@@ -1,0 +1,5 @@
+<list xmlns="http://www.xml-cml.org/schema">
+  <map role="dictionary" ref="org/xmlcml/cml/element/test/examples/dict/catalog.xml"/>
+  <map role="units"      ref="org/xmlcml/cml/element/test/examples/units/catalog.xml"/>
+  <map role="dictionary" ref="org/xmlcml/cml/element/test/examples/foo/catalog.xml"/>
+</list>

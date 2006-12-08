@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="javadoc">
+<target name="javadoc">
+<javadoc access="public" author="true" classpath="lib/xml-apis.jar;lib/junit-4.0.jar;lib/xercesImpl.jar;lib/xercesSamples.jar;lib/xom-1.1.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.xmlcml.cml.legacy.molecule.test,org.xmlcml.cml.tools,org.xmlcml.cml.legacy.react,org.xmlcml.molutil,org.xmlcml.cml.element.test,org.xmlcml.euclid.test,org.xmlcml.cml.tools.test,org.xmlcml.cml.legacy.molecule,org.xmlcml.cml.base,org.xmlcml.euclid,org.xmlcml.cml.element,org.xmlcml.cml.base.test,org.xmlcml.molutil.test" source="1.5" sourcepath="src" splitindex="true" use="true" version="true"/>
+</target>
+</project>
+
+
+
