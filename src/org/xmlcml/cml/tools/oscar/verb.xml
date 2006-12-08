@@ -1,0 +1,11 @@
+<entries key="key" value="dictRef">
+<!--  order may be important -->
+        <entry key="acidified"    dictRef="cml:acidified"/>
+        <entry key="activated"    dictRef="cml:activated"/>
+        <entry key="concentrated" dictRef="cml:concentrated"/>
+        <entry key="crushed"      dictRef="cml:crushed"/>
+        <entry key="degassed"     dictRef="cml:degassed"/>
+        <entry key="dried"        dictRef="cml:dried"/>
+        <entry key="powdered"     dictRef="cml:powdered"/>
+        <entry key="saturated"    dictRef="cml:saturated"/>
+</entries>

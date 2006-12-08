@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<map xmlns="http://www.xml-cml.org/schema">
+  <link from="http://www.xml-cml.org/mols/geom" to="./geom.xml"/>
+  <link from="http://www.xml-cml.org/mols/frags" to="./frags.xml"/>
+  <!-- DIRECTORY -->
+  <link from="http://www.xml-cml.org/mols/geom1" to="./geom1"/>
+  <link from="http://www.xml-cml.org/mols/poly" to="../nick/poly"/>
+</map>

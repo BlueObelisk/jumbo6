@@ -1,0 +1,169 @@
+/*  
+Theme Name: Unilever Centre Theme
+Theme URI: http://wwmm.ch.cam.ac.uk/
+Description: Theme for Murray-Rust Group Blogs
+Version: 1.0
+Author: Andrew Walkingshaw
+Author URI: http://www.lexical.org.uk/
+
+*/
+
+
+body {
+  font-family: "Lucida Grande", "Luxi Sans", "Lucida Sans", 
+  Geneva, Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  background: #FFFFFF;
+  width: 800px;
+}
+
+input {
+  width: 100px;
+  margin-top: 10px;
+}
+
+/* main post box */
+.cssbox {
+    width: 600px;
+    background: #EEEEFF;
+    margin-top: 30px;
+} 
+
+/* set the top image */ 
+.cssbox_head { 
+    background: url(/wordpress/images/posttop.png) no-repeat top left; 
+    margin: 0;
+} 
+
+.cssbox_body { 
+    line-height: 1.4;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 10px;
+    text-align: left;
+} 
+
+/* set the bottom image */
+.cssbox_foot { 
+    background: transparent url(/wordpress/images/postbottom.png) no-repeat bottom left; 
+} 
+	
+/* author box at top of page */
+
+.authrole {
+width: 600px;
+background-color: #101080;
+margin-top: 20px;
+}
+
+.authrole_head { 
+    background: url(/wordpress/images/authtop.png) no-repeat top left; 
+    margin: 0;
+} 
+
+.authrole_body {  
+    color: white;
+    font-weight: bold;
+    font-size: 140%;
+    text-align: center;
+ }
+
+/* set the bottom image */
+.authrole_foot { 
+    background: transparent url(/wordpress/images/authbottom.png) no-repeat bottom left; 
+} 
+
+.post_title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 115%;
+    margin-bottom: 10px;
+}
+
+.post_title a {
+    text-decoration: none
+}
+
+.post_title hr {
+     background-color: #EEAA22; 
+     color: #EEAA22; 
+     height: 2px;
+     border: 0;
+     width: 80%;
+}
+
+img {
+   border: None;
+}
+
+
+div.navbar { 
+  display: block;
+  margin-left: 2px;
+  text-align: left;
+  line-height: 1.1;
+}
+
+ul.navbar2 {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 5px;
+}
+
+ul.navbar2 li ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 5px;
+}
+
+ul.navbar2 li ul li {
+  padding-top: 2px;
+}
+
+ul.navbar2 li h2 {
+   font-size: 110%;
+   font-weight: normal;
+   padding-top: 5px;
+   padding-bottom: 5px;
+}
+
+li.navbody {display: block; }
+
+p.author { font-size: 100%; padding: 0; margin: 0;}
+p.desc { font-weight: normal; padding: 0; margin: 0; }
+
+div.top { 
+  clear: both;
+  text-align: center;
+}
+
+div.left { 
+  float: left;
+}
+
+div.right {
+  float: right;
+  text-align: left;
+  width: 170px;
+  margin: 0px;
+  padding-top: 10px;
+  font-size: 8pt;
+  background-color: #EEAA22; 
+}
+
+
+div.center {
+  clear: none;
+  text-align: justify;
+}
+
+
+div.bottom { 
+  clear: both;
+  font-size: 6pt;
+}
+
+
+.delicious-posts {  border: 2px solid #ddd; float: left;}
+.delicious-posts a { text-decoration: none; font-size: 10pt; text-align: left;  }
+.delicious-post { text-align: left; margin-right: 20px;}

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="jumbo50" basedir="." default="compileAll">
+	<!-- 2006-02-14: PMR. tidied to use CodeGenerator -->
+
+
+	<!-- edit this to the location of the schema dir to use -->
+<!--	<property name="schema.dir" value="C:\pmr\schema25" />-->
+	<property name="schema.dir" value="C:\pmr\schema23" />
+
+	<!-- ====== do not edit anything below this line ====== -->
+	<property name="distribName" value="${basedir}/../jumbo_distrib.jar" />
+
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="bin.dir" value="bin" />
+	<property name="doc.dir" value="doc" />
+
+	<property name="xomJar" value="${lib.dir}/xom-1.1.jar" />
+	<property name="junitJar" value="${lib.dir}/junit-4.0.jar" />
+	<property name="xercesJar" value="${lib.dir}/xercesImpl.jar" />
+	<property name="xercesSamplesJar" value="${lib.dir}/xercesSamples.jar" />
+
+	<!-- where the output code will go -->
+	<property name="generated.dir" value="${basedir}" />
+
+	<target name="clean" description="Delete all generated files">
+		<delete dir="${bin.dir}" failonerror="false"/>
+	</target>
+
+	
+	<target name="compileAll" description="Compiles Jumbo5.0">
+		<mkdir dir="${bin.dir}" />
+
+		<antcall target="compileEuclid"/>
+		<antcall target="compileBase"/>
+		<antcall target="compileMolutil"/>
+		<antcall target="compileElement"/>
+		<antcall target="compileTools"/>
+		<antcall target="compileLegacyMolecule"/>
+		<antcall target="compileLegacyReact"/>
+		
+		<antcall target="compileTests"/>
+		
+		<!-- copy elementdata.xml to where this has been built -->
+		<copy file="${src.dir}/org/xmlcml/molutil/elementdata.xml" tofile="${bin.dir}/org/xmlcml/molutil/elementdata.xml" />
+
+	</target>
+
+	<!-- ======================= COMPILE ================= -->
+	<!-- compile euclid -->
+	<target name="compileEuclid" description="Compile euclid">
+		<echo>COMPILING EUCLID</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/euclid" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/euclid/test"/>
+			<classpath>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- compile base as everything else relies on these classes -->
+	<target name="compileBase" description="Compile base">
+		<echo>COMPILING BASE</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/base" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/cml/base/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="compileMolutil" description="Compile molutil">
+		<!-- compile molutil -->
+		<echo>COMPILING MOLUTIL</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/molutil" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/molutil/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="compileElement" description="Compile element">
+		<!-- compile element -->
+		<echo>COMPILING ELEMENT</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/element" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/cml/element/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="compileTools" description="Compile tools">
+		<!-- compile tools -->
+		<echo>COMPILING TOOLS</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/tools" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/cml/tools/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="compileLegacyMolecule" description="Compile legacyMolecule">
+
+		<!-- compile molecule -->
+		<echo>COMPILING LEGACY MOLECULE</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/legacy/molecule" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/cml/legacy/molecule/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="compileLegacyReact" description="Compile legacyReact">
+
+		<!-- compile react -->
+		<echo>COMPILING LEGACY REACT</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/legacy/react" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<exclude name="${src.dir}/org/xmlcml/cml/legacy/react/test" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileTests" description="compiles all the tests in the Jumbo50 package">
+		<antcall target="compileEuclidTest"/>
+		<antcall target="compileBaseTest"/>
+		<antcall target="compileMolutilTest"/>
+		<antcall target="compileElementTest"/>
+		<antcall target="compileToolsTest"/>
+		<antcall target="compileLegacyMoleculeTest"/>
+	</target>
+		
+	<target name="compileEuclidTest" description="Compile euclid test">
+		<!-- compile  euclid test -->
+		<echo>COMPILING EUCLID TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/euclid/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileBaseTest" description="Compile base test">
+		<!-- compile  test -->
+		<echo>COMPILING BASE TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/base/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${xercesJar}"/>
+				<pathelement location="${xercesSamplesJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileMolutilTest" description="Compile molutil test">
+
+		<!-- compile molutil test -->
+		<echo>COMPILING MOLUTIL TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/molutil/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileElementTest" description="Compile element test">
+
+		<!-- compile element test -->
+		<echo>COMPILING ELEMENT TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/element/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileToolsTest" description="Compile tools test">
+
+		<!-- compile tools test -->
+		<echo>COMPILING Tools TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/tools/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compileLegacyMoleculeTest" description="Compile legacyMolecule test">
+
+		<!-- compile molecule test -->
+		<echo>COMPILING LEGACY MOLECULE TEST</echo>
+		<javac srcdir="${src.dir}/org/xmlcml/cml/legacy/molecule/test" destdir="${bin.dir}">
+		    <include name="*.java" />
+			<classpath>
+				<pathelement location="${xomJar}"/>
+				<pathelement location="${junitJar}"/>
+				<pathelement location="${bin.dir}"/>
+			</classpath>
+		</javac>
+		<echo> *** TO RUN TESTS, ant junitTests *** </echo>
+	</target>
+
+	<target name="jar" description="Packages Jumbo5.0" depends="compileTests">
+        <jar destfile="${ant.project.name}.jar" basedir="${bin.dir}"/>
+    </target>
+
+	<!-- create jar with with only classes required by schemagen -->
+	<target name="schemagenjar" 
+		description="makes jar file for schemagen to use" >
+        <jar destfile="schemagen.jar" basedir="${bin.dir}">
+    	      <include name="org/xmlcml/cml/base/*"/>
+	  	      <include name="org/xmlcml/euclid/EuclidConstants.*"/>
+	  	      <include name="org/xmlcml/cml/autogenerated/CMLTypeList.*"/>
+	  	      <include name="org/xmlcml/cml/autogenerated/CMLAttributeList.*"/>
+    	</jar>
+    </target>
+
+    <target name="makeDistrib" description="Creates a completely standalone distribution version of Jumbo5.0" depends="compileTests, javadoc">
+        <jar destfile="${distribName}">
+        <!--
+            <fileset dir="${bin.dir}"/>
+	    <fileset dir="${lib.dir}" />
+	    <fileset dir="${doc.dir}" />
+	    <fileset dir="${src.dir}" />
+	    -->
+	    <fileset dir="${basedir}" />
+	    <fileset dir="${schema.dir}"/>
+	</jar>
+    </target>
+
+    <target name="junitTests" description="run junit tests">
+	<java fork="true" failonerror="true" classname="org.xmlcml.cml.element.test.CompleteCMLTest">
+		<classpath>
+			<pathelement location="${xomJar}"/>
+			<pathelement location="${junitJar}"/>
+			<pathelement location="${bin.dir}"/>
+		</classpath>
+	</java>
+    </target>
+
+    <target name="javadoc" description="make javadoc">
+	<javadoc
+		   destdir="doc"
+		   author="true"
+		   version="true"
+		   use="true"
+		   windowtitle="JUMBO5.0">
+
+	    <packageset dir="src" defaultexcludes="yes">
+	      <include name="org/xmlcml/**"/>
+	    </packageset>
+
+	    <doctitle><![CDATA[<h1>JUMBO5.0</h1>]]></doctitle>
+	    <bottom><![CDATA[<i>Copyright &#169; 2005, 2006 Peter Murray-Rust, Artistic License</i>]]></bottom>
+		<classpath>
+			<pathelement location="${xomJar}"/>
+			<pathelement location="${junitJar}"/>
+			<pathelement location="${bin.dir}"/>
+		</classpath>
+	  </javadoc>
+    </target>
+
+
+</project>
