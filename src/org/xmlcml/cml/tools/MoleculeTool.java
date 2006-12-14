@@ -368,7 +368,7 @@ public class MoleculeTool extends AbstractTool {
 						}
 						n2:
 						if (finalMolList.size() == 0) {
-							System.out.println("MARKING UP N2s");
+							System.out.println("STILL NOT FOUND SOLUTION");
 							for (int l = 0; l < n2ComboList.size(); l++) {
 							for (int i = 0; i < n3ComboList.size(); i++) {
 								for (int j = osComboList.size()-1; j >= 0; j--) {
@@ -433,64 +433,48 @@ public class MoleculeTool extends AbstractTool {
 										for (int e = 0; e < piElectrons.size(); e++) {
 											((CMLElectron)piElectrons.get(e)).detach();
 										}
+									}
 								}
-							}
 							}
 						}
 						cAttempt:
-							if (finalMolList.size() == 0) {
-								System.out.println("MARKING UP C-");
-								for (CMLAtom atom : subMolAtomList) {
-									if ("C".equals(atom.getElementType())) {
-										atom.setFormalCharge(-1);
-										PiSystem newPiS = new PiSystem(subMolAtomList);
-										newPiS.setPiSystemManager(piSystemManager);
-										List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-										int sysCount = 0;
-										boolean piRemaining = false;
-										for (PiSystem system : newPiSList) {
-											sysCount++;
-											boolean inSystem = false;
-											for (CMLAtom at : system.getAtomList()) {
-												if (at.getId().equals(atom.getId())) {
-													inSystem = true;
-												}
-											}
-											if (!inSystem) {
-												System.out
-														.println("not in suystem");
-												continue;
-											}
-											system.identifyDoubleBonds();
-											for (CMLAtom a : system.getAtomList()) {
-												Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
-												System.out
-														.println("pi es left: "+nodes.size());
-												if (nodes.size() > 0) {
-													piRemaining = true;
-													for (int i = 0; i < nodes.size(); i++) {
-														nodes.get(i).detach();
-													}
-												}
-											}
-											if (piRemaining) {
-												atom.setFormalCharge(0);
-											} else {
-												if (sysCount == newPiSList.size()) {
-													// when a valid pi-system found, check whether a molecule with the same
-													// overall charge has already been found.  If so, take the system with 
-													// the least charged atoms.
-													if (!piRemaining) {
-														CMLMolecule copy = (CMLMolecule)subMol.copy();
-														validMolList.add(copy);
-														finalMolList.add(copy);
-														break cAttempt;
-													}
-												}
-											}
+						if (finalMolList.size() == 0) {
+							int cCharge = 1;
+							if (subMolTool.containsEWithdrawingGroup) {
+								cCharge = -1;
+							}
+							System.out.println("MY LIFE....  STILL NOT FOUND SOLUTION");
+							for (CMLAtom atom : subMolAtomList) {
+								atom.setFormalCharge(cCharge);
+								PiSystem newPiS = new PiSystem(subMolAtomList);
+								newPiS.setPiSystemManager(piSystemManager);
+								List<PiSystem> newPiSList = newPiS.generatePiSystemList();
+								int sysCount = 0;
+								//System.out.println("system count: "+newPiSList.size());
+								boolean piRemaining = false;
+								for (PiSystem system : newPiSList) {
+									//System.out.println("system atoms: "+system.getAtomList().size());
+									sysCount++;
+									system.identifyDoubleBonds();
+									for (CMLAtom a : system.getAtomList()) {
+										Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
+										if (nodes.size() > 0) {
+											piRemaining = true;
+										}
+									}
+									if (sysCount == newPiSList.size()) {
+										// when a valid pi-system found, check whether a molecule with the same
+										// overall charge has already been found.  If so, take the system with 
+										// the least charged atoms.
+										if (!piRemaining) {
+											CMLMolecule copy = (CMLMolecule)subMol.copy();
+											validMolList.add(copy);
+											finalMolList.add(copy);
+											break cAttempt;
 										}
 									}
 								}
+								atom.setFormalCharge(0);
 								// reset only those bonds that were single to start with
 								for (CMLBond bond : singleBonds) {
 									bond.setOrder(CMLBond.SINGLE);
@@ -501,6 +485,7 @@ public class MoleculeTool extends AbstractTool {
 									((CMLElectron)piElectrons.get(e)).detach();
 								}
 							}
+						}
 						if (finalMolList.size() > 0) {							
 							CMLMolecule theMol = null;
 							if (molCharge != 99 && !isMetalComplex) {
@@ -530,12 +515,16 @@ public class MoleculeTool extends AbstractTool {
 									count++;
 								}
 							}
+							
+							subMol = (CMLMolecule)theMol.copy();
+							/*
 							for (Node node : subMol.getChildCMLElements()) {
 								node.detach();
 							}
 							for (Node node : theMol.getChildCMLElements()) {
 								subMol.appendChild(node.copy());
 							}
+							*/
 						}
 					}
 				}
@@ -2443,7 +2432,6 @@ public class MoleculeTool extends AbstractTool {
 			}
 		}
 	}
-	
 
 	private void markAzide(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
@@ -2661,6 +2649,61 @@ public class MoleculeTool extends AbstractTool {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	private void markCarbanion(List<CMLAtom> atoms) {
+		// doesn't take into account the possibility of the structure
+		// being c=c=c
+		for (CMLAtom atom : atoms) {
+			if ("C".equals(atom.getElementType())) {
+				List<CMLAtom> ligands = atom.getLigandAtoms();
+				if (ligands.size() == 3 && isBondedToMetal(atom)) {
+					boolean set = true;
+					for (CMLAtom ligand : ligands) {
+						if (isBondedToMetal(ligand)) {
+							set = false;
+						}
+					}
+					if (set) {
+						atom.setFormalCharge(-1);
+					}
+				}
+				// if carbon has only two ligands then check to see if it
+				// can be marked as a carbanion.
+				if (ligands.size() == 2  && isBondedToMetal(atom)) {
+					boolean set = true;
+					for (CMLAtom ligand : ligands) {
+						if ("C".equals(ligand.getElementType())) {
+							List<CMLAtom> ats = ligand.getLigandAtoms();
+							if (ats.size() == 2) {
+								// if one of the two ligands also only
+								// has two ligands then stop as this is
+								// most probably a carbyne.
+								for (CMLAtom at : ats) {
+									if (at.equals(atom)) {
+										System.out.println("**hellO&&&");
+										System.out.println(at.getId());
+										continue;
+									}
+									if (!"N".equals(at.getElementType())) {
+										System.out.println("setting false");
+										set = false;
+									}
+								}
+							}
+							if (ats.size() < 2) {
+								set = false;
+							}
+						} else {
+							set = false;
+							break;
+						}
+					} if (set) {
+						atom.setFormalCharge(-1);
+					}
+				}
+			}
 		}
 	}
 

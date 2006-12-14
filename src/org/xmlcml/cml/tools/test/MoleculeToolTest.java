@@ -969,15 +969,15 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
          --*/
     }
 
-    private void abocv(CMLMolecule mol, int knownUnpaired) {
-        // System.out.println("====adjustBondOrdersAndCharge=====
-        // "+mol.getTitle()+" ======================");
-        PiSystemManager piSystemManager = new PiSystemManager();
-        piSystemManager.setUpdateBonds(true);
-        piSystemManager.setKnownUnpaired(knownUnpaired);
-        new MoleculeTool(mol)
-                .adjustBondOrdersAndChargesToValency(piSystemManager);
-    }
+	private void abocv(CMLMolecule mol, int knownUnpaired) {
+		// System.out.println("====adjustBondOrdersAndCharge=====
+		// "+mol.getTitle()+" ======================");
+		PiSystemManager piSystemManager = new PiSystemManager();
+		piSystemManager.setUpdateBonds(true);
+		piSystemManager.setKnownUnpaired(knownUnpaired);
+		new MoleculeTool(mol)
+				.adjustBondOrdersAndChargesToValency(piSystemManager, null);
+	}
 
     void meaninglessCodeToGetRidOfWarnings() {
         abocv(null, 0);
