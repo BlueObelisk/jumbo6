@@ -364,7 +364,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
         cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
         int count = 0;
-        int MAX = 10000;
+        int MAX = 1000;
         for (String filename : cifPathList) {
             if (count++ >= MAX) break;
             int iCif = filename.indexOf(".cif");
