@@ -29,6 +29,7 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
+import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLSymmetry;
@@ -363,7 +364,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
         cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
         int count = 0;
-        int MAX = 5;
+        int MAX = 10000;
         for (String filename : cifPathList) {
             if (count++ >= MAX) break;
             int iCif = filename.indexOf(".cif");
@@ -422,10 +423,19 @@ public class CrystalToolTest extends AbstractToolTest {
 						continue;
 					}
 					// at this point no bonds have been calculated
+					Nodes moiFormNodes = cml.query(".//cml:formula[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
+					CMLFormula moietyFormula = null;
+					if (moiFormNodes.size() > 0) {
+						moietyFormula = (CMLFormula)moiFormNodes.get(0);
+					} 
                     CrystalTool crystalTool = new CrystalTool(molecule);
                     CMLMolecule mergedMolecule = null;
                     try {
-                        mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+                    	if (moietyFormula == null) {
+                    		mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+                    	} else {
+                    		mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8), moietyFormula);
+                    	}
                     } catch (CMLRuntimeException e) {
                         //System.err.println("Cannot calculate bond orders/ring: "+e+"/"+cifname);
                     	e.printStackTrace();
@@ -434,19 +444,19 @@ public class CrystalToolTest extends AbstractToolTest {
                     // full cif
                     writeXML(getCrystalName(user, cifname+"_"+mol), mergedMolecule, log, "full cif");
                     // ring nuclei
-                    outputRingNuclei(user, cifname, mol, mergedMolecule, log);
+                    //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
                     // atom centered species
                     String outfile = getOutfile(user, "atom", cifname+"_ATOM_", mol, 0, 0);
-                    outputAtomCenteredSpecies(outfile, moleculeTool, log);
+                    //outputAtomCenteredSpecies(outfile, moleculeTool, log);
                     
                     // clusters
-                    outputClusters(user, cifname, mergedMolecule, log);
+                    //outputClusters(user, cifname, mergedMolecule, log);
                     // ligands
-                    outputLigands(user, cifname, mergedMolecule, log);
+                    //outputLigands(user, cifname, mergedMolecule, log);
                 } catch (CMLRuntimeException e) {
                     e.printStackTrace();
                     System.err.println("Cannot process CIF: "+e);
-                    throw e;
+                    continue;
                 }
             }
         }

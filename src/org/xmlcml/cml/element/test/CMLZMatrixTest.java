@@ -219,18 +219,6 @@ public class CMLZMatrixTest extends AbstractTest {
 		/* CMLZMatrix zMatrix = */new CMLZMatrix(molecule);
 	}
 
-	/**
-	 * test example files.
-	 * @throws ParsingException
-	 * @throws IOException
-	 * @throws ValidityException
-	 */
-	@Test
-//	@Ignore
-	public void testExamples() throws ValidityException, IOException, ParsingException {
-		testExample("peo3zmat.xml", "peo3cart.xml");
-	}
-
 	private void testExample(String infileS, String outfileS)
 			throws IOException, ValidityException, ParsingException {
 		Document doc = null;

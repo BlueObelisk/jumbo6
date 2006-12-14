@@ -4,10 +4,17 @@
 	xmlns="http://www.xml-cml.org/schema">
 	<molecule id="polystyrene" convention="cml:PML-basic" 
 	    countExpression="*(3)">
+	    <transform3>
+	    1 0 0 4
+	    0 1 0 8
+	    0 0 1 12
+	    0 0 0 1
+	    </transform3>
 		<!--  polystyrene -->
 		<fragment>
 			<molecule ref="g:dummy"/>
-			<fragmentList countExpression="range(3,6)">
+<!--  		<fragmentList countExpression="range(3,6)">-->
+			<fragmentList countExpression="*(3)">
 				<join order="1" moleculeRefs2="PARENT NEXT"
 					atomRefs2="r1 r1">
 					<torsion>180</torsion>

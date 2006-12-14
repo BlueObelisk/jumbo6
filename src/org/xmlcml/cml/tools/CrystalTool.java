@@ -161,7 +161,7 @@ public class CrystalTool extends AbstractTool {
      * @param dist2Range minimum and maximum SQUARED distances
      * @return merged molecule
      */
-    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
+    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range, CMLFormula moietyFormula) {
         List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
         
         boolean addBonds = true;
@@ -179,9 +179,13 @@ public class CrystalTool extends AbstractTool {
         List<CMLMolecule> mols = mergedMolecule.getDescendantsOrMolecule();
         for (CMLMolecule mol : mols) {
         	MoleculeTool subMolTool = new MoleculeTool(mol);
-        	subMolTool.adjustBondOrdersAndChargesToValency();
+        	subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
         }
         return mergedMolecule;
+    }
+    
+    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
+    	return calculateCrystallochemicalUnit(dist2Range, null);
     }
     
     

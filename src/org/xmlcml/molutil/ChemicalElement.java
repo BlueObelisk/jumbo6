@@ -41,6 +41,8 @@ public class ChemicalElement {
         PBLOCK,
         /** metal any sort*/
         METAL,
+        /** metal any sort*/
+        METAL_NOT_SEMI_METAL,
         /** group A (number to be given separately)*/
         GROUP_A,
         /** group B (number to be given separately)*/

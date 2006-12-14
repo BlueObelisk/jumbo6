@@ -55,7 +55,8 @@ public class PolymerToolTest extends AbstractToolTest {
 //        testExample("new6");
 //          testExample("mixed");
 //        testExample("polystyrene"); // works
-        testExample("polystyreneList");
+        // FIXME
+//        testExample("polystyreneList");
 //      testExample("new7");
         
 //        testExample("star1");
