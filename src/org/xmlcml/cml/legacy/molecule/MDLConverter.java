@@ -71,6 +71,8 @@ public class MDLConverter {
     }
 
     private enum MDLTag {
+        /** unknown MDL dimensional code */
+        DUNK(" "+" "),
         /** represents the MDL dimensional code for a 2D molecule */
         D2("2D"),
         /** represents the MDL dimensional code for a 2D molecule */
@@ -165,7 +167,7 @@ public class MDLConverter {
     /** number of bonds to be read in the MOL molecule */
     private int molBondCount;
 
-    private MDLTag dimensionalCode;
+    private MDLTag dimensionalCode = MDLTag.DUNK;
 
     private String version = "V2000";
 

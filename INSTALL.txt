@@ -16,7 +16,7 @@ HOW DO I USE JUMBO?
 
 Jumbo is a library, not an application and the main() routines are either for testing the schema, code
 or data. The distribution will run under the Eclipse development kit. A good way to start is to
-run all the unit tests (jumbo53 | rightClick | run as JUmnit tests)
+run all the unit tests (jumbo53 | rightClick | run as JUnit tests)
 
 You might look for unitTests that relate to your 
 requirements. 

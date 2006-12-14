@@ -77,6 +77,8 @@ public class PolymerTool extends AbstractTool {
         }
     }
     
+//    Set<Convention> debugSet = new HashSet<Convention>();
+    
     File OUTPUT_DIR = Util.getTestOutputDirectory(PolymerTool.class);
 
     // root might be a molecule
@@ -306,7 +308,7 @@ public class PolymerTool extends AbstractTool {
                 }
             }
         } catch (CMLRuntimeException e) {
-            System.err.println("Comparison files does not exist, skipped:  "+f);
+            System.out.println("Comparison files does not exist, skipped:  "+f);
         }
         File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+".xml");
         System.out.println("wrote..: "+testFile.getAbsolutePath());
@@ -904,6 +906,7 @@ formula='
             Convention targetLevel = null;
             int i = 0;
             boolean debug = true;
+            List<String> debugList = new ArrayList<String>();
             while (i < args.length) {
                 if (args[i].equalsIgnoreCase("-INFILE")) {
                     infile = args[++i]; i++;
