@@ -30,11 +30,13 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.test.AbstractTest;
 import org.xmlcml.cml.element.test.MoleculeAtomBondTest;
 import org.xmlcml.cml.tools.CatalogTool;
 import org.xmlcml.cml.tools.GeometryTool;
 import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.cml.tools.PiSystemManager;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;
 import org.xmlcml.molutil.Molutils;
@@ -2315,5 +2317,66 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     public void testGetSymmetryContacts() {
 
     }
+    
+	/** copies attributes on bonds and atoms to another molecule.
+	 * for each atom/bond in this.molecule finds Id and hence corresponding 
+	 * atom/bond in 'to'. Copies all attributes from that atom to to.atom/@*
+	 * If corresponding atom does not exist, throws exception.
+	 * If target attribute exists throws exception
+	 * @param to
+	 * @exception CMLRuntimeException ids in molecules do not correspond or
+	 * attributes are already present
+	 */
+    @Test
+	public void testCopyAtomAndBondAttributesById() {
+		CMLMolecule from = new CMLMolecule();
+		from.setId("from");
+		CMLAtom atom0 = new CMLAtom();
+		atom0.setElementType("C");
+		atom0.setId("a0");
+		from.addAtom(atom0);
+		CMLAtom atom1 = new CMLAtom();
+		atom1.setElementType("O");
+		atom1.setId("a1");
+		from.addAtom(atom1);
+		CMLBond bond01 = new CMLBond(atom0, atom1);
+		bond01.setId("b01");
+		from.addBond(bond01);
+		
+		CMLMolecule to = (CMLMolecule) from.copy();
+		to.setId("to");
+
+		
+		atom0.setXY2(new Real2(1.,2.));
+		atom1.setFormalCharge(1);
+		bond01.setOrder(CMLBond.DOUBLE);
+
+		MoleculeTool fromTool = new MoleculeTool(from);
+		boolean permitOverwrite = true;
+		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+		
+		to.setId("from"); // to allow comparison
+		AbstractTest.assertEqualsCanonically("compare mols", from, to);
+		
+		permitOverwrite = false;
+		try {
+			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+			Assert.fail("Should fail on overwrite");
+		} catch (CMLRuntimeException e) {
+			Assert.assertTrue("cannot overwrite", e.getMessage().startsWith(
+					"cannot overwrite attribute:"));
+		}
+
+		// mimic atomId mismatch
+		atom0.resetId("resetId");
+		try {
+			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+			Assert.fail("Should fail on atom mismatch");
+		} catch (CMLRuntimeException e) {
+			Assert.assertEquals("atom mismatch", "Cannot find target atom: resetId", e.getMessage());
+		}
+		
+	}
+    
 
  }

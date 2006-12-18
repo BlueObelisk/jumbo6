@@ -450,7 +450,7 @@ public class CrystalToolTest extends AbstractToolTest {
                     //outputAtomCenteredSpecies(outfile, moleculeTool, log);
                     
                     // clusters
-                    //outputClusters(user, cifname, mergedMolecule, log);
+                    // outputClusters(user, cifname, mergedMolecule, log);
                     // ligands
                     //outputLigands(user, cifname, mergedMolecule, log);
                 } catch (CMLRuntimeException e) {
@@ -646,7 +646,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-test";
+            s = "E:\\cif-test2";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {
