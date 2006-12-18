@@ -81,7 +81,6 @@ public class MoleculeTool extends AbstractTool {
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
 	String metalLigandDictRef = "jumbo:metalLigand";
-	boolean containsEWithdrawingGroup = false;
 
 	/**
 	 * control operations for removing disorder.
@@ -173,7 +172,6 @@ public class MoleculeTool extends AbstractTool {
 				CMLFormula molForm = mol.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
 				if (molForm.getConciseNoCharge().equals(formula.getConciseNoCharge())) {
 					molCharge = formula.getFormalCharge();
-					System.out.println("molcharge: "+molCharge);
 				}
 			}
 			// reset all bond orders to single
@@ -290,9 +288,6 @@ public class MoleculeTool extends AbstractTool {
 						List<List<Integer>> n3ComboList = generateCombinationList(n3List.size());
 						List<List<Integer>> osComboList = generateCombinationList(osList.size());
 						List<List<Integer>> n2ComboList = generateCombinationList(n2List.size());
-						//System.out.println(n3List.size()+", combos: "+nComboList.size());
-						//System.out.println(osList.size()+", combos: "+osComboList.size());
-						//System.out.println(orList.size()+", combos: "+orComboList.size());
 						List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
 						List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
 						for (int i = 0; i < n3ComboList.size(); i++) {
@@ -368,7 +363,7 @@ public class MoleculeTool extends AbstractTool {
 						}
 						n2:
 						if (finalMolList.size() == 0) {
-							System.out.println("STILL NOT FOUND SOLUTION");
+							System.out.println("Trying N2-");
 							for (int l = 0; l < n2ComboList.size(); l++) {
 							for (int i = 0; i < n3ComboList.size(); i++) {
 								for (int j = osComboList.size()-1; j >= 0; j--) {
@@ -390,7 +385,7 @@ public class MoleculeTool extends AbstractTool {
 											CMLAtom atom = n2List.get(in);
 											atom.setFormalCharge(-1);
 											chargedAtoms.add(atom);
-											System.out.println("setting n2: "+atom.getId());
+											//System.out.println("setting n2: "+atom.getId());
 										}
 										PiSystem newPiS = new PiSystem(subMolAtomList);
 										newPiS.setPiSystemManager(piSystemManager);
@@ -439,11 +434,8 @@ public class MoleculeTool extends AbstractTool {
 						}
 						cAttempt:
 						if (finalMolList.size() == 0) {
-							int cCharge = 1;
-							if (subMolTool.containsEWithdrawingGroup) {
-								cCharge = -1;
-							}
-							System.out.println("MY LIFE....  STILL NOT FOUND SOLUTION");
+							int cCharge = -1;
+							System.out.println("Trying carbanions....");
 							for (CMLAtom atom : subMolAtomList) {
 								atom.setFormalCharge(cCharge);
 								PiSystem newPiS = new PiSystem(subMolAtomList);
@@ -486,7 +478,8 @@ public class MoleculeTool extends AbstractTool {
 								}
 							}
 						}
-						if (finalMolList.size() > 0) {							
+						if (finalMolList.size() > 0) {
+							// remember that molCharge is the charge given to the molecule from the CIF file
 							CMLMolecule theMol = null;
 							if (molCharge != 99 && !isMetalComplex) {
 								for (CMLMolecule n : finalMolList) {
@@ -498,33 +491,52 @@ public class MoleculeTool extends AbstractTool {
 							} 
 							// if theMol not set above OR part of metal complex OR no corresponding formal charge
 							if (theMol == null) {
-								int count = 0;
-								int currentCharge2 = 0;
-								for (CMLMolecule n : finalMolList) {
-									MoleculeTool nTool = new MoleculeTool(n);
-									if (count == 0) {
-										theMol = n;
-										currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
-									} else {
-										int nCharge = (int)Math.pow(nTool.getFormalCharge(), 2);
-										if (nCharge < currentCharge2) {
-											currentCharge2 = nCharge;
+								if (isMetalComplex) {
+									int count = 0;
+									int currentCharge2 = 0;
+									for (CMLMolecule n : finalMolList) {
+										MoleculeTool nTool = new MoleculeTool(n);
+										if (count == 0) {
 											theMol = n;
+											currentCharge2 = nTool.getFormalCharge();
+										} else {
+											int nCharge = nTool.getFormalCharge();
+											if (currentCharge2 < 0) {
+												if (nCharge > currentCharge2 && nCharge <= 0) {
+													currentCharge2 = nCharge;
+													theMol = n;
+												}
+											}
+											if (currentCharge2 >= 0) {
+												if (nCharge < currentCharge2) {
+													currentCharge2 = nCharge;
+													theMol = n;
+												}
+											}
 										}
+										count++;
 									}
-									count++;
+								} else {
+									int count = 0;
+									int currentCharge2 = 0;
+									for (CMLMolecule n : finalMolList) {
+										MoleculeTool nTool = new MoleculeTool(n);
+										if (count == 0) {
+											theMol = n;
+											currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
+										} else {
+											int nCharge = (int)Math.pow(nTool.getFormalCharge(), 2);
+											if (nCharge < currentCharge2) {
+												currentCharge2 = nCharge;
+												theMol = n;
+											}
+										}
+										count++;
+									}
 								}
 							}
-							
-							subMol = (CMLMolecule)theMol.copy();
-							/*
-							for (Node node : subMol.getChildCMLElements()) {
-								node.detach();
-							}
-							for (Node node : theMol.getChildCMLElements()) {
-								subMol.appendChild(node.copy());
-							}
-							*/
+							MoleculeTool theMolTool = new MoleculeTool(theMol);
+							theMolTool.copyAtomAndBondAttributesById(subMol, true);
 						}
 					}
 				}
@@ -2488,7 +2500,6 @@ public class MoleculeTool extends AbstractTool {
 				CMLAtom lig = atom.getLigandAtoms().get(0);
 				if ("C".equals(lig.getElementType()) && lig.getLigandAtoms().size() == 2) {
 					atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
-					containsEWithdrawingGroup = true;
 				}
 			}
 		}
@@ -2682,12 +2693,9 @@ public class MoleculeTool extends AbstractTool {
 								// most probably a carbyne.
 								for (CMLAtom at : ats) {
 									if (at.equals(atom)) {
-										System.out.println("**hellO&&&");
-										System.out.println(at.getId());
 										continue;
 									}
 									if (!"N".equals(at.getElementType())) {
-										System.out.println("setting false");
 										set = false;
 									}
 								}
@@ -2735,12 +2743,10 @@ public class MoleculeTool extends AbstractTool {
 								// most probably a carbyne.
 								for (CMLAtom at : ats) {
 									if (at.equals(atom)) {
-										System.out.println("**hellO&&&");
 										System.out.println(at.getId());
 										continue;
 									}
 									if (!"N".equals(at.getElementType())) {
-										System.out.println("setting false");
 										set = false;
 									}
 								}
@@ -2782,7 +2788,6 @@ public class MoleculeTool extends AbstractTool {
 				if (oxyList.size() == 2) {
 					molecule.getBond(atom, oxyList.get(1)).setOrder(
 							CMLBond.DOUBLE);
-					containsEWithdrawingGroup = true;
 				}
 			}
 		}
@@ -2976,7 +2981,6 @@ public class MoleculeTool extends AbstractTool {
 					if (CMLBond.CYCLIC.equals(bond.getCyclic())) {
 						CMLAtom otherAtom = bond.getOtherAtom(atom);
 						if (otherAtom == null) {
-							System.out.println(bond.getString());
 							throw new CMLRuntimeException("null atom in bond");
 						}
 						cAtomList.add(otherAtom);
@@ -4810,5 +4814,85 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
+	/** copies attributes on bonds and atoms to another molecule.
+	 * for each atom/bond in this.molecule finds Id and hence corresponding 
+	 * atom/bond in 'to'. Copies all attributes from that atom to to.atom/@*
+	 * If corresponding atom does not exist, throws exception.
+	 * If target attribute exists throws exception
+	 * @param to
+	 * @param permitOverwrite allow existing attributes on target to be overwritten
+	 * @exception CMLRuntimeException ids in molecules do not correspond or
+	 * attributes are already present
+	 */
+	public void copyAtomAndBondAttributesById(CMLMolecule to, boolean permitOverwrite) {
+		copyAtomAttributesById(to, permitOverwrite);
+		copyBondAttributesById(to, permitOverwrite);
+	}
+	
+	/** copies attributes on atoms to another molecule.
+	 * for each atom in this.molecule finds Id and hence corresponding 
+	 * atom in 'to'. Copies all attributes from that atom to to.atom/@*
+	 * If corresponding atom does not exist, throws exception.
+	 * If target attribute exists throws exception
+	 * @param to
+	 * @param permitOverwrite allow existing attributes on target to be overwritten
+	 * @exception CMLRuntimeException ids in molecules do not correspond or
+	 * attributes are already present
+	 */
+	
+	public void copyAtomAttributesById(CMLMolecule to, boolean permitOverwrite) {
+		List<CMLAtom> fromAtoms = molecule.getAtoms();
+		for (CMLAtom fromAtom : fromAtoms) {
+			String fromId = fromAtom.getId();
+			if (fromId != null) {
+				CMLAtom toAtom = to.getAtomById(fromId);
+				if (toAtom == null) {
+					throw new CMLRuntimeException("Cannot find target atom: "+fromId);
+				}
+				copyAttributes(fromAtom, toAtom, permitOverwrite);
+			}
+		}
+	}
+	
+	
+	/** copies attributes on bonds to another molecule.
+	 * for each bond in this.molecule finds Id and hence corresponding 
+	 * bond in 'to'. Copies all attributes from that bond to to.bond/@*
+	 * If corresponding bond does not exist, throws exception.
+	 * If target attribute exists throws exception
+	 * @param to
+	 * @param permitOverwrite allow existing attributes on target to be overwritten
+	 * @exception CMLRuntimeException ids in molecules do not correspond or
+	 * attributes are already present
+	 */
+	
+	public void copyBondAttributesById(CMLMolecule to, boolean permitOverwrite) {
+		List<CMLBond> fromBonds = molecule.getBonds();
+		for (CMLBond fromBond : fromBonds) {
+			String fromId = fromBond.getId();
+			if (fromId != null) {
+				CMLBond toBond = to.getBondById(fromId);
+				if (toBond == null) {
+					throw new CMLRuntimeException("Cannot find target bond: "+fromId);
+				}
+				copyAttributes(fromBond, toBond, permitOverwrite);
+			}
+		}
+	}
 
+	private void copyAttributes(Element from, Element to, boolean permitOverwrite) {
+		List<Node> nodes = CMLUtil.getQueryNodes(from, "./@*");
+		for (Node node : nodes) {
+			Attribute attribute = (Attribute) node;
+			String name = attribute.getLocalName();
+			if ("id".equals(name)) {
+				continue;
+			}
+			if (!permitOverwrite && to.getAttribute(name) != null) {
+				throw new CMLRuntimeException("cannot overwrite attribute: "+name);
+			}
+			Attribute newAttribute = new Attribute(name, attribute.getValue());
+			to.addAttribute(newAttribute);
+		}
+	}
 }
