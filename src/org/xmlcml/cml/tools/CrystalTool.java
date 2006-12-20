@@ -50,13 +50,13 @@ public class CrystalTool extends AbstractTool {
     public final static String IUCR = "iucr";
     /** cif stuff */
     public final static String DISORDER_GROUP = 
-        IUCR+S_COLON+"atom_site_disorder_group";
+        IUCR+S_COLON+"_atom_site_disorder_group";
     /** cif stuff */
     public final static String DISORDER_ASSEMBLY = 
-        IUCR+S_COLON+"atom_site_disorder_assembly";
+        IUCR+S_COLON+"_atom_site_disorder_assembly";
     /** cif stuff */
     public final static String ATOM_LABEL = 
-        IUCR+S_COLON+"atom_site_label";
+        IUCR+S_COLON+"_atom_site_label";
 
     /** tolerance for comparing occupancies.
      */
@@ -175,11 +175,15 @@ public class CrystalTool extends AbstractTool {
         ConnectionTableTool ct = new ConnectionTableTool(mergedMolecule);
         ct.flattenMolecules();
         ct.partitionIntoMolecules();
-        
+
         List<CMLMolecule> mols = mergedMolecule.getDescendantsOrMolecule();
         for (CMLMolecule mol : mols) {
-        	MoleculeTool subMolTool = new MoleculeTool(mol);
-        	subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
+        	if (!MoleculeTool.isDisordered(mol)) {
+        		MoleculeTool subMolTool = new MoleculeTool(mol);
+        		subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
+        	} else {
+        		System.out.println("molecule is disoredered");
+        	}
         }
         return mergedMolecule;
     }

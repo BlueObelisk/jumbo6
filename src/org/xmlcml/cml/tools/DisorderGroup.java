@@ -3,7 +3,10 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import nu.xom.Node;
+
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 
 /** based on IUCr Core CIF dictionary 
@@ -149,4 +152,14 @@ public class DisorderGroup implements CMLConstants, Comparable<DisorderGroup> {
         return s;
     }
 
+    public void removeDisorderInformation() {
+    	for (CMLAtom atom : this.atomList) {
+    		List<Node> nodes = CMLUtil.getQueryNodes(atom,
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
+    		for (Node node : nodes) {
+    			node.detach();
+    		}
+    	}
+    }
 };

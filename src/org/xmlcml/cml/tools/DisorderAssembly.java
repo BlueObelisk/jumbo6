@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
 
@@ -209,12 +211,29 @@ public class DisorderAssembly implements CMLConstants {
         Collections.sort(groupList);
         int count = 0;
         for (DisorderGroup group : groupList) {
-            if (count++ > 0) {
-                group.detachAtoms();
-            }
-        }
+        	if (count++ == 0) {
+        		// remove disorder information from the atoms in the major
+        		// occupied group
+        		this.removeCommonAtomDisorderInformation();
+        		group.removeDisorderInformation();
+        	} else if (count++ > 0) {
+        		// remove the atoms from minor occupied groups
+        		group.detachAtoms();
+        	}
+        }      
     }
-    
+
+    private void removeCommonAtomDisorderInformation() {
+    	for (CMLAtom atom : this.commonAtoms) {
+    		List<Node> nodes = CMLUtil.getQueryNodes(atom,
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
+    		for (Node node : nodes) {
+    			node.detach();
+    		}
+    	}
+    }
+
     /** string representation.
      * @return string
      */
