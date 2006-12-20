@@ -9,7 +9,11 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
 
+import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement;
 
 /**
@@ -804,6 +808,46 @@ public class CMLBond extends AbstractBond {
         this.setId(bondId);
         return bondId;
     }
+
+	/**
+	 * get bond length.
+	 *
+	 * uses 3D atom coordinates, else 2D atom coordinates, to generate length
+	 *
+	 * @param type
+	 * @return the length
+	 * @throws CMLException
+	 *             if not computable (no coord, missing atoms...)
+	 */
+	public double calculateBondLength(CoordinateType type) {
+		CMLAtom atom0 = null;
+		CMLAtom atom1 = null;
+		List<CMLAtom> atomList = getAtoms();
+		atom0 = atomList.get(0);
+		atom1 = atomList.get(1);
+		if (atom0 == null || atom1 == null) {
+			throw new CMLRuntimeException("missing atoms");
+		}
+		double length = -1.0;
+		if (type.equals(CoordinateType.CARTESIAN)) {
+			Point3 p0 = atom0.getXYZ3();
+			Point3 p1 = atom1.getXYZ3();
+			if (p0 == null || p1 == null) {
+				throw new CMLRuntimeException(
+						"atoms do not have 3D coordinates");
+			}
+			length = p0.getDistanceFromPoint(p1);
+		} else if (type.equals(CoordinateType.TWOD)) {
+			Real2 p0 = atom0.getXY2();
+			Real2 p1 = atom1.getXY2();
+			if (p0 == null || p1 == null) {
+				throw new CMLRuntimeException(
+						"atoms do not have 2D coordinates");
+			}
+			length = p0.getDistance(p1);
+		}
+		return length;
+	}
 
     
 }

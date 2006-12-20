@@ -569,8 +569,8 @@ public class CrystalToolTest extends AbstractToolTest {
         int atomCount = 0;
         for (CMLAtom atom : atoms) {
             ChemicalElement element = atom.getChemicalElement();
-            if (MoleculeTool.isChemicalElementType(
-                element, Type.TRANSITION_METAL)) {
+            if (element.isChemicalElementType(
+                Type.TRANSITION_METAL)) {
                 atomCount++;
                 List<CMLAtom> singleAtomList = new ArrayList<CMLAtom>();
                 singleAtomList.add(atom);

@@ -456,18 +456,50 @@ public class PiSystem {
     }
 
     private void exploreDoubleBonds() {
+    	// copy the piMap and remainingPiCount so that we can use these values 
+    	// to reset the variables later on.
+    	Map<CMLAtom, Integer> piMapCopy = new HashMap<CMLAtom, Integer>(piMap);
+    	int startRemainingPiCount = remainingPiCount;
+    	
         int knownUnpaired = piSystemManager.getKnownUnpaired();
-        // System.out.println("ENTERING EXPLORE");
         int oldPiCount = -1;
+        int count = 0;
+        while (count < atomList.size()) {
+        	while (remainingPiCount > knownUnpaired
+        			&& remainingPiCount != oldPiCount) {
+        		oldPiCount = remainingPiCount;
+        		List<CMLAtom> atomList = getSortedAtomList();
+        		for (CMLAtom startAtom : atomList) {
+        			// reset stack
+        			atomStack = new Stack<CMLAtom>();
+        			tempAtomPairList = new ArrayList<AtomPair>();
+        			exploreStart1(startAtom, 0);
+        			if (remainingPiCount <= knownUnpaired) {
+        				break;
+        			}
+        		}
+        	}
+        	// reset piMap and remainingPiCount
+    		piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
+    		remainingPiCount = startRemainingPiCount;
+    		// put the first item in the list to the end, to
+    		// change startAtom for next iteration
+    		CMLAtom atom = atomList.get(0);
+    		atomList.remove(0);
+    		atomList.add(atom);
+    		count++;
+        }
+        /*
+        remainingPiCount = 20;
+        oldPiCount = -1;
         while (remainingPiCount > knownUnpaired
                 && remainingPiCount != oldPiCount) {
-            // System.out.println("REMAINING PI "+remainingPiCount+"/ OLD
-            // "+oldPiCount+"/"+piMap.size());
+        	piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
             oldPiCount = remainingPiCount;
-            // loop through all atoms, but normally only use the first one or
-            // few
-            // this.debugMap();
             List<CMLAtom> atomList = getSortedAtomList();
+            CMLAtom atom = atomList.get(0);
+            atomList.remove(0);
+            atomList.add(atom);
             for (CMLAtom startAtom : atomList) {
                 // reset stack
                 atomStack = new Stack<CMLAtom>();
@@ -477,14 +509,8 @@ public class PiSystem {
                     break;
                 }
             }
-            // System.out.println("REMAINING PI COUNT / ATOMS at END
-            // "+remainingPiCount+"/"+tempAtomPairList.size());
-//            for (AtomPair atomPair : tempAtomPairList) {
-                // System.out.print("||"+atomPair);
-//                Assert.assertNotNull(atomPair);
-//            }
         }
-        // System.out.println("EXIT EXPLORE");
+        */
     }
 
     /**

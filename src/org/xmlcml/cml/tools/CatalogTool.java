@@ -3,9 +3,12 @@ package org.xmlcml.cml.tools;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nu.xom.Document;
 import nu.xom.Element;
@@ -16,10 +19,12 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLBuilder;
+import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -306,7 +311,7 @@ public class CatalogTool implements CMLConstants {
         /* String argVal = */ callingArg.getString();
         String ref = molecule.getRef();
         CMLMolecule refMol = 
-            new MoleculeTool(molecule).getReferencedMolecule(ref, this);
+            getReferencedMolecule1(ref, new MoleculeTool(molecule));
         if (refMol == null) {
             throw new CMLRuntimeException("Cannot find molecule: "+ref);
         }
@@ -316,4 +321,144 @@ public class CatalogTool implements CMLConstants {
         MoleculeTool moleculeTool = new MoleculeTool(molecule);
         moleculeTool.expandRefFromFragment(refMol);
     }
+
+	/**
+	 * get map of molecules under namespace.
+	 *
+	 * @param namespace
+	 * @return map indexed by id
+	 */
+	public Map<String, CMLMolecule> getMolecules(String namespace) {
+		if (this == null) {
+			throw new CMLRuntimeException("Null catalogTool");
+		}
+		CMLMap catalogMap = getCatalogMap();
+		if (catalogMap == null) {
+			throw new CMLRuntimeException("cannot get catalogMap");
+		}
+		String to = catalogMap.getToRef(namespace);
+		if (to == null) {
+			throw new CMLRuntimeException("Cannot find catalog entry for: "
+					+ namespace);
+		}
+	
+		URL toUrl = null;
+		try {
+			toUrl = new URL(getCatalogUrl(), to);
+		} catch (MalformedURLException e1) {
+			throw new CMLRuntimeException("Bad catalogue reference: " + to, e1);
+		}
+	
+		Map<String, CMLMolecule> moleculeMap = null;
+		File file = new File(toUrl.getFile());
+		if (file.isDirectory()) {
+			moleculeMap = CatalogTool.getMoleculeMapFromDirectory(file);
+		} else {
+			moleculeMap = CatalogTool.getMoleculeMapFromFile(toUrl);
+		}
+		return moleculeMap;
+	}
+
+	private static Map<String, CMLMolecule> getMoleculeMapFromDirectory(File dir) {
+	File[] files = dir.listFiles();
+	Map<String, CMLMolecule> moleculeMap = new HashMap<String, CMLMolecule>();
+	for (File file : files) {
+		if (!file.toString().endsWith(".xml")) {
+			continue;
+		}
+		// File file1 = new File(dir, file.toString());
+		CMLMolecule molecule = null;
+		try {
+			Document doc = new CMLBuilder().build(file);
+			molecule = (CMLMolecule) doc.getRootElement();
+		} catch (Exception e) {
+			System.err.println("File: " + file);
+			throw new CMLRuntimeException(e);
+		}
+		moleculeMap.put(molecule.getId(), molecule);
+	}
+	return moleculeMap;
+}
+	
+	private static Map<String, CMLMolecule> getMoleculeMapFromFile(URL toUrl) {
+		CMLCml cml = null;
+		InputStream cmlIn = null;
+		try {
+			cmlIn = toUrl.openStream();
+			cml = (CMLCml) new CMLBuilder().build(cmlIn).getRootElement();
+		} catch (Exception e) {
+			throw new CMLRuntimeException("Cannot read molecule file: " + toUrl
+					+ " (" + e + ")");
+		} finally {
+			if (cmlIn != null) {
+				try {
+					cmlIn.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Map<String, CMLMolecule> moleculeMap = new HashMap<String, CMLMolecule>();
+		Elements elements = cml.getChildCMLElements(CMLMolecule.TAG);
+		for (int i = 0; i < elements.size(); i++) {
+			CMLMolecule molecule = (CMLMolecule) elements.get(i);
+			moleculeMap.put(molecule.getId(), molecule);
+		}
+		return moleculeMap;
+	}
+	/**
+	 * get referenced molecule. uses ref attribute on molecule
+	 *
+	 * @param tool TODO
+	 * @return the molecule or null
+	 */
+	public CMLMolecule getReferencedMolecule(MoleculeTool tool) {
+		return getReferencedMolecule1(tool.molecule.getRef(), tool);
+	}
+
+	/**
+		 * ger referenced molecule.
+		 *
+		 * @param ref
+		 *            (local "foo", or namespaced ("f:bar"))
+	 * @param tool TODO
+	 * @return the molecule or null
+		 */
+		public CMLMolecule getReferencedMolecule1(String ref, MoleculeTool tool) {
+			if (this == null) {
+				new Exception().printStackTrace();
+				throw new CMLRuntimeException("Null catalog tool");
+			}
+			CMLMolecule refMol = null;
+			if (ref == null) {
+				throw new CMLRuntimeException("ref must not be null");
+			}
+			int idx = ref.indexOf(EuclidConstants.S_COLON);
+			if (idx == -1) {
+				throw new CMLRuntimeException(
+						"unprefixed reference for molecule NYI");
+			}
+			String prefix = ref.substring(0, idx);
+			if (prefix.length() == 0) {
+				throw new CMLRuntimeException(
+						"Cannot have empty prefix for mol ref");
+			}
+			String namespace = tool.molecule.getNamespaceForPrefix(prefix);
+			if (namespace == null) {
+				throw new CMLRuntimeException("Cannot find namespace for: " + ref);
+			}
+			Map<String, CMLMolecule> moleculeMap = getMolecules(
+					namespace);
+			if (moleculeMap == null) {
+				throw new CMLRuntimeException("Cannot find molecule map for: "
+						+ namespace);
+			}
+			String localRef = ref.substring(idx + 1);
+			if (localRef.length() == 0) {
+				throw new CMLRuntimeException(
+						"Cannot have empty prefix for mol ref");
+			}
+			refMol = moleculeMap.get(localRef);
+			return refMol;
+		}
 }
