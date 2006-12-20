@@ -63,7 +63,7 @@ public class CrystalToolTest extends AbstractToolTest {
 
     CrystalTool tool1 = null;
 
-    String mol1S = ""
+    String mol1S = S_EMPTY
             + "<molecule "
             + CML_XMLNS
             + ">"
@@ -71,14 +71,14 @@ public class CrystalToolTest extends AbstractToolTest {
             + "  <atom id='a1' xFract='0.1'  yFract='0.2'  zFract='0.3' elementType='O'/>"
             + "  <atom id='a2' xFract='0.15' yFract='0.25' zFract='0.35' elementType='H'/>"
             + "  <atom id='a3' xFract='0.15' yFract='0.15' zFract='0.25' elementType='H'/>"
-            + " </atomArray>" + "</molecule>" + "";
+            + " </atomArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule mol1;
 
-    String crystal1S = "" + "<crystal " + CML_XMLNS + ">"
+    String crystal1S = S_EMPTY + "<crystal " + CML_XMLNS + ">"
             + "  <cellParameter type='length'>10. 11. 12.</cellParameter>"
             + "  <cellParameter type='angle'>90. 90. 90.</cellParameter>"
-            + "</crystal>" + "";
+            + "</crystal>" + S_EMPTY;
 
     CMLCrystal crystal1;
 
@@ -145,7 +145,7 @@ public class CrystalToolTest extends AbstractToolTest {
     @Test
     @Ignore
     public void testGetSymmetryContactsToMolecule() {
-        String molS = ""
+        String molS = S_EMPTY
                 + "<molecule id='m1' "
                 + CML_XMLNS
                 + ">"
@@ -281,15 +281,15 @@ public class CrystalToolTest extends AbstractToolTest {
                         .size());
                 if (contactCount[i] > 0) {
                     Contact contact = contactList.get(0);
-                    Assert.assertEquals("contact atom 1 (" + i + ")", ss[i][0],
+                    Assert.assertEquals("contact atom 1 (" + i + S_RBRAK, ss[i][0],
                             contact.getFromAtom().getId());
-                    Assert.assertEquals("contact atom 2 (" + i + ")", ss[i][1],
+                    Assert.assertEquals("contact atom 2 (" + i + S_RBRAK, ss[i][1],
                             contact.getToAtom().getId());
                     String cc = contact.getTransform3().getEuclidTransform3()
                             .getCrystallographicString();
-                    Assert.assertEquals("contact operator (" + i + ")", ss[i][2],
+                    Assert.assertEquals("contact operator (" + i + S_RBRAK, ss[i][2],
                             cc);
-                    Assert.assertEquals("contact distance (" + i + ")",
+                    Assert.assertEquals("contact distance (" + i + S_RBRAK,
                             contactDist[i], contact.getDistance(), EPS);
                 }
 
@@ -415,7 +415,7 @@ public class CrystalToolTest extends AbstractToolTest {
                     MoleculeTool moleculeTool = new MoleculeTool(molecule);
                     
                     moleculeTool.createCartesiansFromFractionals();
-                    molecule.setId(cifname+((molecule.getId() == null) ? "" : S_UNDER+molecule.getId()));
+                    molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
                     try {
 						moleculeTool.processDisorder(RemoveDisorderControl.REMOVE_MINOR_DISORDER);
 					} catch (Exception e) {
@@ -437,15 +437,16 @@ public class CrystalToolTest extends AbstractToolTest {
                     		mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8), moietyFormula);
                     	}
                     } catch (CMLRuntimeException e) {
-                        //System.err.println("Cannot calculate bond orders/ring: "+e+"/"+cifname);
+                        //System.err.println("Cannot calculate bond orders/ring: "+e+S_SLASH+cifname);
                     	e.printStackTrace();
                         continue;
                     }
                     // full cif
-                    writeXML(getCrystalName(user, cifname+"_"+mol), mergedMolecule, log, "full cif");
+                    writeXML(getCrystalName(user, cifname+S_UNDER+mol), mergedMolecule, log, "full cif");
                     // ring nuclei
                     //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
                     // atom centered species
+                	@SuppressWarnings("unused")
                     String outfile = getOutfile(user, "atom", cifname+"_ATOM_", mol, 0, 0);
                     //outputAtomCenteredSpecies(outfile, moleculeTool, log);
                     
@@ -519,6 +520,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
 
+	@SuppressWarnings("unused")
     private void outputRingNuclei(String user, String cifname, int mol, 
             CMLMolecule mergedMolecule, CMLLog log) {
         List<CMLMolecule> subMoleculeList =
@@ -562,6 +564,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
 
+	@SuppressWarnings("unused")
     private void outputAtomCenteredSpecies(
             String outfile, MoleculeTool moleculeTool, CMLLog log) {
         CMLMolecule molecule = moleculeTool.getMolecule();
@@ -593,6 +596,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
 
+	@SuppressWarnings("unused")
     private void outputClusters(
         String user, String cifname, CMLMolecule molecule, CMLLog log) {
         List<Type> typeList = new ArrayList<Type>();
@@ -616,7 +620,7 @@ public class CrystalToolTest extends AbstractToolTest {
         					writeXML(getOutfile(user, "clust", cifname+"_clust", 0, 0, ++clust),
         							sproutCluster, log, "nucleus");
         				} else {
-        					System.err.println("No atoms in cluster!"+cifname+"_"+(clust-1));
+        					System.err.println("No atoms in cluster!"+cifname+S_UNDER+(clust-1));
         				}
         			}
         		}
@@ -624,6 +628,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
 
+	@SuppressWarnings("unused")
     private void outputLigands(
         String user, String cifname, CMLMolecule molecule, CMLLog log) {
         List<Type> typeList = new ArrayList<Type>();
@@ -725,7 +730,7 @@ public class CrystalToolTest extends AbstractToolTest {
             s += File.separator + "xml" + File.separator + cifname + ".cml.xml";
         } else if (user.equals("NED")) {
             @SuppressWarnings("unused")
-            int idx = cifname.lastIndexOf("_");
+            int idx = cifname.lastIndexOf(S_UNDER);
             s += File.separator + cifname
                     + ".cml.xml";
         } else if (user.startsWith("HEATH")) {

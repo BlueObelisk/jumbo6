@@ -62,8 +62,8 @@ public class CMLBond extends AbstractBond {
     public final static String AROMATIC = "A";
 
     // same as SMILES
-    /** zero bond (disjoint == "." in SMILES) */
-    public final static String ZERO = ".";
+    /** zero bond (disjoint == S_PERIOD in SMILES) */
+    public final static String ZERO = S_PERIOD;
 
     /** wedge bond */
     public final static String WEDGE = "W";
@@ -81,7 +81,7 @@ public class CMLBond extends AbstractBond {
     public final static String LINEAR = "L";
 
     /** nostereo bond */
-    public final static String NOSTEREO = "-";
+    public final static String NOSTEREO = S_MINUS;
 
     /** acyclic bond */
     public final static String ACYCLIC = "ACYCLIC";
@@ -403,7 +403,7 @@ public class CMLBond extends AbstractBond {
         if (atom == null) {
 //            CMLMolecule molecule = this.getMolecule();
             String molId = (molecule == null) ? null : molecule.getId();
-            throw new CMLRuntimeException("Non-existent atom in bond " + id+"/"+molId);
+            throw new CMLRuntimeException("Non-existent atom in bond " + id+S_SLASH+molId);
         }
         atomList.add(atom);
     }
@@ -771,7 +771,7 @@ public class CMLBond extends AbstractBond {
      */
     void renameAtomRef(String oldId, String newId) {
         String[] atomRefs2 = this.getAtomRefs2();
-        // int idx = atomRefs2.indexOf(" ");
+        // int idx = atomRefs2.indexOf(S_SPACE);
         // String atomRef0 = atomRefs2.substring(0, idx);
         // String atomRef1 = atomRefs2.substring(idx+1);
         String newAtomRef0 = S_EMPTY;
@@ -804,7 +804,7 @@ public class CMLBond extends AbstractBond {
         String at0id = atomList.get(0).getId();
         String at1id = atomList.get(1).getId();
 
-        bondId = at0id + "_" + at1id;
+        bondId = at0id + S_UNDER + at1id;
         this.setId(bondId);
         return bondId;
     }

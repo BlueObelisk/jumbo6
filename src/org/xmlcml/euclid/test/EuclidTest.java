@@ -47,7 +47,7 @@ public class EuclidTest implements EuclidConstants {
             Object actual) {
         String formatted = "";
         if (message != null) {
-            formatted = message + " ";
+            formatted = message + S_SPACE;
         }
         return formatted + "expected:<" + expected + "> but was:<" + actual
                 + ">";

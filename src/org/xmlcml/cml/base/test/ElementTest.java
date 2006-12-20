@@ -188,9 +188,9 @@ public class ElementTest extends BaseTest {
 		int nsCount = b.getNamespaceDeclarationCount();
 		for (int i = 0; i < nsCount; i++) {
 			// Util.output("NSPREFIX"+i+"
-			// ["+b.getNamespacePrefix(i)+"]");
+			// ["+b.getNamespacePrefix(i)+S_RSQUARE);
 			// Util.output("NSURI"+i+"
-			// ["+b.getNamespaceURI(b.getNamespacePrefix(i))+"]");
+			// ["+b.getNamespaceURI(b.getNamespacePrefix(i))+S_RSQUARE);
 		}
 		// Util.output("NS: "+b.getNamespaceURI("ns"));
 	}

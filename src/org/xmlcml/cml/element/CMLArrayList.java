@@ -142,7 +142,7 @@ public class CMLArrayList extends org.xmlcml.cml.element.AbstractArrayList {
         if (list.getConventionAttribute() != null) {
             tableHeaderCell.setConvention(list.getConvention());
         }
-        List<Node> childNodes = CMLUtil.getQueryNodes(this, "*");
+        List<Node> childNodes = CMLUtil.getQueryNodes(this, S_STAR);
         if (childNodes.size() > 0) {
             tableHeaderCell.setDataType(((Element)childNodes.get(0)).getQualifiedName());
         }

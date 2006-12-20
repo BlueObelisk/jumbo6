@@ -180,7 +180,7 @@ public abstract class GenericDictionaryMap extends
 		System.out.println("Dictionary map: " + this.size());
 		for (String s : this.keySet()) {
 			GenericDictionary gd = this.get(s);
-			System.out.println(s + ":");
+			System.out.println(s + S_COLON);
 			gd.debug();
 		}
 	}

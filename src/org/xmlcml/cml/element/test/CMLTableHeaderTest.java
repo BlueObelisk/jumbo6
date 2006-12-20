@@ -17,7 +17,7 @@ public class CMLTableHeaderTest extends AbstractTableTest {
      */
     @Test
     public final void testWriteHTML() {
-        String expected = "" +
+        String expected = S_EMPTY +
                 "\n<tr><th class='c:foo'>foo</th><th class='c:bar'>bar</th></tr>";
         assertWriteHTML(tableHeader, expected);
     }

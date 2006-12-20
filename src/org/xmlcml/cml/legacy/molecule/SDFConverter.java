@@ -16,6 +16,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -30,7 +31,7 @@ import org.xmlcml.cml.element.CMLScalar;
  * @author pmr
  * 
  */
-public class SDFConverter {
+public class SDFConverter implements CMLConstants {
 
     final static Logger logger = Logger.getLogger(SDFConverter.class.getName());
 
@@ -243,8 +244,8 @@ public class SDFConverter {
          * MoleculeToolImpl.getMoleculeTool(molecule); MoleculeTool moleculeTool =
          * MoleculeToolImpl.getTool(molecule); boolean joined = true; if
          * (joinBonds) { try { moleculeTool.calculateBondedAtoms(); } catch
-         * (CMLException e) { //logger.info("problem in molecule " + i + " " +
-         * molecule.getTitle() + " " + molecule.getId()); //e.printStackTrace();
+         * (CMLException e) { //logger.info("problem in molecule " + i + S_SPACE +
+         * molecule.getTitle() + S_SPACE + molecule.getId()); //e.printStackTrace();
          * joined = false; } // must set to reasonable number or algorithm fails
          * if (joined) { moleculeTool.setBondOrders("1"); } } if (joined &&
          * addOrderBonds) { moleculeTool.adjustBondOrdersToValency(); } }
@@ -266,9 +267,9 @@ public class SDFConverter {
         try {
             cmlDoc = builder.build(r);
         } catch (ValidityException ve) {
-            throw new CMLException("" + ve);
+            throw new CMLException(S_EMPTY + ve);
         } catch (ParsingException pe) {
-            throw new CMLException("" + pe);
+            throw new CMLException(S_EMPTY + pe);
         }
 
         return cmlDoc;
@@ -306,21 +307,21 @@ public class SDFConverter {
                 // (n) - external registry number
                 String dataTitle = line.substring(line.indexOf("<") + 1, line
                         .indexOf(">"));
-                line = line.replaceFirst("<" + dataTitle + ">", "");
+                line = line.replaceFirst("<" + dataTitle + ">", S_EMPTY);
                 // TODO Implement reading of diffrent data headers in SDF files
 
                 list.setTitle(dataTitle);
                 mainList.appendChild(list);
                 while (true) {
                     line = br.readLine().trim();
-                    if (line.equals("")) {
+                    if (line.equals(S_EMPTY)) {
                         break;
                     }
                     CMLScalar scalar = new CMLScalar();
                     scalar.setXMLContent(line);
                     list.appendChild(scalar);
                 }
-            } else if (line.equals("")) {
+            } else if (line.equals(S_EMPTY)) {
                 // ignore blank lines
             } else {
                 logger.info("SDF data misread: " + line);
@@ -426,8 +427,8 @@ public class SDFConverter {
         }
         SDFConverter sdf = new SDFConverter();
         int i = 0;
-        String infile = "";
-        String outfile = "";
+        String infile = S_EMPTY;
+        String outfile = S_EMPTY;
         boolean join = false;
         boolean addOrder = false;
         boolean vvv = false;
@@ -456,7 +457,7 @@ public class SDFConverter {
         }
         Document doc = null;
         try {
-            if (!infile.equals("")) {
+            if (!infile.equals(S_EMPTY)) {
                 if (infile.endsWith(".cml")) {
                     doc = sdf.readXML(new FileReader(infile));
                     sdf.setDocument(doc);
@@ -478,7 +479,7 @@ public class SDFConverter {
                 sdf.setVvv(vvv);
             }
             sdf.process();
-            if (doc != null && !outfile.equals("")) {
+            if (doc != null && !outfile.equals(S_EMPTY)) {
                 if (outfile.endsWith(".cml")) {
                     Serializer serializer = new Serializer(
                             new FileOutputStream(outfile));

@@ -39,8 +39,8 @@ public class Plane3Test extends GeomTest {
      */
     public static void assertEquals(String msg, Plane3 test, Plane3 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
@@ -57,9 +57,9 @@ public class Plane3Test extends GeomTest {
      */
     public static void assertEquals(String msg, double[] test, Plane3 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 4", 4, test.length);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 

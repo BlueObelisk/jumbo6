@@ -487,8 +487,8 @@ public class CMLBondSet extends AbstractBondSet {
     public void removeBond(CMLBond bond) throws CMLRuntimeException {
         if (bond != null) {
             if (!set.contains(bond)) {
-                throw new CMLRuntimeException("Bond not in set:" + bond.getId() + ":"
-                        + Util.concatenate(this.getXMLContent(), "/"));
+                throw new CMLRuntimeException("Bond not in set:" + bond.getId() + S_COLON
+                        + Util.concatenate(this.getXMLContent(), S_SLASH));
             }
             // remove from set
             set.remove(bond);

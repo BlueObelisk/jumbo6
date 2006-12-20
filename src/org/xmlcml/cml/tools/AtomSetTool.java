@@ -239,7 +239,7 @@ public class AtomSetTool implements CMLConstants {
                     // boolean diff = false;
                     if (atomSets[i] == null || atomSets[j] == null) {
                         throw new CMLRuntimeException("Null atom set component: " + i
-                                + "/" + j);
+                                + S_SLASH + j);
                     } else if (atomSets[i].compareTo(atomSets[j]) == 0) {
                         different = false;
                         break;

@@ -66,8 +66,8 @@ public class Real2VectorTest extends EuclidTest {
      */
     public static void assertEquals(String msg, Real2Vector test,
             Real2Vector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getXY().getArray(), expected.getXY()
                 .getArray(), epsilon);
@@ -85,8 +85,8 @@ public class Real2VectorTest extends EuclidTest {
      */
     public static void assertEquals(String msg, double[] test,
             Real2Vector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getXY().getArray().length);

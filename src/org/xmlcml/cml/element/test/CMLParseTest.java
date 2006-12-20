@@ -81,7 +81,7 @@ public class CMLParseTest extends AbstractTest {
          } catch (ValidityException e) {
          Assert.fail("should not throw validity exception "+e.getMessage());
          } catch (ParsingException e) {
-         Assert.assertEquals("parse exception ", "Attribute \"a\" was already specified for element \"foo\".", e.getMessage());
+         Assert.assertEquals("parse exception ", "Attribute \"a\" was already specified for element 'foo'.", e.getMessage());
          } catch (IOException e) {
          Assert.fail("should not throw IO exception "+e.getMessage());
          } catch (CMLRuntime e) {

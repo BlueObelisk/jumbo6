@@ -409,7 +409,7 @@ class Fragment implements CMLConstants {
                     rightS = rightS.substring(joinBondS.length());
                     if (!rightS.equals(S_EMPTY)) {
                         throw new CMLRuntimeException("Unexpected fragment after " +
-                                "repeatableBond :"+rightS+":");
+                                "repeatableBond :"+rightS+S_COLON);
                     }
                 } else if (rc == Branch.LBRANCH) {
                     String branchS = Branch.grabBranch(rightS);

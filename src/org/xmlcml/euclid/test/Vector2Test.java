@@ -42,8 +42,8 @@ public class Vector2Test extends EuclidTest {
      */
     public static void assertEquals(String msg, Vector2 test, Vector2 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
     }

@@ -68,7 +68,7 @@ public abstract class ReactionAllTestBase extends AbstractTest {
             + "    <substance>" + "      <molecule title='benzene' id='m7'/>"
             + "    </substance>" + "  </substanceList>" + "  <map>"
             + "    <link from='a1' to='a1'/>" + "    <link from='a2' to='a3'/>"
-            + "    <link from='a3' to='a2'/>" + "  </map>" + "</reaction>" + "";
+            + "    <link from='a3' to='a2'/>" + "  </map>" + "</reaction>" + S_EMPTY;
     protected CMLReaction xmlReact1;
     protected CMLReaction multiReact1;
     protected CMLElements<CMLReactantList> xmlReactantLists1;
@@ -94,7 +94,7 @@ public abstract class ReactionAllTestBase extends AbstractTest {
             + "    </product>" + "  </productList>"
             + "  <spectatorList id='sl1'>"
             + "    <spectator id='sp1' title='phenolphthalein'/>"
-            + "  </spectatorList>" + "</reaction>" + "";
+            + "  </spectatorList>" + "</reaction>" + S_EMPTY;
     protected CMLReaction xmlReact2;
     /**
      * setup.
@@ -167,7 +167,7 @@ public abstract class ReactionAllTestBase extends AbstractTest {
                 + "          <atom id='a3' elementType='Ar'>"
                 + "          </atom>" + "        </atomArray>"
                 + "      </molecule>" + "    </spectator>"
-                + "  </spectatorList>" + "</reaction>" + "";
+                + "  </spectatorList>" + "</reaction>" + S_EMPTY;
         try {
             multiReact1 = (CMLReaction) new CMLBuilder().build(
                     new StringReader(multiReact1S)).getRootElement();

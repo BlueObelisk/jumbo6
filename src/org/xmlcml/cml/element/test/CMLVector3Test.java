@@ -41,8 +41,8 @@ public class CMLVector3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, CMLVector3 test,
             CMLVector3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getXYZ3(), expected.getXYZ3(),
                 epsilon);
@@ -60,9 +60,9 @@ public class CMLVector3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, double[] test,
             CMLVector3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 3", 3, test.length);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test, expected.getXYZ3(), epsilon);
     }

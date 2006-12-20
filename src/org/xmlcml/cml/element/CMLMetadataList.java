@@ -169,14 +169,14 @@ public class CMLMetadataList extends AbstractMetadataList {
                 MetadataNameAttribute nameAttribute = (MetadataNameAttribute) ((CMLMetadata) metadata)
                         .getNameAttribute();
                 if (nameAttribute == null) {
-                    errorList.add("NULL NAME: " + "[" + metadata.toXML() + "]");
+                    errorList.add("NULL NAME: " + S_LSQUARE + metadata.toXML() + S_RSQUARE);
                 } else {
                     CMLEntry entry = (CMLEntry) dictionaryMap
                             .getEntry(nameAttribute);
                     if (entry == null) {
                         errorList.add("NOTFOUND "
-                                + nameAttribute.getQualifiedName() + "["
-                                + metadata.toXML() + "]");
+                                + nameAttribute.getQualifiedName() + S_LSQUARE
+                                + metadata.toXML() + S_RSQUARE);
                     } else {
                         // System.out.println("FOUND "+dictRefAttribute);
                     }

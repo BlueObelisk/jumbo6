@@ -46,7 +46,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     // read into xom;
     String xmlForm1S = "<formula id='f1' concise='C 2 H 2 O 2 Br 1' "
-            + CML_XMLNS + " formalCharge='-1'/>" + "";
+            + CML_XMLNS + " formalCharge='-1'/>" + S_EMPTY;
 
     Document xmlForm1Doc = null;
 
@@ -96,18 +96,18 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         xomForm3 = new CMLFormula();
         xomForm3a = new CMLFormula();
         xomForm3a.setId("xomForm3a");
-        String expectS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + (char) 13 + (char) 10 + "<formula id=\"xomForm3a\"  "
+        String expectS = "<?xml version='1.0' encoding='UTF-8'?>"
+                + (char) 13 + (char) 10 + "<formula id='xomForm3a'  "
                 + CML_XMLNS + "/>";
         Element expectElem = parseValidString(expectS);
         assertEqualsCanonically("formula setup", expectElem, xomForm3a);
 
         xomForm3a.setConcise("H 2 S 1 O 4");
-        expectS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + (char) 13
+        expectS = "<?xml version='1.0' encoding='UTF-8'?>" + (char) 13
                 + (char) 10
-                + "<formula id=\"xomForm3a\" concise=\"H 2 O 4 S 1\"" + " "
+                + "<formula id='xomForm3a' concise='H 2 O 4 S 1'" + S_SPACE
                 + CML_XMLNS + ">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>"
                 + "</formula>";
         expectElem = parseValidString(expectS);
         assertEqualsCanonically("formula setup", expectElem, xomForm3a);
@@ -116,18 +116,18 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertEquals("xom3a children", 1, xomForm3aCopy
                 .getAtomArrayElements().size());
         // should be
-        expectS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + (char) 13
+        expectS = "<?xml version='1.0' encoding='UTF-8'?>" + (char) 13
                 + (char) 10
-                + "<formula id=\"xomForm3aaa\" concise=\"H 2 O 4 S 1\"" + " "
+                + "<formula id='xomForm3aaa' concise='H 2 O 4 S 1'" + S_SPACE
                 + CML_XMLNS + ">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>"
                 + "</formula>";
         // but is
-        expectS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + (char) 13
+        expectS = "<?xml version='1.0' encoding='UTF-8'?>" + (char) 13
                 + (char) 10
-                + "<formula id=\"xomForm3a\" concise=\"H 2 O 4 S 1\"" + " "
+                + "<formula id='xomForm3a' concise='H 2 O 4 S 1'" + S_SPACE
                 + CML_XMLNS + ">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>"
                 + "</formula>";
         
         expectElem = parseValidString(expectS);
@@ -188,7 +188,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         String xmlForm1S = "<formula id='f1' " + CML_XMLNS + ">"
                 + "  <atomArray>"
                 + "    <atom id='a2' elementType='O' count='3'/>"
-                + "  </atomArray>" + "</atom>" + "";
+                + "  </atomArray>" + "</atom>" + S_EMPTY;
 
         try {
             builder.build(new StringReader(xmlForm1S));
@@ -210,9 +210,9 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
          serializer = new CMLSerializer();
          s = serializer.getXML(xomForm1).trim();
          expect =
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+(char)13+(char)10+
-         "<formula concise=\"H 1 N 1 O 3\" count=\"2.0\" xmlns=\""+CML_NS+"\">" +
-         "<atomArray elementType=\"H O N\" count=\"1.0 3.0 1.0\"/>" +
+         "<?xml version='1.0' encoding='UTF-8'?>"+(char)13+(char)10+
+         "<formula concise='H 1 N 1 O 3' count='2.0' xmlns=\S_EMPTY+CML_NS+"'>" +
+         "<atomArray elementType='H O N' count='1.0 3.0 1.0'/>" +
          "</formula>";
          Assert.assertEquals("xom1 serializer2", expect, s);
          xomForm1.add("H", 7.0);
@@ -220,37 +220,37 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
          serializer = new CMLSerializer();
          s = serializer.getXML(xomForm1).trim();
          expect =
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+(char)13+(char)10+
-         "<formula concise=\"H 8 O 3 N 1\" count=\"2.0\" xmlns=\""+CML_NS+"\">" +
-         "<atomArray elementType=\"H O N\" count=\"8.0 3.0 1.0\"/>" +
+         "<?xml version='1.0' encoding='UTF-8'?>"+(char)13+(char)10+
+         "<formula concise='H 8 O 3 N 1' count='2.0' xmlns=\S_EMPTY+CML_NS+"'>" +
+         "<atomArray elementType='H O N' count='8.0 3.0 1.0'/>" +
          "</formula>";
          expect =
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+(char)13+(char)10+
-         "<formula concise=\"H 8 N 1 O 3\" count=\"2.0\" xmlns=\""+CML_NS+"\">" +
-         "<atomArray elementType=\"H N O\" count=\"8.0 1.0 3.0\"/>" +
-         "<atomArray elementType=\"H O N\" count=\"8.0 3.0 1.0\"/>" +
+         "<?xml version='1.0' encoding='UTF-8'?>"+(char)13+(char)10+
+         "<formula concise='H 8 N 1 O 3' count='2.0' xmlns=\S_EMPTY+CML_NS+"'>" +
+         "<atomArray elementType='H N O' count='8.0 1.0 3.0'/>" +
+         "<atomArray elementType='H O N' count='8.0 3.0 1.0'/>" +
          "</formula>";
          Assert.assertEquals("xom1 serializer2", expect, s);
 
          serializer = new CMLSerializer();
          s = serializer.getXML(xomForm3).trim();
          expect =
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+(char)13+(char)10+
-         "<formula xmlns=\""+CML_NS+"\">" +
-         "<formula concise=\"H 2 O 4 S 1\">" +
-         "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>" +
+         "<?xml version='1.0' encoding='UTF-8'?>"+(char)13+(char)10+
+         "<formula xmlns=\S_EMPTY+CML_NS+"'>" +
+         "<formula concise='H 2 O 4 S 1'>" +
+         "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>" +
          "</formula>" +
          "</formula>";
          expect =
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+(char)13+(char)10+
-         "<formula xmlns=\""+CML_NS+"\">" +
-         "<formula concise=\"H 2 O 4 S 1\">" +
-         "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>" +
-         "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>" +
+         "<?xml version='1.0' encoding='UTF-8'?>"+(char)13+(char)10+
+         "<formula xmlns=\S_EMPTY+CML_NS+"'>" +
+         "<formula concise='H 2 O 4 S 1'>" +
+         "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>" +
+         "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>" +
          "</formula>" +
-         "<formula concise=\"C 1 H 1 Na 1 O 3\">" +
-         "<atomArray elementType=\"C H Na O\" count=\"1.0 1.0 1.0 3.0\"/>" +
-         "<atomArray elementType=\"C H Na O\" count=\"1.0 1.0 1.0 3.0\"/>" +
+         "<formula concise='C 1 H 1 Na 1 O 3'>" +
+         "<atomArray elementType='C H Na O' count='1.0 1.0 1.0 3.0'/>" +
+         "<atomArray elementType='C H Na O' count='1.0 1.0 1.0 3.0'/>" +
          "</formula>" +
          "</formula>";
          Assert.assertEquals("xom1 serializer2", expect, s);
@@ -558,11 +558,11 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     public void testAddFormulaCMLFormula() {
         CMLSerializer serializer = new CMLSerializer();
         String s = serializer.getXML(xomForm3a).trim();
-        String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        String expect = "<?xml version="+S_QUOT+"1.0"+S_QUOT+" encoding="+S_QUOT+"UTF-8"+S_QUOT+"?>"
                 + (char) 13 + (char) 10
-                + "<formula id=\"xomForm3a\" concise=\"H 2 O 4 S 1\" "
-                + "xmlns=\"" + CML_NS + "\">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + "<formula id="+S_QUOT+"xomForm3a"+S_QUOT+" concise="+S_QUOT+"H 2 O 4 S 1"+S_QUOT+" "
+                + "xmlns="+S_QUOT+"" + CML_NS + ""+S_QUOT+">"
+                + "<atomArray elementType="+S_QUOT+"H O S"+S_QUOT+" count="+S_QUOT+"2.0 4.0 1.0"+S_QUOT+"/>"
                 + "</formula>";
         Assert.assertEquals("xom3a serializer", expect, s);
         Assert.assertEquals("child count", 1, xomForm3a.getChildCount());
@@ -572,11 +572,11 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                 .getConcise());
         serializer = new CMLSerializer();
         s = serializer.getXML(xomForm3a).trim();
-        expect = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + (char) 13
+        expect = "<?xml version="+S_QUOT+"1.0"+S_QUOT+" encoding="+S_QUOT+"UTF-8"+S_QUOT+"?>" + (char) 13
                 + (char) 10
-                + "<formula id=\"xomForm3a\" concise=\"H 2 O 4 S 1\" "
-                + "xmlns=\"" + CML_NS + "\">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + "<formula id="+S_QUOT+"xomForm3a"+S_QUOT+" concise="+S_QUOT+"H 2 O 4 S 1"+S_QUOT+" "
+                + "xmlns="+S_QUOT+"" + CML_NS + ""+S_QUOT+">"
+                + "<atomArray elementType="+S_QUOT+"H O S"+S_QUOT+" count="+S_QUOT+"2.0 4.0 1.0"+S_QUOT+"/>"
                 + "</formula>";
         Assert.assertEquals("xom3a serializer", expect, s);
         // now add the formula
@@ -590,18 +590,18 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                 childFormula.get(1).getConcise());
         serializer = new CMLSerializer();
         s = serializer.getXML(xomForm3a).trim();
-        expect = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        expect = "<?xml version="+S_QUOT+"1.0"+S_QUOT+" encoding="+S_QUOT+"UTF-8"+S_QUOT+"?>"
                 + (char) 13
                 + (char) 10
-                + "<formula id=\"xomForm3a\" "
-                + "xmlns=\""
+                + "<formula id="+S_QUOT+"xomForm3a"+S_QUOT+" "
+                + "xmlns="+S_QUOT+""
                 + CML_NS
-                + "\">"
-                + "<formula id=\"xomForm3a\" concise=\"H 2 O 4 S 1\">"
-                + "<atomArray elementType=\"H O S\" count=\"2.0 4.0 1.0\"/>"
+                + ""+S_QUOT+">"
+                + "<formula id="+S_QUOT+"xomForm3a"+S_QUOT+" concise="+S_QUOT+"H 2 O 4 S 1"+S_QUOT+">"
+                + "<atomArray elementType="+S_QUOT+"H O S"+S_QUOT+" count="+S_QUOT+"2.0 4.0 1.0"+S_QUOT+"/>"
                 + "</formula>"
-                + "<formula concise=\"C 1 H 1 Na 1 O 3\">"
-                + "<atomArray elementType=\"C H Na O\" count=\"1.0 1.0 1.0 3.0\"/>"
+                + "<formula concise="+S_QUOT+"C 1 H 1 Na 1 O 3"+S_QUOT+">"
+                + "<atomArray elementType="+S_QUOT+"C H Na O"+S_QUOT+" count="+S_QUOT+"1.0 1.0 1.0 3.0"+S_QUOT+"/>"
                 + "</formula>" + "</formula>";
         Assert.assertEquals("xom3a serializer", expect, s);
 

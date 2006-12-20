@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class Real2 {
+public class Real2 implements EuclidConstants {
     /** the first floating point value */
     public double x;
     /** the second floating point value */
@@ -440,7 +440,7 @@ public class Real2 {
      * @return string
      */
     public String toString() {
-        return "(" + x + "," + y + ")";
+        return S_LBRAK + x + S_COMMA + y + S_RBRAK;
     }
     /**
      * get x y as array.

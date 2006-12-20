@@ -118,11 +118,11 @@ public class IntMatrix implements EuclidConstants {
             throws EuclidException {
         this(hirow - lowrow + 1, hicol - lowcol + 1);
         if (hirow >= m.getRows() || lowrow < 0) {
-            throw new EuclidException("bad row index: " + lowrow + "/" + hirow
+            throw new EuclidException("bad row index: " + lowrow + S_SLASH + hirow
                     + " outside 0/" + m.getRows());
         }
         if (hicol >= m.getCols() || lowcol < 0) {
-            throw new EuclidException("bad col index: " + lowcol + "/" + hicol
+            throw new EuclidException("bad col index: " + lowcol + S_SLASH + hicol
                     + " outside 0/" + m.getCols());
         }
         for (int i = 0, mrow = lowrow; i < rows; i++, mrow++) {
@@ -283,7 +283,7 @@ public class IntMatrix implements EuclidConstants {
     private void checkConformable2(IntMatrix m) throws EuclidException {
         if (m.rows != this.cols) {
             throw new EuclidException("unequal matrices (" + this.cols + ", "
-                    + m.rows + ")");
+                    + m.rows + S_RBRAK);
         }
     }
     private void check(int rows, int cols, int[] array) throws EuclidException {
@@ -291,8 +291,8 @@ public class IntMatrix implements EuclidConstants {
             throw new EuclidException("IntMatrix(null)");
         }
         if (array.length != rows * cols) {
-            throw new EuclidException("rows * cols (" + rows + "*" + cols
-                    + ") != array (" + array.length + ")");
+            throw new EuclidException("rows * cols (" + rows + S_STAR + cols
+                    + ") != array (" + array.length + S_RBRAK);
         }
     }
     /**
@@ -486,7 +486,7 @@ public class IntMatrix implements EuclidConstants {
      */
     public void columnwiseDivide(IntArray f) throws EuclidException {
         if (this.cols != f.size()) {
-            throw new EuclidException("unequal matrices " + this.cols + "/"
+            throw new EuclidException("unequal matrices " + this.cols + S_SLASH
                     + f.size());
         }
         for (int i = 0; i < rows; i++) {
@@ -517,7 +517,7 @@ public class IntMatrix implements EuclidConstants {
      */
     private void checkRow(int row) throws EuclidException {
         if (row < 0 || row >= rows)
-            throw new EuclidException("Bad value of row: " + row + "/" + rows);
+            throw new EuclidException("Bad value of row: " + row + S_SLASH + rows);
     }
     /**
      * checks a col is in range.
@@ -527,7 +527,7 @@ public class IntMatrix implements EuclidConstants {
      */
     private void checkColumn(int col) throws EuclidException {
         if (col < 0 || col >= cols)
-            throw new EuclidException("Bad value of col: " + col + "/" + cols);
+            throw new EuclidException("Bad value of col: " + col + S_SLASH + cols);
     }
     /**
      * extracts a given element.
@@ -960,31 +960,31 @@ public class IntMatrix implements EuclidConstants {
     private void checkRows(IntArray f) throws EuclidException {
         if (f == null || f.size() != rows) {
             throw new EuclidException("incompatible value of array size: "
-                    + f.size() + "/" + rows);
+                    + f.size() + S_SLASH + rows);
         }
     }
     private void checkColumns(IntArray f) throws EuclidException {
         if (f == null || f.size() != cols) {
             throw new EuclidException("incompatible value of array size: "
-                    + f.size() + "/" + cols);
+                    + f.size() + S_SLASH + cols);
         }
     }
     private void checkColumns(IntSet is) throws EuclidException {
         if (is == null || is.size() != cols) {
             throw new EuclidException("incompatible value of IntSet size: "
-                    + is.size() + "/" + cols);
+                    + is.size() + S_SLASH + cols);
         }
     }
     private void checkColumns(IntMatrix m) throws EuclidException {
         if (m == null || m.getCols() != cols) {
             throw new EuclidException("incompatible value of matrix size: "
-                    + m.getCols() + "/" + cols);
+                    + m.getCols() + S_SLASH + cols);
         }
     }
     private void checkRows(IntMatrix m) throws EuclidException {
         if (m == null || m.getRows() != rows) {
             throw new EuclidException("incompatible value of matrix size: "
-                    + m.getRows() + "/" + rows);
+                    + m.getRows() + S_SLASH + rows);
         }
     }
     /**
@@ -1028,7 +1028,7 @@ public class IntMatrix implements EuclidConstants {
         int end_column = start_column + mcols;
         if (end_column > cols) {
             throw new EuclidException("too many columns to copy: "
-                    + start_column + "|" + mcols + "/" + cols);
+                    + start_column + "|" + mcols + S_SLASH + cols);
         }
         copyColumns(m.flmat, start_column, mcols);
     }
@@ -1164,7 +1164,7 @@ public class IntMatrix implements EuclidConstants {
         try {
             temp = new IntArray(cols, f);
         } catch (EuclidException e) {
-            throw new EuclidRuntimeException("" + e);
+            throw new EuclidRuntimeException(S_EMPTY + e);
         }
         replaceRowData(row, temp);
     }
@@ -1190,7 +1190,7 @@ public class IntMatrix implements EuclidConstants {
         if (!(afterRow <= (rows - m.rows))) {
             throw new EuclidException("afterRow (" + afterRow
                     + ")must be <= rows (" + rows + ") - m.rows (" + m.rows
-                    + ")");
+                    + S_RBRAK);
         }
         copyRowData(m.flmat, afterRow + 1, m.rows);
     }
@@ -1246,7 +1246,7 @@ public class IntMatrix implements EuclidConstants {
             replaceRowData(after_row + 1, f);
         } else {
             throw new EuclidException("Cannot add array after  row" + after_row
-                    + "/" + rows + "==" + mcols + "/" + cols);
+                    + S_SLASH + rows + "==" + mcols + S_SLASH + cols);
         }
     }
     /**
@@ -1493,11 +1493,11 @@ public class IntMatrix implements EuclidConstants {
      */
     public void writeXML(Writer w) throws IOException {
         StringBuffer sb = new StringBuffer();
-        sb.append("<matrix rows=\"" + rows + "\" columns=\"" + cols + "\">");
+        sb.append("<matrix rows='" + rows + "' columns='" + cols + "'>");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (i != 0 || j != 0)
-                    sb.append(" ");
+                    sb.append(S_SPACE);
                 if (format == null) {
                     sb.append(flmat[i][j]);
                 } else {

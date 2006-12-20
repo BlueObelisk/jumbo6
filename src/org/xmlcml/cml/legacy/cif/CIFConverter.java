@@ -116,7 +116,7 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
     
 	CMLCrystal crystal = null;
 	List<CMLScalar> cellParams = null;
-	/** omit "." or "?" in CIFs */
+	/** omit "." or S_QUERY in CIFs */
 	boolean omitIndeterminate = false;
     
 	CIFCategory[] CML_CATEGORIES = new CIFCategory[] {
@@ -522,7 +522,7 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
 	 */
     private String makeId(String s) {
 		String ss = (s == null) ? "unknown" : s;
-		while (ss.startsWith("_")) {
+		while (ss.startsWith(S_UNDER)) {
 			ss = ss.substring(1);
 		}
 		ss = (ss.length() == 0) ? "unknown" : ss;
@@ -634,9 +634,9 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
 		}
 	}
     private String makeDictRef(String name) {
-		String name0 = (name.startsWith("_")) ? name.substring(0) : name;
-		name0 = name0.replaceAll("/", "_slash_");
-		name0 = name0.replaceAll("%", "_percent_");
+		String name0 = (name.startsWith(S_UNDER)) ? name.substring(0) : name;
+		name0 = name0.replaceAll(S_SLASH, "_slash_");
+		name0 = name0.replaceAll(S_PERCENT, "_percent_");
 		return "iucr:"+name0;
 	}
     /**
@@ -893,11 +893,11 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
 	/** checks for special CIF values.
 	 *
 	 * @param s
-	 * @return true if s is "?" or "."
+	 * @return true if s is S_QUERY or "."
 	 */
     private static boolean isIndeterminateValue(String s) {
 		String ss = s.trim();
-		return ss.equals("?") || ss.equals(".");
+		return ss.equals(S_QUERY) || ss.equals(S_PERIOD);
 	}
     private void addAtomSitesSolution(CIFItem item, CMLCml cml0) {
 		String[] names = {
@@ -1248,7 +1248,7 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
                 e.printStackTrace();
             }
         } else {
-            File cifDir = new File("G:\\01-00\\");
+            File cifDir = new File("G:"+File.separator+"01-00+"+File.separator);
             String[] files = cifDir.list();
             /*--
             String cifnames[] = {
@@ -1264,7 +1264,7 @@ public class CIFConverter implements LegacyConverter, CMLConstants {
             LegacyConverter cifConverter = LegacyConverterFactory.createLegacyConverter(
                  "org.xmlcml.cml.legacy.cif.CIFConverter");
             for (String cifname : files) {
-                if (cifname.startsWith(".") || 
+                if (cifname.startsWith(S_PERIOD) || 
                         cifname.equals("cifs") ||
                 cifname.equals("files")) continue;
                 System.out.println(cifname+": ");

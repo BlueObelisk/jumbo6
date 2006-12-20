@@ -16,7 +16,7 @@ import nu.xom.Elements;
  * 
  * @param <E>
  */
-public class CMLElements<E extends Element> implements Iterable<E> {
+public class CMLElements<E extends Element> implements Iterable<E>, CMLConstants {
 
     private ArrayList<E> elementsArray;
 
@@ -94,7 +94,7 @@ public class CMLElements<E extends Element> implements Iterable<E> {
                     type = classx;
                 } else if (!(type.equals(classx))) {
                     throw new CMLRuntimeException("CMLElements is not homogeneous: "
-                            + type + "/" + classx);
+                            + type + S_SLASH + classx);
                 }
                 i++;
             }

@@ -26,7 +26,7 @@ import org.xmlcml.cml.tools.ConnectionTableTool;
  */
 public class ConnectionTableToolTest extends AbstractToolTest {
 
-    String ringMolS = "" +
+    String ringMolS = S_EMPTY +
             "  <molecule id='m1' "+CML_XMLNS+">" +
             "    <atomArray>" +
             "      <atom id='a1' elementType='C'/>" +
@@ -57,12 +57,12 @@ public class ConnectionTableToolTest extends AbstractToolTest {
             "      <bond id='b1011' atomRefs2='a10 a11'/>" +
             "    </bondArray>" +
             "  </molecule>" +
-            "";
+            S_EMPTY;
 
     CMLMolecule ringMol = null;
     ConnectionTableTool ringMolTool = null;
 
-    String multiMolS = "" +
+    String multiMolS = S_EMPTY +
     "  <molecule id='m2' "+CML_XMLNS+">" +
     "    <atomArray>" +
     "      <atom id='a1' elementType='C'/>" +
@@ -91,7 +91,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     "      <bond id='b1011' atomRefs2='a10 a11'/>" +
     "    </bondArray>" +
     "  </molecule>" +
-    "";
+    S_EMPTY;
 
     CMLMolecule multiMol = null;
     ConnectionTableTool multiMolTool = null;
@@ -108,7 +108,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     "      <bond id='b93' atomRefs2='a92 a93'/>" +
     "    </bondArray>" +
     "  </molecule>" +
-    "";
+    S_EMPTY;
     
     /** setup
      * @exception Exception
@@ -243,7 +243,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
             "      <bond id='b34' atomRefs2='a3 a4'/>" +
             "    </bondArray>" +
             "  </molecule>" +
-            "";
+            S_EMPTY;
         CMLMolecule triangleMol = makeMol(triangleMolS);
         ConnectionTableTool triangleMolTool = new ConnectionTableTool(triangleMol);
         cyclicBondList = triangleMolTool.getCyclicBonds();
@@ -267,7 +267,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
             "      <bond id='b56' atomRefs2='a3 a4'/>" +
             "    </bondArray>" +
             "  </molecule>" +
-            "";
+            S_EMPTY;
         CMLMolecule triangle1Mol = makeMol(triangle1MolS);
         ConnectionTableTool triangle1MolTool = new ConnectionTableTool(triangle1Mol);
         cyclicBondList = triangle1MolTool.getCyclicBonds();

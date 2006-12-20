@@ -37,8 +37,8 @@ public class Vector3Test extends GeomTest {
      */
     public static void assertEquals(String msg, Vector3 test, Vector3 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
@@ -56,9 +56,9 @@ public class Vector3Test extends GeomTest {
      */
     public static void assertEquals(String msg, double[] test,
             Vector3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 3", 3, test.length);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
     }

@@ -169,14 +169,14 @@ public class CMLPropertyList extends AbstractPropertyList {
                         .getDictRefAttribute();
                 // System.out.println("N"+dictRefAttribute);
                 if (dictRefAttribute == null) {
-                    errorList.add("NULL NAME: " + "[" + property.toXML() + "]");
+                    errorList.add("NULL NAME: " + S_LSQUARE + property.toXML() + S_RSQUARE);
                 } else {
                     CMLEntry entry = (CMLEntry) dictionaryMap
                             .getEntry(dictRefAttribute);
                     if (entry == null) {
                         errorList.add("NOTFOUND "
-                                + dictRefAttribute.getQualifiedName() + "["
-                                + property.toXML() + "]");
+                                + dictRefAttribute.getQualifiedName() + S_LSQUARE
+                                + property.toXML() + S_RSQUARE);
                     } else {
                         // System.out.println("FOUND "+dictRefAttribute);
                     }

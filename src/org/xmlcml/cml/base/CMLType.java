@@ -766,8 +766,8 @@ public class CMLType implements CMLConstants {
      */
     public void setSummary(String s) {
         summary = s.trim();
-        if (summary.length() != 0 && !summary.endsWith(".")) {
-            summary += ".";
+        if (summary.length() != 0 && !summary.endsWith(S_PERIOD)) {
+            summary += S_PERIOD;
         }
     }
 

@@ -144,8 +144,8 @@ public abstract class NamespaceRefAttribute extends StringAttribute {
             NamespaceRefAttribute namespaceRefAttribute = (NamespaceRefAttribute) elem
                     .getAttribute(attributeName);
             if (namespaceRefAttribute == null) {
-                errorList.add("NULL " + attributeName + ": " + "["
-                        + elem.toXML() + "]");
+                errorList.add("NULL " + attributeName + ": " + S_LSQUARE
+                        + elem.toXML() + S_RSQUARE);
             } else {
                 GenericEntry entry = dictionaryMap
                         .getEntry(namespaceRefAttribute);
@@ -154,8 +154,8 @@ public abstract class NamespaceRefAttribute extends StringAttribute {
                         errorList.add("==== too many errors ===");
                     } else if (count < 100) {
                         errorList.add(attributeName + " NOT FOUND "
-                                + namespaceRefAttribute + "[" + elem.toXML()
-                                + "]");
+                                + namespaceRefAttribute + S_LSQUARE + elem.toXML()
+                                + S_RSQUARE);
                     }
                 } else {
                     // System.out.println("FOUND "+dictRefAttribute);
@@ -183,7 +183,7 @@ public abstract class NamespaceRefAttribute extends StringAttribute {
 //            rootElement = new Builder().build(file).getRootElement();
             rootElement = new CMLBuilder().build(file).getRootElement();
         } catch (ClassCastException e) {
-            System.err.println("Class cast in file: ("+rootElement+")"+file);
+            System.err.println("Class cast in file: ("+rootElement+S_RBRAK+file);
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Error in file: "+file);

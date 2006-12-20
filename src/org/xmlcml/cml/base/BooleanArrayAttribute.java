@@ -80,7 +80,7 @@ public class BooleanArrayAttribute extends CMLAttribute {
         for (int i = 0; i < bb.length; i++) {
             this.bb[i] = bb[i];
         }
-        this.setValue(Util.concatenate(bb, " "));
+        this.setValue(Util.concatenate(bb, S_SPACE));
     }
 
     /**

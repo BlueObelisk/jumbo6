@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
@@ -14,7 +15,7 @@ import org.xmlcml.euclid.Vector3;
  * @author pm286
  *
  */
-public abstract class Molutils {
+public abstract class Molutils implements CMLConstants {
 
     final static Logger logger = Logger.getLogger(Molutils.class.getName());
 
@@ -311,7 +312,7 @@ public abstract class Molutils {
         logger.info("add ligands to: " + pZero + "; length: " + length
                 + "; angle: " + angle);
         for (int geometry = ANY; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + ":");
+            logger.info("\nType of geometry: " + geometry + S_COLON);
             try {
                 List<Point3> ligands = calculate3DCoordinates0(pZero, geometry,
                         length);
@@ -328,7 +329,7 @@ public abstract class Molutils {
                 + "; angle: " + angle);
         logger.info("reference atom: " + pOne);
         for (int geometry = LINEAR; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + ":");
+            logger.info("\nType of geometry: " + geometry + S_COLON);
             try {
                 List<Point3> ligands = calculate3DCoordinates1(pZero, pOne,
                         pStaggered, geometry, length, angles[geometry - 2]);
@@ -367,9 +368,9 @@ public abstract class Molutils {
         logger.info("\n\nadd ligands to atom with two ligands");
         logger.info("add ligands to: " + pZero + "; length: " + length
                 + "; angle: " + angle);
-        logger.info("reference atoms: " + pTwoa + "/" + pTwob);
+        logger.info("reference atoms: " + pTwoa + S_SLASH + pTwob);
         for (int geometry = TRIGONAL; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + ":");
+            logger.info("\nType of geometry: " + geometry + S_COLON);
             try {
                 List<Point3> ligands = calculate3DCoordinates2(pZero, pTwoa,
                         pTwob, geometry, length, angles[geometry - 2]);
@@ -401,7 +402,7 @@ public abstract class Molutils {
         }
 
         logger.info("\n\nadd ligand to atom with three ligands");
-        logger.info("reference atoms: " + pThreea + "/" + pThreeb + "/"
+        logger.info("reference atoms: " + pThreea + S_SLASH + pThreeb + S_SLASH
                 + pThreec);
         Point3 ligand = calculate3DCoordinates3(pZero, pThreea, pThreeb,
                 pThreec, length);

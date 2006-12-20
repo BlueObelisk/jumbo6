@@ -62,8 +62,8 @@ public class CMLLine3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, CMLLine3 test,
             CMLLine3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Line3Test.assertEquals(msg, test.getEuclidLine3(), expected
                 .getEuclidLine3(), epsilon);
@@ -81,23 +81,23 @@ public class CMLLine3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, CMLPoint3 testPoint,
             CMLVector3 testVector, CMLLine3 expected, double epsilon) {
-        Assert.assertNotNull("testVector should not be null (" + msg + ")",
+        Assert.assertNotNull("testVector should not be null (" + msg + S_RBRAK,
                 testVector);
-        Assert.assertNotNull("testPoint should not be null (" + msg + ")",
+        Assert.assertNotNull("testPoint should not be null (" + msg + S_RBRAK,
                 testPoint);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         try {
             Vector3Test.assertEquals(msg, testVector.getEuclidVector3(),
                     new Vector3(expected.getVector3()), epsilon);
         } catch (EuclidException e) {
-            Assert.fail("" + e + " (" + msg + ")");
+            Assert.fail("" + e + " (" + msg + S_RBRAK);
         }
         try {
             Point3Test.assertEquals(msg, testPoint.getEuclidPoint3(),
                     new Point3(expected.getPoint3()), epsilon);
         } catch (EuclidException e) {
-            Assert.fail("" + e + " (" + msg + ")");
+            Assert.fail("" + e + " (" + msg + S_RBRAK);
         }
     }
 
@@ -115,7 +115,7 @@ public class CMLLine3Test extends GeomTestBase {
      */
     @Test
     public void testParse() {
-        String s = "<line3 point3='4. 5. 6.' vector3='1. 2. 3.'" + " "
+        String s = "<line3 point3='4. 5. 6.' vector3='1. 2. 3.'" + S_SPACE
                 + CML_XMLNS + ">1. 2. 3. 4. 5. 6. </line3>";
         CMLLine3 l = null;
         try {

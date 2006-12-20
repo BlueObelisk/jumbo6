@@ -6,7 +6,7 @@ import java.util.logging.Logger;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public abstract class Int {
+public abstract class Int implements EuclidConstants {
     final static Logger logger = Logger.getLogger(Int.class.getName());
     /**
      * set an array to zero
@@ -39,7 +39,7 @@ public abstract class Int {
      */
     public static void printArray(int[] a) {
         for (int i = 0; i < a.length; i++) {
-            logger.info(a[i] + " ");
+            logger.info(a[i] + S_SPACE);
         }
         logger.info("");
     }

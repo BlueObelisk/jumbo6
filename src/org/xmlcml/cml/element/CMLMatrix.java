@@ -246,7 +246,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      try {
      euclIntMatrix = new IntMatrix(rows, cols, intArray);
      } catch (EuclidException e) {
-     throw new CMLException(""+e);
+     throw new CMLException(S_EMPTY+e);
      }
      }
      }
@@ -261,7 +261,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      */
     static CMLMatrix createCMLMatrix(RealMatrix realMatrix) {
         CMLMatrix cmlMatrix = null;
-        String delimiter = " ";
+        String delimiter = S_SPACE;
         cmlMatrix = new CMLMatrix();
         setXMLContent(cmlMatrix, delimiter, realMatrix.getMatrixAsArray());
         cmlMatrix.setColumns(realMatrix.getCols());
@@ -279,7 +279,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      */
     static CMLMatrix createCMLMatrix(IntMatrix intMatrix) {
         CMLMatrix cmlMatrix = null;
-        String delimiter = " ";
+        String delimiter = S_SPACE;
         cmlMatrix = new CMLMatrix();
         setXMLContent(cmlMatrix, delimiter, intMatrix.getMatrixAsArray());
         cmlMatrix.setColumns(intMatrix.getCols());
@@ -359,7 +359,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
         try {
             mm = new RealMatrix(mat);
         } catch (EuclidException e) {
-            throw new CMLException("" + e);
+            throw new CMLException(S_EMPTY + e);
         }
         String content = Util.concatenate(mm.getMatrixAsArray(), S_SPACE);
         setRows(mm.getRows());
@@ -381,7 +381,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
         try {
             mm = new IntMatrix(mat);
         } catch (EuclidException e) {
-            throw new CMLException("" + e);
+            throw new CMLException(S_EMPTY + e);
         }
         String content = Util.concatenate(mm.getMatrixAsArray(), S_SPACE);
         setRows(mm.getRows());
@@ -406,7 +406,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
         try {
             euclRealMatrix = new RealMatrix(rows, columns, array);
         } catch (EuclidException e) {
-            throw new CMLRuntimeException("" + e);
+            throw new CMLRuntimeException(S_EMPTY + e);
         }
         setRows(rows);
         setColumns(columns);
@@ -430,7 +430,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
         try {
             euclIntMatrix = new IntMatrix(rows, columns, array);
         } catch (EuclidException e) {
-            throw new CMLRuntimeException("" + e);
+            throw new CMLRuntimeException(S_EMPTY + e);
         }
         setRows(rows);
         setColumns(columns);
@@ -597,7 +597,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
             RealMatrix teucl3 = new RealMatrix(m2r, m2c, this.getDoubleArray());
             t = teucl3.multiply(m2.getEuclidRealMatrix());
         } catch (EuclidException e) {
-            throw new CMLException("" + e);
+            throw new CMLException(S_EMPTY + e);
         }
         return new CMLMatrix(m2r, m2c, t.getMatrixAsArray());
     }

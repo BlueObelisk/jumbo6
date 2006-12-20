@@ -47,15 +47,15 @@ public class OscarToolTest {
 //        </quantity>
 //        </property>
         String s =
-          "<property type=\"quantity\">" +
-          "  <quantity type=\"mass\">" +
+          "<property type='quantity'>" +
+          "  <quantity type='mass'>" +
           "    <value>" +
           "      <point>11.9</point>" +
           "    </value>" +
           "    <units>g</units>" +
           "  </quantity>" +
           "  ," +
-          "  <quantity type=\"amount\">" +
+          "  <quantity type='amount'>" +
           "    <value>" +
           "      <point>0.04</point>" +
           "    </value>" +
@@ -79,7 +79,7 @@ public class OscarToolTest {
     public void testAddScalar() {
         System.out.println("=====testAddScalar====");
         String s =
-            "  <quantity type=\"mass\">" +
+            "  <quantity type='mass'>" +
             "    <value>" +
             "      <point>11.9</point>" +
             "    </value>" +
@@ -100,7 +100,7 @@ public class OscarToolTest {
         Element expectedQuantity = null;
         try {
             expectedQuantity = new CMLBuilder().parseString(
-                    "<quantity type=\"mass\">" +
+                    "<quantity type='mass'>" +
                     "    <value>" +
                     "      <point>11.9</point>" +
                     "    </value>" +
@@ -115,9 +115,9 @@ public class OscarToolTest {
         Element expectedProperty = null;
         try {
             expectedProperty = new CMLBuilder().parseString(
-                    "<property xmlns=\"http://www.xml-cml.org/schema\">" +
-                    "<scalar dataType=\"xsd:double\" dictRef=\"osc:fooname\"" +
-                    " units=\"oscUnits:barunits\">11.9</scalar>" +
+                    "<property xmlns='http://www.xml-cml.org/schema'>" +
+                    "<scalar dataType='xsd:double' dictRef='osc:fooname'" +
+                    " units='oscUnits:barunits'>11.9</scalar>" +
                     "</property>");
         } catch (Exception e) {
             Util.BUG(e);

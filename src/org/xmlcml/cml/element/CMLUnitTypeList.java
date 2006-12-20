@@ -146,10 +146,10 @@ public class CMLUnitTypeList extends AbstractUnitTypeList implements
             dictDoc = new CMLBuilder().build(in);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            throw new CMLException("NULL " + e.getMessage() + "/"
+            throw new CMLException("NULL " + e.getMessage() + S_SLASH
                     + e.getCause() + " in " + url);
         } catch (ValidityException e) {
-            throw new CMLException(S_EMPTY + e.getMessage() + "/"
+            throw new CMLException(S_EMPTY + e.getMessage() + S_SLASH
                     + e.getCause() + " in " + url);
         } catch (ParsingException e) {
             throw new CMLException("PARSE " + S_EMPTY + e.getMessage() + " in "
@@ -170,7 +170,7 @@ public class CMLUnitTypeList extends AbstractUnitTypeList implements
                 dt = new CMLUnitTypeList((CMLUnitTypeList) root);
             } else {
                 // throw new CMLException("Expected CMLUnitList root element,
-                // found: "+root.getClass().getName()+"/"+root.getLocalName());
+                // found: "+root.getClass().getName()+S_SLASH+root.getLocalName());
             }
         }
         if (dt != null) {
@@ -257,7 +257,7 @@ public class CMLUnitTypeList extends AbstractUnitTypeList implements
                 throw new CMLRuntimeException(
                     "Expected CMLUnitTypeList root element in ("+
                         url+"), found: "
-                        + root.getClass().getName() + "/"
+                        + root.getClass().getName() + S_SLASH
                         + root.getLocalName());
             }
         }

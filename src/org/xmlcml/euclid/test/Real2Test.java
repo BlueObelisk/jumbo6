@@ -52,8 +52,8 @@ public class Real2Test extends EuclidTest {
      */
     public static void assertEquals(String msg, Real2 test, Real2 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         DoubleTest.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
     }
 
@@ -69,9 +69,9 @@ public class Real2Test extends EuclidTest {
      */
     public static void assertEquals(String msg, double[] test, Real2 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 2", 2, test.length);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         DoubleTest.assertEquals(msg, test, expected.getXY(), epsilon);
     }
 

@@ -755,7 +755,7 @@ public class RealSquareMatrix extends RealMatrix {
     }
 }
 /* in separate class because jvc bombs on compiling this */
-class Diagonalise {
+class Diagonalise implements EuclidConstants {
     final static double ZERO = 0.0;
     final static double ONE = 1.0;
     final static double TWO = 2.0;
@@ -954,8 +954,8 @@ class Diagonalise {
                         /* test for l = second from last column */
                         // L270
                         if (l == (order - 1)) {
-                            RealSquareMatrix.logger.info("[" + l + "/" + order
-                                    + "]");
+                            RealSquareMatrix.logger.info(S_LSQUARE + l + S_SLASH + order
+                                    + S_RSQUARE);
                             break;
                         }
                         // goto L100;
@@ -963,7 +963,7 @@ class Diagonalise {
                         ++l;
                     }
                     // L290
-                    RealSquareMatrix.logger.info("+" + l + "/" + ind);
+                    RealSquareMatrix.logger.info(S_PLUS + l + S_SLASH + ind);
                     if (ind != 1) {
                         break;
                     }

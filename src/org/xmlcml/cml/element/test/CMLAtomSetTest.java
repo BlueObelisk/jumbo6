@@ -74,7 +74,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
         CMLAtomSet xomAtomSet = new CMLAtomSet();
         Assert.assertNotNull("atom set creation", xomAtomSet);
         Assert.assertEquals("atom set size", 0, xomAtomSet.size());
-        Assert.assertEquals("atom set ", new String[] { "" }, xomAtomSet
+        Assert.assertEquals("atom set ", new String[] { S_EMPTY }, xomAtomSet
                 .getXMLContent());
 
     }

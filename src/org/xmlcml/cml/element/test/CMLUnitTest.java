@@ -362,7 +362,7 @@ public class CMLUnitTest extends AbstractUnitTest {
      */
     @Test
     public void testSetUnitsOn() {
-        String scalarS = "<scalar "+CML_XMLNS+" " +
+        String scalarS = "<scalar "+CML_XMLNS+S_SPACE +
             "units='units:ang' " +
             "xmlns:units='"+UNIT_NS+"' " +
             "dataType='"+XSD_DOUBLE+"' " +

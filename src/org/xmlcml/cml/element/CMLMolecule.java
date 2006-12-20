@@ -581,7 +581,7 @@ public class CMLMolecule extends AbstractMolecule {
                 && !control.equals(HydrogenControl.USE_EXPLICIT_HYDROGENS)) {
             throw new CMLRuntimeException(
                     "No hydrogen count control on Formula - found(" + control
-                            + ")");
+                            + S_RBRAK);
         }
 
         CMLAtomSet atomSet = new CMLAtomSet(getAtoms());
@@ -1190,8 +1190,8 @@ public class CMLMolecule extends AbstractMolecule {
             if (!(e1 == null && e2 == null ||
                     e1.equals(e2))) {
                 throw new CMLRuntimeException(
-                    "atoms have different excludeElementTypes: " + id + "("
-                    + e1 + ") != " + id2 + "(" + e2 + ")");
+                    "atoms have different excludeElementTypes: " + id + S_LBRAK
+                    + e1 + ") != " + id2 + S_LBRAK + e2 + S_RBRAK);
             }
             CMLLink link = new CMLLink();
             link.setFrom(id);
@@ -1490,9 +1490,9 @@ public class CMLMolecule extends AbstractMolecule {
         Map<String, String> newTable = new HashMap<String, String>();
         List<CMLAtom> atoms = this.getAtoms();
         if (oldIds.size() != atoms.size() || newIds.size() != atoms.size()) {
-            throw new CMLException("Lists (" + oldIds.size() + "/"
+            throw new CMLException("Lists (" + oldIds.size() + S_SLASH
                     + newIds.size() + ") must be same length as atomCount ("
-                    + atoms.size() + ")");
+                    + atoms.size() + S_RBRAK);
         }
         for (int i = 0; i < atoms.size(); i++) {
             String oldId = oldIds.get(i);

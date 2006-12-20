@@ -711,7 +711,7 @@ public class MoleculeTool extends AbstractTool {
 			} else if (order.equals(CMLBond.AROMATIC)) {
 				aromaticBondSum += 1;
 			} else {
-				logger.info("Unknown bond order:" + order + ":");
+				logger.info("Unknown bond order:" + order + S_COLON);
 				ok = false;
 			}
 		}
@@ -1813,8 +1813,7 @@ public class MoleculeTool extends AbstractTool {
 //		}
 //	}
 
-/**
-	 * Traverses all non-H atoms and contracts the hydrogens on each.
+	 /* Traverses all non-H atoms and contracts the hydrogens on each.
 	 *
 	 * @param control
 	 * @throws CMLException
@@ -2354,7 +2353,7 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 
-/**
+	/**
 	 * creates bonds and partitions molecules and returns contacts. currently
 	 * looks only for homo-molecule contacts.
 	 *
@@ -2761,7 +2760,7 @@ public class MoleculeTool extends AbstractTool {
 		//		 ><arg parentAttribute="atomRefs2">acet_{$idx}_a4 acet_{$idx}_r1</arg>
 		//		 </bond>
 		//		 </bondArray>
-		//		 <name><arg substitute=".">acet_{$idx}</arg></name>
+		//		 <name><arg substitute=S_PERIOD>acet_{$idx}</arg></name>
 		List<CMLBond> bonds = molecule.getBonds();
 		for (CMLBond bond : bonds) {
 			// String bondId = bond.getId();
@@ -2789,7 +2788,7 @@ public class MoleculeTool extends AbstractTool {
 		//		 ...
 		//		 <length atomRefs4="a1 a2 a3 r2">
 		//		 <arg parentAttribute="atomRefs2">gly_{$idx}_a1 gly_{$idx}_a2</arg>
-		//		 <arg substitute=".">{$psi}</arg>
+		//		 <arg substitute=S_PERIOD>{$psi}</arg>
 		//		 </torsion>
 		CMLElements<CMLLength> lengths = molecule.getLengthElements();
 		for (CMLLength length : lengths) {
@@ -2830,7 +2829,7 @@ public class MoleculeTool extends AbstractTool {
 		//		 ...
 		//		 <torsion atomRefs4="a1 a2 a3 r2">
 		//		 <arg parentAttribute="atomRefs4">gly_{$idx}_a1 gly_{$idx}_a2 gly_{$idx}_a3 gly_{$idx}_r2</arg>
-		//		 <arg substitute=".">{$psi}</arg>
+		//		 <arg substitute=S_PERIOD>{$psi}</arg>
 		//		 </torsion>
 		CMLElements<CMLTorsion> torsions = molecule.getTorsionElements();
 		for (CMLTorsion torsion : torsions) {
@@ -2861,7 +2860,7 @@ public class MoleculeTool extends AbstractTool {
 		//		 ...
 		//		 <angle atomRefs4="a1 a2 a3 r2">
 		//		 <arg parentAttribute="atomRefs4">gly_{$idx}_a1 gly_{$idx}_a2 gly_{$idx}_a3 gly_{$idx}_r2</arg>
-		//		 <arg substitute=".">{$psi}</arg>
+		//		 <arg substitute=S_PERIOD>{$psi}</arg>
 		//		 </angle>
 		CMLElements<CMLAngle> angles = molecule.getAngleElements();
 		for (CMLAngle angle : angles) {

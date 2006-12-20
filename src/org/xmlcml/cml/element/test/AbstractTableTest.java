@@ -24,7 +24,7 @@ import org.xmlcml.euclid.Util;
  */
 public abstract class AbstractTableTest extends AbstractTest {
 
-    String tableRowListS = "" +
+    String tableRowListS = S_EMPTY +
     "<tableRowList "+CML_XMLNS+">" +
     "  <tableRow>" +
     "    <tableCell>1</tableCell>" +
@@ -42,7 +42,7 @@ public abstract class AbstractTableTest extends AbstractTest {
     CMLTableRowList tableRowList = null;
     CMLTableRow tableRow = null;
 
-    String tableContentS = "" +
+    String tableContentS = S_EMPTY +
     "<tableContent "+CML_XMLNS+">" +
     "1 a\n" +
     "2 b\n" +
@@ -50,20 +50,20 @@ public abstract class AbstractTableTest extends AbstractTest {
     "</tableContent>";
     CMLTableContent tableContent = null;
 
-    String tableHeaderS = "" +
+    String tableHeaderS = S_EMPTY +
     "<tableHeader "+CML_XMLNS+">" +
     "  <tableHeaderCell id='th1' dictRef='c:foo' title='foo' dataType='xsd:string'/>" +
     "  <tableHeaderCell id='th2' dictRef='c:bar' title='bar' dataType='xsd:string'/>" +
     "</tableHeader>" +
-    "";
+    S_EMPTY;
     CMLTableHeader tableHeader = null;
 
-    String arrayListS = "" +
+    String arrayListS = S_EMPTY +
     "<arrayList "+CML_XMLNS+">" +
     "  <array id='th1' dictRef='c:foo' title='foo' size='3'>1 2 3</array>" +
     "  <array id='th2' dictRef='c:bar' title='bar' size='3'>a b c</array>" +
     "</arrayList>" +
-    "";
+    S_EMPTY;
     CMLArrayList arrayList = null;
 
     /** set up.

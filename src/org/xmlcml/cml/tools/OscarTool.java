@@ -230,7 +230,7 @@ public class OscarTool implements CMLConstants {
 //        Nodes nodes = cml.query(".//*[local-name()='module']");
 //        Nodes mods = cml.query(".//cml:module", X_CML);
 //        if (nodes.size() != mods.size()) {
-//            System.out.println("MODULES....."+nodes.size()+"/"+mods.size());
+//            System.out.println("MODULES....."+nodes.size()+S_SLASH+mods.size());
 //        }
     }
 
@@ -463,7 +463,7 @@ public class OscarTool implements CMLConstants {
                 // all are modules
                 if (childs.size() == module.getChildCount()) {
 //                    for (int i = 0; i < module.getChildCount(); i++) {
-//                        System.out.print(((CMLModule)module.getChild(i)).getId()+" ");
+//                        System.out.print(((CMLModule)module.getChild(i)).getId()+S_SPACE);
 //                    }
 //                    System.out.println("\nREPLACEBYCHILDREN............"+module.getId());
                     module.replaceByChildren();
@@ -558,7 +558,7 @@ public class OscarTool implements CMLConstants {
                 "self::cml:property and " +
                 "@state]";
         List<Node> molList = CMLUtil.getQueryNodes(
-                doc, ".//cml:molecule["+subquery+"]", X_CML);
+                doc, ".//cml:molecule["+subquery+S_RSQUARE, X_CML);
         for (Node node : molList) {
             CMLMolecule mol = (CMLMolecule) node;
             @SuppressWarnings("unused")
@@ -965,7 +965,7 @@ public class OscarTool implements CMLConstants {
             Element element = (Element) node;
             String name = element.getLocalName();
             if ("SB".equals(name)) {
-                node.getParent().replaceChild(node, new Text("_"+element.getValue()+"_"));
+                node.getParent().replaceChild(node, new Text(S_UNDER+element.getValue()+S_UNDER));
             } else if ("SP".equals(name)) {
                 node.getParent().replaceChild(node, new Text("^"+element.getValue()+"^"));
             } else if ("peaks".equals(name)) {
@@ -1114,7 +1114,7 @@ public class OscarTool implements CMLConstants {
                     }
                     String title = textS.substring(start, end);
                     if (!(cmlClass.equals(CMLAction.class))) {
-//                        System.out.println("Made "+cmlClass+"/"+title);
+//                        System.out.println("Made "+cmlClass+S_SLASH+title);
                     }
                     cmlElement.addAttribute(new Attribute("title", title));
                     cmlElement.appendChild(new Text(title));
@@ -1196,7 +1196,7 @@ public class OscarTool implements CMLConstants {
         Text t = CMLUtil.getLastTextDescendant(psib);
         if (t != null) {
             String vvv = t.getValue().trim();
-            String[] vv = vvv.split(" ");
+            String[] vv = vvv.split(S_SPACE);
             String v = vv[vv.length-1].trim();
             Double d = null;
             if (v.length() > 0) {
@@ -1238,7 +1238,7 @@ public class OscarTool implements CMLConstants {
                 String standardUnit = unitsMap.get(u);
                 if (standardUnit == null) {
                     CMLUtil.debug(unit);
-                    System.out.println("\nCannot find unit for ["+u+"]");
+                    System.out.println("\nCannot find unit for ["+u+S_RSQUARE);
                 } else {
                     text.setValue(standardUnit);
                     String uType = unitTypeMap.get(standardUnit);
@@ -1256,7 +1256,7 @@ public class OscarTool implements CMLConstants {
                             } else {
                                 if (tt.equals(uType)) {
                                 } else {
-                                    System.out.println("original type ("+tt+") incomaptible with ("+uType+")");
+                                    System.out.println("original type ("+tt+") incomaptible with ("+uType+S_RBRAK);
                                 }
                             }
                         }
@@ -1541,7 +1541,7 @@ public class OscarTool implements CMLConstants {
             Element div = (Element) divs.get(i);
             Element header = (Element) div.getFirstChildElement("HEADER");
             String title = header.getValue();
-            if (title == null || title.trim().equals("")) {
+            if (title == null || title.trim().equals(S_EMPTY)) {
                 try {
 //                CMLUtil.debug(div, System.err);
                 } catch (Exception e) {}
@@ -1953,8 +1953,8 @@ public class OscarTool implements CMLConstants {
                 // might have something like: ', 252.0569, found' 
                 if (texts.size() > 0) {
                     String value = texts.get(texts.size()-1).getValue();
-                    value = value.replaceAll("[)(:, ;]", "");
-                    value = value.replaceAll("(\\.)?(F|f)ound", "");
+                    value = value.replaceAll("[)(:, ;]", S_EMPTY);
+                    value = value.replaceAll("(\\.)?(F|f)ound", S_EMPTY);
                     try {
                         double d = new Double(value).doubleValue();
                         required = new CMLScalar(d);
@@ -1983,7 +1983,7 @@ public class OscarTool implements CMLConstants {
         formula.appendChild(required);
         int idx = prop.indexOf(formula);
         // tidy text nodes
-        String ss = "";
+        String ss = S_EMPTY;
         for (int i = 0; i < idx; i++) {
             Node node = prop.getChild(i);
             if (node instanceof Text) {
@@ -1994,7 +1994,7 @@ public class OscarTool implements CMLConstants {
         foundSc.setDictRef(OSCAR_NSP+S_COLON+"foundString");
         foundSc.setValue(ss);
         formula.appendChild(foundSc);
-        ss = "";
+        ss = S_EMPTY;
         for (int i = idx; i < prop.getChildCount(); i++) {
             Node node = prop.getChild(i);
             if (node instanceof Text) {
@@ -2164,7 +2164,7 @@ public class OscarTool implements CMLConstants {
             System.out.println("null parent");
         } else {
             CMLUtil.debug((Element)elem.getParent());
-            error("Bad value/point for "+ss+"/"+elem.getParent().getValue());
+            error("Bad value/point for "+ss+S_SLASH+elem.getParent().getValue());
         }
         if (Double.isNaN(d)) {
             throw new CMLRuntimeException("Unexpected NaN");
@@ -2186,7 +2186,7 @@ public class OscarTool implements CMLConstants {
         } else {
             s = ((Element) units.get(0)).getValue();
             // trim bracket
-            if (s.startsWith(S_LBRAK) || s.startsWith("-")) {
+            if (s.startsWith(S_LBRAK) || s.startsWith(S_MINUS)) {
                 s = s.substring(1);
             }
         }
@@ -2409,7 +2409,7 @@ public class OscarTool implements CMLConstants {
             } else {
                 String type = unitsMap.get(s);
                 if (type == null) {
-                    System.out.println("Cannot interpret text as unit:"+s+":");
+                    System.out.println("Cannot interpret text as unit:"+s+S_COLON);
                 } else {
                     unit = new Element("units");
                     unit.appendChild(new Text(s));

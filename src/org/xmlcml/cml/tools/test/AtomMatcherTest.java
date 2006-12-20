@@ -16,7 +16,7 @@ import org.xmlcml.euclid.test.StringTest;
  */
 public class AtomMatcherTest extends AbstractToolTest {
 
-    String mol1S = "" +
+    String mol1S = S_EMPTY +
         "<molecule id='m1' "+CML_XMLNS+">" +
         "  <atomArray>" +
         "    <atom id='a1' elementType='N' x2='0.0' y2='0.0'/>"+
@@ -30,9 +30,9 @@ public class AtomMatcherTest extends AbstractToolTest {
         "    <bond atomRefs2='a4 a2' order='2'/>"+
         "  </bondArray>" +
         "</molecule>" +
-        "";
+        S_EMPTY;
 
-    String mol2S = "" +
+    String mol2S = S_EMPTY +
     "<molecule id='m1' "+CML_XMLNS+">" +
     "  <atomArray>" +
     "    <atom id='a1' elementType='N' x2='0.0', y2='0.0'/>"+
@@ -46,7 +46,7 @@ public class AtomMatcherTest extends AbstractToolTest {
     "    <bond atomRefs2='a4 a2' order='2'/>"+
     "  </bondArray>" +
     "</molecule>" +
-    "";
+    S_EMPTY;
 
     CMLMolecule mol1;
     CMLMolecule mol2;

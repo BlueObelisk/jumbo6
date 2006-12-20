@@ -157,8 +157,8 @@ public class CMLArrayTest extends NumericTest {
      */
     public static void assertEquals(String msg, CMLArray test,
             CMLArray expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         if ((test.getDataType() == null || test.getDataType()
                 .equals(XSD_STRING))
@@ -190,8 +190,8 @@ public class CMLArrayTest extends NumericTest {
      */
     public static void assertEquals(String msg, double[] test,
             CMLArray expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         if (!expected.getDataType().equals(XSD_DOUBLE)) {
             Assert.fail("expected should be double");
@@ -208,8 +208,8 @@ public class CMLArrayTest extends NumericTest {
      * @param expected
      */
     public static void assertEquals(String msg, int[] test, CMLArray expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         if (!expected.getDataType().equals(XSD_INTEGER)) {
             Assert.fail("expected should be int");
@@ -226,8 +226,8 @@ public class CMLArrayTest extends NumericTest {
      * @param expected
      */
     public static void assertEquals(String msg, String[] test, CMLArray expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         if (expected.getDataType() != null
                 && !expected.getDataType().equals(XSD_STRING)) {
@@ -856,7 +856,7 @@ public class CMLArrayTest extends NumericTest {
             Assert.assertEquals("int", 5, xomI0.getInts().length);
 
             xomS.setArray(i0);
-            Assert.assertEquals("d delim", " ", xomS.getDelimiter());
+            Assert.assertEquals("d delim", S_SPACE, xomS.getDelimiter());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert.assertEquals("d XML", "1 2 3 4 5", xomS.getXMLContent());
@@ -867,7 +867,7 @@ public class CMLArrayTest extends NumericTest {
             Assert.assertEquals("i1 ", 5, i1.length);
             xomS.setArray(i1);
             Assert.assertNotNull("xomS i1 ", xomS);
-            Assert.assertEquals("d delim", " ", xomS.getDelimiter());
+            Assert.assertEquals("d delim", S_SPACE, xomS.getDelimiter());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert
                     .assertEquals("d XML", "10 20 30 40 50", xomS
@@ -990,7 +990,7 @@ public class CMLArrayTest extends NumericTest {
         // Assert.assertEquals("append", 6, xomS0.getSize());
         Assert.assertEquals("append", "a b c d e f", xomS0.getXMLContent());
 
-        xomS1.append("?");
+        xomS1.append(S_QUERY);
         // FIXME
         // Assert.assertEquals("append", 6, xomS0.getSize());
         Assert.assertEquals("append", "/v/w/x/y/z/?/", xomS1.getXMLContent());
@@ -1118,7 +1118,7 @@ public class CMLArrayTest extends NumericTest {
     public void testSetDelimiter() {
         CMLArray array = new CMLArray();
         array.setDataType(XSD_DOUBLE);
-        array.setDelimiter("/");
+        array.setDelimiter(S_SLASH);
         array.setXMLContent("1./2.");
         double[] dd = array.getDoubles();
         Assert.assertNotNull("dd null", dd);

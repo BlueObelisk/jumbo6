@@ -122,7 +122,7 @@ public class IntTest extends EuclidTest {
                 for (int j = 0; j < a[i].length; j++) {
                     if (a[i][j] != b[i][j]) {
                         s = "unequal element at (" + i + ", " + j + "), ("
-                                + a[i][j] + " != " + b[i][j] + ")";
+                                + a[i][j] + " != " + b[i][j] + S_RBRAK;
                         break;
                     }
                 }

@@ -14,7 +14,7 @@ import org.xmlcml.cml.base.*;
 * use as a shell which can be edited
 
 */
-public class CMLNodeFactory extends NodeFactory {
+public class CMLNodeFactory extends NodeFactory implements CMLConstants {
 
 // fields;
     /** current of current node*/
@@ -359,7 +359,7 @@ public class CMLNodeFactory extends NodeFactory {
         Nodes nodes = new Nodes();
         Attribute attribute = null;
         try {
-            int prefixLoc = name.indexOf(":");
+            int prefixLoc = name.indexOf(S_COLON);
             if (URI != null && URI.trim().length() != 0 && prefixLoc != -1) {
         // namespaced non-cml attribute is allowed
                 attribute = new Attribute(name, URI, value);
@@ -378,7 +378,7 @@ public class CMLNodeFactory extends NodeFactory {
                 attribute = new Attribute(name, URI, value);
             }
         } catch (CMLException e) {
-            throw new CMLRuntimeException(""+e);
+            throw new CMLRuntimeException(S_EMPTY+e);
         }
         nodes.append(attribute);
         return nodes;

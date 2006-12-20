@@ -79,8 +79,8 @@ public class CMLMatrixTest extends NumericTest {
      */
     public static void assertEquals(String msg, CMLMatrix test,
             CMLMatrix expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         if (test.getEuclidRealMatrix() != null) {
             RealMatrixTest.assertEquals(msg, test.getEuclidRealMatrix(),
@@ -106,8 +106,8 @@ public class CMLMatrixTest extends NumericTest {
      */
     public static void assertEquals(String msg, int rows, int cols,
             double[] test, CMLMatrix expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("rows ", rows, expected.getRows());
         Assert.assertEquals("columns ", cols, expected.getColumns());
@@ -127,8 +127,8 @@ public class CMLMatrixTest extends NumericTest {
      */
     public static void assertEquals(String msg, int rows, int cols, int[] test,
             CMLMatrix expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("rows ", rows, expected.getRows());
         Assert.assertEquals("columns ", cols, expected.getColumns());

@@ -409,7 +409,6 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     @Test
     public final void testGetOtherAtomId() {
         CMLBond bond = getBond5a(0);
-        bond.debug();
         Assert.assertEquals("getid", "a2", bond.getOtherAtomId("a1"));
         Assert.assertEquals("getid", "a1", bond.getOtherAtomId("a2"));
     }
@@ -474,9 +473,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     public final void testAreWithinBondingDistanceCMLAtomCMLAtomDoubleDoubleDouble() {
         makeMol5a();
         CMLAtom a1 = mol5a.getAtom(0);
-        a1.debug();
         CMLAtom a2 = mol5a.getAtom(2);
-        a2.debug();
         Assert.assertTrue("bond?", CMLBond.areWithinBondingDistance(a1, a2, 1.2, 1.2, 0.2));
     }
 

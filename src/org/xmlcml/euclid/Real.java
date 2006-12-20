@@ -6,7 +6,7 @@ import java.util.logging.Logger;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public abstract class Real {
+public abstract class Real implements EuclidConstants {
     final static Logger logger = Logger.getLogger(Real.class.getName());
     /** standard for equality of numbers */
     static double epsx = 0.0000000001;
@@ -193,7 +193,7 @@ public abstract class Real {
      */
     public static void printArray(double[] a) {
         for (int i = 0; i < a.length; i++) {
-            logger.info(a[i] + " ");
+            logger.info(a[i] + S_SPACE);
         }
         logger.info("");
     }

@@ -35,7 +35,7 @@ public class Standalone implements CMLConstants {
     public static void Test1() {
         String localResourceString = "" + "<cml:molecule"
                 + " xmlns:cml='"+CML_NS+"'" +
-                // " xsi:schemaLocation='"+CML_NS+" "+
+                // " xsi:schemaLocation='"+CML_NS+S_SPACE+
                 // "../../schema.xsd'" +
                 // " xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'"+
                 "	>" + "	<cml:atomArray atomID='a1 a2 a3 a4' "

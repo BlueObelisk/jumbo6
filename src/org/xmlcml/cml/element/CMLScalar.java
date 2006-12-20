@@ -19,7 +19,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
 
     /**
      * default constructor. NOTE creates a CMLScalar with dataType = XSD_STRING
-     * and content "".
+     * and content S_EMPTY.
      * 
      */
     public CMLScalar() {
@@ -187,7 +187,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
      * @param scalar
      */
     public void setValue(double scalar) {
-        setXMLContent("" + scalar);
+        setXMLContent(S_EMPTY + scalar);
         super.setDataType(XSD_DOUBLE);
     }
 
@@ -197,7 +197,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
      * @param scalar
      */
     public void setValue(int scalar) {
-        setXMLContent("" + scalar);
+        setXMLContent(S_EMPTY + scalar);
         super.setDataType(XSD_INTEGER);
     }
 

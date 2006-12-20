@@ -94,8 +94,8 @@ public abstract class CMLUtil implements CMLConstants {
 	 *             not colonized
 	 */
 	public final static void checkPrefixedName(String name) throws CMLException {
-		if (name == null || name.indexOf(":") < 1) {
-			throw new CMLException("Unprefixed name (" + name + ")");
+		if (name == null || name.indexOf(S_COLON) < 1) {
+			throw new CMLException("Unprefixed name (" + name + S_RBRAK);
 		}
 	}
 
@@ -396,7 +396,7 @@ public abstract class CMLUtil implements CMLConstants {
      * @throws CMLRuntimeException if element already has element content
      */
     public static void setXMLContent(Element element, String s) {
-        List<Node> elements = CMLUtil.getQueryNodes(element, "*");
+        List<Node> elements = CMLUtil.getQueryNodes(element, S_STAR);
         if (elements.size() > 0) {
             throw new CMLRuntimeException("Cannot set text with element children");
         }
@@ -416,7 +416,7 @@ public abstract class CMLUtil implements CMLConstants {
      * @throws CMLRuntimeException if element already has element content
      */
     public static String getXMLContent(Element element) {
-        List<Node> elements = CMLUtil.getQueryNodes(element, "*");
+        List<Node> elements = CMLUtil.getQueryNodes(element, S_STAR);
         if (elements.size() > 0) {
             throw new CMLRuntimeException("Cannot get text with element children");
         }

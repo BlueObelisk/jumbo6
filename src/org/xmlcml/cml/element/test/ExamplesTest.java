@@ -93,7 +93,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 			} catch (Exception e) {
 				e.printStackTrace();
                 Assert.assertEquals("don't understand",
-                        "This parser does not support specification \"null\" version \"null\"",
+                        "This parser does not support specification 'null' version 'null'",
                         e.getMessage());
 //				throw new CMLRuntimeException("BUG" + e);
 			} // OK
@@ -215,7 +215,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		}
 		if (ee != null) {
 			logger.severe("failed to cmlParse: " + url + "\n..... because: ["
-					+ ee + "] [" + ee.getMessage() + "] in [" + url + "]");
+					+ ee + "] [" + ee.getMessage() + "] in [" + url + S_RSQUARE);
 			ok = false;
 		}
 		if (ok && checkDict) {

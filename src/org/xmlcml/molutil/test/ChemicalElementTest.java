@@ -417,7 +417,7 @@ public class ChemicalElementTest extends BaseTest {
         elem = ChemicalElement.grabChemicalElement("z");
         Assert.assertNull("z", elem);
 
-        elem = ChemicalElement.grabChemicalElement("");
+        elem = ChemicalElement.grabChemicalElement(S_EMPTY);
         Assert.assertNull("empty", elem);
 
         String s = "HeCClNBr";

@@ -319,7 +319,7 @@ public class StereochemistryTool extends AbstractTool {
         try {
             atom4 = moleculeTool.getAtomRefs4(bond);
         } catch (CMLException e) {
-            logger.severe("No stereo for: " + this + "/" + e);
+            logger.severe("No stereo for: " + this + S_SLASH + e);
             /* bond cannot have stereochemistry */
         }
         if (atom4 != null) {

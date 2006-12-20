@@ -125,8 +125,8 @@ public class CMLAtomicBasisFunction extends AbstractAtomicBasisFunction {
      * @return string
      */
     public String getString() {
-        String s = "" + getN() + getLm() + "(" + getSymbol() + ")(" + getId()
-                + ")";
+        String s = S_EMPTY + getN() + getLm() + S_LBRAK + getSymbol() + ")(" + getId()
+                + S_RBRAK;
         return s;
     }
 }

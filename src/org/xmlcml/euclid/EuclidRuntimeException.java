@@ -3,6 +3,7 @@
  */
 package org.xmlcml.euclid;
 
+
 /**
  * 
  * <p>
@@ -13,7 +14,7 @@ package org.xmlcml.euclid;
  * @version 5.0
  * 
  */
-public class EuclidRuntimeException extends RuntimeException {
+public class EuclidRuntimeException extends RuntimeException implements EuclidConstants {
 
     /**
      * 
@@ -39,6 +40,6 @@ public class EuclidRuntimeException extends RuntimeException {
      * @param exception
      */
     public EuclidRuntimeException(EuclidException exception) {
-        this("" + exception);
+        this(S_EMPTY + exception);
     }
 }

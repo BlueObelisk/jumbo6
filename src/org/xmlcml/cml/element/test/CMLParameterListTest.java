@@ -15,7 +15,7 @@ import org.xmlcml.cml.element.CMLParameterList;
  */
 public class CMLParameterListTest extends AbstractTest {
 
-    String parameterS = "" +
+    String parameterS = S_EMPTY +
         "<parameterList id='a1' "+CML_XMLNS+">" +
         "  <parameter id='a2' name='foo:angle' dictRef='bar:xxx'>"+
         "    <scalar id='a3'>1.23</scalar>" +
@@ -26,7 +26,7 @@ public class CMLParameterListTest extends AbstractTest {
         "    </parameter>" +
         "  </parameterList>"+
         "</parameterList>"+
-        "";
+        S_EMPTY;
     
     CMLParameterList parameterList = null;
     

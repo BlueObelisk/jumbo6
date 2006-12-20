@@ -428,8 +428,8 @@ public class CMLAtomSet extends AbstractAtomSet {
     public void removeAtom(CMLAtom atom) throws CMLRuntimeException {
         if (atom != null) {
             if (!set.contains(atom)) {
-                throw new CMLRuntimeException("atom not in set:" + atom.getId() + ":"
-                        + Util.concatenate(this.getXMLContent(), "/"));
+                throw new CMLRuntimeException("atom not in set:" + atom.getId() + S_COLON
+                        + Util.concatenate(this.getXMLContent(), S_SLASH));
             }
             // remove from set
             set.remove(atom);
@@ -1095,7 +1095,7 @@ public class CMLAtomSet extends AbstractAtomSet {
         List<CMLAtom> atoms = this.getAtoms();
         if (p2Vector.size() != atoms.size()) {
             throw new CMLException("Vector (" + p2Vector.size()
-                    + ") not same length as atoms (" + atoms.size() + ")");
+                    + ") not same length as atoms (" + atoms.size() + S_RBRAK);
         }
         for (int i = 0; i < atoms.size(); i++) {
             CMLAtom atom = atoms.get(i);

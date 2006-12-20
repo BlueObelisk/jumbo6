@@ -487,12 +487,12 @@ public class ReactionTool extends AbstractTool {
                     if (parent.getLocalName().equals(CMLReactant.TAG)) {
                         newParent = new CMLReactant();
                         type = "r";
-                        ((CMLReactant) newParent).setId(id + "." + type
+                        ((CMLReactant) newParent).setId(id + S_PERIOD + type
                                 + (k + 1 + count));
                     } else if (parent.getLocalName().equals(CMLProduct.TAG)) {
                         newParent = new CMLProduct();
                         type = "p";
-                        ((CMLProduct) newParent).setId(id + "." + type
+                        ((CMLProduct) newParent).setId(id + S_PERIOD + type
                                 + (k + 1 + count));
                     } else {
                         throw new CMLRuntimeException("BUG: " + parent.getLocalName());
@@ -501,7 +501,7 @@ public class ReactionTool extends AbstractTool {
                     grandParent.appendChild(newParent);
 
                     moleculeToolVector.add(molecule);
-                    childMolecule.setId(id + "." + type + (k + 1 + count) + "."
+                    childMolecule.setId(id + S_PERIOD + type + (k + 1 + count) + S_PERIOD
                             + "m1");
                 }
                 molecule.detach();

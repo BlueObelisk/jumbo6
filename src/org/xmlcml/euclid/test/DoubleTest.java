@@ -112,7 +112,7 @@ public class DoubleTest extends EuclidTest {
         } else if (b == null) {
             s = "b is null";
         } else if (a.length != b.length) {
-            s = "unequal arrays: " + a.length + "/" + b.length;
+            s = "unequal arrays: " + a.length + S_SLASH + b.length;
         } else {
             for (int i = 0; i < a.length; i++) {
                 if (!equals(a[i], b[i], eps)) {
@@ -143,18 +143,18 @@ public class DoubleTest extends EuclidTest {
         } else if (b == null) {
             s = "b is null";
         } else if (a.length != b.length) {
-            s = "unequal arrays: " + a.length + "/" + b.length;
+            s = "unequal arrays: " + a.length + S_SLASH + b.length;
         } else {
             for (int i = 0; i < a.length; i++) {
                 if (a[i].length != b[i].length) {
                     s = "row (" + i + ") has unequal lengths: " + a[i].length
-                            + "/" + b[i].length;
+                            + S_SLASH + b[i].length;
                     break;
                 }
                 for (int j = 0; j < a[i].length; j++) {
                     if (!equals(a[i][j], b[i][j], eps)) {
                         s = "unequal element at (" + i + ", " + j + "), ("
-                                + a[i][j] + " != " + b[i][j] + ")";
+                                + a[i][j] + " != " + b[i][j] + S_RBRAK;
                         break;
                     }
                 }

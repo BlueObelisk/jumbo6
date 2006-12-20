@@ -47,8 +47,8 @@ public class IntSetTest extends EuclidTest {
      * @param expected
      */
     public static void assertEquals(String msg, IntSet test, IntSet expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         IntTest.assertEquals(msg, test.getElements(), expected.getElements());
     }
@@ -62,8 +62,8 @@ public class IntSetTest extends EuclidTest {
      * @param expected
      */
     public static void assertEquals(String msg, int[] test, IntSet expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getElements().length);
@@ -190,7 +190,7 @@ public class IntSetTest extends EuclidTest {
                     .assertEquals(
                             "addElement",
                             "org.xmlcml.euclid.EuclidRuntimeException: value (8)outside range (-2147483648...7)",
-                            "" + e);
+                            S_EMPTY + e);
         }
     }
 
@@ -213,7 +213,7 @@ public class IntSetTest extends EuclidTest {
                     .assertEquals(
                             "addElement",
                             "org.xmlcml.euclid.EuclidRuntimeException: value (-4)outside range (-3...2147483647)",
-                            "" + e);
+                            S_EMPTY + e);
         }
     }
 
@@ -237,7 +237,7 @@ public class IntSetTest extends EuclidTest {
         } catch (EuclidRuntimeException e) {
             Assert.assertEquals("addElement",
                     "org.xmlcml.euclid.EuclidRuntimeException: value already in set: 4",
-                    "" + e);
+                    S_EMPTY + e);
         }
         IntSetTest.assertEquals("addElement", new int[] { 3, 4, 1, 2, 6 }, i1);
     }
@@ -304,7 +304,7 @@ public class IntSetTest extends EuclidTest {
             i2.addSet(newIs);
         } catch (EuclidRuntimeException e) {
             Assert.assertEquals("addSet",
-                    "org.xmlcml.euclid.EuclidRuntimeException: duplicate element 3", ""
+                    "org.xmlcml.euclid.EuclidRuntimeException: duplicate element 3", S_EMPTY
                             + e);
         }
         IntSetTest.assertEquals("addSet", new int[] { 0, 1, 2, 3 }, i2);

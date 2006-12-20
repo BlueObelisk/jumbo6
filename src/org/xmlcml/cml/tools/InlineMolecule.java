@@ -163,13 +163,11 @@ public class InlineMolecule implements CMLConstants {
     /** debug.
      */
     public void debug() {
-        System.out.println("XXXXXXXX>>>>>>>>");
-        cmlMolecule.debug();
-        System.out.println("<<<<<<<<XXXXXXXXX");
+        cmlMolecule.debug("INLINE");
         rootAtom.debug();
     }
 }
-class InlineAtom {
+class InlineAtom implements CMLConstants {
     
     private InlineAtom greatGrandParent = null;
     private InlineAtom grandParent = null;
@@ -321,7 +319,7 @@ class InlineAtom {
      */
     public String fullString() {
         return chemicalElement.getSymbol()+
-        "{chirality="+chirality+",id="+id+"}";
+        "{chirality="+chirality+",id="+id+S_RCURLY;
     }
 
     /** get string.
@@ -338,12 +336,12 @@ class InlineAtom {
         System.out.println("ATOM: "+chemicalElement.getSymbol());
         for (int i = 0; i < childAtoms.size(); i++) {
             if (i > 0) {
-                System.out.println("(");
+                System.out.println(S_LBRAK);
             }
             childBonds.get(i).debug();
             childAtoms.get(i).debug();
             if (i > 0) {
-                System.out.println(")");
+                System.out.println(S_RBRAK);
             }
         }
     }
@@ -479,7 +477,7 @@ class InlineBond implements CMLConstants {
      * @return the string with fuller interpretation
      */
     public String fullString() {
-        return s+" {order="+order+",length="+length+",torsion="+torsion+"}";
+        return s+" {order="+order+",length="+length+",torsion="+torsion+S_RCURLY;
     }
 
     void debug() {

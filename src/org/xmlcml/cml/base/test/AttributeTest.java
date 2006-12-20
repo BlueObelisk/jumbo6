@@ -43,9 +43,9 @@ public class AttributeTest extends BaseTest {
         Assert.assertEquals("string att", "string", string.getLocalName());
         Assert.assertEquals("string att", "string", string.getQualifiedName());
         Assert.assertEquals("string att", "string", string.getLocalName());
-        Assert.assertEquals("string att", "", string.getValue());
-        Assert.assertEquals("string att", "", string.getCMLValue());
-        Assert.assertEquals("string att", "", string.getNamespaceURI());
+        Assert.assertEquals("string att", S_EMPTY, string.getValue());
+        Assert.assertEquals("string att", S_EMPTY, string.getCMLValue());
+        Assert.assertEquals("string att", S_EMPTY, string.getNamespaceURI());
         Assert.assertEquals("string att", "String", string.getJavaType());
         Assert.assertEquals("string att", "setCMLValue", string
                 .getJavaSetMethod());
@@ -69,7 +69,7 @@ public class AttributeTest extends BaseTest {
         Assert.assertEquals("string att", "string", string.getLocalName());
         Assert.assertEquals("string att", "a1", string.getValue());
         Assert.assertEquals("string att", "a1", string.getCMLValue());
-        Assert.assertEquals("string att", "", string.getNamespaceURI());
+        Assert.assertEquals("string att", S_EMPTY, string.getNamespaceURI());
         Assert.assertEquals("string att", "String", string.getJavaType());
         Assert.assertEquals("string att", "setCMLValue", string
                 .getJavaSetMethod());
@@ -164,7 +164,7 @@ public class AttributeTest extends BaseTest {
                 .setDescription("x2 is the 2D coordinate in arbitrary units.\n it should always be accompanied by y2");
         // note added period
         Assert
-                .assertEquals("doc", "the x2 coordinate" + ".", att1
+                .assertEquals("doc", "the x2 coordinate" + S_PERIOD, att1
                         .getSummary());
         Assert
                 .assertEquals(
@@ -187,7 +187,7 @@ public class AttributeTest extends BaseTest {
      */
     @Test
     public void testGetSetNamespace() {
-        Assert.assertEquals("namespace", "", att1.getNamespacePrefix());
+        Assert.assertEquals("namespace", S_EMPTY, att1.getNamespacePrefix());
         att1.setNamespace("xyz", "http://foo");
         Assert.assertEquals("namespace", "xyz", att1.getNamespacePrefix());
         Assert.assertEquals("namespace", "http://foo", att1.getNamespaceURI());

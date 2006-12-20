@@ -76,7 +76,7 @@ public class IntAttribute extends CMLAttribute {
         try {
             i = Integer.parseInt(s.trim());
         } catch (NumberFormatException nfe) {
-            throw new CMLRuntimeException("" + nfe);
+            throw new CMLRuntimeException(S_EMPTY + nfe);
         }
         this.setCMLValue(i);
     }
@@ -90,10 +90,10 @@ public class IntAttribute extends CMLAttribute {
         try {
             checkValue(i);
         } catch (CMLException e) {
-            throw new CMLRuntimeException("" + e);
+            throw new CMLRuntimeException(S_EMPTY + e);
         }
         this.i = new Integer(i);
-        this.setValue("" + i);
+        this.setValue(S_EMPTY + i);
     }
 
     /**

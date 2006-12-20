@@ -34,7 +34,7 @@ public class CMLMapTest extends AbstractTest {
     String xmlMap2S = "<map id='m1' fromType='cml:atom' toType='cml:atom'"
             + " " + CML_XMLNS + ">" + "  <link from='a4' to='a14'/>"
             + "  <link from='a5' to='a15'/>" + "  <link from='a6' to='a16'/>"
-            + "</map>" + "";
+            + "</map>" + S_EMPTY;
     /**
      * setup.
      *
@@ -539,11 +539,11 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testSetLinkFromContext() {
         xmlMap1.setLinkFromContext("foo");
-        String ss = "<map id=\"m1\" fromType=\"cml:atom\" toType=\"cml:atom\" " +
-                "xmlns=\"http://www.xml-cml.org/schema\">" +
-                "  <link from=\"a1\" to=\"a11\" fromContext=\"foo\"/>" +
-                "  <link from=\"a2\" to=\"a12\" fromContext=\"foo\"/>" +
-                "  <link from=\"a3\" to=\"a13\" fromContext=\"foo\"/>" +
+        String ss = "<map id='m1' fromType='cml:atom' toType='cml:atom' " +
+                "xmlns='http://www.xml-cml.org/schema'>" +
+                "  <link from='a1' to='a11' fromContext='foo'/>" +
+                "  <link from='a2' to='a12' fromContext='foo'/>" +
+                "  <link from='a3' to='a13' fromContext='foo'/>" +
                 "</map>";
         CMLMap expected = (CMLMap) parseValidString(ss);
         assertEqualsCanonically("set from", expected, xmlMap1);
@@ -555,11 +555,11 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testSetLinkToContext() {
         xmlMap1.setLinkToContext("foo");
-        String ss = "<map id=\"m1\" fromType=\"cml:atom\" toType=\"cml:atom\" " +
-                "xmlns=\"http://www.xml-cml.org/schema\">" +
-                "  <link from=\"a1\" to=\"a11\" toContext=\"foo\"/>" +
-                "  <link from=\"a2\" to=\"a12\" toContext=\"foo\"/>" +
-                "  <link from=\"a3\" to=\"a13\" toContext=\"foo\"/>" +
+        String ss = "<map id='m1' fromType='cml:atom' toType='cml:atom' " +
+                "xmlns='http://www.xml-cml.org/schema'>" +
+                "  <link from='a1' to='a11' toContext='foo'/>" +
+                "  <link from='a2' to='a12' toContext='foo'/>" +
+                "  <link from='a3' to='a13' toContext='foo'/>" +
                 "</map>";
         CMLMap expected = (CMLMap) parseValidString(ss);
         assertEqualsCanonically("set to", expected, xmlMap1);
@@ -570,11 +570,11 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testSetLinkFromType() {
         xmlMap1.setLinkFromType("foo");
-        String ss = "<map id=\"m1\" fromType=\"cml:atom\" toType=\"cml:atom\" " +
-                "xmlns=\"http://www.xml-cml.org/schema\">" +
-                "  <link from=\"a1\" to=\"a11\" fromType=\"foo\"/>" +
-                "  <link from=\"a2\" to=\"a12\" fromType=\"foo\"/>" +
-                "  <link from=\"a3\" to=\"a13\" fromType=\"foo\"/>" +
+        String ss = "<map id='m1' fromType='cml:atom' toType='cml:atom' " +
+                "xmlns='http://www.xml-cml.org/schema'>" +
+                "  <link from='a1' to='a11' fromType='foo'/>" +
+                "  <link from='a2' to='a12' fromType='foo'/>" +
+                "  <link from='a3' to='a13' fromType='foo'/>" +
                 "</map>";
         CMLMap expected = (CMLMap) parseValidString(ss);
         assertEqualsCanonically("set fromType", expected, xmlMap1);
@@ -585,11 +585,11 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testSetLinkToType() {
         xmlMap1.setLinkToType("foo");
-        String ss = "<map id=\"m1\" fromType=\"cml:atom\" toType=\"cml:atom\" " +
-                "xmlns=\"http://www.xml-cml.org/schema\">" +
-                "  <link from=\"a1\" to=\"a11\" toType=\"foo\"/>" +
-                "  <link from=\"a2\" to=\"a12\" toType=\"foo\"/>" +
-                "  <link from=\"a3\" to=\"a13\" toType=\"foo\"/>" +
+        String ss = "<map id='m1' fromType='cml:atom' toType='cml:atom' " +
+                "xmlns='http://www.xml-cml.org/schema'>" +
+                "  <link from='a1' to='a11' toType='foo'/>" +
+                "  <link from='a2' to='a12' toType='foo'/>" +
+                "  <link from='a3' to='a13' toType='foo'/>" +
                 "</map>";
         CMLMap expected = (CMLMap) parseValidString(ss);
         assertEqualsCanonically("set fromType", expected, xmlMap1);

@@ -22,7 +22,7 @@ import org.xmlcml.cml.tools.ConnectionTableTool;
  */
 public class AtomSetToolTest extends AbstractToolTest {
 
-    String sproutS = "" +
+    String sproutS = S_EMPTY +
     "<molecule " + CML_XMLNS + " title='sprout'>"
     + "  <atomArray>"
     + "    <atom id='a1' elementType='C'/>"
@@ -55,7 +55,7 @@ public class AtomSetToolTest extends AbstractToolTest {
       "     <bond id='a12 a13' atomRefs2='a12 a13'/>" +
       "  </bondArray>" +
       "</molecule>" +
-      "";
+      S_EMPTY;
     CMLMolecule sprout = null;
 
     /**

@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Document;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLSerializer;
 import org.xmlcml.cml.element.CMLAtom;
@@ -33,7 +34,7 @@ import org.xmlcml.cml.tools.ReactionTool;
  * 
  * @author Administrator
  */
-public class RXNConverter {
+public class RXNConverter implements CMLConstants {
 
     final static Logger logger = Logger.getLogger(RXNConverter.class.getName());
 
@@ -150,7 +151,7 @@ public class RXNConverter {
                 String fName = files[i].getPath();
                 if (fName.endsWith(inSuffix)) {
                     logger.info("Reading" + fName);
-                    int idx = fName.lastIndexOf(".");
+                    int idx = fName.lastIndexOf(S_PERIOD);
                     String fileroot = fName.substring(0, idx);
                     idx = fileroot.lastIndexOf(File.separator);
                     String id = fileroot.substring(idx + 1);
@@ -386,7 +387,7 @@ public class RXNConverter {
 
         if (!line.startsWith(RXN)) {
             throw new IOException("non-RXN: RXN file must start with '$RXN':"
-                    + line + ":");
+                    + line + S_COLON);
         }
 
         line = br.readLine();

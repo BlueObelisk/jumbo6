@@ -42,21 +42,21 @@ public class AbstractUnitTest extends AbstractTest {
 
 	CMLUnitType unitType;
 
-	protected String newUnitS = "" + "<unit id='g.s-1'" + "  xmlns='" + CML_NS
+	protected String newUnitS = S_EMPTY + "<unit id='g.s-1'" + "  xmlns='" + CML_NS
 			+ "' " + "  xmlns:siUnits='" + SIUNIT_NS + "' " + "  xmlns:units='"
 			+ UNIT_NS + "' " + "  xmlns:unitType='" + UNITTYPES_NS + "' "
 			+ "  unitType='newUnitType:mass.length-1'" + ">"
 			+ "  <unit id='u1' units='units:g' power='1'/>"
-			+ "  <unit id='u2' units='siUnits:s' power='-1'/>" + "</unit>" + "";
+			+ "  <unit id='u2' units='siUnits:s' power='-1'/>" + "</unit>" + S_EMPTY;
 
-	protected String unitList1S = "" + "<unitList" + "  id='fooUnits'"
-			+ "  namespace='" + _UNIT_NS + "/" + "fooUnits'"
+	protected String unitList1S = S_EMPTY + "<unitList" + "  id='fooUnits'"
+			+ "  namespace='" + _UNIT_NS + S_SLASH + "fooUnits'"
 			+ "  dictionaryPrefix='fooUnits'" + "  title='simple foo units'"
 			+ "  siNamespace='" + SIUNIT_NS + "' " + "  xmlns:siUnits='"
 			+ SIUNIT_NS + "' " + "  xmlns:units='" + UNIT_NS + "' "
 			+ "  xmlns:unitType='" + UNITTYPES_NS + "' " + "    xmlns='"
 			+ CML_NS + "' " + ">" + "  <unit id='g'"
-			+ "    unitType='unitType:mass'" + "" + "    parentSI='siUnits:m'"
+			+ "    unitType='unitType:mass'" + S_EMPTY + "    parentSI='siUnits:m'"
 			+ "    multiplierToSI='0.001'" + "  />" + "</unitList>";
 
 	protected CMLUnitList unitList1 = null;

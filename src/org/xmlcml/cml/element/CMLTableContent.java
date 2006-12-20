@@ -169,7 +169,7 @@ public class CMLTableContent extends AbstractTableContent {
             }
         } catch (Exception e) {
             throw new CMLRuntimeException(
-                    "wrong data type ["+s+"]["+dataType+"]"+e.getMessage());
+                    "wrong data type ["+s+"]["+dataType+S_RSQUARE+e.getMessage());
         }
     }
      

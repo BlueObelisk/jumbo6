@@ -41,8 +41,8 @@ public class Line3Test extends GeomTest {
      */
     public static void assertEquals(String msg, Line3 test, Line3 expected,
             double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         Point3Test.assertEquals(msg, test.getPoint(), expected.getPoint(),
                 epsilon);
         Vector3Test.assertEquals(msg, test.getVector(), expected.getVector(),
@@ -61,11 +61,11 @@ public class Line3Test extends GeomTest {
      */
     public static void assertEquals(String msg, Point3 testPoint,
             Vector3 testVector, Line3 expected, double epsilon) {
-        Assert.assertNotNull("testPoint should not be null (" + msg + ")",
+        Assert.assertNotNull("testPoint should not be null (" + msg + S_RBRAK,
                 testPoint);
-        Assert.assertNotNull("testVector should not be null (" + msg + ")",
+        Assert.assertNotNull("testVector should not be null (" + msg + S_RBRAK,
                 testVector);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Point3Test.assertEquals(msg, testPoint, expected.getPoint(), epsilon);
         Vector3Test

@@ -37,9 +37,9 @@ public class CMLSpectatorTest extends ReactionAllTestBase {
     @Test
     public void testGetFormula() {
         CMLFormula formula = spectator.getFormula();
-        String ss = "" +
-                "<formula formalCharge=\"0\" concise=\"F 1 P 1\" xmlns=\"http://www.xml-cml.org/schema\">" +
-                "  <atomArray elementType=\"F P\" count=\"1.0 1.0\"/>" +
+        String ss = S_EMPTY +
+                "<formula formalCharge=\'0\' concise=\'F 1 P 1\' xmlns=\'http://www.xml-cml.org/schema\'>" +
+                "  <atomArray elementType=\'F P\' count=\'1.0 1.0\'/>" +
                 "</formula>";
         CMLFormula expected = (CMLFormula) parseValidString(ss);
         assertEqualsCanonically("form",expected, formula, true);

@@ -215,12 +215,12 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     private String getFromLink(CMLLink link) {
         return (S_EMPTY.equals(link.getFrom())) ? Util.concatenate(link
-                .getFromSet(), " ") : link.getFrom();
+                .getFromSet(), S_SPACE) : link.getFrom();
     }
 
     private String getToLink(CMLLink link) {
         return (S_EMPTY.equals(link.getTo())) ? Util.concatenate(link
-                .getToSet(), " ") : link.getTo();
+                .getToSet(), S_SPACE) : link.getTo();
     }
 
     /**
@@ -599,8 +599,8 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
             String toType = CMLMap.getType(link, Direction.TO);
             String fromType = CMLMap.getType(link, Direction.FROM);
             if (tag.equals(toType) && tag.equals(fromType)) {
-                String toSet = Util.concatenate(link.getToSet(), " ");
-                String fromSet = Util.concatenate(link.getFromSet(), " ");
+                String toSet = Util.concatenate(link.getToSet(), S_SPACE);
+                String fromSet = Util.concatenate(link.getFromSet(), S_SPACE);
                 if (toSet != null && !S_EMPTY.equals(toSet.trim())
                         && fromSet != null && !S_EMPTY.equals(fromSet.trim())) {
                     linkList.add(link);

@@ -144,7 +144,7 @@ public class UnitTypeAttributeTest extends AbstractTest {
 		 int namespaceCount = cmlUnitTypeList0.getNamespaceDeclarationCount();
 		 Assert.assertEquals("unitList namespace count", 1, namespaceCount);
 		 String namespacePrefix = cmlUnitTypeList0.getNamespacePrefix(0);
-		 Assert.assertEquals("namespace ", "", namespacePrefix);
+		 Assert.assertEquals("namespace ", S_EMPTY, namespacePrefix);
 		 String namespaceURI = cmlUnitTypeList0.getNamespaceURI(namespacePrefix);
 		 Assert.assertEquals("namespaceURI ", CML_NS, namespaceURI);
 		 --*/

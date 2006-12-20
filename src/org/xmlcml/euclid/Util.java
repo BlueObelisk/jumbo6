@@ -127,7 +127,7 @@ public class Util implements EuclidConstants {
      * @param e
      */
     public static void BUG(String msg, Exception e) {
-        msg = (msg == null || msg.trim().length() == 0) ? "" : "("+msg+")";
+        msg = (msg == null || msg.trim().length() == 0) ? S_EMPTY : S_LBRAK+msg+S_RBRAK;
         throw new CMLRuntimeException("BUG: "+msg+"should never throw", e);
     }
     
@@ -137,7 +137,7 @@ public class Util implements EuclidConstants {
      * @param e
      */
     public static void BUG(Exception e) {
-        BUG("", e);
+        BUG(S_EMPTY, e);
     }
     
     /** convenience method for "not yet implemented".
@@ -186,7 +186,7 @@ public class Util implements EuclidConstants {
         if (!dir.exists()) {
             boolean ok = dir.mkdirs();
             if (!ok) {
-                throw new IOException("cannot make dictories: "+dir+" "+filename);
+                throw new IOException("cannot make dictories: "+dir+S_SPACE+filename);
             }
         }
         if (!file.exists()) {
@@ -318,7 +318,7 @@ public class Util implements EuclidConstants {
         int count = 0;
         StringBuffer sb = new StringBuffer();
         String s0 = "\n";
-        String s1 = "";
+        String s1 = S_EMPTY;
         while (true) {
             int i = br.read();
             if (i == -1) {
@@ -332,11 +332,11 @@ public class Util implements EuclidConstants {
             if (i >= 32 && i < 128) {
                 s1 += (char) i;
             } else {
-                s1 += " ";
+                s1 += S_SPACE;
             }
             if (++count % 10 == 0) {
                 sb.append(s0 + "   " + s1);
-                s1 = "";
+                s1 = S_EMPTY;
                 s0 = "\n";
             }
         }
@@ -355,11 +355,11 @@ public class Util implements EuclidConstants {
      */
     public static String spaces(int nspace) {
         if (nspace <= 0) {
-            return "";
+            return S_EMPTY;
         } else {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < nspace; i++) {
-                sb.append(" ");
+                sb.append(S_SPACE);
             }
             return sb.toString();
         }
@@ -413,7 +413,7 @@ public class Util implements EuclidConstants {
             return null;
         }
         String ss = s.trim();
-        if (ss.equals("")) {
+        if (ss.equals(S_EMPTY)) {
             return ss;
         }
         char c = ss.charAt(0);
@@ -437,8 +437,8 @@ public class Util implements EuclidConstants {
         if (s == null) {
             return null;
         }
-        if (s.trim().equals("")) {
-            return "";
+        if (s.trim().equals(S_EMPTY)) {
+            return S_EMPTY;
         }
         int l = s.length();
         while (l >= 0) {
@@ -461,8 +461,8 @@ public class Util implements EuclidConstants {
         if (s == null) {
             return null;
         }
-        if (s.trim().equals("")) {
-            return "";
+        if (s.trim().equals(S_EMPTY)) {
+            return S_EMPTY;
         }
         int l = s.length();
         for (int i = 0; i < l; i++) {
@@ -515,9 +515,9 @@ public class Util implements EuclidConstants {
     }
 
     /**
-     * parse comma-separated Strings Note fields can be "" (as in ,,,) and
-     * fields can be quoted "...". If so, embedded quotes are represented as "",
-     * for example A," this is a ""B"" character",C. An unbalanced quote returns
+     * parse comma-separated Strings Note fields can be S_EMPTY (as in ,,,) and
+     * fields can be quoted "...". If so, embedded quotes are represented as S_EMPTY,
+     * for example A," this is a S_EMPTYBS_EMPTY character",C. An unbalanced quote returns
      * a mess
      * 
      * @param s
@@ -533,17 +533,17 @@ public class Util implements EuclidConstants {
         String s0 = s;
         s = s.trim();
         List<String> v = new ArrayList<String>();
-        while (!s.equals("")) {
+        while (!s.equals(S_EMPTY)) {
             if (s.startsWith(S_QUOT)) {
-                String temp = "";
+                String temp = S_EMPTY;
                 s = s.substring(1);
                 while (true) {
                     int idx = s.indexOf(S_QUOT);
                     if (idx == -1) {
-                        throw new RuntimeException("Missing Quote:" + s0 + ":");
+                        throw new RuntimeException("Missing Quote:" + s0 + S_COLON);
                     }
                     int idx2 = s.indexOf(S_QUOT + S_QUOT);
-                    // next quote is actually ""
+                    // next quote is actually S_EMPTY
                     if (idx2 == idx) {
                         temp += s.substring(0, idx) + S_QUOT;
                         s = s.substring(idx + 2);
@@ -557,9 +557,9 @@ public class Util implements EuclidConstants {
                 v.add(temp);
                 if (s.startsWith(S_COMMA)) {
                     s = s.substring(1);
-                } else if (s.equals("")) {
+                } else if (s.equals(S_EMPTY)) {
                 } else {
-                    throw new RuntimeException("Unbalanced Quotes:" + s0 + ":");
+                    throw new RuntimeException("Unbalanced Quotes:" + s0 + S_COLON);
                 }
             } else {
                 int idx = s.indexOf(S_COMMA);
@@ -572,7 +572,7 @@ public class Util implements EuclidConstants {
                     String temp = s.substring(0, idx);
                     v.add(temp);
                     s = s.substring(idx + 1);
-                    if (s.equals("")) {
+                    if (s.equals(S_EMPTY)) {
                         v.add(s);
                         break;
                     }
@@ -584,9 +584,9 @@ public class Util implements EuclidConstants {
 
     /**
      * create comma-separated Strings fields include a comma or a " they are
-     * wrapped with quotes ("). Note fields can be "" (as in ,,,) and fields can
-     * be quoted "...". If so, embedded quotes are represented as "", for
-     * example A," this is a ""B"" character",C.
+     * wrapped with quotes ("). Note fields can be S_EMPTY (as in ,,,) and fields can
+     * be quoted "...". If so, embedded quotes are represented as S_EMPTY, for
+     * example A," this is a S_EMPTYBS_EMPTY character",C.
      * 
      * @param v
      *            vector of strings to be concatenated (null returns null)
@@ -624,16 +624,16 @@ public class Util implements EuclidConstants {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length; i++) {
             if (i > 0) {
-                sb.append(" ");
+                sb.append(S_SPACE);
             }
             boolean quote = false;
-            if (s[i].indexOf(" ") != -1) {
-                sb.append("\"");
+            if (s[i].indexOf(S_SPACE) != -1) {
+                sb.append(S_QUOT);
                 quote = true;
             }
             sb.append(s[i]);
             if (quote) {
-                sb.append("\"");
+                sb.append(S_QUOT);
             }
         }
         return sb.toString();
@@ -768,7 +768,7 @@ public class Util implements EuclidConstants {
      * @param t
      */
     public static void BUG(String msg, Throwable t) {
-        msg = (msg == null || msg.trim().length() == 0) ? "" : "("+msg+")";
+        msg = (msg == null || msg.trim().length() == 0) ? S_EMPTY : S_LBRAK+msg+S_RBRAK;
         throw new RuntimeException("BUG: "+msg+"should never throw", t);
     }
     
@@ -778,7 +778,7 @@ public class Util implements EuclidConstants {
      * @param t
      */
     public static void BUG(Throwable t) {
-        BUG("", t);
+        BUG(S_EMPTY, t);
     }
     
     /** file separator.*/
@@ -820,7 +820,7 @@ public class Util implements EuclidConstants {
 //            f = new File(fileName);
 //        }
 //        // } catch (IOException e) {
-//        // logger.info("Failed to create: "+fileName+"("+e+")");
+//        // logger.info("Failed to create: "+fileName+S_LBRAK+e+S_RBRAK);
 //        // }
 //        return f;
 //    }
@@ -830,7 +830,7 @@ public class Util implements EuclidConstants {
      * @return The pWDName value
      */
     public static String getPWDName() {
-        File f = new File(".");
+        File f = new File(S_PERIOD);
         return new File(f.getAbsolutePath()).getParent();
     }
 
@@ -850,9 +850,7 @@ public class Util implements EuclidConstants {
         int idx = fileName.lastIndexOf(FS);
         if (idx != -1) {
             path = fileName.substring(0, idx);
-            // fileN = fileName.substring(idx+1);
         }
-        // try {
         if (path != null) {
             f = new File(path);
             f.mkdirs();
@@ -860,9 +858,6 @@ public class Util implements EuclidConstants {
         if (!fileName.endsWith(FS)) {
             f = new File(fileName);
         }
-        // } catch (IOException e) {
-        // logger.info("Failed to create: "+fileName+"("+e+")");
-        // }
         return f;
     }
 
@@ -918,7 +913,7 @@ public class Util implements EuclidConstants {
         int nl = newSubstrings.length;
         if (ol != nl) {
             throw new RuntimeException(
-                "Util.substituteStrings  arguments of different lengths: "+ol+"/"+nl);
+                "Util.substituteStrings  arguments of different lengths: "+ol+S_SLASH+nl);
         }
         for (int i = 0; i < ol; i++) {
             String oldS = oldSubstrings[i];
@@ -927,7 +922,7 @@ public class Util implements EuclidConstants {
             if (s.indexOf(oldS) == -1) {
                 continue;
             }
-            String ss = "";
+            String ss = S_EMPTY;
             while (true) {
                 int idx = s.indexOf(oldS);
                 if (idx == -1) {
@@ -953,277 +948,277 @@ public class Util implements EuclidConstants {
      * 
      * 
      */
-    static String[] dosEquivalents = { "" + (char) 12,
+    static String[] dosEquivalents = { S_EMPTY + (char) 12,
     // ??
-            "" + (char) 127,
+            S_EMPTY + (char) 127,
             // ??
-            "" + (char) 128,
+            S_EMPTY + (char) 128,
             // Ccedil
-            "" + (char) 129,
+            S_EMPTY + (char) 129,
             // uuml
-            "" + (char) 130,
+            S_EMPTY + (char) 130,
             // eacute
-            "" + (char) 131,
+            S_EMPTY + (char) 131,
             // acirc
-            "" + (char) 132,
+            S_EMPTY + (char) 132,
             // auml
-            "" + (char) 133,
+            S_EMPTY + (char) 133,
             // agrave
-            "" + (char) 134,
+            S_EMPTY + (char) 134,
             // aring
-            "" + (char) 135,
+            S_EMPTY + (char) 135,
             // ccedil
-            "" + (char) 136,
+            S_EMPTY + (char) 136,
             // ecirc
-            "" + (char) 137,
+            S_EMPTY + (char) 137,
             // euml
-            "" + (char) 138,
+            S_EMPTY + (char) 138,
             // egrave
-            "" + (char) 139,
+            S_EMPTY + (char) 139,
             // iuml
-            "" + (char) 140,
+            S_EMPTY + (char) 140,
             // icirc
-            "" + (char) 141,
+            S_EMPTY + (char) 141,
             // igrave
-            "" + (char) 142,
+            S_EMPTY + (char) 142,
             // Auml
-            "" + (char) 143,
+            S_EMPTY + (char) 143,
             // Aring
-            "" + (char) 144,
+            S_EMPTY + (char) 144,
             // Eacute
-            "" + (char) 145,
+            S_EMPTY + (char) 145,
             // aelig
-            "" + (char) 146,
+            S_EMPTY + (char) 146,
             // ff?
-            "" + (char) 147,
+            S_EMPTY + (char) 147,
             // ocirc
-            "" + (char) 148,
+            S_EMPTY + (char) 148,
             // ouml
-            "" + (char) 149,
+            S_EMPTY + (char) 149,
             // ograve
-            "" + (char) 150,
+            S_EMPTY + (char) 150,
             // ucirc
-            "" + (char) 151,
+            S_EMPTY + (char) 151,
             // ugrave
-            "" + (char) 152,
+            S_EMPTY + (char) 152,
             // yuml
-            "" + (char) 153,
+            S_EMPTY + (char) 153,
             // Ouml
-            "" + (char) 154,
+            S_EMPTY + (char) 154,
             // Uuml
-            "" + (char) 155,
+            S_EMPTY + (char) 155,
             // ??
-            "" + (char) 156,
+            S_EMPTY + (char) 156,
             // ??
-            "" + (char) 157,
+            S_EMPTY + (char) 157,
             // ??
-            "" + (char) 158,
+            S_EMPTY + (char) 158,
             // ??
-            "" + (char) 159,
+            S_EMPTY + (char) 159,
             // ??
-            "" + (char) 160,
+            S_EMPTY + (char) 160,
             // aacute
-            "" + (char) 161,
+            S_EMPTY + (char) 161,
             // iacute
-            "" + (char) 162,
+            S_EMPTY + (char) 162,
             // oacute
-            "" + (char) 163,
+            S_EMPTY + (char) 163,
             // uacute
-            "" + (char) 164,
+            S_EMPTY + (char) 164,
             // nwave?
-            "" + (char) 165,
+            S_EMPTY + (char) 165,
             // Nwave?
-            "" + (char) 166,
+            S_EMPTY + (char) 166,
             // ??
-            "" + (char) 167,
+            S_EMPTY + (char) 167,
             // ??
-            "" + (char) 168,
+            S_EMPTY + (char) 168,
             // ??
-            "" + (char) 169,
+            S_EMPTY + (char) 169,
             // ??
-            "" + (char) 170,
+            S_EMPTY + (char) 170,
             // 170
-            "" + (char) 171,
+            S_EMPTY + (char) 171,
             // ??
-            "" + (char) 172,
+            S_EMPTY + (char) 172,
             // ??
-            "" + (char) 173,
+            S_EMPTY + (char) 173,
             // ??
-            "" + (char) 174,
+            S_EMPTY + (char) 174,
             // ??
-            "" + (char) 175,
+            S_EMPTY + (char) 175,
             // ??
-            "" + (char) 176,
+            S_EMPTY + (char) 176,
             // ??
-            "" + (char) 177,
+            S_EMPTY + (char) 177,
             // ??
-            "" + (char) 178,
+            S_EMPTY + (char) 178,
             // ??
-            "" + (char) 179,
+            S_EMPTY + (char) 179,
             // ??
-            "" + (char) 180,
+            S_EMPTY + (char) 180,
             // 180
             //
-            "" + (char) 192,
+            S_EMPTY + (char) 192,
             // eacute
-            "" + (char) 248,
+            S_EMPTY + (char) 248,
             // degrees
-            "" + (char) 352,
+            S_EMPTY + (char) 352,
             // egrave
-            "" + (char) 402,
+            S_EMPTY + (char) 402,
             // acirc
-            "" + (char) 710,
+            S_EMPTY + (char) 710,
             // ecirc
-            "" + (char) 8218,
+            S_EMPTY + (char) 8218,
             // eacute
-            "" + (char) 8221,
+            S_EMPTY + (char) 8221,
             // ouml
-            "" + (char) 8222,
+            S_EMPTY + (char) 8222,
             // auml
-            "" + (char) 8225,
+            S_EMPTY + (char) 8225,
             // ccedil
-            "" + (char) 8230,
+            S_EMPTY + (char) 8230,
             // agrave
-            "" + (char) 8240,
+            S_EMPTY + (char) 8240,
             // euml
-            "" + (char) 65533,
+            S_EMPTY + (char) 65533,
     // uuml
     };
 
-    static String[] asciiEquivalents = { "",
+    static String[] asciiEquivalents = { S_EMPTY,
     // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 199,
+            S_EMPTY + (char) 199,
             // Ccedil
-            "" + (char) 252,
+            S_EMPTY + (char) 252,
             // uuml
-            "" + (char) 233,
+            S_EMPTY + (char) 233,
             // eacute
-            "" + (char) 226,
+            S_EMPTY + (char) 226,
             // acirc
-            "" + (char) 228,
+            S_EMPTY + (char) 228,
             // auml
-            "" + (char) 224,
+            S_EMPTY + (char) 224,
             // agrave
-            "" + (char) 229,
+            S_EMPTY + (char) 229,
             // aring
-            "" + (char) 231,
+            S_EMPTY + (char) 231,
             // ccedil
-            "" + (char) 234,
+            S_EMPTY + (char) 234,
             // ecirc
-            "" + (char) 235,
+            S_EMPTY + (char) 235,
             // euml
-            "" + (char) 232,
+            S_EMPTY + (char) 232,
             // egrave
-            "" + (char) 239,
+            S_EMPTY + (char) 239,
             // iuml
-            "" + (char) 238,
+            S_EMPTY + (char) 238,
             // icirc
-            "" + (char) 236,
+            S_EMPTY + (char) 236,
             // igrave
-            "" + (char) 196,
+            S_EMPTY + (char) 196,
             // Auml
-            "" + (char) 197,
+            S_EMPTY + (char) 197,
             // Aring
-            "" + (char) 201,
+            S_EMPTY + (char) 201,
             // Eacute
-            "" + (char) 230,
+            S_EMPTY + (char) 230,
             // aelig
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 244,
+            S_EMPTY + (char) 244,
             // ocirc
-            "" + (char) 246,
+            S_EMPTY + (char) 246,
             // ouml
-            "" + (char) 242,
+            S_EMPTY + (char) 242,
             // ograve
-            "" + (char) 251,
+            S_EMPTY + (char) 251,
             // ucirc
-            "" + (char) 249,
+            S_EMPTY + (char) 249,
             // ugrave
-            "" + (char) 255,
+            S_EMPTY + (char) 255,
             // yuml
-            "" + (char) 214,
+            S_EMPTY + (char) 214,
             // Ouml
-            "" + (char) 220,
+            S_EMPTY + (char) 220,
             // Uuml
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ff?
-            "" + (char) 225,
+            S_EMPTY + (char) 225,
             // aacute
-            "" + (char) 237,
+            S_EMPTY + (char) 237,
             // iacute
-            "" + (char) 243,
+            S_EMPTY + (char) 243,
             // oacute
-            "" + (char) 250,
+            S_EMPTY + (char) 250,
             // uacute
-            "" + (char) 241,
+            S_EMPTY + (char) 241,
             // nwave?
-            "" + (char) 209,
+            S_EMPTY + (char) 209,
             // Nwave?
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // 170
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // ??
-            "" + (char) 0,
+            S_EMPTY + (char) 0,
             // 180
             //
-            "" + (char) 233,
+            S_EMPTY + (char) 233,
             // eacute
             "[degrees]",
             // degrees
-            "" + (char) 232,
+            S_EMPTY + (char) 232,
             // egrave
-            "" + (char) 226,
+            S_EMPTY + (char) 226,
             // acirc
-            "" + (char) 234,
+            S_EMPTY + (char) 234,
             // ecirc
-            "" + (char) 233,
+            S_EMPTY + (char) 233,
             // eacute
-            "" + (char) 246,
+            S_EMPTY + (char) 246,
             // ouml
-            "" + (char) 228,
+            S_EMPTY + (char) 228,
             // auml
-            "" + (char) 231,
+            S_EMPTY + (char) 231,
             // ccedil
-            "" + (char) 224,
+            S_EMPTY + (char) 224,
             // agrave
-            "" + (char) 235,
+            S_EMPTY + (char) 235,
             // euml
-            "" + (char) 252,
+            S_EMPTY + (char) 252,
     // uuml
     };
 
@@ -1242,7 +1237,7 @@ public class Util implements EuclidConstants {
             if (jj > 180) {
                 boolean ok = false;
                 for (int j = 0; j < dosEquivalents.length; j++) {
-                    if (dosEquivalents[j].equals("" + s.charAt(i))) {
+                    if (dosEquivalents[j].equals(S_EMPTY + s.charAt(i))) {
                         ok = true;
                         break;
                     }
@@ -1269,7 +1264,7 @@ public class Util implements EuclidConstants {
             return null;
         }
         int len = s.length();
-        StringBuffer sb = new StringBuffer("");
+        StringBuffer sb = new StringBuffer(S_EMPTY);
         while (true) {
             int idx = s.indexOf(S_EQUALS);
             if (idx == -1) {
@@ -1345,8 +1340,8 @@ public class Util implements EuclidConstants {
      * @return Description of the Return Value
      */
     public static String capitalise(String s) {
-        if (s.equals("")) {
-            return "";
+        if (s.equals(S_EMPTY)) {
+            return S_EMPTY;
         }
         if (s.length() == 1) {
             return s.toUpperCase();
@@ -1365,10 +1360,10 @@ public class Util implements EuclidConstants {
      */
     public static String toCamelCase(String s) {
         StringTokenizer st = new StringTokenizer(s, " \n\r\t");
-        String out = "";
+        String out = S_EMPTY;
         while (st.hasMoreTokens()) {
             s = st.nextToken();
-            if (out != "") {
+            if (out != S_EMPTY) {
                 s = capitalise(s);
             }
             out += s;
@@ -1458,18 +1453,18 @@ public class Util implements EuclidConstants {
      * @return Description of the Return Value
      */
     public static String normaliseWhitespace(String s) {
-        if (s == null || s.equals("")) {
+        if (s == null || s.equals(S_EMPTY)) {
             return s;
         }
         StringTokenizer st = new StringTokenizer(s, Util.WHITESPACE);
         int l = s.length();
-        String ss = "";
+        String ss = S_EMPTY;
         if (Character.isWhitespace(s.charAt(0))) {
-            ss = " ";
+            ss = S_SPACE;
         }
-        String end = "";
+        String end = S_EMPTY;
         if (Character.isWhitespace(s.charAt(l - 1))) {
-            end = " ";
+            end = S_SPACE;
         }
         boolean start = true;
         while (st.hasMoreTokens()) {
@@ -1477,7 +1472,7 @@ public class Util implements EuclidConstants {
                 ss += st.nextToken();
                 start = false;
             } else {
-                ss += " " + st.nextToken();
+                ss += S_SPACE + st.nextToken();
             }
         }
         return ss + end;
@@ -1570,7 +1565,7 @@ public class Util implements EuclidConstants {
         String currentDirectory = System.getProperty("user.dir");
         String file = currentDirectory.replace(fileSep.charAt(0), '/') + '/';
         if (file.charAt(0) != '/') {
-            file = "/" + file;
+            file = S_SLASH + file;
         }
         baseURL = new URL("file", null, file);
         String newUrl = new URL(baseURL, url).toString();
@@ -1625,7 +1620,7 @@ public class Util implements EuclidConstants {
         String f = "i" + nPlaces;
         DecimalFormat form = formTable.get(f);
         if (form == null) {
-            String pattern = "";
+            String pattern = S_EMPTY;
             for (int i = 0; i < nPlaces - 1; i++) {
                 pattern += "#";
             }
@@ -1642,7 +1637,7 @@ public class Util implements EuclidConstants {
         }
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < nPlaces - l; i++) {
-            sb.append(" ");
+            sb.append(S_SPACE);
         }
         return sb.append(result).toString();
     }
@@ -1666,7 +1661,7 @@ public class Util implements EuclidConstants {
         String f = "f" + nPlaces + S_PERIOD + nDec;
         DecimalFormat form = formTable.get(f);
         if (form == null) {
-            String pattern = "";
+            String pattern = S_EMPTY;
             for (int i = 0; i < nPlaces - nDec - 2; i++) {
                 pattern += "#";
             }
@@ -1694,21 +1689,21 @@ public class Util implements EuclidConstants {
             result = result.substring(1);
         }
         if (negative) {
-            result = "-" + result;
+            result = S_MINUS + result;
         }
         StringBuffer sb = new StringBuffer();
         int l = result.length();
         for (int i = 0; i < nPlaces - l; i++) {
-            sb.append(" ");
+            sb.append(S_SPACE);
         }
         String s = sb.append(result).toString();
         if (l > nPlaces) {
             s = s.substring(0, nPlaces);
             // decimal point got truncated?
-            if (s.indexOf(".") == -1) {
-                s = "";
+            if (s.indexOf(S_PERIOD) == -1) {
+                s = S_EMPTY;
                 for (int i = 0; i < nPlaces; i++) {
-                    s += "*";
+                    s += S_STAR;
                 }
             }
         }
@@ -1733,11 +1728,11 @@ public class Util implements EuclidConstants {
         } catch (EuclidException e) {
             Util.BUG(e);
         }
-        if (s.indexOf(".") != -1) {
+        if (s.indexOf(S_PERIOD) != -1) {
             while (s.endsWith("0")) {
                 s = s.substring(0, s.length() - 1);
             }
-            if (s.endsWith(".")) {
+            if (s.endsWith(S_PERIOD)) {
                 s = s.substring(0, s.length() - 1);
             }
         }
@@ -1818,7 +1813,7 @@ public class Util implements EuclidConstants {
     public static void check(int n, int low, int high) throws EuclidException {
         if (n < low || n > high) {
             throw new EuclidException("index (" + n + ")out of range: " + low
-                    + "/" + high);
+                    + S_SLASH + high);
         }
     }
 
@@ -1959,7 +1954,7 @@ public class Util implements EuclidConstants {
             try {
                 ii[i] = Integer.parseInt(ss[i]);
             } catch (NumberFormatException nfe) {
-                throw new EuclidException("" + nfe);
+                throw new EuclidException(S_EMPTY + nfe);
             }
         }
         return ii;
@@ -1984,7 +1979,7 @@ public class Util implements EuclidConstants {
             try {
                 dd[i] = new Double(ss[i]).doubleValue();
             } catch (NumberFormatException nfe) {
-                throw new EuclidException("" + nfe);
+                throw new EuclidException(S_EMPTY + nfe);
             }
         }
         return dd;
@@ -2075,8 +2070,8 @@ public class Util implements EuclidConstants {
      * @return trimmed string
      */
     public static String trim(double d) {
-        String s = "" + d;
-        int idx = s.lastIndexOf(".");
+        String s = S_EMPTY + d;
+        int idx = s.lastIndexOf(S_PERIOD);
         if (idx > 0) {
             int l = s.length() - 1;
             while (l > idx) {

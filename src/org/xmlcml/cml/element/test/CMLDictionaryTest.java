@@ -37,21 +37,21 @@ public class CMLDictionaryTest extends AbstractTest {
 	CMLDictionary xomDict1 = null;
 
 	// read into xom;
-	String xmlDict1S = ""
-			+ "<dictionary title=\"dictionary1 example\""
-			+ " xmlns:h=\"http://www.w3.org/XHTML\" "
+	String xmlDict1S = S_EMPTY
+			+ "<dictionary title='dictionary1 example'"
+			+ " xmlns:h='http://www.w3.org/XHTML' "
 			+ CML_XMLNS
 			+ ">"
-			+ "<entry id=\"a001\" term=\"Amplitude for CHARGE density mixing\" >"
+			+ "<entry id='a001' term='Amplitude for CHARGE density mixing' >"
 			+ "    <annotation>"
 			+ "       <documentation>"
 			+
-			// " <h:div class=\"summary\">Amplitude for CHARGE density
+			// " <h:div class='summary'>Amplitude for CHARGE density
 			// mixing</h:div>"+
-			// " <h:div class=\"description\">Not yet filled in...</h:div>"+
+			// " <h:div class='description'>Not yet filled in...</h:div>"+
 			"       </documentation>" + "   </annotation>"
-			+ "   <alternative type=\"abbreviation\">CDMixAmp</alternative>"
-			+ "</entry>" + "</dictionary>" + "";
+			+ "   <alternative type='abbreviation'>CDMixAmp</alternative>"
+			+ "</entry>" + "</dictionary>" + S_EMPTY;
 
 	Document xmlDict1Doc = null;
 
@@ -165,7 +165,7 @@ public class CMLDictionaryTest extends AbstractTest {
 					.assertEquals(
 							"duplicate entry",
 							"org.xmlcml.cml.base.CMLException: Entry for a002 already present",
-							"" + e);
+							S_EMPTY + e);
 		}
 	}
 
@@ -225,7 +225,7 @@ public class CMLDictionaryTest extends AbstractTest {
 		for (String s : dictionaryMap.keySet()) {
 			CMLDictionary dictionary = (CMLDictionary) dictionaryMap.get(s);
 			// System.out.println(s+"..."+dictionary.getTitle()+"
-			// ["+dictionary.getEntryElements().size()+"]");
+			// ["+dictionary.getEntryElements().size()+S_RSQUARE);
 			Assert.assertNotNull(dictionary);
 		}
 	}

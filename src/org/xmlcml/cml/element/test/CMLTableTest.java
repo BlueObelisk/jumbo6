@@ -49,7 +49,7 @@ public class CMLTableTest extends AbstractTableTest {
         } catch (IOException e) {
             Assert.fail("should not throw " + e);
         }
-        String ss = "<table border=\"1\">\n"
+        String ss = "<table border='1'>\n"
                 + "<tr><th>d</th><th>s</th></tr>\n"
                 + "<tr><td>1.0</td><td>a</td></tr>\n"
                 + "<tr><td>2.0</td><td>b</td></tr>\n"

@@ -43,8 +43,8 @@ public class IntArrayTest extends EuclidTest {
      * @param expected
      */
     public static void assertEquals(String msg, IntArray test, IntArray expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         IntTest.assertEquals(msg, test.getArray(), expected.getArray());
     }
@@ -58,8 +58,8 @@ public class IntArrayTest extends EuclidTest {
      * @param expected
      */
     public static void assertEquals(String msg, int[] test, IntArray expected) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getArray().length);
@@ -366,7 +366,7 @@ public class IntArrayTest extends EuclidTest {
             alwaysFail("ArrayIndexOutOfBoundsException");
         } catch (ArrayIndexOutOfBoundsException e) {
             Assert.assertEquals("subArray ArrayIndexOutOfBoundsException",
-                    "java.lang.ArrayIndexOutOfBoundsException", "" + e);
+                    "java.lang.ArrayIndexOutOfBoundsException", S_EMPTY + e);
         }
     }
 
@@ -382,7 +382,7 @@ public class IntArrayTest extends EuclidTest {
             alwaysFail("ArrayIndexOutOfBoundsException");
         } catch (ArrayIndexOutOfBoundsException e) {
             Assert.assertEquals("subArray ArrayIndexOutOfBoundsException",
-                    "java.lang.ArrayIndexOutOfBoundsException", "" + e);
+                    "java.lang.ArrayIndexOutOfBoundsException", S_EMPTY + e);
         }
     }
 
@@ -450,7 +450,7 @@ public class IntArrayTest extends EuclidTest {
             a1.dotProduct(a);
             alwaysFail("ArrayIndexOutOfBoundsException");
         } catch (EuclidException e) {
-            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidException", ""
+            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidException", S_EMPTY
                     + e);
         }
     }

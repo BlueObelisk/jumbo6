@@ -65,7 +65,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     protected MoleculeTool moleculeToolBond0;
     protected MoleculeTool moleculeToolXmlBonds;
 
-    String benzeneS = "" + "<molecule " + CML_XMLNS + " title='benzene'>"
+    String benzeneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='benzene'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -80,13 +80,13 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b4' atomRefs2='a4 a5' order='A'/>"
             + "    <bond id='b5' atomRefs2='a5 a6' order='A'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule benzene = null;
 
     String[] benzeneOrder = new String[] { "2", "1", "2", "1", "2", "1" };
 
-    String nickS = "" + "<molecule " + CML_XMLNS + ">" + " <atomArray> "
+    String nickS = S_EMPTY + "<molecule " + CML_XMLNS + ">" + " <atomArray> "
             + "  <atom id='a1' elementType='O'/>"
             + "  <atom id='a2' elementType='O'/>"
             + "  <atom id='a3' elementType='O'/>"
@@ -171,7 +171,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "  <bond atomRefs2='a38 a41' /> " + " </bondArray>"
             + " <formula formalCharge='0' concise='C 19 H 9 N 5 O 8'> "
             + "  <atomArray elementType='C H N O' count='19.0 9.0 5.0 8.0' />"
-            + " </formula> " + "</molecule> " + "";
+            + " </formula> " + "</molecule> " + S_EMPTY;
 
     CMLMolecule nick = null;
 
@@ -180,7 +180,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             "1", "2", "1", "1", "2", "1", "1", "2", "1", "1", "2", "1", "1",
             "1", "1", "1", "1", "1", "1", "1", "1", "1" };
 
-    String styreneS = "" + "<molecule " + CML_XMLNS + " title='styrene'>"
+    String styreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='styrene'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -199,14 +199,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
             + "    <bond id='b7' atomRefs2='a6 a7' order='1'/>"
             + "    <bond id='b8' atomRefs2='a7 a8' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule styrene = null;
 
     String[] styreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
             "2", };
 
-    String pyreneS = "" + "<molecule " + CML_XMLNS + " title='pyrene'>"
+    String pyreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyrene'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -244,14 +244,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
             + "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
             + "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule pyrene = null;
 
     String[] pyreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
             "1", "2", "1", "2", "1", "1", "1", "2", "1", "1", "2", "1" };
 
-    String tripheneS = "" + "<molecule " + CML_XMLNS + " title='triphene'>"
+    String tripheneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='triphene'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -282,14 +282,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
             + "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
             + "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule triphene = null;
 
     String[] tripheneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
             "2", "1", "1", "1", "2", "1", "2", "1" };
 
-    String methyleneCyclohexeneS = "" + "<molecule " + CML_XMLNS
+    String methyleneCyclohexeneS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='methyleneCyclohexene'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -306,14 +306,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
             + "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule methyleneCyclohexene = null;
 
     String[] methyleneCyclohexeneOrder = new String[] { "2", "1", "1", "1",
             "1", "1", "2" };
 
-    String methyleneCyclohexadieneS = "" + "<molecule " + CML_XMLNS
+    String methyleneCyclohexadieneS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='methyleneCyclohexadiene'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -330,14 +330,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
             + "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule methyleneCyclohexadiene = null;
 
     String[] methyleneCyclohexadieneOrder = new String[] { "2", "1", "1", "2",
             "1", "1", "2" };
 
-    String co2S = "" + "<molecule " + CML_XMLNS + " title='co2'>"
+    String co2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='co2'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -345,13 +345,13 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "  </atomArray>" + "  <bondArray>"
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule co2 = null;
 
     String[] co2Order = new String[] { "2", "2" };
 
-    String azuleneS = "" + "<molecule " + CML_XMLNS + " title='azulene'>"
+    String azuleneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='azulene'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -375,14 +375,14 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b9' atomRefs2='a9 a10' order='1'/>"
             + "    <bond id='b10' atomRefs2='a1 a10' order='1'/>"
             + "    <bond id='b11' atomRefs2='a4 a10' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule azulene = null;
 
     String[] azuleneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
             "1", "2", "1", "1" };
 
-    String conjugatedS = "" + "<molecule " + CML_XMLNS + " title='conjugated'>"
+    String conjugatedS = S_EMPTY + "<molecule " + CML_XMLNS + " title='conjugated'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -402,11 +402,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b6' atomRefs2='a6 a7' order='1'/>"
             + "    <bond id='b7' atomRefs2='a7 a8' order='1'/>"
             + "    <bond id='b8' atomRefs2='a8 a9' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule conjugated = null;
 
-    String formate1S = ""
+    String formate1S = S_EMPTY
             + "<molecule "
             + CML_XMLNS
             + " title='formate1'>"
@@ -417,11 +417,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "  </atomArray>" + "  <bondArray>"
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule formate1 = null;
 
-    String formate2S = "" + "<molecule " + CML_XMLNS + " title='formate2'>"
+    String formate2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='formate2'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='O' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -429,11 +429,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "  </atomArray>" + "  <bondArray>"
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule formate2 = null;
 
-    String formate3S = "" + "<molecule " + CML_XMLNS + " title='formate3'>"
+    String formate3S = S_EMPTY + "<molecule " + CML_XMLNS + " title='formate3'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -441,11 +441,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "  </atomArray>" + "  <bondArray>"
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule formate3 = null;
 
-    String pyridineS = "" + "<molecule " + CML_XMLNS + " title='pyridine'>"
+    String pyridineS = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyridine'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -460,11 +460,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule pyridine = null;
 
-    String pyridiniumS = ""
+    String pyridiniumS = S_EMPTY
             + "<molecule "
             + CML_XMLNS
             + " title='pyridinium'>"
@@ -482,11 +482,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule pyridinium = null;
 
-    String pyridone4S = "" + "<molecule " + CML_XMLNS + " title='pyridone4'>"
+    String pyridone4S = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyridone4'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='N' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -503,7 +503,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
             + "    <bond id='b7' atomRefs2='a4 a7' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule pyridone4 = null;
 
@@ -520,11 +520,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitroMethane = null;
 
-    String nitricS = ""
+    String nitricS = S_EMPTY
             + "<molecule "
             + CML_XMLNS
             + " title='nitric'>"
@@ -537,11 +537,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitric = null;
 
-    String oxalateS = ""
+    String oxalateS = S_EMPTY
             + "<molecule "
             + CML_XMLNS
             + " title='oxalate'>"
@@ -558,22 +558,22 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
             + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
             + "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule oxalate = null;
 
     // =========== redistribute molecular charge ==============
-    String methylammoniumS = "" + "<molecule " + CML_XMLNS
+    String methylammoniumS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='methylammonium' formalCharge='1'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
             + "    <atom id='a2' elementType='N' hydrogenCount='3'/>"
             + "  </atomArray>" + "  <bondArray>"
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule methylammonium = null;
 
-    String pyridinium1S = "" + "<molecule " + CML_XMLNS
+    String pyridinium1S = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='pyridinium1' formalCharge='1'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -588,11 +588,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b4' atomRefs2='a4 a5' order='2'/>"
             + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
             + "    <bond id='b6' atomRefs2='a6 a1' order='2'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule pyridinium1 = null;
 
-    String oxalate2S = "" + "<molecule " + CML_XMLNS
+    String oxalate2S = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='oxalate2' formalCharge='-2'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -606,11 +606,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
             + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
             + "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule oxalate2 = null;
 
-    String diMethylIminiumS = "" + "<molecule " + CML_XMLNS
+    String diMethylIminiumS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='diMethylIminium Me2N-CH2(+)'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
             + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -620,11 +620,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule diMethylIminium = null;
 
-    String munchnoneS = "" + "<molecule " + CML_XMLNS + " title='munchnone'>"
+    String munchnoneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='munchnone'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -639,12 +639,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
             + "    <bond id='b5' atomRefs2='a1 a5' order='1'/>"
             + "    <bond id='b6' atomRefs2='a1 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule munchnone = null;
 
     // nitrogen molecules
-    String nitric2S = "" + "<molecule " + CML_XMLNS + " title='ON(O)O'>"
+    String nitric2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='ON(O)O'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -654,11 +654,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitric2 = null;
 
-    String nitroMethane2S = "" + "<molecule " + CML_XMLNS
+    String nitroMethane2S = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='CH3N(O)O'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
             + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -668,12 +668,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitroMethane2 = null;
 
     // oxy anion
-    String carbonate2S = "" + "<molecule " + CML_XMLNS + " title='OC(O)O'>"
+    String carbonate2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='OC(O)O'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -683,12 +683,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
             + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule carbonate2 = null;
 
     // oxy anion
-    String hydrogenSulfateS = "" + "<molecule " + CML_XMLNS + " title='HSO4'>"
+    String hydrogenSulfateS = S_EMPTY + "<molecule " + CML_XMLNS + " title='HSO4'>"
             + "  <atomArray>"
             + "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -700,12 +700,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
             + "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule hydrogenSulfate = null;
 
     // methaneSulfonate
-    String methaneSulfonateS = "" + "<molecule " + CML_XMLNS
+    String methaneSulfonateS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='methaneSulfonate'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='3'/>"
@@ -717,11 +717,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
             + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
             + "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule methaneSulfonate = null;
 
-    String benzophenoneS = "" + "<molecule " + CML_XMLNS
+    String benzophenoneS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='benzophenone'>" + "  <atomArray>"
             + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
             + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -753,11 +753,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b13' atomRefs2='a12 a13' order='1'/>"
             + "    <bond id='b14' atomRefs2='a13 a14' order='1'/>"
             + "    <bond id='b15' atomRefs2='a9 a14' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule benzophenone = null;
 
-    String sproutS = "" + "<molecule " + CML_XMLNS + " title='sprout'>"
+    String sproutS = S_EMPTY + "<molecule " + CML_XMLNS + " title='sprout'>"
             + "  <atomArray>" + "    <atom id='a1' elementType='C'/>"
             + "    <atom id='a2' elementType='C'/>"
             + "    <atom id='a3' elementType='C'/>"
@@ -784,7 +784,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "     <bond id='a5 a11' atomRefs2='a5 a11'/>"
             + "     <bond id='a6 a12' atomRefs2='a6 a12'/>"
             + "     <bond id='a12 a13' atomRefs2='a12 a13'/>"
-            + "  </bondArray>" + "</molecule>" + "";
+            + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule sprout = null;
 
@@ -1220,15 +1220,15 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Builder builder = new CMLBuilder();
         Document doc;
         try {
-            String t01 = ""
-                    + "<molecule id=\"t01\" "
+            String t01 = S_EMPTY
+                    + "<molecule id='t01' "
                     + CML_XMLNS
                     + ">"
                     + "  <atomArray>"
-                    + "    <atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/>"
-                    + "    <atom id=\"h1\" elementType=\"H\"/>"
+                    + "    <atom id='a1' elementType='C' x3='10' y3='10' z3='10'/>"
+                    + "    <atom id='h1' elementType='H'/>"
                     + "  </atomArray>" + "  <bondArray>"
-                    + "    <bond atomRefs2=\"a1 h1\" order=\"1\"/>"
+                    + "    <bond atomRefs2='a1 h1' order='1'/>"
                     + "  </bondArray>" + "</molecule>";
             doc = builder.build(new StringReader(t01));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
@@ -1243,10 +1243,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // C(-H)-H
         try {
             // FIXME
-            String t02 = "<molecule id=\"t02\" "
+            String t02 = "<molecule id='t02' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t02));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1259,10 +1259,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
         // C(-H)(-H)-H
         try {
-            String t03 = "<molecule id=\"t03\" "
+            String t03 = "<molecule id='t03' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/><atom id=\"h2\" elementType=\"H\"/><atom id=\"h3\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 h1\" order=\"1\"/><bond atomRefs2=\"a1 h2\" order=\"1\"/><bond atomRefs2=\"a1 h3\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t03));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1275,10 +1275,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
         // C(-H)(-H)(-H)-H
         try {
-            String t04 = "<molecule id=\"t04\" "
+            String t04 = "<molecule id='t04' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/><atom id=\"h2\" elementType=\"H\"/><atom id=\"h3\" elementType=\"H\"/><atom id=\"h4\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 h1\" order=\"1\"/><bond atomRefs2=\"a1 h2\" order=\"1\"/><bond atomRefs2=\"a1 h3\" order=\"1\"/><bond atomRefs2=\"a1 h4\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/><atom id='h4' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/><bond atomRefs2='a1 h4' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t04));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1292,10 +1292,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // one ligand
         // C#C-H
         try {
-            String t11 = "<molecule id=\"t11\" "
+            String t11 = "<molecule id='t11' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"8.6\" y3=\"10\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"3\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='3'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t11));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1308,10 +1308,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
         // C-C-O-H
         try {
-            String t11a = "<molecule id=\"t11a\" "
+            String t11a = "<molecule id='t11a' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"O\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"8.6\" y3=\"10\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"8\" y3=\"9\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"1\"/><bond atomRefs2=\"a2 a3\" order=\"1\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='O' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8' y3='9' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t11a));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1324,10 +1324,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
         // C-C=C(-H)-H
         try {
-            String t12 = "<molecule id=\"t12\" "
+            String t12 = "<molecule id='t12' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"8.6\" y3=\"10\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"8.\" y3=\"8.7\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/><atom id=\"h2\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"1\"/><bond atomRefs2=\"a2 a3\" order=\"2\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/><bond atomRefs2=\"a1 h2\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t12));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1340,10 +1340,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
         // C-C-C(-H)(-H)-H
         try {
-            String t13 = "<molecule id=\"t13\" "
+            String t13 = "<molecule id='t13' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"8.6\" y3=\"10\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"8.\" y3=\"8.7\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/><atom id=\"h2\" elementType=\"H\"/><atom id=\"h3\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"1\"/><bond atomRefs2=\"a2 a3\" order=\"1\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/><bond atomRefs2=\"a1 h2\" order=\"1\"/><bond atomRefs2=\"a1 h3\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t13));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1359,10 +1359,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // |
         // C
         try {
-            String t21 = "<molecule id=\"t21\" "
+            String t21 = "<molecule id='t21' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"9.2\" y3=\"9\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"9.2\" y3=\"11\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"2\"/><bond atomRefs2=\"a1 a3\" order=\"1\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t21));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1377,10 +1377,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // |
         // C
         try {
-            String t21a = "<molecule id=\"t21a\" "
+            String t21a = "<molecule id='t21a' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"N\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"9.2\" y3=\"9\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"9.2\" y3=\"11\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"2\"/><bond atomRefs2=\"a1 a3\" order=\"1\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='N' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t21a));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1395,10 +1395,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // |
         // C
         try {
-            String t22 = "<molecule id=\"t22\" "
+            String t22 = "<molecule id='t22' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"9.2\" y3=\"9\" z3=\"10\"/><atom id=\"a3\" elementType=\"C\" x3=\"9.2\" y3=\"11\" z3=\"10\"/><atom id=\"h1\" elementType=\"H\"/><atom id=\"h2\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"1\"/><bond atomRefs2=\"a1 a3\" order=\"2\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/><bond atomRefs2=\"a1 h2\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t22));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);
@@ -1416,10 +1416,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // |
         // C
         try {
-            String t31 = "<molecule id=\"t31\" "
+            String t31 = "<molecule id='t31' "
                     + CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id=\"a1\" elementType=\"C\" x3=\"10\" y3=\"10\" z3=\"10\"/><atom id=\"a2\" elementType=\"C\" x3=\"9.2\" y3=\"10.8\" z3=\"10.8\"/><atom id=\"a3\" elementType=\"C\" x3=\"10.8\" y3=\"10.8\" z3=\"9.2\"/><atom id=\"a4\" elementType=\"C\" x3=\"10.8\" y3=\"9.2\" z3=\"10.8\"/><atom id=\"h1\" elementType=\"H\"/></atomArray><bondArray><bond atomRefs2=\"a1 a2\" order=\"1\"/><bond atomRefs2=\"a1 a3\" order=\"1\"/><bond atomRefs2=\"a1 a4\" order=\"1\"/><bond atomRefs2=\"a1 h1\" order=\"1\"/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='10.8' z3='10.8'/><atom id='a3' elementType='C' x3='10.8' y3='10.8' z3='9.2'/><atom id='a4' elementType='C' x3='10.8' y3='9.2' z3='10.8'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 a4' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t31));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = new MoleculeTool(mol);

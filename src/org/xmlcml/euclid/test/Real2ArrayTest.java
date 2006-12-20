@@ -58,9 +58,9 @@ public class Real2ArrayTest extends EuclidTest {
      */
     @Test
     public void testReal2ArrayRealArrayRealArray() {
-        Assert.assertEquals("realArrays", "(" + "(1.0,11.0)" + "(2.0,12.0)"
+        Assert.assertEquals("realArrays", S_LBRAK + "(1.0,11.0)" + "(2.0,12.0)"
                 + "(3.0,13.0)" + "(4.0,14.0)" + "(5.0,15.0)" + "(6.0,16.0)"
-                + ")", ra1.toString());
+                + S_RBRAK, ra1.toString());
     }
 
     /**

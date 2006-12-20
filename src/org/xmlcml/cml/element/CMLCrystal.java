@@ -80,7 +80,7 @@ public class CMLCrystal extends AbstractCrystal {
         C("C", "C-centered", new String[] { "1/2+x, 1/2+y, z" }),
 
         /** unknown */
-        UNKNOWN("?", "unknown", new String[] {});
+        UNKNOWN(S_QUERY, "unknown", new String[] {});
         String symbol;
 
         String desc;
@@ -319,7 +319,7 @@ public class CMLCrystal extends AbstractCrystal {
         } else {
             throw new CMLException(
                     "Corrupted cell parameters: must be exactly 6 (found: "
-                            + cellParamVector.size() + ")");
+                            + cellParamVector.size() + S_RBRAK);
         }
     }
 

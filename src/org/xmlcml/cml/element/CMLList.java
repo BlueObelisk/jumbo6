@@ -60,7 +60,7 @@ public class CMLList extends org.xmlcml.cml.element.AbstractList
      * @param tableRows
      */
     public void addColumnElementsTo(CMLElements<CMLTableRow> tableRows) {
-        List<Node> nodes = CMLUtil.getQueryNodes(this, "*");
+        List<Node> nodes = CMLUtil.getQueryNodes(this, S_STAR);
         if (nodes.size() != tableRows.size()) {
             throw new CMLRuntimeException("inconsistent column size: "+
                     nodes.size()+" expected "+tableRows.size());
@@ -82,7 +82,7 @@ public class CMLList extends org.xmlcml.cml.element.AbstractList
      * @return size
      */
     public int getArraySize() {
-        List<Node> nodeList = CMLUtil.getQueryNodes(this, "*");
+        List<Node> nodeList = CMLUtil.getQueryNodes(this, S_STAR);
         return nodeList.size();
     }
         
@@ -91,7 +91,7 @@ public class CMLList extends org.xmlcml.cml.element.AbstractList
      * @return elements as String
      */
     public List<String> getStringValues() {
-        List<Node> nodeList = CMLUtil.getQueryNodes(this, "*");
+        List<Node> nodeList = CMLUtil.getQueryNodes(this, S_STAR);
         List<String> stringList = new ArrayList<String>();
         for (Node node : nodeList) {
             stringList.add(node.getValue());

@@ -42,7 +42,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 
     ReactionTool xmlReactTool1;
 
-    String balancedS = "" + "<reaction id='br' " + CML_XMLNS + ">"
+    String balancedS = S_EMPTY + "<reaction id='br' " + CML_XMLNS + ">"
             + "  <reactantList id='brl1'>" + "    <reactant id='br1'>"
             + "     <molecule id='brm1'>" + "      <atomArray>"
             + "        <atom id='a1' elementType='O'/>"
@@ -61,9 +61,9 @@ public class ReactionToolTest extends ReactionAllTestBase {
             + "        <atom id='a1' elementType='O'/>"
             + "        <atom id='a4' elementType='Zn'/>" + "      </atomArray>"
             + "     </molecule>" + "    </product>" + "  </productList>"
-            + "</reaction>" + "";
+            + "</reaction>" + S_EMPTY;
 
-    String unbalancedS = "" + "<reaction " + CML_XMLNS + ">"
+    String unbalancedS = S_EMPTY + "<reaction " + CML_XMLNS + ">"
             + "  <reactantList>" + "    <reactant>" + "     <molecule>"
             + "      <atomArray>" + "        <atom id='a1' elementType='O'/>"
             + "        <atom id='a2' elementType='Mg'/>" + "      </atomArray>"
@@ -77,7 +77,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
             + "        <atom id='a3' elementType='Cl'/>"
             + "        <atom id='a2' elementType='Mg'/>" + "      </atomArray>"
             + "     </molecule>" + "    </product>" + "  </productList>"
-            + "</reaction>" + "";
+            + "</reaction>" + S_EMPTY;
 
     CMLReaction balancedR = null;
 

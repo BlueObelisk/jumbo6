@@ -127,7 +127,7 @@ public class DisorderAssembly implements CMLConstants {
     	for (CMLAtom atom : disorderedAtomList) {
     		String assemblyCode = DisorderAssembly.getAtomCode(atom);
     		if (assemblyCode == null) {
-    			assemblyCode = ".";
+    			assemblyCode = S_PERIOD;
     		}
     		
     		DisorderAssembly assembly = assemblyMap.get(assemblyCode);
@@ -168,14 +168,14 @@ public class DisorderAssembly implements CMLConstants {
     	String groupCode = DisorderGroup.getAtomCode(atom);
     	String assCode = DisorderAssembly.getAtomCode(atom);
     	if (groupCode == null) {
-    		groupCode = ".";
+    		groupCode = S_PERIOD;
     	}
     	if (assCode == null) {
-    		assCode = ".";
+    		assCode = S_PERIOD;
     		addCommonAtom(atom);
     	} else {
     		assemblyCode = assCode;
-    		if (".".equals(groupCode)) {
+    		if (S_PERIOD.equals(groupCode)) {
     			this.addCommonAtom(atom);
     		} else {
     			DisorderGroup group = groupMap.get(groupCode);

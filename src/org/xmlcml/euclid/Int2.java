@@ -7,7 +7,7 @@ import java.util.Arrays;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class Int2 {
+public class Int2 implements EuclidConstants {
     /** the first integer value */
     int x;
     /** the second integer value */
@@ -180,7 +180,7 @@ public class Int2 {
      * @return string
      */
     public String toString() {
-        return "(" + x + "," + y + ")";
+        return S_LBRAK + x + S_COMMA + y + S_RBRAK;
     }
 }
 /**
