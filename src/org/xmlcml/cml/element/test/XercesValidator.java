@@ -28,6 +28,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.euclid.EuclidConstants;
 
 /**
  * A sample DOM counter. This sample program illustrates how to traverse a DOM
@@ -50,7 +51,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  * 
  * @version $Id$
  */
-public class XercesValidator {
+public class XercesValidator implements EuclidConstants {
 
     //
     // Constants
@@ -319,7 +320,7 @@ public class XercesValidator {
         // process arguments
         for (int i = 0; i < argv.length; i++) {
             String arg = argv[i];
-            if (arg.startsWith("-")) {
+            if (arg.startsWith(S_MINUS)) {
                 String option = arg.substring(1);
                 if (option.equals("p")) {
                     // get parser name
@@ -405,11 +406,11 @@ public class XercesValidator {
             }
 
             if (1 == 2) {
-                System.out.println(namespaces + "/" + validation + "/"
-                        + schemaValidation + "/" + schemaFullChecking + "/"
-                        + validateAnnotations + "/" + dynamicValidation + "/"
-                        + xincludeProcessing + "/" + xincludeFixupBaseURIs
-                        + "/" + xincludeFixupLanguage);
+                System.out.println(namespaces + S_SLASH + validation + S_SLASH
+                        + schemaValidation + S_SLASH + schemaFullChecking + S_SLASH
+                        + validateAnnotations + S_SLASH + dynamicValidation + S_SLASH
+                        + xincludeProcessing + S_SLASH + xincludeFixupBaseURIs
+                        + S_SLASH + xincludeFixupLanguage);
             }
 
             // use default parser?
@@ -432,14 +433,14 @@ public class XercesValidator {
                 parser.setFeature(NAMESPACES_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + NAMESPACES_FEATURE_ID + ")");
+                        + NAMESPACES_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(VALIDATION_FEATURE_ID, validation);
                 parser.setFeature(VALIDATION_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + VALIDATION_FEATURE_ID + ")");
+                        + VALIDATION_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(SCHEMA_VALIDATION_FEATURE_ID,
@@ -447,7 +448,7 @@ public class XercesValidator {
                 parser.setFeature(SCHEMA_VALIDATION_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + SCHEMA_VALIDATION_FEATURE_ID + ")");
+                        + SCHEMA_VALIDATION_FEATURE_ID + S_RBRAK);
             }
             try {
                 // this checks the schema rather than the document
@@ -456,7 +457,7 @@ public class XercesValidator {
                 // parser.setFeature(SCHEMA_FULL_CHECKING_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + SCHEMA_FULL_CHECKING_FEATURE_ID + ")");
+                        + SCHEMA_FULL_CHECKING_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(VALIDATE_ANNOTATIONS_ID,
@@ -464,7 +465,7 @@ public class XercesValidator {
                 parser.setFeature(VALIDATE_ANNOTATIONS_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + VALIDATE_ANNOTATIONS_ID + ")");
+                        + VALIDATE_ANNOTATIONS_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(DYNAMIC_VALIDATION_FEATURE_ID,
@@ -473,14 +474,14 @@ public class XercesValidator {
                 parser.setFeature(DYNAMIC_VALIDATION_FEATURE_ID, false);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + DYNAMIC_VALIDATION_FEATURE_ID + ")");
+                        + DYNAMIC_VALIDATION_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(XINCLUDE_FEATURE_ID, xincludeProcessing);
                 parser.setFeature(XINCLUDE_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + XINCLUDE_FEATURE_ID + ")");
+                        + XINCLUDE_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(XINCLUDE_FIXUP_BASE_URIS_FEATURE_ID,
@@ -488,7 +489,7 @@ public class XercesValidator {
                 parser.setFeature(XINCLUDE_FIXUP_BASE_URIS_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + XINCLUDE_FIXUP_BASE_URIS_FEATURE_ID + ")");
+                        + XINCLUDE_FIXUP_BASE_URIS_FEATURE_ID + S_RBRAK);
             }
             try {
                 // parser.setFeature(XINCLUDE_FIXUP_LANGUAGE_FEATURE_ID,
@@ -496,7 +497,7 @@ public class XercesValidator {
                 parser.setFeature(XINCLUDE_FIXUP_LANGUAGE_FEATURE_ID, true);
             } catch (SAXException e) {
                 System.err.println("warning: Parser does not support feature ("
-                        + XINCLUDE_FIXUP_LANGUAGE_FEATURE_ID + ")");
+                        + XINCLUDE_FIXUP_LANGUAGE_FEATURE_ID + S_RBRAK);
             }
 
             // parse file

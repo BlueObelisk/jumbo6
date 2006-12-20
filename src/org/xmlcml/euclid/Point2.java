@@ -1,5 +1,6 @@
 package org.xmlcml.euclid;
 
+
 /**
  * 2-dimensional point class
  * 
@@ -17,7 +18,7 @@ package org.xmlcml.euclid;
  * @author (C) P. Murray-Rust, 1996
  */
 
-public class Point2 {
+public class Point2 implements EuclidConstants {
 
     /**
      * the coordinates of the point
@@ -298,10 +299,10 @@ public class Point2 {
      * @return string value
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(" ");
+        StringBuffer sb = new StringBuffer(S_SPACE);
         for (int i = 0; i < 2; i++) {
             sb.append(p2_array[i]);
-            sb.append(" ");
+            sb.append(S_SPACE);
         }
         return sb.toString();
     }

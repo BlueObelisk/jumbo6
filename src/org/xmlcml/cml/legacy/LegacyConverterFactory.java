@@ -1,13 +1,14 @@
 package org.xmlcml.cml.legacy;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.euclid.EuclidConstants;
 
 /**
  * factory for LegacyConverter
  * 
  * @author Administrator
  */
-public class LegacyConverterFactory {
+public class LegacyConverterFactory implements EuclidConstants {
     
     /** create LegacyFactory from classname.
      * 
@@ -21,12 +22,12 @@ public class LegacyConverterFactory {
         try {
             classx = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            throw new CMLRuntimeException("Cannot find LegacyConverter ("+e+")"+className);
+            throw new CMLRuntimeException("Cannot find LegacyConverter ("+e+S_RBRAK+className);
         }
         try {
             legacyConverter = (LegacyConverter) classx.newInstance();
         } catch (Exception e) {
-            throw new CMLRuntimeException("Cannot instantiate LegacyConverter ("+e+")"+className);
+            throw new CMLRuntimeException("Cannot instantiate LegacyConverter ("+e+S_RBRAK+className);
         }
         return legacyConverter;
     }

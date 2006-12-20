@@ -56,11 +56,11 @@ public class MatrixTest extends EuclidTest {
         int bCols = b.getCols();
         if (aRows != bRows) {
             Assert.fail(getAssertFormat(message + "; unequal rows in matrices",
-                    "" + aRows, "" + bRows));
+                    S_EMPTY + aRows, S_EMPTY + bRows));
         }
         if (aCols != bCols) {
             Assert.fail(getAssertFormat(message + "; unequal cols in matrices",
-                    "" + aCols, "" + bCols));
+                    S_EMPTY + aCols, S_EMPTY + bCols));
         }
         double[][] aMat = a.getMatrix();
         double[][] bMat = b.getMatrix();
@@ -68,7 +68,7 @@ public class MatrixTest extends EuclidTest {
             for (int j = 0; j < aCols; j++) {
                 if (!DoubleTest.equals(aMat[i][j], bMat[i][j], eps)) {
                     Assert.fail(getAssertFormat(message + "; unequal element ("
-                            + i + ", " + j + ")", "" + aMat[i][j], ""
+                            + i + ", " + j + S_RBRAK, S_EMPTY + aMat[i][j], S_EMPTY
                             + bMat[i][j]));
                 }
             }
@@ -96,11 +96,11 @@ public class MatrixTest extends EuclidTest {
         int bCols = b.getCols();
         if (aRows != bRows) {
             Assert.fail(getAssertFormat(message + "; unequal rows in matrices",
-                    "" + aRows, "" + bRows));
+                    S_EMPTY + aRows, S_EMPTY + bRows));
         }
         if (aCols != bCols) {
             Assert.fail(getAssertFormat(message + "; unequal cols in matrices",
-                    "" + aCols, "" + bCols));
+                    S_EMPTY + aCols, S_EMPTY + bCols));
         }
         String s = IntTest.testEquals(a.getMatrix(), b.getMatrix());
         if (s != null) {

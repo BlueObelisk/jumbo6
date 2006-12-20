@@ -24,7 +24,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
     public void testCMLBuilderBooleanNodeFactory() {
         // fails because default CMLBuilder uses CMLNodeFactory 
         // to validate element names
-        String s = ""+
+        String s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
              "<inchi/>" +
                 "</cml>";
@@ -74,7 +74,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
     @Test
     public void testParseString() {
         // parse, validation by CMLNodeFactory
-        String s = ""+
+        String s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
           "</cml>";
         CMLBuilder builder = new CMLBuilder();
@@ -85,7 +85,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
         }
         
         // parse, validation by CMLNodeFactory
-        s = ""+
+        s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
           "<inchi/>"+
           "</cml>";

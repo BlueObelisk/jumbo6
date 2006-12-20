@@ -35,7 +35,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
     @Test
     public final void testGetTEMP_DIRECTORY() {
         File dir = Util.getTEMP_DIRECTORY();
-        File f = new File("." + F_S + "target" + U_S + "test-outputs");
+        File f = new File(S_PERIOD + F_S + "target" + U_S + "test-outputs");
         try {
             Assert.assertEquals("temp dir", f.getCanonicalPath(), dir
                     .getAbsolutePath());

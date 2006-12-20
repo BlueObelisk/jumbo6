@@ -105,7 +105,7 @@ public class MorganTest extends MoleculeAtomBondTest {
     // FIXME
     @Ignore
     public final void testAlgorithm1() {
-        String benzeneS = "" +
+        String benzeneS = S_EMPTY +
                 "<molecule "+CML_XMLNS+">" +
                 "  <atomArray>" +
                 "    <atom id='a1' elementType='C'/>" +

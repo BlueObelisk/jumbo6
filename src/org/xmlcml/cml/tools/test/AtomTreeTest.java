@@ -21,7 +21,7 @@ import org.xmlcml.cml.tools.AtomTree;
  */
 public class AtomTreeTest extends AbstractToolTest {
 
-    String dmfS = "" +
+    String dmfS = S_EMPTY +
             "<molecule id='m1' "+CML_XMLNS + ">" +
             "  <atomArray>" +
             "    <atom id='a1' elementType='N' hydrogenCount='0'/>"+
@@ -41,7 +41,7 @@ public class AtomTreeTest extends AbstractToolTest {
             "    <bond atomRefs2='a5 a3' order='2'/>"+
             "  </bondArray>" +
             "</molecule>" +
-            "";
+            S_EMPTY;
     
     CMLMolecule dmf = null;
 

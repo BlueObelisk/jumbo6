@@ -125,7 +125,7 @@ public class DictRefAttributeTest extends AbstractTest {
 		int namespaceCount = cmlDictionary0.getNamespaceDeclarationCount();
 		Assert.assertEquals("dictionary namespace count", 3, namespaceCount);
 		String namespacePrefix0 = cmlDictionary0.getNamespacePrefix(0);
-		Assert.assertEquals("namespace0 ", "", namespacePrefix0);
+		Assert.assertEquals("namespace0 ", S_EMPTY, namespacePrefix0);
 		String namespaceURI0 = cmlDictionary0.getNamespaceURI(namespacePrefix0);
 		Assert.assertEquals("namespaceURI0 ", CML_NS, namespaceURI0);
 		String namespacePrefix1 = cmlDictionary0.getNamespacePrefix(1);

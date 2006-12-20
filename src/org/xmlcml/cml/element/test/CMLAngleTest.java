@@ -26,7 +26,7 @@ import org.xmlcml.euclid.test.StringTest;
 
 public class CMLAngleTest extends AbstractTest {
 
-    String s1 = "" + "<cml " + CML_XMLNS + ">" +
+    String s1 = S_EMPTY + "<cml " + CML_XMLNS + ">" +
             " <molecule id='m1'>" +
             "  <atomArray>" + "   <atom id='a1' x3='1.0' y3='0.0' z3='0.0'/>" +
             "   <atom id='a2' x3='0.0' y3='0.0' z3='0.0'/>" +
@@ -40,7 +40,7 @@ public class CMLAngleTest extends AbstractTest {
             " <angle id='aa0' atomRefs3='a1 a2 a3'/>" +
             " <angle id='aa1' atomRefs3='a2 a1 a3'/>" +
             " <angle id='aa2' atomRefs3='a1 a2 a4'/>" +
-            "</cml>" + "";
+            "</cml>" + S_EMPTY;
 
     CMLAngle angle0;
     CMLAngle angle1;
@@ -114,7 +114,7 @@ public class CMLAngleTest extends AbstractTest {
             atomRefs3 = angle2.getAtoms(molecule1);
             alwaysFail(msg);
         } catch (CMLRuntimeException e) {
-            Assert.assertEquals("non existent atom ", msg, "" + e);
+            Assert.assertEquals("non existent atom ", msg, S_EMPTY + e);
         }
     }
 
@@ -133,7 +133,7 @@ public class CMLAngleTest extends AbstractTest {
         try {
             angle = angle2.getCalculatedAngle(molecule1);
         } catch (CMLRuntimeException e) {
-            Assert.assertEquals("non existent ", msg, "" + e);
+            Assert.assertEquals("non existent ", msg, S_EMPTY + e);
         }
     }
 

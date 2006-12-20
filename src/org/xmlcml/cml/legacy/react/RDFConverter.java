@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import nu.xom.Document;
 import nu.xom.Element;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLSerializer;
@@ -47,7 +48,7 @@ import org.xmlcml.cml.element.CMLScalar;
  * @author (C) P. Murray-Rust, 1996, 1998, 2000
  */
 
-public class RDFConverter {
+public class RDFConverter implements CMLConstants {
 
     final static Logger logger = Logger.getLogger(RDFConverter.class.getName());
 
@@ -111,7 +112,7 @@ public class RDFConverter {
      * constructor.
      */
     public RDFConverter() {
-        this("");
+        this(S_EMPTY);
     }
 
     /**
@@ -326,7 +327,7 @@ public class RDFConverter {
             return readReaction(br);
         } else {
             throw new CMLException("Corrupt RDF entry: " + line + " (line: "
-                    + br.getLineNumber() + ")");
+                    + br.getLineNumber() + S_RBRAK);
         }
     }
 
@@ -365,7 +366,7 @@ public class RDFConverter {
             if (st.countTokens() == 1) {
                 mol.setRef(line);
             } else {
-                logger.severe("Bad " + MIREG + " " + line);
+                logger.severe("Bad " + MIREG + S_SPACE + line);
             }
         } else if (line.startsWith(MEREG)) {
             line = line.substring(MEREG.length()).trim();
@@ -375,7 +376,7 @@ public class RDFConverter {
                 mol.setRef(tok);
                 mol.setConvention("external");
             } else {
-                logger.severe("Bad " + MEREG + " " + line);
+                logger.severe("Bad " + MEREG + S_SPACE + line);
             }
         } else if (keyw.equals(MFMT)) {
             // mol = new MDLConverter().readMolecule(doc, br); // FIXME
@@ -409,7 +410,7 @@ public class RDFConverter {
                 logger.info("RIREG: " + tok);
                 reaction.setId("r" + tok);
             } else {
-                logger.severe("Bad " + RIREG + " " + line);
+                logger.severe("Bad " + RIREG + S_SPACE + line);
             }
         } else if (keyw.equals(REREG)) {
             reaction = new CMLReaction();
@@ -417,7 +418,7 @@ public class RDFConverter {
                 reaction.setRef(line);
                 reaction.setConvention("external");
             } else {
-                logger.severe("Bad " + RIREG + " " + line);
+                logger.severe("Bad " + RIREG + S_SPACE + line);
             }
         } else if (keyw.equals(RFMT)) {
             reaction = new RXNConverter().readReaction(doc, br);
@@ -608,9 +609,9 @@ public class RDFConverter {
             System.exit(0);
         }
         int i = 0;
-        String infile = "";
-        String outfile = "";
-        String id = "";
+        String infile = S_EMPTY;
+        String outfile = S_EMPTY;
+        String id = S_EMPTY;
         while (i < args.length) {
             if (1 == 2) {
                 ;
@@ -630,17 +631,17 @@ public class RDFConverter {
         }
         Document doc = null;
         try {
-            if (!infile.equals("")) {
+            if (!infile.equals(S_EMPTY)) {
                 LineNumberReader lnr = new LineNumberReader(new FileReader(
                         infile));
                 RDFConverter rdf = new RDFConverter(id);
                 doc = (Document) rdf.read(lnr);
             }
-            // if (!id.equals("")) {
+            // if (!id.equals(S_EMPTY)) {
             // CMLReaction reaction = (CMLReaction) doc.getDocumentElement();
             // reaction.setId(id);
             // }
-            if (!outfile.equals("")) {
+            if (!outfile.equals(S_EMPTY)) {
                 FileOutputStream fos = new FileOutputStream(outfile);
                 CMLSerializer serializer = new CMLSerializer(fos);
                 serializer.write(doc);

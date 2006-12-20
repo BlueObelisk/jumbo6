@@ -15,6 +15,8 @@ import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import org.xmlcml.euclid.EuclidConstants;
+
 /**
  * This utility class is looking for all the classes implementing or inheriting
  * from a given interface or class. (RunTime Subclass Identification)
@@ -22,7 +24,7 @@ import java.util.zip.ZipEntry;
  * @author <a href="mailto:daniel@satlive.org">Daniel Le Berre</a>
  * @version 1.0
  */
-public class RTSI {
+public class RTSI implements EuclidConstants {
 
     /**
      * Display all the classes inheriting or implementing a given class in the
@@ -119,7 +121,7 @@ public class RTSI {
                             files[i].length() - 6);
                     try {
                         // Try to create an instance of the object
-                        Object o = Class.forName(pckgname + "." + classname)
+                        Object o = Class.forName(pckgname + S_PERIOD + classname)
                                 .newInstance();
                         if (tosubclass.isInstance(o)) {
                             System.out.println(classname);

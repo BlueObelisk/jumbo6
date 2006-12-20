@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
+import org.xmlcml.euclid.EuclidConstants;
 
 /**
  * Wraps the Xerces DOM parser.
@@ -32,7 +33,7 @@ import org.xml.sax.SAXParseException;
  * @version $Id$
  */
 public class XercesWrapper implements ParserWrapper,
-        ParserWrapper.DocumentInfo, ErrorHandler {
+        ParserWrapper.DocumentInfo, ErrorHandler, EuclidConstants {
     //
     // Data
     //
@@ -149,7 +150,7 @@ public class XercesWrapper implements ParserWrapper,
      */
     protected void printError(String type, SAXParseException ex) {
 
-        System.err.print("[");
+        System.err.print(S_LSQUARE);
         System.err.print(type);
         System.err.print("] ");
         String systemId = ex.getSystemId();

@@ -206,9 +206,9 @@ public class AtomTree extends AbstractTool implements Comparable {
                 CMLLabel childLabel = (CMLLabel) atom.getFirstChildElement(
                         "label", CML_NS);
                 if (childLabel != null) {
-                    s.append("{");
+                    s.append(S_LCURLY);
                     s.append(childLabel.getValue());
-                    s.append("}");
+                    s.append(S_RCURLY);
                 }
             }
             if (atom.getHydrogenCountAttribute() != null) {
@@ -223,7 +223,7 @@ public class AtomTree extends AbstractTool implements Comparable {
                 int ch = atom.getFormalCharge();
                 int nch = (ch > 0) ? ch : -ch;
                 if (ch != 0) {
-                    String chS = (ch > 0) ? "+" : "-";
+                    String chS = (ch > 0) ? S_PLUS : S_MINUS;
                     for (int i = 0; i < nch; i++) {
                         s.append(chS);
                     }
@@ -231,9 +231,9 @@ public class AtomTree extends AbstractTool implements Comparable {
             }
             if (atomTree != null) {
                 for (int i = 0; i < atomTree.length; i++) {
-                    s.append("(");
+                    s.append(S_LBRAK);
                     s.append(atomTree[i].toString());
-                    s.append(")");
+                    s.append(S_RBRAK);
                 }
             }
         }

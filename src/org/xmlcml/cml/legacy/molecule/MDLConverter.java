@@ -32,6 +32,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -63,7 +64,7 @@ import org.xmlcml.molutil.ChemicalElement;
  * @author Peter Murry-Rust, Ramin Ghorashi (2005)
  * 
  */
-public class MDLConverter {
+public class MDLConverter implements CMLConstants {
 
     final static Logger logger = Logger.getLogger(MDLConverter.class.getName());
     static {
@@ -72,7 +73,7 @@ public class MDLConverter {
 
     private enum MDLTag {
         /** unknown MDL dimensional code */
-        DUNK(" "+" "),
+        DUNK(S_SPACE+S_SPACE),
         /** represents the MDL dimensional code for a 2D molecule */
         D2("2D"),
         /** represents the MDL dimensional code for a 2D molecule */
@@ -157,7 +158,7 @@ public class MDLConverter {
     /** represents the V3000 version tag */
     public final static String V3000 = "V3000";
 
-    protected final static String S_EMPTY = "";
+//    protected final static String S_EMPTY = "";
 
     protected final static String S_NEWLINE = "\r\n";
 
@@ -396,7 +397,7 @@ public class MDLConverter {
     private static String outputMDLInt(int intgr) {
         String s = "" + intgr;
         while (s.length() < 3) {
-            s = " " + s;
+            s = S_SPACE + s;
         }
         return s;
     }
@@ -417,7 +418,7 @@ public class MDLConverter {
 
         String s = format.format(value);
         while (s.length() < 10) {
-            s = " " + s;
+            s = S_SPACE + s;
         }
         return s;
     }
@@ -616,7 +617,7 @@ public class MDLConverter {
                     + (y + 2000);
             String month = date.substring(0, 2).trim();
             String day = date.substring(2, 4).trim();
-            date = year + "-" + month + "-" + day;
+            date = year + S_MINUS + month + S_MINUS + day;
             // Date d = new Date(date);
             // TODO do something with the date read from MOL
         }
@@ -1111,42 +1112,39 @@ public class MDLConverter {
     private Iterator<String> v3readValues(String line) {
         List<String> values = new ArrayList<String>();
         // line should have "M V30 " chopped off
-        line = line.trim() + " ";
+        line = line.trim() + S_SPACE;
 
-        while (line.indexOf(" ") != -1) {
+        while (line.indexOf(S_SPACE) != -1) {
             int endOfValue = 0;
-            if (line.indexOf(" ") == -1) {
+            if (line.indexOf(S_SPACE) == -1) {
                 break;
             }
 
-            if (line.startsWith("\"")) {
+            if (line.startsWith(S_QUOT)) {
                 line = line.substring(1);
-                endOfValue = line.indexOf("\"");
+                endOfValue = line.indexOf(S_QUOT);
 
-                while (line.charAt(endOfValue + 1) == '\"') {
+                while (line.charAt(endOfValue + 1) == C_QUOT) {
                     endOfValue = endOfValue + 2
-                            + line.substring(endOfValue + 2).indexOf("\"");
+                            + line.substring(endOfValue + 2).indexOf(S_QUOT);
                 }
             } else {
-                endOfValue = line.indexOf(" ");
+                endOfValue = line.indexOf(S_SPACE);
             }
 
             String theValue = line.substring(0, endOfValue);
 
-            if (theValue.indexOf("=") != -1) {
+            if (theValue.indexOf(S_EQUALS) != -1) {
                 break;
-            } else if (!theValue.equals("") && !theValue.equals(" ")) {
-                if (theValue.startsWith("(")) {
+            } else if (!theValue.equals("") && !theValue.equals(S_SPACE)) {
+                if (theValue.startsWith(S_LBRAK)) {
                     // first value in bracket is a count
                     theValue = theValue.substring(1);
                 }
-                if (theValue.endsWith(")")) {
+                if (theValue.endsWith(S_RBRAK)) {
                     theValue = theValue.substring(0, theValue.length() - 1);
-                    values.add(theValue.replaceAll("\"\"", "\""));
-                } else {
-                    values.add(theValue.replaceAll("\"\"", "\""));
                 }
-
+                values.add(theValue.replaceAll(S_QUOT+S_QUOT, S_QUOT));
             }
 
             line = line.substring(endOfValue + 1);
@@ -1203,7 +1201,7 @@ public class MDLConverter {
      */
     private String nextLine() throws IOException, CMLException {
         String nextLine = currentReader.readLine();
-        // System.out.println(currentReader.getLineNumber() + ":" + nextLine);
+        // System.out.println(currentReader.getLineNumber() + S_COLON + nextLine);
         if (nextLine == null) {
             throw new CMLException("MDLConverter: Unexpected EOF: Line number:"
                     + currentReader.getLineNumber());
@@ -1211,7 +1209,7 @@ public class MDLConverter {
             if (nextLine.startsWith(MDLTag.M_V30.tag)) {
                 // V3000 line
                 nextLine = nextLine.substring(MDLTag.M_V30.tag.length()).trim();
-                if (nextLine.endsWith("-")) {
+                if (nextLine.endsWith(S_MINUS)) {
                     nextLine += nextLine();
                 }
             }
@@ -1365,7 +1363,7 @@ public class MDLConverter {
             writer.write(outputMDLFloat(y));
             writer.write(outputMDLFloat(z));
             // write single whitespace after coords
-            writer.write(" ");
+            writer.write(S_SPACE);
 
             String elType = atom.getElementType();
             if (!elementExists(elType)) {
@@ -1388,7 +1386,7 @@ public class MDLConverter {
                     int mainIsotope = chemEl.getMainIsotope();
                     int delta = (mainIsotope > 0) ? (int) (isotope - mainIsotope)
                             : 0;
-                    isoString = (delta >= 0) ? " " + delta : "" + delta;
+                    isoString = (delta >= 0) ? S_SPACE + delta : "" + delta;
                 } else {
                     logger.severe("cannot find weight of " + elType
                             + " to work out isotopic difference");
@@ -1573,7 +1571,7 @@ public class MDLConverter {
             for (int j = 0; j < thisLineCount; j++) {
                 String atomNumber = outputMDLInt(atomNumbers.get(j + i * 8));
                 String value = outputMDLInt(values.get(j + i * 8));
-                output += " " + atomNumber + " " + value;
+                output += S_SPACE + atomNumber + S_SPACE + value;
             }
             output += MDLConverter.S_NEWLINE;
         }
@@ -1589,11 +1587,11 @@ public class MDLConverter {
      */
     private String v3writeCountsLine() {
         String counts = MDLTag.M_V30.tag + "COUNTS";
-        counts += " " + currentMolecule.getAtomCount();
-        counts += " " + currentMolecule.getBondCount();
-        counts += " " + 0; // number of Sgroups
-        counts += " " + 0; // number of 3D constraints
-        counts += " " + 0; // 1 if molecule is pure, 0 for mix (or just not
+        counts += S_SPACE + currentMolecule.getAtomCount();
+        counts += S_SPACE + currentMolecule.getBondCount();
+        counts += S_SPACE + 0; // number of Sgroups
+        counts += S_SPACE + 0; // number of 3D constraints
+        counts += S_SPACE + 0; // 1 if molecule is pure, 0 for mix (or just not
                             // chiral)
         counts += S_NEWLINE;
         return counts;
@@ -1632,37 +1630,37 @@ public class MDLConverter {
                 z = atom.getZ3();
             }
 
-            theWriter.write(MDLTag.M_V30.tag + (++i) + " " + elType + " " + x
-                    + " " + y);
+            theWriter.write(MDLTag.M_V30.tag + (++i) + S_SPACE + elType + S_SPACE + x
+                    + S_SPACE + y);
 
             // prevent 0.0 for 0 z
             if (z > 0.0001) {
-                theWriter.write(" " + z);
+                theWriter.write(S_SPACE + z);
             } else {
-                theWriter.write(" " + 0);
+                theWriter.write(S_SPACE + 0);
             }
 
             // atom-atom mapping
-            theWriter.write(" " + "0");
+            theWriter.write(S_SPACE + "0");
 
             if (atom.getIsotopeAttribute() != null) {
                 Double isotope = atom.getIsotope();
-                theWriter.write(" " + MDLTag.V3_ISOTOPE.tag + "="
+                theWriter.write(S_SPACE + MDLTag.V3_ISOTOPE.tag + S_EQUALS
                         + isotope.intValue());
             }
 
             if (atom.getFormalChargeAttribute() != null) {
-                theWriter.write(" " + MDLTag.V3_CHARGE.tag + "="
+                theWriter.write(S_SPACE + MDLTag.V3_CHARGE.tag + S_EQUALS
                         + atom.getFormalCharge());
             }
 
             if (atom.getSpinMultiplicityAttribute() != null) {
-                theWriter.write(" " + MDLTag.V3_RADICAL.tag + "="
+                theWriter.write(S_SPACE + MDLTag.V3_RADICAL.tag + S_EQUALS
                         + atom.getSpinMultiplicity());
             }
 
             if (atom.getHydrogenCountAttribute() != null) {
-                theWriter.write(" " + MDLTag.V3_HCOUNT.tag + "="
+                theWriter.write(S_SPACE + MDLTag.V3_HCOUNT.tag + S_EQUALS
                         + atom.getHydrogenCount());
             }
 
@@ -1688,13 +1686,13 @@ public class MDLConverter {
             int bondOrder = molBondOrder(bond.getOrder());
 
             theWriter.write(MDLTag.M_V30.tag + (++i));
-            theWriter.write(" " + bondOrder);
-            theWriter.write(" " + atomNumber1);
-            theWriter.write(" " + atomNumber2);
+            theWriter.write(S_SPACE + bondOrder);
+            theWriter.write(S_SPACE + atomNumber1);
+            theWriter.write(S_SPACE + atomNumber2);
 
             CMLBondStereo bs = bond.getBondStereo();
             if (bs != null) {
-                theWriter.write(" " + MDLTag.V3_STEREO.tag + "="
+                theWriter.write(S_SPACE + MDLTag.V3_STEREO.tag + S_EQUALS
                         + v3molBondStereo(bs.getXMLContent()));
             }
 
@@ -1748,7 +1746,7 @@ public class MDLConverter {
             // String s = (String)JOptionPane.showInputDialog(frame,"name of
             // file to convert");
 
-            JFileChooser fileChooser = new JFileChooser("C:\\rg312\\");
+            JFileChooser fileChooser = new JFileChooser("C:"+File.separator+"rg312"+File.separator);
             fileChooser.setFileFilter(MDLMOL2000);
             fileChooser.setFileFilter(MDLMOL3000);
             fileChooser.setFileFilter(CML);
@@ -1789,12 +1787,12 @@ public class MDLConverter {
                 i++;
                 inFileFormat = FileFormat
                         .getFileFormatFromExtension(infile.substring(infile
-                                .lastIndexOf(".") + 1, infile.length()));
+                                .lastIndexOf(S_PERIOD) + 1, infile.length()));
             } else if (args[i].equalsIgnoreCase("-OUT")) {
                 outfile = args[++i];
                 i++;
                 outFileFormat = FileFormat.getFileFormatFromExtension(outfile
-                        .substring(outfile.lastIndexOf(".") + 1, outfile
+                        .substring(outfile.lastIndexOf(S_PERIOD) + 1, outfile
                                 .length()));
             } else if (args[i].equalsIgnoreCase("-V3000")) {
                 outFileFormat = MDLMOL3000;
@@ -1966,7 +1964,7 @@ class SGroup {
     }
 }
 
-class FileFormat extends FileFilter {
+class FileFormat extends FileFilter implements CMLConstants {
 
     private static HashMap<String, FileFormat> formatExtensionMap = new HashMap<String, FileFormat>();
 
@@ -2014,7 +2012,7 @@ class FileFormat extends FileFilter {
      * @return description
      */
     public String getDescription() {
-        return description + " (*." + extension + ")";
+        return description + " (*." + extension + S_RBRAK;
     }
 
     /**

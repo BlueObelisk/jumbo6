@@ -115,13 +115,13 @@ public class CMLEigen extends AbstractEigen {
         if (eigenvectors.getRows() != eigenvectors.getColumns()) {
             throw new CMLException("eigenvector matrix must be square: rows("
                     + eigenvectors.getRows() + ") columns ("
-                    + eigenvectors.getColumns() + ")");
+                    + eigenvectors.getColumns() + S_RBRAK);
         }
         if (eigenvalues.getSize() != eigenvectors.getColumns()) {
             throw new CMLException("eigenvector matrix ("
                     + eigenvectors.getColumns()
                     + ") incompatible with eigenvalues ("
-                    + eigenvalues.getSize() + ")");
+                    + eigenvalues.getSize() + S_RBRAK);
         }
         if (!(XSD_DOUBLE.equals(eigenvalues.getDataType()))) {
             throw new CMLException("eigenvalue matrix must be real numbers");

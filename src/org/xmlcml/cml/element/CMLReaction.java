@@ -142,7 +142,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      * @return an id including the reaction id and type
      */
     public String getId(String type) {
-        return this.getId() + "." + type;
+        return this.getId() + S_PERIOD + type;
     }
 
     /**

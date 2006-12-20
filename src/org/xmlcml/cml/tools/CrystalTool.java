@@ -416,7 +416,7 @@ public class CrystalTool extends AbstractTool {
                     }
                     if (!duplicate) {
                         CMLAtom newAtom = new CMLAtom(symmetryAtom);
-                        String newId = fromAtom.getId()+"_"+serial;
+                        String newId = fromAtom.getId()+S_UNDER+serial;
                         newAtom.resetId(newId);
                         targetMolecule.addAtom(newAtom);
                         newAtomList.add(newAtom);
@@ -571,7 +571,7 @@ public class CrystalTool extends AbstractTool {
 		if (publishedFormula != null) {
 			System.out.println("PF "+publishedFormula.toFormulaString());
 			for (CMLFormula f : publishedFormulaList) {
-				System.out.println("..form.. "+f.getConcise()+"("+f.getCount()+")");
+				System.out.println("..form.. "+f.getConcise()+S_LBRAK+f.getCount()+S_RBRAK);
 			}
 			if (publishedFormulaList.size() != formulaCountMap.size()) {
 				moietyMatchesMolecules = false;
@@ -604,7 +604,7 @@ public class CrystalTool extends AbstractTool {
 		// are described by the reported moiety.
 //		String compositionMatch = "UNMATCHED COMPOSITION";
 		String diff = checkDiff(childFormulaList, publishedFormulaList, formulaUnitsPerOperator);
-		if (diff.equals("")) {
+		if (diff.equals(S_EMPTY)) {
 //			compositionMatch = "MATCHED COMPOSITION";
 		} else {
 //			compositionMatch = "UNMATCHED COMPOSITION: atoms - formula = diff";
@@ -613,8 +613,8 @@ public class CrystalTool extends AbstractTool {
 		}
 		
 		boolean formulaMoleculeCount = (publishedFormulaList.size() == formulaCountMap.size());
-		String formulaCountMatch = "";
-		String formulaMoleculeMatch = "";
+		String formulaCountMatch = S_EMPTY;
+		String formulaMoleculeMatch = S_EMPTY;
 //		boolean matchedFormula = false;
 		
 		try {
@@ -623,7 +623,7 @@ public class CrystalTool extends AbstractTool {
 				formulaMoleculeMatch = formulaCountMatch;
 			} else{
 				formulaCountMatch = "MATCHED FORMULA/MOLECULE COUNT "+publishedFormulaList.size()+"/"+formulaCountMap.size();
-				formulaMoleculeMatch = "";
+				formulaMoleculeMatch = S_EMPTY;
 				// no symmetry, possibly multiple molecules
 				if (formulaUnitsInCell >= operatorCount) {
 					if (formulaUnitsInCell % operatorCount == 0){
@@ -636,7 +636,7 @@ public class CrystalTool extends AbstractTool {
 								formulaMoleculeMatch += formulaS+": found molecules : "+count+"; expected "+formulaUnitsPerOperator+" * "+formulaCount;
 							}
 						}
-						if (!formulaMoleculeMatch.equals("")) {
+						if (!formulaMoleculeMatch.equals(S_EMPTY)) {
 							formulaMoleculeMatch = "UNMATCHED FORMULA/MOLECULE COUNT: "+formulaMoleculeMatch;
 							moietyMatchesMolecules = false;
 						} else {
@@ -824,7 +824,7 @@ public class CrystalTool extends AbstractTool {
     --*/
 
     /** analyses cif value for indeterminacy.
-     * if value id null, "." or "?" assumes it is not
+     * if value id null, "." or S_QUERY assumes it is not
      * determinate
      * @param value
      * @return true if value as above
@@ -861,7 +861,7 @@ public class CrystalTool extends AbstractTool {
      */
     public static String getFullLabel(CMLAtom atom) {
         return (atom == null) ? null : 
-            atom.getMolecule().getId()+":"+atom.getId()+"/"+CrystalTool.getCIFLabel(atom);
+            atom.getMolecule().getId()+S_COLON+atom.getId()+"/"+CrystalTool.getCIFLabel(atom);
     }
     
     /** gets occupancy.

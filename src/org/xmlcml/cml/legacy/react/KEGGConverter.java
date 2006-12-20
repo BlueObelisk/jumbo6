@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Document;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLName;
@@ -25,7 +26,7 @@ import org.xmlcml.cml.element.CMLReactionList;
  * @author pmr
  * 
  */
-public class KEGGConverter {
+public class KEGGConverter implements CMLConstants {
 
     final static Logger logger = Logger
             .getLogger(KEGGConverter.class.getName());
@@ -91,11 +92,11 @@ public class KEGGConverter {
             } catch (EOFException eof) {
                 break;
             } catch (IOException ioe) {
-                throw new IOException("" + ioe + "at line: "
+                throw new IOException(S_EMPTY + ioe + "at line: "
                         + br.getLineNumber());
             } catch (CMLException cmle) {
                 cmle.printStackTrace();
-                throw new CMLException("" + cmle + "at line: "
+                throw new CMLException(S_EMPTY + cmle + "at line: "
                         + br.getLineNumber());
             }
         }
@@ -111,7 +112,7 @@ public class KEGGConverter {
          * 3.6.1.1 ///
          */
         line = br.readLine();
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (!line.startsWith(K_ENTRY)) {
@@ -123,7 +124,7 @@ public class KEGGConverter {
         reaction.setId(id);
         // optional name
         line = br.readLine();
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (line.startsWith(K_NAME)) {
@@ -134,7 +135,7 @@ public class KEGGConverter {
             reaction.addName(cname);
         }
         // definition
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (!line.startsWith(K_DEFINITION)) {
@@ -144,7 +145,7 @@ public class KEGGConverter {
         String definition = line.substring(K_DEFINITION.length()).trim();
         definition += readOverflow(br);
         // equation
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (!line.startsWith(K_EQUATION)) {
@@ -155,7 +156,7 @@ public class KEGGConverter {
         equation += readOverflow(br);
         // pathway
         String pathway = null;
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (line.startsWith(K_PATHWAY)) {
@@ -164,7 +165,7 @@ public class KEGGConverter {
         }
         // enzyme
         String enzyme = null;
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (line.startsWith(K_ENZYME)) {
@@ -172,14 +173,14 @@ public class KEGGConverter {
             enzyme += readOverflow(br);
         }
         // ///
-        if (line == null || line.equals("")) {
+        if (line == null || line.equals(S_EMPTY)) {
             return null;
         }
         if (!line.startsWith(K_SLASH3)) {
             throw new CMLException("line: " + br.getLineNumber()
                     + "; expected " + K_SLASH3 + "; found: " + line);
         }
-        logger.info(".");
+        logger.info(S_PERIOD);
         KEGGReaction defReaction = new KEGGReaction(definition);
         KEGGReaction eqnReaction = new KEGGReaction(equation);
         CMLReactantList reactantList = new CMLReactantList();
@@ -232,21 +233,21 @@ public class KEGGConverter {
 
     // kludgy; sets line to latest value
     private String readOverflow(LineNumberReader br) throws IOException {
-        String extension = "";
+        String extension = S_EMPTY;
         while (true) {
             line = br.readLine();
-            if (line == null || line.equals("")) {
+            if (line == null || line.equals(S_EMPTY)) {
                 return extension;
             }
             if (!line.startsWith(BLANK12)) {
                 return extension;
             }
-            extension += " " + line.trim();
+            extension += S_SPACE + line.trim();
         }
     }
 }
 
-class KEGGReaction {
+class KEGGReaction implements CMLConstants {
 
     List<KEGGSpecies> pVector;
 
@@ -270,7 +271,7 @@ class KEGGReaction {
 
     List<KEGGSpecies> split(String s) {
         List<KEGGSpecies> v = new ArrayList<KEGGSpecies>();
-        String f = "";
+        String f = S_EMPTY;
         while (true) {
             int idx = s.indexOf(" + ");
             if (idx == -1) {
@@ -289,7 +290,7 @@ class KEGGReaction {
     }
 }
 
-class KEGGSpecies {
+class KEGGSpecies implements CMLConstants {
     int count = 1;
 
     String name;
@@ -300,8 +301,8 @@ class KEGGSpecies {
      * @param s
      */
     public KEGGSpecies(String s) {
-        s = s.trim() + " ";
-        int idx = s.indexOf(" ");
+        s = s.trim() + S_SPACE;
+        int idx = s.indexOf(S_SPACE);
         try {
             count = Integer.parseInt(s.substring(0, idx));
             s = s.substring(idx);

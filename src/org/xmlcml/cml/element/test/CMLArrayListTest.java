@@ -46,8 +46,8 @@ public class CMLArrayListTest extends AbstractTableTest {
         array.append(3.4);
         CMLTableHeaderCell tableHeaderCell1 = arrayList.createTableHeaderCell(array);
         Assert.assertNotNull("tableHeader not null", tableHeaderCell1);
-        String ss = "<tableHeaderCell title=\"my title\" dictRef=\"my:dict\"" +
-                " dataType=\"xsd:double\" xmlns=\"http://www.xml-cml.org/schema\"/>";
+        String ss = "<tableHeaderCell title='my title' dictRef='my:dict'" +
+                " dataType='xsd:double' xmlns='http://www.xml-cml.org/schema'/>";
         CMLTableHeaderCell expected = (CMLTableHeaderCell) parseValidString(ss);
         assertEqualsCanonically("tableHeaderCell", expected, tableHeaderCell1, true);
     }
@@ -65,8 +65,8 @@ public class CMLArrayListTest extends AbstractTableTest {
         array.append(3.4);
         CMLTableHeaderCell tableHeaderCell1 = arrayList.createTableHeaderCell(array);
         Assert.assertNotNull("tableHeader not null", tableHeaderCell1);
-        String ss = "<tableHeaderCell title=\"my title\" dictRef=\"my:dict\"" +
-                " dataType=\"xsd:double\" xmlns=\"http://www.xml-cml.org/schema\"/>";
+        String ss = "<tableHeaderCell title='my title' dictRef='my:dict'" +
+                " dataType='xsd:double' xmlns='http://www.xml-cml.org/schema'/>";
         CMLTableHeaderCell expected = (CMLTableHeaderCell) parseValidString(ss);
         assertEqualsCanonically("tableHeaderCell", expected, tableHeaderCell1, true);
     }
@@ -83,8 +83,8 @@ public class CMLArrayListTest extends AbstractTableTest {
         list.appendChild(new CMLScalar(3.4));
         CMLTableHeaderCell tableHeaderCell1 = arrayList.createTableHeaderCell(list);
         Assert.assertNotNull("tableHeader not null", tableHeaderCell1);
-        String ss = "<tableHeaderCell title=\"my title\" dictRef=\"my:dict\"" +
-                " dataType=\"array\" xmlns=\"http://www.xml-cml.org/schema\"/>";
+        String ss = "<tableHeaderCell title='my title' dictRef='my:dict'" +
+                " dataType='array' xmlns='http://www.xml-cml.org/schema'/>";
         CMLTableHeaderCell expected = (CMLTableHeaderCell) parseValidString(ss);
         assertEqualsCanonically("tableHeaderCell", expected, tableHeaderCell1, true);
     }
@@ -105,7 +105,7 @@ public class CMLArrayListTest extends AbstractTableTest {
     public final void testCreateTableContent() {
         CMLTableContent tableContent = arrayList.createTableContent();
         String ss = "<tableContent " +
-                "xmlns=\"http://www.xml-cml.org/schema\">1 a 2 b 3 c</tableContent>";
+                "xmlns='http://www.xml-cml.org/schema'>1 a 2 b 3 c</tableContent>";
         CMLTableContent expected = (CMLTableContent) parseValidString(ss);
         assertEqualsCanonically("tableContent", expected, tableContent, true);
     }
@@ -116,7 +116,7 @@ public class CMLArrayListTest extends AbstractTableTest {
     @Test
     public final void testGetCommonDelimiter() {
         String delim = arrayList.getCommonDelimiter();
-        Assert.assertEquals("delim", " ", delim);
+        Assert.assertEquals("delim", S_SPACE, delim);
     }
 
     /**

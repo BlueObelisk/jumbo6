@@ -300,8 +300,8 @@ public class CMLArg extends AbstractArg {
             String value = eval.getValue().trim();
             if (this.getDataType().equals(XSD_STRING)) {
             } else {
-                value = value.replace(S_PLUS, " "+S_PLUS+" ");
-                value = value.replace(S_MINUS, " "+S_MINUS+" ");
+                value = value.replace(S_PLUS, S_SPACE+S_PLUS+S_SPACE);
+                value = value.replace(S_MINUS, S_SPACE+S_MINUS+S_SPACE);
                 String[] tokens = value.trim().split("\\s+");
                 if (tokens.length % 2 != 1) {
                     throw new CMLRuntimeException("bad eval for numeric data: "+value);
@@ -309,7 +309,7 @@ public class CMLArg extends AbstractArg {
                 if (this.getDataType().equals(XSD_DOUBLE)) {
                     try {
                         double dd = new Double(tokens[0]).doubleValue();
-                        String op = "";
+                        String op = S_EMPTY;
                         for (int i = 1; i < tokens.length; i+=2) {
                             op = tokens[i];
                             double d = new Double(tokens[i+1]).doubleValue();
@@ -328,7 +328,7 @@ public class CMLArg extends AbstractArg {
                 } else if (this.getDataType().equals(XSD_INTEGER)) {
                     try {
                         int jj = Integer.parseInt(tokens[0]);
-                        String op = "";
+                        String op = S_EMPTY;
                         for (int i = 1; i < tokens.length; i+=2) {
                             op = tokens[i];
                             int j = Integer.parseInt(tokens[i+1]);
@@ -570,10 +570,10 @@ public class CMLArg extends AbstractArg {
         Set<String> idSet = new HashSet<String>();
         for (int i = 0; i < nodes.size(); i++) {
             CMLElement element = (CMLElement) nodes.get(i);
-            String serial = ""+(i+1);
+            String serial = S_EMPTY+(i+1);
             String id = element.getAttributeValue("id");
             if (id == null) {
-                id = ""+serial;
+                id = S_EMPTY+serial;
             } else {
                 id += S_UNDER+serial;
                 if (idSet.contains(id)) {

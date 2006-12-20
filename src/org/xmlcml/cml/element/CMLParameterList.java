@@ -174,14 +174,14 @@ public class CMLParameterList extends AbstractParameterList {
                 // System.out.println("N"+dictRefAttribute);
                 if (dictRefAttribute == null) {
                     errorList
-                            .add("NULL NAME: " + "[" + parameter.toXML() + "]");
+                            .add("NULL NAME: " + S_LSQUARE + parameter.toXML() + S_RSQUARE);
                 } else {
                     CMLEntry entry = (CMLEntry) dictionaryMap
                             .getEntry(dictRefAttribute);
                     if (entry == null) {
                         errorList.add("NOTFOUND "
-                                + dictRefAttribute.getQualifiedName() + "["
-                                + parameter.toXML() + "]");
+                                + dictRefAttribute.getQualifiedName() + S_LSQUARE
+                                + parameter.toXML() + S_RSQUARE);
                     } else {
                         // System.out.println("FOUND "+dictRefAttribute);
                     }

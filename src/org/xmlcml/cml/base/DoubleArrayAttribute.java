@@ -120,7 +120,7 @@ public class DoubleArrayAttribute extends CMLAttribute {
      * @param s
      *            the string
      * @param delim
-     *            delimiter (if null defaults to " ");
+     *            delimiter (if null defaults to S_SPACE);
      * @return array
      * @throws CMLRuntimeException
      *             cannot parse as doubles
@@ -139,7 +139,7 @@ public class DoubleArrayAttribute extends CMLAttribute {
             try {
                 dd[i] = new Double(ss[i]).doubleValue();
             } catch (NumberFormatException nfe) {
-                throw new CMLRuntimeException("" + nfe);
+                throw new CMLRuntimeException(S_EMPTY + nfe);
             }
         }
         return dd;

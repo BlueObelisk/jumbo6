@@ -13,6 +13,7 @@ import net.sf.jniinchi.JniInchiInputInchi;
 import net.sf.jniinchi.JniInchiOutputStructure;
 import net.sf.jniinchi.JniInchiWrapper;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -40,14 +41,14 @@ import org.xmlcml.cml.element.CMLMolecule;
  * <code>} else if (ret != INCHI_RET.OKAY) {</code><br>
  * <code>  // Structure generation failed</code><br>
  * <code>  throw new CMLxception("Structure generation failed failed: " + ret.toString()</code><br>
- * <code>    + " [" + intostruct.getMessage() + "]");</code><br>
+ * <code>    + " [" + intostruct.getMessage() + S_RSQUARE);</code><br>
  * <code>}</code><br>
  * <code></code><br>
  * <code>CMLMolecule molecule = intostruct.getMolecule();</code><br>
  * 
  * @author Sam Adams
  */
-public class InChIToStructure {
+public class InChIToStructure implements CMLConstants {
 	
 	protected JniInchiInputInchi input;
 	
@@ -62,7 +63,7 @@ public class InChIToStructure {
 	 */
 	public InChIToStructure(String inchi) throws CMLException {
 		try {
-			input = new JniInchiInputInchi(inchi, "");
+			input = new JniInchiInputInchi(inchi, S_EMPTY);
 		} catch (JniInchiException jie) {
 			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}

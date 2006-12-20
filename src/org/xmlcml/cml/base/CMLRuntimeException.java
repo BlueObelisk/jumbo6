@@ -12,7 +12,7 @@ import nu.xom.ParsingException;
  * @version 5.0
  * 
  */
-public class CMLRuntimeException extends RuntimeException {
+public class CMLRuntimeException extends RuntimeException implements CMLConstants {
 
     /**
      * 
@@ -38,7 +38,7 @@ public class CMLRuntimeException extends RuntimeException {
      * @param exception
      */
     public CMLRuntimeException(CMLException exception) {
-        this("" + exception);
+        this(S_EMPTY + exception);
     }
 
     /**
@@ -47,7 +47,7 @@ public class CMLRuntimeException extends RuntimeException {
      * @param exception
      */
     public CMLRuntimeException(Exception exception) {
-        this("" + exception);
+        this(S_EMPTY + exception);
     }
 
     /**
@@ -58,7 +58,7 @@ public class CMLRuntimeException extends RuntimeException {
      *            exception
      */
     public CMLRuntimeException(String msg, ParsingException e) {
-        this("PARSE_ERROR [at " + e.getLineNumber() + ":" + e.getColumnNumber()
+        this("PARSE_ERROR [at " + e.getLineNumber() + S_COLON + e.getColumnNumber()
                 + "] " + e.getMessage() + " | " + msg, (Exception) e);
     }
 

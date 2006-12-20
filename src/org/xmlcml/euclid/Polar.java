@@ -4,7 +4,7 @@ package org.xmlcml.euclid;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class Polar extends Object {
+public class Polar implements EuclidConstants {
     /**
      * the radius from the origin
      */
@@ -183,7 +183,7 @@ public class Polar extends Object {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("Polar: " + r + "," + theta);
+        sb.append("Polar: " + r + S_COMMA + theta);
         return sb.toString();
     }
 }

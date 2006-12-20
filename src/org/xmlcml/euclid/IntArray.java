@@ -166,7 +166,7 @@ public class IntArray extends ArrayBase {
      */
     public IntArray(IntArray m, int low, int high) throws EuclidException {
         if (low < 0 || low > high || high >= m.size()) {
-            throw new EuclidException("index out of range: " + low + "/" + high);
+            throw new EuclidException("index out of range: " + low + S_SLASH + high);
         }
         nelem = high - low + 1;
         checkSize(nelem);

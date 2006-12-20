@@ -255,10 +255,10 @@ public class PolymerTool extends AbstractTool {
         if (in == null) {
             molList = (CMLMoleculeList) new CMLBuilder().build(
                 new StringReader(
-                    ""
+                    S_EMPTY
                         + "<?xml version='1.0' encoding='UTF-8'?>"
                         + "<moleculeList  xmlns='http://www.xml-cml.org/schema'/>"
-                        + "")).getRootElement();
+                        + S_EMPTY)).getRootElement();
         } else {
             molList = (CMLMoleculeList) new CMLBuilder().build(in)
                     .getRootElement();
@@ -288,7 +288,7 @@ public class PolymerTool extends AbstractTool {
      * @param molTest
      */
     public void debug(String s, CMLMolecule molTest) {
-        String f = fileroot + "_" + s + ".xml";
+        String f = fileroot + S_UNDER + s + ".xml";
         System.out.println("=== debug " + s + "== to == "+fileroot);
         
         try {
@@ -302,7 +302,7 @@ public class PolymerTool extends AbstractTool {
 //                molRef.debug("MOLREF");
 //                molTest.debug("MOLTEST");
                 try {
-                    Assert.fail(e + " for " + fileroot + "/" + s);
+                    Assert.fail(e + " for " + fileroot + S_SLASH + s);
                 } catch (Throwable e1) {
                     System.err.println("Molecules are different: "+e1);
                 }
@@ -331,7 +331,7 @@ public class PolymerTool extends AbstractTool {
             throws Exception {
         Assert.assertNotNull("molListTest", molListTest);
         System.out.println("============" + s + "==========");
-        String f = fileroot + "_" + s + ".xml";
+        String f = fileroot + S_UNDER + s + ".xml";
         CMLMoleculeList molListRef = readMoleculeList(f);
         Assert.assertNotNull("molListRef", molListRef);
         try {
@@ -339,7 +339,7 @@ public class PolymerTool extends AbstractTool {
                     molListRef, molListTest, true);
         } catch (AssertionError e) {
             // molListTest.debug();
-            Assert.fail(e + " for " + fileroot + "/" + s);
+            Assert.fail(e + " for " + fileroot + S_SLASH + s);
         }
         System.out.println("============" + s + "==========");
     }
@@ -657,7 +657,7 @@ formula='
         List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//cml:torsion[@min and @max]", X_CML);
         for (Node node : torsions) {
             CMLTorsion torsion = (CMLTorsion) node;
-            String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+")";
+            String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
             int value = new CountExpressionAttribute(countExpression).calculateCountExpression();
             torsion.setXMLContent((double)value);
             torsion.removeAttribute("min");
@@ -778,7 +778,7 @@ formula='
                     moleculeConvention = molecule.getConvention();
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    System.err.println("Unexpected throwable "+t+" "+molecule.getConvention());
+                    System.err.println("Unexpected throwable "+t+S_SPACE+molecule.getConvention());
                     throw new CMLRuntimeException("cannot processConvention "+molecule.getConvention()+"; "+t);
                 }
             }
@@ -827,7 +827,7 @@ formula='
         }
         CMLElement molecule = (CMLElement) nodes.get(0);
         System.out.println("Read input: "+infile+" ("+
-                molecule.getAttributeValue("title")+")");
+                molecule.getAttributeValue("title")+S_RBRAK);
             
         this.setElement(molecule);
         
@@ -906,6 +906,7 @@ formula='
             Convention targetLevel = null;
             int i = 0;
             boolean debug = true;
+        	@SuppressWarnings("unused")
             List<String> debugList = new ArrayList<String>();
             while (i < args.length) {
                 if (args[i].equalsIgnoreCase("-INFILE")) {

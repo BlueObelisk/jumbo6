@@ -58,25 +58,25 @@ public class RepeatAttribute extends StringAttribute {
             super.setCMLValue(value);
             String[] values = value.trim().split("\\s+");
             if (values.length != 3) {
-                throw new CMLRuntimeException("repeat must have 3 whitespaced values: ("+value+")");
+                throw new CMLRuntimeException("repeat must have 3 whitespaced values: ("+value+S_RBRAK);
             }
             argName = values[0];
             try {
                 start = Integer.parseInt(values[1]);
             } catch (NumberFormatException e) {
-                throw new CMLRuntimeException("Cannot parse start value in: "+value+" ("+e+")");
+                throw new CMLRuntimeException("Cannot parse start value in: "+value+" ("+e+S_RBRAK);
             }
             try {
                 end = Integer.parseInt(values[2]);
             } catch (NumberFormatException e) {
-                throw new CMLRuntimeException("Cannot parse end value in: "+value+" ("+e+")");
+                throw new CMLRuntimeException("Cannot parse end value in: "+value+" ("+e+S_RBRAK);
             }
     //        end may be <=, ==, or >= start
         }
     }
     
     void resetAttribute() {
-        setValue(argName+" "+start+" "+end);
+        setValue(argName+S_SPACE+start+S_SPACE+end);
 //        Element parent = (Element) this.getParent();
 //        if (parent != null) {
             

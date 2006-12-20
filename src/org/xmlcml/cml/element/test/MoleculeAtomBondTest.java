@@ -43,7 +43,7 @@ public abstract class MoleculeAtomBondTest extends AbstractTest {
     //
     // read into xom; not a stable molecule... (CH3)[N+](S-)(O)(F)
     // 2 1 3 4 5
-    protected String xmlMolS = "" +
+    protected String xmlMolS = S_EMPTY +
             "  <molecule id='m1'  " + CML_XMLNS + ">"
             + "    <atomArray>"
             + "      <atom id='a1' "
@@ -459,6 +459,6 @@ public abstract class MoleculeAtomBondTest extends AbstractTest {
             "    <bond atomRefs2='a3 a5' order='S'/>" +
             "  </bondArray>" +
             "</molecule>" +
-            "");
+            S_EMPTY);
     }
 }

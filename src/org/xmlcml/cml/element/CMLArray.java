@@ -169,7 +169,7 @@ public class CMLArray extends AbstractArray
 
     /**
      * formed from components. size is extracted from array dimensions sets
-     * dataType to xsd:string cannot use default delimiter (" ") if strings
+     * dataType to xsd:string cannot use default delimiter (S_SPACE) if strings
      * contain whitespace, so choose another delimiter
      * 
      * @param array
@@ -402,13 +402,13 @@ public class CMLArray extends AbstractArray
         if (this.getDataType().equals(XSD_INTEGER)) {
             int[] ints = this.getInts();
             for (int i : ints) {
-                values.add("" + i);
+                values.add(S_EMPTY + i);
             }
         } else if (this.getDataType().equals(XSD_DOUBLE)) {
 
             double[] doubles = this.getDoubles();
             for (double d : doubles) {
-                values.add("" + d);
+                values.add(S_EMPTY + d);
             }
         } else if (this.getDataType().equals(XSD_STRING)) {
             String[] strings = this.getStrings();
@@ -497,7 +497,7 @@ public class CMLArray extends AbstractArray
      */
     private void checkDelimiter(String s, String d) throws CMLRuntimeException {
         if (s.contains(d)) {
-            throw new CMLRuntimeException("cannot delimit {" + s + "} with {" + d + "}");
+            throw new CMLRuntimeException("cannot delimit {" + s + "} with {" + d + S_RCURLY);
         }
     }
 
@@ -542,13 +542,13 @@ public class CMLArray extends AbstractArray
     }
 
     /**
-     * get delimiter. if none, use default " ".
+     * get delimiter. if none, use default S_SPACE.
      * 
      * @return delimiter
      */
     public String getDelimiter() {
         String delim = super.getDelimiter();
-        if (delim == null || delim.equals("")) {
+        if (delim == null || delim.equals(S_EMPTY)) {
             delim = S_SPACE;
         }
         return delim;
@@ -640,8 +640,8 @@ public class CMLArray extends AbstractArray
                 || this.getSize() != array.getSize()) {
             throw new CMLException(
                     "Unsuitable dataTypes for numeric operations / "
-                            + this.getDataType() + "/" + this.getSize() + "/"
-                            + array.getDataType() + "/" + array.getSize());
+                            + this.getDataType() + S_SLASH + this.getSize() + S_SLASH
+                            + array.getDataType() + S_SLASH + array.getSize());
         }
     }
 
@@ -677,7 +677,7 @@ public class CMLArray extends AbstractArray
                 resultArray = new CMLArray(result.getArray());
             }
         } catch (EuclidException je) {
-            throw new CMLException("" + je);
+            throw new CMLException(S_EMPTY + je);
         }
         return resultArray;
     }
@@ -710,7 +710,7 @@ public class CMLArray extends AbstractArray
                 resultArray = new CMLArray(result.getArray());
             }
         } catch (EuclidException je) {
-            throw new CMLException("" + je);
+            throw new CMLException(S_EMPTY + je);
         }
         return resultArray;
     }
@@ -755,8 +755,8 @@ public class CMLArray extends AbstractArray
         if (!XSD_DOUBLE.equals(dataType)) {
             throw new CMLRuntimeException("Cannot add double to array of: " + dataType);
         }
-        checkDelimiter("" + d, this.getDelimiter());
-        appendXMLContent(getXMLContent(), this.getDelimiter(), "" + d);
+        checkDelimiter(S_EMPTY + d, this.getDelimiter());
+        appendXMLContent(getXMLContent(), this.getDelimiter(), S_EMPTY + d);
         resetSize(size+1);
     }
 
@@ -777,8 +777,8 @@ public class CMLArray extends AbstractArray
         if (!XSD_INTEGER.equals(dataType)) {
             throw new CMLRuntimeException("Cannot add int to array of: " + dataType);
         }
-        checkDelimiter("" + i, this.getDelimiter());
-        appendXMLContent(getXMLContent(), this.getDelimiter(), "" + i);
+        checkDelimiter(S_EMPTY + i, this.getDelimiter());
+        appendXMLContent(getXMLContent(), this.getDelimiter(), S_EMPTY + i);
         resetSize(size + 1);
     }
 

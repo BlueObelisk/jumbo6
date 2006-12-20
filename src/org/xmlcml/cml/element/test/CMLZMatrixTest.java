@@ -50,7 +50,7 @@ public class CMLZMatrixTest extends AbstractTest {
 	@Ignore
 	public void testCMLZMatrixCMLElement() throws Exception {
 
-		String zmatS = ""
+		String zmatS = S_EMPTY
 				+ "<molecule id='polypropylene_oxide' "
 				+ CML_XMLNS
 				+ ">"
@@ -121,7 +121,7 @@ public class CMLZMatrixTest extends AbstractTest {
 				+ "<length atomRefs2='prop3_a4 h1_a1'>1.10</length>"
 				+ "<angle atomRefs3='prop3_a2 prop3_a4 h1_a1'>105</angle>"
 				+ "<torsion atomRefs4='prop3_a1 prop3_a2 prop3_a4 h1_a1'>60</torsion>"
-				+ "</molecule>" + "";
+				+ "</molecule>" + S_EMPTY;
 		CMLMolecule molecule = (CMLMolecule) new CMLBuilder()
 				.parseString(zmatS);
 		CMLZMatrix zmat = new CMLZMatrix(molecule);
@@ -139,7 +139,7 @@ public class CMLZMatrixTest extends AbstractTest {
 				+ "<torsion atomRefs4='prop1_a1 prop1_a4 prop1_a2 prop1_a3'>120</torsion>"
 				+ "<length atomRefs2='prop2_a1 prop2_a2'>1.54</length>"
 				+ "<length atomRefs2='prop2_a2 prop2_a3'>1.54</length>"
-				+ "</cml>" + "";
+				+ "</cml>" + S_EMPTY;
 		CMLCml cml = (CMLCml) parseValidString(zmatBadS);
 		try {
 			zmat = new CMLZMatrix(cml);
@@ -157,7 +157,7 @@ public class CMLZMatrixTest extends AbstractTest {
 				+ "<angle atomRefs3='prop1_a1 prop1_a2 prop1_a3'>111</angle>"
 				+ "<length atomRefs2='prop1_a2 prop1_a4'>1.40</length>"
 				+ "<angle atomRefs3='prop1_a1 prop1_a2 prop1_a4'>111</angle>"
-				+ "</cml>" + "";
+				+ "</cml>" + S_EMPTY;
 		cml = (CMLCml) parseValidString(zmatBadS);
 		try {
 			zmat = new CMLZMatrix(cml);
@@ -177,7 +177,7 @@ public class CMLZMatrixTest extends AbstractTest {
 	 */
 	@Test
 	public void testZMatrixElement2() {
-		String moleculeS = "" + "<molecule id='branch0' "
+		String moleculeS = S_EMPTY + "<molecule id='branch0' "
 				+ "convention='cml:PML-complete' "
 				+ "xmlns='http://www.xml-cml.org/schema'>" + "<atomArray>"
 				+ "<atom elementType='O' hydrogenCount='1' id='a0'/>"
@@ -219,6 +219,7 @@ public class CMLZMatrixTest extends AbstractTest {
 		/* CMLZMatrix zMatrix = */new CMLZMatrix(molecule);
 	}
 
+	@SuppressWarnings("unused")
 	private void testExample(String infileS, String outfileS)
 			throws IOException, ValidityException, ParsingException {
 		Document doc = null;

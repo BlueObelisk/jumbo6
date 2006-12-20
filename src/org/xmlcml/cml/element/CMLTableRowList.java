@@ -94,7 +94,7 @@ public class CMLTableRowList extends org.xmlcml.cml.element.AbstractTableRowList
         if (listArray instanceof CMLArray) {
             size = ((CMLArray)listArray).getSize();
         } else if (listArray instanceof CMLList) {
-            size = CMLUtil.getQueryNodes(listArray, "*").size();
+            size = CMLUtil.getQueryNodes(listArray, S_STAR).size();
         }
         if (tableRows.size() == 0) {
             for (int iRow = 0; iRow < size; iRow++) {
@@ -146,7 +146,7 @@ public class CMLTableRowList extends org.xmlcml.cml.element.AbstractTableRowList
                         arrayList.addArray(array);
                 } else {
                     CMLTableCell tableCell = firstTableRow.getTableCellElements().get(jCol);
-                    List<Node> nodeList = CMLUtil.getQueryNodes(tableCell, "*");
+                    List<Node> nodeList = CMLUtil.getQueryNodes(tableCell, S_STAR);
                     Class classx = (nodeList.size() == 0) ? null : nodeList.get(0).getClass();
                     classList.add(classx);
                     CMLList cmlList = new CMLList();

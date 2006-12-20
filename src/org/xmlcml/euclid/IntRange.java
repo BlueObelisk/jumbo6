@@ -10,7 +10,7 @@ package org.xmlcml.euclid;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class IntRange {
+public class IntRange implements EuclidConstants {
     /**
      * maximum of range
      */
@@ -173,6 +173,6 @@ public class IntRange {
      * @return string
      */
     public String toString() {
-        return (minval > maxval) ? "NULL" : "(" + minval + "," + maxval + ")";
+        return (minval > maxval) ? "NULL" : S_LBRAK + minval + S_COMMA + maxval + S_RBRAK;
     }
 }

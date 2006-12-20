@@ -228,7 +228,7 @@ public class CMLBasisSet extends AbstractBasisSet {
             throw new CMLException("Number of orbitals ("
                     + this.getAtomicBasisFunctionElements().size()
                     + ") inconsistent with size of matrix ("
-                    + coefficients.getSize() + ")");
+                    + coefficients.getSize() + S_RBRAK);
         }
         this.coefficients = coefficients;
     }

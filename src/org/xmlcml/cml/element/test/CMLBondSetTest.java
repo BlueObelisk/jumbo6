@@ -182,7 +182,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
             Assert.fail("should throw duplicate bond ");
         } catch (CMLRuntimeException e) {
             Assert.assertEquals("duplicate bond",
-                    "duplicate bond in bondSet: b3", "" + e.getMessage());
+                    "duplicate bond in bondSet: b3", S_EMPTY + e.getMessage());
         }
         Assert.assertEquals("bondset2", 3, bondSet1.size());
     }

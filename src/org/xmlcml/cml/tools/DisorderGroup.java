@@ -75,7 +75,7 @@ public class DisorderGroup implements CMLConstants, Comparable<DisorderGroup> {
     public void addAtom(CMLAtom atom) {
     	String groupCode = getAtomCode(atom);
     	if (groupCode == null) {
-    		groupCode = ".";
+    		groupCode = S_PERIOD;
     		assembly.addCommonAtom(atom);
     	} else {
     		code = groupCode;

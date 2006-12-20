@@ -86,7 +86,7 @@ public class CMLScalarTest extends NumericTest {
 	String xmlBad2 = "<scalar dataType='xsd:integer' " + CML_XMLNS
 			+ ">2.1</scalar>";
 
-	String unitsS = "" + "<c:cml " + " id='a234234' " + "  xmlns:c='" + CML_NS
+	String unitsS = S_EMPTY + "<c:cml " + " id='a234234' " + "  xmlns:c='" + CML_NS
 			+ "' " + "  xmlns:siUnits='" + SIUNIT_NS + "' " + "  xmlns:units='"
 			+ UNIT_NS + "' " + ">"
 			+ "<c:scalar id='s1' dictRef='cmlDict:angle' units='" + U_DEGREE
@@ -143,7 +143,7 @@ public class CMLScalarTest extends NumericTest {
 			Assert.fail("should be valid");
 		} catch (ParsingException e) {
 			Assert.assertEquals("should fail to parse",
-					"For input string: \"three\"", e.getMessage());
+					"For input string: "+S_QUOT+"three"+S_QUOT, e.getMessage());
 		} catch (IOException e) {
 			Assert.fail("should not throw IO");
 		}
@@ -207,8 +207,8 @@ public class CMLScalarTest extends NumericTest {
 		Assert.assertNotNull("new CMLScalar", copy);
 		Assert.assertEquals("data type", CMLElement.XSD_STRING, copy
 				.getDataType());
-		Assert.assertEquals("value", "", copy.getString());
-		Assert.assertEquals("value", "", copy.getXMLContent());
+		Assert.assertEquals("value", S_EMPTY, copy.getString());
+		Assert.assertEquals("value", S_EMPTY, copy.getXMLContent());
 		int nchild = copy.getChildCount();
 		Assert.assertEquals("should be a text child", 1, nchild);
 		// Assert.assertEquals("should be a text child - wrong", 0, nchild);

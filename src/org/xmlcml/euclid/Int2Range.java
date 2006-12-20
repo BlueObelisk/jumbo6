@@ -1,4 +1,6 @@
 package org.xmlcml.euclid;
+
+
 /**
  * 
  * 2-D int limits
@@ -12,7 +14,7 @@ package org.xmlcml.euclid;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class Int2Range {
+public class Int2Range implements EuclidConstants {
     /**
      * X-range
      */
@@ -167,6 +169,6 @@ public class Int2Range {
      * @return string
      */
     public String toString() {
-        return "(" + xrange.toString() + "," + yrange.toString() + ")";
+        return S_LBRAK + xrange.toString() + S_COMMA + yrange.toString() + S_RBRAK;
     }
 }

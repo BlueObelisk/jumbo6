@@ -6,6 +6,7 @@ import java.util.Set;
 import nu.xom.Attribute;
 
 import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 
@@ -14,7 +15,7 @@ import org.xmlcml.cml.base.CMLException;
  * which have specific code assocaietd with them. and which created there own
  * subclassed attribute objects normally of type string but others are possible
  */
-public class SpecialAttribute {
+public class SpecialAttribute implements CMLConstants {
 
     // counter for whether each attribute has been processed once
     static Set<String> specialAttributeSet = new HashSet<String>();
@@ -88,7 +89,7 @@ public class SpecialAttribute {
      * @return String
      */
     public String getSummary() {
-        return "";
+        return S_EMPTY;
 
     }
 

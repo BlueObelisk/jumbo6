@@ -80,7 +80,7 @@ public class IntArrayAttribute extends CMLAttribute {
         for (int i = 0; i < ii.length; i++) {
             this.ii[i] = ii[i];
         }
-        this.setValue(Util.concatenate(ii, " "));
+        this.setValue(Util.concatenate(ii, S_SPACE));
     }
 
     /**
@@ -123,7 +123,7 @@ public class IntArrayAttribute extends CMLAttribute {
             try {
                 ii[i] = Integer.parseInt(ss[i]);
             } catch (NumberFormatException nfe) {
-                throw new CMLRuntimeException("" + nfe);
+                throw new CMLRuntimeException(S_EMPTY + nfe);
             }
         }
         return ii;

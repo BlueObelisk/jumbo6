@@ -12,7 +12,7 @@ import nu.xom.ParsingException;
  * @version 5.0
  * 
  */
-public class CMLException extends Exception {
+public class CMLException extends Exception implements CMLConstants {
 
     /**
      * 
@@ -42,7 +42,7 @@ public class CMLException extends Exception {
      * @param msg
      */
     public CMLException(ParsingException e, String msg) {
-        this("PARSE_ERROR [at " + e.getLineNumber() + ":" + e.getColumnNumber()
+        this("PARSE_ERROR [at " + e.getLineNumber() + S_COLON + e.getColumnNumber()
                 + "] " + e.getMessage() + " | " + msg);
     }
 }

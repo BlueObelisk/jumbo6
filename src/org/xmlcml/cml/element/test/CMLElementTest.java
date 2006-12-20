@@ -413,7 +413,7 @@ public class CMLElementTest extends AbstractTest {
         elem2.addAttribute(new Attribute("bar", "plugh"));
         assertEqualsCanonically("test canonicalization", elem1, elem2);
         String s1 = "<foo bar='plugh' y2='xyzzy'/>";
-        String s2 = "<foo y2=\"xyzzy\"   bar=\"plugh\"  ></foo>";
+        String s2 = "<foo y2='xyzzy'   bar='plugh'  ></foo>";
         try {
             elem1 = new Builder().build(new StringReader(s1)).getRootElement();
             elem2 = new Builder().build(new StringReader(s2)).getRootElement();
@@ -424,7 +424,7 @@ public class CMLElementTest extends AbstractTest {
         }
         assertEqualsCanonically("test canonicalization", elem1, elem2);
         s1 = "<x:foo xmlns:x='http://xx' bar='plugh' y2='xyzzy'/>";
-        s2 = "<x:foo xmlns:x='http://xx' y2=\"xyzzy\"   bar=\"plugh\"  ></x:foo>";
+        s2 = "<x:foo xmlns:x='http://xx' y2='xyzzy'   bar='plugh'  ></x:foo>";
         try {
             elem1 = new Builder().build(new StringReader(s1)).getRootElement();
             elem2 = new Builder().build(new StringReader(s2)).getRootElement();
@@ -435,7 +435,7 @@ public class CMLElementTest extends AbstractTest {
         }
         assertEqualsCanonically("test canonicalization", elem1, elem2);
         s1 = "<x:foo xmlns:x='http://xx' bar='plugh' y2='xyzzy'/>";
-        s2 = "<x:foo xmlns:x='http://zz' y2=\"xyzzy\"   bar=\"plugh\"  ></x:foo>";
+        s2 = "<x:foo xmlns:x='http://zz' y2='xyzzy'   bar='plugh'  ></x:foo>";
         try {
             elem1 = new Builder().build(new StringReader(s1)).getRootElement();
             elem2 = new Builder().build(new StringReader(s2)).getRootElement();
@@ -446,7 +446,7 @@ public class CMLElementTest extends AbstractTest {
         }
         assertNotEqualsCanonically("test canonicalization", elem1, elem2);
         s1 = "<x:foo xmlns:x='http://xx' bar='plugh' y2='xyzzy'/>";
-        s2 = "<y:foo xmlns:y='http://xx' y2=\"xyzzy\"   bar=\"plugh\"  ></y:foo>";
+        s2 = "<y:foo xmlns:y='http://xx' y2='xyzzy'   bar='plugh'  ></y:foo>";
         try {
             elem1 = new Builder().build(new StringReader(s1)).getRootElement();
             elem2 = new Builder().build(new StringReader(s2)).getRootElement();

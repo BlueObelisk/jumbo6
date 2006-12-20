@@ -21,7 +21,7 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testCalculateCountExpression() {
-        String s = "" +
+        String s = S_EMPTY +
                 "<fragment "+CML_XMLNS+
                 "  countExpression='*(5)'/>";
         CMLFragment frag = (CMLFragment) parseValidString(s);

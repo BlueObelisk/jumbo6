@@ -199,13 +199,13 @@ public interface CMLConstants extends EuclidConstants {
     String CML_DICT_NS = DICT_NS+U_S+"cml";
 
     /** constant */
-    String CML1 = CML + "/" + "cml1";
+    String CML1 = CML + S_SLASH + "cml1";
 
     /** constant */
-    String CML2 = CML + "/" + "cml2";
+    String CML2 = CML + S_SLASH + "cml2";
 
     /** constant */
-    String CML3 = CML + "/" + "cml3";
+    String CML3 = CML + S_SLASH + "cml3";
 
     /**
      * CML prefix (cml) reserved: for several uses

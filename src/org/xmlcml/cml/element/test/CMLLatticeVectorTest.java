@@ -44,8 +44,8 @@ public class CMLLatticeVectorTest extends AbstractTest {
      */
     public static void assertEquals(String msg, CMLLatticeVector test,
             CMLLatticeVector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getXMLContent(), expected
                 .getXMLContent(), epsilon);
@@ -63,9 +63,9 @@ public class CMLLatticeVectorTest extends AbstractTest {
      */
     public static void assertEquals(String msg, double[] test,
             CMLLatticeVector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 3", 3, test.length);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test, expected.getXMLContent(), epsilon);
     }

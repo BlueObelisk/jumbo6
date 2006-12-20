@@ -10,7 +10,7 @@ import org.xmlcml.euclid.Axis.Axis2;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class Real2Range {
+public class Real2Range implements EuclidConstants {
     /**
      * X-range
      */
@@ -192,6 +192,6 @@ public class Real2Range {
     public String toString() {
         String xx = (xrange == null) ? "NULL" : xrange.toString();
         String yy = (yrange == null) ? "NULL" : yrange.toString();
-        return "(" + xx + "," + yy + ")";
+        return S_LBRAK + xx + S_COMMA + yy + S_RBRAK;
     }
 }

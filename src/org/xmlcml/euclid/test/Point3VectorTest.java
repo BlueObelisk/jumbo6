@@ -64,8 +64,8 @@ public class Point3VectorTest extends EuclidTest {
      */
     public static void assertEquals(String msg, Point3Vector test,
             Point3Vector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
@@ -83,8 +83,8 @@ public class Point3VectorTest extends EuclidTest {
      */
     public static void assertEquals(String msg, double[] test,
             Point3Vector expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getArray().length);

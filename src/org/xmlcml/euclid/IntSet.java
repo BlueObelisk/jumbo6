@@ -184,7 +184,7 @@ public class IntSet implements EuclidConstants {
         for (int i = 0; i < nelem; i++) {
             if (array[i] > max) {
                 throw new EuclidRuntimeException("element in set (" + array[i]
-                        + ") greater than new max (" + max + ")");
+                        + ") greater than new max (" + max + S_RBRAK);
             }
         }
         this.max = max;
@@ -201,7 +201,7 @@ public class IntSet implements EuclidConstants {
         for (int i = 0; i < nelem; i++) {
             if (array[i] < min) {
                 throw new EuclidRuntimeException("element in set (" + array[i]
-                        + ") less than new max (" + max + ")");
+                        + ") less than new max (" + max + S_RBRAK);
             }
         }
         this.min = min;
@@ -227,7 +227,7 @@ public class IntSet implements EuclidConstants {
     public boolean addElement(int value) throws EuclidRuntimeException {
         if (value < min || value > max) {
             throw new EuclidRuntimeException("value (" + value + ")outside range ("
-                    + min + "..." + max + ")");
+                    + min + "..." + max + S_RBRAK);
         }
         if (set.contains(value)) {
             throw new EuclidRuntimeException("value already in set: " + value);
@@ -393,7 +393,7 @@ public class IntSet implements EuclidConstants {
      */
     public void debug() {
         for (int i = 0; i < nelem; i++) {
-            logger.info(" " + array[i]);
+            logger.info(S_SPACE + array[i]);
         }
         logger.info("");
     }

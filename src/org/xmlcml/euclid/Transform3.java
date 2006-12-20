@@ -441,7 +441,7 @@ public class Transform3 extends RealSquareMatrix {
      */
     public Transform3(String opString) throws EuclidException {
         super(4);
-        StringTokenizer st = new StringTokenizer(opString, ",");
+        StringTokenizer st = new StringTokenizer(opString, S_COMMA);
         if (st.countTokens() != 3) {
             throw new EuclidException("Must have 3 operators");
         }
@@ -453,7 +453,7 @@ public class Transform3 extends RealSquareMatrix {
             double sign = 1;
             for (int j = 0; j < ntok; j++) {
                 String ss = sst.nextToken().trim();
-                int idx = ss.indexOf("/");
+                int idx = ss.indexOf(S_SLASH);
                 if (idx != -1) {
                     final String numerator = ss.substring(0, idx).trim();
                     final String denominator = ss.substring(idx + 1).trim();
@@ -465,9 +465,9 @@ public class Transform3 extends RealSquareMatrix {
                     flmat[i][1] = sign;
                 } else if (ss.equalsIgnoreCase("z")) {
                     flmat[i][2] = sign;
-                } else if (ss.equals("-")) {
+                } else if (ss.equals(S_MINUS)) {
                     sign = -1;
-                } else if (ss.equals("+")) {
+                } else if (ss.equals(S_PLUS)) {
                     sign = 1;
                 } else if (ss.trim().equals("")) {
                     // unusual, but some people put "y+1"

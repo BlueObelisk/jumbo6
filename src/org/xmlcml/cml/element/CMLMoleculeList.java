@@ -199,7 +199,7 @@ public class CMLMoleculeList extends org.xmlcml.cml.element.AbstractMoleculeList
 //            throw new CMLRuntimeException("left link without preceding molecule or parent: "+molecule.getId());
 //        } else {
 ////            this.debug("QQQ");
-////            throw new CMLRuntimeException("lefthand molecule cannot have left link:"+leftLabel+":");
+////            throw new CMLRuntimeException("lefthand molecule cannot have left link:"+leftLabel+S_COLON);
 //        }
 //        if (nMolecules > 1 && CMLLabel.getLabelValue(molecule, Position.RIGHT) == null) {
 //            molecule.debug("LABEL");
@@ -230,7 +230,7 @@ public class CMLMoleculeList extends org.xmlcml.cml.element.AbstractMoleculeList
 //        // right molecule, special case
 //        if (CMLLabel.getLabelValue(molecule, Position.RIGHT) != null) {
 //            throw new CMLRuntimeException("last molecule cannot have right link:"+
-//                    CMLLabel.getLabelValue(molecule, Position.RIGHT)+":");
+//                    CMLLabel.getLabelValue(molecule, Position.RIGHT)+S_COLON);
 //        }
 //        if (CMLLabel.getLabelValue(molecule, Position.LEFT) == null) {
 //            throw new CMLRuntimeException("last molecule must have left link: "+ molecule.getId());

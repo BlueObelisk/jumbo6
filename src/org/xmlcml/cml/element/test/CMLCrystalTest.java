@@ -36,11 +36,11 @@ public class CMLCrystalTest extends AbstractTest {
 
     String crystal1S = "" + "<crystal z='4' " + CML_XMLNS + ">"
             + "<scalar id='sc1' title='a' errorValue='0.001' units='"
-            + U_ANGSTROM + "'" + " " + CML_XMLNS + ">4.500</scalar>"
+            + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
             + "<scalar id='sc2' title='b' errorValue='0.001' units='"
-            + U_ANGSTROM + "'" + " " + CML_XMLNS + ">4.500</scalar>"
+            + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
             + "<scalar id='sc3' title='c' errorValue='0.001' units='"
-            + U_ANGSTROM + "'" + " " + CML_XMLNS + ">4.500</scalar>"
+            + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
             + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
             + "<scalar id='sc5' title='beta' units='" + U_DEGREE + "' "
@@ -51,10 +51,10 @@ public class CMLCrystalTest extends AbstractTest {
             + "</crystal>" + "";
 
     String crystal2S = "" + "<crystal " + CML_XMLNS + ">"
-            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + " "
+            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' title='b' units='"
-            + U_ANGSTROM + "'" + " " + CML_XMLNS + ">9</scalar>"
-            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + " "
+            + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">9</scalar>"
+            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">10</scalar>"
             + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">80</scalar>"
@@ -64,10 +64,10 @@ public class CMLCrystalTest extends AbstractTest {
             + CML_XMLNS + ">100</scalar>" + "</crystal>" + "";
 
     String crystal3S = "" + "<crystal " + CML_XMLNS + ">"
-            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + " "
+            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' title='b' units='"
-            + U_ANGSTROM + "'" + " " + CML_XMLNS + ">9</scalar>"
-            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + " "
+            + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">9</scalar>"
+            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">10</scalar>"
             + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
@@ -78,19 +78,19 @@ public class CMLCrystalTest extends AbstractTest {
 
     String lattice1S = "" + "<lattice " + CML_XMLNS + ">"
             + "<latticeVector id='l1' title='a' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">8 0 0</latticeVector>"
+            + S_SPACE + CML_XMLNS + ">8 0 0</latticeVector>"
             + "<latticeVector id='l2' title='b' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">0 9 0</latticeVector>"
+            + S_SPACE + CML_XMLNS + ">0 9 0</latticeVector>"
             + "<latticeVector id='l3' title='c' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
+            + S_SPACE + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
 
     String lattice2S = "" + "<lattice " + CML_XMLNS + ">"
             + "<latticeVector id='l1' title='a' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">8 4 0</latticeVector>"
+            + S_SPACE + CML_XMLNS + ">8 4 0</latticeVector>"
             + "<latticeVector id='l2' title='b' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">0 9 0</latticeVector>"
+            + S_SPACE + CML_XMLNS + ">0 9 0</latticeVector>"
             + "<latticeVector id='l3' title='c' units='" + U_ANGSTROM + "'"
-            + " " + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
+            + S_SPACE + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
 
     CMLLattice lattice1;
 

@@ -23,6 +23,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLIdentifier;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.euclid.EuclidConstants;
 
 /**
  * <p>This class generates the IUPAC International Chemical Identifier (InChI) for
@@ -49,7 +50,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * <code>} else if (ret != INCHI_RET.OKAY) {</code><br>
  * <code>  // InChI generation failed</code><br>
  * <code>  throw new CMLException("InChI failed: " + ret.toString()</code><br>
- * <code>    + " [" + gen.getMessage() + "]");</code><br>
+ * <code>    + " [" + gen.getMessage() + S_RSQUARE);</code><br>
  * <code>}</code><br>
  * <code></code><br>
  * <code>String inchi = gen.getInchi();</code><br>
@@ -62,7 +63,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * 
  * @author Sam Adams
  */
-public class InChIGenerator {
+public class InChIGenerator implements EuclidConstants {
 	
 	protected JniInchiInput input;
 	
@@ -279,7 +280,7 @@ public class InChIGenerator {
             } else if (CMLBond.AROMATIC.equals(bo)) {
                 order = INCHI_BOND_TYPE.ALTERN;
             } else {
-                throw new CMLException("Failed to generate InChI: Unsupported bond order (" + bo + ")");
+                throw new CMLException("Failed to generate InChI: Unsupported bond order (" + bo + S_RBRAK);
             }
             
             

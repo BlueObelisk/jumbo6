@@ -375,7 +375,7 @@ public class CMLTable extends AbstractTable {
             newTable.resetTableType(TableType.ROW_BASED);
             newTable.writeHTML(w);
         } else if (TableType.ROW_BASED == tableType) {
-            w.write("<table border=\"1\">");
+            w.write("<table border='1'>");
             CMLTableHeader tableHeader = this.getTableHeaderElements().get(0);
             tableHeader.writeHTML(w);
             CMLTableRowList tableRowList = this.getTableRowListElements().get(0);

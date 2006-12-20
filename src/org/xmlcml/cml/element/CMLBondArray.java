@@ -161,7 +161,7 @@ public class CMLBondArray extends AbstractBondArray {
         if (hash != null) {
             if (bondMap.containsKey(hash)) {
                 String molId = (bond.getMolecule() == null) ? null : bond.getMolecule().getId();
-                throw new CMLRuntimeException("bond already in array "+bond.getId()+"/"+hash+"/"+molId);
+                throw new CMLRuntimeException("bond already in array "+bond.getId()+S_SLASH+hash+S_SLASH+molId);
             }
             bondMap.put(hash, bond);
             addedBond = bond;
@@ -174,7 +174,7 @@ public class CMLBondArray extends AbstractBondArray {
         String id = bond.getId();
         if (id != null && !"".equals(id.trim())) {
             if (bondIdMap.containsKey(id)) {
-                throw new CMLRuntimeException("bond already in id map "+bond.getId()+"/"+bond.getMolecule().getId());
+                throw new CMLRuntimeException("bond already in id map "+bond.getId()+S_SLASH+bond.getMolecule().getId());
             }
             bondIdMap.put(id, bond);
         }

@@ -36,7 +36,7 @@ public class CMLTableContentTest extends AbstractTableTest {
     @Test
     public final void testCreateTableRowList() {
         CMLTableRowList rowList = tableContent.createTableRowList(3, 2);
-        String rowS = "" +
+        String rowS = S_EMPTY +
                 "<tableRowList "+CML_XMLNS+">" +
                 "  <tableRow>" +
                 "    <tableCell>1</tableCell>" +
@@ -51,7 +51,7 @@ public class CMLTableContentTest extends AbstractTableTest {
                 "    <tableCell>c</tableCell>" +
                 "  </tableRow>" +
                 "</tableRowList>" +
-                "";
+                S_EMPTY;
         CMLTableRowList expected = (CMLTableRowList) parseValidString(rowS);
         boolean stripWhite = true;
         assertEqualsCanonically("row list", expected, rowList, stripWhite);
@@ -63,12 +63,12 @@ public class CMLTableContentTest extends AbstractTableTest {
     @Test
     public final void testCreateArrayList() {
         CMLArrayList arrayList = (CMLArrayList) tableContent.createArrayList(3, 2, tableHeader);
-        String rowS = "" +
+        String rowS = S_EMPTY +
                 "<arrayList "+CML_XMLNS+">" +
                 "  <array title='foo' id='th1' dictRef='c:foo' dataType='xsd:string' size='3'>1 2 3</array>" +
                 "  <array title='bar' id='th2' dictRef='c:bar' dataType='xsd:string' size='3'>a b c</array>" +
                 "</arrayList>" +
-                "";
+                S_EMPTY;
         CMLArrayList expected = (CMLArrayList) parseValidString(rowS);
         boolean stripWhite = true;
         assertEqualsCanonically("row list", expected, arrayList, stripWhite);

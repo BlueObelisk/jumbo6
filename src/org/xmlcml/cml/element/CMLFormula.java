@@ -453,7 +453,7 @@ public class CMLFormula extends AbstractFormula {
             int nelem = elems.length;
             String[] sortS = new String[elems.length];
             for (int i = 0; i < nelem; i++) {
-                sortS[i] = elems[i] + " " + counts[i];
+                sortS[i] = elems[i] + S_SPACE + counts[i];
             }
             Arrays.sort(sortS);
             if (sort.equals(Sort.ALPHABETIC_ELEMENTS)) {
@@ -512,24 +512,24 @@ public class CMLFormula extends AbstractFormula {
                 counts = new double[0];
             } else if (elems == null || counts == null) {
                 throw new CMLRuntimeException(
-                        "atomArray has elements/counts "+elems+"/"+counts);
+                        "atomArray has elements/counts "+elems+S_SLASH+counts);
             } else if (counts.length != elems.length) {
                 throw new CMLRuntimeException(
-                        "atomArray has inconsistent counts/elems "+counts.length+"/"+elems.length);
+                        "atomArray has inconsistent counts/elems "+counts.length+S_SLASH+elems.length);
             }
             int nelem = elems.length;
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < nelem; i++) {
-                sb.append(" ");
+                sb.append(S_SPACE);
                 sb.append(elems[i]);
-                sb.append(" ");
+                sb.append(S_SPACE);
                 sb.append(Util.trim(Util.format(counts[i], 4)));
             }
             if (formalCharge != 0) {
-                sb.append(" ");
+                sb.append(S_SPACE);
                 sb.append(formalCharge);
             }
-            concise = (sb.length() == 0) ? "" : sb.substring(1);
+            concise = (sb.length() == 0) ? S_EMPTY : sb.substring(1);
         }
         return concise;
     }
@@ -559,7 +559,7 @@ public class CMLFormula extends AbstractFormula {
         String s0 = s.trim();
         String ss[] = s0.split(S_SPACE);
         if (ss.length % 2 != 0) {
-            int idx = s0.lastIndexOf(" ");
+            int idx = s0.lastIndexOf(S_SPACE);
             s0 = s0.substring(0, idx).trim();
         }
         return s0;
@@ -734,7 +734,7 @@ public class CMLFormula extends AbstractFormula {
                     countS = st.nextToken();
                 } catch (NoSuchElementException e) {
                     throw new CMLException("Bad formula: {" + formulaString
-                            + "}");
+                            + S_RCURLY);
                 }
                 elTypeS = s;
             } else {
@@ -806,8 +806,8 @@ public class CMLFormula extends AbstractFormula {
             formulaString = formulaString.substring(ii);
         }
 
-        int lb = formulaString.indexOf("(");
-        int rb = formulaString.indexOf(")");
+        int lb = formulaString.indexOf(S_LBRAK);
+        int rb = formulaString.indexOf(S_RBRAK);
         if (lb == -1 && rb == -1) {
             this.createFromString(formulaString, Type.ANY);
         } else if (lb == 0 && rb != -1) {
@@ -954,7 +954,7 @@ public class CMLFormula extends AbstractFormula {
             }
             s = ss;
             // get Element+count
-            String elem = "";
+            String elem = S_EMPTY;
             double count = 0;
             if (Character.isUpperCase(s.charAt(0))) {
                 if (s.length() > 1) {
@@ -997,7 +997,7 @@ public class CMLFormula extends AbstractFormula {
     private void parseAny(String formulaString) throws CMLException {
         // ANY - make whitespace separated string and then recurse
         String result = S_EMPTY;
-        formulaString += " ";
+        formulaString += S_SPACE;
         int l = formulaString.length();
         int i = 0;
         char c;
@@ -1503,11 +1503,11 @@ public class CMLFormula extends AbstractFormula {
                 if (!omitCount1 || !c.equals("1")) {
                     sb.append(c);
                 }
-                sb.append("(");
+                sb.append(S_LBRAK);
                 sb
                         .append(this.getFormattedString(convention, sort,
                                 omitCount1));
-                sb.append(")");
+                sb.append(S_RBRAK);
             }
             return sb.toString();
         } else {
@@ -1522,13 +1522,13 @@ public class CMLFormula extends AbstractFormula {
                 String s = Util.outputNumber(NPLACES, NDEC, counts[i]).trim();
                 if (!omitCount1 || !s.equals("1")) {
                     if (convention.equals(Type.ELEMENT_WHITESPACE_COUNT)) {
-                        sb.append(" ");
+                        sb.append(S_SPACE);
                     }
                     sb.append(s);
                 }
                 if (convention.equals(Type.ELEMENT_WHITESPACE_COUNT)
                         || convention.equals(Type.ELEMENT_COUNT_WHITESPACE)) {
-                    sb.append(" ");
+                    sb.append(S_SPACE);
                 }
             }
         }
@@ -1540,7 +1540,7 @@ public class CMLFormula extends AbstractFormula {
         String s = getFormalChargeString().trim();
         if (!s.equals(S_EMPTY)) {
             if (!convention.equals(Type.NOPUNCTUATION)) {
-                sb.append(" ");
+                sb.append(S_SPACE);
             }
             sb.append(s);
         }
@@ -1583,11 +1583,11 @@ public class CMLFormula extends AbstractFormula {
             ;
         } else if (iCharge < 0) {
             for (int i = iCharge; i < 0; i++) {
-                s += "-";
+                s += S_MINUS;
             }
         } else {
             for (int i = 0; i < iCharge; i++) {
-                s += "+";
+                s += S_PLUS;
             }
         }
         return s;
@@ -1713,7 +1713,7 @@ public class CMLFormula extends AbstractFormula {
                 countTable.put(elementTypes[i], new Double(counts[i]));
             }
         }
-        String newFormula = "";
+        String newFormula = S_EMPTY;
         String[] fElementTypes = form.getElementTypes();
         double[] fCounts = form.getCounts();
         double fCount = (form.getCountAttribute() == null) ? 1.0 : form
@@ -1731,7 +1731,7 @@ public class CMLFormula extends AbstractFormula {
                             * fCount;
                 }
                 if (Math.abs(delta) > 0.000001) {
-                    newFormula += " " + element + " " + delta;
+                    newFormula += S_SPACE + element + S_SPACE + delta;
                 }
                 countTable.remove(element);
             }
@@ -1740,14 +1740,14 @@ public class CMLFormula extends AbstractFormula {
         for (String element : countTable.keySet()) {
             Double count = countTable.get(element);
             if (count != null) {
-                newFormula += " " + element + " "
+                newFormula += S_SPACE + element + S_SPACE
                         + (count.doubleValue() * thisCount);
             }
         }
         int charge = (int) Math.round(this.getFormalCharge() * thisCount
                 - form.getFormalCharge() * fCount);
         if (charge != 0) {
-            newFormula += " " + charge;
+            newFormula += S_SPACE + charge;
         }
         return newFormula.trim();
     }
@@ -1784,7 +1784,7 @@ public class CMLFormula extends AbstractFormula {
 	        for (int i = 0; i < elementTypes.length; i++) {
 	            double d = counts[i];
 	            s += elementTypes[i]
-	                    + ((d > 1.000000001) ? "(" + counts[i] + ")" : S_EMPTY);
+	                    + ((d > 1.000000001) ? S_LBRAK + counts[i] + S_RBRAK : S_EMPTY);
 	        }
         }
         return s;
@@ -1801,9 +1801,9 @@ public class CMLFormula extends AbstractFormula {
     	CMLElements<CMLFormula> formulas = this.getFormulaElements();
     	if (formulas.size() > 0) {
     		for (CMLFormula formula : formulas) {
-    			w.write("(");
+    			w.write(S_LBRAK);
     			formula.writeHTML(w);
-    			w.write(")");
+    			w.write(S_RBRAK);
     		}
     	} else {
     		String[] elementTypes = this.getElementTypes();
@@ -1812,11 +1812,11 @@ public class CMLFormula extends AbstractFormula {
     			w.write(elementTypes[i]);
     			double d = counts[i];
     			int c = (int) Math.round(d);
-    			String countS = "";
+    			String countS = S_EMPTY;
     			if (Math.abs(d - c) < EPS) {
-    				countS = ""+c;
+    				countS = S_EMPTY+c;
     			} else {
-    				countS = ""+d;
+    				countS = S_EMPTY+d;
     			}
     			if (!countS.equals("1")) {
     				w.write("<sub>"+countS+"</sub>");
@@ -1825,11 +1825,11 @@ public class CMLFormula extends AbstractFormula {
     		if (this.getFormalChargeAttribute() != null) {
     			int fc = this.getFormalCharge();
     			int signum = Integer.signum(fc);
-    			String sign = "";
+    			String sign = S_EMPTY;
 
-    			//no need to assign "-" to sign if signum is negative as the "-" will be in the formalChargeAttribute
+    			//no need to assign S_MINUS to sign if signum is negative as the S_MINUS will be in the formalChargeAttribute
     			if (signum == 1) {
-    				sign = "+";
+    				sign = S_PLUS;
     			}
     			if (fc != 0) {
     				w.write("<sup>"+fc+sign+"</sup>");

@@ -244,8 +244,8 @@ public class CMLLattice extends AbstractLattice {
     public String getString() {
         String s = "";
         for (CMLLatticeVector lv : this.getLatticeVectorElements()) {
-            s += "[" + lv.getStringContent() + "]";
-            s += "(" + lv.getCMLVector3().getLength() + ")";
+            s += S_LSQUARE + lv.getStringContent() + S_RSQUARE;
+            s += S_LBRAK + lv.getCMLVector3().getLength() + S_RBRAK;
         }
         return s;
     }

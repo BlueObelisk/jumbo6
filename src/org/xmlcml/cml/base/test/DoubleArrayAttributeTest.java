@@ -98,7 +98,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
      */
     @Test
     public void testSplit() {
-        double[] dd = DoubleArrayAttribute.split("1.2 3.4 5.6", " ");
+        double[] dd = DoubleArrayAttribute.split("1.2 3.4 5.6", S_SPACE);
         Assert.assertEquals("split", 3, dd.length);
         DoubleTest.assertEquals("split", new double[] { 1.2, 3.4, 5.6 }, dd,
                 EPS);

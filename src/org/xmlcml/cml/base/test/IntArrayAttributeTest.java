@@ -89,7 +89,7 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
      */
     @Test
     public void testSplit() {
-        int[] dd = IntArrayAttribute.split("1 3 5", " ");
+        int[] dd = IntArrayAttribute.split("1 3 5", S_SPACE);
         Assert.assertEquals("split", 3, dd.length);
         IntTest.assertEquals("split", new int[] { 1, 3, 5 }, dd);
         dd = IntArrayAttribute.split("7 3 5", null);

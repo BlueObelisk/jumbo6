@@ -58,8 +58,8 @@ public class CMLCellParameterTest extends AbstractTest {
      */
     public static void assertEquals(String msg, CMLCellParameter test,
             CMLCellParameter expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         CMLCellParameterTest.assertEquals(msg, test.getType(), test
                 .getXMLContent(), expected, epsilon);
@@ -78,13 +78,13 @@ public class CMLCellParameterTest extends AbstractTest {
      */
     public static void assertEquals(String msg, String type, double[] test,
             CMLCellParameter expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 3", 3, test.length);
-        Assert.assertNotNull("type should not be null (" + msg + ")", type);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("type should not be null (" + msg + S_RBRAK, type);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertNotNull(
-                "expected should not have null type (" + msg + ")", expected
+                "expected should not have null type (" + msg + S_RBRAK, expected
                         .getType());
         Assert.assertEquals("types must be equal", 3, test.length);
         DoubleTest.assertEquals(msg, test, expected.getXMLContent(), epsilon);
@@ -224,7 +224,7 @@ public class CMLCellParameterTest extends AbstractTest {
                 .get(0).copy();
         // "<cellParameter id='scp1' error='0.001 0.002 0.003'
         // units='"+U_ANGSTROM+"'" +
-        // " "+CML_XMLNS+">4.500 5.500 6.500</cellParameter>"+
+        // S_SPACE+CML_XMLNS+">4.500 5.500 6.500</cellParameter>"+
         Assert.assertEquals("id", "scp1", cellParameter1.getId());
         Assert.assertEquals("units", U_ANGSTROM, cellParameter1.getUnits());
         DoubleTest.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLLog;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
@@ -34,7 +35,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pmr
  * 
  */
-public class PiSystem {
+public class PiSystem implements CMLConstants {
 
     MoleculeTool moleculeTool;
 
@@ -494,7 +495,12 @@ public class PiSystem {
         oldPiCount = -1;
         while (remainingPiCount > knownUnpaired
                 && remainingPiCount != oldPiCount) {
+<<<<<<< .mine
+            // System.out.println("REMAINING PI "+remainingPiCount+"/ OLD
+            // "+oldPiCount+S_SLASH+piMap.size());
+=======
         	piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
+>>>>>>> .r173
             oldPiCount = remainingPiCount;
             List<CMLAtom> atomList = getSortedAtomList();
             CMLAtom atom = atomList.get(0);
@@ -509,6 +515,15 @@ public class PiSystem {
                     break;
                 }
             }
+<<<<<<< .mine
+            // System.out.println("REMAINING PI COUNT / ATOMS at END
+            // "+remainingPiCount+S_SLASH+tempAtomPairList.size());
+//            for (AtomPair atomPair : tempAtomPairList) {
+                // System.out.print("||"+atomPair);
+//                Assert.assertNotNull(atomPair);
+//            }
+=======
+>>>>>>> .r173
         }
         */
     }
@@ -591,7 +606,7 @@ public class PiSystem {
 
     private AtomPair markAtomPair(CMLAtom atom, CMLAtom ligand, int level) {
         // System.out.println(spaces(2*level+2)+"++
-        // "+atom.getId()+"-"+ligand.getId());
+        // "+atom.getId()+S_MINUS+ligand.getId());
         AtomPair bond = new AtomPair(atom, ligand);
         addToPi(atom, -1);
         addToPi(ligand, -1);
@@ -602,7 +617,7 @@ public class PiSystem {
     private void unmarkAtomPair(AtomPair atomPair, String s, int level) {
         if (atomPair != null) {
             // System.out.println(spaces(2*level+2)+"--
-            // "+atomPair.getAtom1().getId()+"-"+atomPair.getAtom2().getId());
+            // "+atomPair.getAtom1().getId()+S_MINUS+atomPair.getAtom2().getId());
             CMLAtom atom = atomPair.getAtom1();
             CMLAtom ligand = atomPair.getAtom2();
             addToPi(atom, 1);
@@ -677,10 +692,10 @@ public class PiSystem {
     public String toString() {
         String s = "Atoms: ";
         for (CMLAtom atom : atomStack) {
-            s += "/" + atom.getId();
+            s += S_SLASH + atom.getId();
         }
         // for (AtomPair atomPair : fullBondList) {
-        // s += "/"+atomPair;
+        // s += S_SLASH+atomPair;
         // }
         return s;
     }

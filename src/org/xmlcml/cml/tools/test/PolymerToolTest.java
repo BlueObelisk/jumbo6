@@ -137,7 +137,7 @@ public class PolymerToolTest extends AbstractToolTest {
 	@Ignore
 	public void testProcessConventionExhaustively() throws Exception { //added throws Exception
 		String fileroot = "copoly1";
-		String copolyS = ""
+		String copolyS = S_EMPTY
 				+ "<molecule id='"
 				+ fileroot
 				+ "'"
@@ -174,6 +174,7 @@ public class PolymerToolTest extends AbstractToolTest {
 		System.out.println("Wrote: " + outfile.getAbsolutePath());
 	}
 
+	@SuppressWarnings("unused")
 	private void testExample(String fileroot) throws Exception {
 //		System.out.println("Running example " + fileroot);
 //        CMLElement root = null;

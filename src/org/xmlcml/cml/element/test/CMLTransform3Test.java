@@ -42,8 +42,8 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, CMLTransform3 test,
             CMLTransform3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Transform3Test.assertEquals(msg, test.getEuclidTransform3(), expected
                 .getEuclidTransform3(), epsilon);
@@ -61,9 +61,9 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     public static void assertEquals(String msg, double[] test,
             CMLTransform3 expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 16", 16, test.length);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Transform3Test.assertEquals(msg, test, expected.getEuclidTransform3(),
                 epsilon);
@@ -131,7 +131,7 @@ public class CMLTransform3Test extends GeomTestBase {
             Assert.fail("should not throw validity " + e.getMessage());
         } catch (ParsingException e) {
             Assert.assertEquals("should throw parsing exception",
-                    "java.lang.NumberFormatException: For input string: \"X\"",
+                    "java.lang.NumberFormatException: For input string: "+S_QUOT+"X"+S_QUOT,
                     e.getMessage());
         } catch (IOException e) {
             Assert.fail("should not throw IO " + e.getMessage());

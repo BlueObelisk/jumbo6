@@ -162,7 +162,7 @@ public class CatalogTool implements CMLConstants {
 
 	/**
 	 * gets the top catalog. first looks for <user.dir>/.jumbo/catalog.xml if
-	 * this is missing, looks for resource under "." - this will be in the
+	 * this is missing, looks for resource under S_PERIOD - this will be in the
 	 * directory immediately above org/cml... *.class usually "bin" or "classes"
 	 * 
 	 * @return null means not found, else a list of CMLMap which are the actual
@@ -215,7 +215,7 @@ public class CatalogTool implements CMLConstants {
 
 	private static List<CMLMap> getMapListFromResource() {
 		List<CMLMap> catalogList = null;
-		String context = "."; // might change later
+		String context = S_PERIOD; // might change later
 		InputStream in = null;
 		try {
 			in = Util

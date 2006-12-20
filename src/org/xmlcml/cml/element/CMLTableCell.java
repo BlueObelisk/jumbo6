@@ -54,7 +54,7 @@ public class CMLTableCell extends org.xmlcml.cml.element.AbstractTableCell {
      */
     public CMLTableCell(double d) {
         this();
-        CMLUtil.setXMLContent(this, ""+d);
+        CMLUtil.setXMLContent(this, S_EMPTY+d);
     }
 
     /** constructor.
@@ -63,7 +63,7 @@ public class CMLTableCell extends org.xmlcml.cml.element.AbstractTableCell {
      */
     public CMLTableCell(int i) {
         this();
-        CMLUtil.setXMLContent(this, ""+i);
+        CMLUtil.setXMLContent(this, S_EMPTY+i);
     }
 
     /** constructor.
@@ -144,13 +144,13 @@ public class CMLTableCell extends org.xmlcml.cml.element.AbstractTableCell {
         if (XSD_DOUBLE.equals(dataType)) {
             if (!XSD_DOUBLE.equals(array.getDataType())) {
                 throw new CMLRuntimeException("Inconsistent dataTypes: "
-                        +dataType+" "+array.getDataType());
+                        +dataType+S_SPACE+array.getDataType());
             }
             array.append(this.getDouble());
         } else if (XSD_INTEGER.equals(dataType)) {
             if (!XSD_INTEGER.equals(array.getDataType())) {
                 throw new CMLRuntimeException("Inconsistent dataTypes: "
-                        +dataType+" "+array.getDataType());
+                        +dataType+S_SPACE+array.getDataType());
             }
             array.append(this.getInt());
         } else {

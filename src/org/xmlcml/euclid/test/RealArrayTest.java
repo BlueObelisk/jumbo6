@@ -55,8 +55,8 @@ public class RealArrayTest extends EuclidTest {
      */
     public static void assertEquals(String msg, RealArray test,
             RealArray expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
@@ -74,8 +74,8 @@ public class RealArrayTest extends EuclidTest {
      */
     public static void assertEquals(String msg, double[] test,
             RealArray expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getArray().length);

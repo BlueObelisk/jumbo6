@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLTransform3;
@@ -12,7 +13,7 @@ import org.xmlcml.euclid.RealRange;
  * @author pmr
  * 
  */
-public class Contact implements Comparable<Contact> {
+public class Contact implements Comparable<Contact>, CMLConstants {
     CMLAtom fromAtom;
     CMLAtom toAtom;
     CMLAtom transformedToAtom;
@@ -133,10 +134,10 @@ public class Contact implements Comparable<Contact> {
      */
     public String toString() {
         String s = "";
-        s += fromAtom.getId()+"("+fromAtom.getElementType()+") "+fromAtom.getXYZ3();
+        s += fromAtom.getId()+S_LBRAK+fromAtom.getElementType()+") "+fromAtom.getXYZ3();
         s += " -> ";
-        s += toAtom.getId()+"("+toAtom.getElementType()+")"+toAtom.getXYZ3();
-        s += "("+getCMLTransform3().getEuclidTransform3().getCrystallographicString()+") = "+getDistance();
+        s += toAtom.getId()+S_LBRAK+toAtom.getElementType()+S_RBRAK+toAtom.getXYZ3();
+        s += S_LBRAK+getCMLTransform3().getEuclidTransform3().getCrystallographicString()+") = "+getDistance();
         return s;
     }
 };

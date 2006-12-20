@@ -373,7 +373,7 @@ public class CMLAtomArray extends AbstractAtomArray {
         // check atoms match arrays
         if (atomList.size() != length) {
             throw new CMLRuntimeException("inconsistent atom count ("+
-                atomList.size()+") and "+typeName+" ("+length+")");
+                atomList.size()+") and "+typeName+" ("+length+S_RBRAK);
         }
         return atomList;
     }

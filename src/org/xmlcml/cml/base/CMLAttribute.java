@@ -423,8 +423,8 @@ public class CMLAttribute extends Attribute implements CMLConstants {
     public void setSummary(String s) {
         if (s != null) {
             summary = s;
-            if (!summary.endsWith(".")) {
-                summary += ".";
+            if (!summary.endsWith(S_PERIOD)) {
+                summary += S_PERIOD;
             }
         }
     }

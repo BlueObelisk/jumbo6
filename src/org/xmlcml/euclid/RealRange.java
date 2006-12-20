@@ -10,7 +10,7 @@ package org.xmlcml.euclid;
  * 
  * @author (C) P. Murray-Rust, 1996
  */
-public class RealRange {
+public class RealRange implements EuclidConstants {
     /**
      * maximum of range
      */
@@ -194,11 +194,11 @@ public class RealRange {
         return minval + Math.random() * range;
     }
     /**
-     * to string. format: "NULL" or "("+minval+","+maxval+")";
+     * to string. format: "NULL" or S_LBRAK+minval+S_COMMA+maxval+S_RBRAK;
      * 
      * @return string
      */
     public String toString() {
-        return (minval > maxval) ? "NULL" : "(" + minval + "," + maxval + ")";
+        return (minval > maxval) ? "NULL" : S_LBRAK + minval + S_COMMA + maxval + S_RBRAK;
     }
 }

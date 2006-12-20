@@ -185,7 +185,7 @@ public class Complex extends Real2 {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(x + "," + y);
+        sb.append(x + S_COMMA + y);
         return sb.toString();
     }
 }

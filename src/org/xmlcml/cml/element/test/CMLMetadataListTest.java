@@ -26,7 +26,7 @@ public class CMLMetadataListTest extends AbstractTest {
             + "    <metadata id='m5' name='foo:foo1' content='bar51'/>"
             + "  </metadataList>"
             + "  <metadata id='m6' name='foo:foo6' content='bar6'/>"
-            + "</molecule>" + "";
+            + "</molecule>" + S_EMPTY;
     CMLMolecule molecule;
     CMLMetadataList metadataList0;
     CMLMetadataList metadataList1;

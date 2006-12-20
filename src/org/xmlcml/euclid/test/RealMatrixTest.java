@@ -61,20 +61,20 @@ public class RealMatrixTest extends MatrixTest {
      */
     public static void assertEquals(String msg, RealMatrix test,
             RealMatrix expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("expected should not be null (" + msg + ")",
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        Assert.assertNotNull("expected should have columns (" + msg + ")",
+        Assert.assertNotNull("expected should have columns (" + msg + S_RBRAK,
                 expected.getCols());
-        Assert.assertNotNull("expected should have rows (" + msg + ")",
+        Assert.assertNotNull("expected should have rows (" + msg + S_RBRAK,
                 expected.getRows());
-        Assert.assertNotNull("test should have columns (" + msg + ")", test
+        Assert.assertNotNull("test should have columns (" + msg + S_RBRAK, test
                 .getCols());
-        Assert.assertNotNull("test should have rows (" + msg + ")", test
+        Assert.assertNotNull("test should have rows (" + msg + S_RBRAK, test
                 .getRows());
-        Assert.assertEquals("rows should be equal (" + msg + ")", test
+        Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, test
                 .getRows(), expected.getRows());
-        Assert.assertEquals("columns should be equal (" + msg + ")", test
+        Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
                 .getCols(), expected.getCols());
         DoubleTest.assertEquals(msg, test.getMatrixAsArray(), expected
                 .getMatrixAsArray(), epsilon);
@@ -93,11 +93,11 @@ public class RealMatrixTest extends MatrixTest {
      */
     public static void assertEquals(String msg, int rows, int cols,
             double[] test, RealMatrix expected, double epsilon) {
-        Assert.assertNotNull("test should not be null (" + msg + ")", test);
-        Assert.assertNotNull("ref should not be null (" + msg + ")", expected);
-        Assert.assertEquals("rows should be equal (" + msg + ")", rows,
+        Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
+        Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, rows,
                 expected.getRows());
-        Assert.assertEquals("columns should be equal (" + msg + ")", cols,
+        Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, cols,
                 expected.getCols());
         DoubleTest
                 .assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
@@ -1342,7 +1342,7 @@ public class RealMatrixTest extends MatrixTest {
         Assert
                 .assertEquals(
                         "writeXML",
-                        "<matrix rows=\"3\" columns=\"4\">11.0 12.0 13.0 14.0 21.0 22.0 23.0 24.0 31.0 32.0 33.0 34.0</matrix>",
+                        "<matrix rows='3' columns='4'>11.0 12.0 13.0 14.0 21.0 22.0 23.0 24.0 31.0 32.0 33.0 34.0</matrix>",
                         w.toString());
     }
 

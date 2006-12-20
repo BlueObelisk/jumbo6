@@ -497,7 +497,7 @@ public class CMLZMatrix extends AbstractZMatrix {
             angle = angleByAtomHashMap.get(
                     CMLAngle.atomHash(atomRefs4[0], atomRefs4[1], atomRefs4[2]));
         } else if (atom.equals(atomRefs4[3])) {
-//            System.out.println("3... "+Util.concatenate(atomRefs4, " "+S_MINUS+" "));
+//            System.out.println("3... "+Util.concatenate(atomRefs4, S_SPACE+S_MINUS+S_SPACE));
             length = lengthByAtomHashMap.get(
                     CMLBond.atomHash(atomRefs4[2], atomRefs4[3]));
             if (length == null) {
@@ -579,7 +579,7 @@ public class CMLZMatrix extends AbstractZMatrix {
             List<CMLTorsion> torsionList = torsionByAtomMap.get(atomId);
             String s = atomId+": ";
             for (CMLTorsion torsion : torsionList) {
-                s += " ("+torsion.getString()+")";
+                s += " ("+torsion.getString()+S_RBRAK;
             }
 //            System.out.println(s);
         }
