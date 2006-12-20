@@ -156,6 +156,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public void adjustBondOrdersAndChargesToValency(
 			PiSystemManager piSystemManager, CMLFormula moietyFormula) {
+		System.out.println("started adjusting bonds and charges");
 		// get a list of formulas for the moieties. 
 		List<CMLFormula> moietyFormulaList = new ArrayList<CMLFormula>();
 		if (moietyFormula != null) {
@@ -361,6 +362,7 @@ public class MoleculeTool extends AbstractTool {
 								}
 							}
 						}
+						
 						n2:
 						if (finalMolList.size() == 0) {
 							System.out.println("Trying N2-");
@@ -433,51 +435,53 @@ public class MoleculeTool extends AbstractTool {
 							}
 						}
 						cAttempt:
-						if (finalMolList.size() == 0) {
-							int cCharge = -1;
-							System.out.println("Trying carbanions....");
-							for (CMLAtom atom : subMolAtomList) {
-								atom.setFormalCharge(cCharge);
-								PiSystem newPiS = new PiSystem(subMolAtomList);
-								newPiS.setPiSystemManager(piSystemManager);
-								List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-								int sysCount = 0;
-								//System.out.println("system count: "+newPiSList.size());
-								boolean piRemaining = false;
-								for (PiSystem system : newPiSList) {
-									//System.out.println("system atoms: "+system.getAtomList().size());
-									sysCount++;
-									system.identifyDoubleBonds();
-									for (CMLAtom a : system.getAtomList()) {
-										Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
-										if (nodes.size() > 0) {
-											piRemaining = true;
+							if (finalMolList.size() == 0) {
+								int cCharge = -1;
+								System.out.println("Trying carbanions....");
+								for (CMLAtom atom : subMolAtomList) {
+									if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
+										atom.setFormalCharge(cCharge);
+										PiSystem newPiS = new PiSystem(subMolAtomList);
+										newPiS.setPiSystemManager(piSystemManager);
+										List<PiSystem> newPiSList = newPiS.generatePiSystemList();
+										int sysCount = 0;
+										//System.out.println("system count: "+newPiSList.size());
+										boolean piRemaining = false;
+										for (PiSystem system : newPiSList) {
+											//System.out.println("system atoms: "+system.getAtomList().size());
+											sysCount++;
+											system.identifyDoubleBonds();
+											for (CMLAtom a : system.getAtomList()) {
+												Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
+												if (nodes.size() > 0) {
+													piRemaining = true;
+												}
+											}
+											if (sysCount == newPiSList.size()) {
+												// when a valid pi-system found, check whether a molecule with the same
+												// overall charge has already been found.  If so, take the system with 
+												// the least charged atoms.
+												if (!piRemaining) {
+													CMLMolecule copy = (CMLMolecule)subMol.copy();
+													validMolList.add(copy);
+													finalMolList.add(copy);
+													break cAttempt;
+												}
+											}
+										}
+										atom.setFormalCharge(0);
+										// reset only those bonds that were single to start with
+										for (CMLBond bond : singleBonds) {
+											bond.setOrder(CMLBond.SINGLE);
+										}
+										// reset all pi-electrons
+										Nodes piElectrons = subMol.query(".//cml:atom/cml:electron[@dictRef='cml:piElectron']", X_CML);
+										for (int e = 0; e < piElectrons.size(); e++) {
+											((CMLElectron)piElectrons.get(e)).detach();
 										}
 									}
-									if (sysCount == newPiSList.size()) {
-										// when a valid pi-system found, check whether a molecule with the same
-										// overall charge has already been found.  If so, take the system with 
-										// the least charged atoms.
-										if (!piRemaining) {
-											CMLMolecule copy = (CMLMolecule)subMol.copy();
-											validMolList.add(copy);
-											finalMolList.add(copy);
-											break cAttempt;
-										}
-									}
-								}
-								atom.setFormalCharge(0);
-								// reset only those bonds that were single to start with
-								for (CMLBond bond : singleBonds) {
-									bond.setOrder(CMLBond.SINGLE);
-								}
-								// reset all pi-electrons
-								Nodes piElectrons = subMol.query(".//cml:atom/cml:electron[@dictRef='cml:piElectron']", X_CML);
-								for (int e = 0; e < piElectrons.size(); e++) {
-									((CMLElectron)piElectrons.get(e)).detach();
 								}
 							}
-						}
 						if (finalMolList.size() > 0) {
 							// remember that molCharge is the charge given to the molecule from the CIF file
 							CMLMolecule theMol = null;
@@ -562,6 +566,7 @@ public class MoleculeTool extends AbstractTool {
 				nodes.get(i).detach();
 			}
 		}
+		System.out.println("finished");
 	}
 	
 	public int getFormalCharge() {
@@ -4062,7 +4067,6 @@ public class MoleculeTool extends AbstractTool {
 		.getDisorderedAtoms(molecule);
 		List<DisorderAssembly> disorderAssemblyList = null;
 		disorderAssemblyList = DisorderAssembly.getDisorderedAssemblyList(disorderedAtomList);
-
 		return disorderAssemblyList;
 	}
 
@@ -4115,14 +4119,11 @@ public class MoleculeTool extends AbstractTool {
 	 * @exception CMLRuntimeException
 	 */
 	public void processDisorder(ProcessDisorderControl pControl,
-			RemoveDisorderControl rControl) throws CMLRuntimeException {
+			RemoveDisorderControl rControl) {
 
 		List<DisorderAssembly> disorderAssemblyList = null;
 		disorderAssemblyList = this.getDisorderAssemblyList();
 		disorderAssemblyList = checkDisorder(disorderAssemblyList, pControl);
-		if (pControl.equals(ProcessDisorderControl.STRICT)) {
-			addDisorderMetadata(true);
-		}
 		if (rControl.equals(RemoveDisorderControl.REMOVE_MINOR_DISORDER)) {
 			for (DisorderAssembly assembly : disorderAssemblyList) {
 				assembly.removeMinorDisorder();
@@ -4203,6 +4204,12 @@ public class MoleculeTool extends AbstractTool {
 					}
 				}
 			}
+		}
+		// if the process reaches this point without an error being thrown then
+		// the disorder can be processed.  Add metadata to say so!
+		if (pControl.equals(ProcessDisorderControl.STRICT)) {
+			addDisorderMetadata(true);
+			metadataSet = true;
 		}
 		return disorderAssemblyList;
 	}
@@ -4894,5 +4901,17 @@ public class MoleculeTool extends AbstractTool {
 			Attribute newAttribute = new Attribute(name, attribute.getValue());
 			to.addAttribute(newAttribute);
 		}
+	}
+
+	public static boolean isDisordered(CMLMolecule molecule) {
+		for (CMLAtom atom : molecule.getAtoms()) {
+			List<Node> nodes = CMLUtil.getQueryNodes(atom,
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
+    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
+			if (nodes.size() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
