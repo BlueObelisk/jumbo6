@@ -436,6 +436,163 @@ public class ChemicalElement {
     }
 
     /**
+	 * is element a transition metal. FIXME - I haven't checked values
+     * @param type
+	 *            GROUP_A, GROUP_B or ROW
+     * @param value
+	 *            or row or group
+	 *
+	 * @return true if is TM
+	 */
+	public boolean isChemicalElementType(
+			Type type, int value) {
+		int atNum = this.getAtomicNumber();
+		// String symbol = chemicalElement.getSymbol();
+		boolean isType = false;
+		if (type.equals(Type.ROW)) {
+			isType = value == 1 && atNum >= 3 && atNum <= 10 || value == 2
+			&& atNum >= 11 && atNum <= 18 || value == 3 && atNum >= 19
+			&& atNum <= 36 || value == 4 && atNum >= 37 && atNum <= 54
+			|| value == 5 && atNum >= 55 && atNum <= 86 || value == 6
+			&& atNum >= 87;
+		} else if (type.equals(Type.GROUP_A)) {
+			if (value == 1 || value == 2) {
+				isType = atNum == 2 + value || atNum == 10 + value
+				|| atNum == 18 + value || atNum == 36 + value
+				|| atNum == 54 + value;
+			} else if (value >= 3 && value <= 8) {
+				isType = atNum == 2 + value || atNum == 10 + value
+				|| atNum == 28 + value || atNum == 46 + value
+				|| atNum == 78 + value;
+			}
+		} else if (type.equals(Type.GROUP_B)) {
+			if (value >= 1 || value <= 10) {
+				isType = atNum == 18 + value || atNum == 36 + value
+				|| atNum == 56 + value;
+			}
+		} else {
+			throw new CMLRuntimeException("Bad type for " + type + ": " + value);
+		}
+		return isType;
+	}
+
+		//	private void addDoubleBonds(Set<CMLAtom> ringSet, CMLAtom atom) {
+	//		boolean doubleB = true;
+	//		while (ringSet.size() > 1) {
+	//			List<CMLAtom> ligandList = atom.getLigandAtoms();
+	//			List<CMLBond> ligandBondList = atom.getLigandBonds();
+	//			ringSet.remove(atom);
+	//			int i = 0;
+	//			for (CMLAtom ligand : ligandList) {
+	//				if (ringSet.contains(ligand)) {
+	//					if (doubleB) {
+	//						CMLBond bond = ligandBondList.get(i);
+	//						bond.setOrder(CMLBond.DOUBLE);
+	//					}
+	//					doubleB = !doubleB;
+	//					atom = ligand;
+	//					break;
+	//				}
+	//				i++;
+	//			}
+	//		}
+	//	}
+	//
+	//	private boolean addNextAtom(CMLAtom atom, Set<CMLAtom> ringSet) {
+	//		if (atom == null) {
+	//			throw new CMLRuntimeException("Null atom");
+	//		}
+	//		boolean added = false;
+	//		if (!ringSet.contains(atom)) {
+	//			added = true;
+	//			ringSet.add(atom);
+	//			List<CMLAtom> ligands = atom.getLigandAtoms();
+	//			if ("C".equals(atom.getElementType()) && ligands.size() == 3) {
+	//				List<CMLBond> bonds = atom.getLigandBonds();
+	//				List<CMLAtom> cAtomList = new ArrayList<CMLAtom>();
+	//				for (int i = 0; i < bonds.size(); i++) {
+	//					CMLBond bond = bonds.get(i);
+	//					if (CMLBond.CYCLIC.equals(bond.getCyclic())) {
+	//						CMLAtom otherAtom = bond.getOtherAtom(atom);
+	//						if (otherAtom == null) {
+	//							throw new CMLRuntimeException("null atom in bond");
+	//						}
+	//						cAtomList.add(otherAtom);
+	//					}
+	//				}
+	//				if (cAtomList.size() == 2) {
+	//					for (CMLAtom cAtom : cAtomList) {
+	//						addNextAtom(cAtom, ringSet);
+	//					}
+	//				}
+	//			}
+	//		}
+	//		return added;
+	//	}
+	//
+		/**
+		 * is element of given type.
+		 * @param type
+		 *            TRANSITION METAL, LANTHANIDE, ACTINIDE, METAL,
+		 *            NON_METAL, PBLOCK, GROUP_A, GROUP_B
+		 *
+		 * @return true if of type
+		 */
+		public boolean isChemicalElementType(
+				Type type) {
+			int atNum = this.getAtomicNumber();
+			// String symbol = chemicalElement.getSymbol();
+			boolean isType = false;
+			if (type.equals(Type.TRANSITION_METAL)) {
+				isType = (atNum > 20 && atNum <= 30) ||
+				(atNum > 38 && atNum <= 48) ||
+				(atNum > 56 && atNum <= 80);
+			} else if (type.equals(Type.LANTHANIDE)) {
+				isType = (atNum >= 58 && atNum <= 71);
+			} else if (type.equals(Type.ACTINIDE)) {
+				isType = atNum >= 90 && atNum <= 103;
+			} else if (type.equals(Type.METAL)) {
+				isType = isChemicalElementType(Type.TRANSITION_METAL) ||
+				isChemicalElementType(Type.LANTHANIDE) ||
+				isChemicalElementType(Type.ACTINIDE) ||
+				isChemicalElementType(Type.GROUP_A) ||
+				isChemicalElementType(Type.GROUP_B) ||
+				// include metalloids on left of step
+				(atNum == 13) ||
+				(atNum >= 31 && atNum <= 32) ||
+				(atNum >= 49 && atNum <= 51) ||
+				(atNum >= 81 && atNum <=84);
+			} else if (type.equals(Type.METAL_NOT_SEMI_METAL)) {
+				isType = isChemicalElementType(Type.TRANSITION_METAL) ||
+				isChemicalElementType(Type.LANTHANIDE) ||
+				isChemicalElementType(Type.ACTINIDE) ||
+				isChemicalElementType(Type.GROUP_A) ||
+				isChemicalElementType(Type.GROUP_B);
+			} else if (type.equals(Type.NON_METAL)) {
+				isType = atNum >=5 && atNum <= 10 ||
+				atNum >=14 && atNum <= 18 ||
+				atNum >=33 && atNum <= 36 ||
+				atNum >=52 && atNum <= 54 ||
+				atNum >=85 && atNum <= 86;
+			} else if (type.equals(Type.PBLOCK)) {
+				isType = atNum >= 5 && atNum <= 10 || // B, C, N, O, F,Ne
+				atNum >= 14 && atNum <= 18 || // Si, P, S,Cl,Ar
+				atNum >= 32 && atNum <= 36 || // Ge,As,Se,Br,Kr
+				atNum >= 53 && atNum <= 54 // I,Xe
+				;
+			} else if (type.equals(Type.GROUP_A)) {
+				isType = atNum == 3 || atNum == 11 || atNum == 19 ||
+				atNum == 37 || atNum == 55 || atNum ==87;
+			} else if (type.equals(Type.GROUP_B)) {
+				isType = atNum == 4 || atNum == 12 || atNum == 20 ||
+				atNum == 38 || atNum == 56 || atNum ==88;
+			}else {
+				throw new CMLRuntimeException("Bad type for " + type);
+			}
+			return isType;
+		}
+
+	/**
      * get the element corresponding to a (case-insensitive) atomicSymbol; else
      * returns null.
      * 

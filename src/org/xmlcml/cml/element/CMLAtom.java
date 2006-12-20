@@ -8,15 +8,20 @@ import java.util.logging.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
  * Class representing the CML atom element
@@ -955,4 +960,110 @@ public class CMLAtom extends AbstractAtom {
         sb.append(" elementType='"+this.getElementType()+"'");
         return sb.toString();
     }
+
+	/**
+	 * is atom of given type.
+	 *
+	 * @param typeList
+	 * @return true if of type
+	 */
+	public boolean atomIsCompatible(List<Type> typeList) {
+		boolean isCompatible = false;
+		ChemicalElement chemicalElement = ChemicalElement
+		.getChemicalElement(this.getElementType());
+		for (Type type : typeList) {
+			if (type != null && chemicalElement.isChemicalElementType(type)) {
+				isCompatible = true;
+			}
+		}
+		return isCompatible;
+	}
+
+	public boolean isBondedToMetal() {
+		Nodes nodes = query(".//cml:scalar[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
+		if (nodes.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * gets list of ligands in 2D diagram in clockwise order.
+	 *
+	 * starting atom is arbitrary (makes smallest clockwise angle with xAxis).
+	 * The 4 atoms can be compared to atomRefs4 given by author or other methods
+	 * to see if they are of the same or alternative parity.
+	 *
+	 * use compareAtomRefs4(CMLAtom[] a, CMLAtom[] b) for comparison
+	 *
+	 * @param atom4
+	 *            the original list of 4 atoms
+	 * @return ligands sorted into clockwise order
+	 * @throws CMLRuntimeException
+	 */
+	public CMLAtom[] getClockwiseLigands(CMLAtom[] atom4)
+	throws CMLRuntimeException {
+		Vector2 vx = new Vector2(1.0, 0.0);
+		Real2 thisxy = getXY2();
+		double[] angle = new double[4];
+		Vector2 v = null;
+		for (int i = 0; i < 4; i++) {
+			try {
+				v = new Vector2(atom4[i].getXY2().subtract(thisxy));
+				// Angle class appears to be broken, hence the degrees
+				angle[i] = vx.getAngleMadeWith(v).getDegrees();
+			} catch (NullPointerException npe) {
+				throw new CMLRuntimeException(
+						"Cannot compute clockwise ligands");
+			}
+			if (angle[i] < 0) {
+				angle[i] += 360.;
+			}
+			if (angle[i] > 360.) {
+				angle[i] -= 360.;
+			}
+		}
+		// get atom4Refs sorted in cyclic order
+		CMLAtom[] cyclicAtom4 = new CMLAtom[4];
+		for (int i = 0; i < 4; i++) {
+			double minAngle = Double.MAX_VALUE;
+			int low = -1;
+			for (int j = 0; j < 4; j++) {
+				if (angle[j] >= 0 && angle[j] < minAngle) {
+					low = j;
+					minAngle = angle[j];
+				}
+			}
+	
+			if (low != -1) {
+				cyclicAtom4[i] = atom4[low];
+				angle[low] = -100.;
+			} else {
+				throw new CMLRuntimeException(
+						"Couldn't get AtomRefs4 sorted in cyclic order");
+			}
+		}
+		// all 4 angles must be less than PI
+		// the ligands in clockwise order
+		for (int i = 0; i < 4; i++) {
+			CMLAtom cyclicAtomNext = cyclicAtom4[(i < 3) ? i + 1 : 0];
+			Real2 cyclicXy = cyclicAtom4[i].getXY2();
+			Real2 cyclicXyNext = cyclicAtomNext.getXY2();
+			v = new Vector2(cyclicXy.subtract(thisxy));
+			Vector2 vNext = new Vector2(cyclicXyNext.subtract(thisxy));
+			double ang = v.getAngleMadeWith(vNext).getDegrees();
+			if (ang < 0) {
+				ang += 360.;
+			}
+			if (ang > 360.) {
+				ang -= 360.;
+			}
+			if (ang > 180.) {
+				throw new CMLRuntimeException("All 4 ligands on same side "
+						+ getId());
+			}
+		}
+		return cyclicAtom4;
+	}
 }

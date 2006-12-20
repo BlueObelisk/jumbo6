@@ -12,6 +12,7 @@ import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -533,6 +534,43 @@ public class CMLBondSet extends AbstractBondSet {
             }
         }
     }
+
+	/**
+	 * gets average 2D bond length.
+	 *
+	 * if excludeElements is not null, exclude any bonds including those
+	 * excludeElementTypes ELSE if includeElements is not null, include any
+	 * bonds including only those excludeElementTypes ELSE use all bonds
+	 *
+	 * @param excludeElements
+	 *            list of element symbols to exclude
+	 * @param includeElements
+	 *            list of element symbols to include
+	 * @return average bond length (NaN if no bonds selected)
+	 */
+	public double getAverage2DBondLength(String[] excludeElements, String[] includeElements) {
+		double sum = 0.0;
+		int count = 0;
+		List<CMLBond> bonds = getBonds();
+		for (CMLBond bond : bonds) {
+			String elem0 = bond.getAtom(0).getElementType();
+			String elem1 = bond.getAtom(1).getElementType();
+			boolean skip = false;
+			if (excludeElements != null) {
+				skip = Util.containsString(excludeElements, elem0)
+				|| Util.containsString(excludeElements, elem1);
+			} else if (includeElements != null) {
+				skip = !Util.containsString(includeElements, elem0)
+				|| !Util.containsString(excludeElements, elem1);
+			}
+			if (!skip) {
+				double length = bond.calculateBondLength(CoordinateType.TWOD);
+				sum += length;
+				count++;
+			}
+		}
+		return (count == 0) ? Double.NaN : sum / (double) count;
+	}
     
     
 }

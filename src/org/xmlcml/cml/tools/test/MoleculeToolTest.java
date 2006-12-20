@@ -507,7 +507,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 
     CMLMolecule pyridone4 = null;
 
-    String nitroMethaneS = ""
+    static String nitroMethaneS = ""
             + "<molecule "
             + CML_XMLNS
             + " title='MeN+(-O)O-'>"
@@ -981,12 +981,6 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 				.adjustBondOrdersAndChargesToValency(piSystemManager, null);
 	}
 
-    void meaninglessCodeToGetRidOfWarnings() {
-        abocv(null, 0);
-        dmcn4(null);
-        tcfe(null, 0);
-        mcm(null);
-    }
 
     /**
      * Test method for
@@ -1049,57 +1043,45 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
          --*/
     }
 
-    private void dmcn4(CMLMolecule mol) {
-        System.out.println("====distributeCharge====== " + mol.getTitle()
-                + " ======================");
-        new MoleculeTool(mol).distributeMolecularChargeToN4();
-    }
+//    private void dmcn4(CMLMolecule mol) {
+//        System.out.println("====distributeCharge====== " + mol.getTitle()
+//                + " ======================");
+//        new MoleculeTool(mol).distributeMolecularChargeToN4();
+//    }
+//
 
-    /**
-     * test resolve.
-     */
-    @Test
-    public void testTransferChargeToFreePiElectrons() {
-        /*--
-         tcfe(oxalate2, 2);
-         tcfe(diMethylIminium, 0);
-         tcfe(nitric2, 0);
-         tcfe(nitroMethane2, 0);
-         --*/
-    }
+//    private void tcfe(CMLMolecule mol, int knownUnpaired) {
+//        System.out.println("====transferUnpairedPi====== " + mol.getTitle()
+//                + " ======================");
+//        MoleculeTool moleculeTool = new MoleculeTool(mol);
+//        mol.setBondOrders(CMLBond.SINGLE);
+//        PiSystemManager piSystemManager = new PiSystemManager();
+//        piSystemManager.setUpdateBonds(true);
+//        piSystemManager.setKnownUnpaired(knownUnpaired);
+//        moleculeTool.adjustBondOrdersToValency(piSystemManager);
+////        moleculeTool.transferChargeToFreePiElectrons();
+//    }
 
-    private void tcfe(CMLMolecule mol, int knownUnpaired) {
-        System.out.println("====transferUnpairedPi====== " + mol.getTitle()
-                + " ======================");
-        MoleculeTool moleculeTool = new MoleculeTool(mol);
-        mol.setBondOrders(CMLBond.SINGLE);
-        PiSystemManager piSystemManager = new PiSystemManager();
-        piSystemManager.setUpdateBonds(true);
-        piSystemManager.setKnownUnpaired(knownUnpaired);
-        moleculeTool.adjustBondOrdersToValency(piSystemManager);
-        moleculeTool.transferChargeToFreePiElectrons();
-    }
+//    /**
+//     * common molecules.
+//     */
+//    @Test
+//    public void testMarkupCommonMolecules() {
+//        /*--
+//         mcm(nitric2);
+//         mcm(carbonate2);
+//         mcm(hydrogenSulfate);
+//         mcm(nitroMethane2);
+//         mcm(methaneSulfonate);
+//         --*/
+//    }
 
-    /**
-     * common molecules.
-     */
-    @Test
-    public void testMarkupCommonMolecules() {
-        /*--
-         mcm(nitric2);
-         mcm(carbonate2);
-         mcm(hydrogenSulfate);
-         mcm(nitroMethane2);
-         mcm(methaneSulfonate);
-         --*/
-    }
-
-    private void mcm(CMLMolecule mol) {
-        System.out.println("====MarkupCommonMolecules====== " + mol.getTitle()
-                + " ======================");
-        MoleculeTool moleculeTool = new MoleculeTool(mol);
-        moleculeTool.markupCommonMolecules();
-    }
+//    private void mcm(CMLMolecule mol) {
+//        System.out.println("====MarkupCommonMolecules====== " + mol.getTitle()
+//                + " ======================");
+//        MoleculeTool moleculeTool = new MoleculeTool(mol);
+//        moleculeTool.markupCommonMolecules();
+//    }
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLAtom.getBondOrderSum()'
@@ -1807,7 +1789,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         CatalogTool catalog = getMoleculeCatalog();
         Map<String, CMLMolecule> map = null;
         try {
-            map = MoleculeTool.getMolecules(namespace, catalog);
+            map = catalog.getMolecules(namespace);
         } catch (CMLRuntimeException e) {
             Assert.fail("enxpcted "+e);
         }
@@ -1841,12 +1823,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             neverThrow(e);
         }
         MoleculeTool moleculeTool = new MoleculeTool(mol);
-        CMLMolecule refMol = moleculeTool
-                .getReferencedMolecule("p:oh", catalog);
+        CMLMolecule refMol = catalog
+                .getReferencedMolecule1("p:oh", moleculeTool);
         Assert.assertNotNull("refenced mol not null", refMol);
         Assert.assertEquals("refenced mol", "oh", refMol.getId());
         // use ref on molecule
-        refMol = moleculeTool.getReferencedMolecule(catalog);
+        refMol = catalog.getReferencedMolecule(moleculeTool);
         Assert.assertNotNull("refenced mol not null", refMol);
         Assert.assertEquals("refenced mol", "oh", refMol.getId());
     }
@@ -2130,35 +2112,6 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.tools.MoleculeTool.markSpecial()'
-     * Not all methods are exhaustively tested, just the principle
-     */
-    @Test
-    public void testMarkSpecial() {
-        CMLMolecule nitroMethane = (CMLMolecule) parseValidString(nitroMethaneS);
-        MoleculeTool moleculeTool = new MoleculeTool(nitroMethane);
-        CMLAtom nAtom = nitroMethane.getAtom(0);
-        Assert.assertEquals("nitro", "a1", nAtom.getId());
-        Assert.assertNotNull("nitro", nAtom.getFormalChargeAttribute());
-        Assert.assertEquals("nitro", 1, nAtom.getFormalCharge());
-        CMLAtom cAtom = nitroMethane.getAtom(1);
-        Assert.assertEquals("nitro", "a2", cAtom.getId());
-        CMLAtom oAtom1 = nitroMethane.getAtom(2);
-        Assert.assertEquals("nitro", "a3", oAtom1.getId());
-        Assert.assertNotNull("nitro", oAtom1.getFormalChargeAttribute());
-        Assert.assertEquals("nitro", -1, oAtom1.getFormalCharge());
-        CMLAtom oAtom2 = nitroMethane.getAtom(3);
-        Assert.assertEquals("nitro", "a4", oAtom2.getId());
-        CMLBond bond = nitroMethane.getBonds().get(2);
-        Assert.assertEquals("nitro", CMLBond.SINGLE, bond.getOrder());
-        
-//        moleculeTool.markSpecial(); // hope this is right
-        moleculeTool.markupSpecial();
-        Assert.assertEquals("nitro", CMLBond.DOUBLE, bond.getOrder());
-
-    }
-
-    /**
      * Test method for
      * 'org.xmlcml.cml.tools.MoleculeTool.contractExplicitHydrogens(HydrogenControl)'
      */
@@ -2240,27 +2193,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         makeMol5a();
         MoleculeTool moleculeTool = new MoleculeTool(mol5a);
         CMLBond bond = mol5a.getBonds().get(0);
-        double d = moleculeTool.calculateBondLength(bond, CoordinateType.CARTESIAN);
+        double d = bond.calculateBondLength(CoordinateType.CARTESIAN);
         Assert.assertEquals("length", 1.3, d, 0.0000001);
     }
 
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getClonedMolecule(CMLAtomSet,
-     * CMLBondSet)'
-     */
-    @Test
-    public void testGetClonedMolecule() {
-        makeMol5a();
-        MoleculeTool moleculeTool = new MoleculeTool(mol5a);
-        CMLAtomSet atomSet = mol5a.getAtomSet();
-        CMLBondSet bondSet = new CMLBondSet(mol5a);
-        Assert.assertEquals("before", 5, mol5a.getAtomCount());
-        Assert.assertEquals("before", 4, mol5a.getBondCount());
-        CMLMolecule newMolecule = moleculeTool.getClonedMolecule(atomSet, bondSet);
-        Assert.assertEquals("before", 5, newMolecule.getAtomCount());
-        Assert.assertEquals("before", 4, newMolecule.getBondCount());
-    }
 
     /**
      * Test method for

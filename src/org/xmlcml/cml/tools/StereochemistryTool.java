@@ -4,11 +4,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomParity;
+import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -61,7 +63,7 @@ public class StereochemistryTool extends AbstractTool {
         // CMLBond[] acyclicDoubleBonds = getAcyclicDoubleBonds();
         // testing only
         for (CMLAtom atom : molecule.getAtoms()) {
-            moleculeTool.addWedgeHatchBond(atom);
+            this.addWedgeHatchBond(atom);
         }
     }
     /**
@@ -77,7 +79,7 @@ public class StereochemistryTool extends AbstractTool {
     public void addWedgeHatchBonds() throws CMLRuntimeException {
         for (CMLAtom chiralAtom : new StereochemistryTool(molecule)
                 .getChiralAtoms()) {
-            moleculeTool.addWedgeHatchBond(chiralAtom);
+            this.addWedgeHatchBond(chiralAtom);
         }
     }
     /**
@@ -489,4 +491,316 @@ public class StereochemistryTool extends AbstractTool {
         }
         return d;
     }
+	/**
+	 * gets first bond which is not already a wedge/hatch.
+	 *
+	 * try to get an X-H or other acyclic bond if possible bond must have first
+	 * atom equal to thisAtom so sharp end of bond can be managed
+	 *
+	 * @param tool TODO
+	 * @param atom TODO
+	 * @return the bond
+	 */
+	CMLBond getFirstWedgeableBond(CMLAtom atom) {
+		List<CMLAtom> atomList = atom.getLigandAtoms();
+		List<CMLBond> ligandBondList = atom.getLigandBonds();
+		CMLBond bond = null;
+		for (int i = 0; i < ligandBondList.size(); i++) {
+			CMLBond bondx = ligandBondList.get(i);
+			CMLAtom atomx = atomList.get(i);
+			if (bondx.getBondStereo() != null) {
+				continue;
+			}
+			// select any H
+			if (atomx.getElementType().equals("H")
+					&& bondx.getAtom(0).equals(atom)) {
+				bond = bondx;
+				break;
+			}
+		}
+		if (bond == null) {
+			for (int i = 0; i < atomList.size(); i++) {
+				CMLBond bondx = ligandBondList.get(i);
+				if (bondx.getBondStereo() != null) {
+					continue;
+				}
+				// or any acyclic bond
+				if (bondx.getCyclic().equals(CMLBond.ACYCLIC)
+						&& bondx.getAtom(0).equals(atom)) {
+					bond = bondx;
+					break;
+				}
+			}
+		}
+		// OK, get first unmarked bond
+		if (bond == null) {
+			for (int i = 0; i < atomList.size(); i++) {
+				CMLBond bondx = ligandBondList.get(i);
+				if (bondx.getBondStereo() != null) {
+					continue;
+				}
+				if (bondx.getAtom(0).equals(atom)) {
+					bond = bondx;
+					break;
+				}
+			}
+		}
+		return bond;
+	}
+	/**
+	 * uses atomParity to create wedge or hatch.
+	 *
+	 * @param tool TODO
+	 * @param atom
+	 * @throws CMLRuntimeException
+	 *             inconsistentencies in diagram, etc.
+	 */
+	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
+		CMLAtom[] atom4 = new CMLAtom[4];// getAtomRefs4();
+		if (atom4 != null) {
+			CMLBond bond = getFirstWedgeableBond(atom);
+			int totalParity = 0;
+			if (bond == null) {
+				logger.info("Cannot find ANY free wedgeable bonds! "
+						+ atom.getId());
+			} else {
+				final CMLAtomParity atomParity = (CMLAtomParity) atom
+				.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
+				if (atomParity != null) {
+	
+					CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
+					int atomParityValue = atomParity.getIntegerValue();
+					// three explicit ligands
+					if (atomRefs4x[3].equals(atom)) {
+						double d = this.getSenseOf3Ligands(atom, atomRefs4x);
+						if (Math.abs(d) > 0.000001) {
+							int sense = (d < 0) ? -1 : 1;
+							totalParity = sense * atomParityValue;
+						}
+						// 4 explicit ligands
+					} else {
+						CMLAtom[] cyclicAtom4 = atom.getClockwiseLigands(atomRefs4x);
+						// bond position matters here. must find bond before
+						// compareAtomRefs4
+						// as it scrambles the order
+						int serial = -1;
+						for (int i = 0; i < 4; i++) {
+							if (cyclicAtom4[i].equals(bond.getOtherAtom(atom))) {
+								serial = i;
+								break;
+							}
+						}
+						if (serial == -1) {
+							throw new CMLRuntimeException(
+									"Cannot find bond in cyclicAtom4 (bug)");
+						}
+						// how does this differ from the original atomRefs4?
+						int sense = 1; // FIXME
+						// CMLAtom.compareAtomRefs4(atomRefs4x,
+						// cyclicAtom4);
+						int positionParity = 1 - 2 * (serial % 2);
+						totalParity = sense * atomParityValue * positionParity;
+					}
+					String bondType = (totalParity > 0) ? CMLBond.WEDGE
+							: CMLBond.HATCH;
+					CMLBondStereo bondStereo = new CMLBondStereo();
+					bondStereo.setXMLContent(bondType);
+					bond.addBondStereo(bondStereo);
+	
+				} else {
+					// throw new CMLException ("BUG :: AddWedgeHatchBond ->
+					// atomParity is null for atom " + atom.getId ());
+				}
+			}
+		}
+	}
+	/**
+	 * not fully written.
+	 *
+	 * @param atom
+	 * @param array
+	 * @return value
+	 */
+	double getSenseOf3Ligands(CMLAtom atom, CMLAtom[] array) {
+		return 0;
+	}
+	/**
+	 * gets atomSet for ligand in prioritized order.
+	 *
+	 * ligand is expanded as a breadth-first atomSet. This is ordered so that
+	 * atoms appear in CIP order. (stereochemistry within ligand is ignored as
+	 * too dificult at this stage, so full CIP is not supported). the set for
+	 * each ligand can be retrieved by getLigandAtomSet(ligandAtoms). Where
+	 * ligands are cyclic the set may continue until it reaches thisatom or
+	 * ligandAtoms. thus in some cases the whole molecule except this atom may
+	 * be returned
+	 *
+	 * @param tool TODO
+	 * @param atom
+	 * @param ligandAt
+	 * @return the atomSet (icludes the immediate ligand atom, but not
+	 *         thisatom).
+	 */
+	CMLAtomSet getPrioritizedLigand(CMLAtom atom, CMLAtom ligandAt) {
+		CMLAtomSet[] prioritizedLigands = this.getPrioritizedLigands(atom);
+		CMLAtomSet atomSet = null;
+		if (ligandAt != null) {
+			this.getPrioritizedLigands(atom);
+			for (int i = 0; i < prioritizedLigands.length; i++) {
+				List<CMLAtom> ligandList = atom.getLigandAtoms();
+				if (ligandAt.equals(ligandList.get(i))) {
+					atomSet = prioritizedLigands[i];
+					break;
+				}
+			}
+		}
+		return atomSet;
+	}
+	/**
+	 * gets all ligandAtomSets for atom.
+	 *
+	 * getLigandAtomSet(ligandAtom) is called for each ligand the results are
+	 * returned *in ligand order*, not in priority, so they can be synchronized
+	 * with ligandAtoms[] and ligandBonds[]
+	 *
+	 * @param tool TODO
+	 * @param atom
+	 * @return ligands as array of atomSets
+	 */
+	CMLAtomSet[] getPrioritizedLigands(CMLAtom atom) {
+		List<CMLAtom> ligands = atom.getLigandAtoms();
+		CMLAtomSet[] prioritizedLigands = new CMLAtomSet[ligands.size()];
+		for (int i = 0; i < prioritizedLigands.length; i++) {
+			CMLAtom atomi = ligands.get(i);
+			prioritizedLigands[i] = getPrioritizedLigand(atom, atomi);
+			if (prioritizedLigands[i] == null) {
+				CMLAtomSet atomSet = new CMLAtomSet();
+				this.createPrioritizedLigand(atom, atomSet, atomi);
+				prioritizedLigands[i] = atomSet;
+			}
+		}
+		return prioritizedLigands;
+	}
+	/**
+	 * not fully developed.
+	 *
+	 * @param atom
+	 * @param atomSetTool
+	 * @param upstreamAtom
+	 * @deprecated
+	 */
+	void createPrioritizedLigand(CMLAtom atom, CMLAtomSet atomSetTool, CMLAtom upstreamAtom) {
+	
+		// CMLAtom ligands
+	}
+	
+	/**
+	 * get ligands of this atom not in markedAtom set sorted in decreasing
+	 * atomic number.
+	 *
+	 * sort the unvisisted atoms in decreasing atomic number. If atomic numbers
+	 * are tied, any order is permitted
+	 *
+	 * @param atom
+	 * @param markedAtoms
+	 *            atoms already visited and not to be included
+	 *
+	 * @return the new ligands in decreasing order of atomic mass.
+	 */
+	private CMLAtom[] getNewLigandsSortedByAtomicNumber(CMLAtom atom,
+			CMLAtomSet markedAtoms) {
+		List<CMLAtom> newLigandVector = new ArrayList<CMLAtom>();
+		List<CMLAtom> ligandList = atom.getLigandAtoms();
+		for (CMLAtom ligandAtom : ligandList) {
+			if (!markedAtoms.contains(ligandAtom)) {
+				newLigandVector.add(ligandAtom);
+			}
+		}
+		CMLAtom[] newLigands = new CMLAtom[newLigandVector.size()];
+		int count = 0;
+		while (newLigandVector.size() > 0) {
+			int heaviest = getHeaviestAtom(newLigandVector);
+			CMLAtom heaviestAtom = newLigandVector.get(heaviest);
+			newLigands[count++] = heaviestAtom;
+			newLigandVector.remove(heaviest);
+		}
+		return newLigands;
+	}
+
+	/**
+	 * get priority relative to other atom.
+	 *
+	 * uses simple CIP prioritization (does not include stereochemistry) if
+	 * thisAtom has higher priority return 1 if thisAtom and otherAtom have
+	 * equal priority return 0 if otherAtom has higher priority return -1
+	 *
+	 * compare atomic numbers. if thisAtom has higher atomicNumber return 1 if
+	 * otherAtom has higher atomicNumber return -1 if equal, visit new ligands
+	 * of each atom, sorted by priority until a mismatch is found or the whole
+	 * of the ligand trees are visited
+	 *
+	 * example: CMLAtomSet thisSetTool = new AtomSetToolImpl(); CMLAtomSet
+	 * otherSetTool = new AtomSetToolImpl(); int res =
+	 * atomTool.compareByAtomicNumber(otherAtom, thisSetTool, otherSetTool);
+	 *
+	 * @param atom
+	 * @param otherAtom
+	 * @param markedAtoms
+	 *            atomSet to keep track of visited atoms (avoiding infinite
+	 *            recursion)
+	 * @param otherMarkedAtoms
+	 *            atomSet to keep track of visited atoms (avoiding infinite
+	 *            recursion)
+	 *
+	 * @return int the comparison
+	 */
+	// FIXME
+	private int compareByAtomicNumber(CMLAtom atom, CMLAtom otherAtom,
+			CMLAtomSet markedAtoms, CMLAtomSet otherMarkedAtoms) {
+		// compare on atomic number
+		int comp = atom.compareByAtomicNumber(otherAtom);
+		if (comp == 0) {
+			markedAtoms.addAtom(atom);
+			otherMarkedAtoms.addAtom(otherAtom);
+			CMLAtom[] thisSortedLigands = getNewLigandsSortedByAtomicNumber(
+					atom, markedAtoms);
+			CMLAtom[] otherSortedLigands = getNewLigandsSortedByAtomicNumber(
+					otherAtom, otherMarkedAtoms);
+			int length = Math.min(thisSortedLigands.length,
+					otherSortedLigands.length);
+			for (int i = 0; i < length; i++) {
+				CMLAtom thisLigand = thisSortedLigands[i];
+				comp = this.compareByAtomicNumber(thisLigand, otherSortedLigands[i],
+						markedAtoms, otherMarkedAtoms);
+				if (comp != 0) {
+					break;
+				}
+			}
+			if (comp == 0) {
+				// if matched so far, prioritize longer list
+				if (thisSortedLigands.length > otherSortedLigands.length) {
+					comp = 1;
+				} else if (thisSortedLigands.length < otherSortedLigands.length) {
+					comp = -1;
+				}
+			}
+		}
+		return comp;
+	}
+
+	private int getHeaviestAtom(List<CMLAtom> newAtomVector) {
+		int heaviestAtNum = -1;
+		int heaviest = -1;
+		for (int i = 0; i < newAtomVector.size(); i++) {
+			CMLAtom atom = newAtomVector.get(i);
+			int atnum = atom.getAtomicNumber();
+			if (atnum > heaviestAtNum) {
+				heaviest = i;
+				heaviestAtNum = atnum;
+			}
+		}
+		return heaviest;
+	}
+
+	
 }

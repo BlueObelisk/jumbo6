@@ -164,8 +164,8 @@ public class GeometryTool extends AbstractTool {
         }
         double length = 0.0;
         try {
-            length = moleculeTool
-                    .calculateBondLength(bond, CoordinateType.TWOD);
+            length = bond
+                    .calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
             throw new CMLException(
                     "Cannot find length for: " + at2.getId() + "/" + at3.getId());} //$NON-NLS-1$ //$NON-NLS-2$
@@ -265,8 +265,7 @@ public class GeometryTool extends AbstractTool {
         at0.setXYZ3(new Point3(0., 0., 0.));
         double length1;
         try {
-            length1 = moleculeTool.calculateBondLength(bond1,
-                    CoordinateType.CARTESIAN);
+            length1 = bond1.calculateBondLength(CoordinateType.CARTESIAN);
         } catch (Exception e) {
             throw new CMLException(
                     "Cannot find length for: " + at0.getId() + "/" + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -274,8 +273,7 @@ public class GeometryTool extends AbstractTool {
         at1.setXYZ3(new Point3(length1, 0., 0.));
         double length2 = 0.0;
         try {
-            length2 = moleculeTool.calculateBondLength(bond2,
-                    CoordinateType.TWOD);
+            length2 = bond2.calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
             throw new CMLException(
                     "Cannot find length for: " + at2.getId() + "/" + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$

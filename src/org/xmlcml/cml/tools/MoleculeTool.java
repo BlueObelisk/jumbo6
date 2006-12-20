@@ -1,21 +1,13 @@
 package org.xmlcml.cml.tools;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import nu.xom.Attribute;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
@@ -36,14 +28,10 @@ import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
@@ -61,10 +49,8 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
-import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.Vector2;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.Type;
@@ -80,7 +66,7 @@ public class MoleculeTool extends AbstractTool {
 	final static String IDX = "idx";
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
-	String metalLigandDictRef = "jumbo:metalLigand";
+	public static String metalLigandDictRef = "jumbo:metalLigand";
 
 	/**
 	 * control operations for removing disorder.
@@ -109,6 +95,8 @@ public class MoleculeTool extends AbstractTool {
 		private ProcessDisorderControl() {
 		}
 	}
+	
+	public final static int UNREALISTIC_CHARGE = 99;
 
 	CMLMolecule molecule;
 
@@ -167,7 +155,7 @@ public class MoleculeTool extends AbstractTool {
 		}
 		List<CMLMolecule> mols = molecule.getDescendantsOrMolecule();
 		for (CMLMolecule mol : mols) {
-			int molCharge = 99;
+			int molCharge = UNREALISTIC_CHARGE;
 			boolean isMetalComplex = false;
 			for (CMLFormula formula : moietyFormulaList) {
 				CMLFormula molForm = mol.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
@@ -186,7 +174,7 @@ public class MoleculeTool extends AbstractTool {
 			List<CMLAtom> atomList = mol.getAtoms();		
 			for(CMLAtom atom : atomList) {
 				ChemicalElement element = atom.getChemicalElement();
-				if (MoleculeTool.isChemicalElementType(element, Type.METAL)) {
+				if (element.isChemicalElementType(Type.METAL)) {
 					isMetalComplex = true;
 					metalAtomList.add(atom);
 					List<CMLBond> bonds = atom.getLigandBonds();
@@ -226,9 +214,10 @@ public class MoleculeTool extends AbstractTool {
 				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
 				for (CMLMolecule subMol : subMols) {
 					MoleculeTool subMolTool = new MoleculeTool(subMol);
-					boolean common = subMolTool.markupCommonMolecules();
+					ValencyTool valencyTool = new ValencyTool(subMol);
+					boolean common = valencyTool.markupCommonMolecules();
 					if (!common) {
-						subMolTool.markupSpecial();
+						valencyTool.markupSpecial();
 						subMol.setNormalizedBondOrders();
 						List<CMLBond> singleBonds = new ArrayList<CMLBond>();
 						for (CMLBond bond : subMol.getBonds()) {
@@ -362,7 +351,7 @@ public class MoleculeTool extends AbstractTool {
 								}
 							}
 						}
-						
+						/*
 						n2:
 						if (finalMolList.size() == 0) {
 							System.out.println("Trying N2-");
@@ -482,10 +471,11 @@ public class MoleculeTool extends AbstractTool {
 									}
 								}
 							}
+							*/
 						if (finalMolList.size() > 0) {
 							// remember that molCharge is the charge given to the molecule from the CIF file
 							CMLMolecule theMol = null;
-							if (molCharge != 99 && !isMetalComplex) {
+							if (molCharge != UNREALISTIC_CHARGE && !isMetalComplex) {
 								for (CMLMolecule n : finalMolList) {
 									if (molCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
 										theMol = n;
@@ -1244,320 +1234,6 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	/**
-	 * gets first bond which is not already a wedge/hatch.
-	 *
-	 * try to get an X-H or other acyclic bond if possible bond must have first
-	 * atom equal to thisAtom so sharp end of bond can be managed
-	 *
-	 * @return the bond
-	 */
-	private CMLBond getFirstWedgeableBond(CMLAtom atom) {
-		List<CMLAtom> atomList = atom.getLigandAtoms();
-		List<CMLBond> ligandBondList = atom.getLigandBonds();
-		CMLBond bond = null;
-		for (int i = 0; i < ligandBondList.size(); i++) {
-			CMLBond bondx = ligandBondList.get(i);
-			CMLAtom atomx = atomList.get(i);
-			if (bondx.getBondStereo() != null) {
-				continue;
-			}
-			// select any H
-			if (atomx.getElementType().equals("H")
-					&& bondx.getAtom(0).equals(this)) {
-				bond = bondx;
-				break;
-			}
-		}
-		if (bond == null) {
-			for (int i = 0; i < atomList.size(); i++) {
-				CMLBond bondx = ligandBondList.get(i);
-				if (bondx.getBondStereo() != null) {
-					continue;
-				}
-				// or any acyclic bond
-				if (bondx.getCyclic().equals(CMLBond.ACYCLIC)
-						&& bondx.getAtom(0).equals(atom)) {
-					bond = bondx;
-					break;
-				}
-			}
-		}
-		// OK, get first unmarked bond
-		if (bond == null) {
-			for (int i = 0; i < atomList.size(); i++) {
-				CMLBond bondx = ligandBondList.get(i);
-				if (bondx.getBondStereo() != null) {
-					continue;
-				}
-				if (bondx.getAtom(0).equals(this)) {
-					bond = bondx;
-					break;
-				}
-			}
-		}
-		return bond;
-	}
-
-	/**
-	 * uses atomParity to create wedge or hatch.
-	 *
-	 * @param atom
-	 * @throws CMLRuntimeException
-	 *             inconsistentencies in diagram, etc.
-	 */
-	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
-		CMLAtom[] atom4 = new CMLAtom[4];// getAtomRefs4();
-		if (atom4 != null) {
-			CMLBond bond = this.getFirstWedgeableBond(atom);
-			int totalParity = 0;
-			if (bond == null) {
-				logger.info("Cannot find ANY free wedgeable bonds! "
-						+ atom.getId());
-			} else {
-				final CMLAtomParity atomParity = (CMLAtomParity) atom
-				.getFirstChildElement(CMLAtomParity.TAG, CML_NS);
-				if (atomParity != null) {
-
-					CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
-					int atomParityValue = atomParity.getIntegerValue();
-					// three explicit ligands
-					if (atomRefs4x[3].equals(this)) {
-						double d = getSenseOf3Ligands(atom, atomRefs4x);
-						if (Math.abs(d) > 0.000001) {
-							int sense = (d < 0) ? -1 : 1;
-							totalParity = sense * atomParityValue;
-						}
-						// 4 explicit ligands
-					} else {
-						CMLAtom[] cyclicAtom4 = getClockwiseLigands(atom,
-								atomRefs4x);
-						// bond position matters here. must find bond before
-						// compareAtomRefs4
-						// as it scrambles the order
-						int serial = -1;
-						for (int i = 0; i < 4; i++) {
-							if (cyclicAtom4[i].equals(bond.getOtherAtom(atom))) {
-								serial = i;
-								break;
-							}
-						}
-						if (serial == -1) {
-							throw new CMLRuntimeException(
-									"Cannot find bond in cyclicAtom4 (bug)");
-						}
-						// how does this differ from the original atomRefs4?
-						int sense = 1; // FIXME
-						// CMLAtom.compareAtomRefs4(atomRefs4x,
-						// cyclicAtom4);
-						int positionParity = 1 - 2 * (serial % 2);
-						totalParity = sense * atomParityValue * positionParity;
-					}
-					String bondType = (totalParity > 0) ? CMLBond.WEDGE
-							: CMLBond.HATCH;
-					CMLBondStereo bondStereo = new CMLBondStereo();
-					bondStereo.setXMLContent(bondType);
-					bond.addBondStereo(bondStereo);
-
-				} else {
-					// throw new CMLException ("BUG :: AddWedgeHatchBond ->
-					// atomParity is null for atom " + atom.getId ());
-				}
-			}
-		}
-	}
-
-	// FIXME
-	/**
-	 * not fully written.
-	 *
-	 * @param array
-	 * @param atom
-	 * @return value
-	 */
-	double getSenseOf3Ligands(CMLAtom atom, CMLAtom[] array) {
-		return 0;
-	}
-
-	/**
-	 * gets atomSet for ligand in prioritized order.
-	 *
-	 * ligand is expanded as a breadth-first atomSet. This is ordered so that
-	 * atoms appear in CIP order. (stereochemistry within ligand is ignored as
-	 * too dificult at this stage, so full CIP is not supported). the set for
-	 * each ligand can be retrieved by getLigandAtomSet(ligandAtoms). Where
-	 * ligands are cyclic the set may continue until it reaches thisatom or
-	 * ligandAtoms. thus in some cases the whole molecule except this atom may
-	 * be returned
-	 *
-	 * @param atom
-	 * @param ligandAt
-	 * @return the atomSet (icludes the immediate ligand atom, but not
-	 *         thisatom).
-	 */
-	CMLAtomSet getPrioritizedLigand(CMLAtom atom, CMLAtom ligandAt) {
-		CMLAtomSet[] prioritizedLigands = this.getPrioritizedLigands(atom);
-		CMLAtomSet atomSet = null;
-		if (ligandAt != null) {
-			this.getPrioritizedLigands(atom);
-			for (int i = 0; i < prioritizedLigands.length; i++) {
-				List<CMLAtom> ligandList = atom.getLigandAtoms();
-				if (ligandAt.equals(ligandList.get(i))) {
-					atomSet = prioritizedLigands[i];
-					break;
-				}
-			}
-		}
-		return atomSet;
-	}
-
-	/**
-	 * gets all ligandAtomSets for atom.
-	 *
-	 * getLigandAtomSet(ligandAtom) is called for each ligand the results are
-	 * returned *in ligand order*, not in priority, so they can be synchronized
-	 * with ligandAtoms[] and ligandBonds[]
-	 *
-	 * @param atom
-	 * @return ligands as array of atomSets
-	 */
-	CMLAtomSet[] getPrioritizedLigands(CMLAtom atom) {
-		List<CMLAtom> ligands = atom.getLigandAtoms();
-		CMLAtomSet[] prioritizedLigands = new CMLAtomSet[ligands.size()];
-		for (int i = 0; i < prioritizedLigands.length; i++) {
-			CMLAtom atomi = ligands.get(i);
-			prioritizedLigands[i] = this.getPrioritizedLigand(atom, atomi);
-			if (prioritizedLigands[i] == null) {
-				CMLAtomSet atomSet = new CMLAtomSet();
-				this.createPrioritizedLigand(atom, atomSet, atomi);
-				prioritizedLigands[i] = atomSet;
-			}
-		}
-		return prioritizedLigands;
-	}
-
-	/**
-	 * not fully developed.
-	 *
-	 * @deprecated
-	 * @param atom
-	 * @param atomSetTool
-	 * @param upstreamAtom
-	 */
-	void createPrioritizedLigand(CMLAtom atom, CMLAtomSet atomSetTool,
-			CMLAtom upstreamAtom) {
-
-		// CMLAtom ligands
-	}
-
-	/**
-	 * get ligands of this atom not in markedAtom set sorted in decreasing
-	 * atomic number.
-	 *
-	 * sort the unvisisted atoms in decreasing atomic number. If atomic numbers
-	 * are tied, any order is permitted
-	 *
-	 * @param atom
-	 * @param markedAtoms
-	 *            atoms already visited and not to be included
-	 *
-	 * @return the new ligands in decreasing order of atomic mass.
-	 */
-	CMLAtom[] getNewLigandsSortedByAtomicNumber(CMLAtom atom,
-			CMLAtomSet markedAtoms) {
-		List<CMLAtom> newLigandVector = new ArrayList<CMLAtom>();
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligandAtom : ligandList) {
-			if (!markedAtoms.contains(ligandAtom)) {
-				newLigandVector.add(ligandAtom);
-			}
-		}
-		CMLAtom[] newLigands = new CMLAtom[newLigandVector.size()];
-		int count = 0;
-		while (newLigandVector.size() > 0) {
-			int heaviest = getHeaviestAtom(newLigandVector);
-			CMLAtom heaviestAtom = newLigandVector.get(heaviest);
-			newLigands[count++] = heaviestAtom;
-			newLigandVector.remove(heaviest);
-		}
-		return newLigands;
-	}
-
-	/**
-	 * get priority relative to other atom.
-	 *
-	 * uses simple CIP prioritization (does not include stereochemistry) if
-	 * thisAtom has higher priority return 1 if thisAtom and otherAtom have
-	 * equal priority return 0 if otherAtom has higher priority return -1
-	 *
-	 * compare atomic numbers. if thisAtom has higher atomicNumber return 1 if
-	 * otherAtom has higher atomicNumber return -1 if equal, visit new ligands
-	 * of each atom, sorted by priority until a mismatch is found or the whole
-	 * of the ligand trees are visited
-	 *
-	 * example: CMLAtomSet thisSetTool = new AtomSetToolImpl(); CMLAtomSet
-	 * otherSetTool = new AtomSetToolImpl(); int res =
-	 * atomTool.compareByAtomicNumber(otherAtom, thisSetTool, otherSetTool);
-	 *
-	 * @param atom
-	 * @param otherAtom
-	 * @param markedAtoms
-	 *            atomSet to keep track of visited atoms (avoiding infinite
-	 *            recursion)
-	 * @param otherMarkedAtoms
-	 *            atomSet to keep track of visited atoms (avoiding infinite
-	 *            recursion)
-	 *
-	 * @return int the comparison
-	 */
-	// FIXME
-	public int compareByAtomicNumber(CMLAtom atom, CMLAtom otherAtom,
-			CMLAtomSet markedAtoms, CMLAtomSet otherMarkedAtoms) {
-		// compare on atomic number
-		int comp = atom.compareByAtomicNumber(otherAtom);
-		if (comp == 0) {
-			markedAtoms.addAtom(atom);
-			otherMarkedAtoms.addAtom(otherAtom);
-			CMLAtom[] thisSortedLigands = getNewLigandsSortedByAtomicNumber(
-					atom, markedAtoms);
-			CMLAtom[] otherSortedLigands = getNewLigandsSortedByAtomicNumber(
-					otherAtom, otherMarkedAtoms);
-			int length = Math.min(thisSortedLigands.length,
-					otherSortedLigands.length);
-			for (int i = 0; i < length; i++) {
-				CMLAtom thisLigand = thisSortedLigands[i];
-				comp = compareByAtomicNumber(thisLigand, otherSortedLigands[i],
-						markedAtoms, otherMarkedAtoms);
-				if (comp != 0) {
-					break;
-				}
-			}
-			if (comp == 0) {
-				// if matched so far, prioritize longer list
-				if (thisSortedLigands.length > otherSortedLigands.length) {
-					comp = 1;
-				} else if (thisSortedLigands.length < otherSortedLigands.length) {
-					comp = -1;
-				}
-			}
-		}
-		return comp;
-	}
-
-	private int getHeaviestAtom(List<CMLAtom> newAtomVector) {
-		int heaviestAtNum = -1;
-		int heaviest = -1;
-		for (int i = 0; i < newAtomVector.size(); i++) {
-			CMLAtom atom = newAtomVector.get(i);
-			int atnum = atom.getAtomicNumber();
-			if (atnum > heaviestAtNum) {
-				heaviest = i;
-				heaviestAtNum = atnum;
-			}
-		}
-		return heaviest;
-	}
-
-	/**
 	 * gets lone electrons on atom. electrons not involved in bonding assumes
 	 * accurate hydrogen count only currently really works for first row (C, N,
 	 * O, F) calculated as getHydrogenValencyGroup() -
@@ -1583,8 +1259,8 @@ public class MoleculeTool extends AbstractTool {
 		return loneElectronCount;
 	}
 
-	@SuppressWarnings("unused")
-	void getHybridizationFromConnectivty() {
+//	@SuppressWarnings("unused")
+	private void getHybridizationFromConnectivty() {
 		@SuppressWarnings("unused")
 		// FIXME
 		List<CMLAtom> atoms = molecule.getAtoms();
@@ -1843,7 +1519,7 @@ public class MoleculeTool extends AbstractTool {
 			CMLBondSet clusterBondSet, CMLAtomSet unusedAtomSet,
 			List<Type> typeList) {
 		boolean change = false;
-		if (atomIsCompatible(currentAtom, typeList)) {
+		if (currentAtom.atomIsCompatible(typeList)) {
 			change = true;
 			if (!clusterSet.contains(currentAtom)) {
 				clusterSet.addAtom(currentAtom);
@@ -1860,7 +1536,7 @@ public class MoleculeTool extends AbstractTool {
 					continue;
 				}
 				// atom not of right kind
-				if (!atomIsCompatible(ligand, typeList)) {
+				if (!ligand.atomIsCompatible(typeList)) {
 					continue;
 				}
 				ChemicalElement element2 = ChemicalElement
@@ -1884,26 +1560,6 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	/**
-	 * is atom of given type. only does TM at present
-	 *
-	 * @param atom
-	 *            to inspect
-	 * @param typeList
-	 * @return true if of type
-	 */
-	private boolean atomIsCompatible(CMLAtom atom, List<Type> typeList) {
-		boolean isCompatible = false;
-		ChemicalElement chemicalElement = ChemicalElement
-		.getChemicalElement(atom.getElementType());
-		for (Type type : typeList) {
-			if (type != null && MoleculeTool.isChemicalElementType(chemicalElement, type)) {
-				isCompatible = true;
-			}
-		}
-		return isCompatible;
-	}
-
-	/**
 	 * extract ligands from connected molecule components.
 	 *
 	 * @param typeList
@@ -1919,7 +1575,7 @@ public class MoleculeTool extends AbstractTool {
 			boolean deleted = false;
 			List<CMLAtom> atomList = subMolecule.getAtoms();
 			for (CMLAtom atom : atomList) {
-				if (atomIsCompatible(atom, typeList)) {
+				if (atom.atomIsCompatible(typeList)) {
 					deleted = true;
 					subMolecule.deleteAtom(atom);
 				}
@@ -1961,7 +1617,7 @@ public class MoleculeTool extends AbstractTool {
 	 *             atom is not in bond
 	 * @return the list of substituent atoms
 	 */
-	List<CMLAtom> getSubstituentLigandList(CMLBond bond, CMLAtom atom)
+	private List<CMLAtom> getSubstituentLigandList(CMLBond bond, CMLAtom atom)
 	throws CMLException {
 		CMLAtom otherAtom = bond.getOtherAtom(atom);
 		List<CMLAtom> substituent = new ArrayList<CMLAtom>(atom
@@ -2094,1019 +1750,70 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	/**
-	 * dereference moleculeRef. will not process any args at this stage
-	 *
-	 * @param molRef
-	 *            of form "abc:def"
-	 * @return the molecule or null
-	 */
-	/*--
-	     public static CMLMolecule dereferenceMolecule(String molRef) {
-	     CMLMolecule molecule = null;
-	     return molecule;
-	     }
-	     --*/
+//	/**
+//	 * try to distribute molecular charge over quaternary nitrogens Empirical!
+//	 *
+//	 * Interacts with adjustBondOrdersToValency() so these may be run in
+//	 * different order and iteratively. only run if molecule.formalCharge set
+//	 * adds +1 to each N.formalCharge where: (i) sum bond order = 4 (ii) not
+//	 * coordinated to unusual elements (NYI)
+//	 */
+//	private void distributeMolecularChargeToN4() {
+//		if (molecule.getFormalChargeAttribute() != null) {
+//			List<CMLAtom> atoms = molecule.getAtoms();
+//			MoleculeTool moleculeTool = new MoleculeTool(molecule);
+//			for (CMLAtom atom : atoms) {
+//				if (!"N".equals(atom.getElementType())) {
+//					continue;
+//				}
+//				if (atom.getFormalChargeAttribute() == null) {
+//					if (moleculeTool.getBondOrderSum(atom) == 4) {
+//						atom.setFormalCharge(1);
+//						// molecule.setFormalCharge(molecule.getFormalCharge() -
+//						// 1);
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * transfers molecular charge to atoms with free electrons. Double bond
+//	 * analysis may leave some atoms with unpaired pi electrons. This assumes
+//	 * they are negative or positive and transfers charge
+//	 */
+//	private void transferChargeToFreePiElectrons() {
+//		List<CMLAtom> atoms = molecule.getAtoms();
+//		for (CMLAtom atom : atoms) {
+//			// has atom got free pi electrons after PiSystem analysis?
+//			CMLElements<CMLElectron> electrons = atom.getElectronElements();
+//			for (CMLElectron electron : electrons) {
+//				if (CMLElectron.PI.equals(electron.getDictRef())) {
+//					electron.detach();
+//					if (atom.getFormalChargeAttribute() == null) {
+//						atom.setFormalCharge(0);
+//					}
+//					if ("N".equals(atom.getElementType())) {
+//						atom.setFormalCharge(atom.getFormalCharge() + 1);
+//					}
+//					if ("O".equals(atom.getElementType())) {
+//						atom.setFormalCharge(atom.getFormalCharge() - 1);
+//					}
+//				}
+//			}
+//			// has carbon got missing ligands? add charge
+//			if ("C".equals(atom.getElementType())) {
+//				if (this.getBondOrderSum(atom) == 3) {
+//					if (atom.getFormalChargeAttribute() == null
+//							|| atom.getFormalCharge() == 0) {
+//						atom.setFormalCharge(1);
+//					}
+//				}
+//			}
+//		}
+//	}
 
-	/**
-	 * try to distribute molecular charge over quaternary nitrogens Empirical!
-	 *
-	 * Interacts with adjustBondOrdersToValency() so these may be run in
-	 * different order and iteratively. only run if molecule.formalCharge set
-	 * adds +1 to each N.formalCharge where: (i) sum bond order = 4 (ii) not
-	 * coordinated to unusual elements (NYI)
-	 */
-	public void distributeMolecularChargeToN4() {
-		if (molecule.getFormalChargeAttribute() != null) {
-			List<CMLAtom> atoms = molecule.getAtoms();
-			MoleculeTool moleculeTool = new MoleculeTool(molecule);
-			for (CMLAtom atom : atoms) {
-				if (!"N".equals(atom.getElementType())) {
-					continue;
-				}
-				if (atom.getFormalChargeAttribute() == null) {
-					if (moleculeTool.getBondOrderSum(atom) == 4) {
-						atom.setFormalCharge(1);
-						// molecule.setFormalCharge(molecule.getFormalCharge() -
-						// 1);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * transfers molecular charge to atoms with free electrons. Double bond
-	 * analysis may leave some atoms with unpaired pi electrons. This assumes
-	 * they are negative or positive and transfers charge
-	 */
-	public void transferChargeToFreePiElectrons() {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			// has atom got free pi electrons after PiSystem analysis?
-			CMLElements<CMLElectron> electrons = atom.getElectronElements();
-			for (CMLElectron electron : electrons) {
-				if (CMLElectron.PI.equals(electron.getDictRef())) {
-					electron.detach();
-					if (atom.getFormalChargeAttribute() == null) {
-						atom.setFormalCharge(0);
-					}
-					if ("N".equals(atom.getElementType())) {
-						atom.setFormalCharge(atom.getFormalCharge() + 1);
-					}
-					if ("O".equals(atom.getElementType())) {
-						atom.setFormalCharge(atom.getFormalCharge() - 1);
-					}
-				}
-			}
-			// has carbon got missing ligands? add charge
-			if ("C".equals(atom.getElementType())) {
-				if (this.getBondOrderSum(atom) == 3) {
-					if (atom.getFormalChargeAttribute() == null
-							|| atom.getFormalCharge() == 0) {
-						atom.setFormalCharge(1);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * adds charges and bond orders for common species.
-	 * 
-	 * @return true if identified as common molecule
-	 */
-	public boolean markupCommonMolecules() {
-		CMLFormula formula = new CMLFormula(molecule);
-		formula.normalize();
-		String formulaS = formula.getConcise();
-		formulaS = CMLFormula.removeChargeFromConcise(formulaS);
-		molecule.addToLog(Severity.INFO, "Formula " + formulaS);
-		boolean marked = true;
-		// SiF6
-		if (formulaS.equals("F 6 Si 1")) {
-			addDoubleCharge("Si", -2, "F", 0);
-			// CO3
-		} else if (formulaS.equals("C 1 O 3")) {
-			addDoubleCharge("C", 0, "O", 2);
-			// HCO3
-		} else if (formulaS.equals("C 1 H 1 O 3")) {
-			addDoubleCharge("C", 0, "O", 1);
-			// H2CO3
-		} else if (formulaS.equals("C 1 H 2 O 3")) {
-			addDoubleCharge("C", 0, "O", 0);
-			// NO3
-		} else if (formulaS.equals("N 1 O 3")) {
-			addDoubleCharge("N", -1, "O", 2);
-			// HNO3
-		} else if (formulaS.equals("H 1 N 1 O 3")) {
-			addDoubleCharge("N", 1, "O", 1);
-			// SO4
-		} else if (formulaS.equals("O 4 S 1")) {
-			addDoubleCharge("S", 0, "O", 2);
-			// HSO4
-		} else if (formulaS.equals("H 1 O 4 S 1")) {
-			addDoubleCharge("S", 0, "O", 1);
-			// H2SO4
-		} else if (formulaS.equals("H 2 O 4 S 1")) {
-			addDoubleCharge("S", 0, "O", 0);
-			// PF6
-		} else if (formulaS.equals("F 6 P 1")) {
-			addCharge("P", -1);
-			// PO4, etc.
-		} else if (formulaS.equals("O 4 P 1")) {
-			addDoubleCharge("P", 0, "O", 3);
-			// HPO4, etc.
-		} else if (formulaS.equals("H 1 O 4 P 1")) {
-			addDoubleCharge("P", 0, "O", 2);
-			// H2PO4, etc.
-		} else if (formulaS.equals("H 2 O 4 P 1")) {
-			addDoubleCharge("P", 0, "O", 1);
-			// H3PO4, etc.
-		} else if (formulaS.equals("H 3 O 4 P 1")) {
-			addDoubleCharge("P", 0, "O", 0);
-			// PO3
-		} else if (formulaS.equals("O 3 P 1")) {
-			addDoubleCharge("P", 0, "O", 3);
-			// HPO3
-		} else if (formulaS.equals("H 1 O 3 P 1")) {
-			addDoubleCharge("P", 0, "O", 2);
-			// H2PO3
-		} else if (formulaS.equals("H 2 O 3 P 1")) {
-			addDoubleCharge("P", 0, "O", 1);
-			// H3PO3
-		} else if (formulaS.equals("H 3 O 3 P 1")) {
-			addDoubleCharge("P", 0, "O", 0);
-			// ClO3, ClO4
-		} else if (formulaS.equals("Cl 1 O 3") || formulaS.equals("Cl 1 O 4")) {
-			addDoubleCharge("Cl", 0, "O", 1);
-			// HClO3, HClO4
-		} else if (formulaS.equals("H 1 Cl 1 O 3")
-				|| formulaS.equals("H 1 Cl 1 O 4")) {
-			addDoubleCharge("Cl", 0, "O", 0);
-			// BrO3, BrO4
-		} else if (formulaS.equals("Br 1 O 3") || formulaS.equals("O 4 Br 1")) {
-			addDoubleCharge("Br", 0, "O", 1);
-			// IO3, IO4
-		} else if (formulaS.equals("I 1 O 3") || formulaS.equals("I 1 O 4")) {
-			addDoubleCharge("I", 0, "O", 1);
-		} else if (formulaS.equals("Cl 1") || formulaS.equals("Br 1")
-				|| formulaS.equals("I 1")) {
-			molecule.getAtoms().get(0).setFormalCharge(-1);
-		} else {
-			marked = false;
-		}
-		return marked;
-	}
-
-	private void addCharge(String elementType, int charge) {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			if (atom.getElementType().equals(elementType)) {
-				atom.setFormalCharge(charge);
-			}
-		}
-	}
-
-	private void addDoubleCharge(String centralS, int centralCharge,
-			String ligandS, int nChargeLigand) {
-		CMLAtom centralA = getCentralAtom(centralS);
-		addDoubleCharge(centralA, centralCharge, ligandS, nChargeLigand);
-	}
-
-	private CMLAtom getCentralAtom(String centralS) {
-		CMLAtom centralA = null;
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			if (centralS.equals(atom.getElementType())) {
-				centralA = atom;
-				break;
-			}
-		}
-		return centralA;
-	}
-
-	private void addDoubleCharge(CMLAtom centralA, int centralCharge,
-			String ligandS, int nChargeLigand) {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		centralA.setFormalCharge(centralCharge);
-		int count = 0;
-		for (CMLAtom atom : atoms) {
-			if (ligandS.equals(atom.getElementType())) {
-				int bos = this.getBondOrderSum(atom);
-				if (bos == 1) {
-					if (count++ < nChargeLigand) {
-						atom.setFormalCharge(-1);
-					} else {
-						molecule.getBond(centralA, atom).setOrder(
-								CMLBond.DOUBLE);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * special routines. mark common groups with charges and 
-	 * bond orders
-	 * 
-	 */
-	public void markupSpecial() {
-		CMLFormula formula = new CMLFormula(molecule);
-		formula.normalize();
-		String formulaS = formula.getConcise();
-		formulaS = CMLFormula.removeChargeFromConcise(formulaS);
-
-		List<CMLAtom> atoms = molecule.getAtoms();
-		markCarboxyAnion(atoms);
-		markCS2(atoms);
-		markCOS(atoms);
-		markNitro(atoms);
-		markPAnion(atoms);
-		markSulfo(atoms);
-		markTerminalCarbyne(atoms);
-		mark_CSi_anion(atoms);
-		markQuaternaryBAlGaIn(atoms);
-		markQuaternaryNPAsSb(atoms);
-		markTerminalCN(atoms);
-		markOSQuatP(atoms);
-		markAzide(atoms);
-		markM_PN_C(atoms);
-		markMCN(atoms);
-		markMNN(atoms);
-		markPNP(atoms);
-		markMCC(atoms);
-		markSandwichLigands(atoms);
-		int count = atoms.size();
-		if (count == 2) {
-			markMetalCarbonylAndNitrile(atoms);
-		}
-		if (count == 3) {
-			markN3(atoms);
-			markThiocyanate(atoms);
-			markNCN(atoms);
-		}
-		if (formulaS.equals("C 2 N 3")) {
-			markNCNCN(atoms);
-		}
-	}
-	
-	private void markMCC(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (isBondedToMetal(atom) && "C".equals(atom.getElementType()) 
-					&& atom.getLigandAtoms().size() == 1) {
-				CMLAtom ligand = atom.getLigandAtoms().get(0);
-				if ("C".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-					atom.getLigandBonds().get(0).setOrder(CMLBond.DOUBLE);
-					atom.setFormalCharge(-2);
-				}
-			}
-		}
-	}
-	
-	private void markMNN(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (isBondedToMetal(atom) && "N".equals(atom.getElementType()) 
-					&& atom.getLigandAtoms().size() == 1) {
-				CMLAtom ligand = atom.getLigandAtoms().get(0);
-				if ("N".equals(ligand.getElementType())){
-					if (ligand.getLigandAtoms().size() == 3) {
-						atom.getLigandBonds().get(0).setOrder(CMLBond.DOUBLE);
-						atom.setFormalCharge(-1);
-						ligand.setFormalCharge(1);
-					}
-					if (ligand.getLigandAtoms().size() == 2) {
-						atom.setFormalCharge(-2);
-					}
-				}
-			}
-		}
-	}
-	
-	private void markPNP(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
-				int pCount = 0;
-				for (CMLAtom at : atom.getLigandAtoms()) {
-					if ("P".equals(at.getElementType())) {
-						pCount++;
-					}
-				}
-				if (pCount == 2) {
-					atom.setFormalCharge(-1);
-				}
-			}
-		}
-	}
-	
-	private void markMCN(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (isBondedToMetal(atom) && "C".equals(atom.getElementType()) 
-					&& atom.getLigandAtoms().size() == 1) {
-				CMLAtom ligand = atom.getLigandAtoms().get(0);
-				if ("N".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 2) {
-					atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
-					atom.setFormalCharge(-1);
-					ligand.setFormalCharge(1);
-				}
-			}
-		}
-	}
-	
-	private void markM_PN_C(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (isBondedToMetal(atom) && ("N".equals(atom.getElementType()) || "P".equals(atom.getElementType())) 
-					&& atom.getLigandAtoms().size() == 1) {
-				CMLAtom ligand = atom.getLigandAtoms().get(0);
-				if ("C".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-					atom.setFormalCharge(-2);
-				}
-			}
-		}
-	}
-	
-	private void markSandwichLigands(List<CMLAtom> atoms) {
-		CMLAtomSet atomSet = new CMLAtomSet(atoms);
-		CMLBondSet bondSet = this.getBondSet(atomSet);
-		CMLMolecule piSysMol = new CMLMolecule(atomSet, bondSet);
-		ConnectionTableTool ctool = new ConnectionTableTool(piSysMol);
-		List<CMLAtomSet> ringSetList = ctool.getRingNucleiAtomSets();
-		for (CMLAtomSet ringSet : ringSetList) {
-			int count = 0;
-			List<CMLAtom> atomList = ringSet.getAtoms();
-			List<CMLAtom> ringAtomList = new ArrayList<CMLAtom>();
-			// if there is a ring with an odd number of atoms that all
-			// have pi- electrons and are connected to a metal, then
-			// mark one of them as negatively charged.
-			for (CMLAtom atom : atomList) {
-				if (isBondedToMetal(atom)) {
-					count++;
-					ringAtomList.add(atom);
-				}
-			}
-			if (count > 1 && count % 2 == 1) {
-				molecule.getAtomById(ringAtomList.get(0).getId()).setFormalCharge(-1);
-			}
-		}
-	}
-
-	private void markAzide(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 1) {
-				CMLAtom lig = atom.getLigandAtoms().get(0);
-				List<CMLAtom> ligLigands = lig.getLigandAtoms();
-				if (ligLigands.size() == 2) {
-					for (CMLAtom at : ligLigands) {
-						if (at != atom) {
-							if (at.getLigandAtoms().size() == 2) {
-								atom.setFormalCharge(-1);
-								lig.setFormalCharge(1);
-								molecule.getBond(atom, lig).setOrder(CMLBond.DOUBLE);
-								molecule.getBond(lig, at).setOrder(CMLBond.DOUBLE);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void markQuaternaryNPAsSb(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (("N".equals(atom.getElementType()) ||
-					"P".equals(atom.getElementType()) ||
-					"As".equals(atom.getElementType()) ||
-					"Sb".equals(atom.getElementType())) && 
-					atom.getLigandAtoms().size() == 4) {
-				atom.setFormalCharge(1);
-			}
-		}
-	}
-
-	/*
-	 * mark O or S next to a quaternary P as negative
-	 */
-	private void markOSQuatP(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
-				if (atom.getLigandAtoms().size() == 1) {
-					CMLAtom ligand = atom.getLigandAtoms().get(0);
-					if ("P".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 4) {
-						atom.setFormalCharge(-1);
-					}
-				}
-			}
-		}
-	}
-
-	private void markTerminalCN(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 1) {
-				CMLAtom lig = atom.getLigandAtoms().get(0);
-				if ("C".equals(lig.getElementType()) && lig.getLigandAtoms().size() == 2) {
-					atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
-				}
-			}
-		}
-	}
-
-	private void markNCNCN(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType())) {
-				if (atom.getLigandAtoms().size() == 2) {
-					atom.setFormalCharge(-1);
-					for (CMLBond bond : atom.getLigandBonds()) {
-						bond.setOrder(CMLBond.SINGLE);
-					}
-				} else if (atom.getLigandAtoms().size() == 1) {
-					atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
-				}
-			}
-		}
-	}
-
-	private void markQuaternaryBAlGaIn(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (("B".equals(atom.getElementType()) ||
-					"Al".equals(atom.getElementType()) ||
-					"Ga".equals(atom.getElementType()) ||
-					"In".equals(atom.getElementType())) &&
-					atom.getLigandAtoms().size() == 4) {
-				atom.setFormalCharge(-1);
-			}
-		}
-	}
-
-	private void markNCN(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				List<CMLAtom> nList = new ArrayList<CMLAtom>(2);
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 2) {
-					for (CMLAtom ligand : ligands) {
-						if ("N".equals(ligand.getElementType())) {
-							nList.add(ligand);
-						}
-					}
-					if (nList.size() == 2) {
-						CMLAtom negative = nList.get(0);
-						negative.setFormalCharge(-1);
-						molecule.getBond(atom, negative).setOrder(CMLBond.DOUBLE);
-						molecule.getBond(atom, nList.get(1)).setOrder(CMLBond.DOUBLE);
-					}
-				}
-			}
-		}
-	}
-
-	private void markN3(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType())) {
-				List<CMLAtom> nList = new ArrayList<CMLAtom>(2);
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 2) {
-					for (CMLAtom ligand : ligands) {
-						if ("N".equals(ligand.getElementType())) {
-							nList.add(ligand);
-						}
-					}
-					if (nList.size() == 2) {
-						CMLAtom negative = nList.get(0);
-						negative.setFormalCharge(-1);
-						molecule.getBond(atom, negative).setOrder(CMLBond.DOUBLE);
-						molecule.getBond(atom, nList.get(1)).setOrder(CMLBond.DOUBLE);
-						atom.setFormalCharge(+1);
-					}
-				}		
-			}
-		}
-	}
-
-
-	/**
-	 * mark O=C-O(-)
-	 */
-	private void markCarboxyAnion(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
-				for (CMLAtom ligand : ligands) {
-					if ("O".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						oxyList.add(ligand);
-					}
-				}
-				marker:
-				if (oxyList.size() == 2) {
-					for (CMLAtom oAtom : oxyList) {
-						if (isBondedToMetal(oAtom)) {
-							oAtom.setFormalCharge(-1);
-							for (CMLAtom oAt : oxyList) {
-								if (oAt != oAtom) {
-									molecule.getBond(atom, oAt).setOrder(
-											CMLBond.DOUBLE);
-									break marker;
-								}
-							}
-						}
-					}
-					oxyList.get(0).setFormalCharge(-1);
-					molecule.getBond(atom, oxyList.get(1)).setOrder(
-							CMLBond.DOUBLE);
-				}
-			}
-		}
-	}
-
-	/**
-	 * mark -C-(triple bond)-O and -C-(triple bond)-N
-	 */
-	private void markMetalCarbonylAndNitrile(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 1) {
-					if ("O".equals(ligands.get(0).getElementType())) {
-						CMLBond bond = atom.getLigandBonds().get(0);
-						bond.setOrder(CMLBond.TRIPLE);
-						atom.setFormalCharge(-1);
-						ligands.get(0).setFormalCharge(1);
-					} else if ("N".equals(ligands.get(0).getElementType())) {
-						CMLBond bond = atom.getLigandBonds().get(0);
-						bond.setOrder(CMLBond.TRIPLE);
-						atom.setFormalCharge(-1);
-					}
-				}
-			}
-		}
-	}
-
-	private void markTerminalCarbyne(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				if (isBondedToMetal(atom)) {
-					List<CMLAtom> ligands = atom.getLigandAtoms();
-					if (ligands.size() == 1) {
-						CMLAtom lig = ligands.get(0);
-						if ("C".equals(lig.getElementType()) && lig.getLigandBonds().size() < 3) {
-							atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
-							atom.setFormalCharge(-1);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private boolean isBondedToMetal(CMLAtom atom) {
-		Nodes nodes = atom.query(".//cml:scalar[@dictRef='"+metalLigandDictRef+"']", X_CML);
-		if (nodes.size() > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private void markCarbanion(List<CMLAtom> atoms) {
-		// doesn't take into account the possibility of the structure
-		// being c=c=c
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 3 && isBondedToMetal(atom)) {
-					boolean set = true;
-					for (CMLAtom ligand : ligands) {
-						if (isBondedToMetal(ligand)) {
-							set = false;
-						}
-					}
-					if (set) {
-						atom.setFormalCharge(-1);
-					}
-				}
-				// if carbon has only two ligands then check to see if it
-				// can be marked as a carbanion.
-				if (ligands.size() == 2  && isBondedToMetal(atom)) {
-					boolean set = true;
-					for (CMLAtom ligand : ligands) {
-						if ("C".equals(ligand.getElementType())) {
-							List<CMLAtom> ats = ligand.getLigandAtoms();
-							if (ats.size() == 2) {
-								// if one of the two ligands also only
-								// has two ligands then stop as this is
-								// most probably a carbyne.
-								for (CMLAtom at : ats) {
-									if (at.equals(atom)) {
-										continue;
-									}
-									if (!"N".equals(at.getElementType())) {
-										set = false;
-									}
-								}
-							}
-							if (ats.size() < 2) {
-								set = false;
-							}
-						} else {
-							set = false;
-							break;
-						}
-					} if (set) {
-						atom.setFormalCharge(-1);
-					}
-				}
-			}
-		}
-	}
-
-	private void mark_CSi_anion(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType()) || "Si".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 3 && isBondedToMetal(atom)) {
-					boolean set = true;
-					for (CMLAtom ligand : ligands) {
-						if (isBondedToMetal(ligand)) {
-							set = false;
-						}
-					}
-					if (set) {
-						atom.setFormalCharge(-1);
-					}
-				}
-				// if carbon has only two ligands then check to see if it
-				// can be marked as a carbanion.
-				if (ligands.size() == 2  && isBondedToMetal(atom)) {
-					boolean set = true;
-					for (CMLAtom ligand : ligands) {
-						if ("C".equals(ligand.getElementType())) {
-							List<CMLAtom> ats = ligand.getLigandAtoms();
-							if (ats.size() == 2) {
-								// if one of the two ligands also only
-								// has two ligands then stop as this is
-								// most probably a carbyne.
-								for (CMLAtom at : ats) {
-									if (at.equals(atom)) {
-										System.out.println(at.getId());
-										continue;
-									}
-									if (!"N".equals(at.getElementType())) {
-										set = false;
-									}
-								}
-							}
-							if (ats.size() < 2) {
-								set = false;
-							}
-						} else {
-							set = false;
-							break;
-						}
-					} if (set) {
-						atom.setFormalCharge(-1);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * mark N-O compounds. X-NO2, X3N(+)-(O-) where X is not O
-	 */
-	private void markNitro(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("N".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
-				for (CMLAtom ligand : ligands) {
-					if ("O".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						oxyList.add(ligand);
-					}
-				}
-				if (oxyList.size() > 0) {
-					// think setting as +1 does more harm than good
-					//atom.setFormalCharge(1);
-					oxyList.get(0).setFormalCharge(-1);
-				}
-				if (oxyList.size() == 2) {
-					molecule.getBond(atom, oxyList.get(1)).setOrder(
-							CMLBond.DOUBLE);
-				}
-			}
-		}
-	}
-
-	private void markPAnion(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("P".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 2) {
-					atom.setFormalCharge(-1);
-				}
-			}
-		}
-	}
-
-	/**
-	 * mark S-O compounds. X-SO-Y and X-S)2-Y where X, Y are not O
-	 */
-	private void markSulfo(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("S".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
-				for (CMLAtom ligand : ligands) {
-					if ("O".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						oxyList.add(ligand);
-					}
-				}
-				if (oxyList.size() > 0) {
-					molecule.getBond(atom, oxyList.get(0)).setOrder(
-							CMLBond.DOUBLE);
-				}
-				if (oxyList.size() > 1) {
-					molecule.getBond(atom, oxyList.get(1)).setOrder(
-							CMLBond.DOUBLE);
-				}
-				if (oxyList.size() == 3) {
-					oxyList.get(2).setFormalCharge(-1);
-				}
-			}
-		}
-	}
-
-	/**
-	 * mark S=C-S(-)
-	 */
-	private void markCS2(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				List<CMLAtom> sulfoList = new ArrayList<CMLAtom>();
-				for (CMLAtom ligand : ligands) {
-					if ("S".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						sulfoList.add(ligand);
-					}
-				}
-				if (sulfoList.size() == 2) {
-					sulfoList.get(0).setFormalCharge(-1);
-					molecule.getBond(atom, sulfoList.get(1)).setOrder(
-							CMLBond.DOUBLE);
-				}
-			}
-		}
-	}
-
-	private void markCOS(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				CMLAtom o = null;
-				CMLAtom s = null;
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				for (CMLAtom ligand : ligands) {
-					if ("S".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						s = ligand;
-					}
-					if ("O".equals(ligand.getElementType())
-							&& this.getBondOrderSum(ligand) == 1) {
-						o = ligand;
-					}
-				}
-				if (s != null && o != null) {
-					s.setFormalCharge(-1);
-					molecule.getBond(atom, o).setOrder(
-							CMLBond.DOUBLE);
-				}
-			}
-		}
-	}
-
-
-	private void markThiocyanate(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType())) {
-				CMLAtom c = null;
-				CMLAtom s = null;
-				CMLAtom n = null;
-				c = atom;
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				if (ligands.size() == 2) {
-					for (CMLAtom ligand : ligands) {
-						if ("S".equals(ligand.getElementType())) {
-							s = ligand;
-						}
-						if ("N".equals(ligand.getElementType())) {
-							n = ligand;
-						}
-					}
-				}
-				if (s != null && n != null) {
-					s.setFormalCharge(-1);
-					molecule.getBond(c, s).setOrder(CMLBond.DOUBLE);
-					molecule.getBond(c, n).setOrder(CMLBond.DOUBLE);
-				}
-			}
-		}
-	}
-
-	/**
-	 * mark benzene (later pyridine, etc.) BUGGY!
-	 *
-	 */
-	// FIXME
-	@SuppressWarnings("unused")
-	private void markMonocyclicBenzene() {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		Set<CMLAtom> usedAtoms = new HashSet<CMLAtom>();
-		for (CMLAtom atom : atoms) {
-			if (usedAtoms.contains(atom)) {
-				continue;
-			}
-			if ("C".equals(atom.getElementType())) {
-				if (atom.getLigandAtoms().size() == 3) {
-					Set<CMLAtom> ringSet = new HashSet<CMLAtom>();
-					while (true) {
-						if (!addNextAtom(atom, ringSet)) {
-							break;
-						}
-					}
-					if (ringSet.size() == 6) {
-						for (CMLAtom rAtom : ringSet) {
-							usedAtoms.add(rAtom);
-						}
-						addDoubleBonds(ringSet, atom);
-					}
-				}
-			}
-			usedAtoms.add(atom);
-		}
-	}
-
-	private void addDoubleBonds(Set<CMLAtom> ringSet, CMLAtom atom) {
-		boolean doubleB = true;
-		while (ringSet.size() > 1) {
-			List<CMLAtom> ligandList = atom.getLigandAtoms();
-			List<CMLBond> ligandBondList = atom.getLigandBonds();
-			ringSet.remove(atom);
-			int i = 0;
-			for (CMLAtom ligand : ligandList) {
-				if (ringSet.contains(ligand)) {
-					if (doubleB) {
-						CMLBond bond = ligandBondList.get(i);
-						bond.setOrder(CMLBond.DOUBLE);
-					}
-					doubleB = !doubleB;
-					atom = ligand;
-					break;
-				}
-				i++;
-			}
-		}
-	}
-
-	private boolean addNextAtom(CMLAtom atom, Set<CMLAtom> ringSet) {
-		if (atom == null) {
-			throw new CMLRuntimeException("Null atom");
-		}
-		boolean added = false;
-		if (!ringSet.contains(atom)) {
-			added = true;
-			ringSet.add(atom);
-			List<CMLAtom> ligands = atom.getLigandAtoms();
-			if ("C".equals(atom.getElementType()) && ligands.size() == 3) {
-				List<CMLBond> bonds = atom.getLigandBonds();
-				List<CMLAtom> cAtomList = new ArrayList<CMLAtom>();
-				for (int i = 0; i < bonds.size(); i++) {
-					CMLBond bond = bonds.get(i);
-					if (CMLBond.CYCLIC.equals(bond.getCyclic())) {
-						CMLAtom otherAtom = bond.getOtherAtom(atom);
-						if (otherAtom == null) {
-							throw new CMLRuntimeException("null atom in bond");
-						}
-						cAtomList.add(otherAtom);
-					}
-				}
-				if (cAtomList.size() == 2) {
-					for (CMLAtom cAtom : cAtomList) {
-						addNextAtom(cAtom, ringSet);
-					}
-				}
-			}
-		}
-		return added;
-	}
-
-	/**
-	 * is element of given type.
-	 *
-	 * @param chemicalElement
-	 * @param type
-	 *            TRANSITION METAL, LANTHANIDE, ACTINIDE, METAL,
-	 *            NON_METAL, PBLOCK, GROUP_A, GROUP_B
-	 * @return true if of type
-	 */
-	public static boolean isChemicalElementType(
-			ChemicalElement chemicalElement, Type type) {
-		int atNum = chemicalElement.getAtomicNumber();
-		// String symbol = chemicalElement.getSymbol();
-		boolean isType = false;
-		if (type.equals(Type.TRANSITION_METAL)) {
-			isType = (atNum > 20 && atNum <= 30) ||
-			(atNum > 38 && atNum <= 48) ||
-			(atNum > 56 && atNum <= 80);
-		} else if (type.equals(Type.LANTHANIDE)) {
-			isType = (atNum >= 58 && atNum <= 71);
-		} else if (type.equals(Type.ACTINIDE)) {
-			isType = atNum >= 90 && atNum <= 103;
-		} else if (type.equals(Type.METAL)) {
-			isType = isChemicalElementType(chemicalElement, Type.TRANSITION_METAL) ||
-			isChemicalElementType(chemicalElement, Type.LANTHANIDE) ||
-			isChemicalElementType(chemicalElement, Type.ACTINIDE) ||
-			isChemicalElementType(chemicalElement, Type.GROUP_A) ||
-			isChemicalElementType(chemicalElement, Type.GROUP_B) ||
-			// include metalloids on left of step
-			(atNum == 13) ||
-			(atNum >= 31 && atNum <= 32) ||
-			(atNum >= 49 && atNum <= 51) ||
-			(atNum >= 81 && atNum <=84);
-		} else if (type.equals(Type.METAL_NOT_SEMI_METAL)) {
-			isType = isChemicalElementType(chemicalElement, Type.TRANSITION_METAL) ||
-			isChemicalElementType(chemicalElement, Type.LANTHANIDE) ||
-			isChemicalElementType(chemicalElement, Type.ACTINIDE) ||
-			isChemicalElementType(chemicalElement, Type.GROUP_A) ||
-			isChemicalElementType(chemicalElement, Type.GROUP_B);
-		} else if (type.equals(Type.NON_METAL)) {
-			isType = atNum >=5 && atNum <= 10 ||
-			atNum >=14 && atNum <= 18 ||
-			atNum >=33 && atNum <= 36 ||
-			atNum >=52 && atNum <= 54 ||
-			atNum >=85 && atNum <= 86;
-		} else if (type.equals(Type.PBLOCK)) {
-			isType = atNum >= 5 && atNum <= 10 || // B, C, N, O, F,Ne
-			atNum >= 14 && atNum <= 18 || // Si, P, S,Cl,Ar
-			atNum >= 32 && atNum <= 36 || // Ge,As,Se,Br,Kr
-			atNum >= 53 && atNum <= 54 // I,Xe
-			;
-		} else if (type.equals(Type.GROUP_A)) {
-			isType = atNum == 3 || atNum == 11 || atNum == 19 ||
-			atNum == 37 || atNum == 55 || atNum ==87;
-		} else if (type.equals(Type.GROUP_B)) {
-			isType = atNum == 4 || atNum == 12 || atNum == 20 ||
-			atNum == 38 || atNum == 56 || atNum ==88;
-		}else {
-			throw new CMLRuntimeException("Bad type for " + type);
-		}
-		return isType;
-	}
-
-	/**
-	 * is element a transition metal. FIXME - I haven't checked values
-	 *
-	 * @param chemicalElement
-	 * @param type
-	 *            GROUP_A, GROUP_B or ROW
-	 * @param value
-	 *            or row or group
-	 * @return true if is TM
-	 */
-	public static boolean isChemicalElementType(
-			ChemicalElement chemicalElement, Type type, int value) {
-		int atNum = chemicalElement.getAtomicNumber();
-		// String symbol = chemicalElement.getSymbol();
-		boolean isType = false;
-		if (type.equals(Type.ROW)) {
-			isType = value == 1 && atNum >= 3 && atNum <= 10 || value == 2
-			&& atNum >= 11 && atNum <= 18 || value == 3 && atNum >= 19
-			&& atNum <= 36 || value == 4 && atNum >= 37 && atNum <= 54
-			|| value == 5 && atNum >= 55 && atNum <= 86 || value == 6
-			&& atNum >= 87;
-		} else if (type.equals(Type.GROUP_A)) {
-			if (value == 1 || value == 2) {
-				isType = atNum == 2 + value || atNum == 10 + value
-				|| atNum == 18 + value || atNum == 36 + value
-				|| atNum == 54 + value;
-			} else if (value >= 3 && value <= 8) {
-				isType = atNum == 2 + value || atNum == 10 + value
-				|| atNum == 28 + value || atNum == 46 + value
-				|| atNum == 78 + value;
-			}
-		} else if (type.equals(Type.GROUP_B)) {
-			if (value >= 1 || value <= 10) {
-				isType = atNum == 18 + value || atNum == 36 + value
-				|| atNum == 56 + value;
-			}
-		} else {
-			throw new CMLRuntimeException("Bad type for " + type + ": " + value);
-		}
-		return isType;
-	}
-
-	/**
+/**
 	 * Traverses all non-H atoms and contracts the hydrogens on each.
 	 *
 	 * @param control
@@ -3181,179 +1888,58 @@ public class MoleculeTool extends AbstractTool {
 
 	// atom
 
-	/**
-	 * gets list of ligands in 2D diagram in clockwise order.
-	 *
-	 * starting atom is arbitrary (makes smallest clockwise angle with xAxis).
-	 * The 4 atoms can be compared to atomRefs4 given by author or other methods
-	 * to see if they are of the same or alternative parity.
-	 *
-	 * use compareAtomRefs4(CMLAtom[] a, CMLAtom[] b) for comparison
-	 *
-	 * @param atom
-	 * @param atom4
-	 *            the original list of 4 atoms
-	 * @return ligands sorted into clockwise order
-	 * @throws CMLRuntimeException
-	 */
-	CMLAtom[] getClockwiseLigands(CMLAtom atom, CMLAtom[] atom4)
-	throws CMLRuntimeException {
-		Vector2 vx = new Vector2(1.0, 0.0);
-		Real2 thisxy = atom.getXY2();
-		double[] angle = new double[4];
-		Vector2 v = null;
-		for (int i = 0; i < 4; i++) {
-			try {
-				v = new Vector2(atom4[i].getXY2().subtract(thisxy));
-				// Angle class appears to be broken, hence the degrees
-				angle[i] = vx.getAngleMadeWith(v).getDegrees();
-			} catch (NullPointerException npe) {
-				throw new CMLRuntimeException(
-						"Cannot compute clockwise ligands");
-			}
-			if (angle[i] < 0) {
-				angle[i] += 360.;
-			}
-			if (angle[i] > 360.) {
-				angle[i] -= 360.;
-			}
-		}
-		// get atom4Refs sorted in cyclic order
-		CMLAtom[] cyclicAtom4 = new CMLAtom[4];
-		for (int i = 0; i < 4; i++) {
-			double minAngle = 99999.;
-			int low = -1;
-			for (int j = 0; j < 4; j++) {
-				if (angle[j] >= 0 && angle[j] < minAngle) {
-					low = j;
-					minAngle = angle[j];
-				}
-			}
-
-			if (low != -1) {
-				cyclicAtom4[i] = atom4[low];
-				angle[low] = -100.;
-			} else {
-				throw new CMLRuntimeException(
-						"Couldn't get AtomRefs4 sorted in cyclic order");
-			}
-		}
-		// all 4 angles must be less than PI
-		// the ligands in clockwise order
-		for (int i = 0; i < 4; i++) {
-			CMLAtom cyclicAtomNext = cyclicAtom4[(i < 3) ? i + 1 : 0];
-			Real2 cyclicXy = cyclicAtom4[i].getXY2();
-			Real2 cyclicXyNext = cyclicAtomNext.getXY2();
-			v = new Vector2(cyclicXy.subtract(thisxy));
-			Vector2 vNext = new Vector2(cyclicXyNext.subtract(thisxy));
-			double ang = v.getAngleMadeWith(vNext).getDegrees();
-			if (ang < 0) {
-				ang += 360.;
-			}
-			if (ang > 360.) {
-				ang -= 360.;
-			}
-			if (ang > 180.) {
-				throw new CMLRuntimeException("All 4 ligands on same side "
-						+ molecule.getId());
-			}
-		}
-		return cyclicAtom4;
-	}
-
-	/**
-	 * get bond length.
-	 *
-	 * uses 3D atom coordinates, else 2D atom coordinates, to generate length
-	 *
-	 * @param bond
-	 * @param type
-	 * @return the length
-	 * @throws CMLException
-	 *             if not computable (no coord, missing atoms...)
-	 */
-	public double calculateBondLength(CMLBond bond, CoordinateType type) {
-		CMLAtom atom0 = null;
-		CMLAtom atom1 = null;
-		List<CMLAtom> atomList = bond.getAtoms();
-		atom0 = atomList.get(0);
-		atom1 = atomList.get(1);
-		if (atom0 == null || atom1 == null) {
-			throw new CMLRuntimeException("missing atoms");
-		}
-		double length = -1.0;
-		if (type.equals(CoordinateType.CARTESIAN)) {
-			Point3 p0 = atom0.getXYZ3();
-			Point3 p1 = atom1.getXYZ3();
-			if (p0 == null || p1 == null) {
-				throw new CMLRuntimeException(
-						"atoms do not have 3D coordinates");
-			}
-			length = p0.getDistanceFromPoint(p1);
-		} else if (type.equals(CoordinateType.TWOD)) {
-			Real2 p0 = atom0.getXY2();
-			Real2 p1 = atom1.getXY2();
-			if (p0 == null || p1 == null) {
-				throw new CMLRuntimeException(
-						"atoms do not have 2D coordinates");
-			}
-			length = p0.getDistance(p1);
-		}
-		return length;
-	}
-
-	/**
-	 * get new (cloned) molecule from atomset and bondset.
-	 *
-	 * the bonds must be between the atoms, but not all such bonds need to be in
-	 * the bondSet (e.g. to create a spanning tree)
-	 *
-	 * @param atomSet
-	 * @param bondSet
-	 *            the bonds in the new molecule
-	 * @exception CMLRuntimeException
-	 *                bond not between atomset members
-	 * @return cloned molecule
-	 */
-	public CMLMolecule getClonedMolecule(CMLAtomSet atomSet, CMLBondSet bondSet)
-	throws CMLRuntimeException {
-		if (bondSet == null) {
-			bondSet = new CMLBondSet();
-		}
-
-		CMLMolecule newMol = new CMLMolecule();
-		CMLAtomArray newAtomArray = new CMLAtomArray();
-		newMol.addAtomArray(newAtomArray);
-		CMLBondArray newBondArray = new CMLBondArray();
-		newMol.addBondArray(newBondArray);
-
-		// add clones of old atoms
-		List<CMLAtom> atoms = atomSet.getAtoms();
-		for (CMLAtom atom : atoms) {
-			// AtomTool atomTool = AtomToolImpl.getTool((CMLAtom)atoms.get(i));
-			// atomTool.setAtom(atoms[i]);
-			// newAtomArray.appendAtom (atomTool.cloneAtom (ownerDoc));
-			newAtomArray.appendChild(new CMLAtom(atom));
-		}
-
-		List<CMLBond> bonds = bondSet.getBonds();
-		// add clones of old bonds
-		for (CMLBond bond : bonds) {
-			String atId0 = bond.getAtomId(0);
-			if (molecule.getAtomById(atId0) == null) {
-				throw new CMLRuntimeException("Atom in bond not in atomset: "
-						+ atId0);
-			}
-			String atId1 = bond.getAtomId(1);
-			if (molecule.getAtomById(atId1) == null) {
-				throw new CMLRuntimeException("Atom in bond not in atomset: "
-						+ atId1);
-			}
-			newBondArray.appendChild(new CMLBond(bond));
-		}
-
-		return newMol;
-	}
+//	/**
+//	 * get new (cloned) molecule from atomset and bondset.
+//	 *
+//	 * the bonds must be between the atoms, but not all such bonds need to be in
+//	 * the bondSet (e.g. to create a spanning tree)
+//	 *
+//	 * @param atomSet
+//	 * @param bondSet
+//	 *            the bonds in the new molecule
+//	 * @exception CMLRuntimeException
+//	 *                bond not between atomset members
+//	 * @return cloned molecule
+//	 */
+//	private CMLMolecule getClonedMolecule(CMLAtomSet atomSet, CMLBondSet bondSet)
+//	throws CMLRuntimeException {
+//		if (bondSet == null) {
+//			bondSet = new CMLBondSet();
+//		}
+//
+//		CMLMolecule newMol = new CMLMolecule();
+//		CMLAtomArray newAtomArray = new CMLAtomArray();
+//		newMol.addAtomArray(newAtomArray);
+//		CMLBondArray newBondArray = new CMLBondArray();
+//		newMol.addBondArray(newBondArray);
+//
+//		// add clones of old atoms
+//		List<CMLAtom> atoms = atomSet.getAtoms();
+//		for (CMLAtom atom : atoms) {
+//			// AtomTool atomTool = AtomToolImpl.getTool((CMLAtom)atoms.get(i));
+//			// atomTool.setAtom(atoms[i]);
+//			// newAtomArray.appendAtom (atomTool.cloneAtom (ownerDoc));
+//			newAtomArray.appendChild(new CMLAtom(atom));
+//		}
+//
+//		List<CMLBond> bonds = bondSet.getBonds();
+//		// add clones of old bonds
+//		for (CMLBond bond : bonds) {
+//			String atId0 = bond.getAtomId(0);
+//			if (molecule.getAtomById(atId0) == null) {
+//				throw new CMLRuntimeException("Atom in bond not in atomset: "
+//						+ atId0);
+//			}
+//			String atId1 = bond.getAtomId(1);
+//			if (molecule.getAtomById(atId1) == null) {
+//				throw new CMLRuntimeException("Atom in bond not in atomset: "
+//						+ atId1);
+//			}
+//			newBondArray.appendChild(new CMLBond(bond));
+//		}
+//
+//		return newMol;
+//	}
 
 	/**
 	 * gets atomset corresponding to bondset.
@@ -3373,47 +1959,6 @@ public class MoleculeTool extends AbstractTool {
 		}
 
 		return atomSet;
-	}
-
-	/**
-	 * gets average 2D bond length.
-	 *
-	 * if excludeElements is not null, exclude any bonds including those
-	 * excludeElementTypes ELSE if includeElements is not null, include any
-	 * bonds including only those excludeElementTypes ELSE use all bonds
-	 *
-	 * @param bondSet
-	 * @param excludeElements
-	 *            list of element symbols to exclude
-	 * @param includeElements
-	 *            list of element symbols to include
-	 * @return average bond length (NaN if no bonds selected)
-	 */
-	@SuppressWarnings("unused")
-	private double getAverage2DBondLength(CMLBondSet bondSet,
-			String[] excludeElements, String[] includeElements) {
-		double sum = 0.0;
-		int count = 0;
-		List<CMLBond> bonds = bondSet.getBonds();
-		for (CMLBond bond : bonds) {
-			String elem0 = bond.getAtom(0).getElementType();
-			String elem1 = bond.getAtom(1).getElementType();
-			boolean skip = false;
-			if (excludeElements != null) {
-				skip = Util.containsString(excludeElements, elem0)
-				|| Util.containsString(excludeElements, elem1);
-			} else if (includeElements != null) {
-				skip = !Util.containsString(includeElements, elem0)
-				|| !Util.containsString(excludeElements, elem1);
-			}
-			if (!skip) {
-				double length = this.calculateBondLength(bond,
-						CoordinateType.TWOD);
-				sum += length;
-				count++;
-			}
-		}
-		return (count == 0) ? Double.NaN : sum / (double) count;
 	}
 
 	/**
@@ -3494,7 +2039,7 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	void calculateBondedAtoms(List<CMLAtom> atoms) {
+	private void calculateBondedAtoms(List<CMLAtom> atoms) {
 		double[] radii = new double[atoms.size()];
 		for (int i = 0; i < atoms.size(); i++) {
 			String sym = ((CMLAtom) atoms.get(i)).getElementType();
@@ -3513,7 +2058,7 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	double getCovalentRadius(String sym) {
+	private double getCovalentRadius(String sym) {
 		double radius = getCustomCovalentRadius(sym);
 		if (radius <= 0.0) {
 			ChemicalElement element = ChemicalElement.getChemicalElement(sym);
@@ -3526,7 +2071,7 @@ public class MoleculeTool extends AbstractTool {
 		return radius;
 	}
 
-	double getCustomCovalentRadius(String sym) {
+	private double getCustomCovalentRadius(String sym) {
 		double radius = 0.0;
 		if (sym.equals("Li") || sym.equals("Na") || sym.equals("K")
 				|| sym.equals("Rb") || sym.equals("Cs") ||
@@ -3654,7 +2199,7 @@ public class MoleculeTool extends AbstractTool {
 		double bondSum = 0.0;
 		int nBonds = 0;
 		for (CMLBond bond : molecule.getBonds()) {
-			double length = this.calculateBondLength(bond, type);
+			double length = bond.calculateBondLength(type);
 			bondSum += length;
 			nBonds++;
 		}
@@ -3709,7 +2254,6 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 */
 	// FIXME
-	@SuppressWarnings("unused")
 	private AtomPair getAtomsWithSameMappedNeighbours00(
 			AtomMatcher atomMatcher, CMLAtomSet atomSet1, CMLAtomSet atomSet2,
 			CMLMap from1to2map) {
@@ -3809,171 +2353,8 @@ public class MoleculeTool extends AbstractTool {
 		return newMolecule;
 	}
 
-	/**
-	 * gets mapping of namespaces onto molecule files.
-	 *
-	 * @return map of namespace->file
-	 */
-	/*--
-	     public static CMLMap getMoleculeCatalog(CMLInputStreamContainer catalogISC) {
-	     if (catalogISC == null) {
-	     throw new CMLRuntime("NULL catalogISC");
-	     }
-	     CMLMap map = null;
-	     try {
-	     CMLCml cml = (CMLCml) new CMLBuilder().build(catalogISC.getInputStream()).getRootElement();
-	     map = (CMLMap) cml.getFirstCMLChild(CMLMap.TAG);
-	     } catch (Exception e) {
-	     throw new CMLRuntime("BUG: maybe bad catalog: "+e+": "+catalogISC.getName());
-	     }
-	     return map;
-	     }
-	     --*/
 
-	/**
-	 * get map of molecules under namespace.
-	 *
-	 * @param namespace
-	 * @param catalogTool
-	 * @return map indexed by id
-	 */
-	public static Map<String, CMLMolecule> getMolecules(String namespace,
-			CatalogTool catalogTool) {
-		if (catalogTool == null) {
-			throw new CMLRuntimeException("Null catalogTool");
-		}
-		CMLMap catalogMap = catalogTool.getCatalogMap();
-		if (catalogMap == null) {
-			throw new CMLRuntimeException("cannot get catalogMap");
-		}
-		String to = catalogMap.getToRef(namespace);
-		if (to == null) {
-			throw new CMLRuntimeException("Cannot find catalog entry for: "
-					+ namespace);
-		}
-
-		URL toUrl = null;
-		try {
-			toUrl = new URL(catalogTool.getCatalogUrl(), to);
-		} catch (MalformedURLException e1) {
-			throw new CMLRuntimeException("Bad catalogue reference: " + to, e1);
-		}
-
-		Map<String, CMLMolecule> moleculeMap = null;
-		File file = new File(toUrl.getFile());
-		if (file.isDirectory()) {
-			moleculeMap = getMoleculeMapFromDirectory(file);
-		} else {
-			moleculeMap = getMoleculeMapFromFile(toUrl);
-		}
-		return moleculeMap;
-	}
-
-	private static Map<String, CMLMolecule> getMoleculeMapFromDirectory(File dir) {
-		File[] files = dir.listFiles();
-		Map<String, CMLMolecule> moleculeMap = new HashMap<String, CMLMolecule>();
-		for (File file : files) {
-			if (!file.toString().endsWith(".xml")) {
-				continue;
-			}
-			// File file1 = new File(dir, file.toString());
-			CMLMolecule molecule = null;
-			try {
-				Document doc = new CMLBuilder().build(file);
-				molecule = (CMLMolecule) doc.getRootElement();
-			} catch (Exception e) {
-				System.err.println("File: " + file);
-				throw new CMLRuntimeException(e);
-			}
-			moleculeMap.put(molecule.getId(), molecule);
-		}
-		return moleculeMap;
-	}
-
-	private static Map<String, CMLMolecule> getMoleculeMapFromFile(URL toUrl) {
-		CMLCml cml = null;
-		InputStream cmlIn = null;
-		try {
-			cmlIn = toUrl.openStream();
-			cml = (CMLCml) new CMLBuilder().build(cmlIn).getRootElement();
-		} catch (Exception e) {
-			throw new CMLRuntimeException("Cannot read molecule file: " + toUrl
-					+ " (" + e + ")");
-		} finally {
-			if (cmlIn != null) {
-				try {
-					cmlIn.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		Map<String, CMLMolecule> moleculeMap = new HashMap<String, CMLMolecule>();
-		Elements elements = cml.getChildCMLElements(CMLMolecule.TAG);
-		for (int i = 0; i < elements.size(); i++) {
-			CMLMolecule molecule = (CMLMolecule) elements.get(i);
-			moleculeMap.put(molecule.getId(), molecule);
-		}
-		return moleculeMap;
-	}
-
-	/**
-	 * get referenced molecule. uses ref attribute on molecule
-	 *
-	 * @param moleculeCatalog
-	 * @return the molecule or null
-	 */
-	public CMLMolecule getReferencedMolecule(CatalogTool moleculeCatalog) {
-		return this.getReferencedMolecule(molecule.getRef(), moleculeCatalog);
-	}
-
-	/**
-	 * ger referenced molecule.
-	 *
-	 * @param ref
-	 *            (local "foo", or namespaced ("f:bar"))
-	 * @param catalog
-	 * @return the molecule or null
-	 */
-	public CMLMolecule getReferencedMolecule(String ref, CatalogTool catalog) {
-		if (catalog == null) {
-			new Exception().printStackTrace();
-			throw new CMLRuntimeException("Null catalog tool");
-		}
-		CMLMolecule refMol = null;
-		if (ref == null) {
-			throw new CMLRuntimeException("ref must not be null");
-		}
-		int idx = ref.indexOf(S_COLON);
-		if (idx == -1) {
-			throw new CMLRuntimeException(
-					"unprefixed reference for molecule NYI");
-		}
-		String prefix = ref.substring(0, idx);
-		if (prefix.length() == 0) {
-			throw new CMLRuntimeException(
-					"Cannot have empty prefix for mol ref");
-		}
-		String namespace = molecule.getNamespaceForPrefix(prefix);
-		if (namespace == null) {
-			throw new CMLRuntimeException("Cannot find namespace for: " + ref);
-		}
-		Map<String, CMLMolecule> moleculeMap = MoleculeTool.getMolecules(
-				namespace, catalog);
-		if (moleculeMap == null) {
-			throw new CMLRuntimeException("Cannot find molecule map for: "
-					+ namespace);
-		}
-		String localRef = ref.substring(idx + 1);
-		if (localRef.length() == 0) {
-			throw new CMLRuntimeException(
-					"Cannot have empty prefix for mol ref");
-		}
-		refMol = moleculeMap.get(localRef);
-		return refMol;
-	}
-
-	/**
+/**
 	 * creates bonds and partitions molecules and returns contacts. currently
 	 * looks only for homo-molecule contacts.
 	 *

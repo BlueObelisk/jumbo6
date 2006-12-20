@@ -190,8 +190,7 @@ public class CrystalTool extends AbstractTool {
     
     public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
     	return calculateCrystallochemicalUnit(dist2Range, null);
-    }
-    
+    }    
     
     /**
      * calculate cartesians and bonds.
