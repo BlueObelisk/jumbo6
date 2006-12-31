@@ -14,6 +14,7 @@ import org.xmlcml.cml.tools.FragmentTool;
 import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
 /** .
@@ -28,6 +29,9 @@ import org.xmlcml.euclid.Vector3;
 */
 public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** relationship of molecule in moleculeRefs2.
      * 
      */
@@ -57,11 +61,11 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     
     /** label to define torsion.
      */
-    public final static String TORSION_END = "cml:torsionEnd";
+    public final static String TORSION_END = C_A+"torsionEnd";
     /** find labels with torsions.
      */
     public final String TORSION_END_QUERY = 
-        "./cml:"+CMLLabel.TAG+"[@dictRef='"+TORSION_END+"']";
+        CMLLabel.NS+"[@dictRef='"+TORSION_END+"']";
     
     /** convention attribute indicating that join contains fragments.
      */
@@ -129,26 +133,24 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
      * @throws CMLRuntimeException if groups are not R or other problems
      */
     private void joinByAtomRefs2AndAdjustGeometry(
+    		CMLMolecule staticMolecule, CMLAtomSet movableAtomSet,
             boolean takeLigandWithLowestId) throws CMLRuntimeException {
         String[] atomRefs2 = this.getAtomRefs2();
         if (atomRefs2 == null) {
             throw new CMLRuntimeException("missing atomRefs2 attribute");
         }
-        CMLElement oldestAncestor = this.getOldestCMLAncestor();
-        if (oldestAncestor == null) {
-            throw new CMLRuntimeException("no ancestor for context");
+        String staticAtomId = CMLUtil.getLocalName(atomRefs2[0]);
+        CMLAtom staticAtom =  staticMolecule.getAtomArray().getAtomById(staticAtomId);
+        if (staticAtom == null) {
+            throw new CMLRuntimeException("Cannot find existing atom: "+staticAtomId);
         }
-        
-        // FIXME we shall have to deal with this elsewhere
-        CMLMolecule parent = this.getParentMolecule();
-        if (parent.getMoleculeCount() > 0) {
-//            System.out.println("FLATTEN");
+        String movableAtomId = CMLUtil.getLocalName(atomRefs2[1]);
+        CMLAtom movableAtom = movableAtomSet.getAtomById(movableAtomId);
+        if (movableAtom == null) {
+            throw new CMLRuntimeException("Cannot find movable atom: "+movableAtomId);
         }
-        
-        CMLAtom rGroup0 = getRGroup(oldestAncestor, atomRefs2[0]);
-        CMLAtom atom0 = new AtomTool(rGroup0).getSingleLigand();
-        CMLAtom rGroup1 = getRGroup(oldestAncestor, atomRefs2[1]);
-        CMLAtom atom1 = new AtomTool(rGroup1).getSingleLigand();
+        CMLAtom atom0 = new AtomTool(staticAtom).getSingleLigand();
+        CMLAtom atom1 = new AtomTool(movableAtom).getSingleLigand();
         
         CMLMolecule molecule = atom0.getMolecule();
         if (molecule == null) {
@@ -163,20 +165,20 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         }
 
         // create bond
-        createAndAddBond(parent, atom0, atom1);
+        createAndAddBond(staticMolecule, atom0, atom1);
         
-        removeOldElements(parent, rGroup0, rGroup1, atom0, atom1);
+        removeOldElements(staticMolecule, staticAtom, movableAtom, atom0, atom1);
         
         CMLAtomSet moleculeAtomSet = molecule.getAtomSet();
         CMLAtomSet moveableAtomSet = new MoleculeTool(molecule).getDownstreamAtoms(atom1, atom0);
         
-        adjustTorsion(rGroup0, atom0, atom1, rGroup1, moleculeAtomSet, moveableAtomSet);
+        adjustTorsion(staticAtom, atom0, atom1, movableAtom, moleculeAtomSet, moveableAtomSet);
         adjustLength(atom0, atom1, moveableAtomSet);
         
     }
     
     private void adjustLength(CMLAtom atom0, CMLAtom atom1, CMLAtomSet moveableAtomSet) {
-        List<Node> lengths = CMLUtil.getQueryNodes(this, "./cml:length", X_CML);
+        List<Node> lengths = CMLUtil.getQueryNodes(this, CMLLength.NS, X_CML);
         if (lengths.size() == 1) {
             CMLLength length = (CMLLength) lengths.get(0);
             length.setAtomRefs2(atom0, atom1);
@@ -187,7 +189,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     private void adjustTorsion(
             CMLAtom rGroup0, CMLAtom atom0, CMLAtom atom1, CMLAtom rGroup1,
             CMLAtomSet moleculeAtomSet, CMLAtomSet moveableAtomSet) {
-        List<Node> torsions = CMLUtil.getQueryNodes(this, "./cml:"+CMLTorsion.TAG, X_CML);
+        List<Node> torsions = CMLUtil.getQueryNodes(this, CMLTorsion.NS, X_CML);
         if (torsions.size() == 1) {
             CMLTorsion torsion = (CMLTorsion) torsions.get(0);
             CMLAtom atom00 = this.getUniqueLigand(rGroup0, atom0, atom1);
@@ -239,7 +241,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         return id.substring(idx+1);
     }
     
-    private CMLBond createAndAddBond(CMLMolecule parent, CMLAtom atom0, CMLAtom atom1) {
+    private CMLBond createAndAddBond(CMLMolecule parentMolecule, CMLAtom atom0, CMLAtom atom1) {
         CMLBond bond = new CMLBond(atom0, atom1);
         if (this.getId() != null) {
             bond.setId(this.getId());
@@ -251,12 +253,12 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
             bond.setOrder(order);
         }
         // add bond to molecule
-        parent.addBond(bond);
+        parentMolecule.addBond(bond);
         return bond;
     }
     
     private void removeOldElements(
-            CMLMolecule parent,
+            CMLMolecule parentMolecule,
             CMLAtom rGroup0,
             CMLAtom rGroup1,
             CMLAtom atom0,
@@ -270,39 +272,18 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         CMLUtil.transferChildren(rGroup0, atom1);
         rGroup1.detach();
         CMLUtil.transferChildren(rGroup1, atom0);
-        CMLBond bond0 = parent.getBond(atom0, rGroup0);
+        CMLBond bond0 = parentMolecule.getBond(atom0, rGroup0);
         if (bond0 == null) {
         } else {
             bond0.detach();
         }
-        CMLBond bond1 = parent.getBond(atom1, rGroup1);
+        CMLBond bond1 = parentMolecule.getBond(atom1, rGroup1);
         if (bond1 == null) {
         } else {
             bond1.detach();
         }
     }
     
-    private static CMLAtom getRGroup(CMLElement oldestAncestor, String id) throws CMLRuntimeException {
-        id = NamespaceRefAttribute.getLocalName(id);
-        List<CMLElement> atomList = (List<CMLElement>) oldestAncestor.getElementsById(id, true);
-        if (atomList.size() == 0) {
-            throw new CMLRuntimeException("cannot find atom: "+id);
-        }
-        if (atomList.size() > 1) {
-            throw new CMLRuntimeException("too many atoms for: "+id);
-        }
-        CMLElement element = (CMLElement) atomList.get(0);
-        if (!(element instanceof CMLAtom)) {
-            throw new CMLRuntimeException(
-                "id ("+id+") does not poiint to atom: "+element.getClass());
-        }
-        CMLAtom atom = (CMLAtom) element;
-        String elemType = atom.getElementType();
-        if (!R_GROUP.equals(elemType)) {
-            throw new CMLRuntimeException("R group required on ("+atom.getId()+") found: "+elemType);
-        }
-        return atom;
-    }
     /** join one molecule to another.
      * manages the XML but not yet the geometry
      * @param existingMolecule
@@ -312,9 +293,14 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     public void addMoleculeTo(
             CMLMolecule existingMolecule, CMLAtomSet addedAtomSet,
             boolean takeAtomWithLowestId) {
-        
-        this.alignAndMoveBonds(existingMolecule, addedAtomSet);
-        this.joinByAtomRefs2AndAdjustGeometry(takeAtomWithLowestId);
+        try {
+	        this.alignAndMoveBonds(existingMolecule, addedAtomSet);
+	        this.joinByAtomRefs2AndAdjustGeometry(
+	        		existingMolecule, addedAtomSet, takeAtomWithLowestId);
+        } catch (CMLRuntimeException e) {
+        	e.printStackTrace();
+        	System.err.println("Cannot join because: "+e);
+        }
     }
     
     private void alignAndMoveBonds(CMLMolecule existingMolecule, CMLAtomSet addedAtomSet) {
@@ -325,15 +311,18 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
             throw new CMLRuntimeException("cannot add null molecule");
         }
         String[] atomRefs2 = this.getAtomRefs2();
-        String staticAtomId = atomRefs2[0].substring(atomRefs2[0].indexOf(S_COLON)+1);
-        String movableAtomId = atomRefs2[1].substring(atomRefs2[0].indexOf(S_COLON)+1);
-        // TODO
+        String staticAtomId = CMLUtil.getLocalName(atomRefs2[0]);
+        String movableAtomId = CMLUtil.getLocalName(atomRefs2[1]);
         // the transforms can be concatenated to improve efficiency.
         // first I just need to get it right
         
-        CMLAtom existingAtom = existingMolecule.getAtomById(staticAtomId);
+        // use atomArray since molecules also have children and
+        // the normal method fails
+        CMLAtomArray atomArray = existingMolecule.getAtomArray();
+        CMLAtom existingAtom = atomArray.getAtomById(staticAtomId);
         if (existingAtom == null) {
-            existingMolecule.debug("EXIST");
+        	// this happens when join is used twice
+//            existingMolecule.debug("ATOM SHOULD BE IN HERE");
             throw new CMLRuntimeException("Cannot find atom ("+staticAtomId+") in "+existingMolecule.getId());
         }
         Point3 existingPoint = existingAtom.getPoint3(CoordinateType.CARTESIAN);
@@ -375,60 +364,11 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         
     }
 
-    /** gets parent.
-     * checks it is a CMLMolecule.
-     * @return the molecule
-     * @exception CMLRuntimeException if parent is not a molecule
-     */
-    private CMLMolecule getParentMolecule() {
-        Node parent = this.getParent();
-        if (!(parent instanceof CMLMolecule)) {
-            throw new CMLRuntimeException("join must have parent molecule");
-        }
-        return (CMLMolecule) parent;
-    }
     
-    /** create atomRefs2 from moleculeRefs2, atomrefs2 and neighbours.
-     * 
-     * @param previousMolecule
-     * @param molecule
-     * @param parentLabel
-     */
-    public void addAtomRefs2ToJoinAndProcessDescendants(
-            CMLMolecule previousMolecule, CMLMolecule molecule, CMLLabel parentLabel) {
-//        * where complexMol =
-//            *     molecule
-//            *         branchList?
-//            *         branchList?
-//            *
-//        <molecule ref="g:2pyr" id="m2">
-//            <label dictRef="cml:LEFT">r1</label>
-//            <moleculeList convention="branch">
-//                <label dictRef="cml:PARENT">r3</label> 
-//                <join id="j2.1" order="1">
-//                    <length id="l2.1">1.5</length>
-//                    <torsion id="t2.1">120.0</torsion>
-//                </join>
-//                <molecule ref="g:po" id="m2.1.1">
-        List<CMLElement> childEntries = molecule.getChildCMLElements();
-        for (CMLElement child : childEntries) {
-            if (child instanceof CMLFragment) {
-                FragmentTool fragmentTool = new FragmentTool((CMLFragment) child);
-                fragmentTool.recursivelyCreateAtomsRefs2OnJoins(molecule);
-            }
-        }
-    }
-
-    /** create atomRefs2 from moleculeRefs2 and atomRefs2.
-     * 
-     * @param parent
-     */
-    public void dereferenceMoleculeRefs2AndAtomRefs2(CMLMolecule parent) {
-        List<Node> previousFragments = CMLUtil.getQueryNodes(
-                this, "./preceding-sibling::cml:fragment", X_CML); 
-        List<Node> nextFragments = CMLUtil.getQueryNodes(
-                this, "./following-sibling::cml:fragment", X_CML); 
-        this.dereferenceMoleculeRefs2AndAtomRefs2(parent, previousFragments, nextFragments);
+    private String getId(CMLMolecule molecule) {
+        String ref = molecule.getRef();
+        String id = molecule.getId();
+        return ref+S_UNDER+id;
     }
     
     /** create atomRefs2 from moleculeRefs2 and atomRefs2.
@@ -437,8 +377,8 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
      * @param previousFragments
      * @param nextFragments
      */
-    private void dereferenceMoleculeRefs2AndAtomRefs2(CMLMolecule parent, 
-            List<Node> previousFragments, List<Node> nextFragments) {
+    public void processMoleculeRefs2AndAtomRefs2( 
+            CMLFragment previousFragment, CMLFragment nextFragment) {
 //      <join id="j1" order="1" moleculeRefs2="PARENT NEXT" atomRefs2="r1 r1">
 //      <length>1.4</length>
 //      <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
@@ -446,30 +386,48 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
 //  <fragment>
 //      <molecule ref="g:po" id="m3" />
 //  </fragment>
-        CMLMolecule previousMolecule = null;
-        CMLMolecule nextMolecule = null;
         String[] moleculeRefs2 = this.getMoleculeRefs2();
         if (moleculeRefs2 == null) {
             throw new CMLRuntimeException("No moleculeRefs2 on join");
         }
         if (CMLJoin.PARENT_S.equals(moleculeRefs2[0])) {
-            previousMolecule = parent;
-        } else if (CMLJoin.PREVIOUS_S.equals(moleculeRefs2[0]) &&
-                previousFragments.size() > 0) {
-            CMLFragment previousFragment = 
-                (CMLFragment)previousFragments.get(previousFragments.size()-1);
-            previousMolecule = new FragmentTool(previousFragment).getMolecule();
+            previousFragment = (CMLFragment) this.getParent();
+            if (previousFragment == null) {
+            	throw new CMLRuntimeException("No parent fragment");
+            }
+        } else if (CMLJoin.PREVIOUS_S.equals(moleculeRefs2[0])) {
         }
-        if (CMLJoin.NEXT_S.equals(moleculeRefs2[1]) && 
-                nextFragments.size() > 0) {
-            nextMolecule = new FragmentTool(((CMLFragment)nextFragments.get(0))).getMolecule();
-        }
-        String[] atomRefs2 = this.getAtomRefs2();
+        CMLMolecule previousMolecule = new FragmentTool(previousFragment).getMolecule();
         if (previousMolecule == null) {
-            throw new CMLRuntimeException("null previous molecule");
+        	throw new CMLRuntimeException("Cannot find previous molecule to join");
+        }
+        CMLMolecule nextMolecule = null;
+        if (CMLJoin.NEXT_S.equals(moleculeRefs2[1])) {
+            nextMolecule = new FragmentTool(nextFragment).getMolecule();
         }
         if (nextMolecule == null) {
-            throw new CMLRuntimeException("null next molecule");
+        	throw new CMLRuntimeException("Cannot find next molecule to join");
+        }
+        processMoleculeRefs2AndAtomRefs2(previousMolecule, nextMolecule);
+    }
+    
+    /** creates atomRefs2 to join previous/parent molecule to next/child.
+     * 
+     * @param previousMolecule
+     * @param nextMolecule
+     */
+    public void processMoleculeRefs2AndAtomRefs2( 
+        CMLMolecule previousMolecule, CMLMolecule nextMolecule) {
+//      <join id="j1" order="1" moleculeRefs2="PARENT NEXT" atomRefs2="r1 r1">
+//      <length>1.4</length>
+//      <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
+//  </join>
+//  <fragment>
+//      <molecule ref="g:po" id="m3" />
+//  </fragment>
+        String[] atomRefs2 = this.getAtomRefs2();
+        if (atomRefs2 == null) {
+        	throw new CMLRuntimeException("No atomrefs2 on Join");
         }
         this.setAtomRefs2(new String[]{
                 getId(previousMolecule)+S_UNDER+atomRefs2[0],
@@ -479,10 +437,21 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
                 getId(nextMolecule)});
     }
     
-    private String getId(CMLMolecule molecule) {
-        String ref = molecule.getRef();
-        String id = molecule.getId();
-        return ref+S_UNDER+id;
+    public String getString() {
+    	String s = S_EMPTY;
+    	String id = this.getId();
+    	if (id != null) {
+    		s += id+S_SPACE;
+    	}
+    	String[] moleculeRefs2 = this.getMoleculeRefs2();
+    	if (moleculeRefs2 != null) {
+    		s += Util.concatenate(moleculeRefs2, S_SPACE)+S_SEMICOLON;
+    	}
+    	String[] atomRefs2 = this.getAtomRefs2();
+    	if (atomRefs2 != null) {
+    		s += Util.concatenate(atomRefs2, S_SPACE)+S_SEMICOLON;
+    	}
+    	return s;
     }
     
 }

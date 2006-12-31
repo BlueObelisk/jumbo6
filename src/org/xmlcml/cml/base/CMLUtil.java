@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -98,6 +99,26 @@ public abstract class CMLUtil implements CMLConstants {
 			throw new CMLException("Unprefixed name (" + name + S_RBRAK);
 		}
 	}
+
+    /** get prefix from qualified name.
+     * 
+     * @param s
+     * @return prefix (or empty string)
+     */
+    public static String getPrefix(String s) {
+    	int idx = s.indexOf(S_COLON);
+    	return (idx == -1) ? S_EMPTY : s.substring(0, idx);
+    }
+
+    /** get localName from qualified name.
+     * 
+     * @param s
+     * @return localName (or empty string)
+     */
+    public static String getLocalName(String s) {
+    	int idx = s.indexOf(S_COLON);
+    	return (idx == -1) ? s : s.substring(idx+1);
+    }
 
 	/**
 	 * converts an Elements to a java array. we might convert code to use
@@ -447,4 +468,45 @@ public abstract class CMLUtil implements CMLConstants {
     public static void BUG(String message) {
         Util.BUG(message);
     }
+    
+    /** returns all prefixes in attributes in descendants.
+     * currently accesses all elements
+     * @param attName attribute name (e.g. ref, dictRef)
+     * @return prefixes
+     */
+    public static List<String> getPrefixes(Element element, String attName) {
+    	List<String> prefixList = new ArrayList<String>();
+    	List<Node> refs = CMLUtil.getQueryNodes(element, ".//@"+attName, X_CML);
+    	for (Node node : refs) {
+    		Attribute attribute = (Attribute) node;
+    		String value = attribute.getValue();
+    		String prefix = CMLUtil.getPrefix(value);
+    		if (!prefixList.contains(prefix)) {
+    			prefixList.add(prefix);
+    		}
+    	}
+    	return prefixList;
+    }
+
+    /** get namespace for list of prefixes.
+     * 
+     * @param element in which namespaces are in scope
+     * @param prefixes
+     * @return list of namespaces
+     * @exception CMLRuntimeException if any prefix does not map to a namespace
+     */
+	public static List<CMLNamespace> getNamespaces(
+			Element element, List<String> prefixes) {
+		List<CMLNamespace> namespaceList = new ArrayList<CMLNamespace>();
+		for (String prefix : prefixes) {
+			String namespaceURI = element.getNamespaceURI(prefix);
+			if (namespaceURI == null) {
+				throw new CMLRuntimeException("Missing namespace :"+prefix+":");
+			}
+			CMLNamespace namespace = new CMLNamespace(prefix, namespaceURI);
+			namespaceList.add(namespace);
+		}
+		return namespaceList;
+	}
+    
 }

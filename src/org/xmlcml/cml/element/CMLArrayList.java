@@ -156,7 +156,7 @@ public class CMLArrayList extends org.xmlcml.cml.element.AbstractArrayList {
     public List<HasArraySize> getArrays() {
         List<HasArraySize> list = new ArrayList<HasArraySize>();
         List<Node> nodes = CMLUtil.getQueryNodes(this, 
-                "./cml:array | ./cml:list", X_CML);
+                CMLArray.NS+X_OR+CMLList.NS, X_CML);
         for (Node node : nodes) {
             list.add((HasArraySize) node);
         }

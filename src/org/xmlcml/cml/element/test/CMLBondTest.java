@@ -18,6 +18,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -359,7 +360,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         } catch (CMLRuntimeException e) {
             Assert.assertEquals("should throw", "Cannot reindex id", e.getMessage());
         }
-        bond.removeAttribute("id");
+        bond.removeAttribute(IdAttribute.NAME);
         try {
             bond.setId("FOO");
         } catch (CMLRuntimeException e) {
@@ -515,9 +516,21 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     public final void testGenerateAndSetId() {
         makeMol5a();
         CMLBond bond = mol5a.getBonds().get(0);
-        bond.removeAttribute("id");
+        bond.removeAttribute(IdAttribute.NAME);
         bond.generateAndSetId();
         Assert.assertEquals("bond?", "a2__a1", bond.getString());
     }
 
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.tools.MoleculeTool.calculateBondLength(CMLBond,
+     * CoordinateType)'
+     */
+    @Test
+    public void testCalculateBondLength() {
+        makeMol5a();
+        CMLBond bond = mol5a.getBonds().get(0);
+        double d = bond.calculateBondLength(CoordinateType.CARTESIAN);
+        Assert.assertEquals("length", 1.3, d, 0.0000001);
+    }
 }

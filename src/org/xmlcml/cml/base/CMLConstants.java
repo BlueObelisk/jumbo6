@@ -16,7 +16,9 @@ import org.xmlcml.euclid.EuclidConstants;
  */
 public interface CMLConstants extends EuclidConstants {
 
-//  -------------------------------------------    
+	/** suffix for files */
+	String XML_SUFF = ".xml";
+	
     /** xmlns attribute name */
     String XMLNS = "xmlns";
 
@@ -207,10 +209,21 @@ public interface CMLConstants extends EuclidConstants {
     /** constant */
     String CML3 = CML + S_SLASH + "cml3";
 
-    /**
-     * CML prefix (cml) reserved: for several uses
+    /** CML prefix (cml) reserved: for several uses
      */
     String CML_PREFIX = "cml";
+
+    /** CML prefix + colon  (cml:)
+     */
+    String CML_COLON = CML_PREFIX+S_COLON;
+
+    /** CML prefix when used as element namespace
+     */
+    String C_E = CML_COLON;
+
+    /** CML prefix when used as attribute value namespace
+     */
+    String C_A = CML_COLON;
 
     /**
      * namespace declaration for CML without prefix
@@ -235,6 +248,9 @@ public interface CMLConstants extends EuclidConstants {
     /** XPathContext for CML.
      */
     XPathContext X_CML = new XPathContext("cml", CML_NS);
+    
+    /** XPath 'OR' concatenator*/
+    String X_OR = S_PIPE;
 
     // subdirs of components
     /** constant */
@@ -281,7 +297,7 @@ public interface CMLConstants extends EuclidConstants {
     String CML_UNITSTYPE = "unitsType";
 
     /** dictRef value identifying a filename */
-    String CML_FILENAME = "cml:filename";
+    String CML_FILENAME = C_A+"filename";
 
 // -----------------------------------------------    
     // format

@@ -29,6 +29,9 @@ public class CMLAngle extends AbstractAngle {
 
     final static Logger logger = Logger.getLogger(CMLAngle.class.getName());
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */
@@ -371,7 +374,7 @@ public class CMLAngle extends AbstractAngle {
                     w.write("<td>");
                     CMLAtom atom = atoms.get(i);
                     Nodes labelNodes = atom.query(
-                        "cml:scalar[@dictRef='iucr:_atom_site_label']", X_CML);
+                        CMLScalar.NS+"[@dictRef='iucr:_atom_site_label']", X_CML);
                     String label = ((CMLScalar) labelNodes.get(0)).getXMLContent()+" ("+atom.getId()+S_RBRAK;
                     w.write( (label == null) ? atom.getId() : label);
                     w.write("</td>");

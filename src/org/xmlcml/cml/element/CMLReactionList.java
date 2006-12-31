@@ -10,6 +10,9 @@ import nu.xom.Node;
  */
 public class CMLReactionList extends AbstractReactionList {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */

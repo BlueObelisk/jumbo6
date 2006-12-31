@@ -16,6 +16,9 @@ import org.xmlcml.cml.base.CMLUtil;
  */
 public class CMLLabel extends AbstractLabel {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** used in fragment building
      * 
      * @author pm286
@@ -85,9 +88,9 @@ public class CMLLabel extends AbstractLabel {
      * @return label
      */
     public static CMLLabel getLabel(CMLElement element, Position side) {
-        String dictRef = "cml:"+side;
+        String dictRef = C_E+side;
         List<Node> nodeList = CMLUtil.getQueryNodes(
-            element, "./cml:label[@dictRef='"+dictRef+"']", X_CML);
+            element, CMLLabel.NS+"[@dictRef='"+dictRef+"']", X_CML);
         return (nodeList.size() == 0) ? null : (CMLLabel) nodeList.get(0);
     }
 
@@ -104,7 +107,7 @@ public class CMLLabel extends AbstractLabel {
             element.appendChild(label);
             Text text = new Text(value);
             label.appendChild(text);
-            label.setDictRef("cml:"+side);
+            label.setDictRef(C_E+side);
         } else {
             Text text = CMLUtil.getFirstTextDescendant(label);
             text.setValue(value);

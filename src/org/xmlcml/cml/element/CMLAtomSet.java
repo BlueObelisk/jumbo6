@@ -33,6 +33,8 @@ import org.xmlcml.euclid.Vector3;
 public class CMLAtomSet extends AbstractAtomSet {
 
     final static Logger logger = Logger.getLogger(CMLAtomSet.class.getName());
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
 
     // arbitrary large distance to unmap atoms of different types
     /** */

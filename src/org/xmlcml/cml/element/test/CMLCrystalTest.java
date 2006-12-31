@@ -190,7 +190,7 @@ public class CMLCrystalTest extends AbstractTest {
         }
         Assert.assertNotNull("cell params should not be null", cell);
         Assert.assertNotNull("cell param a should not be null", cell.get(0));
-        Assert.assertEquals("a dictRef", "cml:a", cell.get(0).getDictRef());
+        Assert.assertEquals("a dictRef", CMLCrystal.A, cell.get(0).getDictRef());
         Assert.assertEquals("a", 10, cell.get(0).getDouble(), EPS);
         RealSquareMatrix matrix = null;
         try {
@@ -227,7 +227,7 @@ public class CMLCrystalTest extends AbstractTest {
         }
         Assert.assertNotNull("cell params should not be null", cell);
         Assert.assertNotNull("cell param a should not be null", cell.get(0));
-        Assert.assertEquals("a dictRef", "cml:a", cell.get(0).getDictRef());
+        Assert.assertEquals("a dictRef", CMLCrystal.A, cell.get(0).getDictRef());
         Assert.assertEquals("a", 10, cell.get(0).getDouble(), EPS);
         RealSquareMatrix matrix = null;
         try {
@@ -257,7 +257,7 @@ public class CMLCrystalTest extends AbstractTest {
         }
         Assert.assertNotNull("cell params should not be null", cell);
         Assert.assertNotNull("cell param a should not be null", cell.get(0));
-        Assert.assertEquals("a dictRef", "cml:a", cell.get(0).getDictRef());
+        Assert.assertEquals("a dictRef", CMLCrystal.A, cell.get(0).getDictRef());
         Assert.assertEquals("a", 10, cell.get(0).getDouble(), EPS);
         matrix = null;
         try {
@@ -627,12 +627,12 @@ public class CMLCrystalTest extends AbstractTest {
     @Test
     public void testCMLCrystalCMLScalarArray() {
         CMLScalar[] scalars = new CMLScalar[6];
-        scalars[0] = CMLCrystal.createScalar("cml:a", 8.0, U_ANGSTROM, 0.001);
-        scalars[1] = CMLCrystal.createScalar("cml:b", 9.0, U_ANGSTROM, 0.002);
-        scalars[2] = CMLCrystal.createScalar("cml:c", 10.0, U_ANGSTROM, 0.003);
-        scalars[3] = CMLCrystal.createScalar("cml:alpha", 80.0, U_DEGREE);
-        scalars[4] = CMLCrystal.createScalar("cml:beta", 90.0, U_DEGREE);
-        scalars[5] = CMLCrystal.createScalar("cml:gamma", 100.0, U_DEGREE);
+        scalars[0] = CMLCrystal.createScalar(CMLCrystal.A, 8.0, U_ANGSTROM, 0.001);
+        scalars[1] = CMLCrystal.createScalar(CMLCrystal.B, 9.0, U_ANGSTROM, 0.002);
+        scalars[2] = CMLCrystal.createScalar(CMLCrystal.C, 10.0, U_ANGSTROM, 0.003);
+        scalars[3] = CMLCrystal.createScalar(CMLCrystal.ALPHA, 80.0, U_DEGREE);
+        scalars[4] = CMLCrystal.createScalar(CMLCrystal.BETA, 90.0, U_DEGREE);
+        scalars[5] = CMLCrystal.createScalar(CMLCrystal.GAMMA, 100.0, U_DEGREE);
         CMLCrystal crystal = new CMLCrystal(scalars);
         List<CMLCellParameter> cellParameterList = crystal
                 .createCellParameterElements();

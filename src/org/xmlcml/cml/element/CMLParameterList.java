@@ -18,6 +18,9 @@ import org.xmlcml.cml.base.CMLElements;
  */
 public class CMLParameterList extends AbstractParameterList {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */
@@ -167,7 +170,7 @@ public class CMLParameterList extends AbstractParameterList {
         }
         if (errorList.size() == 0) {
             // scalars
-            List<CMLElement> parameters = cml.getElements(".//cml:parameter/@name");
+            List<CMLElement> parameters = cml.getElements(".//"+CMLParameter.NS+"/@name");
             for (CMLElement parameter : parameters) {
                 DictRefAttribute dictRefAttribute = (DictRefAttribute) ((CMLParameter) parameter)
                         .getDictRefAttribute();

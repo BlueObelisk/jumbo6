@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<molecule xmlns="http://www.xml-cml.org/schema" id="propanoic">
+<molecule 
+  xmlns="http://www.xml-cml.org/schema" 
+  id="propanoic">
  <atomArray>
   <atom id="a1" elementType="C" x3="1.998000" y3="-0.064000" z3="-0.000000"/>
   <atom id="a2" elementType="C" x3="0.757000" y3="0.831000" z3="-0.000000"/>
@@ -11,7 +13,7 @@
   <atom id="a8" elementType="H" x3="2.893000" y3="0.557000" z3="-0.000000"/>
   <atom id="a9" elementType="H" x3="0.763000" y3="1.460000" z3="0.890000"/>
   <atom id="a10" elementType="H" x3="0.763000" y3="1.460000" z3="-0.890000"/>
-  <atom id="a11" elementType="H" x3="-2.490000" y3="-0.005000" z3="0.000000"/>
+  <atom id="r1" elementType="R" x3="-2.490000" y3="-0.005000" z3="0.000000"/>
  </atomArray>
  <bondArray>
   <bond atomRefs2="a1 a2" order="1"/>
@@ -23,6 +25,6 @@
   <bond atomRefs2="a2 a10" order="1"/>
   <bond atomRefs2="a3 a4" order="2"/>
   <bond atomRefs2="a3 a5" order="1"/>
-  <bond atomRefs2="a5 a11" order="1"/>
+  <bond atomRefs2="a5 r1" order="1"/>
  </bondArray>
 </molecule>

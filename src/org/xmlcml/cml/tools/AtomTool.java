@@ -287,11 +287,17 @@ public class AtomTool {
       */
      public void translateToCovalentRadius() {
          Point3 groupPoint = atom.getPoint3(CoordinateType.CARTESIAN);
+         if (groupPoint == null) {
+        	 throw new CMLRuntimeException("atom has no coordinates: "+atom.getId());
+         }
          CMLAtom rAtom = this.getSingleLigand();
          if (rAtom == null) {
              throw new CMLRuntimeException("Expected 1 ligand for: "+atom.getId());
          }
          Point3 atomPoint = rAtom.getPoint3(CoordinateType.CARTESIAN);
+         if (atomPoint == null) {
+        	 throw new CMLRuntimeException("atom has no coordinates: "+rAtom.getId());
+         }
          Vector3 vector = groupPoint.subtract(atomPoint);
          vector = vector.normalize();
          String rElement = rAtom.getElementType();

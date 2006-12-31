@@ -1,55 +1,51 @@
 package org.xmlcml.cml.base;
 
-/**
- * 
- * <p>
- * manages CML namespaces.
- * </p>
+
+/** manages CML namespaces.
+ * NOTE: NOT subclassed from nu.xom.Namespace (this is final)
  * 
  * @author Peter Murray-Rust
  * @version 5.0
  * 
  */
-public abstract class CMLNamespace implements CMLConstants {
+public class CMLNamespace implements CMLConstants {
 
-    /**
-     * default is CML.
-     * 
-     */
-    protected static String currentNamespaceURI = CML;
-
-    protected CMLNamespace() {
-        super();
+	private String prefix;
+	private String namespaceURI;
+	
+    public CMLNamespace(String prefix, String namespaceURI) {
+    	this.prefix = prefix;
+    	this.namespaceURI = namespaceURI;
     }
 
-    /**
-     * is a namespace URI compatible with CML namespaces.
-     * 
-     * @param URI
-     *            to compare
-     * @return true if compatible
+    /** make namespace from prefix and element which holds namespaces.
+     * iterates up ancestry namespace prefixes until finds match
+     * @param prefix
+     * @param element
      */
-    public static boolean isCMLNamespace(String URI) {
-        return CML.equals(URI) || CML2.equals(URI) || CML3.equals(URI);
+    public static CMLNamespace createNamespace(String prefix, CMLElement element) {
+    	String namespaceURI = element.getNamespaceURIForPrefix(prefix);
+    	CMLNamespace namespace = null;
+    	if (namespaceURI != null) {
+    		namespace = new CMLNamespace(prefix, namespaceURI);
+    	}
+    	return namespace;
     }
 
-    /**
-     * get current namespaceURI.
+    /** get namespaceURI.
      * 
-     * @return the URI (default is CML)
+     * @return the URI 
      */
-    public static String getCurrentNamespaceURI() {
-        return currentNamespaceURI;
+    public String getNamespaceURI() {
+        return namespaceURI;
     }
 
-    /**
-     * get current namespaceURI.
+    /** get prefix.
      * 
-     * @param n
-     *            the URI
+     * @return the prefix
      */
-    public static void setCurrentNamespaceURI(String n) {
-        currentNamespaceURI = n;
+    public String getPrefix() {
+        return prefix;
     }
 
     /**

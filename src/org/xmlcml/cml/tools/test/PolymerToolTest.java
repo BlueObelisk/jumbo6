@@ -158,7 +158,7 @@ public class PolymerToolTest extends AbstractToolTest {
 		String convention = molecule.getConvention();
 		convention = convention.substring(convention.indexOf(S_COLON) + 1);
 
-        writeFile(molecule, fileroot + S_UNDER + convention + ".xml");
+        writeFile(molecule, fileroot + S_UNDER + convention + XML_SUFF);
     }
     
     private void writeFile(CMLMolecule molecule, String filename) {

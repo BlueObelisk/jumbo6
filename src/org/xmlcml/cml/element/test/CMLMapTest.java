@@ -386,21 +386,21 @@ public class CMLMapTest extends AbstractTest {
      */
     @Test
     public void testSetLinkToFromType() {
-        Assert.assertEquals("type", "cml:" + CMLAtom.TAG, xmlMap1.getToType());
+        Assert.assertEquals("type", CMLAtom.NS, xmlMap1.getToType());
         Assert
-                .assertEquals("type", "cml:" + CMLAtom.TAG, xmlMap1
+                .assertEquals("type", CMLAtom.NS, xmlMap1
                         .getFromType());
-        String toType = "cml:" + CMLPeak.TAG;
-        String fromType = "cml:" + CMLBond.TAG;
+        String toType = CMLPeak.NS;
+        String fromType = CMLBond.NS;
         for (CMLLink link : xmlMap1.getLinkElements()) {
             Assert.assertNull("link", link.getFromType());
             Assert.assertNull("link", link.getToType());
         }
         xmlMap1.setLinkToType(toType);
         xmlMap1.setLinkFromType(fromType);
-        Assert.assertEquals("type", "cml:" + CMLAtom.TAG, xmlMap1.getToType());
+        Assert.assertEquals("type", CMLAtom.NS, xmlMap1.getToType());
         Assert
-                .assertEquals("type", "cml:" + CMLAtom.TAG, xmlMap1
+                .assertEquals("type", CMLAtom.NS, xmlMap1
                         .getFromType());
         for (CMLLink link : xmlMap1.getLinkElements()) {
             Assert.assertEquals("type", fromType, link.getFromType());
@@ -413,8 +413,8 @@ public class CMLMapTest extends AbstractTest {
      */
     @Test
     public void testAnnotateLinks() {
-        String toType = "cml:" + CMLPeak.TAG;
-        String fromType = "cml:" + CMLBond.TAG;
+        String toType = CMLPeak.NS;
+        String fromType = CMLBond.NS;
         String fromContext = "mol1";
         String toContext = "mol2";
         for (CMLLink link : xmlMap1.getLinkElements()) {
@@ -611,6 +611,6 @@ public class CMLMapTest extends AbstractTest {
     public void testGetType() {
         CMLLink link = xmlMap1.getLinkElements().get(0);
         String type = CMLMap.getType(link, Direction.TO);
-        Assert.assertEquals("link type", "cml:atom", type);
+        Assert.assertEquals("link type", CMLAtom.NS, type);
     }
  }

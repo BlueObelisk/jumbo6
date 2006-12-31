@@ -25,7 +25,6 @@ import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomArray;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -63,7 +62,6 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  */
 public class MoleculeTool extends AbstractTool {
 
-	final static String IDX = "idx";
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
 	public static String metalLigandDictRef = "jumbo:metalLigand";
@@ -277,6 +275,7 @@ public class MoleculeTool extends AbstractTool {
 						// get a completed pi-system.
 						List<List<Integer>> n3ComboList = generateCombinationList(n3List.size());
 						List<List<Integer>> osComboList = generateCombinationList(osList.size());
+						@SuppressWarnings("unused")
 						List<List<Integer>> n2ComboList = generateCombinationList(n2List.size());
 						List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
 						List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
@@ -307,7 +306,7 @@ public class MoleculeTool extends AbstractTool {
 									sysCount++;
 									system.identifyDoubleBonds();
 									for (CMLAtom a : system.getAtomList()) {
-										Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
+										Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 										if (nodes.size() > 0) {
 											piRemaining = true;
 										}
@@ -345,7 +344,7 @@ public class MoleculeTool extends AbstractTool {
 									bond.setOrder(CMLBond.SINGLE);
 								}
 								// reset all pi-electrons
-								Nodes piElectrons = subMol.query(".//cml:atom/cml:electron[@dictRef='cml:piElectron']", X_CML);
+								Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 								for (int e = 0; e < piElectrons.size(); e++) {
 									((CMLElectron)piElectrons.get(e)).detach();
 								}
@@ -389,7 +388,7 @@ public class MoleculeTool extends AbstractTool {
 											sysCount++;
 											system.identifyDoubleBonds();
 											for (CMLAtom a : system.getAtomList()) {
-												Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
+												Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 												if (nodes.size() > 0) {
 													piRemaining = true;
 												}
@@ -415,7 +414,7 @@ public class MoleculeTool extends AbstractTool {
 											bond.setOrder(CMLBond.SINGLE);
 										}
 										// reset all pi-electrons
-										Nodes piElectrons = subMol.query(".//cml:atom/cml:electron[@dictRef='cml:piElectron']", X_CML);
+										Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 										for (int e = 0; e < piElectrons.size(); e++) {
 											((CMLElectron)piElectrons.get(e)).detach();
 										}
@@ -441,7 +440,7 @@ public class MoleculeTool extends AbstractTool {
 											sysCount++;
 											system.identifyDoubleBonds();
 											for (CMLAtom a : system.getAtomList()) {
-												Nodes nodes = a.query(".//cml:electron[@dictRef='cml:piElectron']", X_CML);
+												Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 												if (nodes.size() > 0) {
 													piRemaining = true;
 												}
@@ -464,7 +463,7 @@ public class MoleculeTool extends AbstractTool {
 											bond.setOrder(CMLBond.SINGLE);
 										}
 										// reset all pi-electrons
-										Nodes piElectrons = subMol.query(".//cml:atom/cml:electron[@dictRef='cml:piElectron']", X_CML);
+										Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
 										for (int e = 0; e < piElectrons.size(); e++) {
 											((CMLElectron)piElectrons.get(e)).detach();
 										}
@@ -551,7 +550,7 @@ public class MoleculeTool extends AbstractTool {
 				}
 			}
 			// remove scalars signifying atoms attached to metal
-			Nodes nodes = molecule.query(".//cml:scalar[@dictRef='"+metalLigandDictRef+"']", X_CML);
+			Nodes nodes = molecule.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", X_CML);
 			for (int i = 0; i < nodes.size(); i++) {
 				nodes.get(i).detach();
 			}
@@ -561,7 +560,7 @@ public class MoleculeTool extends AbstractTool {
 	
 	public int getFormalCharge() {
 		int formalCharge = 0;
-		Nodes chargedAtoms = molecule.getAtomArray().query(".//cml:atom[@formalCharge]", X_CML);
+		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", X_CML);
 		for (int i = 0; i < chargedAtoms.size(); i++) {
 			formalCharge += Integer.parseInt(((Element)chargedAtoms.get(i)).getAttributeValue("formalCharge"));
 		}
@@ -570,7 +569,7 @@ public class MoleculeTool extends AbstractTool {
 	
 	public List<CMLAtom> getChargedAtoms() {
 		List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-		Nodes atoms = molecule.getAtomArray().query(".//cml:atom[@formalCharge != 0]", X_CML);
+		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", X_CML);
 		for (int i = 0; i < atoms.size(); i++) {
 			chargedAtoms.add((CMLAtom)atoms.get(i));
 		}
@@ -1258,8 +1257,8 @@ public class MoleculeTool extends AbstractTool {
 		loneElectronCount = group - (sumNonHBo + nHyd) - formalCharge;
 		return loneElectronCount;
 	}
-
-//	@SuppressWarnings("unused")
+	
+	@SuppressWarnings("unused")
 	private void getHybridizationFromConnectivty() {
 		@SuppressWarnings("unused")
 		// FIXME
@@ -1333,10 +1332,8 @@ public class MoleculeTool extends AbstractTool {
 		while (change) {
 			change = false;
 			// iterate using the known bond orders and filling in any gaps...
-			i = -1;
-			for (CMLAtom atom : atoms) {
-				i++;
-				if (valence[i] < 0) {
+			for (int j = 0; j < atoms.size(); j++) {
+				if (valence[j] < 0) {
 					continue;
 				}
 				int bondSum = 0;
@@ -1367,7 +1364,7 @@ public class MoleculeTool extends AbstractTool {
 						}
 					}
 				}
-				change = assignMissingBonds(valence, i, bondSum, aromSum,
+				change = assignMissingBonds(valence, j, bondSum, aromSum,
 						missingBond, nMissing);
 			}
 		}
@@ -1750,68 +1747,6 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-//	/**
-//	 * try to distribute molecular charge over quaternary nitrogens Empirical!
-//	 *
-//	 * Interacts with adjustBondOrdersToValency() so these may be run in
-//	 * different order and iteratively. only run if molecule.formalCharge set
-//	 * adds +1 to each N.formalCharge where: (i) sum bond order = 4 (ii) not
-//	 * coordinated to unusual elements (NYI)
-//	 */
-//	private void distributeMolecularChargeToN4() {
-//		if (molecule.getFormalChargeAttribute() != null) {
-//			List<CMLAtom> atoms = molecule.getAtoms();
-//			MoleculeTool moleculeTool = new MoleculeTool(molecule);
-//			for (CMLAtom atom : atoms) {
-//				if (!"N".equals(atom.getElementType())) {
-//					continue;
-//				}
-//				if (atom.getFormalChargeAttribute() == null) {
-//					if (moleculeTool.getBondOrderSum(atom) == 4) {
-//						atom.setFormalCharge(1);
-//						// molecule.setFormalCharge(molecule.getFormalCharge() -
-//						// 1);
-//					}
-//				}
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * transfers molecular charge to atoms with free electrons. Double bond
-//	 * analysis may leave some atoms with unpaired pi electrons. This assumes
-//	 * they are negative or positive and transfers charge
-//	 */
-//	private void transferChargeToFreePiElectrons() {
-//		List<CMLAtom> atoms = molecule.getAtoms();
-//		for (CMLAtom atom : atoms) {
-//			// has atom got free pi electrons after PiSystem analysis?
-//			CMLElements<CMLElectron> electrons = atom.getElectronElements();
-//			for (CMLElectron electron : electrons) {
-//				if (CMLElectron.PI.equals(electron.getDictRef())) {
-//					electron.detach();
-//					if (atom.getFormalChargeAttribute() == null) {
-//						atom.setFormalCharge(0);
-//					}
-//					if ("N".equals(atom.getElementType())) {
-//						atom.setFormalCharge(atom.getFormalCharge() + 1);
-//					}
-//					if ("O".equals(atom.getElementType())) {
-//						atom.setFormalCharge(atom.getFormalCharge() - 1);
-//					}
-//				}
-//			}
-//			// has carbon got missing ligands? add charge
-//			if ("C".equals(atom.getElementType())) {
-//				if (this.getBondOrderSum(atom) == 3) {
-//					if (atom.getFormalChargeAttribute() == null
-//							|| atom.getFormalCharge() == 0) {
-//						atom.setFormalCharge(1);
-//					}
-//				}
-//			}
-//		}
-//	}
 
 	 /* Traverses all non-H atoms and contracts the hydrogens on each.
 	 *
@@ -1885,60 +1820,6 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	// atom
-
-//	/**
-//	 * get new (cloned) molecule from atomset and bondset.
-//	 *
-//	 * the bonds must be between the atoms, but not all such bonds need to be in
-//	 * the bondSet (e.g. to create a spanning tree)
-//	 *
-//	 * @param atomSet
-//	 * @param bondSet
-//	 *            the bonds in the new molecule
-//	 * @exception CMLRuntimeException
-//	 *                bond not between atomset members
-//	 * @return cloned molecule
-//	 */
-//	private CMLMolecule getClonedMolecule(CMLAtomSet atomSet, CMLBondSet bondSet)
-//	throws CMLRuntimeException {
-//		if (bondSet == null) {
-//			bondSet = new CMLBondSet();
-//		}
-//
-//		CMLMolecule newMol = new CMLMolecule();
-//		CMLAtomArray newAtomArray = new CMLAtomArray();
-//		newMol.addAtomArray(newAtomArray);
-//		CMLBondArray newBondArray = new CMLBondArray();
-//		newMol.addBondArray(newBondArray);
-//
-//		// add clones of old atoms
-//		List<CMLAtom> atoms = atomSet.getAtoms();
-//		for (CMLAtom atom : atoms) {
-//			// AtomTool atomTool = AtomToolImpl.getTool((CMLAtom)atoms.get(i));
-//			// atomTool.setAtom(atoms[i]);
-//			// newAtomArray.appendAtom (atomTool.cloneAtom (ownerDoc));
-//			newAtomArray.appendChild(new CMLAtom(atom));
-//		}
-//
-//		List<CMLBond> bonds = bondSet.getBonds();
-//		// add clones of old bonds
-//		for (CMLBond bond : bonds) {
-//			String atId0 = bond.getAtomId(0);
-//			if (molecule.getAtomById(atId0) == null) {
-//				throw new CMLRuntimeException("Atom in bond not in atomset: "
-//						+ atId0);
-//			}
-//			String atId1 = bond.getAtomId(1);
-//			if (molecule.getAtomById(atId1) == null) {
-//				throw new CMLRuntimeException("Atom in bond not in atomset: "
-//						+ atId1);
-//			}
-//			newBondArray.appendChild(new CMLBond(bond));
-//		}
-//
-//		return newMol;
-//	}
 
 	/**
 	 * gets atomset corresponding to bondset.
@@ -2253,6 +2134,7 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 */
 	// FIXME
+	@SuppressWarnings("unused")
 	private AtomPair getAtomsWithSameMappedNeighbours00(
 			AtomMatcher atomMatcher, CMLAtomSet atomSet1, CMLAtomSet atomSet2,
 			CMLMap from1to2map) {
@@ -2691,213 +2573,9 @@ public class MoleculeTool extends AbstractTool {
 		return connectionTableTool.getRingNucleiMolecules();
 	}
 
-	// FIXME refactor to fragment
-	/**
-	 * processes conventional molecule into fragment.
-	 */
-	public void convertToFragment() {
-		// <molecule role="fragment" id="acet"
-		// xmlns="http://www.xml-cml.org/schema"
-		// xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-		// <!-- acetate -->
-		// <arg parameterName="idx"/>
-		// <arg parentAttribute="id">acet_{$idx}</arg>
-		String molId = molecule.getId();
-		molecule.addAttribute(new Attribute("role", "fragment"));
-		CMLArg arg = new CMLArg();
-		arg.setParameterName(IDX);
-		molecule.appendChild(arg);
-		arg = new CMLArg();
-		arg.setParentAttribute("id");
-		arg.appendChild(molId + S_UNDER + S_LCURLY + S_DOLLAR + IDX + S_RCURLY);
-		molecule.appendChild(arg);
-
-		createAtomArguments(molId);
-		createBondArguments(molId);
-		createLengthArguments(molId);
-		createAngleArguments(molId);
-		createTorsionArguments(molId);
-
-		// deal with R
-		List<Node> rGroups = CMLUtil.getQueryNodes(molecule,
-				".//cml:atom[@elementType='R']", X_CML);
-		for (Node node : rGroups) {
-			new AtomTool((CMLAtom) node).translateToCovalentRadius();
-		}
-	}
-
-	private void createAtomArguments(String molId) {
-		// <atomArray>
-		// <atom id="a1" elementType="C" hydrogenCount="3" x3="0.0" y3="0.0"
-		// z3="0.0">
-		// <arg parentAttribute="id">acet_{$idx}_a1</arg>
-		// </atom>
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			String atomId = atom.getId();
-			CMLArg arg = new CMLArg();
-			arg.setParentAttribute("id");
-			arg.appendChild(createMolIdArg(molId) + atomId);
-			atom.appendChild(arg);
-		}
-	}
-
-
-	private void createBondArguments(String molId) {
-		//		 ...
-		//		 <atom id="r1" elementType="R" x3="2.83" y3="-1.0" z3="0.0">
-		//		 <arg parentAttribute="id">acet_{$idx}_r1</arg>
-		//		 </atom>
-		//		 </atomArray>
-		//		 <bondArray>
-		//		 <bond atomRefs2="a1 a2" order="1"
-		//		 ><arg parentAttribute="id">acet_{$idx}_a1_acet_{$idx}_a2</arg
-		//		 ><arg parentAttribute="atomRefs2">acet_{$idx}_a1 acet_{$idx}_a2</arg>
-		//		 </bond>
-		//		 ...
-		//		 <bond atomRefs2="a4 r1" order="1"
-		//		 ><arg parentAttribute="id">acet_{$idx}_a4_acet_{$idx}_r1</arg
-		//		 ><arg parentAttribute="atomRefs2">acet_{$idx}_a4 acet_{$idx}_r1</arg>
-		//		 </bond>
-		//		 </bondArray>
-		//		 <name><arg substitute=S_PERIOD>acet_{$idx}</arg></name>
-		List<CMLBond> bonds = molecule.getBonds();
-		for (CMLBond bond : bonds) {
-			// String bondId = bond.getId();
-			String[] atomRefs2 = bond.getAtomRefs2();
-			CMLArg arg = new CMLArg();
-			arg.setParentAttribute("id");
-			arg.appendChild(
-					createMolIdArg(molId)+atomRefs2[0]+S_UNDER+
-					createMolIdArg(molId)+atomRefs2[1]
-			);
-			bond.appendChild(arg);
-			arg = new CMLArg();
-			arg.setParentAttribute("atomRefs2");
-			arg.appendChild(
-					createMolIdArg(molId)+atomRefs2[0]+S_SPACE+
-					createMolIdArg(molId)+atomRefs2[1]
-			);
-			bond.appendChild(arg);
-		}
-	}
-
-	private void createLengthArguments(String molId) {
-		//		 <arg parameterName="phi"/>
-		//		 <arg parameterName="psi"/>
-		//		 ...
-		//		 <length atomRefs4="a1 a2 a3 r2">
-		//		 <arg parentAttribute="atomRefs2">gly_{$idx}_a1 gly_{$idx}_a2</arg>
-		//		 <arg substitute=S_PERIOD>{$psi}</arg>
-		//		 </torsion>
-		CMLElements<CMLLength> lengths = molecule.getLengthElements();
-		for (CMLLength length : lengths) {
-			// id
-			String lengthId = length.getId();
-			CMLArg arg = new CMLArg();
-			arg.setParentAttribute("id");
-			arg.appendChild(createMolIdArg(molId) + lengthId);
-			length.appendChild(arg);
-			// atomRefs4
-			String[] atomRefs2 = length.getAtomRefs2();
-			arg = new CMLArg();
-			arg.setParentAttribute("atomRefs2");
-			arg.appendChild(
-					createMolIdArg(molId) + atomRefs2[0] +S_SPACE+
-					createMolIdArg(molId) + atomRefs2[1]
-			);
-			length.appendChild(arg);
-			addArg(length, lengthId);
-		}
-	}
-
-	private void addArg(CMLElement element, String id) {
-		// substitute
-		CMLArg arg = new CMLArg();
-		arg.setSubstitute(S_PERIOD);
-		arg.appendChild(createIdArg(id));
-		element.appendChild(arg);
-		// append args to molecule
-		arg = new CMLArg();
-		arg.setParameterName(id);
-		molecule.appendChild(arg);
-	}
-
-	private void createTorsionArguments(String molId) {
-		//		 <arg parameterName="phi"/>
-		//		 <arg parameterName="psi"/>
-		//		 ...
-		//		 <torsion atomRefs4="a1 a2 a3 r2">
-		//		 <arg parentAttribute="atomRefs4">gly_{$idx}_a1 gly_{$idx}_a2 gly_{$idx}_a3 gly_{$idx}_r2</arg>
-		//		 <arg substitute=S_PERIOD>{$psi}</arg>
-		//		 </torsion>
-		CMLElements<CMLTorsion> torsions = molecule.getTorsionElements();
-		for (CMLTorsion torsion : torsions) {
-			// id
-			String torsionId = torsion.getId();
-			CMLArg arg = new CMLArg();
-			arg.setParentAttribute("id");
-			arg.appendChild(createMolIdArg(molId) + torsionId);
-			torsion.appendChild(arg);
-			// atomRefs4
-			String[] atomRefs4 = torsion.getAtomRefs4();
-			arg = new CMLArg();
-			arg.setParentAttribute("atomRefs4");
-			arg.appendChild(
-					createMolIdArg(molId) + atomRefs4[0] +S_SPACE+
-					createMolIdArg(molId) + atomRefs4[1] +S_SPACE+
-					createMolIdArg(molId) + atomRefs4[2] +S_SPACE+
-					createMolIdArg(molId) + atomRefs4[3]
-			);
-			torsion.appendChild(arg);
-			addArg(torsion, torsionId);
-		}
-	}
-
-	private void createAngleArguments(String molId) {
-		//		 <arg parameterName="phi"/>
-		//		 <arg parameterName="psi"/>
-		//		 ...
-		//		 <angle atomRefs4="a1 a2 a3 r2">
-		//		 <arg parentAttribute="atomRefs4">gly_{$idx}_a1 gly_{$idx}_a2 gly_{$idx}_a3 gly_{$idx}_r2</arg>
-		//		 <arg substitute=S_PERIOD>{$psi}</arg>
-		//		 </angle>
-		CMLElements<CMLAngle> angles = molecule.getAngleElements();
-		for (CMLAngle angle : angles) {
-			// id
-			String angleId = angle.getId();
-			CMLArg arg = new CMLArg();
-			arg.setParentAttribute("id");
-			arg.appendChild(createMolIdArg(molId) + angleId);
-			angle.appendChild(arg);
-			// atomRefs4
-			String[] atomRefs3 = angle.getAtomRefs3();
-			arg = new CMLArg();
-			arg.setParentAttribute("atomRefs3");
-			arg.appendChild(
-					createMolIdArg(molId) + atomRefs3[0] +S_SPACE+
-					createMolIdArg(molId) + atomRefs3[1] +S_SPACE+
-					createMolIdArg(molId) + atomRefs3[2]
-			);
-			angle.appendChild(arg);
-			addArg(angle, angleId);
-		}
-	}
-
-	// at present gly_{$idx}_
-	private static String createMolIdArg(String molId) {
-		return molId +
-		S_UNDER + createIdArg(IDX) + S_UNDER;
-	}
-
-	// at present {$id}
-	private static String createIdArg(String id) {
-		return S_LCURLY + S_DOLLAR + id + S_RCURLY;
-	}
-
 	private void flattenJoinMoleculeChildren() {
 		int idx = molecule.getParent().indexOf(molecule);
-		Nodes moleculesAndJoin = molecule.query("cml:molecule | cml:join'",
+		Nodes moleculesAndJoin = molecule.query(CMLMolecule.NS+X_OR+CMLJoin.NS+"'",
 				X_CML);
 		for (int i = 0; i < moleculesAndJoin.size(); i++) {
 			Node node = moleculesAndJoin.get(i);
@@ -2906,120 +2584,13 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	/**
-	 * finds descendant molecules and joins and flattens them. creates a single
-	 * list of molecule-join-molecule-join...
-	 */
-	public void flattenJoinMoleculeDescendants() {
-		Nodes molecules = molecule
-		.query(".//cml:molecule[cml:molecule]", X_CML);
-		for (int i = 0; i < molecules.size(); i++) {
-			CMLMolecule molecule = (CMLMolecule) molecules.get(i);
-			new MoleculeTool(molecule).flattenJoinMoleculeChildren();
-		}
-
-		// tidy join geometry
-		this.tidyJoinGeometry();
-	}
 
 	/**
-	 * tidy geometry after joining. a few molecules have still not transferred
-	 * their torsion and other contents to previous join.
-	 */
-	private void tidyJoinGeometry() {
-		Nodes molecules = molecule.query(
-				"cml:molecule[cml:torsion | cml:length]", X_CML);
-		for (int i = 0; i < molecules.size(); i++) {
-			CMLMolecule mol = (CMLMolecule) molecules.get(i);
-			Nodes torsionsAndLengths = mol.query("cml:torsion | cml:length",
-					X_CML);
-			int nnodes = torsionsAndLengths.size();
-			Nodes previousSiblings = mol.query("./preceding-sibling::*[1]");
-			// is the preceding-sibling a join?
-			CMLJoin join = null;
-			if (previousSiblings.size() == 1) {
-				Node previousSibling = previousSiblings.get(0);
-				if (previousSibling instanceof CMLJoin) {
-					join = (CMLJoin) previousSibling;
-					// if not a full join or populated with geometry ignore
-					if (join.getAtomRefs2() == null
-							|| join.getChildCMLElements(CMLLength.TAG).size() != 0
-							|| join.getChildCMLElements(CMLTorsion.TAG).size() != 0) {
-						join = null;
-					}
-				}
-			}
-			// detach node anyway
-			for (int j = nnodes - 1; j >= 0; j--) {
-				Node node = torsionsAndLengths.get(j);
-				node.detach();
-				// attach node if join is an explicit join and does not have
-				// torsions or lengths
-				if (join != null) {
-					join.appendChild(node);
-				}
-			}
-		}
-	}
-
-	/**
-	 * finds submolecules with
-	 *
-	 * @countExpression and expands these.
-	 *
-	 */
-	public void expandCountExpressions() {
-		// must do this recursively (WHY??)
-		while (true) {
-			Nodes nodes = molecule.query(".//cml:molecule[@countExpression]",
-					X_CML);
-			if (nodes.size() == 0) {
-				break;
-			}
-			CMLMolecule molecule = (CMLMolecule) nodes.get(0);
-			new MoleculeTool(molecule).expandCountExpression();
-		}
-	}
-
-	// move to fragment
-	// FIXME
-	private void expandCountExpression() {
-		throw new CMLRuntimeException("NEEDS FIXING");
-		//		 Node parent = molecule.getParent();
-		//		 Element parentElement = (Element) parent;
-		//		 // position of molecule
-		//		 int idx = parentElement.indexOf(molecule);
-		//		 int count = molecule.calculateCountExpression();
-		//		 // detach any molecules without a reference (from hanging bond)
-		//		 Nodes nodes = molecule.query("cml:molecule[@ref='']", X_CML);
-		//		 if (nodes.size() == 1) {
-		//		 nodes.get(0).detach();
-		//		 }
-		//		 // any child joins? if so detach and transfer to following sibling
-		//		 CMLJoin subJoin = null;
-		//		 Nodes joins = molecule.query("cml:join[not(@right) and not(@left)]",
-		//		 X_CML);
-		//		 if (joins.size() != 0) {
-		//		 subJoin = (CMLJoin) joins.get(0);
-		//		 subJoin.detach();
-		//		 }
-		//		 // clone count-1 molecules and append to existing molecule
-		//		 for (int i = 1; i < count; i++) {
-		//		 // add join to preceeding molecule
-		//		 if (subJoin != null) {
-		//		 CMLJoin subJoin1 = new CMLJoin(subJoin);
-		//		 parentElement.insertChild(subJoin1, idx);
-		//		 }
-		//		 CMLMolecule molecule1 = new CMLMolecule(molecule);
-		//		 parentElement.insertChild(molecule1, idx);
-		//		 }
-	}
-
-	/**
-	 * join one molecule to another. manages the XML but not yet the geometry
-	 *
-	 * @param addedMolecule
-	 *            to be joined
+	 * join one molecule to another. 
+	 * manages the XML but not yet the geometry
+	 * empties the added molecule of elements and copies them
+	 * to this.molecule and then detaches the addedMolecule
+	 * @param addedMolecule to be joined
 	 * @param existingMolecule
 	 * @param takeAtomWithLowestId
 	 */
@@ -3045,29 +2616,14 @@ public class MoleculeTool extends AbstractTool {
 			Node node = nodes.get(i);
 			node.detach();
 			if (node instanceof CMLAtomArray) {
+				// don't copy
 			} else if (node instanceof CMLBondArray) {
+				// don't copy
 			} else {
 				molecule.appendChild(node);
 			}
 		}
 		addedMolecule.detach();
-
-	}
-
-	/**
-	 * get list of joins. looks for child join with linkOnParent attribute
-	 *
-	 * @return list of joins
-	 */
-	public List<CMLMoleculeList> getBranchingJoinList() {
-		List<CMLMoleculeList> branchingJoinList = new ArrayList<CMLMoleculeList>();
-		String link = "cml:PARENT";
-		Nodes branchingJoinNodes = molecule.query("cml:moleculeList[cml:label[@dictRef='"+link+"']]",
-				X_CML);
-		for (int i = 0; i < branchingJoinNodes.size(); i++) {
-			branchingJoinList.add((CMLMoleculeList) branchingJoinNodes.get(i));
-		}
-		return branchingJoinList;
 	}
 
 	/** adjust the cartesians to fit declared torsions.
@@ -3097,29 +2653,6 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	/** expands this molecules with content from refMol.
-	 * used when this contains only a @ref and no content.
-	 * will also expand any args
-	 * @param refMol
-	 */
-	public void expandRefFromFragment(CMLMolecule refMol) {
-		// copy the molecule from the catalogue
-		CMLMolecule copyMol = new CMLMolecule(refMol);
-		Nodes nodes = molecule.query("cml:arg", X_CML);
-		for (int i = 0; i < nodes.size(); i++) {
-			CMLArg arg = (CMLArg) nodes.get(i);
-			String name = arg.getName();
-			String value = arg.getString();
-			CMLArg.substituteParameterName(copyMol, name, value);
-		}
-		CMLArg.substituteParentAttributes(copyMol);
-		CMLArg.substituteTextContent(copyMol);
-		Element parent = (Element) molecule.getParent();
-		int idx = parent.indexOf(molecule);
-		parent.insertChild(copyMol, idx);
-		molecule.detach();
-	}
-
 	/** iterates through torsions in molecule.
 	 * if they contain atom0 and atom1, adjusts them to value of torsion
 	 * @param atom0
@@ -3129,7 +2662,7 @@ public class MoleculeTool extends AbstractTool {
 		if (molecule.hasCoordinates(CoordinateType.CARTESIAN)) {
 			// set torsions
 			CMLAtomSet moleculeAtomSet = molecule.getAtomSet();
-			Nodes torsions = molecule.query(".//cml:torsion", X_CML);
+			Nodes torsions = molecule.query(".//"+CMLTorsion.NS, X_CML);
 			int nTors = torsions.size();
 			for (int i = 0; i < nTors; i++) {
 				CMLTorsion torsion = (CMLTorsion) torsions.get(i);
@@ -3286,8 +2819,8 @@ public class MoleculeTool extends AbstractTool {
 	public static boolean isDisordered(CMLMolecule molecule) {
 		for (CMLAtom atom : molecule.getAtoms()) {
 			List<Node> nodes = CMLUtil.getQueryNodes(atom,
-    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
-    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
+    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
+    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
 			if (nodes.size() > 0) {
 				return true;
 			}

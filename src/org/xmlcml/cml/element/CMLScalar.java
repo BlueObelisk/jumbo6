@@ -15,6 +15,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLScalar extends AbstractScalar implements HasUnits {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     final static Logger logger = Logger.getLogger(CMLScalar.class.getName());
 
     /**

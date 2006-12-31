@@ -18,6 +18,9 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLMatrix extends AbstractMatrix implements HasUnits {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      * 

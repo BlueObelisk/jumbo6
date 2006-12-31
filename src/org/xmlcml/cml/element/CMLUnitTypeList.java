@@ -36,6 +36,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 public class CMLUnitTypeList extends AbstractUnitTypeList implements
         GenericDictionary {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     Map<String, CMLUnitType> unitTypeMap;
 
     /**

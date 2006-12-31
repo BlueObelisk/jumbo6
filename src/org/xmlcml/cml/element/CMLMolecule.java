@@ -36,8 +36,11 @@ import org.xmlcml.euclid.Vector3;
  * @author Peter Murray-Rust, Ramin Ghorashi (2005)
  * 
  */
-public class CMLMolecule extends AbstractMolecule {
+public class CMLMolecule extends AbstractMolecule implements Indexable {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** control of hydrogen */
     public enum HydrogenControl {
         // this probablly needs more looking at
@@ -83,6 +86,13 @@ public class CMLMolecule extends AbstractMolecule {
         logger.setLevel(Level.INFO);
     }
 
+    /** ensure integrity between list and children.
+     * @return CMLMoleculeList.class
+     */
+    public Class getIndexableListClass() {
+    	return CMLMoleculeList.class;
+    }
+    
     // ancillary elements or helpers
 
     /**
@@ -409,7 +419,7 @@ public class CMLMolecule extends AbstractMolecule {
             CMLMolecule thisMol = new CMLMolecule(this);
             for (int i = 0; i < this.getAttributeCount(); i++) {
                 Attribute att = this.getAttribute(i);
-                if (!att.getLocalName().equals("id")) {
+                if (!att.getLocalName().equals(IdAttribute.NAME)) {
                     this.removeAttribute(this.getAttribute(i));
                 }
             }
@@ -846,23 +856,22 @@ public class CMLMolecule extends AbstractMolecule {
      */
     public CMLAtom getAtomById(String id) {
         CMLAtom atom = null;
-        if (getMoleculeCount() > 0) {
+        CMLAtomArray atomArray = getAtomArray();
+        // use atomArray first in case there are child molecules
+    	if (atomArray != null) {
+        // crude check for update index
+            if (atomArray.atomMap.size() !=
+                atomArray.getAtomElements().size()) {
+                atomArray.indexAtoms();
+            }
+            atom = atomArray.getAtomById(id);
+    	} else if (getMoleculeCount() > 0) {
             getChildMoleculeAtomMap();
             List<CMLAtom> atomList = childMoleculeAtomMap.get(id);
             if (atomList != null && atomList.size() == 1) {
                 atom = atomList.get(0);
             }
-        } else {
-            CMLAtomArray atomArray = getAtomArray();
-            // crude check for update index
-            if (atomArray != null) {
-                if (atomArray.atomMap.size() !=
-                    atomArray.getAtomElements().size()) {
-                    atomArray.indexAtoms();
-                }
-                atom = atomArray.getAtomById(id);
-            }
-        }
+    	}
         return atom;
     }
     
@@ -1463,7 +1472,7 @@ public class CMLMolecule extends AbstractMolecule {
 //         } else {
 //         //			CMLBond[] bondTools = this.getBondTools();
 //         for (int i = 0; i < bonds.size(); i++) {
-//         bonds[i].setIgnoreAttribute("id", true);
+//         bonds[i].setIgnoreAttribute(IdAttribute.NAME, true);
 //         }
 //         mustEqualAttributes(other);
 //         mustEqualChildNodes(other);

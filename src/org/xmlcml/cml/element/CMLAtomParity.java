@@ -12,6 +12,8 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLAtomParity extends AbstractAtomParity {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
     /** */
     public final static int TWODIM = 1;
 

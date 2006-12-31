@@ -10,6 +10,9 @@ import nu.xom.Node;
  */
 public class CMLGradient extends AbstractGradient {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

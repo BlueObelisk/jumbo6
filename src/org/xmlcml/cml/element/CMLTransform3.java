@@ -24,6 +24,9 @@ import org.xmlcml.euclid.Transform3.Type;
  */
 public class CMLTransform3 extends AbstractTransform3 {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * transformation matrix size
      */

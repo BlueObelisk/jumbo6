@@ -10,6 +10,7 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLCellParameter;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.euclid.test.DoubleTest;
 
 /**
@@ -225,7 +226,7 @@ public class CMLCellParameterTest extends AbstractTest {
         // "<cellParameter id='scp1' error='0.001 0.002 0.003'
         // units='"+U_ANGSTROM+"'" +
         // S_SPACE+CML_XMLNS+">4.500 5.500 6.500</cellParameter>"+
-        Assert.assertEquals("id", "scp1", cellParameter1.getId());
+        Assert.assertEquals(IdAttribute.NAME, "scp1", cellParameter1.getId());
         Assert.assertEquals("units", U_ANGSTROM, cellParameter1.getUnits());
         DoubleTest.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
                 cellParameter1.getError(), EPS);
@@ -244,7 +245,7 @@ public class CMLCellParameterTest extends AbstractTest {
         CMLCellParameter cellParameter1 = CMLCellParameter.getCellParameter(
                 cellParameterList, CMLCellParameter.Type.LENGTH);
         Assert.assertNotNull("cell parameter not null", cellParameter1);
-        Assert.assertEquals("id", "scp1", cellParameter1.getId());
+        Assert.assertEquals(IdAttribute.NAME, "scp1", cellParameter1.getId());
         Assert.assertEquals("units", U_ANGSTROM, cellParameter1.getUnits());
         DoubleTest.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
                 cellParameter1.getError(), EPS);
@@ -269,7 +270,7 @@ public class CMLCellParameterTest extends AbstractTest {
                 EPS);
         Assert.assertEquals("dataType", XSD_DOUBLE, cmlScalarList.get(0)
                 .getDataType());
-        Assert.assertEquals("dictRef", "cml:a", cmlScalarList.get(0)
+        Assert.assertEquals("dictRef", CMLCrystal.A, cmlScalarList.get(0)
                 .getDictRef());
         Assert.assertNotNull("error", cmlScalarList.get(0).getErrorValue());
         Assert.assertEquals("error", 0.001, cmlScalarList.get(0)

@@ -19,6 +19,9 @@ import org.xmlcml.euclid.Vector3;
  */
 public class CMLPoint3 extends AbstractPoint3 {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * empty point.
      * 

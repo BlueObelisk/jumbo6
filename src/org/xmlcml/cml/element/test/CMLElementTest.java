@@ -27,6 +27,8 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class CMLElementTest extends AbstractTest {
+	
+	final static String ID = "id";
     CMLElement atom;
     CMLElement cml1;
     Element elem1;
@@ -56,13 +58,13 @@ public class CMLElementTest extends AbstractTest {
         atom.setProperty("bar", "barString");
         cml1 = new CMLElement("cml1");
         CMLElement c = new CMLElement("cml2");
-        c.addAttribute(new Attribute("id", "c1"));
+        c.addAttribute(new Attribute(ID, "c1"));
         cml1.appendChild(c);
         Element noncml = new Element("noncml");
-        noncml.addAttribute(new Attribute("id", "n1"));
+        noncml.addAttribute(new Attribute(ID, "n1"));
         cml1.appendChild(noncml);
         c = new CMLElement("cml2");
-        c.addAttribute(new Attribute("id", "c2"));
+        c.addAttribute(new Attribute(ID, "c2"));
         cml1.appendChild(c);
     }
     /**
@@ -145,7 +147,7 @@ public class CMLElementTest extends AbstractTest {
         Assert.assertEquals("namespace", "atom", element.getLocalName());
         Assert.assertEquals("namespace", CML_NS, element.getNamespaceURI());
         // explicit prefix
-        element = new CMLElement("cml:atom");
+        element = new CMLElement(CMLAtom.NS);
         Assert.assertNotNull("constructor", element);
         Assert.assertEquals("default attribute count", 0, element
                 .getAttributeCount());
@@ -158,7 +160,7 @@ public class CMLElementTest extends AbstractTest {
                 .getAttributeCount());
         Assert.assertEquals("namespace", "", element.getNamespacePrefix());
         // non-CML element
-        element = new CMLElement("cml:foo");
+        element = new CMLElement(C_E+"foo");
         Assert.assertNotNull("constructor", element);
         Assert.assertEquals("default attribute count", 0, element
                 .getAttributeCount());
@@ -303,15 +305,15 @@ public class CMLElementTest extends AbstractTest {
         Assert.assertEquals("child cml", CMLElement.class, elems.get(0)
                 .getClass());
         Assert.assertEquals("child cml id", "c1", elems.get(0)
-                .getAttributeValue("id"));
+                .getAttributeValue(ID));
         Assert.assertEquals("child cml id", "c2", elems.get(1)
-                .getAttributeValue("id"));
+                .getAttributeValue(ID));
         elems = cml1.getChildCMLElements("noncml");
         Assert.assertEquals("child cml", 0, elems.size());
         elems = cml1.getChildElements("noncml");
         Assert.assertEquals("child cml", 1, elems.size());
         Assert.assertEquals("child cml id", "n1", elems.get(0)
-                .getAttributeValue("id"));
+                .getAttributeValue(ID));
         Assert
                 .assertEquals("child cml", Element.class, elems.get(0)
                         .getClass());
@@ -323,7 +325,7 @@ public class CMLElementTest extends AbstractTest {
     public void testGetFirstCMLChild() {
         Element elem = cml1.getFirstCMLChild("cml2");
         Assert.assertEquals("child cml", CMLElement.class, elem.getClass());
-        Assert.assertEquals("child cml id", "c1", elem.getAttributeValue("id"));
+        Assert.assertEquals("child cml id", "c1", elem.getAttributeValue(ID));
     }
     /**
      * Test method for
@@ -333,10 +335,10 @@ public class CMLElementTest extends AbstractTest {
     public void testGetChildCMLElement() {
         Element elem = cml1.getChildCMLElement("cml2", 0);
         Assert.assertEquals("child cml", CMLElement.class, elem.getClass());
-        Assert.assertEquals("child cml id", "c1", elem.getAttributeValue("id"));
+        Assert.assertEquals("child cml id", "c1", elem.getAttributeValue(ID));
         elem = cml1.getChildCMLElement("cml2", 1);
         Assert.assertEquals("child cml", CMLElement.class, elem.getClass());
-        Assert.assertEquals("child cml id", "c2", elem.getAttributeValue("id"));
+        Assert.assertEquals("child cml id", "c2", elem.getAttributeValue(ID));
         elem = cml1.getChildCMLElement("cml2", 2);
         Assert.assertNull("child cml", elem);
     }

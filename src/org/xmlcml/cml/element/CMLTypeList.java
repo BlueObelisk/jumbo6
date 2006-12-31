@@ -1,9 +1,12 @@
 package org.xmlcml.cml.element;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
-import org.xmlcml.cml.base.*;
+
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLType;
 
 /** NON-modifiable class supporting CMLTypeList.
 *

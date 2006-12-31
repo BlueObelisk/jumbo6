@@ -25,7 +25,7 @@ import org.xmlcml.cml.base.CMLUtil;
 * the autogeneration software will not overwrite an existing class file
 
 */
-public class CMLTableRowList extends org.xmlcml.cml.element.AbstractTableRowList {
+public class CMLTableRowList extends AbstractTableRowList {
 
     /** must give simple documentation.
     *

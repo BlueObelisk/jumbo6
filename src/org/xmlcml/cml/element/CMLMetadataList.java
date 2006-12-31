@@ -18,6 +18,9 @@ import org.xmlcml.cml.base.CMLElements;
  */
 public class CMLMetadataList extends AbstractMetadataList {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */
@@ -164,7 +167,7 @@ public class CMLMetadataList extends AbstractMetadataList {
         }
         if (errorList.size() == 0) {
             // scalars
-            List<CMLElement> metadatas = cml.getElements(".//cml:metadata");
+            List<CMLElement> metadatas = cml.getElements(".//"+CMLMetadata.NS);
             for (CMLElement metadata : metadatas) {
                 MetadataNameAttribute nameAttribute = (MetadataNameAttribute) ((CMLMetadata) metadata)
                         .getNameAttribute();

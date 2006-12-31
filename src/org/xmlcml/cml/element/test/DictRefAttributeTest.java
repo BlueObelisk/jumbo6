@@ -191,7 +191,7 @@ public class DictRefAttributeTest extends AbstractTest {
 		DictionaryMap dictionaryMap = null;
 		CMLElement rootElement = null;
 		InputStream in = Util.getInputStreamFromResource(COMPLEX_RESOURCE
-				+ U_S + filename + ".xml");
+				+ U_S + filename + XML_SUFF);
 		rootElement = (CMLElement) new CMLBuilder().build(in).getRootElement();
 		in.close();
 		dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE

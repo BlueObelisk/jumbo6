@@ -16,6 +16,8 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class CMLAtomicBasisFunction extends AbstractAtomicBasisFunction {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
     /**
      * constructor.
      */

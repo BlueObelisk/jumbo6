@@ -23,6 +23,8 @@ import org.xmlcml.cml.base.StringArrayAttribute;
 public class CMLAtomArray extends AbstractAtomArray {
 
     final static Logger logger = Logger.getLogger(CMLAtomArray.class.getName());
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
 
     /** map of atom ids to atoms.*/
     Map<String, CMLAtom> atomMap;

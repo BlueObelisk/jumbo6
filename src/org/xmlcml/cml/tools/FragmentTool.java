@@ -1,24 +1,33 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
-import nu.xom.ParentNode;
 
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArg;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLFragment;
-import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CountExpressionAttribute;
+import org.xmlcml.cml.element.Indexable;
+import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
+import org.xmlcml.euclid.Util;
 
 /**
  * additional tools for fragment. not fully developed
@@ -30,9 +39,20 @@ public class FragmentTool extends AbstractTool {
 
     Logger logger = Logger.getLogger(FragmentTool.class.getName());
 
-    CMLFragment fragment;
 
-    /**
+	final static String IDX = "idx";
+	final static String F_PREFIX = "f_";
+//	private MoleculeFragmentLocator moleculeFragmentLocator;
+    private CMLFragment fragment;
+    
+	/**
+	 * @param fragment the fragment to set
+	 */
+	public void setFragment(CMLFragment fragment) {
+		this.fragment = fragment;
+	}
+
+	/**
      * constructor
      * 
      * @param fragment
@@ -66,8 +86,9 @@ public class FragmentTool extends AbstractTool {
      * @return null if none
      */
     public void setMolecule(CMLMolecule molecule) {
-    	List<Node> molecules = CMLUtil.getQueryNodes(fragment, "./cml:molecule", X_CML);
+    	List<Node> molecules = CMLUtil.getQueryNodes(fragment, CMLMolecule.NS, X_CML);
     	if (molecules.size() == 0) {
+    		molecule.detach();
     		fragment.insertChild(molecule, 0);
     	} else {
     		fragment.replaceChild(molecules.get(0), molecule);
@@ -76,213 +97,140 @@ public class FragmentTool extends AbstractTool {
 	
     /** process basic convention.
      * 
-     * @param parent
      */
-    public void processBasic(CMLMolecule parent) {
-        CMLUtil.removeWhitespaceNodes(fragment);
-        // will have to process repeat count here before args
-        this.expandCountExpressions();
-        // add args first so every molecule has unique id
-        CMLArg.addArgs(fragment, CMLMolecule.TAG);
-        
-        // create join/@atomRefs2
-        this.recursivelyCreateAtomsRefs2OnJoins(parent);
-        
-        // flatten molecules
-        List<Node> nonFragments = CMLUtil.getQueryNodes(
-                parent, ".//*[self::cml:fragment or " +
-                "self::cml:fragmentList]/*[not(self::cml:fragment) " +
-                "and not(self::cml:fragmentList)]", X_CML);
-        for (Node nonFragment : nonFragments) {
-            nonFragment.detach();
-            parent.appendChild(nonFragment);
-        }
-        parent.setConvention(Convention.PML_INTERMEDIATE.value);
+    public void processBasic() {
+    	new BasicProcessor(fragment).process();
     }
     
-    /**
-     * finds subfragments with
-     * 
-     * @countExpression and expands these.
-     * 
-     */
-    public void expandCountExpressions() {
-        // must do this recursively (WHY??)
-        while (true) {
-            Nodes nodes = fragment.query(".//cml:fragment[@countExpression]",
-                    X_CML);
-            if (nodes.size() == 0) {
-                break;
-            }
-            CMLFragment fragment = (CMLFragment) nodes.get(0);
-            new FragmentTool(fragment).expandCountExpression();
-        }
-    }
-
-    // move to fragment
-    private void expandCountExpression() {
-        Node parent = fragment.getParent();
-        Element parentElement = (Element) parent;
-        // position of fragment
-        int idx = parentElement.indexOf(fragment);
-        CountExpressionAttribute cea = (CountExpressionAttribute) fragment.getCountExpressionAttribute();
-        int count = cea.calculateCountExpression();
-        // detach any fragments without a reference (from hanging bond)
-        Nodes nodes = fragment.query("cml:fragment[@ref='']", X_CML);
-        if (nodes.size() == 1) {
-            nodes.get(0).detach();
-        }
-        // any child joins? if so detach and transfer to following sibling
-        CMLJoin subJoin = null;
-        Nodes joins = fragment.query("./cml:join", X_CML);
-        if (joins.size() != 0) {
-            subJoin = (CMLJoin) joins.get(0);
-            System.out.println("FOUND JOIN");
-            subJoin.detach();
-        } else {
-            throw new CMLRuntimeException("EXPECTED JOIN CHILD");
-        }
-        // clone count-1 fragments and append to existing fragment
-        for (int i = 1; i < count; i++) {
-            // add join to preceeding fragment
-            if (subJoin != null) {
-                CMLJoin subJoin1 = new CMLJoin(subJoin);
-                parentElement.insertChild(subJoin1, idx);
-            }
-            CMLFragment fragment1 = new CMLFragment(fragment);
-            parentElement.insertChild(fragment1, idx);
-        }
-    }
-
-    /**
-     * get list of joins. looks for child join with linkOnParent attribute
-     * 
-     * @return list of joins
-     */
-    public List<CMLFragmentList> getBranchingJoinList() {
-        List<CMLFragmentList> branchingJoinList = new ArrayList<CMLFragmentList>();
-        String link = "cml:PARENT";
-        Nodes branchingJoinNodes = fragment.query(
-                "cml:fragmentList[cml:label[@dictRef='"+link+"']]",
-                X_CML);
-        for (int i = 0; i < branchingJoinNodes.size(); i++) {
-            branchingJoinList.add((CMLFragmentList) branchingJoinNodes.get(i));
-        }
-        return branchingJoinList;
-    }
     
-    /** expands this fragments with content from refMol.
-     * used when this contains only a @ref and no content.
-     * will also expand any args
-     * @param refMol
-     */
-    public void expandRefFromFragment(CMLFragment refMol) {
-        // copy the fragment from the catalogue
-        CMLFragment copyMol = new CMLFragment(refMol);
-        
-        Nodes nodes = fragment.query("cml:arg", X_CML);
-        for (int i = 0; i < nodes.size(); i++) {
-            CMLArg arg = (CMLArg) nodes.get(i);
-            String name = arg.getName();
-            String value = arg.getString();
-            CMLArg.substituteParameterName(copyMol, name, value);
-        }
-        CMLArg.substituteParentAttributes(copyMol);
-        CMLArg.substituteTextContent(copyMol);
-        Element parent = (Element) fragment.getParent();
-        int idx = parent.indexOf(fragment);
-        parent.insertChild(copyMol, idx);
-        fragment.detach();
-    }
     
-    /** recursive processing.
-     * 
-     * @param parent
-     */
-    
-    public void recursivelyCreateAtomsRefs2OnJoins(CMLMolecule parent) {
-//    <fragment>
-//        <molecule ref="g:benzene" id="m1" />
-//        <fragmentList>
-//            <join id="j1" order="1" moleculeRefs2="PARENT NEXT" atomRefs2="r1 r1">
-//                <length>1.4</length>
-//                <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
-//            </join>
-//            <fragment>
-//                <molecule ref="g:po" id="m3" />
-//            </fragment>
-        
-        @SuppressWarnings("unused")
-        CMLMolecule previousMolecule = parent;
-        CMLMolecule molecule = this.getMolecule();
-        if (molecule == null) {
-            throw new CMLRuntimeException("Expected child molecule in fragment");
-        }
-        CMLElements<CMLFragmentList> fragmentLists = fragment.getFragmentListElements();
-        for (CMLFragmentList fragmentList : fragmentLists) {
-            fragmentList.recursivelyCreateAtomsRefs2OnJoins(molecule);
-        }
-    }
-
     /** get first child molecule.
      * 
      * @return molecule or null
      */
     public CMLMolecule getMolecule() {
-//      <fragment>
-//      <molecule ref="g:po" id="m3" />
-//  </fragment>
     	CMLMolecule molecule = null;
     	if (fragment != null) {
         	List<Node> molecules = CMLUtil.getQueryNodes(
-        			fragment, "./cml:molecule", X_CML);
+        			fragment, CMLMolecule.NS, X_CML);
         	molecule = (molecules.size() == 0) ? null : (CMLMolecule) molecules.get(0); 
     	}
     	return molecule;
     }
     
-    /** flatten recursively.
-     *
-     */
-    public void flattenFragmentListDescendants() {
-        CMLElements<CMLFragmentList> fragmentLists = fragment.getFragmentListElements();
-        for (CMLFragmentList fragmentList : fragmentLists) {
-            fragmentList.flattenFragmentDescendants();
-            CMLUtil.transferChildren(fragmentList, fragment);
-        }
-    }
-    
-    /** process children of form fragment-join-fragment.
-     */
-//    public void joinChildFragments() {
-//    	List<CMLElement> childElements = fragment.getChildCMLElements();
-//    	CMLFragment topFragment = null;
-//    	for (CMLElement child : childElements) {
-//    		if (child instanceof CMLFragmentList) {
-//    			FragmentListTool fragmentListTool = 
-//    				new FragmentListTool((CMLFragmentList) child);
-//			}
-//    	}
-//    }
-    
-    public static void processRecursively(CMLMolecule molecule) {
-    	List<Node> joins = CMLUtil.getQueryNodes(molecule, "./cml:join", X_CML);
-    	for (Node join : joins) {
-    		FragmentTool.processRecursively((CMLJoin) join);
-    	}
-    }
-    
     /** return expanded countExpression.
      * @return evaluated expression (0 if missing attribute)
      */
-    private int calculateCountExpression() {
-//        Node parent = fragment.getParent();
-//        Element parentElement = (Element) parent;
-//        // position of fragment
-//        int idx = parentElement.indexOf(fragment);
+    int calculateCountExpression() {
         CountExpressionAttribute cea = 
         	(CountExpressionAttribute) fragment.getCountExpressionAttribute();
         return (cea == null) ? 0 : cea.calculateCountExpression();
+    }
+
+    /** process fragment recursively.
+     * public mainly for testing
+     *
+     */
+	public void basic_processRecursively() {
+		new RecursiveProcessor(fragment).process();
+	}
+	
+	/** expand joins in list.
+	 * public for testing
+	 *
+	 */
+	public void expandJoinedList() {
+		RecursiveProcessor recursiveProcessor = new RecursiveProcessor(fragment);
+		recursiveProcessor.expandJoinedList();
+	}
+    
+	/** process intermediate format.
+	 * moved from polymerTool
+	 * @param fragmentList
+	 */
+    public void processIntermediate(Catalog catalog) {
+    	IntermediateProcessor intermediateProcessor = 
+    		new IntermediateProcessor(fragment);
+    	intermediateProcessor.process(catalog);
+    }
+    
+    public void processExplicit() {
+    	ExplicitProcessor explicitProcessor = new ExplicitProcessor(fragment);
+    	explicitProcessor.process();
+    }
+    
+    /** public only for testing.
+     */
+    public void substituteParameters() {
+    	new IntermediateProcessor(fragment).substituteParameters();
+    }
+}
+class RecursiveProcessor implements CMLConstants {
+	
+	CMLFragment fragment;
+	FragmentTool fragmentTool;
+	
+	public RecursiveProcessor(CMLFragment fragment) {
+		this.fragment = fragment;		
+		fragmentTool = new FragmentTool(fragment);
+	}
+	
+    /** process fragment recursively.
+     * public mainly for testing
+     *
+     */
+	void process() {
+		if (fragment.getCountExpressionAttribute() != null) {
+			expandJoinedList();
+			this.process();
+		} else {
+	    	List<Node> nodes = CMLUtil.getQueryNodes(fragment, 
+				CMLJoin.NS+X_OR+CMLFragment.NS+X_OR+CMLMolecule.NS, X_CML);
+	    	for (Node node : nodes) {
+	    		if (node instanceof CMLFragment) {
+	    			new RecursiveProcessor((CMLFragment) node).process();
+	    		} else if (node instanceof CMLJoin) {
+	    			CMLJoin join = (CMLJoin) node;
+	    			if (join.getAtomRefs2() == null) {
+	    				throw new CMLRuntimeException("join must have atomRefs2");
+	    			} else if (join.getMoleculeRefs2() == null) {
+	    				throw new CMLRuntimeException("join must have moleculeRefs2");
+	    			}
+	    		} else if (node instanceof CMLMolecule) {
+	    			process((CMLMolecule) node);
+	    		}
+	    	}
+	    	nodes = CMLUtil.getQueryNodes(fragment, 
+	    			CMLJoin.NS+X_OR+CMLFragment.NS, X_CML);
+	    	if (nodes.size() > 0 && 
+				nodes.size() == fragment.getChildElements().size()) {
+	    		Node parent = fragment.getParent();
+	    		if (parent instanceof CMLFragment) {
+	    			fragment.replaceByChildren();
+	    		}
+	    	}
+		}
+	}
+	
+    private void process(CMLMolecule molecule) {
+    	List<Node> joins = CMLUtil.getQueryNodes(molecule, CMLJoin.NS, X_CML);
+    	for (Node join : joins) {
+    		process((CMLJoin) join);
+    	}
+    }
+    
+    /** process join recursively.
+     * should move to CMLJoin
+     * @param join
+     */
+    private void process(CMLJoin join) {
+    	List<Node> frags = CMLUtil.getQueryNodes(join, CMLFragment.NS, X_CML);
+    	if (frags.size() != 1) {
+    		throw new CMLRuntimeException("exactly one frag child needed");
+    	}
+    	CMLFragment fragChild = (CMLFragment) frags.get(0);
+    	RecursiveProcessor recursiveProcessor = new RecursiveProcessor(fragChild);
+    	recursiveProcessor.process();
     }
 
     /** expands join-fragment and @countExpression() to fragment.
@@ -300,17 +248,16 @@ public class FragmentTool extends AbstractTool {
      *       fragment
      *       
      * where fragment and joins are clones
-     *
+     * public mainly for testing
      *@return fragment (if countExpression evalues to 0, returns null; 
      *if expression is 1 returns the fragment)
      */
-    public void expandJoinedList() {
-//    	CMLFragment parentFragment = null;
-    	int count = calculateCountExpression();
+    void expandJoinedList() {
+    	int count = fragmentTool.calculateCountExpression();
     	if (count != 0) {
     		fragment.removeAttribute("countExpression");
-    		List<Node> joins = CMLUtil.getQueryNodes(fragment, "./cml:join", X_CML);
-    		List<Node> fragments = CMLUtil.getQueryNodes(fragment, "./cml:fragment", X_CML);
+    		List<Node> joins = CMLUtil.getQueryNodes(fragment, CMLJoin.NS, X_CML);
+    		List<Node> fragments = CMLUtil.getQueryNodes(fragment, CMLFragment.NS, X_CML);
     		if (joins.size() != 1 || fragments.size() != 1) {
     			throw new CMLRuntimeException("wrong format; requires exactly 1 join and 1 fragment");
     		}
@@ -326,48 +273,367 @@ public class FragmentTool extends AbstractTool {
     		childFragment.detach();
     	}
     }
-    
-    /** process join recursively.
-     * should move to CMLJoin
-     * @param join
-     */
-    public static void processRecursively(CMLJoin join) {
-    	List<Node> frags = CMLUtil.getQueryNodes(join, "./cml:fragment", X_CML);
-    	if (frags.size() != 1) {
-    		throw new CMLRuntimeException("exactly one frag child needed");
-    	}
-    	CMLFragment fragChild = (CMLFragment) frags.get(0);
-    	new FragmentTool(fragChild).processRecursively();
+}
+
+class BasicProcessor implements CMLConstants {
+
+	private CMLFragment fragment;
+	
+	public BasicProcessor(CMLFragment fragment) {
+		this.fragment = fragment;
+	}
+	
+	public CMLFragment getFragment() {
+		return fragment;
+	}
+	
+    void process() {
+        CMLUtil.removeWhitespaceNodes(fragment);
+        RecursiveProcessor recursiveProcessor = new RecursiveProcessor(fragment);
+        recursiveProcessor.process();
+        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
+        
+        // create join/@atomRefs2
+        this.recursivelyCreateAtomsRefs2OnJoins();
+        this.replaceFragmentsByChildMolecules();
+        fragment.setConvention(Convention.PML_INTERMEDIATE.value);
     }
     
-	public void processRecursively() {
-		if (fragment.getCountExpressionAttribute() != null) {
-			expandJoinedList();
-			this.processRecursively();
-		} else {
-	    	List<Node> nodes = CMLUtil.getQueryNodes(fragment, 
-				"./cml:join | ./cml:fragment | ./cml:molecule", X_CML);
-	    	for (Node node : nodes) {
-	    		if (node instanceof CMLFragment) {
-	    			new FragmentTool((CMLFragment) node).processRecursively();
-	    		} else if (node instanceof CMLJoin) {
-	    			CMLJoin join = (CMLJoin) node;
-	    			if (join.getAtomRefs2() == null) {
-	    				throw new CMLRuntimeException("join must have atomRefs2");
-	    			} else if (join.getMoleculeRefs2() == null) {
-	    				throw new CMLRuntimeException("join must have moleculeRefs2");
-	    			}
-	    		} else if (node instanceof CMLMolecule) {
-	    			FragmentTool.processRecursively((CMLMolecule) node);
-	    		}
-	    	}
-	    	nodes = CMLUtil.getQueryNodes(fragment, 
-	    			"./cml:join | ./cml:fragment", X_CML);
-	    	if (nodes.size() > 0 && 
-				nodes.size() == fragment.getChildElements().size()) {
-	    		fragment.replaceByChildren();
-	    	}
+    private void replaceFragmentsByChildMolecules() {
+    	List<Node> childMols = CMLUtil.getQueryNodes(
+    			fragment, ".//"+CMLMolecule.NS, X_CML);
+    	for (Node node : childMols) {
+    		CMLElement parent = (CMLElement) node.getParent();
+    		if (parent instanceof CMLFragment) {
+    			parent.replaceByChildren();
+			}
+    	}
+    }
+    
+    /** recursive processing.
+     */
+    
+    private void recursivelyCreateAtomsRefs2OnJoins() {
+
+    	List<Node> joins = CMLUtil.getQueryNodes(fragment, CMLJoin.NS, X_CML);
+    	List<Node> frags = CMLUtil.getQueryNodes(fragment, CMLFragment.NS, X_CML);
+    	List<Node> mols = CMLUtil.getQueryNodes(fragment, CMLMolecule.NS, X_CML);
+    	// first process descendants recursively
+    	// frag-join-frag...
+    	if (joins.size() > 0 && joins.size() + 1 == frags.size()) {
+        	for (Node node : frags) {
+        		CMLFragment subFragment = (CMLFragment) node;
+        		BasicProcessor subProcessor = new BasicProcessor(subFragment);
+        		subProcessor.recursivelyCreateAtomsRefs2OnJoins();
+        	}
+        	int i = 0;
+        	for (Node node : joins) {
+        		CMLJoin subJoin = (CMLJoin) node;
+        		CMLFragment previousFragment = (CMLFragment) frags.get(i);
+        		CMLFragment nextFragment = (CMLFragment) frags.get(i+1);
+        		cleanMoleculeArgs(previousFragment, FragmentTool.IDX);
+        		cleanMoleculeArgs(nextFragment, FragmentTool.IDX);
+        		subJoin.processMoleculeRefs2AndAtomRefs2(previousFragment, nextFragment);
+        		i++;
+        	}
+    	} else if (mols.size() == 1) {
+    		CMLMolecule subMol = (CMLMolecule) mols.get(0);
+        	List<Node> childJoins = CMLUtil.getQueryNodes(subMol, CMLJoin.NS, X_CML);
+        	for (Node node : childJoins) {
+        		CMLJoin childJoin = (CMLJoin) node;
+            	List<Node> childs = CMLUtil.getQueryNodes(childJoin, CMLFragment.NS/*+X_OR+CMLMolecule.NS*/, X_CML);
+            	if (childs.size() != 1) {
+            		throw new CMLRuntimeException(
+        				"branching join requires 1 child fragment; found "+
+        				childs.size()+" on "+childJoin.getId());
+            	}
+            	CMLFragment newFragment = (CMLFragment)childs.get(0);
+            	BasicProcessor newProcessor = new BasicProcessor(newFragment);
+            	newProcessor.process();
+            	newFragment = newProcessor.getFragment();
+            	FragmentTool newFragmentTool = new FragmentTool(newFragment);
+            	CMLMolecule newMolecule = newFragmentTool.getMolecule();
+            	cleanMoleculeArgs(newFragment, FragmentTool.IDX);
+            	cleanArgs(subMol, FragmentTool.IDX);
+            	childJoin.processMoleculeRefs2AndAtomRefs2(subMol, newMolecule);
+        	}
+    	}
+    }
+    
+    /** remove spurious IDs and underscores
+     * this is really a bug 
+     * @param molecule
+     * @param argName
+     */
+    private void cleanMoleculeArgs(CMLFragment fragment, String argName) {
+    	List<Node> mols = CMLUtil.getQueryNodes(fragment, CMLMolecule.NS, X_CML);
+    	for (Node node : mols) {
+    		CMLMolecule molecule = (CMLMolecule) node;
+    		cleanArgs(molecule, argName);
+    	}
+    }
+    
+    /** remove spurious IDs and underscores
+     * this is really a bug 
+     * @param molecule
+     * @param argName
+     */
+    private void cleanArgs(CMLMolecule molecule, String argName) {
+    	// id may have acquired underscores as result of branches.
+    	// remove them
+    	String id = molecule.getId();
+    	int idx = id.indexOf(S_UNDER);
+    	if (idx != -1) {
+    		molecule.setId(id.substring(0, idx));
+    	}
+    	List<Node> args = CMLUtil.getQueryNodes(molecule, CMLArg.NS+"[@name='"+argName+"']", X_CML);
+    	while(args.size() > 1) {
+    		args.get(1).detach();
+    		args.remove(1);
+    	}
+    }
+}
+
+class IntermediateProcessor implements CMLConstants {
+	//should consist of molecule (join, molecule)*
+	// molecules may have child joins.
+	// processing will be recursive
+	// process branches first (includes all joining) 
+	// then join branches to molecule
+	// then process chain
+	
+	CMLFragment fragment;
+	
+	public IntermediateProcessor(CMLFragment fragment) {
+		this.fragment = fragment;
+	}
+	
+	void process(Catalog catalog) {
+		List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS+"[not(@order)]", X_CML);
+		for (Node node : joins) {
+		    ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
+		}
+		expandTorsionsWithMinMaxValues();
+		// lookup referenced molecules; replaces by fragments containing new molecules
+		dereferenceMolecules(catalog);
+		// this is not yet tested
+		dereferenceFragments(catalog);
+		fragment.setConvention(Convention.PML_EXPLICIT.value);
+	}
+
+	private void dereferenceMolecules(Catalog catalog) {
+		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLMolecule.NS+"[@ref]", X_CML);
+		for (Node node : mols) {
+		    CMLMolecule subMolecule = (CMLMolecule) node;
+		    CMLMolecule dereferencedMol = (CMLMolecule) 
+		        dereference(catalog, subMolecule, IndexableList.Type.MOLECULE_LIST);
+		    if (dereferencedMol == null) {
+		    	throw new CMLRuntimeException("Cannot dereference: "+subMolecule.getRef());
+		    }
+		    subMolecule.removeAttribute("ref");
+		    // copy
+		    FragmentConverter fragmentConverter = new FragmentConverter(dereferencedMol);
+		    // make a new fragment
+		    CMLFragment newFragment = fragmentConverter.convertToFragment();
+		    FragmentTool newFragmentTool = new FragmentTool(newFragment); 
+		    // its molecule becomes the new molecule
+		    CMLMolecule newMolecule = newFragmentTool.getMolecule();
+		    // transfer anything meaningful from original one
+		    CMLUtil.transferChildren(subMolecule, newMolecule);
+		    newMolecule.copyAttributesFrom(subMolecule);
+		    // replace old molecule
+		    subMolecule.getParent().replaceChild(subMolecule, newFragment);
+		    // do parameter substitution
+		    new IntermediateProcessor(newFragment).substituteParameters();
+		    // replace fragments by child molecules
+		    newMolecule.detach();
+		    newFragment.getParent().replaceChild(newFragment, newMolecule);
 		}
 	}
 	
+	
+	/** expand fragments.
+	* not yet tested
+	* @param catalog
+	*/
+	private void dereferenceFragments(Catalog catalog) {
+		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLFragment.NS+"[@ref]", X_CML);
+		for (Node node : mols) {
+		    CMLFragment subFragment = (CMLFragment) node;
+		    CMLFragment newFragment = (CMLFragment) 
+		        dereference(catalog, subFragment, IndexableList.Type.FRAGMENT_LIST);
+		    subFragment.removeAttribute("ref");
+		    // copy
+		    FragmentTool newFragmentTool = new FragmentTool(newFragment); 
+		    // transfer anything meaningful from original one
+		    CMLUtil.transferChildren(subFragment, newFragment);
+		    newFragment.copyAttributesFrom(subFragment);
+		    // replace old molecule
+		    subFragment.getParent().replaceChild(subFragment, newFragment);
+		    // do parameter substitution
+		    newFragmentTool.substituteParameters();
+		    // replace fragment by molecule child
+		}
+	}
+	
+	/** expand arguments.
+	* calls:
+	* CMLArg.substituteParameterName(molecule, name, value);
+	* CMLArg.substituteParentAttributes(molecule);
+	* CMLArg.substituteTextContent(molecule);
+	*/
+	void substituteParameters() {
+		CMLMolecule molecule = new FragmentTool(fragment).getMolecule();
+		Nodes nodes = molecule.query(CMLArg.NS+"[@name]", X_CML);
+		for (int i = 0; i < nodes.size(); i++) {
+			CMLArg arg = (CMLArg) nodes.get(i);
+			String name = arg.getName();
+			String value = arg.getString();
+			CMLArg.substituteParameterName(molecule, name, value);
+			arg.detach();
+		}
+		CMLArg.substituteParentAttributes(molecule);
+		CMLArg.substituteTextContent(molecule);
+		fragment.setId(FragmentTool.F_PREFIX+molecule.getId());
+	}
+	
+	
+	/** returns a copy of a derefenceable element.
+	* 
+	* @param catalog
+	* @param indexable
+	* @param type
+	* @return derefernced ellemnt or null
+	*/
+	private Indexable dereference(Catalog catalog, Indexable indexable, IndexableList.Type type) {
+		Indexable deref = null;
+		String ref = indexable.getRef();
+		
+		if (ref != null) {
+			String prefix = CMLUtil.getPrefix(ref);
+			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, (CMLElement)indexable);
+			if (namespace != null) {
+				IndexableList indexableList = catalog.getIndexableList(namespace, type);
+				if (indexableList != null) {
+					deref = indexableList.getById(CMLUtil.getLocalName(ref));
+				}
+				if (deref == null) {
+					((CMLElement)indexableList).debug("II");
+				}
+			} else {
+				((CMLElement)indexable).debug("FAILS TO LOOKUP");
+				throw new CMLRuntimeException(
+						"Cannot create namespace for indexable lookup;" +
+						" check that data namespaces are in scope");
+			}
+		} else {
+			throw new CMLRuntimeException("Null ref on indexable");
+		}
+		return (deref == null) ? null : (Indexable) ((CMLElement)deref).copy();
+	}
+	
+	private void expandTorsionsWithMinMaxValues() {
+		List<Node> torsions = CMLUtil.getQueryNodes(fragment, ".//"+CMLTorsion.NS+"[@min and @max]", X_CML);
+		for (Node node : torsions) {
+		    CMLTorsion torsion = (CMLTorsion) node;
+		    String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
+		    int value = new CountExpressionAttribute(countExpression).calculateCountExpression();
+		    torsion.setXMLContent((double)value);
+		    torsion.removeAttribute("min");
+		    torsion.removeAttribute("max");
+		    torsion.debug("MINMAX");
+		}
+	}
+}
+
+class ExplicitProcessor implements CMLConstants {
+	
+	CMLFragment fragment;
+	
+	public ExplicitProcessor(CMLFragment fragment) {
+		this.fragment = fragment;
+	}
+	
+    void process() {
+        //should consist of molecule (join, molecule)*
+        CMLElements<CMLJoin> joinList = fragment.getJoinElements();
+        CMLElements<CMLMolecule> moleculeList = fragment.getMoleculeElements();
+        if (moleculeList.size() - joinList.size() != 1) {
+        	throw new CMLRuntimeException("Must have molecule-join-molecule...");
+        }
+        // immediate children
+        List<Node> moleculeAndJoinList = CMLUtil.getQueryNodes(
+        	fragment, CMLJoin.NS+X_OR+CMLMolecule.NS, X_CML);
+        CMLMolecule growingMolecule = (CMLMolecule) moleculeAndJoinList.get(0);
+        moleculeAndJoinList.remove(0);
+        
+        processMoleculeAndJoin(growingMolecule, moleculeAndJoinList);
+        // clean join bonds (they are left hanging)
+        cleanJoinBonds();
+        fragment.setConvention(Convention.PML_COMPLETE.value);
+    }
+    
+    private void processMoleculeAndJoin(
+		CMLMolecule growingMolecule, List<Node> moleculeAndJoinList) {
+        boolean takeAtomWithLowestId = true;
+    	MoleculeTool growingMoleculeTool = new MoleculeTool(growingMolecule);
+    	// iterate through the list, removing join-mol
+        while (moleculeAndJoinList.size() > 0) {
+    		CMLJoin join = (CMLJoin) moleculeAndJoinList.get(0);
+    		moleculeAndJoinList.remove(0);
+        	CMLMolecule molecule = (CMLMolecule) moleculeAndJoinList.get(0);
+    		moleculeAndJoinList.remove(0);
+            adjustGeometry(molecule);
+            List<Node> joins = CMLUtil.getQueryNodes(molecule, CMLJoin.NS, X_CML);
+            detachJoins(joins);
+            CMLAtomSet molAtomSet = molecule.getAtomSet();
+            growingMoleculeTool.addMoleculeTo(molecule, takeAtomWithLowestId);
+            join.addMoleculeTo(growingMolecule, molAtomSet, takeAtomWithLowestId);
+        	processMoleculeWithJoinChildren(growingMolecule, joins);
+        }
+    }
+    
+    private void detachJoins(List<Node> joinList) {
+    	for (Node node : joinList) {
+    		node.detach();
+    	}
+    }
+    
+    private void adjustGeometry(CMLMolecule molecule) {
+        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+        moleculeTool.adjustTorsions();
+        moleculeTool.adjustAngles();
+        moleculeTool.adjustLengths();
+        List<Node> args = CMLUtil.getQueryNodes(molecule, CMLArg.NS, X_CML);
+        for (Node arg : args) {
+        	arg.detach();
+        }
+    }
+    
+	private void processMoleculeWithJoinChildren(
+		CMLMolecule growingMolecule, List<Node> joinList) {
+		for (Node node : joinList) {
+			CMLJoin join = (CMLJoin) node;
+	        List<Node> moleculeAndJoinList = CMLUtil.getQueryNodes(
+	        	join, CMLJoin.NS+X_OR+CMLMolecule.NS, X_CML);
+	        moleculeAndJoinList.add(0, join);
+	        processMoleculeAndJoin(growingMolecule, moleculeAndJoinList);
+		}
+	}
+	
+    private void cleanJoinBonds() {
+//        List<Node> bondArrays = CMLUtil.getQueryNodes(fragment, "./cml"+CMLBondArray.TAG, X_CML);
+//        CMLElements<CMLMolecule> molecules = fragment.getMoleculeElements();
+//        if (bondArrays.size() == 1 && molecules.size() == 1) {
+//            CMLBondArray bondArray = (CMLBondArray) bondArrays.get(0);
+//            CMLMolecule subMolecule = molecules.get(0);
+//            List<CMLBond> bonds = bondArray.getBonds();
+//            for (CMLBond bond : bonds) {
+//                bond.detach();
+//                subMolecule.addBond(bond);
+//            }
+//            bondArray.detach();
+//        }
+    }
+    
 }

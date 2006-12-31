@@ -20,6 +20,9 @@ import org.xmlcml.euclid.Point3;
  */
 public class CMLSymmetry extends AbstractSymmetry {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */
@@ -393,7 +396,7 @@ public class CMLSymmetry extends AbstractSymmetry {
      * @throws CMLRuntimeException if 0 or >1 nodes
      */
     public static CMLSymmetry getContainedSymmetry(CMLElement element) throws CMLRuntimeException {
-        Nodes symmetryNodes = element.query("//cml:symmetry", X_CML);
+        Nodes symmetryNodes = element.query("//"+CMLSymmetry.NS, X_CML);
         if (symmetryNodes.size() == 0) {
             throw new CMLRuntimeException("NO <symmetry> FOUND");
         } else if (symmetryNodes.size() > 1) {

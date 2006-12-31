@@ -10,8 +10,11 @@ import nu.xom.Node;
  */
 public class CMLElectron extends AbstractElectron {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** pi electron. */
-    public final static String PI = "cml:piElectron";
+    public final static String PI = C_A+"piElectron";
 
     /**
      * constructor.

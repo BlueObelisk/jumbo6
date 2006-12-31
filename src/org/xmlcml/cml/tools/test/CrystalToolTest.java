@@ -297,7 +297,7 @@ public class CrystalToolTest extends AbstractToolTest {
                 CMLMolecule mergedMolecule = crystalTool.getMergedMolecule(mol,
                         contactList, addBonds);
                 String filename = Util.getTEMP_DIRECTORY() + File.separator
-                        + "cif" + File.separator + cifname + ".xml";
+                        + "cif" + File.separator + cifname + XML_SUFF;
                 try {
                     File file = Util.createNewFile(filename);
                     mergedMolecule.serialize(new FileOutputStream(file), 1);
@@ -310,7 +310,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
     private CMLMolecule getMolecule(CMLElement cml) {
-        Nodes moleculeNodes = cml.query("cml:molecule", X_CML);
+        Nodes moleculeNodes = cml.query(CMLMolecule.NS, X_CML);
         if (moleculeNodes.size() != 1) {
             throw new CMLRuntimeException("NO MOLECULE FOUND");
         }
@@ -423,7 +423,7 @@ public class CrystalToolTest extends AbstractToolTest {
 						continue;
 					}
 					// at this point no bonds have been calculated
-					Nodes moiFormNodes = cml.query(".//cml:formula[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
+					Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+"[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
 					CMLFormula moietyFormula = null;
 					if (moiFormNodes.size() > 0) {
 						moietyFormula = (CMLFormula)moiFormNodes.get(0);

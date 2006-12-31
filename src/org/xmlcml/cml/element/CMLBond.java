@@ -11,7 +11,6 @@ import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement;
@@ -23,6 +22,9 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class CMLBond extends AbstractBond {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** messages.*/
     public enum Message {
         /** no grandparent */
@@ -403,7 +405,7 @@ public class CMLBond extends AbstractBond {
         if (atom == null) {
 //            CMLMolecule molecule = this.getMolecule();
             String molId = (molecule == null) ? null : molecule.getId();
-            throw new CMLRuntimeException("Non-existent atom in bond " + id+S_SLASH+molId);
+            throw new CMLRuntimeException("Non-existent atom in bond/mol " + id+S_SLASH+molId);
         }
         atomList.add(atom);
     }
@@ -798,7 +800,7 @@ public class CMLBond extends AbstractBond {
     public String generateAndSetId() {
         String bondId = this.getId();
         if (bondId != null) {
-            this.removeAttribute("id");
+            this.removeAttribute(IdAttribute.NAME);
         }
         List<CMLAtom> atomList = this.getAtoms();
         String at0id = atomList.get(0).getId();

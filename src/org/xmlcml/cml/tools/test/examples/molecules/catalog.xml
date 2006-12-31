@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <map xmlns="http://www.xml-cml.org/schema">
-  <link from="http://www.xml-cml.org/mols/geom" to="./geom.xml"/>
-  <link from="http://www.xml-cml.org/mols/frags" to="./frags.xml"/>
+  <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/geom" 
+  role="cml:moleculeList" to="./geom.xml"/>
+  <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/frags" 
+  role="cml:fragmentList" to="./fragments/frags.xml"/>
   <!-- DIRECTORY -->
-  <link from="http://www.xml-cml.org/mols/geom1" to="./geom1"/>
-  <link from="http://www.xml-cml.org/mols/poly" to="../nick/poly"/>
+  <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/fragments" 
+  role="cml:fragmentList" to="./fragments"/>
+  <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/geom1" 
+  role="cml:moleculeList" to="./geom1"/>
 </map>

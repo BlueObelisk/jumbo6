@@ -43,7 +43,7 @@ public class Util implements EuclidConstants {
             + File.separator + "test-outputs");
 
     /**
-     * get temporary directory - mainly for testing methods with ouputs. calls
+     * get temporary directory - mainly for testing methods with outputs. calls
      * mkdirs() if does not exist
      * 
      * @return temporary directory.

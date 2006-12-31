@@ -12,6 +12,7 @@ import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProduct;
 import org.xmlcml.cml.element.CMLReactant;
+import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.cml.element.ReactionComponent;
 
 /**
@@ -242,28 +243,28 @@ public class CMLReactionComponentTest extends ReactionAllTestBase {
         Assert.assertEquals("descendants", 9, componentList.size());
         // reactantList
         Assert.assertEquals("descendant 1", "rl1", ((CMLElement) componentList
-                .get(0)).getAttributeValue("id"));
+                .get(0)).getAttributeValue(IdAttribute.NAME));
         // reactants
         Assert.assertEquals("descendant 2", "re1", ((CMLElement) componentList
-                .get(1)).getAttributeValue("id"));
+                .get(1)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("descendant 3", "re2", ((CMLElement) componentList
-                .get(2)).getAttributeValue("id"));
+                .get(2)).getAttributeValue(IdAttribute.NAME));
         // productList
         Assert.assertEquals("descendant 4", "pl1", ((CMLElement) componentList
-                .get(3)).getAttributeValue("id"));
+                .get(3)).getAttributeValue(IdAttribute.NAME));
         // products
         Assert.assertEquals("descendant 5", "pr1", ((CMLElement) componentList
-                .get(4)).getAttributeValue("id"));
+                .get(4)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("descendant 6", "pr2", ((CMLElement) componentList
-                .get(5)).getAttributeValue("id"));
+                .get(5)).getAttributeValue(IdAttribute.NAME));
         // spectatorList
         Assert.assertEquals("descendant 7", "sl1", ((CMLElement) componentList
-                .get(6)).getAttributeValue("id"));
+                .get(6)).getAttributeValue(IdAttribute.NAME));
         // spectators
         Assert.assertEquals("descendant 8", "sp1", ((CMLElement) componentList
-                .get(7)).getAttributeValue("id"));
+                .get(7)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("descendant 9", "sp2", ((CMLElement) componentList
-                .get(8)).getAttributeValue("id"));
+                .get(8)).getAttributeValue(IdAttribute.NAME));
     }
 
     /**
@@ -277,37 +278,37 @@ public class CMLReactionComponentTest extends ReactionAllTestBase {
         Assert.assertEquals("children", 3, componentList.size());
         // reactantList
         Assert.assertEquals("child 1", "rl1", ((CMLElement) componentList
-                .get(0)).getAttributeValue("id"));
+                .get(0)).getAttributeValue(IdAttribute.NAME));
         // productList
         Assert.assertEquals("child 2", "pl1", ((CMLElement) componentList
-                .get(1)).getAttributeValue("id"));
+                .get(1)).getAttributeValue(IdAttribute.NAME));
         // spectatorList
         Assert.assertEquals("child 3", "sl1", ((CMLElement) componentList
-                .get(2)).getAttributeValue("id"));
+                .get(2)).getAttributeValue(IdAttribute.NAME));
 
         componentList = xmlReact1.getReactantListElements().get(0)
                 .getReactionComponentChildren();
         Assert.assertEquals("reactants", 2, componentList.size());
         Assert.assertEquals("reactant 1", "re1", ((CMLElement) componentList
-                .get(0)).getAttributeValue("id"));
+                .get(0)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("reactant 2", "re2", ((CMLElement) componentList
-                .get(1)).getAttributeValue("id"));
+                .get(1)).getAttributeValue(IdAttribute.NAME));
 
         componentList = xmlReact1.getProductListElements().get(0)
                 .getReactionComponentChildren();
         Assert.assertEquals("products", 2, componentList.size());
         Assert.assertEquals("product 1", "pr1", ((CMLElement) componentList
-                .get(0)).getAttributeValue("id"));
+                .get(0)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("product 2", "pr2", ((CMLElement) componentList
-                .get(1)).getAttributeValue("id"));
+                .get(1)).getAttributeValue(IdAttribute.NAME));
 
         componentList = xmlReact1.getSpectatorListElements().get(0)
                 .getReactionComponentChildren();
         Assert.assertEquals("spectators", 2, componentList.size());
         Assert.assertEquals("spectator 1", "sp1", ((CMLElement) componentList
-                .get(0)).getAttributeValue("id"));
+                .get(0)).getAttributeValue(IdAttribute.NAME));
         Assert.assertEquals("spectator 2", "sp2", ((CMLElement) componentList
-                .get(1)).getAttributeValue("id"));
+                .get(1)).getAttributeValue(IdAttribute.NAME));
 
     }
 

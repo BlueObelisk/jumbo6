@@ -2,6 +2,7 @@ package org.xmlcml.cml.base.test;
 
 import java.util.List;
 
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -281,5 +282,44 @@ public class CMLUtilTest extends BaseTest {
         Element root = CMLUtil.parseXML(s);
         Elements elements = root.getChildElements();
         CMLUtil.toArray(elements, new Element[] {});
+    }
+    
+	/** test get prefixes.
+	 */
+	@Test
+    public void testGetPrefixes() {
+		Element fragment = new Element("fragment", CML_NS);
+		Element fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("ref", "g:mol"));
+		fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("ref", "k:mol"));
+		fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("dictRef", "k:x"));
+		fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("ref", "k:xxx"));
+		fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("dictRef", "q:xxx"));
+		fragment1 = new Element("fragment");
+		fragment.appendChild(fragment1);
+		fragment1.addAttribute(new Attribute("ref", "xxx"));
+		
+    	List<String> prefixList = CMLUtil.getPrefixes(fragment, "ref");
+    	Assert.assertEquals("set", 3, prefixList.size());
+    	Assert.assertTrue("set", prefixList.contains(S_EMPTY));
+    	Assert.assertTrue("set", prefixList.contains("g"));
+    	Assert.assertTrue("set", prefixList.contains("k"));
+    	Assert.assertFalse("set", prefixList.contains("q"));
+    	
+    	prefixList = CMLUtil.getPrefixes(fragment, "dictRef");
+    	Assert.assertEquals("set", 2, prefixList.size());
+    	Assert.assertFalse("set", prefixList.contains(S_EMPTY));
+    	Assert.assertFalse("set", prefixList.contains("g"));
+    	Assert.assertTrue("set", prefixList.contains("k"));
+    	Assert.assertTrue("set", prefixList.contains("q"));
     }
 }

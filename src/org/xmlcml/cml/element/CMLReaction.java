@@ -17,6 +17,9 @@ import org.xmlcml.cml.base.CMLElement;
  */
 public class CMLReaction extends AbstractReaction implements ReactionComponent {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** mappings */
     public enum Mapping {
         /** */
@@ -435,7 +438,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      */
     static List<CMLAtom> getAtoms(ReactionComponent component) {
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
-        List<CMLElement> elementList = ((CMLElement) component).getElements(".//cml:atom");
+        List<CMLElement> elementList = ((CMLElement) component).getElements(".//"+CMLAtom.NS);
         for (CMLElement element : elementList) {
             atomList.add((CMLAtom) element);
         }
@@ -450,7 +453,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      */
     static List<CMLBond> getBonds(ReactionComponent component) {
         List<CMLBond> bondList = new ArrayList<CMLBond>();
-        List<CMLElement> elementList = ((CMLElement) component).getElements(".//cml:bond");
+        List<CMLElement> elementList = ((CMLElement) component).getElements(".//"+CMLBond.NS);
         for (CMLElement element : elementList) {
             bondList.add((CMLBond) element);
         }
@@ -465,7 +468,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      */
     static List<CMLFormula> getFormulas(ReactionComponent component) {
         List<CMLFormula> formulaList = new ArrayList<CMLFormula>();
-        List<CMLElement> elementList = ((CMLElement) component).getElements(".//cml:formula");
+        List<CMLElement> elementList = ((CMLElement) component).getElements(".//"+CMLFormula.NS);
         for (CMLElement element : elementList) {
             formulaList.add((CMLFormula) element);
         }
@@ -480,7 +483,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      */
     static List<CMLMolecule> getMolecules(ReactionComponent component) {
         List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
-        List<CMLElement> elementList = ((CMLElement) component).getElements(".//cml:molecule");
+        List<CMLElement> elementList = ((CMLElement) component).getElements(".//"+CMLMolecule.NS);
         for (CMLElement element : elementList) {
             moleculeList.add((CMLMolecule) element);
         }
@@ -519,7 +522,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      * @return list of descendant reactants
      */
     public List<CMLReactant> getDescendantReactants() {
-        List<CMLElement> elems = this.getElements(".//cml:reactant");
+        List<CMLElement> elems = this.getElements(".//"+CMLReactant.NS);
         List<CMLReactant> reactantList = new ArrayList<CMLReactant>();
         for (CMLElement elem : elems) {
             reactantList.add((CMLReactant) elem);
@@ -533,7 +536,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      * @return list of descendant products
      */
     public List<CMLProduct> getDescendantProducts() {
-        List<CMLElement> elems = this.getElements(".//cml:product");
+        List<CMLElement> elems = this.getElements(".//"+CMLProduct.NS);
         List<CMLProduct> productList = new ArrayList<CMLProduct>();
         for (CMLElement elem : elems) {
             productList.add((CMLProduct) elem);
@@ -547,7 +550,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
      * @return list of descendant spectators
      */
     public List<CMLSpectator> getDescendantSpectators() {
-        List<CMLElement> elems = this.getElements(".//cml:spectator");
+        List<CMLElement> elems = this.getElements(".//"+CMLSpectator.NS);
         List<CMLSpectator> spectatorList = new ArrayList<CMLSpectator>();
         for (CMLElement elem : elems) {
             spectatorList.add((CMLSpectator) elem);

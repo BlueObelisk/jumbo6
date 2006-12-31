@@ -139,7 +139,7 @@ public abstract class NamespaceRefAttribute extends StringAttribute {
     public List<String> check(CMLElement element, String name,
             String attributeName, GenericDictionaryMap dictionaryMap) {
         List<String> errorList = new ArrayList<String>();
-        List<CMLElement> elems = element.getElements(".//cml:"+name+"/@"+attributeName);
+        List<CMLElement> elems = element.getElements(".//"+C_E+name+"/@"+attributeName);
         for (CMLElement elem : elems) {
             NamespaceRefAttribute namespaceRefAttribute = (NamespaceRefAttribute) elem
                     .getAttribute(attributeName);
@@ -302,7 +302,7 @@ public abstract class NamespaceRefAttribute extends StringAttribute {
      */
     public static void setUnits(HasUnits hasUnits, String prefix, String id, String namespaceURI) {
         CMLElement element = (CMLElement) hasUnits;
-        String currentNamespace = element.getNamespaceForPrefix(prefix);
+        String currentNamespace = element.getNamespaceURIForPrefix(prefix);
         if (currentNamespace != null) {
             if (!currentNamespace.equals(namespaceURI)) {
                 throw new CMLRuntimeException("Cannot reset units namespace for "+prefix+" from " +

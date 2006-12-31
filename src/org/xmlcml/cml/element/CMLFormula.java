@@ -48,6 +48,9 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class CMLFormula extends AbstractFormula {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** */
     public final static int NPLACES = 10;
 
@@ -257,7 +260,7 @@ public class CMLFormula extends AbstractFormula {
      */
     public CMLFormula(CMLFormula old) {
         this();
-        copyAttributes(old);
+        copyAttributesFrom(old);
         // concise will have triggered the creation of atomArray, so detach if
         // necessary
         if (old.getConcise() != null) {
@@ -267,7 +270,7 @@ public class CMLFormula extends AbstractFormula {
                 this.removeChild(newAtomArray);
             }
         }
-        copyChildren(old);
+        copyChildrenFrom(old);
         copyProperties(old);
     }
 

@@ -22,6 +22,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLCellParameter extends AbstractCellParameter {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** type of cellParameter */
     public enum Type {
         /** three lengths */
@@ -40,8 +43,8 @@ public class CMLCellParameter extends AbstractCellParameter {
      * dictRef attributes for obsolete cell parameters. do not use these if
      * possible. cellParameter has replaced this
      */
-    public final static String[] dictRef = { "cml:a", "cml:b", "cml:c",
-            "cml:alpha", "cml:beta", "cml:gamma", };
+    public final static String[] dictRef = { CMLCrystal.A, CMLCrystal.B, CMLCrystal.C,
+            CMLCrystal.ALPHA, CMLCrystal.BETA, CMLCrystal.GAMMA, };
 
     /**
      * constructor

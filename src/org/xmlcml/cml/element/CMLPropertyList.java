@@ -18,6 +18,9 @@ import org.xmlcml.cml.base.CMLElements;
  */
 public class CMLPropertyList extends AbstractPropertyList {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */
@@ -163,7 +166,7 @@ public class CMLPropertyList extends AbstractPropertyList {
         }
         if (errorList.size() == 0) {
             // scalars
-            List<CMLElement> propertys = cml.getElements(".//cml:property");
+            List<CMLElement> propertys = cml.getElements(".//"+CMLProperty.NS);
             for (CMLElement property : propertys) {
                 DictRefAttribute dictRefAttribute = (DictRefAttribute) ((CMLProperty) property)
                         .getDictRefAttribute();

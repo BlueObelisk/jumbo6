@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import nu.xom.Document;
@@ -23,21 +21,15 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.test.BaseTest;
-import org.xmlcml.cml.element.CMLArg;
-import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLFragment;
-import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
-import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.element.CountExpressionAttribute;
-import org.xmlcml.cml.element.CMLLabel.Position;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 
@@ -57,17 +49,17 @@ public class PolymerTool extends AbstractTool {
      */
     public enum Convention {
         /** concise formula string - obsolete.*/
-        PML_CONCISE("cml:PML-concise"),
+        PML_CONCISE(C_A+"PML-concise"),
         /** basic XML formula.*/
-        PML_BASIC("cml:PML-basic"),
+        PML_BASIC(C_A+"PML-basic"),
         /** molecule references.*/
-        PML_INTERMEDIATE("cml:PML-intermediate"),
+        PML_INTERMEDIATE(C_A+"PML-intermediate"),
         /** explicit un-joined molecules.*/
-        PML_EXPLICIT("cml:PML-explicit"),
+        PML_EXPLICIT(C_A+"PML-explicit"),
         /** complete molecules (includes cartesian coords).*/
-        PML_COMPLETE("cml:PML-complete"),
+        PML_COMPLETE(C_A+"PML-complete"),
         /** inline atom obsolete.*/
-        PML_INLINE_ATOM("cml:PML-inline-atom"),
+        PML_INLINE_ATOM(C_A+"PML-inline-atom"),
         /** inline atom obsolete.*/
         PML_DEFAULT_FINAL(PML_COMPLETE.value),
         ;
@@ -92,7 +84,7 @@ public class PolymerTool extends AbstractTool {
     // debug
     private boolean debug = false;
     // catalog
-    private CatalogTool moleculeCatalog = null;
+    private Catalog moleculeCatalog = null;
     // fileroot
     private String fileroot;
 
@@ -184,7 +176,7 @@ public class PolymerTool extends AbstractTool {
     /** set molecule catalog
      * @param catalog
      */
-    public void setMoleculeCatalog(CatalogTool catalog) {
+    public void setMoleculeCatalog(Catalog catalog) {
         this.moleculeCatalog = catalog;
     }
     /** process current molecule with its convention attribute.
@@ -197,7 +189,7 @@ public class PolymerTool extends AbstractTool {
         if (moleculeList != null) {
             System.out.println("==========MOLLIST=========");
             List<Node> nodes = CMLUtil.getQueryNodes(
-                    moleculeList, "./cml:molecule[@countExpression]", X_CML);
+                    moleculeList, CMLMolecule.NS+"[@countExpression]", X_CML);
             if (nodes.size() == 1) {
                 CMLMolecule molecule0 = (CMLMolecule) nodes.get(0);
                 CountExpressionAttribute.generateAndInsertClones(molecule0);
@@ -288,19 +280,15 @@ public class PolymerTool extends AbstractTool {
      * @param molTest
      */
     public void debug(String s, CMLMolecule molTest) {
-        String f = fileroot + S_UNDER + s + ".xml";
+        String f = fileroot + S_UNDER + s + XML_SUFF;
         System.out.println("=== debug " + s + "== to == "+fileroot);
         
         try {
-//            System.out.println("Comparing file resource: "+f);
-//            f += EXPERIMENTAL_RESOURCE + U_S + f;
             CMLMolecule molRef = (CMLMolecule) CMLUtil.readElementFromResource(f);
             try {
                 BaseTest.assertEqualsCanonically("comparing with previous result",
                         molRef, molTest, true);
             } catch (AssertionError e) {
-//                molRef.debug("MOLREF");
-//                molTest.debug("MOLTEST");
                 try {
                     Assert.fail(e + " for " + fileroot + S_SLASH + s);
                 } catch (Throwable e1) {
@@ -310,7 +298,7 @@ public class PolymerTool extends AbstractTool {
         } catch (CMLRuntimeException e) {
             System.out.println("Comparison files does not exist, skipped:  "+f);
         }
-        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+".xml");
+        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+XML_SUFF);
         System.out.println("wrote..: "+testFile.getAbsolutePath());
         try {
             CMLUtil.debug(molTest, new FileOutputStream(testFile));
@@ -331,7 +319,7 @@ public class PolymerTool extends AbstractTool {
             throws Exception {
         Assert.assertNotNull("molListTest", molListTest);
         System.out.println("============" + s + "==========");
-        String f = fileroot + S_UNDER + s + ".xml";
+        String f = fileroot + S_UNDER + s + XML_SUFF;
         CMLMoleculeList molListRef = readMoleculeList(f);
         Assert.assertNotNull("molListRef", molListRef);
         try {
@@ -397,7 +385,6 @@ formula='
      */
     private void processConcise() {
         if (moleculeList != null) {
-//            System.out.println("MOLLIST");
         } else if (molecule != null){
             String formula = molecule.getFormula();
             if (formula == null) {
@@ -425,6 +412,7 @@ formula='
     }
     
     /** basic consists of:
+     * OUT OF DATE DESCRIPTION
      * moleculeList
      *     complexMol
      *     (joinComplexMol)?
@@ -447,35 +435,35 @@ formula='
      *
      */
     @SuppressWarnings("unused")
-    private void processBasicOld() {
-        CMLMoleculeList moleculeList = (CMLMoleculeList) molecule.getFirstCMLChild(CMLMoleculeList.TAG);
-        if (moleculeList == null) {
-            throw new CMLRuntimeException("expected moleculeList child");
-        }
-        CMLUtil.removeWhitespaceNodes(molecule);
-        MoleculeTool moleculeTool = new MoleculeTool(molecule);
-        // will have to process repeat count here before args
-        moleculeTool.expandCountExpressions();
-//        molecule.debug("BEFORE ARGS");
-        // add args first so every molecule has unique id
-        CMLArg.addArgs(moleculeList, CMLMolecule.TAG);
-        
-//        molecule.debug("BEFORE CHILD");
-        // create join/@atomRefs2
-        recursiveProcessJoins(moleculeList, null);
-//        check(moleculeList, null);
-//        moleculeList.processChildMolecules(null);
-        
-        molecule.debug("BEFORE FLATTEN");
-        // flatten molecules
-// FIXME
-        //flattenMoleculeDescendants(molecule, null);
-        
-        molecule.debug("AFTER FLATTEN");
-        
-        molecule.setConvention(Convention.PML_INTERMEDIATE.value);
-//        molecule.debug("END BASIC");
-    }
+//    private void processBasicOld() {
+//        CMLMoleculeList moleculeList = (CMLMoleculeList) molecule.getFirstCMLChild(CMLMoleculeList.TAG);
+//        if (moleculeList == null) {
+//            throw new CMLRuntimeException("expected moleculeList child");
+//        }
+//        CMLUtil.removeWhitespaceNodes(molecule);
+//        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+//        // will have to process repeat count here before args
+//        moleculeTool.expandCountExpressions();
+////        molecule.debug("BEFORE ARGS");
+//        // add args first so every molecule has unique id
+//        CMLArg.addArgs(moleculeList, CMLMolecule.TAG);
+//        
+////        molecule.debug("BEFORE CHILD");
+//        // create join/@atomRefs2
+//        recursiveProcessJoins(moleculeList, null);
+////        check(moleculeList, null);
+////        moleculeList.processChildMolecules(null);
+//        
+//        molecule.debug("BEFORE FLATTEN");
+//        // flatten molecules
+//// FIXME
+//        //flattenMoleculeDescendants(molecule, null);
+//        
+//        molecule.debug("AFTER FLATTEN");
+//        
+//        molecule.setConvention(Convention.PML_INTERMEDIATE.value);
+////        molecule.debug("END BASIC");
+//    }
     
     /** basic consists of:
      * fragment @countExpression?
@@ -500,7 +488,7 @@ formula='
      *
      */
 //    <?xml version="1.0" encoding="UTF-8"?>
-//    <molecule id="star1" convention="cml:PML-basic"
+//    <molecule id="star1" convention=C_A+"PML-basic"
 //        xmlns:g="http://www.xml-cml.org/mols/geom1"
 //        xmlns="http://www.xml-cml.org/schema">
 //        <!--  a star polymer -->
@@ -553,108 +541,117 @@ formula='
 //            </fragmentList>
 //        </fragment>
 //    </molecule>
+//    private void processBasicOld1() {
+//        CMLFragment fragment0 = (CMLFragment) molecule.getFirstCMLChild(CMLFragment.TAG);
+//        if (fragment0 == null) {
+//            throw new CMLRuntimeException("expected fragment child");
+//        }
+////        CountExpressionAttribute.generateAndInsertClones(fragment0);
+////        List<Node> fragments = CMLUtil.getQueryNodes(molecule, CMLFragment.NS, X_CML);
+////        int i = 0;
+////        for (Node node0 : fragments) {
+//////            if (i > 0) continue;
+////            System.out.println("==================>> "+i++);
+////            CMLFragment fragment = (CMLFragment) node0;
+//            // expand fragmentLists
+//            List<Node> expandableFragmentLists = CMLUtil.getQueryNodes(
+//                    molecule, ".//"+CMLFragmentList.NS+"[@countExpression]", X_CML);
+//            for (Node node : expandableFragmentLists) {
+//                CMLFragmentList expandableFragmentList = (CMLFragmentList) node;
+//                expandableFragmentList.processCountExpression();
+//            }
+//            
+//            FragmentTool fragmentTool = new FragmentTool(fragment0);
+////            fragmentTool.processBasic(molecule);
+//            List<Node> fragmentNodes = CMLUtil.getQueryNodes(
+//                    molecule, ".//"+CMLFragment.NS+" | .//"+CMLFragmentList.NS, X_CML);
+//            for (Node fragmentNode : fragmentNodes) {
+//                fragmentNode.detach();
+//            }
+////        }
+////        
+////        for (Node node0 : fragments) {
+////            CMLFragment fragment = (CMLFragment) node0;
+//            CMLUtil.transferChildren(fragment0, molecule);
+////        }
+//    }
+    
     private void processBasic() {
         CMLFragment fragment0 = (CMLFragment) molecule.getFirstCMLChild(CMLFragment.TAG);
         if (fragment0 == null) {
             throw new CMLRuntimeException("expected fragment child");
         }
-//        CountExpressionAttribute.generateAndInsertClones(fragment0);
-//        List<Node> fragments = CMLUtil.getQueryNodes(molecule, "./cml:fragment", X_CML);
-//        int i = 0;
-//        for (Node node0 : fragments) {
-////            if (i > 0) continue;
-//            System.out.println("==================>> "+i++);
-//            CMLFragment fragment = (CMLFragment) node0;
-            // expand fragmentLists
-            List<Node> expandableFragmentLists = CMLUtil.getQueryNodes(
-                    molecule, ".//cml:fragmentList[@countExpression]", X_CML);
-            for (Node node : expandableFragmentLists) {
-                CMLFragmentList expandableFragmentList = (CMLFragmentList) node;
-                expandableFragmentList.processCountExpression();
-            }
-            
-            FragmentTool fragmentTool = new FragmentTool(fragment0);
-            fragmentTool.processBasic(molecule);
-            List<Node> fragmentNodes = CMLUtil.getQueryNodes(
-                    molecule, ".//cml:fragment | .//cml:fragmentList", X_CML);
-            for (Node fragmentNode : fragmentNodes) {
-                fragmentNode.detach();
-            }
-//        }
-//        
-//        for (Node node0 : fragments) {
-//            CMLFragment fragment = (CMLFragment) node0;
-            CMLUtil.transferChildren(fragment0, molecule);
-//        }
+        FragmentTool fragmentTool = new FragmentTool(fragment0);
+        fragmentTool.processBasic();
     }
     
-    private static void recursiveProcessJoins(
-            CMLMoleculeList moleculeList, CMLMolecule parent) {
-//      * moleculeList
-//      *     complexMol?
-//      *     (join
-//      *     complexMol)?
-//      *     (join
-//      *     complexMol)?
-        List<CMLElement> childEntries = moleculeList.getChildCMLElements();        
-        CMLMolecule previousMolecule = parent;
-        CMLJoin join = null;
-        CMLLabel parentLabel = null;
-        if (parent != null) {
-            parentLabel = CMLLabel.getLabel(moleculeList, Position.PARENT);
-            if (parentLabel == null) {
-                throw new CMLRuntimeException("moleculeList must have parent label: "+moleculeList.getId());
-            }
-        }
-        for (int i = 0; i < childEntries.size(); i++) {
-            CMLElement child = childEntries.get(i);
-            if (parent == null && i == 0) {
-                // only occurs at root of molecule
-                if (child instanceof CMLMolecule) {
-                    join.addAtomRefs2ToJoinAndProcessDescendants(previousMolecule, (CMLMolecule) child, null);
-                    previousMolecule = (CMLMolecule) child;
-                } else {
-                    throw new CMLRuntimeException("Expected complex molecule");
-                }
-            } else if (child instanceof CMLJoin) {
-                // trawl through join+molecule to find next molecule
-                join = (CMLJoin) child;
-                CMLMolecule molecule = null;
-                for (int j = i+1; j < childEntries.size(); j++) {
-                    CMLElement nextChild = childEntries.get(j);
-                    i++;
-                    if (nextChild instanceof CMLMolecule) {
-                        molecule = (CMLMolecule) nextChild;
-                        break;
-                    } else if (nextChild instanceof CMLJoin) {
-                        throw new CMLRuntimeException("Unexpected join");
-                    } else {
-                        System.out.println("Skipped element: "+nextChild);
-                    }
-                }
-                if (molecule == null) {
-                    System.out.println("Join has no following molecule sibling");
-                }
-                join.addAtomRefs2ToJoinAndProcessDescendants(previousMolecule, molecule, parentLabel);
-                parentLabel = null;
-                previousMolecule = molecule;
-            } else if (child instanceof CMLLabel) {
-            } else {
-                System.out.println("Skipped element: "+child);
-            }
-        }
-    }
+//    private static void recursiveProcessJoins(
+//            CMLMoleculeList moleculeList, CMLMolecule parent) {
+////      * moleculeList
+////      *     complexMol?
+////      *     (join
+////      *     complexMol)?
+////      *     (join
+////      *     complexMol)?
+//        List<CMLElement> childEntries = moleculeList.getChildCMLElements();        
+//        CMLMolecule previousMolecule = parent;
+//        CMLJoin join = null;
+//        CMLLabel parentLabel = null;
+//        if (parent != null) {
+//            parentLabel = CMLLabel.getLabel(moleculeList, Position.PARENT);
+//            if (parentLabel == null) {
+//                throw new CMLRuntimeException("moleculeList must have parent label: "+moleculeList.getId());
+//            }
+//        }
+//        for (int i = 0; i < childEntries.size(); i++) {
+//            CMLElement child = childEntries.get(i);
+//            if (parent == null && i == 0) {
+//                // only occurs at root of molecule
+//                if (child instanceof CMLMolecule) {
+//                    join.addAtomRefs2ToJoinAndProcessDescendants(previousMolecule, (CMLMolecule) child, null);
+//                    previousMolecule = (CMLMolecule) child;
+//                } else {
+//                    throw new CMLRuntimeException("Expected complex molecule");
+//                }
+//            } else if (child instanceof CMLJoin) {
+//                // trawl through join+molecule to find next molecule
+//                join = (CMLJoin) child;
+//                CMLMolecule molecule = null;
+//                for (int j = i+1; j < childEntries.size(); j++) {
+//                    CMLElement nextChild = childEntries.get(j);
+//                    i++;
+//                    if (nextChild instanceof CMLMolecule) {
+//                        molecule = (CMLMolecule) nextChild;
+//                        break;
+//                    } else if (nextChild instanceof CMLJoin) {
+//                        throw new CMLRuntimeException("Unexpected join");
+//                    } else {
+//                        System.out.println("Skipped element: "+nextChild);
+//                    }
+//                }
+//                if (molecule == null) {
+//                    System.out.println("Join has no following molecule sibling");
+//                }
+//                join.addAtomRefs2ToJoinAndProcessDescendants(previousMolecule, molecule, parentLabel);
+//                parentLabel = null;
+//                previousMolecule = molecule;
+//            } else if (child instanceof CMLLabel) {
+//            } else {
+//                System.out.println("Skipped element: "+child);
+//            }
+//        }
+//    }
     
     private void processIntermediate() {
-        
+// probably obsolete        
         //should consist of molecule (join, molecule)*
         // give join default bond orders
-        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//cml:join[not(@order)]", X_CML);
+        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLJoin.NS+"[not(@order)]", X_CML);
         for (Node node : nodes) {
             ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
         }
         // expand random torsions
-        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//cml:torsion[@min and @max]", X_CML);
+        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//"+CMLTorsion.NS+"[@min and @max]", X_CML);
         for (Node node : torsions) {
             CMLTorsion torsion = (CMLTorsion) node;
             String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
@@ -672,71 +669,9 @@ formula='
         CMLElements<CMLMolecule> subMoleculeList = molecule.getMoleculeElements();
         for (int i = 0; i < subMoleculeList.size(); i++) {
             CMLMolecule subMolecule = (CMLMolecule) subMoleculeList.get(i);
-            moleculeCatalog.lookupAndExpandMolecule(subMolecule);
+//            moleculeCatalog.lookupAndExpandMolecule(subMolecule);
         }
         molecule.setConvention(Convention.PML_EXPLICIT.value);
-    }
-    
-    private void processExplicit() {
-        //should consist of molecule (join, molecule)*
-        // use atomSets as molecules are volatile
-        List<CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
-        List<CMLMolecule> subMoleculeList = new ArrayList<CMLMolecule>();
-        for (CMLMolecule subMolecule : molecule.getMoleculeElements()) {
-            MoleculeTool subMoleculeTool = new MoleculeTool(subMolecule);
-            subMoleculeTool.adjustTorsions();
-            subMoleculeTool.adjustAngles();
-            subMoleculeTool.adjustLengths();
-            atomSetList.add(subMolecule.getAtomSet());
-            subMoleculeList.add(subMolecule);
-        }
-        CMLElements<CMLJoin> joinList = molecule.getJoinElements();
-        CMLElements<CMLMolecule> moleculeList = molecule.getMoleculeElements();
-        Map<String, CMLMolecule> moleculeMap = new HashMap<String, CMLMolecule>();
-        for (CMLMolecule molecule : moleculeList) {
-            moleculeMap.put(molecule.getId(), molecule);
-        }
-        
-        boolean takeAtomWithLowestId = true;
-        MoleculeTool moleculeTool = new MoleculeTool(moleculeList.get(0));
-        CMLMolecule growingMolecule = moleculeTool.getMolecule();
-        for (CMLJoin join : joinList) {
-            String[] moleculeRefs2 = join.getMoleculeRefs2();
-            String nextMoleculeId = stripPrefix(moleculeRefs2[1]);
-            CMLMolecule subMolecule0 = moleculeMap.get(nextMoleculeId);
-            CMLAtomSet molAtomSet = subMolecule0.getAtomSet();
-            // flatten molecules
-            moleculeTool.addMoleculeTo(subMolecule0, takeAtomWithLowestId);
-            // make covalent bonds
-           join.addMoleculeTo(growingMolecule, molAtomSet, takeAtomWithLowestId);
-            
-        }
-        // clean join bonds (they are left hanging)
-        cleanJoinBonds();
-        molecule.setConvention(Convention.PML_COMPLETE.value);
-    }
-    
-    private void cleanJoinBonds() {
-        CMLElements<CMLBondArray> bondArrays = molecule.getBondArrayElements();
-        CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
-        if (bondArrays.size() == 1 && molecules.size() == 1) {
-            CMLBondArray bondArray = bondArrays.get(0);
-            CMLMolecule subMolecule = molecules.get(0);
-            List<CMLBond> bonds = bondArray.getBonds();
-            for (CMLBond bond : bonds) {
-                bond.detach();
-                subMolecule.addBond(bond);
-            }
-            bondArray.detach();
-        }
-    }
-    
-    private static String stripPrefix(String s) {
-        int idx = s.indexOf(S_COLON);
-        if (idx == -1) {
-            throw new CMLRuntimeException("Missing prefix in: "+s);
-        }
-        return s.substring(idx+1);
     }
     
     /** convenience method to generate detailed molecules.
@@ -787,11 +722,12 @@ formula='
         }
     }
     
+    
     private void tidyMoleculeList() {
         CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
         Transform3 fullTransform = new Transform3();
         for (CMLMolecule molecule : molecules) {
-            List<Node> transforms = CMLUtil.getQueryNodes(molecule, "./cml:transform3", X_CML);
+            List<Node> transforms = CMLUtil.getQueryNodes(molecule, CMLTransform3.NS, X_CML);
             if (transforms.size() == 1) {   
                 molecule.transformCartesians(fullTransform);
                 CMLTransform3 transform = (CMLTransform3) transforms.get(0);
@@ -821,7 +757,7 @@ formula='
             Convention targetLevel, boolean debug) throws Exception {
     
         Document doc = new CMLBuilder().build(new File(infile));
-        Nodes nodes = doc.query("./cml:molecule | ./cml:moleculeList", X_CML);
+        Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, X_CML);
         if (nodes.size() == 0) {
             throw new CMLException("No CML Molecule(List) in file: "+infile);
         }
@@ -831,11 +767,15 @@ formula='
             
         this.setElement(molecule);
         
-        this.setMoleculeCatalog(new CatalogTool(new File(fragments)));
+        this.setMoleculeCatalog(new Catalog(new File(fragments)));
         System.out.println("Processing to level: "+targetLevel.value);
         this.processConventionExhaustively(targetLevel);
 
         write(outfileName);
+    }
+    
+    public void processExplicit() {
+    	throw new CMLRuntimeException("probably obsolete");
     }
     
     /** write.

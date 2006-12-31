@@ -16,6 +16,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLLattice extends AbstractLattice {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

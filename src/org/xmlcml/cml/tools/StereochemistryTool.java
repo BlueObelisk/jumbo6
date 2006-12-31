@@ -755,6 +755,7 @@ public class StereochemistryTool extends AbstractTool {
 	 * @return int the comparison
 	 */
 	// FIXME
+	@SuppressWarnings("unused")
 	private int compareByAtomicNumber(CMLAtom atom, CMLAtom otherAtom,
 			CMLAtomSet markedAtoms, CMLAtomSet otherMarkedAtoms) {
 		// compare on atomic number

@@ -12,7 +12,6 @@ import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -22,6 +21,9 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLBondSet extends AbstractBondSet {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     protected Set<CMLBond> set = new LinkedHashSet<CMLBond>();
 
     protected HashMap<String, CMLBond> idTable;

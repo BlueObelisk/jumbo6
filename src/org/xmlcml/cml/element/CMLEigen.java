@@ -16,6 +16,9 @@ import org.xmlcml.euclid.RealMatrix;
  */
 public class CMLEigen extends AbstractEigen {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** orientation of matrix. */
     public enum Orientation {
         /** values down */

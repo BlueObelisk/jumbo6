@@ -10,6 +10,9 @@ import nu.xom.Node;
  */
 public class CMLSpectrumList extends AbstractSpectrumList {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */
