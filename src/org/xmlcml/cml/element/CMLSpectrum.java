@@ -18,6 +18,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLSpectrum extends AbstractSpectrum {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */

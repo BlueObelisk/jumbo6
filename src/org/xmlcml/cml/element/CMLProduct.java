@@ -16,6 +16,9 @@ import org.xmlcml.cml.base.CMLElement;
  */
 public class CMLProduct extends AbstractProduct implements ReactionComponent {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

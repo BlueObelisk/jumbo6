@@ -23,6 +23,9 @@ import org.xmlcml.euclid.Vector3;
  */
 public class CMLZMatrix extends AbstractZMatrix {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     //temporary storage
     List<CMLLength> lengthList = null;
     List<CMLAngle> angleList = null;

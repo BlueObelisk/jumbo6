@@ -24,14 +24,14 @@ import org.xmlcml.euclid.Util;
  */
 public abstract class PeakSpectrumTest extends AbstractTest {
 
-	protected String peakStructureFile1 = "peakStructure1" + ".xml";
+	protected String peakStructureFile1 = "peakStructure1" + XML_SUFF;
 
 	protected String peakStructureFile1NoSchema = "peakStructure1-noSchema"
-			+ ".xml";
+			+ XML_SUFF;
 
-	protected String peakStructureFile2 = "peakStructure2" + ".xml";
+	protected String peakStructureFile2 = "peakStructure2" + XML_SUFF;
 
-	protected String peakStructureFile2Schema = "peakStructure2Schema" + ".xml";
+	protected String peakStructureFile2Schema = "peakStructure2Schema" + XML_SUFF;
 
 	protected String testfile = "spectrum";
 
@@ -59,7 +59,7 @@ public abstract class PeakSpectrumTest extends AbstractTest {
 
 	private URL makeSpectrumInputStreamContainer(int num) throws IOException {
 		return Util.getResource(SIMPLE_RESOURCE + U_S + "spectrum" + num
-				+ ".xml");
+				+ XML_SUFF);
 	}
 
 	protected CMLSpectrum readSpectrum(int num) throws Exception {

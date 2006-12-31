@@ -17,6 +17,9 @@ import org.xmlcml.cml.base.CMLElements;
 public class CMLSpectatorList extends AbstractSpectatorList implements
         ReactionComponent {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */

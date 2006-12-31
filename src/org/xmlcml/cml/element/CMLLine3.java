@@ -19,7 +19,10 @@ import org.xmlcml.euclid.Vector3;
  */
 public class CMLLine3 extends AbstractLine3 {
 
-    /**
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
+   /**
      * start of point in array.
      * 
      */

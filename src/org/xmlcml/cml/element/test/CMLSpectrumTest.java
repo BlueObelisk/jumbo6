@@ -23,6 +23,7 @@ import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMetadata;
 import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLParameterList;
 import org.xmlcml.cml.element.CMLPeak;
 import org.xmlcml.cml.element.CMLPeakGroup;
 import org.xmlcml.cml.element.CMLPeakList;
@@ -493,17 +494,17 @@ public class CMLSpectrumTest extends PeakSpectrumTest {
 				+ U_S + testCompoundFile1);
 		document = new CMLBuilder().build(in);
 		in.close();
-		Nodes cmlNodes = document.query("//cml:cml", X_CML);
+		Nodes cmlNodes = document.query("//"+CMLCml.NS, X_CML);
 		Assert.assertEquals("spectra count", cmlNodes.size(), 1);
 		CMLCml cml = (CMLCml) cmlNodes.get(0);
-		Nodes spectrumNodes = cml.query("//cml:spectrum", X_CML);
+		Nodes spectrumNodes = cml.query("//"+CMLSpectrum.NS, X_CML);
 		Assert.assertEquals("spectra count", spectrumNodes.size(), 1);
 		CMLSpectrum spectrum = (CMLSpectrum) spectrumNodes.get(0);
-		Nodes spectrumDataNodes = spectrum.query("cml:spectrumData", X_CML);
+		Nodes spectrumDataNodes = spectrum.query(CMLSpectrumData.NS, X_CML);
 		Assert.assertEquals("spectrumData count", spectrumDataNodes.size(), 1);
 		// CMLSpectrumData spectrumData = (CMLSpectrumData)
 		// spectrumDataNodes.get(0);
-		Nodes parameterListNodes = spectrum.query("cml:parameterList", X_CML);
+		Nodes parameterListNodes = spectrum.query(CMLParameterList.NS, X_CML);
 		Assert
 				.assertEquals("parameterList count", parameterListNodes.size(),
 						1);

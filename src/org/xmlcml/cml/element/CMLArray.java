@@ -25,6 +25,8 @@ public class CMLArray extends AbstractArray
     implements HasUnits, HasArraySize {
 
     static Logger logger = Logger.getLogger(CMLArray.class.getName());
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
 
     /**
      * constructor.

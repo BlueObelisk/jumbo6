@@ -22,6 +22,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLBondArray extends AbstractBondArray {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** messages.*/
     public enum Message {
         /** no parent for bondArray*/

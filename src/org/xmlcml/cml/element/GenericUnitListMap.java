@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 
@@ -13,7 +14,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  * a map of unitLists by namespaceURI. required for looking up entries by
  * unitAttributes *
  */
-public class GenericUnitListMap extends HashMap<String, CMLUnitList> {
+public class GenericUnitListMap extends HashMap<String, CMLUnitList> implements CMLConstants {
 
     /**
      * 
@@ -72,7 +73,7 @@ public class GenericUnitListMap extends HashMap<String, CMLUnitList> {
         String[] files = dir.list();
         if (files != null) {
             for (String file : files) {
-                if (file.endsWith(".xml")) {
+                if (file.endsWith(XML_SUFF)) {
                     File f = new File(dir, file);
                     CMLUnitList unitList = null;
                     try {

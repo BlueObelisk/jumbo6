@@ -369,7 +369,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
         for (String fileS : files) {
             fileS = getFileNameIn(fileS, xmlName);
             try {
-                if (!fileS.endsWith(".xml") || 
+                if (!fileS.endsWith(XML_SUFF) || 
                     fileS.endsWith("out.xml")) {
                     continue;
                 }

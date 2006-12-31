@@ -17,6 +17,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLUnit extends AbstractUnit implements GenericEntry {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     static String NULL_UNIT_LIST_MAP = "null unitListMap";
 
     /**

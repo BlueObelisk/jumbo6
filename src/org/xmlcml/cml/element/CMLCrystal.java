@@ -24,7 +24,10 @@ import org.xmlcml.euclid.Transform3;
  */
 public class CMLCrystal extends AbstractCrystal {
 
-    /**
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
+   /**
      * crystal systems.
      */
     public enum Bravais {
@@ -100,7 +103,21 @@ public class CMLCrystal extends AbstractCrystal {
             }
         }
     }
-
+    /** symbols constants */
+    /** a */
+    public final static String A = C_A + "a";
+    /** b */
+    public final static String B = C_A + "b";
+    /** c */
+    public final static String C = C_A + "c";
+    /** a */
+    public final static String ALPHA = C_A + "alpha";
+    /** b */
+    public final static String BETA = C_A + "beta";
+    /** c */
+    public final static String GAMMA = C_A + "gamma";
+    /** convert Z to #operators */
+    public final static String Z2OP = C_A + "z2op";
     /**
      * constructor.
      */
@@ -740,7 +757,7 @@ public class CMLCrystal extends AbstractCrystal {
      * @throws CMLRuntimeException if 0 or >1 nodes
      */
     public static CMLCrystal getContainedCrystal(CMLElement element) throws CMLRuntimeException {
-        Nodes crystalNodes = element.query("//cml:crystal", X_CML);
+        Nodes crystalNodes = element.query("//"+CMLCrystal.NS, X_CML);
         if (crystalNodes.size() == 0) {
             throw new CMLRuntimeException("NO <crystal> FOUND");
         } else if (crystalNodes.size() > 1) {

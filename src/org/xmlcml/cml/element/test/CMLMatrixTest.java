@@ -473,7 +473,7 @@ public class CMLMatrixTest extends NumericTest {
         CMLCml cml = (CMLCml) parseValidString(unitsS);
  
         // matrixs
-        List<CMLElement> matrixs = cml.getElements(".//cml:matrix");
+        List<CMLElement> matrixs = cml.getElements(".//"+CMLMatrix.NS);
         Assert.assertEquals("matrix count", 3, matrixs.size());
         CMLMatrix matrix = (CMLMatrix) matrixs.get(0);
         UnitAttribute unitsAttribute = (UnitAttribute) matrix
@@ -493,7 +493,7 @@ public class CMLMatrixTest extends NumericTest {
         CMLCml cml = (CMLCml) parseValidString(unitsS);
 
         // matrixs
-        List<CMLElement> matrixs = cml.getElements(".//cml:matrix");
+        List<CMLElement> matrixs = cml.getElements(".//"+CMLMatrix.NS);
         Assert.assertEquals("matrix count", 3, matrixs.size());
         testMatrix((CMLMatrix) matrixs.get(0),
                 new double[] { 180., 90, 45., 0. },

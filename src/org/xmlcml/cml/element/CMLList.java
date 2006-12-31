@@ -18,6 +18,9 @@ import org.xmlcml.cml.base.CMLUtil;
 public class CMLList extends org.xmlcml.cml.element.AbstractList
     implements HasArraySize {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

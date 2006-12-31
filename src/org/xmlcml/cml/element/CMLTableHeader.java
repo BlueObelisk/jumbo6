@@ -24,10 +24,11 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLTableHeader extends AbstractTableHeader {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * must give simple documentation.
-     * 
-     * 
      */
 
     public CMLTableHeader() {

@@ -798,7 +798,7 @@ public class CMLScalarTest extends NumericTest {
 		CMLCml cml = (CMLCml) parseValidString(unitsS);
 
 		// scalars
-		List<CMLElement> scalars = cml.getElements(".//cml:scalar");
+		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
 		Assert.assertEquals("scalar count", 3, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
 		UnitAttribute unitsAttribute = (UnitAttribute) scalar
@@ -825,7 +825,7 @@ public class CMLScalarTest extends NumericTest {
 		}
 
 		// scalars
-		List<CMLElement> scalars = cml.getElements(".//cml:scalar");
+		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
 		Assert.assertEquals("scalar count", 3, scalars.size());
 		CMLScalar scalar0 = (CMLScalar) scalars.get(0);
 		Assert.assertEquals("scalar0", 180., scalar0.getDouble(), EPS);
@@ -906,7 +906,7 @@ public class CMLScalarTest extends NumericTest {
 		xmlScalarD0.setUnits("units", "g", UNIT_NS);
 		Assert.assertEquals("set units", "units:g", xmlScalarD0.getUnits());
 		Assert.assertEquals("set units", UNIT_NS, xmlScalarD0
-				.getNamespaceForPrefix("units"));
+				.getNamespaceURIForPrefix("units"));
 	}
 
  }

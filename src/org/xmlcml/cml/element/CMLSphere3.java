@@ -10,6 +10,9 @@ import nu.xom.Node;
  */
 public class CMLSphere3 extends AbstractSphere3 {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */

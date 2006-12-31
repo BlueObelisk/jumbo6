@@ -1,14 +1,17 @@
 package org.xmlcml.cml.element;
 
-import nu.xom.Attribute;
-import org.xmlcml.cml.base.*;
-import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-import org.xmlcml.cml.element.CMLDimension;
-import org.xmlcml.cml.element.CMLAnnotation;
-import org.xmlcml.cml.element.CMLDefinition;
-import org.xmlcml.cml.element.CMLDescription;
+
+import nu.xom.Attribute;
+import nu.xom.Elements;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** The type of a scientific unit.
 *
@@ -49,7 +52,7 @@ public abstract class AbstractUnitType extends CMLElement {
     }
 
     static {
-        attributeGroupNameTable.put("id", "id");
+        attributeGroupNameTable.put(IdAttribute.NAME, "id");
         attributeGroupNameTable.put("name", "name");
         attributeGroupNameTable.put("title", "title");
         attributeGroupNameTable.put("parentSI", "parentSI");

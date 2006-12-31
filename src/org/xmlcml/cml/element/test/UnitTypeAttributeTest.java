@@ -199,14 +199,14 @@ public class UnitTypeAttributeTest extends AbstractTest {
 				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
 		CMLCml cml = null;
 		InputStream in = Util.getInputStreamFromResource(COMPLEX_RESOURCE
-				+ filename + ".xml");
+				+ filename + XML_SUFF);
 		cml = (CMLCml) new CMLBuilder().build(in).getRootElement();
 		in.close();
 		int namespaceCount = cml.getNamespaceDeclarationCount();
 		Assert.assertEquals("namespaces ", ndict, namespaceCount);
 
 		// scalars
-		List<CMLElement> scalars = cml.getElements(".//cml:scalar");
+		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
 		int count = 0;
 		for (CMLElement scalar : scalars) {
 			UnitAttribute unitsAttribute = (UnitAttribute) ((CMLScalar) scalar)

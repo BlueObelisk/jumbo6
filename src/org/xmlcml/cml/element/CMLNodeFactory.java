@@ -1,12 +1,19 @@
 package org.xmlcml.cml.element;
 
 import java.util.Stack;
+
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.Text;
-import org.xmlcml.cml.base.*;
+
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLNamespace;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 
 /** user-modifiable class supporting CMLNodeFactory.
 *

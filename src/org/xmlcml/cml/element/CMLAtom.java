@@ -32,6 +32,8 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 public class CMLAtom extends AbstractAtom {
 
     final static Logger logger = Logger.getLogger(CMLAtom.class.getName());
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
     static {
         logger.setLevel(Level.WARNING);
     };
@@ -980,7 +982,7 @@ public class CMLAtom extends AbstractAtom {
 	}
 
 	public boolean isBondedToMetal() {
-		Nodes nodes = query(".//cml:scalar[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
+		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
 		if (nodes.size() > 0) {
 			return true;
 		} else {

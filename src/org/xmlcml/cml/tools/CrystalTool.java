@@ -44,7 +44,7 @@ public class CrystalTool extends AbstractTool {
 
     /** multiplicity of atom symmetry.
      */
-    public final static String DICT_MULTIPLICITY = "cml:mult";
+    public final static String DICT_MULTIPLICITY = C_A+"mult";
 
     /** cif stuff */
     public final static String IUCR = "iucr";
@@ -588,7 +588,7 @@ public class CrystalTool extends AbstractTool {
 		if (formulaUnitsInCell != operatorCount) {
 			formulaUnitsPerOperator = (double) formulaUnitsInCell / (double) operatorCount;
 			CMLScalar z2op = new CMLScalar(formulaUnitsPerOperator);
-			z2op.setDictRef("cml:z2op");
+			z2op.setDictRef(CMLCrystal.Z2OP);
 			z2op.setTitle("ratio of Z to symmetry operators");
 			molecule.appendChild(z2op);
 		}
@@ -761,7 +761,7 @@ public class CrystalTool extends AbstractTool {
 	
     private CMLFormula getFormula(String dictRef, CMLCml cml) {
 		CMLFormula formula = null;
-		Nodes formulaElements = cml.query(".//cml:formula", X_CML);
+		Nodes formulaElements = cml.query(".//"+CMLFormula.NS, X_CML);
 		for (int i = 0; i < formulaElements.size(); i++) {
 			CMLFormula formula0 = (CMLFormula) formulaElements.get(i);
 			if (dictRef.equalsIgnoreCase(formula0.getDictRef())) {

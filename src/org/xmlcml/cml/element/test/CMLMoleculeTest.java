@@ -812,9 +812,9 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
 //        makeMolCryst();
 //        cmlCryst.debug();
 //        CMLMolecule mol = (CMLMolecule) CMLUtil.getQueryNodes(
-//                cmlCryst, ".//cml:molecule", X_CML).get(0);
+//                cmlCryst, ".//"+CMLMolecule.NS, X_CML).get(0);
 //        CMLCrystal cryst = (CMLCrystal) CMLUtil.getQueryNodes(
-//                cmlCryst, ".//cml:crystal", X_CML).get(0);
+//                cmlCryst, ".//"+CMLCrystal.NS, X_CML).get(0);
 //        Transform3 t3 = cryst.getOrthogonalizationTransform();
 //        RealSquareMatrix rsm = null;
 //        try {

@@ -19,6 +19,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLScalar;
 
 /** based on IUCr Core CIF dictionary 
  * 
@@ -89,10 +90,10 @@ public class DisorderAssembly implements CMLConstants {
      */
     public static List<CMLAtom> getDisorderedAtoms(CMLMolecule molecule) {
         Nodes nodes = molecule.query(
-            ".//cml:atom[cml:scalar[" +
+            ".//"+CMLAtom.NS+"["+CMLScalar.NS+"[" +
             "contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
             "contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
-            "]] | .//cml:atom[@occupancy[. < 1]]", X_CML);
+            "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", X_CML);
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         for (int i = 0; i < nodes.size(); i++) {
             atomList.add((CMLAtom) nodes.get(i));
@@ -149,7 +150,7 @@ public class DisorderAssembly implements CMLConstants {
      */
     public static String getAtomCode(CMLAtom atom) {
     	return CrystalTool.getValue(atom,
-    			"cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"']");
+    			CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"']");
     }
     
     /** gets assembly code
@@ -226,8 +227,8 @@ public class DisorderAssembly implements CMLConstants {
     private void removeCommonAtomDisorderInformation() {
     	for (CMLAtom atom : this.commonAtoms) {
     		List<Node> nodes = CMLUtil.getQueryNodes(atom,
-    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
-    				".//cml:scalar[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
+    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
+    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
     		for (Node node : nodes) {
     			node.detach();
     		}

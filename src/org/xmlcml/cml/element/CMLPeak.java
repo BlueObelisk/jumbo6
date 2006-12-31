@@ -13,6 +13,9 @@ import nu.xom.Node;
  */
 public class CMLPeak extends AbstractPeak {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

@@ -89,7 +89,7 @@ public class OscarTool implements CMLConstants {
     static {
 //    <states>
 //    <!--  order may be important -->
-//        <state term="acid(ic|ified)" dictRef="cml:acidic"/>
+//        <state term="acid(ic|ified)" dictRef=C_A+"acidic"/>
         actionMap = getLexicalMap(OSCAR_DIR+U_S+"action.xml");
         charactersMap = getLexicalMap(OSCAR_DIR+U_S+"characters.xml");
         conditionMap = getLexicalMap(OSCAR_DIR+U_S+"condition.xml");
@@ -228,7 +228,7 @@ public class OscarTool implements CMLConstants {
         
         
 //        Nodes nodes = cml.query(".//*[local-name()='module']");
-//        Nodes mods = cml.query(".//cml:module", X_CML);
+//        Nodes mods = cml.query(".//"+CMLModule.NS, X_CML);
 //        if (nodes.size() != mods.size()) {
 //            System.out.println("MODULES....."+nodes.size()+S_SLASH+mods.size());
 //        }
@@ -363,7 +363,7 @@ public class OscarTool implements CMLConstants {
     }
     
     private void processBrackets() {
-        Nodes nodes = bodyM.query(".//cml:module[@role='container']", X_CML);
+        Nodes nodes = bodyM.query(".//"+CMLModule.NS+"[@role='container']", X_CML);
         List<CMLModule> moduleList = new ArrayList<CMLModule>();
         for (int i = 0; i < nodes.size(); i++) {
             CMLModule module = (CMLModule) nodes.get(i);
@@ -391,9 +391,9 @@ public class OscarTool implements CMLConstants {
     private void groupBrackets() {
         // this is not yet fully developed as some non-semantic RBRACKETS are picked up
         // now group brackets
-        List<Node> lbrakList = CMLUtil.getQueryNodes(bodyM, ".//cml:module[@role='lbracket']", X_CML);
+        List<Node> lbrakList = CMLUtil.getQueryNodes(bodyM, ".//"+CMLModule.NS+"[@role='lbracket']", X_CML);
         for (Node lbrak : lbrakList) {
-            Nodes nodes = lbrak.query("./following-sibling::cml:module[@role='rbracket']",
+            Nodes nodes = lbrak.query("./following-sibling::"+CMLModule.NS+"[@role='rbracket']",
                     X_CML);
             if (nodes.size() == 0) {
                 // debug stuff
@@ -435,7 +435,7 @@ public class OscarTool implements CMLConstants {
     private void removeEmptyContainers() {
         // remove empty containers
         List<Node> emptyList = CMLUtil.getQueryNodes(
-                doc, ".//cml:module[@role='container']", X_CML);
+                doc, ".//"+CMLModule.NS+"[@role='container']", X_CML);
         for (Node empty : emptyList) {
             CMLModule container = (CMLModule) empty;
             if (container.getChildCMLElements().size() == 0 &&
@@ -448,17 +448,17 @@ public class OscarTool implements CMLConstants {
     
     private void flattenModules() {
         List<Node> modList = CMLUtil.getQueryNodes(
-                doc, ".//cml:module[@role='container']",
+                doc, ".//"+CMLModule.NS+"[@role='container']",
                 X_CML);
         for (Node mod : modList) {
             CMLModule module = (CMLModule) mod;
-            Nodes childs = module.query("./cml:module", X_CML);
+            Nodes childs = module.query(CMLModule.NS, X_CML);
             List<Node> texts = CMLUtil.getQueryNodes(module, "./text()");
             // has at least one module child
             if (childs.size() > 0) {
                 if (texts.size() > 0) {
                     wrapTextNodes(module, texts);
-                    childs = module.query("./cml:module", X_CML);
+                    childs = module.query(CMLModule.NS, X_CML);
                 }
                 // all are modules
                 if (childs.size() == module.getChildCount()) {
@@ -531,14 +531,14 @@ public class OscarTool implements CMLConstants {
      */
     private void conflateMoleculeAndFollowingBalancedBrackets() {
         List<Node> molList = CMLUtil.getQueryNodes(
-                doc, ".//cml:molecule[following-sibling::cml:module[@role='balancedBrackets']]",
+                doc, ".//"+CMLMolecule.NS+"[following-sibling::"+CMLModule.NS+"[@role='balancedBrackets']]",
                 X_CML);
         for (Node node : molList) {
             CMLMolecule mol = (CMLMolecule) node;
             @SuppressWarnings("unused")
             String title = mol.getTitle();
             List<Node> mods = CMLUtil.getQueryNodes(mol, 
-                    "./following-sibling::cml:module[@role='balancedBrackets'][1]", X_CML);
+                    "./following-sibling::"+CMLModule.NS+"[@role='balancedBrackets'][1]", X_CML);
             if (mods.size() > 0) {
                 CMLModule module = (CMLModule) mods.get(0);
                 module.detach();
@@ -555,16 +555,16 @@ public class OscarTool implements CMLConstants {
     private void conflatePropertyAndFollowingMolecule() {
         String subquery = "preceding-sibling::node()[" +
                 "position()=1 and " +
-                "self::cml:property and " +
+                "self::"+CMLProperty.NS+" and " +
                 "@state]";
         List<Node> molList = CMLUtil.getQueryNodes(
-                doc, ".//cml:molecule["+subquery+S_RSQUARE, X_CML);
+                doc, ".//"+CMLMolecule.NS+"["+subquery+S_RSQUARE, X_CML);
         for (Node node : molList) {
             CMLMolecule mol = (CMLMolecule) node;
             @SuppressWarnings("unused")
             String title = mol.getTitle();
 //            System.out.println("PPPPP "+title);
-            List<Node> props = CMLUtil.getQueryNodes(mol, "./"+subquery, X_CML);
+            List<Node> props = CMLUtil.getQueryNodes(mol, subquery, X_CML);
             if (props.size() > 0) {
                 CMLProperty property = (CMLProperty) props.get(0);
                 property.detach();
@@ -577,8 +577,8 @@ public class OscarTool implements CMLConstants {
 
     private void removeBalancedBracketParentFromMolecule() {
         List<Node> brackMolList = CMLUtil.getQueryNodes(
-            doc, ".//cml:module[@role='balancedBrackets' and " +
-            "count(*) = 1 and count(cml:molecule) = 1]", X_CML);
+            doc, ".//"+CMLModule.NS+"[@role='balancedBrackets' and " +
+            "count(*) = 1 and count("+CMLMolecule.NS+") = 1]", X_CML);
         for (Node brackMol : brackMolList) {
             ((CMLElement)brackMol).replaceByChildren();
         }
@@ -586,14 +586,14 @@ public class OscarTool implements CMLConstants {
     
     private void removeBalancedBracketChildFromMolecule() {
         List<Node> brackMolList = CMLUtil.getQueryNodes(
-            doc, ".//cml:molecule/cml:module[@role='balancedBrackets']", X_CML);
+            doc, ".//"+CMLMolecule.NS+"/"+CMLModule.NS+"[@role='balancedBrackets']", X_CML);
         for (Node brackMol : brackMolList) {
             ((CMLElement)brackMol).replaceByChildren();
         }
     }
 
     private void processConjunctions() {
-        List<Node> textList = CMLUtil.getQueryNodes(doc, ".//cml:module[@role='container']", X_CML);
+        List<Node> textList = CMLUtil.getQueryNodes(doc, ".//"+CMLModule.NS+"[@role='container']", X_CML);
         for (Node node : textList) {
             CMLModule module = (CMLModule) node;
             String value = module.getValue().trim();
@@ -633,7 +633,7 @@ public class OscarTool implements CMLConstants {
      */
     private void processSentences() {
         // for all modules look for end of sentence
-        List<Node> contList = CMLUtil.getQueryNodes(doc, ".//cml:module[@role='container']", X_CML);
+        List<Node> contList = CMLUtil.getQueryNodes(doc, ".//"+CMLModule.NS+"[@role='container']", X_CML);
         for (Node cont : contList) {
             CMLModule module = (CMLModule) cont;
             List<Node> textList = CMLUtil.getQueryNodes(module, "./text()");
@@ -656,7 +656,7 @@ public class OscarTool implements CMLConstants {
         }
         // split modules at sentence end
         List<Node> sentenceEndList = CMLUtil.getQueryNodes(doc, 
-                ".//cml:module[@role='container']/cml:module[@role='sentenceEnd']",
+                ".//"+CMLModule.NS+"[@role='container']/"+CMLModule.NS+"[@role='sentenceEnd']",
                 X_CML);
         for (Node n : sentenceEndList) {
             CMLModule sentenceEnd = (CMLModule) n;
@@ -716,14 +716,14 @@ public class OscarTool implements CMLConstants {
     
     private void wrapSentencesAsModules() {
         List<Node> sentenceEnds = CMLUtil.getQueryNodes(
-                cml, ".//cml:module[@role='sentenceEnd']", X_CML);
+                cml, ".//"+CMLModule.NS+"[@role='sentenceEnd']", X_CML);
         int ii = 0;
         for (Node node : sentenceEnds) {
             CMLModule sentenceEnd = (CMLModule) node;
             sentenceEnd.setId("S"+(++ii));
             ParentNode parent = sentenceEnd.getParent();
             List<Node> precedingSE = CMLUtil.getQueryNodes(sentenceEnd, 
-                    "./preceding-sibling::cml:module[@role='sentenceEnd'][position()=1]", X_CML);
+                    "./preceding-sibling::"+CMLModule.NS+"[@role='sentenceEnd'][position()=1]", X_CML);
             int idx = (precedingSE.size()==0) ? -1 : 
                 parent.indexOf(precedingSE.get(0));
             wrapSiblingsInSentence(sentenceEnd, idx);
@@ -785,7 +785,7 @@ public class OscarTool implements CMLConstants {
     
     private void aggregateMolecules() {
         // find molecule conjunction molecule
-        List<Node> molList = CMLUtil.getQueryNodes(doc, ".//cml:molecule", X_CML);
+        List<Node> molList = CMLUtil.getQueryNodes(doc, ".//"+CMLMolecule.NS, X_CML);
         for (Node molNode : molList) {
             Node conj = CMLUtil.getPrecedingSibling(molNode);
             if (conj instanceof CMLModule) {
@@ -812,7 +812,7 @@ public class OscarTool implements CMLConstants {
     private void findSolvents() {
         // wrap possible molecules in substance
         List<Node> moleculeList = 
-            CMLUtil.getQueryNodes(doc, ".//cml:molecule", X_CML);
+            CMLUtil.getQueryNodes(doc, ".//"+CMLMolecule.NS, X_CML);
         for (Node node : moleculeList) {
             if (node instanceof CMLMolecule) {
                 CMLMolecule molecule = (CMLMolecule) node;
@@ -828,12 +828,12 @@ public class OscarTool implements CMLConstants {
         }
         // set role=solvent
         List<Node> substanceList = 
-            CMLUtil.getQueryNodes(doc, ".//cml:substance", X_CML);
+            CMLUtil.getQueryNodes(doc, ".//"+CMLSubstance.NS, X_CML);
         for (Node node : substanceList) {
             CMLSubstance substance = (CMLSubstance) node;
             @SuppressWarnings("unused")
             CMLModule module = getPrecedingModuleContainer(substance, " in");
-            substance.setRole("cml:solvent");
+            substance.setRole(C_A+"solvent");
         }
     }
     
@@ -858,7 +858,7 @@ public class OscarTool implements CMLConstants {
      */
     private void aggregatePropertyAndMolecules() {
         List<Node> nodeList = CMLUtil.getQueryNodes(doc,
-                "cml:molecule[preceding-sibling::cml:property]", X_CML);
+                CMLMolecule.NS+"[preceding-sibling::"+CMLProperty.NS+"]", X_CML);
         for (Node node : nodeList) {
             CMLMolecule molecule = (CMLMolecule) node;
             Node propSib = CMLUtil.getPrecedingSibling(molecule);
@@ -883,16 +883,16 @@ public class OscarTool implements CMLConstants {
     ...*/
     private void processAmounts() {
         Nodes nodes = cml.query(
-                ".//cml:molecule[following-sibling::cml:module[@role='container' and position()=1]]",
+                ".//"+CMLMolecule.NS+"[following-sibling::"+CMLModule.NS+"[@role='container' and position()=1]]",
                 X_CML);
 //        System.err.println("NODES "+nodes.size());
         for (int i = 0; i < nodes.size(); i++) {
             CMLMolecule molecule = (CMLMolecule) nodes.get(i);
-            CMLModule module = (CMLModule) molecule.query("following-sibling::cml:module", X_CML).get(0);
+            CMLModule module = (CMLModule) molecule.query("following-sibling::"+CMLModule.NS, X_CML).get(0);
             String value = module.getValue().trim();
             if (value.startsWith(S_LBRAK)) {
 //                System.err.println("VALUE "+value);
-                Nodes properties = module.query("./cml:property", X_CML);
+                Nodes properties = module.query(CMLProperty.NS, X_CML);
                 if (properties.size() != 2) {
 //                    module.debug();
 //                    System.err.println("\nOnly "+properties.size()+" property children");
@@ -990,7 +990,7 @@ public class OscarTool implements CMLConstants {
         for (Element namedEntity : neList) {
             processNamedEntity(namedEntity);
         }
-        List<Node> nodeList = CMLUtil.getQueryNodes(doc, ".//cml:molecule", X_CML);
+        List<Node> nodeList = CMLUtil.getQueryNodes(doc, ".//"+CMLMolecule.NS, X_CML);
         @SuppressWarnings("unused")
         List<CMLMolecule> molList = new ArrayList<CMLMolecule>();
         for (Node node : nodeList) {
@@ -1030,7 +1030,7 @@ public class OscarTool implements CMLConstants {
                 ParentNode parent = molecule.getParent();
                 int idx = parent.indexOf(molecule);
                 List<Node> nodes = CMLUtil.getQueryNodes(molecule, 
-                    "./preceding-sibling::cml:molecule", X_CML);
+                    "./preceding-sibling::"+CMLMolecule.NS, X_CML);
                 if (nodes.size() > 0) {
                     CMLMolecule preceding = (CMLMolecule) nodes.get(0);
                     int prevIdx = parent.indexOf(preceding);
@@ -1683,14 +1683,14 @@ public class OscarTool implements CMLConstants {
         }
     }
     
-    // ".//cml:molecule[@role='chemical']/following-sibling::cml:molecule[position()=1 and@ref]", X_CML);
+    // ".//CMLMolecule.NS+"[@role='chemical']/following-sibling::CMLMolecule.NS+"[position()=1 and@ref]", X_CML);
     private void chemicalXref(Element elem) {
         Nodes molecules = elem.query(
-                ".//cml:molecule[@role='chemical']/following-sibling::cml:molecule[position()=1 and @ref]", X_CML);
+                ".//"+CMLMolecule.NS+"[@role='chemical']/following-sibling::"+CMLMolecule.NS+"[position()=1 and @ref]", X_CML);
         for (int i = 0; i < molecules.size(); i++) {
             Element molecule = (CMLMolecule) molecules.get(i);
             CMLMolecule previous = (CMLMolecule) molecule.query(
-                    "./preceding-sibling::cml:molecule[position()=1 and @role='chemical']", X_CML).get(0);
+                    "./preceding-sibling::"+CMLMolecule.NS+"[position()=1 and @role='chemical']", X_CML).get(0);
             CMLName name = new CMLName();
             name.setXMLContent(previous.getTitle());
             previous.detach();
@@ -1700,7 +1700,7 @@ public class OscarTool implements CMLConstants {
 
     // molecule followed by REF
     private void moleculeREF(Element elem) {
-        Nodes nodes = elem.query(".//cml:molecule[following-sibling::*[position()=1" +
+        Nodes nodes = elem.query(".//"+CMLMolecule.NS+"[following-sibling::*[position()=1" +
                 " and self::REF]]", X_CML);
         for (int i = 0; i < nodes.size(); i++) {
             CMLMolecule molecule = (CMLMolecule) nodes.get(i);
@@ -1787,7 +1787,7 @@ public class OscarTool implements CMLConstants {
 //      <P>...
 
     private void markSynthesizedCompounds() {
-        Nodes divs = experimentalM.query(".//DIV[HEADER[count(cml:molecule) = 1" +
+        Nodes divs = experimentalM.query(".//DIV[HEADER[count("+CMLMolecule.NS+") = 1" +
                 "and count(text()[string-length(normalize-space()) > 0]) = 0]]", X_CML);
         for (int i = 0; i < divs.size(); i++) {
             Element div = (Element) divs.get(i);
@@ -1797,11 +1797,11 @@ public class OscarTool implements CMLConstants {
             addProduct(reactionScheme, molecule);
         }
         
-        divs = experimentalM.query(".//DIV[HEADER[count(cml:molecule) = 2]]", X_CML);
+        divs = experimentalM.query(".//DIV[HEADER[count("+CMLMolecule.NS+") = 2]]", X_CML);
         for (int i = 0; i < divs.size(); i++) {
             Element div = (Element) divs.get(i);
             Element header = (Element) div.getFirstChildElement("HEADER");
-            Nodes molecules = header.query("cml:molecule", X_CML);
+            Nodes molecules = header.query(CMLMolecule.NS, X_CML);
             int idx0 = header.indexOf(molecules.get(0));
             int idx1 = header.indexOf(molecules.get(1));
 //            System.out.println("==============");

@@ -17,6 +17,9 @@ import nu.xom.Node;
  */
 public class CMLKpoint extends AbstractKpoint {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * must give simple documentation.
      * 

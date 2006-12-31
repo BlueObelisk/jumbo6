@@ -13,6 +13,9 @@ public class CMLSubstanceList extends AbstractSubstanceList {
     /** */
     public final static String TAG = "substanceList";
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * contructor.
      */

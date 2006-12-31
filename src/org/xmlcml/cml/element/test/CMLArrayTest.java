@@ -1042,7 +1042,7 @@ public class CMLArrayTest extends NumericTest {
         CMLCml cml = (CMLCml) parseValidString(unitsS);
 
         // arrays
-        List<CMLElement> arrays = cml.getElements(".//cml:array");
+        List<CMLElement> arrays = cml.getElements(".//"+CMLArray.NS);
         Assert.assertEquals("array count", 3, arrays.size());
         CMLArray array = (CMLArray) arrays.get(0);
         UnitAttribute unitsAttribute = (UnitAttribute) array.getUnitsAttribute();
@@ -1068,7 +1068,7 @@ public class CMLArrayTest extends NumericTest {
         CMLCml cml = (CMLCml) parseValidString(unitsS);
 
         // arrays
-        List<CMLElement> arrays = cml.getElements(".//cml:array");
+        List<CMLElement> arrays = cml.getElements(".//"+CMLArray.NS);
         Assert.assertEquals("array count", 3, arrays.size());
         testArray((CMLArray) arrays.get(0), new double[] { 180., 90, 45., 0. },
                 CML_UNITS + S_COLON + "deg", new double[] { 3.1415922,

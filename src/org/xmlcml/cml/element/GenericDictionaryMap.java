@@ -51,7 +51,7 @@ public abstract class GenericDictionaryMap extends
 		if (dir.isDirectory()) {
 			String[] files = dir.list();
 			for (String file : files) {
-				if (file.endsWith(".xml")) {
+				if (file.endsWith(XML_SUFF)) {
 					File f = new File(dir, file);
 					GenericDictionary dict = null;
 					try {

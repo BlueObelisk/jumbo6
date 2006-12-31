@@ -25,6 +25,9 @@ import org.xmlcml.cml.base.CMLElements;
  */
 public class CMLPeakStructure extends AbstractPeakStructure {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * must give simple documentation.
      * 

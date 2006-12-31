@@ -14,6 +14,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLMetadata extends AbstractMetadata {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

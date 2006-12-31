@@ -1,408 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<molecule id="branch0" convention="cml:PML-intermediate"
-	xmlns:g="http://www.xml-cml.org/mols/geom"
-	xmlns="http://www.xml-cml.org/schema">
-	<molecule ref="g:oh">
-		<arg name="idx">
-			<scalar dataType="xsd:string">1</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:oh_1_r1 g:acryl_2_r1" id="g:oh_1_r1_g:acryl_2_r1"
-		order="1">
-		<length>1.4</length>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">2</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_2_r3 g:po_3_r1" id="g:acryl_2_r3_g:po_3_r1"
-		order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">3</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_3_r2 g:po_4_r1" id="g:po_3_r2_g:po_4_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">4</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_4_r2 g:me_5_r1" id="g:po_4_r2_g:me_5_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">5</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_2_r2 g:acryl_6_r1"
-		id="g:acryl_2_r2_g:acryl_6_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">6</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_6_r3 g:po_7_r1" id="g:acryl_6_r3_g:po_7_r1"
-		order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">7</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_7_r2 g:po_8_r1" id="g:po_7_r2_g:po_8_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">8</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_8_r2 g:me_9_r1" id="g:po_8_r2_g:me_9_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">9</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_6_r2 g:acryl_10_r1"
-		id="g:acryl_6_r2_g:acryl_10_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">10</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_10_r3 g:po_11_r1"
-		id="g:acryl_10_r3_g:po_11_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">11</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_11_r2 g:po_12_r1" id="g:po_11_r2_g:po_12_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">12</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_12_r2 g:me_13_r1" id="g:po_12_r2_g:me_13_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">13</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_10_r2 g:acryl_14_r1"
-		id="g:acryl_10_r2_g:acryl_14_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">14</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_14_r3 g:po_15_r1"
-		id="g:acryl_14_r3_g:po_15_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">15</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_15_r2 g:po_16_r1" id="g:po_15_r2_g:po_16_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">16</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_16_r2 g:me_17_r1" id="g:po_16_r2_g:me_17_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">17</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_14_r2 g:acryl_18_r1"
-		id="g:acryl_14_r2_g:acryl_18_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">18</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_18_r3 g:po_19_r1"
-		id="g:acryl_18_r3_g:po_19_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">19</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_19_r2 g:po_20_r1" id="g:po_19_r2_g:po_20_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">20</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_20_r2 g:me_21_r1" id="g:po_20_r2_g:me_21_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">21</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_18_r2 g:acryl_22_r1"
-		id="g:acryl_18_r2_g:acryl_22_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">22</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_22_r3 g:po_23_r1"
-		id="g:acryl_22_r3_g:po_23_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">23</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_23_r2 g:po_24_r1" id="g:po_23_r2_g:po_24_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">24</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_24_r2 g:me_25_r1" id="g:po_24_r2_g:me_25_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">25</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_22_r2 g:acryl_26_r1"
-		id="g:acryl_22_r2_g:acryl_26_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">26</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_26_r3 g:po_27_r1"
-		id="g:acryl_26_r3_g:po_27_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">27</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_27_r2 g:po_28_r1" id="g:po_27_r2_g:po_28_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">28</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_28_r2 g:me_29_r1" id="g:po_28_r2_g:me_29_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">29</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_26_r2 g:acryl_30_r1"
-		id="g:acryl_26_r2_g:acryl_30_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">30</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_30_r3 g:po_31_r1"
-		id="g:acryl_30_r3_g:po_31_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">31</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_31_r2 g:po_32_r1" id="g:po_31_r2_g:po_32_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">32</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_32_r2 g:me_33_r1" id="g:po_32_r2_g:me_33_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">33</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_30_r2 g:acryl_34_r1"
-		id="g:acryl_30_r2_g:acryl_34_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">34</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_34_r3 g:po_35_r1"
-		id="g:acryl_34_r3_g:po_35_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">35</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_35_r2 g:po_36_r1" id="g:po_35_r2_g:po_36_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">36</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_36_r2 g:me_37_r1" id="g:po_36_r2_g:me_37_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">37</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_34_r2 g:acryl_38_r1"
-		id="g:acryl_34_r2_g:acryl_38_r1" order="1">
-		<length>1.2</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:acryl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">38</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_38_r3 g:po_39_r1"
-		id="g:acryl_38_r3_g:po_39_r1" order="1">
-		<torsion>120.0</torsion>
-		<length>1.5</length>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">39</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_39_r2 g:po_40_r1" id="g:po_39_r2_g:po_40_r1"
-		order="1">
-		<length>1.4</length>
-		<torsion>150.0</torsion>
-	</join>
-	<molecule ref="g:po">
-		<arg name="idx">
-			<scalar dataType="xsd:string">40</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:po_40_r2 g:me_41_r1" id="g:po_40_r2_g:me_41_r1"
-		order="1">
-		<length>1.39</length>
-	</join>
-	<molecule ref="g:me">
-		<arg name="idx">
-			<scalar dataType="xsd:string">41</scalar>
-		</arg>
-	</molecule>
-	<join atomRefs2="g:acryl_38_r2 g:cl_42_r1"
-		id="g:acryl_38_r2_g:cl_42_r1" order="1">
-		<length>1.54</length>
-	</join>
-	<molecule ref="g:cl">
-		<arg name="idx">
-			<scalar dataType="xsd:string">42</scalar>
-		</arg>
-	</molecule>
-</molecule>
+<fragment id='m1' xmlns='http://www.xml-cml.org/schema'>"+
+  "<molecule role='fragment'>"+
+    "<atomArray>"+
+      "<atom id='a1'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a1</arg>"+
+      "</atom>"+
+      "<atom id='a2'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a2</arg>"+
+      "</atom>"+
+      "<atom id='a3'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a3</arg>"+
+      "</atom>"+
+      "<atom id='a4'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a4</arg>"+
+      "</atom>"+
+      "<atom id='a5'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a5</arg>"+
+      "</atom>"+
+    "</atomArray>"+
+    "<bondArray>"+
+      "<bond atomRefs2='a1 a2'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a1_m1_{$idx}_a2</arg>"+
+        "<arg parentAttribute='atomRefs2'>m1_{$idx}_a1 m1_{$idx}_a2</arg>"+
+      "</bond>"+
+      "<bond atomRefs2='a2 a3'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a2_m1_{$idx}_a3</arg>"+
+        "<arg parentAttribute='atomRefs2'>m1_{$idx}_a2 m1_{$idx}_a3</arg>"+
+      "</bond>"+
+      "<bond atomRefs2='a3 a4'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a3_m1_{$idx}_a4</arg>"+
+        "<arg parentAttribute='atomRefs2'>m1_{$idx}_a3 m1_{$idx}_a4</arg>"+
+      "</bond>"+
+      "<bond atomRefs2='a4 a5'>"+
+        "<arg parentAttribute='id'>m1_{$idx}_a4_m1_{$idx}_a5</arg>"+
+        "<arg parentAttribute='atomRefs2'>m1_{$idx}_a4 m1_{$idx}_a5</arg>"+
+      "</bond>"+
+    "</bondArray>"+
+    "<length id='l1' atomRefs2='a1 a2'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_l1</arg>"+
+      "<arg parentAttribute='atomRefs2'>m1_{$idx}_a1 m1_{$idx}_a2</arg>"+
+      "<arg substitute='.'>{$l1}</arg>"+
+    "</length>"+
+    "<length id='len2' atomRefs2='a2 a3'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_len2</arg>"+
+      "<arg parentAttribute='atomRefs2'>m1_{$idx}_a2 m1_{$idx}_a3</arg>"+
+      "<arg substitute='.'>{$len2}</arg>"+
+    "</length>"+
+    "<angle id='a1' atomRefs3='a1 a2 a3'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_a1</arg>"+
+      "<arg parentAttribute='atomRefs3'>m1_{$idx}_a1 m1_{$idx}_a2 m1_{$idx}_a3</arg>"+
+      "<arg substitute='.'>{$a1}</arg>"+
+    "</angle>"+
+    "<angle id='ang2' atomRefs3='a2 a3 a4'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_ang2</arg>"+
+      "<arg parentAttribute='atomRefs3'>m1_{$idx}_a2 m1_{$idx}_a3 m1_{$idx}_a4</arg>"+
+      "<arg substitute='.'>{$ang2}</arg>"+
+    "</angle>"+
+    "<torsion id='t1' atomRefs4='a1 a2 a3 a4'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_t1</arg>"+
+      "<arg parentAttribute='atomRefs4'>m1_{$idx}_a1 m1_{$idx}_a2 m1_{$idx}_a3 m1_{$idx}_a4</arg>"+
+      "<arg substitute='.'>{$t1}</arg>"+
+    "</torsion>"+
+    "<torsion id='tor2' atomRefs4='a2 a3 a4 a5'>"+
+      "<arg parentAttribute='id'>m1_{$idx}_tor2</arg>"+
+      "<arg parentAttribute='atomRefs4'>m1_{$idx}_a2 m1_{$idx}_a3 m1_{$idx}_a4 m1_{$idx}_a5</arg>"+
+      "<arg substitute='.'>{$tor2}</arg>"+
+    "</torsion>"+
+    "<arg parameterName='idx'/>"+
+    "<arg parentAttribute='id'>m1_{$idx}</arg>"+
+    "<arg parameterName='l1'/>"+
+    "<arg parameterName='len2'/>"+
+    "<arg parameterName='a1'/>"+
+    "<arg parameterName='ang2'/>"+
+    "<arg parameterName='t1'/>"+
+    "<arg parameterName='tor2'/>"+
+  "</molecule>"+
+</fragment>"+

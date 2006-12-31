@@ -14,6 +14,9 @@ import nu.xom.Node;
  */
 public class CMLAbundance extends AbstractAbundance {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * constructor.
      */

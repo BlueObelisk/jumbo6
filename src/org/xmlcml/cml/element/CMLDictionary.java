@@ -24,6 +24,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 public class CMLDictionary extends AbstractDictionary implements
 		GenericDictionary {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
 	final static Logger logger = Logger
 			.getLogger(CMLDictionary.class.getName());
 

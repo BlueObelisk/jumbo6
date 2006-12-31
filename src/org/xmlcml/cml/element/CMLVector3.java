@@ -17,6 +17,9 @@ import org.xmlcml.euclid.Vector3;
  */
 public class CMLVector3 extends AbstractVector3 {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * default. deliberately not user callable
      * 

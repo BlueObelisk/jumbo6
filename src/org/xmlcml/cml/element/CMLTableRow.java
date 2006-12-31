@@ -23,6 +23,9 @@ import org.xmlcml.cml.base.CMLUtil;
  */
 public class CMLTableRow extends AbstractTableRow {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /**
      * must give simple documentation.
      * 

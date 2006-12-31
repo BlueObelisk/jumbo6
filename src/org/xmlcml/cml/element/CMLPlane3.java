@@ -21,6 +21,9 @@ import org.xmlcml.euclid.Vector3;
  */
 public class CMLPlane3 extends AbstractPlane3 {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     final static Logger logger = Logger.getLogger(CMLPlane3.class.getName());
 
     /**

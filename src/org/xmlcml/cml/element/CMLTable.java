@@ -22,6 +22,9 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  */
 public class CMLTable extends AbstractTable {
 
+	/** namespaced element name.*/
+	public final static String NS = C_E+TAG;
+	
     /** types of table.
      * @author pm286
      *

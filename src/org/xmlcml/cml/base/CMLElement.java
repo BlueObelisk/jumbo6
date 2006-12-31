@@ -98,6 +98,7 @@ public class CMLElement extends Element implements CMLConstants {
     }
 
     final static Logger logger = Logger.getLogger(CMLElement.class.getName());
+    final static String ID = "id";
 
     protected Map<String, Object> propertyMap;
 
@@ -128,8 +129,8 @@ public class CMLElement extends Element implements CMLConstants {
      */
     public CMLElement(CMLElement element) {
         this(element.getLocalName());
-        copyAttributes(element);
-        copyChildren(element);
+        copyAttributesFrom(element);
+        copyChildrenFrom(element);
         copyNamespaces(element);
         copyProperties(element);
     }
@@ -155,10 +156,9 @@ public class CMLElement extends Element implements CMLConstants {
     /**
      * copies attributes. makes subclass if necessary.
      * 
-     * @param element
-     *            to copy from
+     * @param element to copy from
      */
-    public void copyAttributes(CMLElement element) {
+    public void copyAttributesFrom(CMLElement element) {
         for (int i = 0; i < element.getAttributeCount(); i++) {
             Attribute att = element.getAttribute(i);
             Attribute newAtt = (Attribute) att.copy();
@@ -168,10 +168,9 @@ public class CMLElement extends Element implements CMLConstants {
 
     /** copies children of element make subclasses when required
      * 
-     * @param element
-     *            to copy from
+     * @param element to copy from
      */
-    public void copyChildren(CMLElement element) {
+    public void copyChildrenFrom(CMLElement element) {
         for (int i = 0; i < element.getChildCount(); i++) {
             Node childNode = element.getChild(i);
             Node newNode = childNode.copy();
@@ -250,7 +249,7 @@ public class CMLElement extends Element implements CMLConstants {
      */
     public void setAttribute(String attName, String attValue) {
         // id is special
-        if ("id".equals(attName)) {
+        if (ID.equals(attName)) {
             this.resetId(attValue);
         } else {
             this.addAttribute(new Attribute(attName, attValue));
@@ -315,7 +314,7 @@ public class CMLElement extends Element implements CMLConstants {
         for (int i = 0; i < n; i++) {
             String namespacePrefix = element.getNamespacePrefix(i);
             String namespaceURI = element
-                    .getNamespaceForPrefix(namespacePrefix);
+                    .getNamespaceURIForPrefix(namespacePrefix);
             this.addNamespaceDeclaration(namespacePrefix, namespaceURI);
         }
     }
@@ -759,7 +758,7 @@ public class CMLElement extends Element implements CMLConstants {
         if (id != null) {
             List<CMLElement> childElements = this.getChildCMLElements();
             for (CMLElement e : childElements) {
-                if (id.equals(e.getAttribute("id"))) {
+                if (id.equals(e.getAttribute(ID))) {
                     elementList.add(e);
                 }
             }
@@ -890,7 +889,7 @@ public class CMLElement extends Element implements CMLConstants {
      * @param prefix
      * @return namespace
      */
-    public String getNamespaceForPrefix(String prefix) {
+    public String getNamespaceURIForPrefix(String prefix) {
         String namespace = null;
         Element current = this;
         while (true) {
@@ -907,9 +906,8 @@ public class CMLElement extends Element implements CMLConstants {
         return namespace;
     }
 
-    /**
-     * get prefix for declared namespace. since namespaces may be declared on
-     * ancestprs, recurse up tree till namespace found
+    /** get prefix for declared namespace. since namespaces may be declared on
+     * ancestors, recurse up tree till namespace found
      * 
      * @param namespaceURI
      * @return prefix
@@ -970,7 +968,7 @@ public class CMLElement extends Element implements CMLConstants {
     }
     
     void addIds(CMLElement elem) {
-        String id = elem.getAttributeValue("id");
+        String id = elem.getAttributeValue(ID);
         if (id != null) {
             List<CMLElement> idList = idMap.get(id);
             if (idList == null) {
@@ -1081,8 +1079,8 @@ public class CMLElement extends Element implements CMLConstants {
      * @param id
      */
     public void resetId(String id) {
-        this.removeAttribute("id");
-        this.addAttribute(new Attribute("id", id));
+        this.removeAttribute(ID);
+        this.addAttribute(new Attribute(ID, id));
     }
 
 }
