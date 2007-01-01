@@ -14,6 +14,7 @@ import nu.xom.Text;
 
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 
 
 /**
@@ -120,6 +121,19 @@ public class CMLArg extends AbstractArg {
         }
         // OK, insert arg
         parent.insertChild(arg, position);
+    }
+
+    /** remove all arg childern from element.
+     * 
+     * @param element to remove args from
+     */
+    public static void removeArgs(CMLElement element) {
+    	if (element != null) {
+	        List<Node> args = CMLUtil.getQueryNodes(element, CMLArg.NS, X_CML);
+	        for (Node arg : args) {
+	        	arg.detach();
+	        }
+    	}
     }
     
     /** substitute arg name by symbol.

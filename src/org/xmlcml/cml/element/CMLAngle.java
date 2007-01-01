@@ -31,7 +31,7 @@ public class CMLAngle extends AbstractAngle {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
     /**
      * constructor.
      */

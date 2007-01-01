@@ -13,7 +13,7 @@ import org.xmlcml.cml.base.StringAttribute;
  */
 public class CountExpressionAttribute extends StringAttribute {
 
-    final static String NAME = "countExpression";
+    public final static String NAME = "countExpression";
     String argName = "null";
     int start = 0;
     int end = 0;
@@ -118,10 +118,10 @@ public class CountExpressionAttribute extends StringAttribute {
         int count = 1;
         String countEx = this.getValue();
         if (countEx != null) {
-            Element parent = (Element)this.getParent();
-            if (parent != null) {
-                parent.removeAttribute(parent.getAttribute("countExpression"));
-            }
+//            Element parent = (Element)this.getParent();
+//            if (parent != null) {
+//                parent.removeAttribute(parent.getAttribute(CountExpressionAttribute.NAME));
+//            }
             if (countEx.startsWith("gaussian")) {
                 countEx = countEx.substring("gaussian".length());
                 int[] counts = parseCount(countEx);

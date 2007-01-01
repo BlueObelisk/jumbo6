@@ -553,8 +553,6 @@ public class CMLPoint3 extends AbstractPoint3 {
      * @param p2
      * @param p3
      * @param p4
-     * @exception CMLException
-     *                two points are coincident or 3 colinear
      * @return angle unsigned radians
      */
     public double getTorsion(CMLPoint3 p2, CMLPoint3 p3, CMLPoint3 p4)
@@ -562,12 +560,8 @@ public class CMLPoint3 extends AbstractPoint3 {
         Point3 peucl3 = getEuclidPoint3();
         double torsion = Double.NaN;
         if (peucl3 != null) {
-            try {
-                torsion = Point3.getTorsion(peucl3, p2.getEuclidPoint3(),
-                        p3.getEuclidPoint3(), p4.getEuclidPoint3()).getRadian();
-            } catch (EuclidException je) {
-                throw new CMLException("Coincident or linear atoms");
-            }
+            torsion = Point3.getTorsion(peucl3, p2.getEuclidPoint3(),
+            		p3.getEuclidPoint3(), p4.getEuclidPoint3()).getRadian();
         }
         return torsion;
     }

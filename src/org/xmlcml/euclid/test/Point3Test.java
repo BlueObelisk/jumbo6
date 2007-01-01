@@ -528,12 +528,8 @@ public class Point3Test extends GeomTest {
     @Test
     public void testGetTorsion() {
         Angle p = null;
-        try {
-            p = Point3.getTorsion(new Point3(1., 0., 0), p000, new Point3(0.,
-                    1., 0.), new Point3(0., 1., 1.));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        p = Point3.getTorsion(new Point3(1., 0., 0), p000, new Point3(0.,
+                1., 0.), new Point3(0., 1., 1.));
         Assert.assertEquals("angle", -Math.PI / 2., p.getRadian(), EPS);
     }
 

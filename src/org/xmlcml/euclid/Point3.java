@@ -567,12 +567,10 @@ public class Point3 implements EuclidConstants {
      * @param p2
      * @param p3
      * @param p4
-     * @exception EuclidException
-     *                two points are coincident or 3 colinear
-     * @return angle unsigned radians
+     * @return angle unsigned radians or null (null args, or colinearity)
      */
-    public static Angle getTorsion(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
-            throws EuclidException {
+    public static Angle getTorsion(Point3 p1, Point3 p2, Point3 p3, Point3 p4) {
+    	Angle angle = null;
         Vector3 v23 = p3.subtract(p2);
         Vector3 v13a = p2.subtract(p1);
         Vector3 v13 = v13a.cross(v23);
@@ -583,7 +581,8 @@ public class Point3 implements EuclidConstants {
         if (v13.getScalarTripleProduct(v24, v23) < 0.0) {
             ang = -ang;
         }
-        return new Angle(ang);
+        angle = new Angle(ang);
+        return angle;
     }
 
     /**

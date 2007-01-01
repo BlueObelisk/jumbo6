@@ -79,7 +79,7 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
 
     /** convenience method to parse test string.
      * 
-     * @param s
+     * @param s xml string (assumed valid)
      * @return root element
      */
     protected Element parseValidString(String s) {
