@@ -199,8 +199,11 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
             }
             CMLAtom atom11 = this.getUniqueLigand(rGroup1, atom1, atom0);
             if (atom11 == null && atom1.getLigandAtoms().size() > 1) {
-                ((CMLElement)atom1.getParent()).debug("PPP");
-                throw new CMLRuntimeException("Null ligand on "+atom1.getId()+" maybe needs a label for: "+rGroup1.getId());
+//                ((CMLElement)atom1.getParent()).debug("PPP");
+                throw new CMLRuntimeException(
+            		"Null ligand on "+atom1.getId()+" maybe needs a label for: "+rGroup1.getId()+"\n" +
+    				" find a ligand of "+atom1.getId()+" and give it a child ligand of the form:" +
+   			        "<label dictRef='cml:torsionEnd'>"+rGroup1.getId()+"</label> (just the last component)");
             }
             if (atom00 != null && atom11 != null) {
                 torsion.setAtomRefs4(atom00, atom0, atom1, atom11);
@@ -293,14 +296,9 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     public void addMoleculeTo(
             CMLMolecule existingMolecule, CMLAtomSet addedAtomSet,
             boolean takeAtomWithLowestId) {
-        try {
 	        this.alignAndMoveBonds(existingMolecule, addedAtomSet);
 	        this.joinByAtomRefs2AndAdjustGeometry(
-	        		existingMolecule, addedAtomSet, takeAtomWithLowestId);
-        } catch (CMLRuntimeException e) {
-        	e.printStackTrace();
-        	System.err.println("Cannot join because: "+e);
-        }
+        		existingMolecule, addedAtomSet, takeAtomWithLowestId);
     }
     
     private void alignAndMoveBonds(CMLMolecule existingMolecule, CMLAtomSet addedAtomSet) {
@@ -323,7 +321,8 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         if (existingAtom == null) {
         	// this happens when join is used twice
 //            existingMolecule.debug("ATOM SHOULD BE IN HERE");
-            throw new CMLRuntimeException("Cannot find atom ("+staticAtomId+") in "+existingMolecule.getId());
+            throw new CMLRuntimeException("Cannot find atom ("+staticAtomId+") in "+existingMolecule.getId()+";" +
+            		" possibly because 2 or more links have been made to the same atom");
         }
         Point3 existingPoint = existingAtom.getPoint3(CoordinateType.CARTESIAN);
         CMLAtom existingLigand = new AtomTool(existingAtom).getSingleLigand();
@@ -371,45 +370,45 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         return ref+S_UNDER+id;
     }
     
-    /** create atomRefs2 from moleculeRefs2 and atomRefs2.
-     * 
-     * @param parent
-     * @param previousFragments
-     * @param nextFragments
-     */
-    public void processMoleculeRefs2AndAtomRefs2( 
-            CMLFragment previousFragment, CMLFragment nextFragment) {
-//      <join id="j1" order="1" moleculeRefs2="PARENT NEXT" atomRefs2="r1 r1">
-//      <length>1.4</length>
-//      <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
-//  </join>
-//  <fragment>
-//      <molecule ref="g:po" id="m3" />
-//  </fragment>
-        String[] moleculeRefs2 = this.getMoleculeRefs2();
-        if (moleculeRefs2 == null) {
-            throw new CMLRuntimeException("No moleculeRefs2 on join");
-        }
-        if (CMLJoin.PARENT_S.equals(moleculeRefs2[0])) {
-            previousFragment = (CMLFragment) this.getParent();
-            if (previousFragment == null) {
-            	throw new CMLRuntimeException("No parent fragment");
-            }
-        } else if (CMLJoin.PREVIOUS_S.equals(moleculeRefs2[0])) {
-        }
-        CMLMolecule previousMolecule = new FragmentTool(previousFragment).getMolecule();
-        if (previousMolecule == null) {
-        	throw new CMLRuntimeException("Cannot find previous molecule to join");
-        }
-        CMLMolecule nextMolecule = null;
-        if (CMLJoin.NEXT_S.equals(moleculeRefs2[1])) {
-            nextMolecule = new FragmentTool(nextFragment).getMolecule();
-        }
-        if (nextMolecule == null) {
-        	throw new CMLRuntimeException("Cannot find next molecule to join");
-        }
-        processMoleculeRefs2AndAtomRefs2(previousMolecule, nextMolecule);
-    }
+//    /** create atomRefs2 from moleculeRefs2 and atomRefs2.
+//     * 
+//     * @param parent
+//     * @param previousFragments
+//     * @param nextFragments
+//     */
+//    private void processMoleculeRefs2AndAtomRefs2( 
+//            CMLFragment previousFragment, CMLFragment nextFragment) {
+////      <join id="j1" order="1" moleculeRefs2="PARENT NEXT" atomRefs2="r1 r1">
+////      <length>1.4</length>
+////      <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
+////  </join>
+////  <fragment>
+////      <molecule ref="g:po" id="m3" />
+////  </fragment>
+//        String[] moleculeRefs2 = this.getMoleculeRefs2();
+//        if (moleculeRefs2 == null) {
+//            throw new CMLRuntimeException("No moleculeRefs2 on join");
+//        }
+//        if (CMLJoin.PARENT_S.equals(moleculeRefs2[0])) {
+//            previousFragment = (CMLFragment) this.getParent();
+//            if (previousFragment == null) {
+//            	throw new CMLRuntimeException("No parent fragment");
+//            }
+//        } else if (CMLJoin.PREVIOUS_S.equals(moleculeRefs2[0])) {
+//        }
+//        CMLMolecule previousMolecule = new FragmentTool(previousFragment).getMolecule();
+//        if (previousMolecule == null) {
+//        	throw new CMLRuntimeException("Cannot find previous molecule to join");
+//        }
+//        CMLMolecule nextMolecule = null;
+//        if (CMLJoin.NEXT_S.equals(moleculeRefs2[1])) {
+//            nextMolecule = new FragmentTool(nextFragment).getMolecule();
+//        }
+//        if (nextMolecule == null) {
+//        	throw new CMLRuntimeException("Cannot find next molecule to join");
+//        }
+//        processMoleculeRefs2AndAtomRefs2(previousMolecule, nextMolecule);
+//    }
     
     /** creates atomRefs2 to join previous/parent molecule to next/child.
      * 
@@ -425,6 +424,12 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
 //  <fragment>
 //      <molecule ref="g:po" id="m3" />
 //  </fragment>
+       	if (previousMolecule == null) {
+    		throw new CMLRuntimeException("null PREVIOUS, check syntax");
+    	}
+       	if (nextMolecule == null) {
+    		throw new CMLRuntimeException("null NEXT, check syntax");
+    	}
         String[] atomRefs2 = this.getAtomRefs2();
         if (atomRefs2 == null) {
         	throw new CMLRuntimeException("No atomrefs2 on Join");
@@ -453,5 +458,4 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     	}
     	return s;
     }
-    
 }

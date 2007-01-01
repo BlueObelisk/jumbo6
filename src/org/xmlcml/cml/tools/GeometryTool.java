@@ -878,4 +878,66 @@ public class GeometryTool extends AbstractTool {
         }
         return transform;
     }
+
+    /** get calculated length.
+     * 
+     * @param atom0
+     * @param atom1
+     * @return length or NaN
+     */
+    public static double getCalculatedLength (CMLAtom atom0, CMLAtom atom1) {
+    	double length = Double.NaN;
+    	if (atom0 != null && atom1 != null) {
+    		Point3 p0 = atom0.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p1 = atom1.getPoint3(CoordinateType.CARTESIAN);
+    		if (p0 != null && p1 != null) {
+    			length = p0.getDistanceFromPoint(p1);
+    		}
+    	}
+    	return length;
+    }
+    
+    /** get calculated angle.
+     * 
+     * @param atom0
+     * @param atom1
+     * @param atom2
+     * @return angle or null
+     */
+    public static Angle getCalculatedAngle (
+    		CMLAtom atom0, CMLAtom atom1, CMLAtom atom2) {
+    	Angle angle = null;
+    	if (atom0 != null && atom1 != null && atom2 != null) {
+    		Point3 p0 = atom0.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p1 = atom1.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p2 = atom2.getPoint3(CoordinateType.CARTESIAN);
+    		if (p0 != null && p1 != null && p2 != null) {
+    			angle = Point3.getAngle(p0, p1, p2);
+    		}
+    	}
+    	return angle;
+    }
+    
+    /** get calculated torsion.
+     * 
+     * @param atom0
+     * @param atom1
+     * @param atom2
+     * @param atom3
+     * @return torsion or null
+     */
+    public static Angle getCalculatedTorsion (
+    		CMLAtom atom0, CMLAtom atom1, CMLAtom atom2, CMLAtom atom3) {
+    	Angle torsion = null;
+    	if (atom0 != null && atom1 != null && atom2 != null && atom3 != null) {
+    		Point3 p0 = atom0.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p1 = atom1.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p2 = atom2.getPoint3(CoordinateType.CARTESIAN);
+    		Point3 p3 = atom3.getPoint3(CoordinateType.CARTESIAN);
+    		if (p0 != null && p1 != null && p2 != null && p3 != null) {
+    			torsion = Point3.getTorsion(p0, p1, p2, p3);
+    		}
+    	}
+    	return torsion;
+    }
 }
