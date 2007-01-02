@@ -1,4 +1,4 @@
-package org.xmlcml.cml.tools.test;
+package org.xmlcml.cml.tools;
 import org.junit.Ignore;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;

@@ -1,4 +1,4 @@
-package org.xmlcml.cml.legacy.molecule.test;
+package org.xmlcml.cml.legacy.molecule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.LineNumberReader;
