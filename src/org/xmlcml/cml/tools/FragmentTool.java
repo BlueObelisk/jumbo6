@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import nu.xom.Node;
@@ -15,12 +16,14 @@ import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CountExpressionAttribute;
 import org.xmlcml.cml.element.Indexable;
 import org.xmlcml.cml.element.IndexableList;
+import org.xmlcml.cml.element.IndexableListManager;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Util;
@@ -38,13 +41,13 @@ public class FragmentTool extends AbstractTool {
 
 	final static String IDX = "idx";
 	final static String F_PREFIX = "f_";
-    private CMLFragment fragment;
+    private CMLFragment rootFragment;
     
 	/**
 	 * @param fragment the fragment to set
 	 */
 	public void setFragment(CMLFragment fragment) {
-		this.fragment = fragment;
+		this.rootFragment = fragment;
 	}
 
 	/**
@@ -53,7 +56,7 @@ public class FragmentTool extends AbstractTool {
      * @param fragment
      */
     public FragmentTool(CMLFragment fragment) {
-        this.fragment = fragment;
+        this.rootFragment = fragment;
     }
 
     /**
@@ -72,7 +75,7 @@ public class FragmentTool extends AbstractTool {
      * @return the fragment
      */
     public CMLFragment getFragment() {
-        return fragment;
+        return rootFragment;
     }
     
     /** set first molecule child of fragment.
@@ -81,12 +84,12 @@ public class FragmentTool extends AbstractTool {
      * @return null if none
      */
     public void setMolecule(CMLMolecule molecule) {
-    	List<Node> molecules = CMLUtil.getQueryNodes(fragment, CMLMolecule.NS, X_CML);
+    	List<Node> molecules = CMLUtil.getQueryNodes(rootFragment, CMLMolecule.NS, X_CML);
     	if (molecules.size() == 0) {
     		molecule.detach();
-    		fragment.insertChild(molecule, 0);
+    		rootFragment.insertChild(molecule, 0);
     	} else {
-    		fragment.replaceChild(molecules.get(0), molecule);
+    		rootFragment.replaceChild(molecules.get(0), molecule);
     	}
     }
 	
@@ -94,7 +97,7 @@ public class FragmentTool extends AbstractTool {
      * 
      */
     public void processBasic() {
-    	new BasicProcessor(fragment).process();
+    	new BasicProcessor(rootFragment).process();
     }
     
     /** get first child molecule.
@@ -103,9 +106,9 @@ public class FragmentTool extends AbstractTool {
      */
     public CMLMolecule getMolecule() {
     	CMLMolecule molecule = null;
-    	if (fragment != null) {
+    	if (rootFragment != null) {
         	List<Node> molecules = CMLUtil.getQueryNodes(
-        			fragment, CMLMolecule.NS, X_CML);
+        			rootFragment, CMLMolecule.NS, X_CML);
         	molecule = (molecules.size() == 0) ? null : (CMLMolecule) molecules.get(0); 
     	}
     	return molecule;
@@ -116,21 +119,69 @@ public class FragmentTool extends AbstractTool {
 	 */
     public void processIntermediate(Catalog catalog) {
     	IntermediateProcessor intermediateProcessor = 
-    		new IntermediateProcessor(fragment);
+    		new IntermediateProcessor(rootFragment);
     	intermediateProcessor.process(catalog);
     }
 
     /**  final processing.
      */
     public void processExplicit() {
-    	ExplicitProcessor explicitProcessor = new ExplicitProcessor(fragment);
+    	ExplicitProcessor explicitProcessor = new ExplicitProcessor(rootFragment);
     	explicitProcessor.process();
+    }
+    
+    public void substituteFragmentRefsRecursively(int limit) {
+    	int count = 0;
+    	List<Node> fragmentLists = CMLUtil.getQueryNodes(rootFragment, CMLFragmentList.NS, X_CML);
+    	CMLFragmentList fragmentList = (fragmentLists.size() == 0) ? null : (CMLFragmentList) fragmentLists.get(0);
+    	if (fragmentList != null) {
+	    	while (substituteFragmentRefs(fragmentList) && count++ < limit) {
+	    		System.out.println("COUNT"+count);
+	    	}
+	    	fragmentList.detach();
+    	}
+    }
+    	
+    public boolean substituteFragmentRefs(CMLFragmentList fragmentList) {
+        	
+		rootFragment.debug("ROOTSTART");
+    	boolean change = false;
+    	// find list of fragments/"ref. May have changed since last time
+    	// as new fragments may have refs
+    	// avoid fragments in fragmentList
+    	List<Node> fragments = CMLUtil.getQueryNodes(rootFragment, CMLFragment.NS+"//"+CMLFragment.NS+"[@ref]", X_CML);
+    	if (fragmentList != null) {
+    		IndexableListManager manager = fragmentList.getIndexableListManager();
+    		manager.indexList();
+	    	for (Node node : fragments) {
+	    		CMLFragment fragment = (CMLFragment) node;
+	    		String ref = fragment.getRef();
+	    		System.out.println("Substituting fragment "+ref);
+	    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
+	    		if (refFragment0 == null) {
+	    			Map<String, Indexable> map = fragmentList.getIndex();
+	    			fragmentList.debug();
+	    			throw new CMLRuntimeException("Cannot find ref: "+ref);
+	    		}
+	    		CMLFragment refFragment = (CMLFragment) refFragment0.copy();
+	        	refFragment.debug("ADDING FRAGMENT "+ref);
+	    		CMLElement parent = (CMLElement) fragment.getParent();
+	    		parent.replaceChild(fragment, refFragment);
+	    		if (parent instanceof CMLFragment) {
+	    			parent.replaceByChildren();
+	    		}
+	    		rootFragment.debug("ROOT");
+	    		change = true;
+	    	}
+    	}
+    	rootFragment.debug("ROOT AFTER ALL DEREFS");
+    	return change;
     }
     
     /** public only for testing.
      */
     public void substituteParameters() {
-    	new IntermediateProcessor(fragment).substituteParameters();
+    	new IntermediateProcessor(rootFragment).substituteParameters();
     }
     
     /** process fragment recursively.
@@ -138,7 +189,7 @@ public class FragmentTool extends AbstractTool {
      *
      */
 	public void basic_processRecursively() {
-		new CountExpander(fragment).process();
+		new CountExpander(rootFragment).process();
 	}
 }
 class CountExpander implements CMLConstants {
@@ -230,9 +281,11 @@ class CountExpander implements CMLConstants {
 class BasicProcessor implements CMLConstants {
 
 	private CMLFragment fragment;
+	private FragmentTool fragmentTool;
 	
 	public BasicProcessor(CMLFragment fragment) {
 		this.fragment = fragment;
+		this.fragmentTool = new FragmentTool(fragment);
 	}
 	
 	public CMLFragment getFragment() {
@@ -241,6 +294,8 @@ class BasicProcessor implements CMLConstants {
 	
     void process() {
         CMLUtil.removeWhitespaceNodes(fragment);
+        fragmentTool.substituteFragmentRefsRecursively(3);
+        fragment.debug("FFF");
         new CountExpander(fragment).process();
         CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
         this.replaceFragmentsByChildMolecules();
@@ -269,8 +324,10 @@ class BasicProcessor implements CMLConstants {
     	childMols = CMLUtil.getQueryNodes(
 			fragment, ".//"+CMLFragment.NS+"/"+CMLMolecule.NS, X_CML);
     	for (Node node : childMols) {
-    		CMLFragment parent = (CMLFragment) node.getParent();
-			parent.replaceByChildren();
+    		CMLElement parent = (CMLElement) node.getParent();
+    		if (parent instanceof CMLFragment) {
+    			parent.replaceByChildren();
+    		}
     	}
     }
     
