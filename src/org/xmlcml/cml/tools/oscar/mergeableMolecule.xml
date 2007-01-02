@@ -1,7 +1,0 @@
-<entries key="regex" value="dictRef">
-<!--  order may be important -->
-    <entry regex="^(hydro)?(fluoride|chloride|bromide|iodide)"
-                                                         dictRef="cml:halide"/>
-    <entry regex="salt"
-                                                         dictRef="cml:halide"/>
-</entries>
