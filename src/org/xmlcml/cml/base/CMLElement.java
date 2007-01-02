@@ -187,6 +187,7 @@ public class CMLElement extends Element implements CMLConstants {
         if (pos == -1) {
             throw new CMLRuntimeException("Cannot replace non-child");
         }
+        newNode.detach();
         this.removeChild(oldNode);
         this.insertChild(newNode, pos);
     }

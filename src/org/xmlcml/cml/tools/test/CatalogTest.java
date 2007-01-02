@@ -137,7 +137,7 @@ public class CatalogTest extends AbstractTest {
 
 		CMLMoleculeList moleculeList = (CMLMoleculeList) IndexableListManager.createFrom(moleculeCatalogUrl, CMLMoleculeList.class);
 		Assert.assertNotNull("moleculeList", moleculeList);
-		Assert.assertEquals("moleculeList", 30, moleculeList.getChildCount());
+		Assert.assertTrue("moleculeList", 30 <= moleculeList.getChildCount());
 		CMLMolecule molecule = (CMLMolecule) moleculeList.getById("oh");
 		Assert.assertNotNull("molecule", molecule);
 		String ohS = ""+

@@ -3555,7 +3555,422 @@ public class FragmentToolTest extends AbstractTest {
 				intermediateS, explicitS, completeS, check);
 	}
 
-	
+	private CMLFragment makeMol9() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='po'>"+
+		"      <molecule ref='g:po'/>" +
+		"    </fragment>"+
+		"    <fragment id='eocl'>"+
+		"      <fragment>"+
+		"        <molecule ref='g:eo'/>" +
+		"      </fragment>"+
+		"      <join moleculeRefs2='PREVIOUS NEXT' atomRefs2='r1 r1'/>"+
+		"      <fragment>"+
+		"        <molecule ref='g:cl'/>" +
+		"      </fragment>"+
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='po'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='eocl'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	// FIXME used to work
+//	@Ignore
+	public void testAll9() {
+		CMLFragment fragment = makeMol9();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 9,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol10() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='eo'>"+
+		"      <molecule ref='g:eo'/>" +
+		"    </fragment>"+
+		"    <fragment id='po'>"+
+		"      <molecule ref='g:po'/>" +
+		"    </fragment>"+
+		"    <fragment id='eocl'>"+
+		"      <fragment>"+
+		"        <molecule ref='g:eo'/>" +
+		"      </fragment>"+
+		"      <join moleculeRefs2='PREVIOUS NEXT' atomRefs2='r1 r1'/>"+
+		"      <fragment>"+
+		"        <molecule ref='g:cl'/>" +
+		"      </fragment>"+
+		"    </fragment>"+
+		"    <fragment id='eopoeo'>"+
+		"      <fragment ref='eo'/>" +
+		"      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"      <fragment ref='po'/>" +
+		"      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"      <fragment ref='eo'/>" +
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='po'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='eocl'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='eopoeo'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+//	@Ignore
+	public void testAll10() {
+		CMLFragment fragment = makeMol10();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 10,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol11() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene3'>"+
+		"      <fragment ref='benzene'/>" +
+		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"      <fragment ref='benzene'/>" +
+		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"      <fragment ref='benzene'/>" +
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r2'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	public void testAll11() {
+		CMLFragment fragment = makeMol11();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 11,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol12() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene3'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join atomRefs2='r3 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment id='benzene'>"+
+		"            <molecule ref='g:benzene'/>" +
+		"          </fragment>"+
+		"        </join>"+
+		"        <join atomRefs2='r5 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment id='benzene'>"+
+		"            <molecule ref='g:benzene'/>" +
+		"          </fragment>"+
+		"        </join>"+
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	public void testAll12() {
+		CMLFragment fragment = makeMol12();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 12,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol13() {
+		// as 12 but uses references
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene3'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join atomRefs2='r3 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene'/>"+
+		"        </join>"+
+		"        <join atomRefs2='r5 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene'/>"+
+		"        </join>"+
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	public void testAll13() {
+		CMLFragment fragment = makeMol13();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 13,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol14() {
+		// as 12 but uses references
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene3'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join atomRefs2='r3 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene3a'/>"+
+		"        </join>"+
+		"        <join atomRefs2='r5 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene3a'/>"+
+		"        </join>"+
+		"      </molecule>"+
+		"    </fragment>"+
+		"    <fragment id='benzene3a'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join atomRefs2='r3 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene3b'/>"+
+		"        </join>"+
+		"        <join atomRefs2='r5 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene3b'/>"+
+		"        </join>"+
+		"      </molecule>"+
+		"    </fragment>"+
+		"    <fragment id='benzene3b'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join atomRefs2='r3 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene'/>"+
+		"        </join>"+
+		"        <join atomRefs2='r5 r1' moleculeRefs2='PARENT CHILD'>" +
+		"          <fragment ref='benzene'/>"+
+		"        </join>"+
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragment>"+
+		"    <molecule ref='g:triazene'>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r1'>" +
+		"        <torsion>45</torsion>" +
+		"        <fragment>" +
+		"          <fragment ref='benzene3'/>"+
+		"        </fragment>"+
+		"      </join>" +
+		"    </molecule>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	public void testAll14() {
+		CMLFragment fragment = makeMol14();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 14,
+				intermediateS, explicitS, completeS, check);
+	}
+
 	private void testLength(CMLMolecule molecule, String id0, String id1, double lengthE, double eps) {
 		CMLAtom atom0 = molecule.getAtomById(id0);
 		CMLAtom atom1 = molecule.getAtomById(id1);
