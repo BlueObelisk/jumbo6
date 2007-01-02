@@ -1,8 +1,0 @@
-<entries key="regex" value="dictRef">
-<!--  order may be important -->
-    <entry regex="under an atmosphere of"
-                                                         dictRef="cml:atmosphere"/>
-    <entry regex="(under )?reduced pressure"           dictRef="cml:reducedPressure"/>
-    <entry regex="unsuccessful"                        dictRef="cml:unsuccessful"/>
-    <entry regex="(in)? vacu(o|um)"                    dictRef="cml:vacuum"/>
-</entries>

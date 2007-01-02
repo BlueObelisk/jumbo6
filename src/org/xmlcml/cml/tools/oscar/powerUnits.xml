@@ -1,5 +1,0 @@
-<entries key="symbol" value="units">
-<!--  order may be important; first may be the best symbol -->
-    <entry symbol=" cm" units="units:cm"/>
-    <entry symbol=" m" units="units:m"/>
-</entries>
