@@ -1,0 +1,4 @@
+<entries key="regex" value="dictRef">
+<!--  order may be important -->
+    <entry regex="(round bottomed)? flask(|s)" dictRef="cml:flask"/>
+</entries>

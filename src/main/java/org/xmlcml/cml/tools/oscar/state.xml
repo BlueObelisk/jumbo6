@@ -1,0 +1,32 @@
+<entries key="regex" value="dictRef">
+<!--  order may be important -->
+    <entry regex="acid(ic|ified)" dictRef="cml:acidic"/>
+    <entry regex="activated" dictRef="cml:activated"/>
+    <entry regex="analytical grade" dictRef="cml:anhydrous"/>
+    <entry regex="anhydrous" dictRef="cml:anhydrous"/>
+    <entry regex="aq(|\.|ueous)" dictRef="cml:aqueous"/>
+    <entry regex="basic" dictRef="cml:basic"/>
+    <entry regex="boiling" dictRef="cml:boiling"/>
+    <entry regex="catalytic amount of" dictRef="cml:catalytic"/>
+    <entry regex="conc(\.|entrated)" dictRef="cml:concentrated"/>
+    <entry regex="cold" dictRef="cml:cold"/>
+    <entry regex="conjugated" dictRef="cml:conjugated"/>
+    <entry regex="crude" dictRef="cml:crude"/>
+    <entry regex="crushed" dictRef="cml:crushed"/>
+    <entry regex="degassed" dictRef="cml:degassed"/>
+    <entry regex="deionized" dictRef="cml:deionized"/>
+    <entry regex="dilute" dictRef="cml:dilute"/>
+    <entry regex="dr(y|ied)" dictRef="cml:dry"/>
+    <entry regex="excess( of)?" dictRef="cml:excess"/>
+    <entry regex="freshly distilled" dictRef="cml:freshlyDistilled"/>
+    <entry regex="hot" dictRef="cml:hot"/>
+    <entry regex="neat" dictRef="cml:neat"/>
+    <entry regex="powdered" dictRef="cml:powdered"/>
+    <entry regex="potentially explosive" dictRef="cml:potentially explosive"/>
+    <entry regex="pure" dictRef="cml:pure"/>
+    <entry regex="sat(d\.|d|\.|urated)" dictRef="cml:saturated"/>
+    <entry regex="stream of" dictRef="cml:stream of"/>
+    <entry regex="unreacted" dictRef="cml:unreacted"/>
+    <entry regex="unstable" dictRef="cml:unstable"/>
+    <entry regex="volatile" dictRef="cml:volatile"/>
+</entries>
