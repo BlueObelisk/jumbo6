@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.test.ReactionAllTestBase;
+import org.xmlcml.cml.element.ReactionAllTestBase;
 import org.xmlcml.cml.tools.ReactionTool;
 import org.xmlcml.euclid.Util;
 

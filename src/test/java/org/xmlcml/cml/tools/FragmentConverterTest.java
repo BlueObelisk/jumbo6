@@ -4,9 +4,9 @@
 package org.xmlcml.cml.tools;
 
 import org.junit.Test;
+import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.test.AbstractTest;
 import org.xmlcml.cml.tools.FragmentConverter;
 
 /**

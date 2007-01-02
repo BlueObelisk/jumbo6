@@ -4,8 +4,8 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.element.test.MoleculeAtomBondTest;
 import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.euclid.Point3;
 /**
