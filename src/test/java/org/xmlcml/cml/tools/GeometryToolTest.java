@@ -2,7 +2,7 @@ package org.xmlcml.cml.tools;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.test.MoleculeAtomBondTest;
+import org.xmlcml.cml.element.MoleculeAtomBondTest;
 /**
  * test geometry tool
  *

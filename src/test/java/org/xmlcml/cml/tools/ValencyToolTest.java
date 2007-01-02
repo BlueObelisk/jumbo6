@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.test.MoleculeAtomBondTest;
+import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.tools.ValencyTool;
 
 public class ValencyToolTest extends MoleculeAtomBondTest {
