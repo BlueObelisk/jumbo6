@@ -1,4 +1,4 @@
-package org.xmlcml.cml.tools.test;
+package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.element.test.AbstractTest;
 

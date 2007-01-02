@@ -1,4 +1,4 @@
-package org.xmlcml.cml.tools.test;
+package org.xmlcml.cml.tools;
 
 import java.io.StringReader;
 import java.util.List;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.xmlcml.cml.tools.test;
+package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.fail;
 
