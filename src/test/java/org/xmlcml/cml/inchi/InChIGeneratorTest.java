@@ -1,4 +1,4 @@
-package org.xmlcml.cml.inchi.test;
+package org.xmlcml.cml.inchi;
 
 import java.util.ArrayList;
 import java.util.List;
