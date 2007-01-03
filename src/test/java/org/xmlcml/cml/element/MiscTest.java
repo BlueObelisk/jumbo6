@@ -94,7 +94,7 @@ public class MiscTest extends AbstractTest {
         String actual = null;
         try {
             baos = new ByteArrayOutputStream();
-            Serializer ser = new TestSerializer(baos);
+            Serializer ser = new MockSerializer(baos);
             ser.write((Document) a.getParent());
             actual = baos.toString();
         } catch (IOException e) {
@@ -112,13 +112,13 @@ public class MiscTest extends AbstractTest {
 
 }
 
-class TestSerializer extends Serializer {
+class MockSerializer extends Serializer {
     /**
      * constructor
      *
      * @param os
      */
-    public TestSerializer(OutputStream os) {
+    public MockSerializer(OutputStream os) {
         super(os);
     }
 
