@@ -8,11 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLLength;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.test.StringTest;
 
 /** test length.

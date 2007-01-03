@@ -6,9 +6,6 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLDimension;
-import org.xmlcml.cml.element.CMLUnitType;
-import org.xmlcml.cml.element.CMLUnitTypeList;
 
 /**
  * test unitType.

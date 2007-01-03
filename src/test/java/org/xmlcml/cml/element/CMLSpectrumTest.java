@@ -16,23 +16,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMetadata;
-import org.xmlcml.cml.element.CMLMetadataList;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLParameterList;
-import org.xmlcml.cml.element.CMLPeak;
-import org.xmlcml.cml.element.CMLPeakGroup;
-import org.xmlcml.cml.element.CMLPeakList;
-import org.xmlcml.cml.element.CMLSample;
-import org.xmlcml.cml.element.CMLSpectrum;
-import org.xmlcml.cml.element.CMLSpectrumData;
-import org.xmlcml.cml.element.CMLSpectrumList;
-import org.xmlcml.cml.element.CMLXaxis;
-import org.xmlcml.cml.element.CMLYaxis;
 import org.xmlcml.euclid.Util;
 
 /**

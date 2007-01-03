@@ -7,10 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLCellParameter;
-import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.euclid.test.DoubleTest;
 
 /**

@@ -6,7 +6,6 @@ package org.xmlcml.cml.element;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLTableCell;
 
 /**
  * @author pm286

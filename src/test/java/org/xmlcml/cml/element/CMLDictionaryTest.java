@@ -16,12 +16,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLDictionary;
-import org.xmlcml.cml.element.CMLEntry;
-import org.xmlcml.cml.element.DictionaryMap;
-import org.xmlcml.cml.element.GenericDictionary;
 import org.xmlcml.euclid.Util;
 
 /**

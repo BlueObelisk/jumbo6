@@ -8,12 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.test.StringTest;
 
@@ -240,7 +234,7 @@ public class CMLTorsionTest extends AbstractTest {
         Assert.assertEquals("calculated b45", 1., b45, EPS);
         
 
-        String filename = "org/xmlcml/cml/tools/test/examples/molecules/geom1/coxy.xml";
+        String filename = "org/xmlcml/cml/tools/examples/molecules/geom1/coxy.xml";
         CMLMolecule molecule2 = (CMLMolecule) parseValidFile(filename);
         CMLTorsion torsion22 = new CMLTorsion();
         torsion22.setAtomRefs4(new String[]{"a27", "a42", "a28", "a31"});

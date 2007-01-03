@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
 /**
  * test CMLElements
  *

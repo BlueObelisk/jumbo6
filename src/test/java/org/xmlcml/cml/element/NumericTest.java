@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**

@@ -6,18 +6,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLProductList;
-import org.xmlcml.cml.element.CMLReactant;
-import org.xmlcml.cml.element.CMLReactantList;
-import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLSpectator;
-import org.xmlcml.cml.element.CMLSubstance;
-import org.xmlcml.cml.element.CMLSubstanceList;
 import org.xmlcml.cml.element.CMLReaction.Component;
 /**
  * test CMLReaction.

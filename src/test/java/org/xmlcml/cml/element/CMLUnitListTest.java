@@ -10,11 +10,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLUnit;
-import org.xmlcml.cml.element.CMLUnitList;
-import org.xmlcml.cml.element.CMLUnitType;
-import org.xmlcml.cml.element.NamespaceRefAttribute;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**

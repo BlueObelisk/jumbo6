@@ -7,7 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTable.TableType;
 
 /**
@@ -138,7 +137,7 @@ public class CMLTableTest extends AbstractTableTest {
     public final void testResetTableType() {
         // exercises convert
         
-        String BASE = "org/xmlcml/cml/element/test/examples/misc";
+        String BASE = "org/xmlcml/cml/element/examples/misc";
         String COLUMN_TABLE_TO_COLUMN =   BASE+U_S+"columnTableToColumn1.xml";
         String COLUMN_TABLE_TO_CONTENT =  BASE+U_S+"columnTableToContent1.xml";
         String COLUMN_TABLE_TO_ROW =      BASE+U_S+"columnTableToRow1.xml";

@@ -6,14 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLReactant;
-import org.xmlcml.cml.element.IdAttribute;
-import org.xmlcml.cml.element.ReactionComponent;
 
 /**
  * test ReactionComponent.

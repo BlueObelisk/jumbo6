@@ -11,8 +11,6 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.tools.AtomMatcher;
-import org.xmlcml.cml.tools.AtomTree;
 
 /** tests atomTree.
  * 

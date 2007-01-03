@@ -12,12 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed

@@ -7,8 +7,7 @@ import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.test.BaseTest;
-import org.xmlcml.cml.legacy.molecule.MDLConverter;
+import org.xmlcml.cml.base.BaseTest;
 
 /**
  * test MDLConverter

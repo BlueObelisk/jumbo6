@@ -6,15 +6,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.test.BaseTest;
-import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLMatrix;
-import org.xmlcml.cml.element.CMLSymmetry;
-import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 /**

@@ -4,10 +4,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomParity;
-import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * tests CMLAtomParity.

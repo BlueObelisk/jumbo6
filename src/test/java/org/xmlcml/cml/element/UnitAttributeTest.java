@@ -10,13 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLUnit;
-import org.xmlcml.cml.element.CMLUnitList;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
-import org.xmlcml.cml.element.UnitAttribute;
 import org.xmlcml.euclid.Util;
 
 /**

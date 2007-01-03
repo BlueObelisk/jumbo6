@@ -18,8 +18,6 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLSerializer;
 import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.euclid.test.DoubleTest;

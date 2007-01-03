@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.test.BaseTest;
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.euclid.test.DoubleTest;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.molutil.ChemicalElement;

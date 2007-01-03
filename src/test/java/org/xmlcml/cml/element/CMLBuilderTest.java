@@ -7,8 +7,6 @@ import nu.xom.NodeFactory;
 
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLNodeFactory;
 import org.xmlcml.euclid.Util;
 
 /** test CMLBuilder routines.

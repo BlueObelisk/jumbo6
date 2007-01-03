@@ -35,8 +35,8 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.cml.element.CMLTable.TableType;
-import org.xmlcml.cml.legacy.LegacyConverterOld;
 import org.xmlcml.cml.legacy.LegacyConverterFactoryOld;
+import org.xmlcml.cml.legacy.LegacyConverterOld;
 import org.xmlcml.molutil.ChemicalElement;
 
 import uk.co.demon.ursus.cif.CIF;

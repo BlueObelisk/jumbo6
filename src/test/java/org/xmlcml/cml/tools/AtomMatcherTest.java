@@ -6,7 +6,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.tools.AtomMatcher;
 import org.xmlcml.euclid.test.StringTest;
 
 /** test AtomMatcher

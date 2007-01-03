@@ -3,7 +3,6 @@ package org.xmlcml.cml.element;
 import org.junit.Assert;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLBuilder;
 
 /**
  * miscellaneous test stuff

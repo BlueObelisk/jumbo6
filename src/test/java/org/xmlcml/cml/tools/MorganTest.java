@@ -13,7 +13,6 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
-import org.xmlcml.cml.tools.Morgan;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.euclid.test.StringTest;
 

@@ -10,11 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;
 

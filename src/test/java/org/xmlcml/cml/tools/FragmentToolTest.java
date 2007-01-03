@@ -25,10 +25,6 @@ import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.IndexableList;
-import org.xmlcml.cml.tools.Catalog;
-import org.xmlcml.cml.tools.CatalogManager;
-import org.xmlcml.cml.tools.FragmentTool;
-import org.xmlcml.cml.tools.GeometryTool;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Util;
 
