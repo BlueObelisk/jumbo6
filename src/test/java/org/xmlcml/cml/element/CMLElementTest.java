@@ -270,7 +270,7 @@ public class CMLElementTest extends AbstractTest {
         try {
             molecule = (CMLMolecule) new CMLBuilder().parseString(moleculeS);
         } catch (Exception e1) {
-            Assert.assertEquals("bad names", "BUG: (Unknown CML element: foo)should never throw", e1.getMessage());
+            Assert.assertEquals("bad names", "Unknown CML element: foo", e1.getMessage());
         }
         moleculeS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
                 + "    <atom id='a1'/>" + "    <atom id='a2'/>"

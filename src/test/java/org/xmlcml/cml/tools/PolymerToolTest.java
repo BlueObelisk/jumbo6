@@ -9,8 +9,10 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
@@ -237,11 +239,11 @@ public class PolymerToolTest extends AbstractToolTest {
 		polymerTool.setMoleculeList(molList);
 		polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
 		polymerTool.processConvention();
-		try {
-			polymerTool.debug("basic", molList, fileroot);
-		} catch (AssertionError e) {
-			System.err.println("NOT YET FIXED TRANSLATION");
-		}
+//		try {
+//			debug("basic", molList, fileroot);
+//		} catch (AssertionError e) {
+//			System.err.println("NOT YET FIXED TRANSLATION");
+//		}
 		/*--
 
 		 polymerTool.processConvention();
@@ -261,5 +263,63 @@ public class PolymerToolTest extends AbstractToolTest {
 		 }
 		 --*/
 	}
+
+//    /** debug.
+//     * 
+//     * @param s
+//     * @param molTest
+//     */
+//    public void debug(String s, CMLMolecule molTest) {
+//        String f = fileroot + S_UNDER + s + XML_SUFF;
+//        System.out.println("=== debug " + s + "== to == "+fileroot);
+//        
+//        try {
+//            CMLMolecule molRef = (CMLMolecule) CMLUtil.readElementFromResource(f);
+//            try {
+//                BaseTest.assertEqualsCanonically("comparing with previous result",
+//                        molRef, molTest, true);
+//            } catch (AssertionError e) {
+//                try {
+//                    Assert.fail(e + " for " + fileroot + S_SLASH + s);
+//                } catch (Throwable e1) {
+//                    System.err.println("Molecules are different: "+e1);
+//                }
+//            }
+//        } catch (CMLRuntimeException e) {
+//            System.out.println("Comparison files does not exist, skipped:  "+f);
+//        }
+//        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+XML_SUFF);
+//        System.out.println("wrote..: "+testFile.getAbsolutePath());
+//        try {
+//            CMLUtil.debug(molTest, new FileOutputStream(testFile));
+//        } catch (IOException e) {
+//            throw new CMLRuntimeException("IO Exception: "+e);
+//        }
+//        System.out.println("== end ==" + s + "==========");
+//    }
+//
+//    /** debug.
+//     * 
+//     * @param s
+//     * @param molListTest
+//     * @param fileroot
+//     * @throws Exception
+//     */
+//    public void debug(String s, CMLMoleculeList molListTest, String fileroot)
+//            throws Exception {
+//        Assert.assertNotNull("molListTest", molListTest);
+//        System.out.println("============" + s + "==========");
+//        String f = fileroot + S_UNDER + s + XML_SUFF;
+//        CMLMoleculeList molListRef = readMoleculeList(f);
+//        Assert.assertNotNull("molListRef", molListRef);
+//        try {
+//            BaseTest.assertEqualsCanonically("comparing with previous result",
+//                    molListRef, molListTest, true);
+//        } catch (AssertionError e) {
+//            // molListTest.debug();
+//            Assert.fail(e + " for " + fileroot + S_SLASH + s);
+//        }
+//        System.out.println("============" + s + "==========");
+//    }
 
  }
