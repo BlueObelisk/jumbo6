@@ -350,7 +350,6 @@ public class MoleculeTool extends AbstractTool {
 								}
 							}
 						}
-						/*
 						n2:
 						if (finalMolList.size() == 0) {
 							System.out.println("Trying N2-");
@@ -470,7 +469,6 @@ public class MoleculeTool extends AbstractTool {
 									}
 								}
 							}
-							*/
 						if (finalMolList.size() > 0) {
 							// remember that molCharge is the charge given to the molecule from the CIF file
 							CMLMolecule theMol = null;
