@@ -21,9 +21,11 @@ import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CountExpressionAttribute;
+import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.cml.element.Indexable;
 import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.element.IndexableListManager;
+import org.xmlcml.cml.element.RefAttribute;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Util;
@@ -143,6 +145,7 @@ public class FragmentTool extends AbstractTool {
     	
     public boolean substituteFragmentRefs(CMLFragmentList fragmentList) {
         	
+//		rootFragment.debug("ROOT0");
     	boolean change = false;
     	// find list of fragments/"ref. May have changed since last time
     	// as new fragments may have refs
@@ -152,21 +155,32 @@ public class FragmentTool extends AbstractTool {
     		IndexableListManager manager = fragmentList.getIndexableListManager();
     		manager.indexList();
 	    	for (Node node : fragments) {
-	    		CMLFragment fragment = (CMLFragment) node;
-	    		String ref = fragment.getRef();
+	    		CMLFragment refFragment = (CMLFragment) node;
+	    		String ref = refFragment.getRef();
+//	    		System.out.println("REF "+ref);
 	    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
 	    		if (refFragment0 == null) {
-	    			Map<String, Indexable> map = fragmentList.getIndex();
 	    			fragmentList.debug("FAILED DEREF");
 	    			throw new CMLRuntimeException("Cannot find ref: "+ref);
 	    		}
-	    		CMLFragment refFragment = (CMLFragment) refFragment0.copy();
-	    		CMLElement parent = (CMLElement) fragment.getParent();
-	    		parent.replaceChild(fragment, refFragment);
+	    		CMLFragment derefFragment = (CMLFragment) refFragment0.copy();
+	    		derefFragment.copyAttributesFrom(refFragment);
+	    		derefFragment.removeAttribute(RefAttribute.NAME);
+	    		derefFragment.removeAttribute(IdAttribute.NAME);
+	    		CMLElement parent = (CMLElement) refFragment.getParent();
+	    		parent.replaceChild(refFragment, derefFragment);
+	    		// replace parent by fragment unless parent or grandparent
+	    		// has countExpression
 	    		if (parent instanceof CMLFragment) {
-	    			parent.replaceByChildren();
+	    			CMLElement grandParent = (CMLElement) parent.getParent();
+	    			if (parent.getAttribute(CountExpressionAttribute.NAME) != null) {
+	    			} else if (grandParent != null && grandParent.getAttribute(CountExpressionAttribute.NAME) != null) {
+	    			} else {
+	    				parent.replaceByChildren();
+	    			}
 	    		}
 	    		change = true;
+//	    		rootFragment.debug("ROOT");
 	    	}
     	}
     	return change;

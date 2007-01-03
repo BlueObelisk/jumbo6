@@ -15,7 +15,7 @@ import org.xmlcml.cml.base.StringAttribute;
  */
 public class RefAttribute extends StringAttribute {
 
-    final static String NAME = "ref";
+    public final static String NAME = "ref";
     /**
      * constructor.
      * 
