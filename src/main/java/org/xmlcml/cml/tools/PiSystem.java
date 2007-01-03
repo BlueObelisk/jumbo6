@@ -466,16 +466,11 @@ public class PiSystem implements CMLConstants {
         int oldPiCount = -1;
         int count = 0;
         while (count < atomList.size() && remainingPiCount > 0) {
-        	System.out.println("--------------");
-        	System.out.println("count: "+count);
-        	System.out.println("atomlist size: "+atomList.size());
         	while (remainingPiCount > knownUnpaired
         			&& remainingPiCount != oldPiCount) {
         		oldPiCount = remainingPiCount;
-        		System.out.println("oldpicount: "+oldPiCount);
         		//List<CMLAtom> atomList = getSortedAtomList();
         		for (CMLAtom startAtom : atomList) {
-        			System.out.println("start atom: "+startAtom.getId());
         			// reset stack
         			atomStack = new Stack<CMLAtom>();
         			tempAtomPairList = new ArrayList<AtomPair>();
@@ -492,7 +487,6 @@ public class PiSystem implements CMLConstants {
         		// put the first item in the list to the end, to
         		// change startAtom for next iteration
         		CMLAtom atom = atomList.get(0);
-        		System.out.println("getting atom : "+atom.getId());
         		atomList.remove(atom);
         		atomList.add(atom);
         	}
