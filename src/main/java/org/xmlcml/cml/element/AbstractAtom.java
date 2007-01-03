@@ -1,20 +1,20 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLMatrix;
+import org.xmlcml.cml.element.CMLVector3;
+import org.xmlcml.cml.element.CMLAtomType;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLAtomParity;
+import org.xmlcml.cml.element.CMLParticle;
+import org.xmlcml.cml.element.CMLName;
+import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLArray;
 
 /** An atom.
 *
@@ -581,7 +581,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getFormalCharge() {
         CMLAttribute _att_formalCharge = (CMLAttribute) getAttribute("formalCharge");
         if (_att_formalCharge == null) {
-            CMLUtil.BUG("unset attribute: formalCharge");
+            throw new CMLRuntimeException("unset attribute: formalCharge");
         }
         return ((IntAttribute)_att_formalCharge).getInt();
     }
@@ -658,7 +658,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getHydrogenCount() {
         CMLAttribute _att_hydrogenCount = (CMLAttribute) getAttribute("hydrogenCount");
         if (_att_hydrogenCount == null) {
-            CMLUtil.BUG("unset attribute: hydrogenCount");
+            throw new CMLRuntimeException("unset attribute: hydrogenCount");
         }
         return ((IntAttribute)_att_hydrogenCount).getInt();
     }
@@ -792,7 +792,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getIsotopeNumber() {
         CMLAttribute _att_isotopeNumber = (CMLAttribute) getAttribute("isotopeNumber");
         if (_att_isotopeNumber == null) {
-            CMLUtil.BUG("unset attribute: isotopeNumber");
+            throw new CMLRuntimeException("unset attribute: isotopeNumber");
         }
         return ((IntAttribute)_att_isotopeNumber).getInt();
     }
@@ -1082,7 +1082,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getSpinMultiplicity() {
         CMLAttribute _att_spinMultiplicity = (CMLAttribute) getAttribute("spinMultiplicity");
         if (_att_spinMultiplicity == null) {
-            CMLUtil.BUG("unset attribute: spinMultiplicity");
+            throw new CMLRuntimeException("unset attribute: spinMultiplicity");
         }
         return ((IntAttribute)_att_spinMultiplicity).getInt();
     }
@@ -1781,7 +1781,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getSpaceGroupMultiplicity() {
         CMLAttribute _att_spaceGroupMultiplicity = (CMLAttribute) getAttribute("spaceGroupMultiplicity");
         if (_att_spaceGroupMultiplicity == null) {
-            CMLUtil.BUG("unset attribute: spaceGroupMultiplicity");
+            throw new CMLRuntimeException("unset attribute: spaceGroupMultiplicity");
         }
         return ((IntAttribute)_att_spaceGroupMultiplicity).getInt();
     }
@@ -1886,7 +1886,7 @@ public abstract class AbstractAtom extends CMLElement {
     public int getPointGroupMultiplicity() {
         CMLAttribute _att_pointGroupMultiplicity = (CMLAttribute) getAttribute("pointGroupMultiplicity");
         if (_att_pointGroupMultiplicity == null) {
-            CMLUtil.BUG("unset attribute: pointGroupMultiplicity");
+            throw new CMLRuntimeException("unset attribute: pointGroupMultiplicity");
         }
         return ((IntAttribute)_att_pointGroupMultiplicity).getInt();
     }

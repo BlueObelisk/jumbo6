@@ -1,8 +1,7 @@
 package org.xmlcml.cml.element;
 
 import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.*;
 
 /** The definition for an entry.
 *

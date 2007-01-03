@@ -1,17 +1,15 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLBondTypeList;
+import org.xmlcml.cml.element.CMLAtomTypeList;
+import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLDescription;
 
 /** The reactiveCentre in a reaction.
 *

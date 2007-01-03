@@ -1,17 +1,17 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLPeakList;
+import org.xmlcml.cml.element.CMLConditionList;
+import org.xmlcml.cml.element.CMLParameterList;
+import org.xmlcml.cml.element.CMLMetadataList;
+import org.xmlcml.cml.element.CMLSample;
+import org.xmlcml.cml.element.CMLSpectrumData;
+import org.xmlcml.cml.element.CMLSubstanceList;
 
 /** A spectrum and relevant data or metadata.
 *
@@ -806,6 +806,23 @@ public abstract class AbstractSpectrum extends CMLElement {
     }
     /** add spectrum element.
     *
+    * @param parameterList parameterList child to add
+
+    */
+    public void addParameterList(AbstractParameterList parameterList) {
+        parameterList.detach();
+        this.appendChild(parameterList);
+    }
+    /** get spectrum child elements .
+    *
+    * @return CMLElements<CMLParameterList>
+    */
+    public CMLElements<CMLParameterList> getParameterListElements() {
+        Elements elements = this.getChildElements("parameterList", CML_NS);
+        return new CMLElements<CMLParameterList>(elements);
+    }
+    /** add spectrum element.
+    *
     * @param metadataList metadataList child to add
 
     */
@@ -854,6 +871,23 @@ public abstract class AbstractSpectrum extends CMLElement {
     public CMLElements<CMLSpectrumData> getSpectrumDataElements() {
         Elements elements = this.getChildElements("spectrumData", CML_NS);
         return new CMLElements<CMLSpectrumData>(elements);
+    }
+    /** add spectrum element.
+    *
+    * @param substanceList substanceList child to add
+
+    */
+    public void addSubstanceList(AbstractSubstanceList substanceList) {
+        substanceList.detach();
+        this.appendChild(substanceList);
+    }
+    /** get spectrum child elements .
+    *
+    * @return CMLElements<CMLSubstanceList>
+    */
+    public CMLElements<CMLSubstanceList> getSubstanceListElements() {
+        Elements elements = this.getChildElements("substanceList", CML_NS);
+        return new CMLElements<CMLSubstanceList>(elements);
     }
     /** overrides addAttribute(Attribute).
     *

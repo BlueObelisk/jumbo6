@@ -1,21 +1,10 @@
 // CONTENT of type :xsd:string
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleArrayAttribute;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringArrayAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** A homogenous 1 dimensional array of similar object.
 *
@@ -67,6 +56,8 @@ public abstract class AbstractArray extends CMLElement {
         attributeGroupNameTable.put("errorBasis", "errorBasis");
         attributeGroupNameTable.put("minValueArray", "minValueArray");
         attributeGroupNameTable.put("maxValueArray", "maxValueArray");
+        attributeGroupNameTable.put("start", "start");
+        attributeGroupNameTable.put("end", "end");
         attributeGroupNameTable.put("units", "units");
         attributeGroupNameTable.put("delimiter", "delimiter");
         attributeGroupNameTable.put("size", "size");
@@ -741,6 +732,98 @@ public abstract class AbstractArray extends CMLElement {
             super.addAttribute(_att_maxValueArray);
         ((DoubleArrayAttribute)_att_maxValueArray).setCMLValue(value);
     }
+    /** The start value.
+    *
+    * The start value in any allowable 
+    * XSD representation 
+
+    * @return CMLAttribute
+    */
+    public CMLAttribute getStartAttribute() {
+        return (CMLAttribute) getAttribute("start");
+    }
+    /** The start value.
+    *
+    * The start value in any allowable 
+    * XSD representation 
+
+    * @return String
+    */
+    public String getStart() {
+        CMLAttribute _att_start = (CMLAttribute) getAttribute("start");
+        if (_att_start == null) {
+            return null;
+        }
+        return ((StringAttribute)_att_start).getString();
+    }
+    /** The start value.
+    *
+    * The start value in any allowable 
+    * XSD representation 
+
+    * @param value start value
+    * @throws CMLRuntimeException attribute wrong value/type
+
+    */
+    public void setStart(String value) throws CMLRuntimeException {
+            CMLAttribute _att_start = null;
+            try {
+        		_att_start = (CMLAttribute) org.xmlcml.cml.element.SpecialAttribute.createSubclassedAttribute(this, CMLAttributeList.getAttribute("start"));
+        	} catch (CMLException e) {
+        		throw new CMLRuntimeException("bug "+e);
+        	}
+            if (_att_start == null) {
+                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : start; probably incompatible attributeGroupName and attributeName");
+            }
+            super.addAttribute(_att_start);
+        ((StringAttribute)_att_start).setCMLValue(value);
+    }
+    /** The end value.
+    *
+    * The end value in any allowable XSD representation 
+    * of data.
+
+    * @return CMLAttribute
+    */
+    public CMLAttribute getEndAttribute() {
+        return (CMLAttribute) getAttribute("end");
+    }
+    /** The end value.
+    *
+    * The end value in any allowable XSD representation 
+    * of data.
+
+    * @return String
+    */
+    public String getEnd() {
+        CMLAttribute _att_end = (CMLAttribute) getAttribute("end");
+        if (_att_end == null) {
+            return null;
+        }
+        return ((StringAttribute)_att_end).getString();
+    }
+    /** The end value.
+    *
+    * The end value in any allowable XSD representation 
+    * of data.
+
+    * @param value end value
+    * @throws CMLRuntimeException attribute wrong value/type
+
+    */
+    public void setEnd(String value) throws CMLRuntimeException {
+            CMLAttribute _att_end = null;
+            try {
+        		_att_end = (CMLAttribute) org.xmlcml.cml.element.SpecialAttribute.createSubclassedAttribute(this, CMLAttributeList.getAttribute("end"));
+        	} catch (CMLException e) {
+        		throw new CMLRuntimeException("bug "+e);
+        	}
+            if (_att_end == null) {
+                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : end; probably incompatible attributeGroupName and attributeName");
+            }
+            super.addAttribute(_att_end);
+        ((StringAttribute)_att_end).setCMLValue(value);
+    }
     /** Scientific units on an element.
     *
     * These must be taken from a dictionary 
@@ -960,7 +1043,7 @@ public abstract class AbstractArray extends CMLElement {
     public int getSize() {
         CMLAttribute _att_size = (CMLAttribute) getAttribute("size");
         if (_att_size == null) {
-            CMLUtil.BUG("unset attribute: size");
+            throw new CMLRuntimeException("unset attribute: size");
         }
         return ((IntAttribute)_att_size).getInt();
     }
@@ -1303,6 +1386,10 @@ public abstract class AbstractArray extends CMLElement {
             setMinValueArray(value);
         } else if (name.equals("maxValueArray")) {
             setMaxValueArray(value);
+        } else if (name.equals("start")) {
+            setStart(value);
+        } else if (name.equals("end")) {
+            setEnd(value);
         } else if (name.equals("units")) {
             setUnits(value);
         } else if (name.equals("delimiter")) {

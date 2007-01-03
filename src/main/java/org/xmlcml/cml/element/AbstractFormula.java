@@ -1,20 +1,12 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLAtomArray;
 
 /** A molecular formula.
 *
@@ -478,7 +470,7 @@ public abstract class AbstractFormula extends CMLElement {
     public int getFormalCharge() {
         CMLAttribute _att_formalCharge = (CMLAttribute) getAttribute("formalCharge");
         if (_att_formalCharge == null) {
-            CMLUtil.BUG("unset attribute: formalCharge");
+            throw new CMLRuntimeException("unset attribute: formalCharge");
         }
         return ((IntAttribute)_att_formalCharge).getInt();
     }

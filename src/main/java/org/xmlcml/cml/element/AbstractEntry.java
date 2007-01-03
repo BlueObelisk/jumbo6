@@ -1,20 +1,17 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLAlternative;
+import org.xmlcml.cml.element.CMLRelatedEntry;
+import org.xmlcml.cml.element.CMLAnnotation;
+import org.xmlcml.cml.element.CMLMetadataList;
+import org.xmlcml.cml.element.CMLDescription;
+import org.xmlcml.cml.element.CMLDefinition;
+import org.xmlcml.cml.element.CMLEnumeration;
 
 /** A dictionary entry.
 *
@@ -395,7 +392,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getRows() {
         CMLAttribute _att_rows = (CMLAttribute) getAttribute("rows");
         if (_att_rows == null) {
-            CMLUtil.BUG("unset attribute: rows");
+            throw new CMLRuntimeException("unset attribute: rows");
         }
         return ((IntAttribute)_att_rows).getInt();
     }
@@ -474,7 +471,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getColumns() {
         CMLAttribute _att_columns = (CMLAttribute) getAttribute("columns");
         if (_att_columns == null) {
-            CMLUtil.BUG("unset attribute: columns");
+            throw new CMLRuntimeException("unset attribute: columns");
         }
         return ((IntAttribute)_att_columns).getInt();
     }
@@ -831,7 +828,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getTotalDigits() {
         CMLAttribute _att_totalDigits = (CMLAttribute) getAttribute("totalDigits");
         if (_att_totalDigits == null) {
-            CMLUtil.BUG("unset attribute: totalDigits");
+            throw new CMLRuntimeException("unset attribute: totalDigits");
         }
         return ((IntAttribute)_att_totalDigits).getInt();
     }
@@ -902,7 +899,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getFractionDigits() {
         CMLAttribute _att_fractionDigits = (CMLAttribute) getAttribute("fractionDigits");
         if (_att_fractionDigits == null) {
-            CMLUtil.BUG("unset attribute: fractionDigits");
+            throw new CMLRuntimeException("unset attribute: fractionDigits");
         }
         return ((IntAttribute)_att_fractionDigits).getInt();
     }
@@ -973,7 +970,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getLength() {
         CMLAttribute _att_length = (CMLAttribute) getAttribute("length");
         if (_att_length == null) {
-            CMLUtil.BUG("unset attribute: length");
+            throw new CMLRuntimeException("unset attribute: length");
         }
         return ((IntAttribute)_att_length).getInt();
     }
@@ -1044,7 +1041,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getMinLength() {
         CMLAttribute _att_minLength = (CMLAttribute) getAttribute("minLength");
         if (_att_minLength == null) {
-            CMLUtil.BUG("unset attribute: minLength");
+            throw new CMLRuntimeException("unset attribute: minLength");
         }
         return ((IntAttribute)_att_minLength).getInt();
     }
@@ -1115,7 +1112,7 @@ public abstract class AbstractEntry extends CMLElement {
     public int getMaxLength() {
         CMLAttribute _att_maxLength = (CMLAttribute) getAttribute("maxLength");
         if (_att_maxLength == null) {
-            CMLUtil.BUG("unset attribute: maxLength");
+            throw new CMLRuntimeException("unset attribute: maxLength");
         }
         return ((IntAttribute)_att_maxLength).getInt();
     }

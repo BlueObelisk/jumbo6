@@ -1,14 +1,11 @@
 package org.xmlcml.cml.element;
 
 import java.util.Stack;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.Text;
-
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLNamespace;
@@ -21,7 +18,7 @@ import org.xmlcml.cml.base.CMLUtil;
 * use as a shell which can be edited
 
 */
-public class CMLNodeFactory extends NodeFactory implements CMLConstants {
+public class CMLNodeFactory extends NodeFactory {
 
 // fields;
     /** current of current node*/
@@ -45,7 +42,7 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
     public Element startMakingElement(String name, String namespace) {
 // fields;
         /** new element*/
-        Element newElement = null;
+        Element newElement;
         int idx = name.indexOf(CMLUtil.S_COLON);
         if (idx != -1) {
         	name = name.substring(idx+1);
@@ -168,6 +165,8 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
             newElement = org.xmlcml.cml.element.CMLReactiveCentre.makeElementInContext(current);
         } else if(name.equals("link")) {
             newElement = org.xmlcml.cml.element.CMLLink.makeElementInContext(current);
+        } else if(name.equals("tcell")) {
+            newElement = org.xmlcml.cml.element.CMLTcell.makeElementInContext(current);
         } else if(name.equals("relatedEntry")) {
             newElement = org.xmlcml.cml.element.CMLRelatedEntry.makeElementInContext(current);
         } else if(name.equals("isotopeList")) {
@@ -206,8 +205,6 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
             newElement = org.xmlcml.cml.element.CMLMechanism.makeElementInContext(current);
         } else if(name.equals("atom")) {
             newElement = org.xmlcml.cml.element.CMLAtom.makeElementInContext(current);
-        } else if(name.equals("copy")) {
-            newElement = org.xmlcml.cml.element.CMLCopy.makeElementInContext(current);
         } else if(name.equals("fragmentList")) {
             newElement = org.xmlcml.cml.element.CMLFragmentList.makeElementInContext(current);
         } else if(name.equals("spectrumData")) {
@@ -302,6 +299,8 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
             newElement = org.xmlcml.cml.element.CMLSphere3.makeElementInContext(current);
         } else if(name.equals("transform3")) {
             newElement = org.xmlcml.cml.element.CMLTransform3.makeElementInContext(current);
+        } else if(name.equals("trow")) {
+            newElement = org.xmlcml.cml.element.CMLTrow.makeElementInContext(current);
         } else if(name.equals("kpoint")) {
             newElement = org.xmlcml.cml.element.CMLKpoint.makeElementInContext(current);
         } else if(name.equals("basisSet")) {
@@ -333,7 +332,7 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
         } else if(name.equals("moleculeList")) {
             newElement = org.xmlcml.cml.element.CMLMoleculeList.makeElementInContext(current);
         } else {
-            CMLUtil.BUG("Unknown CML element: "+name);
+            throw new CMLRuntimeException("Unknown CML element: "+name);
         }
         stack.push(current);
         current = newElement;
@@ -366,7 +365,7 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
         Nodes nodes = new Nodes();
         Attribute attribute = null;
         try {
-            int prefixLoc = name.indexOf(S_COLON);
+            int prefixLoc = name.indexOf(":");
             if (URI != null && URI.trim().length() != 0 && prefixLoc != -1) {
         // namespaced non-cml attribute is allowed
                 attribute = new Attribute(name, URI, value);
@@ -385,7 +384,7 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
                 attribute = new Attribute(name, URI, value);
             }
         } catch (CMLException e) {
-            throw new CMLRuntimeException(S_EMPTY+e);
+            throw new CMLRuntimeException(""+e);
         }
         nodes.append(attribute);
         return nodes;

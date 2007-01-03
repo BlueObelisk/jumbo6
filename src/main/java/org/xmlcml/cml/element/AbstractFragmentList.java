@@ -1,17 +1,14 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLMetadataList;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLJoin;
 
 /** A container for one or more fragments and joins.
 *
@@ -57,7 +54,7 @@ public abstract class AbstractFragmentList extends CMLElement {
         attributeGroupNameTable.put("title", "title");
         attributeGroupNameTable.put("id", "id");
         attributeGroupNameTable.put("ref", "ref");
-        attributeGroupNameTable.put("countExpression", "countExpression");
+        attributeGroupNameTable.put("role", "role");
     };
     /** get attributeGroupName from attributeName.
     *
@@ -438,51 +435,48 @@ public abstract class AbstractFragmentList extends CMLElement {
             super.addAttribute(_att_ref);
         ((StringAttribute)_att_ref).setCMLValue(value);
     }
-    /** General formula for the repeat count of the element.
+    /** Role of the object.
     *
-    * Experimental.
-    *  No fixed semantics or default. 
+    * How the object functions or its position in the architecture. No controlled vocabulary.
 
     * @return CMLAttribute
     */
-    public CMLAttribute getCountExpressionAttribute() {
-        return (CMLAttribute) getAttribute("countExpression");
+    public CMLAttribute getRoleAttribute() {
+        return (CMLAttribute) getAttribute("role");
     }
-    /** General formula for the repeat count of the element.
+    /** Role of the object.
     *
-    * Experimental.
-    *  No fixed semantics or default. 
+    * How the object functions or its position in the architecture. No controlled vocabulary.
 
     * @return String
     */
-    public String getCountExpression() {
-        CMLAttribute _att_countExpression = (CMLAttribute) getAttribute("countExpression");
-        if (_att_countExpression == null) {
+    public String getRole() {
+        CMLAttribute _att_role = (CMLAttribute) getAttribute("role");
+        if (_att_role == null) {
             return null;
         }
-        return ((StringAttribute)_att_countExpression).getString();
+        return ((StringAttribute)_att_role).getString();
     }
-    /** General formula for the repeat count of the element.
+    /** Role of the object.
     *
-    * Experimental.
-    *  No fixed semantics or default. 
+    * How the object functions or its position in the architecture. No controlled vocabulary.
 
-    * @param value countExpression value
+    * @param value role value
     * @throws CMLRuntimeException attribute wrong value/type
 
     */
-    public void setCountExpression(String value) throws CMLRuntimeException {
-            CMLAttribute _att_countExpression = null;
+    public void setRole(String value) throws CMLRuntimeException {
+            CMLAttribute _att_role = null;
             try {
-        		_att_countExpression = (CMLAttribute) org.xmlcml.cml.element.SpecialAttribute.createSubclassedAttribute(this, CMLAttributeList.getAttribute("countExpression"));
+        		_att_role = (CMLAttribute) org.xmlcml.cml.element.SpecialAttribute.createSubclassedAttribute(this, CMLAttributeList.getAttribute("role"));
         	} catch (CMLException e) {
         		throw new CMLRuntimeException("bug "+e);
         	}
-            if (_att_countExpression == null) {
-                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : countExpression; probably incompatible attributeGroupName and attributeName");
+            if (_att_role == null) {
+                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : role; probably incompatible attributeGroupName and attributeName");
             }
-            super.addAttribute(_att_countExpression);
-        ((StringAttribute)_att_countExpression).setCMLValue(value);
+            super.addAttribute(_att_role);
+        ((StringAttribute)_att_role).setCMLValue(value);
     }
     /** add fragmentList element.
     *
@@ -573,8 +567,8 @@ public abstract class AbstractFragmentList extends CMLElement {
             setId(value);
         } else if (name.equals("ref")) {
             setRef(value);
-        } else if (name.equals("countExpression")) {
-            setCountExpression(value);
+        } else if (name.equals("role")) {
+            setRole(value);
         } else {
             super.addAttribute(att);
         }

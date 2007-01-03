@@ -1,10 +1,8 @@
 package org.xmlcml.cml.element;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Logger;
-
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLType;
 
@@ -14,7 +12,7 @@ import org.xmlcml.cml.base.CMLType;
 * DO  NOT EDIT!!
 
 */
-public class CMLTypeList implements CMLConstants {
+public class CMLTypeList {
 
 // fields;
     /** map of types by type name*/
@@ -61,7 +59,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.alternativeTypeType");
         st.setSummary("The type of an alternative.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("alternativeTypeType", st);
         //----type-------angleUnitsType----------
         st = new CMLType();
@@ -103,7 +101,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.atomRefType");
         st.setSummary("A reference to an existing atom.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("atomRefType", st);
         //----type-------atomRefs2Type----------
         st = new CMLType();
@@ -112,7 +110,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.atomRefs2Type");
         st.setSummary("A reference to two distinct existing atoms in order.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setIsList(true);
         st.setListLength(2);
         typeMap.put("atomRefs2Type", st);
@@ -123,7 +121,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.atomRefs3Type");
         st.setSummary("A reference to three distinct existing atoms in order.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setIsList(true);
         st.setListLength(3);
         typeMap.put("atomRefs3Type", st);
@@ -134,7 +132,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.atomRefs4Type");
         st.setSummary("A reference to four distinct existing atoms in order.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setIsList(true);
         st.setListLength(4);
         typeMap.put("atomRefs4Type", st);
@@ -155,7 +153,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.bondRefType");
         st.setSummary("A reference to an existing bond.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setPattern("[A-Za-z0-9_\\-]+(:[A-Za-z0-9_\\-]+)?");
         typeMap.put("bondRefType", st);
         //----type-------box3Type----------
@@ -176,7 +174,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.cellParameterType");
         st.setSummary("enumerated type of cellParameter.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setEnumeration(new String[] {
         "length",
         "angle",
@@ -204,7 +202,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:double");
         st.setId("st.complexType");
         st.setSummary("A pair of floats representing a complex number.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setIsList(true);
         st.setListLength(2);
         typeMap.put("complexType", st);
@@ -400,7 +398,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.formatType");
         st.setSummary("Two dimensional spectrum with different axe.");
-        st.setDescription("Data are represented by non-square _matrix_ with independent axes. A typical example is a '2D 1H 13C NMR spectrum'. The dependent variable is represented by the matrix elements. .");
+        st.setDescription("Data are represented by non-square _matrix_ with independent axes. A typical example is a \"2D 1H 13C NMR spectrum\". The dependent variable is represented by the matrix elements. .");
         typeMap.put("formatType", st);
         //----type-------formulaType----------
         st = new CMLType();
@@ -428,7 +426,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.headType");
         st.setSummary("The head linker in a polymeric repeat unit.");
-        st.setDescription("\n A polymeric chain may be described by liniing the head of one repeat\n unit to the tail or head of another. The head attribute indicates the atom\n id (normally on an atom of elementType='R') which acts as the head\n ");
+        st.setDescription("\n A polymeric chain may be described by liniing the head of one repeat\n unit to the tail or head of another. The head attribute indicates the atom\n id (normally on an atom of elementType=\"R\") which acts as the head\n ");
         st.setPattern("[A-z][A-z0-9_]*");
         typeMap.put("headType", st);
         //----type-------hydrogenCountArrayType----------
@@ -502,7 +500,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:double");
         st.setId("st.isotopeType");
         st.setSummary("The numeric representation of an isotope.");
-        st.setDescription("\n In core CML this represents a single number; either the \ncombined proton/neutron count or a more accurate estimate of the \nnuclear mass. This is admittedly fuzzy, and requires a more complex\n object (which can manage conventions, lists of isotopic masses, etc.)\n See isotope.\n The default is 'natural abundance' - whatever that can be interpreted\n as.\n Delta values (i.e. deviations from the most abundant istopic mass)\n are never allowed.");
+        st.setDescription("\n In core CML this represents a single number; either the \ncombined proton/neutron count or a more accurate estimate of the \nnuclear mass. This is admittedly fuzzy, and requires a more complex\n object (which can manage conventions, lists of isotopic masses, etc.)\n See isotope.\n The default is \"natural abundance\" - whatever that can be interpreted\n as.\n Delta values (i.e. deviations from the most abundant istopic mass)\n are never allowed.");
         typeMap.put("isotopeType", st);
         //----type-------isotopicSpinType----------
         st = new CMLType();
@@ -511,7 +509,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.isotopicSpinType");
         st.setSummary("A fractional representation of the spin of the nucleus.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setPattern("\\d{1,}(/\\d)?");
         typeMap.put("isotopicSpinType", st);
         //----type-------latticeType----------
@@ -530,7 +528,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:double");
         st.setId("st.line3Type");
         st.setSummary("An unbounded line in 3-space.");
-        st.setDescription("Defined by 6 real numbers, conventionally an arbitrary \npoint on the line and a vector3. There is no significance to the point \n(i.e. it is not the 'end of the line') and there are an infinite number of \nways of representing the line. DANGER. Line3 now uses the point3 and vector3 attributes\n and the line3Type may be OBSOLETED.");
+        st.setDescription("Defined by 6 real numbers, conventionally an arbitrary \npoint on the line and a vector3. There is no significance to the point \n(i.e. it is not the \"end of the line\") and there are an infinite number of \nways of representing the line. DANGER. Line3 now uses the point3 and vector3 attributes\n and the line3Type may be OBSOLETED.");
         st.setIsList(true);
         st.setListLength(6);
         typeMap.put("line3Type", st);
@@ -541,7 +539,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.linkTypeType");
         st.setSummary("A labelled link.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setEnumeration(new String[] {
         "extended",
         "locator",
@@ -608,7 +606,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.measurementType");
         st.setSummary("Data are absorbanc.");
-        st.setDescription("so 'peaks' are normally peaks.");
+        st.setDescription("so \"peaks\" are normally peaks.");
         typeMap.put("measurementType", st);
         //----type-------metadataType----------
         st = new CMLType();
@@ -655,7 +653,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.moleculeRefType");
         st.setSummary("A reference to an existing molecule.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("moleculeRefType", st);
         //----type-------moleculeRefs2Type----------
         st = new CMLType();
@@ -664,7 +662,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.moleculeRefs2Type");
         st.setSummary("At present used for joining molecules or fragments(with join).");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         st.setIsList(true);
         st.setListLength(2);
         typeMap.put("moleculeRefs2Type", st);
@@ -723,7 +721,7 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:double");
         st.setId("st.nonNegativeNumberType");
-        st.setSummary(S_EMPTY);
+        st.setSummary("");
         st.setDescription("Note that we also provide positiveNumber to avoid inclusive zero. The maximum number is 1.0E+999 since 'unbounded' is more difficult to implement. This is greater than Eddington's estimate of the number of particles in the universe so it should work for most people.");
         typeMap.put("nonNegativeNumberType", st);
         //----type-------occupancyArrayType----------
@@ -847,7 +845,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.reactionFormatType");
         st.setSummary("The format of the reaction.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("reactionFormatType", st);
         //----type-------reactionRoleType----------
         st = new CMLType();
@@ -874,7 +872,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.reactionTypeType");
         st.setSummary("The semantic type of the reaction.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("reactionTypeType", st);
         //----type-------refType----------
         st = new CMLType();
@@ -883,7 +881,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.refType");
         st.setSummary("A reference to an existing object.");
-        st.setDescription("The semantic of reference are normally identical to \nan idType (e.g. 'a123b'). Howevere there are some cases where compound references\n are required, such as 'a123b:pq456'. It is likely that this will be superseded at\n by RDF or Xpointer, but as long as we have non-uniqueIds this is a problem");
+        st.setDescription("The semantic of reference are normally identical to \nan idType (e.g. \"a123b\"). Howevere there are some cases where compound references\n are required, such as \"a123b:pq456\". It is likely that this will be superseded at\n by RDF or Xpointer, but as long as we have non-uniqueIds this is a problem");
         st.setPattern("([A-Za-z_][A-Za-z0-9_\\.\\-]*:)?[A-Za-z_][A-Za-z0-9_\\.\\-]*");
         typeMap.put("refType", st);
         //----type-------relatedEntryTypeType----------
@@ -902,7 +900,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.repeatType");
         st.setSummary("instruction to create repeat of the object.");
-        st.setDescription("The attribute contains an index, its start value\n (normally 1) and its end value as in 'i 3 10' which would make 8 repeat\n of the object. In selected attribute values the string _i_ acts as a macro and\n would be replaced by the value of i. EXPERIMENTAL. It can also have variables \nas the values.");
+        st.setDescription("The attribute contains an index, its start value\n (normally 1) and its end value as in \"i 3 10\" which would make 8 repeat\n of the object. In selected attribute values the string _i_ acts as a macro and\n would be replaced by the value of i. EXPERIMENTAL. It can also have variables \nas the values.");
         st.setPattern("[A-z]+ [A-z0-9_\\-\\+]+ [A-z0-9_\\-\\+]+");
         typeMap.put("repeatType", st);
         //----type-------schemeType----------
@@ -984,7 +982,7 @@ public class CMLTypeList implements CMLConstants {
         "T",
         "W",
         "H",
-        S_EMPTY,
+        "",
         });
         typeMap.put("stereoType", st);
         //----type-------stringArrayType----------
@@ -1004,7 +1002,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.substanceListTypeType");
         st.setSummary("Type of the substanceList.");
-        st.setDescription("Extension is allowed through the 'other' value.");
+        st.setDescription("Extension is allowed through the \"other\" value.");
         st.setEnumeration(new String[] {
         "solution",
         "mixture",
@@ -1027,7 +1025,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:string");
         st.setId("st.tailType");
         st.setSummary("The tail linker in a polymeric repeat unit.");
-        st.setDescription("\n A polymeric chain may be described by liniing the tail of one repeat\n unit to the head or tail of another. The tail attribute indicates the atom\n id (normally on an atom of elementType='R') which acts as the tail\n ");
+        st.setDescription("\n A polymeric chain may be described by liniing the tail of one repeat\n unit to the head or tail of another. The tail attribute indicates the atom\n id (normally on an atom of elementType=\"R\") which acts as the tail\n ");
         st.setPattern("[A-z][A-z0-9_]*");
         typeMap.put("tailType", st);
         //----type-------torsionAngleType----------
@@ -1037,7 +1035,7 @@ public class CMLTypeList implements CMLConstants {
         st.setBase("xsd:double");
         st.setId("st.torsionAngleType");
         st.setSummary("The type of a torsion angle.");
-        st.setDescription(S_EMPTY);
+        st.setDescription("");
         typeMap.put("torsionAngleType", st);
         //----type-------unitListTypeType----------
         st = new CMLType();
@@ -1097,8 +1095,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:string");
         st.setId("st.QNameType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         st.setPattern("[A-Za-z][A-Za-z0-9_]*:[A-Za-z][A-Za-z0-9_\\.\\-]*");
         typeMap.put("xsd:QName", st);
         //----type-------xsd:anyURI----------
@@ -1107,8 +1105,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:string");
         st.setId("st.AnyURI");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         st.setPattern("[a-z]*:.*");
         typeMap.put("xsd:anyURI", st);
         //----type-------xsd:boolean----------
@@ -1117,8 +1115,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:string");
         st.setId("st.booleanType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         st.setEnumeration(new String[] {
         "true",
         "false",
@@ -1130,8 +1128,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:double");
         st.setId("st.doubleType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         typeMap.put("xsd:double", st);
         //----type-------xsd:float----------
         st = new CMLType();
@@ -1139,8 +1137,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:double");
         st.setId("st.FloatType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         typeMap.put("xsd:float", st);
         //----type-------xsd:integer----------
         st = new CMLType();
@@ -1148,8 +1146,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:integer");
         st.setId("st.integerType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         typeMap.put("xsd:integer", st);
         //----type-------xsd:nonNegativeInteger----------
         st = new CMLType();
@@ -1157,8 +1155,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:integer");
         st.setId("st.NonNegativeIntegerType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         st.setMinInclusive(0);
         typeMap.put("xsd:nonNegativeInteger", st);
         //----type-------xsd:positiveInteger----------
@@ -1167,8 +1165,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:integer");
         st.setId("st.PositiveIntegerType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         st.setMinExclusive(0);
         typeMap.put("xsd:positiveInteger", st);
         //----type-------xsd:string----------
@@ -1177,8 +1175,8 @@ public class CMLTypeList implements CMLConstants {
         st.setName(namex);
         st.setBase("xsd:string");
         st.setId("st.stringType");
-        st.setSummary(S_EMPTY);
-        st.setDescription(S_EMPTY);
+        st.setSummary("");
+        st.setDescription("");
         typeMap.put("xsd:string", st);
         } catch (CMLException e) {
             logger.severe("bug"+e);

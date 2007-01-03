@@ -1,10 +1,10 @@
 package org.xmlcml.cml.element;
 
 import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.element.CMLDocumentation;
+import org.xmlcml.cml.element.CMLAppinfo;
 
 /** A documentation container similar to annotation in XML Schema.
 *

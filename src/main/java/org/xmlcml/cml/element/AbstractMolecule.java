@@ -1,20 +1,32 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLSymmetry;
+import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLArg;
+import org.xmlcml.cml.element.CMLZMatrix;
+import org.xmlcml.cml.element.CMLMetadataList;
+import org.xmlcml.cml.element.CMLLength;
+import org.xmlcml.cml.element.CMLPropertyList;
+import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLAtomArray;
+import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLArray;
+import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLCrystal;
+import org.xmlcml.cml.element.CMLMatrix;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLAngle;
+import org.xmlcml.cml.element.CMLTorsion;
+import org.xmlcml.cml.element.CMLIdentifier;
+import org.xmlcml.cml.element.CMLJoin;
+import org.xmlcml.cml.element.CMLBondArray;
+import org.xmlcml.cml.element.CMLName;
 
 /** The float|integer|string children are for compatibility with CML-1 and are deprecated. scalar|array|matrix should be used instead.
 *
@@ -64,7 +76,6 @@ public abstract class AbstractMolecule extends CMLElement {
         attributeGroupNameTable.put("process", "process");
         attributeGroupNameTable.put("formula", "formula");
         attributeGroupNameTable.put("count", "count");
-        attributeGroupNameTable.put("countExpression", "countExpression");
         attributeGroupNameTable.put("chirality", "chirality");
         attributeGroupNameTable.put("formalCharge", "formalCharge");
         attributeGroupNameTable.put("spinMultiplicity", "spinMultiplicity");
@@ -691,52 +702,6 @@ public abstract class AbstractMolecule extends CMLElement {
             super.addAttribute(_att_count);
         ((DoubleAttribute)_att_count).setCMLValue(value);
     }
-    /** General formula for the repeat count of the element.
-    *
-    * Experimental.
-    *  No fixed semantics or default. 
-
-    * @return CMLAttribute
-    */
-    public CMLAttribute getCountExpressionAttribute() {
-        return (CMLAttribute) getAttribute("countExpression");
-    }
-    /** General formula for the repeat count of the element.
-    *
-    * Experimental.
-    *  No fixed semantics or default. 
-
-    * @return String
-    */
-    public String getCountExpression() {
-        CMLAttribute _att_countExpression = (CMLAttribute) getAttribute("countExpression");
-        if (_att_countExpression == null) {
-            return null;
-        }
-        return ((StringAttribute)_att_countExpression).getString();
-    }
-    /** General formula for the repeat count of the element.
-    *
-    * Experimental.
-    *  No fixed semantics or default. 
-
-    * @param value countExpression value
-    * @throws CMLRuntimeException attribute wrong value/type
-
-    */
-    public void setCountExpression(String value) throws CMLRuntimeException {
-            CMLAttribute _att_countExpression = null;
-            try {
-        		_att_countExpression = (CMLAttribute) org.xmlcml.cml.element.SpecialAttribute.createSubclassedAttribute(this, CMLAttributeList.getAttribute("countExpression"));
-        	} catch (CMLException e) {
-        		throw new CMLRuntimeException("bug "+e);
-        	}
-            if (_att_countExpression == null) {
-                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : countExpression; probably incompatible attributeGroupName and attributeName");
-            }
-            super.addAttribute(_att_countExpression);
-        ((StringAttribute)_att_countExpression).setCMLValue(value);
-    }
     /** The chirality of a system or molecule.
     *
     * This is being actively investigated by a IUPAC committee (2002) so the convention is likely to change. No formal default.
@@ -833,7 +798,7 @@ public abstract class AbstractMolecule extends CMLElement {
     public int getFormalCharge() {
         CMLAttribute _att_formalCharge = (CMLAttribute) getAttribute("formalCharge");
         if (_att_formalCharge == null) {
-            CMLUtil.BUG("unset attribute: formalCharge");
+            throw new CMLRuntimeException("unset attribute: formalCharge");
         }
         return ((IntAttribute)_att_formalCharge).getInt();
     }
@@ -906,7 +871,7 @@ public abstract class AbstractMolecule extends CMLElement {
     public int getSpinMultiplicity() {
         CMLAttribute _att_spinMultiplicity = (CMLAttribute) getAttribute("spinMultiplicity");
         if (_att_spinMultiplicity == null) {
-            CMLUtil.BUG("unset attribute: spinMultiplicity");
+            throw new CMLRuntimeException("unset attribute: spinMultiplicity");
         }
         return ((IntAttribute)_att_spinMultiplicity).getInt();
     }
@@ -1457,8 +1422,6 @@ public abstract class AbstractMolecule extends CMLElement {
             setFormula(value);
         } else if (name.equals("count")) {
             setCount(value);
-        } else if (name.equals("countExpression")) {
-            setCountExpression(value);
         } else if (name.equals("chirality")) {
             setChirality(value);
         } else if (name.equals("formalCharge")) {
