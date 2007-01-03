@@ -7,6 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.euclid.DoubleTool;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.RealMatrix;
@@ -66,7 +67,7 @@ public class MatrixTest extends EuclidTest {
         double[][] bMat = b.getMatrix();
         for (int i = 0; i < aRows; i++) {
             for (int j = 0; j < aCols; j++) {
-                if (!DoubleTest.equals(aMat[i][j], bMat[i][j], eps)) {
+                if (!DoubleTool.equals(aMat[i][j], bMat[i][j], eps)) {
                     Assert.fail(getAssertFormat(message + "; unequal element ("
                             + i + ", " + j + S_RBRAK, S_EMPTY + aMat[i][j], S_EMPTY
                             + bMat[i][j]));
