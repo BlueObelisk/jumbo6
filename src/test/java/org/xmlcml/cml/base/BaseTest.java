@@ -1,4 +1,4 @@
-package org.xmlcml.cml.base.test;
+package org.xmlcml.cml.base;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -38,7 +38,7 @@ public class BaseTest extends EuclidTest implements CMLConstants {
             .getName());
 
     /** root of tests.*/
-    public final static String BASE_RESOURCE = "org/xmlcml/cml/base/test";
+    public final static String BASE_RESOURCE = "org/xmlcml/cml/base";
     
     /**
      * setup.

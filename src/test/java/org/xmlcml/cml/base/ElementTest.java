@@ -1,4 +1,4 @@
-package org.xmlcml.cml.base.test;
+package org.xmlcml.cml.base;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

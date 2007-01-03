@@ -1,4 +1,4 @@
-package org.xmlcml.cml.base.test;
+package org.xmlcml.cml.base;
 
 import java.util.List;
 

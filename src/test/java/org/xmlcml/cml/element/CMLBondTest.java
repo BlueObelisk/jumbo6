@@ -257,7 +257,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         Assert.assertTrue("bonded", CMLBond.areWithinBondingDistance(atom1,
                 atom2));
         // FIXME the latest change in bonding tolerance breaks this
-        ChemicalElement.setBondingRadiusTolerance(0.01);
+//        ChemicalElement.setBondingRadiusTolerance(0.01);
 //        Assert.assertFalse("bonded", CMLBond.areWithinBondingDistance(atom1,
 //                atom2));
     }

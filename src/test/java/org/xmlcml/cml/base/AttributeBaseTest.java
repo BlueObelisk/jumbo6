@@ -1,4 +1,4 @@
-package org.xmlcml.cml.base.test;
+package org.xmlcml.cml.base;
 
 /**
  * super class for attribute tests.
