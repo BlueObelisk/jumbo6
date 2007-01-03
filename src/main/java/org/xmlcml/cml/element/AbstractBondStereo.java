@@ -1,17 +1,10 @@
 // CONTENT of type :stereoType
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringArrayAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** A container supporting cis trans wedge hatch and other stereochemistry.
 *

@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import nu.xom.Node;

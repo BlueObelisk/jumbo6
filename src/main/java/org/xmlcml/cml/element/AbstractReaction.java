@@ -1,18 +1,25 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLMetadataList;
+import org.xmlcml.cml.element.CMLMechanism;
+import org.xmlcml.cml.element.CMLReactiveCentre;
+import org.xmlcml.cml.element.CMLPropertyList;
+import org.xmlcml.cml.element.CMLReactantList;
+import org.xmlcml.cml.element.CMLSubstanceList;
+import org.xmlcml.cml.element.CMLObject;
+import org.xmlcml.cml.element.CMLConditionList;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLTransitionState;
+import org.xmlcml.cml.element.CMLSpectatorList;
+import org.xmlcml.cml.element.CMLMap;
+import org.xmlcml.cml.element.CMLIdentifier;
+import org.xmlcml.cml.element.CMLProductList;
+import org.xmlcml.cml.element.CMLName;
 
 /** A chemical reaction or reaction step.
 *

@@ -1,20 +1,10 @@
 // CONTENT of type :xsd:string
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.DoubleArrayAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringArrayAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** A rectangular matrix of any quantities.
 *
@@ -284,7 +274,7 @@ public abstract class AbstractMatrix extends CMLElement {
     public int getRows() {
         CMLAttribute _att_rows = (CMLAttribute) getAttribute("rows");
         if (_att_rows == null) {
-            CMLUtil.BUG("unset attribute: rows");
+            throw new CMLRuntimeException("unset attribute: rows");
         }
         return ((IntAttribute)_att_rows).getInt();
     }
@@ -363,7 +353,7 @@ public abstract class AbstractMatrix extends CMLElement {
     public int getColumns() {
         CMLAttribute _att_columns = (CMLAttribute) getAttribute("columns");
         if (_att_columns == null) {
-            CMLUtil.BUG("unset attribute: columns");
+            throw new CMLRuntimeException("unset attribute: columns");
         }
         return ((IntAttribute)_att_columns).getInt();
     }

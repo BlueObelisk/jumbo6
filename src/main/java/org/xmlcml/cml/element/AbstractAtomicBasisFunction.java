@@ -1,19 +1,11 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLGradient;
 
 /** An atomicBasisFunction.
 *
@@ -450,7 +442,7 @@ public abstract class AbstractAtomicBasisFunction extends CMLElement {
     public int getN() {
         CMLAttribute _att_n = (CMLAttribute) getAttribute("n");
         if (_att_n == null) {
-            CMLUtil.BUG("unset attribute: n");
+            throw new CMLRuntimeException("unset attribute: n");
         }
         return ((IntAttribute)_att_n).getInt();
     }
@@ -521,7 +513,7 @@ public abstract class AbstractAtomicBasisFunction extends CMLElement {
     public int getL() {
         CMLAttribute _att_l = (CMLAttribute) getAttribute("l");
         if (_att_l == null) {
-            CMLUtil.BUG("unset attribute: l");
+            throw new CMLRuntimeException("unset attribute: l");
         }
         return ((IntAttribute)_att_l).getInt();
     }
@@ -586,7 +578,7 @@ public abstract class AbstractAtomicBasisFunction extends CMLElement {
     public int getM() {
         CMLAttribute _att_m = (CMLAttribute) getAttribute("m");
         if (_att_m == null) {
-            CMLUtil.BUG("unset attribute: m");
+            throw new CMLRuntimeException("unset attribute: m");
         }
         return ((IntAttribute)_att_m).getInt();
     }

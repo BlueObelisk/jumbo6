@@ -1,19 +1,10 @@
 // CONTENT of type :atomRefArrayType
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringArrayAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** A set of references to atoms.
 *
@@ -399,7 +390,7 @@ public abstract class AbstractAtomSet extends CMLElement {
     public int getSize() {
         CMLAttribute _att_size = (CMLAttribute) getAttribute("size");
         if (_att_size == null) {
-            CMLUtil.BUG("unset attribute: size");
+            throw new CMLRuntimeException("unset attribute: size");
         }
         return ((IntAttribute)_att_size).getInt();
     }

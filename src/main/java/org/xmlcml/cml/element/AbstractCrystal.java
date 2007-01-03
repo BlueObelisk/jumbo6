@@ -1,19 +1,13 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLSymmetry;
+import org.xmlcml.cml.element.CMLCellParameter;
+import org.xmlcml.cml.element.CMLScalar;
 
 /** A crystallographic cell.
 *
@@ -92,7 +86,7 @@ public abstract class AbstractCrystal extends CMLElement {
     public int getZ() {
         CMLAttribute _att_z = (CMLAttribute) getAttribute("z");
         if (_att_z == null) {
-            CMLUtil.BUG("unset attribute: z");
+            throw new CMLRuntimeException("unset attribute: z");
         }
         return ((IntAttribute)_att_z).getInt();
     }

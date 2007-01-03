@@ -1,19 +1,12 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
+import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-import nu.xom.Elements;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.element.CMLMatrix;
+import org.xmlcml.cml.element.CMLTransform3;
 
 /** Molecular, crystallographic or other symmetry.
 *
@@ -525,7 +518,7 @@ public abstract class AbstractSymmetry extends CMLElement {
     public int getNumber() {
         CMLAttribute _att_number = (CMLAttribute) getAttribute("number");
         if (_att_number == null) {
-            CMLUtil.BUG("unset attribute: number");
+            throw new CMLRuntimeException("unset attribute: number");
         }
         return ((IntAttribute)_att_number).getInt();
     }

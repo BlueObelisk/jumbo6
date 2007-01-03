@@ -1,17 +1,9 @@
 package org.xmlcml.cml.element;
 
+import nu.xom.Attribute;
+import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** The complete system of components in a calculation.
 *
@@ -99,7 +91,7 @@ public abstract class AbstractSystem extends CMLElement {
     public int getDimensionality() {
         CMLAttribute _att_dimensionality = (CMLAttribute) getAttribute("dimensionality");
         if (_att_dimensionality == null) {
-            CMLUtil.BUG("unset attribute: dimensionality");
+            throw new CMLRuntimeException("unset attribute: dimensionality");
         }
         return ((IntAttribute)_att_dimensionality).getInt();
     }
@@ -178,7 +170,7 @@ public abstract class AbstractSystem extends CMLElement {
     public int getPeriodicity() {
         CMLAttribute _att_periodicity = (CMLAttribute) getAttribute("periodicity");
         if (_att_periodicity == null) {
-            CMLUtil.BUG("unset attribute: periodicity");
+            throw new CMLRuntimeException("unset attribute: periodicity");
         }
         return ((IntAttribute)_att_periodicity).getInt();
     }
