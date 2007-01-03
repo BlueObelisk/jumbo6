@@ -465,12 +465,17 @@ public class PiSystem implements CMLConstants {
         int knownUnpaired = piSystemManager.getKnownUnpaired();
         int oldPiCount = -1;
         int count = 0;
-        while (count < atomList.size()) {
+        while (count < atomList.size() && remainingPiCount > 0) {
+        	System.out.println("--------------");
+        	System.out.println("count: "+count);
+        	System.out.println("atomlist size: "+atomList.size());
         	while (remainingPiCount > knownUnpaired
         			&& remainingPiCount != oldPiCount) {
         		oldPiCount = remainingPiCount;
-        		List<CMLAtom> atomList = getSortedAtomList();
+        		System.out.println("oldpicount: "+oldPiCount);
+        		//List<CMLAtom> atomList = getSortedAtomList();
         		for (CMLAtom startAtom : atomList) {
+        			System.out.println("start atom: "+startAtom.getId());
         			// reset stack
         			atomStack = new Stack<CMLAtom>();
         			tempAtomPairList = new ArrayList<AtomPair>();
@@ -480,52 +485,19 @@ public class PiSystem implements CMLConstants {
         			}
         		}
         	}
-        	// reset piMap and remainingPiCount
-    		piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
-    		remainingPiCount = startRemainingPiCount;
-    		// put the first item in the list to the end, to
-    		// change startAtom for next iteration
-    		CMLAtom atom = atomList.get(0);
-    		atomList.remove(0);
-    		atomList.add(atom);
-    		count++;
+        	if (remainingPiCount > 0) {
+        		// reset piMap and remainingPiCount
+        		piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
+        		remainingPiCount = startRemainingPiCount;
+        		// put the first item in the list to the end, to
+        		// change startAtom for next iteration
+        		CMLAtom atom = atomList.get(0);
+        		System.out.println("getting atom : "+atom.getId());
+        		atomList.remove(atom);
+        		atomList.add(atom);
+        	}
+        	count++;
         }
-        /*
-        remainingPiCount = 20;
-        oldPiCount = -1;
-        while (remainingPiCount > knownUnpaired
-                && remainingPiCount != oldPiCount) {
-<<<<<<< .mine
-            // System.out.println("REMAINING PI "+remainingPiCount+"/ OLD
-            // "+oldPiCount+S_SLASH+piMap.size());
-=======
-        	piMap = new HashMap<CMLAtom, Integer>(piMapCopy);
->>>>>>> .r173
-            oldPiCount = remainingPiCount;
-            List<CMLAtom> atomList = getSortedAtomList();
-            CMLAtom atom = atomList.get(0);
-            atomList.remove(0);
-            atomList.add(atom);
-            for (CMLAtom startAtom : atomList) {
-                // reset stack
-                atomStack = new Stack<CMLAtom>();
-                tempAtomPairList = new ArrayList<AtomPair>();
-                exploreStart1(startAtom, 0);
-                if (remainingPiCount <= knownUnpaired) {
-                    break;
-                }
-            }
-<<<<<<< .mine
-            // System.out.println("REMAINING PI COUNT / ATOMS at END
-            // "+remainingPiCount+S_SLASH+tempAtomPairList.size());
-//            for (AtomPair atomPair : tempAtomPairList) {
-                // System.out.print("||"+atomPair);
-//                Assert.assertNotNull(atomPair);
-//            }
-=======
->>>>>>> .r173
-        }
-        */
     }
 
     /**
