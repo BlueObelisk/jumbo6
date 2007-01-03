@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLFragment;
-import org.xmlcml.cml.element.CountExpressionAttribute;
 
 /**
  * @author pm286

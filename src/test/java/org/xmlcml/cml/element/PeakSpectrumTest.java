@@ -7,13 +7,6 @@ import java.net.URL;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLPeak;
-import org.xmlcml.cml.element.CMLPeakList;
-import org.xmlcml.cml.element.CMLPeakStructure;
-import org.xmlcml.cml.element.CMLSpectrum;
 import org.xmlcml.euclid.Util;
 
 /**

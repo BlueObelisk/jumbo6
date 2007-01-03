@@ -7,10 +7,9 @@ import java.net.URL;
 
 import nu.xom.Element;
 
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.test.BaseTest;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -24,7 +23,7 @@ import org.xmlcml.euclid.Util;
 public abstract class AbstractTest extends BaseTest implements CMLConstants {
 
 	/** root of tests. */
-	public final static String TEST_RESOURCE = "org/xmlcml/cml/element/test";
+	public final static String TEST_RESOURCE = "org/xmlcml/cml/element";
 
 	/** root of examples. */
 	public final static String EXAMPLES_RESOURCE = TEST_RESOURCE + S_SLASH
@@ -51,7 +50,7 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
 			+ "units";
 
 	/** root of tool tests. */
-	public final static String TOOL_TEST_RESOURCE = "org/xmlcml/cml/tools/test";
+	public final static String TOOL_TEST_RESOURCE = "org/xmlcml/cml/tools";
 
 	/** root of tool test examples. */
 	public final static String TOOL_EXAMPLES_RESOURCE = TOOL_TEST_RESOURCE

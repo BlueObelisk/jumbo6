@@ -12,13 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLDictionary;
-import org.xmlcml.cml.element.CMLEntry;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.DictRefAttribute;
-import org.xmlcml.cml.element.DictionaryMap;
 import org.xmlcml.euclid.Util;
 
 /**

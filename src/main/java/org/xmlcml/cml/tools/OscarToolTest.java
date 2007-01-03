@@ -9,7 +9,7 @@ import nu.xom.Element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.test.BaseTest;
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.euclid.Util;

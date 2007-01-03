@@ -5,8 +5,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLParameter;
-import org.xmlcml.cml.element.CMLParameterList;
 
 /**
  * tests parameterList.

@@ -50,13 +50,13 @@ import org.xmlcml.cml.element.CMLScalar;
  *    <![CDATA[
 <list xmlns="http://www.xml-cml.org/schema">
   <scalar role='cml:dictionaryCatalog' convention='cml:resourceUrl'
-    >org/xmlcml/cml/element/test/examples/dict/catalog.xml</scalar>
+    >org/xmlcml/cml/element/examples/dict/catalog.xml</scalar>
   <scalar role='cml:moleculeCatalog' convention='cml:resourceUrl'
-    >org/xmlcml/cml/tools/test/examples/molecules/catalog.xml</scalar>
+    >org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>
   <scalar role='cml:unitsCatalog' convention='cml:resourceUrl'
-    >org/xmlcml/cml/element/test/examples/units/catalog.xml</scalar>
+    >org/xmlcml/cml/element/examples/units/catalog.xml</scalar>
   <scalar role='cml:catalogList' convention='cml:resourceUrl'
-    >org/xmlcml/cml/element/test/examples/foo/catalogList.xml</scalar>
+    >org/xmlcml/cml/element/examples/foo/catalogList.xml</scalar>
 </list>
  *    ]]>
  * </pre>

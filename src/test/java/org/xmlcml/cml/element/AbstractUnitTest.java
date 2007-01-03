@@ -5,11 +5,6 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLUnit;
-import org.xmlcml.cml.element.CMLUnitList;
-import org.xmlcml.cml.element.CMLUnitType;
-import org.xmlcml.cml.element.CMLUnitTypeList;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**

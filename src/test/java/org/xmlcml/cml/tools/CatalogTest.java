@@ -22,9 +22,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.IndexableListManager;
 import org.xmlcml.cml.element.CMLMap.Direction;
-import org.xmlcml.cml.tools.Catalog;
-import org.xmlcml.cml.tools.CatalogManager;
-import org.xmlcml.cml.tools.CatalogUtil;
 
 /**
  * @author pm286
@@ -60,11 +57,11 @@ public class CatalogTest extends AbstractTest {
 		Assert.assertNotNull("catalogList", catalogList);
 		String expectedS = "" +
 		"<list xmlns='http://www.xml-cml.org/schema'>"+
-		"  <scalar convention='cml:resourceUrl' dictRef='cml:dictionaryCatalog' dataType='xsd:string'>org/xmlcml/cml/element/test/examples/dict/catalog.xml</scalar>"+
-		"  <scalar convention='cml:resourceUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>org/xmlcml/cml/tools/test/examples/molecules/catalog.xml</scalar>"+
-		"  <scalar convention='cml:resourceUrl' dictRef='cml:unitsCatalog' dataType='xsd:string'>org/xmlcml/cml/element/test/examples/units/catalog.xml</scalar>"+
-		"  <scalar convention='cml:absoluteUrl' dictRef='cml:foo' dataType='xsd:string'>http://www.sf.net/projects/cml/org/xmlcml/cml/element/test/examples/foo/catalog.xml</scalar>"+
-		"  <scalar convention='cml:relativeUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>src/org/xmlcml/cml/tools/test/examples/molecules/catalog.xml</scalar>"+
+		"  <scalar convention='cml:resourceUrl' dictRef='cml:dictionaryCatalog' dataType='xsd:string'>org/xmlcml/cml/element/examples/dict/catalog.xml</scalar>"+
+		"  <scalar convention='cml:resourceUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>"+
+		"  <scalar convention='cml:resourceUrl' dictRef='cml:unitsCatalog' dataType='xsd:string'>org/xmlcml/cml/element/examples/units/catalog.xml</scalar>"+
+		"  <scalar convention='cml:absoluteUrl' dictRef='cml:foo' dataType='xsd:string'>http://www.sf.net/projects/cml/org/xmlcml/cml/element/examples/foo/catalog.xml</scalar>"+
+		"  <scalar convention='cml:relativeUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>src/org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>"+
 		"</list>"+
 				"";
 		CMLList expected = (CMLList) parseValidString(expectedS);
@@ -128,7 +125,7 @@ public class CatalogTest extends AbstractTest {
 		String expectedURLS = null;
 		try {
 			expectedURLS = new File(System.getProperty("user.dir")).toURL()+
-			"target"+U_S+"classes"+U_S+"org/xmlcml/cml/tools/test/examples/molecules/geom1";
+			"target"+U_S+"classes"+U_S+"org/xmlcml/cml/tools/examples/molecules/geom1";
 		} catch (MalformedURLException e) {
 			CMLUtil.BUG("Malformed URL");
 		}

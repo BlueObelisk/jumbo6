@@ -15,13 +15,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLUnit;
-import org.xmlcml.cml.element.DictRefAttribute;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
-import org.xmlcml.cml.element.UnitAttribute;
 import org.xmlcml.euclid.Util;
 
 /**

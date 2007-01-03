@@ -4,11 +4,6 @@ import java.io.StringReader;
 import java.util.logging.Logger;
 
 import org.junit.Before;
-import org.xmlcml.cml.element.CMLLine3;
-import org.xmlcml.cml.element.CMLPlane3;
-import org.xmlcml.cml.element.CMLPoint3;
-import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.element.CMLVector3;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed

@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLUnitType;
-import org.xmlcml.cml.element.CMLUnitTypeList;
 import org.xmlcml.euclid.Util;
 
 /**

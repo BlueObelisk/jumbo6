@@ -14,11 +14,6 @@ import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.StringAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.molutil.ChemicalElement;
 

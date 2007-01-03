@@ -11,8 +11,6 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.tools.AtomSetTool;
-import org.xmlcml.cml.tools.ConnectionTableTool;
 
 /**
  * test AtomSetTool.

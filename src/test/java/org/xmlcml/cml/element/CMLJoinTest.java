@@ -7,9 +7,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLJoin;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Util;
 
 /** tests CMLJoin.

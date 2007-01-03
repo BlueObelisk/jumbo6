@@ -6,10 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLSpectator;
 
 /**
  * tests spectator.

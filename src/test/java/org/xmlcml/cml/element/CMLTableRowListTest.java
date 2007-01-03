@@ -4,12 +4,6 @@
 package org.xmlcml.cml.element;
 
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLArrayList;
-import org.xmlcml.cml.element.CMLList;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLTableContent;
-import org.xmlcml.cml.element.CMLTableRowList;
 
 /**
  * @author pm286

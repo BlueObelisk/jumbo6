@@ -8,14 +8,6 @@ import nu.xom.ValidityException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLProductList;
-import org.xmlcml.cml.element.CMLReactant;
-import org.xmlcml.cml.element.CMLReactantList;
-import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLSpectator;
-import org.xmlcml.cml.element.CMLSpectatorList;
 /**
  * test for reaction elements.
  * 

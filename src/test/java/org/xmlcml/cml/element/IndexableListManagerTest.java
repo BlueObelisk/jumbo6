@@ -10,10 +10,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.element.Indexable;
-import org.xmlcml.cml.element.IndexableListManager;
 
 /**
  * @author pm286

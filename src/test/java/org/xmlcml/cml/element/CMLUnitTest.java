@@ -8,12 +8,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLDimension;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLUnit;
-import org.xmlcml.cml.element.CMLUnitList;
-import org.xmlcml.cml.element.CMLUnitType;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
 
 /**
  * tests CMLUnit.

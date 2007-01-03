@@ -16,10 +16,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLZMatrix;
 import org.xmlcml.euclid.Util;
 
 /**

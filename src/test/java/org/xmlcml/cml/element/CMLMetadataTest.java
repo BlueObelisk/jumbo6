@@ -4,7 +4,6 @@ import nu.xom.Attribute;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLMetadata;
 
 /**
  * test for metadata.

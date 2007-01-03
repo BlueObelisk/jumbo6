@@ -28,12 +28,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.DictRefAttribute;
-import org.xmlcml.cml.element.DictionaryMap;
-import org.xmlcml.cml.element.MetadataNameAttribute;
-import org.xmlcml.cml.element.NamespaceToUnitListMap;
-import org.xmlcml.cml.element.UnitAttribute;
 import org.xmlcml.euclid.Util;
 
 /**

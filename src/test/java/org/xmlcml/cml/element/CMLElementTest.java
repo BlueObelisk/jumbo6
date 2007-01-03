@@ -15,10 +15,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBuilder;
-import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Util;
 /**
  * test CMLElement.

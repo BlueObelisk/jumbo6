@@ -17,7 +17,6 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.tools.ConnectionTableTool;
 
 /** test ConnectionTableTool.
  * 

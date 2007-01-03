@@ -6,7 +6,6 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.euclid.Point3;
 /**
  * tests atomTool.

@@ -8,12 +8,6 @@ import nu.xom.ParsingException;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.xmlcml.cml.element.CMLArrayList;
-import org.xmlcml.cml.element.CMLTable;
-import org.xmlcml.cml.element.CMLTableContent;
-import org.xmlcml.cml.element.CMLTableHeader;
-import org.xmlcml.cml.element.CMLTableRow;
-import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -72,11 +66,11 @@ public abstract class AbstractTableTest extends AbstractTest {
     public void makeContent() {
     }
     static String COLUMN_TABLE1_XML = 
-        "org/xmlcml/cml/element/test/examples/misc/columnTable1.xml";
+        "org/xmlcml/cml/element/examples/misc/columnTable1.xml";
     static String CONTENT_TABLE1_XML = 
-        "org/xmlcml/cml/element/test/examples/misc/contentTable1.xml";
+        "org/xmlcml/cml/element/examples/misc/contentTable1.xml";
     static String ROW_TABLE1_XML = 
-        "org/xmlcml/cml/element/test/examples/misc/rowTable1.xml";
+        "org/xmlcml/cml/element/examples/misc/rowTable1.xml";
 
     CMLTable columnTable1  = null;
     CMLTable contentTable1 = null;

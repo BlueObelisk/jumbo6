@@ -15,12 +15,12 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
 import org.junit.Assert;
+import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.test.BaseTest;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLFragment;
