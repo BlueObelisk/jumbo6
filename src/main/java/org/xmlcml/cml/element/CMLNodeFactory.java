@@ -165,8 +165,6 @@ public class CMLNodeFactory extends NodeFactory {
             newElement = org.xmlcml.cml.element.CMLReactiveCentre.makeElementInContext(current);
         } else if(name.equals("link")) {
             newElement = org.xmlcml.cml.element.CMLLink.makeElementInContext(current);
-        } else if(name.equals("tcell")) {
-            newElement = org.xmlcml.cml.element.CMLTcell.makeElementInContext(current);
         } else if(name.equals("relatedEntry")) {
             newElement = org.xmlcml.cml.element.CMLRelatedEntry.makeElementInContext(current);
         } else if(name.equals("isotopeList")) {
@@ -299,8 +297,6 @@ public class CMLNodeFactory extends NodeFactory {
             newElement = org.xmlcml.cml.element.CMLSphere3.makeElementInContext(current);
         } else if(name.equals("transform3")) {
             newElement = org.xmlcml.cml.element.CMLTransform3.makeElementInContext(current);
-        } else if(name.equals("trow")) {
-            newElement = org.xmlcml.cml.element.CMLTrow.makeElementInContext(current);
         } else if(name.equals("kpoint")) {
             newElement = org.xmlcml.cml.element.CMLKpoint.makeElementInContext(current);
         } else if(name.equals("basisSet")) {
