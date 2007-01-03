@@ -2,7 +2,6 @@ package org.xmlcml.cml.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
-import org.junit.Assert;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -274,64 +271,6 @@ public class PolymerTool extends AbstractTool {
         }
     }
     
-    /** debug.
-     * 
-     * @param s
-     * @param molTest
-     */
-    public void debug(String s, CMLMolecule molTest) {
-        String f = fileroot + S_UNDER + s + XML_SUFF;
-        System.out.println("=== debug " + s + "== to == "+fileroot);
-        
-        try {
-            CMLMolecule molRef = (CMLMolecule) CMLUtil.readElementFromResource(f);
-            try {
-                BaseTest.assertEqualsCanonically("comparing with previous result",
-                        molRef, molTest, true);
-            } catch (AssertionError e) {
-                try {
-                    Assert.fail(e + " for " + fileroot + S_SLASH + s);
-                } catch (Throwable e1) {
-                    System.err.println("Molecules are different: "+e1);
-                }
-            }
-        } catch (CMLRuntimeException e) {
-            System.out.println("Comparison files does not exist, skipped:  "+f);
-        }
-        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+XML_SUFF);
-        System.out.println("wrote..: "+testFile.getAbsolutePath());
-        try {
-            CMLUtil.debug(molTest, new FileOutputStream(testFile));
-        } catch (IOException e) {
-            throw new CMLRuntimeException("IO Exception: "+e);
-        }
-        System.out.println("== end ==" + s + "==========");
-    }
-
-    /** debug.
-     * 
-     * @param s
-     * @param molListTest
-     * @param fileroot
-     * @throws Exception
-     */
-    public void debug(String s, CMLMoleculeList molListTest, String fileroot)
-            throws Exception {
-        Assert.assertNotNull("molListTest", molListTest);
-        System.out.println("============" + s + "==========");
-        String f = fileroot + S_UNDER + s + XML_SUFF;
-        CMLMoleculeList molListRef = readMoleculeList(f);
-        Assert.assertNotNull("molListRef", molListRef);
-        try {
-            BaseTest.assertEqualsCanonically("comparing with previous result",
-                    molListRef, molListTest, true);
-        } catch (AssertionError e) {
-            // molListTest.debug();
-            Assert.fail(e + " for " + fileroot + S_SLASH + s);
-        }
-        System.out.println("============" + s + "==========");
-    }
-
     /** connection table as inline atoms.
      * only for single molecule at present
      */

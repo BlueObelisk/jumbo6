@@ -31,7 +31,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             Assert.fail("should throw: Unknown CML element: inchi");
         } catch (Exception e) {
             Assert.assertEquals("CMLNodeFactory validation", 
-                    "BUG: (Unknown CML element: inchi)should never throw", e.getMessage());
+                    "Unknown CML element: inchi", e.getMessage());
         }
         
         // succeeds with ordinary NodeFactory
@@ -63,7 +63,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             Assert.fail("should throw: Unknown CML element: inchi");
         } catch (Exception e) {
             Assert.assertEquals("CMLNodeFactory validation", 
-                    "BUG: (Unknown CML element: inchi)should never throw", e.getMessage());
+                    "Unknown CML element: inchi", e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             builder.parseString(s);
         } catch (Exception e) {
             Assert.assertEquals("CMLNodeFactory validation", 
-                    "BUG: (Unknown CML element: inchi)should never throw", e.getMessage());
+                    "Unknown CML element: inchi", e.getMessage());
         }
         
         // parse against DOCTYPE (tests XOM DTD validation)
