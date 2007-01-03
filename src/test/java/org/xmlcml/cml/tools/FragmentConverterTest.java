@@ -104,7 +104,6 @@ public class FragmentConverterTest extends AbstractTest {
 		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
 		FragmentConverter fragmentConverter = new FragmentConverter(molecule);
 		CMLFragment fragment = fragmentConverter.convertToFragment();
-		fragment.debug();
 		String fragmentS = 
 		"<fragment id='m1' xmlns='http://www.xml-cml.org/schema'>"+
 		  "<molecule role='fragment'>"+

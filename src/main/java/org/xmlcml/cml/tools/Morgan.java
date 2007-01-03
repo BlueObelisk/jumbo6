@@ -157,7 +157,6 @@ public class Morgan extends AbstractTool {
             iterateTillConstantEquivalenceClassCount();
             //
             if (algorithm == Algorithm.SPLIT) {
-                this.debug("split");
                 repeatedlySplitEquivalences();
             }
         }
