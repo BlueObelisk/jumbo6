@@ -162,12 +162,26 @@
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
             <resource>
-                <directory>src</directory>
+                <directory>src/main/java</directory>
                 <includes>
-                    <include>src/main/java/**/*.xml</include>
+                    <include>**</include>
                 </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -207,9 +221,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.0</version>
-            <!--  This should be reinstated when test sources are separated from main
-                <scope>test</scope>
-            -->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>xom</groupId>
