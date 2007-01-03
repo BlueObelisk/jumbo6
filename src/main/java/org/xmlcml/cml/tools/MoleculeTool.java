@@ -211,19 +211,35 @@ public class MoleculeTool extends AbstractTool {
 				ctt.partitionIntoMolecules();
 				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
 				for (CMLMolecule subMol : subMols) {
+					System.out.println("-----------");
 					MoleculeTool subMolTool = new MoleculeTool(subMol);
 					ValencyTool valencyTool = new ValencyTool(subMol);
 					boolean common = valencyTool.markupCommonMolecules();
 					if (!common) {
 						valencyTool.markupSpecial();
 						subMol.setNormalizedBondOrders();
+						// get list of bonds that have not been set by 
+						// markupSpecial or markupCommonMolecules
+						// do this so these are are the only bonds that are
+						// reset further down the method
 						List<CMLBond> singleBonds = new ArrayList<CMLBond>();
 						for (CMLBond bond : subMol.getBonds()) {
 							if (CMLBond.SINGLE.equals(bond.getOrder())) {
 								singleBonds.add(bond);
 							}
 						}
-
+						// get list of atoms whose charge has been set by
+						// markupSpecial or markupCommonMolecules
+						// do this so these are not reset further down the
+						// method
+						List<CMLAtom> alreadySetChargedAtoms = new ArrayList<CMLAtom>();
+						for (CMLAtom atom : subMol.getAtoms()) {
+							System.out.println("atomid : "+atom.getId());
+							Nodes nodes = atom.query(".//@formalCharge[.!=0]", X_CML);
+							if (nodes.size() > 0) {
+								alreadySetChargedAtoms.add(atom);
+							}
+						}
 						List<CMLAtom> subMolAtomList = subMol.getAtoms();
 						PiSystem piS = new PiSystem(subMolAtomList);
 						piS.setPiSystemManager(piSystemManager);
@@ -337,7 +353,9 @@ public class MoleculeTool extends AbstractTool {
 								}
 								// reset charges on charged atoms
 								for (CMLAtom atom : chargedAtoms) {
-									atom.setFormalCharge(0);
+									if (!alreadySetChargedAtoms.contains(atom)) {
+										atom.setFormalCharge(0);
+									}
 								}
 								// reset only those bonds that were single to start with
 								for (CMLBond bond : singleBonds) {
@@ -404,9 +422,11 @@ public class MoleculeTool extends AbstractTool {
 												}
 											}
 										}
-										// reset charges on charged atoms
+//										 reset charges on charged atoms
 										for (CMLAtom atom : chargedAtoms) {
-											atom.setFormalCharge(0);
+											if (!alreadySetChargedAtoms.contains(atom)) {
+												atom.setFormalCharge(0);
+											}
 										}
 										// reset only those bonds that were single to start with
 										for (CMLBond bond : singleBonds) {
