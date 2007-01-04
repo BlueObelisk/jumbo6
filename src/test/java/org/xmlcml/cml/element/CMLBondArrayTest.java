@@ -171,7 +171,7 @@ public class CMLBondArrayTest extends MoleculeAtomBondTest {
     }
     
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLBondArray#removeChild()}.
+     * Test method for {@link org.xmlcml.cml.element.CMLBondArray#removeChild(CMLBond)}.
      */
     @Test
     public final void testRemoveChild() {
@@ -184,7 +184,7 @@ public class CMLBondArrayTest extends MoleculeAtomBondTest {
     }
     
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLBondArray#removeBond()}.
+     * Test method for {@link org.xmlcml.cml.element.CMLBondArray#removeBond(CMLBond)}.
      */
     @Test
     public final void testRemoveBond() {

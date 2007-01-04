@@ -344,8 +344,6 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
      * only if in same molecule. If already added returns with no-op
      * 
      * @param bond
-     * @param check
-     *            if true check for duplicate bonds by bond id.
      * @throws CMLRuntimeException
      *             null, non-uniqueID, etc.
      */
