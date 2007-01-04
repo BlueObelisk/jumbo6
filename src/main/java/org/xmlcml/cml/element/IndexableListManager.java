@@ -37,8 +37,7 @@ public class IndexableListManager implements CMLConstants {
 	}
 
 	/** index all current indexable children.
-	 * 
-	 * @return
+	 * @return map
 	 */
     public Map indexList() {
     	map = new HashMap<String, Indexable>();
@@ -54,7 +53,8 @@ public class IndexableListManager implements CMLConstants {
     /** make indexableList from URL.
      * either contains a directory with indexable in *.xml
      * or an indexableList in a single XML file.
-    * @param URL
+    * @param url 
+    * @param indexableListClass
     */
     public static IndexableList createFrom(URL url, Class indexableListClass) {
     	File file = new File(url.getFile());

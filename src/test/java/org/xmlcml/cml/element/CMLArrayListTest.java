@@ -26,7 +26,7 @@ public class CMLArrayListTest extends AbstractTableTest {
     }
 
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLArrayList#createTableHeaderCell(nu.xom.Node)}.
+     * Test method for {@link org.xmlcml.cml.element.CMLArrayList#createTableHeaderCell(CMLArray)}.
      */
     @Test
     public final void testCreateTableHeaderCellNode() {

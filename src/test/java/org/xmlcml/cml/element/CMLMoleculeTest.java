@@ -1384,7 +1384,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     }
     
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLMolecule#CMLMolecule(java.lang.String)}.
+     * Test method for {@link org.xmlcml.cml.element.CMLMolecule#createMoleculeWithId(java.lang.String)}.
      */
     @Test
     public final void testCreateMoleculeWithIdString() {

@@ -180,7 +180,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#getInputStreamFromResource(java.lang.String)}.
+     * {@link org.xmlcml.cml.base.Util#getInputStreamFromResource(java.lang.String)}.
      */
     @Test
     public final void testGetInputStreamFromResource() {
@@ -201,7 +201,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#getResource(java.lang.String)}.
+     * {@link org.xmlcml.cml.base.Util#getResource(java.lang.String)}.
      */
     @Test
     public final void testGetResource() {
@@ -214,7 +214,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#getResourceFile(java.lang.String[])}.
+     * {@link org.xmlcml.cml.base.Util#getResourceFile(java.lang.String[])}.
      */
     @Test
     public final void testGetResourceFile() {
@@ -235,7 +235,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#buildPath(java.lang.String[])}.
+     * {@link org.xmlcml.cml.base.CMLUtil#buildPath(java.lang.String...)}.
      */
     @Test
     public final void testBuildPath() {

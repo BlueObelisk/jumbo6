@@ -43,8 +43,7 @@ public interface IndexableList {
 	 * Must be of consistent type (i.e. CMLMoleculeList
 	 * requires CMLMolecule children). This method might be
 	 * wrapped in a convenience method (e.g. remove(CMLMolecule)
-	 * @param id
-	 * @return the indexed child or null
+	 * @param indexable
 	 */
 	void removeIndexable(Indexable indexable);
 
@@ -52,8 +51,7 @@ public interface IndexableList {
 	 * Must be of consistent type (i.e. CMLMoleculeList
 	 * requires CMLMolecule children). This method might be
 	 * wrapped in a convenience method (e.g. add(CMLMolecule)
-	 * @param id
-	 * @return the indexed child or null
+	 * @param indexable
 	 */
 	void addIndexable(Indexable indexable);
 

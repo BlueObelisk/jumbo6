@@ -328,13 +328,10 @@ public class CMLTorsion extends AbstractTorsion {
 
     /** set atomRefs4 attribute.
      * 
-     * @param atom0
-     * @param molecule0
      * @param rGroup0
+     * @param atom0
      * @param atom1
-     * @param molecule1
      * @param rGroup1
-     * @param takeLigandWithLowestId
      */
     public void setAtomRefs4( 
         CMLAtom rGroup0, CMLAtom atom0, CMLAtom atom1, CMLAtom rGroup1) {
