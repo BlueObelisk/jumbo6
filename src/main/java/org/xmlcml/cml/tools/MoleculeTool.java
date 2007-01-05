@@ -142,7 +142,6 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public void adjustBondOrdersAndChargesToValency(
 			PiSystemManager piSystemManager, CMLFormula moietyFormula) {
-		System.out.println("started adjusting bonds and charges");
 		// get a list of formulas for the moieties. 
 		List<CMLFormula> moietyFormulaList = new ArrayList<CMLFormula>();
 		if (moietyFormula != null) {
@@ -234,7 +233,6 @@ public class MoleculeTool extends AbstractTool {
 						// method
 						List<CMLAtom> alreadySetChargedAtoms = new ArrayList<CMLAtom>();
 						for (CMLAtom atom : subMol.getAtoms()) {
-							System.out.println("atomid : "+atom.getId());
 							Nodes nodes = atom.query(".//@formalCharge[.!=0]", X_CML);
 							if (nodes.size() > 0) {
 								alreadySetChargedAtoms.add(atom);
@@ -248,51 +246,78 @@ public class MoleculeTool extends AbstractTool {
 						List<CMLAtom> osList = new ArrayList<CMLAtom>();
 						List<CMLAtom> n2List = new ArrayList<CMLAtom>();
 						for (PiSystem piSys : piSList) {
-							List<CMLAtom> piAtomList = piSys.getAtomList();
-							for (CMLAtom atom : piAtomList) {
-								// see if there are any Ns with 3 ligands next to the pi-system that
-								// may be positively charged
-								for (CMLAtom ligand : atom.getLigandAtoms()) {
-									if ("N".equals(ligand.getElementType())) {
-										if (ligand.getLigandAtoms().size() == 3) {
-											int count = 0;
-											for (CMLAtom ligLig : ligand.getLigandAtoms()) {
-												if ("H".equals(ligLig.getElementType())) {
-													count++;
+							if (piSys.getSize() == 1) {
+								CMLAtom piAtom = piSys.getAtomList().get(0);
+								String atomElType = piAtom.getElementType();
+								if ("O".equals(atomElType) || 
+										"S".equals(atomElType)) {
+									piAtom.setFormalCharge(-1);
+									alreadySetChargedAtoms.add(piAtom);
+								} else if ("N".equals(atomElType)) {
+									int ligandNum = piAtom.getLigandBonds().size();
+									piAtom.setFormalCharge(-3+ligandNum);
+								} else if ("C".equals(atomElType)) {
+									//FIXME - this surely can't always work
+									piAtom.setFormalCharge(1);
+								}
+							} else {
+								List<CMLAtom> piAtomList = piSys.getAtomList();
+								for (CMLAtom atom : piAtomList) {
+									// don't want to include atoms that have already had formal charge set
+									// by markupCommonMolecules or markupSpecial
+									if (alreadySetChargedAtoms.contains(atom)) {
+										continue;
+									}
+									// see if there are any Ns with 3 ligands next to the pi-system that
+									// may be positively charged
+									for (CMLAtom ligand : atom.getLigandAtoms()) {
+										if ("N".equals(ligand.getElementType())) {
+											if (ligand.getLigandAtoms().size() == 3) {
+												int count = 0;
+												for (CMLAtom ligLig : ligand.getLigandAtoms()) {
+													if ("H".equals(ligLig.getElementType())) {
+														count++;
+													}
+												}
+												if (count < 2 && !n3List.contains(ligand)) {
+													n3List.add(ligand);
 												}
 											}
-											if (count < 2 && !n3List.contains(ligand)) {
-												n3List.add(ligand);
-											}
-										}
-										if (ligand.getLigandAtoms().size() == 2) {
-											int count = 0;
-											for (CMLAtom ligLig : ligand.getLigandAtoms()) {
-												if ("H".equals(ligLig.getElementType())) {
-													count++;
+											if (ligand.getLigandAtoms().size() == 2) {
+												int count = 0;
+												for (CMLAtom ligLig : ligand.getLigandAtoms()) {
+													if ("H".equals(ligLig.getElementType())) {
+														count++;
+													}
 												}
-											}
-											if (count == 0) {
-												n2List.add(ligand);
+												if (count == 0) {
+													n2List.add(ligand);
+												}
 											}
 										}
 									}
 								}
 							}
-						}
-						for (CMLAtom atom : subMolAtomList) {
-							if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
-								if (atom.getLigandAtoms().size() == 1) {
-									osList.add(atom);
+							for (CMLAtom atom : subMolAtomList) {
+								// don't want to include atoms that have already had formal charge set
+								// by markupCommonMolecules or markupSpecial
+								if (alreadySetChargedAtoms.contains(atom)) {
+									continue;
+								}
+								if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
+									if (atom.getLigandAtoms().size() == 1) {
+										osList.add(atom);
+									}
 								}
 							}
 						}
+						
 						// take all combinations of charges on the atoms found and attempt to 
 						// get a completed pi-system.
-						List<List<Integer>> n3ComboList = generateCombinationList(n3List.size());
-						List<List<Integer>> osComboList = generateCombinationList(osList.size());
-						@SuppressWarnings("unused")
-						List<List<Integer>> n2ComboList = generateCombinationList(n2List.size());
+						List<List<Integer>> n3ComboList = CMLUtil.generateCombinationList(n3List.size());
+						List<List<Integer>> osComboList = CMLUtil.generateCombinationList(osList.size());
+						List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
+						//System.out.println(n3ComboList.size()+","+osComboList.size()+","+n2ComboList.size());
 						List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
 						List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
 						for (int i = 0; i < n3ComboList.size(); i++) {
@@ -372,8 +397,8 @@ public class MoleculeTool extends AbstractTool {
 						if (finalMolList.size() == 0) {
 							System.out.println("Trying N2-");
 							for (int l = 0; l < n2ComboList.size(); l++) {
-							for (int i = 0; i < n3ComboList.size(); i++) {
-								for (int j = osComboList.size()-1; j >= 0; j--) {
+								for (int i = 0; i < n3ComboList.size(); i++) {
+									for (int j = osComboList.size()-1; j >= 0; j--) {
 										//System.out.println("====================");
 										List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
 										for (Integer in : n3ComboList.get(i)) {
@@ -422,7 +447,7 @@ public class MoleculeTool extends AbstractTool {
 												}
 											}
 										}
-//										 reset charges on charged atoms
+//										reset charges on charged atoms
 										for (CMLAtom atom : chargedAtoms) {
 											if (!alreadySetChargedAtoms.contains(atom)) {
 												atom.setFormalCharge(0);
@@ -592,46 +617,6 @@ public class MoleculeTool extends AbstractTool {
 			chargedAtoms.add((CMLAtom)atoms.get(i));
 		}
 		return chargedAtoms;
-	}
-
-	private List<List<Integer>> generateCombinationList(int listSize) {
-		List<List<Integer>> combinationList = new ArrayList<List<Integer>>();
-		int count = (int) Math.pow(2.0, listSize);
-		for (int i = 2; i <= count; i++) {
-			int thisCount = i;
-			List<Integer> intSet = new ArrayList<Integer>(listSize);
-			for (int j = listSize; j >= 0; j--) {
-				int minus = (int)Math.pow(2.0, j);
-				int test = thisCount;
-				if (test - minus > 0) {
-					thisCount -= minus;
-					intSet.add(j);
-				}
-			}
-			combinationList.add(intSet);
-		}
-		// add entry with no values
-		combinationList.add(new ArrayList<Integer>(0));
-		
-		/*
-		 * the below version gets the largest combinations first, working down
-		List<List<Integer>> combinationList = new ArrayList<List<Integer>>();
-		int count = (int) Math.pow(2.0, listSize);
-		for (int i = count; i >= 1; i--) {
-			int thisCount = i;
-			List<Integer> intSet = new ArrayList<Integer>(listSize);
-			for (int j = listSize-1; j >= 0; j--) {
-				int minus = (int)Math.pow(2.0, j);
-				int test = thisCount;
-				if (test - minus > 0) {
-					thisCount -= minus;
-					intSet.add(j);
-				}
-			}
-			combinationList.add(intSet);
-		}
-		*/
-		return combinationList;
 	}
 
 	/**

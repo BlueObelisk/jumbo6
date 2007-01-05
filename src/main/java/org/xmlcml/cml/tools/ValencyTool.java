@@ -35,7 +35,7 @@ public class ValencyTool extends AbstractTool {
 		boolean marked = true;
 		// SiF6
 		if (formulaS.equals("F 6 Si 1")) {
-			addDoubleCharge("Si", -2, "F", 0);
+			addCharge("Si", -2);
 			// CO3
 		} else if (formulaS.equals("C 1 O 3")) {
 			addDoubleCharge("C", 0, "O", 2);
