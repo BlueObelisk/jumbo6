@@ -509,4 +509,25 @@ public abstract class CMLUtil implements CMLConstants {
 		return namespaceList;
 	}
     
+	public static List<List<Integer>> generateCombinationList(int listSize) {
+		List<List<Integer>> combinationList = new ArrayList<List<Integer>>();
+		int count = (int) Math.pow(2.0, listSize);
+		for (int i = 2; i <= count; i++) {
+			int thisCount = i;
+			List<Integer> intSet = new ArrayList<Integer>(listSize);
+			for (int j = listSize; j >= 0; j--) {
+				int minus = (int)Math.pow(2.0, j);
+				int test = thisCount;
+				if (test - minus > 0) {
+					thisCount -= minus;
+					intSet.add(j);
+				}
+			}
+			combinationList.add(intSet);
+		}
+		// add entry with no values
+		combinationList.add(new ArrayList<Integer>(0));
+
+		return combinationList;
+	}
 }

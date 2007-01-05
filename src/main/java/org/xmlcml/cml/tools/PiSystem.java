@@ -180,35 +180,23 @@ public class PiSystem implements CMLConstants {
      * @return list of piSystems (zero length if none)
      */
     public List<PiSystem> generatePiSystemList() {
-        // gets Pi count for all atoms in molecule
         this.createPiMap();
-        // Iterate through atomSet - best elsewhere?
         List<PiSystem> piSystemList = new ArrayList<PiSystem>();
-        if (piMap.size() <= 1) {
-            CMLMolecule molecule = moleculeTool.getMolecule();
-            molecule.addToLog(CMLLog.Severity.ERROR, "Cannot create pi system for 1 electron");
-            return piSystemList;
-        }
-        CMLAtom lastAtom = null;
-        int lastAtomCount = piMap.size();
-        while (piMap.size() > 0) {
-            // get next atom with free ligands
-            CMLAtom atom = this.getPiSystemList_nextAtom();
-            if (atom == null) {
-                break;
-            }
-            if (atom.equals(lastAtom)) {
-                if (lastAtomCount-- <= 0) {
-//                    System.err.println("Failed to converge in addDoubleBonds");
-//                    piMap = new HashMap<CMLAtom, Integer>();
-//                    break;
-                }
-            }
-            lastAtom = atom;
-//            System.out.println("A "+atom.getId());
-            PiSystem piSystem = this.getPiSystem_createSubSystem(atom, piMap);
-            piSystemList.add(piSystem);
-            piSystem.getPiSystem_deleteFromParentMap();
+        if (piMap.size() == 1) {
+        	PiSystem piSystem = this.getPiSystem_createSubSystem(piMap.entrySet().iterator().next().getKey(), piMap);
+    		piSystemList.add(piSystem);
+    		piSystem.getPiSystem_deleteFromParentMap();
+        } else {
+        	while (piMap.size() > 0) {
+        		// get next atom with free ligands
+        		CMLAtom atom = this.getPiSystemList_nextAtom();
+        		if (atom == null) {
+        			break;
+        		}
+        		PiSystem piSystem = this.getPiSystem_createSubSystem(atom, piMap);
+        		piSystemList.add(piSystem);
+        		piSystem.getPiSystem_deleteFromParentMap();
+        	}
         }
         return piSystemList;
     }
@@ -224,8 +212,8 @@ public class PiSystem implements CMLConstants {
             int nPi = moleculeTool.getDoubleBondEquivalents(atom,
                     piSystemManager.getFormalChargeControl());
             if (nPi > 0) {
-            	//System.out.println(atom.getId()+" has "+nPi+" DBEs");
                 piMap.put(atom, new Integer(nPi));
+                //System.out.println("putting atom in pimap: "+atom.getId());
             }
         }
         return piMap;
