@@ -34,7 +34,6 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMetadata;
@@ -2576,17 +2575,17 @@ public class MoleculeTool extends AbstractTool {
 		return connectionTableTool.getRingNucleiMolecules();
 	}
 
-	private void flattenJoinMoleculeChildren() {
-		int idx = molecule.getParent().indexOf(molecule);
-		Nodes moleculesAndJoin = molecule.query(CMLMolecule.NS+X_OR+CMLJoin.NS+"'",
-				X_CML);
-		for (int i = 0; i < moleculesAndJoin.size(); i++) {
-			Node node = moleculesAndJoin.get(i);
-			node.detach();
-			molecule.getParent().insertChild(node, idx + 1 + i);
-		}
-	}
-
+//	private void flattenJoinMoleculeChildren() {
+//		int idx = molecule.getParent().indexOf(molecule);
+//		Nodes moleculesAndJoin = molecule.query(CMLMolecule.NS+X_OR+CMLJoin.NS+"'",
+//				X_CML);
+//		for (int i = 0; i < moleculesAndJoin.size(); i++) {
+//			Node node = moleculesAndJoin.get(i);
+//			node.detach();
+//			molecule.getParent().insertChild(node, idx + 1 + i);
+//		}
+//	}
+//
 
 	/**
 	 * join one molecule to another. 

@@ -27,9 +27,14 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
     *
     */
     public CMLFragmentList() {
-    	this.indexableListManager = new IndexableListManager(this);
+    	ensureManager();
     }
-    
+
+    void ensureManager() {
+    	if (this.indexableListManager == null) {
+    		this.indexableListManager = new IndexableListManager(this);
+    	}
+    }
     /** copy constructor.
     *
     * @param old CMLFragmentList to copy
@@ -58,12 +63,14 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      * @return list manager
      */
     public IndexableListManager getIndexableListManager() {
+    	ensureManager();
     	return indexableListManager;
     }
     /** add fragment.
      * @param indexable to add
      */
     public void addIndexable(Indexable indexable) {
+    	ensureManager();
     	indexableListManager.add(indexable);
     }
 
@@ -71,6 +78,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      * @param indexable to remove
      */
     public void removeIndexable(Indexable indexable) {
+    	ensureManager();
     	indexableListManager.remove(indexable);
     }
 
@@ -79,6 +87,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      * @return molecule or null
      */
     public Indexable getById(String id) {
+    	ensureManager();
     	return indexableListManager.getById(id);
     }
     
@@ -86,6 +95,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      * @return index
      */
     public Map<String, Indexable> getIndex() {
+    	ensureManager();
     	return indexableListManager.getIndex();
     }
 
@@ -101,5 +111,12 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      */
     public String getIndexableLocalName() {
     	return CMLFragment.TAG;
+    }
+    
+    /** update the index.
+     */
+    public void updateIndex() {
+    	ensureManager();
+    	this.indexableListManager.indexList();
     }
 }

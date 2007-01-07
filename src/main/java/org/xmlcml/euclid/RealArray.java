@@ -1516,4 +1516,24 @@ public class RealArray extends ArrayBase {
         iarr.setElementAt(a, iarr.elementAt(b));
         iarr.setElementAt(b, t);
     }
+    
+    /**
+     * checks RealArray is not null and is of given size.
+     * 
+     * @param array
+     *            to check
+     * @param size
+     *            required size
+     * @throws EuclidException
+     *             if null or wrong size
+     */
+    public static void check(RealArray array, int size) throws EuclidException {
+        if (array == null) {
+            throw new EuclidException("null array");
+        } else if (array.size() != size) {
+            throw new EuclidException("array size required (" + size
+                    + ") found " + array.size());
+        }
+    }
+
 }

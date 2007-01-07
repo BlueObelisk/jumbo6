@@ -74,18 +74,6 @@ import org.xmlcml.euclid.Util;
  */
 public abstract class CMLUtil implements CMLConstants {
 
-    /** messages */
-    public enum Message {
-        /** not yet implemented */
-        NYI("not yet implemented"),
-        ;
-        /** value*/
-        public String value;
-        private Message(String v) {
-            value = v;
-        }
-    }
-    
 	// ========================== utilities ====================== //
 
 	/** checks that name is QName.

@@ -57,8 +57,10 @@ public class PolymerTool extends AbstractTool {
         PML_COMPLETE(C_A+"PML-complete"),
         /** inline atom obsolete.*/
         PML_INLINE_ATOM(C_A+"PML-inline-atom"),
-        /** inline atom obsolete.*/
+        /** default endpoint.*/
         PML_DEFAULT_FINAL(PML_COMPLETE.value),
+        /** processed (nothing further to do) Normally Markush.*/
+        PML_PROCESSED(C_A+"PML-processed"),
         ;
         String value;
         private Convention(String v) {
@@ -82,8 +84,6 @@ public class PolymerTool extends AbstractTool {
     private boolean debug = false;
     // catalog
     private Catalog moleculeCatalog = null;
-    // fileroot
-    private String fileroot;
 
     
     /** constructor.
@@ -131,13 +131,13 @@ public class PolymerTool extends AbstractTool {
         this.debug = debug;
     }
 
-    /** set fileroot.
-     * 
-     * @param fileroot
-     */
-    public void setFileroot(String fileroot) {
-        this.fileroot = fileroot;
-    }
+//    /** set fileroot.
+//     * 
+//     * @param fileroot
+//     */
+//    public void setFileroot(String fileroot) {
+//        this.fileroot = fileroot;
+//    }
 
     /** set molecule or moleculeList
      * 
@@ -350,170 +350,6 @@ formula='
         }
     }
     
-    /** basic consists of:
-     * OUT OF DATE DESCRIPTION
-     * moleculeList
-     *     complexMol
-     *     (joinComplexMol)?
-     *     (joinComplexMol)?
-     *    ...
-     *    
-     * where joinComplexMol =
-     *     join
-     *     complexMol
-     *     
-     * where complexMol =
-     *     molecule
-     *         branchList?
-     *         branchList?
-     *      
-     *     branchList =
-     *         moleculeList
-     *             (joinComplexMol)?
-     *             (joinComplexMol)?
-     *
-     */
-    @SuppressWarnings("unused")
-//    private void processBasicOld() {
-//        CMLMoleculeList moleculeList = (CMLMoleculeList) molecule.getFirstCMLChild(CMLMoleculeList.TAG);
-//        if (moleculeList == null) {
-//            throw new CMLRuntimeException("expected moleculeList child");
-//        }
-//        CMLUtil.removeWhitespaceNodes(molecule);
-//        MoleculeTool moleculeTool = new MoleculeTool(molecule);
-//        // will have to process repeat count here before args
-//        moleculeTool.expandCountExpressions();
-////        molecule.debug("BEFORE ARGS");
-//        // add args first so every molecule has unique id
-//        CMLArg.addArgs(moleculeList, CMLMolecule.TAG);
-//        
-////        molecule.debug("BEFORE CHILD");
-//        // create join/@atomRefs2
-//        recursiveProcessJoins(moleculeList, null);
-////        check(moleculeList, null);
-////        moleculeList.processChildMolecules(null);
-//        
-//        molecule.debug("BEFORE FLATTEN");
-//        // flatten molecules
-//// FIXME
-//        //flattenMoleculeDescendants(molecule, null);
-//        
-//        molecule.debug("AFTER FLATTEN");
-//        
-//        molecule.setConvention(Convention.PML_INTERMEDIATE.value);
-////        molecule.debug("END BASIC");
-//    }
-    
-    /** basic consists of:
-     * fragment @countExpression?
-     *     molecule
-     *     fragmentList*
-     *     join*
-     *    ...
-     *    
-     * where fragmentList =
-     *     fragment?
-     *     (join fragment)*
-     *     
-     * where complexMol =
-     *     molecule
-     *         branchList?
-     *         branchList?
-     *      
-     *     branchList =
-     *         moleculeList
-     *             (joinComplexMol)?
-     *             (joinComplexMol)?
-     *
-     */
-//    <?xml version="1.0" encoding="UTF-8"?>
-//    <molecule id="star1" convention=C_A+"PML-basic"
-//        xmlns:g="http://www.xml-cml.org/mols/geom1"
-//        xmlns="http://www.xml-cml.org/schema">
-//        <!--  a star polymer -->
-//        <fragment>
-//            <molecule ref="g:benzene" id="m1" />
-//            <fragmentList>
-//                <join id="j1" order="1" moleculeRefs2="benzene m3" atomRefs2="r1 r1">
-//                    <length>1.4</length>
-//                    <angle id="l2.1.1" atomRefs3="a2 r1 r1">115</angle>
-//                </join>
-//                <fragment>
-//                    <molecule ref="g:po" id="m3" />
-//                </fragment>
-//                ...
-//            </fragmentList>
-//            <fragmentList>
-//                <join id="j1" order="1" moleculeRefs2="g:benzene g:2pyr" atomRefs2="r1 r1">
-//                    <length>1.4</length>
-//                </join>
-//                <fragment>
-//                    <molecule ref="g:2pyr" id="m2"/>
-//                    <fragmentList>
-//                        <join id="j2.1" order="1" moleculeRefs2="g:2pyr g:po"
-//                            atomRefs2="r1 r2">
-//                            <length id="l2.1">1.5</length>
-//                            <torsion id="t2.1">120.0</torsion>
-//                        </join>
-//                        <fragment>
-//                            <molecule ref="g:po" id="m3"/>
-//                        </fragment>
-//                        <join id="j2.1.1" order="1" moleculeRefs2="m3 m4" 
-//                            atomRefs2="r1 r1">
-//                            <length id="l2.1.1">1.39</length>
-//                        </join>
-//                        <fragment countExpression="3">
-//                            <molecule ref="g:me" id="m4"/>
-//                            <fragmentList id="ml3">
-//                                <join id="j2.1.2" order="1" moleculeRefs2="g:me g:cl" atomRefs2="r1 r1">
-//                                    <length id="t2.1.2">1.4</length>
-//                                    <torsion>124.0</torsion>
-//                                </join>
-//                                <molecule ref="g:cl" id="m5"/>
-//                            </fragmentList>
-//                            <join id="j2.1.1" order="1" atomRefs2="r1 r2">
-//                                <length id="l2.1.1">1.39</length>
-//                            </join>
-//                        </fragment>
-//                    </fragmentList>
-//                </fragment>
-//            </fragmentList>
-//        </fragment>
-//    </molecule>
-//    private void processBasicOld1() {
-//        CMLFragment fragment0 = (CMLFragment) molecule.getFirstCMLChild(CMLFragment.TAG);
-//        if (fragment0 == null) {
-//            throw new CMLRuntimeException("expected fragment child");
-//        }
-////        CountExpressionAttribute.generateAndInsertClones(fragment0);
-////        List<Node> fragments = CMLUtil.getQueryNodes(molecule, CMLFragment.NS, X_CML);
-////        int i = 0;
-////        for (Node node0 : fragments) {
-//////            if (i > 0) continue;
-////            System.out.println("==================>> "+i++);
-////            CMLFragment fragment = (CMLFragment) node0;
-//            // expand fragmentLists
-//            List<Node> expandableFragmentLists = CMLUtil.getQueryNodes(
-//                    molecule, ".//"+CMLFragmentList.NS+"[@countExpression]", X_CML);
-//            for (Node node : expandableFragmentLists) {
-//                CMLFragmentList expandableFragmentList = (CMLFragmentList) node;
-//                expandableFragmentList.processCountExpression();
-//            }
-//            
-//            FragmentTool fragmentTool = new FragmentTool(fragment0);
-////            fragmentTool.processBasic(molecule);
-//            List<Node> fragmentNodes = CMLUtil.getQueryNodes(
-//                    molecule, ".//"+CMLFragment.NS+" | .//"+CMLFragmentList.NS, X_CML);
-//            for (Node fragmentNode : fragmentNodes) {
-//                fragmentNode.detach();
-//            }
-////        }
-////        
-////        for (Node node0 : fragments) {
-////            CMLFragment fragment = (CMLFragment) node0;
-//            CMLUtil.transferChildren(fragment0, molecule);
-////        }
-//    }
     
     private void processBasic() {
         CMLFragment fragment0 = (CMLFragment) molecule.getFirstCMLChild(CMLFragment.TAG);
@@ -521,7 +357,7 @@ formula='
             throw new CMLRuntimeException("expected fragment child");
         }
         FragmentTool fragmentTool = new FragmentTool(fragment0);
-        fragmentTool.processBasic();
+        fragmentTool.processBasic(moleculeCatalog);
     }
     
 //    private static void recursiveProcessJoins(

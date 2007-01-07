@@ -75,4 +75,8 @@ public interface IndexableList {
 	 * @return listManager
 	 */
 	IndexableListManager getIndexableListManager();
+
+	/** update index.
+	 */
+	void updateIndex();
 }

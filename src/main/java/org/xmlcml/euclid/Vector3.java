@@ -150,7 +150,7 @@ public class Vector3 implements EuclidConstants {
      */
     public Vector3(RealArray f) throws EuclidException {
         this();
-        Util.check(f, 3);
+        RealArray.check(f, 3);
         System.arraycopy(f.getArray(), 0, flarray, 0, 3);
     }
 
@@ -348,7 +348,7 @@ public class Vector3 implements EuclidConstants {
      * @return tranformed vector
      */
     public Vector3 transform(Transform3 t) {
-        Util.checkNotNull(t);
+        Transform3.checkNotNull(t);
         Vector3 vout = new Vector3();
         double[] pv = vout.flarray;
         double[][] pt = t.getMatrix();

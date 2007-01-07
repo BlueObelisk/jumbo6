@@ -34,13 +34,20 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
     *
     */
     public CMLMoleculeList() {
-    	this.indexableListManager = new IndexableListManager(this);
+    	ensureManager();
+    }
+    
+    private void ensureManager() {
+    	if (this.indexableListManager == null) {
+    		this.indexableListManager = new IndexableListManager(this);
+    	}
     }
 
     /** get listManager
      * @return list manager
      */
     public IndexableListManager getIndexableListManager() {
+    	ensureManager();
     	return indexableListManager;
     }
     /** must give simple documentation.
@@ -71,6 +78,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      * @param indexable to add
      */
     public void addIndexable(Indexable indexable) {
+    	ensureManager();
     	indexableListManager.add(indexable);
     }
 
@@ -78,6 +86,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      * @param indexable to remove
      */
     public void removeIndexable(Indexable indexable) {
+    	ensureManager();
     	indexableListManager.remove(indexable);
     }
 
@@ -86,6 +95,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      * @return molecule or null
      */
     public Indexable getById(String id) {
+    	ensureManager();
     	return indexableListManager.getById(id);
     }
     
@@ -93,6 +103,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      * @return molecule or null
      */
     public Map<String, Indexable> getIndex() {
+    	ensureManager();
     	return indexableListManager.getIndex();
     }
 
@@ -108,5 +119,12 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      */
     public String getIndexableLocalName() {
     	return CMLMolecule.TAG;
+    }
+    
+    /** update the index.
+     */
+    public void updateIndex() {
+    	ensureManager();
+    	this.indexableListManager.indexList();
     }
 }

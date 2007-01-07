@@ -47,12 +47,12 @@ public class AttributeTest extends BaseTest {
         Assert.assertEquals("string att", S_EMPTY, string.getCMLValue());
         Assert.assertEquals("string att", S_EMPTY, string.getNamespaceURI());
         Assert.assertEquals("string att", "String", string.getJavaType());
-        Assert.assertEquals("string att", "setCMLValue", string
-                .getJavaSetMethod());
-        Assert.assertEquals("string att", "getCMLValue", string
-                .getJavaGetMethod());
-        Assert.assertEquals("string att", "CMLAttribute", string
-                .getJavaShortClassName());
+//        Assert.assertEquals("string att", "setCMLValue", string
+//                .getJavaSetMethod());
+//        Assert.assertEquals("string att", "getCMLValue", string
+//                .getJavaGetMethod());
+//        Assert.assertEquals("string att", "CMLAttribute", string
+//                .getJavaShortClassName());
         Assert.assertNull("string att", string.getSchemaType());
         Assert.assertNull("string att", string.getSummary());
         Assert.assertNull("string att", string.getDescription());
@@ -71,10 +71,10 @@ public class AttributeTest extends BaseTest {
         Assert.assertEquals("string att", "a1", string.getCMLValue());
         Assert.assertEquals("string att", S_EMPTY, string.getNamespaceURI());
         Assert.assertEquals("string att", "String", string.getJavaType());
-        Assert.assertEquals("string att", "setCMLValue", string
-                .getJavaSetMethod());
-        Assert.assertEquals("string att", "getCMLValue", string
-                .getJavaGetMethod());
+//        Assert.assertEquals("string att", "setCMLValue", string
+//                .getJavaSetMethod());
+//        Assert.assertEquals("string att", "getCMLValue", string
+//                .getJavaGetMethod());
         Assert.assertEquals("string att", "CMLAttribute", string
                 .getJavaShortClassName());
         Assert.assertNull("string att", string.getSchemaType());
