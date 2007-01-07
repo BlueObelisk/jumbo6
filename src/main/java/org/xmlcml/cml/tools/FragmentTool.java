@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,7 +24,6 @@ import org.xmlcml.cml.element.CountExpressionAttribute;
 import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.cml.element.Indexable;
 import org.xmlcml.cml.element.IndexableList;
-import org.xmlcml.cml.element.IndexableListManager;
 import org.xmlcml.cml.element.RefAttribute;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
@@ -94,13 +94,6 @@ public class FragmentTool extends AbstractTool {
     	}
     }
 	
-    /** process basic convention.
-     * 
-     */
-    public void processBasic() {
-    	new BasicProcessor(rootFragment).process();
-    }
-    
     /** get first child molecule.
      * 
      * @return molecule or null
@@ -113,6 +106,16 @@ public class FragmentTool extends AbstractTool {
         	molecule = (molecules.size() == 0) ? null : (CMLMolecule) molecules.get(0); 
     	}
     	return molecule;
+    }
+    
+    /** process basic convention.
+	 * @param catalog to find molecules
+	 * "return fragmentList for Markush; null for simple fragment
+     */
+    public CMLElement processBasic(Catalog catalog) {
+    	BasicProcessor basicProcessor = new BasicProcessor(rootFragment);
+    	CMLElement generatedElement = basicProcessor.process(catalog);
+    	return generatedElement;
     }
     
 	/** process intermediate format.
@@ -130,6 +133,20 @@ public class FragmentTool extends AbstractTool {
     	ExplicitProcessor explicitProcessor = new ExplicitProcessor(rootFragment);
     	explicitProcessor.process();
     }
+
+    /** complete processing.
+     * 
+     * @param moleculeCatalog
+     * @return fragmentList (Markush) or null
+     */
+    public CMLElement processAll(Catalog moleculeCatalog) {
+		CMLElement generatedElement = this.processBasic(moleculeCatalog);
+		if (generatedElement == null) {
+			this.processIntermediate(moleculeCatalog);
+			this.processExplicit();
+		}
+		return generatedElement;
+    }
     
     public void substituteFragmentRefsRecursively(int limit) {
     	int count = 0;
@@ -144,19 +161,16 @@ public class FragmentTool extends AbstractTool {
     	
     public boolean substituteFragmentRefs(CMLFragmentList fragmentList) {
         	
-//		rootFragment.debug("ROOT0");
     	boolean change = false;
     	// find list of fragments/"ref. May have changed since last time
     	// as new fragments may have refs
     	// avoid fragments in fragmentList
     	List<Node> fragments = CMLUtil.getQueryNodes(rootFragment, CMLFragment.NS+"//"+CMLFragment.NS+"[@ref]", X_CML);
     	if (fragmentList != null) {
-    		IndexableListManager manager = fragmentList.getIndexableListManager();
-    		manager.indexList();
+    		fragmentList.updateIndex();
 	    	for (Node node : fragments) {
 	    		CMLFragment refFragment = (CMLFragment) node;
 	    		String ref = refFragment.getRef();
-//	    		System.out.println("REF "+ref);
 	    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
 	    		if (refFragment0 == null) {
 	    			fragmentList.debug("FAILED DEREF");
@@ -179,7 +193,6 @@ public class FragmentTool extends AbstractTool {
 	    			}
 	    		}
 	    		change = true;
-//	    		rootFragment.debug("ROOT");
 	    	}
     	}
     	return change;
@@ -199,6 +212,8 @@ public class FragmentTool extends AbstractTool {
 		new CountExpander(rootFragment).process();
 	}
 }
+
+
 class CountExpander implements CMLConstants {
 	
 	CMLFragment topFragment;
@@ -298,15 +313,144 @@ class BasicProcessor implements CMLConstants {
 	public CMLFragment getFragment() {
 		return fragment;
 	}
-	
-    void process() {
+
+	/** manages single fragments and Markush
+	 * 
+	 * @param catalog
+	 * "return fragmentList if Markush; null if fragment
+	 */
+    CMLElement process(Catalog catalog) {
+    	CMLElement generatedElement = null;
         CMLUtil.removeWhitespaceNodes(fragment);
-        fragmentTool.substituteFragmentRefsRecursively(3);
-        new CountExpander(fragment).process();
-        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
-        this.replaceFragmentsByChildMolecules();
-        this.createAtomsRefs2OnJoins();
-        fragment.setConvention(Convention.PML_INTERMEDIATE.value);
+        List<Node> markushs = CMLUtil.getQueryNodes(
+        		fragment, CMLFragmentList.NS+"[@role='markush']", X_CML);
+        if (markushs.size() != 0) {
+        	if (markushs.size() > 1) {
+        		throw new CMLRuntimeException("Can only process one Markush child");
+        	}
+        	CMLFragmentList markush = (CMLFragmentList)markushs.get(0);
+        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(markush, catalog);
+	        fragment.setConvention(Convention.PML_PROCESSED.value);
+        } else {
+	        fragmentTool.substituteFragmentRefsRecursively(3);
+	        new CountExpander(fragment).process();
+	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
+	        this.replaceFragmentsByChildMolecules();
+	        this.createAtomsRefs2OnJoins();
+	        fragment.setConvention(Convention.PML_INTERMEDIATE.value);
+        }
+        return generatedElement;
+    }
+    
+    /** generate fragmentList from fragment.
+     * creates M * N * P ... fragments in a fragmentList
+     * 
+     * @param markushFragmentList
+     * @param catalog
+     * @return generated fragmentList
+     */
+    private CMLFragmentList generateFragmentListFromMarkushGroupsAndTarget(
+		CMLFragmentList markushFragmentList, Catalog catalog) {
+//    	fragment
+//    		fragmentList (refs)
+//    		fragmentList role='markush'
+//    			fragmentList role='markushList'
+//    			fragment role='markushTarget'
+//    				...
+//    				fragment ref=...fragmentList => markushList
+
+    	
+    	// should have 1 or more fragmentLists and one fragment
+        List<Node> markushLists = CMLUtil.getQueryNodes(
+        		markushFragmentList, CMLFragmentList.NS+"[@role='markushList']", X_CML);
+        List<Node> referenceFragmentLists = CMLUtil.getQueryNodes(
+        		fragment, CMLFragmentList.NS+"[not(@role='markush')]", X_CML);
+        List<Node> markushTargets = CMLUtil.getQueryNodes(
+        		markushFragmentList, CMLFragment.NS+"[@role='markushTarget']", X_CML);
+        // checks
+        if (markushLists.size() == 0) {
+        	throw new CMLRuntimeException("No markushLists given");
+        } else {
+//        	System.out.println("found markushLists: "+markushLists.size());
+        }
+        if (referenceFragmentLists.size() != 1) {
+        	throw new CMLRuntimeException(
+        		"Must have exactly one referenceFragmentList; was: "+referenceFragmentLists.size());
+        }
+        if (markushTargets.size() != 1) {
+        	throw new CMLRuntimeException("Must have exactly one markushTarget");
+        }
+    	CMLFragmentList generatedFragmentList = multipleMarkush(markushLists, catalog);
+        return generatedFragmentList;
+    }
+    
+    private CMLFragmentList multipleMarkush(
+    		List<Node> markushLists, Catalog catalog) {
+    	
+    	List<List<CMLFragment>> cartesianProductList = new ArrayList<List<CMLFragment>>();
+    	// seed with new zero-length list
+		cartesianProductList.add(new ArrayList<CMLFragment>());
+		// iterate through markush lists in turn
+    	for (Node node : markushLists) {
+    		CMLFragmentList markushList = (CMLFragmentList) node;
+        	List<List<CMLFragment>> newCartesianProductList = new ArrayList<List<CMLFragment>>();
+        	// convolute with already generated lists
+        	for (List<CMLFragment> cartesianProduct : cartesianProductList) {
+        		// make copy and add markush for each list
+        		for (CMLFragment markushGroup : markushList.getFragmentElements()) {
+        			// clone list
+        			List<CMLFragment> listCopy = new ArrayList<CMLFragment>(cartesianProduct);
+        			listCopy.add(markushGroup);
+        			newCartesianProductList.add(listCopy);
+        		}
+        	}
+        	cartesianProductList = newCartesianProductList;
+    	}
+    	// generate the starting basic fragments
+    	CMLFragmentList generatedFragmentList = new CMLFragmentList();
+    	for (List<CMLFragment> markushGroupList : cartesianProductList) {
+        	// clone the complete fragment
+        	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
+        	FragmentTool newFragmentTool = new FragmentTool(newFragment);
+        	newFragmentTool.processAll(catalog);
+        	generatedFragmentList.addFragment(newFragment);
+//        	System.out.println("made fragment: "+newFragment.getId());
+        }
+    	return generatedFragmentList;
+    }
+    
+    private CMLFragment createSingleBasicFragment(List<CMLFragment> markushGroupList) {
+    	// copy the fragment
+    	CMLFragment newFragment = new CMLFragment(fragment);
+        CMLFragmentList referenceFragmentList = (CMLFragmentList) CMLUtil.getQueryNodes(
+        		newFragment, CMLFragmentList.NS+"[not(@role='markush')]", X_CML).get(0);
+        CMLFragmentList markush = (CMLFragmentList) CMLUtil.getQueryNodes(
+        		newFragment, CMLFragmentList.NS+"[@role='markush']", X_CML).get(0);
+        List<Node> markushGroupLists = CMLUtil.getQueryNodes(
+        		markush, CMLFragmentList.NS+"[@role='markushList']", X_CML);
+        for (Node node : markushGroupLists) {
+        	node.detach();
+        }
+//        CMLFragment markushTarget = (CMLFragment) CMLUtil.getQueryNodes(
+//        		markush, CMLFragment.NS+"[@role='markushTarget']", X_CML).get(0);
+        // add single markush group to reference
+        int i = 0;
+        String newFragmentId = S_EMPTY;
+        for (CMLFragment markushFragment : markushGroupList) {
+        	CMLFragment referenceFragment = new CMLFragment();
+	        String ref = markushFragment.getRef();
+	        newFragmentId += (i == 0) ? ref : S_UNDER + ref;
+	        String markushId = ((CMLFragmentList) markushGroupLists.get(i)).getId();
+	        referenceFragment.setId(markushId);
+	        markushFragment.detach();
+	        referenceFragment.appendChild(markushFragment);
+	        referenceFragmentList.appendChild(referenceFragment);
+	        // replace the markush
+	        markush.replaceByChildren();
+	        i++;
+        }
+        newFragment.setId(newFragmentId);
+        return newFragment;
     }
     
     /** replace fragment/molecule by molecule.
@@ -523,7 +667,7 @@ class IntermediateProcessor implements CMLConstants {
 					deref = indexableList.getById(CMLUtil.getLocalName(ref));
 				}
 				if (deref == null) {
-					((CMLElement)indexableList).debug("null II");
+					((CMLElement)indexableList).debug("cannot dereference: "+ref);
 				}
 			} else {
 				((CMLElement)indexable).debug("FAILS TO LOOKUP");

@@ -21,6 +21,7 @@ import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -106,7 +107,7 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 	/** test 0	 */
-	@Test
+//	@Test
 	public void testAll0() {
 		CMLFragment fragment = makeMol();
 		boolean debug = false;
@@ -260,8 +261,18 @@ public class FragmentToolTest extends AbstractTest {
 		// basic -> intermediate
 		String title = "basic"+serial;
 		outputXML(title, fragment);
-		fragmentTool.processBasic();
-		title = "intermediate"+serial;
+		CMLElement generatedElement = fragmentTool.processBasic(moleculeCatalog);
+		if (generatedElement == null) {
+			testSimple(fragment, fragmentTool, debug, serial, intermediateS, explicitS, completeS, check);
+		} else if (generatedElement instanceof CMLFragmentList) {
+			testMarkush((CMLFragmentList) generatedElement, debug, serial, 
+					intermediateS, explicitS, completeS, check);
+		}
+	}
+	
+	private void testSimple(CMLFragment fragment, FragmentTool fragmentTool, boolean debug, int serial,
+					String intermediateS, String explicitS, String completeS, boolean check) {
+		String title = "intermediate"+serial;
 		if (debug) {
 			fragment.debug(title);
 		}
@@ -297,6 +308,24 @@ public class FragmentToolTest extends AbstractTest {
 		outputXML("complete"+serial, fragment);
 	
 	}
+
+	private void testMarkush(CMLFragmentList fragmentList, boolean debug, int serial,
+			String intermediateS, String explicitS, String completeS, boolean check) {
+
+		int serialx = 0;
+		for (CMLFragment newFragment : fragmentList.getFragmentElements()) {
+			outputXML("newFragment"+(++serialx), newFragment);
+		}
+		String title = "complete"+serial;
+		if (debug) {
+			fragmentList.debug(title);
+		}
+		if (check) {
+			CMLFragment complete = (CMLFragment) parseValidString(completeS);
+			AbstractTest.assertEqualsCanonically(title, complete, fragmentList, true);
+		}
+		outputXML("complete"+serial, fragmentList);
+	}
 	
 	private void outputXML(String name, CMLElement element) {
 		try {
@@ -315,7 +344,7 @@ public class FragmentToolTest extends AbstractTest {
 	public void testProcessIntermediate() {
 		CMLFragment fragment = makeMol();
 		FragmentTool fragmentTool = new FragmentTool(fragment);
-		fragmentTool.processBasic();
+		fragmentTool.processBasic(moleculeCatalog);
 		
 		List<String> prefixes = CMLUtil.getPrefixes(fragment, "ref");
 		Assert.assertEquals("prefixes", 1, prefixes.size());
@@ -421,6 +450,116 @@ public class FragmentToolTest extends AbstractTest {
 		outputXML("explicit", explicit);
 	}
 
+	/** intermediate result in processing Markush
+	 */
+	@Test
+	public void testGeneratedMarkush() {
+		String generatedS = ""+
+		"<fragment xmlns:g='http://www.xml-cml.org/mols/geom1' xmlns='http://www.xml-cml.org/schema'>"+
+		 "<fragmentList>"+
+		   "<fragment id='f'>"+
+		     "<molecule ref='g:f'/>"+
+		   "</fragment>"+
+		   "<fragment id='br'>"+
+		     "<molecule ref='g:br'/>"+
+		   "</fragment>"+
+		   "<fragment id='cl'>"+
+		     "<molecule ref='g:cl'/>"+
+		   "</fragment>"+
+		   "<fragment id='nsp2'>"+
+		     "<molecule ref='g:nsp2'/>"+
+		   "</fragment>"+
+		   "<fragment id='oh'>"+
+		     "<molecule ref='g:oh'/>"+
+		   "</fragment>"+
+		   "<fragment id='benzene'>"+
+		     "<molecule ref='g:benzene'/>"+
+		   "</fragment>"+
+		   "<fragment id='halogen'>"+
+		     "<fragment ref='f'/>"+
+		   "</fragment>"+
+		 "</fragmentList>"+
+		 "<fragment role='markushTarget'>"+
+		   "<molecule ref='g:benzene'>"+
+		     "<join moleculeRefs2='PARENT CHILD' atomRefs2='r1 r1'>"+
+		       "<torsion>45</torsion>"+
+		       "<fragment>"+
+		         "<fragment ref='halogen'/>"+
+		       "</fragment>"+
+		     "</join>"+
+		   "</molecule>"+
+		 "</fragment>"+
+		"</fragment>";		
+		
+		CMLFragment generatedFragment = (CMLFragment) parseValidString(generatedS);
+		FragmentTool generatedFragmentTool = new FragmentTool(generatedFragment);
+		generatedFragmentTool.processAll(moleculeCatalog);
+		
+		String generatedES = "" +
+		"<fragment convention='cml:PML-complete' xmlns:g='http://www.xml-cml.org/mols/geom1' xmlns='http://www.xml-cml.org/schema'>"+
+		 "<molecule role='fragment' id='benzene_1'>"+
+		   "<atomArray>"+
+		     "<atom elementType='C' x3='9.526706134000763' y3='3.869733600000001' z3='5.213518402229052' id='benzene_1_a1'>"+
+		       "<label dictRef='cml:torsionEnd'>r6</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='10.243299413197152' y3='3.932398500000001' z3='6.439022942911609' id='benzene_1_a2'>"+
+		       "<label dictRef='cml:torsionEnd'>r1</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='8.713504556428543' y3='2.7185301000000006' z3='5.01720505576243' id='benzene_1_a6'>"+
+		       "<label dictRef='cml:torsionEnd'>r5</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='8.385888936961882' y3='2.655387420737078' z3='4.323244676535362' id='benzene_1_r6'/>"+
+		     "<atom elementType='C' x3='10.119474056141831' y3='2.9008920000000007' z3='7.3834992125284815' id='benzene_1_a3'>"+
+		       "<label dictRef='cml:torsionEnd'>r2</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='10.509388371349742' y3='2.947556560950007' z3='8.045835415334345' id='benzene_1_r3'/>"+
+		     "<atom elementType='C' x3='9.320371405363035' y3='1.8151698000000005' z3='7.151684115065878' id='benzene_1_a4'>"+
+		       "<label dictRef='cml:torsionEnd'>r3</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='9.280916015724046' y3='1.2657016684721403' z3='7.6896692864820775' id='benzene_1_r4'/>"+
+		     "<atom elementType='C' x3='8.610030693701125' y3='1.7243409000000007' z3='5.934289686115539' id='benzene_1_a5'>"+
+		       "<label dictRef='cml:torsionEnd'>r4</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='8.16522311995263' y3='1.112386804675892' z3='5.790907652540795' id='benzene_1_r5'/>"+
+		     "<atom elementType='R' x3='10.697234803620145' y3='4.543958438540135' z3='6.552323882423661' id='benzene_1_r2'/>"+
+		     "<atom elementType='F' formalCharge='0' hydrogenCount='0' id='f_2_a1' x3='9.665713335944316' y3='4.947555867080721' z3='4.208841260858353'/>"+
+		   "</atomArray>"+
+		   "<bondArray>"+
+		     "<bond order='2' id='benzene_1_a1_benzene_1_a2' atomRefs2='benzene_1_a1 benzene_1_a2'/>"+
+		     "<bond order='1' id='benzene_1_a1_benzene_1_a6' atomRefs2='benzene_1_a1 benzene_1_a6'/>"+
+		     "<bond order='1' id='benzene_1_a3_benzene_1_a2' atomRefs2='benzene_1_a3 benzene_1_a2'/>"+
+		     "<bond order='1' id='benzene_1_a2_benzene_1_r2' atomRefs2='benzene_1_a2 benzene_1_r2'/>"+
+		     "<bond order='1' id='benzene_1_r6_benzene_1_a6' atomRefs2='benzene_1_r6 benzene_1_a6'/>"+
+		     "<bond order='2' id='benzene_1_a5_benzene_1_a6' atomRefs2='benzene_1_a5 benzene_1_a6'/>"+
+		     "<bond order='1' id='benzene_1_a3_benzene_1_r3' atomRefs2='benzene_1_a3 benzene_1_r3'/>"+
+		     "<bond order='2' id='benzene_1_a3_benzene_1_a4' atomRefs2='benzene_1_a3 benzene_1_a4'/>"+
+		     "<bond order='1' id='benzene_1_a5_benzene_1_a4' atomRefs2='benzene_1_a5 benzene_1_a4'/>"+
+		     "<bond order='1' id='benzene_1_a4_benzene_1_r4' atomRefs2='benzene_1_a4 benzene_1_r4'/>"+
+		     "<bond order='1' id='benzene_1_a5_benzene_1_r5' atomRefs2='benzene_1_a5 benzene_1_r5'/>"+
+		     "<bond atomRefs2='benzene_1_a1 f_2_a1' order='S' id='benzene_1_a1_f_2_a1'/>"+
+		   "</bondArray>"+
+		 "</molecule>"+
+		"</fragment>";
+		
+		CMLFragment generatedE = (CMLFragment) parseValidString(generatedES);
+		assertEqualsCanonically("generated", generatedE, generatedFragment, true);
+ 	}
+
+	/** tests first ten examples
+	 */
+	@Test
+	public void test0_9() {
+		testAll0();
+		testAll1();
+		testAll2();
+		testAll3();
+		testAll4();
+		testAll5();
+		testAll6();
+		testAll7();
+		testAll8();
+		testAll9();
+	}
 
 	private CMLFragment makeMol1() {
 		String fragmentS = "" +
@@ -446,7 +585,7 @@ public class FragmentToolTest extends AbstractTest {
 	}
 	
 	/** test 1*/
-	@Test
+//	@Test
 	public void testAll1() {
 		CMLFragment fragment = makeMol1();
 		boolean debug = false;
@@ -1656,7 +1795,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll4() {
 		CMLFragment fragment = makeMol4();
 		boolean debug = false;
@@ -3155,7 +3294,7 @@ public class FragmentToolTest extends AbstractTest {
 	}
 	
 	/** test 5*/
-	@Test
+//	@Test
 	public void testAll5() {
 		CMLFragment fragment = makeMol5();
 		boolean debug = false;
@@ -3295,7 +3434,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll6() {
 		CMLFragment fragment = makeMol6();
 		boolean debug = false;
@@ -3407,7 +3546,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll7() {
 		CMLFragment fragment = makeMol7();
 		boolean debug = false;
@@ -3490,7 +3629,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll8() {
 		CMLFragment fragment = makeMol8();
 		boolean debug = false;
@@ -3591,8 +3730,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
-	// FIXME used to work
+//	@Test
 //	@Ignore
 	public void testAll9() {
 		CMLFragment fragment = makeMol9();
@@ -3610,6 +3748,198 @@ public class FragmentToolTest extends AbstractTest {
 		testAll(fragment, debug, 9,
 				intermediateS, explicitS, completeS, check);
 	}
+	
+	/** tests 20_
+	 */
+	@Test
+	public void test20_() {
+		testAll20();
+		testAll21();
+//		testAll22();
+//		testAll23();
+//		testAll24();
+	}
+
+	private CMLFragment makeMol20() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='f'>"+
+		"      <molecule ref='g:f'/>" +
+		"    </fragment>"+
+		"    <fragment id='br'>"+
+		"      <molecule ref='g:br'/>" +
+		"    </fragment>"+
+		"    <fragment id='cl'>"+
+		"      <molecule ref='g:cl'/>" +
+		"    </fragment>"+
+		"    <fragment id='nsp2'>"+
+		"      <molecule ref='g:nsp2'/>" +
+		"    </fragment>"+
+		"    <fragment id='oh'>"+
+		"      <molecule ref='g:oh'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragmentList role='markush'>" +
+		"    <fragmentList role='markushList' id='halogen'>" +
+		"      <fragment ref='f'/>" +
+		"      <fragment ref='cl'/>" +
+		"      <fragment ref='br'/>" +
+		"    </fragmentList>" +
+//		"    <fragmentList role='markushList' id='polar'>" +
+//		"      <fragment ref='nsp2'/>" +
+//		"      <fragment ref='oh'/>" +
+//		"    </fragmentList>" +
+		"    <fragment role='markushTarget'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r1 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='halogen'/>"+
+		"          </fragment>"+
+		"        </join>" +
+//		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r1'>" +
+//		"          <torsion>45</torsion>" +
+//		"          <fragment>" +
+//		"            <fragment ref='polar'/>"+
+//		"          </fragment>"+
+//		"        </join>" +
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+//	@Ignore
+	public void testAll20() {
+		CMLFragment fragment = makeMol20();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 20,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol21() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='f'>"+
+		"      <molecule ref='g:f'/>" +
+		"    </fragment>"+
+		"    <fragment id='br'>"+
+		"      <molecule ref='g:br'/>" +
+		"    </fragment>"+
+		"    <fragment id='cl'>"+
+		"      <molecule ref='g:cl'/>" +
+		"    </fragment>"+
+		"    <fragment id='nsp2'>"+
+		"      <molecule ref='g:nsp2'/>" +
+		"    </fragment>"+
+		"    <fragment id='oh'>"+
+		"      <molecule ref='g:oh'/>" +
+		"    </fragment>"+
+		"    <fragment id='ethyl'>"+
+		"      <molecule ref='g:et'/>" +
+		"    </fragment>"+
+		"    <fragment id='methyl'>"+
+		"      <molecule ref='g:me'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragmentList role='markush'>" +
+		"    <fragmentList role='markushList' id='halogen'>" +
+		"      <fragment ref='f'/>" +
+		"      <fragment ref='cl'/>" +
+		"      <fragment ref='br'/>" +
+		"    </fragmentList>" +
+		"    <fragmentList role='markushList' id='polar'>" +
+		"      <fragment ref='nsp2'/>" +
+		"      <fragment ref='oh'/>" +
+		"    </fragmentList>" +
+		"    <fragmentList role='markushList' id='alkyl'>" +
+		"      <fragment ref='ethyl'/>" +
+		"      <fragment ref='methyl'/>" +
+		"    </fragmentList>" +
+		"    <fragment role='markushTarget'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r1 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='halogen'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='polar'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r5 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='alkyl'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+//	@Ignore
+	public void testAll21() {
+		CMLFragment fragment = makeMol21();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 21,
+				intermediateS, explicitS, completeS, check);
+	}
+
+
+	/** tests second ten examples
+	 */
+	@Test
+	public void test10_() {
+		testAll10();
+		testAll11();
+		testAll12();
+		testAll13();
+		testAll14();
+	}
+
 
 	private CMLFragment makeMol10() {
 		// 
@@ -3799,7 +4129,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll12() {
 		CMLFragment fragment = makeMol12();
 		boolean debug = false;
@@ -3864,7 +4194,7 @@ public class FragmentToolTest extends AbstractTest {
 		return (CMLFragment) parseValidString(fragmentS);
 	}
 
-	@Test
+//	@Test
 	public void testAll13() {
 		CMLFragment fragment = makeMol13();
 		boolean debug = false;
@@ -3966,6 +4296,21 @@ public class FragmentToolTest extends AbstractTest {
 		testAll(fragment, debug, 14,
 				intermediateS, explicitS, completeS, check);
 	}
+
+	
+	/** tests 50-57
+	 */
+	@Test
+	public void test50_57() {
+		testPEO();
+		testPEOFromScratch();
+		testNylon3();
+		testNylon3alternative();
+		testNylon44();
+		testPVC();
+		testPVCHeadTail();
+	}
+
 	
 	private CMLFragment makeMol50() {
 		// 

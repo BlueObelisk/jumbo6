@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <molecule xmlns="http://www.xml-cml.org/schema" id="et">
  <atomArray>
-  <atom id="a1" elementType="C" x3="1.998000" y3="-0.064000" z3="-0.000000"/>
+  <atom id="a1" elementType="C" x3="1.998000" y3="-0.064000" z3="-0.000000">
+    <label dictRef="cml:torsionEnd">r1</label>
+  </atom>
   <atom id="a2" elementType="C" x3="0.757000" y3="0.831000" z3="-0.000000"/>
   <atom id="r1" elementType="R" x3="-0.482000" y3="-0.028000" z3="0.000000"/>
   <atom id="a6" elementType="H" x3="1.992000" y3="-0.694000" z3="0.890000"/>

@@ -1,18 +1,9 @@
 package org.xmlcml.cml.element;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
-
+import java.util.HashMap;
+import org.xmlcml.cml.base.*;
 import nu.xom.Attribute;
-
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.DoubleArrayAttribute;
-import org.xmlcml.cml.base.DoubleAttribute;
-import org.xmlcml.cml.base.IntAttribute;
-import org.xmlcml.cml.base.StringArrayAttribute;
-import org.xmlcml.cml.base.StringAttribute;
 
 /** user-modifiable class supporting CMLAttributeList.
 *
@@ -25,8 +16,6 @@ public class CMLAttributeList {
 // fields;
     /** map of types by type name*/
     public static Map<String, CMLAttribute> attributeMap = new HashMap<String, CMLAttribute>();
-    /** logger*/
-    public final static Logger logger = Logger.getLogger(CMLAttributeList.class.getName());
     /** ??*/
     public static CMLAttribute cmlAttribute = null;
     /** ??*/
@@ -1999,7 +1988,6 @@ public class CMLAttributeList {
         cmlAttribute.setDescription("normally xFract, yFract and zFract should all be present or absent. If present a _crystal_ element should also occur.");
         
         } catch (CMLException e) {
-            logger.severe("bug"+e);
         }
     };
     /** make CMLAttributes.

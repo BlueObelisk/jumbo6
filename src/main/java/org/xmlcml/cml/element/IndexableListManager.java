@@ -30,17 +30,23 @@ public class IndexableListManager implements CMLConstants {
 	private Map<String, Indexable> map;
 	private String indexableLocalName;
 	
-	public IndexableListManager(IndexableList indexableList) {
-		
+	IndexableListManager(IndexableList indexableList) {
 		this.indexableList = indexableList;
-    	indexList();
+		ensureMap();
+//    	indexList();
+	}
+	
+	private void ensureMap() {
+		if (map == null) {
+			map = new HashMap<String, Indexable>();
+		}
 	}
 
 	/** index all current indexable children.
 	 * @return map
 	 */
-    public Map indexList() {
-    	map = new HashMap<String, Indexable>();
+    Map indexList() {
+    	ensureMap();
     	indexableLocalName = indexableList.getIndexableLocalName();
     	List<Node> indexables = CMLUtil.getQueryNodes((Node)indexableList,
     			C_E+indexableLocalName, X_CML);
@@ -91,6 +97,7 @@ public class IndexableListManager implements CMLConstants {
 						indexableList.addIndexable((Indexable) element);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					System.err.println("Cannot parse XML file: "+file+" /"+e);
 				}
     		}
@@ -102,7 +109,8 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @return map
      */
-    public Map<String, Indexable> getIndex() {
+    Map<String, Indexable> getIndex() {
+    	ensureMap();
     	return map;
     }
     
@@ -110,7 +118,8 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @param indexable to add
      */
-    public void add(Indexable indexable) {
+    void add(Indexable indexable) {
+    	ensureMap();
     	((Element)indexableList).appendChild((Element)indexable);
 		map.put(indexable.getId(), indexable);
     }
@@ -119,7 +128,8 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @param indexable to remove
      */
-    public void remove(Indexable indexable) {
+    void remove(Indexable indexable) {
+    	ensureMap();
     	((Element)indexableList).removeChild((Element)indexable);
 		map.remove(indexable.getId());
     }
@@ -129,7 +139,8 @@ public class IndexableListManager implements CMLConstants {
      * @param id
      * @return indexable or null
      */
-    public Indexable getById(String id) {
+    Indexable getById(String id) {
+    	ensureMap();
     	return map.get(id);
     }
     

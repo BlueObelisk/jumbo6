@@ -889,4 +889,16 @@ public class Transform3 extends RealSquareMatrix {
         }
         return s;
     }
+    
+    /**
+     * check not null
+     * 
+     * @param t transform3
+     */
+    public static void checkNotNull(Transform3 t) {
+        if (t == null) {
+            throw new EuclidRuntimeException("null transform");
+        }
+    }
+
 }

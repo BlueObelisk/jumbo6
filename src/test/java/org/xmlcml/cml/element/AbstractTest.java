@@ -10,6 +10,7 @@ import nu.xom.Element;
 import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -83,10 +84,14 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
      */
     protected Element parseValidString(String s) {
         Element element = null;
+        if (s == null) {
+        	throw new CMLRuntimeException("NULL VALID STRING");
+        }
         try {
             element = new CMLBuilder().parseString(s);
         } catch (Exception e) {
-            System.err.println("ERROR "+e);
+        	e.printStackTrace();
+            System.err.println("ERROR "+e+e.getMessage()+"..."+s.substring(0, Math.min(100, s.length())));
             Util.BUG(e);
         }
         return element;

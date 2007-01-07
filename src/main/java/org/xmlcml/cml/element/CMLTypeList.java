@@ -2,9 +2,7 @@ package org.xmlcml.cml.element;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.logging.Logger;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLType;
+import org.xmlcml.cml.base.*;
 
 /** NON-modifiable class supporting CMLTypeList.
 *
@@ -17,8 +15,6 @@ public class CMLTypeList {
 // fields;
     /** map of types by type name*/
     public static Map<String, CMLType> typeMap = new HashMap<String, CMLType>();
-    /** logger*/
-    public final static Logger logger = Logger.getLogger(CMLTypeList.class.getName());
     /** ??*/
     public static CMLType subt = null;
     /** ??*/
@@ -1179,7 +1175,7 @@ public class CMLTypeList {
         st.setDescription("");
         typeMap.put("xsd:string", st);
         } catch (CMLException e) {
-            logger.severe("bug"+e);
+            System.err.println("bug"+e);
         }
     };
 }

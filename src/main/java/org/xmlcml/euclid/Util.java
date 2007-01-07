@@ -25,10 +25,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.CMLUtil.Message;
-
 /**
  * A number of miscellaneous tools. Originally devised for jumbo.sgml, now
  * rewritten for jumbo.xml. Use these at your peril - some will be phased out
@@ -37,6 +33,19 @@ import org.xmlcml.cml.base.CMLUtil.Message;
  * @author 20 August 2003
  */
 public class Util implements EuclidConstants {
+	
+    /** messages */
+    public enum Message {
+        /** not yet implemented */
+        NYI("not yet implemented"),
+        ;
+        /** value*/
+        public String value;
+        private Message(String v) {
+            value = v;
+        }
+    }
+    
     final static Logger logger = Logger.getLogger(Util.class.getName());
     
     private final static File TEMP_DIRECTORY = new File("target"
@@ -52,7 +61,7 @@ public class Util implements EuclidConstants {
         if (!TEMP_DIRECTORY.exists()) {
             boolean ok = TEMP_DIRECTORY.mkdirs();
             if (!ok) {
-                throw new CMLRuntimeException("Cannot create temporary directory : "
+                throw new RuntimeException("Cannot create temporary directory : "
                         + TEMP_DIRECTORY.getAbsolutePath());
             }
         }
@@ -72,7 +81,7 @@ public class Util implements EuclidConstants {
         if (!testDir.exists()) {
             boolean ok = testDir.mkdirs();
             if (!ok) {
-                throw new CMLRuntimeException("Cannot create temporary class directory : "
+                throw new RuntimeException("Cannot create temporary class directory : "
                         + testDir.getAbsolutePath());
             }
         }
@@ -128,7 +137,7 @@ public class Util implements EuclidConstants {
      */
     public static void BUG(String msg, Exception e) {
         msg = (msg == null || msg.trim().length() == 0) ? S_EMPTY : S_LBRAK+msg+S_RBRAK;
-        throw new CMLRuntimeException("BUG: "+msg+"should never throw", e);
+        throw new RuntimeException("BUG: "+msg+"should never throw", e);
     }
     
     /** traps a bug.
@@ -144,10 +153,10 @@ public class Util implements EuclidConstants {
      * deliberately deprecated so that it requires deprecated on
      * all modules containing NYI
      * @deprecated
-     * @throws CMLRuntimeException
+     * @throws RuntimeException
      */
     public static void throwNYI() {
-        throw new CMLRuntimeException(Message.NYI.value);
+        throw new RuntimeException(Message.NYI.value);
     }
     /** traps a bug.
      * @see #BUG(String, Throwable)
@@ -205,7 +214,7 @@ public class Util implements EuclidConstants {
             ClassLoader l = Thread.currentThread().getContextClassLoader();
             url = l.getResource(filename);
             if (url == null) {
-                throw new CMLRuntimeException("No resource with name " + filename);
+                throw new RuntimeException("No resource with name " + filename);
             }
         }
         return url;
@@ -219,7 +228,7 @@ public class Util implements EuclidConstants {
      * @throws URISyntaxException
      */
     public static File getResourceFile(String... path) throws URISyntaxException {
-        File f = new File(CMLUtil.class.getClassLoader()
+        File f = new File(Util.class.getClassLoader()
                 .getResource(buildPath(path)).toURI());
         return f;
     }
@@ -1780,25 +1789,6 @@ public class Util implements EuclidConstants {
     }
 
     /**
-     * checks RealArray is not null and is of given size.
-     * 
-     * @param array
-     *            to check
-     * @param size
-     *            required size
-     * @throws EuclidException
-     *             if null or wrong size
-     */
-    public static void check(RealArray array, int size) throws EuclidException {
-        if (array == null) {
-            throw new EuclidException("null array");
-        } else if (array.size() != size) {
-            throw new EuclidException("array size required (" + size
-                    + ") found " + array.size());
-        }
-    }
-
-    /**
      * checks that an in is in the range low to high.
      * 
      * @param n
@@ -1814,17 +1804,6 @@ public class Util implements EuclidConstants {
         if (n < low || n > high) {
             throw new EuclidException("index (" + n + ")out of range: " + low
                     + S_SLASH + high);
-        }
-    }
-
-    /**
-     * check not null. maybe obsolete?
-     * 
-     * @param t
-     */
-    public static void checkNotNull(Transform3 t) {
-        if (t == null) {
-            throw new EuclidRuntimeException("null transform");
         }
     }
 

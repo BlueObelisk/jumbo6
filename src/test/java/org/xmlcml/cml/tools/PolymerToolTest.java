@@ -9,10 +9,8 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;

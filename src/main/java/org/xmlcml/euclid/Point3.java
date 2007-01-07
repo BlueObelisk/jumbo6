@@ -217,7 +217,7 @@ public class Point3 implements EuclidConstants {
     }
 
     /**
-     * Move this CMLPoint3. alters this
+     * Move this Point3. alters this
      * 
      * @param pt
      *            point to shift by
