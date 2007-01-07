@@ -15,7 +15,6 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLFormula;
@@ -168,21 +167,13 @@ public class CrystalTool extends AbstractTool {
         new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
             molecule, contactList, addBonds);
-        
-        // need to flatten then partition molecules as at this point the symmetry related
-        // molecules (which had been partitioned) have been merged, so just partitioning the
-        // container molecules could lead to sub-molecules of sub-molecules, which isn't what we want.
-        ConnectionTableTool ct = new ConnectionTableTool(mergedMolecule);
-        ct.flattenMolecules();
-        ct.partitionIntoMolecules();
 
-        List<CMLMolecule> mols = mergedMolecule.getDescendantsOrMolecule();
-        for (CMLMolecule mol : mols) {
+        for (CMLMolecule mol : mergedMolecule.getDescendantsOrMolecule()) {
         	if (!MoleculeTool.isDisordered(mol)) {
-        		MoleculeTool subMolTool = new MoleculeTool(mol);
+        		ValencyTool subMolTool = new ValencyTool(mol);
         		subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
         	} else {
-        		System.out.println("molecule is disoredered");
+        		System.out.println("molecule is disordered");
         	}
         }
         return mergedMolecule;
@@ -386,11 +377,11 @@ public class CrystalTool extends AbstractTool {
      * @return molecule a molecule composed of the merged molecules
      */
     public CMLMolecule mergeSymmetryMolecules(CMLMolecule mergedMolecule,
-        Contact contact, int serial, Transform3 orthMat, boolean addBonds) {
+        Contact contact, int serial, Transform3 orthMat) {
 
         CMLMolecule fromMolecule = contact.fromAtom.getMolecule();
         CMLMolecule targetMolecule = getTargetMolecule(mergedMolecule, fromMolecule.getId());
-        List<CMLAtom> targetAtomList = targetMolecule.getAtoms();
+        //List<CMLAtom> targetAtomList = targetMolecule.getAtoms();
         CMLMolecule symmetryMolecule = new CMLMolecule(fromMolecule);
         symmetryMolecule.transformFractionalsAndCartesians(contact.transform3, orthMat);
         if (contact.isInSameMolecule) {
@@ -420,6 +411,7 @@ public class CrystalTool extends AbstractTool {
                         newAtom.resetId(newId);
                         targetMolecule.addAtom(newAtom);
                         newAtomList.add(newAtom);
+                        /*
                         // add bonds?
                         if (addBonds) {
                             // bonds to old atoms
@@ -432,9 +424,11 @@ public class CrystalTool extends AbstractTool {
                                 }
                             }
                         }
+                        */
                     }
                 }
             }
+            /*
             // any bonds to new atoms? (not very good solution)
             for (int i = 0; i < newAtomList.size(); i++) {
                 CMLAtom atomi = newAtomList.get(i);
@@ -453,6 +447,7 @@ public class CrystalTool extends AbstractTool {
                     }
                 }
             }
+            */
         }
         return mergedMolecule;
     }
@@ -521,11 +516,16 @@ public class CrystalTool extends AbstractTool {
         if (contactList.size() > 0) {
             for (int icontact = 0; icontact < contactList.size(); icontact++) {
                 this.mergeSymmetryMolecules(mergedMolecule, 
-                contactList.get(icontact), icontact+1, orthMat, addBonds);
+                contactList.get(icontact), icontact+1, orthMat);
             }
         } else {
             mergedMolecule = new CMLMolecule(mol);
         }
+        //mergedMolecule.debug();
+		ConnectionTableTool ct = new ConnectionTableTool(mergedMolecule);
+		ct.flattenMolecules();
+        new MoleculeTool(mergedMolecule).calculateBondedAtoms();
+        ct.partitionIntoMolecules();
         return mergedMolecule;
     }
     

@@ -276,7 +276,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         atom2.setPoint3(new Point3(1.3, 1.3, 1.3), CoordinateType.CARTESIAN);
         atom2.setElementType("Pt");
         Assert.assertTrue("bonded", CMLBond.areWithinBondingDistance(atom1,
-                atom2, 1.2, 1.2, ChemicalElement.getBondingRadiusTolerance()));
+                atom2));
     }
 
     /**
@@ -460,17 +460,6 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     @Ignore
     public final void testSetBondStereo() {
         fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.cml.element.CMLBond#areWithinBondingDistance(org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom, double, double, double)}.
-     */
-    @Test
-    public final void testAreWithinBondingDistanceCMLAtomCMLAtomDoubleDoubleDouble() {
-        makeMol5a();
-        CMLAtom a1 = mol5a.getAtom(0);
-        CMLAtom a2 = mol5a.getAtom(2);
-        Assert.assertTrue("bond?", CMLBond.areWithinBondingDistance(a1, a2, 1.2, 1.2, 0.2));
     }
 
     /**
