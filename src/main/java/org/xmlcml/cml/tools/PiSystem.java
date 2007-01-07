@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -212,7 +213,6 @@ public class PiSystem implements CMLConstants {
                     piSystemManager.getFormalChargeControl());
             if (nPi > 0) {
                 piMap.put(atom, new Integer(nPi));
-                //System.out.println("putting atom in pimap: "+atom.getId());
             }
         }
         return piMap;
@@ -222,10 +222,8 @@ public class PiSystem implements CMLConstants {
         CMLAtom atomx = null;
         List<CMLAtom> atomList = getSortedAtomList();
         for (CMLAtom atom : atomList) {
-            if (getPiNeighbours(atom).size() > 0) {
                 atomx = atom;
                 break;
-            }
         }
         return atomx;
     }
@@ -452,7 +450,8 @@ public class PiSystem implements CMLConstants {
         int knownUnpaired = piSystemManager.getKnownUnpaired();
         int oldPiCount = -1;
         int count = 0;
-        while (count < atomList.size() && remainingPiCount > 0) {
+        int iterationMax = 5;
+        while (count < atomList.size() && remainingPiCount > 0 && count < iterationMax) {
         	while (remainingPiCount > knownUnpaired
         			&& remainingPiCount != oldPiCount) {
         		oldPiCount = remainingPiCount;
@@ -478,6 +477,7 @@ public class PiSystem implements CMLConstants {
         		atomList.add(atom);
         	}
         	count++;
+        	iterationMax++;
         }
     }
 

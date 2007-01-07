@@ -970,18 +970,6 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
          --*/
     }
 
-    @SuppressWarnings("unused")
-	private void abocv(CMLMolecule mol, int knownUnpaired) {
-		// System.out.println("====adjustBondOrdersAndCharge=====
-		// "+mol.getTitle()+" ======================");
-		PiSystemManager piSystemManager = new PiSystemManager();
-		piSystemManager.setUpdateBonds(true);
-		piSystemManager.setKnownUnpaired(knownUnpaired);
-		new MoleculeTool(mol)
-				.adjustBondOrdersAndChargesToValency(piSystemManager, null);
-	}
-
-
     /**
      * Test method for
      * 'org.xmlcml.cml.element.MoleculeTool.adjustBondOrdersToValency() { '

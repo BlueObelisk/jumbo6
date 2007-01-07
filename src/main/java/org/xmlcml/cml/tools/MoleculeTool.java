@@ -32,8 +32,6 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMetadata;
@@ -63,8 +61,6 @@ public class MoleculeTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
-	public static String metalLigandDictRef = "jumbo:metalLigand";
-
 	/**
 	 * control operations for removing disorder.
 	 */
@@ -92,8 +88,6 @@ public class MoleculeTool extends AbstractTool {
 		private ProcessDisorderControl() {
 		}
 	}
-	
-	public final static int UNREALISTIC_CHARGE = 99;
 
 	CMLMolecule molecule;
 
@@ -124,481 +118,8 @@ public class MoleculeTool extends AbstractTool {
 	public CMLMolecule getMolecule() {
 		return molecule;
 	}
-
-	/**
-	 * Adjust bond orders and charges to satisfy valence. empirical, and
-	 * containing several special cases:
-	 * <ul>
-	 * <li>identifying N+</li>
-	 * <li>identifying O-</li>
-	 * <li>X=O and X-O(-) bonds</li>
-	 * </ul>
-	 * then adds double bonds to pi-systems in impossible systems appropriate
-	 * atoms are marked as having piElectron childrens assumes explicit
-	 * hydrogens
-	 * 
-	 * @param piSystemManager
-	 */
-	public void adjustBondOrdersAndChargesToValency(
-			PiSystemManager piSystemManager, CMLFormula moietyFormula) {
-		// get a list of formulas for the moieties. 
-		List<CMLFormula> moietyFormulaList = new ArrayList<CMLFormula>();
-		if (moietyFormula != null) {
-			moietyFormulaList = moietyFormula.getFormulaElements().getList();
-			if (moietyFormulaList.size() == 0) {
-				moietyFormulaList.add(moietyFormula);
-			}
-		}
-		List<CMLMolecule> mols = molecule.getDescendantsOrMolecule();
-		for (CMLMolecule mol : mols) {
-			int molCharge = UNREALISTIC_CHARGE;
-			boolean isMetalComplex = false;
-			for (CMLFormula formula : moietyFormulaList) {
-				CMLFormula molForm = mol.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
-				if (molForm.getConciseNoCharge().equals(formula.getConciseNoCharge())) {
-					molCharge = formula.getFormalCharge();
-				}
-			}
-			// reset all bond orders to single
-			mol.setBondOrders(CMLBond.SINGLE);
-			ConnectionTableTool ctt = new ConnectionTableTool(mol);
-			ctt.getCyclicBonds();
-			// remove metal atoms, calculate bond orders, then reattach 
-			// the metal atoms
-			List<CMLAtom> metalAtomList = new ArrayList<CMLAtom>();
-			List<CMLBond> metalBondList = new ArrayList<CMLBond>();
-			List<CMLAtom> atomList = mol.getAtoms();		
-			for(CMLAtom atom : atomList) {
-				ChemicalElement element = atom.getChemicalElement();
-				if (element.isChemicalElementType(Type.METAL)) {
-					isMetalComplex = true;
-					metalAtomList.add(atom);
-					List<CMLBond> bonds = atom.getLigandBonds();
-					for (CMLBond bond : bonds) {
-						metalBondList.add(bond);
-					}
-					// tag atoms bonded to metals as being so.  This can then
-					// be used later to figure out charges and bond orders
-					List<CMLAtom> ligands = atom.getLigandAtoms();
-					for (CMLAtom ligand : ligands) {
-						CMLScalar metalLigand = new CMLScalar();
-						ligand.appendChild(metalLigand);
-						metalLigand.addAttribute(new Attribute("dictRef", metalLigandDictRef));
-					}
-				}
-			}		
-			for (CMLAtom metalAtom : metalAtomList)	 {
-				metalAtom.detach();
-			}
-			// remove duplicates from metal bond list
-			Set<CMLBond> set = new HashSet<CMLBond>();
-			set.addAll(metalBondList);
-			if(set.size() < metalBondList.size()) {
-				metalBondList.clear();
-				metalBondList.addAll(set);
-			} 
-			for (CMLBond metalBond : metalBondList)	 {
-				metalBond.detach();
-			}
-			//if the removing of metal atoms takes the molecules atom to zero
-			//then don't bother calculating bonds
-			if (mol.getAtomCount() > 1) {
-				// now the metal atoms and bonds have been removed, partition 
-				// molecule into submolecules and then calculate the bond orders
-				// and charges
-				ctt.partitionIntoMolecules();
-				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
-				for (CMLMolecule subMol : subMols) {
-					System.out.println("-----------");
-					MoleculeTool subMolTool = new MoleculeTool(subMol);
-					ValencyTool valencyTool = new ValencyTool(subMol);
-					boolean common = valencyTool.markupCommonMolecules();
-					if (!common) {
-						valencyTool.markupSpecial();
-						subMol.setNormalizedBondOrders();
-						// get list of bonds that have not been set by 
-						// markupSpecial or markupCommonMolecules
-						// do this so these are are the only bonds that are
-						// reset further down the method
-						List<CMLBond> singleBonds = new ArrayList<CMLBond>();
-						for (CMLBond bond : subMol.getBonds()) {
-							if (CMLBond.SINGLE.equals(bond.getOrder())) {
-								singleBonds.add(bond);
-							}
-						}
-						// get list of atoms whose charge has been set by
-						// markupSpecial or markupCommonMolecules
-						// do this so these are not reset further down the
-						// method
-						List<CMLAtom> alreadySetChargedAtoms = new ArrayList<CMLAtom>();
-						for (CMLAtom atom : subMol.getAtoms()) {
-							Nodes nodes = atom.query(".//@formalCharge[.!=0]", X_CML);
-							if (nodes.size() > 0) {
-								alreadySetChargedAtoms.add(atom);
-							}
-						}
-						List<CMLAtom> subMolAtomList = subMol.getAtoms();
-						PiSystem piS = new PiSystem(subMolAtomList);
-						piS.setPiSystemManager(piSystemManager);
-						List<PiSystem> piSList = piS.generatePiSystemList();
-						List<CMLAtom> n3List = new ArrayList<CMLAtom>();
-						List<CMLAtom> osList = new ArrayList<CMLAtom>();
-						List<CMLAtom> n2List = new ArrayList<CMLAtom>();
-						for (PiSystem piSys : piSList) {
-							if (piSys.getSize() == 1) {
-								CMLAtom piAtom = piSys.getAtomList().get(0);
-								String atomElType = piAtom.getElementType();
-								if ("O".equals(atomElType) || 
-										"S".equals(atomElType)) {
-									piAtom.setFormalCharge(-1);
-									alreadySetChargedAtoms.add(piAtom);
-								} else if ("N".equals(atomElType)) {
-									int ligandNum = piAtom.getLigandBonds().size();
-									piAtom.setFormalCharge(-3+ligandNum);
-								} else if ("C".equals(atomElType)) {
-									//FIXME - this surely can't always work
-									piAtom.setFormalCharge(1);
-								}
-							} else {
-								List<CMLAtom> piAtomList = piSys.getAtomList();
-								for (CMLAtom atom : piAtomList) {
-									// don't want to include atoms that have already had formal charge set
-									// by markupCommonMolecules or markupSpecial
-									if (alreadySetChargedAtoms.contains(atom)) {
-										continue;
-									}
-									// see if there are any Ns with 3 ligands next to the pi-system that
-									// may be positively charged
-									for (CMLAtom ligand : atom.getLigandAtoms()) {
-										if ("N".equals(ligand.getElementType())) {
-											if (ligand.getLigandAtoms().size() == 3) {
-												int count = 0;
-												for (CMLAtom ligLig : ligand.getLigandAtoms()) {
-													if ("H".equals(ligLig.getElementType())) {
-														count++;
-													}
-												}
-												if (count < 2 && !n3List.contains(ligand)) {
-													n3List.add(ligand);
-												}
-											}
-											if (ligand.getLigandAtoms().size() == 2) {
-												int count = 0;
-												for (CMLAtom ligLig : ligand.getLigandAtoms()) {
-													if ("H".equals(ligLig.getElementType())) {
-														count++;
-													}
-												}
-												if (count == 0) {
-													n2List.add(ligand);
-												}
-											}
-										}
-									}
-								}
-							}
-							for (CMLAtom atom : subMolAtomList) {
-								// don't want to include atoms that have already had formal charge set
-								// by markupCommonMolecules or markupSpecial
-								if (alreadySetChargedAtoms.contains(atom)) {
-									continue;
-								}
-								if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
-									if (atom.getLigandAtoms().size() == 1) {
-										osList.add(atom);
-									}
-								}
-							}
-						}
-						
-						// take all combinations of charges on the atoms found and attempt to 
-						// get a completed pi-system.
-						List<List<Integer>> n3ComboList = CMLUtil.generateCombinationList(n3List.size());
-						List<List<Integer>> osComboList = CMLUtil.generateCombinationList(osList.size());
-						List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
-						//System.out.println(n3ComboList.size()+","+osComboList.size()+","+n2ComboList.size());
-						List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
-						List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
-						for (int i = 0; i < n3ComboList.size(); i++) {
-							for (int j = osComboList.size()-1; j >= 0; j--) {
-								//System.out.println("====================");
-								List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-								for (Integer in : n3ComboList.get(i)) {
-									CMLAtom atom = n3List.get(in);
-									atom.setFormalCharge(1);
-									//System.out.println("setting n3: "+atom.getId());
-									chargedAtoms.add(atom);
-								}
-								for (Integer in : osComboList.get(j)) {
-									CMLAtom atom = osList.get(in);
-									atom.setFormalCharge(-1);
-									chargedAtoms.add(atom);
-									//System.out.println("setting os: "+atom.getId());
-								}
-								PiSystem newPiS = new PiSystem(subMolAtomList);
-								newPiS.setPiSystemManager(piSystemManager);
-								List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-								int sysCount = 0;
-								//System.out.println("system count: "+newPiSList.size());
-								boolean piRemaining = false;
-								for (PiSystem system : newPiSList) {
-									//System.out.println("system atoms: "+system.getAtomList().size());
-									sysCount++;
-									system.identifyDoubleBonds();
-									for (CMLAtom a : system.getAtomList()) {
-										Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-										if (nodes.size() > 0) {
-											piRemaining = true;
-										}
-									}
-									if (sysCount == newPiSList.size()) {
-										// when a valid pi-system found, check whether a molecule with the same
-										// overall charge has already been found.  If so, take the system with 
-										// the least charged atoms.
-										if (!piRemaining) {
-											boolean add = true;
-											for (CMLMolecule m : validMolList) {
-												MoleculeTool mTool = new MoleculeTool(m);
-												if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
-													if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
-														finalMolList.remove(m);
-													} else {
-														add = false;
-													}
-												}
-											}
-											if (add) {
-												CMLMolecule copy = (CMLMolecule)subMol.copy();
-												validMolList.add(copy);
-												finalMolList.add(copy);
-											}
-										}
-									}
-								}
-								// reset charges on charged atoms
-								for (CMLAtom atom : chargedAtoms) {
-									if (!alreadySetChargedAtoms.contains(atom)) {
-										atom.setFormalCharge(0);
-									}
-								}
-								// reset only those bonds that were single to start with
-								for (CMLBond bond : singleBonds) {
-									bond.setOrder(CMLBond.SINGLE);
-								}
-								// reset all pi-electrons
-								Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-								for (int e = 0; e < piElectrons.size(); e++) {
-									((CMLElectron)piElectrons.get(e)).detach();
-								}
-							}
-						}
-						n2:
-						if (finalMolList.size() == 0) {
-							System.out.println("Trying N2-");
-							for (int l = 0; l < n2ComboList.size(); l++) {
-								for (int i = 0; i < n3ComboList.size(); i++) {
-									for (int j = osComboList.size()-1; j >= 0; j--) {
-										//System.out.println("====================");
-										List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-										for (Integer in : n3ComboList.get(i)) {
-											CMLAtom atom = n3List.get(in);
-											atom.setFormalCharge(1);
-											//System.out.println("setting n3: "+atom.getId());
-											chargedAtoms.add(atom);
-										}
-										for (Integer in : osComboList.get(j)) {
-											CMLAtom atom = osList.get(in);
-											atom.setFormalCharge(-1);
-											chargedAtoms.add(atom);
-											//System.out.println("setting os: "+atom.getId());
-										}
-										for (Integer in : n2ComboList.get(l)) {
-											CMLAtom atom = n2List.get(in);
-											atom.setFormalCharge(-1);
-											chargedAtoms.add(atom);
-											//System.out.println("setting n2: "+atom.getId());
-										}
-										PiSystem newPiS = new PiSystem(subMolAtomList);
-										newPiS.setPiSystemManager(piSystemManager);
-										List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-										int sysCount = 0;
-										//System.out.println("system count: "+newPiSList.size());
-										boolean piRemaining = false;
-										for (PiSystem system : newPiSList) {
-											//System.out.println("system atoms: "+system.getAtomList().size());
-											sysCount++;
-											system.identifyDoubleBonds();
-											for (CMLAtom a : system.getAtomList()) {
-												Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-												if (nodes.size() > 0) {
-													piRemaining = true;
-												}
-											}
-											if (sysCount == newPiSList.size()) {
-												// when a valid pi-system found, check whether a molecule with the same
-												// overall charge has already been found.  If so, take the system with 
-												// the least charged atoms.
-												if (!piRemaining) {
-													CMLMolecule copy = (CMLMolecule)subMol.copy();
-													validMolList.add(copy);
-													finalMolList.add(copy);
-													break n2;
-												}
-											}
-										}
-//										reset charges on charged atoms
-										for (CMLAtom atom : chargedAtoms) {
-											if (!alreadySetChargedAtoms.contains(atom)) {
-												atom.setFormalCharge(0);
-											}
-										}
-										// reset only those bonds that were single to start with
-										for (CMLBond bond : singleBonds) {
-											bond.setOrder(CMLBond.SINGLE);
-										}
-										// reset all pi-electrons
-										Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-										for (int e = 0; e < piElectrons.size(); e++) {
-											((CMLElectron)piElectrons.get(e)).detach();
-										}
-									}
-								}
-							}
-						}
-						cAttempt:
-							if (finalMolList.size() == 0) {
-								int cCharge = -1;
-								System.out.println("Trying carbanions....");
-								for (CMLAtom atom : subMolAtomList) {
-									if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
-										atom.setFormalCharge(cCharge);
-										PiSystem newPiS = new PiSystem(subMolAtomList);
-										newPiS.setPiSystemManager(piSystemManager);
-										List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-										int sysCount = 0;
-										//System.out.println("system count: "+newPiSList.size());
-										boolean piRemaining = false;
-										for (PiSystem system : newPiSList) {
-											//System.out.println("system atoms: "+system.getAtomList().size());
-											sysCount++;
-											system.identifyDoubleBonds();
-											for (CMLAtom a : system.getAtomList()) {
-												Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-												if (nodes.size() > 0) {
-													piRemaining = true;
-												}
-											}
-											if (sysCount == newPiSList.size()) {
-												// when a valid pi-system found, check whether a molecule with the same
-												// overall charge has already been found.  If so, take the system with 
-												// the least charged atoms.
-												if (!piRemaining) {
-													CMLMolecule copy = (CMLMolecule)subMol.copy();
-													validMolList.add(copy);
-													finalMolList.add(copy);
-													break cAttempt;
-												}
-											}
-										}
-										atom.setFormalCharge(0);
-										// reset only those bonds that were single to start with
-										for (CMLBond bond : singleBonds) {
-											bond.setOrder(CMLBond.SINGLE);
-										}
-										// reset all pi-electrons
-										Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-										for (int e = 0; e < piElectrons.size(); e++) {
-											((CMLElectron)piElectrons.get(e)).detach();
-										}
-									}
-								}
-							}
-						if (finalMolList.size() > 0) {
-							// remember that molCharge is the charge given to the molecule from the CIF file
-							CMLMolecule theMol = null;
-							if (molCharge != UNREALISTIC_CHARGE && !isMetalComplex) {
-								for (CMLMolecule n : finalMolList) {
-									if (molCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
-										theMol = n;
-									}
-								}
-
-							} 
-							// if theMol not set above OR part of metal complex OR no corresponding formal charge
-							if (theMol == null) {
-								if (isMetalComplex) {
-									int count = 0;
-									int currentCharge2 = 0;
-									for (CMLMolecule n : finalMolList) {
-										MoleculeTool nTool = new MoleculeTool(n);
-										if (count == 0) {
-											theMol = n;
-											currentCharge2 = nTool.getFormalCharge();
-										} else {
-											int nCharge = nTool.getFormalCharge();
-											if (currentCharge2 < 0) {
-												if (nCharge > currentCharge2 && nCharge <= 0) {
-													currentCharge2 = nCharge;
-													theMol = n;
-												}
-											}
-											if (currentCharge2 >= 0) {
-												if (nCharge < currentCharge2) {
-													currentCharge2 = nCharge;
-													theMol = n;
-												}
-											}
-										}
-										count++;
-									}
-								} else {
-									int count = 0;
-									int currentCharge2 = 0;
-									for (CMLMolecule n : finalMolList) {
-										MoleculeTool nTool = new MoleculeTool(n);
-										if (count == 0) {
-											theMol = n;
-											currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
-										} else {
-											int nCharge = (int)Math.pow(nTool.getFormalCharge(), 2);
-											if (nCharge < currentCharge2) {
-												currentCharge2 = nCharge;
-												theMol = n;
-											}
-										}
-										count++;
-									}
-								}
-							}
-							MoleculeTool theMolTool = new MoleculeTool(theMol);
-							theMolTool.copyAtomAndBondAttributesById(subMol, true);
-						}
-					}
-				}
-				// return the mol to its original state before adding metal
-				// atoms and bonds back in
-				ctt.flattenMolecules();
-			}
-			// reattach metal atoms and bonds now bonds have been calculated
-			CMLAtomArray atomArray = mol.getAtomArray();
-			CMLBondArray bondArray = mol.getBondArray();	
-			for (CMLAtom atom : metalAtomList) {
-				atomArray.appendChild(atom);
-			}
-			if (bondArray != null) {
-				bondArray.indexBonds();
-				for (CMLBond bond : metalBondList) {
-					bondArray.appendChild(bond);
-				}
-			}
-			// remove scalars signifying atoms attached to metal
-			Nodes nodes = molecule.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", X_CML);
-			for (int i = 0; i < nodes.size(); i++) {
-				nodes.get(i).detach();
-			}
-		}
-		System.out.println("finished");
-	}
+	
+	
 	
 	public int getFormalCharge() {
 		int formalCharge = 0;
@@ -1189,6 +710,105 @@ public class MoleculeTool extends AbstractTool {
 		return noCoordsLigandsAS;
 	}
 
+	// ============ atom matcher ==============
+	/**
+	 * finds a pair with neighbours that map to each other can be called
+	 * iteratively until returns null
+	 *
+	 * @param atomSet1
+	 *            to match
+	 * @param atomSet2
+	 *            diminished if match found
+	 * @param from1to2map
+	 *            the mapping from atomSet1 to atomSet2 (i.e. from ids in
+	 *            atomSet1, to in atomSet2)
+	 * @param atomMatcher
+	 * @return pair of matched atoms
+	 *
+	 */
+	// FIXME
+	@SuppressWarnings("unused")
+	private AtomPair getAtomsWithSameMappedNeighbours00(
+			AtomMatcher atomMatcher, CMLAtomSet atomSet1, CMLAtomSet atomSet2,
+			CMLMap from1to2map) {
+	
+		Set<CMLAtom> matchingSet = new HashSet<CMLAtom>();
+		AtomPair pair = null;
+		for (CMLAtom atom : atomSet1.getAtoms()) {
+			if (atomMatcher.skipAtom(atom)) {
+				continue;
+			}
+			matchingSet.add(atom);
+		}
+	
+		for (CMLAtom atom : atomSet2.getAtoms()) {
+			String elementType2 = atom.getElementType();
+			if (atomMatcher.skipAtom(atom)) {
+				continue;
+			}
+	
+			CMLAtomSet ligand2Set = new CMLAtomSet(atom.getLigandAtoms());
+	
+			// for each ligandList or atom2 loop through all atom1s to find
+			// match
+			// which has most ligands?
+			// FIXME better - store all atoms with at least one ligand
+			List<CMLAtom> matchAtomList = new ArrayList<CMLAtom>();
+			int maxLigands = 0;
+			CMLAtom mostLigandedAtom1 = null;
+			for (int j = 0; j < atomSet1.size(); j++) {
+				CMLAtom atom1 = (CMLAtom) atomSet1.getAtom(j);
+				if (atomMatcher.skipAtom(atom1)) {
+					continue;
+				}
+				String elementType1 = atom1.getElementType();
+				// atoms must match type
+				if (!elementType1.equals(elementType2)) {
+					continue;
+				}
+				int ligandCount = 0;
+				List<CMLAtom> ligandList = atom1.getLigandAtoms();
+				for (CMLAtom ligandAtom1 : ligandList) {
+					if (!atomMatcher.skipLigandAtom(ligandAtom1)) {
+						String id1 = ligandAtom1.getId();
+						String id2 = from1to2map.getRef(id1,
+								CMLMap.Direction.FROM);
+						// does id2 exist and is it a ligand of atom 2
+						if (id2 != null && ligand2Set.getAtomById(id2) != null) {
+							ligandCount++;
+						}
+					}
+				}
+				if (ligandCount > maxLigands) {
+					maxLigands = ligandCount;
+					mostLigandedAtom1 = atom1;
+				}
+				if (ligandCount > 0) {
+					matchAtomList.add(atom1);
+				}
+	
+			}
+			// ligand atoms in common?
+			//
+			if (matchAtomList.size() == 1) {
+				CMLAtom matchAtom1 = matchAtomList.get(0);
+				pair = new AtomPair(matchAtom1, atom);
+				atomSet1.removeAtom(matchAtom1);
+				atomSet2.removeAtom(atom);
+				break;
+				// old method
+			} else if (false && mostLigandedAtom1 != null) {
+				pair = new AtomPair(mostLigandedAtom1, atom);
+				atomSet1.removeAtom(mostLigandedAtom1);
+				atomSet2.removeAtom(atom);
+				break;
+			} else {
+				pair = null;
+			}
+		}
+		return pair;
+	}
+
 	/**
 	 * Expand implicit hydrogen atoms.
 	 *
@@ -1525,7 +1145,6 @@ public class MoleculeTool extends AbstractTool {
 			}
 			ChemicalElement element1 = ChemicalElement
 			.getChemicalElement(currentAtom.getElementType());
-			double radius1 = element1.getCovalentRadius();
 			List<CMLAtom> ligandList = currentAtom.getLigandAtoms();
 			List<CMLBond> ligandBondList = currentAtom.getLigandBonds();
 			int lig = 0;
@@ -1540,10 +1159,8 @@ public class MoleculeTool extends AbstractTool {
 				}
 				ChemicalElement element2 = ChemicalElement
 				.getChemicalElement(ligand.getElementType());
-				double radius2 = element2.getCovalentRadius();
 				boolean bonded = CMLBond.areWithinBondingDistance(currentAtom,
-						ligand, radius1, radius2, ChemicalElement
-						.getBondingRadiusTolerance());
+						ligand);
 				if (bonded) {
 					clusterSet.addAtom(ligand);
 					CMLBond addBond = ligandBondList.get(lig);
@@ -1907,33 +1524,26 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 */
 	public void calculateBondedAtoms() {
-		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
-		if (molecules.size() > 0) {
-			for (CMLMolecule molecule : molecules) {
-				new MoleculeTool(molecule).calculateBondedAtoms();
+		for (CMLMolecule mol : molecule.getDescendantsOrMolecule()) {
+			List<CMLAtom> atoms = mol.getAtoms();
+			// need to remove old bonds first
+			for (CMLBond bond : mol.getBonds()) {
+				bond.detach();
 			}
-		} else {
-			List<CMLBond> bonds = molecule.getBonds();
-			if (bonds == null || bonds.size() == 0) {
-				List<CMLAtom> atoms = molecule.getAtoms();
-				calculateBondedAtoms(atoms);
+			CMLBondArray ba = mol.getBondArray();
+			if (ba != null) {
+				ba.indexBonds();
 			}
+			calculateBondedAtoms(atoms);
 		}
 	}
 
 	private void calculateBondedAtoms(List<CMLAtom> atoms) {
-		double[] radii = new double[atoms.size()];
-		for (int i = 0; i < atoms.size(); i++) {
-			String sym = ((CMLAtom) atoms.get(i)).getElementType();
-			radii[i] = this.getCovalentRadius(sym);
-		}
-
 		for (int i = 0; i < atoms.size(); i++) {
 			CMLAtom atomi = (CMLAtom) atoms.get(i);
 			for (int j = i + 1; j < atoms.size(); ++j) {
 				CMLAtom atomj = (CMLAtom) atoms.get(j);
-				if (CMLBond.areWithinBondingDistance(atomi, atomj, radii[i],
-						radii[j], ChemicalElement.getBondingRadiusTolerance())) {
+				if (CMLBond.areWithinBondingDistance(atomi, atomj)) {
 					molecule.addBond(new CMLBond(atomi, atomj));
 				}
 			}
@@ -1976,17 +1586,7 @@ public class MoleculeTool extends AbstractTool {
 	boolean calculateBondsToAndJoin(CMLMolecule molecule2) {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		List<CMLAtom> atoms2 = molecule2.getAtoms();
-		// List<CMLBond> bonds = getBonds();
-		double[] radiusi = new double[atoms.size()];
-		for (int i = 0; i < atoms.size(); i++) {
-			String sym = ((CMLAtom) atoms.get(i)).getElementType();
-			radiusi[i] = getCovalentRadius(sym);
-		}
-		double[] radiusj = new double[atoms2.size()];
-		for (int j = 0; j < atoms2.size(); j++) {
-			String sym = ((CMLAtom) atoms2.get(j)).getElementType();
-			radiusj[j] = getCovalentRadius(sym);
-		}
+
 		boolean madeBond = false;
 		int i = 0;
 		int idMax = this.getMaximumId("a");
@@ -1994,12 +1594,9 @@ public class MoleculeTool extends AbstractTool {
 			int j = 0;
 			for (CMLAtom atomj : atoms2) {
 				if (CMLBond
-						.areWithinBondingDistance(atomi, atomj, radiusi[i],
-								radiusj[j], ChemicalElement
-								.getBondingRadiusTolerance())) {
+						.areWithinBondingDistance(atomi, atomj)) {
 					madeBond = true;
-					if (CMLBond.areWithinBondingDistance(atomi, atomj, 0.1,
-							0.1, ChemicalElement.getBondingRadiusTolerance())) {
+					if (atomi.getDistanceTo(atomj) < 0.2) {
 						// remove overlapping atoms
 						atomj.detach();
 						System.out
@@ -2119,105 +1716,6 @@ public class MoleculeTool extends AbstractTool {
 		return targetBond;
 	}
 
-	// ============ atom matcher ==============
-	/**
-	 * finds a pair with neighbours that map to each other can be called
-	 * iteratively until returns null
-	 *
-	 * @param atomSet1
-	 *            to match
-	 * @param atomSet2
-	 *            diminished if match found
-	 * @param from1to2map
-	 *            the mapping from atomSet1 to atomSet2 (i.e. from ids in
-	 *            atomSet1, to in atomSet2)
-	 * @param atomMatcher
-	 * @return pair of matched atoms
-	 *
-	 */
-	// FIXME
-	@SuppressWarnings("unused")
-	private AtomPair getAtomsWithSameMappedNeighbours00(
-			AtomMatcher atomMatcher, CMLAtomSet atomSet1, CMLAtomSet atomSet2,
-			CMLMap from1to2map) {
-
-		Set<CMLAtom> matchingSet = new HashSet<CMLAtom>();
-		AtomPair pair = null;
-		for (CMLAtom atom : atomSet1.getAtoms()) {
-			if (atomMatcher.skipAtom(atom)) {
-				continue;
-			}
-			matchingSet.add(atom);
-		}
-
-		for (CMLAtom atom : atomSet2.getAtoms()) {
-			String elementType2 = atom.getElementType();
-			if (atomMatcher.skipAtom(atom)) {
-				continue;
-			}
-
-			CMLAtomSet ligand2Set = new CMLAtomSet(atom.getLigandAtoms());
-
-			// for each ligandList or atom2 loop through all atom1s to find
-			// match
-			// which has most ligands?
-			// FIXME better - store all atoms with at least one ligand
-			List<CMLAtom> matchAtomList = new ArrayList<CMLAtom>();
-			int maxLigands = 0;
-			CMLAtom mostLigandedAtom1 = null;
-			for (int j = 0; j < atomSet1.size(); j++) {
-				CMLAtom atom1 = (CMLAtom) atomSet1.getAtom(j);
-				if (atomMatcher.skipAtom(atom1)) {
-					continue;
-				}
-				String elementType1 = atom1.getElementType();
-				// atoms must match type
-				if (!elementType1.equals(elementType2)) {
-					continue;
-				}
-				int ligandCount = 0;
-				List<CMLAtom> ligandList = atom1.getLigandAtoms();
-				for (CMLAtom ligandAtom1 : ligandList) {
-					if (!atomMatcher.skipLigandAtom(ligandAtom1)) {
-						String id1 = ligandAtom1.getId();
-						String id2 = from1to2map.getRef(id1,
-								CMLMap.Direction.FROM);
-						// does id2 exist and is it a ligand of atom 2
-						if (id2 != null && ligand2Set.getAtomById(id2) != null) {
-							ligandCount++;
-						}
-					}
-				}
-				if (ligandCount > maxLigands) {
-					maxLigands = ligandCount;
-					mostLigandedAtom1 = atom1;
-				}
-				if (ligandCount > 0) {
-					matchAtomList.add(atom1);
-				}
-
-			}
-			// ligand atoms in common?
-			//
-			if (matchAtomList.size() == 1) {
-				CMLAtom matchAtom1 = matchAtomList.get(0);
-				pair = new AtomPair(matchAtom1, atom);
-				atomSet1.removeAtom(matchAtom1);
-				atomSet2.removeAtom(atom);
-				break;
-				// old method
-			} else if (false && mostLigandedAtom1 != null) {
-				pair = new AtomPair(mostLigandedAtom1, atom);
-				atomSet1.removeAtom(mostLigandedAtom1);
-				atomSet2.removeAtom(atom);
-				break;
-			} else {
-				pair = null;
-			}
-		}
-		return pair;
-	}
-
 	/**
 	 * make sub molecule.
 	 *
@@ -2253,17 +1751,6 @@ public class MoleculeTool extends AbstractTool {
 		.getSymmetryContactsToMolecule(dist2Range);
 		Collections.sort(contactList);
 		return contactList;
-	}
-
-	/**
-	 * add double bonds through PiSystemManager.
-	 */
-	public void adjustBondOrdersAndChargesToValency(CMLFormula moietyFormula) {
-		PiSystemManager piSystemManager = new PiSystemManager();
-		piSystemManager.setUpdateBonds(true);
-		piSystemManager.setKnownUnpaired(0);
-		piSystemManager.setDistributeCharge(true);
-		this.adjustBondOrdersAndChargesToValency(piSystemManager, moietyFormula);
 	}
 
 	/**
