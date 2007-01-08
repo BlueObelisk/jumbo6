@@ -1,10 +1,14 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import nu.xom.Node;
 
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
@@ -92,12 +96,6 @@ public class DisorderTool extends AbstractTool {
 			}
 		}
 	}
-	
-	private boolean	processAssemblyWithLessThan2Groups(DisorderAssembly disorderAssembly) {
-		System.out.println(disorderAssembly.getAssemblyCode());
-		System.out.println(disorderAssembly.toString());
-		return true;
-	}
 
 	/**
 	 * checks that the disorder complies with the CIF specification.
@@ -113,15 +111,20 @@ public class DisorderTool extends AbstractTool {
 			List<DisorderAssembly> disorderAssemblyList) {
 		ProcessControl pControl = disorderManager.getProcessControl();
 		boolean metadataSet = false;
+		List<DisorderAssembly> failedAssemblyList = new ArrayList<DisorderAssembly>();
+		List<DisorderAssembly> finishedAssemblyList = new ArrayList<DisorderAssembly>();
 		for (DisorderAssembly da : disorderAssemblyList) {
 			List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
 			if (disorderGroupList.size() < 2) {
 				if (ProcessControl.LOOSE.equals(pControl)) {
-					boolean success = processAssemblyWithLessThan2Groups(da);
-					if (!metadataSet && success) {
+					failedAssemblyList.add(da);
+					continue;
+					/*
+					if (!metadataSet) {
 						addDisorderMetadata(false);
 						metadataSet = true;
 					}
+					*/
 				} else if (ProcessControl.STRICT.equals(pControl)) {
 					throw new CMLRuntimeException(
 							"Disorder assembly should contain at least 2 disorder groups: "
@@ -132,10 +135,14 @@ public class DisorderTool extends AbstractTool {
 			for (CMLAtom commonAtom : commonAtoms) {
 				if (!CrystalTool.hasUnitOccupancy(commonAtom)) {
 					if (ProcessControl.LOOSE.equals(pControl)) {
+						failedAssemblyList.add(da);
+						continue;
+						/*
 						if (!metadataSet) {
 							addDisorderMetadata(false);
 							metadataSet = true;
 						}
+						*/
 					} else if (ProcessControl.STRICT.equals(pControl)) {
 						throw new CMLRuntimeException(
 								"Common atoms require unit occupancy: "
@@ -150,10 +157,14 @@ public class DisorderTool extends AbstractTool {
 				for (CMLAtom atom : atomList) {
 					if (CrystalTool.hasUnitOccupancy(atom)) {
 						if (ProcessControl.LOOSE.equals(pControl)) {
+							failedAssemblyList.add(da);
+							continue;
+							/*
 							if (!metadataSet) {
 								addDisorderMetadata(false);
 								metadataSet = true;
 							}
+							*/
 						} else if (ProcessControl.STRICT.equals(pControl)) {
 							throw new CMLRuntimeException("Atom, "
 									+ atom.getId() + ", in disorder group, "
@@ -163,10 +174,14 @@ public class DisorderTool extends AbstractTool {
 					}
 					if (Math.abs(atom.getOccupancy() - dg.getOccupancy()) > CrystalTool.OCCUPANCY_EPS) {
 						if (ProcessControl.LOOSE.equals(pControl)) {
+							failedAssemblyList.add(da);
+							continue;
+							/*
 							if (!metadataSet) {
 								addDisorderMetadata(false);
 								metadataSet = true;
 							}
+							*/
 						} else if (ProcessControl.STRICT.equals(pControl)) {
 							throw new CMLRuntimeException(
 									"Atom "
@@ -181,14 +196,75 @@ public class DisorderTool extends AbstractTool {
 					}
 				}
 			}
+			finishedAssemblyList.add(da);
 		}
+		// attempt to reconcile errors in disorder assemblies
+		if (failedAssemblyList.size() > 0) {
+			fixFailedAssemblies(failedAssemblyList);
+		}
+		// if process reaches this point then failed assemblies have been
+		// fixed - add them to finished list
+		finishedAssemblyList.addAll(failedAssemblyList);
 		// if the process reaches this point without an error being thrown then
 		// the disorder can be processed. Add metadata to say so!
-		if (ProcessControl.STRICT.equals(pControl)) {
-			addDisorderMetadata(true);
-			metadataSet = true;
+		addDisorderMetadata(true);
+		metadataSet = true;
+		return finishedAssemblyList;
+	}
+
+	private void fixFailedAssemblies(List<DisorderAssembly> failedAssemblyList) {
+		// aggregate all disordered atoms from the failed assemblies
+		List<CMLAtom> disorderedAtoms = new ArrayList<CMLAtom>();
+		for (DisorderAssembly failedAssembly : failedAssemblyList) {
+			disorderedAtoms.addAll(failedAssembly.getCommonAtoms());
+			for (DisorderGroup group : failedAssembly.getDisorderGroupList()) {
+				// test to see if any of the lists has occupancy of 0.5.  If so then throw
+				// exception as we cannot be confident of getting the proper structure if there
+				// are more than one assemblies with this occupancy
+				if (group.getOccupancy() == 0.5) {
+					throw new CMLRuntimeException("Cannot fix disorder - found group"
+							+" with occupancy of 0.5");
+					
+				}
+				disorderedAtoms.addAll(group.getAtomList());
+			}
 		}
-		return disorderAssemblyList;
+		// attempt to resolve failed assemblies, by first splitting the atoms into
+		// lists of similar occupancy.  Then test to see if there are 2 or more that
+		// add up to unity (fail if not so or if any lists left over)
+		Map<Double, List<CMLAtom>> atomMap = new HashMap<Double, List<CMLAtom>>();
+		for (CMLAtom disorderedAtom : disorderedAtoms) {
+			boolean added = false;
+			double occupancy = disorderedAtom.getOccupancy();
+			// if atom has unit occupancy then we can ignore it for the rest of 
+			// the method
+			if (Math.abs(1.0 - occupancy) < CrystalTool.OCCUPANCY_EPS) {
+						continue;
+					}
+			Iterator it = atomMap.entrySet().iterator();
+			// counter to make sure the same atom isn't added to two different
+			// lists
+			int addedCount = 0;
+			while(it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				if (Math.abs((Double)entry.getKey() - occupancy) < CrystalTool.OCCUPANCY_EPS) {
+					((List<CMLAtom>)entry.getValue()).add(disorderedAtom);
+					added = true;
+					addedCount++;
+				}
+			}
+			// if atom added to more than one list then throw exception
+			if (addedCount > 1) throw new CMLRuntimeException("Cannot resolve disorder");
+			if (added) continue;
+			List<CMLAtom> newList = new ArrayList<CMLAtom>();
+			newList.add(disorderedAtom);
+			atomMap.put(occupancy, newList);
+		}
+		reassignDisorderGroups(atomMap);
+	}
+	
+	private void reassignDisorderGroups(Map<Double, List<CMLAtom>> atomMap) {
+		
 	}
 
 	private void addDisorderMetadata(boolean processed) {
