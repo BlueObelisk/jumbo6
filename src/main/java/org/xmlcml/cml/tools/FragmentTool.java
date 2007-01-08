@@ -9,6 +9,7 @@ import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
@@ -19,6 +20,7 @@ import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CountExpressionAttribute;
 import org.xmlcml.cml.element.IdAttribute;
@@ -328,8 +330,8 @@ class BasicProcessor implements CMLConstants {
         	if (markushs.size() > 1) {
         		throw new CMLRuntimeException("Can only process one Markush child");
         	}
-        	CMLFragmentList markush = (CMLFragmentList)markushs.get(0);
-        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(markush, catalog);
+        	CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
+        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
 	        fragment.setConvention(Convention.PML_PROCESSED.value);
         } else {
 	        fragmentTool.substituteFragmentRefsRecursively(3);
@@ -345,12 +347,12 @@ class BasicProcessor implements CMLConstants {
     /** generate fragmentList from fragment.
      * creates M * N * P ... fragments in a fragmentList
      * 
-     * @param markushFragmentList
+     * @param expandableMarkush
      * @param catalog
      * @return generated fragmentList
      */
     private CMLFragmentList generateFragmentListFromMarkushGroupsAndTarget(
-		CMLFragmentList markushFragmentList, Catalog catalog) {
+		CMLFragmentList expandableMarkush, Catalog catalog) {
 //    	fragment
 //    		fragmentList (refs)
 //    		fragmentList role='markush'
@@ -359,33 +361,51 @@ class BasicProcessor implements CMLConstants {
 //    				...
 //    				fragment ref=...fragmentList => markushList
 
-    	
-    	// should have 1 or more fragmentLists and one fragment
-        List<Node> markushLists = CMLUtil.getQueryNodes(
-        		markushFragmentList, CMLFragmentList.NS+"[@role='markushList']", X_CML);
+    	// referenceFragmentList
         List<Node> referenceFragmentLists = CMLUtil.getQueryNodes(
         		fragment, CMLFragmentList.NS+"[not(@role='markush')]", X_CML);
-        List<Node> markushTargets = CMLUtil.getQueryNodes(
-        		markushFragmentList, CMLFragment.NS+"[@role='markushTarget']", X_CML);
-        // checks
-        if (markushLists.size() == 0) {
-        	throw new CMLRuntimeException("No markushLists given");
-        } else {
-//        	System.out.println("found markushLists: "+markushLists.size());
-        }
         if (referenceFragmentLists.size() != 1) {
         	throw new CMLRuntimeException(
         		"Must have exactly one referenceFragmentList; was: "+referenceFragmentLists.size());
         }
+        
+    	// should have 1 or more fragmentLists and one fragment
+        List<Node> markushListsOrMixtures = CMLUtil.getQueryNodes(
+        		expandableMarkush, CMLFragmentList.NS+
+        		    "[@role='markushList' or @role='markushMixture']", X_CML);
+        List<Node> markushTargets = CMLUtil.getQueryNodes(
+        		expandableMarkush, CMLFragment.NS+"[@role='markushTarget']", X_CML);
+        // checks
+        if (markushListsOrMixtures.size() == 0) {
+        	throw new CMLRuntimeException("No markushLists or markushMixtures given");
+        }
         if (markushTargets.size() != 1) {
         	throw new CMLRuntimeException("Must have exactly one markushTarget");
         }
-    	CMLFragmentList generatedFragmentList = multipleMarkush(markushLists, catalog);
+    	String role = ((CMLFragmentList)markushListsOrMixtures.get(0)).getRole();
+    	if (role == null) {
+    		throw new CMLRuntimeException("must give role attribute on fragmentList");
+    	}
+    	CMLFragmentList generatedFragmentList = null;
+    	if (role.equals("markushList")) {
+    		generatedFragmentList = multipleMarkush(markushListsOrMixtures, catalog);
+    	} else if (role.equals("markushMixture")) {
+    		CMLFragment markushTarget = (CMLFragment) markushTargets.get(0);
+    		CountExpressionAttribute cea = 
+    			(CountExpressionAttribute) markushTarget.getCountExpressionAttribute();
+    		if (cea == null) {
+    			throw new CMLRuntimeException("must have count expression for mixture");
+    		}
+    		cea.detach();
+    		int count = cea.calculateCountExpression();
+    		generatedFragmentList = markushMixture(markushListsOrMixtures, catalog, count);
+    	} else {
+    		throw new CMLRuntimeException("Unknown role: "+role);
+    	}
         return generatedFragmentList;
     }
     
-    private CMLFragmentList multipleMarkush(
-    		List<Node> markushLists, Catalog catalog) {
+    private CMLFragmentList multipleMarkush(List<Node> markushLists, Catalog catalog) {
     	
     	List<List<CMLFragment>> cartesianProductList = new ArrayList<List<CMLFragment>>();
     	// seed with new zero-length list
@@ -414,9 +434,62 @@ class BasicProcessor implements CMLConstants {
         	FragmentTool newFragmentTool = new FragmentTool(newFragment);
         	newFragmentTool.processAll(catalog);
         	generatedFragmentList.addFragment(newFragment);
-//        	System.out.println("made fragment: "+newFragment.getId());
         }
     	return generatedFragmentList;
+    }
+    
+    private CMLFragmentList markushMixture(
+    		List<Node> markushLists, Catalog catalog, int count) {
+    	
+    	CMLFragmentList generatedFragmentList = new CMLFragmentList();
+    	for (int i = 0; i < count; i++) {
+    		List<CMLFragment> markushGroupList = new ArrayList<CMLFragment>();
+    		for (Node node : markushLists) {
+    			CMLFragmentList markushList = new CMLFragmentList((CMLFragmentList) node);
+    			CMLFragment randomFragment = getRandomFragment(markushList);
+    			markushGroupList.add(randomFragment);
+        	}
+        	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
+        	if (newFragment != null) {
+	        	FragmentTool newFragmentTool = new FragmentTool(newFragment);
+	        	newFragmentTool.processAll(catalog);
+	        	generatedFragmentList.addFragment(newFragment);
+        	} else {
+        		System.out.println("NULL "+i);
+        	}
+    	}
+    	return generatedFragmentList;
+    }
+    
+    private CMLFragment getRandomFragment(CMLFragmentList markushList) {
+    	CMLElements<CMLFragment> fragments = markushList.getFragmentElements();
+    	double sum = 0.0;
+    	int nFragments = fragments.size();
+    	double[] ratios = new double[nFragments];
+    	int i = 0;
+    	for (CMLFragment fragment : fragments) {
+    		CMLScalar scalar = (CMLScalar) fragment.getFirstCMLChild(CMLScalar.TAG);
+    		if (scalar == null) {
+    			throw new CMLRuntimeException("must have scalar child");
+    		}
+    		ratios[i] = scalar.getDouble();
+    		if (Double.isNaN(ratios[i])) {
+    			scalar.debug("DDDD");
+    			throw new CMLRuntimeException("scalar must have double value");
+    		}
+    		sum += ratios[i];
+    		i++;
+    	}
+    	// get random fragment
+    	double rand = Math.random()*sum;
+    	int j = nFragments - 1;
+    	for (i = 0; i < nFragments; i++) {
+    		if (rand < ratios[i]) {
+    			j = i;
+    			break;
+    		}
+    	}
+    	return fragments.get(j);
     }
     
     private CMLFragment createSingleBasicFragment(List<CMLFragment> markushGroupList) {
@@ -427,22 +500,27 @@ class BasicProcessor implements CMLConstants {
         CMLFragmentList markush = (CMLFragmentList) CMLUtil.getQueryNodes(
         		newFragment, CMLFragmentList.NS+"[@role='markush']", X_CML).get(0);
         List<Node> markushGroupLists = CMLUtil.getQueryNodes(
-        		markush, CMLFragmentList.NS+"[@role='markushList']", X_CML);
+        		markush, CMLFragmentList.NS+
+        		"[@role='markushList' or @role='markushMixture']", X_CML);
         for (Node node : markushGroupLists) {
         	node.detach();
         }
-//        CMLFragment markushTarget = (CMLFragment) CMLUtil.getQueryNodes(
-//        		markush, CMLFragment.NS+"[@role='markushTarget']", X_CML).get(0);
         // add single markush group to reference
         int i = 0;
         String newFragmentId = S_EMPTY;
+        boolean failed = false;
         for (CMLFragment markushFragment : markushGroupList) {
+        	if (markushFragment == null) {
+        		failed = true;
+        		break;
+        	}
         	CMLFragment referenceFragment = new CMLFragment();
 	        String ref = markushFragment.getRef();
 	        newFragmentId += (i == 0) ? ref : S_UNDER + ref;
 	        String markushId = ((CMLFragmentList) markushGroupLists.get(i)).getId();
 	        referenceFragment.setId(markushId);
 	        markushFragment.detach();
+//	        markushFragment.removeChildren();
 	        referenceFragment.appendChild(markushFragment);
 	        referenceFragmentList.appendChild(referenceFragment);
 	        // replace the markush
@@ -450,6 +528,9 @@ class BasicProcessor implements CMLConstants {
 	        i++;
         }
         newFragment.setId(newFragmentId);
+        if (failed) {
+        	newFragment = null;
+        }
         return newFragment;
     }
     
