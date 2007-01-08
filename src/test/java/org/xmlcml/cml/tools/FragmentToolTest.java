@@ -3,8 +3,6 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
-
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -3755,7 +3753,7 @@ public class FragmentToolTest extends AbstractTest {
 	public void test20_() {
 		testAll20();
 		testAll21();
-//		testAll22();
+		testAll22();
 //		testAll23();
 //		testAll24();
 	}
@@ -3925,6 +3923,112 @@ public class FragmentToolTest extends AbstractTest {
 				"<foo/>";
 			
 		testAll(fragment, debug, 21,
+				intermediateS, explicitS, completeS, check);
+	}
+
+	private CMLFragment makeMol22() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='f'>"+
+		"      <molecule ref='g:f'/>" +
+		"    </fragment>"+
+		"    <fragment id='br'>"+
+		"      <molecule ref='g:br'/>" +
+		"    </fragment>"+
+		"    <fragment id='cl'>"+
+		"      <molecule ref='g:cl'/>" +
+		"    </fragment>"+
+		"    <fragment id='nsp2'>"+
+		"      <molecule ref='g:nsp2'/>" +
+		"    </fragment>"+
+		"    <fragment id='oh'>"+
+		"      <molecule ref='g:oh'/>" +
+		"    </fragment>"+
+		"    <fragment id='ethyl'>"+
+		"      <molecule ref='g:et'/>" +
+		"    </fragment>"+
+		"    <fragment id='methyl'>"+
+		"      <molecule ref='g:me'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"  </fragmentList>" +
+		"  <fragmentList role='markush'>" +
+		"    <fragmentList role='markushMixture' id='halogen'>" +
+		"      <fragment ref='f'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.2</scalar>" +
+		"      </fragment>" +
+		"      <fragment ref='cl'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.5</scalar>" +
+		"      </fragment>" +
+		"      <fragment ref='br'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.3</scalar>" +
+		"      </fragment>" +
+		"    </fragmentList>" +
+		"    <fragmentList role='markushMixture' id='polar'>" +
+		"      <fragment ref='nsp2'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.7</scalar>" +
+		"      </fragment>" +
+		"      <fragment ref='oh'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.3</scalar>" +
+		"      </fragment>" +
+		"    </fragmentList>" +
+		"    <fragmentList role='markushMixture' id='alkyl'>" +
+		"      <fragment ref='ethyl'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.4</scalar>" +
+		"      </fragment>" +
+		"      <fragment ref='methyl'>" +
+		"        <scalar dictRef='cml:ratio' dataType='xsd:double'>0.6</scalar>" +
+		"      </fragment>" +
+		"    </fragmentList>" +
+		"    <fragment role='markushTarget' countExpression='*(15)'>"+
+		"      <molecule ref='g:benzene'>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r1 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='halogen'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='polar'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"        <join moleculeRefs2='PARENT CHILD' atomRefs2='r5 r1'>" +
+		"          <torsion>45</torsion>" +
+		"          <fragment>" +
+		"            <fragment ref='alkyl'/>"+
+		"          </fragment>"+
+		"        </join>" +
+		"      </molecule>"+
+		"    </fragment>"+
+		"  </fragmentList>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+//	@Ignore
+	public void testAll22() {
+		CMLFragment fragment = makeMol22();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 22,
 				intermediateS, explicitS, completeS, check);
 	}
 
@@ -4774,7 +4878,7 @@ public class FragmentToolTest extends AbstractTest {
 	@Test
 	@Ignore
 	public void testExpandCountExpressions() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	/**
@@ -4783,7 +4887,7 @@ public class FragmentToolTest extends AbstractTest {
 	@Test
 	@Ignore
 	public void testRecursivelyCreateAtomsRefs2OnJoins() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 //	/** test expandJoinedList.
