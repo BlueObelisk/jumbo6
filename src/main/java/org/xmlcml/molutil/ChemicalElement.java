@@ -476,60 +476,6 @@ public class ChemicalElement {
 		return isType;
 	}
 
-		//	private void addDoubleBonds(Set<CMLAtom> ringSet, CMLAtom atom) {
-	//		boolean doubleB = true;
-	//		while (ringSet.size() > 1) {
-	//			List<CMLAtom> ligandList = atom.getLigandAtoms();
-	//			List<CMLBond> ligandBondList = atom.getLigandBonds();
-	//			ringSet.remove(atom);
-	//			int i = 0;
-	//			for (CMLAtom ligand : ligandList) {
-	//				if (ringSet.contains(ligand)) {
-	//					if (doubleB) {
-	//						CMLBond bond = ligandBondList.get(i);
-	//						bond.setOrder(CMLBond.DOUBLE);
-	//					}
-	//					doubleB = !doubleB;
-	//					atom = ligand;
-	//					break;
-	//				}
-	//				i++;
-	//			}
-	//		}
-	//	}
-	//
-	//	private boolean addNextAtom(CMLAtom atom, Set<CMLAtom> ringSet) {
-	//		if (atom == null) {
-	//			throw new CMLRuntimeException("Null atom");
-	//		}
-	//		boolean added = false;
-	//		if (!ringSet.contains(atom)) {
-	//			added = true;
-	//			ringSet.add(atom);
-	//			List<CMLAtom> ligands = atom.getLigandAtoms();
-	//			if ("C".equals(atom.getElementType()) && ligands.size() == 3) {
-	//				List<CMLBond> bonds = atom.getLigandBonds();
-	//				List<CMLAtom> cAtomList = new ArrayList<CMLAtom>();
-	//				for (int i = 0; i < bonds.size(); i++) {
-	//					CMLBond bond = bonds.get(i);
-	//					if (CMLBond.CYCLIC.equals(bond.getCyclic())) {
-	//						CMLAtom otherAtom = bond.getOtherAtom(atom);
-	//						if (otherAtom == null) {
-	//							throw new CMLRuntimeException("null atom in bond");
-	//						}
-	//						cAtomList.add(otherAtom);
-	//					}
-	//				}
-	//				if (cAtomList.size() == 2) {
-	//					for (CMLAtom cAtom : cAtomList) {
-	//						addNextAtom(cAtom, ringSet);
-	//					}
-	//				}
-	//			}
-	//		}
-	//		return added;
-	//	}
-	//
 		/**
 		 * is element of given type.
 		 * @param type

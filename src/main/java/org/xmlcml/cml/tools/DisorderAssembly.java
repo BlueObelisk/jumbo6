@@ -89,6 +89,9 @@ public class DisorderAssembly implements CMLConstants {
      * @return list of atoms flagged as disordered
      */
     public static List<CMLAtom> getDisorderedAtoms(CMLMolecule molecule) {
+    	if(molecule == null) {
+    		throw new IllegalArgumentException("Molecule must not be null");
+    	}
         Nodes nodes = molecule.query(
             ".//"+CMLAtom.NS+"["+CMLScalar.NS+"[" +
             "contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
@@ -97,6 +100,7 @@ public class DisorderAssembly implements CMLConstants {
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         for (int i = 0; i < nodes.size(); i++) {
             atomList.add((CMLAtom) nodes.get(i));
+            //System.out.println("disordered atom: "+((CMLAtom) nodes.get(i)).getId());
         }
         
         return atomList;
@@ -149,8 +153,9 @@ public class DisorderAssembly implements CMLConstants {
      * @return code or null if indterminate
      */
     public static String getAtomCode(CMLAtom atom) {
-    	return CrystalTool.getValue(atom,
+    	String atomCode = CrystalTool.getValue(atom,
     			CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"']");
+    	return (atomCode != null) ? atomCode : ".";
     }
     
     /** gets assembly code

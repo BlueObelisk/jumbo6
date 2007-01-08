@@ -59,7 +59,7 @@ public class CrystalTool extends AbstractTool {
 
     /** tolerance for comparing occupancies.
      */
-    public final static double OCCUPANCY_EPS = 0.0001;
+    public final static double OCCUPANCY_EPS = 0.005;
     
     CMLMolecule molecule;
     MoleculeTool moleculeTool = null;
@@ -169,7 +169,7 @@ public class CrystalTool extends AbstractTool {
             molecule, contactList, addBonds);
 
         for (CMLMolecule mol : mergedMolecule.getDescendantsOrMolecule()) {
-        	if (!MoleculeTool.isDisordered(mol)) {
+        	if (!DisorderTool.isDisordered(mol)) {
         		ValencyTool subMolTool = new ValencyTool(mol);
         		subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
         	} else {
