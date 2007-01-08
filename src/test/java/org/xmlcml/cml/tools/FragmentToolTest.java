@@ -4032,6 +4032,41 @@ public class FragmentToolTest extends AbstractTest {
 				intermediateS, explicitS, completeS, check);
 	}
 
+	// polyinfo examples
+	private CMLFragment makeMol30() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='p129'>"+
+		"      <molecule ref='g:ch2'/>" +
+		"    </fragment>"+
+		"    <fragment id='p708'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>" +
+		"  </fragmentList>"+
+		"  <fragment countExpression='*(10)'>" +
+		"    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>" +
+		"      <torsion>180</torsion>" +
+		"    </join>"+
+		"    <fragment>" +
+		"      <fragment>" +
+		"        <molecule ref='g:ch'>" +
+		"          <join moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>" +
+		"            <fragment ref='p708'/>"+
+		"          </join>" +
+		"        </molecule>"+
+		"      </fragment>" +
+		"      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='p129'/>"+
+		"    </fragment>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
 
 	private CMLFragment makeMol23() {
 		// 
@@ -4103,6 +4138,27 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 
+	@Test
+//	@Ignore
+	public void testAll30() {
+		CMLFragment fragment = makeMol30();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 30,
+				intermediateS, explicitS, completeS, check);
+	}
+
+
+	
 	/** tests second ten examples
 	 */
 	@Test
