@@ -37,7 +37,7 @@ public class ValencyTool extends AbstractTool {
 	private MoleculeTool moleculeTool;
 	private String formulaS;
 	
-	private List<CMLAtom> alreadySetAtoms;
+	private List<CMLAtom> alreadySetAtoms = new ArrayList<CMLAtom>();
 	
 	public ValencyTool(CMLMolecule molecule) {
 		this.molecule = molecule;
@@ -138,9 +138,8 @@ public class ValencyTool extends AbstractTool {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
 			if (atom.getElementType().equals(elementType)) {
-				atom.setFormalCharge(charge);
+				this.setAtomCharge(atom, charge);
 			}
-			alreadySetAtoms.add(atom);
 		}
 	}
 	/**
@@ -150,8 +149,6 @@ public class ValencyTool extends AbstractTool {
 	 * 
 	 */
 	public void markupSpecial() {
-		alreadySetAtoms = new ArrayList<CMLAtom>();
-		
 		List<CMLAtom> atoms = molecule.getAtoms();
 		this.markCarboxyAnion(atoms);
 		this.markCS2(atoms);
@@ -187,6 +184,9 @@ public class ValencyTool extends AbstractTool {
 		if (formulaS.equals("C 2 N 3")) {
 			this.markNCNCN(atoms);
 		}
+		if (formulaS.equals("N 1 O 1")) {
+			this.markNO(atoms);
+		}
 	}
 
 	void addDoubleCharge(String centralS, int centralCharge,
@@ -210,19 +210,28 @@ public class ValencyTool extends AbstractTool {
 	private void addDoubleCharge(CMLAtom centralA, int centralCharge,
 			String ligandS, int nChargeLigand) {
 		List<CMLAtom> atoms = molecule.getAtoms();
-		centralA.setFormalCharge(centralCharge);
+		this.setAtomCharge(centralA, centralCharge);
 		int count = 0;
 		for (CMLAtom atom : atoms) {
 			if (ligandS.equals(atom.getElementType())) {
 				int bos = moleculeTool.getBondOrderSum(atom);
 				if (bos == 1) {
 					if (count++ < nChargeLigand) {
-						atom.setFormalCharge(-1);
+						this.setAtomCharge(atom, -1);
 					} else {
 						molecule.getBond(centralA, atom).setOrder(
 								CMLBond.DOUBLE);
 					}
 				}
+			}
+		}
+	}
+	
+	void markNO(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if ("O".equals(atom.getElementType())) {
+				atom.setFormalCharge(1);
+				atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
 			}
 		}
 	}
@@ -983,7 +992,7 @@ public class ValencyTool extends AbstractTool {
 									for (CMLAtom ligand : piAtom.getLigandAtoms()) {
 										if ("N".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
 											ligand.setFormalCharge(+1);
-											CMLBond bond = molecule.getBond(piAtom, ligand);
+											CMLBond bond = subMol.getBond(piAtom, ligand);
 											bond.setOrder(CMLBond.DOUBLE);
 											singleBonds.remove(bond);
 											alreadySetAtoms.add(piAtom);
