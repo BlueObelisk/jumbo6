@@ -345,9 +345,9 @@ public class CrystalToolTest extends AbstractToolTest {
 //            user = null;
         }
 
-        CMLLog log = new CMLLog();
+        //CMLLog log = new CMLLog();
         if (user == null) return;
-        log.add("USER "+user);
+        //log.add("USER "+user);
 
         List<String> cifPathList = getCifPathList(user);
         
@@ -361,6 +361,7 @@ public class CrystalToolTest extends AbstractToolTest {
         cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
         int count = 0;
         int MAX = 1000;
+        StringBuffer sb = new StringBuffer();
         for (String filename : cifPathList) {
             if (count++ >= MAX) break;
             int iCif = filename.indexOf(".cif");
@@ -370,7 +371,7 @@ public class CrystalToolTest extends AbstractToolTest {
             String cifname = filename.substring(0, iCif);
             cifname = cifname.substring(cifname.lastIndexOf(File.separator)+1);
             System.out.println("======================="+cifname+"=======================");
-            log.add("======================="+cifname+"=======================");
+            //log.add("======================="+cifname+"=======================");
             boolean skip =
 //                true ||
                     "br6199sup1".equals(cifname) ||
@@ -394,7 +395,7 @@ public class CrystalToolTest extends AbstractToolTest {
                 cifConverter.parseLegacy(new FileReader(filename));
             } catch (Exception e) {
             	e.printStackTrace();
-                log.add(e, " in "+cifname);
+                //log.add(e, " in "+cifname);
                 continue;
             }
             if (cifname.endsWith("sup1")) {
@@ -407,7 +408,7 @@ public class CrystalToolTest extends AbstractToolTest {
                 mol++;
                 try {
                     CMLMolecule molecule = getMolecule(cml);
-                    molecule.setLog(log);
+                    //molecule.setLog(log);
                     MoleculeTool moleculeTool = new MoleculeTool(molecule);
                     
                     moleculeTool.createCartesiansFromFractionals();
@@ -416,6 +417,7 @@ public class CrystalToolTest extends AbstractToolTest {
 						moleculeTool.processDisorder(RemoveDisorderControl.REMOVE_MINOR_DISORDER);
 					} catch (Exception e) {
 						System.err.println("Problem processing disorder: "+e.getMessage());
+						sb.append(filename+"\n");
 						continue;
 					}
 					// at this point no bonds have been calculated
@@ -438,7 +440,7 @@ public class CrystalToolTest extends AbstractToolTest {
                         continue;
                     }
                     // full cif
-                    writeXML(getCrystalName(user, cifname+S_UNDER+mol), mergedMolecule, log, "full cif");
+                    writeXML(getCrystalName(user, cifname+S_UNDER+mol), mergedMolecule, "full cif");
                     // ring nuclei
                     //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
                     // atom centered species
@@ -459,19 +461,37 @@ public class CrystalToolTest extends AbstractToolTest {
         }
         String dir = getDir(user);
         try {
+            File file = new File("E:/disordered-cifs.txt");
+            FileWriter out = new FileWriter(file);
+            out.write(sb.toString());
+            out.close();
+        } catch (IOException e) {
+            System.err.println("Unhandled exception:" + e.toString());
+        }
+        try {
             FileWriter fw = new FileWriter(dir+File.separator+"log.xml");
-            log.writeXML(fw);
+            //log.writeXML(fw);
             fw.close();
         } catch (Exception e) {
             throw new CMLRuntimeException("ERROR "+e);
         }
     }
     
-    private void writeXML(String filename, CMLMolecule molecule, CMLLog log, String message) {
+    private void writeCML(String filename, CMLCml cml, String message) {
+    	try {
+            File file = new File(filename);
+            cml.serialize(new FileOutputStream(file), 1);
+            //log.add(file, message);
+        } catch (IOException e) {
+            throw new CMLRuntimeException("ERROR "+e);
+        }
+    }
+    
+    private void writeXML(String filename, CMLMolecule molecule, String message) {
         try {
             File file = new File(filename);
             molecule.serialize(new FileOutputStream(file), 1);
-            log.add(file, message);
+            //log.add(file, message);
         } catch (IOException e) {
             throw new CMLRuntimeException("ERROR "+e);
         }
@@ -493,7 +513,8 @@ public class CrystalToolTest extends AbstractToolTest {
 	    	String inchi = igen.getInchi();
 	    	log.add("INCHI: "+inchi);
     	 } catch (Throwable e) {
-             log.add(e, "BUG ");
+    		 e.printStackTrace();
+             //log.add(e, "BUG ");
          }
     }
 
@@ -533,7 +554,7 @@ public class CrystalToolTest extends AbstractToolTest {
             for (CMLMolecule ringNucleus : ringNucleusList) {
                 nuc++;
                 writeXML(getOutfile(user, "nuc", cifname, mol, subMol, nuc),
-                        ringNucleus, log, "nucleus");
+                        ringNucleus, "nucleus");
                 
                 String outfile = getOutfile(user, "nuc", cifname+"_SP_", mol, subMol, nuc);
                 CMLAtomSet nucleus = new CMLAtomSet(subMolecule, ringNucleus.getAtomSet().getAtomIDs());
@@ -555,14 +576,14 @@ public class CrystalToolTest extends AbstractToolTest {
     
                 // sprout
                 CMLMolecule sprout = subMoleculeTool.sprout(nucleus);
-                writeXML(outfile, sprout, log, "sprout");
+                writeXML(outfile, sprout, "sprout");
             }
         }
     }
 
 	@SuppressWarnings("unused")
     private void outputAtomCenteredSpecies(
-            String outfile, MoleculeTool moleculeTool, CMLLog log) {
+            String outfile, MoleculeTool moleculeTool) {
         CMLMolecule molecule = moleculeTool.getMolecule();
         List<CMLAtom> atoms = molecule.getAtoms();
         int atomCount = 0;
@@ -575,7 +596,7 @@ public class CrystalToolTest extends AbstractToolTest {
                 singleAtomList.add(atom);
                 CMLAtomSet singleAtomSet = new CMLAtomSet(singleAtomList);
                 CMLMolecule atomSprout = moleculeTool.sprout(singleAtomSet);
-                writeXML(outfile, atomSprout, log, "atom sprout");
+                writeXML(outfile, atomSprout, "atom sprout");
                 
                 GeometryTool geometryTool = new GeometryTool(atomSprout);
                 // lengths 
@@ -614,7 +635,7 @@ public class CrystalToolTest extends AbstractToolTest {
         				CMLMolecule sproutCluster = new MoleculeTool(mol).sprout(clAtomSet);
         				if (sproutCluster != null) {
         					writeXML(getOutfile(user, "clust", cifname+"_clust", 0, 0, ++clust),
-        							sproutCluster, log, "nucleus");
+        							sproutCluster, "nucleus");
         				} else {
         					System.err.println("No atoms in cluster!"+cifname+S_UNDER+(clust-1));
         				}
@@ -639,7 +660,7 @@ public class CrystalToolTest extends AbstractToolTest {
             if (ligand.getAtomCount() >= 3) {
 //            ligand.debug();
                 writeXML(getOutfile(user, "ligand", cifname+"_lig", 0, 0, ++ligCount),
-                    ligand, log, "ligand");
+                    ligand, "ligand");
             }
         }
     }
@@ -647,7 +668,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-problems";
+            s = "E:\\cif-test3";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {
