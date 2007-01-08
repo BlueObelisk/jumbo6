@@ -4033,6 +4033,76 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 
+	private CMLFragment makeMol23() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='eo'>"+
+		"      <molecule ref='g:eo'/>" +
+		"    </fragment>"+
+		"    <fragment id='po'>"+
+		"      <molecule ref='g:po'/>" +
+		"    </fragment>"+
+		"    <fragment id='acetyl'>"+
+		"      <molecule ref='g:acetyl'/>" +
+		"    </fragment>"+
+		"    <fragment id='ethyl'>"+
+		"      <molecule ref='g:ethyl'/>" +
+		"    </fragment>"+
+		"    <fragment id='eo'>"+
+		"      <molecule ref='g:eo'/>" +
+		"    </fragment>"+
+		"    <fragment id='eoA'>" +
+		"      <fragment ref='eo'/>" +
+		"      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='AAA'/>"+
+		"    </fragment>"+
+		"    <fragment id='AAA'>" +
+		"      <fragmentList role='markushMixture'>" +
+		"        <fragment ref='eo'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.1</scalar>" +
+		"        </fragment>" +
+		"        <fragment ref='eoA'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.9</scalar>" +
+		"        </fragment>" +
+		"      </fragmentList>" +
+		"    </fragment>" +
+		"  </fragmentList>" +
+		"" +
+		"  <fragment>" +
+		"    <fragment>"+
+		"      <molecule ref='acetyl'/>" +
+		"    </fragment>" +
+		"    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"    <fragment ref='AAA'/>"+
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
+
+	@Test
+	@Ignore
+	public void testAll23() {
+		CMLFragment fragment = makeMol23();
+		boolean debug = false;
+		boolean check = false;
+		
+		String intermediateS = "" +
+		"<foo/>";
+		
+		String explicitS = "" +
+				"<foo/>";
+		String completeS = "" +
+				"<foo/>";
+			
+		testAll(fragment, debug, 23,
+				intermediateS, explicitS, completeS, check);
+	}
+
+
 	/** tests second ten examples
 	 */
 	@Test
