@@ -34,11 +34,8 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMetadata;
-import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
@@ -61,34 +58,6 @@ public class MoleculeTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
-	/**
-	 * control operations for removing disorder.
-	 */
-	public enum RemoveDisorderControl {
-		/** used with processDisorder to remove minor components. */
-		REMOVE_MINOR_DISORDER;
-		private RemoveDisorderControl() {
-		}
-	}
-
-	/**
-	 * control operations for removing disorder.
-	 */
-	public enum ProcessDisorderControl {
-		/**
-		 * used with processDisorder to handle disorder in a molecule. STRICT -
-		 * if the disorder does not comply with the CIF specification, then an
-		 * error is thrown. LOOSE - attempts to process disorder which deviates
-		 * from the CIF specification
-		 */
-
-		STRICT,
-		/** */
-		LOOSE;
-		private ProcessDisorderControl() {
-		}
-	}
-
 	CMLMolecule molecule;
 
 	/**
@@ -98,16 +67,6 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public MoleculeTool(CMLMolecule molecule) {
 		this.molecule = molecule;
-	}
-
-	/**
-	 * make molecule tool from a molecule.
-	 *
-	 * @param molecule
-	 * @return the tool
-	 */
-	static MoleculeTool createMoleculeTool(CMLMolecule molecule) {
-		return new MoleculeTool(molecule);
 	}
 
 	/**
@@ -1754,74 +1713,6 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	/**
-	 * analyze atoms with disorder flags.
-	 *
-	 * This may need to be rafactored to CIF Converter
-	 *
-	 * CIF currently provides two flags atom_disorder_assembly identifies
-	 * different independent groups atom_disorder_group identifies the different
-	 * instances of atoms within a single group from the CIF dictionary:
-	 *
-	 * ===atom_site_disorder_assembly
-	 *
-	 * _name _atom_site_disorder_assembly _category atom_site _type char _list
-	 * yes _list_reference _atom_site_label
-	 *
-	 * _example _detail A disordered methyl assembly with groups 1 and 2 B
-	 * disordered sites related by a mirror S disordered sites independent of
-	 * symmetry
-	 *
-	 * _definition A code which identifies a cluster of atoms that show
-	 * long-range positional disorder but are locally ordered. Within each such
-	 * cluster of atoms, _atom_site_disorder_group is used to identify the sites
-	 * that are simultaneously occupied. This field is only needed if there is
-	 * more than one cluster of disordered atoms showing independent local
-	 * order.
-	 *
-	 * ===atom_site_disorder_group
-	 *
-	 *
-	 * _name _atom_site_disorder_group _category atom_site _type char _list yes
-	 * _list_reference _atom_site_label
-	 *
-	 * _example _detail 1 unique disordered site in group 1 2 unique disordered
-	 * site in group 2 -1 symmetry-independent disordered site
-	 *
-	 * _definition A code which identifies a group of positionally disordered
-	 * atom sites that are locally simultaneously occupied. Atoms that are
-	 * positionally disordered over two or more sites (e.g. the hydrogen atoms
-	 * of a methyl group that exists in two orientations) can be assigned to two
-	 * or more groups. Sites belonging to the same group are simultaneously
-	 * occupied, but those belonging to different groups are not. A minus prefix
-	 * (e.g. "-1") is used to indicate sites disordered about a special
-	 * position.
-	 *
-	 * we analyse this as follows: if there is no disorder_assembly we assume a
-	 * single disorder_assembly containing all disordered atoms. if there are
-	 * several disorder_assemblies, each is treated separately. within a
-	 * disorderAssembly there must be 2 or more disorder_groups each group is a
-	 * separate locally disordered syste, which we describe by an atomSet. The
-	 * occupancies within in group must be identical. We also check for whether
-	 * the groups contain the same number of atoms and whether the occupancies
-	 * of the groups sum to 1.0
-	 *
-	 * At this stage it may not be known whether the assemblies are in different
-	 * chemical molecules. It is unusual for disorder_groups to belong to
-	 * different subMolecules though it could happen with partial proton
-	 * transfer
-	 *
-	 * @exception Exception
-	 * @return list of disorderAssembly
-	 */
-	private List<DisorderAssembly> getDisorderAssemblyList() {
-		List<CMLAtom> disorderedAtomList = DisorderAssembly
-		.getDisorderedAtoms(molecule);
-		List<DisorderAssembly> disorderAssemblyList = null;
-		disorderAssemblyList = DisorderAssembly.getDisorderedAssemblyList(disorderedAtomList);
-		return disorderAssemblyList;
-	}
-
-	/**
 	 * convenience method to get molecule or its child molecules as a list.
 	 *
 	 * @return list of either just the molecule (if no children) or list of the
@@ -1842,150 +1733,6 @@ public class MoleculeTool extends AbstractTool {
 	public void createCartesiansFromFractionals() throws CMLRuntimeException {
 		CMLCrystal crystal = CMLCrystal.getContainedCrystal(molecule);
 		molecule.createCartesiansFromFractionals(crystal);
-	}
-
-	/**
-	 * Processes crystallographic disorder.
-	 *
-	 * At present the only RemoveDisorderControl is to remove minor disorder.
-	 * These are components with occupancies <= 0.5.
-	 *
-	 * Can provide two different kinds of ProcessDisorderControl:
-	 * 1. STRICT - this tries to process the disorder as set out in the CIF
-	 * specification (http://www.iucr.org/iucr-top/cif/#spec) If it comes
-	 * across disorder which does not comply with the spec then throws an error.
-	 *
-	 * 2. LOOSE - this tries to process the disorder as with STRICT, but does
-	 * not throw an error if it comes across disorder not valid with respect
-	 * to the CIF spec.  Instead it tags the provided molecule with metadata
-	 * stating that the disorder cannot currently be processed and does nothing
-	 * more.
-	 *
-	 * NOTE: if the disorder is successfully processed then the molecule is
-	 * tagged with metadata stating that the molecule did contain disorder,
-	 * but has now been removed.
-	 *
-	 * @param pControl
-	 * @param rControl
-	 * @exception CMLRuntimeException
-	 */
-	public void processDisorder(ProcessDisorderControl pControl,
-			RemoveDisorderControl rControl) {
-
-		List<DisorderAssembly> disorderAssemblyList = null;
-		disorderAssemblyList = this.getDisorderAssemblyList();
-		disorderAssemblyList = checkDisorder(disorderAssemblyList, pControl);
-		if (rControl.equals(RemoveDisorderControl.REMOVE_MINOR_DISORDER)) {
-			for (DisorderAssembly assembly : disorderAssemblyList) {
-				assembly.removeMinorDisorder();
-			}
-		} else {
-			throw new CMLRuntimeException("Illegal RemoveDisorderControl: "
-					+ rControl);
-		}
-	}
-
-	/**
-	 * checks that the disorder complies with the CIF specification.
-	 * http://www.iucr.org/iucr-top/cif/#spec
-	 *
-	 * called only from processDisorder().
-	 *
-	 * @param disorderAssemblyList
-	 * @param pControl
-	 * @return list of disorder assemblies in the given molecule
-	 */
-	private List<DisorderAssembly> checkDisorder(
-			List<DisorderAssembly> disorderAssemblyList,
-			ProcessDisorderControl pControl) {
-		boolean metadataSet = false;
-		for (DisorderAssembly da : disorderAssemblyList) {
-			List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
-			if (disorderGroupList.size() < 2) {
-				if (pControl.equals(ProcessDisorderControl.LOOSE)) {
-					if (!metadataSet) {
-						addDisorderMetadata(false);
-						metadataSet = true;
-					}
-				} else if (pControl.equals(ProcessDisorderControl.STRICT)) {
-					throw new CMLRuntimeException(
-							"Disorder assembly should contain at least 2 disorder groups: "
-							+ da.toString());
-				}
-			}
-			List<CMLAtom> commonAtoms = da.getCommonAtoms();
-			for (CMLAtom commonAtom : commonAtoms) {
-				if (!CrystalTool.hasUnitOccupancy(commonAtom)) {
-					if (pControl.equals(ProcessDisorderControl.LOOSE)) {
-						if (!metadataSet) {
-							addDisorderMetadata(false);
-							metadataSet = true;
-						}
-					} else if (pControl.equals(ProcessDisorderControl.STRICT)) {
-						throw new CMLRuntimeException("Common atoms require unit occupancy: "+commonAtom.getId()+
-								", in disorder assembly, "+da.getAssemblyCode());
-					}
-				}
-			}
-			for (DisorderGroup dg : disorderGroupList) {
-				List<CMLAtom> atomList = dg.getAtomList();
-				for (CMLAtom atom : atomList) {
-					if (CrystalTool.hasUnitOccupancy(atom)) {
-						if (pControl.equals(ProcessDisorderControl.LOOSE)) {
-							if (!metadataSet) {
-								addDisorderMetadata(false);
-								metadataSet = true;
-							}
-						} else if (pControl.equals(ProcessDisorderControl.STRICT)) {
-							throw new CMLRuntimeException("Atom, "+atom.getId()+
-									", in disorder group, "+dg.getGroupCode()+", has unit occupancy");
-						}
-					}
-					if (Math.abs(atom.getOccupancy() - dg.getOccupancy()) > CrystalTool.OCCUPANCY_EPS) {
-						if (pControl.equals(ProcessDisorderControl.LOOSE)) {
-							if (!metadataSet) {
-								addDisorderMetadata(false);
-								metadataSet = true;
-							}
-						} else if (pControl.equals(ProcessDisorderControl.STRICT)) {
-							throw new CMLRuntimeException("Atom, "+atom.getId()+
-									", in disorder group, "+dg.getGroupCode()+
-							", has inconsistent occupancy with that of the disorder group.");
-						}
-					}
-				}
-			}
-		}
-		// if the process reaches this point without an error being thrown then
-		// the disorder can be processed.  Add metadata to say so!
-		if (pControl.equals(ProcessDisorderControl.STRICT)) {
-			addDisorderMetadata(true);
-			metadataSet = true;
-		}
-		return disorderAssemblyList;
-	}
-
-	private void addDisorderMetadata(boolean processed) {
-		CMLMetadataList metList = new CMLMetadataList();
-		molecule.appendChild(metList);
-		CMLMetadata met = new CMLMetadata();
-		metList.appendChild(met);
-		if (!processed) {
-			met.setAttribute("dictRef", "cif:unprocessedDisorder");
-		} else if (processed) {
-			met.setAttribute("dictRef", "cif:processedDisorder");
-		}
-	}
-
-	/**
-	 * defaults to strict.
-	 *
-	 * @param rControl
-	 * @throws CMLRuntimeException
-	 */
-	public void processDisorder(RemoveDisorderControl rControl)
-	throws CMLRuntimeException {
-		processDisorder(ProcessDisorderControl.STRICT, rControl);
 	}
 
 	/**
@@ -2303,17 +2050,5 @@ public class MoleculeTool extends AbstractTool {
 			Attribute newAttribute = new Attribute(name, attribute.getValue());
 			to.addAttribute(newAttribute);
 		}
-	}
-
-	public static boolean isDisordered(CMLMolecule molecule) {
-		for (CMLAtom atom : molecule.getAtoms()) {
-			List<Node> nodes = CMLUtil.getQueryNodes(atom,
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
-			if (nodes.size() > 0) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -38,7 +38,7 @@ import org.xmlcml.cml.inchi.InChIGenerator;
 import org.xmlcml.cml.inchi.InChIGeneratorFactory;
 import org.xmlcml.cml.legacy.LegacyConverterFactoryOld;
 import org.xmlcml.cml.legacy.LegacyConverterOld;
-import org.xmlcml.cml.tools.MoleculeTool.RemoveDisorderControl;
+import org.xmlcml.cml.tools.DisorderManager.ProcessControl;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;
@@ -414,8 +414,12 @@ public class CrystalToolTest extends AbstractToolTest {
                     moleculeTool.createCartesiansFromFractionals();
                     molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
                     try {
-						moleculeTool.processDisorder(RemoveDisorderControl.REMOVE_MINOR_DISORDER);
+                    	//molecule.debug();
+                    	DisorderManager dm = new DisorderManager(/*ProcessControl.LOOSE*/);
+						DisorderTool dt = new DisorderTool(molecule, dm);
+						dt.resolveDisorder();
 					} catch (Exception e) {
+						e.printStackTrace();
 						System.err.println("Problem processing disorder: "+e.getMessage());
 						sb.append(filename+"\n");
 						continue;
@@ -460,6 +464,7 @@ public class CrystalToolTest extends AbstractToolTest {
             }
         }
         String dir = getDir(user);
+        /*
         try {
             File file = new File("E:/disordered-cifs.txt");
             FileWriter out = new FileWriter(file);
@@ -468,6 +473,7 @@ public class CrystalToolTest extends AbstractToolTest {
         } catch (IOException e) {
             System.err.println("Unhandled exception:" + e.toString());
         }
+        */
         try {
             FileWriter fw = new FileWriter(dir+File.separator+"log.xml");
             //log.writeXML(fw);
@@ -668,7 +674,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-test3";
+            s = "E:\\disordered-cifs";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {
