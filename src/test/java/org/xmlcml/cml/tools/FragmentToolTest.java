@@ -4150,48 +4150,48 @@ public class FragmentToolTest extends AbstractTest {
 		"    <fragment id='benzene'>"+
 		"      <molecule ref='g:benzene'/>" +
 		"    </fragment>"+
-		"    <fragment id='eoA'>" +
+		"    <fragment id='eE'>" +
 		"      <fragment ref='eo'/>" +
 		"      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		"      <fragment ref='AAA'/>"+
+		"      <fragment ref='EE'/>"+
 		"    </fragment>"+
-		"    <fragment id='eoB'>" +
+		"    <fragment id='eB'>" +
 		"      <fragment ref='eo'/>" +
 		"      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		"      <fragment ref='BBB'/>"+
+		"      <fragment ref='BB'/>"+
 		"    </fragment>"+
-		"    <fragment id='AAA'>" +
+		"    <fragment id='EE'>" +
 		"      <fragmentList role='markushMixture'>" +
 		"        <fragment ref='eo'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.02</scalar>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.01</scalar>" +
 		"        </fragment>" +
-		"        <fragment ref='eoA'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.80</scalar>" +
+		"        <fragment ref='eE'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.84</scalar>" +
 		"        </fragment>" +
-		"        <fragment ref='eoB'>" +
+		"        <fragment ref='eB'>" +
 		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>" +
 		"        </fragment>" +
 		"      </fragmentList>" +
 		"    </fragment>" +
-		"    <fragment id='bA'>" +
+		"    <fragment id='bE'>" +
 		"      <fragment ref='benzene'/>" +
 		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		"      <fragment ref='AAA'/>"+
+		"      <fragment ref='EE'/>"+
 		"    </fragment>"+
 		"    <fragment id='bB'>" +
 		"      <fragment ref='benzene'/>" +
 		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		"      <fragment ref='BBB'/>"+
+		"      <fragment ref='BB'/>"+
 		"    </fragment>"+
-		"    <fragment id='BBB'>" +
+		"    <fragment id='BB'>" +
 		"      <fragmentList role='markushMixture'>" +
 		"        <fragment ref='benzene'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.02</scalar>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.01</scalar>" +
 		"        </fragment>" +
 		"        <fragment ref='bB'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.80</scalar>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.84</scalar>" +
 		"        </fragment>" +
-		"        <fragment ref='bA'>" +
+		"        <fragment ref='bE'>" +
 		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>" +
 		"        </fragment>" +
 		"      </fragmentList>" +
@@ -4201,7 +4201,7 @@ public class FragmentToolTest extends AbstractTest {
 		"  <fragment id='f0'>" +
 		"    <fragment ref='cl'/>"+
 		"    <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
-		"    <fragment ref='AAA'/>"+
+		"    <fragment ref='EE'/>"+
 		"    <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
 		"    <fragment ref='acetyl'/>" +
 		"  </fragment>"+
