@@ -497,13 +497,33 @@ public abstract class CMLUtil implements CMLConstants {
 		return namespaceList;
 	}
     
-	public static List<List<Integer>> generateCombinationList(int listSize) {
+	/**
+	 * returns a list of list of integers.
+	 * Supply it with an integer of the list size and it will return all
+	 * possible combinations of all groupings of the integers up to the
+	 * integer you supply
+	 * 
+	 * thus supplying 3 would return:
+	 * 
+	 * -- blank entry--
+	 * 1
+	 * 2
+	 * 3
+	 * 1 2
+	 * 1 3
+	 * 2 3
+	 * 1 2 3
+	 * 
+	 * @param max
+     * @return list of all possible integer combinations going from 0 to max.
+	 */
+	public static List<List<Integer>> generateCombinationList(int max) {
 		List<List<Integer>> combinationList = new ArrayList<List<Integer>>();
-		int count = (int) Math.pow(2.0, listSize);
+		int count = (int) Math.pow(2.0, max);
 		for (int i = 2; i <= count; i++) {
 			int thisCount = i;
-			List<Integer> intSet = new ArrayList<Integer>(listSize);
-			for (int j = listSize; j >= 0; j--) {
+			List<Integer> intSet = new ArrayList<Integer>(max);
+			for (int j = max; j >= 0; j--) {
 				int minus = (int)Math.pow(2.0, j);
 				int test = thisCount;
 				if (test - minus > 0) {
@@ -516,6 +536,22 @@ public abstract class CMLUtil implements CMLConstants {
 		// add entry with no values
 		combinationList.add(new ArrayList<Integer>(0));
 
+		return combinationList;
+	}
+	
+	/**
+	 * 
+	 * @param max
+	 * @return
+	 */
+	public static List<List<Integer>> generateGroupList(int max) {
+		List<List<Integer>> combinationList = new ArrayList<List<Integer>>();
+		List<Integer> combination = new ArrayList<Integer>();
+		for (int i = 0; i < max; i++) {
+			int maxCopy = max;
+			maxCopy -= i;
+		}
+		
 		return combinationList;
 	}
 }

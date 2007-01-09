@@ -1068,8 +1068,15 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 				atom.setYFract(y[i]);
 				atom.setZFract(z[i]);
 			}
-			// occupancy - only add if not 1.0
-			if (occ != null && occ[i] < 1.0) {
+			// occupancy - (only add if not 1.0)
+			// ned24 changed this line.  If an atom is disordered
+			// and isn't given a numerical occupancy in the cif then there is
+			// a problem.  If we don't attach the occupancies when
+			// they are == 1 then we cannot distinguish between those
+			// atoms which haven't been given an occupancy and those
+			// which have occupancy == 1.  We need to keep track 
+			// of occupancies for all atoms until disorder is resolved.
+			if (occ != null /*&& occ[i] < 1.0*/) {
 				atom.setOccupancy(occ[i]);
 			}
 			if (u != null) {

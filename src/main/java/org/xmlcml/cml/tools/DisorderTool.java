@@ -1,11 +1,10 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import nu.xom.Node;
 
@@ -18,6 +17,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.tools.DisorderManager.ProcessControl;
 import org.xmlcml.cml.tools.DisorderManager.RemoveControl;
+import org.xmlcml.util.CombinationGenerator;
 
 public class DisorderTool extends AbstractTool {
 
@@ -218,39 +218,47 @@ public class DisorderTool extends AbstractTool {
 		for (DisorderAssembly failedAssembly : failedAssemblyList) {
 			disorderedAtoms.addAll(failedAssembly.getCommonAtoms());
 			for (DisorderGroup group : failedAssembly.getDisorderGroupList()) {
-				// test to see if any of the lists has occupancy of 0.5.  If so then throw
-				// exception as we cannot be confident of getting the proper structure if there
-				// are more than one assemblies with this occupancy
-				if (group.getOccupancy() == 0.5) {
-					throw new CMLRuntimeException("Cannot fix disorder - found group"
-							+" with occupancy of 0.5");
-					
-				}
 				disorderedAtoms.addAll(group.getAtomList());
 			}
 		}
 		// attempt to resolve failed assemblies, by first splitting the atoms into
 		// lists of similar occupancy.  Then test to see if there are 2 or more that
 		// add up to unity (fail if not so or if any lists left over)
-		Map<Double, List<CMLAtom>> atomMap = new HashMap<Double, List<CMLAtom>>();
+		List<CMLAtom> unityAtoms = new ArrayList<CMLAtom>();
+		Map<Double, List<CMLAtom>> atomMap = new LinkedHashMap<Double, List<CMLAtom>>();
 		for (CMLAtom disorderedAtom : disorderedAtoms) {
+			//System.out.println("processing: "+disorderedAtom.getId());
 			boolean added = false;
 			double occupancy = disorderedAtom.getOccupancy();
+			// test to see if any of the lists has occupancy of 0.5.  If so then throw
+			// exception as we cannot be confident of getting the proper structure if there
+			// are more than one assemblies with this occupancy
+			if (occupancy == 0.5) {
+				throw new CMLRuntimeException("Cannot fix disorder - found atom"
+						+" with occupancy of 0.5");
+				
+			}
+			if (occupancy == Double.NaN) {
+				throw new CMLRuntimeException("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
+			}
+			//System.out.println("occupancy is: "+occupancy);
 			// if atom has unit occupancy then we can ignore it for the rest of 
 			// the method
 			if (Math.abs(1.0 - occupancy) < CrystalTool.OCCUPANCY_EPS) {
+				//System.out.println("unit occupancy");
+						unityAtoms.add(disorderedAtom);
 						continue;
 					}
-			Iterator it = atomMap.entrySet().iterator();
 			// counter to make sure the same atom isn't added to two different
 			// lists
 			int addedCount = 0;
-			while(it.hasNext()) {
-				Entry entry = (Entry) it.next();
+			for (Iterator it=atomMap.entrySet().iterator(); it.hasNext(); ) {
+				Map.Entry entry = (Map.Entry) it.next();
 				if (Math.abs((Double)entry.getKey() - occupancy) < CrystalTool.OCCUPANCY_EPS) {
 					((List<CMLAtom>)entry.getValue()).add(disorderedAtom);
 					added = true;
 					addedCount++;
+					//System.out.println("adding to current list of occupancy: "+(Double)entry.getKey());
 				}
 			}
 			// if atom added to more than one list then throw exception
@@ -259,12 +267,85 @@ public class DisorderTool extends AbstractTool {
 			List<CMLAtom> newList = new ArrayList<CMLAtom>();
 			newList.add(disorderedAtom);
 			atomMap.put(occupancy, newList);
+			//System.out.println("created new list of occupancy: "+occupancy);
 		}
-		reassignDisorderGroups(atomMap);
+		for (Iterator it=atomMap.entrySet().iterator(); it.hasNext(); ) {
+			//System.out.println("~~~~~~~~~~~~~~~");
+	        Map.Entry entry = (Map.Entry)it.next();
+	        Double key = ((Double)entry.getKey());
+	        //System.out.println("Group occupancy: "+key);
+	        List<CMLAtom> value = ((List<CMLAtom>)entry.getValue());
+	        for (CMLAtom atom : value) {
+	        	//System.out.println("--- "+atom.getId());
+	        }
+	    }
+		//molecule.debug();
+		reassignDisorderGroups(atomMap, new ArrayList<String>());
 	}
 	
-	private void reassignDisorderGroups(Map<Double, List<CMLAtom>> atomMap) {
-		
+	private void reassignDisorderGroups(Map<Double, List<CMLAtom>> atomMap, List<String> failedCombinations) {
+		if (atomMap.size() < 2) {
+			throw new CMLRuntimeException("Cannot resolve disorder.");
+		}
+		List<Integer> completedIndices = new ArrayList<Integer>();
+		for (int i = 2; i < atomMap.size()+1; i++) {
+			System.out.println("gen");
+			CombinationGenerator cg = new CombinationGenerator(atomMap.size(), i);
+			while (cg.hasMore()) {
+				System.out.println("next combo");
+				int[] indices = cg.getNext();
+				// create the identifier for this combination
+				StringBuilder combination = new StringBuilder();
+				boolean containsAlreadyCompletedIndice = false;
+				for (int j : indices) {
+					combination.append(String.valueOf(j)+"-");
+					// check to see if indice is in the list of ones already completed
+					// if so then skip to next combination
+					for (Integer in : completedIndices) {
+						if (in == j) {
+							containsAlreadyCompletedIndice = true;
+						}
+					}
+				}
+				if (containsAlreadyCompletedIndice) continue;
+				// check to see if this combination has already been attempted.
+				// if so, skip to the next combination
+				boolean alreadyTried = false;
+				for (String str : failedCombinations) {
+					if (str.equals(combination.toString())) {
+						alreadyTried = true;
+					}
+				}
+				if (alreadyTried) continue;
+				// combination has not yet been checked, attempt to resolve
+				double totalOccCount = 0;
+				for (int j : indices) {
+					System.out.print("j "+j);
+					int count = 0;
+					System.out.println("atommap size: "+atomMap.size());
+					Iterator it =atomMap.entrySet().iterator();
+					while (it.hasNext()) {
+						Double occ = (Double)((Map.Entry)it.next()).getKey();
+						if (j == count++) {
+							totalOccCount += occ;
+							System.out.println("total: "+totalOccCount);
+						}
+						System.out.println("count: "+count);
+					}
+				}
+				// iterate through all possible combinations until correct one found
+				// or run out of combinations to attempt
+				if (!(Math.abs(1.0 - totalOccCount) < CrystalTool.OCCUPANCY_EPS)) {
+					failedCombinations.add(combination.toString());
+					reassignDisorderGroups(atomMap, failedCombinations);
+				} else {
+					for (int j : indices) {
+						completedIndices.add(j);
+					}
+				}
+			}
+		}
+		System.out.println("finished");
 	}
 
 	private void addDisorderMetadata(boolean processed) {
