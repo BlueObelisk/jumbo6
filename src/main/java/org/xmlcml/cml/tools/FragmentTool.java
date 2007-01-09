@@ -15,6 +15,7 @@ import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArg;
+import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFragment;
@@ -30,6 +31,7 @@ import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.element.RefAttribute;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
+import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -161,8 +163,75 @@ public class FragmentTool extends AbstractTool {
 	    	}
 	    	fragmentList.detach();
     	}
+    	substituteHangingFragmentsByDummy();
     }
+    
+    /** replace fragment[@ref] by dummy.
+     * when recursion is forceably terminated there may be hanging
+     * fragments with unresolved references. These are replaced by a
+     * molecule reference to a dummy atom.
+     */
+    private void substituteHangingFragmentsByDummy() {
+    	List<Node> unresolvedNodes = CMLUtil.getQueryNodes(
+			rootFragment, CMLFragment.NS+"[@ref]", X_CML);
+    	for (Node unresolvedFragment : unresolvedNodes) {
+    		CMLMolecule dummyMoleculeRef = FragmentTool.createMoleculeRef("g:dummy2");
+    		rootFragment.replaceChild(unresolvedFragment, dummyMoleculeRef);
+    	}
+    }
+
+    /** create a molecule ref to a named resource in the repository.
+     * use with care as there is no guarantee that the molecule exists
+     * @param ref of the form "g:dummy2"
+     * @return
+     */
+    public static CMLMolecule createMoleculeRef(String ref) {
     	
+//    	<molecule id="dummy" xmlns="http://www.xml-cml.org/schema" ref='g:dummy'/>
+    	CMLMolecule dummyMolecule = new CMLMolecule();
+    	dummyMolecule.setRef(ref);
+    	return dummyMolecule;
+    }
+
+    /** creates a dummy fragment.
+     * may be required if dummy cannot be resolved in repository.
+     * 
+     * @return
+     */
+    public static CMLMolecule createDummyMolecule() {
+    	
+//    	<molecule id="dummy" xmlns="http://www.xml-cml.org/schema"
+//    		  title="dummy atom">
+//    		  <atomArray>
+//    		    <atom id="dummy" elementType="R" x3="1.0" y3="0.0" z3="0.0" formalCharge="0" hydrogenCount="0"/>
+//    		    <atom id="r1" elementType="R" x3="0.0" y3="0.0" z3="0.0" formalCharge="0" hydrogenCount="0"/>
+//    		  </atomArray>
+//    		  <bondArray>
+//    		    <bond atomRefs2="dummy r1" order="S"/>
+//    		  </bondArray>
+//    		</molecule>
+    	CMLMolecule dummyMolecule = new CMLMolecule();
+    	dummyMolecule.setId("dummy");
+    	dummyMolecule.setTitle("dummy");
+    	CMLAtom atom1 = new CMLAtom("dummy");
+    	atom1.setElementType("R");
+    	Point3 xyz = new Point3(1.0, 0., 0.0);
+    	atom1.setXYZ3(xyz);
+    	dummyMolecule.addAtom(atom1);
+    	
+    	CMLAtom atom2 = new CMLAtom("r1");
+    	atom2.setElementType("R");
+    	xyz = new Point3(0.0, 0., 0.0);
+    	atom2.setXYZ3(xyz);
+    	dummyMolecule.addAtom(atom2);
+
+    	CMLBond bond = new CMLBond(atom1, atom2);
+    	bond.setOrder(CMLBond.SINGLE_S);
+    	dummyMolecule.addBond(bond);
+
+    	return dummyMolecule;
+    }
+    
     public boolean substituteFragmentRefs(CMLFragmentList fragmentList) {
     	if (fragmentList == null) {
     		throw new CMLRuntimeException("NULL FRAGMENTLIST");
@@ -173,7 +242,6 @@ public class FragmentTool extends AbstractTool {
     	// avoid fragments in fragmentList
 		fragmentList.updateIndex();
     	List<Node> fragmentsWithRefs = CMLUtil.getQueryNodes(rootFragment, 
-//			CMLFragment.NS+
 			"//"+
 			CMLFragment.NS+"[@ref and not(../*[@role='markushMixture'])" +
 					" and not(ancestor::"+CMLFragmentList.NS+")]", X_CML);
@@ -185,20 +253,24 @@ public class FragmentTool extends AbstractTool {
     			fragmentList.debug("FAILED DEREF");
     			throw new CMLRuntimeException("Cannot find ref: "+ref);
     		}
+    		// does the referenced fragment describe a mixture?
     		List<Node> flNodes = CMLUtil.getQueryNodes(refFragment0, 
     				CMLFragmentList.NS+"[@role='markushMixture']", X_CML);
-    		// get random fragment
+    		// if so, get random fragment
     		if (flNodes.size() == 1) {
     			CMLFragmentList randomFragmentList = (CMLFragmentList) flNodes.get(0);
     			refFragment0 = BasicProcessor.getRandomFragment(randomFragmentList);
     		}
+    		// make copy of fragment so as not to deplete reference list
     		CMLFragment derefFragment = (CMLFragment) refFragment0.copy();
+    		// remove copy attributes and remove ref attribute unless markush random fragment
     		if (flNodes.size() == 0) {
     			derefFragment.copyAttributesFrom(refFragment);
-    		// remove ref attribute unless markush random fragment
     			derefFragment.removeAttribute(RefAttribute.NAME);
     		}
+    		// remove any id attributes - they will be replaced by enumerated numbers
     		derefFragment.removeAttribute(IdAttribute.NAME);
+    		// replace the reference by the object
     		CMLElement parent = (CMLElement) refFragment.getParent();
     		parent.replaceChild(refFragment, derefFragment);
     		// replace parent by fragment unless parent or grandparent
