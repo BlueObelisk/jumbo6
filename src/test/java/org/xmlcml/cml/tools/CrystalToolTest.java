@@ -415,7 +415,7 @@ public class CrystalToolTest extends AbstractToolTest {
                     molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
                     try {
                     	//molecule.debug();
-                    	DisorderManager dm = new DisorderManager(/*ProcessControl.LOOSE*/);
+                    	DisorderManager dm = new DisorderManager(ProcessControl.LOOSE);
 						DisorderTool dt = new DisorderTool(molecule, dm);
 						dt.resolveDisorder();
 					} catch (Exception e) {
