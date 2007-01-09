@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Node;
 import nu.xom.Nodes;
+import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
@@ -155,47 +156,66 @@ public class FragmentTool extends AbstractTool {
     	List<Node> fragmentLists = CMLUtil.getQueryNodes(rootFragment, CMLFragmentList.NS, X_CML);
     	CMLFragmentList fragmentList = (fragmentLists.size() == 0) ? null : (CMLFragmentList) fragmentLists.get(0);
     	if (fragmentList != null) {
-	    	while (substituteFragmentRefs(fragmentList) && count++ < limit) {
+	    	while (/*fragmentList != null && */
+    			substituteFragmentRefs(fragmentList) && count++ < limit) {
 	    	}
 	    	fragmentList.detach();
     	}
     }
     	
     public boolean substituteFragmentRefs(CMLFragmentList fragmentList) {
-        	
+    	if (fragmentList == null) {
+    		throw new CMLRuntimeException("NULL FRAGMENTLIST");
+    	}
     	boolean change = false;
     	// find list of fragments/"ref. May have changed since last time
     	// as new fragments may have refs
     	// avoid fragments in fragmentList
-    	List<Node> fragments = CMLUtil.getQueryNodes(rootFragment, CMLFragment.NS+"//"+CMLFragment.NS+"[@ref]", X_CML);
-    	if (fragmentList != null) {
-    		fragmentList.updateIndex();
-	    	for (Node node : fragments) {
-	    		CMLFragment refFragment = (CMLFragment) node;
-	    		String ref = refFragment.getRef();
-	    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
-	    		if (refFragment0 == null) {
-	    			fragmentList.debug("FAILED DEREF");
-	    			throw new CMLRuntimeException("Cannot find ref: "+ref);
-	    		}
-	    		CMLFragment derefFragment = (CMLFragment) refFragment0.copy();
-	    		derefFragment.copyAttributesFrom(refFragment);
-	    		derefFragment.removeAttribute(RefAttribute.NAME);
-	    		derefFragment.removeAttribute(IdAttribute.NAME);
-	    		CMLElement parent = (CMLElement) refFragment.getParent();
-	    		parent.replaceChild(refFragment, derefFragment);
-	    		// replace parent by fragment unless parent or grandparent
-	    		// has countExpression
-	    		if (parent instanceof CMLFragment) {
-	    			CMLElement grandParent = (CMLElement) parent.getParent();
+		fragmentList.updateIndex();
+    	List<Node> fragmentsWithRefs = CMLUtil.getQueryNodes(rootFragment, 
+//			CMLFragment.NS+
+			"//"+
+			CMLFragment.NS+"[@ref and not(../*[@role='markushMixture'])" +
+					" and not(ancestor::"+CMLFragmentList.NS+")]", X_CML);
+    	for (Node node : fragmentsWithRefs) {
+    		CMLFragment refFragment = (CMLFragment) node;
+    		String ref = refFragment.getRef();
+    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
+    		if (refFragment0 == null) {
+    			fragmentList.debug("FAILED DEREF");
+    			throw new CMLRuntimeException("Cannot find ref: "+ref);
+    		}
+    		List<Node> flNodes = CMLUtil.getQueryNodes(refFragment0, 
+    				CMLFragmentList.NS+"[@role='markushMixture']", X_CML);
+    		// get random fragment
+    		if (flNodes.size() == 1) {
+    			CMLFragmentList randomFragmentList = (CMLFragmentList) flNodes.get(0);
+    			refFragment0 = BasicProcessor.getRandomFragment(randomFragmentList);
+    		}
+    		CMLFragment derefFragment = (CMLFragment) refFragment0.copy();
+    		if (flNodes.size() == 0) {
+    			derefFragment.copyAttributesFrom(refFragment);
+    		// remove ref attribute unless markush random fragment
+    			derefFragment.removeAttribute(RefAttribute.NAME);
+    		}
+    		derefFragment.removeAttribute(IdAttribute.NAME);
+    		CMLElement parent = (CMLElement) refFragment.getParent();
+    		parent.replaceChild(refFragment, derefFragment);
+    		// replace parent by fragment unless parent or grandparent
+    		// has countExpression
+    		if (parent instanceof CMLFragment) {
+    			ParentNode grandParentNode = parent.getParent();
+    			if (grandParentNode instanceof CMLElement) {
+    				CMLElement grandParent = (CMLElement) grandParentNode;
 	    			if (parent.getAttribute(CountExpressionAttribute.NAME) != null) {
-	    			} else if (grandParent != null && grandParent.getAttribute(CountExpressionAttribute.NAME) != null) {
-	    			} else {
+	    			} else if (grandParent != null && 
+	    					grandParent.getAttribute(CountExpressionAttribute.NAME) != null) {
+	    			} else if (true || flNodes.size() == 0) {
 	    				parent.replaceByChildren();
 	    			}
-	    		}
-	    		change = true;
-	    	}
+    			}
+    		}
+    		change = true;
     	}
     	return change;
     }
@@ -334,7 +354,7 @@ class BasicProcessor implements CMLConstants {
         	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
 	        fragment.setConvention(Convention.PML_PROCESSED.value);
         } else {
-	        fragmentTool.substituteFragmentRefsRecursively(3);
+	        fragmentTool.substituteFragmentRefsRecursively(100);
 	        new CountExpander(fragment).process();
 	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
 	        this.replaceFragmentsByChildMolecules();
@@ -461,7 +481,7 @@ class BasicProcessor implements CMLConstants {
     	return generatedFragmentList;
     }
     
-    private CMLFragment getRandomFragment(CMLFragmentList markushList) {
+    static CMLFragment getRandomFragment(CMLFragmentList markushList) {
     	CMLElements<CMLFragment> fragments = markushList.getFragmentElements();
     	double sum = 0.0;
     	int nFragments = fragments.size();
@@ -489,7 +509,9 @@ class BasicProcessor implements CMLConstants {
     			break;
     		}
     	}
-    	return fragments.get(j);
+    	CMLFragment newFragment = new CMLFragment(fragments.get(j));
+    	newFragment.removeChildren();
+    	return newFragment;
     }
     
     private CMLFragment createSingleBasicFragment(List<CMLFragment> markushGroupList) {
@@ -609,7 +631,7 @@ class BasicProcessor implements CMLConstants {
     	List<Node> nodes = CMLUtil.getQueryNodes(join, 
 			"preceding-sibling::"+CMLMolecule.NS+"[1]", X_CML);
     	if (nodes.size() == 0) {
-    		((CMLElement) join.getParent()).debug("JJJ");
+    		((CMLElement) join.getParent()).debug("Cannot find join");
     		throw new CMLRuntimeException("Cannot find previous for join: "+join.getString());
     	}
     	CMLMolecule previousMolecule = (CMLMolecule) nodes.get(0);
