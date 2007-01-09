@@ -4031,7 +4031,7 @@ public class FragmentToolTest extends AbstractTest {
 		testAll(fragment, debug, 22,
 				intermediateS, explicitS, completeS, check);
 	}
-
+	
 	// polyinfo examples
 	private CMLFragment makeMol30() {
 		// 
@@ -4068,23 +4068,15 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 
+	// markov chain for single fragment
 	private CMLFragment makeMol23() {
 		// 
 		String fragmentS = "" +
 		"<fragment xmlns='http://www.xml-cml.org/schema'" +
 		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
 		"  <fragmentList>" +
-		"    <fragment id='eo'>"+
-		"      <molecule ref='g:eo'/>" +
-		"    </fragment>"+
-		"    <fragment id='po'>"+
-		"      <molecule ref='g:po'/>" +
-		"    </fragment>"+
-		"    <fragment id='acetyl'>"+
-		"      <molecule ref='g:acetyl'/>" +
-		"    </fragment>"+
-		"    <fragment id='ethyl'>"+
-		"      <molecule ref='g:ethyl'/>" +
+		"    <fragment id='cl'>"+
+		"      <molecule ref='g:cl'/>" +
 		"    </fragment>"+
 		"    <fragment id='eo'>"+
 		"      <molecule ref='g:eo'/>" +
@@ -4097,21 +4089,23 @@ public class FragmentToolTest extends AbstractTest {
 		"    <fragment id='AAA'>" +
 		"      <fragmentList role='markushMixture'>" +
 		"        <fragment ref='eo'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.1</scalar>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.05</scalar>" +
 		"        </fragment>" +
 		"        <fragment ref='eoA'>" +
-		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.9</scalar>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.95</scalar>" +
 		"        </fragment>" +
 		"      </fragmentList>" +
 		"    </fragment>" +
 		"  </fragmentList>" +
 		"" +
-		"  <fragment>" +
+		"  <fragment id='f0'>" +
 		"    <fragment>"+
-		"      <molecule ref='acetyl'/>" +
+		"      <molecule ref='g:acetyl'/>" +
 		"    </fragment>" +
 		"    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>" +
 		"    <fragment ref='AAA'/>"+
+		"    <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"    <fragment ref='cl'/>"+
 		"  </fragment>"+
 		"</fragment>";
 		
@@ -4119,7 +4113,7 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void testAll23() {
 		CMLFragment fragment = makeMol23();
 		boolean debug = false;
@@ -4137,11 +4131,89 @@ public class FragmentToolTest extends AbstractTest {
 				intermediateS, explicitS, completeS, check);
 	}
 
+	// markov chain for double fragment
+	private CMLFragment makeMol24() {
+		// 
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"  <fragmentList>" +
+		"    <fragment id='acetyl'>"+
+		"      <molecule ref='g:acetyl'/>" +
+		"    </fragment>"+
+		"    <fragment id='cl'>"+
+		"      <molecule ref='g:cl'/>" +
+		"    </fragment>"+
+		"    <fragment id='eo'>"+
+		"      <molecule ref='g:eo'/>" +
+		"    </fragment>"+
+		"    <fragment id='benzene'>"+
+		"      <molecule ref='g:benzene'/>" +
+		"    </fragment>"+
+		"    <fragment id='eoA'>" +
+		"      <fragment ref='eo'/>" +
+		"      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='AAA'/>"+
+		"    </fragment>"+
+		"    <fragment id='eoB'>" +
+		"      <fragment ref='eo'/>" +
+		"      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='BBB'/>"+
+		"    </fragment>"+
+		"    <fragment id='AAA'>" +
+		"      <fragmentList role='markushMixture'>" +
+		"        <fragment ref='eo'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.02</scalar>" +
+		"        </fragment>" +
+		"        <fragment ref='eoA'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.80</scalar>" +
+		"        </fragment>" +
+		"        <fragment ref='eoB'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>" +
+		"        </fragment>" +
+		"      </fragmentList>" +
+		"    </fragment>" +
+		"    <fragment id='bA'>" +
+		"      <fragment ref='benzene'/>" +
+		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='AAA'/>"+
+		"    </fragment>"+
+		"    <fragment id='bB'>" +
+		"      <fragment ref='benzene'/>" +
+		"      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"      <fragment ref='BBB'/>"+
+		"    </fragment>"+
+		"    <fragment id='BBB'>" +
+		"      <fragmentList role='markushMixture'>" +
+		"        <fragment ref='benzene'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.02</scalar>" +
+		"        </fragment>" +
+		"        <fragment ref='bB'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.80</scalar>" +
+		"        </fragment>" +
+		"        <fragment ref='bA'>" +
+		"          <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>" +
+		"        </fragment>" +
+		"      </fragmentList>" +
+		"    </fragment>" +
+		"  </fragmentList>" +
+		"" +
+		"  <fragment id='f0'>" +
+		"    <fragment ref='cl'/>"+
+		"    <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"    <fragment ref='AAA'/>"+
+		"    <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>" +
+		"    <fragment ref='acetyl'/>" +
+		"  </fragment>"+
+		"</fragment>";
+		
+		return (CMLFragment) parseValidString(fragmentS);
+	}
 
 	@Test
 //	@Ignore
-	public void testAll30() {
-		CMLFragment fragment = makeMol30();
+	public void testAll24() {
+		CMLFragment fragment = makeMol24();
 		boolean debug = false;
 		boolean check = false;
 		
@@ -4153,12 +4225,11 @@ public class FragmentToolTest extends AbstractTest {
 		String completeS = "" +
 				"<foo/>";
 			
-		testAll(fragment, debug, 30,
+		testAll(fragment, debug, 24,
 				intermediateS, explicitS, completeS, check);
 	}
 
 
-	
 	/** tests second ten examples
 	 */
 	@Test
