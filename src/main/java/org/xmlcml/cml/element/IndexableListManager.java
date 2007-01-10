@@ -26,9 +26,11 @@ import org.xmlcml.cml.base.CMLUtil;
 */
 public class IndexableListManager implements CMLConstants {
 
+	/** duplicate id exception */
+	public final static String DUPLICATE_ID = "duplicate id in indexableList: ";
 	private IndexableList indexableList;
 	private Map<String, Indexable> map;
-	private String indexableLocalName;
+	private String indexableLocalName;	// XML name
 	
 	IndexableListManager(IndexableList indexableList) {
 		this.indexableList = indexableList;
@@ -117,21 +119,29 @@ public class IndexableListManager implements CMLConstants {
     /** add indexable.
      * 
      * @param indexable to add
+     * @throws CMLRuntimeException if id already in map
      */
-    void add(Indexable indexable) {
+    void add(Indexable indexable) throws CMLRuntimeException{
     	ensureMap();
+    	String id = indexable.getId();
+    	if (map.containsKey(id)) {
+    		throw new CMLRuntimeException(DUPLICATE_ID + id);
+    	}
     	((Element)indexableList).appendChild((Element)indexable);
 		map.put(indexable.getId(), indexable);
     }
 
     /** remove indexable.
-     * 
+     * removes BOTH from map and from parent indexableList
      * @param indexable to remove
      */
     void remove(Indexable indexable) {
     	ensureMap();
-    	((Element)indexableList).removeChild((Element)indexable);
-		map.remove(indexable.getId());
+    	String id = indexable.getId();
+    	if (map.containsKey(id)) {
+    		((Element)indexableList).removeChild((Element)indexable);
+    		map.remove(id);
+    	}
     }
 
     /** get indexable by id.

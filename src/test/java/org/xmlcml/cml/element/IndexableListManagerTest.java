@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.xmlcml.cml.element;
 
 import static org.junit.Assert.fail;
@@ -10,6 +7,8 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLRuntimeException;
+
 
 /**
  * @author pm286
@@ -41,6 +40,14 @@ public class IndexableListManagerTest extends AbstractTest {
 		"</moleculeList>";
 		CMLMoleculeList moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
 		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		
+		try {
+			moleculeList.addIndexable(molecule);
+			Assert.fail("should throw CMLRuntimeException");
+		} catch (CMLRuntimeException e) {
+			Assert.assertEquals("duplicate id", 
+					IndexableListManager.DUPLICATE_ID + molecule.getId(), e.getMessage());
+		}
 	}
 
 	/**
