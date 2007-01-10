@@ -217,27 +217,11 @@ public class DisorderAssembly implements CMLConstants {
         Collections.sort(groupList);
         int count = 0;
         for (DisorderGroup group : groupList) {
-        	if (count++ == 0) {
-        		// remove disorder information from the atoms in the major
-        		// occupied group
-        		this.removeCommonAtomDisorderInformation();
-        		group.removeDisorderInformation();
-        	} else if (count++ > 0) {
+        	if (count++ > 0) {
         		// remove the atoms from minor occupied groups
         		group.detachAtoms();
         	}
         }      
-    }
-
-    private void removeCommonAtomDisorderInformation() {
-    	for (CMLAtom atom : this.commonAtoms) {
-    		List<Node> nodes = CMLUtil.getQueryNodes(atom,
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
-    		for (Node node : nodes) {
-    			node.detach();
-    		}
-    	}
     }
 
     /** string representation.

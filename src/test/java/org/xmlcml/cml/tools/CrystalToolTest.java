@@ -674,7 +674,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-disordered-test";
+            s = "E:\\cif-problems";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {

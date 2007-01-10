@@ -50,7 +50,6 @@ import uk.co.demon.ursus.cif.CIFTableCell;
 import uk.co.demon.ursus.cif.CIFUtil;
 
 /** converts CML to from CIF
- * 
  * @author pm286
  *
  */

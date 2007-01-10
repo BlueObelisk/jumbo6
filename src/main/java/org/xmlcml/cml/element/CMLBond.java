@@ -659,7 +659,7 @@ public class CMLBond extends AbstractBond {
     			radius = radius * 1.25;
     		} else if (el.isChemicalElementType(Type.GROUP_A) ||
     				el.isChemicalElementType(Type.GROUP_B)){
-    			radius = radius * 1.0;
+    			radius = radius * 1.2;
     		} else {
     			radius = radius * 1.10;
     		}

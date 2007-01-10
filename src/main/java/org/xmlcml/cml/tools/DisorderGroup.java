@@ -152,15 +152,4 @@ public class DisorderGroup implements CMLConstants, Comparable<DisorderGroup> {
         }
         return s;
     }
-
-    public void removeDisorderInformation() {
-    	for (CMLAtom atom : this.atomList) {
-    		List<Node> nodes = CMLUtil.getQueryNodes(atom,
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"'] | "+
-    				".//"+CMLScalar.NS+"[@dictRef='"+CrystalTool.DISORDER_GROUP+"']", X_CML);
-    		for (Node node : nodes) {
-    			node.detach();
-    		}
-    	}
-    }
 };
