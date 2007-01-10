@@ -125,7 +125,8 @@ public class ValencyTool extends AbstractTool {
 		} else if (formulaS.equals("C 2 N 2")) { 
 			for (CMLAtom atom : molecule.getAtoms()) {
 				if ("N".equals(atom.getElementType())) {
-					atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
+					CMLBond bond = atom.getLigandBonds().get(0);
+					this.setBondOrder(bond, CMLBond.TRIPLE);
 				}
 			}
 		} else {
@@ -230,8 +231,9 @@ public class ValencyTool extends AbstractTool {
 	void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("O".equals(atom.getElementType())) {
-				atom.setFormalCharge(1);
-				atom.getLigandBonds().get(0).setOrder(CMLBond.TRIPLE);
+				this.setAtomCharge(atom, 1);
+				CMLBond bond = atom.getLigandBonds().get(0);
+				this.setBondOrder(bond, CMLBond.TRIPLE);
 			}
 		}
 	}
@@ -240,9 +242,9 @@ public class ValencyTool extends AbstractTool {
 		for (CMLAtom atom : atoms) {
 			ChemicalElement ce = atom.getChemicalElement();
 			if (ce.isChemicalElementType(Type.GROUP_A)) {
-				atom.setFormalCharge(1);
+				this.setAtomCharge(atom, 1);
 			} else if (ce.isChemicalElementType(Type.GROUP_B)) {
-				atom.setFormalCharge(2);
+				this.setAtomCharge(atom, 2);
 			}
 		}
 	}
@@ -254,16 +256,16 @@ public class ValencyTool extends AbstractTool {
 					|| "Br".equals(atom.getElementType())
 					|| "I".equals(atom.getElementType()))
 					&& atom.getLigandAtoms().size() == 0) {
-				atom.setFormalCharge(-1);
+				this.setAtomCharge(atom, -1);
 			}
 			if (("O".equals(atom.getElementType()) 
 					|| "S".equals(atom.getElementType()))
 					&& atom.getLigandAtoms().size() == 0) {
-				atom.setFormalCharge(-2);
+				this.setAtomCharge(atom, -2);
 			}
 			if (("N".equals(atom.getElementType()))
 					&& atom.getLigandAtoms().size() == 0) {
-				atom.setFormalCharge(-3);
+				this.setAtomCharge(atom, -3);
 			}	
 		}
 	}
@@ -544,7 +546,7 @@ public class ValencyTool extends AbstractTool {
 				if (oxyList.size() == 2) {
 					for (CMLAtom oAtom : oxyList) {
 						if (oAtom.isBondedToMetal()) {
-							oAtom.setFormalCharge(-1);
+							this.setAtomCharge(atom, -1);
 							for (CMLAtom oAt : oxyList) {
 								if (oAt != oAtom) {
 									CMLBond bond = molecule.getBond(atom, oAt);
@@ -608,20 +610,22 @@ public class ValencyTool extends AbstractTool {
 	void mark_CSi_anion(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType()) || "Si".equals(atom.getElementType())) {
+				int hCount = 0;
 				List<CMLAtom> ligands = atom.getLigandAtoms();
-				/*
 				if (ligands.size() == 3 && atom.isBondedToMetal()) {
 					boolean set = true;
 					for (CMLAtom ligand : ligands) {
+						if ("H".equals(ligand.getElementType())) {
+							hCount++;
+						}
 						if (ligand.isBondedToMetal()) {
 							set = false;
 						}
 					}
-					if (set) {
-						atom.setFormalCharge(-1);
+					if (set && hCount == 2) {
+						this.setAtomCharge(atom, -1);
 					}
 				}
-				*/
 				// if carbon has only two ligands then check to see if it
 				// can be marked as a carbanion.
 				if (ligands.size() == 2  && atom.isBondedToMetal()) {
@@ -635,7 +639,6 @@ public class ValencyTool extends AbstractTool {
 								// most probably a carbyne.
 								for (CMLAtom at : ats) {
 									if (at.equals(atom)) {
-										//System.out.println(at.getId());
 										continue;
 									}
 									if (!"N".equals(at.getElementType())) {
@@ -901,9 +904,7 @@ public class ValencyTool extends AbstractTool {
 	 * @param piSystemManager
 	 */
 	public void adjustBondOrdersAndChargesToValency(
-			PiSystemManager piSystemManager, CMLFormula moietyFormula) {
-		//System.out.println("-----------");
-		//System.out.println("starting boc");
+			PiSystemManager piSystemManager, CMLFormula moietyFormula) {	
 		// get a list of formulas for the moieties. 
 		List<CMLFormula> moietyFormulaList = new ArrayList<CMLFormula>();
 		if (moietyFormula != null) {
@@ -940,10 +941,8 @@ public class ValencyTool extends AbstractTool {
 					ValencyTool valencyTool = new ValencyTool(subMol);
 					boolean common = valencyTool.markupCommonMolecules();
 					if (!common) {
-						//System.out.println("marking special");
 						valencyTool.markupSpecial();
 						List<CMLAtom> alreadySetAtoms = valencyTool.getAlreadySetAtoms();
-						//System.out.println("finished marking special");
 						subMol.setNormalizedBondOrders();
 						// get list of bonds that have not been set by 
 						// markupSpecial or markupCommonMolecules
@@ -955,20 +954,6 @@ public class ValencyTool extends AbstractTool {
 								singleBonds.add(bond);
 							}
 						}
-						/*
-						// get list of atoms whose charge has been set by
-						// markupSpecial or markupCommonMolecules
-						// do this so these are not reset further down the
-						// method
-						List<CMLAtom> alreadySetChargedAtoms = new ArrayList<CMLAtom>();
-						for (CMLAtom atom : subMol.getAtoms()) {
-							Nodes nodes = atom.query(".//@formalCharge[.!=0]", X_CML);
-							if (nodes.size() > 0) {
-								alreadySetChargedAtoms.add(atom);
-							}
-						}
-						*/
-						//System.out.println("setting lists");
 						List<CMLAtom> subMolAtomList = subMol.getAtoms();
 						PiSystem piS = new PiSystem(subMolAtomList);
 						piS.setPiSystemManager(piSystemManager);
@@ -1052,7 +1037,6 @@ public class ValencyTool extends AbstractTool {
 						List<List<Integer>> n3ComboList = CMLUtil.generateCombinationList(n3List.size());
 						List<List<Integer>> osComboList = CMLUtil.generateCombinationList(osList.size());
 						List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
-						//System.out.println(n3ComboList.size()+", "+osComboList.size()+", "+n2ComboList.size());
 						List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
 						List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
 						for (int l = 0; l < n2ComboList.size(); l++) {
@@ -1062,20 +1046,17 @@ public class ValencyTool extends AbstractTool {
 									for (Integer in : n3ComboList.get(i)) {
 										CMLAtom atom = n3List.get(in);
 										atom.setFormalCharge(1);
-										////System.out.println("setting n3: "+atom.getId());
 										chargedAtoms.add(atom);
 									}
 									for (Integer in : osComboList.get(j)) {
 										CMLAtom atom = osList.get(in);
 										atom.setFormalCharge(-1);
 										chargedAtoms.add(atom);
-										////System.out.println("setting os: "+atom.getId());
 									}
 									for (Integer in : n2ComboList.get(l)) {
 										CMLAtom atom = n2List.get(in);
 										atom.setFormalCharge(-1);
 										chargedAtoms.add(atom);
-										////System.out.println("setting n2: "+atom.getId());
 									}
 									PiSystem newPiS = new PiSystem(subMolAtomList);
 									newPiS.setPiSystemManager(piSystemManager);
@@ -1136,19 +1117,16 @@ public class ValencyTool extends AbstractTool {
 						cAttempt:
 							if (finalMolList.size() == 0) {
 								int cCharge = -1;
-								//System.out.println("Trying carbanions....");
 								for (CMLAtom atom : subMolAtomList) {
-									if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
-										//System.out.println("carbanion: "+atom.getId());
+									if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3
+											&& !alreadySetAtoms.contains(atom)) {
 										atom.setFormalCharge(cCharge);
 										PiSystem newPiS = new PiSystem(subMolAtomList);
 										newPiS.setPiSystemManager(piSystemManager);
 										List<PiSystem> newPiSList = newPiS.generatePiSystemList();
 										int sysCount = 0;
-										////System.out.println("system count: "+newPiSList.size());
 										boolean piRemaining = false;
 										for (PiSystem system : newPiSList) {
-											////System.out.println("system atoms: "+system.getAtomList().size());
 											sysCount++;
 											system.identifyDoubleBonds();
 											for (CMLAtom a : system.getAtomList()) {

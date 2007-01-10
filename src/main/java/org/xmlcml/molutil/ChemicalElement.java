@@ -54,7 +54,9 @@ public class ChemicalElement {
         /** actinide*/
         ACTINIDE,
         /** non-metal*/
-        NON_METAL
+        NON_METAL,
+        /** semi-metal*/
+        SEMI_METAL
         ;
         private Type() {
         }
@@ -532,7 +534,12 @@ public class ChemicalElement {
 			} else if (type.equals(Type.GROUP_B)) {
 				isType = atNum == 4 || atNum == 12 || atNum == 20 ||
 				atNum == 38 || atNum == 56 || atNum ==88;
-			}else {
+			} else if (type.equals(Type.SEMI_METAL)) {
+				isType = atNum == 13 || atNum == 31 || atNum == 32 ||
+				atNum >= 49 && atNum <= 51 ||
+				atNum >= 81 && atNum <= 84
+				;
+			} else {
 				throw new CMLRuntimeException("Bad type for " + type);
 			}
 			return isType;
