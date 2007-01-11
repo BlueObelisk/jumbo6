@@ -546,11 +546,11 @@ public class ConnectionTableTool extends AbstractTool {
                 	cyclicBondList.add(bond);
                     bond.setCyclic(CMLBond.CYCLIC);
                 }
-                for (CMLBond bond : molecule.getBonds()) {
-                    String cyclic = bond.getCyclic();
-                    if (cyclic == null || cyclic.equals(CMLBond.UNKNOWN_ORDER)) {
-                        bond.setCyclic(CMLBond.ACYCLIC);
-                    }
+            }
+            for (CMLBond bond : molecule.getBonds()) {
+                String cyclic = bond.getCyclic();
+                if (cyclic == null || cyclic.equals(CMLBond.UNKNOWN_ORDER)) {
+                    bond.setCyclic(CMLBond.ACYCLIC);
                 }
             }
             return cyclicBondList;
@@ -562,10 +562,9 @@ public class ConnectionTableTool extends AbstractTool {
      * get acyclic bonds.
      * 
      * derived by calculating cyclic bonds
-     * @exception CMLException
      * @return acyclic bonds (or zero array)
      */
-     public List<CMLBond> getAcyclicBonds() throws CMLException {
+     public List<CMLBond> getAcyclicBonds() {
          List<CMLBond> acyclicVector = new ArrayList<CMLBond>();
          CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
          if (molecules.size() > 0) {
@@ -591,15 +590,14 @@ public class ConnectionTableTool extends AbstractTool {
      * identify acyclic double bonds for stereochemistry.
      * 
      * @return the bonds (zero length if none)
-     * @throws CMLException
      */
     // FIXME
-    public List<CMLBond> getAcyclicDoubleBonds() throws CMLException {
+    public List<CMLBond> getAcyclicDoubleBonds() {
         molecule.setNormalizedBondOrders();
         getCyclicBonds();
         List<CMLBond> adbVector = new ArrayList<CMLBond>();
         for (CMLBond bond : molecule.getBonds()) {
-            if (bond.getCyclic().equals(CMLBond.ACYCLIC)) {
+            if (CMLBond.ACYCLIC.equals(bond.getCyclic())) {
                 if (CMLBond.DOUBLE.equals(bond.getOrder())) {
                     adbVector.add(bond);
                 }

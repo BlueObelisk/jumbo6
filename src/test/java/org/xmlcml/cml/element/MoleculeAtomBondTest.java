@@ -12,13 +12,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.tools.AbstractToolTest;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed
  * by atom- molecule and bond-aware
  */
 
-public abstract class MoleculeAtomBondTest extends AbstractTest {
+public abstract class MoleculeAtomBondTest extends AbstractToolTest {
 
     final static Logger logger = Logger.getLogger(MoleculeAtomBondTest.class
             .getName());

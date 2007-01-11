@@ -1,6 +1,5 @@
 package org.xmlcml.cml.tools;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,13 +36,12 @@ public class StereochemistryTool extends AbstractTool {
         this.molecule = molecule;
         moleculeTool = new MoleculeTool(molecule);
     }
+    
     /**
      * uses 2D coordinates to add bondStereo.
      * 
-     * @throws CMLException
-     *             inappropriate connectivity, coordinates, etc.
      */
-    public void add2DStereo() throws CMLException {
+    public void add2DStereo() {
         // MoleculeTool moleculeTool = new MoleculeTool(molecule);
         List<CMLBond> acyclicDoubleBonds = new ConnectionTableTool(molecule)
                 .getAcyclicDoubleBonds();
@@ -92,7 +90,7 @@ public class StereochemistryTool extends AbstractTool {
      * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
      *         there isnt enough stereo information to calculate parity
      */
-    public CMLAtomParity calculateAtomParity(CMLAtom atom) {
+    public static CMLAtomParity calculateAtomParity(CMLAtom atom) {
         if (!isChiralCentre(atom)) {
             return null;
         }
@@ -144,7 +142,7 @@ public class StereochemistryTool extends AbstractTool {
             return null;
         }
     }
-    private double determinant(double[][] matrix) {
+    private static double determinant(double[][] matrix) {
         double determinant = 0;
         int matrixSize = matrix.length;
         double[][] minorMatrix = new double[matrixSize - 1][matrixSize - 1];
@@ -175,37 +173,38 @@ public class StereochemistryTool extends AbstractTool {
      * @param atom
      * @return true unless this atom has 2 or more identical ligands
      */
-    public boolean isChiralCentre(CMLAtom atom) {
-        boolean mayBeChiral = true;
+    public static boolean isChiralCentre(CMLAtom atom) {
+        boolean mayBeChiral = false;
         List<CMLAtom> ligandList = atom.getLigandAtoms();
-        if (atom.getElementType().equals("C")
-                && (ligandList.size() == 3 | ligandList.size() == 4)) {
-            for (Iterator<CMLAtom> ligands = ligandList.iterator(); ligands
-                    .hasNext();) {
-                CMLAtom firstLigand = ligands.next();
-                if (ligandList.size() == 3
-                        && firstLigand.getElementType().equals("H")) {
-                    // also have one implicit hydrogen, so not chiral
-                    mayBeChiral = false;
-                    return mayBeChiral;
-                }
-                for (Iterator<CMLAtom> ligandsCompare = ligandList.iterator(); ligandsCompare
-                        .hasNext();) {
-                    CMLAtom secondLigand = ligandsCompare.next();
-                    if (firstLigand == secondLigand) {
-                        continue;
-                    }
-                    AtomTree firstAtomTree = new AtomTree(atom, firstLigand);
-                    AtomTree secondAtomTree = new AtomTree(atom, secondLigand);
-                    firstAtomTree.expandTo(100);
-                    secondAtomTree.expandTo(100);
-                    if (firstAtomTree.toString().equals(
-                            secondAtomTree.toString())) {
-                        // identical ligands
-                        mayBeChiral = false;
-                        return mayBeChiral;
-                    }
-                }
+        if (atom.getElementType().equals("C")) {
+        	// skip atoms with too few ligands
+        	boolean c3h = ligandList.size() == 3 && 
+                    	atom.getHydrogenCountAttribute() != null &&
+                    	atom.getHydrogenCount() == 1;
+            if (ligandList.size() == 4 || c3h) {
+            	mayBeChiral = true;
+	            for (CMLAtom firstLigand : ligandList) {
+	                if (c3h && firstLigand.getElementType().equals("H")) {
+	                    // also have one implicit hydrogen, so not chiral
+	                    mayBeChiral = false;
+	                    return mayBeChiral;
+	                }
+	                for (CMLAtom secondLigand : ligandList) {
+	                    if (firstLigand == secondLigand) {
+	                        continue;
+	                    }
+	                    AtomTree firstAtomTree = new AtomTree(atom, firstLigand);
+	                    AtomTree secondAtomTree = new AtomTree(atom, secondLigand);
+	                    firstAtomTree.expandTo(5);
+	                    secondAtomTree.expandTo(5);
+	                    if (firstAtomTree.toString().equals(
+	                            secondAtomTree.toString())) {
+	                        // identical ligands
+	                        mayBeChiral = false;
+	                        return mayBeChiral;
+	                    }
+	                }
+	            }
             }
         } else {
             mayBeChiral = false;
@@ -227,7 +226,8 @@ public class StereochemistryTool extends AbstractTool {
     public List<CMLAtom> getChiralAtoms() {
         List<CMLAtom> chiralAtoms = new ArrayList<CMLAtom>();
         for (CMLAtom atom : molecule.getAtoms()) {
-            if (isChiralCentre(atom)) {
+        	boolean isChiral = isChiralCentre(atom);
+        	if (isChiral) {
                 chiralAtoms.add(atom);
             }
         }
@@ -246,7 +246,7 @@ public class StereochemistryTool extends AbstractTool {
      * @return bondstereo (null if cannot calculate as CIS/TRANS)
      * @throws CMLException
      */
-    public CMLBondStereo get2DBondStereo(CMLBond bond) throws CMLException {
+    public CMLBondStereo get2DBondStereo(CMLBond bond) {
         CMLBondStereo bondStereo = null;
         CMLAtom[] atom4 = moleculeTool.getAtomRefs4(bond);
         if (atom4 != null) {
@@ -272,14 +272,8 @@ public class StereochemistryTool extends AbstractTool {
         CMLBondStereo bondStereo2 = null;
         CMLBondStereo bondStereo3 = null;
         // CMLMolecule molecule = this.getMolecule();
-        try {
-            bondStereo2 = this.get2DBondStereo(bond);
-            bondStereo3 = this.get3DBondStereo(bond);
-        } catch (CMLException e) {
-            logger.severe("cannot layout double bond" + e);
-            // e.printStackTrace ();
-            // cannot layout double bond
-        }
+        bondStereo2 = this.get2DBondStereo(bond);
+        bondStereo3 = this.get3DBondStereo(bond);
         if (bondStereo2 != null && bondStereo3 != null) {
             int match = bondStereo3.matchParity(bondStereo2, molecule);
             if (match == -1) {
@@ -311,25 +305,19 @@ public class StereochemistryTool extends AbstractTool {
      * @param bond
      * 
      * @return bondstereo (null if cannot calculate as CIS/TRANS)
-     * @exception CMLException
      */
-    public CMLBondStereo get3DBondStereo(CMLBond bond) throws CMLException {
+    public CMLBondStereo get3DBondStereo(CMLBond bond) {
         CMLBondStereo bondStereo = null;
-        CMLAtom[] atom4 = null;
-        try {
-            atom4 = moleculeTool.getAtomRefs4(bond);
-        } catch (CMLException e) {
-            logger.severe("No stereo for: " + this + S_SLASH + e);
-            /* bond cannot have stereochemistry */
-        }
-        if (atom4 != null) {
-            Vector3 v1 = atom4[1].get3DCrossProduct(atom4[2], atom4[0]);
-            Vector3 v2 = atom4[2].get3DCrossProduct(atom4[1], atom4[3]);
+        CMLAtom[] atomRefs4 = null;
+        atomRefs4 = moleculeTool.getAtomRefs4(bond);
+        if (atomRefs4 != null) {
+            Vector3 v1 = atomRefs4[1].get3DCrossProduct(atomRefs4[2], atomRefs4[0]);
+            Vector3 v2 = atomRefs4[2].get3DCrossProduct(atomRefs4[1], atomRefs4[3]);
             double d = v1.dot(v2);
             if (Math.abs(d) > 0.000001) {
                 bondStereo = new CMLBondStereo();
-                bondStereo.setAtomRefs4(new String[] { atom4[0].getId(),
-                        atom4[1].getId(), atom4[2].getId(), atom4[3].getId() });
+                bondStereo.setAtomRefs4(new String[] { atomRefs4[0].getId(),
+                        atomRefs4[1].getId(), atomRefs4[2].getId(), atomRefs4[3].getId() });
                 bondStereo.setXMLContent((d > 0) ? CMLBond.TRANS : CMLBond.CIS);
             }
         }
@@ -417,28 +405,48 @@ public class StereochemistryTool extends AbstractTool {
     /**
      * uses 3D coordinates to add bondStereo.
      * 
-     * @throws CMLException
-     *             inappropriate connectivity, coordinates, etc.
      */
-    public void add3DStereo() throws CMLException {
+    public void add3DStereo() {
         // StereochemistryTool stereochemistryTool = new
         // StereochemistryTool(molecule);
         List<CMLBond> doubleBonds = molecule.getDoubleBonds();
         for (CMLBond bond : doubleBonds) {
-            CMLBondStereo bondStereo3 = /* stereochemistryTool. */get3DBondStereo(bond);
+            CMLBondStereo bondStereo3 = get3DBondStereo(bond);
             if (bondStereo3 != null) {
                 bond.addBondStereo(bondStereo3);
             }
         }
-        for (CMLAtom chiralAtom : new StereochemistryTool(molecule)
-                .getChiralAtoms()) {
+        List<CMLAtom> chiralAtoms = new StereochemistryTool(molecule).getChiralAtoms();
+        for (CMLAtom chiralAtom : chiralAtoms) {
             CMLAtomParity atomParity3 = null;
-            // atomParity3 = chiralAtom.get3DAtomParity();
+            atomParity3 = calculateAtomParity(chiralAtom);
             if (atomParity3 != null) {
                 chiralAtom.addAtomParity(atomParity3);
             }
         }
     }
+
+//    /** calculate atomParity from coordinates.
+//     * generates default atomRefs4
+//     * @param atom
+//     * @return atomParity or null
+//     */
+//    static CMLAtomParity get3DAtomParity(CMLAtom atom) {
+//    	CMLAtom[] atomRefs4 = MoleculeTool.getAtomRefs4(atom);
+//    	return get3DAtomParity(atom, atomRefs4);
+//    }
+//    
+//    /** calculate atomParity from coordinates.
+//     * generates default atomRefs4
+//     * @param atom
+//     * @param atomRefs4 ligand ids
+//     * @return atomParity or null
+//     */
+//    static CMLAtomParity get3DAtomParity(CMLAtom atom, CMLAtom[] atomRefs4) {
+//    	CMLAtomParity atomParity = null;
+//    	
+//    	return get3DAtomParity(atom, atomRefs4);
+//    }
     /**
      * determines if 2D coordinates of atoms are suitable for bond
      * stereochemistry.

@@ -15,7 +15,6 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.StringAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Point3;
-import org.xmlcml.molutil.ChemicalElement;
 
 /**
  * test CMLBond.

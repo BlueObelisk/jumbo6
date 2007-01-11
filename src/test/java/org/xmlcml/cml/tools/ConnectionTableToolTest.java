@@ -278,11 +278,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     @Test
     public void testGetAcyclicBonds() {
         List<CMLBond> acyclicBondList = null;
-        try {
-            acyclicBondList = ringMolTool.getAcyclicBonds();
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        acyclicBondList = ringMolTool.getAcyclicBonds();
         Assert.assertEquals("cyclic bond count", 3, acyclicBondList.size());
         CMLBondSet bondSet = null;
         try {
@@ -300,11 +296,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     @Test
     public void testGetAcyclicDoubleBonds() {
         List<CMLBond> acyclicDoubleBondList = null;
-        try {
-            acyclicDoubleBondList = ringMolTool.getAcyclicDoubleBonds();
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        acyclicDoubleBondList = ringMolTool.getAcyclicDoubleBonds();
         Assert.assertEquals("cyclic bond count", 1, acyclicDoubleBondList.size());
         CMLBondSet bondSet = null;
         try {
