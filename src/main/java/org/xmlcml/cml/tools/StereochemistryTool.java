@@ -247,9 +247,17 @@ public class StereochemistryTool extends AbstractTool {
      * @throws CMLException
      */
     public CMLBondStereo get2DBondStereo(CMLBond bond) {
+    	for (CMLAtom atom : bond.getAtoms()) {
+    		System.out.print(atom.getId()+" ");
+    	}
+    	System.out.println();
         CMLBondStereo bondStereo = null;
-        CMLAtom[] atom4 = moleculeTool.getAtomRefs4(bond);
+        CMLAtom[] atom4 = MoleculeTool.createAtomRefs4(bond);
         if (atom4 != null) {
+        	System.out.println(atom4[0].toXML());
+        	System.out.println(atom4[1].toXML());
+        	System.out.println(atom4[2].toXML());
+        	System.out.println(atom4[3].toXML());
             Vector3 v1 = atom4[1].get2DCrossProduct(atom4[2], atom4[0]);
             Vector3 v2 = atom4[2].get2DCrossProduct(atom4[1], atom4[3]);
             double d = v1.dot(v2);
@@ -273,7 +281,7 @@ public class StereochemistryTool extends AbstractTool {
         CMLBondStereo bondStereo3 = null;
         // CMLMolecule molecule = this.getMolecule();
         bondStereo2 = this.get2DBondStereo(bond);
-        bondStereo3 = this.get3DBondStereo(bond);
+        bondStereo3 = this.create3DBondStereo(bond);
         if (bondStereo2 != null && bondStereo3 != null) {
             int match = bondStereo3.matchParity(bondStereo2, molecule);
             if (match == -1) {
@@ -293,36 +301,7 @@ public class StereochemistryTool extends AbstractTool {
         // FIXME
         // flip2D(bond, this.getAtom(bond, 0));
     }
-    /**
-     * get the bondstereo from 3D coordinates.
-     * 
-     * gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
-     * X at1-lig2 and at1-at2 X at1-lig2
-     * 
-     * does NOT add bondStereo as child (in case further decisions need to be
-     * made)
-     * 
-     * @param bond
-     * 
-     * @return bondstereo (null if cannot calculate as CIS/TRANS)
-     */
-    public CMLBondStereo get3DBondStereo(CMLBond bond) {
-        CMLBondStereo bondStereo = null;
-        CMLAtom[] atomRefs4 = null;
-        atomRefs4 = moleculeTool.getAtomRefs4(bond);
-        if (atomRefs4 != null) {
-            Vector3 v1 = atomRefs4[1].get3DCrossProduct(atomRefs4[2], atomRefs4[0]);
-            Vector3 v2 = atomRefs4[2].get3DCrossProduct(atomRefs4[1], atomRefs4[3]);
-            double d = v1.dot(v2);
-            if (Math.abs(d) > 0.000001) {
-                bondStereo = new CMLBondStereo();
-                bondStereo.setAtomRefs4(new String[] { atomRefs4[0].getId(),
-                        atomRefs4[1].getId(), atomRefs4[2].getId(), atomRefs4[3].getId() });
-                bondStereo.setXMLContent((d > 0) ? CMLBond.TRANS : CMLBond.CIS);
-            }
-        }
-        return bondStereo;
-    }
+    
     /**
      * calculates whether geometry of bond is cis or trans.
      * 
@@ -361,13 +340,14 @@ public class StereochemistryTool extends AbstractTool {
      * @throws CMLException
      * @return CIS, TRANS, UNKNOWN,
      */
-    public String calculate3DStereo(CMLBond bond, CMLAtom ligand0,
+    public CMLBondStereo create3DBondStereo(CMLBond bond, CMLAtom ligand0,
             CMLAtom ligand1) throws CMLException {
+        CMLBondStereo bondStereo = null;
         String cisTrans = CMLBond.UNKNOWN_ORDER;
         // wrong sort of bond
         // String order = getOrder();
         if (!bond.getOrder().equals(CMLBond.DOUBLE)) {
-            return CMLBond.UNKNOWN_ORDER;
+            return null;
         }
         CMLAtom atom0 = bond.getAtom(0);
         if (molecule.getBond(atom0, ligand0) == null) {
@@ -382,7 +362,7 @@ public class StereochemistryTool extends AbstractTool {
         int ligandCount1 = atom1.getLigandAtoms().size();
         if ((ligandCount0 < 2 || ligandCount0 > 3)
                 || (ligandCount1 < 2 || ligandCount1 > 3)) {
-            return CMLBond.UNKNOWN_ORDER;
+            return null;
         }
         // torsion
         Point3 p0 = ligand0.getXYZ3();
@@ -400,8 +380,49 @@ public class StereochemistryTool extends AbstractTool {
         } catch (Exception e) {
             cisTrans = CMLBond.LINEAR;
         }
-        return cisTrans;
+        List<CMLAtom> atoms = new ArrayList<CMLAtom>();
+        atoms.add(ligand0);
+        atoms.add(atom0);
+        atoms.add(atom1);
+        atoms.add(ligand1);
+        String[] atomRefs4 = CMLAtomParity.createAtomRefs4(atoms);
+        bondStereo = new CMLBondStereo();
+        bondStereo.setAtomRefs4(atomRefs4);
+        bondStereo.setXMLContent(cisTrans);
+        return bondStereo;
     }
+    
+    /**
+     * get the bondstereo from 3D coordinates.
+     * 
+     * gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
+     * X at1-lig2 and at1-at2 X at1-lig2
+     * 
+     * does NOT add bondStereo as child (in case further decisions need to be
+     * made)
+     * 
+     * @param bond
+     * 
+     * @return bondstereo (null if cannot calculate as CIS/TRANS)
+     */
+    public CMLBondStereo create3DBondStereo(CMLBond bond) {
+        CMLBondStereo bondStereo = null;
+        CMLAtom[] atomRefs4 = null;
+        atomRefs4 = MoleculeTool.createAtomRefs4(bond);
+        if (atomRefs4 != null) {
+            Vector3 v1 = atomRefs4[1].get3DCrossProduct(atomRefs4[2], atomRefs4[0]);
+            Vector3 v2 = atomRefs4[2].get3DCrossProduct(atomRefs4[1], atomRefs4[3]);
+            double d = v1.dot(v2);
+            if (Math.abs(d) > 0.000001) {
+                bondStereo = new CMLBondStereo();
+                bondStereo.setAtomRefs4(new String[] { atomRefs4[0].getId(),
+                        atomRefs4[1].getId(), atomRefs4[2].getId(), atomRefs4[3].getId() });
+                bondStereo.setXMLContent((d > 0) ? CMLBond.TRANS : CMLBond.CIS);
+            }
+        }
+        return bondStereo;
+    }
+    
     /**
      * uses 3D coordinates to add bondStereo.
      * 
@@ -411,7 +432,7 @@ public class StereochemistryTool extends AbstractTool {
         // StereochemistryTool(molecule);
         List<CMLBond> doubleBonds = molecule.getDoubleBonds();
         for (CMLBond bond : doubleBonds) {
-            CMLBondStereo bondStereo3 = get3DBondStereo(bond);
+            CMLBondStereo bondStereo3 = create3DBondStereo(bond);
             if (bondStereo3 != null) {
                 bond.addBondStereo(bondStereo3);
             }

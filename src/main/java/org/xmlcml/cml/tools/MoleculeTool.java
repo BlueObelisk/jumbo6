@@ -1222,7 +1222,7 @@ public class MoleculeTool extends AbstractTool {
 	 *                bond
 	 * @return the four atoms
 	 */
-	static CMLAtom[] getAtomRefs4(CMLBond bond) throws CMLRuntimeException {
+	static CMLAtom[] createAtomRefs4(CMLBond bond) throws CMLRuntimeException {
 		CMLAtom[] atom4 = null;
 		List<CMLAtom> atomList = bond.getAtoms();
 		List<CMLAtom> ligands0 = getSubstituentLigandList(bond, atomList.get(0));
