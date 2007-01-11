@@ -945,6 +945,19 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
         CMLBondArray bondArray = getBondArray();
         return (bondArray == null) ? null : bondArray.getBondById(id);
     }
+    
+    /**
+     * get bond for atom ids
+     * 
+     * @param id1
+     * @param id2
+     * @return bond or null
+     */
+    public CMLBond getBondByAtomIds(String id1, String id2) {
+    	CMLAtom atom1 = this.getAtomById(id1);
+    	CMLAtom atom2 = this.getAtomById(id2);
+    	return this.getBond(atom1, atom2);
+    }
 
     /**
      * gets atoms by id. can be used to resolve attributes such as atomRefs2,
@@ -1065,13 +1078,15 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
      * @return bond or null if not found
      */
     public CMLBond getBond(CMLAtom a1, CMLAtom a2) {
-        String atomHash = CMLBond.atomHash(a1, a2);
-        for (CMLBond bond : getBonds()) {
-            String bondHash = CMLBond.atomHash(bond);
-            if (bondHash.equals(atomHash)) {
-                return bond;
-            }
-        }
+    	String atomHash = CMLBond.atomHash(a1, a2);
+    	if (atomHash != null) {
+    		for (CMLBond bond : getBonds()) {
+    			String bondHash = CMLBond.atomHash(bond);
+    			if (bondHash.equals(atomHash)) {
+    				return bond;
+    			}
+    		}
+    	}
         return null;
     }
 

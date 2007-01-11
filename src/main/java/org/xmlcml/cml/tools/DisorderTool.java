@@ -28,16 +28,20 @@ public class DisorderTool extends AbstractTool {
 	private CMLMolecule molecule;
 
 	private DisorderManager disorderManager;
-
-	private DisorderTool() {
-		;
-	}
+	
+	private final String[] alphabetArray = {"a", "b", "c", "d", "e", "f",
+			"g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", 
+			"s", "t", "u", "v", "w", "x", "y", "z"};
 
 	/**
 	 * constructor
 	 * 
 	 * @param molecule
 	 */
+	private DisorderTool() {
+		;
+	}
+
 	public DisorderTool(CMLMolecule molecule) {
 		this(molecule, new DisorderManager());
 	}
@@ -223,7 +227,7 @@ public class DisorderTool extends AbstractTool {
 					addDisorderMetadata(false);
 					isMetadataSet = true;
 				}
-				throw new CMLRuntimeException("Could resolve invalid disorder.");
+				System.err.println("Could not resolve invalid disorder.");
 			}
 		}
 		return finishedAssemblyList;
@@ -259,12 +263,13 @@ public class DisorderTool extends AbstractTool {
 			// exception as we cannot be confident of getting the proper structure if there
 			// are more than one assemblies with this occupancy
 			if (occupancy == 0.5) {
-				throw new CMLRuntimeException("Cannot fix invalid disorder - found atom"
+				System.err.println("Cannot fix invalid disorder - found atom"
 						+" with occupancy of 0.5");
-				
+				return false;
 			}
 			if (occupancy == Double.NaN) {
-				throw new CMLRuntimeException("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
+				System.err.println("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
+				return false;
 			}
 			//System.out.println("occupancy is: "+occupancy);
 			// if atom has unit occupancy then we can ignore it for the rest of 
@@ -286,13 +291,28 @@ public class DisorderTool extends AbstractTool {
 				}
 			}
 			// if atom added to more than one list then throw exception
-			if (addedCount > 1) throw new CMLRuntimeException("Ambiguous atom occupancy.  Cannot resolve disorder");
+			if (addedCount > 1) {
+				System.err.println("Ambiguous atom occupancy.  Cannot resolve disorder");
+				return false;
+			}
 			if (added) continue;
 			List<CMLAtom> newList = new ArrayList<CMLAtom>();
 			newList.add(disorderedAtom);
 			atomMap.put(occupancy, newList);
 		}
-		boolean fixed =  reassignDisorderGroups(atomMap);
+		boolean fixed = false;
+		
+		if (unityAtoms.size() == disorderedAtoms.size()) {
+			// if all the disordered atoms actually have an occupancy
+			// of 1.0 then set them to have no assembly or group
+			for (CMLAtom atom : unityAtoms) {
+				replaceAtomDisorderInformation(atom, ".", ".");
+			}
+			fixed = true;
+		} else {
+			// try to figure out the assembly/groupings
+			fixed = reassignDisorderGroups(atomMap);
+		}
 		if (fixed) {
 			//molecule.debug();
 			// clear disorder information from unity atoms
@@ -305,9 +325,25 @@ public class DisorderTool extends AbstractTool {
 					node.detach();
 				}
 			}
+		} else {
+			System.out.println("~~~ cannot fix invalid disorder ~~~");
 		}
 		return fixed;
 	}
+	
+	/*
+	private boolean resolveZeroPointFiveAtoms(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			List<Node> atomCifIdNodes = CMLUtil.getQueryNodes(atom, 
+					".//"+CMLScalar.NS+"[contains(@dictRef, '"+
+					CrystalTool.ATOM_LABEL+"')]", X_CML);
+			if () {
+				
+			}
+			String atomCifId = "";
+		}
+	}
+	*/
 	
 	/**
 	 * Takes a map of occupancies related to their atoms with that occupancy.  Tries
@@ -350,34 +386,8 @@ public class DisorderTool extends AbstractTool {
 						for (int i : indices) {
 							List<CMLAtom> atoms = atomMap.get(occupancyList.get(i));
 							for (CMLAtom atom : atoms) {
-								List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-										"contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
-								if (assemblyNodes.size() > 1) {
-									throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
-											+" disorder assembly.");
-								} else if (assemblyNodes.size() > 0) {
-									((CMLScalar)assemblyNodes.get(0)).setValue(assemblyCode.toString());
-								} else if (assemblyNodes.size() == 0) {
-									CMLElement scalar = new CMLElement(CMLScalar.TAG);
-									atom.appendChild(scalar);
-									scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_ASSEMBLY));
-									scalar.addAttribute(new CMLAttribute("dataType", "xsd:string"));
-									scalar.setStringContent(assemblyCode.toString());
-								}
-								List<Node> groupNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-										"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", X_CML);
-								if (groupNodes.size() > 1) {
-									throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
-											+" disorder group.");
-								} else if (groupNodes.size() > 0) {
-									((CMLScalar)groupNodes.get(0)).setValue(groupCode);
-								} else if (groupNodes.size() == 0) {
-									CMLElement scalar = new CMLElement(CMLScalar.TAG);
-									atom.appendChild(scalar);
-									scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_GROUP));
-									scalar.addAttribute(new CMLAttribute("dataType", "xsd:string"));
-									scalar.setStringContent(String.valueOf(groupCode));
-								}
+								replaceAtomDisorderInformation(atom, assemblyCode, 
+										String.valueOf(groupCode));
 							}
 							groupCode++;
 						}
@@ -391,6 +401,37 @@ public class DisorderTool extends AbstractTool {
 			}
 		}
 		return false;
+	}
+	
+	private void replaceAtomDisorderInformation(CMLAtom atom, String assemblyCode, String groupCode) {
+		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
+				"contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
+		if (assemblyNodes.size() > 1) {
+			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
+					+" disorder assembly.");
+		} else if (assemblyNodes.size() > 0) {
+			((CMLScalar)assemblyNodes.get(0)).setValue(assemblyCode.toString());
+		} else if (assemblyNodes.size() == 0) {
+			CMLElement scalar = new CMLElement(CMLScalar.TAG);
+			atom.appendChild(scalar);
+			scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_ASSEMBLY));
+			scalar.addAttribute(new CMLAttribute("dataType", "xsd:string"));
+			scalar.setStringContent(assemblyCode.toString());
+		}
+		List<Node> groupNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
+				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", X_CML);
+		if (groupNodes.size() > 1) {
+			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
+					+" disorder group.");
+		} else if (groupNodes.size() > 0) {
+			((CMLScalar)groupNodes.get(0)).setValue(groupCode);
+		} else if (groupNodes.size() == 0) {
+			CMLElement scalar = new CMLElement(CMLScalar.TAG);
+			atom.appendChild(scalar);
+			scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_GROUP));
+			scalar.addAttribute(new CMLAttribute("dataType", "xsd:string"));
+			scalar.setStringContent(String.valueOf(groupCode));
+		}
 	}
 
 	/**

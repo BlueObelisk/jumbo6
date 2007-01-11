@@ -13,6 +13,7 @@ import nu.xom.Node;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
@@ -186,7 +187,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#get3DBondStereo(org.xmlcml.cml.element.CMLBond)}.
+	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#create3DBondStereo(org.xmlcml.cml.element.CMLBond)}.
 	 */
 	@Test
 	public final void testGet3DBondStereo() {
@@ -194,11 +195,21 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#calculate3DStereo(org.xmlcml.cml.element.CMLBond, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom)}.
+	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#create3DBondStereo(org.xmlcml.cml.element.CMLBond, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
-	public final void testCalculate3DStereo() {
-		fail("Not yet implemented"); // TODO
+	public final void testCreate3DBondStereo() {
+		CMLMolecule molecule = makeMolecule1(); 
+		CMLBond bond = molecule.getBondByAtomIds("a30", "a32");
+		CMLAtom ligand0 = molecule.getAtomById("a19");
+		CMLAtom ligand1 = molecule.getAtomById("a34");
+		StereochemistryTool st = new StereochemistryTool(molecule);
+		CMLBondStereo bondStereo = null;
+		try {
+			bondStereo = st.create3DBondStereo(bond, ligand0, ligand1);
+		} catch (CMLException e) {
+			// TODO - complete this test
+		}
 	}
 
 	/**

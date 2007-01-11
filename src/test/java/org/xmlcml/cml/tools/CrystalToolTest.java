@@ -443,6 +443,10 @@ public class CrystalToolTest extends AbstractToolTest {
                     	e.printStackTrace();
                         continue;
                     }
+                    for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
+                    	StereochemistryTool st = new StereochemistryTool(subMol);
+                    	st.add3DStereo();
+                    }
                     // full cif
                     writeXML(getCrystalName(user, cifname+S_UNDER+mol), mergedMolecule, "full cif");
                     // ring nuclei
@@ -674,7 +678,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-problems";
+            s = "E:\\cif-test";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {

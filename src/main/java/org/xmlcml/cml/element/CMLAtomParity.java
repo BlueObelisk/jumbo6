@@ -1,5 +1,7 @@
 package org.xmlcml.cml.element;
 
+import java.util.List;
+
 import nu.xom.Element;
 import nu.xom.Node;
 
@@ -161,6 +163,24 @@ public class CMLAtomParity extends AbstractAtomParity {
             }
         }
         return atoms;
+    }
+    
+    /**
+     * utility method to create atomRefs4 attribute
+     * 
+     * @param atoms
+     * @return string array or null
+     */
+    public static String[] createAtomRefs4(List<CMLAtom> atoms) {
+    	if (atoms == null || atoms.size() != 4) {
+    		throw new CMLRuntimeException("Bad atom list argument.");
+    	}
+    	String[] atomRefs4 = new String[4];
+    	int i = 0;
+    	for (CMLAtom atom : atoms) {
+    		atomRefs4[i++] = atom.getId();    		
+    	}
+    	return atomRefs4;
     }
 
     /**
