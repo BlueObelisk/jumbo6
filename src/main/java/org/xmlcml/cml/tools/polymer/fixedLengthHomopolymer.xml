@@ -1,0 +1,10 @@
+	<fragment convention='cml:PML-basic'  +
+	   xmlns='http://www.xml-cml.org/schema' +
+	   xmlns:g='http://www.xml-cml.org/mols/geom1'>
+	  <fragment countExpression='*(NNN)'>
+	    <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>
+	    <fragment> +
+	      <molecule ref='MOL'/> +
+	    </fragment>
+	  </fragment>
+	</fragment>;

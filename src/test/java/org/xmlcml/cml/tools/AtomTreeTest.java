@@ -43,6 +43,27 @@ public class AtomTreeTest extends AbstractToolTest {
     
     CMLMolecule dmf = null;
 
+    String cnoS = S_EMPTY +
+    "<molecule id='m2' "+CML_XMLNS + ">" +
+    "  <atomArray>" +
+    "    <atom id='a1' elementType='N' hydrogenCount='1'/>"+
+    "    <atom id='a2' elementType='C' hydrogenCount='2'>"+
+    "      <label>C1</label>"+
+    "    </atom>"+
+    "    <atom id='a3' elementType='O' hydrogenCount='0'>"+
+    "      <label>C2</label>"+
+    "    </atom>"+
+    "  </atomArray>" +
+    "  <bondArray>" +
+    "    <bond atomRefs2='a1 a2'/>"+
+    "    <bond atomRefs2='a2 a3'/>"+
+    "    <bond atomRefs2='a1 a3'/>"+
+    "  </bondArray>" +
+    "</molecule>" +
+    S_EMPTY;
+
+    CMLMolecule cno = null;
+
     /** set up.
      * @exception Exception
      */
@@ -50,6 +71,7 @@ public class AtomTreeTest extends AbstractToolTest {
     public void setUp() throws Exception {
         super.setUp();
         dmf = (CMLMolecule) parseValidString(dmfS);
+        cno = (CMLMolecule) parseValidString(cnoS);
     }
     /** Test method for 'org.xmlcml.cml.tools.AtomTree.AtomTree(CMLAtom, CMLAtom)'
      */
@@ -58,6 +80,13 @@ public class AtomTreeTest extends AbstractToolTest {
         AtomTree atomTree = new AtomTree(dmf.getAtom(0), dmf.getAtom(1));
         atomTree.expandTo(2);
         Assert.assertEquals("new AtomTree", "C", atomTree.toString());
+        atomTree = new AtomTree(dmf.getAtom(1), dmf.getAtom(0));
+        atomTree.expandTo(3);
+        Assert.assertEquals("new AtomTree", "N(C)(C(O))", atomTree.toString());
+        
+        atomTree = new AtomTree(cno.getAtom(0), cno.getAtom(1));
+        atomTree.expandTo(2);
+        Assert.assertEquals("new AtomTree", "C(O(N))", atomTree.toString());
         atomTree = new AtomTree(dmf.getAtom(1), dmf.getAtom(0));
         atomTree.expandTo(3);
         Assert.assertEquals("new AtomTree", "N(C)(C(O))", atomTree.toString());

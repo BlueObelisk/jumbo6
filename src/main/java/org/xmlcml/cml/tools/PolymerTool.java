@@ -8,11 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
+import nu.xom.xslt.XSLTransform;
 
+import org.junit.Before;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -577,12 +581,46 @@ formula='
         }
     }
     
+    public static CMLFragment createFromTemplate(
+		String stylesheetFilename, List<XSLParam> parameters, Catalog catalog) {
+    	
+    	System.out.println("XSL "+stylesheetFilename);
+    	for (XSLParam param : parameters) {
+    		System.out.println(param.name + "=" + param.value);
+    	}
+    	Document dummyDoc = new Document(new Element("dummy"));
+    	Element element = null;
+    	Builder builder = new Builder();
+    	try {
+	        Document stylesheet = builder.build(stylesheetFilename);
+	        XSLTransform transform = new XSLTransform(stylesheet);
+	    	for (XSLParam param : parameters) {
+	    		transform.setParameter(param.name, param.value);
+	    	}
+	        element = (Element) transform.transform(dummyDoc).get(0);
+    	} catch (Exception e) {
+    		throw new CMLRuntimeException("should never throw "+e);
+    	}
+    	String s = CMLUtil.getCanonicalString(element);
+    	CMLFragment fragment = null;
+    	try {
+    		fragment = (CMLFragment) new CMLBuilder().parseString(s);
+    	} catch (Exception e) {
+    		throw new CMLRuntimeException("should not throw: "+e.getMessage());
+    	}
+    	fragment.debug();
+    	new FragmentTool(fragment).processAll(catalog);
+    	fragment.debug();
+    	return fragment;
+    }
+    
     private static void usage() {
         System.out.println("java org.xmlcml.cml.tools.PolymerTool1 [args]");
         System.out.println("    -INFILE filename // XML input file; must include convention ");
         System.out.println("    -OUTFILE filename // XML output file");
         System.out.println("    -BASIC, -INTERMEDIATE, -EXPLICIT, -COMPLETE");
         System.out.println("    -DEBUG");
+        System.out.println("  OR;  -TEMPLATE [-PARAM name value]* -CATALOG catalog");
     }
     
     /** runs Polymer Tool including building polymers.
@@ -619,6 +657,9 @@ formula='
             String outfileName = S_EMPTY;
             String fragments = S_EMPTY;
             Convention targetLevel = null;
+            String template = S_EMPTY;
+            List<XSLParam> paramList = new ArrayList<XSLParam>();
+            String catalog = S_EMPTY;
             int i = 0;
             boolean debug = true;
         	@SuppressWarnings("unused")
@@ -642,29 +683,50 @@ formula='
                 } else if("-DEBUG".equalsIgnoreCase(args[i])) {
                     debug = true;
                     i++;
+                } else if (args[i].equalsIgnoreCase("-TEMPLATE")) {
+                    template = args[++i]; i++;
+                } else if (args[i].equalsIgnoreCase("-CATALOG")) {
+                    catalog = args[++i]; i++;
+                } else if (args[i].equalsIgnoreCase("-PARAM")) {
+                    paramList.add(new XSLParam(args[++i], args[++i])); i++;
                 }else {
                 	System.err.println("Bad arg "+ args[i]);
                 	i++;
                 }
             }
             
-            if (targetLevel == null){
-            	targetLevel = Convention.PML_DEFAULT_FINAL;
-            	System.out.println("No level specified. Assuming level: "+targetLevel);
-            }
-            if(S_EMPTY.equals(fragments)) {
-                System.err.println("No fragments found; please give -FRAGMENTS");
-            }
-            if (!infile.equals(S_EMPTY)) {
-                try {
-                    PolymerTool polymerTool = new PolymerTool();
-                    polymerTool.processConventionExhaustively(
-                        infile, fragments, outfileName, targetLevel, debug);
-                } catch (Exception e) {
-                    System.err.println("ERROR... "+e);
-                    e.printStackTrace();
-                }
-            }
+            if (!S_EMPTY.equals(template)) {
+            	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
+        		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
+            	CMLFragment fragment = createFromTemplate(template, paramList, moleculeCatalog);
+            } else {
+	            if (targetLevel == null){
+	            	targetLevel = Convention.PML_DEFAULT_FINAL;
+	            	System.out.println("No level specified. Assuming level: "+targetLevel);
+	            }
+	            if(S_EMPTY.equals(fragments)) {
+	                System.err.println("No fragments found; please give -FRAGMENTS");
+	            }
+	            if (!infile.equals(S_EMPTY)) {
+	                try {
+	                    PolymerTool polymerTool = new PolymerTool();
+	                    polymerTool.processConventionExhaustively(
+	                        infile, fragments, outfileName, targetLevel, debug);
+	                } catch (Exception e) {
+	                    System.err.println("ERROR... "+e);
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
         }
     }
+}
+class XSLParam {
+	String name;
+	String value;
+	
+	public XSLParam(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
 }

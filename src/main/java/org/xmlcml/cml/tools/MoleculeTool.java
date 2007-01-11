@@ -1186,25 +1186,19 @@ public class MoleculeTool extends AbstractTool {
 	 * gets all substituent atoms of atom (but not otherAtom in bond)
 	 *
 	 * @param bond
-	 * @param atom
-	 *            at one end of bond
-	 * @throws CMLException
-	 *             atom is not in bond
+	 * @param atom at one end of bond
 	 * @return the list of substituent atoms
 	 */
-	private List<CMLAtom> getSubstituentLigandList(CMLBond bond, CMLAtom atom)
-	throws CMLException {
+	private static List<CMLAtom> getSubstituentLigandList(CMLBond bond, CMLAtom atom) {
 		CMLAtom otherAtom = bond.getOtherAtom(atom);
-		List<CMLAtom> substituent = new ArrayList<CMLAtom>(atom
-				.getLigandAtoms().size() - 1);
-		int count = 0;
+		List<CMLAtom> substituentLigandList = new ArrayList<CMLAtom>();
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligand : ligandList) {
 			if (!ligand.equals(otherAtom)) {
-				substituent.set(count++, ligand);
+				substituentLigandList.add(ligand);
 			}
 		}
-		return substituent;
+		return substituentLigandList;
 	}
 
 	/**
@@ -1222,53 +1216,73 @@ public class MoleculeTool extends AbstractTool {
 	 * than dumping the program
 	 *
 	 * @param bond
-	 * @exception CMLException
+	 * @exception CMLRuntimeException
 	 *                2 ligand atoms on same atom on same side too few or too
 	 *                many ligands at either end (any) ligand is linear with
 	 *                bond
 	 * @return the four atoms
 	 */
-	CMLAtom[] getAtomRefs4(CMLBond bond) throws CMLException {
-		List<CMLAtom> atomList = molecule.getAtoms();
+	static CMLAtom[] getAtomRefs4(CMLBond bond) throws CMLRuntimeException {
+		CMLAtom[] atom4 = null;
+		List<CMLAtom> atomList = bond.getAtoms();
 		List<CMLAtom> ligands0 = getSubstituentLigandList(bond, atomList.get(0));
 		List<CMLAtom> ligands1 = getSubstituentLigandList(bond, atomList.get(1));
 		if (ligands0.size() == 0) {
-			throw new CMLException("Too few ligands on atom: "
+			// no ligands on atom
+		} else if (ligands1.size() == 0) {
+			// no ligands on atom
+		} else if (ligands0.size() > 2) {
+			throw new CMLRuntimeException("Too many ligands on atom: "
 					+ atomList.get(0).getId());
-		}
-		if (ligands1.size() == 0) {
-			throw new CMLException("Too few ligands on atom: "
+		} else if (ligands1.size() > 2) {
+			throw new CMLRuntimeException("Too many ligands on atom: "
 					+ atomList.get(1).getId());
+		} else {
+			CMLAtom ligand0 = ligands0.get(0);
+			if (ligand0.getElementType().equals("H") && ligands0.size() > 1
+					&& ligands0.get(1) != null) {
+				ligand0 = ligands0.get(1);
+			} else if (ligands0.size() > 1
+					&& ligands0.get(1).getId().compareTo(atomList.get(0).getId()) < 0) {
+				ligand0 = ligands0.get(1);
+			}
+			CMLAtom ligand1 = ligands1.get(0);
+			if (ligand1.getElementType().equals("H") && ligands1.size() > 1
+					&& ligands1.get(1) != null) {
+				ligand1 = ligands1.get(1);
+			} else if (ligands1.size() > 1
+					&& ligands1.get(1).getId().compareTo(atomList.get(1).getId()) < 0) {
+				ligand1 = ligands1.get(1);
+			}
+			atom4 = new CMLAtom[4];
+			atom4[0] = ligand0;
+			atom4[1] = atomList.get(0);
+			atom4[2] = atomList.get(1);
+			atom4[3] = ligand1;
 		}
-		if (ligands0.size() > 2) {
-			throw new CMLException("Too many ligands on atom: "
-					+ atomList.get(0).getId());
+		return atom4;
+	}
+
+	/**
+	 * gets four atoms defining atomParity isomerism.
+	 * applies only to 4-coordinate atoms l1-X(l2)(l3)-l4
+	 * and possibly 3-coordinate atoms l1-X(l2)-l3
+	 * when central atom is added to list: l1-l2-l3-X
+	 *
+	 * @param atom
+	 * @return the four atoms or null
+	 */
+	static CMLAtom[] getAtomRefs4(CMLAtom atom) throws CMLRuntimeException {
+		CMLAtom[] atom4 = null;
+		List<CMLAtom> ligandList = atom.getLigandAtoms();
+		if (ligandList.size() < 3) {
+		} else {
+			atom4 = new CMLAtom[4];
+			atom4[0] = ligandList.get(0);
+			atom4[1] = ligandList.get(1);
+			atom4[2] = ligandList.get(2);
+			atom4[3] = (ligandList.size() == 3) ? atom : ligandList.get(3);
 		}
-		if (ligands1.size() > 2) {
-			throw new CMLException("Too many ligands on atom: "
-					+ atomList.get(1).getId());
-		}
-		CMLAtom ligand0 = ligands0.get(0);
-		if (ligand0.getElementType().equals("H") && ligands0.size() > 1
-				&& ligands0.get(1) != null) {
-			ligand0 = ligands0.get(1);
-		} else if (ligands0.size() > 1
-				&& ligands0.get(1).getId().compareTo(atomList.get(0).getId()) < 0) {
-			ligand0 = ligands0.get(1);
-		}
-		CMLAtom ligand1 = ligands1.get(0);
-		if (ligand1.getElementType().equals("H") && ligands1.size() > 1
-				&& ligands1.get(1) != null) {
-			ligand1 = ligands1.get(1);
-		} else if (ligands1.size() > 1
-				&& ligands1.get(1).getId().compareTo(atomList.get(1).getId()) < 0) {
-			ligand1 = ligands1.get(1);
-		}
-		CMLAtom[] atom4 = new CMLAtom[4];
-		atom4[0] = ligand0;
-		atom4[1] = atomList.get(0);
-		atom4[2] = atomList.get(1);
-		atom4[3] = ligand1;
 		return atom4;
 	}
 
@@ -1746,12 +1760,8 @@ public class MoleculeTool extends AbstractTool {
 		for (CMLMolecule subMol : subMolList) {
 			List<CMLBond> acyclicBonds = new ArrayList<CMLBond>();
 			int bondCount = subMol.getBondCount();
-			try {
-				ConnectionTableTool ct = new ConnectionTableTool(subMol);
-				acyclicBonds = ct.getAcyclicBonds();
-			} catch (CMLException e) {
-				e.printStackTrace();
-			}
+			ConnectionTableTool ct = new ConnectionTableTool(subMol);
+			acyclicBonds = ct.getAcyclicBonds();
 			// if bond count equal to number of acyclic bonds then there
 			// aren't any cyclic bonds in the molecule, hence no linkers
 			if (bondCount != acyclicBonds.size()) {
