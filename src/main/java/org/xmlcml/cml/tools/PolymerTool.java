@@ -2,6 +2,8 @@ package org.xmlcml.cml.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -16,7 +18,6 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.xslt.XSLTransform;
 
-import org.junit.Before;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -648,7 +649,7 @@ formula='
      * -FILE filename //input tool
      * [level] //output level (BASIC, INTERMEDIATE, EXPLICIT, COMPLETE, CARTESIAN)
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if (args.length == 0) {
             usage();
 //            System.exit(0);
@@ -656,6 +657,7 @@ formula='
             String infile = S_EMPTY;
             String outfileName = S_EMPTY;
             String fragments = S_EMPTY;
+            String fragmentName = S_EMPTY;
             Convention targetLevel = null;
             String template = S_EMPTY;
             List<XSLParam> paramList = new ArrayList<XSLParam>();
@@ -669,6 +671,8 @@ formula='
                     infile = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-OUTFILE")) {
                     outfileName = args[++i]; i++;
+                } else if (args[i].equalsIgnoreCase("-FRAGMENT")) {
+                    fragmentName = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-BASIC")) {
                     targetLevel = Convention.PML_BASIC; i++;
                 } else if (args[i].equalsIgnoreCase("-INTERMEDIATE")) {
@@ -705,7 +709,7 @@ formula='
 	            	System.out.println("No level specified. Assuming level: "+targetLevel);
 	            }
 	            if(S_EMPTY.equals(fragments)) {
-	                System.err.println("No fragments found; please give -FRAGMENTS");
+//	                System.err.println("No fragments found; please give -FRAGMENTS");
 	            }
 	            if (!infile.equals(S_EMPTY)) {
 	                try {
@@ -716,6 +720,16 @@ formula='
 	                    System.err.println("ERROR... "+e);
 	                    e.printStackTrace();
 	                }
+	            } else if (!fragmentName.equals(S_EMPTY)) {
+	            	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
+	        		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
+	            	CMLFragment fragment = (CMLFragment) new CMLBuilder().build(new FileReader(fragmentName)).getRootElement();
+	            	FragmentTool fragmentTool = new FragmentTool(fragment);
+	            	fragmentTool.processAll(moleculeCatalog);
+	            	if (!outfileName.equals(S_EMPTY)) {
+	            		FileOutputStream fos = new FileOutputStream(outfileName);
+	            		fragment.debug(fos, 2);
+	            	}
 	            }
 	        }
         }
