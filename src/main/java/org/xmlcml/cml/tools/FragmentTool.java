@@ -838,11 +838,14 @@ class IntermediateProcessor implements CMLConstants {
 			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, (CMLElement)indexable);
 			if (namespace != null) {
 				IndexableList indexableList = catalog.getIndexableList(namespace, type);
+				String localRef = S_EMPTY;
 				if (indexableList != null) {
-					deref = indexableList.getById(CMLUtil.getLocalName(ref));
+//					indexableList.updateIndex();
+					localRef = CMLUtil.getLocalName(ref);
+					deref = indexableList.getById(localRef);
 				}
 				if (deref == null) {
-					((CMLElement)indexableList).debug("cannot dereference: "+ref);
+					((CMLElement)indexableList).debug("cannot dereference: "+ref+"/"+localRef);
 				}
 			} else {
 				((CMLElement)indexable).debug("FAILS TO LOOKUP");

@@ -112,7 +112,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	}
 
 	/** get map of indexables under namespace.
-	 *
+	 * also updates the index
 	 * @param namespace
 	 * @return map indexed by id
 	 */
@@ -127,7 +127,9 @@ public class Catalog implements CatalogListChild, CMLConstants {
 			throw new CMLRuntimeException("Cannot find catalog entry for: "
 					+ namespace.getNamespaceURI());
 		}
-		return getIndexableList(to, type.classx);
+		IndexableList indexableList = getIndexableList(to, type.classx);
+		indexableList.updateIndex();
+		return indexableList;
 	}
 	
 	private IndexableList getIndexableList(String to, Class indexableListClass) {
