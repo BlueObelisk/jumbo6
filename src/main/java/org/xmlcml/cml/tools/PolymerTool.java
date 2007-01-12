@@ -2,7 +2,6 @@ package org.xmlcml.cml.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -602,10 +601,10 @@ formula='
     	} catch (Exception e) {
     		throw new CMLRuntimeException("should never throw "+e);
     	}
-    	String s = CMLUtil.getCanonicalString(element);
+    	String basicXML = CMLUtil.getCanonicalString(element);
     	CMLFragment fragment = null;
     	try {
-    		fragment = (CMLFragment) new CMLBuilder().parseString(s);
+    		fragment = (CMLFragment) new CMLBuilder().parseString(basicXML);
     	} catch (Exception e) {
     		throw new CMLRuntimeException("should not throw: "+e.getMessage());
     	}
@@ -649,7 +648,7 @@ formula='
      * -FILE filename //input tool
      * [level] //output level (BASIC, INTERMEDIATE, EXPLICIT, COMPLETE, CARTESIAN)
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (args.length == 0) {
             usage();
 //            System.exit(0);
@@ -657,7 +656,6 @@ formula='
             String infile = S_EMPTY;
             String outfileName = S_EMPTY;
             String fragments = S_EMPTY;
-            String fragmentName = S_EMPTY;
             Convention targetLevel = null;
             String template = S_EMPTY;
             List<XSLParam> paramList = new ArrayList<XSLParam>();
@@ -671,8 +669,6 @@ formula='
                     infile = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-OUTFILE")) {
                     outfileName = args[++i]; i++;
-                } else if (args[i].equalsIgnoreCase("-FRAGMENT")) {
-                    fragmentName = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-BASIC")) {
                     targetLevel = Convention.PML_BASIC; i++;
                 } else if (args[i].equalsIgnoreCase("-INTERMEDIATE")) {
@@ -703,13 +699,16 @@ formula='
             	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
         		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
             	CMLFragment fragment = createFromTemplate(template, paramList, moleculeCatalog);
+            	if (!S_EMPTY.equals(outfileName)) {
+//            		FileWriter fw = new FileWriter(outfileName);
+            	}
             } else {
 	            if (targetLevel == null){
 	            	targetLevel = Convention.PML_DEFAULT_FINAL;
 	            	System.out.println("No level specified. Assuming level: "+targetLevel);
 	            }
 	            if(S_EMPTY.equals(fragments)) {
-//	                System.err.println("No fragments found; please give -FRAGMENTS");
+	                System.err.println("No fragments found; please give -FRAGMENTS");
 	            }
 	            if (!infile.equals(S_EMPTY)) {
 	                try {
@@ -720,16 +719,6 @@ formula='
 	                    System.err.println("ERROR... "+e);
 	                    e.printStackTrace();
 	                }
-	            } else if (!fragmentName.equals(S_EMPTY)) {
-	            	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
-	        		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
-	            	CMLFragment fragment = (CMLFragment) new CMLBuilder().build(new FileReader(fragmentName)).getRootElement();
-	            	FragmentTool fragmentTool = new FragmentTool(fragment);
-	            	fragmentTool.processAll(moleculeCatalog);
-	            	if (!outfileName.equals(S_EMPTY)) {
-	            		FileOutputStream fos = new FileOutputStream(outfileName);
-	            		fragment.debug(fos, 2);
-	            	}
 	            }
 	        }
         }
