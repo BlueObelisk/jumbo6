@@ -235,7 +235,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#buildPath(java.lang.String...)}.
+     * {at link org.xmlcml.cml.base.CMLUtil#buildPath(java.lang.String...)}.
      */
     @Test
     public final void testBuildPath() {
@@ -682,15 +682,6 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
     @Test
     @Ignore
     public final void testCheckIntIntInt() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#checkNotNull(org.xmlcml.euclid.Transform3)}.
-     */
-    @Test
-    @Ignore
-    public final void testCheckNotNull() {
         fail("Not yet implemented"); // TODO
     }
 

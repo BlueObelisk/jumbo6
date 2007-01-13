@@ -104,7 +104,9 @@ public class CMLZMatrix extends AbstractZMatrix {
         Elements lengthElements = this.getChildCMLElements(CMLLength.TAG);
         Elements angleElements = this.getChildCMLElements(CMLAngle.TAG);
         Elements torsionElements = this.getChildCMLElements(CMLTorsion.TAG);
-        if (lengthElements.size() == 1) {
+        if (lengthElements.size() == 0) {
+        	// nothing to do!
+        } else if (lengthElements.size() == 1) {
             CMLLength length = (CMLLength) lengthElements.get(0);
             String id = length.getAtomRefs2()[0];
             CMLAtom atom0 = molecule.getAtomById(id);
@@ -123,6 +125,9 @@ public class CMLZMatrix extends AbstractZMatrix {
                 (CMLLength) lengthElements.get(0), 
                 (CMLLength) lengthElements.get(1),
                 molecule);
+        } else if (angleElements.size() == 0) {
+        	this.debug("BAD ZMATRIX");
+        	throw new CMLRuntimeException("Bad zMatrix");
         } else {
             setCoordinates((CMLAngle) angleElements.get(0), 
                 (CMLLength) lengthElements.get(0), 
@@ -136,7 +141,6 @@ public class CMLZMatrix extends AbstractZMatrix {
                     molecule);
             }
         }
-//        molecule.debug();
     }
     
     private void setCoordinates(CMLAngle angle, CMLLength length0, CMLLength length1,

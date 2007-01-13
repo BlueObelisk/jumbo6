@@ -1135,6 +1135,17 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
         }
         return charge;
     }
+    
+    /**
+     * get formula.
+     * 
+     * @param control
+     * @return calculated formula
+     * @throws CMLRuntimeException
+     */
+    public CMLFormula getCalculatedFormula(CMLMolecule.HydrogenControl control) {
+    	return this.getAtomSet().getCalculatedFormula(control);
+    }
 
     /**
      * calculate 2D centroid.
