@@ -32,6 +32,7 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLCrystal;
+import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -98,6 +99,23 @@ public class MoleculeTool extends AbstractTool {
 		return chargedAtoms;
 	}
 
+
+	/**
+	 * Adjust bond orders to satisfy valence.
+	 *
+	 * in impossible systems appropriate atoms are marked as radicals
+	 * (spinMultiplicity) assumes explicit hydrogens
+	 * uses default PISystemManager
+	 */
+	public void adjustBondOrdersToValency() {
+        molecule.setBondOrders(CMLBond.SINGLE);
+        PiSystemManager piSystemManager = new PiSystemManager();
+        piSystemManager.setUpdateBonds(true);
+//        piSystemManager.setKnownUnpaired(knownUnpaired);
+        piSystemManager.setDistributeCharge(true);
+		this.adjustBondOrdersToValency(piSystemManager);
+	}
+	
 	/**
 	 * Adjust bond orders to satisfy valence.
 	 *
@@ -120,6 +138,11 @@ public class MoleculeTool extends AbstractTool {
 			} else {
 				subPiSystem.identifyDoubleBonds();
 			}
+		}
+		// remove temporary pi electrons
+		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", X_CML);
+		for (Node electron : electrons) {
+			electron.detach();
 		}
 	}
 
