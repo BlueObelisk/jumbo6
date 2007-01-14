@@ -171,9 +171,11 @@ public class ValencyTool extends AbstractTool {
 		this.markMCC(atoms);
 		this.markSNH(atoms);
 		this.markSandwichLigands(atoms);
-		this.markLoneNonMetalAnions(atoms);
 		this.markEarthMetals(atoms);
 		int count = atoms.size();
+		if (count == 1) {
+			this.markLoneNonMetalAnions(atoms);
+		}
 		if (count == 2) {
 			this.markMetalCarbonylAndNitrile(atoms);
 		}
@@ -929,7 +931,7 @@ public class ValencyTool extends AbstractTool {
 			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = this.removeMetalAtomsAndBonds(molecule);
 			// if the removing of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
-			if (mol.getAtomCount() > 1) {
+
 				// now the metal atoms and bonds have been removed, partition 
 				// molecule into submolecules and then calculate the bond orders
 				// and charges
@@ -1225,12 +1227,11 @@ public class ValencyTool extends AbstractTool {
 				// return the mol to its original state before adding metal
 				// atoms and bonds back in
 				ctt.flattenMolecules();
-			}
-			// reattach metal atoms and bonds now bonds have been calculated
-			this.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
+				// reattach metal atoms and bonds now bonds have been calculated
+				this.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
 		}
 	}
-	
+
 	/**
 	 * add double bonds through PiSystemManager.
 	 */
