@@ -164,9 +164,10 @@ public class CrystalTool extends AbstractTool {
         List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
         
         boolean addBonds = true;
-        new ConnectionTableTool(molecule).partitionIntoMolecules();
+        //new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
             molecule, contactList, addBonds);
+        mergedMolecule.debug();
 
         for (CMLMolecule mol : mergedMolecule.getDescendantsOrMolecule()) {
         	if (!DisorderTool.isDisordered(mol)) {
