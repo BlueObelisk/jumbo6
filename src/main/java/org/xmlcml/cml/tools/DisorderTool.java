@@ -321,8 +321,6 @@ public class DisorderTool extends AbstractTool {
 					node.detach();
 				}
 			}
-		} else {
-			System.out.println("~~~ cannot fix invalid disorder ~~~");
 		}
 		return fixed;
 	}

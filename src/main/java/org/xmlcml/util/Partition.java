@@ -28,7 +28,7 @@ public class Partition {
 			List<List<Integer>> partitionList,
 			List<Integer> partition) {
 		if (n == 0) {
-			System.out.println(prefix);
+			//System.out.println(prefix);
 			partitionList.add(new ArrayList<Integer>(partition));
 			partition.clear();
 			return partitionList;
