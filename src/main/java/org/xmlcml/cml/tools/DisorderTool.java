@@ -28,10 +28,6 @@ public class DisorderTool extends AbstractTool {
 	private CMLMolecule molecule;
 
 	private DisorderManager disorderManager;
-	
-	private final String[] alphabetArray = {"a", "b", "c", "d", "e", "f",
-			"g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", 
-			"s", "t", "u", "v", "w", "x", "y", "z"};
 
 	/**
 	 * constructor
@@ -354,8 +350,10 @@ public class DisorderTool extends AbstractTool {
 	 * @return whether or not the disorder groups have been successfully reassigned
 	 */
 	private boolean reassignDisorderGroups(Map<Double, List<CMLAtom>> atomMap) {
+		// if only 1 or 0 occupancies left, then we cannot create a valid disorder assembly.
 		if (atomMap.size() < 2) {
-			throw new CMLRuntimeException("Cannot resolve disorder. Only one non-unit occupancy value found in molecule.");
+			System.err.println("Cannot resolve disorder. Only one non-unit occupancy value found in molecule.");
+			return false;
 		}
 		List<Double> occupancyList = new LinkedList<Double>(atomMap.keySet());
 		List<List<Integer>> partitionList = Partition.partition(atomMap.size());
