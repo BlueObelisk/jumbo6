@@ -651,6 +651,10 @@ public class CMLBond extends AbstractBond {
     	double covd = 0.0;
     	for (CMLAtom atom : atomList) {
     		ChemicalElement el = atom.getChemicalElement();
+    		if (el == null) {
+    			throw new CMLRuntimeException("cannot find chemicalElement for atom ("+
+    					atom.getId()+"):"+atom.getElementType());
+    		}
     		double radius = el.getCovalentRadius();
     		if (el.isChemicalElementType(Type.ACTINIDE) ||
     				el.isChemicalElementType(Type.LANTHANIDE)) {

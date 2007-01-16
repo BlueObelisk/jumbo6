@@ -364,6 +364,12 @@ public class ChemicalElementTest extends BaseTest {
     public void testGetChemicalElement() {
         ChemicalElement el = ChemicalElement.getChemicalElement("C");
         Assert.assertEquals("get", "C", el.getSymbol());
+        el = ChemicalElement.getChemicalElement("CA");
+        Assert.assertNull("get", el);
+        el = ChemicalElement.getChemicalElement("Dummy");
+        Assert.assertNotNull("get", el);
+        el.debug();
+        Assert.assertEquals("get", "Dummy", el.getSymbol());
     }
 
     /**

@@ -102,7 +102,6 @@ public class ChemicalElement {
 
     /** XML file containing elemental details. */
     final static String ELEMENT_FILE = "org/xmlcml/molutil/elementdata.xml";
-    final static String JUNK_FILE = "org/xmlcml/molutil/elementdata1.xml";
 
     final static double DEFAULT_ATOMIC_RADIUS = 1.6;
 
@@ -622,7 +621,7 @@ public class ChemicalElement {
 
         document = null;
         try {
-            document = CMLUtil.getXMLResource(JUNK_FILE);
+            document = CMLUtil.getXMLResource(ELEMENT_FILE);
         } catch (IOException e1) {
             throw new CMLRuntimeException("BUG: cannot read PT resource file: "+
                 ELEMENT_FILE);

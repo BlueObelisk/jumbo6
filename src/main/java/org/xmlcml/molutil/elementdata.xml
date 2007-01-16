@@ -1,18 +1,31 @@
 <!-- Generated 15th July 2004 by Sam Adams. Data from OpenBabel elements.txt file, and IUPAC isotope data -->
 <!-- OpenBabel's covalent radii appear to be atomic radii, and the bond order radii are actually the covalent radii -->
 <!-- Webelements data added 28th July -->
+<!--  PMR 2007-01-12 replaced Xx by Dummy and R -->
 <elements>
-  <element atomicnumber="0" id="Xx">
+  <element atomicnumber="0" id="Dummy">
     <radii source="openbabel">
       <radius type="covalent" unit="angstrom">0.000</radius>
       <radius type="bondorder" unit="angstrom">0.000</radius>
       <radius type="vanderwaals" unit="angstrom">0.000</radius>
     </radii>
-    <maxbondorder source="openbabel">0</maxbondorder>
-    <mass source="openbabel" unit="amu">0.000</mass>
-    <electronegativity source="openbabel">0.00</electronegativity>
+    <maxbondorder>0</maxbondorder>
+    <mass source="webelements" unit="amu">0.000</mass>
+    <electronegativity>0.00</electronegativity>
+    <rgb red="0.07" green="0.60" blue="0.70"/>
+  </element>
+  <element atomicnumber="149" id="R">
+    <radii source="openbabel">
+      <radius type="covalent" unit="angstrom">0.000</radius>
+      <radius type="bondorder" unit="angstrom">0.000</radius>
+      <radius type="vanderwaals" unit="angstrom">0.000</radius>
+    </radii>
+    <maxbondorder >0</maxbondorder>
+    <mass source="webelements" unit="amu">0.000</mass>
+    <electronegativity>0.00</electronegativity>
     <rgb red="0.07" green="0.50" blue="0.70"/>
   </element>
+  
   <element atomicnumber="1" id="H" name="hydrogen" group="1" period="1">
     <radii source="openbabel">
       <radius type="covalent" unit="angstrom">0.230</radius>

@@ -867,7 +867,7 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 				// if we cannot parse it, create formula without contents
 				try {
 					formula = CMLFormula.createFormula(value);
-				} catch (CMLException e) {
+				} catch (CMLRuntimeException e) {
 					formula = new CMLFormula();
 				}
 				formula.setInline(value);
@@ -875,11 +875,7 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 				cml0.appendChild(formula);
 			} else if (idx == 3) {
 				// structural, probably same as IUPAC
-				try {
-					formula = CMLFormula.createFormula(value);
-				} catch (CMLException e) {
-					formula = new CMLFormula();
-				}
+				formula = CMLFormula.createFormula(value);
 				formula.setInline(value);
 				formula.setDictRef(makeDictRef(name));
 				cml0.appendChild(formula);
