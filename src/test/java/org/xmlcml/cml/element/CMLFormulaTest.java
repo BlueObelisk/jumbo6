@@ -364,16 +364,12 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         s = "H 2 O 4 S 1";
         try {
             form = CMLFormula.createFormula(s);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("parsing shouldn't fail for: " + s + " because:" + e);
         }
         Assert.assertEquals("formula string", "H 2 O 4 S 1", form.getConcise());
         s = "H2O4S";
-        try {
-            form = CMLFormula.createFormula(s);
-        } catch (CMLException e) {
-            Assert.fail("parsing shouldn't fail for: " + s + " because:" + e);
-        }
+        form = CMLFormula.createFormula(s);
         Assert.assertEquals("formula string", "H 2 O 4 S 1", form.getConcise());
     }
 
@@ -391,9 +387,8 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
             form = CMLFormula.createFormula("C2H4",
                     CMLFormula.Type.NOPUNCTUATION);
         } catch (CMLRuntimeException e) {
-            // neverThrow(e); // FIXME
-        } catch (CMLException e) {
-            // neverThrow(e);
+        	e.printStackTrace();
+             neverThrow(e);
         }
         // Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
         try {
@@ -401,16 +396,12 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                     CMLFormula.Type.ELEMENT_WHITESPACE_COUNT);
         } catch (CMLRuntimeException e) {
             neverThrow(e);
-        } catch (CMLException e) {
-            neverThrow(e);
         }
         Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
         try {
             form = CMLFormula.createFormula("C2 H4",
                     CMLFormula.Type.ELEMENT_COUNT_WHITESPACE);
         } catch (CMLRuntimeException e) {
-            neverThrow(e);
-        } catch (CMLException e) {
             neverThrow(e);
         }
         Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
@@ -420,8 +411,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                     CMLFormula.Type.MULTIPLIED_ELEMENT_COUNT_WHITESPACE);
         } catch (CMLRuntimeException e) {
             neverThrow(e);
-        } catch (CMLException e) {
-            neverThrow(e);
         }
         Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
         Assert.assertEquals("createFormula", 2.0, form.getCount(), EPS);
@@ -430,7 +419,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
          form = CMLFormula.createFormula("3(C 2 H 4) 2(H 2 O 1)", CMLFormula.Type.NESTEDBRACKETS);
          } catch (CMLRuntime e) {
          neverThrow(e);
-         } catch (CMLException e) {
+         } catch (CMLRuntimeException e) {
          neverThrow(e);
          }
          Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
@@ -450,13 +439,13 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula[] f = new CMLFormula[2];
         try {
             f[0] = CMLFormula.createFormula("NC2H6");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         f[0].setFormalCharge(1);
         try {
             f[1] = CMLFormula.createFormula("S2O4H");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         f[1].setFormalCharge(-1);
@@ -464,7 +453,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula fMoiety = null;
         try {
             fMoiety = CMLFormula.createFormula(moiety, Type.MOIETY);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             e.printStackTrace();
             Assert.fail("should not throw " + e);
         }
@@ -634,7 +623,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         try {
             formula1 = CMLFormula.createFormula("H 1 S 1 O 3",
                     CMLFormula.Type.ELEMENT_WHITESPACE_COUNT);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         formula1.setCount(3);
@@ -648,7 +637,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         try {
             formula2 = CMLFormula.createFormula("Mg 1 O 6 H 12",
                     CMLFormula.Type.ELEMENT_WHITESPACE_COUNT);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         formula2.setFormalCharge(2);
@@ -674,14 +663,14 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula fTop = null;
         try {
             fTop = CMLFormula.createFormula("NC2H6");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         fTop.setFormalCharge(1);
         CMLFormula fBot = null;
         try {
             fBot = CMLFormula.createFormula("N2C4H12");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         fBot.setFormalCharge(2);
@@ -691,7 +680,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertEquals("divide top by bottom", 2.0, d, 0.0001);
         try {
             fBot = CMLFormula.createFormula("N2C4.1H12");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         d = fBot.divideBy(fTop, 0.0001);
@@ -699,12 +688,12 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
         try {
             fTop = CMLFormula.createFormula("Al10.0O20.Si1.0000Sr3.");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         try {
             fBot = CMLFormula.createFormula("Al2.5O5.Si0.25Sr0.75");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         d = fBot.divideBy(fTop, 0.0001);
@@ -824,7 +813,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula f1 = null;
         try {
             f1 = CMLFormula.createFormula("C 2 H 3 Cl 1");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         double d = f1.getCalculatedMolecularMass();
@@ -840,13 +829,13 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula f1 = null;
         try {
             f1 = CMLFormula.createFormula("C 2 H 3 Cl 1");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         CMLFormula f2 = null;
         try {
             f2 = CMLFormula.createFormula("C 2 H 3 Cl 1");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         boolean ff = f1.equals(f2, 0.0001);
@@ -865,7 +854,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         try {
             formula1 = CMLFormula.createFormula("H 1 S 1 O 3",
                     CMLFormula.Type.ELEMENT_WHITESPACE_COUNT);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         formula1.setCount(3);
@@ -879,7 +868,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         try {
             formula2 = CMLFormula.createFormula("Mg 1 O 6 H 12",
                     CMLFormula.Type.ELEMENT_WHITESPACE_COUNT);
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         formula2.setFormalCharge(2);
@@ -922,7 +911,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula f1 = null;
         try {
             f1 = CMLFormula.createFormula("C 2 H 3 Cl 1");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         String formulaString = f1.toFormulaString();
@@ -937,7 +926,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         CMLFormula f1 = null;
         try {
             f1 = CMLFormula.createFormula("C 1 H 1.5 Cl 0.5");
-        } catch (CMLException e) {
+        } catch (CMLRuntimeException e) {
             Assert.fail("should not throw " + e);
         }
         f1.multiplyBy(2.0);

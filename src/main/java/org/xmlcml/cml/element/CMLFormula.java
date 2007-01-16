@@ -620,9 +620,8 @@ public class CMLFormula extends AbstractFormula {
      *            the String describing the formula
      * @exception CMLRuntimeException
      * @return the CMLFormula derived from the String s
-     * @throws CMLException
      */
-    public static CMLFormula createFormula(String s) throws CMLException {
+    public static CMLFormula createFormula(String s) {
         return createFormula(s, Type.ANY);
     }
 
@@ -634,11 +633,9 @@ public class CMLFormula extends AbstractFormula {
      * @param convention
      *            the convention
      * @return the CMLFormula derived from the String s
-     * @throws CMLException
      */
     // shouldn't this be a constructor instead?
-    public static CMLFormula createFormula(String s, Type convention)
-            throws CMLException {
+    public static CMLFormula createFormula(String s, Type convention) {
         CMLFormula docFormula = new CMLFormula();
         docFormula.createFromString(s, convention);
 
@@ -695,14 +692,14 @@ public class CMLFormula extends AbstractFormula {
      * convention: "); } }
      */
 
-    void createFromString(String formulaString, Type formulaConvention)
-            throws CMLException {
+    void createFromString(String formulaString, Type formulaConvention) {
         formulaString = formulaString.trim();
         if (formulaConvention.equals(Type.ELEMENT_WHITESPACE_COUNT)
                 || formulaConvention.equals(Type.ELEMENT_COUNT_WHITESPACE)) {
             parseElementCountWhitespace(formulaString, formulaConvention);
         } else if (formulaConvention.equals(Type.NOPUNCTUATION)) {
-            parseElementCountWhitespace(formulaString, formulaConvention);
+//            parseElementCountWhitespace(formulaString, formulaConvention);
+            parseAny(formulaString /*, formulaConvention*/);
         } else if (formulaConvention
                 .equals(Type.MULTIPLIED_ELEMENT_COUNT_WHITESPACE)) {
             parseMultipliedElementCountWhitespace(formulaString);
@@ -725,7 +722,7 @@ public class CMLFormula extends AbstractFormula {
     }
 
     private void parseElementCountWhitespace(String formulaString,
-            Type formulaConvention) throws CMLException {
+            Type formulaConvention) {
         StringTokenizer st = new StringTokenizer(formulaString);
         while (st.hasMoreTokens()) {
             String s = st.nextToken();
@@ -735,7 +732,7 @@ public class CMLFormula extends AbstractFormula {
                 try {
                     countS = st.nextToken();
                 } catch (NoSuchElementException e) {
-                    throw new CMLException("Bad formula: {" + formulaString
+                    throw new CMLRuntimeException("Bad formula: {" + formulaString
                             + S_RCURLY);
                 }
                 elTypeS = s;
@@ -743,7 +740,7 @@ public class CMLFormula extends AbstractFormula {
                 elTypeS = S_EMPTY;
                 int l = s.length();
                 if (!Character.isUpperCase(s.charAt(0))) {
-                    throw new CMLException("Bad element 1st char in: " + s);
+                    throw new CMLRuntimeException("Bad element 1st char in: " + s);
                 }
                 if (l == 1) {
                     elTypeS = s;
@@ -762,7 +759,7 @@ public class CMLFormula extends AbstractFormula {
             ChemicalElement element = ChemicalElement
                     .getChemicalElement(elTypeS);
             if (element == null) {
-                throw new CMLException("Bad element (" + elTypeS + ") in: " + s);
+                throw new CMLRuntimeException("Bad element (" + elTypeS + ") in: " + s);
             }
             if (countS.equals(S_EMPTY)) {
                 c = 1;
@@ -770,7 +767,7 @@ public class CMLFormula extends AbstractFormula {
                 try {
                     c = new Double(countS).doubleValue();
                 } catch (NumberFormatException nfe) {
-                    throw new CMLException("Bad element count (" + countS
+                    throw new CMLRuntimeException("Bad element count (" + countS
                             + ") in: " + s);
                 }
             }
@@ -783,8 +780,7 @@ public class CMLFormula extends AbstractFormula {
         }
     }
 
-    private void parseMultipliedElementCountWhitespace(String formulaString)
-            throws CMLException {
+    private void parseMultipliedElementCountWhitespace(String formulaString) {
         formulaString.trim();
         // can start with a number :-(
         int ii = 0;
@@ -801,7 +797,7 @@ public class CMLFormula extends AbstractFormula {
             try {
                 mult = new Double(formulaString.substring(0, ii)).doubleValue();
             } catch (NumberFormatException nfe) {
-                throw new CMLException(
+                throw new CMLRuntimeException(
                         "Cannot interpret start of formula as multiplier: "
                                 + formulaString);
             }
@@ -820,7 +816,7 @@ public class CMLFormula extends AbstractFormula {
                     try {
                         mult = new Double(r).doubleValue();
                     } catch (NumberFormatException nfe) {
-                        throw new CMLException("Bad multiplier in: "
+                        throw new CMLRuntimeException("Bad multiplier in: "
                                 + formulaString);
                     }
                 } else {
@@ -829,7 +825,7 @@ public class CMLFormula extends AbstractFormula {
             }
             this.createFromString(formulaString.substring(1, rb), Type.ANY);
         } else {
-            throw new CMLException(
+            throw new CMLRuntimeException(
                     "Unbalanced () in multiplied formula string: "
                             + formulaString);
         }
@@ -843,7 +839,7 @@ public class CMLFormula extends AbstractFormula {
      *
      * @param formulaString
      */
-    private void parseMoiety(String formulaString) throws CMLException {
+    private void parseMoiety(String formulaString) {
         formulaString = formulaString.trim();
         StringTokenizer st = new StringTokenizer(formulaString, S_COMMA);
         if (st.countTokens() == 1) {
@@ -858,7 +854,7 @@ public class CMLFormula extends AbstractFormula {
         }
     }
 
-    private void parseMoiety0(String formulaString) throws CMLException {
+    private void parseMoiety0(String formulaString) {
         formulaString = formulaString.trim();
         // can start with a number :-(
         int ii = 0;
@@ -875,7 +871,7 @@ public class CMLFormula extends AbstractFormula {
             try {
                 mult = new Double(formulaString.substring(0, ii)).doubleValue();
             } catch (NumberFormatException nfe) {
-                throw new CMLException(
+                throw new CMLRuntimeException(
                         "Cannot interpret start of formula as multiplier: "
                                 + formulaString);
             }
@@ -893,7 +889,7 @@ public class CMLFormula extends AbstractFormula {
                     try {
                         mult = new Double(r).doubleValue();
                     } catch (NumberFormatException nfe) {
-                        throw new CMLException("Bad multiplier in: "
+                        throw new CMLRuntimeException("Bad multiplier in: "
                                 + formulaString);
                     }
                 } else {
@@ -902,7 +898,7 @@ public class CMLFormula extends AbstractFormula {
             }
             this.parseSubMoiety(formulaString.substring(1, rb));
         } else {
-            throw new CMLException(
+            throw new CMLRuntimeException(
                     "Unbalanced () in multiplied formula string: "
                             + formulaString);
         }
@@ -911,7 +907,7 @@ public class CMLFormula extends AbstractFormula {
         }
     }
 
-    private void parseSubMoiety(String sm) throws CMLException {
+    private void parseSubMoiety(String sm) {
         sm = sm.trim();
         // List<String> elementList = new ArrayList<String>();
         int charge = 0;
@@ -942,7 +938,7 @@ public class CMLFormula extends AbstractFormula {
                         try {
                             charge = Integer.parseInt(s);
                         } catch (NumberFormatException nfe) {
-                            throw new CMLException("Bad charge: " + s);
+                            throw new CMLRuntimeException("Bad charge: " + s);
                         }
                     } else {
                         charge = 1;
@@ -964,7 +960,7 @@ public class CMLFormula extends AbstractFormula {
                         elem = s.substring(0, 2);
                         s = s.substring(2);
                     } else if (!Character.isDigit(s.charAt(1))) {
-                        throw new CMLException("Bad elementCount: " + s);
+                        throw new CMLRuntimeException("Bad elementCount: " + s);
                     } else {
                         elem = s.substring(0, 1);
                         s = s.substring(1);
@@ -975,7 +971,7 @@ public class CMLFormula extends AbstractFormula {
                         try {
                             count = new Double(s).doubleValue();
                         } catch (NumberFormatException nfe) {
-                            throw new CMLException(
+                            throw new CMLRuntimeException(
                                 "Moiety cannot parse element count: " + s);
                         }
                     }
@@ -984,10 +980,10 @@ public class CMLFormula extends AbstractFormula {
                     count = 1.0;
                 }
             } else {
-                throw new CMLException("Moiety cannot parse element at: " + s);
+                throw new CMLRuntimeException("Moiety cannot parse element at: " + s);
             }
             if (elem.equals(S_EMPTY)) {
-                throw new CMLException("Moiety cannot parse element: " + s);
+                throw new CMLRuntimeException("Moiety cannot parse element: " + s);
             }
             this.add(elem, count);
         }
@@ -996,7 +992,7 @@ public class CMLFormula extends AbstractFormula {
         }
     }
 
-    private void parseAny(String formulaString) throws CMLException {
+    private void parseAny(String formulaString) {
         // ANY - make whitespace separated string and then recurse
         String result = S_EMPTY;
         formulaString += S_SPACE;
@@ -1023,7 +1019,7 @@ public class CMLFormula extends AbstractFormula {
             }
             // upper case required
             if (!Character.isUpperCase(c)) {
-                throw new CMLException("Formula: Cannot interpret element ("
+                throw new CMLRuntimeException("Formula: Cannot interpret element ("
                         + c + ") at char (" + (i + 1) + ") in: "
                         + formulaString);
             }
@@ -1072,9 +1068,9 @@ public class CMLFormula extends AbstractFormula {
         }
     }
 
-    private int getFinalCharge(String f) throws CMLException {
+    private int getFinalCharge(String f) {
         if (f.indexOf(' ') != -1) {
-            throw new CMLException("Charge must be final field: " + f);
+            throw new CMLRuntimeException("Charge must be final field: " + f);
         }
         int sign = 0;
         int charge = 0;
@@ -1093,7 +1089,7 @@ public class CMLFormula extends AbstractFormula {
             sign = -1;
             ch = f.substring(0, l - 1);
         } else {
-            throw new CMLException("Cannot parse as charge field: " + f);
+            throw new CMLRuntimeException("Cannot parse as charge field: " + f);
         }
         if (ch.equals(S_EMPTY)) {
             charge = 1;
@@ -1101,7 +1097,7 @@ public class CMLFormula extends AbstractFormula {
             try {
                 charge = Integer.parseInt(ch);
             } catch (NumberFormatException nfe) {
-                throw new CMLException("Cannot parse as charge field: " + f);
+                throw new CMLRuntimeException("Cannot parse as charge field: " + f);
             }
         }
         return sign * charge;
@@ -1214,11 +1210,7 @@ public class CMLFormula extends AbstractFormula {
             // values
             String concise = this.getConcise();
             CMLFormula fNew = new CMLFormula();
-            try {
-                fNew.createFromString(concise, Type.ELEMENT_WHITESPACE_COUNT);
-            } catch (CMLException e) {
-                throw new CMLRuntimeException("bug: " + e);
-            }
+            fNew.createFromString(concise, Type.ELEMENT_WHITESPACE_COUNT);
             fNew.multiplyBy(d);
             String concise1 = fNew.getConcise();
             this.setConcise(concise1);
@@ -1327,11 +1319,7 @@ public class CMLFormula extends AbstractFormula {
                     Sort.CHFIRST, false).trim();
             if (getConciseAttribute() != null) {
                 CMLFormula newForm = new CMLFormula();
-                try {
-                    newForm.createFromString(concise, Type.ANY);
-                } catch (CMLException e) {
-                    throw new CMLRuntimeException("bug: " + e);
-                }
+                newForm.createFromString(concise, Type.ANY);
                 aggregate(newForm);
             }
         }
@@ -1624,21 +1612,20 @@ public class CMLFormula extends AbstractFormula {
      *
      * @param countArray
      * @param elementTypeVector
-     * @throws CMLException
      * @return mass
      */
     public static double getCalculatedMass(List elementTypeVector,
-            RealArray countArray) throws CMLException {
+            RealArray countArray)  {
         if (elementTypeVector == null || countArray == null
                 || elementTypeVector.size() != countArray.size()) {
-            throw new CMLException("Bad arguments");
+            throw new CMLRuntimeException("Bad arguments");
         }
         double mwt = 0.0;
         for (int i = 0; i < elementTypeVector.size(); i++) {
             String elType = (String) elementTypeVector.get(i);
             ChemicalElement el = ChemicalElement.getChemicalElement(elType);
             if (el == null) {
-                throw new CMLException("Unsupported element: " + elType);
+                throw new CMLRuntimeException("Unsupported element: " + elType);
             }
             mwt += el.getAtomicWeight() * countArray.elementAt(i);
         }

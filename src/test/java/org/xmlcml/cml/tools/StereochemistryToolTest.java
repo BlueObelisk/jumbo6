@@ -12,6 +12,7 @@ import nu.xom.Document;
 import nu.xom.Node;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -113,6 +114,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatch()}.
 	 */
 	@Test
+	@Ignore
 	public final void testAddWedgeHatch() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -121,6 +123,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatchBonds()}.
 	 */
 	@Test
+	@Ignore
 	public final void testAddWedgeHatchBonds() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -129,6 +132,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#calculateAtomParity(org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
+	@Ignore
 	public final void testCalculateAtomParity() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -166,6 +170,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#get2DBondStereo(org.xmlcml.cml.element.CMLBond)}.
 	 */
 	@Test
+	@Ignore
 	public final void testGet2DBondStereo() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -174,6 +179,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#layoutDoubleBond(org.xmlcml.cml.element.CMLBond)}.
 	 */
 	@Test
+	@Ignore
 	public final void testLayoutDoubleBond() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -182,6 +188,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#flip2D(org.xmlcml.cml.element.CMLBond)}.
 	 */
 	@Test
+	@Ignore
 	public final void testFlip2D() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -190,6 +197,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#create3DBondStereo(org.xmlcml.cml.element.CMLBond)}.
 	 */
 	@Test
+	@Ignore
 	public final void testGet3DBondStereo() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -374,6 +382,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#get2DLigandScalarProduct(org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
+	@Ignore
 	public final void testGet2DLigandScalarProduct() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -382,6 +391,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#get3DLigandScalarProduct(org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom, org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
+	@Ignore
 	public final void testGet3DLigandScalarProduct() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -390,6 +400,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatchBond(org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
+	@Ignore
 	public final void testAddWedgeHatchBond() {
 		fail("Not yet implemented"); // TODO
 	}

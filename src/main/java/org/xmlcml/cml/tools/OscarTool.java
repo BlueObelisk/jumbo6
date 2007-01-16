@@ -1898,7 +1898,7 @@ public class OscarTool implements CMLConstants {
                 String val = quantity.getValue();
                 try {
                     formula = CMLFormula.createFormula(val);
-                } catch (CMLException e) {
+                } catch (CMLRuntimeException e) {
                     error("Bad formula: "+e.getMessage());
                 }
                 if (formula == null) {
