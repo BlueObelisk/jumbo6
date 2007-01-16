@@ -49,6 +49,7 @@ public class IndexableListManager implements CMLConstants {
 	 */
     Map indexList() {
     	ensureMap();
+    	map.clear();
     	indexableLocalName = indexableList.getIndexableLocalName();
     	List<Node> indexables = CMLUtil.getQueryNodes((Node)indexableList,
     			C_E+indexableLocalName, X_CML);

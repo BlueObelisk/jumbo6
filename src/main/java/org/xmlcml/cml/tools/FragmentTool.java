@@ -1,7 +1,9 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import nu.xom.Node;
@@ -22,6 +24,8 @@ import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLProperty;
+import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CountExpressionAttribute;
@@ -895,6 +899,7 @@ class ExplicitProcessor implements CMLConstants {
         moleculeAndJoinList.remove(0);
         processMolecule(growingMolecule, null);
         processMoleculeAndJoin(moleculeAndJoinList);
+        processProperties();
         fragment.setConvention(Convention.PML_COMPLETE.value);
     }
     
@@ -961,5 +966,75 @@ class ExplicitProcessor implements CMLConstants {
         moleculeTool.adjustLengths();
         moleculeTool.adjustAngles();
         moleculeTool.adjustTorsions();
+    }
+    
+    private void processProperties() {
+    	// there is a bug in that propertys are separated from propertyList and
+    	// the same for scalar
+//		<scalar units="units:g.cm-3" dataType="xsd:string">1.23</scalar>
+//		<property dictRef="pml:density" title="mass density">
+//
+//		</property>
+//		<scalar units="units:cm3" dataType="xsd:string">123</scalar>
+//		<property dictRef="pml:volume" title="molar volume">
+//
+//		</property>
+//		<propertyList dictRef="pml:vanKrevelen">
+    	CMLMolecule molecule = fragment.getMoleculeElements().get(0);
+    	// group scalar into property
+    	List<Node> scalarNodes = CMLUtil.getQueryNodes(molecule, CMLScalar.NS, X_CML);
+    	for (Node node : scalarNodes) {
+    		CMLScalar scalar = (CMLScalar) node;
+    		List<Node> fsList = CMLUtil.getQueryNodes(scalar, "following-sibling::*", X_CML);
+    		System.out.println("FS "+fsList.size());
+    		if (fsList.size() == 0) {
+    			throw new CMLRuntimeException("Expected following-sibling");
+    		}
+    		if (!(fsList.get(0) instanceof CMLProperty)) {
+    			throw new CMLRuntimeException("Expected following property sibling");
+    		}
+    		CMLProperty property = (CMLProperty) fsList.get(0);
+    		scalar.detach();
+    		property.appendChild(scalar);
+    	}
+    	List<Node> propertyListNodes = CMLUtil.getQueryNodes(molecule, CMLPropertyList.NS, X_CML);
+    	for (Node node : propertyListNodes) {
+    		CMLPropertyList propertyList = (CMLPropertyList) node;
+    		List<Node> psList = CMLUtil.getQueryNodes(propertyList, "preceding-sibling::"+CMLProperty.NS, X_CML);
+    		if (psList.size() == 0) {
+    			throw new CMLRuntimeException("Expected preceding-sibling");
+    		}
+    		while (psList.size() > 0) {
+    			Node node0 = psList.get(0);
+    			if (node0 instanceof CMLProperty) {
+	    			CMLProperty property = (CMLProperty) node0;
+	    			property.detach();
+	    			propertyList.insertChild(property, 0);
+	    			psList.remove(0);
+    			}
+    		}
+    	}
+//    	
+//	<propertyList dictRef="pml:vanKrevelen">
+//		<property dictRef="pml:volume" title="molar volume">
+//			<scalar units="units:cm3" dataType="xsd:string">
+//				123
+//			</scalar>
+//		</property>
+//		<property dictRef="pml:density" title="mass density">
+//			<scalar units="units:g.cm-3" dataType="xsd:string">
+//				1.23
+//			</scalar>
+//		</property>
+//	</propertyList>
+    	// VERY crude - go through all fragments and add all similar ones:
+    	List<Node> propertys = CMLUtil.getQueryNodes(molecule, "@dictRef");
+    	Set<String> propertySet = new HashSet<String>();
+    	for (Node node : propertys) {
+    		propertySet.add(node.getValue());
+    	}
+    	for (String propertyS : propertySet) {
+    	}
+    	
     }
 }
