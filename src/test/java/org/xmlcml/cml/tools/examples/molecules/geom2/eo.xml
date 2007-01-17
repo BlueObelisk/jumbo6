@@ -25,4 +25,12 @@ id="eo">
   <bond atomRefs2="a3 a9" order="1"/>
   <bond atomRefs2="a4 r2" order="1"/>
  </bondArray>
+ <propertyList dictRef="pml:vanKrevelen">
+    <property dictRef="pml:density" role="intensive">
+      <scalar units="unit:g.cm-3" dataType="xsd:double">1.23</scalar>
+    </property>
+    <property dictRef="pml:molarVolume" role="extensive">
+      <scalar units="unit:cm3" dataType="xsd:double">123</scalar>
+    </property>
+ </propertyList>
 </molecule>

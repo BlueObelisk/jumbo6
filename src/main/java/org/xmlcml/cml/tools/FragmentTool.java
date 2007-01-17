@@ -983,10 +983,10 @@ class ExplicitProcessor implements CMLConstants {
     	CMLMolecule molecule = fragment.getMoleculeElements().get(0);
     	// group scalar into property
     	List<Node> scalarNodes = CMLUtil.getQueryNodes(molecule, CMLScalar.NS, X_CML);
+    	List<Node> propertyListNodes = CMLUtil.getQueryNodes(molecule, CMLPropertyList.NS, X_CML);
     	for (Node node : scalarNodes) {
     		CMLScalar scalar = (CMLScalar) node;
     		List<Node> fsList = CMLUtil.getQueryNodes(scalar, "following-sibling::*", X_CML);
-    		System.out.println("FS "+fsList.size());
     		if (fsList.size() == 0) {
     			throw new CMLRuntimeException("Expected following-sibling");
     		}
@@ -997,12 +997,11 @@ class ExplicitProcessor implements CMLConstants {
     		scalar.detach();
     		property.appendChild(scalar);
     	}
-    	List<Node> propertyListNodes = CMLUtil.getQueryNodes(molecule, CMLPropertyList.NS, X_CML);
     	for (Node node : propertyListNodes) {
     		CMLPropertyList propertyList = (CMLPropertyList) node;
     		List<Node> psList = CMLUtil.getQueryNodes(propertyList, "preceding-sibling::"+CMLProperty.NS, X_CML);
     		if (psList.size() == 0) {
-    			throw new CMLRuntimeException("Expected preceding-sibling");
+    			System.out.println("Expected preceding-sibling");
     		}
     		while (psList.size() > 0) {
     			Node node0 = psList.get(0);
@@ -1028,13 +1027,52 @@ class ExplicitProcessor implements CMLConstants {
 //		</property>
 //	</propertyList>
     	// VERY crude - go through all fragments and add all similar ones:
-    	List<Node> propertys = CMLUtil.getQueryNodes(molecule, "@dictRef");
+    	CMLElement parent = fragment;
+    	List<Node> dictRefs = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS+"/"+CMLProperty.NS+"/@dictRef", X_CML);
     	Set<String> propertySet = new HashSet<String>();
-    	for (Node node : propertys) {
+    	for (Node node : dictRefs) {
     		propertySet.add(node.getValue());
     	}
+    	List<CMLProperty> newPropertyList = new ArrayList<CMLProperty>();
     	for (String propertyS : propertySet) {
+        	double sum = 0.0;
+        	int count = 0;
+        	String role = S_EMPTY;
+        	String units = S_EMPTY;
+        	String dictRef = S_EMPTY;
+        	List<Node> nodes = CMLUtil.getQueryNodes(parent, 
+        			CMLPropertyList.NS+"/"+CMLProperty.NS+"[@dictRef='"+propertyS+"']/"+CMLScalar.NS, X_CML);
+        	for (Node node : nodes) {
+        		CMLScalar scalar = (CMLScalar) node;
+        		units = scalar.getUnits();
+        		CMLProperty prop = (CMLProperty) scalar.getParent();
+        		role = prop.getRole();
+        		dictRef = prop.getDictRef();
+        		sum += scalar.getDouble();
+        		count++;
+        	}
+        	if (role.equals("intensive") && count > 0) {
+        		sum /= (double) count;
+        	}
+        	CMLProperty property = new CMLProperty();
+        	CMLScalar scalar = new CMLScalar();
+        	property.appendChild(scalar);
+        	property.setDictRef(dictRef);
+        	property.setRole(role);
+        	scalar.setUnits(units);
+        	scalar.setValue(sum);
+        	newPropertyList.add(property);
     	}
-    	
+    	propertyListNodes = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS, X_CML);
+    	for (Node node : propertyListNodes) {
+    		node.detach();
+    	}
+    	if (newPropertyList.size() > 0) {
+	    	CMLPropertyList propertyList = new CMLPropertyList();
+	    	for (CMLProperty property : newPropertyList) {
+	    		propertyList.appendChild(property);
+	    	}
+	    	parent.appendChild(propertyList);
+    	}
     }
 }

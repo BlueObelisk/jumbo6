@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import junit.framework.Assert;
+import nu.xom.Node;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -23,6 +24,9 @@ import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLProperty;
+import org.xmlcml.cml.element.CMLPropertyList;
+import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Util;
@@ -618,159 +622,159 @@ public class FragmentToolTest extends AbstractTest {
 		
 		String explicitS = "" +
 		"<fragment convention='cml:PML-explicit' xmlns:g='http://www.xml-cml.org/mols/geom1' xmlns='http://www.xml-cml.org/schema'>"+
- "<molecule role='fragment' id='2pyr_1'>"+
-   "<atomArray>"+
-     "<atom elementType='C' x3='0.9130440201297267' y3='2.8881300000000003' z3='24.75205498269886' id='2pyr_1_a1'>"+
-       "<label dictRef='cml:torsionEnd'>r6</label>"+
-     "</atom>"+
-     "<atom elementType='R' x3='1.413862592327999' y3='3.1385040220730342' z3='24.22347801875486' id='2pyr_1_r1'> </atom>"+
-     "<atom elementType='C' x3='0.6710034793604291' y3='1.5629880000000003' z3='24.99245916290205' id='2pyr_1_a2'>"+
-       "<label dictRef='cml:torsionEnd'>r1</label>"+
-     "</atom>"+
-     "<atom elementType='R' x3='1.0407687745715524' y3='1.0167533171021161' z3='24.595217048245413' id='2pyr_1_r2'> </atom>"+
-     "<atom elementType='N' x3='0.2765492911364054' y3='3.8757572000000002' z3='25.381508959946053' id='2pyr_1_a3'>"+
-       "<label dictRef='cml:torsionEnd'>r2</label>"+
-     "</atom>"+
-     "<atom elementType='C' x3='-0.2506677283610746' y3='1.2254732000000002' z3='25.965836532665875' id='2pyr_1_a4'>"+
-       "<label dictRef='cml:torsionEnd'>r3</label>"+
-     "</atom>"+
-     "<atom elementType='R' x3='-0.3812304106029923' y3='0.48743690707544074' z3='26.14234663530017' id='2pyr_1_r4'> </atom>"+
-     "<atom elementType='C' x3='-0.9274226661160216' y3='2.2244264' z3='26.61004448473895' id='2pyr_1_a5'>"+
-       "<label dictRef='cml:torsionEnd'>r4</label>"+
-     "</atom>"+
-     "<atom elementType='R' x3='-1.4642755092148265' y3='2.0584636784491517' z3='27.136490493283194' id='2pyr_1_r5'> </atom>"+
-     "<atom elementType='C' x3='-0.638411881791494' y3='3.5031318000000002' z3='26.308615162238905' id='2pyr_1_a6'>"+
-       "<label dictRef='cml:torsionEnd'>r5</label>"+
-     "</atom>"+
-     "<atom elementType='R' x3='-1.0162393566378534' y3='4.057405011259368' z3='26.686672838435875' id='2pyr_1_r6'> </atom>"+
-   "</atomArray>"+
-   "<bondArray>"+
-     "<bond order='1' id='2pyr_1_r1_2pyr_1_a1' atomRefs2='2pyr_1_r1 2pyr_1_a1'/>"+
-     "<bond order='2' id='2pyr_1_a1_2pyr_1_a2' atomRefs2='2pyr_1_a1 2pyr_1_a2'/>"+
-     "<bond order='1' id='2pyr_1_a1_2pyr_1_a3' atomRefs2='2pyr_1_a1 2pyr_1_a3'/>"+
-     "<bond order='1' id='2pyr_1_a2_2pyr_1_r2' atomRefs2='2pyr_1_a2 2pyr_1_r2'/>"+
-     "<bond order='1' id='2pyr_1_a2_2pyr_1_a4' atomRefs2='2pyr_1_a2 2pyr_1_a4'/>"+
-     "<bond order='2' id='2pyr_1_a6_2pyr_1_a3' atomRefs2='2pyr_1_a6 2pyr_1_a3'/>"+
-     "<bond order='1' id='2pyr_1_a4_2pyr_1_r4' atomRefs2='2pyr_1_a4 2pyr_1_r4'/>"+
-     "<bond order='2' id='2pyr_1_a4_2pyr_1_a5' atomRefs2='2pyr_1_a4 2pyr_1_a5'/>"+
-     "<bond order='1' id='2pyr_1_a5_2pyr_1_r5' atomRefs2='2pyr_1_a5 2pyr_1_r5'/>"+
-     "<bond order='1' id='2pyr_1_a5_2pyr_1_a6' atomRefs2='2pyr_1_a5 2pyr_1_a6'/>"+
-     "<bond order='1' id='2pyr_1_a6_2pyr_1_r6' atomRefs2='2pyr_1_a6 2pyr_1_r6'/>"+
-   "</bondArray>"+
- "</molecule>"+
- "<join atomRefs2='g:2pyr_1_r1 g:po_2_r2' moleculeRefs2='g:2pyr_1 g:po_2' order='S'/>"+
- "<molecule role='fragment' id='po_2'>"+
-   "<atomArray>"+
-     "<atom elementType='R' x3='1.2718481659602687' y3='-0.056654043087598735' z3='0.02401534139488537' id='po_2_r1'/>"+
-     "<atom elementType='C' x3='0.912' y3='-0.145' z3='0.699' id='po_2_a2'/>"+
-     "<atom elementType='C' x3='-0.599' y3='-0.016' z3='0.493' id='po_2_a3'>"+
-       "<label dictRef='cml:torsionEnd'>r1</label>"+
-       "<label dictRef='cml:torsionEnd'>r2</label>"+
-     "</atom>"+
-     "<atom elementType='C' x3='-0.908' y3='1.315' z3='-0.194' id='po_2_a4'/>"+
-     "<atom elementType='O' x3='-1.061' y3='-1.093' z3='-0.326' id='po_2_a5'/>"+
-     "<atom elementType='H' x3='1.14' y3='-1.13' z3='1.106' id='po_2_a7'/>"+
-     "<atom elementType='H' x3='1.25' y3='0.623' z3='1.394' id='po_2_a8'/>"+
-     "<atom elementType='H' x3='-1.102' y3='-0.053' z3='1.459' id='po_2_a9'/>"+
-     "<atom elementType='H' x3='-1.984' y3='1.407' z3='-0.341' id='po_2_a10'/>"+
-     "<atom elementType='H' x3='-0.556' y3='2.137' z3='0.43' id='po_2_a11'/>"+
-     "<atom elementType='H' x3='-0.405' y3='1.352' z3='-1.16' id='po_2_a12'/>"+
-     "<atom elementType='R' x3='-1.7811041326297956' y3='-1.0031756899549835' z3='-0.40525674415736745' id='po_2_r2'/>"+
-   "</atomArray>"+
-   "<bondArray>"+
-     "<bond order='1' id='po_2_r1_po_2_a2' atomRefs2='po_2_r1 po_2_a2'/>"+
-     "<bond order='1' id='po_2_a2_po_2_a3' atomRefs2='po_2_a2 po_2_a3'/>"+
-     "<bond order='1' id='po_2_a2_po_2_a7' atomRefs2='po_2_a2 po_2_a7'/>"+
-     "<bond order='1' id='po_2_a2_po_2_a8' atomRefs2='po_2_a2 po_2_a8'/>"+
-     "<bond order='1' id='po_2_a3_po_2_a4' atomRefs2='po_2_a3 po_2_a4'/>"+
-     "<bond order='1' id='po_2_a3_po_2_a5' atomRefs2='po_2_a3 po_2_a5'/>"+
-     "<bond order='1' id='po_2_a3_po_2_a9' atomRefs2='po_2_a3 po_2_a9'/>"+
-     "<bond order='1' id='po_2_a4_po_2_a10' atomRefs2='po_2_a4 po_2_a10'/>"+
-     "<bond order='1' id='po_2_a4_po_2_a11' atomRefs2='po_2_a4 po_2_a11'/>"+
-     "<bond order='1' id='po_2_a4_po_2_a12' atomRefs2='po_2_a4 po_2_a12'/>"+
-     "<bond order='1' id='po_2_a5_po_2_r2' atomRefs2='po_2_a5 po_2_r2'/>"+
-   "</bondArray>"+
-   "<length id='po_2_len23' atomRefs2='po_2_a2 po_2_a3'/>"+
-   "<angle id='po_2_ang234' atomRefs3='po_2_a2 po_2_a3 po_2_a4'/>"+
-   "<angle id='po_2_ang123' atomRefs3='po_2_r1 po_2_a2 po_2_a3'/>"+
-   "<angle id='po_2_ang352' atomRefs3='po_2_a3 po_2_a5 po_2_r2'/>"+
-   "<torsion id='po_2_tor1' atomRefs4='po_2_r1 po_2_a2 po_2_a3 po_2_a5'/>"+
-   "<torsion id='po_2_tor2' atomRefs4='po_2_a2 po_2_a3 po_2_a5 po_2_r2'/>"+
-   "<arg parameterName='len23'/>"+
-   "<arg parameterName='ang234'/>"+
-   "<arg parameterName='ang123'/>"+
-   "<arg parameterName='ang352'/>"+
-   "<arg parameterName='tor1'/>"+
-   "<arg parameterName='tor2'/>"+
- "</molecule>"+
- "<join atomRefs2='g:po_2_r1 g:po_3_r2' moleculeRefs2='g:po_2 g:po_3' order='S'/>"+
- "<molecule role='fragment' id='po_3'>"+
-   "<atomArray>"+
-     "<atom elementType='R' x3='1.2718481659602687' y3='-0.056654043087598735' z3='0.02401534139488537' id='po_3_r1'/>"+
-     "<atom elementType='C' x3='0.912' y3='-0.145' z3='0.699' id='po_3_a2'/>"+
-     "<atom elementType='C' x3='-0.599' y3='-0.016' z3='0.493' id='po_3_a3'>"+
-       "<label dictRef='cml:torsionEnd'>r1</label>"+
-       "<label dictRef='cml:torsionEnd'>r2</label>"+
-     "</atom>"+
-     "<atom elementType='C' x3='-0.908' y3='1.315' z3='-0.194' id='po_3_a4'/>"+
-     "<atom elementType='O' x3='-1.061' y3='-1.093' z3='-0.326' id='po_3_a5'/>"+
-     "<atom elementType='H' x3='1.14' y3='-1.13' z3='1.106' id='po_3_a7'/>"+
-     "<atom elementType='H' x3='1.25' y3='0.623' z3='1.394' id='po_3_a8'/>"+
-     "<atom elementType='H' x3='-1.102' y3='-0.053' z3='1.459' id='po_3_a9'/>"+
-     "<atom elementType='H' x3='-1.984' y3='1.407' z3='-0.341' id='po_3_a10'/>"+
-     "<atom elementType='H' x3='-0.556' y3='2.137' z3='0.43' id='po_3_a11'/>"+
-     "<atom elementType='H' x3='-0.405' y3='1.352' z3='-1.16' id='po_3_a12'/>"+
-     "<atom elementType='R' x3='-1.7811041326297956' y3='-1.0031756899549835' z3='-0.40525674415736745' id='po_3_r2'/>"+
-   "</atomArray>"+
-   "<bondArray>"+
-     "<bond order='1' id='po_3_r1_po_3_a2' atomRefs2='po_3_r1 po_3_a2'/>"+
-     "<bond order='1' id='po_3_a2_po_3_a3' atomRefs2='po_3_a2 po_3_a3'/>"+
-     "<bond order='1' id='po_3_a2_po_3_a7' atomRefs2='po_3_a2 po_3_a7'/>"+
-     "<bond order='1' id='po_3_a2_po_3_a8' atomRefs2='po_3_a2 po_3_a8'/>"+
-     "<bond order='1' id='po_3_a3_po_3_a4' atomRefs2='po_3_a3 po_3_a4'/>"+
-     "<bond order='1' id='po_3_a3_po_3_a5' atomRefs2='po_3_a3 po_3_a5'/>"+
-     "<bond order='1' id='po_3_a3_po_3_a9' atomRefs2='po_3_a3 po_3_a9'/>"+
-     "<bond order='1' id='po_3_a4_po_3_a10' atomRefs2='po_3_a4 po_3_a10'/>"+
-     "<bond order='1' id='po_3_a4_po_3_a11' atomRefs2='po_3_a4 po_3_a11'/>"+
-     "<bond order='1' id='po_3_a4_po_3_a12' atomRefs2='po_3_a4 po_3_a12'/>"+
-     "<bond order='1' id='po_3_a5_po_3_r2' atomRefs2='po_3_a5 po_3_r2'/>"+
-   "</bondArray>"+
-   "<length id='po_3_len23' atomRefs2='po_3_a2 po_3_a3'/>"+
-   "<angle id='po_3_ang234' atomRefs3='po_3_a2 po_3_a3 po_3_a4'/>"+
-   "<angle id='po_3_ang123' atomRefs3='po_3_r1 po_3_a2 po_3_a3'/>"+
-   "<angle id='po_3_ang352' atomRefs3='po_3_a3 po_3_a5 po_3_r2'/>"+
-   "<torsion id='po_3_tor1' atomRefs4='po_3_r1 po_3_a2 po_3_a3 po_3_a5'/>"+
-   "<torsion id='po_3_tor2' atomRefs4='po_3_a2 po_3_a3 po_3_a5 po_3_r2'/>"+
-   "<arg parameterName='len23'/>"+
-   "<arg parameterName='ang234'/>"+
-   "<arg parameterName='ang123'/>"+
-   "<arg parameterName='ang352'/>"+
-   "<arg parameterName='tor1'/>"+
-   "<arg parameterName='tor2'/>"+
- "</molecule>"+
- "<join atomRefs2='g:po_3_r1 g:acetyl_4_r1' moleculeRefs2='g:po_3 g:acetyl_4' order='S'/>"+
- "<molecule role='fragment' id='acetyl_4'>"+
-   "<atomArray>"+
-     "<atom elementType='R' xFract='0.853' yFract='0.40329' zFract='0.08749' formalCharge='0' hydrogenCount='0' x3='6.858584288887507' y3='7.368205459562712' z3='1.672120540673427' id='acetyl_4_r1'/>"+
-     "<atom elementType='C' x3='7.470354790502688' y3='7.21912165' z3='2.1153032017509776' xFract='0.9966' yFract='0.38915' zFract='0.12895' formalCharge='0' hydrogenCount='0' id='acetyl_4_a71'/>"+
-     "<atom elementType='O' x3='7.621770771606594' y3='6.2131009200000005' z3='2.7265105769419966' xFract='1.0168' yFract='0.33492' zFract='0.15894' formalCharge='0' hydrogenCount='0' id='acetyl_4_a72'>"+
-       "<label dictRef='cml:torsionEnd'>r1</label>"+
-     "</atom>"+
-     "<atom elementType='C' x3='8.407334871591223' y3='8.375034459999998' z3='2.09259931555679' xFract='1.1216' yFract='0.45146' zFract='0.13125' formalCharge='0' hydrogenCount='0' id='acetyl_4_a73'/>"+
-     "<atom elementType='H' x3='9.290344900009062' y3='8.0103218' z3='1.9961034580073869' xFract='1.2394' yFract='0.4318' zFract='0.1298' formalCharge='0' hydrogenCount='0' id='acetyl_4_a74'/>"+
-     "<atom elementType='H' x3='8.339122721687978' y3='8.830276' z3='2.9353942128717265' xFract='1.1125' yFract='0.476' zFract='0.1716' formalCharge='0' hydrogenCount='0' id='acetyl_4_a75'/>"+
-     "<atom elementType='H' x3='8.236429704800676' y3='8.9953799' z3='1.3798877395986096' xFract='1.0988' yFract='0.4849' zFract='0.0963' formalCharge='0' hydrogenCount='0' id='acetyl_4_a76'/>"+
-   "</atomArray>"+
-   "<bondArray>"+
-     "<bond order='S' id='acetyl_4_r1_acetyl_4_a71' atomRefs2='acetyl_4_r1 acetyl_4_a71'/>"+
-     "<bond order='D' id='acetyl_4_a71_acetyl_4_a72' atomRefs2='acetyl_4_a71 acetyl_4_a72'/>"+
-     "<bond order='S' id='acetyl_4_a71_acetyl_4_a73' atomRefs2='acetyl_4_a71 acetyl_4_a73'/>"+
-     "<bond order='S' id='acetyl_4_a73_acetyl_4_a74' atomRefs2='acetyl_4_a73 acetyl_4_a74'/>"+
-     "<bond order='S' id='acetyl_4_a73_acetyl_4_a75' atomRefs2='acetyl_4_a73 acetyl_4_a75'/>"+
-     "<bond order='S' id='acetyl_4_a73_acetyl_4_a76' atomRefs2='acetyl_4_a73 acetyl_4_a76'/>"+
-   "</bondArray>"+
- "</molecule>"+
-"</fragment>";
+		 "<molecule role='fragment' id='2pyr_1'>"+
+		   "<atomArray>"+
+		     "<atom elementType='C' x3='0.9130440201297267' y3='2.8881300000000003' z3='24.75205498269886' id='2pyr_1_a1'>"+
+		       "<label dictRef='cml:torsionEnd'>r6</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='1.413862592327999' y3='3.1385040220730342' z3='24.22347801875486' id='2pyr_1_r1'> </atom>"+
+		     "<atom elementType='C' x3='0.6710034793604291' y3='1.5629880000000003' z3='24.99245916290205' id='2pyr_1_a2'>"+
+		       "<label dictRef='cml:torsionEnd'>r1</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='1.0407687745715524' y3='1.0167533171021161' z3='24.595217048245413' id='2pyr_1_r2'> </atom>"+
+		     "<atom elementType='N' x3='0.2765492911364054' y3='3.8757572000000002' z3='25.381508959946053' id='2pyr_1_a3'>"+
+		       "<label dictRef='cml:torsionEnd'>r2</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='-0.2506677283610746' y3='1.2254732000000002' z3='25.965836532665875' id='2pyr_1_a4'>"+
+		       "<label dictRef='cml:torsionEnd'>r3</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='-0.3812304106029923' y3='0.48743690707544074' z3='26.14234663530017' id='2pyr_1_r4'> </atom>"+
+		     "<atom elementType='C' x3='-0.9274226661160216' y3='2.2244264' z3='26.61004448473895' id='2pyr_1_a5'>"+
+		       "<label dictRef='cml:torsionEnd'>r4</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='-1.4642755092148265' y3='2.0584636784491517' z3='27.136490493283194' id='2pyr_1_r5'> </atom>"+
+		     "<atom elementType='C' x3='-0.638411881791494' y3='3.5031318000000002' z3='26.308615162238905' id='2pyr_1_a6'>"+
+		       "<label dictRef='cml:torsionEnd'>r5</label>"+
+		     "</atom>"+
+		     "<atom elementType='R' x3='-1.0162393566378534' y3='4.057405011259368' z3='26.686672838435875' id='2pyr_1_r6'> </atom>"+
+		   "</atomArray>"+
+		   "<bondArray>"+
+		     "<bond order='1' id='2pyr_1_r1_2pyr_1_a1' atomRefs2='2pyr_1_r1 2pyr_1_a1'/>"+
+		     "<bond order='2' id='2pyr_1_a1_2pyr_1_a2' atomRefs2='2pyr_1_a1 2pyr_1_a2'/>"+
+		     "<bond order='1' id='2pyr_1_a1_2pyr_1_a3' atomRefs2='2pyr_1_a1 2pyr_1_a3'/>"+
+		     "<bond order='1' id='2pyr_1_a2_2pyr_1_r2' atomRefs2='2pyr_1_a2 2pyr_1_r2'/>"+
+		     "<bond order='1' id='2pyr_1_a2_2pyr_1_a4' atomRefs2='2pyr_1_a2 2pyr_1_a4'/>"+
+		     "<bond order='2' id='2pyr_1_a6_2pyr_1_a3' atomRefs2='2pyr_1_a6 2pyr_1_a3'/>"+
+		     "<bond order='1' id='2pyr_1_a4_2pyr_1_r4' atomRefs2='2pyr_1_a4 2pyr_1_r4'/>"+
+		     "<bond order='2' id='2pyr_1_a4_2pyr_1_a5' atomRefs2='2pyr_1_a4 2pyr_1_a5'/>"+
+		     "<bond order='1' id='2pyr_1_a5_2pyr_1_r5' atomRefs2='2pyr_1_a5 2pyr_1_r5'/>"+
+		     "<bond order='1' id='2pyr_1_a5_2pyr_1_a6' atomRefs2='2pyr_1_a5 2pyr_1_a6'/>"+
+		     "<bond order='1' id='2pyr_1_a6_2pyr_1_r6' atomRefs2='2pyr_1_a6 2pyr_1_r6'/>"+
+		   "</bondArray>"+
+		 "</molecule>"+
+		 "<join atomRefs2='g:2pyr_1_r1 g:po_2_r2' moleculeRefs2='g:2pyr_1 g:po_2' order='S'/>"+
+		 "<molecule role='fragment' id='po_2'>"+
+		   "<atomArray>"+
+		     "<atom elementType='R' x3='1.2718481659602687' y3='-0.056654043087598735' z3='0.02401534139488537' id='po_2_r1'/>"+
+		     "<atom elementType='C' x3='0.912' y3='-0.145' z3='0.699' id='po_2_a2'/>"+
+		     "<atom elementType='C' x3='-0.599' y3='-0.016' z3='0.493' id='po_2_a3'>"+
+		       "<label dictRef='cml:torsionEnd'>r1</label>"+
+		       "<label dictRef='cml:torsionEnd'>r2</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='-0.908' y3='1.315' z3='-0.194' id='po_2_a4'/>"+
+		     "<atom elementType='O' x3='-1.061' y3='-1.093' z3='-0.326' id='po_2_a5'/>"+
+		     "<atom elementType='H' x3='1.14' y3='-1.13' z3='1.106' id='po_2_a7'/>"+
+		     "<atom elementType='H' x3='1.25' y3='0.623' z3='1.394' id='po_2_a8'/>"+
+		     "<atom elementType='H' x3='-1.102' y3='-0.053' z3='1.459' id='po_2_a9'/>"+
+		     "<atom elementType='H' x3='-1.984' y3='1.407' z3='-0.341' id='po_2_a10'/>"+
+		     "<atom elementType='H' x3='-0.556' y3='2.137' z3='0.43' id='po_2_a11'/>"+
+		     "<atom elementType='H' x3='-0.405' y3='1.352' z3='-1.16' id='po_2_a12'/>"+
+		     "<atom elementType='R' x3='-1.7811041326297956' y3='-1.0031756899549835' z3='-0.40525674415736745' id='po_2_r2'/>"+
+		   "</atomArray>"+
+		   "<bondArray>"+
+		     "<bond order='1' id='po_2_r1_po_2_a2' atomRefs2='po_2_r1 po_2_a2'/>"+
+		     "<bond order='1' id='po_2_a2_po_2_a3' atomRefs2='po_2_a2 po_2_a3'/>"+
+		     "<bond order='1' id='po_2_a2_po_2_a7' atomRefs2='po_2_a2 po_2_a7'/>"+
+		     "<bond order='1' id='po_2_a2_po_2_a8' atomRefs2='po_2_a2 po_2_a8'/>"+
+		     "<bond order='1' id='po_2_a3_po_2_a4' atomRefs2='po_2_a3 po_2_a4'/>"+
+		     "<bond order='1' id='po_2_a3_po_2_a5' atomRefs2='po_2_a3 po_2_a5'/>"+
+		     "<bond order='1' id='po_2_a3_po_2_a9' atomRefs2='po_2_a3 po_2_a9'/>"+
+		     "<bond order='1' id='po_2_a4_po_2_a10' atomRefs2='po_2_a4 po_2_a10'/>"+
+		     "<bond order='1' id='po_2_a4_po_2_a11' atomRefs2='po_2_a4 po_2_a11'/>"+
+		     "<bond order='1' id='po_2_a4_po_2_a12' atomRefs2='po_2_a4 po_2_a12'/>"+
+		     "<bond order='1' id='po_2_a5_po_2_r2' atomRefs2='po_2_a5 po_2_r2'/>"+
+		   "</bondArray>"+
+		   "<length id='po_2_len23' atomRefs2='po_2_a2 po_2_a3'/>"+
+		   "<angle id='po_2_ang234' atomRefs3='po_2_a2 po_2_a3 po_2_a4'/>"+
+		   "<angle id='po_2_ang123' atomRefs3='po_2_r1 po_2_a2 po_2_a3'/>"+
+		   "<angle id='po_2_ang352' atomRefs3='po_2_a3 po_2_a5 po_2_r2'/>"+
+		   "<torsion id='po_2_tor1' atomRefs4='po_2_r1 po_2_a2 po_2_a3 po_2_a5'/>"+
+		   "<torsion id='po_2_tor2' atomRefs4='po_2_a2 po_2_a3 po_2_a5 po_2_r2'/>"+
+		   "<arg parameterName='len23'/>"+
+		   "<arg parameterName='ang234'/>"+
+		   "<arg parameterName='ang123'/>"+
+		   "<arg parameterName='ang352'/>"+
+		   "<arg parameterName='tor1'/>"+
+		   "<arg parameterName='tor2'/>"+
+		 "</molecule>"+
+		 "<join atomRefs2='g:po_2_r1 g:po_3_r2' moleculeRefs2='g:po_2 g:po_3' order='S'/>"+
+		 "<molecule role='fragment' id='po_3'>"+
+		   "<atomArray>"+
+		     "<atom elementType='R' x3='1.2718481659602687' y3='-0.056654043087598735' z3='0.02401534139488537' id='po_3_r1'/>"+
+		     "<atom elementType='C' x3='0.912' y3='-0.145' z3='0.699' id='po_3_a2'/>"+
+		     "<atom elementType='C' x3='-0.599' y3='-0.016' z3='0.493' id='po_3_a3'>"+
+		       "<label dictRef='cml:torsionEnd'>r1</label>"+
+		       "<label dictRef='cml:torsionEnd'>r2</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='-0.908' y3='1.315' z3='-0.194' id='po_3_a4'/>"+
+		     "<atom elementType='O' x3='-1.061' y3='-1.093' z3='-0.326' id='po_3_a5'/>"+
+		     "<atom elementType='H' x3='1.14' y3='-1.13' z3='1.106' id='po_3_a7'/>"+
+		     "<atom elementType='H' x3='1.25' y3='0.623' z3='1.394' id='po_3_a8'/>"+
+		     "<atom elementType='H' x3='-1.102' y3='-0.053' z3='1.459' id='po_3_a9'/>"+
+		     "<atom elementType='H' x3='-1.984' y3='1.407' z3='-0.341' id='po_3_a10'/>"+
+		     "<atom elementType='H' x3='-0.556' y3='2.137' z3='0.43' id='po_3_a11'/>"+
+		     "<atom elementType='H' x3='-0.405' y3='1.352' z3='-1.16' id='po_3_a12'/>"+
+		     "<atom elementType='R' x3='-1.7811041326297956' y3='-1.0031756899549835' z3='-0.40525674415736745' id='po_3_r2'/>"+
+		   "</atomArray>"+
+		   "<bondArray>"+
+		     "<bond order='1' id='po_3_r1_po_3_a2' atomRefs2='po_3_r1 po_3_a2'/>"+
+		     "<bond order='1' id='po_3_a2_po_3_a3' atomRefs2='po_3_a2 po_3_a3'/>"+
+		     "<bond order='1' id='po_3_a2_po_3_a7' atomRefs2='po_3_a2 po_3_a7'/>"+
+		     "<bond order='1' id='po_3_a2_po_3_a8' atomRefs2='po_3_a2 po_3_a8'/>"+
+		     "<bond order='1' id='po_3_a3_po_3_a4' atomRefs2='po_3_a3 po_3_a4'/>"+
+		     "<bond order='1' id='po_3_a3_po_3_a5' atomRefs2='po_3_a3 po_3_a5'/>"+
+		     "<bond order='1' id='po_3_a3_po_3_a9' atomRefs2='po_3_a3 po_3_a9'/>"+
+		     "<bond order='1' id='po_3_a4_po_3_a10' atomRefs2='po_3_a4 po_3_a10'/>"+
+		     "<bond order='1' id='po_3_a4_po_3_a11' atomRefs2='po_3_a4 po_3_a11'/>"+
+		     "<bond order='1' id='po_3_a4_po_3_a12' atomRefs2='po_3_a4 po_3_a12'/>"+
+		     "<bond order='1' id='po_3_a5_po_3_r2' atomRefs2='po_3_a5 po_3_r2'/>"+
+		   "</bondArray>"+
+		   "<length id='po_3_len23' atomRefs2='po_3_a2 po_3_a3'/>"+
+		   "<angle id='po_3_ang234' atomRefs3='po_3_a2 po_3_a3 po_3_a4'/>"+
+		   "<angle id='po_3_ang123' atomRefs3='po_3_r1 po_3_a2 po_3_a3'/>"+
+		   "<angle id='po_3_ang352' atomRefs3='po_3_a3 po_3_a5 po_3_r2'/>"+
+		   "<torsion id='po_3_tor1' atomRefs4='po_3_r1 po_3_a2 po_3_a3 po_3_a5'/>"+
+		   "<torsion id='po_3_tor2' atomRefs4='po_3_a2 po_3_a3 po_3_a5 po_3_r2'/>"+
+		   "<arg parameterName='len23'/>"+
+		   "<arg parameterName='ang234'/>"+
+		   "<arg parameterName='ang123'/>"+
+		   "<arg parameterName='ang352'/>"+
+		   "<arg parameterName='tor1'/>"+
+		   "<arg parameterName='tor2'/>"+
+		 "</molecule>"+
+		 "<join atomRefs2='g:po_3_r1 g:acetyl_4_r1' moleculeRefs2='g:po_3 g:acetyl_4' order='S'/>"+
+		 "<molecule role='fragment' id='acetyl_4'>"+
+		   "<atomArray>"+
+		     "<atom elementType='R' xFract='0.853' yFract='0.40329' zFract='0.08749' formalCharge='0' hydrogenCount='0' x3='6.858584288887507' y3='7.368205459562712' z3='1.672120540673427' id='acetyl_4_r1'/>"+
+		     "<atom elementType='C' x3='7.470354790502688' y3='7.21912165' z3='2.1153032017509776' xFract='0.9966' yFract='0.38915' zFract='0.12895' formalCharge='0' hydrogenCount='0' id='acetyl_4_a71'/>"+
+		     "<atom elementType='O' x3='7.621770771606594' y3='6.2131009200000005' z3='2.7265105769419966' xFract='1.0168' yFract='0.33492' zFract='0.15894' formalCharge='0' hydrogenCount='0' id='acetyl_4_a72'>"+
+		       "<label dictRef='cml:torsionEnd'>r1</label>"+
+		     "</atom>"+
+		     "<atom elementType='C' x3='8.407334871591223' y3='8.375034459999998' z3='2.09259931555679' xFract='1.1216' yFract='0.45146' zFract='0.13125' formalCharge='0' hydrogenCount='0' id='acetyl_4_a73'/>"+
+		     "<atom elementType='H' x3='9.290344900009062' y3='8.0103218' z3='1.9961034580073869' xFract='1.2394' yFract='0.4318' zFract='0.1298' formalCharge='0' hydrogenCount='0' id='acetyl_4_a74'/>"+
+		     "<atom elementType='H' x3='8.339122721687978' y3='8.830276' z3='2.9353942128717265' xFract='1.1125' yFract='0.476' zFract='0.1716' formalCharge='0' hydrogenCount='0' id='acetyl_4_a75'/>"+
+		     "<atom elementType='H' x3='8.236429704800676' y3='8.9953799' z3='1.3798877395986096' xFract='1.0988' yFract='0.4849' zFract='0.0963' formalCharge='0' hydrogenCount='0' id='acetyl_4_a76'/>"+
+		   "</atomArray>"+
+		   "<bondArray>"+
+		     "<bond order='S' id='acetyl_4_r1_acetyl_4_a71' atomRefs2='acetyl_4_r1 acetyl_4_a71'/>"+
+		     "<bond order='D' id='acetyl_4_a71_acetyl_4_a72' atomRefs2='acetyl_4_a71 acetyl_4_a72'/>"+
+		     "<bond order='S' id='acetyl_4_a71_acetyl_4_a73' atomRefs2='acetyl_4_a71 acetyl_4_a73'/>"+
+		     "<bond order='S' id='acetyl_4_a73_acetyl_4_a74' atomRefs2='acetyl_4_a73 acetyl_4_a74'/>"+
+		     "<bond order='S' id='acetyl_4_a73_acetyl_4_a75' atomRefs2='acetyl_4_a73 acetyl_4_a75'/>"+
+		     "<bond order='S' id='acetyl_4_a73_acetyl_4_a76' atomRefs2='acetyl_4_a73 acetyl_4_a76'/>"+
+		   "</bondArray>"+
+		 "</molecule>"+
+		"</fragment>";
 		
 		String completeS =
 			"<fragment convention='cml:PML-complete' xmlns:g='http://www.xml-cml.org/mols/geom1' xmlns='http://www.xml-cml.org/schema'>"+
@@ -1222,7 +1226,7 @@ public class FragmentToolTest extends AbstractTest {
 			   "<length id='po_3_len23' atomRefs2='po_3_a2 po_3_a3'/>"+
 			 "</molecule>"+
 			"</fragment>";
-		
+
 		testAll(fragment, debug, 2,
 				intermediateS, explicitS, completeS, check);
 	}
@@ -5087,50 +5091,6 @@ public class FragmentToolTest extends AbstractTest {
 		Assert.fail("Not yet implemented");
 	}
 
-//	/** test expandJoinedList.
-//	 */
-//	@Test
-//	public final void testExpandJoinedList() {
-//		CMLFragment fragment = new CMLFragment();
-//		FragmentTool fragmentTool = new FragmentTool(fragment);
-//		fragmentTool.expandJoinedList();
-//		
-//		CMLJoin join = new CMLJoin();
-//		join.setAtomRefs2(new String[]{"r1", "r2"});
-//		join.setMoleculeRefs2(new String[]{
-//				CMLJoin.PREVIOUS_S, CMLJoin.NEXT_S});
-//		fragment.appendChild(join);
-//		
-//		CMLFragment fragmentChild = new CMLFragment();
-////		fragmentChild.setId("child");
-//		CMLMolecule molecule = new CMLMolecule();
-//		molecule.setRef("ref1");
-//		new FragmentTool(fragmentChild).setMolecule(molecule);
-//		fragment.appendChild(fragmentChild);
-//		
-//		fragment.setCountExpression("*(3)");
-//		
-//		// countExpression required
-//		fragmentTool.expandJoinedList();
-//		
-//		String fragmentS = "" +
-//		"<fragment xmlns='http://www.xml-cml.org/schema'>"+
-//		"  <fragment>"+
-//		"    <molecule ref='ref1'/>"+
-//		"  </fragment>"+
-//		"  <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
-//		"  <fragment>"+
-//		"    <molecule ref='ref1'/>"+
-//		"  </fragment>"+
-//		"  <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
-//		"  <fragment>"+
-//		"    <molecule ref='ref1'/>"+
-//		"  </fragment>"+
-//		"</fragment>";
-//		CMLFragment reference = (CMLFragment) parseValidString(fragmentS);
-//		reference.debug("XXX");
-//		AbstractTest.assertEqualsCanonically("fragment", reference, fragment, true);
-//	}
 	
 	/** 
 	 * no longer relevant
@@ -5611,5 +5571,91 @@ public class FragmentToolTest extends AbstractTest {
 	   	assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 
-	
+     @Test
+     public void testProperty() {
+		String fragmentS = "" +
+		"<fragment xmlns='http://www.xml-cml.org/schema'" +
+		"  convention='PML-explicit'" +
+		"  xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"    <molecule id='m1'>" +
+		"      <atomArray>" +
+		"        <atom id='m1_1_r1' x3='0' y3='0' z3='0'/>" +
+		"        <atom id='m1_1_r2' x3='0' y3='0' z3='1'/>" +
+		"      </atomArray>" +
+		"      <bondArray>" +
+		"        <bond order='1' id='m1_1_r1_m1_1_r2'"+
+		"          atomRefs2='m1_1_r1 m1_1_r2'/>" +
+		"      </bondArray>"+
+		"    </molecule>" +
+		"  <join atomRefs2='m1_1_r2 m2_2_r1' moleculeRefs2='m1_1 m2_2'/>"+
+		"    <molecule id='m2'>" +
+		"      <atomArray>" +
+		"        <atom id='m2_2_r1' x3='0' y3='0' z3='0'/>" +
+		"        <atom id='m2_2_r2' x3='0' y3='0' z3='1'/>" +
+		"      </atomArray>" +
+		"      <bondArray>" +
+		"        <bond order='1' id='m2_1_r1_m2_1_r2'"+
+		"          atomRefs2='m2_2_r1 m2_2_r2'/>" +
+		"      </bondArray>"+
+		"    </molecule>" +
+		"  <join atomRefs2='m2_2_r2 m3_3_r1' moleculeRefs2='m2_2 m3_3'/>"+
+		"    <molecule id='m3'>" +
+		"      <atomArray>" +
+		"        <atom id='m3_3_r1' x3='0' y3='0' z3='0'/>" +
+		"        <atom id='m3_3_r2' x3='0' y3='0' z3='1'/>" +
+		"      </atomArray>" +
+		"      <bondArray>" +
+		"        <bond order='1' id='m3_3_r1_m3_3_r2'"+
+		"          atomRefs2='m3_3_r1 m3_3_r2'/>" +
+		"      </bondArray>"+
+		"    </molecule>" +
+		"      <propertyList>" +
+		"        <property dictRef='cml:prop1' role='intensive'>" +
+		"          <scalar units='unit:g.cm-3' dataType='xsd:double'>1.23</scalar>" +
+		"        </property>" +
+		"        <property dictRef='cml:prop2' role='extensive'>" +
+		"          <scalar units='unit:cm3' dataType='xsd:double'>123</scalar>" +
+		"        </property>" +
+		"      </propertyList>" +
+		"      <propertyList>" +
+		"        <property dictRef='cml:prop1' role='intensive'>" +
+		"          <scalar units='unit:g.cm-3' dataType='xsd:double'>2.34</scalar>" +
+		"        </property>" +
+		"        <property dictRef='cml:prop2' role='extensive'>" +
+		"          <scalar units='unit:cm3' dataType='xsd:double'>234</scalar>" +
+		"        </property>" +
+		"      </propertyList>" +
+		"      <propertyList>" +
+		"        <property dictRef='cml:prop1' role='intensive'>" +
+		"          <scalar units='unit:g.cm-3' dataType='xsd:double'>3.45</scalar>" +
+		"        </property>" +
+		"        <property dictRef='cml:prop2' role='extensive'>" +
+		"          <scalar units='unit:cm3' dataType='xsd:double'>345</scalar>" +
+		"        </property>" +
+		"      </propertyList>" +
+		"</fragment>";
+		CMLFragment fragment = (CMLFragment) parseValidString(fragmentS);
+		FragmentTool fragmentTool = new FragmentTool(fragment);
+		fragmentTool.processExplicit();
+		fragment = fragmentTool.getFragment();
+//		  <propertyList>
+//		    <property dictRef="cml:prop2" role="extensive">
+//		      <scalar units="unit:cm3" dataType="xsd:double">702.0</scalar>
+//		    </property>
+//		    <property dictRef="cml:prop1" role="intensive">
+//		      <scalar units="unit:g.cm-3" dataType="xsd:double">2.34</scalar>
+//		    </property>
+//		  </propertyList>
+		List<Node> scalars = CMLUtil.getQueryNodes(fragment, 
+				CMLPropertyList.NS+"/"+CMLProperty.NS+"/"+CMLScalar.NS, X_CML);
+		Assert.assertEquals("scalars", 2, scalars.size());
+		CMLScalar scalar = (CMLScalar) scalars.get(0);
+		Assert.assertEquals("extensive", "extensive", ((CMLProperty)scalar.getParent()).getRole());
+		Assert.assertEquals("extensive", "cml:prop2", ((CMLProperty)scalar.getParent()).getDictRef());
+		Assert.assertEquals("extensive", 702.0, scalar.getDouble());
+		scalar = (CMLScalar) scalars.get(1);
+		Assert.assertEquals("intensive", "intensive", ((CMLProperty)scalar.getParent()).getRole());
+		Assert.assertEquals("intensive", "cml:prop1", ((CMLProperty)scalar.getParent()).getDictRef());
+		Assert.assertEquals("intensive", 2.34, scalar.getDouble());
+     }
 }
