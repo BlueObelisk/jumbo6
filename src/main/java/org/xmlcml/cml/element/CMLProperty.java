@@ -12,6 +12,22 @@ public class CMLProperty extends AbstractProperty {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
+
+	/** type of property */
+	public enum Type {
+		/** intensive properties do not depend on amoount*/
+		INTENSIVE("intensive"),
+		/** extensive properties depend on amount*/
+		EXTENSIVE("extensive"),
+		/** semintensive properties are intensive properties 
+		 * which also depend on polymer size*/
+		SEMINTENSIVE("semintensive"),
+		;
+		public String value;
+		private Type(String t) {
+			this.value = t;
+		}
+	}
 	
     /**
      * constructor.

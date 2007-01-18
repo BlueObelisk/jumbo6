@@ -36,6 +36,7 @@ import org.xmlcml.cml.element.Indexable;
 import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.element.RefAttribute;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
+import org.xmlcml.cml.element.CMLProperty.Type;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
@@ -857,8 +858,13 @@ class IntermediateProcessor implements CMLConstants {
 		Indexable deref = null;
 		String ref = indexable.getRef();
 		
+	
 		if (ref != null) {
 			String prefix = CMLUtil.getPrefix(ref);
+			if (S_EMPTY.equals(prefix)){
+				((CMLElement)deref).debug();
+				throw new CMLRuntimeException("Cannot dereference empty prefix");
+			}
 			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, (CMLElement)indexable);
 			if (namespace != null) {
 				IndexableList indexableList = catalog.getIndexableList(namespace, type);
@@ -909,16 +915,19 @@ class ExplicitProcessor implements CMLConstants {
 	}
 	
     void process() {
+//    	fragment.debug("RAW EXPLICIT");
         //should consist of molecule (join, molecule)*
         List<Node> moleculeAndJoinList = CMLUtil.getQueryNodes(
             	fragment, CMLJoin.NS+X_OR+CMLMolecule.NS, X_CML);
         checkMoleculeAndJoinList(moleculeAndJoinList);
+//    	fragment.debug(" EXPLICIT 1");
         // immediate children
         growingMolecule = (CMLMolecule) moleculeAndJoinList.get(0);
     	growingMoleculeTool = new MoleculeTool(growingMolecule);
         moleculeAndJoinList.remove(0);
         processMolecule(growingMolecule, null);
         processMoleculeAndJoin(moleculeAndJoinList);
+ //   	fragment.debug("COMPLETE");
         processProperties();
         fragment.setConvention(Convention.PML_COMPLETE.value);
     }
@@ -1047,7 +1056,8 @@ class ExplicitProcessor implements CMLConstants {
 //		</property>
 //	</propertyList>
     	// VERY crude - go through all fragments and add all similar ones:
-    	CMLElement parent = fragment;
+//    	CMLElement parent = fragment;
+    	CMLElement parent = molecule;
     	List<Node> dictRefs = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS+"/"+CMLProperty.NS+"/@dictRef", X_CML);
     	Set<String> propertySet = new HashSet<String>();
     	for (Node node : dictRefs) {
@@ -1060,6 +1070,7 @@ class ExplicitProcessor implements CMLConstants {
         	String role = S_EMPTY;
         	String units = S_EMPTY;
         	String dictRef = S_EMPTY;
+        	String title = S_EMPTY;
         	List<Node> nodes = CMLUtil.getQueryNodes(parent, 
         			CMLPropertyList.NS+"/"+CMLProperty.NS+"[@dictRef='"+propertyS+"']/"+CMLScalar.NS, X_CML);
         	for (Node node : nodes) {
@@ -1067,19 +1078,32 @@ class ExplicitProcessor implements CMLConstants {
         		units = scalar.getUnits();
         		CMLProperty prop = (CMLProperty) scalar.getParent();
         		role = prop.getRole();
-        		dictRef = prop.getDictRef();
-        		sum += scalar.getDouble();
+        		if (role != null && units != null) {
+	        		dictRef = prop.getDictRef();
+	        		title = prop.getTitle();
+	        		sum += scalar.getDouble();
+        		} else {
+        			System.out.println("ROLE UNITS "+role+"/"+units);
+        			sum = Double.NaN;
+        		}
         		count++;
         	}
-        	if (role.equals("intensive") && count > 0) {
+        	if (Type.INTENSIVE.value.equals(role) && count > 0) {
+        		sum /= (double) count;
+        	} else if (Type.SEMINTENSIVE.value.equals(role) && count > 0) {
+        		//FIXME replace this later
         		sum /= (double) count;
         	}
         	CMLProperty property = new CMLProperty();
         	CMLScalar scalar = new CMLScalar();
         	property.appendChild(scalar);
         	property.setDictRef(dictRef);
-        	property.setRole(role);
-        	scalar.setUnits(units);
+        	if (role != null) {
+        		property.setRole(role);
+        	}
+        	if (units != null) {
+        		scalar.setUnits(units);
+        	}
         	scalar.setValue(sum);
         	newPropertyList.add(property);
     	}
