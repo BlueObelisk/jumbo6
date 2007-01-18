@@ -316,7 +316,6 @@ public class FragmentTool extends AbstractTool {
      *used to add H atoms on to vacant R groups
      */
     public void pruneRtoH(){
-    	System.out.println("TEST running prune");
     	List<Node> ratoms= CMLUtil.getQueryNodes(
 				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", X_CML);
 		if (ratoms.size() == 0) {
