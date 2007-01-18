@@ -252,7 +252,7 @@ public class DisorderTool extends AbstractTool {
 		List<CMLAtom> unityAtoms = new ArrayList<CMLAtom>();
 		Map<Double, List<CMLAtom>> atomMap = new LinkedHashMap<Double, List<CMLAtom>>();
 		for (CMLAtom disorderedAtom : disorderedAtoms) {
-			//System.out.println("processing: "+disorderedAtom.getId());
+			System.out.println("processing: "+disorderedAtom.getId());
 			boolean added = false;
 			double occupancy = disorderedAtom.getOccupancy();
 			// test to see if any of the lists has occupancy of 0.5.  If so then throw
@@ -280,6 +280,7 @@ public class DisorderTool extends AbstractTool {
 			for (Iterator it=atomMap.entrySet().iterator(); it.hasNext(); ) {
 				Map.Entry entry = (Map.Entry) it.next();
 				if (Math.abs((Double)entry.getKey() - occupancy) < CrystalTool.OCCUPANCY_EPS) {
+					System.out.println("adding atom to list: "+(Double)entry.getKey());
 					((List<CMLAtom>)entry.getValue()).add(disorderedAtom);
 					added = true;
 					addedCount++;
@@ -292,6 +293,7 @@ public class DisorderTool extends AbstractTool {
 				return false;
 			}
 			if (added) continue;
+			System.out.println("creating new list of occupancy: "+occupancy);
 			List<CMLAtom> newList = new ArrayList<CMLAtom>();
 			newList.add(disorderedAtom);
 			atomMap.put(occupancy, newList);
@@ -325,20 +327,6 @@ public class DisorderTool extends AbstractTool {
 		return fixed;
 	}
 	
-	/*
-	private boolean resolveZeroPointFiveAtoms(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			List<Node> atomCifIdNodes = CMLUtil.getQueryNodes(atom, 
-					".//"+CMLScalar.NS+"[contains(@dictRef, '"+
-					CrystalTool.ATOM_LABEL+"')]", X_CML);
-			if () {
-				
-			}
-			String atomCifId = "";
-		}
-	}
-	*/
-	
 	/**
 	 * Takes a map of occupancies related to their atoms with that occupancy.  Tries
 	 * to decipher the correct disorder assemblies and groups from the occupancies
@@ -367,26 +355,28 @@ public class DisorderTool extends AbstractTool {
 					int[] indices = cg.getNext();
 					for (int i : indices) {
 						double occ = occupancyList.get(i);
-						// check if already contained in dList
-						boolean inDList = false;
-						for (Double d : dList) {
-							if (d.compareTo(occ) == 0) {
-								inDList = true;
-							}
-						}
-						if (!inDList) dList.add(occ);
 						occCount += occ;
 					}
 					if (Math.abs(1.0 - occCount) < CrystalTool.OCCUPANCY_EPS) {
 						assemblyCode += "z";
 						for (int i : indices) {
-							List<CMLAtom> atoms = atomMap.get(occupancyList.get(i));
+							double occ = occupancyList.get(i);
+							// check if already contained in dList
+							boolean inDList = false;
+							for (Double d : dList) {
+								if (d.compareTo(occ) == 0) {
+									inDList = true;
+								}
+							}
+							if (!inDList) dList.add(occ);
+							List<CMLAtom> atoms = atomMap.get(occ);
 							for (CMLAtom atom : atoms) {
 								replaceAtomDisorderInformation(atom, assemblyCode, 
 										String.valueOf(groupCode));
 							}
 							groupCode++;
 						}
+						System.out.println();
 					}
 				}
 				// if the number of occupancies used is the same as the total 
