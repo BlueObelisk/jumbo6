@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import nu.xom.Attribute;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
@@ -18,6 +19,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFragment;
@@ -309,6 +311,25 @@ public class FragmentTool extends AbstractTool {
 	public void basic_processRecursively() {
 		new CountExpander(rootFragment).process();
 	}
+	/**pruneRtoH.
+     * @author nwe23
+     *used to add H atoms on to vacant R groups
+     */
+    public void pruneRtoH(){
+    	System.out.println("TEST running prune");
+    	List<Node> ratoms= CMLUtil.getQueryNodes(
+				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", X_CML);
+		if (ratoms.size() == 0) {
+			return;
+		}
+		
+		for (Node node : ratoms) {
+			if("R".equals(node.getValue())){
+				Attribute a=(Attribute)node;
+				a.setValue("H");
+			}
+		}
+    }
 }
 
 
@@ -430,7 +451,7 @@ class BasicProcessor implements CMLConstants {
         	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
 	        fragment.setConvention(Convention.PML_PROCESSED.value);
         } else {
-	        fragmentTool.substituteFragmentRefsRecursively(100);
+	        fragmentTool.substituteFragmentRefsRecursively(400);
 	        new CountExpander(fragment).process();
 	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
 	        this.replaceFragmentsByChildMolecules();
