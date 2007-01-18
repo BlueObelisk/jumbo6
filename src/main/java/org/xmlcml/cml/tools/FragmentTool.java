@@ -451,7 +451,7 @@ class BasicProcessor implements CMLConstants {
         	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
 	        fragment.setConvention(Convention.PML_PROCESSED.value);
         } else {
-	        fragmentTool.substituteFragmentRefsRecursively(400);
+	        fragmentTool.substituteFragmentRefsRecursively(100);
 	        new CountExpander(fragment).process();
 	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
 	        this.replaceFragmentsByChildMolecules();
