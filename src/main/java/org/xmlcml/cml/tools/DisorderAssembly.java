@@ -215,13 +215,9 @@ public class DisorderAssembly implements CMLConstants {
     public void removeMinorDisorder() {
         getDisorderGroupList();
         Collections.sort(groupList);
-        int count = 0;
-        for (DisorderGroup group : groupList) {
-        	if (count++ > 0) {
-        		// remove the atoms from minor occupied groups
-        		group.detachAtoms();
-        	}
-        }      
+        for (int i = 0; i < groupList.size()-1; i++) {
+        	groupList.get(i).detachAtoms();
+        }   
     }
 
     /** string representation.
