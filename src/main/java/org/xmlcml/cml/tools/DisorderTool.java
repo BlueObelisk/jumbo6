@@ -252,7 +252,6 @@ public class DisorderTool extends AbstractTool {
 		List<CMLAtom> unityAtoms = new ArrayList<CMLAtom>();
 		Map<Double, List<CMLAtom>> atomMap = new LinkedHashMap<Double, List<CMLAtom>>();
 		for (CMLAtom disorderedAtom : disorderedAtoms) {
-			System.out.println("processing: "+disorderedAtom.getId());
 			boolean added = false;
 			double occupancy = disorderedAtom.getOccupancy();
 			// test to see if any of the lists has occupancy of 0.5.  If so then throw
@@ -280,7 +279,6 @@ public class DisorderTool extends AbstractTool {
 			for (Iterator it=atomMap.entrySet().iterator(); it.hasNext(); ) {
 				Map.Entry entry = (Map.Entry) it.next();
 				if (Math.abs((Double)entry.getKey() - occupancy) < CrystalTool.OCCUPANCY_EPS) {
-					System.out.println("adding atom to list: "+(Double)entry.getKey());
 					((List<CMLAtom>)entry.getValue()).add(disorderedAtom);
 					added = true;
 					addedCount++;
@@ -293,7 +291,6 @@ public class DisorderTool extends AbstractTool {
 				return false;
 			}
 			if (added) continue;
-			System.out.println("creating new list of occupancy: "+occupancy);
 			List<CMLAtom> newList = new ArrayList<CMLAtom>();
 			newList.add(disorderedAtom);
 			atomMap.put(occupancy, newList);
@@ -310,19 +307,6 @@ public class DisorderTool extends AbstractTool {
 		} else {
 			// try to figure out the assembly/groupings
 			fixed = reassignDisorderGroups(atomMap);
-		}
-		if (fixed) {
-			//molecule.debug();
-			// clear disorder information from unity atoms
-			for (CMLAtom atom : unityAtoms) {
-				List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-			            "contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
-			            "contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
-			            "]", X_CML);
-				for (Node node : nodes) {
-					node.detach();
-				}
-			}
 		}
 		return fixed;
 	}
@@ -370,13 +354,15 @@ public class DisorderTool extends AbstractTool {
 							}
 							if (!inDList) dList.add(occ);
 							List<CMLAtom> atoms = atomMap.get(occ);
+							//System.out.println("asscode: "+assemblyCode+", groupcode: "+groupCode);
 							for (CMLAtom atom : atoms) {
+								//List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//cml:scalar[contains(@dictRef,'iucr:_atom_site_label')]", X_CML);
+								//System.out.println("processing: "+atom.getId()+"("+nodes.get(0).getValue()+")"+" occ: "+atom.getOccupancy());
 								replaceAtomDisorderInformation(atom, assemblyCode, 
 										String.valueOf(groupCode));
 							}
 							groupCode++;
 						}
-						System.out.println();
 					}
 				}
 				// if the number of occupancies used is the same as the total 
