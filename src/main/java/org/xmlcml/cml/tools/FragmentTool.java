@@ -1098,6 +1098,7 @@ class ExplicitProcessor implements CMLConstants {
         	CMLScalar scalar = new CMLScalar();
         	property.appendChild(scalar);
         	property.setDictRef(dictRef);
+        	property.setTitle(title);
         	if (role != null) {
         		property.setRole(role);
         	}
