@@ -1094,6 +1094,9 @@ class ExplicitProcessor implements CMLConstants {
         		//FIXME replace this later
         		sum /= (double) count;
         	}
+        	
+        	if (!Double.isNaN(sum)) sum = (Math.round(sum*100))/100;	//round the number to 2dp
+        	
         	CMLProperty property = new CMLProperty();
         	CMLScalar scalar = new CMLScalar();
         	property.appendChild(scalar);
