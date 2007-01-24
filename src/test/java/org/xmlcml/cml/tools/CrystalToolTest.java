@@ -292,7 +292,7 @@ public class CrystalToolTest extends AbstractToolTest {
 
                 boolean addBonds = true;
                 CMLMolecule mergedMolecule = crystalTool.getMergedMolecule(mol,
-                        contactList, addBonds);
+                        contactList);
                 String filename = Util.getTEMP_DIRECTORY() + File.separator
                         + "cif" + File.separator + cifname + XML_SUFF;
                 try {
@@ -355,7 +355,7 @@ public class CrystalToolTest extends AbstractToolTest {
         LegacyConverterOld cifConverter = null;
         try {
             cifConverter = LegacyConverterFactoryOld.createLegacyConverter(
-                "org.xmlcml.cml.legacy2cml.cif.CIFConverter");
+                "org.xmlcml.cml.legacy.cif.CIFConverter");
         } catch (Throwable t) {
             throw new CMLRuntimeException("Cannot create legacyConverter "+t);
         }
@@ -420,7 +420,6 @@ public class CrystalToolTest extends AbstractToolTest {
                     moleculeTool.createCartesiansFromFractionals();
                     molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
                     try {
-                    	//molecule.debug();
                     	DisorderToolControls dm = new DisorderToolControls(ProcessControl.LOOSE);
 						DisorderTool dt = new DisorderTool(molecule, dm);
 						dt.resolveDisorder();
@@ -436,21 +435,25 @@ public class CrystalToolTest extends AbstractToolTest {
 					if (moiFormNodes.size() > 0) {
 						moietyFormula = (CMLFormula)moiFormNodes.get(0);
 					} 
-                    CrystalTool crystalTool = new CrystalTool(molecule);
-                    CMLMolecule mergedMolecule = null;
-                    try {
-                    	if (moietyFormula == null) {
-                    		mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
-                    	} else {
-                    		mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8), moietyFormula);
-                    	}
-                    } catch (CMLRuntimeException e) {
-                        //System.err.println("Cannot calculate bond orders/ring: "+e+S_SLASH+cifname);
-                    	e.printStackTrace();
-                        continue;
-                    }
-                    cml.appendChild(mergedMolecule);
-                    molecule.detach();
+					CrystalTool crystalTool = new CrystalTool(molecule);
+					CMLMolecule mergedMolecule = null;
+					mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+
+					CrystalTool cryst2 = new CrystalTool(mergedMolecule);
+					CMLMolecule merged2 = null;
+					merged2 = cryst2.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+
+					cml.appendChild(merged2);
+					molecule.detach();
+
+					for (CMLMolecule subMol : merged2.getDescendantsOrMolecule()) {
+						if (!DisorderTool.isDisordered(subMol)) {
+							ValencyTool subMolTool = new ValencyTool(subMol);
+							subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
+						} else {
+							System.out.println("molecule is disordered");
+						}
+					}
                     //addSpaceGroup(cml);
                     for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
                     	StereochemistryTool st = new StereochemistryTool(subMol);
@@ -685,7 +688,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-problems";
+            s = "E:\\cif-wrongformula";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {

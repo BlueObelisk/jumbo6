@@ -506,6 +506,7 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 			processCMLItems(nonGlobalBlock, cml0);
 			processCell();
 			processCMLLoops(nonGlobalBlock, cml0);
+			molecule.appendChild(crystal);
 			try {
 				checkCML(cml0);
 			} catch (CMLRuntimeException e) {
@@ -538,7 +539,7 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 		return (!Character.isLetter(ss.charAt(0))) ? "c"+ss : ss;
 	}
     private void checkCML(CMLCml cml) {
-		if (cml.getChildCMLElements(CMLCrystal.TAG).size() == 0) {
+		if (molecule.getChildCMLElements(CMLCrystal.TAG).size() == 0) {
 			throw new CMLRuntimeException("nonGlobalBlock "+cml.getId()+" has no cell");
 		}
 		if (cml.getChildCMLElements(CMLMolecule.TAG).size() == 0) {
@@ -707,7 +708,6 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 							for (int i = 0; i < 6; i++) {
 								cellParams.add((CMLScalar) null);
 							}
-							cml0.appendChild(crystal);
 						}
 						addCell(item);
 					} else if (categoryName.equals("chemical_name")) {
