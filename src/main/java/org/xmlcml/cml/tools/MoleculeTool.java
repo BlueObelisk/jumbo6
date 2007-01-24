@@ -1530,11 +1530,11 @@ public class MoleculeTool extends AbstractTool {
 			if (ba != null) {
 				ba.indexBonds();
 			}
-			calculateBondedAtoms(atoms);
+			calculateBondedAtoms(atoms, mol);
 		}
 	}
 
-	private void calculateBondedAtoms(List<CMLAtom> atoms) {
+	private void calculateBondedAtoms(List<CMLAtom> atoms, CMLMolecule molecule) {
 		for (int i = 0; i < atoms.size(); i++) {
 			CMLAtom atomi = (CMLAtom) atoms.get(i);
 			for (int j = i + 1; j < atoms.size(); ++j) {
@@ -1621,7 +1621,7 @@ public class MoleculeTool extends AbstractTool {
 				atom2.setId(id);
 				molecule.addAtom(atom2);
 			}
-			calculateBondedAtoms(atoms2);
+			calculateBondedAtoms(atoms2, molecule);
 		}
 		return madeBond;
 	}

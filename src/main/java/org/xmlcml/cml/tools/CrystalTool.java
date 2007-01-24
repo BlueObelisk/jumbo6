@@ -29,6 +29,7 @@ import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
  * tool for managing crystals
@@ -160,29 +161,14 @@ public class CrystalTool extends AbstractTool {
      * @param dist2Range minimum and maximum SQUARED distances
      * @return merged molecule
      */
-    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range, CMLFormula moietyFormula) {
+    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
         List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
-        
-        boolean addBonds = true;
         //new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
-            molecule, contactList, addBonds);
-        //mergedMolecule.debug();
+            molecule, contactList);
 
-        for (CMLMolecule mol : mergedMolecule.getDescendantsOrMolecule()) {
-        	if (!DisorderTool.isDisordered(mol)) {
-        		ValencyTool subMolTool = new ValencyTool(mol);
-        		subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
-        	} else {
-        		System.out.println("molecule is disordered");
-        	}
-        }
         return mergedMolecule;
-    }
-    
-    public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
-    	return calculateCrystallochemicalUnit(dist2Range, null);
-    }    
+    }   
     
     /**
      * calculate cartesians and bonds.
@@ -511,7 +497,8 @@ public class CrystalTool extends AbstractTool {
      * @param addBonds
      * @return new molecule
      */
-    public CMLMolecule getMergedMolecule(CMLMolecule mol, List<Contact> contactList, boolean addBonds) {
+    public CMLMolecule getMergedMolecule(CMLMolecule mol, List<Contact> contactList) {
+    	//mol.debug();
         Transform3 orthMat = crystal.getOrthogonalizationTransform();
         CMLMolecule mergedMolecule = new CMLMolecule(mol);
         if (contactList.size() > 0) {
@@ -522,7 +509,6 @@ public class CrystalTool extends AbstractTool {
         } else {
             mergedMolecule = new CMLMolecule(mol);
         }
-        //mergedMolecule.debug();
 		ConnectionTableTool ct = new ConnectionTableTool(mergedMolecule);
 		ct.flattenMolecules();
         new MoleculeTool(mergedMolecule).calculateBondedAtoms();
