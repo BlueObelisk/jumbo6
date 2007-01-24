@@ -1,24 +1,24 @@
 package org.xmlcml.cml.tools;
 
-public class DisorderManager {
+public class DisorderToolControls {
 	
 	private RemoveControl removeControl;
 	private ProcessControl processControl;
 	
-	public DisorderManager() {
+	public DisorderToolControls() {
 		this(ProcessControl.STRICT, RemoveControl.REMOVE_MINOR_DISORDER);
 	}
 	
-	public DisorderManager(ProcessControl processControl) {
+	public DisorderToolControls(ProcessControl processControl) {
 		this(processControl, RemoveControl.REMOVE_MINOR_DISORDER);
 	}
 	
-	public DisorderManager(RemoveControl removeControl) {
+	public DisorderToolControls(RemoveControl removeControl) {
 		this(ProcessControl.STRICT, removeControl);
 	}
 	
 	
-	public DisorderManager(ProcessControl processControl, RemoveControl removeControl) {
+	public DisorderToolControls(ProcessControl processControl, RemoveControl removeControl) {
 		this.processControl = processControl;
 		this.removeControl = removeControl;
 	}

@@ -3,10 +3,7 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import nu.xom.Node;
-
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLScalar;
 

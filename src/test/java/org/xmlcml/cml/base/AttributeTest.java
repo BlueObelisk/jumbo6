@@ -2,8 +2,6 @@ package org.xmlcml.cml.base;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLType;
 /**
  * test for attribute.
  * 

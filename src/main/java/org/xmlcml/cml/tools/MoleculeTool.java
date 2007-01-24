@@ -109,7 +109,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public void adjustBondOrdersToValency() {
         molecule.setBondOrders(CMLBond.SINGLE);
-        PiSystemManager piSystemManager = new PiSystemManager();
+        PiSystemControls piSystemManager = new PiSystemControls();
         piSystemManager.setUpdateBonds(true);
 //        piSystemManager.setKnownUnpaired(knownUnpaired);
         piSystemManager.setDistributeCharge(true);
@@ -124,11 +124,11 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 * @param piSystemManager
 	 */
-	public void adjustBondOrdersToValency(PiSystemManager piSystemManager) {
+	public void adjustBondOrdersToValency(PiSystemControls piSystemManager) {
 		// normalize bond orders
 		molecule.setNormalizedBondOrders();
 		PiSystem piSystem2 = new PiSystem(molecule.getAtoms());
-		piSystem2.setPiSystemManager(new PiSystemManager(piSystemManager));
+		piSystem2.setPiSystemManager(new PiSystemControls(piSystemManager));
 		List<PiSystem> piSystemList2 = piSystem2.generatePiSystemList();
 		for (PiSystem subPiSystem : piSystemList2) {
 			List<CMLAtom> atomList = subPiSystem.getAtomList();

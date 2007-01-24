@@ -1006,7 +1006,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // System.out.println("====adjustBondOrders===== "+mol.getTitle()+"
         // ======================");
         mol.setBondOrders(CMLBond.SINGLE);
-        PiSystemManager piSystemManager = new PiSystemManager();
+        PiSystemControls piSystemManager = new PiSystemControls();
         piSystemManager.setUpdateBonds(true);
         piSystemManager.setKnownUnpaired(knownUnpaired);
         piSystemManager.setDistributeCharge(true);

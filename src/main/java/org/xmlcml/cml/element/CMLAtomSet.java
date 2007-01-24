@@ -256,11 +256,12 @@ public class CMLAtomSet extends AbstractAtomSet {
                 addAtomId(atom.getId());
             }
         }
+        /*
         if (molecule == null) {
             molecule = atom.getMolecule();
         } else if (checkDuplicates && molecule != atom.getMolecule()) {
             throw new CMLRuntimeException("cannot add atoms from different moelcules");
-        }
+        }*/
     }
 
     /** add atom id.

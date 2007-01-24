@@ -1,8 +1,10 @@
 package org.xmlcml.cml.element;
 
-import java.util.Map;
 import java.util.HashMap;
-import org.xmlcml.cml.base.*;
+import java.util.Map;
+
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLType;
 
 /** NON-modifiable class supporting CMLTypeList.
 *

@@ -167,7 +167,7 @@ public class CrystalTool extends AbstractTool {
         //new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
             molecule, contactList, addBonds);
-        mergedMolecule.debug();
+        //mergedMolecule.debug();
 
         for (CMLMolecule mol : mergedMolecule.getDescendantsOrMolecule()) {
         	if (!DisorderTool.isDisordered(mol)) {

@@ -12,8 +12,6 @@ import nu.xom.XPathContext;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLUtil;
 
 /**
  * test CMLUtil.

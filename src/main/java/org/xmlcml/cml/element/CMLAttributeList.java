@@ -1,9 +1,17 @@
 package org.xmlcml.cml.element;
 
-import java.util.Map;
 import java.util.HashMap;
-import org.xmlcml.cml.base.*;
+import java.util.Map;
+
 import nu.xom.Attribute;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.DoubleArrayAttribute;
+import org.xmlcml.cml.base.DoubleAttribute;
+import org.xmlcml.cml.base.IntAttribute;
+import org.xmlcml.cml.base.StringArrayAttribute;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** user-modifiable class supporting CMLAttributeList.
 *

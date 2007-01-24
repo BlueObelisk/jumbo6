@@ -11,6 +11,8 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
+import nu.xom.Attribute;
+import nu.xom.Elements;
 import nu.xom.Nodes;
 
 import org.junit.Before;
@@ -38,13 +40,12 @@ import org.xmlcml.cml.inchi.InChIGenerator;
 import org.xmlcml.cml.inchi.InChIGeneratorFactory;
 import org.xmlcml.cml.legacy.LegacyConverterFactoryOld;
 import org.xmlcml.cml.legacy.LegacyConverterOld;
-import org.xmlcml.cml.tools.DisorderManager.ProcessControl;
+import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
-
 
 /**
  * test CrystalTool.
@@ -354,13 +355,13 @@ public class CrystalToolTest extends AbstractToolTest {
         LegacyConverterOld cifConverter = null;
         try {
             cifConverter = LegacyConverterFactoryOld.createLegacyConverter(
-                "org.xmlcml.cml.legacy.cif.CIFConverter");
+                "org.xmlcml.cml.legacy2cml.cif.CIFConverter");
         } catch (Throwable t) {
             throw new CMLRuntimeException("Cannot create legacyConverter "+t);
         }
         cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
         int count = 0;
-        int MAX = 1000;
+        int MAX = 10000000;
         StringBuffer sb = new StringBuffer();
         for (String filename : cifPathList) {
             if (count++ >= MAX) break;
@@ -391,6 +392,11 @@ public class CrystalToolTest extends AbstractToolTest {
                 System.err.println("SKIPPED: "+cifname);
                 continue;
             }
+            
+            //String calculatedCheckCif = calculateCheckcif(filename);
+    		//String ccPath = filename+".calculated.checkcif.html";
+    		//IOUtils.writeText(calculatedCheckCif, ccPath);
+            
             try {
                 cifConverter.parseLegacy(new FileReader(filename));
             } catch (Exception e) {
@@ -415,13 +421,13 @@ public class CrystalToolTest extends AbstractToolTest {
                     molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
                     try {
                     	//molecule.debug();
-                    	DisorderManager dm = new DisorderManager(ProcessControl.LOOSE);
+                    	DisorderToolControls dm = new DisorderToolControls(ProcessControl.LOOSE);
 						DisorderTool dt = new DisorderTool(molecule, dm);
 						dt.resolveDisorder();
 					} catch (Exception e) {
 						e.printStackTrace();
 						System.err.println("Problem processing disorder: "+e.getMessage());
-						sb.append(filename+"\n");
+						sb.append(filename+": - "+e.getMessage()+"\n");
 						continue;
 					}
 					// at this point no bonds have been calculated
@@ -443,12 +449,15 @@ public class CrystalToolTest extends AbstractToolTest {
                     	e.printStackTrace();
                         continue;
                     }
+                    cml.appendChild(mergedMolecule);
+                    molecule.detach();
+                    //addSpaceGroup(cml);
                     for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
                     	StereochemistryTool st = new StereochemistryTool(subMol);
-                    	st.add3DStereo();
+                    	//st.add3DStereo();
                     }
                     // full cif
-                    writeXML(getCrystalName(user, cifname+S_UNDER+mol), mergedMolecule, "full cif");
+                    writeCML(getCrystalName(user, cifname+S_UNDER+mol), cml, "full cif");
                     // ring nuclei
                     //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
                     // atom centered species
@@ -468,7 +477,6 @@ public class CrystalToolTest extends AbstractToolTest {
             }
         }
         String dir = getDir(user);
-        /*
         try {
             File file = new File("E:/disordered-cifs.txt");
             FileWriter out = new FileWriter(file);
@@ -477,7 +485,6 @@ public class CrystalToolTest extends AbstractToolTest {
         } catch (IOException e) {
             System.err.println("Unhandled exception:" + e.toString());
         }
-        */
         try {
             FileWriter fw = new FileWriter(dir+File.separator+"log.xml");
             //log.writeXML(fw);
@@ -678,7 +685,7 @@ public class CrystalToolTest extends AbstractToolTest {
     private String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
-            s = "E:\\cif-test";
+            s = "E:\\cif-problems";
         } else if (user.equals("PMR")) {
 //            s = ACTALARGEEXAMPLESDIR;
         } else if (user.equals("PMR1")) {
@@ -796,4 +803,57 @@ public class CrystalToolTest extends AbstractToolTest {
         String user = (args.length == 0) ? S_EMPTY : args[0];
         new CrystalToolTest().analyzeCIFs(user);
     }
+    
+    /*
+    private String calculateCheckcif(String cifPath/*, int timeout) {
+		PostMethod filePost = null;
+		String checkcif = "";
+		try {
+			File f = new File(cifPath);
+			filePost = new PostMethod(
+			"http://dynhost1.iucr.org/cgi-bin/checkcif.pl");
+			Part[] parts = { new FilePart("file", f),
+					new StringPart("runtype", "fullpublication"),
+					new StringPart("UPLOAD", "Send CIF for checking") };
+			filePost.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+					new DefaultHttpMethodRetryHandler(5, false));
+			filePost.setRequestEntity(new MultipartRequestEntity(parts,
+					filePost.getParams()));
+			HttpClient client = new HttpClient();
+			
+			//HttpClientParams hcp = new HttpClientParams();
+			//hcp.setSoTimeout(timeout);
+			//hcp.setConnectionManagerTimeout(timeout);
+			
+			//client.setParams(hcp);
+			int statusCode = client.executeMethod(filePost);
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Could not connect to the IUCr Checkcif service.");
+			}
+			InputStream in = filePost.getResponseBodyAsStream();
+			checkcif = IOUtils.stream2String(in);
+		} catch (IOException e) {
+			System.err.println("Error calculating checkcif.");
+		} finally {
+			if (filePost != null)
+				filePost.releaseConnection();
+		}
+		return checkcif;
+	}
+    */
+    
+    private void addSpaceGroup(CMLCml cml) {
+		Nodes hmGroupNodes = cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']", X_CML);
+		if (hmGroupNodes.size() > 0) {
+			String hmGroup = hmGroupNodes.get(0).getValue();
+			Elements crystals = cml.getChildCMLElements(CMLCrystal.TAG);
+			if (crystals.size() > 0) {
+				CMLCrystal crystal = (CMLCrystal)crystals.get(0);
+				Elements symmetrys = crystal.getChildCMLElements("symmetry");
+				if (symmetrys.size() > 0) {
+					symmetrys.get(0).addAttribute(new Attribute("spaceGroup", hmGroup));
+				}
+			}
+		}
+	}
 }
