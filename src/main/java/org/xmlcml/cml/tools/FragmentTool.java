@@ -19,7 +19,6 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFragment;

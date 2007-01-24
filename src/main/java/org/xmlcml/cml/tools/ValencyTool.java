@@ -903,7 +903,7 @@ public class ValencyTool extends AbstractTool {
 	 * @param piSystemManager
 	 */
 	public void adjustBondOrdersAndChargesToValency(
-			PiSystemManager piSystemManager, CMLFormula moietyFormula) {	
+			PiSystemControls piSystemManager, CMLFormula moietyFormula) {	
 		// get a list of formulas for the moieties. 
 		List<CMLFormula> moietyFormulaList = new ArrayList<CMLFormula>();
 		if (moietyFormula != null) {
@@ -1237,7 +1237,7 @@ public class ValencyTool extends AbstractTool {
 	 * add double bonds through PiSystemManager.
 	 */
 	public void adjustBondOrdersAndChargesToValency(CMLFormula moietyFormula) {
-		PiSystemManager piSystemManager = new PiSystemManager();
+		PiSystemControls piSystemManager = new PiSystemControls();
 		piSystemManager.setUpdateBonds(true);
 		piSystemManager.setKnownUnpaired(0);
 		piSystemManager.setDistributeCharge(true);

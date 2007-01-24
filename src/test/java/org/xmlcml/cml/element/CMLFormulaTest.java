@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLSerializer;
 import org.xmlcml.cml.base.DoubleAttribute;

@@ -11,12 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;

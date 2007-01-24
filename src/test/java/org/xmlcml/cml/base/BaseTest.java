@@ -16,9 +16,6 @@ import nu.xom.tests.XOMTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.test.EuclidTest;
 
 /**

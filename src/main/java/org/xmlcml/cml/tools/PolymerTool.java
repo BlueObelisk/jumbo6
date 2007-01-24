@@ -2,7 +2,6 @@ package org.xmlcml.cml.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;

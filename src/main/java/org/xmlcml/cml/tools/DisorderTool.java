@@ -18,8 +18,8 @@ import org.xmlcml.cml.element.CMLMetadata;
 import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.tools.DisorderManager.ProcessControl;
-import org.xmlcml.cml.tools.DisorderManager.RemoveControl;
+import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
+import org.xmlcml.cml.tools.DisorderToolControls.RemoveControl;
 import org.xmlcml.util.CombinationGenerator;
 import org.xmlcml.util.Partition;
 
@@ -27,7 +27,7 @@ public class DisorderTool extends AbstractTool {
 
 	private CMLMolecule molecule;
 
-	private DisorderManager disorderManager;
+	private DisorderToolControls disorderOptions;
 
 	/**
 	 * constructor
@@ -39,10 +39,10 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	public DisorderTool(CMLMolecule molecule) {
-		this(molecule, new DisorderManager());
+		this(molecule, new DisorderToolControls());
 	}
 
-	public DisorderTool(CMLMolecule mol, DisorderManager disorderMan) {
+	public DisorderTool(CMLMolecule mol, DisorderToolControls disorderMan) {
 		if (mol == null) {
 			throw new IllegalArgumentException("Molecule cannot be null");
 		}
@@ -51,7 +51,7 @@ public class DisorderTool extends AbstractTool {
 					"Disorder manager cannot be null");
 		}
 		this.molecule = mol;
-		this.disorderManager = disorderMan;
+		this.disorderOptions = disorderMan;
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class DisorderTool extends AbstractTool {
 	 * @param disorderAssemblyList
 	 */
 	private void processDisorder(List<DisorderAssembly> disorderAssemblyList) {
-		if (RemoveControl.REMOVE_MINOR_DISORDER.equals(disorderManager
+		if (RemoveControl.REMOVE_MINOR_DISORDER.equals(disorderOptions
 				.getRemoveControl())) {
 			for (DisorderAssembly assembly : disorderAssemblyList) {
 				assembly.removeMinorDisorder();
@@ -137,7 +137,7 @@ public class DisorderTool extends AbstractTool {
 	 */
 	private List<DisorderAssembly> checkDisorder() {
 		List<DisorderAssembly> disorderAssemblyList = getDisorderAssemblyList();
-		ProcessControl pControl = disorderManager.getProcessControl();
+		ProcessControl pControl = disorderOptions.getProcessControl();
 		boolean isMetadataSet = false;
 		List<DisorderAssembly> failedAssemblyList = new ArrayList<DisorderAssembly>();
 		List<DisorderAssembly> finishedAssemblyList = new ArrayList<DisorderAssembly>();

@@ -57,7 +57,7 @@ public class PiSystem implements CMLConstants {
 
     FormalChargeControl fcd;
 
-    PiSystemManager piSystemManager;
+    PiSystemControls piSystemOptions;
 
     // ================== constructors and accessors ===============
     /**
@@ -70,7 +70,7 @@ public class PiSystem implements CMLConstants {
     public PiSystem(MoleculeTool moleculeTool, List<CMLAtom> atoms) {
         this.moleculeTool = moleculeTool;
         allAtoms = atoms;
-        piSystemManager = new PiSystemManager();
+        piSystemOptions = new PiSystemControls();
     }
 
     /**
@@ -100,7 +100,7 @@ public class PiSystem implements CMLConstants {
         if (atomx != null) {
             this.moleculeTool = new MoleculeTool(atomx.getMolecule());
         }
-        piSystemManager = new PiSystemManager();
+        piSystemOptions = new PiSystemControls();
     }
 
     /**
@@ -108,8 +108,8 @@ public class PiSystem implements CMLConstants {
      * 
      * @return the piSystemManager.
      */
-    public PiSystemManager getPiSystemManager() {
-        return piSystemManager;
+    public PiSystemControls getPiSystemManager() {
+        return piSystemOptions;
     }
 
     /**
@@ -118,8 +118,8 @@ public class PiSystem implements CMLConstants {
      * @param piSystemManager
      *            The piSystemManager to set.
      */
-    public void setPiSystemManager(PiSystemManager piSystemManager) {
-        this.piSystemManager = piSystemManager;
+    public void setPiSystemManager(PiSystemControls piSystemManager) {
+        this.piSystemOptions = piSystemManager;
     }
 
     /**
@@ -209,7 +209,7 @@ public class PiSystem implements CMLConstants {
         piMap = new HashMap<CMLAtom, Integer>();
         for (CMLAtom atom : allAtoms) {
             int nPi = moleculeTool.getDoubleBondEquivalents(atom,
-                    piSystemManager.getFormalChargeControl());
+                    piSystemOptions.getFormalChargeControl());
             if (nPi > 0) {
                 piMap.put(atom, new Integer(nPi));
             }
@@ -256,7 +256,7 @@ public class PiSystem implements CMLConstants {
         }
         PiSystem subSystem = new PiSystem(moleculeTool,
                 new ArrayList<CMLAtom>());
-        subSystem.setPiSystemManager(new PiSystemManager(piSystemManager));
+        subSystem.setPiSystemManager(new PiSystemControls(piSystemOptions));
         subSystem.parentPiMap = parentMap;
         subSystem.getPiSystem_initializeContainers();
         subSystem.expand_addAtom(atom);
@@ -317,7 +317,7 @@ public class PiSystem implements CMLConstants {
         if (finalAtomPairList.size() != 0) {
             PiSystem newPiSystem = new PiSystem(piMap);
             newPiSystem
-                    .setPiSystemManager(new PiSystemManager(piSystemManager));
+                    .setPiSystemManager(new PiSystemControls(piSystemOptions));
             subPiSystemList = newPiSystem.generatePiSystemList();
         } else {
             subPiSystemList = new ArrayList<PiSystem>();
@@ -330,10 +330,10 @@ public class PiSystem implements CMLConstants {
             }
             annotateUnmarkedPi();
         }
-        if (piSystemManager.isUpdateBonds()) {
+        if (piSystemOptions.isUpdateBonds()) {
             this.incrementBondOrders();
         }
-        if (piSystemManager.isDistributeCharge()) {
+        if (piSystemOptions.isDistributeCharge()) {
             distributeCharge();
         }
 
@@ -345,7 +345,7 @@ public class PiSystem implements CMLConstants {
         CMLMolecule molecule = moleculeTool.getMolecule();
         if (molecule.getFormalChargeAttribute() != null) {
             List<CMLAtom> atoms = molecule.getAtoms();
-            int knownUnpaired = piSystemManager.getKnownUnpaired();
+            int knownUnpaired = piSystemOptions.getKnownUnpaired();
             int formalCharge = molecule.getFormalCharge();
             int tempCharge = formalCharge;
             // probably know the charge distribution
@@ -446,7 +446,7 @@ public class PiSystem implements CMLConstants {
     	Map<CMLAtom, Integer> piMapCopy = new HashMap<CMLAtom, Integer>(piMap);
     	int startRemainingPiCount = remainingPiCount;
     	
-        int knownUnpaired = piSystemManager.getKnownUnpaired();
+        int knownUnpaired = piSystemOptions.getKnownUnpaired();
         int oldPiCount = -1;
         int count = 0;
         int iterationMax = 5;
@@ -488,7 +488,7 @@ public class PiSystem implements CMLConstants {
      * @return true if matched (may not be used later)
      */
     private int exploreStart1(CMLAtom atom, int level) {
-        int knownUnpaired = piSystemManager.getKnownUnpaired();
+        int knownUnpaired = piSystemOptions.getKnownUnpaired();
         // System.out.println(spaces(2*level)+">> "+atom.getId());
         // store any bonds formed here
         Stack<AtomPair> atomPairStack = new Stack<AtomPair>();

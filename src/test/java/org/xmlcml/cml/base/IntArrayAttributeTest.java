@@ -3,8 +3,6 @@ package org.xmlcml.cml.base;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.IntArrayAttribute;
 import org.xmlcml.euclid.test.IntTest;
 
 /**

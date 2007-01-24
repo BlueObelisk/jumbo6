@@ -23,7 +23,6 @@ import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.DoubleTool;
 import org.xmlcml.euclid.RealArray;
