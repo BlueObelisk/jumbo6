@@ -2,9 +2,12 @@ package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import nu.xom.Attribute;
@@ -37,6 +40,7 @@ import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
@@ -58,6 +62,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 public class MoleculeTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
+	public static String metalLigandDictRef = "jumbo:metalLigand";
 
 	CMLMolecule molecule;
 
@@ -2082,6 +2087,72 @@ public class MoleculeTool extends AbstractTool {
 			}
 			Attribute newAttribute = new Attribute(name, attribute.getValue());
 			to.addAttribute(newAttribute);
+		}
+	}
+	
+	/**
+	 * removes metal atoms and bonds from the supplied molecule.  Optional to tag atoms that were metal ligands
+	 * with a 'bonded to metal tag'.
+	 * returns a map containing the list of metal atoms and bonds removed.
+	 */
+	public static Map<List<CMLAtom>, List<CMLBond>> removeMetalAtomsAndBonds(CMLMolecule mol, boolean tagMetalLigandAtoms) {
+		List<CMLAtom> metalAtomList = new ArrayList<CMLAtom>();
+		List<CMLBond> metalBondList = new ArrayList<CMLBond>();
+		List<CMLAtom> atomList = mol.getAtoms();		
+		for(CMLAtom atom : atomList) {
+			ChemicalElement element = atom.getChemicalElement();
+			if (element.isChemicalElementType(Type.METAL)) {
+				metalAtomList.add(atom);
+				List<CMLBond> bonds = atom.getLigandBonds();
+				for (CMLBond bond : bonds) {
+					metalBondList.add(bond);
+				}
+				// tag atoms bonded to metals as being so.  This can then
+				// be used later to figure out charges and bond orders
+				List<CMLAtom> ligands = atom.getLigandAtoms();
+				for (CMLAtom ligand : ligands) {
+					CMLScalar metalLigand = new CMLScalar();
+					ligand.appendChild(metalLigand);
+					metalLigand.addAttribute(new Attribute("dictRef", metalLigandDictRef));
+				}
+			}
+		}		
+		for (CMLAtom metalAtom : metalAtomList)	 {
+			metalAtom.detach();
+		}
+		// remove duplicates from metal bond list
+		Set<CMLBond> set = new HashSet<CMLBond>();
+		set.addAll(metalBondList);
+		if(set.size() < metalBondList.size()) {
+			metalBondList.clear();
+			metalBondList.addAll(set);
+		} 
+		for (CMLBond metalBond : metalBondList)	 {
+			metalBond.detach();
+		}
+		Map<List<CMLAtom>, List<CMLBond>> map = new HashMap<List<CMLAtom>, List<CMLBond>>(1);
+		map.put(metalAtomList, metalBondList);
+		return map;
+	}
+	
+
+	public static void addMetalAtomsAndBonds(CMLMolecule mol, Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap) {
+		Entry<List<CMLAtom>, List<CMLBond>> entry = metalAtomAndBondMap.entrySet().iterator().next();
+		CMLAtomArray atomArray = mol.getAtomArray();
+		for (CMLAtom atom : entry.getKey()) {
+			atomArray.appendChild(atom);
+		}
+		CMLBondArray bondArray = mol.getBondArray();
+		if (bondArray != null) {
+			bondArray.indexBonds();
+		}
+		for (CMLBond bond : entry.getValue()) {
+			mol.addBond(bond);
+		}
+		// remove scalars signifying atoms attached to metal
+		Nodes nodes = mol.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", X_CML);
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).detach();
 		}
 	}
 }
