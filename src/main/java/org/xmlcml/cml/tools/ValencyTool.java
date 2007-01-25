@@ -1,35 +1,26 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
-import nu.xom.Attribute;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
 public class ValencyTool extends AbstractTool {
 	
-	public static String metalLigandDictRef = "jumbo:metalLigand";
 	public final static int UNREALISTIC_CHARGE = 99999;
 	
 	private boolean isMetalComplex = false;
@@ -793,100 +784,6 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-
-//	/**
-//	 * mark benzene (later pyridine, etc.) BUGGY!
-//	 *
-//	 */
-//	// FIXME
-//	@SuppressWarnings("unused")
-//	private void markMonocyclicBenzene() {
-//		List<CMLAtom> atoms = molecule.getAtoms();
-//		Set<CMLAtom> usedAtoms = new HashSet<CMLAtom>();
-//		for (CMLAtom atom : atoms) {
-//			if (usedAtoms.contains(atom)) {
-//				continue;
-//			}
-//			if ("C".equals(atom.getElementType())) {
-//				if (atom.getLigandAtoms().size() == 3) {
-//					Set<CMLAtom> ringSet = new HashSet<CMLAtom>();
-//					while (true) {
-//						if (!addNextAtom(atom, ringSet)) {
-//							break;
-//						}
-//					}
-//					if (ringSet.size() == 6) {
-//						for (CMLAtom rAtom : ringSet) {
-//							usedAtoms.add(rAtom);
-//						}
-//						addDoubleBonds(ringSet, atom);
-//					}
-//				}
-//			}
-//			usedAtoms.add(atom);
-//		}
-//	}
-	
-	private Map<List<CMLAtom>, List<CMLBond>> removeMetalAtomsAndBonds(CMLMolecule mol) {
-		List<CMLAtom> metalAtomList = new ArrayList<CMLAtom>();
-		List<CMLBond> metalBondList = new ArrayList<CMLBond>();
-		List<CMLAtom> atomList = mol.getAtoms();		
-		for(CMLAtom atom : atomList) {
-			ChemicalElement element = atom.getChemicalElement();
-			if (element.isChemicalElementType(Type.METAL)) {
-				isMetalComplex = true;
-				metalAtomList.add(atom);
-				List<CMLBond> bonds = atom.getLigandBonds();
-				for (CMLBond bond : bonds) {
-					metalBondList.add(bond);
-				}
-				// tag atoms bonded to metals as being so.  This can then
-				// be used later to figure out charges and bond orders
-				List<CMLAtom> ligands = atom.getLigandAtoms();
-				for (CMLAtom ligand : ligands) {
-					CMLScalar metalLigand = new CMLScalar();
-					ligand.appendChild(metalLigand);
-					metalLigand.addAttribute(new Attribute("dictRef", metalLigandDictRef));
-				}
-			}
-		}		
-		for (CMLAtom metalAtom : metalAtomList)	 {
-			metalAtom.detach();
-		}
-		// remove duplicates from metal bond list
-		Set<CMLBond> set = new HashSet<CMLBond>();
-		set.addAll(metalBondList);
-		if(set.size() < metalBondList.size()) {
-			metalBondList.clear();
-			metalBondList.addAll(set);
-		} 
-		for (CMLBond metalBond : metalBondList)	 {
-			metalBond.detach();
-		}
-		Map<List<CMLAtom>, List<CMLBond>> map = new HashMap<List<CMLAtom>, List<CMLBond>>(1);
-		map.put(metalAtomList, metalBondList);
-		return map;
-	}
-	
-	private void addMetalAtomsAndBonds(CMLMolecule mol, Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap) {
-		Entry<List<CMLAtom>, List<CMLBond>> entry = metalAtomAndBondMap.entrySet().iterator().next();
-		CMLAtomArray atomArray = mol.getAtomArray();
-		for (CMLAtom atom : entry.getKey()) {
-			atomArray.appendChild(atom);
-		}
-		CMLBondArray bondArray = mol.getBondArray();
-		if (bondArray != null) {
-			bondArray.indexBonds();
-		}
-		for (CMLBond bond : entry.getValue()) {
-			mol.addBond(bond);
-		}
-		// remove scalars signifying atoms attached to metal
-		Nodes nodes = molecule.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", X_CML);
-		for (int i = 0; i < nodes.size(); i++) {
-			nodes.get(i).detach();
-		}
-	}
 	
 	/**
 	 * Adjust bond orders and charges to satisfy valence. empirical, and
@@ -925,7 +822,10 @@ public class ValencyTool extends AbstractTool {
 			mol.setBondOrders(CMLBond.SINGLE);
 			// remove metal atoms so we can calculate bond orders on organic species, 
 			// then we will reattach the metal atoms later in the method
-			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = this.removeMetalAtomsAndBonds(molecule);
+			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = MoleculeTool.removeMetalAtomsAndBonds(molecule, true);
+			if (metalAtomAndBondMap.size() > 0) {
+				isMetalComplex = true;
+			}
 			// if the removing of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
 			if (mol.getAtomCount() == 1) {
@@ -1229,7 +1129,7 @@ public class ValencyTool extends AbstractTool {
 				ctt.flattenMolecules();
 			}
 			// reattach metal atoms and bonds now bonds have been calculated
-			this.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
+			MoleculeTool.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
 		}
 	}
 	

@@ -253,15 +253,14 @@ public class CMLAtomSet extends AbstractAtomSet {
             }
             idTable.put(atom.getId(), atom);
             if (forceUpdate) {
-                addAtomId(atom.getId());
+            	addAtomId(atom.getId());
             }
         }
-        /*
         if (molecule == null) {
-            molecule = atom.getMolecule();
+        	molecule = atom.getMolecule();
         } else if (checkDuplicates && molecule != atom.getMolecule()) {
-            throw new CMLRuntimeException("cannot add atoms from different moelcules");
-        }*/
+        	throw new CMLRuntimeException("cannot add atoms from different moelcules");
+        }
     }
 
     /** add atom id.

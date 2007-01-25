@@ -15,6 +15,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLFormula;
@@ -280,6 +281,9 @@ public class CrystalTool extends AbstractTool {
             // molecule and orig
             List<CMLAtom> atomList = symMolecule.getAtoms();
             for (CMLAtom atom : atomList) {
+            	// don't translate metal atoms, otherwise polymeric crystal structures will end up
+            	// with big extended molecules.
+            	if (atom.getChemicalElement().isChemicalElementType(Type.METAL)) continue;
                 // move atom to outside bounding box for orig molecule
                 Point3 xyzFract = atom.getXYZFract();
                 Point3 maxPoint = translateOutsidePositiveBox(xyzFract, xr, yr, zr);
@@ -365,14 +369,37 @@ public class CrystalTool extends AbstractTool {
      */
     public CMLMolecule mergeSymmetryMolecules(CMLMolecule mergedMolecule,
         Contact contact, int serial, Transform3 orthMat) {
-
         CMLMolecule fromMolecule = contact.fromAtom.getMolecule();
         CMLMolecule targetMolecule = getTargetMolecule(mergedMolecule, fromMolecule.getId());
-        //List<CMLAtom> targetAtomList = targetMolecule.getAtoms();
         CMLMolecule symmetryMolecule = new CMLMolecule(fromMolecule);
         symmetryMolecule.transformFractionalsAndCartesians(contact.transform3, orthMat);
+        // don't want to also translate any metal centres or ligands that do not have
+        // symmetry contacts, so remove metals and then partition the remaining molecule
+        Map<List<CMLAtom>, List<CMLBond>> metalMap = MoleculeTool.removeMetalAtomsAndBonds(symmetryMolecule, false);
+        // if metals have been removed, then partition remaining ligands
+        if (metalMap.size() > 0) {
+        	new ConnectionTableTool(symmetryMolecule).partitionIntoMolecules();
+        	String id = contact.fromAtom.getId();
+        	List<CMLMolecule> removeMolList = new ArrayList<CMLMolecule>();
+        	for (CMLMolecule mol : symmetryMolecule.getDescendantsOrMolecule()) {
+        		boolean thisMol = false;
+        		for (CMLAtom atom : mol.getAtoms()) {
+        			if (atom.getId().equals(id)) {
+        				thisMol = true;
+        			}
+        		}
+        		if (!thisMol) {
+        			removeMolList.add(mol);
+        		}
+        	}
+        	for (CMLMolecule mol : removeMolList) {
+        		mol.detach();
+        	}
+        	new ConnectionTableTool(symmetryMolecule).flattenMolecules();
+        }
+
         if (contact.isInSameMolecule) {
-            List<CMLAtom> newAtomList = new ArrayList<CMLAtom>();
+        	List<CMLAtom> newAtomList = new ArrayList<CMLAtom>();
             List<CMLAtom> fromAtomList = fromMolecule.getAtoms();
             List<CMLAtom> symmetryAtomList = symmetryMolecule.getAtoms();
             for (int i = 0; i < fromAtomList.size(); i++) {
@@ -398,43 +425,9 @@ public class CrystalTool extends AbstractTool {
                         newAtom.resetId(newId);
                         targetMolecule.addAtom(newAtom);
                         newAtomList.add(newAtom);
-                        /*
-                        // add bonds?
-                        if (addBonds) {
-                            // bonds to old atoms
-                            for (int j = 0; j < fromAtomList.size(); j++) {
-                                CMLAtom targetAtom = targetAtomList.get(j);
-                                if (CMLBond.areWithinBondingDistance(targetAtom, newAtom)) {
-                                    CMLBond newBond = new CMLBond(targetAtom, newAtom);
-                                    newBond.setId(targetAtom.getId()+Util.S_UNDER+newAtom.getId());
-                                    targetMolecule.addBond(newBond);
-                                }
-                            }
-                        }
-                        */
                     }
                 }
             }
-            /*
-            // any bonds to new atoms? (not very good solution)
-            for (int i = 0; i < newAtomList.size(); i++) {
-                CMLAtom atomi = newAtomList.get(i);
-                for (int j = 0; j < newAtomList.size(); j++) {
-                    if (i == j) continue;
-                    CMLAtom atomj = newAtomList.get(j);
-                    if (CMLBond.areWithinBondingDistance(atomi, atomj)) {
-                        CMLBond newBond = new CMLBond(atomi, atomj);
-                        newBond.setId(CMLBond.atomHash(atomi.getId(),atomj.getId()));
-                        try {
-                            targetMolecule.addBond(newBond);
-                        } catch (CMLRuntimeException e) {
-                            // non unique bond
-//                            System.out.println("Duplicate "+newBond.getId());
-                        }
-                    }
-                }
-            }
-            */
         }
         return mergedMolecule;
     }

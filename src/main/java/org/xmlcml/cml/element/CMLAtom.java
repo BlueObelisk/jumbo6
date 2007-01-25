@@ -13,7 +13,7 @@ import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.tools.ValencyTool;
+import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -982,7 +982,7 @@ public class CMLAtom extends AbstractAtom {
 	}
 
 	public boolean isBondedToMetal() {
-		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+ValencyTool.metalLigandDictRef+"']", CMLConstants.X_CML);
+		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
 		if (nodes.size() > 0) {
 			return true;
 		} else {

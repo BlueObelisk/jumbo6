@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
@@ -439,14 +440,26 @@ public class CrystalToolTest extends AbstractToolTest {
 					CMLMolecule mergedMolecule = null;
 					mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
 
+					/*
+					// only want to move organic species the second time round to make sure all organic species
+					// present are complete.
+					mergedMolecule.debug();
+					// 1. must remove metals atoms and bonds
+					// 2. partition into molecules (? maybe don't need this step)
+					// 3. calc crystallochemical unit
+					Map<List<CMLAtom>, List<CMLBond>> metalAtomBondMap = MoleculeTool.removeMetalAtomsAndBonds(mergedMolecule, false);
+					new ConnectionTableTool(mergedMolecule).partitionIntoMolecules();
 					CrystalTool cryst2 = new CrystalTool(mergedMolecule);
 					CMLMolecule merged2 = null;
 					merged2 = cryst2.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+					new ConnectionTableTool(merged2).flattenMolecules();
+					MoleculeTool.addMetalAtomsAndBonds(merged2, metalAtomBondMap);
+					*/
 
-					cml.appendChild(merged2);
+					cml.appendChild(mergedMolecule);
 					molecule.detach();
 
-					for (CMLMolecule subMol : merged2.getDescendantsOrMolecule()) {
+					for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
 						if (!DisorderTool.isDisordered(subMol)) {
 							ValencyTool subMolTool = new ValencyTool(subMol);
 							subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
