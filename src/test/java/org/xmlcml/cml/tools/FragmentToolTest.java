@@ -5648,14 +5648,14 @@ public class FragmentToolTest extends AbstractTest {
 //		  </propertyList>
 		List<Node> scalars = CMLUtil.getQueryNodes(fragment, 
 				CMLPropertyList.NS+"/"+CMLProperty.NS+"/"+CMLScalar.NS, X_CML);
-		Assert.assertEquals("scalars", 2, scalars.size());
+		Assert.assertEquals("scalars", 6, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
-		Assert.assertEquals("extensive", "extensive", ((CMLProperty)scalar.getParent()).getRole());
-		Assert.assertEquals("extensive", "cml:prop2", ((CMLProperty)scalar.getParent()).getDictRef());
-		Assert.assertEquals("extensive", 702.0, scalar.getDouble());
+		Assert.assertEquals("extensive", "intensive", ((CMLProperty)scalar.getParent()).getRole());
+		Assert.assertEquals("extensive", "cml:prop1", ((CMLProperty)scalar.getParent()).getDictRef());
+		Assert.assertEquals("extensive", 1.23, scalar.getDouble());
 		scalar = (CMLScalar) scalars.get(1);
-		Assert.assertEquals("intensive", "intensive", ((CMLProperty)scalar.getParent()).getRole());
-		Assert.assertEquals("intensive", "cml:prop1", ((CMLProperty)scalar.getParent()).getDictRef());
-		Assert.assertEquals("intensive", 2.34, scalar.getDouble());
+		Assert.assertEquals("intensive", "extensive", ((CMLProperty)scalar.getParent()).getRole());
+		Assert.assertEquals("intensive", "cml:prop2", ((CMLProperty)scalar.getParent()).getDictRef());
+		Assert.assertEquals("intensive", 123.0, scalar.getDouble());
      }
 }

@@ -8,8 +8,12 @@ import nu.xom.Node;
  * as a shell which can be edited
  * 
  */
-public class CMLEnumeration extends AbstractEnumeration {
+public class CMLEnumeration extends AbstractEnumeration implements Indexable {
 
+	/** dummy enumeration is useful to 'seed' an entry as enumaratable
+	 */
+	public final static String DUMMY_ENUM = "_dummy";
+	
     /**
      * constructor.
      */
@@ -46,5 +50,19 @@ public class CMLEnumeration extends AbstractEnumeration {
     public static CMLEnumeration makeElementInContext(Element parent) {
         return new CMLEnumeration();
 
+    }
+    
+    /** containing class is CMLEntry.
+     * @return CMLEntry.class
+     */
+    public Class getIndexableListClass() {
+    	return CMLEntry.class;
+    }
+
+    /** indexing by value.
+     * 
+     */
+    public String getRef() {
+    	return this.getCMLValue();
     }
 }

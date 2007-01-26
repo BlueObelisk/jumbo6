@@ -24,6 +24,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A number of miscellaneous tools. Originally devised for jumbo.sgml, now
@@ -2133,5 +2135,81 @@ public class Util implements EuclidConstants {
             }
         }
         return prime;
+    }
+    
+    /** parse string as integer.
+     * @return true if can be parsed.
+     */
+    public static boolean isInt(String s) {
+    	boolean couldBeInt = true;
+    	try {
+    		new Integer(s);
+    	} catch (NumberFormatException e) {
+    		couldBeInt = false;
+    	}
+    	return couldBeInt;
+    }
+    
+    /** parse string as float.
+     * @return true if can be parsed.
+     */
+    public static boolean isFloat(String s) {
+    	boolean couldBeFloat = true;
+    	try {
+    		new Double(s);
+    	} catch (NumberFormatException e) {
+    		couldBeFloat = false;
+    	}
+    	return couldBeFloat;
+    }
+
+    /** date of form 21-jan-1965.
+     */
+    public final static String DATE_REGEX1 =
+    	"([0-3][0-9])\\-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\\-(\\d\\d\\d\\d)";
+    /** date of form 1965-01-25.
+     */
+    public final static String DATE_REGEX2 =
+    	"\\d\\d\\d\\d\\-[0-1][0-9]\\-[0-3][0-9]";
+
+    public final static String[] months = {
+    	"jan",
+    	"feb",
+    	"mar",
+    	"apr",
+    	"may",
+    	"jun",
+    	"jul",
+    	"aug",
+    	"sep",
+    	"oct",
+    	"nov",
+    	"dec"
+    };
+    /** parse string as date.
+     * tries several formats (case insensitive)
+     * can be used to test whether string is parsable as date
+     * @return ISO 8601 format if can be parsed or null
+     */
+    public static String getCanonicalDate(String s) {
+    	String dateS = null;
+    	Pattern pattern = Pattern.compile(DATE_REGEX1, Pattern.CASE_INSENSITIVE);
+    	Matcher matcher = pattern.matcher(s.toLowerCase());
+    	boolean couldBeDate = matcher.matches();
+    	if (couldBeDate) {
+    		int day = Integer.parseInt(matcher.group(1));
+    		String month = matcher.group(2).toLowerCase();
+    		boolean ignoreCase = true;
+    		int imonth = Util.indexOf(month, months, ignoreCase);
+    		int year = Integer.parseInt(matcher.group(3));
+    		dateS = ""+year+S_MINUS+imonth+S_MINUS+day;
+    	}
+    	if (!couldBeDate) {
+	    	pattern = Pattern.compile(DATE_REGEX2, Pattern.CASE_INSENSITIVE);
+	    	matcher = pattern.matcher(s.toLowerCase());
+	    	couldBeDate = matcher.matches();
+	    	dateS = s;
+    	}
+    	return dateS;
     }
 }

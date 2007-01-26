@@ -144,11 +144,10 @@ public class Vector3 implements EuclidConstants {
     /**
      * copy constructor from RealArray.
      * 
-     * @param f
-     *            the array (of length 3)
-     * @throws EuclidException
+     * @param f the array (of length 3)
+     * @throws EuclidRuntimeException
      */
-    public Vector3(RealArray f) throws EuclidException {
+    public Vector3(RealArray f) throws EuclidRuntimeException {
         this();
         RealArray.check(f, 3);
         System.arraycopy(f.getArray(), 0, flarray, 0, 3);

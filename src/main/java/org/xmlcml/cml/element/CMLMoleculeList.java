@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import java.util.List;
 import java.util.Map;
 
 import nu.xom.Element;
@@ -74,12 +75,37 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
         return new CMLMoleculeList();
     }
 
+    /** get list of molecules.
+     * @return list
+     */
+    public List<Indexable> getIndexables() {
+    	ensureManager();
+    	return indexableListManager.getIndexables();
+    }
+
     /** add molecule.
      * @param indexable to add
      */
     public void addIndexable(Indexable indexable) {
     	ensureManager();
     	indexableListManager.add(indexable);
+    }
+
+    /** insert molecule.
+     * @param indexable to add
+     * @param position
+     */
+    public void insertIndexable(Indexable indexable, int position) {
+    	ensureManager();
+    	indexableListManager.insert(indexable, position);
+    }
+
+    /** insert molecule in order.
+     * @param indexable to add
+     */
+    public void insertIndexableInOrder(Indexable indexable) {
+    	ensureManager();
+    	indexableListManager.insertInOrder(indexable);
     }
 
     /** remove molecule.

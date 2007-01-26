@@ -44,6 +44,9 @@ public interface CMLConstants extends EuclidConstants {
     String XSD_BOOLEAN = "xsd:boolean";
 
     /** constant */
+    String XSD_DATE = "xsd:date";
+
+    /** constant */
     String XSD_DOUBLE = "xsd:double";
 
     /** constant */

@@ -18,6 +18,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
@@ -110,31 +111,42 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		
 	}
 
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatch()}.
-	 */
-	@Test
-	@Ignore
-	public final void testAddWedgeHatch() {
-		fail("Not yet implemented"); // TODO
-	}
+//	/**
+//	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatch()}.
+//	 */
+//	@Test
+//	@Ignore
+//	public final void testAddWedgeHatch() {
+//		fail("Not yet implemented"); // TODO
+//	}
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatchBonds()}.
 	 */
 	@Test
-	@Ignore
 	public final void testAddWedgeHatchBonds() {
-		fail("Not yet implemented"); // TODO
+		CMLMolecule molecule1 = makeMolecule1();
+		StereochemistryTool stereochemistryTool = new StereochemistryTool(molecule1);
+		stereochemistryTool.addWedgeHatchBonds();
+		molecule1.debug("WHB");
 	}
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.StereochemistryTool#calculateAtomParity(org.xmlcml.cml.element.CMLAtom)}.
 	 */
 	@Test
-	@Ignore
 	public final void testCalculateAtomParity() {
-		fail("Not yet implemented"); // TODO
+		CMLMolecule molecule1 = makeMolecule1();
+		CMLAtom atom = molecule1.getAtomById("a1");
+		// not chiral
+		CMLAtomParity atomParity1 = StereochemistryTool.calculateAtomParity(atom);
+		Assert.assertNull("non-chiral", atomParity1);
+		atom = molecule1.getAtomById("a9");
+		// chiral
+		atomParity1 = StereochemistryTool.calculateAtomParity(atom);
+		String[] atomRefs4 = atomParity1.getAtomRefs4();
+		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a10", "a28", "a49"}, atomRefs4);
+		Assert.assertEquals("atomRefs4", 11.158571879456787, atomParity1.getXMLContent(), 0.000001);
 	}
 
 	/**
@@ -143,13 +155,13 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	public final void testIsChiralCentre() {
 		CMLMolecule molecule1 = makeMolecule1();
-		StereochemistryTool stereochemistryTool1 = new StereochemistryTool(molecule1);
+//		StereochemistryTool stereochemistryTool1 = new StereochemistryTool(molecule1);
 		CMLAtom atom = molecule1.getAtomById("a1");
-		Assert.assertFalse("atom1 O is not chiral", stereochemistryTool1.isChiralCentre(atom));
+		Assert.assertFalse("atom1 O is not chiral", StereochemistryTool.isChiralCentre(atom));
 		atom = molecule1.getAtomById("a9");
-		Assert.assertTrue("atom9 C is chiral", stereochemistryTool1.isChiralCentre(atom));
+		Assert.assertTrue("atom9 C is chiral", StereochemistryTool.isChiralCentre(atom));
 		atom = molecule1.getAtomById("a5");
-		Assert.assertFalse("atom5 C(Me)(Me) is not chiral", stereochemistryTool1.isChiralCentre(atom));
+		Assert.assertFalse("atom5 C(Me)(Me) is not chiral", StereochemistryTool.isChiralCentre(atom));
 	}
 
 	/**

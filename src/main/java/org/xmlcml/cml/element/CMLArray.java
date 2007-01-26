@@ -732,7 +732,7 @@ public class CMLArray extends AbstractArray
         int size = (this.getSizeAttribute() == null) ? 0 : this.getSize();
         String dataType = this.getDataType();
         if (!XSD_STRING.equals(dataType)) {
-            throw new CMLRuntimeException("Cannot add string to array of: " + dataType);
+            throw new CMLRuntimeException("Cannot add string ("+s+") to array of: " + dataType);
         }
         String delim = this.getDelimiter();
         checkDelimiter(s, delim);

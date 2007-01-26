@@ -1005,7 +1005,7 @@ public class CMLArrayTest extends NumericTest {
         } catch (CMLRuntimeException e) {
             Assert
                     .assertEquals("cannot add string to double",
-                            "Cannot add string to array of: xsd:double", e
+                            "Cannot add string (f) to array of: xsd:double", e
                                     .getMessage());
         }
     }
@@ -1023,7 +1023,7 @@ public class CMLArrayTest extends NumericTest {
             Assert.fail("append should not throw ");
         } catch (CMLRuntimeException e) {
             Assert.assertEquals("cannot add string to int",
-                    "Cannot add string to array of: xsd:integer", e
+                    "Cannot add string (f) to array of: xsd:integer", e
                             .getMessage());
         }
     }

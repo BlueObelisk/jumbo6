@@ -15,7 +15,6 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 
 /**
@@ -194,19 +193,46 @@ public class CMLDictionary extends AbstractDictionary implements
 	 * 
 	 * @param entry
 	 *            to add
-	 * @throws CMLException
+	 * @throws CMLRuntimeException
 	 *             entry already present.
 	 */
-	public void addEntry(CMLEntry entry) throws CMLException {
+	public void addEntry(CMLEntry entry) {
 		String id = entry.getId();
 		if (id == null) {
-			throw new CMLException("Entry has no id");
+			throw new CMLRuntimeException("Entry has no id");
 		}
 		if (getCMLEntry(id) != null) {
-			throw new CMLException("Entry for " + id + " already present");
+			throw new CMLRuntimeException("Entry for " + id + " already present");
 		}
 		entryMap.put(id, entry);
 		this.appendChild(entry);
+	}
+
+	/**
+	 * add new Entry in order of id
+	 * 
+	 * @param entry to add
+	 * @throws CMLRuntimeException
+	 *             entry already present.
+	 */
+	public void addEntryInOrder(CMLEntry entry) {
+		String id = entry.getId();
+		if (id == null) {
+			throw new CMLRuntimeException("Entry has no id");
+		}
+		if (getCMLEntry(id) != null) {
+			throw new CMLRuntimeException("Entry for " + id + " already present");
+		}
+		entryMap.put(id, entry);
+		CMLElements<CMLEntry> entries = this.getEntryElements();
+		int idx = entries.size();
+		for (CMLEntry entry0 : entries) {
+			if (id.compareTo(entry0.getId()) < 0) {
+				idx = this.indexOf(entry0);
+				break;
+			}
+		}
+		this.insertChild(entry, idx);
 	}
 
 	/**
