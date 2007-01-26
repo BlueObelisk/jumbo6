@@ -373,30 +373,6 @@ public class CrystalTool extends AbstractTool {
         CMLMolecule targetMolecule = getTargetMolecule(mergedMolecule, fromMolecule.getId());
         CMLMolecule symmetryMolecule = new CMLMolecule(fromMolecule);
         symmetryMolecule.transformFractionalsAndCartesians(contact.transform3, orthMat);
-        // don't want to also translate any metal centres or ligands that do not have
-        // symmetry contacts, so remove metals and then partition the remaining molecule
-        Map<List<CMLAtom>, List<CMLBond>> metalMap = MoleculeTool.removeMetalAtomsAndBonds(symmetryMolecule, false);
-        // if metals have been removed, then partition remaining ligands
-        if (metalMap.size() > 0) {
-        	new ConnectionTableTool(symmetryMolecule).partitionIntoMolecules();
-        	String id = contact.fromAtom.getId();
-        	List<CMLMolecule> removeMolList = new ArrayList<CMLMolecule>();
-        	for (CMLMolecule mol : symmetryMolecule.getDescendantsOrMolecule()) {
-        		boolean thisMol = false;
-        		for (CMLAtom atom : mol.getAtoms()) {
-        			if (atom.getId().equals(id)) {
-        				thisMol = true;
-        			}
-        		}
-        		if (!thisMol) {
-        			removeMolList.add(mol);
-        		}
-        	}
-        	for (CMLMolecule mol : removeMolList) {
-        		mol.detach();
-        	}
-        	new ConnectionTableTool(symmetryMolecule).flattenMolecules();
-        }
 
         if (contact.isInSameMolecule) {
         	List<CMLAtom> newAtomList = new ArrayList<CMLAtom>();
@@ -494,6 +470,7 @@ public class CrystalTool extends AbstractTool {
     	//mol.debug();
         Transform3 orthMat = crystal.getOrthogonalizationTransform();
         CMLMolecule mergedMolecule = new CMLMolecule(mol);
+        
         if (contactList.size() > 0) {
             for (int icontact = 0; icontact < contactList.size(); icontact++) {
                 this.mergeSymmetryMolecules(mergedMolecule, 
