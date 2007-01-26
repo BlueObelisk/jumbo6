@@ -2,12 +2,14 @@ package org.xmlcml.cml.element;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLConstants;
@@ -125,11 +127,82 @@ public class IndexableListManager implements CMLConstants {
     void add(Indexable indexable) throws CMLRuntimeException{
     	ensureMap();
     	String id = indexable.getId();
+    	if (id == null) {
+    		throw new CMLRuntimeException("indexable has no id: "+indexable.getClass());
+    	}
     	if (map.containsKey(id)) {
     		throw new CMLRuntimeException(DUPLICATE_ID + id);
     	}
     	((Element)indexableList).appendChild((Element)indexable);
 		map.put(indexable.getId(), indexable);
+    }
+
+    /** insert indexable.
+     * 
+     * @param indexable to add
+     * @param position
+     * @throws CMLRuntimeException if id already in map
+     */
+    void insert(Indexable indexable, int position) throws CMLRuntimeException{
+    	ensureMap();
+    	String id = indexable.getId();
+    	if (id == null) {
+    		throw new CMLRuntimeException("indexable has no id: "+indexable.getClass());
+    	}
+    	if (map.containsKey(id)) {
+    		throw new CMLRuntimeException(DUPLICATE_ID + id);
+    	}
+    	((Element)indexableList).insertChild((Element)indexable, position);
+		map.put(indexable.getId(), indexable);
+    }
+
+    /** insert indexable.
+     * 
+     * @param indexable to add
+     * @param position
+     * @throws CMLRuntimeException if id already in map
+     */
+    void insertInOrder(Indexable indexable) throws CMLRuntimeException{
+    	String id = indexable.getId();
+    	if (id == null) {
+    		throw new CMLRuntimeException("indexable has no id: "+indexable.getClass());
+    	}
+    	if (map.containsKey(id)) {
+    		throw new CMLRuntimeException(DUPLICATE_ID + id);
+    	}
+    	boolean added = false;
+    	Elements elements = ((Element) indexableList).getChildElements();
+    	for (int i = 0; i < elements.size(); i++) {
+    		if (elements.get(i) instanceof Indexable) {
+	    		Indexable indexable0 = (Indexable) elements.get(i);
+	    		String id0 = indexable0.getId();
+	    		if (id.compareTo(id0) < 0) {
+	    	    	((Element)indexableList).insertChild((Element)indexable, i);
+	    	    	added = true;
+	    	    	break;
+	    		}
+    		}
+    	}
+		if (!added) {
+	    	((Element)indexableList).appendChild((Element)indexable);
+		}
+		map.put(indexable.getId(), indexable);
+    }
+
+    /** get indexable children.
+     * 
+     * @return indexables
+     */
+    List<Indexable> getIndexables() {
+    	List<Indexable> list = new ArrayList<Indexable>();
+    	Elements elements = ((Element) indexableList).getChildElements();
+    	for (int i = 0; i < elements.size(); i++) {
+    		Node element = elements.get(i);
+    		if (element instanceof Indexable) {
+    			list.add((Indexable) element);
+    		}
+    	}
+    	return list;
     }
 
     /** remove indexable.

@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,6 +56,31 @@ public interface IndexableList {
 	 */
 	void addIndexable(Indexable indexable);
 
+	/** add an Indexable child.
+	 * Must be of consistent type (i.e. CMLMoleculeList
+	 * requires CMLMolecule children). This method might be
+	 * wrapped in a convenience method (e.g. add(CMLMolecule)
+	 * @param indexable
+	 * @param position
+	 */
+	void insertIndexable(Indexable indexable, int position);
+
+	/** add an Indexable child in order of id.
+	 * Must be of consistent type (i.e. CMLMoleculeList
+	 * requires CMLMolecule children). This method might be
+	 * wrapped in a convenience method (e.g. add(CMLMolecule)
+	 * @param indexable
+	 */
+	void insertIndexableInOrder(Indexable indexable);
+
+	/** add an Indexable child in order of id.
+	 * Must be of consistent type (i.e. CMLMoleculeList
+	 * requires CMLMolecule children). This method might be
+	 * wrapped in a convenience method (e.g. add(CMLMolecule)
+	 * @param indexable
+	 */
+	List<Indexable> getIndexables();
+	
 	/** get the index
 	 * @return the index (may be empty but not null)
 	 */

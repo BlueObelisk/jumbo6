@@ -52,18 +52,18 @@ public class StereochemistryTool extends AbstractTool {
             }
         }
     }
-    /**
-     * uses atomParity to add wedge and hatch.
-     * 
-     * @throws CMLException
-     */
-    public void addWedgeHatch() throws CMLException {
-        // CMLBond[] acyclicDoubleBonds = getAcyclicDoubleBonds();
-        // testing only
-        for (CMLAtom atom : molecule.getAtoms()) {
-            this.addWedgeHatchBond(atom);
-        }
-    }
+//    /**
+//     * uses atomParity to add wedge and hatch.
+//     * 
+//     * @throws CMLException
+//     */
+//    private void addWedgeHatch() throws CMLException {
+//        // CMLBond[] acyclicDoubleBonds = getAcyclicDoubleBonds();
+//        // testing only
+//        for (CMLAtom atom : molecule.getAtoms()) {
+//            this.addWedgeHatchBond(atom);
+//        }
+//    }
     /**
      * add wedge hatch bonds.
      * 
@@ -75,8 +75,7 @@ public class StereochemistryTool extends AbstractTool {
      * @throws CMLRuntimeException
      */
     public void addWedgeHatchBonds() throws CMLRuntimeException {
-        for (CMLAtom chiralAtom : new StereochemistryTool(molecule)
-                .getChiralAtoms()) {
+        for (CMLAtom chiralAtom : new StereochemistryTool(molecule).getChiralAtoms()) {
             this.addWedgeHatchBond(chiralAtom);
         }
     }
@@ -554,7 +553,7 @@ public class StereochemistryTool extends AbstractTool {
 					continue;
 				}
 				// or any acyclic bond
-				if (bondx.getCyclic().equals(CMLBond.ACYCLIC)
+				if (CMLBond.ACYCLIC.equals(bondx.getCyclic())
 						&& bondx.getAtom(0).equals(atom)) {
 					bond = bondx;
 					break;

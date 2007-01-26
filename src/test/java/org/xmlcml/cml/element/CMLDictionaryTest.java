@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
 
@@ -142,11 +141,7 @@ public class CMLDictionaryTest extends AbstractTest {
 		CMLEntry entry = xmlDict1.getCMLEntry("a002");
 		Assert.assertNull("entry should be null", entry);
 		entry = new CMLEntry("a002");
-		try {
-			xmlDict1.addEntry(entry);
-		} catch (CMLException e) {
-			Assert.fail("should not throw " + e);
-		}
+		xmlDict1.addEntry(entry);
 		CMLEntry entry1 = xmlDict1.getCMLEntry("a002");
 		Assert.assertNotNull("entry should not be null", entry);
 		Assert.assertSame("entries are the same", entry, entry1);
@@ -154,12 +149,11 @@ public class CMLDictionaryTest extends AbstractTest {
 		try {
 			xmlDict1.addEntry(entry);
 			Assert.fail("should throw ");
-		} catch (CMLException e) {
-			Assert
-					.assertEquals(
-							"duplicate entry",
-							"org.xmlcml.cml.base.CMLException: Entry for a002 already present",
-							S_EMPTY + e);
+		} catch (CMLRuntimeException e) {
+			Assert.assertEquals(
+				"duplicate entry",
+				"org.xmlcml.cml.base.CMLRuntimeException: Entry for a002 already present",
+				S_EMPTY + e);
 		}
 	}
 
@@ -170,11 +164,7 @@ public class CMLDictionaryTest extends AbstractTest {
 	@Test
 	public void testRemoveEntry() {
 		CMLEntry entry = new CMLEntry("a002");
-		try {
-			xmlDict1.addEntry(entry);
-		} catch (CMLException e) {
-			Assert.fail("should not throw " + e);
-		}
+		xmlDict1.addEntry(entry);
 		CMLEntry entry1 = xmlDict1.getCMLEntry("a002");
 		Assert.assertNotNull("entry should not be null", entry);
 		Assert.assertEquals("dictionary size", 2, xmlDict1.getEntryElements()

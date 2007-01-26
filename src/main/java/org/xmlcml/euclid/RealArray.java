@@ -1524,14 +1524,14 @@ public class RealArray extends ArrayBase {
      *            to check
      * @param size
      *            required size
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if null or wrong size
      */
-    public static void check(RealArray array, int size) throws EuclidException {
+    public static void check(RealArray array, int size) throws EuclidRuntimeException {
         if (array == null) {
-            throw new EuclidException("null array");
+            throw new EuclidRuntimeException("null array");
         } else if (array.size() != size) {
-            throw new EuclidException("array size required (" + size
+            throw new EuclidRuntimeException("array size required (" + size
                     + ") found " + array.size());
         }
     }
