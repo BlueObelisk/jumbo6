@@ -128,7 +128,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		CMLMolecule molecule1 = makeMolecule1();
 		StereochemistryTool stereochemistryTool = new StereochemistryTool(molecule1);
 		stereochemistryTool.addWedgeHatchBonds();
-		molecule1.debug("WHB");
+//		molecule1.debug("WHB");
 	}
 
 	/**
