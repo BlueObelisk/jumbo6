@@ -326,10 +326,14 @@ public class RealArray extends ArrayBase {
      * @exception NumberFormatException
      *                a string could not be interpreted as doubles
      */
-    public RealArray(String[] strings) throws NumberFormatException {
+    public RealArray(String[] strings) throws EuclidRuntimeException {
         this(strings.length);
         for (int i = 0; i < strings.length; i++) {
-            array[i] = (Double.valueOf(strings[i])).doubleValue();
+        	try {
+        		array[i] = (Double.valueOf(strings[i])).doubleValue();
+        	} catch (NumberFormatException e) {
+        		throw new EuclidRuntimeException("Bad array element at ("+i+") :"+strings[i]);
+        	}
         }
     }
     /**
