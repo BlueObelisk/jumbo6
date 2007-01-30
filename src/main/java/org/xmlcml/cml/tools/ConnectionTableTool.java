@@ -565,24 +565,24 @@ public class ConnectionTableTool extends AbstractTool {
      * @return acyclic bonds (or zero array)
      */
      public List<CMLBond> getAcyclicBonds() {
-         List<CMLBond> acyclicVector = new ArrayList<CMLBond>();
+         List<CMLBond> acyclicBonds = new ArrayList<CMLBond>();
          CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
          if (molecules.size() > 0) {
              for (CMLMolecule molecule1 : molecule.getMoleculeElements()) {
                  ConnectionTableTool connectionTable = new ConnectionTableTool(molecule1);
                  for (CMLBond bond: connectionTable.getAcyclicBonds()) {
-                     acyclicVector.add(bond);
+                     acyclicBonds.add(bond);
                  }
              }
          } else {
              getCyclicBonds();
              for (CMLBond bond : molecule.getBonds()) {
                  if (CMLBond.ACYCLIC.equals(bond.getCyclic())) {
-                     acyclicVector.add(bond);
+                     acyclicBonds.add(bond);
                  }
              }
          }
-         return acyclicVector;
+         return acyclicBonds;
     }
      
      
