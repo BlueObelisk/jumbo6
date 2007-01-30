@@ -1024,7 +1024,14 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
      * @return the atoms (none returns emptyList)
      */
     public List<CMLAtom> getAtoms() {
-        List<CMLAtom> atomList = new ArrayList<CMLAtom>();
+    	List<CMLAtom> atomList = new ArrayList<CMLAtom>();
+    	for (CMLMolecule molecule : this.getDescendantsOrMolecule()) {
+    		CMLAtomArray atomArray = molecule.getAtomArray();
+    		if (atomArray != null) {
+    			atomList.addAll(atomArray.getAtoms());
+    		}
+        }
+        /*
         if (isMoleculeContainer()) {
             atomList = new ArrayList<CMLAtom>();
             for (CMLMolecule mol : this.getMoleculeElements()) {
@@ -1036,6 +1043,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
                 atomList = atomArray.getAtoms();
             }
         }
+        */
         // else return a blank list
         return atomList;
     }
@@ -1115,8 +1123,14 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
      * @return a typed list
      */
     public List<CMLBond> getBonds() {
-        CMLBondArray bondArray = this.getBondArray();
-        return (bondArray == null) ? new ArrayList<CMLBond>() : bondArray.getBonds();
+    	List<CMLBond> bondList = new ArrayList<CMLBond>();
+    	for (CMLMolecule molecule : this.getDescendantsOrMolecule()) {
+    		CMLBondArray bondArray = molecule.getBondArray();
+    		if (bondArray != null) {
+    			bondList.addAll(bondArray.getBonds());
+    		}
+    	}
+    	return bondList;
     }
 
     /**

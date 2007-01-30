@@ -1782,50 +1782,43 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 *  @return linkerMolecules
 	 */
-	public List<CMLMolecule> getLinkerMolecules() {
+	public List<CMLMolecule> getChainMolecules() {
 		List<CMLMolecule> linkers = new ArrayList<CMLMolecule>();
 		List<CMLMolecule> subMolList = molecule.getDescendantsOrMolecule();
 		for (CMLMolecule subMol : subMolList) {
-			List<CMLBond> acyclicBonds = new ArrayList<CMLBond>();
-			int bondCount = subMol.getBondCount();
 			ConnectionTableTool ct = new ConnectionTableTool(subMol);
-			acyclicBonds = ct.getAcyclicBonds();
+			List<CMLBond> acyclicBonds = ct.getAcyclicBonds();
+			List<CMLBond> cyclicBonds = ct.getCyclicBonds();
+			List<CMLAtom> acyclicBondAtoms = new ArrayList<CMLAtom>();
+			List<CMLAtom> cyclicBondAtoms = new ArrayList<CMLAtom>();		
+			for (CMLBond acyclicBond : acyclicBonds) {
+				for (CMLAtom atom : acyclicBond.getAtoms()) {
+					acyclicBondAtoms.add(atom);
+				}
+			}
+			for (CMLBond cyclicBond : cyclicBonds) {
+				for (CMLAtom atom : cyclicBond.getAtoms()) {
+					cyclicBondAtoms.add(atom);
+				}
+			}			
 			// if bond count equal to number of acyclic bonds then there
 			// aren't any cyclic bonds in the molecule, hence no linkers
-			if (bondCount != acyclicBonds.size()) {
+			if (subMol.getBondCount() != acyclicBonds.size()) {
 				List<CMLAtom> acyclicAtoms = new ArrayList<CMLAtom>();
-				for (CMLBond bond : acyclicBonds) {
-					List<CMLAtom> atomList = bond.getAtoms();
-					for (CMLAtom atom : atomList) {
-						if (!acyclicAtoms.contains(atom)) {
-							acyclicAtoms.add(atom);
-						}
+				for (CMLAtom atom : subMol.getAtoms()) {
+					if (acyclicBondAtoms.contains(atom) &&
+							!cyclicBondAtoms.contains(atom)) {
+						acyclicAtoms.add(atom);
 					}
 				}
-				CMLBondSet bondSet = new CMLBondSet();
-				try {
-					bondSet = new CMLBondSet(acyclicBonds);
-				} catch (CMLException e) {
-					e.printStackTrace();
-				}
+
 				CMLAtomSet atomSet = new CMLAtomSet(acyclicAtoms);
-				CMLMolecule newMol = new CMLMolecule(atomSet, bondSet);
+				CMLMolecule newMol = new CMLMolecule(atomSet);
+				new MoleculeTool(newMol).calculateBondedAtoms();
 				new ConnectionTableTool(newMol).partitionIntoMolecules();
 				List<CMLMolecule> linkerList = newMol.getDescendantsOrMolecule();
 				for (CMLMolecule mol : linkerList) {
-					// if the linker is just a H atom attached to an atom in
-					// a ring then ignore, else add linker to molList to be
-					// returned
-					List<CMLAtom> atomList = mol.getAtoms();
-					boolean add = true;
-					if (atomList.size() == 2) {
-						for (CMLAtom atom : atomList) {
-							if ("H".equalsIgnoreCase(atom.getElementType())) {
-								add = false;
-							}
-						}
-					}
-					if (add) {
+					if (mol.getAtomCount() > 1) {
 						linkers.add(mol);
 					}
 				}
