@@ -428,15 +428,19 @@ public class StereochemistryTool extends AbstractTool {
      */
     public void add3DStereo() {
         // StereochemistryTool stereochemistryTool = new
-        // StereochemistryTool(molecule);
-        List<CMLBond> doubleBonds = molecule.getDoubleBonds();
-        for (CMLBond bond : doubleBonds) {
-            CMLBondStereo bondStereo3 = create3DBondStereo(bond);
-            if (bondStereo3 != null) {
-                bond.addBondStereo(bondStereo3);
-            }
-        }
-        List<CMLAtom> chiralAtoms = new StereochemistryTool(molecule).getChiralAtoms();
+    	// StereochemistryTool(molecule);
+    	ConnectionTableTool ct = new ConnectionTableTool(molecule);
+    	List<CMLBond> cyclicBonds = ct.getCyclicBonds();
+    	List<CMLBond> doubleBonds = molecule.getDoubleBonds();
+    	for (CMLBond bond : doubleBonds) {
+    		if (!cyclicBonds.contains(bond)) {
+    			CMLBondStereo bondStereo3 = create3DBondStereo(bond);
+    			if (bondStereo3 != null) {
+    				bond.addBondStereo(bondStereo3);
+    			}
+    		}
+    	}
+    	List<CMLAtom> chiralAtoms = new StereochemistryTool(molecule).getChiralAtoms();
         for (CMLAtom chiralAtom : chiralAtoms) {
             CMLAtomParity atomParity3 = null;
             atomParity3 = calculateAtomParity(chiralAtom);
