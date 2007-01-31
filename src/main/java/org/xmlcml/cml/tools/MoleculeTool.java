@@ -1094,7 +1094,7 @@ public class MoleculeTool extends AbstractTool {
 				CMLBondSet clusterBondSet = new CMLBondSet();
 				expandCluster(clusterSet, clusterBondSet, unusedAtomSet,
 						typeList);
-				if (clusterSet.size() > 0) {
+				if (clusterSet.size() > 1) {
 					CMLMolecule clusterMolecule = new CMLMolecule(clusterSet);
 					clusterList.add(clusterMolecule);
 					molecule.addToLog(Severity.INFO, "NEW CLUSTER SIZE "
