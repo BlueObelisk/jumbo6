@@ -14,6 +14,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMetadata;
 import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -412,7 +413,7 @@ public class DisorderTool extends AbstractTool {
 	 * 
 	 * @param processed - whether or not the disorder has been successfully processed
 	 */
-	private void addDisorderMetadata(boolean processed) {
+	public void addDisorderMetadata(boolean processed) {
 		CMLMetadataList metList = new CMLMetadataList();
 		molecule.appendChild(metList);
 		CMLMetadata met = new CMLMetadata();
@@ -425,13 +426,28 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	/**
-	 * returns whether or not this molecule is disordered.
+	 * Checks for CIF disorder flags on each atom, plus some other telling
+	 * things like methyl groups with 6 H/Cl/F attached etc.
 	 * 
 	 * @param molecule
 	 * @return
 	 */
 	public static boolean isDisordered(CMLMolecule molecule) {
 		for (CMLAtom atom : molecule.getAtoms()) {
+			int hCount = 0;
+			int fCount = 0;
+			int clCount = 0;
+			if ("C".equals(atom.getElementType())) {
+				for (CMLAtom ligand : atom.getLigandAtoms()) {
+					if ("H".equals(ligand.getElementType())) hCount++;
+					if ("F".equals(ligand.getElementType())) fCount++;
+					if ("Cl".equals(ligand.getElementType())) clCount++;
+				}
+			}
+			if (hCount == 6 || fCount == 6 || clCount == 6) {
+				return true;
+			}
+			
 			List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//" + CMLScalar.NS
 					+ "[@dictRef='" + CrystalTool.DISORDER_ASSEMBLY + "'] | "
 					+ ".//" + CMLScalar.NS + "[@dictRef='"
