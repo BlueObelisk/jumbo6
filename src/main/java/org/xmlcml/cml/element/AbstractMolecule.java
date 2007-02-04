@@ -1,32 +1,19 @@
 package org.xmlcml.cml.element;
 
-import nu.xom.Attribute;
-import org.xmlcml.cml.base.*;
-import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-import org.xmlcml.cml.element.CMLSymmetry;
-import org.xmlcml.cml.element.CMLList;
-import org.xmlcml.cml.element.CMLArg;
-import org.xmlcml.cml.element.CMLZMatrix;
-import org.xmlcml.cml.element.CMLMetadataList;
-import org.xmlcml.cml.element.CMLLength;
-import org.xmlcml.cml.element.CMLPropertyList;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLMatrix;
-import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.CMLIdentifier;
-import org.xmlcml.cml.element.CMLJoin;
-import org.xmlcml.cml.element.CMLBondArray;
-import org.xmlcml.cml.element.CMLName;
+
+import nu.xom.Attribute;
+import nu.xom.Elements;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.DoubleAttribute;
+import org.xmlcml.cml.base.IntAttribute;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** The float|integer|string children are for compatibility with CML-1 and are deprecated. scalar|array|matrix should be used instead.
 *

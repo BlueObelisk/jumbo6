@@ -167,7 +167,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 			throw new CMLRuntimeException(
 					"Cannot have empty local name for mol ref");
 		}
-		return indexableList.getById(localName);
+		return indexableList.getIndexableById(localName);
 	}
 
 	/** get URL for catalogMap.

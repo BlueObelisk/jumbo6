@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import nu.xom.Document;
@@ -110,11 +112,11 @@ public class CMLDictionary extends AbstractDictionary implements
 	 */
 	public CMLDictionary createDictionary(URL url) throws IOException {
 		Document dictDoc = CMLDictionary.createDictionary0(url);
-		CMLDictionary dt = null;
+		CMLDictionary dictionary1 = null;
 		if (dictDoc != null) {
 			Element root = dictDoc.getRootElement();
 			if (root instanceof CMLDictionary) {
-				dt = new CMLDictionary((CMLDictionary) root);
+				dictionary1 = new CMLDictionary((CMLDictionary) root);
 			} else {
 				throw new CMLRuntimeException(
 						"Expected CMLDictionary root element, found: "
@@ -122,10 +124,10 @@ public class CMLDictionary extends AbstractDictionary implements
 								+ root.getLocalName());
 			}
 		}
-		if (dt != null) {
-			dt.indexEntries();
+		if (dictionary1 != null) {
+			dictionary1.indexEntries();
 		}
-		return dt;
+		return dictionary1;
 	}
 
 	static Document createDictionary0(File file) throws IOException {
@@ -176,11 +178,9 @@ public class CMLDictionary extends AbstractDictionary implements
 		// throw new CMLRuntime("deprecated, use getCMLEntry()");
 	}
 
-	/**
-	 * get Entry by id.
-	 * 
-	 * @param id
-	 *            the entryId (null if absent)
+	/** get Entry by id.
+	 * do not ignore case
+	 * @param id the entryId (null if absent)
 	 * @return entry
 	 */
 	public CMLEntry getCMLEntry(String id) {
@@ -220,19 +220,18 @@ public class CMLDictionary extends AbstractDictionary implements
 		if (id == null) {
 			throw new CMLRuntimeException("Entry has no id");
 		}
-		if (getCMLEntry(id) != null) {
-			throw new CMLRuntimeException("Entry for " + id + " already present");
-		}
-		entryMap.put(id, entry);
-		CMLElements<CMLEntry> entries = this.getEntryElements();
-		int idx = entries.size();
-		for (CMLEntry entry0 : entries) {
-			if (id.compareTo(entry0.getId()) < 0) {
-				idx = this.indexOf(entry0);
-				break;
+		if (getCMLEntry(id) == null) {
+			entryMap.put(id, entry);
+			CMLElements<CMLEntry> entries = this.getEntryElements();
+			int idx = entries.size();
+			for (CMLEntry entry0 : entries) {
+				if (id.compareTo(entry0.getId()) < 0) {
+					idx = this.indexOf(entry0);
+					break;
+				}
 			}
+			this.insertChild(entry, idx);
 		}
-		this.insertChild(entry, idx);
 	}
 
 	/**
@@ -275,4 +274,21 @@ public class CMLDictionary extends AbstractDictionary implements
 			boolean useSubdirectories) {
 		return null;
 	}
+
+	/** sort entries.
+	 * also sorts enumerations in each entry
+	 */
+    public void sortEntries() {
+    	TreeSet<CMLEntry> treeSet = new TreeSet<CMLEntry>();
+    	for (CMLEntry entry : this.getEntryElements()) {
+    		treeSet.add(entry);
+    		entry.detach();
+    	}
+    	Iterator<CMLEntry> iterator = treeSet.iterator();
+    	while (iterator.hasNext()) {
+    		CMLEntry entry = (CMLEntry) iterator.next();
+    		this.appendChild(entry);
+    		entry.sortEnumerations();
+    	}
+    }
 }

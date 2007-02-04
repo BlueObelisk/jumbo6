@@ -254,7 +254,7 @@ public class FragmentTool extends AbstractTool {
     	for (Node node : fragmentsWithRefs) {
     		CMLFragment refFragment = (CMLFragment) node;
     		String ref = refFragment.getRef();
-    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getById(ref);
+    		CMLFragment refFragment0 = (CMLFragment) fragmentList.getIndexableById(ref);
     		if (refFragment0 == null) {
     			fragmentList.debug("FAILED DEREF");
     			throw new CMLRuntimeException("Cannot find ref: "+ref);
@@ -871,7 +871,7 @@ class IntermediateProcessor implements CMLConstants {
 				if (indexableList != null) {
 //					indexableList.updateIndex();
 					localRef = CMLUtil.getLocalName(ref);
-					deref = indexableList.getById(localRef);
+					deref = indexableList.getIndexableById(localRef);
 				}
 				if (deref == null) {
 					((CMLElement)indexableList).debug("cannot dereference: "+ref+"/"+localRef);

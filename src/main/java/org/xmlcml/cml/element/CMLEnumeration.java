@@ -65,4 +65,5 @@ public class CMLEnumeration extends AbstractEnumeration implements Indexable {
     public String getRef() {
     	return this.getCMLValue();
     }
+
 }

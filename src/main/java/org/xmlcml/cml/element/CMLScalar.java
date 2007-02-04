@@ -76,6 +76,8 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
     public void finishMakingElement(Element parent) throws CMLRuntimeException {
         String dataType = this.getDataType();
         if (dataType.equals(XSD_STRING)) {
+        } else if (dataType.equals(XSD_BOOLEAN)) {
+            this.getDouble();
         } else if (dataType.equals(XSD_DOUBLE)) {
             this.getDouble();
         } else if (dataType.equals(XSD_INTEGER)) {

@@ -104,8 +104,12 @@ public abstract class CMLUtil implements CMLConstants {
      * @return localName (or empty string)
      */
     public static String getLocalName(String s) {
-    	int idx = s.indexOf(S_COLON);
-    	return (idx == -1) ? s : s.substring(idx+1);
+    	String ss = null;
+    	if (s != null) {
+	    	int idx = s.indexOf(S_COLON);
+	    	ss = (idx == -1) ? s : s.substring(idx+1);
+    	}
+    	return ss;
     }
 
 	/**
@@ -182,8 +186,7 @@ public abstract class CMLUtil implements CMLConstants {
 	 * org/xmlcml/molutil/elementdata.xml for file elementdata.xml in class
 	 * hierarchy org.xmlcml.molutil
 	 * 
-	 * @param filename
-	 *            relative to current class hierarchy.
+	 * @param filename relative to current class hierarchy.
 	 * @return document for resource
 	 * @throws IOException
 	 */
@@ -440,8 +443,7 @@ public abstract class CMLUtil implements CMLConstants {
     public static CMLElement readElementFromResource(String filename) {
         CMLElement element = null;
         try {
-            InputStream in = Util
-            .getInputStreamFromResource(filename);
+            InputStream in = Util.getInputStreamFromResource(filename);
             element = (CMLElement) new CMLBuilder().build(in).getRootElement();
             in.close();
         } catch (Exception e) {
@@ -538,4 +540,18 @@ public abstract class CMLUtil implements CMLConstants {
 
 		return combinationList;
 	}
+	
+    /** make id from string.
+     * convert to lowercase and replace space by underscore
+     * @param s
+     * @return new id (null if s is null)
+     */
+    public static String makeId(String s) {
+    	String id = null;
+    	if (s != null) {
+    		id = s.toLowerCase();
+    		id = id.replace(S_SPACE, S_UNDER);
+    	}
+    	return id;
+    }
 }

@@ -32,6 +32,7 @@ public class IndexableListManager implements CMLConstants {
 	public final static String DUPLICATE_ID = "duplicate id in indexableList: ";
 	private IndexableList indexableList;
 	private Map<String, Indexable> map;
+	private Map<String, Indexable> lowerCaseMap;
 	private String indexableLocalName;	// XML name
 	
 	IndexableListManager(IndexableList indexableList) {
@@ -44,6 +45,9 @@ public class IndexableListManager implements CMLConstants {
 		if (map == null) {
 			map = new HashMap<String, Indexable>();
 		}
+		if (lowerCaseMap == null) {
+			lowerCaseMap = new HashMap<String, Indexable>();
+		}
 	}
 
 	/** index all current indexable children.
@@ -52,9 +56,10 @@ public class IndexableListManager implements CMLConstants {
     Map indexList() {
     	ensureMap();
     	map.clear();
+    	lowerCaseMap.clear();
     	indexableLocalName = indexableList.getIndexableLocalName();
     	List<Node> indexables = CMLUtil.getQueryNodes((Node)indexableList,
-    			C_E+indexableLocalName, X_CML);
+			C_E+indexableLocalName, X_CML);
     	for (Node node : indexables) {
     		indexableList.addIndexable((Indexable) node);
     	}
@@ -117,6 +122,15 @@ public class IndexableListManager implements CMLConstants {
     Map<String, Indexable> getIndex() {
     	ensureMap();
     	return map;
+    }
+    
+    /** get case-insensitive map of id to indexable.
+     * 
+     * @return map
+     */
+    Map<String, Indexable> getLowerCaseIndex() {
+    	ensureMap();
+    	return lowerCaseMap;
     }
     
     /** add indexable.

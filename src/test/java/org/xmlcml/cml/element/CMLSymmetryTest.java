@@ -79,44 +79,40 @@ public class CMLSymmetryTest extends BaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        try {
-            matrix1 = new CMLMatrix[] {
-                    new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.0, 0, 1, 0,
-                            0.0, 0, 0, 1, 0.0 }),
-                    new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.5, 0, -1, 0,
-                            0.0, 0, 0, 1, 0.5 }),
-                    new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.5, 0, -1, 0,
-                            0.5, 0, 0, -1, 0.0 }),
-                    new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.0, 0, 1, 0,
-                            0.5, 0, 0, -1, 0.5 }),
-                    new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.0, 0, -1, 0,
-                            0.0, 0, 0, -1, 0.0 }),
-                    new CMLMatrix(3, 4, new double[] { 1, 0, 0, -0.5, 0, 1, 0,
-                            0.0, 0, 0, -1, -0.5 }),
-                    new CMLMatrix(3, 4, new double[] { -1, 0, 0, -0.5, 0, 1, 0,
-                            -0.5, 0, 0, 1, 0.0 }),
-                    new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.0, 0, -1, 0,
-                            -0.5, 0, 0, 1, -0.5 }) };
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
-            transform31 = new CMLTransform3[] {
-                new CMLTransform3(new double[] { 1, 0, 0, 0.0, 0, 1, 0,
-                        0.0, 0, 0, 1, 0.0, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { -1, 0, 0, 0.5, 0, -1, 0,
-                        0.0, 0, 0, 1, 0.5, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { 1, 0, 0, 0.5, 0, -1, 0,
-                        0.5, 0, 0, -1, 0.0, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { -1, 0, 0, 0.0, 0, 1, 0,
-                        0.5, 0, 0, -1, 0.5, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { -1, 0, 0, 0.0, 0, -1, 0,
-                        0.0, 0, 0, -1, 0.0, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { 1, 0, 0, -0.5, 0, 1, 0,
-                        0.0, 0, 0, -1, -0.5, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { -1, 0, 0, -0.5, 0, 1, 0,
-                        -0.5, 0, 0, 1, 0.0, 0, 0, 0, 1 }),
-                new CMLTransform3(new double[] { 1, 0, 0, 0.0, 0, -1, 0,
-                        -0.5, 0, 0, 1, -0.5, 0, 0, 0, 1 }), };
+        matrix1 = new CMLMatrix[] {
+            new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.0, 0, 1, 0,
+                    0.0, 0, 0, 1, 0.0 }),
+            new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.5, 0, -1, 0,
+                    0.0, 0, 0, 1, 0.5 }),
+            new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.5, 0, -1, 0,
+                    0.5, 0, 0, -1, 0.0 }),
+            new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.0, 0, 1, 0,
+                    0.5, 0, 0, -1, 0.5 }),
+            new CMLMatrix(3, 4, new double[] { -1, 0, 0, 0.0, 0, -1, 0,
+                    0.0, 0, 0, -1, 0.0 }),
+            new CMLMatrix(3, 4, new double[] { 1, 0, 0, -0.5, 0, 1, 0,
+                    0.0, 0, 0, -1, -0.5 }),
+            new CMLMatrix(3, 4, new double[] { -1, 0, 0, -0.5, 0, 1, 0,
+                    -0.5, 0, 0, 1, 0.0 }),
+            new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.0, 0, -1, 0,
+                    -0.5, 0, 0, 1, -0.5 }) };
+        transform31 = new CMLTransform3[] {
+            new CMLTransform3(new double[] { 1, 0, 0, 0.0, 0, 1, 0,
+                    0.0, 0, 0, 1, 0.0, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { -1, 0, 0, 0.5, 0, -1, 0,
+                    0.0, 0, 0, 1, 0.5, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { 1, 0, 0, 0.5, 0, -1, 0,
+                    0.5, 0, 0, -1, 0.0, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { -1, 0, 0, 0.0, 0, 1, 0,
+                    0.5, 0, 0, -1, 0.5, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { -1, 0, 0, 0.0, 0, -1, 0,
+                    0.0, 0, 0, -1, 0.0, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { 1, 0, 0, -0.5, 0, 1, 0,
+                    0.0, 0, 0, -1, -0.5, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { -1, 0, 0, -0.5, 0, 1, 0,
+                    -0.5, 0, 0, 1, 0.0, 0, 0, 0, 1 }),
+            new CMLTransform3(new double[] { 1, 0, 0, 0.0, 0, -1, 0,
+                    -0.5, 0, 0, 1, -0.5, 0, 0, 0, 1 }), };
     }
     /**
      * Test method for

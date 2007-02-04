@@ -371,9 +371,12 @@ public class CMLNodeFactory extends NodeFactory {
                 CMLElement currentCML = (CMLElement) current;
                 String attributeGroupName = currentCML.getAttributeGroupName(name);
                 if (attributeGroupName == null) {
-                    throw new CMLRuntimeException("+unknown attribute: "+name);
+//                    throw new CMLRuntimeException("unknown attribute: "+name);
+                	attribute = new Attribute(name, value);
+//                    System.err.println("unknown attribute: "+name);
+                } else {
+                	attribute = CMLAttributeList.makeAttributeFromGroupName(attributeGroupName, value, URI);
                 }
-                attribute = CMLAttributeList.makeAttributeFromGroupName(attributeGroupName, value, URI);
             } else if (prefixLoc == -1) {
         // non-prefixed non-cml element
                 attribute = new Attribute(name, value);
@@ -384,7 +387,9 @@ public class CMLNodeFactory extends NodeFactory {
         } catch (CMLException e) {
             throw new CMLRuntimeException(""+e);
         }
-        nodes.append(attribute);
+        if (attribute != null) {
+        	nodes.append(attribute);
+        }
         return nodes;
     }
     /** FIXME text - needs to trap/check values.

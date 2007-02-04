@@ -2150,6 +2150,34 @@ public class Util implements EuclidConstants {
     	return couldBeInt;
     }
     
+    /** parse string as integerArray.
+     * @return true if can be parsed.
+     */
+    public static boolean isIntArray(String s, String delimiterRegex) {
+    	boolean couldBeIntArray = true;
+    	String[] ss = s.split(delimiterRegex);
+    	try {
+    		new IntArray(ss);
+    	} catch (NumberFormatException e) {
+    		couldBeIntArray = false;
+    	}
+    	return couldBeIntArray;
+    }
+    
+    /** parse string as realArray.
+     * @return true if can be parsed.
+     */
+    public static boolean isFloatArray(String s, String delimiterRegex) {
+    	boolean couldBeFloatArray = true;
+    	String[] ss = s.split(delimiterRegex);
+    	try {
+    		new RealArray(ss);
+    	} catch (Exception e) {
+    		couldBeFloatArray = false;
+    	}
+    	return couldBeFloatArray;
+    }
+    
     /** parse string as float.
      * @return true if can be parsed.
      */
@@ -2195,20 +2223,19 @@ public class Util implements EuclidConstants {
     	String dateS = null;
     	Pattern pattern = Pattern.compile(DATE_REGEX1, Pattern.CASE_INSENSITIVE);
     	Matcher matcher = pattern.matcher(s.toLowerCase());
-    	boolean couldBeDate = matcher.matches();
-    	if (couldBeDate) {
+    	if (matcher.matches()) {
     		int day = Integer.parseInt(matcher.group(1));
     		String month = matcher.group(2).toLowerCase();
     		boolean ignoreCase = true;
     		int imonth = Util.indexOf(month, months, ignoreCase);
     		int year = Integer.parseInt(matcher.group(3));
     		dateS = ""+year+S_MINUS+imonth+S_MINUS+day;
-    	}
-    	if (!couldBeDate) {
+    	} else {
 	    	pattern = Pattern.compile(DATE_REGEX2, Pattern.CASE_INSENSITIVE);
 	    	matcher = pattern.matcher(s.toLowerCase());
-	    	couldBeDate = matcher.matches();
-	    	dateS = s;
+	    	if (matcher.matches()) {
+	    		dateS = s;
+	    	}
     	}
     	return dateS;
     }

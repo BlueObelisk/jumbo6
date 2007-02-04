@@ -38,7 +38,7 @@ public interface IndexableList {
 	 * @param id
 	 * @return the indexed child or null
 	 */
-	Indexable getById(String id);
+	Indexable getIndexableById(String id);
 
 	/** remove an Indexable child.
 	 * Must be of consistent type (i.e. CMLMoleculeList

@@ -113,7 +113,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      * @param id
      * @return molecule or null
      */
-    public Indexable getById(String id) {
+    public Indexable getIndexableById(String id) {
     	ensureManager();
     	return indexableListManager.getById(id);
     }

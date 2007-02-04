@@ -1,17 +1,19 @@
 package org.xmlcml.cml.element;
 
-import nu.xom.Attribute;
-import org.xmlcml.cml.base.*;
-import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-import org.xmlcml.cml.element.CMLAlternative;
-import org.xmlcml.cml.element.CMLRelatedEntry;
-import org.xmlcml.cml.element.CMLAnnotation;
-import org.xmlcml.cml.element.CMLMetadataList;
-import org.xmlcml.cml.element.CMLDescription;
-import org.xmlcml.cml.element.CMLDefinition;
-import org.xmlcml.cml.element.CMLEnumeration;
+
+import nu.xom.Attribute;
+import nu.xom.Elements;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.DoubleAttribute;
+import org.xmlcml.cml.base.IntAttribute;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** A dictionary entry.
 *

@@ -120,7 +120,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableLi
      * @param id
      * @return molecule or null
      */
-    public Indexable getById(String id) {
+    public Indexable getIndexableById(String id) {
     	ensureManager();
     	return indexableListManager.getById(id);
     }

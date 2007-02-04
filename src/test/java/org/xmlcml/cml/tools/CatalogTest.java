@@ -135,7 +135,7 @@ public class CatalogTest extends AbstractTest {
 		CMLMoleculeList moleculeList = (CMLMoleculeList) IndexableListManager.createFrom(moleculeCatalogUrl, CMLMoleculeList.class);
 		Assert.assertNotNull("moleculeList", moleculeList);
 		Assert.assertTrue("moleculeList", 30 <= moleculeList.getChildCount());
-		CMLMolecule molecule = (CMLMolecule) moleculeList.getById("oh");
+		CMLMolecule molecule = (CMLMolecule) moleculeList.getIndexableById("oh");
 		Assert.assertNotNull("molecule", molecule);
 		String ohS = ""+
 		"<molecule id='oh' xmlns='http://www.xml-cml.org/schema'>"+
