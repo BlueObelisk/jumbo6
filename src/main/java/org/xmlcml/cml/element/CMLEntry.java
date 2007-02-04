@@ -1,7 +1,11 @@
 package org.xmlcml.cml.element;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
+
+import org.xmlcml.cml.base.CMLRuntimeException;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -122,7 +126,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
      * @param id
      * @return enumeration or null
      */
-    public Indexable getById(String id) {
+    public Indexable getIndexableById(String id) {
     	ensureManager();
     	return indexableListManager.getById(id);
     }
@@ -156,4 +160,32 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
     	this.indexableListManager.indexList();
     }
     
+	/** sort enumerations in each entry
+	 */
+    public void sortEnumerations() {
+    	TreeSet<CMLEnumeration> treeSet = new TreeSet<CMLEnumeration>();
+    	for (CMLEnumeration enumeration : this.getEnumerationElements()) {
+    		treeSet.add(enumeration);
+    		enumeration.detach();
+    	}
+    	Iterator<CMLEnumeration> iterator = treeSet.iterator();
+    	while (iterator.hasNext()) {
+    		CMLEnumeration enumeration = (CMLEnumeration) iterator.next();
+    		this.appendChild(enumeration);
+    	}
+    }
+
+    /** set term if not already set.
+     * if entry already has different term, throw exception
+     */
+    public void checkAndSetTerm(String term) {
+    	if (term != null) {
+			String thisTerm = this.getTerm();
+			// make new entry?
+			if (thisTerm != null && !thisTerm.equals(term)) {
+				throw new CMLRuntimeException("current term ["+this.getId()+"] ("+thisTerm+") different from ("+term+")");
+			}
+			this.setTerm(term);
+		}
+    }
 }

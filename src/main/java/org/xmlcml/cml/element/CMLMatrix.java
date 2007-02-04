@@ -9,6 +9,7 @@ import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
+import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -18,6 +19,36 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLMatrix extends AbstractMatrix implements HasUnits {
 
+	public enum Type {
+        RECTANGULAR("rectangular"),
+        SQUARE("square"),
+        SQUARE_SYMMETRIC("squareSymmetric"),
+        SQUARE_SYMMETRIC_LT("squareSymmetricLT"),
+        SQUARE_SYMMETRIC_UT("squareSymmetricUT"),
+        SQUARE_ANTISYMMETRIC("squareAntisymmetric"),
+        SQUARE_ANTISYMMETRIC_LT("squareAntisymmetricLT"),
+        SQUARE_ANTISYMMETRIC_UT("squareAntisymmetricUT"),
+        DIAGONAL("diagonal"),
+        UPPER_TRIANGULAR("upperTriangular"),
+        UPPER_TRIANGULAR_UT("upperTriangularUT"),
+        LOWER_TRIANGULAR("lowerTriangular"),
+        LOWER_TRIANGULAR_LT("lowerTriangularLT"),
+        UNIT("unit"),
+        UNITARY("unitary"),
+        ROW_EIGENVECTORS("rowEigenvectors"),
+        ROTATION22("rotation22"),
+        ROTATION_TRANSLATION32("rotationTranslation32"),
+        HOMOGENEOUS33("homogeneous33"),
+        ROTATION33("rotation33"),
+		ROTATION_TRANSLATION43("rotationTranslation43"),
+		HOMOGENEOUS44("homogeneous44")
+		;
+		public String value;
+		private Type(String v) {
+			this.value = v;
+		}
+	}
+	
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 	
@@ -68,10 +99,8 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      * 
      * @param matrix
      *            rectangular matrix
-     * @throws CMLException
-     *             wrong matrix shape
      */
-    public CMLMatrix(double[][] matrix) throws CMLException {
+    public CMLMatrix(double[][] matrix) {
         this.setMatrix(matrix);
     }
 
@@ -99,7 +128,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      * @throws CMLException
      *             wrong shape
      */
-    public CMLMatrix(int rows, int columns, double[] array) throws CMLException {
+    public CMLMatrix(int rows, int columns, double[] array) {
         this.setArray(rows, columns, array);
     }
 
@@ -118,6 +147,42 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
         this.setArray(rows, columns, array);
     }
 
+    // FIXME - move to Euclid
+    /** create matrix with special shape.
+     * @param realArray
+     * @param type
+     */
+    public static CMLMatrix createSquareMatrix(RealArray array, int rows, Type type) {
+    	CMLMatrix matrix = null;
+    	int n = array.size();
+    	RealSquareMatrix rsm = null;
+    	if (type == Type.SQUARE ||
+    			type == Type.SQUARE_SYMMETRIC	// more values later
+    		) {
+    		if (rows * rows != n) {
+    			throw new CMLRuntimeException("square array size ("+n+
+					") incompatible with rows: "+rows);
+    		}
+    		matrix = new CMLMatrix(rows, rows, array.getArray());
+    	} else if (type == Type.SQUARE_SYMMETRIC_LT) {
+    		if ((rows * (rows + 1)) /2 != n) {
+    			throw new CMLRuntimeException("triangular array size ("+n+
+    					") incompatible with rows: "+rows);
+    		}
+        	rsm = RealSquareMatrix.fromLowerTriangle(array);
+    	} else if (type == Type.SQUARE_SYMMETRIC_UT) {
+        	rsm = RealSquareMatrix.fromUpperTriangle(array);
+    	}
+    	if (rsm != null) {
+        	if (rsm.getRows() != rows) {
+    			throw new CMLRuntimeException("array size ("+n+
+    					") incompatible with rows: "+rows);
+        	}
+        	matrix = new CMLMatrix(rows, rows, rsm.getMatrixAsArray());
+    	}
+    	return matrix;
+    }
+    
     // ====================== housekeeping methods =====================
 
     /**
@@ -354,15 +419,13 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      * 
      * @param mat
      *            matrix of rowsxcolumns doubles, columns fastest
-     * @throws CMLException
-     *             wrong shape
      */
-    public void setMatrix(double[][] mat) throws CMLException {
+    public void setMatrix(double[][] mat) {
         RealMatrix mm = null;
         try {
             mm = new RealMatrix(mat);
         } catch (EuclidException e) {
-            throw new CMLException(S_EMPTY + e);
+            throw new CMLRuntimeException(S_EMPTY + e);
         }
         String content = Util.concatenate(mm.getMatrixAsArray(), S_SPACE);
         setRows(mm.getRows());
@@ -400,11 +463,8 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      * @param columns
      * @param array
      *            of rowsxcolumns doubles, columns fastest
-     * @throws CMLException
-     *             wrong shape
      */
-    public void setArray(int rows, int columns, double[] array)
-            throws CMLException {
+    public void setArray(int rows, int columns, double[] array) {
         RealMatrix euclRealMatrix = null;
         try {
             euclRealMatrix = new RealMatrix(rows, columns, array);
@@ -646,12 +706,8 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
                     double constant = unit.getConstantToSI();
                     realArray = realArray.addScalar(constant);
                 }
-                try {
-                    this.setArray(this.getRows(), this.getColumns(), realArray
-                            .getArray());
-                } catch (CMLException e) {
-                    throw new CMLRuntimeException("bug " + e);
-                }
+                this.setArray(this.getRows(), this.getColumns(), 
+                		realArray.getArray());
                 siUnit.setUnitsOn(this);
             }
         }

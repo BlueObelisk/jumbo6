@@ -1,10 +1,20 @@
 // CONTENT of type :xsd:string
 package org.xmlcml.cml.element;
 
-import nu.xom.Attribute;
-import org.xmlcml.cml.base.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import nu.xom.Attribute;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.DoubleArrayAttribute;
+import org.xmlcml.cml.base.DoubleAttribute;
+import org.xmlcml.cml.base.IntAttribute;
+import org.xmlcml.cml.base.StringArrayAttribute;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** A homogenous 1 dimensional array of similar object.
 *

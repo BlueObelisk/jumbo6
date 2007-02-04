@@ -25,16 +25,13 @@ import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.euclid.Util;
 
 /**
- * 
- * <p>
- * schema-derived atom class
- * </p>
- * 
+ * base class for all CML elements
+ * can be sorted on id attribute
  * @author Peter Murray-Rust
  * @version 5.0
  * 
  */
-public class CMLElement extends Element implements CMLConstants {
+public class CMLElement extends Element implements CMLConstants, Comparable {
 
     /** hybridisation - from whatever source */
     public enum Hybridization {
@@ -152,6 +149,23 @@ public class CMLElement extends Element implements CMLConstants {
      */
     public void finishMakingElement(Element parent) {
     }
+
+    /** compare elements on id value.
+     * if id is missing returns 0
+     * @param element
+     * @return
+     */
+	public int compareTo(Object element) {
+		int i = 0;
+		if (element.getClass().equals(this.getClass())) {
+			String thisId = this.getAttributeValue("id");
+			String elementId = ((CMLElement)element).getAttributeValue("id");
+			if (thisId != null && elementId != null) {
+				i = thisId.compareTo(elementId);
+			}
+		}
+		return i;
+	}
 
     /**
      * copies attributes. makes subclass if necessary.

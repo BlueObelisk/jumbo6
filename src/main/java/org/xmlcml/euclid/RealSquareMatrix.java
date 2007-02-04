@@ -1,5 +1,7 @@
 package org.xmlcml.euclid;
 import java.util.logging.Logger;
+
+import org.xmlcml.cml.base.CMLRuntimeException;
 /**
  * square matrix class
  * 
@@ -53,6 +55,8 @@ public class RealSquareMatrix extends RealMatrix {
     public RealSquareMatrix(int rows) {
         super(rows, rows);
     }
+    
+    
     /**
      * Creates square matrix from real matrix.
      * 
@@ -70,6 +74,7 @@ public class RealSquareMatrix extends RealMatrix {
         }
         return temp;
     }
+    
     /**
      * create diagonal matrix from real matrix.
      * 
@@ -86,7 +91,8 @@ public class RealSquareMatrix extends RealMatrix {
         return temp;
     }
     /**
-     * Creates real square matrix from array THE COLUMN IS THE FASTEST MOVING
+     * Creates real square matrix from array 
+     * THE COLUMN IS THE FASTEST MOVING
      * INDEX, that is the matrix is filled as mat(0,0), mat(0,1) ... C-LIKE
      * 
      * @param rows
@@ -185,6 +191,57 @@ public class RealSquareMatrix extends RealMatrix {
     public void shallowCopy(RealSquareMatrix m) throws EuclidException {
         super.shallowCopy((RealMatrix) m);
     }
+    
+    /** create square matrix from lower triangle values
+     * upper triangle is filled with zeros
+     * @param f real array (length rows * (rows+1) / 2)
+     * @return square matrix with elem (i, j) = f(k++), else 0.0
+     */
+    public static RealSquareMatrix fromLowerTriangle(RealArray f) {
+        int n = f.size();
+        int rows = (int) Math.round((Math.sqrt(8*n+1) - 1 + 0.001) / 2.);
+        if ((rows * (rows + 1))/2 != n) {
+        	throw new CMLRuntimeException("band number of values ("+n+") for lower Triangle");
+        }
+        RealSquareMatrix temp = new RealSquareMatrix(rows);
+        int count = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j <= i; j++) {
+                temp.flmat[i][j] = f.elementAt(count);
+                if (i != j) {
+                	temp.flmat[j][i] = 0.0;
+                }
+                count++;
+            }
+        }
+        return temp;
+    }
+    
+    /** create square matrix from lower triangle
+     * lower triangle is filled with zeros
+     * @param f real array (length rows * (rows+1) / 2)
+     * @return square matrix with elem (i, j) = f(k++), else 0.0
+     */
+    public static RealSquareMatrix fromUpperTriangle(RealArray f) {
+        int n = f.size();
+        int rows = (int) Math.round((Math.sqrt(8*n+1) - 1 + 0.001) / 2.);
+        if ((rows * (rows + 1))/2 != n) {
+        	throw new CMLRuntimeException("band number of values ("+n+") for lower Triangle");
+        }
+        RealSquareMatrix temp = new RealSquareMatrix(rows);
+        int count = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = i; j < rows; j++) {
+                temp.flmat[i][j] = f.elementAt(count);
+                if (i != j) {
+                	temp.flmat[j][i] = 0.0;
+                }
+                count++;
+            }
+        }
+        return temp;
+    }
+    
     /**
      * are two matrices identical
      * 

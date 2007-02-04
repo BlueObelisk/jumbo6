@@ -139,7 +139,7 @@ public class MoleculeTool extends AbstractTool {
 			List<CMLAtom> atomList = subPiSystem.getAtomList();
 			int npi = atomList.size();
 			if (npi < 2) {
-				System.out.println("Cannot find pi system for " + npi);
+//				System.out.println("Cannot find pi system for " + npi);
 			} else {
 				subPiSystem.identifyDoubleBonds();
 			}

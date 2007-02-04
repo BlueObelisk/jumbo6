@@ -1,12 +1,18 @@
 package org.xmlcml.cml.element;
 
-import nu.xom.Attribute;
-import org.xmlcml.cml.base.*;
-import nu.xom.Elements;
 import java.util.HashMap;
 import java.util.Map;
-import org.xmlcml.cml.element.CMLMatrix;
-import org.xmlcml.cml.element.CMLTransform3;
+
+import nu.xom.Attribute;
+import nu.xom.Elements;
+
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.IntAttribute;
+import org.xmlcml.cml.base.StringAttribute;
 
 /** Molecular, crystallographic or other symmetry.
 *

@@ -29,7 +29,7 @@
   <parameter name="NumberOfSpecies" dictRef="siesta:ns" value="4" />
   <parameter dictRef="siesta:WriteDenChar" value="false" />
   <parameter dictRef="siesta:WriteMullikenPop" value=" 0" />
-  <parameter name="MeshCutOff" dictRef="siesta:g2max">
+  <parameter name="MeshCutOff" dictRef="siesta:g2max1">
    <scalar units="siestaUnits:ry">100.000000000
    </scalar>
   </parameter>

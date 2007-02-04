@@ -449,13 +449,7 @@ public class CMLTransform3 extends AbstractTransform3 {
     public CMLMatrix getMatrix() {
         double[] array = new double[12];
         System.arraycopy(this.getMatrixAsArray(), 0, array, 0, 12);
-        CMLMatrix m = null;
-        try {
-            m = new CMLMatrix(3, 4, array);
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
-        return m;
+        return new CMLMatrix(3, 4, array);
     }
 
     /**

@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntMatrix;
@@ -540,31 +539,26 @@ public class CMLMatrixTest extends NumericTest {
      */
     @Test
     public void testGetIntegerMatrix() {
-        CMLMatrix mat = null;
-            try {
-                mat = new CMLMatrix(2, 3, 
+        CMLMatrix mat = new CMLMatrix(2, 3, 
                     new double[]{1.1, 2.2, 3.3, 11.1, 12.2, 13.3});
-            } catch (CMLException e) {
-                neverThrow(e);
-            }
-            CMLMatrixTest.assertEquals("real mat", 2, 3, 
-                    new double[]{1.1, 2.2, 3.3, 11.1, 12.2, 13.3}, mat, EPS);
-            int[][] ii = mat.getIntegerMatrix();
-            Assert.assertNull("real is null", ii);
+        CMLMatrixTest.assertEquals("real mat", 2, 3, 
+                new double[]{1.1, 2.2, 3.3, 11.1, 12.2, 13.3}, mat, EPS);
+        int[][] ii = mat.getIntegerMatrix();
+        Assert.assertNull("real is null", ii);
 
-            mat = new CMLMatrix(2, 3, 
-                new int[]{1, 2, 3, 11, 12, 13});
-            CMLMatrixTest.assertEquals("int mat", 2, 3, 
-                    new int[]{1, 2, 3, 11, 12, 13}, mat);
-            ii = mat.getIntegerMatrix();
-            
-            IntMatrix imat = null;
-            try {
-                imat = new IntMatrix(ii);
-            } catch (EuclidException e) {
-                neverThrow(e);
-            }
-            IntMatrixTest.assertEquals("int mat", 2, 3, new int[]{1, 2, 3, 11, 12, 13}, imat);
+        mat = new CMLMatrix(2, 3, 
+            new int[]{1, 2, 3, 11, 12, 13});
+        CMLMatrixTest.assertEquals("int mat", 2, 3, 
+                new int[]{1, 2, 3, 11, 12, 13}, mat);
+        ii = mat.getIntegerMatrix();
+        
+        IntMatrix imat = null;
+        try {
+            imat = new IntMatrix(ii);
+        } catch (EuclidException e) {
+            neverThrow(e);
+        }
+        IntMatrixTest.assertEquals("int mat", 2, 3, new int[]{1, 2, 3, 11, 12, 13}, imat);
             
     }
 

@@ -267,8 +267,7 @@ public class IntArray extends ArrayBase {
     /**
      * construct from an array of Strings. must represent integers
      * 
-     * @param strings
-     *            values as Strings
+     * @param strings values as Strings
      * @exception NumberFormatException
      *                a string could not be interpreted as integer
      */

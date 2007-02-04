@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
@@ -291,7 +290,7 @@ public class CrystalToolTest extends AbstractToolTest {
                             contactDist[i], contact.getDistance(), EPS);
                 }
 
-                boolean addBonds = true;
+//                boolean addBonds = true;
                 CMLMolecule mergedMolecule = crystalTool.getMergedMolecule(mol,
                         contactList);
                 String filename = Util.getTEMP_DIRECTORY() + File.separator
