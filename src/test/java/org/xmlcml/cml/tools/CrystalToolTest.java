@@ -38,8 +38,6 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.inchi.InChIGenerator;
 import org.xmlcml.cml.inchi.InChIGeneratorFactory;
-import org.xmlcml.cml.legacy.LegacyConverterFactoryOld;
-import org.xmlcml.cml.legacy.LegacyConverterOld;
 import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Util;
@@ -180,130 +178,130 @@ public class CrystalToolTest extends AbstractToolTest {
     @Test
     @Ignore
     public void testGetSymmetryContactsInCIF1() {
-
-        String[] cifnames = {
-                "ac6175", // tetrachlorobenzene 
-                "cf6158", // boronic dimer, C-C bond 
-                "cf6161", // Ni phosphine OK
-                "cf6162", // trehalose OK
-                "cf6165", // N-C6H4-N OK
-                "ci6106", // Hg-Hg dimer 
-                "ci6110", // Ru2S2 OK
-                "na6153", // cobalt at origin OK
-                "na6156", // CuO6 
-                "tk6062", // S-C=C-S 
-                "ya6102", // Nickel etc. Maybe polymer
-                "xu6033", // benzene acid
-        };
-
-        int[] contactCount = { 
-                4, // "ac6175", // tetrachlorbenzene
-                1, // "cf6158", // boronic dimer, C-C bond 
-                3, // "cf6161", // Ni phosphine OK
-                2, // "cf6162", // trehalose OK
-                2, // "cf6165", // N-C6H4-N OK
-                4, // "ci6106", // Hg-Hg dimer 
-                3, // "ci6110a", // Ru2S2 OK
-                8, // "na6153", // cobalt at origin OK
-                3, // "na6156", // CuO6 
-                1, // "tk6062", // S-C=C-S 
-                26, // "ya6102", // Nickel etc. Maybe polymer
-                15, // "ya6102", // Nickel etc. Maybe polymer
-        };
-
-        String[][] ss = { 
-                new String[] {"a18", "a8", "1-x,-y,1-z" },
-                new String[] { "a5", "a5", "1-x,1-y,1-z" },
-                new String[] { "a1", "a2", "-x,-y,1-z" },
-                new String[] { "a1", "a1", "1-x,2-y,+z" },
-                new String[] { "a18", "a20", "-x,-y,-z" },
-                new String[] { "a1", "a3", "2-x,1-y,-z" },
-                new String[] { "a1", "a2", "-x,1-y,1-z" },
-                new String[] { "a1", "a1", "-x,-y,-z" },
-                new String[] { "a1", "a5", "-x,-y,1-z" },
-                new String[] { "a2", "a2", "-x,1-y,1-z" },
-                new String[] { "a1", "a1", "-x,+y,+z" },
-                new String[] { "a1", "a3", "+x,1/2-y,+z" }, };
-
-        double[] contactDist = new double[] { 
-                1.3998651087476337,
-                1.5104637357820034, 
-                2.225692433254234,
-                0.0, 
-                1.3839263461849156, 
-                2.290218121719922, 
-                2.363649253276249,
-                0.0, 
-                1.917472277949926, 
-                1.350378623134038,
-                0.0,
-                1.9442552151469323, };
-
-        LegacyConverterOld cifConverter = null;
-        try {
-            cifConverter = LegacyConverterFactoryOld
-                 .createLegacyConverter("org.xmlcml.cml.legacy.cif.CIFConverter");
-        } catch (Throwable t) {
-            throw new CMLRuntimeException("Cannot create legacyConverter: "+t);
-        }
-//        CMLLog log = new CMLLog();
-        cifConverter.setControls("NO_GLOBAL", "SKIP_HEADER");
-
-        for (int i = 0; i < cifnames.length; i++) {
-            String cifname = cifnames[i];
-            // System.out.println("CIF: "+cifname);
-            try {
-                InputStream in = Util.getInputStreamFromResource(
-                        CIF_EXAMPLES + U_S+ cifname + "sup1.cif");
-                cifConverter.parseLegacy(in);
-                in.close();
-            } catch (Throwable e) {
-                System.err.println("SKIPPED" + e);
-                continue;
-            }
-            List<CMLCml> cmlList = cifConverter.getCMLCmlList();
-            for (CMLCml cml : cmlList) {
-                CMLCrystal crystal = CMLCrystal.getContainedCrystal(cml);
-                CMLSymmetry symmetry = CMLSymmetry.getContainedSymmetry(crystal);
-                CMLMolecule mol = getMolecule(cml);
-                mol.createCartesiansFromFractionals(crystal);
-                MoleculeTool moleculeTool = new MoleculeTool(mol);
-                Assert.assertNotNull("molecule not null", mol);
-
-                CrystalTool crystalTool = new CrystalTool(mol, crystal, symmetry);
-                RealRange dist2Range = new RealRange(0, 2.5 * 2.5);
-                List<Contact> contactList = moleculeTool.getSymmetryContacts(
-                        dist2Range, crystalTool);
-                Assert.assertEquals("contact count", contactCount[i], contactList
-                        .size());
-                if (contactCount[i] > 0) {
-                    Contact contact = contactList.get(0);
-                    Assert.assertEquals("contact atom 1 (" + i + S_RBRAK, ss[i][0],
-                            contact.getFromAtom().getId());
-                    Assert.assertEquals("contact atom 2 (" + i + S_RBRAK, ss[i][1],
-                            contact.getToAtom().getId());
-                    String cc = contact.getTransform3().getEuclidTransform3()
-                            .getCrystallographicString();
-                    Assert.assertEquals("contact operator (" + i + S_RBRAK, ss[i][2],
-                            cc);
-                    Assert.assertEquals("contact distance (" + i + S_RBRAK,
-                            contactDist[i], contact.getDistance(), EPS);
-                }
-
-//                boolean addBonds = true;
-                CMLMolecule mergedMolecule = crystalTool.getMergedMolecule(mol,
-                        contactList);
-                String filename = Util.getTEMP_DIRECTORY() + File.separator
-                        + "cif" + File.separator + cifname + XML_SUFF;
-                try {
-                    File file = Util.createNewFile(filename);
-                    mergedMolecule.serialize(new FileOutputStream(file), 1);
- //                   log.add(file, "???");
-                } catch (IOException e) {
-                    throw new CMLRuntimeException("ERROR " + e);
-                }
-            }
-        }
+//
+//        String[] cifnames = {
+//                "ac6175", // tetrachlorobenzene 
+//                "cf6158", // boronic dimer, C-C bond 
+//                "cf6161", // Ni phosphine OK
+//                "cf6162", // trehalose OK
+//                "cf6165", // N-C6H4-N OK
+//                "ci6106", // Hg-Hg dimer 
+//                "ci6110", // Ru2S2 OK
+//                "na6153", // cobalt at origin OK
+//                "na6156", // CuO6 
+//                "tk6062", // S-C=C-S 
+//                "ya6102", // Nickel etc. Maybe polymer
+//                "xu6033", // benzene acid
+//        };
+//
+//        int[] contactCount = { 
+//                4, // "ac6175", // tetrachlorbenzene
+//                1, // "cf6158", // boronic dimer, C-C bond 
+//                3, // "cf6161", // Ni phosphine OK
+//                2, // "cf6162", // trehalose OK
+//                2, // "cf6165", // N-C6H4-N OK
+//                4, // "ci6106", // Hg-Hg dimer 
+//                3, // "ci6110a", // Ru2S2 OK
+//                8, // "na6153", // cobalt at origin OK
+//                3, // "na6156", // CuO6 
+//                1, // "tk6062", // S-C=C-S 
+//                26, // "ya6102", // Nickel etc. Maybe polymer
+//                15, // "ya6102", // Nickel etc. Maybe polymer
+//        };
+//
+//        String[][] ss = { 
+//                new String[] {"a18", "a8", "1-x,-y,1-z" },
+//                new String[] { "a5", "a5", "1-x,1-y,1-z" },
+//                new String[] { "a1", "a2", "-x,-y,1-z" },
+//                new String[] { "a1", "a1", "1-x,2-y,+z" },
+//                new String[] { "a18", "a20", "-x,-y,-z" },
+//                new String[] { "a1", "a3", "2-x,1-y,-z" },
+//                new String[] { "a1", "a2", "-x,1-y,1-z" },
+//                new String[] { "a1", "a1", "-x,-y,-z" },
+//                new String[] { "a1", "a5", "-x,-y,1-z" },
+//                new String[] { "a2", "a2", "-x,1-y,1-z" },
+//                new String[] { "a1", "a1", "-x,+y,+z" },
+//                new String[] { "a1", "a3", "+x,1/2-y,+z" }, };
+//
+//        double[] contactDist = new double[] { 
+//                1.3998651087476337,
+//                1.5104637357820034, 
+//                2.225692433254234,
+//                0.0, 
+//                1.3839263461849156, 
+//                2.290218121719922, 
+//                2.363649253276249,
+//                0.0, 
+//                1.917472277949926, 
+//                1.350378623134038,
+//                0.0,
+//                1.9442552151469323, };
+//
+//        LegacyConverterOld cifConverter = null;
+//        try {
+//            cifConverter = LegacyConverterFactoryOld
+//                 .createLegacyConverter("org.xmlcml.cml.legacy.cif.CIFConverter");
+//        } catch (Throwable t) {
+//            throw new CMLRuntimeException("Cannot create legacyConverter: "+t);
+//        }
+////        CMLLog log = new CMLLog();
+//        cifConverter.setControls("NO_GLOBAL", "SKIP_HEADER");
+//
+//        for (int i = 0; i < cifnames.length; i++) {
+//            String cifname = cifnames[i];
+//            // System.out.println("CIF: "+cifname);
+//            try {
+//                InputStream in = Util.getInputStreamFromResource(
+//                        CIF_EXAMPLES + U_S+ cifname + "sup1.cif");
+//                cifConverter.parseLegacy(in);
+//                in.close();
+//            } catch (Throwable e) {
+//                System.err.println("SKIPPED" + e);
+//                continue;
+//            }
+//            List<CMLCml> cmlList = cifConverter.getCMLCmlList();
+//            for (CMLCml cml : cmlList) {
+//                CMLCrystal crystal = CMLCrystal.getContainedCrystal(cml);
+//                CMLSymmetry symmetry = CMLSymmetry.getContainedSymmetry(crystal);
+//                CMLMolecule mol = getMolecule(cml);
+//                mol.createCartesiansFromFractionals(crystal);
+//                MoleculeTool moleculeTool = new MoleculeTool(mol);
+//                Assert.assertNotNull("molecule not null", mol);
+//
+//                CrystalTool crystalTool = new CrystalTool(mol, crystal, symmetry);
+//                RealRange dist2Range = new RealRange(0, 2.5 * 2.5);
+//                List<Contact> contactList = moleculeTool.getSymmetryContacts(
+//                        dist2Range, crystalTool);
+//                Assert.assertEquals("contact count", contactCount[i], contactList
+//                        .size());
+//                if (contactCount[i] > 0) {
+//                    Contact contact = contactList.get(0);
+//                    Assert.assertEquals("contact atom 1 (" + i + S_RBRAK, ss[i][0],
+//                            contact.getFromAtom().getId());
+//                    Assert.assertEquals("contact atom 2 (" + i + S_RBRAK, ss[i][1],
+//                            contact.getToAtom().getId());
+//                    String cc = contact.getTransform3().getEuclidTransform3()
+//                            .getCrystallographicString();
+//                    Assert.assertEquals("contact operator (" + i + S_RBRAK, ss[i][2],
+//                            cc);
+//                    Assert.assertEquals("contact distance (" + i + S_RBRAK,
+//                            contactDist[i], contact.getDistance(), EPS);
+//                }
+//
+////                boolean addBonds = true;
+//                CMLMolecule mergedMolecule = crystalTool.getMergedMolecule(mol,
+//                        contactList);
+//                String filename = Util.getTEMP_DIRECTORY() + File.separator
+//                        + "cif" + File.separator + cifname + XML_SUFF;
+//                try {
+//                    File file = Util.createNewFile(filename);
+//                    mergedMolecule.serialize(new FileOutputStream(file), 1);
+// //                   log.add(file, "???");
+//                } catch (IOException e) {
+//                    throw new CMLRuntimeException("ERROR " + e);
+//                }
+//            }
+//        }
     }
 
     private CMLMolecule getMolecule(CMLElement cml) {
@@ -346,167 +344,167 @@ public class CrystalToolTest extends AbstractToolTest {
 //            user = null;
         }
 
-        //CMLLog log = new CMLLog();
-        if (user == null) return;
-        //log.add("USER "+user);
-
-        List<String> cifPathList = getCifPathList(user);
-        
-        LegacyConverterOld cifConverter = null;
-        try {
-            cifConverter = LegacyConverterFactoryOld.createLegacyConverter(
-                "org.xmlcml.cml.legacy.cif.CIFConverter");
-        } catch (Throwable t) {
-            throw new CMLRuntimeException("Cannot create legacyConverter "+t);
-        }
-        cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
-        int count = 0;
-        int MAX = 10000000;
-        StringBuffer sb = new StringBuffer();
-        for (String filename : cifPathList) {
-            if (count++ >= MAX) break;
-            int iCif = filename.indexOf(".cif");
-            if (iCif == -1) {
-                continue;
-            }
-            String cifname = filename.substring(0, iCif);
-            cifname = cifname.substring(cifname.lastIndexOf(File.separator)+1);
-            System.out.println("======================="+cifname+"=======================");
-            //log.add("======================="+cifname+"=======================");
-            boolean skip =
-//                true ||
-                    "br6199sup1".equals(cifname) ||
-                    "bt6695sup1".equals(cifname) ||
-                    "cf6436sup1".equals(cifname) ||
-                    "cv6537sup1".equals(cifname) ||
-                    "hb6196sup1".equals(cifname) ||
-                    "lh6473sup1".equals(cifname) ||
-                    "om6250sup1".equals(cifname) ||
-                    "su6212sup1".equals(cifname) ||
-                    "su6219sup1".equals(cifname) ||
-                    "wm6077sup1".equals(cifname) ||
-                    "wn6362sup1".equals(cifname) ||
-                    
-                    false;
-            if (!skip && false) {
-                System.err.println("SKIPPED: "+cifname);
-                continue;
-            }
-            
-            //String calculatedCheckCif = calculateCheckcif(filename);
-    		//String ccPath = filename+".calculated.checkcif.html";
-    		//IOUtils.writeText(calculatedCheckCif, ccPath);
-            
-            try {
-                cifConverter.parseLegacy(new FileReader(filename));
-            } catch (Exception e) {
-            	e.printStackTrace();
-                //log.add(e, " in "+cifname);
-                continue;
-            }
-            if (cifname.endsWith("sup1")) {
-                cifname = cifname.substring(0, cifname.length()-4);
-            }
-            List<CMLCml> cmlList = cifConverter.getCMLCmlList();
-            System.out.println(cmlList.size());
-            int mol = 0;
-            for (CMLCml cml : cmlList) {
-                mol++;
-                try {
-                    CMLMolecule molecule = getMolecule(cml);
-                    //molecule.setLog(log);
-                    MoleculeTool moleculeTool = new MoleculeTool(molecule);
-                    
-                    moleculeTool.createCartesiansFromFractionals();
-                    molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
-                    try {
-                    	DisorderToolControls dm = new DisorderToolControls(ProcessControl.LOOSE);
-						DisorderTool dt = new DisorderTool(molecule, dm);
-						dt.resolveDisorder();
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.err.println("Problem processing disorder: "+e.getMessage());
-						sb.append(filename+": - "+e.getMessage()+"\n");
-						continue;
-					}
-					// at this point no bonds have been calculated
-					Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+"[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
-					CMLFormula moietyFormula = null;
-					if (moiFormNodes.size() > 0) {
-						moietyFormula = (CMLFormula)moiFormNodes.get(0);
-					} 
-					CrystalTool crystalTool = new CrystalTool(molecule);
-					CMLMolecule mergedMolecule = null;
-					mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
-
-					/*
-					// only want to move organic species the second time round to make sure all organic species
-					// present are complete.
-					mergedMolecule.debug();
-					// 1. must remove metals atoms and bonds
-					// 2. partition into molecules (? maybe don't need this step)
-					// 3. calc crystallochemical unit
-					Map<List<CMLAtom>, List<CMLBond>> metalAtomBondMap = MoleculeTool.removeMetalAtomsAndBonds(mergedMolecule, false);
-					new ConnectionTableTool(mergedMolecule).partitionIntoMolecules();
-					CrystalTool cryst2 = new CrystalTool(mergedMolecule);
-					CMLMolecule merged2 = null;
-					merged2 = cryst2.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
-					new ConnectionTableTool(merged2).flattenMolecules();
-					MoleculeTool.addMetalAtomsAndBonds(merged2, metalAtomBondMap);
-					*/
-
-					cml.appendChild(mergedMolecule);
-					molecule.detach();
-
-					for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
-						if (!DisorderTool.isDisordered(subMol)) {
-							ValencyTool subMolTool = new ValencyTool(subMol);
-							subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
-						} else {
-							System.out.println("molecule is disordered");
-						}
-					}
-                    //addSpaceGroup(cml);
-                    for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
-                    	StereochemistryTool st = new StereochemistryTool(subMol);
-                    	//st.add3DStereo();
-                    }
-                    // full cif
-                    writeCML(getCrystalName(user, cifname+S_UNDER+mol), cml, "full cif");
-                    // ring nuclei
-                    //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
-                    // atom centered species
-                	@SuppressWarnings("unused")
-                    String outfile = getOutfile(user, "atom", cifname+"_ATOM_", mol, 0, 0);
-                    //outputAtomCenteredSpecies(outfile, moleculeTool, log);
-                    
-                    // clusters
-                    // outputClusters(user, cifname, mergedMolecule, log);
-                    // ligands
-                    //outputLigands(user, cifname, mergedMolecule, log);
-                } catch (CMLRuntimeException e) {
-                    e.printStackTrace();
-                    System.err.println("Cannot process CIF: "+e);
-                    continue;
-                }
-            }
-        }
-        String dir = getDir(user);
-        try {
-            File file = new File("E:/disordered-cifs.txt");
-            FileWriter out = new FileWriter(file);
-            out.write(sb.toString());
-            out.close();
-        } catch (IOException e) {
-            System.err.println("Unhandled exception:" + e.toString());
-        }
-        try {
-            FileWriter fw = new FileWriter(dir+File.separator+"log.xml");
-            //log.writeXML(fw);
-            fw.close();
-        } catch (Exception e) {
-            throw new CMLRuntimeException("ERROR "+e);
-        }
+//        //CMLLog log = new CMLLog();
+//        if (user == null) return;
+//        //log.add("USER "+user);
+//
+//        List<String> cifPathList = getCifPathList(user);
+//        
+//        LegacyConverterOld cifConverter = null;
+//        try {
+//            cifConverter = LegacyConverterFactoryOld.createLegacyConverter(
+//                "org.xmlcml.cml.legacy.cif.CIFConverter");
+//        } catch (Throwable t) {
+//            throw new CMLRuntimeException("Cannot create legacyConverter "+t);
+//        }
+//        cifConverter.setControls("NO_GLOBAL", "SKIP_ERRORS", "SKIP_HEADER");
+//        int count = 0;
+//        int MAX = 10000000;
+//        StringBuffer sb = new StringBuffer();
+//        for (String filename : cifPathList) {
+//            if (count++ >= MAX) break;
+//            int iCif = filename.indexOf(".cif");
+//            if (iCif == -1) {
+//                continue;
+//            }
+//            String cifname = filename.substring(0, iCif);
+//            cifname = cifname.substring(cifname.lastIndexOf(File.separator)+1);
+//            System.out.println("======================="+cifname+"=======================");
+//            //log.add("======================="+cifname+"=======================");
+//            boolean skip =
+////                true ||
+//                    "br6199sup1".equals(cifname) ||
+//                    "bt6695sup1".equals(cifname) ||
+//                    "cf6436sup1".equals(cifname) ||
+//                    "cv6537sup1".equals(cifname) ||
+//                    "hb6196sup1".equals(cifname) ||
+//                    "lh6473sup1".equals(cifname) ||
+//                    "om6250sup1".equals(cifname) ||
+//                    "su6212sup1".equals(cifname) ||
+//                    "su6219sup1".equals(cifname) ||
+//                    "wm6077sup1".equals(cifname) ||
+//                    "wn6362sup1".equals(cifname) ||
+//                    
+//                    false;
+//            if (!skip && false) {
+//                System.err.println("SKIPPED: "+cifname);
+//                continue;
+//            }
+//            
+//            //String calculatedCheckCif = calculateCheckcif(filename);
+//    		//String ccPath = filename+".calculated.checkcif.html";
+//    		//IOUtils.writeText(calculatedCheckCif, ccPath);
+//            
+//            try {
+//                cifConverter.parseLegacy(new FileReader(filename));
+//            } catch (Exception e) {
+//            	e.printStackTrace();
+//                //log.add(e, " in "+cifname);
+//                continue;
+//            }
+//            if (cifname.endsWith("sup1")) {
+//                cifname = cifname.substring(0, cifname.length()-4);
+//            }
+//            List<CMLCml> cmlList = cifConverter.getCMLCmlList();
+//            System.out.println(cmlList.size());
+//            int mol = 0;
+//            for (CMLCml cml : cmlList) {
+//                mol++;
+//                try {
+//                    CMLMolecule molecule = getMolecule(cml);
+//                    //molecule.setLog(log);
+//                    MoleculeTool moleculeTool = new MoleculeTool(molecule);
+//                    
+//                    moleculeTool.createCartesiansFromFractionals();
+//                    molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
+//                    try {
+//                    	DisorderToolControls dm = new DisorderToolControls(ProcessControl.LOOSE);
+//						DisorderTool dt = new DisorderTool(molecule, dm);
+//						dt.resolveDisorder();
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						System.err.println("Problem processing disorder: "+e.getMessage());
+//						sb.append(filename+": - "+e.getMessage()+"\n");
+//						continue;
+//					}
+//					// at this point no bonds have been calculated
+//					Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+"[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
+//					CMLFormula moietyFormula = null;
+//					if (moiFormNodes.size() > 0) {
+//						moietyFormula = (CMLFormula)moiFormNodes.get(0);
+//					} 
+//					CrystalTool crystalTool = new CrystalTool(molecule);
+//					CMLMolecule mergedMolecule = null;
+//					mergedMolecule = crystalTool.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+//
+//					/*
+//					// only want to move organic species the second time round to make sure all organic species
+//					// present are complete.
+//					mergedMolecule.debug();
+//					// 1. must remove metals atoms and bonds
+//					// 2. partition into molecules (? maybe don't need this step)
+//					// 3. calc crystallochemical unit
+//					Map<List<CMLAtom>, List<CMLBond>> metalAtomBondMap = MoleculeTool.removeMetalAtomsAndBonds(mergedMolecule, false);
+//					new ConnectionTableTool(mergedMolecule).partitionIntoMolecules();
+//					CrystalTool cryst2 = new CrystalTool(mergedMolecule);
+//					CMLMolecule merged2 = null;
+//					merged2 = cryst2.calculateCrystallochemicalUnit(new RealRange(0, 2.8 * 2.8));
+//					new ConnectionTableTool(merged2).flattenMolecules();
+//					MoleculeTool.addMetalAtomsAndBonds(merged2, metalAtomBondMap);
+//					*/
+//
+//					cml.appendChild(mergedMolecule);
+//					molecule.detach();
+//
+//					for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
+//						if (!DisorderTool.isDisordered(subMol)) {
+//							ValencyTool subMolTool = new ValencyTool(subMol);
+//							subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
+//						} else {
+//							System.out.println("molecule is disordered");
+//						}
+//					}
+//                    //addSpaceGroup(cml);
+//                    for (CMLMolecule subMol : mergedMolecule.getDescendantsOrMolecule()) {
+//                    	StereochemistryTool st = new StereochemistryTool(subMol);
+//                    	//st.add3DStereo();
+//                    }
+//                    // full cif
+//                    writeCML(getCrystalName(user, cifname+S_UNDER+mol), cml, "full cif");
+//                    // ring nuclei
+//                    //outputRingNuclei(user, cifname, mol, mergedMolecule, log);
+//                    // atom centered species
+//                	@SuppressWarnings("unused")
+//                    String outfile = getOutfile(user, "atom", cifname+"_ATOM_", mol, 0, 0);
+//                    //outputAtomCenteredSpecies(outfile, moleculeTool, log);
+//                    
+//                    // clusters
+//                    // outputClusters(user, cifname, mergedMolecule, log);
+//                    // ligands
+//                    //outputLigands(user, cifname, mergedMolecule, log);
+//                } catch (CMLRuntimeException e) {
+//                    e.printStackTrace();
+//                    System.err.println("Cannot process CIF: "+e);
+//                    continue;
+//                }
+//            }
+//        }
+//        String dir = getDir(user);
+//        try {
+//            File file = new File("E:/disordered-cifs.txt");
+//            FileWriter out = new FileWriter(file);
+//            out.write(sb.toString());
+//            out.close();
+//        } catch (IOException e) {
+//            System.err.println("Unhandled exception:" + e.toString());
+//        }
+//        try {
+//            FileWriter fw = new FileWriter(dir+File.separator+"log.xml");
+//            //log.writeXML(fw);
+//            fw.close();
+//        } catch (Exception e) {
+//            throw new CMLRuntimeException("ERROR "+e);
+//        }
     }
     
     private void writeCML(String filename, CMLCml cml, String message) {
