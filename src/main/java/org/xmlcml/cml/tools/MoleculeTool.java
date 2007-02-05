@@ -1184,11 +1184,15 @@ public class MoleculeTool extends AbstractTool {
 				}
 			}
 			if (deleted) {
-				new ConnectionTableTool(subMolecule).partitionIntoMolecules();
-				List<CMLMolecule> ligands = new MoleculeTool(subMolecule)
-				.getMoleculeList();
-				for (CMLMolecule ligand : ligands) {
-					ligandList.add(ligand);
+				if (subMolecule.getAtomCount() == 0) {
+					continue;
+				} else {
+					new ConnectionTableTool(subMolecule).partitionIntoMolecules();
+					List<CMLMolecule> ligands = new MoleculeTool(subMolecule).getMoleculeList();
+					for (CMLMolecule ligand : ligands) {
+						ligand.debug();
+						ligandList.add(ligand);
+					}
 				}
 			}
 		}
