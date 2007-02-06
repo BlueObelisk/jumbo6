@@ -34,6 +34,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLLength;
@@ -1190,7 +1191,6 @@ public class MoleculeTool extends AbstractTool {
 					new ConnectionTableTool(subMolecule).partitionIntoMolecules();
 					List<CMLMolecule> ligands = new MoleculeTool(subMolecule).getMoleculeList();
 					for (CMLMolecule ligand : ligands) {
-						ligand.debug();
 						ligandList.add(ligand);
 					}
 				}
@@ -1373,21 +1373,38 @@ public class MoleculeTool extends AbstractTool {
 
 
 	 /* Traverses all non-H atoms and contracts the hydrogens on each.
+	  * Can control whether H with stereogenic bonds are contracted or not.
 	 *
 	 * @param control
 	 * @throws CMLException
 	 */
-	public void contractExplicitHydrogens(HydrogenControl control) {
+	public void contractExplicitHydrogens(HydrogenControl control, boolean contractStereoH) {
 		if (molecule.isMoleculeContainer()) {
 			CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
 			for (CMLMolecule mol : molecules) {
-				new MoleculeTool(mol).contractExplicitHydrogens(control);
+				new MoleculeTool(mol).contractExplicitHydrogens(control, contractStereoH);
 			}
 		} else {
 			List<CMLAtom> atoms = molecule.getAtoms();
 			for (CMLAtom atom : atoms) {
 				if (!atom.getElementType().equals("H")) {
-					this.contractExplicitHydrogens(atom, control);
+					if (contractStereoH) {
+						this.contractExplicitHydrogens(atom, control);
+					} else {
+						boolean contract = true;
+						for (CMLBond bond : atom.getLigandBonds()) {
+							List<Node> bondStereoNodes = CMLUtil.getQueryNodes(bond, ".//cml:"+CMLBondStereo.TAG, X_CML);
+							for (Node bondStereoNode : bondStereoNodes) {
+								String stereo = bondStereoNode.getValue();
+								if (CMLBond.WEDGE.equals(stereo) || CMLBond.HATCH.equals(stereo)) {
+									contract = false;
+								}
+							}
+						}
+						if (contract) {
+							this.contractExplicitHydrogens(atom, control);
+						}
+					}
 				}
 			}
 		}

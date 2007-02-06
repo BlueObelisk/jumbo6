@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLAttribute;
@@ -14,7 +15,6 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMetadata;
 import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -378,12 +378,12 @@ public class DisorderTool extends AbstractTool {
 	
 	private void replaceAtomDisorderInformation(CMLAtom atom, String assemblyCode, String groupCode) {
 		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-				"contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
+				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
 		if (assemblyNodes.size() > 1) {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder assembly.");
-		} else if (assemblyNodes.size() > 0) {
-			((CMLScalar)assemblyNodes.get(0)).setValue(assemblyCode.toString());
+		} else if (assemblyNodes.size() == 1) {
+			((CMLElement)assemblyNodes.get(0)).setStringContent(assemblyCode.toString());
 		} else if (assemblyNodes.size() == 0) {
 			CMLElement scalar = new CMLElement(CMLScalar.TAG);
 			atom.appendChild(scalar);
@@ -397,7 +397,7 @@ public class DisorderTool extends AbstractTool {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder group.");
 		} else if (groupNodes.size() > 0) {
-			((CMLScalar)groupNodes.get(0)).setValue(groupCode);
+			((CMLElement)groupNodes.get(0)).setStringContent(groupCode);
 		} else if (groupNodes.size() == 0) {
 			CMLElement scalar = new CMLElement(CMLScalar.TAG);
 			atom.appendChild(scalar);
