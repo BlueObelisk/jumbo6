@@ -2116,7 +2116,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
         
         moleculeTool.contractExplicitHydrogens(
-            HydrogenControl.USE_EXPLICIT_HYDROGENS);
+            HydrogenControl.USE_EXPLICIT_HYDROGENS, true);
         Assert.assertEquals("before", 3, mol9.getAtomCount());
         Assert.assertEquals("before", 2, mol9.getBondCount());
         Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
