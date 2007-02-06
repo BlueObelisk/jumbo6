@@ -1092,11 +1092,11 @@ public class MoleculeTool extends AbstractTool {
 			CMLAtomSet unusedAtomSet = molecule.getAtomSet();
 			while (unusedAtomSet.size() > 0) {
 				CMLAtomSet clusterSet = new CMLAtomSet();
-				CMLBondSet clusterBondSet = new CMLBondSet();
-				expandCluster(clusterSet, clusterBondSet, unusedAtomSet,
+				expandCluster(clusterSet, unusedAtomSet,
 						typeList);
 				if (clusterSet.size() > 1) {
 					CMLMolecule clusterMolecule = new CMLMolecule(clusterSet);
+					new MoleculeTool(clusterMolecule).calculateBondedAtoms();
 					clusterList.add(clusterMolecule);
 					molecule.addToLog(Severity.INFO, "NEW CLUSTER SIZE "
 							+ clusterSet.size());
@@ -1107,13 +1107,12 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	private boolean expandCluster(CMLAtomSet clusterSet,
-			CMLBondSet clusterBondSet, CMLAtomSet unusedAtomSet,
-			List<Type> typeList) {
+			CMLAtomSet unusedAtomSet, List<Type> typeList) {
 		boolean change = false;
 		List<CMLAtom> unusedAtomList = unusedAtomSet.getAtoms();
 		for (CMLAtom currentAtom : unusedAtomList) {
 			unusedAtomSet.removeAtom(currentAtom);
-			if (sproutAtom(currentAtom, clusterSet, clusterBondSet,
+			if (sproutAtom(currentAtom, clusterSet,
 					unusedAtomSet, typeList)) {
 				change = true;
 				break;
@@ -1123,19 +1122,14 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	private boolean sproutAtom(CMLAtom currentAtom, CMLAtomSet clusterSet,
-			CMLBondSet clusterBondSet, CMLAtomSet unusedAtomSet,
-			List<Type> typeList) {
+			CMLAtomSet unusedAtomSet, List<Type> typeList) {
 		boolean change = false;
 		if (currentAtom.atomIsCompatible(typeList)) {
 			change = true;
 			if (!clusterSet.contains(currentAtom)) {
 				clusterSet.addAtom(currentAtom);
 			}
-			ChemicalElement element1 = ChemicalElement
-			.getChemicalElement(currentAtom.getElementType());
 			List<CMLAtom> ligandList = currentAtom.getLigandAtoms();
-			List<CMLBond> ligandBondList = currentAtom.getLigandBonds();
-			int lig = 0;
 			for (CMLAtom ligand : ligandList) {
 				// atom already used?
 				if (!unusedAtomSet.contains(ligand)) {
@@ -1145,19 +1139,11 @@ public class MoleculeTool extends AbstractTool {
 				if (!ligand.atomIsCompatible(typeList)) {
 					continue;
 				}
-				ChemicalElement element2 = ChemicalElement
-				.getChemicalElement(ligand.getElementType());
 				boolean bonded = CMLBond.areWithinBondingDistance(currentAtom,
 						ligand);
 				if (bonded) {
 					clusterSet.addAtom(ligand);
-					CMLBond addBond = ligandBondList.get(lig);
-					if (!clusterBondSet.contains(addBond)) {
-						clusterBondSet.addBond(addBond);
-					}
-					// change = true;
 				}
-				lig++;
 			}
 		}
 		return change;
