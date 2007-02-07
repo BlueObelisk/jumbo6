@@ -1755,8 +1755,7 @@ public class MoleculeTool extends AbstractTool {
 			CrystalTool crystalTool) {
 		this.calculateBondedAtoms();
 		molecule.createCartesiansFromFractionals(crystalTool.getCrystal());
-		List<Contact> contactList = crystalTool
-		.getSymmetryContactsToMolecule(dist2Range);
+		List<Contact> contactList = crystalTool.getSymmetryContactsToMolecule(dist2Range);
 		Collections.sort(contactList);
 		return contactList;
 	}

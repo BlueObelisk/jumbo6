@@ -68,7 +68,7 @@ public class CrystalTool extends AbstractTool {
     CMLSymmetry symmetry = null;
     List<CMLScalar> cellParams = null;
 
-    double squaredDistanceTolerance = 0.001;
+    static final double SYMMETRY_CONTACT_TOLERANCE = 0.4;
 
     /** constructor.
      * requires molecule to contain <crystal> and optionally <symmetry>
@@ -163,7 +163,6 @@ public class CrystalTool extends AbstractTool {
      */
     public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
         List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
-        //new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
             molecule, contactList);
 
@@ -335,7 +334,7 @@ public class CrystalTool extends AbstractTool {
         // iterate through all atoms in orig molecule
         for (CMLAtom origAtom : origAtomList) {
             double d = origAtom.getXYZ3().getDistanceFromPoint(atomXYZ3);
-            if (d < distMax) {
+            if (d < distMax && d > SYMMETRY_CONTACT_TOLERANCE) {
                 ChemicalElement cElem = ChemicalElement.getChemicalElement(atom.getElementType()); 
                 ChemicalElement cElemOrig = ChemicalElement.getChemicalElement(origAtom.getElementType()); 
                 double maxBondLength = cElem.getCovalentRadius() + cElemOrig.getCovalentRadius() +
@@ -381,15 +380,16 @@ public class CrystalTool extends AbstractTool {
                 CMLAtom fromAtom = fromAtomList.get(i);
                 CMLAtom symmetryAtom = symmetryAtomList.get(i);
                 double d = fromAtom.getDistanceTo(symmetryAtom);
-                if (d < 0.005) {
+                if (d < SYMMETRY_CONTACT_TOLERANCE) {
                     // atoms overlap
+                	System.out.println("atoms overlap: "+fromAtom.getId()+","+symmetryAtom.getId());
                     continue;
                 } else {
                     List<CMLAtom> targetAtomList1 = targetMolecule.getAtoms();
                     boolean duplicate = false;
                     for (CMLAtom targetAtom : targetAtomList1) {
                         d = targetAtom.getDistanceTo(symmetryAtom);
-                        if (d < 0.00001) {
+                        if (d < SYMMETRY_CONTACT_TOLERANCE) {
                             duplicate = true;
                             break;
                         }
