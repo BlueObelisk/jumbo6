@@ -156,6 +156,21 @@ public class CMLBond extends AbstractBond {
         this(atom1, atom2);
         this.setId(id);
     }
+    
+    /** Constructor.
+     * @param id
+     * @param atom1
+     * @param atom2
+     * @param order
+     * @throws CMLRuntimeException
+     *             if atoms are null, identical or don't have molecule owner or
+     *             have different molecule owners.or don't have ids.
+     */
+    public CMLBond(String id, CMLAtom atom1, CMLAtom atom2, String order) throws CMLRuntimeException {
+        this(id, atom1, atom2);
+        setOrder(order);
+    }
+    
     /**
      * normal constructor.
      * 
@@ -189,6 +204,21 @@ public class CMLBond extends AbstractBond {
         }
         this.setAtomRefs2(new String[] { atomId1, atomId2 });
 
+    }
+    
+    /**
+     * constructor.
+     * 
+     * @param atom1
+     * @param atom2
+     * @param order
+     * @throws CMLRuntimeException
+     *             if atoms are null, identical or don't have molecule owner or
+     *             have different molecule owners.or don't have ids.
+     */
+    public CMLBond(CMLAtom atom1, CMLAtom atom2, String order) throws CMLRuntimeException {
+        this(atom1, atom2);
+        setOrder(order);
     }
 
     /**
@@ -261,9 +291,11 @@ public class CMLBond extends AbstractBond {
      * @param id
      */
     public void setId(String id) {
+        /*
         if (this.getId() != null) {
             throw new CMLRuntimeException("Cannot reindex id");
         }
+        */
         super.setId(id);
         ParentNode parent = this.getParent();
         if (parent != null && parent instanceof CMLBondArray) {
