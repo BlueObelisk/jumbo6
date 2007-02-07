@@ -73,6 +73,16 @@ public class CMLAtom extends AbstractAtom {
         super(old);
         init();
     }
+    
+    /**
+     * Create new CMLAtom with specified id and ChemicalElement.
+     * @param id
+     * @param chem
+     */
+    public CMLAtom(String id, ChemicalElement chem) {
+        this(id);
+        this.setElementType(chem.getSymbol());
+    }
 
     /**
      * copy node .
