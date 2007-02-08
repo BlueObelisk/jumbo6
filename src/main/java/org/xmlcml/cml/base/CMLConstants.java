@@ -243,7 +243,7 @@ public interface CMLConstants extends EuclidConstants {
      * obsolete CML namespaces
      */
     String[] OLD_NAMESPACES = { CML1, CML2, CML3, "http://www.xmlcml.org/",
-            "http://www.xmlcml.org/schema", };
+            "http://www.xmlcml.org/schema", "http://www.xml-cml.org/schema/cml2/core"};
 
     /** constant */
     String XHTML_NS = "http://www.w3.org/1999/xhtml";
