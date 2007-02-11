@@ -27,6 +27,7 @@ import org.xmlcml.util.Partition;
 public class DisorderTool extends AbstractTool {
 
 	private CMLMolecule molecule;
+	private boolean disorderProcessed;
 
 	private DisorderToolControls disorderOptions;
 
@@ -108,8 +109,11 @@ public class DisorderTool extends AbstractTool {
 				assembly.removeMinorDisorder();
 			}
 		}
-		// remove all atom disorder information after processing
-		removeAtomDisorderInformation();
+		// remove atom disorder information after processing IF disorder
+		// has been successfully resolved.
+		if (disorderProcessed) {
+			removeAtomDisorderInformation();
+		}
 	}
 	
 	/**
@@ -419,8 +423,10 @@ public class DisorderTool extends AbstractTool {
 		CMLMetadata met = new CMLMetadata();
 		metList.appendChild(met);
 		if (!processed) {
+			disorderProcessed = false;
 			met.setAttribute("dictRef", "cif:unprocessedDisorder");
 		} else if (processed) {
+			disorderProcessed = true;
 			met.setAttribute("dictRef", "cif:processedDisorder");
 		}
 	}

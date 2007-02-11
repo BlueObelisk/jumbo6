@@ -257,6 +257,10 @@ public class ValencyTool extends AbstractTool {
 					&& atom.getLigandAtoms().size() == 0) {
 				this.setAtomCharge(atom, -3);
 			}	
+			if (("H".equals(atom.getElementType()))
+					&& atom.getLigandAtoms().size() == 0) {
+				this.setAtomCharge(atom, -1);
+			}
 		}
 	}
 	
