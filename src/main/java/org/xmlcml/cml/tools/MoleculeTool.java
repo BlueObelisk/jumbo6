@@ -1387,6 +1387,10 @@ public class MoleculeTool extends AbstractTool {
 								}
 							}
 						}
+						if ("R".equals(atom.getElementType()) || "Xx".equals(atom.getElementType()) ||
+								atom.getChemicalElement().isChemicalElementType(Type.METAL)) {
+							contract = false;
+						}
 						if (contract) {
 							this.contractExplicitHydrogens(atom, control);
 						}

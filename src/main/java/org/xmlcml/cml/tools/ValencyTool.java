@@ -163,6 +163,7 @@ public class ValencyTool extends AbstractTool {
 		this.markSNH(atoms);
 		this.markSandwichLigands(atoms);
 		this.markEarthMetals(atoms);
+		this.markHydride(atoms);
 		int count = atoms.size();
 		if (count == 2) {
 			this.markMetalCarbonylAndNitrile(atoms);
@@ -180,7 +181,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void addDoubleCharge(String centralS, int centralCharge,
+	private void addDoubleCharge(String centralS, int centralCharge,
 			String ligandS, int nChargeLigand) {
 		CMLAtom centralA = getCentralAtom(centralS);
 		addDoubleCharge(centralA, centralCharge, ligandS, nChargeLigand);
@@ -228,6 +229,15 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
+	void markHydride(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if ("H".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 0 
+					&& atom.isBondedToMetal()) {
+				this.setAtomCharge(atom, -1);
+			}
+		}
+	}
+	
 	void markEarthMetals(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			ChemicalElement ce = atom.getChemicalElement();
@@ -257,10 +267,6 @@ public class ValencyTool extends AbstractTool {
 					&& atom.getLigandAtoms().size() == 0) {
 				this.setAtomCharge(atom, -3);
 			}	
-			if (("H".equals(atom.getElementType()))
-					&& atom.getLigandAtoms().size() == 0) {
-				this.setAtomCharge(atom, -1);
-			}
 		}
 	}
 	
