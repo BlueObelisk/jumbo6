@@ -215,7 +215,7 @@ public class CMLFormula extends AbstractFormula {
      */
     public CMLFormula(CMLMolecule molecule) {
         init();
-        int formalCharge = Integer.MIN_VALUE;
+        int formalCharge = 0;
         // iterate through atoms adding elements, occupancies and charges
         for (CMLAtom atom : molecule.getAtoms()) {
             double occupancy = 1.0;
