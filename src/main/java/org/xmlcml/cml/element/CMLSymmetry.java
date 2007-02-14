@@ -11,6 +11,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Point3;
 
 /**
@@ -132,27 +133,33 @@ public class CMLSymmetry extends AbstractSymmetry {
     }
 
     /**
-     * are two symmetrys equal. compares each transform in sequence. fails if
-     * order of elements is different
+     * are two symmetrys equal. 
+     * iterates through all elements in case order varies. 
      * 
-     * @param sym
-     *            to compare
-     * @param eps
-     *            max deviation of elements
+     * @param sym to compare
+     * @param eps max deviation of elements
      * @return true if equal
      */
     public boolean isEqualTo(CMLSymmetry sym, double eps) {
-        boolean equals = false;
-        CMLElements<CMLTransform3> thisTrs = this.getTransform3Elements();
-        CMLElements<CMLTransform3> symTrs = sym.getTransform3Elements();
-        if (thisTrs.size() == symTrs.size()) {
-            equals = true;
-            for (int i = 0; i < thisTrs.size(); i++) {
-                if (!thisTrs.get(i).isEqualTo(symTrs.get(i), eps)) {
-                    equals = false;
-                    break;
-                }
-            }
+    	// first check in case they are lexically equivalent
+        boolean equals = CMLUtil.equalsCanonically(this, sym, true);
+        if (!equals) {
+	        CMLElements<CMLTransform3> thisTrs = this.getTransform3Elements();
+	        CMLElements<CMLTransform3> symTrs = sym.getTransform3Elements();
+	        if (thisTrs.size() == symTrs.size()) {
+	            for (int i = 0; i < thisTrs.size(); i++) {
+	            	equals = false;
+	                for (int j = 0; j < symTrs.size(); j++) {
+	                    if (thisTrs.get(i).isEqualTo(symTrs.get(j), eps)) {
+	                        equals = true;
+	                        break;
+	                    }
+	                }
+	                if (!equals) {
+	                	break;
+	                }
+	            }
+	        }
         }
         return equals;
     }
@@ -274,7 +281,8 @@ public class CMLSymmetry extends AbstractSymmetry {
     /**
      * do the elements form a group. translation is included but not normalized
      * (see isSpaceGroup()) iterates through all n^2 combinations (a*b and b*a)
-     * and tests them against group members
+     * and tests them against group members. therefore O(n^3) and expensive for
+     * (say) spacegroups with 192 elements
      * 
      * @return true if group
      */
@@ -287,6 +295,7 @@ public class CMLSymmetry extends AbstractSymmetry {
             int j = 0;
             for (CMLTransform3 tr2 : transform3s) {
                 CMLTransform3 tr3 = tr1.concatenate(tr2);
+                tr3.normalizeCrystallographically();
                 group = false;
                 for (CMLTransform3 tr : transform3s) {
                     if (tr.isEqualTo(tr3, EPS)) {
@@ -299,6 +308,7 @@ public class CMLSymmetry extends AbstractSymmetry {
                     // generate a group element: ");
                     break;
                 }
+//                System.out.println("I/J "+i+"/"+j);
                 j++;
             }
             i++;

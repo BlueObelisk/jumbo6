@@ -8,6 +8,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.ComparisonFailure;
+
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -20,6 +23,7 @@ import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
+import nu.xom.tests.XOMTestCase;
 
 import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.euclid.Util;
@@ -553,5 +557,33 @@ public abstract class CMLUtil implements CMLConstants {
     		id = id.replace(S_SPACE, S_UNDER);
     	}
     	return id;
+    }
+    
+    /** tests 2 XML objects for equality using canonical XML.
+     * 
+     * @param refNode first node
+     * @param testNode second node
+     * @param stripWhite if tru remove w/s nodes
+     */
+    public static boolean equalsCanonically(
+            Element refNode, Element testNode, boolean stripWhite) {
+    	boolean equals = true;
+    	// check if they are different objects
+    	if (refNode != testNode) {
+	        if (stripWhite) {
+	            refNode = new Element(refNode);
+	            CMLUtil.removeWhitespaceNodes(refNode);
+	            testNode = new Element(testNode);
+	            CMLUtil.removeWhitespaceNodes(testNode);
+	        }
+	        try {
+	            XOMTestCase.assertEquals("foo", refNode, testNode);
+	        } catch (ComparisonFailure e) {
+	        	equals = false;
+	        } catch (AssertionFailedError e) {
+	        	equals = false;
+	        }
+    	}
+        return equals;
     }
 }

@@ -1012,7 +1012,7 @@ public class CMLFormula extends AbstractFormula {
             // start element or charge
             String el = S_EMPTY;
             // finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
-            if (Character.isDigit(c) || c == '+' || c == '-') {
+            if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
                 charge = getFinalCharge(formulaString.substring(i).trim());
                 break;
             }

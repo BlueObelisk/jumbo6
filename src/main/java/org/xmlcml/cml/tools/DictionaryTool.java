@@ -355,12 +355,12 @@ public class DictionaryTool extends AbstractTool {
     	List<Node> dictRefList = CMLUtil.getQueryNodes(cml, ".//*[@dictRef]");
     	for (Node node : dictRefList) {
     		CMLElement element = (CMLElement) node;
-    		try {
+//    		try {
     			validateElementWithDictRef(element);
-    		} catch (CMLRuntimeException e) {
-    			e.printStackTrace();
-    			System.err.println("Cannot validate: "+element.getAttributeValue("dictRef")+" / "+e);
-    		}
+//    		} catch (CMLRuntimeException e) {
+//    			e.printStackTrace();
+//    			System.err.println("Cannot validate: "+element.getAttributeValue("dictRef")+" / "+e);
+//    		}
     	}
     }
     
