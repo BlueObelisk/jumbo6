@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 /**
  * 3-dimensional plane class
- * 
+ *
  * Plane3 represents a 3-dimensional plane. It is one of a set of primitives
  * which can be combined to create and manipulate complex 3-dimensional objects.
  * Planes can be transformed with rotation matrices or rotation-translation
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * <P>
  * The default plane is a Vector of (0.0, 0.0, 0.0) and a distance of 0.0.
  * Operations on this default may lead to Exceptions such as ZeroLengthvector.
- * 
+ *
  * @author (C) P. Murray-Rust, 1996
  */
 
@@ -52,7 +52,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * formed from components. vector is normalised
-     * 
+     *
      * @param l
      *            component
      * @param m
@@ -76,7 +76,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * formed from components. vector is normalised
-     * 
+     *
      * @param lmn
      *            component
      * @param d
@@ -93,7 +93,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * construct from array.
-     * 
+     *
      * @param array
      *            4-components
      * @throws EuclidException
@@ -108,7 +108,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * formed from plane and distance. vector is copied and normalised
-     * 
+     *
      * @param v
      *            vector
      * @param d
@@ -126,7 +126,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * copy constructor:
-     * 
+     *
      * @param pl
      *            place
      */
@@ -137,7 +137,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * make a plane from three points.
-     * 
+     *
      * @param p1
      *            point
      * @param p2
@@ -160,7 +160,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * make a plane from a line and a point not on the line.
-     * 
+     *
      * @param l
      *            point
      * @param p
@@ -174,7 +174,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * get return contents as an array.
-     * 
+     *
      * @return the array (l,m,n,d)
      */
     public double[] getArray() {
@@ -185,7 +185,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * get vector.
-     * 
+     *
      * @return the vector
      */
     public Vector3 getVector() {
@@ -194,7 +194,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * get distance from origin.
-     * 
+     *
      * @return the distance
      */
     public double getDistance() {
@@ -205,12 +205,12 @@ public class Plane3 implements EuclidConstants {
      * reverse direction of plane.
      */
     public void negative() {
-        vect.negative();
+        vect.negativeEquals();
     }
 
     /**
      * are two planes coincident and parallel.
-     * 
+     *
      * @param pl2
      *            plane to compare
      * @return true if equal within Real.isEqual()
@@ -223,7 +223,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * form coincident antiparallel plane.
-     * 
+     *
      * @return antiparallel plane
      */
     public Plane3 subtract() {
@@ -234,7 +234,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * distance of point from plane. will be a signed quantity
-     * 
+     *
      * @param p
      *            the point
      * @return the distance
@@ -246,7 +246,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * are two planes parallel. not antiparallel
-     * 
+     *
      * @param pl2
      *            the plane
      * @return true if parallel within Real.isEqual()
@@ -257,7 +257,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * are two planes antiparallel. not parallel
-     * 
+     *
      * @param pl2
      *            the plane
      * @return true if antiparallel within Real.isEqual()
@@ -269,7 +269,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * is a point on the plane.
-     * 
+     *
      * @param p
      *            the point
      * @return true if within Real.isEqual()
@@ -281,7 +281,7 @@ public class Plane3 implements EuclidConstants {
     /**
      * point on plane closest to another point. if p2 is on plane then result
      * will coincide
-     * 
+     *
      * @param p2
      *            other point
      * @return the closest point
@@ -297,7 +297,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * point of intersection of plane and line.
-     * 
+     *
      * @param l
      *            line
      * @return intersection point (null if line parallel to plane)
@@ -319,7 +319,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * get line as intersection of two planes.
-     * 
+     *
      * @param pl2
      *            plane
      * @return intersection line (null if parallel)
@@ -339,7 +339,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * point where three planes intersect
-     * 
+     *
      * @param pl2
      *            plane
      * @param pl3
@@ -355,7 +355,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * the angle between 2 planes.
-     * 
+     *
      * @param pl2
      *            plane
      * @return the angle (unsigned)
@@ -366,7 +366,7 @@ public class Plane3 implements EuclidConstants {
 
     /**
      * string representation.
-     * 
+     *
      * @return the string
      */
     public String toString() {

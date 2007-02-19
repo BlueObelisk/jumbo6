@@ -4,7 +4,7 @@ import org.xmlcml.euclid.Axis.Axis3;
 
 /**
  * 3-dimensional vector
- * 
+ *
  * A vector has thre components giving it a length and a direction (whose sign
  * is important),but no position. Vectors are often normalised to unit length.
  * <P>
@@ -16,7 +16,7 @@ import org.xmlcml.euclid.Axis.Axis3;
  * <P>
  * The default vector is 0.0, 0.0, 0.0. Some operations on this will result in
  * ZerolengthVector Exceptions.
- * 
+ *
  * @author (C) P. Murray-Rust, 1996
  */
 
@@ -89,7 +89,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * construct from vector components.
-     * 
+     *
      * @param x
      *            component
      * @param y
@@ -107,7 +107,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * construct from vector components.
-     * 
+     *
      * @param array
      *            components
      * @throws EuclidException
@@ -120,7 +120,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * axial unit vector constructor. unit vectors along X, Y, Z axes
-     * 
+     *
      * @param axis
      *            to use
      */
@@ -132,7 +132,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * copy constructor:
-     * 
+     *
      * @param v
      *            vector to copy
      */
@@ -143,7 +143,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * copy constructor from RealArray.
-     * 
+     *
      * @param f the array (of length 3)
      * @throws EuclidRuntimeException
      */
@@ -155,7 +155,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * make a vector from a point vector is from origin to point
-     * 
+     *
      * @param p
      *            the point
      */
@@ -166,7 +166,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * copy constructor: synonym for copy constructor
-     * 
+     *
      * @param v
      *            vector to copy
      * @return vector
@@ -178,7 +178,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * from Point3 vector is from origin to point
-     * 
+     *
      * @param p
      *            the point
      * @return vector
@@ -190,7 +190,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * get the vector components
-     * 
+     *
      * @return vector of length 3
      */
     public double[] getArray() {
@@ -199,7 +199,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * are two vectors equal lengths. uses Real.isEqual
-     * 
+     *
      * @param v
      * @return equal if length difference is within tolerance
      */
@@ -209,7 +209,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * vector length > vector length
-     * 
+     *
      * @param v
      *            vector to compare
      * @return true if this > v
@@ -220,7 +220,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * scalar multiplication. create new vector v = this*f does not alter this
-     * 
+     *
      * @param f
      *            multiplier for all components
      * @return scaled vector
@@ -235,7 +235,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * scalar multiplication. sets equal to this*f alters this
-     * 
+     *
      * @param f
      *            multiplier for all components
      */
@@ -247,7 +247,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * vector addition. create new vector result = this + v3 does not alter this
-     * 
+     *
      * @param v3
      *            vector to add
      * @return resultant vector
@@ -264,7 +264,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * vector subtraction. create new vector result = this - v3 does not alter
      * this
-     * 
+     *
      * @param v3
      *            vector to subtract
      * @return resultant vector
@@ -280,12 +280,11 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * negative of vector. result = -this does not alter this
-     * 
+     *
      * @return resultant vector
      */
     public Vector3 negative() {
         Vector3 v1 = new Vector3(this);
-        v1 = this;
         for (int i = 0; i < 3; i++) {
             v1.flarray[i] = -flarray[i];
         }
@@ -293,8 +292,20 @@ public class Vector3 implements EuclidConstants {
     }
 
     /**
+     * negative of vector. result = - DOES alter this
+     *
+     * @return resultant vector
+     */
+    public Vector3 negativeEquals() {
+        for (int i = 0; i < 3; i++) {
+            flarray[i] = -flarray[i];
+        }
+        return this;
+    }
+
+    /**
      * get component. use raw array if you are sure checking is not required
-     * 
+     *
      * @param n
      *            the zero-based index
      * @return the n'th component
@@ -307,7 +318,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * set component.
-     * 
+     *
      * @param n
      *            the zero-based index
      * @param f
@@ -321,7 +332,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * are two vectors equal in all components. uses Real.isEqual
-     * 
+     *
      * @param v
      * @return equal if components equal within tolerance
      */
@@ -331,7 +342,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * is vector of zero length. uses Real.isEqual
-     * 
+     *
      * @return if zero within tolerance
      */
     public boolean isZero() {
@@ -341,7 +352,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * create transformed vector. does not alter this.
-     * 
+     *
      * @param t
      *            transform
      * @return tranformed vector
@@ -363,7 +374,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * create cross product. result = this x v3 does not alter this.
-     * 
+     *
      * @param v3
      *            vector to multiply
      * @return cross product
@@ -397,7 +408,7 @@ public class Vector3 implements EuclidConstants {
      *  alters this
      *  this = this.normalize()
      *   if zero vector takes no action (maybe this is bad...)
-     * 
+     *
      * @return vector of unit length
      */
     public Vector3 normalize() {
@@ -423,9 +434,9 @@ public class Vector3 implements EuclidConstants {
     /**
      * get normalized vector.
      *  does not alter this
-     *   result = this.normalize() 
+     *   result = this.normalize()
      *  if zero vector takes no action (maybe this is bad...)
-     * 
+     *
      * @return vector of unit length
      */
     public Vector3 getUnitVector() {
@@ -436,7 +447,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * return vector length. does not alter this result = this.length()
-     * 
+     *
      * @return vector length
      */
     public double getLength() {
@@ -449,7 +460,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * create dot product. result = this . v3 does not alter this.
-     * 
+     *
      * @param v3
      *            vector to multiply
      * @return dot product
@@ -464,7 +475,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * dot product - protected
-     * 
+     *
      * @param v3
      * @return the dotproduct
      */
@@ -479,7 +490,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * calculate unsigned angle between vectors result = angle between this and
      * v2 uses acos(this.dot.v2) so angle is unsigned does not alter this.
-     * 
+     *
      * @param v2
      *            vector to multiply
      * @return angle (null if vectors zero length
@@ -503,7 +514,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * calculate scalar triple product between vectors. result = this.(v2 x v3)
      * does not alter this.
-     * 
+     *
      * @param v2
      *            vector to multiply
      * @param v3
@@ -518,7 +529,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * projection of this onto vector. does not alter this. result = v.norm() *
      * (this.norm() dot v.norm())
-     * 
+     *
      * @param v
      *            vector to project onto
      * @exception EuclidException
@@ -540,7 +551,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * are two vectors colinear. also returns true if one or more vectors are
      * zero
-     * 
+     *
      * @param v
      *            vector to test with this
      * @return true if cross product isZero()
@@ -552,7 +563,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * get any vector not colinear with this. returns any axis which is not
      * colinear with this
-     * 
+     *
      * @return either XV or YV (even if this is zero)
      */
     public Vector3 getNonColinearVector() {
@@ -562,7 +573,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * get any vector perpendicular to this. useful for creating cartesian axes
      * containing this
-     * 
+     *
      * @return vector perpendicular to this (zero if this is zero)
      */
     public Vector3 getPerpendicularVector() {
@@ -571,7 +582,7 @@ public class Vector3 implements EuclidConstants {
 
     /**
      * get string representation.
-     * 
+     *
      * @return string representation
      */
     public String toString() {
