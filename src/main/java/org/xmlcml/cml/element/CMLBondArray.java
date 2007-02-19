@@ -18,13 +18,13 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  *  bondArray manages the bonds in the parent molecule.
  *  it always indexes them by atom hash (from atomRefs2) and
  *  will also index by id if present.
- * 
+ *
  */
 public class CMLBondArray extends AbstractBondArray {
 
-	/** namespaced element name.*/
-	public final static String NS = C_E+TAG;
-	
+    /** namespaced element name.*/
+    public final static String NS = C_E+TAG;
+
     /** messages.*/
     public enum Message {
         /** no parent for bondArray*/
@@ -36,7 +36,7 @@ public class CMLBondArray extends AbstractBondArray {
             value = s;
         }
     }
-    
+
     /** map of bond ids to bonds.*/
     Map<String, CMLBond> bondIdMap;
     /** map of atomRefs2 to bonds.*/
@@ -50,7 +50,7 @@ public class CMLBondArray extends AbstractBondArray {
         super();
         init();
     }
-    
+
     private void init() {
         bondMap = new HashMap<String, CMLBond>();
         bondIdMap = new HashMap<String, CMLBond>();
@@ -69,7 +69,7 @@ public class CMLBondArray extends AbstractBondArray {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -78,7 +78,7 @@ public class CMLBondArray extends AbstractBondArray {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLBond
@@ -89,18 +89,18 @@ public class CMLBondArray extends AbstractBondArray {
     }
 
     /** finish making element.
-     * 
+     *
      * @param parent
      *            element
      */
     public void finishMakingElement(Element parent) {
         super.finishMakingElement(parent);
-        // this is here because the parser doesn't route through the 
+        // this is here because the parser doesn't route through the
         // addBond
         indexBonds();
     }
-    
-    /** adds a bond. 
+
+    /** adds a bond.
      * reroutes to addBond(bond)
      * @param bond to add
      * @return added bond or null
@@ -112,15 +112,15 @@ public class CMLBondArray extends AbstractBondArray {
     }
 
     /** get number of child bonds.
-     * 
+     *
      * @return count
      */
     public int size() {
         return this.getBondElements().size();
     }
-    
-    /** adds a bond. 
-     * 
+
+    /** adds a bond.
+     *
      * cannot add bond unless bondArray already is child of molecule.
      * otherwise it doesn't know how to reference atoms
      * @param bond to add
@@ -131,9 +131,9 @@ public class CMLBondArray extends AbstractBondArray {
         int count = this.getChildCount();
         return this.insertBond(bond, count);
     }
-    
+
     /**
-     * adds a bond. 
+     * adds a bond.
      * will fail if bondArray is not child of molecule
      * @param bond to add
      * @param pos position (see insertChild)
@@ -157,7 +157,7 @@ public class CMLBondArray extends AbstractBondArray {
         indexBondId(bond);
         return addedBond;
     }
-    
+
     private CMLBond indexBondAndLigands(CMLBond bond) {
         CMLBond addedBond = null;
         String hash = CMLBond.atomHash(bond);
@@ -182,7 +182,7 @@ public class CMLBondArray extends AbstractBondArray {
             bondIdMap.put(id, bond);
         }
     }
-    
+
     /** index all the bonds by atom hash.
      * and by bond id
      */
@@ -206,7 +206,7 @@ public class CMLBondArray extends AbstractBondArray {
     }
 
     /** get parent molecule.
-     * 
+     *
      * @return null if no parent or parent is not molecule
      */
     public CMLMolecule getMolecule() {
@@ -221,11 +221,11 @@ public class CMLBondArray extends AbstractBondArray {
     @SuppressWarnings("unused")
     private CMLAtomArray getAtomArray() {
         CMLMolecule molecule = this.getMolecule();
-        return (molecule == null) ? null : molecule.getAtomArray(); 
+        return (molecule == null) ? null : molecule.getAtomArray();
     }
-    
+
     /** adds bond info as ligands to atoms.
-     * 
+     *
      * @param bond
      */
     void updateLigands() {
@@ -235,8 +235,8 @@ public class CMLBondArray extends AbstractBondArray {
         }
     }
 
-    
-    /** removes a bond. 
+
+    /** removes a bond.
      * reroutes to removeBond(bond)
      * @param bond to remove
      * @return removed bond or null
@@ -245,10 +245,10 @@ public class CMLBondArray extends AbstractBondArray {
     public CMLBond removeChild(CMLBond bond) {
         return this.removeBond(bond);
     }
-    
+
     /**
-     * removes a bond. 
-     * 
+     * removes a bond.
+     *
      * @param bond
      * @return deleted bond or null
      */
@@ -279,13 +279,14 @@ public class CMLBondArray extends AbstractBondArray {
                 ; // is this an error?
             }
             super.removeChild(bond);
-            this.getBondMap().remove(bond);
+            this.getBondMap().remove(CMLBond.atomHash(bond));
+            this.getBondIdMap().remove(bond.getId());
         }
         return deletedBond;
     }
 
     /** get map of bond hash to bonds.
-     * 
+     *
      * @return map
      */
     public Map<String, CMLBond> getBondMap() {
@@ -294,9 +295,9 @@ public class CMLBondArray extends AbstractBondArray {
         }
         return bondMap;
     }
-    
+
     /** get map of bond id to bonds.
-     * 
+     *
      * @return map
      */
     public Map<String, CMLBond> getBondIdMap() {
@@ -305,9 +306,9 @@ public class CMLBondArray extends AbstractBondArray {
         }
         return bondIdMap;
     }
-    
+
     /** get list of bonds in order.
-     * 
+     *
      * @return bonds
      */
     public List<CMLBond> getBonds() {
@@ -318,36 +319,36 @@ public class CMLBondArray extends AbstractBondArray {
         }
         return bondList;
     }
-    
+
     /** get bond by hash.
-     * 
+     *
      * @param hash
      * @return bond or null
      */
     public CMLBond getBondByHash(String hash) {
         return bondMap.get(hash);
     }
-    
+
     /** get bond by atomRefs2.
-     * 
+     *
      * @param atomRefs2
      * @return bond or null
      */
     public CMLBond getBondByAtomRefs2(String[] atomRefs2) {
         return bondMap.get(CMLBond.atomHash(atomRefs2));
     }
-    
+
     /** get bond by id.
-     * 
+     *
      * @param id
      * @return bond or null
      */
     public CMLBond getBondById(String id) {
         return (bondIdMap == null) ? null : bondIdMap.get(id);
     }
-    
+
     /** reroute to molecule.removeBondArray().
-     * 
+     *
      */
     public void detach() {
         ParentNode parent = this.getParent();
