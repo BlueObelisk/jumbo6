@@ -142,6 +142,10 @@ public class DisorderTool extends AbstractTool {
 	 */
 	private List<DisorderAssembly> checkDisorder() {
 		List<DisorderAssembly> disorderAssemblyList = getDisorderAssemblyList();
+		boolean containedDisorder = false;
+		if (disorderAssemblyList.size() > 0) {
+			containedDisorder = true;
+		}
 		ProcessControl pControl = disorderOptions.getProcessControl();
 		boolean isMetadataSet = false;
 		List<DisorderAssembly> failedAssemblyList = new ArrayList<DisorderAssembly>();
@@ -220,22 +224,22 @@ public class DisorderTool extends AbstractTool {
 				
 				// if the process reaches this point without an error being thrown then
 				// the disorder can be processed. Add metadata to say so!
-				System.out.println("disorder has been processed");
 				addDisorderMetadata(true);
 				isMetadataSet = true;
 				return newDA;
 			} else {
 				if (!isMetadataSet) {
-					System.out.println("disorder cannot be processed");
 					addDisorderMetadata(false);
 					isMetadataSet = true;
 				}
 				System.err.println("Could not resolve invalid disorder.");
 			}
 		} else {
-			// disorder has already been processed
-			addDisorderMetadata(true);
-			isMetadataSet = true;
+			if (containedDisorder) {
+				// disorder has already been processed
+				addDisorderMetadata(true);
+				isMetadataSet = true;
+			}
 		}
 		return finishedAssemblyList;
 	}
