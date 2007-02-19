@@ -295,7 +295,6 @@ public class CMLSymmetry extends AbstractSymmetry {
             int j = 0;
             for (CMLTransform3 tr2 : transform3s) {
                 CMLTransform3 tr3 = tr1.concatenate(tr2);
-                tr3.normalizeCrystallographically();
                 group = false;
                 for (CMLTransform3 tr : transform3s) {
                     if (tr.isEqualTo(tr3, EPS)) {
@@ -308,7 +307,6 @@ public class CMLSymmetry extends AbstractSymmetry {
                     // generate a group element: ");
                     break;
                 }
-//                System.out.println("I/J "+i+"/"+j);
                 j++;
             }
             i++;

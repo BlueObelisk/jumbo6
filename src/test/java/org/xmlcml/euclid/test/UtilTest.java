@@ -209,7 +209,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
         URL url = Util.getResource(filename);
         Assert.assertNotNull("url", url);
         Assert.assertTrue("target", url.toString().endsWith(
-                "/target/classes/org/xmlcml/cml/base/cml0.xml"));
+                "/org/xmlcml/cml/base/cml0.xml"));
     }
 
     /**
@@ -227,7 +227,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
         }
         Assert.assertNotNull("url", file);
         Assert.assertTrue("target", file.toString().endsWith(
-                "" + F_S + "target" + F_S + "classes" + F_S + "org" + F_S
+                "" + F_S + "org" + F_S
                         + "xmlcml" + F_S + "cml" + F_S + "base" 
                         + F_S + "cml0.xml"));
         Assert.assertTrue("file", file.exists());
