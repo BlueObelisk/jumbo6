@@ -122,14 +122,8 @@ public class CatalogTest extends AbstractTest {
 		Assert.assertEquals("link for geom1", "./geom1", link.getTo());
 		// make a valid url from it.
 		URL moleculeCatalogUrl = CatalogUtil.getURLFromLink(moleculeCatalog, link);
-		String expectedURLS = null;
-		try {
-			expectedURLS = new File(System.getProperty("user.dir")).toURL()+
-			"target"+U_S+"classes"+U_S+"org/xmlcml/cml/tools/examples/molecules/geom1";
-		} catch (MalformedURLException e) {
-			CMLUtil.BUG("Malformed URL");
-		}
-		Assert.assertEquals("Geom url", expectedURLS, moleculeCatalogUrl.toString());
+        String expectedEnd = U_S+"org/xmlcml/cml/tools/examples/molecules/geom1";
+		Assert.assertTrue("Geom url", moleculeCatalogUrl.toString().endsWith(expectedEnd));
 		// this is where we would now get the moleculeList
 
 		CMLMoleculeList moleculeList = (CMLMoleculeList) IndexableListManager.createFrom(moleculeCatalogUrl, CMLMoleculeList.class);
