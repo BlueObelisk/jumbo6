@@ -126,7 +126,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                 + CML_XMLNS + ">"
                 + "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>"
                 + "</formula>";
-        
+
         expectElem = parseValidString(expectS);
 
         assertEqualsCanonically("formula setup", expectElem, xomForm3aCopy);
@@ -386,7 +386,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
             form = CMLFormula.createFormula("C2H4",
                     CMLFormula.Type.NOPUNCTUATION);
         } catch (CMLRuntimeException e) {
-        	e.printStackTrace();
+            e.printStackTrace();
              neverThrow(e);
         }
         // Assert.assertEquals("createFormula", "C 2 H 4", form.getConcise());
@@ -982,7 +982,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     public void testCMLFormulaCMLMolecule() {
         CMLFormula form = new CMLFormula(xmlMolecule);
-        Assert.assertEquals("concise", "N 1 C 1 H 3 S 1 O 1 F 1", form.getConcise());
+        Assert.assertEquals("concise", "C 1 H 3 F 1 N 1 O 1 S 1", form.getConcise());
     }
 
     /**
