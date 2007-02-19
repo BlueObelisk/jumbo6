@@ -220,16 +220,22 @@ public class DisorderTool extends AbstractTool {
 				
 				// if the process reaches this point without an error being thrown then
 				// the disorder can be processed. Add metadata to say so!
+				System.out.println("disorder has been processed");
 				addDisorderMetadata(true);
 				isMetadataSet = true;
 				return newDA;
 			} else {
 				if (!isMetadataSet) {
+					System.out.println("disorder cannot be processed");
 					addDisorderMetadata(false);
 					isMetadataSet = true;
 				}
 				System.err.println("Could not resolve invalid disorder.");
 			}
+		} else {
+			// disorder has already been processed
+			addDisorderMetadata(true);
+			isMetadataSet = true;
 		}
 		return finishedAssemblyList;
 	}
