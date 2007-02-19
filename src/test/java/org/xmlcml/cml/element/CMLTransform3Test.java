@@ -261,9 +261,8 @@ public class CMLTransform3Test extends GeomTestBase {
         }
         CMLPoint3 p = new CMLPoint3(1., 2., 3);
         CMLTransform3 tt = new CMLTransform3(t, p);
-        // values not yet checked
         CMLTransform3Test.assertEquals("transform", new double[] { 1.0, 0.0,
-                0.0, -2.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, -1.0, 0.0, 4.0, 0.0, 0.0, -1.0, 6.0, 0.0, 0.0,
                 0.0, 1.0 }, tt, EPS);
     }
 
