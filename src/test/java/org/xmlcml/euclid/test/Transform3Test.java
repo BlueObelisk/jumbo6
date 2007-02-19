@@ -133,9 +133,9 @@ public class Transform3Test extends GeomTest {
     @Test
     public void testTransform3Transform3Point3() {
         Transform3 t = new Transform3(tr0, new Point3(1., 2., 3.));
-        // not sure if this is right
+        // tr0 is rotation 0 degrees, so should give identity matrix
         Transform3Test.assertEquals("transform3 vector", new double[] { 1.0,
-                0.0, 0.0, -2.0, 0.0, 1.0, 0.0, -4.0, 0.0, 0.0, 1.0, -6.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
                 0.0, 0.0, 1.0 }, t, EPS);
     }
 
