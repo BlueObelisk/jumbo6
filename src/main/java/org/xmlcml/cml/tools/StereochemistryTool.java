@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -588,61 +589,58 @@ public class StereochemistryTool extends AbstractTool {
 	 *             inconsistentencies in diagram, etc.
 	 */
 	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
-		CMLAtom[] atom4 = new CMLAtom[4];// getAtomRefs4();
-		if (atom4 != null) {
-			CMLBond bond = getFirstWedgeableBond(atom);
-			int totalParity = 0;
-			if (bond == null) {
-				logger.info("Cannot find ANY free wedgeable bonds! "
-						+ atom.getId());
-			} else {
-				final CMLAtomParity atomParity = (CMLAtomParity) atom
-				.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
-				if (atomParity != null) {
-	
-					CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
-					int atomParityValue = atomParity.getIntegerValue();
-					// three explicit ligands
-					if (atomRefs4x[3].equals(atom)) {
-						double d = this.getSenseOf3Ligands(atom, atomRefs4x);
-						if (Math.abs(d) > 0.000001) {
-							int sense = (d < 0) ? -1 : 1;
-							totalParity = sense * atomParityValue;
+		CMLBond bond = getFirstWedgeableBond(atom);
+		int totalParity = 0;
+		int sense = 0;
+		if (bond == null) {
+			logger.info("Cannot find ANY free wedgeable bonds! "
+					+ atom.getId());
+		} else {
+			final CMLAtomParity atomParity = (CMLAtomParity) atom
+			.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
+			if (atomParity != null) {
+				CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
+				int atomParityValue = atomParity.getIntegerValue();
+				// three explicit ligands
+				if (atomRefs4x[3].equals(atom)) {
+					double d = this.getSenseOf3Ligands(atom, atomRefs4x);
+					if (Math.abs(d) > 0.000001) {
+						sense = (d < 0) ? -1 : 1;
+						totalParity = sense * atomParityValue;
+					}
+					// 4 explicit ligands
+				} else {
+					CMLAtom[] cyclicAtom4 = atom.getClockwiseLigands(atomRefs4x);
+					List<CMLAtom> list = new LinkedList<CMLAtom>();
+					for (CMLAtom cyclicAtom : cyclicAtom4) {
+						if (!cyclicAtom.getId().equals(atomRefs4x[0].getId())) {
+							list.add(cyclicAtom);
 						}
-						// 4 explicit ligands
-					} else {
-						CMLAtom[] cyclicAtom4 = atom.getClockwiseLigands(atomRefs4x);
-						// bond position matters here. must find bond before
-						// compareAtomRefs4
-						// as it scrambles the order
-						int serial = -1;
-						for (int i = 0; i < 4; i++) {
-							if (cyclicAtom4[i].equals(bond.getOtherAtom(atom))) {
-								serial = i;
-								break;
+					}
+					List<Integer> intList = new LinkedList<Integer>();
+					for (CMLAtom at : list) {
+						for (int i = 0; i < atomRefs4x.length; i++) {
+							if (at.getId().equals(atomRefs4x[i].getId())) {
+								intList.add(i);
 							}
 						}
-						if (serial == -1) {
-							throw new CMLRuntimeException(
-									"Cannot find bond in cyclicAtom4 (bug)");
-						}
-						// how does this differ from the original atomRefs4?
-						int sense = 1; // FIXME
-						// CMLAtom.compareAtomRefs4(atomRefs4x,
-						// cyclicAtom4);
-						int positionParity = 1 - 2 * (serial % 2);
-						totalParity = sense * atomParityValue * positionParity;
 					}
-					String bondType = (totalParity > 0) ? CMLBond.WEDGE
-							: CMLBond.HATCH;
-					CMLBondStereo bondStereo = new CMLBondStereo();
-					bondStereo.setXMLContent(bondType);
-					bond.addBondStereo(bondStereo);
-	
-				} else {
-					// throw new CMLException ("BUG :: AddWedgeHatchBond ->
-					// atomParity is null for atom " + atom.getId ());
+					int first = intList.get(0);
+					int second = intList.get(1);
+					if (first+1 == second || first-2 == second) {
+						sense = 1;
+					} else if(first-1 == second || first+2 == second) {
+						sense = -1;
+					} else {
+						throw new CMLRuntimeException("Should never reach here.");
+					}
+					totalParity = sense * atomParityValue;
 				}
+				String bondType = (totalParity > 0) ? CMLBond.WEDGE
+						: CMLBond.HATCH;
+				CMLBondStereo bondStereo = new CMLBondStereo();
+				bondStereo.setXMLContent(bondType);
+				bond.addBondStereo(bondStereo);
 			}
 		}
 	}
