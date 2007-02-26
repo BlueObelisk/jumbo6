@@ -728,6 +728,8 @@ public class CMLBond extends AbstractBond {
                 order = CMLBond.DOUBLE;
             } else if (order.equals(CMLBond.DOUBLE)) {
                 order = CMLBond.TRIPLE;
+            } else if (order.equals(CMLBond.TRIPLE)) {
+                order = "4";
             } else {
                 throw new CMLRuntimeException("Cannot increment bond order " + order);
             }
@@ -736,6 +738,8 @@ public class CMLBond extends AbstractBond {
                 order = CMLBond.DOUBLE;
             } else if (order.equals(CMLBond.SINGLE)) {
                 order = CMLBond.TRIPLE;
+            } else if (order.equals(CMLBond.DOUBLE)) {
+                order = "4";
             } else {
                 throw new CMLRuntimeException("Cannot increment bond order " + order);
             }
