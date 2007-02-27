@@ -150,10 +150,11 @@ public class DisorderTool extends AbstractTool {
 		boolean isMetadataSet = false;
 		List<DisorderAssembly> failedAssemblyList = new ArrayList<DisorderAssembly>();
 		List<DisorderAssembly> finishedAssemblyList = new ArrayList<DisorderAssembly>();
-		for (DisorderAssembly da : disorderAssemblyList) {
+		for (DisorderAssembly da : disorderAssemblyList) {	
 			List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
 			if (disorderGroupList.size() < 2) {
 				if (ProcessControl.LOOSE.equals(pControl)) {
+					//System.err.println("Group list less than 2");
 					failedAssemblyList.add(da);
 					continue;
 				} else if (ProcessControl.STRICT.equals(pControl)) {
@@ -166,6 +167,7 @@ public class DisorderTool extends AbstractTool {
 			for (CMLAtom commonAtom : commonAtoms) {
 				if (!CrystalTool.hasUnitOccupancy(commonAtom)) {
 					if (ProcessControl.LOOSE.equals(pControl)) {
+						//System.err.println("Common atom doesn't have unit occupancy.");
 						failedAssemblyList.add(da);
 						continue;
 					} else if (ProcessControl.STRICT.equals(pControl)) {
@@ -182,6 +184,7 @@ public class DisorderTool extends AbstractTool {
 				for (CMLAtom atom : atomList) {
 					if (CrystalTool.hasUnitOccupancy(atom)) {
 						if (ProcessControl.LOOSE.equals(pControl)) {
+							//System.err.println("Atom in disorder group has unit occupancy.");
 							failedAssemblyList.add(da);
 							continue;
 						} else if (ProcessControl.STRICT.equals(pControl)) {
@@ -193,6 +196,7 @@ public class DisorderTool extends AbstractTool {
 					}
 					if (Math.abs(atom.getOccupancy() - dg.getOccupancy()) > CrystalTool.OCCUPANCY_EPS) {
 						if (ProcessControl.LOOSE.equals(pControl)) {
+							//System.err.println("Inconsistent occupancy.");
 							failedAssemblyList.add(da);
 							continue;
 						} else if (ProcessControl.STRICT.equals(pControl)) {
@@ -311,7 +315,6 @@ public class DisorderTool extends AbstractTool {
 			atomMap.put(occupancy, newList);
 		}
 		boolean fixed = false;
-		
 		if (unityAtoms.size() == disorderedAtoms.size()) {
 			// if all the disordered atoms actually have an occupancy
 			// of 1.0 then set them to have no assembly or group
@@ -369,10 +372,7 @@ public class DisorderTool extends AbstractTool {
 							}
 							if (!inDList) dList.add(occ);
 							List<CMLAtom> atoms = atomMap.get(occ);
-							//System.out.println("asscode: "+assemblyCode+", groupcode: "+groupCode);
 							for (CMLAtom atom : atoms) {
-								//List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//cml:scalar[contains(@dictRef,'iucr:_atom_site_label')]", X_CML);
-								//System.out.println("processing: "+atom.getId()+"("+nodes.get(0).getValue()+")"+" occ: "+atom.getOccupancy());
 								replaceAtomDisorderInformation(atom, assemblyCode, 
 										String.valueOf(groupCode));
 							}
@@ -396,9 +396,12 @@ public class DisorderTool extends AbstractTool {
 		if (assemblyNodes.size() > 1) {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder assembly.");
-		} else if (assemblyNodes.size() == 1) {
-			((CMLElement)assemblyNodes.get(0)).setStringContent(assemblyCode.toString());
-		} else if (assemblyNodes.size() == 0) {
+		} else {
+			// remove any old nodes
+			for (int i = 0; i < assemblyNodes.size(); i++) {
+				assemblyNodes.get(i).detach();
+			}
+			// add new node
 			CMLElement scalar = new CMLElement(CMLScalar.TAG);
 			atom.appendChild(scalar);
 			scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_ASSEMBLY));
@@ -410,9 +413,11 @@ public class DisorderTool extends AbstractTool {
 		if (groupNodes.size() > 1) {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder group.");
-		} else if (groupNodes.size() > 0) {
-			((CMLElement)groupNodes.get(0)).setStringContent(groupCode);
-		} else if (groupNodes.size() == 0) {
+		} else {
+			// remove any old nodes
+			for (int i = 0; i < groupNodes.size(); i++) {
+				groupNodes.get(i).detach();
+			}
 			CMLElement scalar = new CMLElement(CMLScalar.TAG);
 			atom.appendChild(scalar);
 			scalar.addAttribute(new CMLAttribute("dictRef", CrystalTool.DISORDER_GROUP));
