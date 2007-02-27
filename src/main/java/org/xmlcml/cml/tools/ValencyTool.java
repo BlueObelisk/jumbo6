@@ -44,7 +44,7 @@ public class ValencyTool extends AbstractTool {
 	 * 
 	 * @return true if identified as common molecule
 	 */
-	public boolean markupCommonMolecules() {
+	private boolean markupCommonMolecules() {
 		boolean marked = true;
 		// SiF6
 		if (formulaS.equals("F 6 Si 1")) {
@@ -126,7 +126,7 @@ public class ValencyTool extends AbstractTool {
 		return marked;
 	}
 	
-	void addCharge(String elementType, int charge) {
+	private void addCharge(String elementType, int charge) {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
 			if (atom.getElementType().equals(elementType)) {
@@ -143,6 +143,7 @@ public class ValencyTool extends AbstractTool {
 	public void markupSpecial() {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		this.markCarboxyAnion(atoms);
+		this.markEster(atoms);
 		this.markCS2(atoms);
 		this.markCOS(atoms);
 		this.markNitro(atoms);
@@ -162,6 +163,7 @@ public class ValencyTool extends AbstractTool {
 		this.markMCC(atoms);
 		this.markSNH(atoms);
 		this.markSandwichLigands(atoms);
+		this.markPyridineN(atoms);
 		this.markEarthMetals(atoms);
 		this.markHydride(atoms);
 		int count = atoms.size();
@@ -219,7 +221,34 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markNO(List<CMLAtom> atoms) {
+	private void markEster(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
+				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
+				int etherCount = 0;
+				CMLAtom etherO = null;
+				for (CMLAtom ligand : atom.getLigandAtoms()) {
+					if ("O".equals(ligand.getElementType())) {
+						oxyList.add(ligand);
+						if (ligand.getLigandAtoms().size() == 2) {
+							etherCount++;
+							etherO = ligand;
+						}		
+					}
+				}
+				if (oxyList.size() == 2 && etherCount == 1) {
+					for (CMLAtom oAtom : oxyList) {
+						if (oAtom != etherO) {
+							CMLBond bond = oAtom.getLigandBonds().get(0);
+							this.setBondOrder(bond, CMLBond.DOUBLE);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("O".equals(atom.getElementType())) {
 				this.setAtomCharge(atom, 1);
@@ -229,7 +258,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markHydride(List<CMLAtom> atoms) {
+	private void markHydride(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("H".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 0 
 					&& atom.isBondedToMetal()) {
@@ -238,7 +267,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markEarthMetals(List<CMLAtom> atoms) {
+	private void markEarthMetals(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			ChemicalElement ce = atom.getChemicalElement();
 			if (ce.isChemicalElementType(Type.GROUP_A)) {
@@ -249,7 +278,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markLoneNonMetalAnions(List<CMLAtom> atoms) {
+	private void markLoneNonMetalAnions(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (("F".equals(atom.getElementType()) 
 					|| "Cl".equals(atom.getElementType())
@@ -270,19 +299,20 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markSNH(List<CMLAtom> atoms) {
+	private void markSNH(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
 				for (CMLAtom ligand : atom.getLigandAtoms()) {
 					if ("S".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-						molecule.getBond(atom, ligand).setOrder(CMLBond.DOUBLE);
+						CMLBond bond = molecule.getBond(atom, ligand);
+						this.setBondOrder(bond, CMLBond.DOUBLE);
 					}
 				}
 			}
 		}
 	}
 	
-	void markMCC(List<CMLAtom> atoms) {
+	private void markMCC(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (atom.isBondedToMetal() && "C".equals(atom.getElementType()) 
 					&& atom.getLigandAtoms().size() == 1) {
@@ -296,7 +326,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markMNN(List<CMLAtom> atoms) {
+	private void markMNN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (atom.isBondedToMetal() && "N".equals(atom.getElementType()) 
 					&& atom.getLigandAtoms().size() == 1) {
@@ -316,7 +346,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markPNP(List<CMLAtom> atoms) {
+	private void markPNP(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
 				int pCount = 0;
@@ -332,7 +362,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markMCN(List<CMLAtom> atoms) {
+	private void markMCN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (atom.isBondedToMetal() && "C".equals(atom.getElementType()) 
 					&& atom.getLigandAtoms().size() == 1) {
@@ -347,7 +377,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markM_PN_C(List<CMLAtom> atoms) {
+	private void markM_PN_C(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (atom.isBondedToMetal() && ("N".equals(atom.getElementType()) || "P".equals(atom.getElementType())) 
 					&& atom.getLigandAtoms().size() == 1) {
@@ -359,21 +389,19 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
-	void markSandwichLigands(List<CMLAtom> atoms) {
+	private void markSandwichLigands(List<CMLAtom> atoms) {
 		CMLAtomSet atomSet = new CMLAtomSet(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
-		CMLMolecule piSysMol = new CMLMolecule(atomSet, bondSet);
-		ConnectionTableTool ctool = new ConnectionTableTool(piSysMol);
+		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
+		ConnectionTableTool ctool = new ConnectionTableTool(mol);
 		List<CMLAtomSet> ringSetList = ctool.getRingNucleiAtomSets();
 		for (CMLAtomSet ringSet : ringSetList) {
-			// skip if the ring contains an even number of atoms
+			// skip if the ring contains an even number of atoms - even
+			// numbered rings are handled in adjustBondOrdersAndChargeToValency
 			if (ringSet.getSize() % 2 == 0) continue;
 			int count = 0;
 			List<CMLAtom> atomList = ringSet.getAtoms();
 			List<CMLAtom> ringAtomList = new ArrayList<CMLAtom>();
-			// if there is a ring with an odd number of atoms that all
-			// have pi- electrons and are connected to a metal, then
-			// mark one of them as negatively charged.
 			for (CMLAtom atom : atomList) {
 				if (atom.isBondedToMetal()) {
 					count++;
@@ -386,8 +414,34 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
+	
+	private void markPyridineN(List<CMLAtom> atoms) {
+		CMLAtomSet atomSet = new CMLAtomSet(atoms);
+		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
+		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
+		ConnectionTableTool ctool = new ConnectionTableTool(mol);
+		List<CMLAtomSet> ringSetList = ctool.getRingNucleiAtomSets();
+		for (CMLAtomSet ringSet : ringSetList) {
+			if (ringSet.size() == 6) {
+				int nCount = 0;
+				CMLAtom nAtom = null;
+				for (CMLAtom ringAtom : ringSet.getAtoms()) {
+					if ("N".equals(ringAtom.getElementType())) {
+						nCount++;
+						nAtom = ringAtom;
+					}
+				}
+				if (nCount == 1) {
+					CMLMolecule sprout = new MoleculeTool(mol).sprout(ringSet);
+					if (sprout.getAtomCount() == 11) {
+						this.setAtomCharge(nAtom, 0);
+					}
+				}
+			}
+		}
+	}
 
-	void markAzide(List<CMLAtom> atoms) {
+	private void markAzide(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 1) {
 				CMLAtom lig = atom.getLigandAtoms().get(0);
@@ -410,7 +464,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markQuaternaryNPAsSb(List<CMLAtom> atoms) {
+	private void markQuaternaryNPAsSb(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (("N".equals(atom.getElementType()) ||
 					"P".equals(atom.getElementType()) ||
@@ -425,7 +479,7 @@ public class ValencyTool extends AbstractTool {
 	/*
 	 * mark O or S next to a quaternary P as negative
 	 */
-	void markOSQuatP(List<CMLAtom> atoms) {
+	private void markOSQuatP(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
 				if (atom.getLigandAtoms().size() == 1) {
@@ -438,7 +492,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markTerminalCN(List<CMLAtom> atoms) {
+	private void markTerminalCN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 1) {
 				CMLAtom lig = atom.getLigandAtoms().get(0);
@@ -450,7 +504,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markNCNCN(List<CMLAtom> atoms) {
+	private void markNCNCN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType())) {
 				if (atom.getLigandAtoms().size() == 2) {
@@ -466,7 +520,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markQuaternaryBAlGaIn(List<CMLAtom> atoms) {
+	private void markQuaternaryBAlGaIn(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (("B".equals(atom.getElementType()) ||
 					"Al".equals(atom.getElementType()) ||
@@ -478,7 +532,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markNCN(List<CMLAtom> atoms) {
+	private void markNCN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				List<CMLAtom> nList = new ArrayList<CMLAtom>(2);
@@ -502,7 +556,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markN3(List<CMLAtom> atoms) {
+	private void markN3(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType())) {
 				List<CMLAtom> nList = new ArrayList<CMLAtom>(2);
@@ -531,35 +585,37 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * mark O=C-O(-)
 	 */
-	void markCarboxyAnion(List<CMLAtom> atoms) {
+	private void markCarboxyAnion(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
-				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
-				for (CMLAtom ligand : ligands) {
-					if ("O".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
-						oxyList.add(ligand);
-					}
-				}
-				marker:
-				if (oxyList.size() == 2) {
-					for (CMLAtom oAtom : oxyList) {
-						if (oAtom.isBondedToMetal()) {
-							this.setAtomCharge(atom, -1);
-							for (CMLAtom oAt : oxyList) {
-								if (oAt != oAtom) {
-									CMLBond bond = molecule.getBond(atom, oAt);
-									this.setBondOrder(bond, CMLBond.DOUBLE);
-									break marker;
-								}
-							}
+				if (ligands.size() == 3) {
+					List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
+					for (CMLAtom ligand : ligands) {
+						if ("O".equals(ligand.getElementType())
+								&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							oxyList.add(ligand);
 						}
 					}
-					CMLAtom at = oxyList.get(0);
-					this.setAtomCharge(at, -1);
-					CMLBond bond = molecule.getBond(atom, oxyList.get(1));
-					this.setBondOrder(bond, CMLBond.DOUBLE);
+					marker:
+						if (oxyList.size() == 2) {
+							for (CMLAtom oAtom : oxyList) {
+								if (oAtom.isBondedToMetal()) {
+									this.setAtomCharge(atom, -1);
+									for (CMLAtom oAt : oxyList) {
+										if (oAt != oAtom) {
+											CMLBond bond = molecule.getBond(atom, oAt);
+											this.setBondOrder(bond, CMLBond.DOUBLE);
+											break marker;
+										}
+									}
+								}
+							}
+							CMLAtom at = oxyList.get(0);
+							this.setAtomCharge(at, -1);
+							CMLBond bond = molecule.getBond(atom, oxyList.get(1));
+							this.setBondOrder(bond, CMLBond.DOUBLE);
+						}
 				}
 			}
 		}
@@ -568,7 +624,7 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * mark -C-(triple bond)-O and -C-(triple bond)-N
 	 */
-	void markMetalCarbonylAndNitrile(List<CMLAtom> atoms) {
+	private void markMetalCarbonylAndNitrile(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -589,7 +645,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markTerminalCarbyne(List<CMLAtom> atoms) {
+	private void markTerminalCarbyne(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				if (atom.isBondedToMetal()) {
@@ -607,7 +663,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void mark_CSi_anion(List<CMLAtom> atoms) {
+	private void mark_CSi_anion(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType()) || "Si".equals(atom.getElementType())) {
 				int hCount = 0;
@@ -664,7 +720,7 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * mark N-O compounds. X-NO2, X3N(+)-(O-) where X is not O
 	 */
-	void markNitro(List<CMLAtom> atoms) {
+	private void markNitro(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("N".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -683,7 +739,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markPAnion(List<CMLAtom> atoms) {
+	private void markPAnion(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("P".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -697,7 +753,7 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * mark S-O compounds. X-SO-Y and X-S)2-Y where X, Y are not O
 	 */
-	void markSulfo(List<CMLAtom> atoms) {
+	private void markSulfo(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("S".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -724,7 +780,7 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * mark S=C-S(-)
 	 */
-	void markCS2(List<CMLAtom> atoms) {
+	private void markCS2(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -743,7 +799,7 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
-	void markCOS(List<CMLAtom> atoms) {
+	private void markCOS(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				CMLAtom o = null;
@@ -768,7 +824,7 @@ public class ValencyTool extends AbstractTool {
 	}
 
 
-	void markThiocyanate(List<CMLAtom> atoms) {
+	private void markThiocyanate(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType())) {
 				CMLAtom c = null;
@@ -855,6 +911,10 @@ public class ValencyTool extends AbstractTool {
 					if (!common) {
 						valencyTool.markupSpecial();
 						List<CMLAtom> alreadySetAtoms = valencyTool.getAlreadySetAtoms();
+						List<String> alreadySetAtomIds = new ArrayList<String>();
+						for (CMLAtom alreadySetAtom : alreadySetAtoms) {
+							alreadySetAtomIds.add(alreadySetAtom.getId());
+						}
 						subMol.setNormalizedBondOrders();
 						// get list of bonds that have not been set by 
 						// markupSpecial or markupCommonMolecules
@@ -880,11 +940,11 @@ public class ValencyTool extends AbstractTool {
 								if ("O".equals(atomElType) || 
 										"S".equals(atomElType)) {
 									piAtom.setFormalCharge(-1);
-									alreadySetAtoms.add(piAtom);
+									alreadySetAtomIds.add(piAtom.getId());
 								} else if ("N".equals(atomElType)) {
 									int ligandNum = piAtom.getLigandBonds().size();
 									piAtom.setFormalCharge(-3+ligandNum);
-									alreadySetAtoms.add(piAtom);
+									alreadySetAtomIds.add(piAtom.getId());
 								} else if ("C".equals(atomElType)) {
 									for (CMLAtom ligand : piAtom.getLigandAtoms()) {
 										if ("N".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
@@ -892,8 +952,8 @@ public class ValencyTool extends AbstractTool {
 											CMLBond bond = subMol.getBond(piAtom, ligand);
 											bond.setOrder(CMLBond.DOUBLE);
 											singleBonds.remove(bond);
-											alreadySetAtoms.add(piAtom);
-											alreadySetAtoms.add(ligand);
+											alreadySetAtomIds.add(piAtom.getId());
+											alreadySetAtomIds.add(ligand.getId());
 											break;
 										}
 									}
@@ -904,39 +964,38 @@ public class ValencyTool extends AbstractTool {
 								for (CMLAtom atom : piAtomList) {
 									// don't want to include atoms that have already had formal charge set
 									// by markupCommonMolecules or markupSpecial
-									if (alreadySetAtoms.contains(atom)) {
-										continue;
-									}
-									if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
-										if (atom.getLigandAtoms().size() == 1) {
-											osList.add(atom);
-										}
-									}
-									if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2
-											&& atom.isBondedToMetal()) {
-										int count = 0;
-										for (CMLAtom ligand : atom.getLigandAtoms()) {
-											if ("H".equals(ligand.getElementType())) {
-												count++;
+									if (!alreadySetAtomIds.contains(atom.getId())) {
+										if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
+											if (atom.getLigandAtoms().size() == 1) {
+												osList.add(atom);
 											}
 										}
-										if (count == 0) {
-											n2List.add(atom);
-										}
-									}
-									// see if there are any Ns with 3 ligands next to the pi-system that
-									// may be positively charged
-									for (CMLAtom ligand : atom.getLigandAtoms()) {
-										if ("N".equals(ligand.getElementType())) {
-											if (ligand.getLigandAtoms().size() == 3) {
-												int count = 0;
-												for (CMLAtom ligLig : ligand.getLigandAtoms()) {
-													if ("H".equals(ligLig.getElementType())) {
-														count++;
-													}
+										if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2
+												&& atom.isBondedToMetal()) {
+											int count = 0;
+											for (CMLAtom ligand : atom.getLigandAtoms()) {
+												if ("H".equals(ligand.getElementType())) {
+													count++;
 												}
-												if (count < 2 && !n3List.contains(ligand)) {
-													n3List.add(ligand);
+											}
+											if (count == 0) {
+												n2List.add(atom);
+											}
+										}
+										// see if there are any Ns with 3 ligands next to the pi-system that
+										// may be positively charged
+										for (CMLAtom ligand : atom.getLigandAtoms()) {
+											if ("N".equals(ligand.getElementType())) {
+												if (ligand.getLigandAtoms().size() == 3) {
+													int count = 0;
+													for (CMLAtom ligLig : ligand.getLigandAtoms()) {
+														if ("H".equals(ligLig.getElementType())) {
+															count++;
+														}
+													}
+													if (count < 2 && !n3List.contains(ligand)) {
+														n3List.add(ligand);
+													}
 												}
 											}
 										}

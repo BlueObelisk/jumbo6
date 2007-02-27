@@ -92,13 +92,12 @@ public class DisorderAssembly implements CMLConstants {
     	}
         Nodes nodes = molecule.query(
             ".//"+CMLAtom.NS+"["+CMLScalar.NS+"[" +
-            "contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
-            "contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
+            "(@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"' and .!='.') or " +
+            "(@dictRef='"+CrystalTool.DISORDER_GROUP+"' and .!='.')" +
             "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", X_CML);
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         for (int i = 0; i < nodes.size(); i++) {
             atomList.add((CMLAtom) nodes.get(i));
-            //System.out.println("disordered atom: "+((CMLAtom) nodes.get(i)).getId());
         }
         
         return atomList;

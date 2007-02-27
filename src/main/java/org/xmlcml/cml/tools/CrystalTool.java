@@ -382,7 +382,6 @@ public class CrystalTool extends AbstractTool {
                 double d = fromAtom.getDistanceTo(symmetryAtom);
                 if (d < SYMMETRY_CONTACT_TOLERANCE) {
                     // atoms overlap
-                	System.out.println("atoms overlap: "+fromAtom.getId()+","+symmetryAtom.getId());
                     continue;
                 } else {
                     List<CMLAtom> targetAtomList1 = targetMolecule.getAtoms();
