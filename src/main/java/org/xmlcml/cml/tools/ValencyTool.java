@@ -143,7 +143,7 @@ public class ValencyTool extends AbstractTool {
 	public void markupSpecial() {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		this.markCarboxyAnion(atoms);
-		this.markEster(atoms);
+		this.markKetone(atoms);
 		this.markCS2(atoms);
 		this.markCOS(atoms);
 		this.markNitro(atoms);
@@ -221,6 +221,22 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 	
+	private void markKetone(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if ("O".equals(atom.getElementType()) && !atom.isBondedToMetal()
+					&& atom.getLigandAtoms().size() ==1) {
+				CMLAtom ligand = atom.getLigandAtoms().get(0);
+				if ("C".equals(ligand.getElementType()) &&
+						ligand.getLigandAtoms().size() == 3) {
+					CMLBond bond = atom.getLigandBonds().get(0);
+					this.setBondOrder(bond, CMLBond.DOUBLE);
+				}
+			}
+		}
+	}
+	
+	/*
+	 * made redundant by markKetone
 	private void markEster(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
@@ -247,6 +263,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
+	*/
 	
 	private void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
