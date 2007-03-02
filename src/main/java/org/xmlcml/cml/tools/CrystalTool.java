@@ -163,9 +163,9 @@ public class CrystalTool extends AbstractTool {
      */
     public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
         List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
+        new ConnectionTableTool(molecule).partitionIntoMolecules();
         CMLMolecule mergedMolecule = this.getMergedMolecule(
             molecule, contactList);
-
         return mergedMolecule;
     }   
     
@@ -211,7 +211,6 @@ public class CrystalTool extends AbstractTool {
         molecule.createCartesiansFromFractionals(crystal);
         List<Contact> contactList = new ArrayList<Contact>();
         if (symmetry != null && molecule != null) {
-            
             Real3Range range3Fract = molecule.calculateRange3(CoordinateType.FRACTIONAL);
             // create a wider border round the molecule
             expandRange(range3Fract, crystal, dist2Range);
@@ -465,10 +464,8 @@ public class CrystalTool extends AbstractTool {
      * @return new molecule
      */
     public CMLMolecule getMergedMolecule(CMLMolecule mol, List<Contact> contactList) {
-    	//mol.debug();
         Transform3 orthMat = crystal.getOrthogonalizationTransform();
         CMLMolecule mergedMolecule = new CMLMolecule(mol);
-        
         if (contactList.size() > 0) {
             for (int icontact = 0; icontact < contactList.size(); icontact++) {
                 this.mergeSymmetryMolecules(mergedMolecule, 
