@@ -657,9 +657,15 @@ public class Point3 implements EuclidConstants {
     }
     
     public int hashCode() {
-    	int hash = 1;
-    	hash = (int)(((hash * 31 + flarray[0]) * 31 + flarray[1]) * 31 + flarray[2]);
-    	return hash;
+    	int result = 17;
+    	int c = 1;
+    	long x = Double.doubleToLongBits(flarray[0]);
+    	c = c * (int)(x^(x>>>32));
+    	long y = Double.doubleToLongBits(flarray[1]);
+    	c = c * (int)(y^(x>>>32));
+    	long z = Double.doubleToLongBits(flarray[2]);
+    	c = c * (int)(z^(x>>>32));
+    	return 37*result+c;
     }
 
     public static void main(String[] args) {
