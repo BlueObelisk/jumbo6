@@ -28,6 +28,7 @@ public class DisorderTool extends AbstractTool {
 
 	private CMLMolecule molecule;
 	private boolean disorderProcessed;
+	private boolean containsDisorder;
 
 	private DisorderToolControls disorderOptions;
 
@@ -50,12 +51,12 @@ public class DisorderTool extends AbstractTool {
 		}
 		if (disorderMan == null) {
 			throw new IllegalArgumentException(
-					"Disorder manager cannot be null");
+			"Disorder manager cannot be null");
 		}
 		this.molecule = mol;
 		this.disorderOptions = disorderMan;
 	}
-	
+
 	/**
 	 * gets the cml molecule.
 	 * 
@@ -92,12 +93,12 @@ public class DisorderTool extends AbstractTool {
 	public void resolveDisorder() {
 		if (molecule == null) {
 			throw new IllegalStateException(
-					"Molecule property is null, no operations possible");
+			"Molecule property is null, no operations possible");
 		}
 		List<DisorderAssembly> disorderAssemblyList = checkDisorder();
 		processDisorder(disorderAssemblyList);
 	}
-	
+
 	/**
 	 * 
 	 * @param disorderAssemblyList
@@ -111,11 +112,12 @@ public class DisorderTool extends AbstractTool {
 		}
 		// remove atom disorder information after processing IF disorder
 		// has been successfully resolved.
-		if (disorderProcessed) {
+		if (disorderProcessed || !containsDisorder) {
 			removeAtomDisorderInformation();
 		}
+		//molecule.debug();
 	}
-	
+
 	/**
 	 * removes all disorder elements and attributes from each disordered atom.
 	 *
@@ -123,8 +125,8 @@ public class DisorderTool extends AbstractTool {
 	private void removeAtomDisorderInformation() {
 		List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLAtom.NS+"/@occupancy | "
 				+".//"+CMLAtom.NS+"/"+CMLScalar.NS+"[contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
-	            "contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
-	            "]", X_CML);
+				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
+				"]", X_CML);
 		for (Node node : nodes) {
 			node.detach();
 		}
@@ -142,107 +144,107 @@ public class DisorderTool extends AbstractTool {
 	 */
 	private List<DisorderAssembly> checkDisorder() {
 		List<DisorderAssembly> disorderAssemblyList = getDisorderAssemblyList();
-		boolean containedDisorder = false;
-		if (disorderAssemblyList.size() > 0) {
-			containedDisorder = true;
-		}
-		ProcessControl pControl = disorderOptions.getProcessControl();
-		boolean isMetadataSet = false;
 		List<DisorderAssembly> failedAssemblyList = new ArrayList<DisorderAssembly>();
 		List<DisorderAssembly> finishedAssemblyList = new ArrayList<DisorderAssembly>();
-		for (DisorderAssembly da : disorderAssemblyList) {	
-			List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
-			if (disorderGroupList.size() < 2) {
-				if (ProcessControl.LOOSE.equals(pControl)) {
-					//System.err.println("Group list less than 2");
-					failedAssemblyList.add(da);
-					continue;
-				} else if (ProcessControl.STRICT.equals(pControl)) {
-					throw new CMLRuntimeException(
-							"Disorder assembly should contain at least 2 disorder groups: "
-									+ da.toString());
-				}
-			}
-			List<CMLAtom> commonAtoms = da.getCommonAtoms();
-			for (CMLAtom commonAtom : commonAtoms) {
-				if (!CrystalTool.hasUnitOccupancy(commonAtom)) {
+		if (disorderAssemblyList.size() > 0) {
+			containsDisorder = true;
+			ProcessControl pControl = disorderOptions.getProcessControl();
+			boolean isMetadataSet = false;
+			for (DisorderAssembly da : disorderAssemblyList) {	
+				List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
+				if (disorderGroupList.size() < 2) {
 					if (ProcessControl.LOOSE.equals(pControl)) {
-						//System.err.println("Common atom doesn't have unit occupancy.");
+						//System.err.println("Group list less than 2");
 						failedAssemblyList.add(da);
 						continue;
 					} else if (ProcessControl.STRICT.equals(pControl)) {
 						throw new CMLRuntimeException(
-								"Common atoms require unit occupancy: "
-										+ commonAtom.getId()
-										+ ", in disorder assembly, "
-										+ da.getAssemblyCode());
+								"Disorder assembly should contain at least 2 disorder groups: "
+								+ da.toString());
 					}
 				}
-			}
-			for (DisorderGroup dg : disorderGroupList) {
-				List<CMLAtom> atomList = dg.getAtomList();
-				for (CMLAtom atom : atomList) {
-					if (CrystalTool.hasUnitOccupancy(atom)) {
+				List<CMLAtom> commonAtoms = da.getCommonAtoms();
+				for (CMLAtom commonAtom : commonAtoms) {
+					if (!CrystalTool.hasUnitOccupancy(commonAtom)) {
 						if (ProcessControl.LOOSE.equals(pControl)) {
-							//System.err.println("Atom in disorder group has unit occupancy.");
-							failedAssemblyList.add(da);
-							continue;
-						} else if (ProcessControl.STRICT.equals(pControl)) {
-							throw new CMLRuntimeException("Atom, "
-									+ atom.getId() + ", in disorder group, "
-									+ dg.getGroupCode()
-									+ ", has unit occupancy");
-						}
-					}
-					if (Math.abs(atom.getOccupancy() - dg.getOccupancy()) > CrystalTool.OCCUPANCY_EPS) {
-						if (ProcessControl.LOOSE.equals(pControl)) {
-							//System.err.println("Inconsistent occupancy.");
+							//System.err.println("Common atom doesn't have unit occupancy.");
 							failedAssemblyList.add(da);
 							continue;
 						} else if (ProcessControl.STRICT.equals(pControl)) {
 							throw new CMLRuntimeException(
-									"Atom "
-											+ atom.getId()
-											+ ", in disorder group, "
-											+ dg.getGroupCode()
-											+ ", has inconsistent occupancy ("
-											+ atom.getOccupancy()
-											+ ") with that of the disorder group ("
-											+ dg.getOccupancy()+").");
+									"Common atoms require unit occupancy: "
+									+ commonAtom.getId()
+									+ ", in disorder assembly, "
+									+ da.getAssemblyCode());
 						}
 					}
 				}
+				for (DisorderGroup dg : disorderGroupList) {
+					List<CMLAtom> atomList = dg.getAtomList();
+					for (CMLAtom atom : atomList) {
+						if (CrystalTool.hasUnitOccupancy(atom)) {
+							if (ProcessControl.LOOSE.equals(pControl)) {
+								//System.err.println("Atom in disorder group has unit occupancy.");
+								failedAssemblyList.add(da);
+								continue;
+							} else if (ProcessControl.STRICT.equals(pControl)) {
+								throw new CMLRuntimeException("Atom, "
+										+ atom.getId() + ", in disorder group, "
+										+ dg.getGroupCode()
+										+ ", has unit occupancy");
+							}
+						}
+						if (Math.abs(atom.getOccupancy() - dg.getOccupancy()) > CrystalTool.OCCUPANCY_EPS) {
+							if (ProcessControl.LOOSE.equals(pControl)) {
+								//System.err.println("Inconsistent occupancy.");
+								failedAssemblyList.add(da);
+								continue;
+							} else if (ProcessControl.STRICT.equals(pControl)) {
+								throw new CMLRuntimeException(
+										"Atom "
+										+ atom.getId()
+										+ ", in disorder group, "
+										+ dg.getGroupCode()
+										+ ", has inconsistent occupancy ("
+										+ atom.getOccupancy()
+										+ ") with that of the disorder group ("
+										+ dg.getOccupancy()+").");
+							}
+						}
+					}
+				}
+				finishedAssemblyList.add(da);
 			}
-			finishedAssemblyList.add(da);
-		}
-		// attempt to reconcile errors in disorder assemblies
-		boolean fixed = false;
-		if (failedAssemblyList.size() > 0) {
-			fixed = fixFailedAssemblies(failedAssemblyList);
-			if (fixed) {
-				// if process reaches this point then failed assemblies have been
-				// fixed - add them to finished list
-				//molecule.debug();
-				DisorderTool newDt = new DisorderTool(molecule);
-				List<DisorderAssembly> newDA = newDt.getDisorderAssemblyList();
-				
-				// if the process reaches this point without an error being thrown then
-				// the disorder can be processed. Add metadata to say so!
-				addDisorderMetadata(true);
-				isMetadataSet = true;
-				return newDA;
+			// attempt to reconcile errors in disorder assemblies
+			boolean fixed = false;
+			if (failedAssemblyList.size() > 0) {
+				fixed = fixFailedAssemblies(failedAssemblyList);
+				if (fixed) {	
+					// if process reaches this point then failed assemblies have been
+					// fixed - add them to finished list
+					//molecule.debug();
+					DisorderTool newDt = new DisorderTool(molecule);
+					List<DisorderAssembly> newDA = newDt.getDisorderAssemblyList();
+
+					// if the process reaches this point without an error being thrown then
+					// the disorder can be processed. Add metadata to say so!
+					addDisorderMetadata(true);
+					isMetadataSet = true;
+					return newDA;
+				} else {
+					System.out.println("not fixed");
+					if (!isMetadataSet) {
+						addDisorderMetadata(false);
+						isMetadataSet = true;
+					}
+					System.err.println("Could not resolve invalid disorder.");
+				}
 			} else {
-				if (!isMetadataSet) {
-					addDisorderMetadata(false);
+				if (containsDisorder) {
+					// disorder has already been processed
+					addDisorderMetadata(true);
 					isMetadataSet = true;
 				}
-				System.err.println("Could not resolve invalid disorder.");
-			}
-		} else {
-			if (containedDisorder) {
-				// disorder has already been processed
-				addDisorderMetadata(true);
-				isMetadataSet = true;
 			}
 		}
 		return finishedAssemblyList;
@@ -289,9 +291,9 @@ public class DisorderTool extends AbstractTool {
 			// if atom has unit occupancy then we can ignore it for the rest of 
 			// the method
 			if (Math.abs(1.0 - occupancy) < CrystalTool.OCCUPANCY_EPS) {
-						unityAtoms.add(disorderedAtom);
-						continue;
-					}
+				unityAtoms.add(disorderedAtom);
+				continue;
+			}
 			// counter to make sure the same atom isn't added to two different
 			// lists
 			int addedCount = 0;
@@ -328,7 +330,7 @@ public class DisorderTool extends AbstractTool {
 		}
 		return fixed;
 	}
-	
+
 	/**
 	 * Takes a map of occupancies related to their atoms with that occupancy.  Tries
 	 * to decipher the correct disorder assemblies and groups from the occupancies
@@ -389,7 +391,7 @@ public class DisorderTool extends AbstractTool {
 		}
 		return false;
 	}
-	
+
 	private void replaceAtomDisorderInformation(CMLAtom atom, String assemblyCode, String groupCode) {
 		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
 				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
@@ -468,7 +470,7 @@ public class DisorderTool extends AbstractTool {
 			if (hCount == 6 || fCount == 6 || clCount == 6) {
 				return true;
 			}
-			
+
 			List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//" + CMLScalar.NS
 					+ "[@dictRef='" + CrystalTool.DISORDER_ASSEMBLY + "'] | "
 					+ ".//" + CMLScalar.NS + "[@dictRef='"
@@ -543,12 +545,12 @@ public class DisorderTool extends AbstractTool {
 	private List<DisorderAssembly> getDisorderAssemblyList() {
 		if (molecule == null) {
 			throw new IllegalStateException(
-					"Molecule is null, no operations possible");
+			"Molecule is null, no operations possible");
 		}
 		List<CMLAtom> disorderedAtomList = DisorderAssembly
-				.getDisorderedAtoms(molecule);
+		.getDisorderedAtoms(molecule);
 		List<DisorderAssembly> disorderAssemblyList = DisorderAssembly
-				.getDisorderedAssemblyList(disorderedAtomList);
+		.getDisorderedAssemblyList(disorderedAtomList);
 		return disorderAssemblyList;
 	}
 }

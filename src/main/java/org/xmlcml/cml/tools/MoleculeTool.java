@@ -2158,21 +2158,4 @@ public class MoleculeTool extends AbstractTool {
 			nodes.get(i).detach();
 		}
 	}
-	
-    public void resetAllFractionalsToFallInsideUnitCell() {
-    	for (CMLAtom atom : molecule.getAtoms()) {
-    		Point3 p3 = atom.getFractCoord();
-    		List<Double> dList = new ArrayList<Double>(3);
-    		for (Double fractCoord : p3.getArray()) {
-    			if (fractCoord < 0) {
-    				fractCoord += 1;
-    			} else if (fractCoord > 1) {
-    				fractCoord -= 1;
-    			}
-    			dList.add(fractCoord);
-    		}
-    		Point3 newp3 = new Point3(dList.get(0), dList.get(1), dList.get(2));
-    		atom.setXYZFract(newp3);
-    	}
-    }
 }

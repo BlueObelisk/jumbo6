@@ -774,6 +774,7 @@ public class ValencyTool extends AbstractTool {
 		for (CMLAtom atom : atoms) {
 			if ("S".equals(atom.getElementType())) {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
+				int ligandCount = ligands.size();
 				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
 				for (CMLAtom ligand : ligands) {
 					if ("O".equals(ligand.getElementType())
@@ -781,14 +782,23 @@ public class ValencyTool extends AbstractTool {
 						oxyList.add(ligand);
 					}
 				}
-				if (oxyList.size() > 0) {
-					this.setBondOrder(molecule.getBond(atom, oxyList.get(0)), CMLBond.DOUBLE);
-				}
-				if (oxyList.size() > 1) {
-					this.setBondOrder(molecule.getBond(atom, oxyList.get(1)), CMLBond.DOUBLE);
-				}
-				if (oxyList.size() == 3) {
-					this.setAtomCharge(oxyList.get(2), -1);
+				int oxyCount = oxyList.size();
+				if (ligandCount == 3) {
+					if (oxyCount > 0) {
+						this.setBondOrder(molecule.getBond(atom, oxyList.get(0)), CMLBond.DOUBLE);
+					} else if (oxyCount == 2) {
+						this.setAtomCharge(oxyList.get(1), -1);
+					}
+				} else if (ligandCount == 4) {			
+					if (oxyList.size() == 2) {
+						for (CMLAtom oxy : oxyList) {
+							this.setBondOrder(molecule.getBond(atom, oxy), CMLBond.DOUBLE);
+						}
+					} else if (oxyList.size() == 3) {
+						this.setBondOrder(molecule.getBond(atom, oxyList.get(0)), CMLBond.DOUBLE);
+						this.setBondOrder(molecule.getBond(atom, oxyList.get(1)), CMLBond.DOUBLE);
+						this.setAtomCharge(oxyList.get(2), -1);
+					}
 				}
 			}
 		}
