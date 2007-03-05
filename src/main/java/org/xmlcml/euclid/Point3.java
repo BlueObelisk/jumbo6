@@ -648,5 +648,28 @@ public class Point3 implements EuclidConstants {
         return S_LBRAK + flarray[0] + S_COMMA + S_SPACE + flarray[1] + S_COMMA
                 + S_SPACE + flarray[2] + S_RBRAK;
     }
+    
+    public boolean equals(Object that) {
+    	if (this == that) return true;
+    	if (!(that instanceof Point3)) return false;
+    	Point3 p3 = (Point3) that;
+    	return Real.isEqual(3, this.getArray(), p3.getArray(), Point3.CRYSTALFRACTEPSILON);
+    }
+    
+    public int hashCode() {
+    	int hash = 1;
+    	hash = (int)(((hash * 31 + flarray[0]) * 31 + flarray[1]) * 31 + flarray[2]);
+    	return hash;
+    }
 
+    public static void main(String[] args) {
+    	Point3 one = new Point3(0.1, 0.2, 0.3);
+    	Point3 two = new Point3(0.1, 0.2, 0.5);
+    	if (one.equals(two)) {
+    		System.out.println("are equal in state");
+    	}
+    	if (one == two) {
+    		System.out.println("same object");
+    	}
+    }
 }

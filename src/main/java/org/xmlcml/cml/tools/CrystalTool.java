@@ -15,6 +15,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLFormula;
@@ -163,12 +164,117 @@ public class CrystalTool extends AbstractTool {
 	 */
 	public CMLMolecule calculateCrystallochemicalUnit(RealRange dist2Range) {
 		List<Contact> contactList = moleculeTool.getSymmetryContacts(dist2Range, this);
-		new ConnectionTableTool(molecule).partitionIntoMolecules();
+		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ct.partitionIntoMolecules();
 		CMLMolecule mergedMolecule = this.getMergedMolecule(
 				molecule, contactList);
+		ct.flattenMolecules();
 		return mergedMolecule;
 	}  
 
+    public void resetAllFractionalsToZeroOneRange() {
+    	Transform3 t3 = crystal.getOrthogonalizationTransform();
+    	for (CMLAtom atom : molecule.getAtoms()) {
+    		Point3 p3 = atom.getFractCoord();
+    		List<Double> dList = new ArrayList<Double>(3);
+    		for (Double fractCoord : p3.getArray()) {
+    			if (fractCoord < 0.0) {
+    				fractCoord += 1;
+    			} else if (fractCoord > 1.0 || fractCoord.equals(1.0)) {
+    				fractCoord -= 1;
+    			}
+    			dList.add(fractCoord);
+    		}
+    		Point3 point = new Point3(dList.get(0), dList.get(1), dList.get(2));
+    		atom.setXYZFract(point);
+    		point = point.transform(t3);
+    		atom.setXYZ3(point);	
+    	}
+    }
+    
+    public void addAtomsToAllCornersEdgesAndFaces() {
+    	List<Point3> fractCoordSet = new ArrayList<Point3>();
+    	for (CMLAtom atom : molecule.getAtoms()) {
+    		fractCoordSet.add(atom.getPoint3(CoordinateType.FRACTIONAL));
+    	}
+    	for (CMLAtom atom : molecule.getAtoms()) {
+    		Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
+    		double[] coordArray = p3.getArray();
+    		int zeroCount = 0;
+    		int count = 0;
+    		int nonInteger = -1;
+    		for (Double coord : coordArray) {
+    			if (coord.equals(0.0)) {
+    				zeroCount++;
+    			} else {
+    				nonInteger = count;
+    			}
+    			count++;
+    		}
+    		if (zeroCount > 0) {
+    			List<Point3> p3List = new ArrayList<Point3>();
+    			if (zeroCount == 1) {
+    				//System.out.println("found face atom");
+    				// atom is on a face of the unit cell
+    				List<Double> dList = new ArrayList<Double>(3);
+    				for (Double coord : coordArray) {
+    					if (coord.equals(0.0)) {
+    						dList.add(1.0);
+    					} else {
+    						dList.add(coord);
+    					}
+    				}
+    				p3List.add(new Point3(dList.get(0), dList.get(1), dList.get(2)));
+    			} else if (zeroCount == 2) {
+    				//System.out.println("found edge atom");
+    				// atom is on an edge of the unit cell
+    				if (nonInteger == -1) throw new CMLRuntimeException("Should be one non-intger coordinate to reach this point.");
+    				double[] array = {1.0, 0.0,
+    						1.0, 1.0,
+    						0.0, 1.0
+    				};
+    				for (int i = 0; i < 3; i++) {
+    					if (nonInteger == 0) {
+    						p3List.add(new Point3(coordArray[0], array[(1+(i*2))-1], array[(2+(i*2))-1]));
+    					} else if (nonInteger == 1) {
+    						p3List.add(new Point3(array[(1+(i*2))-1], coordArray[1], array[(2+(i*2))-1]));
+    					} else if (nonInteger == 2) {
+    						p3List.add(new Point3(array[(1+(i*2))-1], array[(2+(i*2))-1], coordArray[2]));
+    					}
+    				}
+    			} else if (zeroCount == 3) {
+    				//System.out.println("found corner atom");
+    				// atom is at a corner of the unit cell
+    				double[] array = {1.0, 0.0, 0.0,
+    						1.0, 1.0, 0.0,
+    						1.0, 0.0, 1.0,
+    						1.0, 1.0, 1.0,
+    						0.0, 1.0, 0.0,
+    						0.0, 1.0, 1.0,
+    						0.0, 0.0, 1.0
+    				};
+    				for (int i = 0; i < 7; i++) {
+    					p3List.add(new Point3(array[(1+(i*3))-1], array[(2+(i*3))-1], array[(3+(i*3))-1]));
+    				}
+    			} else if (zeroCount > 3) {
+    				throw new CMLRuntimeException("Should never throw");
+    			}
+    			int serial = 1;
+    			Transform3 t = crystal.getOrthogonalizationTransform();
+    			for (Point3 point3 : p3List) {
+    				CMLAtom newAtom = new CMLAtom(atom);
+    				newAtom.setPoint3(point3, CoordinateType.FRACTIONAL);
+    				point3 = point3.transform(t);
+    				newAtom.setXYZ3(point3);
+    				String newId = atom.getId()+S_UNDER+serial;
+    				newAtom.resetId(newId);
+    				molecule.addAtom(newAtom);
+    				serial++;
+    			}
+    		}
+    	}
+    }
+	
 	/**
 	 * 
 	 * @return molecule containing completed unit cell
@@ -177,26 +283,48 @@ public class CrystalTool extends AbstractTool {
 		MoleculeTool mt = new MoleculeTool(molecule);
 		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
-		mt.resetAllFractionalsToFallInsideUnitCell();
+		this.resetAllFractionalsToZeroOneRange();
 		CMLElements<CMLTransform3> allSymmElements = symmetry.getTransform3Elements();
+		Map<Point3, CMLAtom> originalAtomMap = new HashMap<Point3, CMLAtom>();
+		Map<Point3, CMLAtom> newAtomMap = new HashMap<Point3, CMLAtom>();
+		for (CMLAtom atom : molecule.getAtoms()) {
+			originalAtomMap.put(atom.getPoint3(CoordinateType.FRACTIONAL), atom);
+		}
 		for (int i = 0; i < allSymmElements.size(); i++) {
 			CMLMolecule symmetryMolecule = new CMLMolecule(molecule);
 			CMLTransform3 transform = allSymmElements.get(i);
 			symmetryMolecule.transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
-			new MoleculeTool(symmetryMolecule).resetAllFractionalsToFallInsideUnitCell();
-			// find all atoms that after the given transformation are still within 
-			// the unit cell and copy to the original molecule.
-			for (CMLAtom symmetryAtom : symmetryMolecule.getAtoms()) {
-				 for (CMLAtom atom : molecule.getAtoms()) {
-                     Double d = atom.getDistanceTo(symmetryAtom);
-                     if (d < SYMMETRY_CONTACT_TOLERANCE) {
-                         break;
-                     }
-                 }
-				CMLAtom newAtom = new CMLAtom(symmetryAtom);
-				String newId = symmetryAtom.getId()+S_UNDER+i;
-				newAtom.resetId(newId);
-				molecule.addAtom(newAtom);
+			new CrystalTool(symmetryMolecule).resetAllFractionalsToZeroOneRange();
+			for (CMLAtom atom : symmetryMolecule.getAtoms()) {
+				Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
+				if (!newAtomMap.containsKey(p3) && !originalAtomMap.containsKey(p3)) {
+					newAtomMap.put(p3, atom);
+				}
+			}
+		}
+		int count = 1;
+		for (CMLAtom atom : newAtomMap.values()) {
+			CMLAtom newAtom = new CMLAtom(atom);
+			String newId = atom.getId()+S_UNDER+count;
+			//String newId = "a"+count+S_UNDER+"1";
+			newAtom.resetId(newId);
+			molecule.addAtom(newAtom);
+			count++;
+		}
+		//molecule.createCartesiansFromFractionals(crystal);
+		this.addAtomsToAllCornersEdgesAndFaces();
+		mt.calculateBondedAtoms();
+		// detach all bonds to group 1 or 2 atoms
+		for (CMLAtom atom : molecule.getAtoms()) {
+			ChemicalElement ce = atom.getChemicalElement();
+			if (ce.isChemicalElementType(Type.GROUP_A) || ce.isChemicalElementType(Type.GROUP_B)) {
+				List<CMLBond> bondList = new ArrayList<CMLBond>();
+				for (CMLBond bond : atom.getLigandBonds()) {
+					bondList.add(bond);
+				}
+				for (CMLBond bond : bondList) {
+					bond.detach();
+				}
 			}
 		}
 		return molecule;
