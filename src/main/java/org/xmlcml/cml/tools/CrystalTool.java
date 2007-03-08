@@ -329,6 +329,9 @@ public class CrystalTool extends AbstractTool {
 		}
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.partitionIntoMolecules();
+		for (CMLBond bond : molecule.getBonds()) {
+			bond.setOrder(CMLBond.SINGLE);
+		}
 		return molecule;
 	}
 
