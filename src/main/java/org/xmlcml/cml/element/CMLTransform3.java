@@ -644,4 +644,12 @@ public class CMLTransform3 extends AbstractTransform3 {
     public String getString() {
         return this.getEuclidTransform3().toString();
     }
+    
+    public boolean isIdentity() {
+    	if (this.getValue().equals("1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0")) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 }

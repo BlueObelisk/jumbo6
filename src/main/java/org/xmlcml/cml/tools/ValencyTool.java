@@ -223,6 +223,10 @@ public class ValencyTool extends AbstractTool {
 	
 	private void markKetone(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
+			// may already have been set in markCarboxyAnion if so
+			// atoms will be in alreadySetAtoms list so just make sure
+			// they are not before continuing
+			if (alreadySetAtoms.contains(atom)) continue;
 			if ("O".equals(atom.getElementType()) && !atom.isBondedToMetal()
 					&& atom.getLigandAtoms().size() ==1) {
 				CMLAtom ligand = atom.getLigandAtoms().get(0);
@@ -234,36 +238,6 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
-	/*
-	 * made redundant by markKetone
-	private void markEster(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if ("C".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 3) {
-				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
-				int etherCount = 0;
-				CMLAtom etherO = null;
-				for (CMLAtom ligand : atom.getLigandAtoms()) {
-					if ("O".equals(ligand.getElementType())) {
-						oxyList.add(ligand);
-						if (ligand.getLigandAtoms().size() == 2) {
-							etherCount++;
-							etherO = ligand;
-						}		
-					}
-				}
-				if (oxyList.size() == 2 && etherCount == 1) {
-					for (CMLAtom oAtom : oxyList) {
-						if (oAtom != etherO) {
-							CMLBond bond = oAtom.getLigandBonds().get(0);
-							this.setBondOrder(bond, CMLBond.DOUBLE);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
 	
 	private void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {

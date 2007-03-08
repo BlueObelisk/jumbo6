@@ -314,7 +314,6 @@ public class CrystalTool extends AbstractTool {
 		//molecule.createCartesiansFromFractionals(crystal);
 		this.addAtomsToAllCornersEdgesAndFaces();
 		mt.calculateBondedAtoms();
-		new ConnectionTableTool(molecule).partitionIntoMolecules();
 		// detach all bonds to group 1 or 2 atoms
 		for (CMLAtom atom : molecule.getAtoms()) {
 			ChemicalElement ce = atom.getChemicalElement();
@@ -328,6 +327,8 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
+		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ct.partitionIntoMolecules();
 		return molecule;
 	}
 
@@ -389,10 +390,12 @@ public class CrystalTool extends AbstractTool {
 			//CMLSymmetry nonTranslateSymmetry = symmetry;
 			//CMLSymmetry nonTranslateSymmetry = symmetry.getNonTranslations();
 			List<CMLMolecule> subMolecules = molecule.getDescendantsOrMolecule();
+			List<Type> typeIgnoreList = new ArrayList<Type>();
+			typeIgnoreList.add(Type.GROUP_A);
 			for (CMLMolecule subMolecule : subMolecules) {
 				subMolecule.createCartesiansFromFractionals(orthMat);
 				List<Contact> subContactList = findMoleculeMoleculeContacts(
-						subMolecule, range3Fract, allSymmetry, orthMat, dist2Range);
+						subMolecule, range3Fract, allSymmetry, orthMat, dist2Range, typeIgnoreList);
 				for (Contact subContact : subContactList) {
 					contactList.add(subContact);
 				}
@@ -424,14 +427,15 @@ public class CrystalTool extends AbstractTool {
 
 	private List<Contact> findMoleculeMoleculeContacts(
 			CMLMolecule origMolecule, Real3Range range3Fract, 
-			CMLSymmetry nonTranslateSymmetry, Transform3 orthMat,
-			RealRange dist2Range) {
+			CMLSymmetry symmetry, Transform3 orthMat,
+			RealRange dist2Range, List<Type> typeIgnoreList) {
 		boolean sameMolecule = true;
 		double distMax = Math.sqrt(dist2Range.getMax());
 		List<Contact> contactList = new ArrayList<Contact>();
-		CMLElements<CMLTransform3> nonTranslationalOperators =
-			nonTranslateSymmetry.getTransform3Elements();
-		for (CMLTransform3 operator : nonTranslationalOperators) {
+		CMLElements<CMLTransform3> symmetryOperators =
+			symmetry.getTransform3Elements();
+		for (CMLTransform3 operator : symmetryOperators) {
+			//if (operator.isIdentity()) continue;
 			// clone molecule
 			CMLMolecule symMolecule = new CMLMolecule(origMolecule);
 			// and transform it
@@ -445,9 +449,6 @@ public class CrystalTool extends AbstractTool {
 			// molecule and orig
 			List<CMLAtom> atomList = symMolecule.getAtoms();
 			for (CMLAtom atom : atomList) {
-				// don't translate metal atoms, otherwise polymeric crystal structures will end up
-				// with big extended molecules.
-				if (atom.getChemicalElement().isChemicalElementType(Type.METAL)) continue;
 				// move atom to outside bounding box for orig molecule
 				Point3 xyzFract = atom.getXYZFract();
 				Point3 maxPoint = translateOutsidePositiveBox(xyzFract, xr, yr, zr);
@@ -477,10 +478,19 @@ public class CrystalTool extends AbstractTool {
 							Contact contact = checkDistances(
 									origMolecule, atomXYZ3, atomXYZFract,
 									distMax, atom, operator);
+							boolean skipContact = false;
 							if (contact != null) {
-								contact.setSameMolecule(sameMolecule);
-								contactList.add(contact);
-								break;
+								// check that the contact doesn't contain an atom type
+								// that we want to ignore
+								for (Type type : typeIgnoreList) {
+									if (contact.fromAtom.getChemicalElement().isChemicalElementType(type)) skipContact = true;
+									if (contact.toAtom.getChemicalElement().isChemicalElementType(type)) skipContact = true;
+								}
+								if (!skipContact) {
+									contact.setSameMolecule(sameMolecule);
+									contactList.add(contact);
+									break;
+								}
 							}
 						}
 					}
