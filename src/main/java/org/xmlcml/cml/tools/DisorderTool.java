@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLAttribute;
@@ -31,6 +30,9 @@ public class DisorderTool extends AbstractTool {
 	private boolean containsDisorder;
 
 	private DisorderToolControls disorderOptions;
+	
+	public static final String PROCESSED_DISORDER_DICTREF = "cif:resolvedDisorder";
+	public static final String UNPROCESSED_DISORDER_DICTREF = "cif:unresolvedDisorder";
 
 	/**
 	 * constructor
@@ -232,7 +234,6 @@ public class DisorderTool extends AbstractTool {
 					isMetadataSet = true;
 					return newDA;
 				} else {
-					System.out.println("not fixed");
 					if (!isMetadataSet) {
 						addDisorderMetadata(false);
 						isMetadataSet = true;
@@ -435,16 +436,19 @@ public class DisorderTool extends AbstractTool {
 	 * @param processed - whether or not the disorder has been successfully processed
 	 */
 	public void addDisorderMetadata(boolean processed) {
-		CMLMetadataList metList = new CMLMetadataList();
-		molecule.appendChild(metList);
+		CMLMetadataList ml = (CMLMetadataList)molecule.getFirstCMLChild(CMLMetadataList.TAG);
+		if (ml == null) {
+			ml = new CMLMetadataList();
+			molecule.appendChild(ml);
+		}
 		CMLMetadata met = new CMLMetadata();
-		metList.appendChild(met);
+		ml.appendChild(met);
 		if (!processed) {
 			disorderProcessed = false;
-			met.setAttribute("dictRef", "cif:unprocessedDisorder");
+			met.setAttribute("dictRef", UNPROCESSED_DISORDER_DICTREF);
 		} else if (processed) {
 			disorderProcessed = true;
-			met.setAttribute("dictRef", "cif:processedDisorder");
+			met.setAttribute("dictRef", PROCESSED_DISORDER_DICTREF);
 		}
 	}
 
