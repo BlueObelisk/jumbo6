@@ -1,0 +1,13 @@
+org.xmlcml.cml.apps
+org.xmlcml.cml.base
+org.xmlcml.cml.element
+org.xmlcml.cml.inchi
+org.xmlcml.cml.legacy
+org.xmlcml.cml.legacy.cif
+org.xmlcml.cml.legacy.molecule
+org.xmlcml.cml.tools
+org.xmlcml.euclid
+org.xmlcml.euclid.test
+org.xmlcml.molutil
+org.xmlcml.molutil.test
+org.xmlcml.util

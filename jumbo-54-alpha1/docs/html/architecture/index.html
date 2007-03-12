@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Architecture of JUMBO</title>
+</head>
+<body>
+<h1>Architecture of JUMBO</h1>
+<p>CML has now evolved to a set of modular components where most schema elements and most attributes are context-independent - i.e. they can be used without immediate reference to their parent, siblings, or other document components. Each schema element (<tt>foo</tt>) therefore has a class automatically generated (<tt>AbstractFoo.java</tt>) by the Schemagen program. (Schemagen was originally part of JUMBO, now it is separate).
+</p>
+<p>
+<tt>AbstractFoo</tt> is a subclass of <tt>CMLElement</tt> which itself is a subclass of <tt>nu.xom.Element</tt>. This means that all XOM methods are available to <tt>AbstractFoo</tt>
+</p>
+<p><tt>AbstractFoo</tt> contains no local data structure and uses the XOM for all its information. This means that alterations to the XOM are immediately reflected in the number and values of components accessible through the member functions of <tt>AbstractFoo</tt>. In other words <tt>AbstractFoo</tt> is an interface to the current XOM. </p>
+
+<p>Assume that <tt>foo</tt> has an attribute <tt>bar</tt> and may contain <tt>blort</tt> children. Then <tt>AbstractFoo</tt> will have methods of the form:
+<ul>
+<li><tt>setBar()</tt></li>
+<li><tt>getBar()</tt></li>
+<li><tt>getBarAttribute()</tt></li>
+</ul>
+and
+<ul>
+<li><tt>getBlortElements()</tt></li>
+</ul>
+<h2>Attributes</h2>
+Where appropriate the arguments are strongly typed according to the type and number declared in the schema. Thus a <tt>list</tt> of <tt>xsd:double</tt> could give rise to:
+<tt>setBar(double[] dd)</tt>.
+All attributes (e.g. <tt>DoubleArrayAttribute</tt> are subclassed from <tt>CMLAttribute</tt>, itself subclassed from <tt>nu.xom.Attribute</tt>. The subclassed attributes are able to apply validation constraints from the schema; thus <tt>DoubleArrayAttribute</tt> will through errors if the text value does not represent a list of floating point numbers.</p>
+
+
+<!-- Creative Commons License -->
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/"><img alt="Creative Commons License" border="0" src="../images/somerights20.gif" /></a> <font size="-1">&#169; P.Murray-Rust, 2005; This work is licensed under a </font><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/"><font size="-1">Creative Commons License</font></a>.
+<!-- /Creative Commons License -->
+
+
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:date>2005</dc:date>
+   <dc:creator><Agent>
+      <dc:title>Peter Murray&amp;#45;Rust</dc:title>
+   </Agent></dc:creator>
+   <dc:rights><Agent>
+      <dc:title>Peter Murray&amp;#45;Rust</dc:title>
+   </Agent></dc:rights>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <license rdf:resource="http://creativecommons.org/licenses/by-nc-nd/2.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nc-nd/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
+</License>
+
+</rdf:RDF>
+
+-->
+</body>
+
+</html>
+

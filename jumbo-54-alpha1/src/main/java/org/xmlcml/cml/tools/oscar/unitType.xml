@@ -1,0 +1,41 @@
+<entries key="units" value="unitType">
+<!--  order may be important -->
+    <entry units="units:eq" unitType="amount"/>
+    <entry units="units:equiv" unitType="molarratio"/>
+    <entry units="units:microequiv" unitType="molarratio"/>
+    <entry units="units:millimol" unitType="amount"/>
+    <entry units="units:micromol" unitType="amount"/>
+    <entry units="units:nanomol" unitType="amount"/>
+    <entry units="units:mol" unitType="amount"/>
+    <entry units="units:millieq" unitType="amount"/>
+    
+    <entry units="units:megahertz" unitType="frequency"/>
+    
+    <entry units="units:H" unitType="integral"/>
+    
+    <entry units="units:millimetre" unitType="length"/>
+    <entry units="units:micrometre" unitType="length"/>
+    
+    <entry units="units:milligram" unitType="mass"/>
+    <entry units="units:microgram" unitType="mass"/>
+    <entry units="units:g" unitType="mass"/>
+    
+    <entry units="units:molpercent" unitType="molpercent"/>
+    
+    <entry units="units:percent" unitType="percent"/>
+    
+    <entry units="units:millimetreHg" unitType="pressure"/>
+    
+    <entry units="units:celsius" unitType="temperature"/>
+    <entry units="units:kelvin" unitType="temperature"/>
+   
+    <entry units="units:s" unitType="time"/>
+    <entry units="units:h" unitType="time"/>
+    <entry units="units:min" unitType="time"/>
+    
+    <entry units="units:millilitre" unitType="volume"/>
+    <entry units="units:microlitre" unitType="volume"/>
+    <entry units="units:cm3" unitType="volume"/>
+    <entry units="units:litre" unitType="volume"/>
+    
+</entries>
