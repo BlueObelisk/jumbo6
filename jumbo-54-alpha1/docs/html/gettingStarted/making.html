@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>Reading a CML file with JUMBO</title>
+</head>
+<body>
+<h1>JUMBO</h1>
+<pre>
+
+    /** make a CML file and write to file.
+     * args: of form "makeCML" args1, arg2...
+     * if args[1] = -HELP, issue help, else args[1] is filename to write
+     * exceptions are reported in situ
+     * @param args
+     */
+    public static void makeCML(String[] args) {
+        if (args.length == 2 && args[1].equalsIgnoreCase("-HELP")) {
+            System.out.println("readCML [filename]");
+            System.out.println("... if filename is present will write to this file");
+        } else {
+            CMLMolecule molecule = new CMLMolecule();
+            molecule.setId("m1");
+            CMLName name = new CMLName();
+            name.setXMLContent("benzene");
+            molecule.appendChild(name);
+            System.out.println("The following molecule has been craeted");
+            molecule.debug();
+            if (args[1] != null) {
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(args[1]);
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found: "+args[1]);
+                    e.printStackTrace();
+                }
+                Document doc = new Document(molecule);
+                Serializer serializer = new Serializer(fos);
+                try {
+                    serializer.write(doc);
+                } catch (IOException e) {
+                    System.err.println("Cannout output file: "+e);
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+</pre>
+<!-- Creative Commons License -->
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/"><img alt="Creative Commons License" border="0" src="../images/somerights20.gif" /></a> <font size="-1">&#169; P.Murray-Rust, 2005; This work is licensed under a </font><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/"><font size="-1">Creative Commons License</font></a>.
+<!-- /Creative Commons License -->
+
+
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:date>2005</dc:date>
+   <dc:creator><Agent>
+      <dc:title>Peter Murray&amp;#45;Rust</dc:title>
+   </Agent></dc:creator>
+   <dc:rights><Agent>
+      <dc:title>Peter Murray&amp;#45;Rust</dc:title>
+   </Agent></dc:rights>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <license rdf:resource="http://creativecommons.org/licenses/by-nc-nd/2.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nc-nd/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
+</License>
+
+</rdf:RDF>
+
+-->
+</body>
+
+</html>

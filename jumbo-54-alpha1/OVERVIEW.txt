@@ -1,0 +1,14 @@
+JUMBO is a library which validates and supports CML Schema. 
+
+Specifically jumbo5.3 and 
+schema2.5 mutually support each other. schema2.5 will not be changed (except for 
+critical bugfixes) and there is no need (unlike previous versions) to generate the 
+AbstractFoo.java classes. These are distributed with Jumbo and will not change.
+	
+Other versions of schema will be incompatible with jumbo5.3	
+
+The architecture is described in docs/html/architecture
+
+Newcomers may get started with docs/html/gettingStarted/index.html
+
+PeterMR

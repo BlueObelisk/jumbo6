@@ -1,0 +1,15 @@
+All JUMBO code is distributed under the Open Source Artistic License 
+(http://www.opensource.org). You are free to modify the code but if you do it may no
+longer be distributed under the name JUMBO (or a derivative) without permission of Peter
+Murray-Rust. Any distribution must acknowledge the origins and also include copies of the
+JUMBO source (see Artistic License for details). You may not claim that a modified version
+is a compliant CML system and may not assert that it reads or writes CML.
+
+CML Schema is distributed under a Creative Commons license, allowing redistribution but
+NOT derivative works. This is to ensure that the schema does not mutate.
+
+
+Peter Murray-Rust
+Henry Rzepa
+
+2006-04-07
