@@ -280,6 +280,8 @@ public class CrystalTool extends AbstractTool {
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell() {
+		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
 		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
@@ -327,8 +329,6 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
-		ConnectionTableTool ct = new ConnectionTableTool(molecule);
-		ct.partitionIntoMolecules();
 		for (CMLBond bond : molecule.getBonds()) {
 			bond.setOrder(CMLBond.SINGLE);
 		}
