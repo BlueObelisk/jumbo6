@@ -1,4 +1,0 @@
-<entries key="regex" value="string">
-<!--  order may be important -->
-    <entry regex="((room|ambient) temperature)|rt|r\.t\." string="298.15 K"/>
-</entries>
