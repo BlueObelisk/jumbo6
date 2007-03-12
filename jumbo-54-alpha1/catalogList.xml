@@ -1,7 +1,0 @@
-<list xmlns="http://www.xml-cml.org/schema">
-  <scalar convention="cml:resourceUrl" dictRef='cml:dictionaryCatalog'>org/xmlcml/cml/element/examples/dict/catalog.xml</scalar>
-  <scalar convention="cml:resourceUrl" dictRef='cml:moleculeCatalog'>org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>
-  <scalar convention="cml:resourceUrl" dictRef='cml:unitsCatalog'>org/xmlcml/cml/element/examples/units/catalog.xml</scalar>
-  <scalar convention="cml:absoluteUrl" dictRef='cml:foo'>http://www.sf.net/projects/cml/org/xmlcml/cml/element/examples/foo/catalog.xml</scalar>
-  <scalar convention="cml:relativeUrl" dictRef='cml:moleculeCatalog'>src/org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>
-</list>

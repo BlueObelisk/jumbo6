@@ -1,4 +1,0 @@
-<entries key="regex" value="dictRef">
-<!--  order may be important -->
-    <entry regex="((the|this) )?((organic|aqueous) )?(extract|filtrate|phase|residue|compound|((reaction )?mixture)|reaction|solvent)" dictRef="cml:substance"/>
-</entries>
