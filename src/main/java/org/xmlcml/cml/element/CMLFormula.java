@@ -1789,9 +1789,17 @@ public class CMLFormula extends AbstractFormula {
         CMLElements<CMLFormula> formulas = this.getFormulaElements();
         if (formulas.size() > 0) {
             for (CMLFormula formula : formulas) {
-                w.write(S_LBRAK);
-                formula.writeHTML(w);
-                w.write(S_RBRAK);
+            	double count = formula.getCount();
+            	w.write(S_LBRAK);
+            	formula.writeHTML(w);
+            	w.write(S_RBRAK);
+            	String cStr = String.valueOf(count);
+            	if (cStr.endsWith(".0")) {
+            		cStr = cStr.substring(0, cStr.length()-2);
+            	}
+            	if (!cStr.equals("1")) {
+            		w.write("<sub>"+cStr+"</sub>");
+            	}
             }
         } else {
             String[] elementTypes = this.getElementTypes();
