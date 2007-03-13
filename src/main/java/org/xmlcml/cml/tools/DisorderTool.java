@@ -31,8 +31,8 @@ public class DisorderTool extends AbstractTool {
 
 	private DisorderToolControls disorderOptions;
 	
-	public static final String PROCESSED_DISORDER_DICTREF = "cif:resolvedDisorder";
-	public static final String UNPROCESSED_DISORDER_DICTREF = "cif:unresolvedDisorder";
+	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
+	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
 
 	/**
 	 * constructor
@@ -445,10 +445,10 @@ public class DisorderTool extends AbstractTool {
 		ml.appendChild(met);
 		if (!processed) {
 			disorderProcessed = false;
-			met.setAttribute("dictRef", UNPROCESSED_DISORDER_DICTREF);
+			met.setAttribute("dictRef", UNRESOLVED_DISORDER_DICTREF);
 		} else if (processed) {
 			disorderProcessed = true;
-			met.setAttribute("dictRef", PROCESSED_DISORDER_DICTREF);
+			met.setAttribute("dictRef", RESOLVED_DISORDER_DICTREF);
 		}
 	}
 
