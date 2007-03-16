@@ -77,8 +77,8 @@ public class RTSI implements EuclidConstants {
         // ======
         // Translate the package name into an absolute path
         String name = new String(pckgname);
-        if (!name.startsWith("/")) {
-            name = "/" + name;
+        if (!name.startsWith(S_SLASH)) {
+            name = S_SLASH + name;
         }
         name = name.replace('.', '/');
 
@@ -153,7 +153,7 @@ public class RTSI implements EuclidConstants {
                             && entryname.endsWith(".class")) {
                         String classname = entryname.substring(0, entryname
                                 .length() - 6);
-                        if (classname.startsWith("/"))
+                        if (classname.startsWith(S_SLASH))
                             classname = classname.substring(1);
                         classname = classname.replace('/', '.');
                         try {

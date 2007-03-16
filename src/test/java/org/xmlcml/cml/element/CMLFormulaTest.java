@@ -16,7 +16,7 @@ import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLSerializer;
-import org.xmlcml.cml.base.DoubleAttribute;
+import org.xmlcml.cml.base.DoubleSTAttribute;
 import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.euclid.test.DoubleTest;
@@ -341,8 +341,8 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertNotNull("copied count attribute", countAtt);
         Assert.assertTrue("count class is subclass of CMLAttribute",
                 CMLAttribute.class.isAssignableFrom(countAtt.getClass()));
-        Assert.assertEquals("count class is DoubleAttribute", countAtt
-                .getClass(), DoubleAttribute.class);
+        Assert.assertEquals("count class is DoubleSTAttribute", countAtt
+                .getClass(), DoubleSTAttribute.class);
         Assert.assertEquals("count value", formula.getCount(), xformula
                 .getCount());
         // FIXME?

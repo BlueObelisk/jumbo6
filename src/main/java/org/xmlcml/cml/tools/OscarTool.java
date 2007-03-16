@@ -585,7 +585,7 @@ public class OscarTool implements CMLConstants {
     
     private void removeBalancedBracketChildFromMolecule() {
         List<Node> brackMolList = CMLUtil.getQueryNodes(
-            doc, ".//"+CMLMolecule.NS+"/"+CMLModule.NS+"[@role='balancedBrackets']", X_CML);
+            doc, ".//"+CMLMolecule.NS+S_SLASH+CMLModule.NS+"[@role='balancedBrackets']", X_CML);
         for (Node brackMol : brackMolList) {
             ((CMLElement)brackMol).replaceByChildren();
         }

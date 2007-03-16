@@ -9,6 +9,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
 
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Point3;
@@ -249,7 +250,7 @@ public class CMLBond extends AbstractBond {
      *            parent of element to be constructed (ignored by default)
      * @return CMLBond
      */
-    public static CMLBond makeElementInContext(Element parent) {
+    public CMLBond makeElementInContext(Element parent) {
         CMLBond bond = null;
         if (parent == null) {
             bond = new CMLBond();
@@ -860,8 +861,7 @@ public class CMLBond extends AbstractBond {
 	 *
 	 * @param type
 	 * @return the length
-	 * @throws CMLException
-	 *             if not computable (no coord, missing atoms...)
+	 * @throws CMLRuntimeException if not computable (no coord, missing atoms...)
 	 */
 	public double calculateBondLength(CoordinateType type) {
 		CMLAtom atom0 = null;

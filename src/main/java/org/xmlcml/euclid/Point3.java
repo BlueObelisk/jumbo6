@@ -648,7 +648,11 @@ public class Point3 implements EuclidConstants {
         return S_LBRAK + flarray[0] + S_COMMA + S_SPACE + flarray[1] + S_COMMA
                 + S_SPACE + flarray[2] + S_RBRAK;
     }
-    
+
+    /** equals.
+     * @param that
+     * @return is equal
+     */
     public boolean equals(Object that) {
     	if (this == that) return true;
     	if (!(that instanceof Point3)) return false;
@@ -656,6 +660,9 @@ public class Point3 implements EuclidConstants {
     	return Real.isEqual(3, this.getArray(), p3.getArray(), Point3.CRYSTALFRACTEPSILON);
     }
     
+    /** hash code.
+     * @return coe
+     */
     public int hashCode() {
     	int result = 17;
     	int c = 1;
@@ -668,6 +675,10 @@ public class Point3 implements EuclidConstants {
     	return 37*result+c;
     }
 
+    /** main.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
     	Point3 one = new Point3(0.1, 0.2, 0.3);
     	Point3 two = new Point3(0.1, 0.2, 0.5);

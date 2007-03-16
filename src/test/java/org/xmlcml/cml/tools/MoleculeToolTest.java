@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -25,16 +26,15 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.Indexable;
-import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.interfacex.Indexable;
+import org.xmlcml.cml.interfacex.IndexableList;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;
@@ -2233,7 +2233,6 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 	 * atom/bond in 'to'. Copies all attributes from that atom to to.atom/@*
 	 * If corresponding atom does not exist, throws exception.
 	 * If target attribute exists throws exception
-	 * @param to
 	 * @exception CMLRuntimeException ids in molecules do not correspond or
 	 * attributes are already present
 	 */

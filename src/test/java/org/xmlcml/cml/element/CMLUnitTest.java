@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 
 /**
  * tests CMLUnit.

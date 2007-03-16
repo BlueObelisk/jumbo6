@@ -10,6 +10,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
 
+import org.xmlcml.cml.attribute.DictRefAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
@@ -25,7 +26,6 @@ import org.xmlcml.cml.element.CMLParameter;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLVector3;
-import org.xmlcml.cml.element.DictRefAttribute;
 
 /** additional tools for dictionary. not fully developed
  * 
@@ -364,6 +364,12 @@ public class DictionaryTool extends AbstractTool {
     	}
     }
     
+    /** create element.
+     * 
+     * @param name
+     * @param value
+     * @return element
+     */
     public CMLElement createTypedNameValue(String name, String value) {
     	name = name.toLowerCase();
     	if (dictionary == null) {
@@ -401,6 +407,11 @@ public class DictionaryTool extends AbstractTool {
 		return element;
     }
 
+    /** create entry tool.
+     * 
+     * @param entry
+     * @return tool
+     */
     public EntryTool createEntryTool(CMLEntry entry) {
     	EntryTool entryTool = new EntryTool(entry);
     	entryTool.setPrefix(this.getPrefix());

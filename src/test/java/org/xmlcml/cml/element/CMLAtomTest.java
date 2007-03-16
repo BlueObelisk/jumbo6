@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.euclid.Angle;
@@ -116,8 +116,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
         CMLAttribute idAtt = atom.getIdAttribute();
         Assert.assertTrue("id class is subclass of CMLAttribute",
                 CMLAttribute.class.isAssignableFrom(idAtt.getClass()));
-        Assert.assertEquals("id class is StringAttribute", idAtt.getClass(),
-                StringAttribute.class);
+        Assert.assertEquals("id class is StringSTAttribute", IdAttribute.class, idAtt.getClass());
         Assert.assertEquals("id value", atom.getId(), xatom.getId());
         Assert.assertEquals("atom is identical", 0, atom.compareTo(xatom));
 

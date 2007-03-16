@@ -25,9 +25,15 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xmlcml.cml.attribute.DictRefAttribute;
+import org.xmlcml.cml.attribute.MetadataNameAttribute;
+import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.map.DictionaryMap;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -40,7 +46,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 
 	/** parser type. */
 	public enum Type {
-		/** use XOM parser with CMLNodeFactory */
+		/** use XOM parser with OldNodeFactory */
 		CML,
 		/** use XOM parser */
 		XOM,
@@ -181,7 +187,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 	}
 
 	/**
-	 * parse with CMLBuilder. will validate and transform with CMLNodeFactory
+	 * parse with CMLBuilder. will validate and transform with OldNodeFactory
 	 * 
 	 * @param type
 	 *            of parse
@@ -222,7 +228,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		boolean ok = true;
 		DictionaryMap dictionaryMap = null;
 		dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE
-				+ U_S + CATALOG_XML));
+				+ U_S + CATALOG_XML), new CMLDictionary());
 		List<String> errorList = new DictRefAttribute().checkAttribute(
 				rootElement, dictionaryMap);
 		if (errorList.size() > 0) {
@@ -241,12 +247,12 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		}
 		NamespaceToUnitListMap unitListMap = null;
 		unitListMap = new NamespaceToUnitListMap(Util
-				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 		// System.out.println("UNIT MAP "+unitListMap.size());
 		// for (String s : unitListMap.keySet()) {
 		// System.out.println(s+"|"+unitListMap.get(s));
 		// }
-		errorList = new UnitAttribute()
+		errorList = new UnitsAttribute()
 				.checkAttribute(rootElement, unitListMap);
 		if (errorList.size() > 0) {
 			for (String error : errorList) {

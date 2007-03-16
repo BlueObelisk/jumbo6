@@ -16,18 +16,23 @@ import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+import org.xmlcml.cml.attribute.GenericDictionaryMap;
+import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.interfacex.GenericDictionary;
+import org.xmlcml.cml.interfacex.IDictionary;
 
 /**
  * user-modifiable class supporting dictionary. *
  */
 public class CMLDictionary extends AbstractDictionary implements
-		GenericDictionary {
+		GenericDictionary, IDictionary {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
 	final static Logger logger = Logger
 			.getLogger(CMLDictionary.class.getName());
 
@@ -41,7 +46,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * constructor.
-	 * 
+	 *
 	 * @param old
 	 */
 	public CMLDictionary(CMLDictionary old) {
@@ -50,7 +55,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * copy node .
-	 * 
+	 *
 	 * @return Node
 	 */
 	public Node copy() {
@@ -60,18 +65,18 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * create new instance in context of parent, overridable by subclasses.
-	 * 
+	 *
 	 * @param parent
 	 *            parent of element to be constructed (ignored by default)
 	 * @return CMLDictionary
 	 */
-	public static CMLDictionary makeElementInContext(Element parent) {
+	public CMLElement makeElementInContext(Element parent) {
 		return new CMLDictionary();
 	}
 
 	/**
 	 * index entries by id.
-	 * 
+	 *
 	 */
 	public void indexEntries() {
 		if (entryMap == null) {
@@ -120,7 +125,7 @@ public class CMLDictionary extends AbstractDictionary implements
 			} else {
 				throw new CMLRuntimeException(
 						"Expected CMLDictionary root element, found: "
-								+ root.getClass().getName() + "/"
+								+ root.getClass().getName() + S_SLASH
 								+ root.getLocalName());
 			}
 		}
@@ -144,13 +149,13 @@ public class CMLDictionary extends AbstractDictionary implements
 			dictDoc = new CMLBuilder().build(in);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			throw new CMLRuntimeException("NULL " + e.getMessage() + "/" + e.getCause()
+			throw new CMLRuntimeException("NULL " + e.getMessage() + S_SLASH + e.getCause()
 					+ " in " + url);
 		} catch (ValidityException e) {
-			throw new CMLRuntimeException(S_EMPTY + e.getMessage() + "/" + e.getCause()
+			throw new CMLRuntimeException(S_EMPTY + e.getMessage() + S_SLASH + e.getCause()
 					+ " in " + url);
 		} catch (ParsingException e) {
-			System.err.println("ERR at line/col " + e.getLineNumber() + "/"
+			System.err.println("ERR at line/col " + e.getLineNumber() + S_SLASH
 					+ e.getColumnNumber());
 			throw new CMLRuntimeException(" in " + url, e);
 		}
@@ -167,7 +172,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * get Entry by id.
-	 * 
+	 *
 	 * @deprecated use getCMLEntry()
 	 * @param id
 	 *            the entryId (null if absent)
@@ -190,7 +195,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * add new Entry.
-	 * 
+	 *
 	 * @param entry
 	 *            to add
 	 * @throws CMLRuntimeException
@@ -210,7 +215,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * add new Entry in order of id
-	 * 
+	 *
 	 * @param entry to add
 	 * @throws CMLRuntimeException
 	 *             entry already present.
@@ -236,10 +241,10 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * remove Entry. calls removeEntryById()
-	 * 
+	 *
 	 * @param entry
 	 *            to remove, no action if not present
-	 * 
+	 *
 	 */
 	public void removeEntry(CMLEntry entry) {
 		String id = entry.getId();
@@ -248,10 +253,10 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * remove Entry by id. the preferred method
-	 * 
+	 *
 	 * @param id
 	 *            of entry to remove, no action if null or not present
-	 * 
+	 *
 	 */
 	public void removeEntryById(String id) {
 		if (id != null) {
@@ -265,7 +270,7 @@ public class CMLDictionary extends AbstractDictionary implements
 
 	/**
 	 * create dictionaryMap.
-	 * 
+	 *
 	 * @param file
 	 * @param useSubdirectories
 	 * @return dictionaryMap

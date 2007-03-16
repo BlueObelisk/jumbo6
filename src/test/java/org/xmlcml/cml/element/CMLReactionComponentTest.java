@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLElement;
 
 /**

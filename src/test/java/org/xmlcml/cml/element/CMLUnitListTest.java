@@ -7,9 +7,11 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.NamespaceRefAttribute;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -165,7 +167,7 @@ public class CMLUnitListTest extends AbstractUnitTest {
 		String outFile = Util.getTEMP_DIRECTORY() + File.separator  + filename;
 		CMLUnitList unitList = CMLUnitList.createUnitList(Util.getResource(xmlFile));
 		NamespaceToUnitListMap unitListMap = new NamespaceToUnitListMap(Util
-				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 		unitList.setUnitListMap(unitListMap);
 		writeHTML(unitList, outFile + ".html");
 	}

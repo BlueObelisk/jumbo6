@@ -40,9 +40,9 @@ public class CMLTransform3 extends AbstractTransform3 {
 
     /**
      * default constructor. does NOT create unit matrix.
-     * 
+     * do not use, except for reflection
      */
-    protected CMLTransform3() {
+    public CMLTransform3() {
     }
 
     /**
@@ -72,7 +72,7 @@ public class CMLTransform3 extends AbstractTransform3 {
      *            parent of element to be constructed (ignored by default)
      * @return CMLTransform3
      */
-    public static CMLTransform3 makeElementInContext(Element parent) {
+    public CMLTransform3 makeElementInContext(Element parent) {
         return new CMLTransform3();
 
     }
@@ -644,7 +644,11 @@ public class CMLTransform3 extends AbstractTransform3 {
     public String getString() {
         return this.getEuclidTransform3().toString();
     }
-    
+
+    /** is identity matrix.
+     * 
+     * @return is identity
+     */
     public boolean isIdentity() {
     	if (this.getValue().equals("1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0")) {
     		return true;

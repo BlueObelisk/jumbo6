@@ -12,6 +12,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.tools.MoleculeTool;
@@ -40,7 +41,7 @@ public class CMLAngle extends AbstractAngle {
 
     /**
      * constructor.
-     * 
+     *
      * @param old
      */
     public CMLAngle(CMLAngle old) {
@@ -50,7 +51,7 @@ public class CMLAngle extends AbstractAngle {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -60,19 +61,19 @@ public class CMLAngle extends AbstractAngle {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLAngle
      */
-    public static CMLAngle makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLAngle();
 
     }
 
     /**
      * gets atomIds as list.
-     * 
+     *
      * @return the atomIds (null if no atomRefs3)
      */
     public List<String> getAtomIds() {
@@ -86,10 +87,10 @@ public class CMLAngle extends AbstractAngle {
         }
         return idList;
     }
-    
+
     /**
      * gets atoms as array of atoms.
-     * 
+     *
      * @param molecule
      * @return the atoms (null if no atomRefs3)
      */
@@ -99,7 +100,7 @@ public class CMLAngle extends AbstractAngle {
 
     /**
      * gets atoms as array of atoms.
-     * 
+     *
      * @param atomSet
      * @return the atoms (null if no atomRefs3)
      */
@@ -124,7 +125,7 @@ public class CMLAngle extends AbstractAngle {
     /**
      * gets value calculated from coordinates. requires atomRefs3 ro be set and
      * valid. then gets the angle between atomRefs3 0-1-2
-     * 
+     *
      * @param molecule
      *            owning molecule (all atoms must be in this)
      * @return the angle in degrees (NaN if cannot calculate)
@@ -132,11 +133,11 @@ public class CMLAngle extends AbstractAngle {
     public double getCalculatedAngle(CMLMolecule molecule) {
         return this.getCalculatedAngle(molecule.getAtomSet());
     }
-    
+
     /**
      * gets value calculated from coordinates. requires atomRefs3 ro be set and
      * valid. then gets the angle between atomRefs3 0-1-2
-     * 
+     *
      * @param atomSet
      * @return the angle in degrees (NaN if cannot calculate)
      */
@@ -165,7 +166,7 @@ public class CMLAngle extends AbstractAngle {
     }
 
     /** create key from atomRefs3 attribute and atomHash
-     * 
+     *
      * @return the hash null if no atomRefs3
      */
     public String atomHash() {
@@ -175,7 +176,7 @@ public class CMLAngle extends AbstractAngle {
 
     /**
      * create key from three atoms. a1-a2-a3 and a3-a2-a1 are equivalent
-     * 
+     *
      * @param atomId1
      * @param atomId2
      * @param atomId3
@@ -210,11 +211,11 @@ public class CMLAngle extends AbstractAngle {
         }
         return angleList;
     }
-    
+
     /**
      * gets a Map of angles indexed by atoms. the map has the keys of atomHashs
      * for the angles
-     * 
+     *
      * @param angleList
      *            list of the angles
      * @return the indexed table (keyed on atomHash)
@@ -230,16 +231,16 @@ public class CMLAngle extends AbstractAngle {
     }
 
     /** applies transformation to reset angle.
-     * 
+     *
      * @param angle
      * @param atomSet to define torsion (could be the molecule)
-     * @param moveableSet set of atoms which can be moved 
-     *   (normally those downstream of the rotatable bond) 
+     * @param moveableSet set of atoms which can be moved
+     *   (normally those downstream of the rotatable bond)
      *   coordinates of these atoms will be altered
      */
     public void adjustCoordinates(Angle angle, CMLAtomSet atomSet, CMLAtomSet moveableSet) {
         // make sure there are exactly 3 atoms in order
-        CMLAtomSet atom3Set = atomSet.getAtomSetById(this.getAtomRefs3()); 
+        CMLAtomSet atom3Set = atomSet.getAtomSetById(this.getAtomRefs3());
         CMLTransform3 transform = this.getTransformationToNewAngle(
                 angle, atom3Set);
         moveableSet.transformCartesians(transform);
@@ -260,15 +261,15 @@ public class CMLAngle extends AbstractAngle {
     }
 
     /** applies transformation to reset torsion angle.
-     * 
+     *
      * @param angle
      * @param atomSet to define torsion (could be the molecule)
-     * @param moveableSet set of atoms which can be moved 
-     *   (normally those downstream of the rotatable bond) 
+     * @param moveableSet set of atoms which can be moved
+     *   (normally those downstream of the rotatable bond)
      *   coordinates of these atoms will be altered
      * @exception CMLRuntimeException bad value for angle
      */
-    void adjustCoordinates(CMLAtomSet atomSet, CMLAtomSet moveableSet) 
+    void adjustCoordinates(CMLAtomSet atomSet, CMLAtomSet moveableSet)
         throws CMLRuntimeException {
         if (this.getValue().trim().length() == 0) {
             //
@@ -277,7 +278,7 @@ public class CMLAngle extends AbstractAngle {
             if (!Double.isNaN(d)) {
                 Angle angle = new Angle(d, Angle.Units.DEGREES);
                 // make sure there are exactly 3 atoms in order
-                CMLAtomSet atom3Set = atomSet.getAtomSetById(this.getAtomRefs3()); 
+                CMLAtomSet atom3Set = atomSet.getAtomSetById(this.getAtomRefs3());
                 CMLTransform3 transform = this.getTransformationToNewAngle(
                         angle, atom3Set);
                 moveableSet.transformCartesians(transform);
@@ -289,7 +290,7 @@ public class CMLAngle extends AbstractAngle {
      * T1 = translateion of atom2 to origin
      * R = rotation
      * T1' = -T1
-     * 
+     *
      * T = T1' * R * T1
      * @param angle
      * @param atomSet of 3 atoms a1 - a2 - a3
@@ -324,14 +325,14 @@ public class CMLAngle extends AbstractAngle {
         transform = t1prime.concatenate(transform);
         return new CMLTransform3(transform);
     }
-    
+
     /** set atomRefs3 attribute.
-     * 
+     *
      * @param atom0
      * @param atom1
      * @param atom2
      */
-    public void setAtomRefs3( 
+    public void setAtomRefs3(
             CMLAtom atom0, CMLAtom atom1, CMLAtom atom2) {
             this.setAtomRefs3(
                 new String[]{
@@ -340,7 +341,7 @@ public class CMLAngle extends AbstractAngle {
                     atom2.getId()
                 });
     }
-    
+
     /** writes angles to an XHTML table.
      * columns are atom1.label atom2.label atom3.label angle in deg
      * @param w writer to output
@@ -386,9 +387,9 @@ public class CMLAngle extends AbstractAngle {
             w.write("</table>\n");
         }
     }
-    
+
     /** get string.
-     * 
+     *
      * @return the string
      */
     public String getString() {

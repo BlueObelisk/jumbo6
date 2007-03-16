@@ -8,6 +8,7 @@ import java.net.URL;
 import nu.xom.Element;
 
 import org.xmlcml.cml.base.BaseTest;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -75,7 +76,13 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
 	/** cml comp dictionary */
 	public final static String CML_COMP_DICT = "cmlComp";
 
-	protected CMLBuilder builder = new CMLBuilder();
+	protected CMLBuilder builder = null;
+
+	/** construct.
+	 */
+	public AbstractTest() {
+		builder = new CMLBuilder();
+	}
 
     /** convenience method to parse test string.
      * 
@@ -85,7 +92,7 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
     protected Element parseValidString(String s) {
         Element element = null;
         if (s == null) {
-        	throw new CMLRuntimeException("NULL VALID STRING");
+        	throw new CMLRuntimeException("NULL VALID JAVA_STRING");
         }
         try {
             element = new CMLBuilder().parseString(s);

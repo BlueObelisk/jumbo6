@@ -292,7 +292,7 @@ class InlineAtom implements CMLConstants {
                 i += idx+1;
 
             } else {
-                throw new CMLRuntimeException("bad qual: "+qqq+"/"+i);
+                throw new CMLRuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
         System.out.println("AQ:"+this.fullString());
@@ -455,7 +455,7 @@ class InlineBond implements CMLConstants {
             } else if (qqq.startsWith(S_COMMA)) {
                 i += 1;
             } else {
-                throw new CMLRuntimeException("bad qual: "+qqq+"/"+i);
+                throw new CMLRuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
         System.out.println("BQ"+this.fullString());
@@ -481,7 +481,7 @@ class InlineBond implements CMLConstants {
     }
 
     void debug() {
-        System.out.println("BOND: "+order+"/"+length+"/"+angle+"/"+torsion);
+        System.out.println("BOND: "+order+S_SLASH+length+S_SLASH+angle+S_SLASH+torsion);
     }
     /** get string.
      * @return exact lexical

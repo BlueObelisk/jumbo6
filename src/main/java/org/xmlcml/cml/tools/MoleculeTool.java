@@ -63,6 +63,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 public class MoleculeTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
+	/** */
 	public static String metalLigandDictRef = "jumbo:metalLigand";
 
 	CMLMolecule molecule;
@@ -84,9 +85,11 @@ public class MoleculeTool extends AbstractTool {
 	public CMLMolecule getMolecule() {
 		return molecule;
 	}
-	
-	
-	
+
+	/** get charge.
+	 * 
+	 * @return charge
+	 */
 	public int getFormalCharge() {
 		int formalCharge = 0;
 		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", X_CML);
@@ -96,6 +99,10 @@ public class MoleculeTool extends AbstractTool {
 		return formalCharge;
 	}
 	
+	/** get charged atoms.
+	 * 
+	 * @return atoms
+	 */
 	public List<CMLAtom> getChargedAtoms() {
 		List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
 		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", X_CML);
@@ -1310,10 +1317,8 @@ public class MoleculeTool extends AbstractTool {
 	 * descendant atoms.
 	 *
 	 * @param bond
-	 * @param atom
-	 *            defining side of bond
-	 * @throws CMLException
-	 *             atom is not in bond
+	 * @param atom defining side of bond
+	 * @throws CMLRuntimeException atom is not in bond
 	 * @return atomSet of downstream atoms
 	 */
 	public CMLAtomSet getDownstreamAtoms(CMLBond bond, CMLAtom atom) {
@@ -1334,7 +1339,7 @@ public class MoleculeTool extends AbstractTool {
 	 * of a fragment in a molecule
 	 *
 	 * @param suffix
-	 * @throws CMLException
+	 * @throws CMLRuntimeException
 	 */
 	public void addSuffixToAtomIDs(String suffix) {
 		for (CMLAtom atom : molecule.getAtoms()) {
@@ -1358,11 +1363,11 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 
-	 /* Traverses all non-H atoms and contracts the hydrogens on each.
+	 /** Traverses all non-H atoms and contracts the hydrogens on each.
 	  * Can control whether H with stereogenic bonds are contracted or not.
 	 *
 	 * @param control
-	 * @throws CMLException
+	 * @param contractStereoH
 	 */
 	public void contractExplicitHydrogens(HydrogenControl control, boolean contractStereoH) {
 		if (molecule.isMoleculeContainer()) {
@@ -1868,11 +1873,9 @@ public class MoleculeTool extends AbstractTool {
 	 * empties the added molecule of elements and copies them
 	 * to this.molecule and then detaches the addedMolecule
 	 * @param addedMolecule to be joined
-	 * @param existingMolecule
 	 * @param takeAtomWithLowestId
 	 */
-	public void addMoleculeTo(CMLMolecule addedMolecule,
-			boolean takeAtomWithLowestId) {
+	public void addMoleculeTo(CMLMolecule addedMolecule, boolean takeAtomWithLowestId) {
 
 		molecule.getOrCreateAtomArray();
 		// bonds must be done first as atom.detach() destroys bonds
@@ -2138,7 +2141,11 @@ public class MoleculeTool extends AbstractTool {
 		return map;
 	}
 	
-
+	/** add atoms.
+	 * 
+	 * @param mol
+	 * @param metalAtomAndBondMap
+	 */
 	public static void addMetalAtomsAndBonds(CMLMolecule mol, Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap) {
 		Entry<List<CMLAtom>, List<CMLBond>> entry = metalAtomAndBondMap.entrySet().iterator().next();
 		CMLAtomArray atomArray = mol.getAtomArray();

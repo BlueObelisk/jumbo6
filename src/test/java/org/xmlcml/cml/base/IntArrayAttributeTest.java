@@ -13,9 +13,9 @@ import org.xmlcml.euclid.test.IntTest;
  */
 public class IntArrayAttributeTest extends AttributeBaseTest {
 
-    IntArrayAttribute daa1;
+    IntArraySTAttribute daa1;
 
-    IntArrayAttribute daa2;
+    IntArraySTAttribute daa2;
 
     /**
      * setup.
@@ -25,11 +25,11 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new IntArrayAttribute(new CMLAttribute("foo"), " 1   3  ");
+        daa1 = new IntArraySTAttribute(new CMLAttribute("foo"), " 1   3  ");
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntArrayAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.IntArraySTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -39,7 +39,7 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.IntArrayAttribute.setCMLValue(String)'
+     * 'org.xmlcml.cml.base.IntArraySTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueString() {
@@ -51,12 +51,12 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.IntArrayAttribute.IntArrayAttribute(IntArrayAttribute)'
+     * 'org.xmlcml.cml.base.IntArraySTAttribute.IntArrayAttribute(IntArraySTAttribute)'
      */
     @Test
     public void testIntArrayAttributeIntArrayAttribute() {
         daa1.setCMLValue("3  5");
-        daa2 = new IntArrayAttribute(daa1);
+        daa2 = new IntArraySTAttribute(daa1);
         int[] dd = (int[]) daa2.getCMLValue();
         IntTest.assertEquals("get CMLValue", new int[] { 3, 5 }, dd);
 
@@ -64,7 +64,7 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.IntArrayAttribute.setCMLValue(int[])'
+     * 'org.xmlcml.cml.base.IntArraySTAttribute.setCMLValue(int[])'
      */
     @Test
     public void testSetCMLValueIntArray() {
@@ -73,7 +73,7 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntArrayAttribute.checkValue(int[])'
+     * Test method for 'org.xmlcml.cml.base.IntArraySTAttribute.checkValue(int[])'
      */
     @Test
     public void testCheckValue() {
@@ -82,27 +82,27 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntArrayAttribute.split(String,
+     * Test method for 'org.xmlcml.cml.base.IntArraySTAttribute.split(String,
      * String)'
      */
     @Test
     public void testSplit() {
-        int[] dd = IntArrayAttribute.split("1 3 5", S_SPACE);
+        int[] dd = IntArraySTAttribute.split("1 3 5", S_SPACE);
         Assert.assertEquals("split", 3, dd.length);
         IntTest.assertEquals("split", new int[] { 1, 3, 5 }, dd);
-        dd = IntArrayAttribute.split("7 3 5", null);
+        dd = IntArraySTAttribute.split("7 3 5", null);
         Assert.assertEquals("split", 3, dd.length);
         IntTest.assertEquals("split", new int[] { 7, 3, 5 }, dd);
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntArrayAttribute.getIntArray()'
+     * Test method for 'org.xmlcml.cml.base.IntArraySTAttribute.getIntArray()'
      */
     @Test
     public void testGetIntArray() {
         daa1.setCMLValue(new int[] { 5, 7 });
         IntTest.assertEquals("get Value", new int[] { 5, 7 }, daa1
-                .getIntegerArray());
+                .getIntArray());
     }
 
 }

@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.interfacex.Indexable;
+import org.xmlcml.cml.map.IndexableListManager;
 
 
 /**
@@ -17,7 +19,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 public class IndexableListManagerTest extends AbstractTest {
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#IndexableListManager(org.xmlcml.cml.element.IndexableList)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#IndexableListManager(org.xmlcml.cml.element.IndexableList)}.
 	 */
 	@Test
 	public void testIndexableListManager() {
@@ -51,7 +53,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#createFrom(java.net.URL, java.lang.Class)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#createFrom(java.net.URL, java.lang.Class)}.
 	 */
 	@Test
 	@Ignore
@@ -60,7 +62,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#getIndex()}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#getIndex()}.
 	 */
 	@Test
 	public void testGetIndex() {
@@ -68,7 +70,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#add(org.xmlcml.cml.element.Indexable)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#add(org.xmlcml.cml.interfacex.Indexable)}.
 	 */
 	@Test
 	public void testAdd() {
@@ -108,7 +110,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#remove(org.xmlcml.cml.element.Indexable)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#remove(org.xmlcml.cml.interfacex.Indexable)}.
 	 */
 	@Test
 	public void testRemoveIndexable() {
@@ -146,7 +148,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.IndexableListManager#getById(java.lang.String)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#getById(java.lang.String)}.
 	 */
 	@Test
 	public void testGetById() {

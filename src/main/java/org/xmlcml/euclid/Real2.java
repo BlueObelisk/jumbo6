@@ -323,7 +323,7 @@ public class Real2 implements EuclidConstants {
             double dista = newPoints[1].subtract(repelPoint).getLength();
             double distb = newPoints[nPoints - 2].subtract(repelPoint)
                     .getLength();
-            // System.out.println(""+dista+"/"+distb+"/"+repelPoint+"/"+newPoints[1]+"/"+newPoints[nPoints-2]);
+            // System.out.println(""+dista+S_SLASH+distb+"/"+repelPoint+"/"+newPoints[1]+"/"+newPoints[nPoints-2]);
             if (dista > distb) {
                 // logger.info("SWAP");
                 center = center0;

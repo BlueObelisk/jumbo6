@@ -13,8 +13,11 @@ import nu.xom.ParsingException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.interfacex.GenericDictionary;
+import org.xmlcml.cml.map.DictionaryMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -184,7 +187,7 @@ public class CMLDictionaryTest extends AbstractTest {
 		Map<String, GenericDictionary> dictionaryMap = null;
 		try {
 			dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE
-					+ U_S + CATALOG_XML));
+					+ U_S + CATALOG_XML), new CMLDictionary());
 		} catch (CMLRuntimeException e) {
 			Assert.fail("should not throw " + e);
 		} catch (IOException e) {
@@ -202,7 +205,7 @@ public class CMLDictionaryTest extends AbstractTest {
 		DictionaryMap dictionaryMap = null;
 		try {
 			dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE
-					+ U_S + CATALOG_XML));
+					+ U_S + CATALOG_XML), new CMLDictionary());
 		} catch (IOException e) {
 			Assert.fail("should not throw " + e);
 		}
@@ -222,7 +225,7 @@ public class CMLDictionaryTest extends AbstractTest {
 		DictionaryMap dictionaryMap = null;
 		try {
 			dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE
-					+ U_S + CATALOG_XML));
+					+ U_S + CATALOG_XML), new CMLDictionary());
 		} catch (IOException e) {
 			Assert.fail("should not throw " + e);
 		}

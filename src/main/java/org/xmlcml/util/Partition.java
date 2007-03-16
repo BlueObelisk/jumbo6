@@ -3,6 +3,11 @@ package org.xmlcml.util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author pm286
+ *
+ */
 public class Partition {
 	/**
 	 * returns all the ways the integer provided can be divided
@@ -17,6 +22,7 @@ public class Partition {
 	 * 5
 	 * 
 	 * @param n
+	 * @return list
 	 */
 	public static List<List<Integer>> partition(int n) {
 		List<List<Integer>> partitionList = new ArrayList<List<Integer>>();
@@ -42,6 +48,10 @@ public class Partition {
 		return partitionList;
 	}
 
+	/** main.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		List<List<Integer>> partitionList = partition(5);
 		for (List<Integer> partition : partitionList) {

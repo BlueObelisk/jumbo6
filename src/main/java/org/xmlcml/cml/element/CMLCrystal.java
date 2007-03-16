@@ -18,15 +18,15 @@ import org.xmlcml.euclid.Transform3;
 
 /**
  * user-modifiable class supporting crystal.
- * 
+ *
  * @author pmr
- * 
+ *
  */
 public class CMLCrystal extends AbstractCrystal {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
    /**
      * crystal systems.
      */
@@ -56,7 +56,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * lattice centering.
-     * 
+     *
      */
     public enum Centering {
         /** primitive */
@@ -126,7 +126,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * constructor.
-     * 
+     *
      * @param old
      */
     public CMLCrystal(CMLCrystal old) {
@@ -136,7 +136,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -146,19 +146,19 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLCrystal
      */
-    public static CMLCrystal makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLCrystal();
 
     }
 
     /**
      * constructor from lattice.
-     * 
+     *
      * @param lattice
      *            (contains 3 lattice vectors)
      */
@@ -169,7 +169,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * constructor from lengths and angles. units are angstrom and degrees must
      * be ordered a,b,c,alpha, beta, gamma
-     * 
+     *
      * @param params
      *            3 length and 3 angles
      * @exception CMLRuntimeException
@@ -182,7 +182,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * constructor from lengths and angles. units are angstrom and degrees must
      * be ordered a,b,c,alpha, beta, gamma
-     * 
+     *
      * @param scalars
      *            3 length and 3 angles
      * @exception CMLRuntimeException
@@ -199,7 +199,7 @@ public class CMLCrystal extends AbstractCrystal {
     }
 
     /** get the crystallographic orthogonalization matrix as a transform
-     * 
+     *
      * @see #getOrthogonalizationMatrix()
      * @return the orthogonalization matrix as a transform
      */
@@ -214,11 +214,11 @@ public class CMLCrystal extends AbstractCrystal {
         return t;
     }
     /** get the crystallographic orthogonalization matrix.
-     * 
+     *
      * see Rollett "Computing Methods in Crystallography" Pergamon 1965 p.23 the
      * matrix has zeros above the diagonal: a*sin(beta)*sin(gamma*) 0.0 0.0
      * -a*sin(beta)*cos(gamma*) b*sin(alpha) 0.0 a*cos(beta) b*cos(alpha) c
-     * 
+     *
      * @return the orthogonalization matrix
      * @throws CMLException
      */
@@ -252,9 +252,9 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * set cell lengths and angles.
-     * 
+     *
      * NO DEFAULT VALUES.
-     * 
+     *
      * @param a
      *            the a cell length (ANGSTROM)
      * @param b
@@ -267,7 +267,7 @@ public class CMLCrystal extends AbstractCrystal {
      *            the beta cell angle (DEGREES)
      * @param gamma
      *            the gamma cell angle (DEGREES)
-     * 
+     *
      * @throws CMLException
      *             corrupted number of cell parameters
      */
@@ -285,11 +285,11 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * set cell lengths and angles. omits error
-     * 
+     *
      * @param params
      *            (length 6: 3 lengths ANGSTROM and three angles DEGREES - IN
      *            ORDER)
-     * 
+     *
      * @throws CMLException
      *             corrupted number of cell parameters
      */
@@ -299,15 +299,15 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * set cell lengths and angles.
-     * 
+     *
      * NO DEFAULT VALUES.
-     * 
+     *
      * @param params
      *            (length 6: 3 lengths ANGSTROM and three angles DEGREES - IN
      *            ORDER)
      * @param error
      *            if not null errors in lengths and angles in same units
-     * 
+     *
      * @throws CMLException
      *             corrupted number of cell parameters
      */
@@ -343,7 +343,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * get cell lengths and angles as list of CMLScalars. if cellParameters are
      * used, take values from them but do not update XOM
-     * 
+     *
      * @deprecated - use CMLCellParameters instead
      * @throws CMLRuntimeException
      *             corrupted number of cell parameters
@@ -378,7 +378,7 @@ public class CMLCrystal extends AbstractCrystal {
      * get cell lengths and angles as CMLCellParameters. if XOM has
      * cellParameter children copy them else create from CMLScalar else return
      * empty list
-     * 
+     *
      * @throws CMLRuntimeException
      *             corrupted number of cell parameters
      * @return the parameters in order (null if not set)
@@ -426,9 +426,9 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * get cell lengths and angles as array of doubles.
-     * 
+     *
      * Values ARE IN ANGSTROM and DEGREES.
-     * 
+     *
      * @throws CMLException
      *             corrupted number of cell parameters
      * @return double[] the parameters in order (null if not set)
@@ -449,7 +449,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * adds symmetry operator
-     * 
+     *
      * @param so
      *            The SymmetryOp to add
      */
@@ -466,24 +466,24 @@ public class CMLCrystal extends AbstractCrystal {
      * returns an array of the SymmetryOps describing the symmetry operators or
      * null if there are no symmetry operators
      */
-    /*--        	
+    /*--
      public List<SymmetryOp> getSymmetryOperators() {
      //System.out.println ("nu sym ops " + symOps.size ());
      if ((symOps != null) && (symOps.size () != 0)) {
      List<SymmetryOp> ops = new ArrayList<SymmetryOp>();
-     
+
      return (symOps(ops));
      } else {
      return null;
      }
      }
-     
+
      --*/
 
     /**
      * get lattice containing latticeVectors. requires cell parameters to be
      * set.
-     * 
+     *
      * @return the lattice.
      */
     public CMLLattice getLattice() {
@@ -518,7 +518,7 @@ public class CMLCrystal extends AbstractCrystal {
      * get cell volume. use current cell parameters. V=
      * abc(1-cos^2alpha-cos^2beta-cos^2gamma + 2cos alpha cos beta cos
      * gamma)^(1/2)
-     * 
+     *
      * @return volume
      */
     public double getCellVolume() {
@@ -545,7 +545,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * get cell volume. use scalar triple product of current lattice vectors V =
      * aVect * bVect . cVect
-     * 
+     *
      * @return volume
      */
     public double getCellVolume1() {
@@ -562,7 +562,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * get cell volume. use determinant of orthogonalization matrix V =
      * det(orthMat)
-     * 
+     *
      * @return volume
      */
     public double getCellVolume2() {
@@ -578,7 +578,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * gets volume of reciprocal cell. scaling factor is 1.0 (i.e.
      * wavelength-independent)
-     * 
+     *
      * @return volume
      */
     public double getReciprocalCellVolume() {
@@ -587,7 +587,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * get reciprocal cell scaling factor is 1.0 (i.e. wavelength-independent)
-     * 
+     *
      * @return the cell.
      */
     public CMLCrystal getReciprocalCell() {
@@ -599,7 +599,7 @@ public class CMLCrystal extends AbstractCrystal {
     /**
      * get reciprocal lattice scaling factor is 1.0 (i.e.
      * wavelength-independent)
-     * 
+     *
      * @return the lattice
      */
     public CMLLattice getReciprocalLattice() {
@@ -636,7 +636,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * create a cell parameter scalar from its values. omits error
-     * 
+     *
      * @param dictRef
      * @param param
      * @param unitRef
@@ -649,7 +649,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * create a cell parameter scalar from its values.
-     * 
+     *
      * @param dictRef
      * @param param
      * @param unitRef
@@ -672,7 +672,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * gets primitive cell. finds Centering; if not UNKNOWN or P applies it
-     * 
+     *
      * @return new lattice
      */
     public CMLLattice getPrimitiveLattice() {
@@ -684,7 +684,7 @@ public class CMLCrystal extends AbstractCrystal {
 
     /**
      * gets primitive cell.
-     * 
+     *
      * @param centering
      * @return new lattice
      */
@@ -751,7 +751,7 @@ public class CMLCrystal extends AbstractCrystal {
     }
 
     /** convenience method to get a single crystal descendant of an element.
-     * 
+     *
      * @param element to search under
      * @return the <crystal>
      * @throws CMLRuntimeException if 0 or >1 nodes

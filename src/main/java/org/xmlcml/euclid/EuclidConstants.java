@@ -130,6 +130,9 @@ public interface EuclidConstants {
 
     
     /** constant */
+    String S_BACKSLASH = "\\";
+    
+    /** constant */
     String S_COLON = ":";
 
     /** constant */
@@ -148,7 +151,7 @@ public interface EuclidConstants {
     String S_SLASH = "/";
 
     /** constant */
-    String S_WHITEREGEX = "\\s+"; // java regex for any whitespace
+    String S_WHITEREGEX = S_BACKSLASH+"s+"; // java regex for any whitespace
 
     /** constant */
     String S_TAB = "\t";
@@ -249,8 +252,6 @@ public interface EuclidConstants {
     /** constant */
     String S_PIPE = "|";
 
-    /** constant */
-    String S_BACKSLASH = "\\";
 
     /** constant */
     String NONWHITEPUNC = S_LBRAK + S_RBRAK + S_SHRIEK + S_QUOT + S_POUND

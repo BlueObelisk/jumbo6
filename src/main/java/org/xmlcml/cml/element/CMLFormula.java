@@ -22,6 +22,8 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.DoubleTool;
@@ -289,7 +291,7 @@ public class CMLFormula extends AbstractFormula {
      *            parent of element to be constructed (ignored by default)
      * @return CMLFormula
      */
-    public static CMLFormula makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLFormula();
     }
 
@@ -1789,17 +1791,9 @@ public class CMLFormula extends AbstractFormula {
         CMLElements<CMLFormula> formulas = this.getFormulaElements();
         if (formulas.size() > 0) {
             for (CMLFormula formula : formulas) {
-            	double count = formula.getCount();
-            	w.write(S_LBRAK);
-            	formula.writeHTML(w);
-            	w.write(S_RBRAK);
-            	String cStr = String.valueOf(count);
-            	if (cStr.endsWith(".0")) {
-            		cStr = cStr.substring(0, cStr.length()-2);
-            	}
-            	if (!cStr.equals("1")) {
-            		w.write("<sub>"+cStr+"</sub>");
-            	}
+                w.write(S_LBRAK);
+                formula.writeHTML(w);
+                w.write(S_RBRAK);
             }
         } else {
             String[] elementTypes = this.getElementTypes();

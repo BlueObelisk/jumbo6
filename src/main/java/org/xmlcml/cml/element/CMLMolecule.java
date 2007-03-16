@@ -12,12 +12,14 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -32,9 +34,9 @@ import org.xmlcml.euclid.Vector3;
  * Class representing the CML molecule element, this class can be used to
  * retrieve and manipulate the CMLAtom and CMLBond elements that belong to this
  * molecule as well as perform simple calculations such as...
- * 
+ *
  * @author Peter Murray-Rust, Ramin Ghorashi (2005)
- * 
+ *
  */
 public class CMLMolecule extends AbstractMolecule implements Indexable {
 
@@ -97,9 +99,9 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get corresponding molecule
-	 * 
+	 *
 	 * uses parent molecule or grandparent // should be using XPath
-	 * 
+	 *
 	 * @param elem
 	 * @return the molecule (null if none)
 	 */
@@ -121,12 +123,12 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * create new instance in context of parent, overridable by subclasses.
-	 * 
+	 *
 	 * @param parent
 	 *            parent of element to be constructed (ignored by default)
 	 * @return CMLBond
 	 */
-	public static CMLMolecule makeElementInContext(Element parent) {
+	public CMLElement makeElementInContext(Element parent) {
 		return new CMLMolecule();
 	}
 
@@ -142,7 +144,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * normal constructor.
-	 * 
+	 *
 	 */
 	public CMLMolecule() {
 		super();
@@ -161,7 +163,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * copy constructor.
-	 * 
+	 *
 	 * @param old
 	 *            molcule to copy
 	 */
@@ -206,10 +208,10 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 
 	/** add atom.
-	 * 
+	 *
 	 * only if in same molecule. If already added returns with no-op
-	 * cannot add to child molecule. However if 'this' is a child of 
-	 * a CMLMolecule throws Exception 
+	 * cannot add to child molecule. However if 'this' is a child of
+	 * a CMLMolecule throws Exception
 	 * @param atom
 	 * @throws CMLRuntimeException
 	 *             null, non-uniqueID, etc.
@@ -303,12 +305,12 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/** remove atomArray.
 	 * also removes bondArray
-	 * 
+	 *
 	 */
 	public void removeAtomArray() {
 		CMLElements<CMLAtomArray> atomArrays= this.getAtomArrayElements();
-		CMLAtomArray atomArray = 
-			(atomArrays.size() == 0) ? null : atomArrays.get(0); 
+		CMLAtomArray atomArray =
+			(atomArrays.size() == 0) ? null : atomArrays.get(0);
 		if (atomArray != null) {
 			super.removeChild(atomArray);
 			this.removeBondArray();
@@ -327,12 +329,12 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 	/** remove bondArray.
-	 * 
+	 *
 	 */
 	public void removeBondArray() {
 		CMLElements<CMLBondArray> bondArrays= this.getBondArrayElements();
-		CMLBondArray bondArray = 
-			(bondArrays.size() == 0) ? null : bondArrays.get(0); 
+		CMLBondArray bondArray =
+			(bondArrays.size() == 0) ? null : bondArrays.get(0);
 		if (bondArray != null) {
 			super.removeChild(bondArray);
 		}
@@ -342,7 +344,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 * add bond.
 	 * checks for duplicates ; should be changed to use atoms
 	 * only if in same molecule. If already added returns with no-op
-	 * 
+	 *
 	 * @param bond
 	 * @throws CMLRuntimeException
 	 *             null, non-uniqueID, etc.
@@ -372,7 +374,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/** delete bond.
 	 * recurse through descendants and remove first instance of
 	 * bond (there should only be one)
-	 * 
+	 *
 	 * @param bond
 	 * @return bond deleted
 	 */
@@ -400,7 +402,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 * in this case strips all attributes except ID.
 	 * if children already present adds as sibling
 	 * children
-	 * 
+	 *
 	 * @param newMol
 	 *            the CMLMolecule to append
 	 * @exception CMLException
@@ -409,7 +411,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	public void appendMolecule(CMLMolecule newMol) throws CMLException {
 		Node parent = newMol.getParent();
 		if (parent != null && parent instanceof Document) {
-			Element dummy = new Element("dummy");
+			Element dummy = new Element("m_dummy");
 			((Document)parent).replaceChild(newMol, dummy);
 		}
 		newMol.detach();
@@ -463,7 +465,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/** normalize molecule has a single molecule child.
 	 * transfers children single child molecule to this
 	 * and removes childMolecule.
-	 * Thus 
+	 * Thus
 	 * <molecule id="m1">
 	 *   <molecule id="m2">
 	 *     <atomArray id="a1 a2"/>
@@ -477,7 +479,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 */
 	public void normalizeSingleMoleculeChild() {
 		if (this.getMoleculeCount() == 1) {
-			CMLMolecule childMolecule = (CMLMolecule) 
+			CMLMolecule childMolecule = (CMLMolecule)
 			this.getChildCMLElements(CMLMolecule.TAG).get(0);
 			CMLUtil.transferChildren(childMolecule, this);
 			childMolecule.detach();
@@ -535,7 +537,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * Appends a string to the ids for the molecule, atoms and bonds. It also
 	 * updates the bond refs to point to the amended atom ids.
-	 * 
+	 *
 	 * @param s
 	 *            The string to be appended to all of the ids
 	 */
@@ -575,7 +577,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * Calculate formula.
-	 * 
+	 *
 	 * @param control
 	 *            USE_EXPLICIT_HYDROGENS (do not use hydrogenCount) OR
 	 *            USE_HYDROGEN_COUNT (use hydrogenCount and ignore explicit H)
@@ -599,7 +601,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 //	/**
 //	* clear wedge and hatch bonds.
-//	* 
+//	*
 //	* required if 2DCoords have been recalculated)
 //	*/
 //	public void clearWedgeHatchBonds() {
@@ -622,7 +624,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * copy node .
-	 * 
+	 *
 	 * @return Node
 	 */
 	public Node copy() {
@@ -635,7 +637,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * creates and adds cartesian coordinates from crystal and fractional
 	 * coordinates.
-	 * 
+	 *
 	 * @param crystal
 	 */
 	public void createCartesiansFromFractionals(CMLCrystal crystal) {
@@ -650,7 +652,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * creates and adds cartesian coordinates from orthogonalizationMatrix and
 	 * fractional coordinates.
-	 * 
+	 *
 	 * @param orthogonalMatrix
 	 */
 	public void createCartesiansFromFractionals(
@@ -667,7 +669,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * creates and adds cartesian coordinates from orthogonalizationMatrix and
 	 * fractional coordinates.
-	 * 
+	 *
 	 * @param orthogonalMatrix
 	 * @throws CMLException
 	 */
@@ -687,7 +689,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * will process repeat attribute.
-	 * 
+	 *
 	 * @param parent
 	 *            element
 	 */
@@ -698,7 +700,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 		// this also updates the ligands
 //		indexBonds();
 //		updateLigands();
-		RepeatAttribute.process(this);
+//		RepeatAttribute.process(this);
 	}
 
 	void indexAtoms() {
@@ -741,7 +743,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * finds angle in XOM corresponding to 3 atoms.
-	 * 
+	 *
 	 * @param at0
 	 *            first atom
 	 * @param at1
@@ -779,13 +781,13 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 * Convenience method for accessing i'th CMLAtom. FRAGILE. Used to iterate
 	 * through the atoms of this molecule; however the list is subject to change
 	 * and could cause unexpected results.
-	 * 
+	 *
 	 * Use getAtoms to return a typed list of all the atoms in this molecule.
-	 * 
+	 *
 	 * @param i
 	 *            the index of the atoms to access
 	 * @return the bond, or null if index is out of bounds.
-	 * 
+	 *
 	 */
 	public CMLAtom getAtom(int i) {
 		List<CMLAtom> atoms = this.getAtoms();
@@ -794,7 +796,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets atomArray child.
-	 * 
+	 *
 	 * @return null if does not exist
 	 */
 	public CMLAtomArray getAtomArray() {
@@ -804,7 +806,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/** gets atomMap.
 	 * if molecule has single AtomArray child returns its map
 	 * if molecule has submolecules returns null;
-	 * @return null if 
+	 * @return null if
 	 */
 	public Map<String, CMLAtom> getAtomMap() {
 		Map<String, CMLAtom> map = null;
@@ -819,7 +821,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/** gets bondMap.
 	 * if molecule has single BondArray child returns its map
 	 * if molecule has submolecules returns null;
-	 * @return null if 
+	 * @return null if
 	 */
 	public Map<String, CMLBond> getBondMap() {
 		Map<String, CMLBond> map = null;
@@ -834,7 +836,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/** gets bondIdMap.
 	 * if molecule has single BondArray child returns its map
 	 * if molecule has submolecules returns null;
-	 * @return null if 
+	 * @return null if
 	 */
 	public Map<String, CMLBond> getBondIdMap() {
 		Map<String, CMLBond> map = null;
@@ -848,7 +850,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets atom by id.
-	 * 
+	 *
 	 * @param id
 	 * @return the atom or null
 	 */
@@ -875,7 +877,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets atom by id.
-	 * 
+	 *
 	 * @param id
 	 * @return the atom or null
 	 */
@@ -937,7 +939,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * does the CMLMolecule contain atoms that are too close together?
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public boolean hasCloseContacts() {
@@ -949,7 +951,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return map where each entry corresponds to 2 atoms involved in a close contact.
 	 */
 	public Map<CMLAtom, CMLAtom> getCloseContacts() {
@@ -970,7 +972,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets bond by id
-	 * 
+	 *
 	 * @param id
 	 * @return the bond or null
 	 */
@@ -981,7 +983,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get bond for atom ids
-	 * 
+	 *
 	 * @param id1
 	 * @param id2
 	 * @return bond or null
@@ -995,7 +997,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * gets atoms by id. can be used to resolve attributes such as atomRefs2,
 	 * atomRefs, etc.
-	 * 
+	 *
 	 * @param ids
 	 *            (if null returns zero length list)
 	 * @return list of atoms (zero length if none or if has child molecules)
@@ -1017,9 +1019,9 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets atom by its label attribute.
-	 * 
+	 *
 	 * if there are duplicate labels, behaviour is undefined
-	 * 
+	 *
 	 * @param label
 	 *            (attribute for atom) should be unique
 	 * @return the atom or null if not found
@@ -1044,7 +1046,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * Gets atom count.
-	 * 
+	 *
 	 * @return int the atom count
 	 */
 	public int getAtomCount() {
@@ -1053,7 +1055,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get atoms.
-	 * 
+	 *
 	 * @return the atoms (none returns emptyList)
 	 */
 	public List<CMLAtom> getAtoms() {
@@ -1083,7 +1085,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get atomSet for all atoms.
-	 * 
+	 *
 	 * @return the atomSet
 	 */
 	public CMLAtomSet getAtomSet() {
@@ -1092,7 +1094,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * calculates formula for molecule or each molecule child.
-	 * 
+	 *
 	 * @param control
 	 *            treatment of hydrogens
 	 */
@@ -1111,7 +1113,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get bond connecting 2 atoms.
-	 * 
+	 *
 	 * @param a1
 	 *            first atom
 	 * @param a2
@@ -1133,7 +1135,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets bondArray child.
-	 * 
+	 *
 	 * @return null if does not exist
 	 */
 	public CMLBondArray getBondArray() {
@@ -1142,7 +1144,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * Gets the number of bonds in this molecule
-	 * 
+	 *
 	 * @return int the Bond count
 	 */
 	public int getBondCount() {
@@ -1152,7 +1154,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets a typed list containing all the bonds in this molecule
-	 * 
+	 *
 	 * @return a typed list
 	 */
 	public List<CMLBond> getBonds() {
@@ -1168,7 +1170,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * Calculate formalCharge from atomCharges.
-	 * 
+	 *
 	 * @param control
 	 * @return calculated formal charge
 	 * @throws CMLRuntimeException
@@ -1185,7 +1187,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get formula.
-	 * 
+	 *
 	 * @param control
 	 * @return calculated formula
 	 * @throws CMLRuntimeException
@@ -1196,7 +1198,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * calculate 2D centroid.
-	 * 
+	 *
 	 * @return centroid of 2D coords or null
 	 */
 	public Real2 calculateCentroid2D() {
@@ -1205,7 +1207,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 	/** calculate 3D centroid.
-	 * 
+	 *
 	 * @param type CARTESIAN or FRACTIONAL
 	 * @return centroid of 3D coords or null
 	 */
@@ -1226,7 +1228,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * identify double bonds.
-	 * 
+	 *
 	 * @return the bonds (zero length if none)
 	 */
 	public List<CMLBond> getDoubleBonds() {
@@ -1242,10 +1244,10 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get id mapping between molecules of equal size.
-	 * 
+	 *
 	 * default is to assume atoms in same order. map is owned by this document
 	 * but is not appended to molecule.
-	 * 
+	 *
 	 * @param mol2
 	 *            to compare
 	 * @exception CMLRuntimeException
@@ -1282,10 +1284,10 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 	/** get matched atom. does not work with sets
-	 * 
+	 *
 	 * if atom id="a1" and map hass a link to="a1" from="b1" and toFrom =
 	 * Direction.FROM then will return atom id="b1" in resultMolecule
-	 * 
+	 *
 	 * @param atom0
 	 *            atom to search with. Its id must occur in a single toFrom
 	 *            attribute
@@ -1308,7 +1310,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 //	/**
 //	* gets nearest ancestor molecule element.
-//	* 
+//	*
 //	* @param element
 //	*            descendant of molecule
 //	* @return the owner molecule or null if not found
@@ -1330,7 +1332,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get count of daughter molecules. further descendants are not counted.
-	 * 
+	 *
 	 * @return the count ; 0 if no molecule children
 	 */
 	public int getMoleculeCount() {
@@ -1338,7 +1340,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 //	/** get variable in repeat attribute.
-//	* 
+//	*
 //	* @return the name of the variable or null
 //	*/
 //	public String getRepeatName() {
@@ -1346,7 +1348,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 //	}
 
 //	/** get the starting index.
-//	* 
+//	*
 //	* @return the start
 //	*/
 //	public int getRepeatStart() {
@@ -1361,7 +1363,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 //	}
 
 //	/** get end of repeat (inclusive).
-//	* 
+//	*
 //	* @return the index
 //	*/
 //	public int getRepeatEnd() {
@@ -1389,7 +1391,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/** get molecule or its descendants. i.e. the actual molecules rather than
 	 * the container
-	 * 
+	 *
 	 * @return list of molecules
 	 */
 	public List<CMLMolecule> getDescendantsOrMolecule() {
@@ -1435,9 +1437,9 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets vector of 2D coordinates.
-	 * 
+	 *
 	 * all atoms must have coordinates
-	 * 
+	 *
 	 * @return the vector (empty if missing 2D coordinates)
 	 */
 	public Real2Vector getCoordinates2D() {
@@ -1457,9 +1459,9 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * gets vector of 3D coordinates.
-	 * 
+	 *
 	 * all atoms must have coordinates
-	 * 
+	 *
 	 * @param type
 	 *            CARTESIAN or FRACTIONAL
 	 * @return the vector (null if missing 3D coordinates)
@@ -1472,7 +1474,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * Convenience method for determing if molecule has coordinates of a given
 	 * type. if hasSubMolecules returns true if any submolecules fit
-	 * 
+	 *
 	 * @param type
 	 *            of coordinates
 	 * @return has coords
@@ -1493,7 +1495,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * determines if this molecule contains child molecules
-	 * 
+	 *
 	 * @return true is this molecule is a container, false otherwise
 	 */
 	public boolean isMoleculeContainer() {
@@ -1504,10 +1506,10 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * scale the coordinates.
-	 * 
+	 *
 	 * this should normally only be done for display purposes so only COORD2 is
 	 * supported
-	 * 
+	 *
 	 * @param scale
 	 *            the scalefactor
 	 */
@@ -1526,7 +1528,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 //	/**throws exception if the contained object is not equal to the other
 //	* contained object. this is a mess! see equals() for atomMatchStrategy.
 //	* compares on attributes and children
-//	* 
+//	*
 //	* @param other
 //	*            the other element (must be of same class)
 //	* @throws CMLException
@@ -1553,14 +1555,14 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * rename AtomIDs in molecule and update atomRefs.
-	 * 
+	 *
 	 * AtomIDs in atoms, and atomRefs are consistently changed.
-	 * 
+	 *
 	 * @param oldIds
 	 *            vector of original IDs
 	 * @param newIds
 	 *            vector of new IDs
-	 * 
+	 *
 	 * @throws CMLException
 	 *             IDs do not correspond, or have duplicates
 	 */
@@ -1605,7 +1607,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * Round the atomCoords to within a multiple of epsilon currently always
 	 * rounds down (e.g. 3.9996 with epsilon = 0.001 => 3.999, not 4)
-	 * 
+	 *
 	 * @param epsilon
 	 * @param coordinateType
 	 */
@@ -1624,7 +1626,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * Sets all bond orders to given value.
-	 * 
+	 *
 	 * @param order
 	 *            must not be null
 	 */
@@ -1642,7 +1644,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 * getOrder and setOrder normalize by default. So this routine
 	 * should only be required immediately after parsing
 	 * values (S->1, D->2, T->3)
-	 * 
+	 *
 	 */
 	public void setNormalizedBondOrders() {
 		List<CMLBond> bonds = this.getBonds();
@@ -1661,6 +1663,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 					bond.setOrder(order);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new CMLRuntimeException("BUG " + e);
 			}
 		}
@@ -1669,7 +1672,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * generate list of transformed molecules. operates on Cartesians; does not
 	 * modify this
-	 * 
+	 *
 	 * @param sym
 	 *            the symmetries
 	 * @return list of molecules
@@ -1685,7 +1688,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * transform 3D Cartesian coordinates. modifies this
-	 * 
+	 *
 	 * @param transform
 	 *            the transformation
 	 */
@@ -1697,7 +1700,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 
 	/** transform 3D Cartesian coordinates. modifies this
-	 * 
+	 *
 	 * @param transform
 	 *            the transformation
 	 */
@@ -1710,7 +1713,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/** generate list of transformed molecules. operates on fractionals; does
 	 * modify Cartesians or modify this
-	 * 
+	 *
 	 * @param sym
 	 *            the symmetries
 	 * @return list of molecules
@@ -1728,7 +1731,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * transform 3D fractional coordinates. modifies this does not affect x3,
 	 * y3, z3 (may need to re-generate cartesians)
-	 * 
+	 *
 	 * @param transform
 	 *            the transformation
 	 */
@@ -1742,7 +1745,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	/**
 	 * transform 3D fractional coordinates. modifies this does not affect x3,
 	 * y3, z3 (may need to re-generate cartesians)
-	 * 
+	 *
 	 * @param transform
 	 *            the transformation
 	 */
@@ -1769,7 +1772,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	}
 	/**
 	 * translate molecule in 2D.
-	 * 
+	 *
 	 * @param delta2
 	 *            add to all 2D coordinates
 	 */
@@ -1784,7 +1787,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * translate molecule in 3D.
-	 * 
+	 *
 	 * @param delta3
 	 *            add to all 3D coordinates
 	 */
@@ -1797,10 +1800,10 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * unlabel all atoms in molecule.
-	 * 
+	 *
 	 * this cannot be reversed. It is mainly for adding labelled fragments to
 	 * build up a molecule
-	 * 
+	 *
 	 */
 	public void unlabelAllAtoms() {
 		for (CMLAtom atom : getAtoms()) {

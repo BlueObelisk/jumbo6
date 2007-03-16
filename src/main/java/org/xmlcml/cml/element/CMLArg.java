@@ -12,13 +12,15 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.Text;
 
+import org.xmlcml.cml.attribute.IdAttribute;
+import org.xmlcml.cml.attribute.RefAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 
 
 /**
- * user-modifiable class supporting arg. 
+ * user-modifiable class supporting arg.
  * There is a lot still being worked out.
  * Too many statics.
  * @author pm286
@@ -27,14 +29,14 @@ public class CMLArg extends AbstractArg {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
     /** start of expandable argument.
      */
     public final static String START_CHARS = S_LCURLY+S_DOLLAR;
     /** end of expandable argument.
      */
     public final static String END_CHARS = S_RCURLY;
-    
+
     /**
      * constructor.
      */
@@ -50,7 +52,7 @@ public class CMLArg extends AbstractArg {
         setInteger(i);
         this.setName(name);
     }
-    
+
     /** create integer argument.
      * adds scalar child.
      * @param name of arg
@@ -62,7 +64,7 @@ public class CMLArg extends AbstractArg {
     }
     /**
      * constructor.
-     * 
+     *
      * @param old
      */
     public CMLArg(CMLArg old) {
@@ -72,7 +74,7 @@ public class CMLArg extends AbstractArg {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -81,28 +83,28 @@ public class CMLArg extends AbstractArg {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLArg
      */
-    public static CMLArg makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLArg();
 
     }
-    
+
     /** inserts arg child.
-     * 
+     *
      * @param parent to hold arg
      * @param arg to add
      * @param position to add att
      * @throws CMLRuntimeException null args or bad position or duplicate argName
      */
-    public static void addArg(CMLElement parent, CMLArg arg, int position) 
+    public static void addArg(CMLElement parent, CMLArg arg, int position)
         throws CMLRuntimeException {
     	// checks
         Elements args = parent.getChildCMLElements(CMLArg.TAG);
-        if (parent == null || arg == null || 
+        if (parent == null || arg == null ||
                 position < 0) {
             throw new CMLRuntimeException("null args or negative position");
         }
@@ -124,7 +126,7 @@ public class CMLArg extends AbstractArg {
     }
 
     /** remove all arg childern from element.
-     * 
+     *
      * @param element to remove args from
      */
     public static void removeArgs(CMLElement element) {
@@ -135,7 +137,7 @@ public class CMLArg extends AbstractArg {
 	        }
     	}
     }
-    
+
     /** substitute arg name by symbol.
      * currently uses _ij_ to represent value of ij.
      * routine recursively descends tree and substitutes all attribute values
@@ -145,14 +147,14 @@ public class CMLArg extends AbstractArg {
         CMLArg.substituteNameByValue(element, new ArrayList<CMLArg>());
     }
 
-//    /** transfers args from one element to another.
-//     * if an arg of name ijk exists on element and toElem
-//     * it is copied from fromElem to toElem
-//     * @param fromElem
-//     * @param toElem
-//     * @exception CMLRuntimeException bad args
-//     */
-    public static void transferArgs(CMLElement fromElem, CMLElement toElem) 
+    /** transfers args from one element to another.
+     * if an arg of name ijk exists on element and toElem
+     * it is copied from fromElem to toElem
+     * @param fromElem
+     * @param toElem
+     * @exception CMLRuntimeException bad args
+     */
+    public static void transferArgs(CMLElement fromElem, CMLElement toElem)
         throws CMLRuntimeException {
         List<CMLArg> fromList = CMLArg.getArgs(fromElem);
         List<CMLArg> toList = CMLArg.getArgs(toElem);
@@ -181,7 +183,7 @@ public class CMLArg extends AbstractArg {
     }
 
     /** gets args from element.
-     * 
+     *
      * @param element
      * @return list of args (empty if none)
      */
@@ -242,7 +244,7 @@ public class CMLArg extends AbstractArg {
             Element childElement = elements.get(j);
             if (childElement instanceof CMLElement) {
                 CMLElement childCMLElement = (CMLElement) childElement;
-                // skip other args of 
+                // skip other args of
                 if (childCMLElement.getLocalName().equals(CMLArg.TAG)) {
                 } else {
                     CMLArg.substituteNameByValue(childCMLElement, newArgList);
@@ -267,9 +269,9 @@ public class CMLArg extends AbstractArg {
     void substituteNameByValue(Attribute att) {
         // do not substitute refs
         if (att instanceof RefAttribute) {
-            
+
         } else {
-            
+
             String value = att.getValue();
             String value1 = value;
             String newValue = this.getValue().trim();
@@ -288,7 +290,7 @@ public class CMLArg extends AbstractArg {
     }
 
     /** get dataType.
-     * if null sets value to dataType of child scalar; 
+     * if null sets value to dataType of child scalar;
      * if scalar is null set to xsd:string
      * @return the dataType
      */
@@ -306,9 +308,9 @@ public class CMLArg extends AbstractArg {
         }
         return dataType;
     }
-    
+
     /** substitutes and evaluates all eval attributes.
-     * 
+     *
      * @param argList
      */
     public void eval(List<CMLArg> argList) {
@@ -371,7 +373,7 @@ public class CMLArg extends AbstractArg {
         if (evalx != null) {
             evalx.detach();
         }
-        
+
     }
 
     /** gets the integer value.
@@ -401,7 +403,7 @@ public class CMLArg extends AbstractArg {
             scalar.setValue(i);
         }
     }
-    
+
     /** gets the string value.
      * requires a child scalar of dataType xsd:string
      * @return string value
@@ -432,7 +434,7 @@ public class CMLArg extends AbstractArg {
             scalar.setXMLContent(s);
         }
     }
-    
+
     /** gets the double value.
      * requires a child scalar of dataType xsd:double
      * @return double value
@@ -460,9 +462,9 @@ public class CMLArg extends AbstractArg {
         }
         this.appendChild(scalar);
     }
-    
+
     /** get the first child scalar if any.
-     * 
+     *
      * @return the scalar
      */
     public CMLScalar getScalar() {
@@ -470,13 +472,13 @@ public class CMLArg extends AbstractArg {
         return (scalars == null || scalars.size() == 0) ?
             null : (CMLScalar) scalars.get(0);
     }
-    
+
     /** process all instances of arg in element.
-     * 
+     *
      * @param element
      */
     public static void processArgs(CMLElement element) {
-        Nodes parameterNameArgs = 
+        Nodes parameterNameArgs =
             element.query(CMLArg.NS+"[@parameterName]", X_CML);
         for (int i = 0; i < parameterNameArgs.size(); i++) {
             CMLArg arg = (CMLArg) parameterNameArgs.get(i);
@@ -484,9 +486,9 @@ public class CMLArg extends AbstractArg {
 //            arg.substituteParameter(element);
         }
     }
-    
+
     /** substitute parameter value through element.
-     * 
+     *
      * @param element to edit
      * @param name of arg (must occur as arg in element)
      * @param value of arg
@@ -495,13 +497,13 @@ public class CMLArg extends AbstractArg {
             CMLElement element, String name, String value) {
         String id = element.getAttributeValue(IdAttribute.NAME);
         CMLArg parameterArg = null;
-        Nodes nameArgs = 
+        Nodes nameArgs =
             element.query(CMLArg.NS+"[@parameterName='"+name+"']", X_CML);
         if (nameArgs.size() == 0) {
         	element.debug("ARG NOT FOUND");
-            throw new CMLRuntimeException("arg not found: "+name+"/"+id);
+            throw new CMLRuntimeException("arg not found: "+name+S_SLASH+id);
         } else if (nameArgs.size() > 1) {
-            throw new CMLRuntimeException("duplicate args: "+name+"/"+id);
+            throw new CMLRuntimeException("duplicate args: "+name+S_SLASH+id);
         } else {
             parameterArg = (CMLArg) nameArgs.get(0);
         }
@@ -527,11 +529,11 @@ public class CMLArg extends AbstractArg {
     }
 
     /** process all arg/@parentAttribute in element.
-     * 
+     *
      * @param element to edit
      */
     public static void substituteParentAttributes(CMLElement element) {
-        Nodes parentAttributeArgs = 
+        Nodes parentAttributeArgs =
             element.query(".//"+CMLArg.NS+"[@parentAttribute]", X_CML);
         for (int i = 0; i < parentAttributeArgs.size(); i++) {
             CMLArg parentAttributeArg = (CMLArg) parentAttributeArgs.get(i);
@@ -545,11 +547,11 @@ public class CMLArg extends AbstractArg {
     }
 
     /** process all arg/@substitute in element.
-     * 
+     *
      * @param element to edit
      */
     public static void substituteTextContent(CMLElement element) {
-        Nodes textContentArgs = 
+        Nodes textContentArgs =
             element.query(".//"+CMLArg.NS+"[@substitute[.='.']]", X_CML);
         for (int i = 0; i < textContentArgs.size(); i++) {
             CMLArg textContentArg = (CMLArg) textContentArgs.get(i);
@@ -581,7 +583,7 @@ public class CMLArg extends AbstractArg {
 
     /** add arguments to descendant elements.
      * descendants mut have @ref.
-     * 
+     *
      * @param current context for search
      * @param localName of element to search for
      */

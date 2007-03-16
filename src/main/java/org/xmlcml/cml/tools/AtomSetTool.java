@@ -66,14 +66,12 @@ public class AtomSetTool implements CMLConstants {
      * undetermined but probably in atom document order and iteration through
      * ligands
      * 
-     * @param atomSet
      * @return the bondSet
-     * @throws CMLException
-     *             one or more bonds does not have an id
+     * @throws CMLException one or more bonds does not have an id
      */
     @SuppressWarnings("unused")
     // FIXME don't think this works
-    public CMLBondSet getBondSet(/*CMLAtomSet atomSet*/) throws CMLException {
+    public CMLBondSet getBondSet() throws CMLException {
         List<CMLAtom> atoms = molecule.getAtoms();
         molecule.getBonds();
         CMLBondSet bondSet = new CMLBondSet();

@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -205,6 +204,7 @@ public class ElementTest extends BaseTest {
 		try {
 			element0 = new CMLBuilder().parseString(element0S);
 		} catch (Exception e) {
+			e.printStackTrace();
 			neverThrow(e);
 		}
 		String element1S = "<foo><bar><plugh><br/></plugh></bar></foo>";

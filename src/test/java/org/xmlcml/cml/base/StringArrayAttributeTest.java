@@ -12,9 +12,9 @@ import org.junit.Test;
  */
 public class StringArrayAttributeTest extends AttributeBaseTest {
 
-    StringArrayAttribute daa1;
+    StringArraySTAttribute daa1;
 
-    StringArrayAttribute daa2;
+    StringArraySTAttribute daa2;
 
     /**
      * setup.
@@ -24,11 +24,11 @@ public class StringArrayAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new StringArrayAttribute(new CMLAttribute("foo"), "abc def");
+        daa1 = new StringArraySTAttribute(new CMLAttribute("foo"), "abc def");
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.StringArrayAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.StringArraySTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -38,7 +38,7 @@ public class StringArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringArrayAttribute.setCMLValue(String)'
+     * 'org.xmlcml.cml.base.StringArraySTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueString() {
@@ -49,19 +49,19 @@ public class StringArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringArrayAttribute.StringArrayAttribute(StringArrayAttribute)'
+     * 'org.xmlcml.cml.base.StringArraySTAttribute.StringArrayAttribute(StringArraySTAttribute)'
      */
     @Test
     public void testStringArrayAttributeStringArrayAttribute() {
         daa1.setCMLValue("3  5");
-        daa2 = new StringArrayAttribute(daa1);
+        daa2 = new StringArraySTAttribute(daa1);
         String[] dd = (String[]) daa2.getCMLValue();
         Assert.assertEquals("get CMLValue", new String[] { "3", "5" }, dd);
     }
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringArrayAttribute.setCMLValue(String[])'
+     * 'org.xmlcml.cml.base.StringArraySTAttribute.setCMLValue(String[])'
      */
     @Test
     public void testSetCMLValueStringArray() {
@@ -71,7 +71,7 @@ public class StringArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringArrayAttribute.checkValue(String[])'
+     * 'org.xmlcml.cml.base.StringArraySTAttribute.checkValue(String[])'
      */
     @Test
     public void testCheckValue() {
@@ -81,7 +81,7 @@ public class StringArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringArrayAttribute.getStringArray()'
+     * 'org.xmlcml.cml.base.StringArraySTAttribute.getStringArray()'
      */
     @Test
     public void testGetStringArray() {

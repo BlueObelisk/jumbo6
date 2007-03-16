@@ -83,7 +83,7 @@ public class CMLBondArray extends AbstractBondArray {
      *            parent of element to be constructed (ignored by default)
      * @return CMLBond
      */
-    public static CMLBondArray makeElementInContext(Element parent) {
+    public CMLBondArray makeElementInContext(Element parent) {
         CMLBondArray bondArray = new CMLBondArray();
         return bondArray;
     }

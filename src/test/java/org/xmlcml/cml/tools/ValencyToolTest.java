@@ -10,8 +10,14 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 
+/**
+ * 
+ * @author pm286
+ *
+ */
 public class ValencyToolTest extends MoleculeAtomBondTest {
 
+	/** test */
 	@Test
 	@Ignore
 	public void testMarkupCommonMolecules() {

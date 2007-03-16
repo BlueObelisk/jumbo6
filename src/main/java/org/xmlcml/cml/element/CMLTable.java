@@ -8,23 +8,24 @@ import java.util.List;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 
 /**
  * user-modifiable class supporting table.
- * 
+ *
  * A table is not valid unless it has a tableType attribute set to
- * one of the allowed values of the TableType enum. Each of these requires 
- * further constraints 
+ * one of the allowed values of the TableType enum. Each of these requires
+ * further constraints
  * @see AbstractTable
- * 
+ *
  */
 public class CMLTable extends AbstractTable {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
     /** types of table.
      * @author pm286
      *
@@ -42,7 +43,7 @@ public class CMLTable extends AbstractTable {
             this.value = v;
         }
         /** get type.
-         * 
+         *
          * @param t
          * @return type
          */
@@ -61,11 +62,12 @@ public class CMLTable extends AbstractTable {
      * contructor.
      */
     public CMLTable() {
+//    	System.out.println("TABLEEEEEEEEEEEEEEE");
     }
 
     /**
      * contructor.
-     * 
+     *
      * @param old
      */
     public CMLTable(CMLTable old) {
@@ -74,7 +76,7 @@ public class CMLTable extends AbstractTable {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -84,19 +86,19 @@ public class CMLTable extends AbstractTable {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLTable
      */
-    public static CMLTable makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLTable();
     }
 
     /**
      * gets the row count. first from rows attribute and if missing from the
      * actual count.
-     * 
+     *
      * @return row count (0 if none or no columns)
      * @throws CMLRuntimeException
      *             irregular table
@@ -126,7 +128,7 @@ public class CMLTable extends AbstractTable {
         }
         return arrayElements;
     }
-    
+
     /** set type.
      * overrides simple set and checks content
      * @param t
@@ -154,7 +156,7 @@ public class CMLTable extends AbstractTable {
             this.setTableType(tt.value);
         }
     }
-    
+
     /** get type of table as enum.
      * @return null if tableType attribute is null or unknown
      */
@@ -162,10 +164,10 @@ public class CMLTable extends AbstractTable {
         String tableType =this.getTableType();
         return TableType.getTableType(tableType);
     }
-    
+
     /** forces table to be of a given type.
      * if table is already of that type, no-op.
-     * if table is of a different type, attempts to convert 
+     * if table is of a different type, attempts to convert
      * to that type
      * @param tt (if null removes all containers and effectively clears table)
      */
@@ -179,20 +181,20 @@ public class CMLTable extends AbstractTable {
             super.setTableType(tt.value);
         }
     }
-    
+
     private void convert(TableType from, TableType to) {
         if (!this.check(from)) {
             throw new CMLRuntimeException("Inconsistent table");
         }
-        CMLTableHeader tableHeader = (CMLTableHeader) 
+        CMLTableHeader tableHeader = (CMLTableHeader)
             this.getFirstCMLChild(CMLTableHeader.TAG);
-        CMLArrayList arrayList = (CMLArrayList) 
+        CMLArrayList arrayList = (CMLArrayList)
             this.getFirstCMLChild(CMLArrayList.TAG);
-        CMLTableContent tableContent = (CMLTableContent) 
+        CMLTableContent tableContent = (CMLTableContent)
             this.getFirstCMLChild(CMLTableContent.TAG);
-        CMLTableRowList tableRowList = (CMLTableRowList) 
+        CMLTableRowList tableRowList = (CMLTableRowList)
             this.getFirstCMLChild(CMLTableRowList.TAG);
-        
+
         if (from != to) {
             if (from == TableType.COLUMN_BASED) {
                 tableHeader = arrayList.createTableHeader();
@@ -237,7 +239,7 @@ public class CMLTable extends AbstractTable {
             }
         }
     }
-    
+
     @SuppressWarnings("unused")
     private void checkRowsAndColumns() {
         if (this.getRowsAttribute() == null ||
@@ -252,43 +254,43 @@ public class CMLTable extends AbstractTable {
      * @return validity
      */
     private boolean check(TableType t) {
-        CMLTableHeader header = (CMLTableHeader) 
+        CMLTableHeader header = (CMLTableHeader)
             this.getFirstCMLChild(CMLTableHeader.TAG);
-        CMLArrayList arrayList = (CMLArrayList) 
+        CMLArrayList arrayList = (CMLArrayList)
             this.getFirstCMLChild(CMLArrayList.TAG);
-        CMLTableContent content = (CMLTableContent) 
+        CMLTableContent content = (CMLTableContent)
             this.getFirstCMLChild(CMLTableContent.TAG);
-        CMLTableRowList rowList = (CMLTableRowList) 
+        CMLTableRowList rowList = (CMLTableRowList)
             this.getFirstCMLChild(CMLTableRowList.TAG);
 
         boolean check = false;
         // attributes are set before content
-        if (header == null && 
+        if (header == null &&
                 arrayList == null &&
                 content == null &&
                 rowList == null) {
             check = true;
         } else if (t == null) {
-            check = 
-                header == null && 
+            check =
+                header == null &&
                 arrayList == null &&
                 content == null &&
                 rowList == null;
         } else if (TableType.COLUMN_BASED.equals(t)) {
-            check = 
-                header == null && 
+            check =
+                header == null &&
                 arrayList != null &&
                 content == null &&
                 rowList == null;
         } else if (TableType.CONTENT_BASED.equals(t)) {
-            check = 
-                header != null && 
+            check =
+                header != null &&
                 arrayList == null &&
                 content != null &&
                 rowList == null;
         } else if (TableType.ROW_BASED.equals(t)) {
-            check = 
-                header != null && 
+            check =
+                header != null &&
                 arrayList == null &&
                 content == null &&
                 rowList != null;
@@ -297,12 +299,12 @@ public class CMLTable extends AbstractTable {
     }
 
     /** gets arrayList or creates one if allowed.
-     * if arrayList does not exist, creates it if table is of 
+     * if arrayList does not exist, creates it if table is of
      * type columnBased
      */
     private CMLArrayList getOrCreateArrayList() {
         CMLArrayList arrayList = (CMLArrayList) this.getFirstCMLChild(CMLArrayList.TAG);
-        if (arrayList == null && 
+        if (arrayList == null &&
                 TableType.COLUMN_BASED.value.equals(this.getTableType())) {
             if (this.getTableContentElements().size() == 0 &&
                     this.getTableRowListElements().size() == 0) {
@@ -312,14 +314,14 @@ public class CMLTable extends AbstractTable {
         }
         return arrayList;
     }
-    
+
     /** gets tableRowList or creates one if allowed.
-     * if tableRowList does not exist, creates it if table is of 
+     * if tableRowList does not exist, creates it if table is of
      * type rowBased
      */
     private CMLTableRowList getOrCreateTableRowList() {
         CMLTableRowList tableRowList = (CMLTableRowList) this.getFirstCMLChild(CMLTableRowList.TAG);
-        if (tableRowList == null && 
+        if (tableRowList == null &&
                 TableType.ROW_BASED.value.equals(this.getTableType())) {
             if (this.getTableContentElements().size() == 0 &&
                     this.getTableRowListElements().size() == 0) {
@@ -329,7 +331,7 @@ public class CMLTable extends AbstractTable {
         }
         return tableRowList;
     }
-    
+
     /** old method for adding column.
      * @deprecated
      * @param array column to add
@@ -340,12 +342,12 @@ public class CMLTable extends AbstractTable {
             arrayList.appendChild(array);
         }
     }
-    
+
 
     /**
      * get column count. uses value of columns attribute if present else counts
      * arrays.
-     * 
+     *
      * @return column count
      */
     public int getColumns() {
@@ -366,7 +368,7 @@ public class CMLTable extends AbstractTable {
 
     /**
      * output HTML.
-     * 
+     *
      * @param w
      * @throws IOException
      */
@@ -405,7 +407,7 @@ public class CMLTable extends AbstractTable {
     }
     /**
      * get values columnwise.
-     * 
+     *
      * @return List of column Values (zero length if none)
      * @throws CMLRuntimeException
      *             columns inconsistent
@@ -420,7 +422,7 @@ public class CMLTable extends AbstractTable {
             if (rows == -1) {
                 rows = nr;
             } else if (rows != nr) {
-                throw new CMLRuntimeException("inconsistent row lengths: " + rows + "/"
+                throw new CMLRuntimeException("inconsistent row lengths: " + rows + S_SLASH
                         + nr);
             }
             stringListList.add(strings);
@@ -467,12 +469,12 @@ public class CMLTable extends AbstractTable {
                 nc = ncols;
             } else if (nc != ncols) {
                 throw new CMLRuntimeException("inconsistent column length in rows: "
-                        + nc + "/" + ncols);
+                        + nc + S_SLASH + ncols);
             }
             row.writeHTML(w);
         }
     }
-    
+
     @SuppressWarnings("unused")
     private void writeContent(Writer w, CMLTableHeader header,
             CMLTableContent content) throws IOException, CMLRuntimeException {
@@ -481,7 +483,7 @@ public class CMLTable extends AbstractTable {
         String[] strings = content.getStrings();
         if (strings.length % ncols != 0) {
             throw new CMLRuntimeException("non-rectangular table: " + strings.length
-                    + "/" + ncols);
+                    + S_SLASH + ncols);
         }
         int count = 0;
         for (String string : strings) {

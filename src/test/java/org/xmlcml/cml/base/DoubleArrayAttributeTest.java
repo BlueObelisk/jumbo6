@@ -13,9 +13,9 @@ import org.xmlcml.euclid.test.DoubleTest;
  */
 public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
-    DoubleArrayAttribute daa1;
+    DoubleArraySTAttribute daa1;
 
-    DoubleArrayAttribute daa2;
+    DoubleArraySTAttribute daa2;
 
     /**
      * main
@@ -30,12 +30,12 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new DoubleArrayAttribute(new CMLAttribute("foo"), " 1.2   3.4  ");
+        daa1 = new DoubleArraySTAttribute(new CMLAttribute("foo"), " 1.2   3.4  ");
 
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.DoubleArrayAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.DoubleArraySTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -45,7 +45,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleArrayAttribute.setCMLValue(String)'
+     * 'org.xmlcml.cml.base.DoubleArraySTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueString() {
@@ -58,12 +58,12 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleArrayAttribute.DoubleArrayAttribute(DoubleArrayAttribute)'
+     * 'org.xmlcml.cml.base.DoubleArraySTAttribute.DoubleArrayAttribute(DoubleArraySTAttribute)'
      */
     @Test
     public void testDoubleArrayAttributeDoubleArrayAttribute() {
         daa1.setCMLValue("3.4  5.6");
-        daa2 = new DoubleArrayAttribute(daa1);
+        daa2 = new DoubleArraySTAttribute(daa1);
         double[] dd = (double[]) daa2.getCMLValue();
         DoubleTest.assertEquals("get CMLValue", new double[] { 3.4, 5.6 }, dd,
                 EPS);
@@ -72,7 +72,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleArrayAttribute.setCMLValue(double[])'
+     * 'org.xmlcml.cml.base.DoubleArraySTAttribute.setCMLValue(double[])'
      */
     @Test
     public void testSetCMLValueDoubleArray() {
@@ -82,7 +82,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleArrayAttribute.checkValue(double[])'
+     * 'org.xmlcml.cml.base.DoubleArraySTAttribute.checkValue(double[])'
      */
     @Test
     public void testCheckValue() {
@@ -91,16 +91,16 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.DoubleArrayAttribute.split(String,
+     * Test method for 'org.xmlcml.cml.base.DoubleArraySTAttribute.split(String,
      * String)'
      */
     @Test
     public void testSplit() {
-        double[] dd = DoubleArrayAttribute.split("1.2 3.4 5.6", S_SPACE);
+        double[] dd = DoubleArraySTAttribute.split("1.2 3.4 5.6", S_SPACE);
         Assert.assertEquals("split", 3, dd.length);
         DoubleTest.assertEquals("split", new double[] { 1.2, 3.4, 5.6 }, dd,
                 EPS);
-        dd = DoubleArrayAttribute.split("1.7 3.4 5.6", null);
+        dd = DoubleArraySTAttribute.split("1.7 3.4 5.6", null);
         Assert.assertEquals("split", 3, dd.length);
         DoubleTest.assertEquals("split", new double[] { 1.7, 3.4, 5.6 }, dd,
                 EPS);
@@ -108,7 +108,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleArrayAttribute.getDoubleArray()'
+     * 'org.xmlcml.cml.base.DoubleArraySTAttribute.getDoubleArray()'
      */
     @Test
     public void testGetDoubleArray() {

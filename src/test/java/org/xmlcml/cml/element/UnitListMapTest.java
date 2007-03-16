@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.UnitTypeAttribute;
+import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -25,7 +28,7 @@ public class UnitListMapTest extends AbstractTest {
 
 	CMLScalar scalar2 = null;
 
-	UnitAttribute unitAttribute = null;
+	UnitsAttribute unitAttribute = null;
 
 	UnitTypeAttribute unitTypeAttribute = null;
 
@@ -53,7 +56,7 @@ public class UnitListMapTest extends AbstractTest {
 		} catch (Exception e) {
 			neverThrow(e);
 		}
-		unitAttribute = (UnitAttribute) scalar1.getUnitsAttribute();
+		unitAttribute = (UnitsAttribute) scalar1.getUnitsAttribute();
 		Assert.assertNotNull("unitAttribute not null", unitAttribute);
 		Assert.assertEquals("unitAttribute ", "units:deg", unitAttribute
 				.getCMLValue());
@@ -65,7 +68,7 @@ public class UnitListMapTest extends AbstractTest {
 
 	void makeUnitList() throws IOException {
 		unitListMap = new NamespaceToUnitListMap(Util
-				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 	}
 
 	void makeUnitTypeAttribute() {
@@ -92,7 +95,7 @@ public class UnitListMapTest extends AbstractTest {
 
 	/**
 	 * Test method for
-	 * 'org.xmlcml.cml.element.NamespaceToUnitListMap.getUnitList(UnitAttribute)'
+	 * 'org.xmlcml.cml.element.NamespaceToUnitListMap.getUnitList(UnitsAttribute)'
 	 */
 	@Test
 	public void testGetUnitList() {
@@ -118,7 +121,7 @@ public class UnitListMapTest extends AbstractTest {
 
 	/**
 	 * Test method for
-	 * 'org.xmlcml.cml.element.NamespaceToUnitListMap.getUnit(UnitAttribute)'
+	 * 'org.xmlcml.cml.element.NamespaceToUnitListMap.getUnit(UnitsAttribute)'
 	 */
 	@Test
 	public void testGetUnit() {

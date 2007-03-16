@@ -6,7 +6,9 @@ import junit.framework.Assert;
 import nu.xom.NodeFactory;
 
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLNodeFactory;
 import org.xmlcml.euclid.Util;
 
 /** test CMLBuilder routines.
@@ -20,7 +22,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
      */
     @Test
     public void testCMLBuilderBooleanNodeFactory() {
-        // fails because default CMLBuilder uses CMLNodeFactory 
+        // fails because default CMLBuilder uses OldNodeFactory 
         // to validate element names
         String s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
@@ -30,8 +32,8 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             new CMLBuilder().parseString(s);
             Assert.fail("should throw: Unknown CML element: inchi");
         } catch (Exception e) {
-            Assert.assertEquals("CMLNodeFactory validation", 
-                    "Unknown CML element: inchi", e.getMessage());
+            Assert.assertEquals("OldNodeFactory validation", 
+                    "Unknown CML Element : inchi", e.getMessage());
         }
         
         // succeeds with ordinary NodeFactory
@@ -50,20 +52,20 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             builder.parseString(s);
             Assert.fail("should throw: Unknown CML element: inchi");
         } catch (Exception e) {
-            Assert.assertEquals("CMLNodeFactory validation", 
+            Assert.assertEquals("OldNodeFactory validation", 
                     "Document root element \"cml\", must match DOCTYPE root \"null\".",
                     e.getMessage());
         }
         
-        // fails through CMLNodeFactory validation
+        // fails through OldNodeFactory validation
         validate = true;
-        builder = new CMLBuilder(validate, new CMLNodeFactory());
+        builder = new CMLBuilder(validate, CMLNodeFactory.nodeFactory);
         try {
             builder.parseString(s);
             Assert.fail("should throw: Unknown CML element: inchi");
         } catch (Exception e) {
-            Assert.assertEquals("CMLNodeFactory validation", 
-                    "Unknown CML element: inchi", e.getMessage());
+            Assert.assertEquals("OldNodeFactory validation", 
+                    "Unknown CML Element : inchi", e.getMessage());
         }
     }
 
@@ -71,7 +73,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
      */
     @Test
     public void testParseString() {
-        // parse, validation by CMLNodeFactory
+        // parse, validation by OldNodeFactory
         String s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
           "</cml>";
@@ -82,7 +84,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             neverThrow(e);
         }
         
-        // parse, validation by CMLNodeFactory
+        // parse, validation by OldNodeFactory
         s = S_EMPTY+
           "<cml " +CML_XMLNS+">" +
           "<inchi/>"+
@@ -91,8 +93,8 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
         try {
             builder.parseString(s);
         } catch (Exception e) {
-            Assert.assertEquals("CMLNodeFactory validation", 
-                    "Unknown CML element: inchi", e.getMessage());
+            Assert.assertEquals("OldNodeFactory validation", 
+                    "Unknown CML Element : inchi", e.getMessage());
         }
         
         // parse against DOCTYPE (tests XOM DTD validation)
@@ -139,7 +141,7 @@ public class CMLBuilderTest extends AbstractTest implements CMLConstants {
             builder.build(in);
             in.close();
         } catch (Exception e) {
-            Assert.assertEquals("CMLNodeFactory validation", 
+            Assert.assertEquals("OldNodeFactory validation", 
                     "Document root element \"cml\", must match DOCTYPE root \"null\".",
                     e.getMessage());
         }

@@ -11,8 +11,8 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLName;
 

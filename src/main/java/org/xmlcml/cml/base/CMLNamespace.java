@@ -13,6 +13,11 @@ public class CMLNamespace implements CMLConstants {
 	private String prefix;
 	private String namespaceURI;
 	
+	/** constructor.
+	 * 
+	 * @param prefix
+	 * @param namespaceURI
+	 */
     public CMLNamespace(String prefix, String namespaceURI) {
     	this.prefix = prefix;
     	this.namespaceURI = namespaceURI;

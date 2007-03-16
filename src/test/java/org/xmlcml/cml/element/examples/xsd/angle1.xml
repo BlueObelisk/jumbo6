@@ -10,5 +10,5 @@
     <atom id="a2"/>
     <atom id="a3"/>
   </atomArray>
-  <angle units="degrees" atomRefs3="a1 a2 a3">123.4</angle>
+  <angle units="units:degrees" atomRefs3="a1 a2 a3">123.4</angle>
 </molecule>

@@ -6,10 +6,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 
 /**
- * test CMLNodeFactory.
+ * test OldNodeFactory.
  *
  * @author pmr
  *
@@ -28,7 +29,7 @@ public class CMLNodeFactoryTest extends AbstractTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLNodeFactory.startMakingElement(String,
+     * 'org.xmlcml.cml.element.OldNodeFactory.startMakingElement(String,
      * String)'
      * * DOES NOT TEST THIS ROUTINE!!!!!!!
      */
@@ -67,7 +68,7 @@ public class CMLNodeFactoryTest extends AbstractTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLNodeFactory.makeAttribute(String, String,
+     * 'org.xmlcml.cml.element.OldNodeFactory.makeAttribute(String, String,
      * String, Type)'
      */
     @Ignore
@@ -78,7 +79,7 @@ public class CMLNodeFactoryTest extends AbstractTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.element.CMLNodeFactory.makeText(String)'
+     * Test method for 'org.xmlcml.cml.element.OldNodeFactory.makeText(String)'
      */
     @Ignore
     @Test

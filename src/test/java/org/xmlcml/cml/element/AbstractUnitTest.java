@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -81,7 +82,7 @@ public class AbstractUnitTest extends AbstractTest {
 
 		if (unitListMap == null) {
 			unitListMap = new NamespaceToUnitListMap(Util
-					.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+					.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 			unitList.setUnitListMap(unitListMap);
 			siUnitList.setUnitListMap(unitListMap);
 		}

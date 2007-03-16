@@ -12,13 +12,14 @@ import nu.xom.Node;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.StringAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
@@ -181,8 +182,8 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         CMLAttribute idAtt = molecule.getIdAttribute();
         Assert.assertTrue("id class is subclass of CMLAttribute",
                 CMLAttribute.class.isAssignableFrom(idAtt.getClass()));
-        Assert.assertEquals("id class is StringAttribute", idAtt.getClass(),
-                StringAttribute.class);
+        Assert.assertEquals("id class is StringSTAttribute", 
+        		IdAttribute.class, idAtt.getClass());
         Assert.assertEquals("id value", molecule.getId(), xmlMolecule.getId());
 
         Assert.assertEquals("Molecule is identical", molecule
@@ -777,54 +778,6 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
                 atomArray.getCount(), 0.000001);
         
     }
-
-//    /**
-//     * Test method for
-//     * 'org.xmlcml.cml.element.CMLMolecule.clearWedgeHatchBonds()'
-//     */
-//    @Test
-//    public void testClearWedgeHatchBonds() {
-//        fail("Not yet implemented"); // TODO
-//    }
-
-//    /**
-//     * Test method for
-//     * 'org.xmlcml.cml.element.CMLMolecule.createCartesiansFromFractionals(RealSquareMatrix)'
-//     */
-//    @Test
-//    public void testCreateCartesiansFromFractionalsRealSquareMatrix() {
-//        makeMolCryst();
-//        cmlCryst.debug();
-//        CMLMolecule mol = (CMLMolecule) CMLUtil.getQueryNodes(
-//                cmlCryst, ".//"+CMLMolecule.NS, X_CML).get(0);
-//        CMLCrystal cryst = (CMLCrystal) CMLUtil.getQueryNodes(
-//                cmlCryst, ".//"+CMLCrystal.NS, X_CML).get(0);
-//        Transform3 t3 = cryst.getOrthogonalizationTransform();
-//        RealSquareMatrix rsm = null;
-//        try {
-//            rsm = new RealSquareMatrix(t3.getMatrix());
-//        } catch (EuclidException e1) {
-//            Util.BUG(e1);
-//        }
-//        System.out.println(rsm);
-//        System.out.println(rsm.getCols());
-//        System.out.println(rsm.getRows());
-//        Assert.assertFalse("no 3d coords", mol.hasCoordinates(CoordinateType.CARTESIAN));
-//        Assert.assertTrue("fractional coords", mol.hasCoordinates(CoordinateType.FRACTIONAL));
-//        try {
-//            mol.createCartesiansFromFractionals(rsm);
-//        } catch (CMLException e) {
-//            Util.BUG(e);
-//        }
-//        Assert.assertTrue("3d coords", mol.hasCoordinates(CoordinateType.CARTESIAN));
-//        Assert.assertTrue("fractional coords", mol.hasCoordinates(CoordinateType.FRACTIONAL));
-//        Point3 xyz = mol.getAtom(2).getPoint3(CoordinateType.CARTESIAN);
-//        System.out.println("X"+xyz);
-//        Point3Test.assertEquals("point", new double[]{
-//                1.08, 2.2, 0.0
-//                }, xyz, 0.0000000000001);
-//        mol.debug();
-//    }
 
     /**
      * Test method for

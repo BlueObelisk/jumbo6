@@ -12,6 +12,7 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
@@ -25,9 +26,9 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
  * Class representing the CML atom element
- * 
+ *
  * @author Peter Murry-Rust, Ramin Ghorashi (2005)
- * 
+ *
  */
 public class CMLAtom extends AbstractAtom {
 
@@ -37,7 +38,7 @@ public class CMLAtom extends AbstractAtom {
     static {
         logger.setLevel(Level.WARNING);
     };
-    
+
     List<CMLAtom> ligandAtoms = null;
     List<CMLBond> ligandBonds = null;
 
@@ -48,7 +49,7 @@ public class CMLAtom extends AbstractAtom {
         super();
         init();
     }
-    
+
     void init() {
         ligandAtoms = new ArrayList<CMLAtom>();
         ligandBonds = new ArrayList<CMLBond>();
@@ -65,7 +66,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * copy constructor.
-     * 
+     *
      * @param old
      *            to copy
      */
@@ -73,7 +74,7 @@ public class CMLAtom extends AbstractAtom {
         super(old);
         init();
     }
-    
+
     /**
      * Create new CMLAtom with specified id and ChemicalElement.
      * @param id
@@ -86,7 +87,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -96,13 +97,13 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLAtom
      * @throws CMLRuntimeException
      */
-    public static CMLAtom makeElementInContext(Element parent)
+    public CMLElement makeElementInContext(Element parent)
             throws CMLRuntimeException {
         String error = null;
         CMLAtom atom = null;
@@ -133,7 +134,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * make sure atomId is present
-     * 
+     *
      * @param parent
      *            element
      */
@@ -143,7 +144,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * checks the CML compliance of this element
-     * 
+     *
      */
     public void check() {
         String id = this.getId();
@@ -155,7 +156,8 @@ public class CMLAtom extends AbstractAtom {
             CMLAtom oldAtom = getMolecule().getAtomById(id);
             if (oldAtom != null) {
                 if (oldAtom != this) {
-                    throw new CMLRuntimeException("duplicate atom id: " + id);
+                	oldAtom.debug("OLD ATOM");
+                    throw new CMLRuntimeException("atom check: duplicate atom id: " + id);
                 }
             }
         } else {
@@ -170,16 +172,21 @@ public class CMLAtom extends AbstractAtom {
      * @param id
      */
     public void setId(String id) {
-        if (this.getId() != null) {
-            throw new CMLRuntimeException("Cannot reindex id");
-        }
-        super.setId(id);
-        ParentNode parent = this.getParent();
-        if (parent != null && parent instanceof CMLAtomArray) {
-            CMLAtomArray atomArray = (CMLAtomArray) parent;
-            if (atomArray != null) {
-                atomArray.indexAtom(this);
-            }
+    	String id0 = this.getId();
+        if (id0 != null) {
+        	if(!id0.equals(id)) {
+        		throw new CMLRuntimeException("Cannot reindex id");
+        	}
+        } else {
+//        	System.out.println("ATOM SET ID "+id);
+	        super.setId(id);
+	        ParentNode parent = this.getParent();
+	        if (parent != null && parent instanceof CMLAtomArray) {
+	            CMLAtomArray atomArray = (CMLAtomArray) parent;
+	            if (atomArray != null) {
+	                atomArray.indexAtom(this);
+	            }
+	        }
         }
     }
 
@@ -252,10 +259,10 @@ public class CMLAtom extends AbstractAtom {
             this.clearLigandInfo(ligandBonds.get(i), ligandAtoms.get(i));
         }
     }
-    
+
     /**
      * Get owner molecule.
-     * 
+     *
      * @return owner molecule
      */
     public CMLMolecule getMolecule() {
@@ -268,7 +275,7 @@ public class CMLAtom extends AbstractAtom {
         }
         return null;
     }
-    
+
     CMLAtomArray getAtomArray() {
         ParentNode parent = this.getParent();
         return (parent == null || !(parent instanceof CMLAtomArray)) ? null :
@@ -284,12 +291,12 @@ public class CMLAtom extends AbstractAtom {
             atomArray.removeAtom(this);
         }
     }
-    
+
 
     /**
      * Returns the number of valence electrons this atom has based on its
      * chemical element
-     * 
+     *
      * @return number of valence electrons
      */
     public int getValenceElectrons() {
@@ -302,7 +309,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets Real2 for x2 y2.
-     * 
+     *
      * @return the point; null if x2, etc. are unset
      */
     public Real2 getXY2() {
@@ -314,7 +321,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * sets Real2 for x2 y2.
-     * 
+     *
      * @param point
      */
     public void setXY2(Real2 point) {
@@ -324,7 +331,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets Point3 for x3, y3, z3.
-     * 
+     *
      * @see #getPoint3(CoordinateType)
      * @return the point; null if x3, etc. are unset
      */
@@ -337,7 +344,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets Point3 for cartesians or fractionals.
-     * 
+     *
      * @see #getXYZ3()
      * @see #getXYZFract()
      * @param type
@@ -356,7 +363,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * sets Point3 for x3 y3 z3.
-     * 
+     *
      * @param point
      */
     public void setXYZ3(Point3 point) {
@@ -367,7 +374,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * sets Point3 for cartesians or fractionals.
-     * 
+     *
      * @param point
      *            to set
      * @param type
@@ -386,7 +393,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * unsets Point3 for cartesians or fractionals or 2D. remove appropraite
      * attributes
-     * 
+     *
      * @param type
      *            selects cartesians or fractionals
      */
@@ -428,7 +435,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * transform 3D coordinates. does NOT alter fractional or 2D coordinates
-     * 
+     *
      * @param transform
      *            the transformation
      */
@@ -440,7 +447,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * transform 3D coordinates. does NOT alter fractional or 2D coordinates
-     * 
+     *
      * @param transform
      *            the transformation
      */
@@ -468,7 +475,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets Point3 for xFract, yFract, zFract.
-     * 
+     *
      * @return the point; null if xFract, etc. are unset
      */
     public Point3 getXYZFract() {
@@ -481,7 +488,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * sets Point3 for x3 y3 z3.
-     * 
+     *
      * @param point
      */
     public void setXYZFract(Point3 point) {
@@ -493,7 +500,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * transform 3D fractional coordinates. modifies this does not modify x3,
      * y3, z3 (may need to re-generate cartesians)
-     * 
+     *
      * @param transform
      *            the transformation
      */
@@ -506,7 +513,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * transform 3D fractional coordinates. modifies this does not modify x3,
      * y3, z3 (may need to re-generate cartesians)
-     * 
+     *
      * @param transform
      *            the transformation
      */
@@ -520,7 +527,7 @@ public class CMLAtom extends AbstractAtom {
      * The formalCharge on the atom. this attribute is often omitted; if so
      * getFormalCharge() will throw CMLRuntime. this routine allows the caller
      * to decide whether an omission default to 0.
-     * 
+     *
      * @param control
      * @return int
      */
@@ -538,7 +545,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * Gets the fractional coordinate for this atom
-     * 
+     *
      * @return the fractional coordinate or null if it has not been set
      */
     public Point3 getFractCoord() {
@@ -554,7 +561,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets chemical element corresponding to elementType.
-     * 
+     *
      * @return the chemical element (or null)
      */
     public ChemicalElement getChemicalElement() {
@@ -563,7 +570,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets atomicNumber corresponding to elementType.
-     * 
+     *
      * @return atomic number (0 if not found)
      */
     public int getAtomicNumber() {
@@ -576,7 +583,7 @@ public class CMLAtom extends AbstractAtom {
      * get convenience serial number for common elements. only used by Molutils
      * and valency tools do not use outside JUMBO. This should be reengineered
      * to manage valency at some stage
-     * 
+     *
      * @param elemType
      * @return number
      */
@@ -593,14 +600,14 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets cross product for 3 atoms in 3D.
-     * 
+     *
      * gets cross products of this->at1 X this->at2
-     * 
+     *
      * @param atom1
      *            first atom
      * @param atom2
      *            second atom
-     * 
+     *
      * @return the cross product (null if parameters are null; zero if atoms are
      *         coincident or colinear)
      */
@@ -615,15 +622,15 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets cross product for 3 atoms in 2D.
-     * 
+     *
      * gets cross products of this->at1 X this->at2 the result is a 3D vector
      * perpendicular to xy2 plane
-     * 
+     *
      * @param atom1
      *            first atom
      * @param atom2
      *            second atom
-     * 
+     *
      * @return the cross product (null if parameters are null; zero if atoms are
      *         coincident or colinear)
      */
@@ -645,9 +652,9 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets 2D coordinates as a 3D point.
-     * 
+     *
      * adds a z coordinate of 0.0. Result is not stored
-     * 
+     *
      * @return the point (null if no 2D coordinates)
      */
     public Point3 get2DPoint3() {
@@ -660,12 +667,12 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * gets vector from this atom to another.
-     * 
+     *
      * gets vector this->at1 (i.e. at1 minus this)
-     * 
+     *
      * @param atom1
      *            other atom
-     * 
+     *
      * @return the vector (null if atoms are null or have no coordinates)
      */
     public Vector3 getVector3(CMLAtom atom1) {
@@ -682,9 +689,9 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * increase x2 and y2 coordinates.
-     * 
+     *
      * if x2 or y2 is unset, no action (to avoid a default of zero)
-     * 
+     *
      * @param dx
      *            amount to add
      * @param dy
@@ -699,9 +706,9 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * transforms 2D coordinates of atom.
-     * 
+     *
      * if x2 or y2 is unset take no action
-     * 
+     *
      * @param t2
      *            transformation
      */
@@ -716,9 +723,9 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * increase x3, y3 and z3 coordinates.
-     * 
+     *
      * if x3, y3 or z3 is unset, no action
-     * 
+     *
      * @param dx
      *            amount to add
      * @param dy
@@ -736,9 +743,9 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * increase x3, y3 and z3 coordinates.
-     * 
+     *
      * if x3, y3 or z3 is unset, no action
-     * 
+     *
      * @param dx
      *            amount to add
      * @param dy
@@ -756,10 +763,10 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * get distance between atoms.
-     * 
+     *
      * @param atom2
      *            the other atom
-     * 
+     *
      * @return distance (< 0.0 if atom(s) lack coordinates)
      */
     public double getDistanceTo(CMLAtom atom2) {
@@ -774,7 +781,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * Rounds the coords that are within epsilon of 0 to 0. works coordinates
      * (XY2, XYZ3, XYZFract) according to coordinateType
-     * 
+     *
      * @param epsilon
      *            (must not be 0)
      * @param coordinateType
@@ -818,7 +825,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * Determines whether or not this atom has coordinates of a given type
-     * 
+     *
      * @param type
      *            of coordinate
      * @return true if all coordinates or a given type are set, false otherwise
@@ -840,7 +847,7 @@ public class CMLAtom extends AbstractAtom {
 
     /**
      * simple atom comparison based on atomic mass (not recursive).
-     * 
+     *
      * @param otherAtom
      * @return int the comparison
      */
@@ -861,7 +868,7 @@ public class CMLAtom extends AbstractAtom {
      * attribute spaceGroupMultiplicity and is the number of symmetry operators
      * that transform the atom onto itself with normalization of cell
      * translations.
-     * 
+     *
      * @param symmetry
      *            spaceGroup operators
      * @return the multiplicity (0 if no coordinates else 1 or more)
@@ -878,7 +885,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * gets count of hydrogens. combines value of hydrogenCount attribute with
      * the actual ligands of type hydrogen.
-     * 
+     *
      * @return hydrogenCount();
      */
     public int getHydrogenCount() {
@@ -895,9 +902,9 @@ public class CMLAtom extends AbstractAtom {
         }
         return hc;
     }
-    
+
     /** gets formal charge.
-     * 
+     *
      * if attribute is missing, returns 0
      * If you don't like this behaviour, test for null getFormalChargeAttribute()
      * and create your own behaviour
@@ -910,9 +917,9 @@ public class CMLAtom extends AbstractAtom {
         }
         return fc;
     }
-    
+
     /** get list of atoms filtered by elements.
-     * 
+     *
      * @param atomList list of atoms
      * @param elementSet elements in filter
      * @return atoms with elements in filter
@@ -927,9 +934,9 @@ public class CMLAtom extends AbstractAtom {
         }
         return newAtomList;
     }
-    
+
     /** rename atom and all bonds it occurs in.
-     * 
+     *
      * @param newId
      */
     public void renameId(String newId) {
@@ -941,7 +948,7 @@ public class CMLAtom extends AbstractAtom {
         // must delay this to the end to keep indexes OK
         this.resetId(newId);
     }
-    
+
     /** replace element in atomRefs array.
      * used for swapping first and last atoms in either atomRefs2, atomRefs3 or atomRefs4
      * @param atomRefs array with atom ids
@@ -991,6 +998,9 @@ public class CMLAtom extends AbstractAtom {
 		return isCompatible;
 	}
 
+	/** is bonded to metal.
+	 * @return is bonded
+	 */
 	public boolean isBondedToMetal() {
 		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
 		if (nodes.size() > 0) {
@@ -1047,7 +1057,7 @@ public class CMLAtom extends AbstractAtom {
 					minAngle = angle[j];
 				}
 			}
-	
+
 			if (low != -1) {
 				cyclicAtom4[i] = atom4[low];
 				angle[low] = -100.;

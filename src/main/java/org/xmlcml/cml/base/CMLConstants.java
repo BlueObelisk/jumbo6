@@ -18,6 +18,8 @@ public interface CMLConstants extends EuclidConstants {
 
 	/** suffix for files */
 	String XML_SUFF = ".xml";
+	/** suffix for files */
+	String XSD_SUFF = ".xsd";
 	
     /** xmlns attribute name */
     String XMLNS = "xmlns";
@@ -81,7 +83,46 @@ public interface CMLConstants extends EuclidConstants {
 
     /** constant */
     String XSD_QNAME = "xsd:QName";
-
+    
+    /** element types */
+    
+    /** */
+    String XSD_ANNOTATION = "xsd:annotation";
+    /** */
+    String XSD_ATTRIBUTE = "xsd:attribute";
+    /** */
+    String XSD_ATTRIBUTE_GROUP = "xsd:attributeGroup";
+    /** */
+    String XSD_COMPLEX_TYPE = "xsd:complexType";
+    /** */
+    String XSD_DOCUMENTATION = "xsd:documentation";
+    /** */
+    String XSD_ELEMENT = "xsd:element";
+    /** */
+    String XSD_ENUMERATION = "xsd:enumeration";
+    /** */
+    String XSD_EXTENSION = "xsd:extension";
+    /** */
+    String XSD_LENGTH = "xsd:length";
+    /** */
+    String XSD_LIST = "xsd:list";
+    /** */
+    String XSD_PATTERN = "xsd:pattern";
+    /** */
+    String XSD_RESTRICTION = "xsd:restriction";
+    /** */
+	String XSD_SIMPLE_TYPE = "xsd:simpleType";
+    /** */
+	String XSD_SIMPLE_CONTENT = "xsd:simpleContent";
+    /** */
+	String XSD_UNION = "xsd:union";
+    /** */
+	String PATTERN_ANYURI = "http://.*";    //crude!
+    /** */
+	String PATTERN_QNAME = "[A-Za-z_][A-Za-z0-9_-\\.]*:[A-Za-z_][A-Za-z0-9_-\\.]*";
+    /** */
+    XPathContext XPATH_XSD = new XPathContext("xsd", XSD_NS);
+    
     /** constant */
     String CMLXSD_ANNOTATION = "annotation";
 
@@ -161,7 +202,7 @@ public interface CMLConstants extends EuclidConstants {
     String CMLXSD_SEQUENCE = "sequence";
 
     /** constant */
-    String CMLXSD_SIMPLECONTENT = "simpleContent";
+    String CMLXSD_SIMPLECONTENT = "simpleType";
 
     /** constant */
     String CMLXSD_SIMPLETYPE = "simpleType";
@@ -278,17 +319,33 @@ public interface CMLConstants extends EuclidConstants {
     String TYPE_LIST = "CMLTypeList";
 
     /** constant */
-    String ABSTRACT_NODEFACTORY = "CMLNodeFactory";
+    String ABSTRACT_NODEFACTORY = "OldNodeFactory";
 
+    /** java classnames */
+    String JAVA_BOOLEAN = "Boolean";
+    /** java classnames */
+    String JAVA_DOUBLE = "Double";
     /** constant */
-    String DOUBLE = "Double";
+    String JAVA_INTEGER = "Integer";
+    /** String class */
+    String JAVA_STRING = "String";
+    /** primitive */
+    String JAVA_BOOL = "boolean";
+    /** primitive */
+    String JAVA_INT = "int";
+    /** primitive */
+    String JAVA_DOUB = "double";
+    /** array */
+    String JAVA_ARRAY = "[]";
 
-    /** constant */
-    String INTEGER = "Integer";
-
-    /** constant */
-    String STRING = "String";
-
+	// for generating elements and attributes
+    /** */
+	String ELEMENT_CLASS_BASE = "org.xmlcml.cml.element";
+    /** */
+	String ATTRIBUTE_CLASS_BASE = "org.xmlcml.cml.attribute";
+    /** */
+	String ATTRIBUTE = "Attribute";
+	
     // sepcial CML dataTypes
     /** dataType */
     String CML_DATATYPETYPE = "dataTypeType";

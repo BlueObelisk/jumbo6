@@ -12,9 +12,9 @@ import org.junit.Test;
  */
 public class IntAttributeTest extends AttributeBaseTest {
 
-    IntAttribute daa1;
+    IntSTAttribute daa1;
 
-    IntAttribute daa2;
+    IntSTAttribute daa2;
 
     /**
      * setup.
@@ -24,12 +24,12 @@ public class IntAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new IntAttribute(new CMLAttribute("foo"), " 1   ");
+        daa1 = new IntSTAttribute(new CMLAttribute("foo"), " 1   ");
 
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.IntSTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -38,7 +38,7 @@ public class IntAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntAttribute.setCMLValue(String)'
+     * Test method for 'org.xmlcml.cml.base.IntSTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueString() {
@@ -49,18 +49,18 @@ public class IntAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.IntAttribute.IntAttribute(IntAttribute)'
+     * 'org.xmlcml.cml.base.IntSTAttribute.IntAttribute(IntSTAttribute)'
      */
     @Test
     public void testIntAttributeIntAttribute() {
         daa1.setCMLValue("3");
-        daa2 = new IntAttribute(daa1);
+        daa2 = new IntSTAttribute(daa1);
         Integer dd = (Integer) daa2.getCMLValue();
         Assert.assertEquals("get CMLValue", 3, dd.intValue(), EPS);
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntAttribute.setCMLValue(double[])'
+     * Test method for 'org.xmlcml.cml.base.IntSTAttribute.setCMLValue(double[])'
      */
     @Test
     public void testSetCMLValueInt() {
@@ -69,7 +69,7 @@ public class IntAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntAttribute.checkValue(double[])'
+     * Test method for 'org.xmlcml.cml.base.IntSTAttribute.checkValue(double[])'
      */
     @Test
     public void testCheckValue() {
@@ -81,7 +81,7 @@ public class IntAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.IntAttribute.getInt()'
+     * Test method for 'org.xmlcml.cml.base.IntSTAttribute.getInt()'
      */
     @Test
     public void testGetInt() {

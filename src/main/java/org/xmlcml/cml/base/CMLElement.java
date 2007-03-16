@@ -102,10 +102,13 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     Map<String, List<CMLElement>> idMap;
     
     CMLLog log = null;
+    protected static CMLNodeFactory nodeFactory = CMLNodeFactory.nodeFactory;
+    protected static AttributeFactory attributeFactory = AttributeFactory.attributeFactory;
     
     // this seems to be mandatory
     protected CMLElement() {
-        super("dummy");
+        super("b_dummy");
+        init();
     }
 
     /**
@@ -116,6 +119,10 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      */
     public CMLElement(String name) {
         super(name, CML_NS);
+        init();
+    }
+    
+    private void init() {
     }
 
     /**
@@ -148,6 +155,16 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      *            element
      */
     public void finishMakingElement(Element parent) {
+    }
+    
+    protected void addRemove(CMLAttribute att, String value) {
+    	if (value == null || value.equals(S_EMPTY)) {
+//    		this.removeAttribute(att.getLocalName());
+    	} else if (att == null) {
+    	} else {
+    		att.setCMLValue(value);
+    		super.addAttribute(att);
+    	}
     }
 
     /** compare elements on id value.
@@ -237,7 +254,6 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      * @deprecated
      * 
      * @param prefix
-     * @param uri
      */
     public void removeNamespaceDeclaration(String prefix) {
         String namespaceURI = this.getNamespaceURI(prefix);
@@ -509,7 +525,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
         if (element == null) {
             try {
                 element = (CMLElement) Class.forName(
-                        "org.xmlcml.cml.element.CML" + name.substring(0, 1)
+                        ELEMENT_CLASS_BASE+".CML" + name.substring(0, 1)
                                 + name.substring(1)).newInstance();
             } catch (Exception e) {
                 throw new CMLRuntimeException("" + e);
@@ -801,12 +817,8 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     /**
      * get all descendants with local name.
      * @deprecated use query 
-     * @param elementName
-     *            to search for (null accepts all)
-     * @param attributeName
-     *            to search for (null accepts all)
-     * @param nested
-     *            if true allows children of elementName (e.g.
+     * @param elementName to search for (null accepts all)
+     * @param nested if true allows children of elementName (e.g.
      *            molecule/molecule)
      * @return list of elements
      */
@@ -1098,4 +1110,13 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
         this.addAttribute(new Attribute(ID, id));
     }
 
+    /**
+     * create new instance in context of parent, overridable by subclasses.
+     * 
+     * @param parent of element to be constructed (ignored by default)
+     * @return CMLElement
+     */
+    public CMLElement makeElementInContext(Element parent) {
+    	return new CMLElement();
+    }
 }
