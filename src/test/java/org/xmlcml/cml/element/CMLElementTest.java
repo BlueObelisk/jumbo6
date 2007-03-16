@@ -14,6 +14,7 @@ import nu.xom.ValidityException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Util;
 /**
@@ -176,18 +177,14 @@ public class CMLElementTest extends AbstractTest {
         Assert.assertEquals("copy constructor", 0, atom.getChildCount());
         Assert.assertNotNull("copy constructor", atom1);
         Assert.assertEquals("copy constructor", "", atom1.getNamespacePrefix());
-        Assert
-                .assertEquals("copy constructor", CML_NS, atom1
-                        .getNamespaceURI());
+        Assert.assertEquals("copy constructor", CML_NS, atom1.getNamespaceURI());
         Assert.assertEquals("copy constructor", 1, atom1.getChildCount());
         // MUST remember the namespace!
         Element child = atom1.getFirstChildElement("label", CML_NS);
         Assert.assertNotNull("child", child);
         Assert.assertEquals("copy child", CMLLabel.class, child.getClass());
         label = (CMLLabel) child;
-        Assert
-                .assertEquals("child", "value1", label
-                        .getAttributeValue("value"));
+        Assert.assertEquals("child", "value1", label.getAttributeValue("value"));
         Assert.assertEquals("property", 2, atom1.getPropertyNames().size());
         Assert.assertEquals("property", "fooString", atom1.getProperty("foo"));
         Assert.assertEquals("property", "barString", atom1.getProperty("bar"));
@@ -253,34 +250,69 @@ public class CMLElementTest extends AbstractTest {
      */
     @Test
     public void testGetChildCMLElements() {
-        String moleculeS = "<molecule " + CML_XMLNS + ">"
-            + "  <atomArray>"
-            + "    <atom id='a1'/>"
-            + "    <atom id='a2'/>"
-            + "    <foo/>"
-            + "  </atomArray>"
-            + "  <blinge/>"
-            + "  <bondArray>"
-            + "    <bar/>"
-            + "    <bond atomRefs2='a1 a2'/>"
-            + "    <bar/>"
-            + "  </bondArray>"
-            + "</molecule>" + "";
-        CMLMolecule molecule = null;
-        try {
-            molecule = (CMLMolecule) new CMLBuilder().parseString(moleculeS);
-        } catch (Exception e1) {
-            Assert.assertEquals("bad names", "Unknown CML element: foo", e1.getMessage());
-        }
-        moleculeS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
-                + "    <atom id='a1'/>" + "    <atom id='a2'/>"
-                + "  </atomArray>" + "  <bondArray>"
-                + "    <bond atomRefs2='a1 a2'/>" + "  </bondArray>"
-                + "</molecule>" + "";
+    	String moleculeS = null;
+    	CMLMolecule molecule = null;
+/*--    	
+	    // this example tests atom code so is not a good test for simple children
+        moleculeS = "<molecule " + CML_XMLNS + " title='myTitle'>"
+        + "  <atomArray>"
+        + "    <atom id='a1' title='atom1' x3='1.23'/>"
+        + "  </atomArray>"
+        + "</molecule>" + "";
+	    CMLMolecule molecule = null;
+	    try {
+	        molecule = (CMLMolecule) new CMLBuilder().parseString(moleculeS);
+	        molecule.debug("MOL");
+	    } catch (Exception e1) {
+	    	e1.printStackTrace();
+	        Assert.assertEquals("bad names", "Unknown CML element: foo", e1.getMessage());
+	    }
+	    CMLAtom atom = molecule.getAtom(0);
+	    String title = atom.getTitle();
+	    Assert.assertEquals("title", "atom1", title);
+	    String id = atom.getId();
+	    Assert.assertEquals("id", "a1", id);
+	    Attribute idAtt = atom.getIdAttribute();
+	    Assert.assertNotNull("id att not null", idAtt);
+	    Attribute idAtt1 = atom.getAttribute("id");
+	    Assert.assertNotNull("id att not null", idAtt1);
+	    
+	    // this example tests atom code so is not a good test for simple children
+	    moleculeS = "<molecule " + CML_XMLNS + " title='myTitle'>"
+	    + "  <atomArray>"
+	    + "    <atom id='a1' title='atom1' x3='1.23'/>"
+	    + "    <atom id='a2' title='atom2'/>"
+	    + "    <foo/>"
+	    + "  </atomArray>"
+	    + "  <blinge/>"
+	    + "  <bondArray>"
+	    + "    <bar/>"
+	    + "    <bond atomRefs2='a1 a2'/>"
+	    + "    <bar/>"
+	    + "  </bondArray>"
+	    + "</molecule>" + "";
+		molecule = null;
+		try {
+		    molecule = (CMLMolecule) new CMLBuilder().parseString(moleculeS);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		    Assert.assertEquals("bad names", "Unknown CML Element : foo", e1.getMessage());
+		}
+--*/		
+        moleculeS = "<molecule " + CML_XMLNS + ">" +
+        	"  <atomArray>" +
+        	"    <atom id='a1'/>" + 
+            "    <atom id='a2'/>" +
+            "  </atomArray>" +
+            "  <bondArray>" +
+            "    <bond atomRefs2='a1 a2'/>" +
+            "  </bondArray>" +
+            "</molecule>" + "";
         try {
             molecule = (CMLMolecule) new CMLBuilder().build(
                     new StringReader(moleculeS)).getRootElement();
         } catch (Exception e) {
+        	e.printStackTrace();
             Assert.assertEquals("unknown elements ", "x", e.getMessage());
         }
         List<CMLElement> childs = molecule.getChildCMLElements();

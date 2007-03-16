@@ -5,6 +5,7 @@ import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;

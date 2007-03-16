@@ -6,6 +6,7 @@ import java.util.List;
 import nu.xom.Attribute;
 import nu.xom.Node;
 
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
@@ -21,7 +22,6 @@ import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.IdAttribute;
 import org.xmlcml.euclid.EuclidConstants;
 
 /** processes conventional molecule into fragment.
@@ -34,6 +34,10 @@ public class FragmentConverter extends AbstractTool {
 	private CMLMolecule molecule;
 	private String molId;
 	
+	/**
+	 * constructor
+	 * @param molecule
+	 */
 	public FragmentConverter(CMLMolecule molecule) {
 		this.molecule = molecule;
 	}

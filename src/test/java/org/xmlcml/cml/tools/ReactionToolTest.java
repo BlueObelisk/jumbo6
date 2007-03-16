@@ -415,7 +415,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
                 
             } catch (Throwable t) {
                 t.printStackTrace();
-                System.err.println("++++++++++"+t+"/"+t.getCause()+"/"+t.getMessage());
+                System.err.println("++++++++++"+t+S_SLASH+t.getCause()+S_SLASH+t.getMessage());
             }
         }
     }

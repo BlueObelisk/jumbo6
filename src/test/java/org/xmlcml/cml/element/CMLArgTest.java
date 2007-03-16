@@ -10,6 +10,8 @@ import nu.xom.Elements;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.RefAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTest;

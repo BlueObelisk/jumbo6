@@ -107,8 +107,7 @@ public class CMLPoint3Test extends GeomTestBase {
                             + e.getMessage());
         } catch (ParsingException e) {
             Assert.assertEquals("parse exception ",
-                    "listLength required (3) incompatible with: 2", e
-                            .getMessage());
+                    "point must have 3 double components", e.getMessage());
         } catch (IOException e) {
             Assert.fail("should not throw IO exception " + e.getMessage());
         } catch (CMLRuntimeException e) {
@@ -144,8 +143,7 @@ public class CMLPoint3Test extends GeomTestBase {
                             + e.getMessage());
         } catch (ParsingException e) {
             Assert.assertEquals("parse exception ",
-                    "listLength required (3) incompatible with: 4", e
-                            .getMessage());
+                    "point must have 3 double components", e.getMessage());
         } catch (IOException e) {
             Assert.fail("should not throw IO exception " + e.getMessage());
         } catch (CMLRuntimeException e) {

@@ -1,5 +1,10 @@
 package org.xmlcml.cml.base;
 
+import java.util.List;
+
+import nu.xom.Element;
+import nu.xom.Node;
+
 /**
  * 
  * <p>
@@ -13,60 +18,384 @@ package org.xmlcml.cml.base;
  */
 public class CMLType implements CMLConstants {
 
+	/** */
+	public final static String NO_BASE = "Cannot find base: ";
+	
     protected String summary = "";
-
     protected String description = "";
-
     protected String base = null;
-
     protected String name = null;
-
     protected String id = null;
-
     protected boolean isList = false;
-
     protected String pattern = null;
-
     protected int listLength = Integer.MIN_VALUE;
-
     protected int iMinInclusive = Integer.MIN_VALUE;
-
     protected int iMinExclusive = Integer.MIN_VALUE;
-
     protected int iMaxInclusive = Integer.MAX_VALUE;
-
     protected int iMaxExclusive = Integer.MAX_VALUE;
-
     protected double dMinInclusive = Double.NaN;
-
     protected double dMinExclusive = Double.NaN;
-
     protected double dMaxInclusive = Double.NaN;
-
     protected double dMaxExclusive = Double.NaN;
-
     protected CMLType[] subTypes = new CMLType[0];
-
     protected String[] sEnumerationValues = new String[0];
-
     protected int[] iEnumerationValues = new int[0];
-
     protected double[] dEnumerationValues = new double[0];
+    protected String javaType;
+    
+    protected Element restriction;
+    protected Element union;
+    protected Element list;
+    
+    private Element simpleType;
 
     /**
      * default.
      */
     public CMLType() {
+    	init();
     }
-
-    /**
-     * default.
+    
+    private void init() {
+        summary = "";
+        description = "";
+        base = null;
+        name = null;
+        id = null;
+        isList = false;
+        pattern = null;
+        listLength = Integer.MIN_VALUE;
+        iMinInclusive = Integer.MIN_VALUE;
+        iMinExclusive = Integer.MIN_VALUE;
+        iMaxInclusive = Integer.MAX_VALUE;
+        iMaxExclusive = Integer.MAX_VALUE;
+        dMinInclusive = Double.NaN;
+        dMinExclusive = Double.NaN;
+        dMaxInclusive = Double.NaN;
+        dMaxExclusive = Double.NaN;
+        subTypes = new CMLType[0];
+        sEnumerationValues = new String[0];
+        iEnumerationValues = new int[0];
+        dEnumerationValues = new double[0];
+        javaType = null;
+    }
+    
+    /** copy constructor.
      * 
      * @param st
      */
     public CMLType(CMLType st) {
     }
+    
+    /** create from XSD simpleType.
+     * may have to be called repeatedly untill all superTypes have been 
+     * created
+     * @param simpleType
+     */
+    public CMLType(Element simpleType) {
+    	init();
+    	if (!simpleType.getLocalName().equals("simpleType")) {
+    		throw new CMLRuntimeException("element is not a simpleType, found: "+simpleType.getLocalName());
+    	}
 
+    	this.name = simpleType.getAttributeValue("name");
+    	this.id = simpleType.getAttributeValue("id");
+    	this.simpleType = simpleType;
+    	createUnion();
+    	// unions are a problem. At present we simply take the first simpleType child
+    	if (union == null || true) {
+    		createRestriction();
+    		createList();
+    		createBase();
+    		createDocumentation();
+    		createPattern();
+    		createLength();
+    		createJavaType();
+    	}
+    }
+    
+    /** create min max.
+     */
+    public void createMinMaxAndEnumerations() {
+//    	if (union == null) {
+    		createMinMax();
+    		createEnumerations();
+//    	}
+    }
+    
+    Element createUnion() {
+    	List<Node> unions = CMLUtil.getQueryNodes(simpleType, ".//"+XSD_UNION, XPATH_XSD);
+    	union = null;
+    	if (unions.size() == 1) {
+    		union = (Element) unions.get(0);
+    	} else if (unions.size() > 1) {
+    		throw new CMLRuntimeException("More than one union");
+    	}
+    	if (union != null) {
+	    	List<Node> nodes = CMLUtil.getQueryNodes(union, "./"+XSD_SIMPLE_TYPE, XPATH_XSD);
+	    	if (nodes.size() != 2) {
+	    		throw new CMLRuntimeException("Union can only have two simpleTypes, found "+nodes.size());
+	    	}
+	    	subTypes = new CMLType[nodes.size()];
+	    	int i = 0;
+	    	for (Node node : nodes) {
+	    		subTypes[i++] = new CMLType((Element) node);
+	    	}
+	    	simpleType = subTypes[0].getSimpleType();
+    	}
+    	return union;
+    }
+    
+    Element createRestriction() {
+    	List<Node> restrictions = CMLUtil.getQueryNodes(simpleType, ".//"+XSD_RESTRICTION, XPATH_XSD);
+    	restriction = null;
+    	if (restrictions.size() == 1) {
+    		restriction = (Element) restrictions.get(0);
+    	} else if (restrictions.size() > 1) {
+    		System.err.println("More than one restriction");
+    		CMLUtil.debug(simpleType);
+    	}
+    	return restriction;
+    }
+
+    Element createList() {
+// lists are of two types:
+// indefinite length    	
+//    	  <xsd:list itemType="atomIDType"/>
+// and
+// specific length    	
+//    	  <xsd:restriction>
+//    	   <xsd:simpleType>
+//    	    <xsd:list itemType="atomIDType"/>
+//    	   </xsd:simpleType>
+//    	   <xsd:length value="2"/>
+//    	  </xsd:restriction>
+
+    	List<Node> lists = null;
+		isList = false;
+    	if (restriction != null) {
+    		lists = CMLUtil.getQueryNodes(restriction, "./"+XSD_SIMPLE_TYPE+S_SLASH+XSD_LIST, XPATH_XSD);
+    		List<Node> lengths = CMLUtil.getQueryNodes(restriction, "./"+XSD_LENGTH, XPATH_XSD);
+    		if (lengths.size() == 1) {
+    			Element length = (Element) lengths.get(0);
+    			try {
+    				listLength = Integer.parseInt(length.getAttributeValue("value"));
+    			} catch (NumberFormatException nfe) {
+    				throw new CMLRuntimeException("bad length: "+nfe);
+    			}
+    		}
+    	} else {
+			lists = CMLUtil.getQueryNodes(simpleType, ".//"+XSD_LIST, XPATH_XSD);
+    	}
+		if (lists.size() == 1) {
+			list = (Element) lists.get(0);
+			isList = true;
+			String baseS = list.getAttributeValue("itemType");
+			if (baseS == null) {
+				CMLUtil.debug(simpleType);
+				throw new CMLRuntimeException("no base for "+name);
+			}
+			base = baseS;
+		} else if (lists.size() > 1) {
+			System.err.println("More than one list");
+			CMLUtil.debug(simpleType);
+		}
+		return list;
+    }
+    
+    String createBase() {
+    	// base may already have been given
+    	if (base == null) {
+	    	String baseS = simpleType.getAttributeValue("base");
+			base = (restriction == null) ? null : restriction.getAttributeValue("base");
+	    	if (baseS == null && base == null) {
+	    		throw new CMLRuntimeException("No base or restriction given");
+	    	} else if (baseS != null) {
+	    		if (base != null) {
+	    			throw new CMLRuntimeException("Cannot give both base attribute and restriction");
+	    		}
+	    		base = baseS;
+	    	}
+    	}
+    	return base;
+    }
+    
+    /** creates javaType from base.
+     * only uses XSD builtins.
+     * Id derived from other types has to be managed from outside this class. 
+     * @return
+     */
+    String createJavaType() {
+    	if (javaType == null) {
+	    	if (XSD_INTEGER.equals(base)) {
+	    		javaType = XSD_INTEGER;
+	    	} else if (XSD_NONNEGATIVEINTEGER.equals(base)) {
+		    	javaType = XSD_INTEGER;
+		    	iMinInclusive = 0;
+	    	} else if (XSD_DOUBLE.equals(base) || XSD_FLOAT.equals(base)) {
+	    		javaType = XSD_DOUBLE;
+	    	} else if (XSD_STRING.equals(base)) {
+	    		javaType = XSD_STRING;
+	    	} else if (XSD_BOOLEAN.equals(base)) {
+	    		javaType = XSD_BOOLEAN;
+	    	} else {
+	    	}
+    	}
+    	return javaType;
+    }
+    
+    void createDocumentation() {
+    	List<Node> docs = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_ANNOTATION+S_SLASH+XSD_DOCUMENTATION, XPATH_XSD);
+    	if (docs.size() == 0) {
+    	} else if (docs.size() == 1) {
+    		Element documentation = (Element) docs.get(0);
+    		List<Node> summarys = CMLUtil.getQueryNodes(documentation, ".//*[@class='summary']");
+    		summary = (summarys.size() == 0) ? null : summarys.get(0).getValue();
+    		List<Node> descriptions = CMLUtil.getQueryNodes(documentation, ".//*[@class='description']");
+    		description = (descriptions.size() == 0) ? null : descriptions.get(0).getValue();
+    	}
+	}
+
+    void createPattern() {
+    	List<Node> patterns = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_PATTERN, XPATH_XSD);
+    	if (patterns.size() > 0) {
+    		pattern = ((Element)patterns.get(0)).getAttributeValue("value");
+    	}
+    }
+    
+    void createLength() {
+    	List<Node> lengths = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_LENGTH, XPATH_XSD);
+    	if (lengths.size() > 0) {
+    		try {
+    			listLength = Integer.parseInt(((Element)lengths.get(0)).getAttributeValue("value"));
+    		} catch (NumberFormatException e) {
+    			CMLUtil.debug(simpleType);
+    			throw new CMLRuntimeException("Bad length "+e);
+    		}
+    	}
+    }
+    
+    void createMinMax() {
+    	List<Node> minEx = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_MINEXCLUSIVE, XPATH_XSD);
+    	if (minEx.size() > 0) {
+    		Element elem = (Element)minEx.get(0);
+    		String value = elem.getAttributeValue("value");
+    		if (iMinExclusive == Integer.MIN_VALUE && XSD_INTEGER.equals(javaType)) {
+	    		try {
+	    			iMinExclusive = Integer.parseInt(value);
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		} else if (Double.isNaN(dMinExclusive) && XSD_DOUBLE.equals(javaType)) {
+	    		try {
+	    			dMinExclusive = new Double(value).doubleValue();
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		}
+    	}
+    	
+    	List<Node> maxEx = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_MAXEXCLUSIVE, XPATH_XSD);
+    	if (maxEx.size() > 0) {
+    		Element elem = (Element)maxEx.get(0);
+    		String value = elem.getAttributeValue("value");
+    		if (iMaxExclusive == Integer.MAX_VALUE && XSD_INTEGER.equals(javaType)) {
+	    		try {
+	    			iMaxExclusive = Integer.parseInt(value);
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		} else if (Double.isNaN(dMaxExclusive) && XSD_DOUBLE.equals(javaType)) {
+	    		try {
+	    			dMaxExclusive = new Double(value).doubleValue();
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		}
+    	}
+    	
+    	List<Node> minInc = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_MININCLUSIVE, XPATH_XSD);
+    	if (minInc.size() > 0) {
+    		Element elem = (Element)minInc.get(0);
+    		String value = elem.getAttributeValue("value");
+    		if (iMinInclusive == Integer.MIN_VALUE && XSD_INTEGER.equals(javaType)) {
+	    		try {
+	    			iMinInclusive = Integer.parseInt(value);
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		} else if (Double.isNaN(dMinInclusive) && XSD_DOUBLE.equals(javaType)) {
+	    		try {
+	    			dMinInclusive = new Double(value).doubleValue();
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		}
+    	}
+    	
+    	List<Node> maxInc = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_MAXINCLUSIVE, XPATH_XSD);
+    	if (maxInc.size() > 0) {
+    		Element elem = (Element)maxInc.get(0);
+    		String value = elem.getAttributeValue("value");
+    		if (iMaxInclusive == Integer.MAX_VALUE && XSD_INTEGER.equals(javaType)) {
+	    		try {
+	    			iMaxInclusive = Integer.parseInt(value);
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		} else if (Double.isNaN(dMaxInclusive) && XSD_DOUBLE.equals(javaType)) {
+	    		try {
+	    			dMaxInclusive = new Double(value).doubleValue();
+	    		} catch (NumberFormatException e) {
+	    			throw new CMLRuntimeException("Bad length "+e);
+	    		}
+    		}
+    	}
+    }
+    
+    void createEnumerations() {
+    	List<Node> restrictions = CMLUtil.getQueryNodes(simpleType, 
+    			"./"+XSD_RESTRICTION+S_SLASH+XSD_ENUMERATION, XPATH_XSD);
+		int size = restrictions.size();
+		if (size > 0) {
+    		int i = 0;
+    		if (XSD_INTEGER.equals(javaType)) {
+    			iEnumerationValues = new int[size];
+    			for (Node node : restrictions) {
+    				Element restriction = (Element) node;
+    				try {
+    					iEnumerationValues[i++] = Integer.parseInt(restriction.getAttributeValue("value"));
+    				} catch (NumberFormatException nfe) {
+    					throw new CMLRuntimeException("Cannot parse enumeration as integer: "+nfe);
+    				}
+    			}
+    		} else if (XSD_DOUBLE.equals(javaType)) {
+    			dEnumerationValues = new double[size];
+    			for (Node node : restrictions) {
+    				Element restriction = (Element) node;
+    				try {
+    					dEnumerationValues[i++] = new Double(restriction.getAttributeValue("value")).doubleValue();
+    				} catch (NumberFormatException nfe) {
+    					throw new CMLRuntimeException("Cannot parse enumeration as double: "+nfe);
+    				}
+    			}
+    		} else if (XSD_STRING.equals(javaType)) {
+    			sEnumerationValues = new String[size];
+    			for (Node node : restrictions) {
+    				Element restriction = (Element) node;
+    				sEnumerationValues[i++] = restriction.getAttributeValue("value");
+    			}
+    		}
+    	}
+    }
+    
     /**
      * checks value of simpleType. throws CMLRuntime if value does not check
      * against SimpleType or is a list currently only uses pattern. fails if
@@ -737,7 +1066,7 @@ public class CMLType implements CMLConstants {
     }
 
     /**
-     * compares schemaType. uses name only as we expect to have singleton
+     * compares cmlType. uses name only as we expect to have singleton
      * CMLTypes null values of any component return -1
      * 
      * @param type
@@ -787,71 +1116,77 @@ public class CMLType implements CMLConstants {
      */
     public String getFullDescription() {
         String desc = "";
-        if (!summary.trim().equals("")) {
-            desc += "\n" + summary;
-        }
-        if (!description.equals("")) {
-            desc += "\n" + description;
-        }
-        if (pattern != null) {
-            desc += "\nPattern: " + pattern;
-        }
-        if (listLength != Integer.MIN_VALUE) {
-            desc += "\nLength: " + listLength;
-        }
-        boolean min = false;
-        if (iMinInclusive != Integer.MIN_VALUE) {
-            desc += "\nMinInclusive: " + iMinInclusive;
-            min = true;
-        }
-        if (iMinExclusive != Integer.MIN_VALUE) {
-            desc += "\nMinExclusive: " + iMinExclusive;
-            min = true;
-        }
-        if (!Double.isNaN(dMinInclusive)) {
-            desc += "\nMinInclusive: " + dMinInclusive;
-            min = true;
-        }
-        if (!Double.isNaN(dMinExclusive)) {
-            desc += "\nMinExclusive: " + dMinExclusive;
-            min = true;
-        }
-
-        if (iMaxInclusive != Integer.MAX_VALUE) {
-            desc += ((min) ? "" : "\n") + "MaxInclusive: " + iMaxInclusive;
-        }
-        if (iMaxExclusive != Integer.MAX_VALUE) {
-            desc += ((min) ? "" : "\n") + "MaxExclusive: " + iMaxExclusive;
-        }
-        if (!Double.isNaN(dMaxInclusive)) {
-            desc += ((min) ? "" : "\n") + "MaxInclusive: " + dMaxInclusive;
-        }
-        if (!Double.isNaN(dMaxExclusive)) {
-            desc += ((min) ? "" : "\n") + "MaxExclusive: " + dMaxExclusive;
-        }
-        /*--
-         protected String[] sEnumerationValues = new String[0];
-         protected int[] iEnumerationValues = new int[0];
-         protected double[] dEnumerationValues = new double[0];
-         --*/
-        if (sEnumerationValues.length > 0) {
-            desc += "\nPermitted values:";
-            for (int i = 0; i < sEnumerationValues.length; i++) {
-                desc += "\n  " + sEnumerationValues[i];
-            }
-        }
-        if (iEnumerationValues.length > 0) {
-            desc += "\nPermitted values:";
-            for (int i = 0; i < iEnumerationValues.length; i++) {
-                desc += "\n  " + iEnumerationValues[i];
-            }
-        }
-        if (dEnumerationValues.length > 0) {
-            desc += "\nPermitted values:";
-            for (int i = 0; i < dEnumerationValues.length; i++) {
-                desc += "\n  " + dEnumerationValues[i];
-            }
-        }
+    	if (subTypes.length > 0) {
+//    		desc = "**************** UNION ****************\n";
+    		for (CMLType subType : subTypes) {
+    			desc += "********SUBTYPE*********\n";
+    			desc += subType.getFullDescription();
+    		}
+    	} else {
+	        if (summary != null && !summary.trim().equals("")) {
+	            desc += "\n....  " + summary;
+	        }
+	        if (description != null && !description.equals("")) {
+	            desc += "\n_______________________________________\n" +
+	            	 description +
+	            	 "\n__________________________________________\n";
+	        }
+	        if (pattern != null) {
+	            desc += "\n Pattern: " + pattern;
+	        }
+	        if (listLength != Integer.MIN_VALUE) {
+	            desc += "\nLength: " + listLength;
+	        }
+	        boolean min = false;
+	        if (iMinInclusive != Integer.MIN_VALUE) {
+	            desc += "\nMinInclusive: " + iMinInclusive;
+	            min = true;
+	        }
+	        if (iMinExclusive != Integer.MIN_VALUE) {
+	            desc += "\nMinExclusive: " + iMinExclusive;
+	            min = true;
+	        }
+	        if (!Double.isNaN(dMinInclusive)) {
+	            desc += "\nMinInclusive: " + dMinInclusive;
+	            min = true;
+	        }
+	        if (!Double.isNaN(dMinExclusive)) {
+	            desc += "\nMinExclusive: " + dMinExclusive;
+	            min = true;
+	        }
+	
+	        if (iMaxInclusive != Integer.MAX_VALUE) {
+	            desc += ((min) ? "" : "\n") + " MaxInclusive: " + iMaxInclusive;
+	        }
+	        if (iMaxExclusive != Integer.MAX_VALUE) {
+	            desc += ((min) ? "" : "\n") + " MaxExclusive: " + iMaxExclusive;
+	        }
+	        if (!Double.isNaN(dMaxInclusive)) {
+	            desc += ((min) ? "" : "\n") + " MaxInclusive: " + dMaxInclusive;
+	        }
+	        if (!Double.isNaN(dMaxExclusive)) {
+	            desc += ((min) ? "" : "\n") + " MaxExclusive: " + dMaxExclusive;
+	        }
+	        
+	        if (sEnumerationValues.length > 0) {
+	            desc += "\nPermitted String values:";
+	            for (int i = 0; i < sEnumerationValues.length; i++) {
+	                desc += "\n  " + sEnumerationValues[i];
+	            }
+	        }
+	        if (iEnumerationValues.length > 0) {
+	            desc += "\nPermitted integer values:";
+	            for (int i = 0; i < iEnumerationValues.length; i++) {
+	                desc += "\n  " + iEnumerationValues[i];
+	            }
+	        }
+	        if (dEnumerationValues.length > 0) {
+	            desc += "\nPermitted double values:";
+	            for (int i = 0; i < dEnumerationValues.length; i++) {
+	                desc += "\n  " + dEnumerationValues[i];
+	            }
+	        }
+    	}
         return desc;
     }
 
@@ -863,5 +1198,276 @@ public class CMLType implements CMLConstants {
     public void setDescription(String d) {
         description = d;
     }
+    
+    /** to string.
+     * @return string
+     */
+    public String toString() {
+    	String s = "Name: "+name+"\n";
+    	if (union != null) {
+    		s += ".....UNION: "+subTypes.length;
+    	} else {
+    		s += this.getFullDescription();
+    		s += "\n";
+    	}
+    	return s;
+    }
+
+	/**
+	 * @return the dEnumerationValues
+	 */
+	public double[] getDEnumerationValues() {
+		return dEnumerationValues;
+	}
+
+	/**
+	 * @param enumerationValues the dEnumerationValues to set
+	 */
+	public void setDEnumerationValues(double[] enumerationValues) {
+		dEnumerationValues = enumerationValues;
+	}
+
+	/**
+	 * @return the dMaxExclusive
+	 */
+	public double getDMaxExclusive() {
+		return dMaxExclusive;
+	}
+
+	/**
+	 * @param maxExclusive the dMaxExclusive to set
+	 */
+	public void setDMaxExclusive(double maxExclusive) {
+		dMaxExclusive = maxExclusive;
+	}
+
+	/**
+	 * @return the dMaxInclusive
+	 */
+	public double getDMaxInclusive() {
+		return dMaxInclusive;
+	}
+
+	/**
+	 * @param maxInclusive the dMaxInclusive to set
+	 */
+	public void setDMaxInclusive(double maxInclusive) {
+		dMaxInclusive = maxInclusive;
+	}
+
+	/**
+	 * @return the dMinExclusive
+	 */
+	public double getDMinExclusive() {
+		return dMinExclusive;
+	}
+
+	/**
+	 * @param minExclusive the dMinExclusive to set
+	 */
+	public void setDMinExclusive(double minExclusive) {
+		dMinExclusive = minExclusive;
+	}
+
+	/**
+	 * @return the dMinInclusive
+	 */
+	public double getDMinInclusive() {
+		return dMinInclusive;
+	}
+
+	/**
+	 * @param minInclusive the dMinInclusive to set
+	 */
+	public void setDMinInclusive(double minInclusive) {
+		dMinInclusive = minInclusive;
+	}
+
+	/**
+	 * @return the iEnumerationValues
+	 */
+	public int[] getIEnumerationValues() {
+		return iEnumerationValues;
+	}
+
+	/**
+	 * @param enumerationValues the iEnumerationValues to set
+	 */
+	public void setIEnumerationValues(int[] enumerationValues) {
+		iEnumerationValues = enumerationValues;
+	}
+
+	/**
+	 * @return the iMaxExclusive
+	 */
+	public int getIMaxExclusive() {
+		return iMaxExclusive;
+	}
+
+	/**
+	 * @param maxExclusive the iMaxExclusive to set
+	 */
+	public void setIMaxExclusive(int maxExclusive) {
+		iMaxExclusive = maxExclusive;
+	}
+
+	/**
+	 * @return the iMaxInclusive
+	 */
+	public int getIMaxInclusive() {
+		return iMaxInclusive;
+	}
+
+	/**
+	 * @param maxInclusive the iMaxInclusive to set
+	 */
+	public void setIMaxInclusive(int maxInclusive) {
+		iMaxInclusive = maxInclusive;
+	}
+
+	/**
+	 * @return the iMinExclusive
+	 */
+	public int getIMinExclusive() {
+		return iMinExclusive;
+	}
+
+	/**
+	 * @param minExclusive the iMinExclusive to set
+	 */
+	public void setIMinExclusive(int minExclusive) {
+		iMinExclusive = minExclusive;
+	}
+
+	/**
+	 * @return the iMinInclusive
+	 */
+	public int getIMinInclusive() {
+		return iMinInclusive;
+	}
+
+	/**
+	 * @param minInclusive the iMinInclusive to set
+	 */
+	public void setIMinInclusive(int minInclusive) {
+		iMinInclusive = minInclusive;
+	}
+
+	/**
+	 * @return the javaType
+	 */
+	public String getJavaType() {
+		return javaType;
+	}
+
+	/**
+	 * @param javaType the javaType to set
+	 */
+	public void setJavaType(String javaType) {
+		this.javaType = javaType;
+	}
+
+	/**
+	 * @return the list
+	 */
+	public Element getList() {
+		return list;
+	}
+
+	/**
+	 * @param list the list to set
+	 */
+	public void setList(Element list) {
+		this.list = list;
+	}
+
+	/**
+	 * @return the restriction
+	 */
+	public Element getRestriction() {
+		return restriction;
+	}
+
+	/**
+	 * @param restriction the restriction to set
+	 */
+	public void setRestriction(Element restriction) {
+		this.restriction = restriction;
+	}
+
+	/**
+	 * @return the sEnumerationValues
+	 */
+	public String[] getSEnumerationValues() {
+		return sEnumerationValues;
+	}
+
+	/**
+	 * @param enumerationValues the sEnumerationValues to set
+	 */
+	public void setSEnumerationValues(String[] enumerationValues) {
+		sEnumerationValues = enumerationValues;
+	}
+
+	/**
+	 * @return the simpleType
+	 */
+	public Element getSimpleType() {
+		return simpleType;
+	}
+
+	/**
+	 * @param simpleType the simpleType to set
+	 */
+	public void setSimpleType(Element simpleType) {
+		this.simpleType = simpleType;
+	}
+
+	/**
+	 * @return the union
+	 */
+	public Element getUnion() {
+		return union;
+	}
+
+	/**
+	 * @param union the union to set
+	 */
+	public void setUnion(Element union) {
+		this.union = union;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @return the subTypes
+	 */
+	public CMLType[] getSubTypes() {
+		return subTypes;
+	}
+
+	/**
+	 * @param isList the isList to set
+	 */
+	public void setList(boolean isList) {
+		this.isList = isList;
+	}
+
+	/** get data type of list.
+	 * @return type
+	 */
+	public String listDataType() {
+		String s = " ... base "+this.base;
+		s += " (java: "+javaType+") ";
+		if (isList) {
+			s += " ["+((this.listLength >= 0) ? this.listLength : "*")+"]";
+		}
+		return s;
+	}
 
 }

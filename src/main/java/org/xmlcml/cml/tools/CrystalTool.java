@@ -172,6 +172,8 @@ public class CrystalTool extends AbstractTool {
 		return mergedMolecule;
 	}  
 
+	/** normalize fractionals.
+	 */
     public void resetAllFractionalsToZeroOneRange() {
     	Transform3 t3 = crystal.getOrthogonalizationTransform();
     	for (CMLAtom atom : molecule.getAtoms()) {
@@ -192,6 +194,8 @@ public class CrystalTool extends AbstractTool {
     	}
     }
     
+    /** populate edges and faces.
+     */
     public void addAtomsToAllCornersEdgesAndFaces() {
     	List<Point3> fractCoordSet = new ArrayList<Point3>();
     	for (CMLAtom atom : molecule.getAtoms()) {
@@ -280,8 +284,6 @@ public class CrystalTool extends AbstractTool {
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell() {
-		ConnectionTableTool ct = new ConnectionTableTool(molecule);
-		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
 		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
@@ -329,6 +331,8 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
+		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ct.partitionIntoMolecules();
 		for (CMLBond bond : molecule.getBonds()) {
 			bond.setOrder(CMLBond.SINGLE);
 		}
@@ -541,7 +545,6 @@ public class CrystalTool extends AbstractTool {
 	 * @param contact
 	 * @param serial number of contact (to generate unique id)
 	 * @param orthMat
-	 * @param addBonds if true add additional bonds
 	 * @return molecule a molecule composed of the merged molecules
 	 */
 	public CMLMolecule mergeSymmetryMolecules(CMLMolecule mergedMolecule,
@@ -640,7 +643,6 @@ public class CrystalTool extends AbstractTool {
 	 * 
 	 * @param mol
 	 * @param contactList
-	 * @param addBonds
 	 * @return new molecule
 	 */
 	 public CMLMolecule getMergedMolecule(CMLMolecule mol, List<Contact> contactList) {

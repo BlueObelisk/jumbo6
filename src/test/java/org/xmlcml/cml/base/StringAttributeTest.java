@@ -12,9 +12,9 @@ import org.junit.Test;
  */
 public class StringAttributeTest extends AttributeBaseTest {
 
-    StringAttribute daa1;
+    StringSTAttribute daa1;
 
-    StringAttribute daa2;
+    StringSTAttribute daa2;
 
     /**
      * setup.
@@ -24,11 +24,11 @@ public class StringAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new StringAttribute(new CMLAttribute("foo"), "abc");
+        daa1 = new StringSTAttribute(new CMLAttribute("foo"), "abc");
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.StringAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.StringSTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -37,7 +37,7 @@ public class StringAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.StringAttribute.setCMLValue(String)'
+     * Test method for 'org.xmlcml.cml.base.StringSTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueStringX() {
@@ -48,19 +48,19 @@ public class StringAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringAttribute.StringAttribute(StringAttribute)'
+     * 'org.xmlcml.cml.base.StringSTAttribute.StringAttribute(StringSTAttribute)'
      */
     @Test
     public void testStringAttributeStringAttribute() {
         daa1.setCMLValue("3");
-        daa2 = new StringAttribute(daa1);
+        daa2 = new StringSTAttribute(daa1);
         String dd = (String) daa2.getCMLValue();
         Assert.assertEquals("get CMLValue", "3", dd);
     }
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringAttribute.setCMLValue(String[])'
+     * 'org.xmlcml.cml.base.StringSTAttribute.setCMLValue(String[])'
      */
     @Test
     public void testSetCMLValueString() {
@@ -70,7 +70,7 @@ public class StringAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.StringAttribute.checkValue(String[])'
+     * 'org.xmlcml.cml.base.StringSTAttribute.checkValue(String[])'
      */
     @Test
     public void testCheckValue() {
@@ -79,7 +79,7 @@ public class StringAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.StringAttribute.getString()'
+     * Test method for 'org.xmlcml.cml.base.StringSTAttribute.getString()'
      */
     @Test
     public void testGetString() {

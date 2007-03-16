@@ -92,7 +92,7 @@ public class CMLMetadataListTest extends AbstractTest {
 //     */
 //    @Test
 //    public void testGetMetadataDescendantsByNameString() {
-//        List<CMLMetadata> metadatas = metadataList0
+//        List<ICMLMetadata> metadatas = metadataList0
 //                .getMetadataDescendantsByName("foo:foo1");
 //        Assert.assertEquals("metadata descendants", 2, metadatas.size());
 //        Assert.assertEquals("metadata descendant 2", "bar31", metadatas.get(1)

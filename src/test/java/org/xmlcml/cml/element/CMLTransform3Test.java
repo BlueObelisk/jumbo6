@@ -86,14 +86,10 @@ public class CMLTransform3Test extends GeomTestBase {
         String s = "<transform3 " + CML_XMLNS
                 + ">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform3>";
         try {
-            t = (CMLTransform3) builder.build(new StringReader(s))
-                    .getRootElement();
-            CMLTransform3Test
-                    .assertEquals("unit", CMLTransform3.UNIT44, t, EPS);
+            t = (CMLTransform3) builder.build(new StringReader(s)).getRootElement();
+            CMLTransform3Test.assertEquals("unit", CMLTransform3.UNIT44, t, EPS);
         } catch (ValidityException e) {
-            Assert
-                    .fail("should not throw validity exception "
-                            + e.getMessage());
+            Assert.fail("should not throw validity exception " + e.getMessage());
         } catch (ParsingException e) {
             Assert.fail("should not throw parsing exception " + e.getMessage());
         } catch (IOException e) {
@@ -103,15 +99,13 @@ public class CMLTransform3Test extends GeomTestBase {
         s = "<transform3 " + CML_XMLNS
                 + ">1 0 0 0 0 1 0 0 0 0 1 0 0 0 1</transform3>";
         try {
-            t = (CMLTransform3) builder.build(new StringReader(s))
-                    .getRootElement();
+            t = (CMLTransform3) builder.build(new StringReader(s)).getRootElement();
             Assert.fail("should not throw parsing exception");
         } catch (ValidityException e) {
             Assert.fail("should not throw validity " + e.getMessage());
         } catch (ParsingException e) {
             Assert.assertEquals("should throw parsing exception",
-                    "listLength required (16) incompatible with: 15", e
-                            .getMessage());
+                    "line must have 16 double components", e.getMessage());
         } catch (IOException e) {
             Assert.fail("should not throw IO " + e.getMessage());
         }

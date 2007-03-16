@@ -16,20 +16,20 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.xslt.XSLTransform;
 
+import org.xmlcml.cml.attribute.CountExpressionAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.element.CountExpressionAttribute;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 
@@ -552,6 +552,8 @@ formula='
         write(outfileName);
     }
     
+    /** process.
+     */
     public void processExplicit() {
     	throw new CMLRuntimeException("probably obsolete");
     }
@@ -580,6 +582,13 @@ formula='
         }
     }
     
+    /** create from template.
+     * 
+     * @param stylesheetFilename
+     * @param parameters
+     * @param catalog
+     * @return fragment
+     */
     public static CMLFragment createFromTemplate(
 		String stylesheetFilename, List<XSLParam> parameters, Catalog catalog) {
     	
@@ -727,7 +736,7 @@ class XSLParam {
 	String name;
 	String value;
 	
-	public XSLParam(String name, String value) {
+	XSLParam(String name, String value) {
 		this.name = name;
 		this.value = value;
 	}

@@ -122,8 +122,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
             Util.BUG("foo", new Exception("bar"));
             Assert.fail("should throw exception");
         } catch (RuntimeException e) {
-            Assert.assertEquals("bug", "BUG: (foo)should never throw", e
-                    .getMessage());
+            Assert.assertEquals("bug", "BUG: (foo)should never throw: java.lang.Exception: bar", e.getMessage());
         } catch (Exception e) {
             neverThrow(e);
         }
@@ -139,8 +138,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
             Util.BUG(new Exception("bar"));
             Assert.fail("should throw exception");
         } catch (RuntimeException e) {
-            Assert.assertEquals("bug", "BUG: should never throw", e
-                    .getMessage());
+            Assert.assertEquals("bug", "BUG: should never throw: java.lang.Exception: bar", e.getMessage());
         } catch (Exception e) {
             neverThrow(e);
         }
@@ -171,8 +169,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
             Util.BUG("foo");
             Assert.fail("should throw exception");
         } catch (RuntimeException e) {
-            Assert.assertEquals("bug", "BUG: (foo)should never throw", e
-                    .getMessage());
+            Assert.assertEquals("bug", "BUG: (foo)should never throw: java.lang.RuntimeException", e.getMessage());
         } catch (Exception e) {
             neverThrow(e);
         }
@@ -180,7 +177,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.Util#getInputStreamFromResource(java.lang.String)}.
+     * {@link org.xmlcml.euclid.Util#getInputStreamFromResource(java.lang.String)}.
      */
     @Test
     public final void testGetInputStreamFromResource() {
@@ -201,7 +198,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.Util#getResource(java.lang.String)}.
+     * {@link org.xmlcml.euclid.Util#getResource(java.lang.String)}.
      */
     @Test
     public final void testGetResource() {
@@ -214,7 +211,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.Util#getResourceFile(java.lang.String[])}.
+     * {@link org.xmlcml.euclid.Util#getResourceFile(java.lang.String[])}.
      */
     @Test
     public final void testGetResourceFile() {
@@ -655,60 +652,6 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
     @Test
     @Ignore
     public final void testInvert() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#check(double[], int)}.
-     */
-    @Test
-    @Ignore
-    public final void testCheckDoubleArrayInt() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#check(org.xmlcml.euclid.RealArray, int)}.
-     */
-    @Test
-    @Ignore
-    public final void testCheckRealArrayInt() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#check(int, int, int)}.
-     */
-    @Test
-    @Ignore
-    public final void testCheckIntIntInt() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#isEqual(double[], double[], double)}.
-     */
-    @Test
-    @Ignore
-    public final void testIsEqualDoubleArrayDoubleArrayDouble() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#isEqual(int[], int[], int)}.
-     */
-    @Test
-    @Ignore
-    public final void testIsEqualIntArrayIntArrayInt() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#concatenate(boolean[], java.lang.String)}.
-     */
-    @Test
-    @Ignore
-    public final void testConcatenateBooleanArrayString() {
         fail("Not yet implemented"); // TODO
     }
 

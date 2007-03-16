@@ -315,12 +315,8 @@ public class Transform3 extends RealSquareMatrix {
      * rotation of one vector onto another. this documentation has not been
      * checked
      * 
-     * @param v1
-     *            vector to rotate
-     * @param v2
-     *            vector to rotate v1 onto
-     * @exception EuclidException
-     *                <TT>v1</TT> or <TT>v2</TT> is zero length
+     * @param v1 vector to rotate
+     * @param v2 vector to rotate v1 onto
      */
     public Transform3(Vector3 v1, Vector3 v2) {
         super(4);

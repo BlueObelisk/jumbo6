@@ -7,6 +7,7 @@ import nu.xom.ValidityException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 /**
  * test for reaction elements.

@@ -3,6 +3,7 @@ package org.xmlcml.cml.element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.euclid.test.DoubleTest;
 
 /**
@@ -72,8 +73,7 @@ public class CMLLatticeVectorTest extends AbstractTest {
      */
     @Test
     public void testCopy() {
-        CMLLatticeVector latticeVector = (CMLLatticeVector) latticeVector1
-                .copy();
+        CMLLatticeVector latticeVector = (CMLLatticeVector) latticeVector1.copy();
         CMLLatticeVectorTest.assertEquals("copy", new double[] { 1., 2., 3. },
                 latticeVector, EPS);
     }

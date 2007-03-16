@@ -12,9 +12,9 @@ import org.junit.Test;
  */
 public class DoubleAttributeTest extends AttributeBaseTest {
 
-    DoubleAttribute daa1;
+    DoubleSTAttribute daa1;
 
-    DoubleAttribute daa2;
+    DoubleSTAttribute daa2;
 
     /**
      * setup.
@@ -24,12 +24,12 @@ public class DoubleAttributeTest extends AttributeBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        daa1 = new DoubleAttribute(new CMLAttribute("foo"), " 1.2   ");
+        daa1 = new DoubleSTAttribute(new CMLAttribute("foo"), " 1.2   ");
 
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.DoubleAttribute.getCMLValue()'
+     * Test method for 'org.xmlcml.cml.base.DoubleSTAttribute.getCMLValue()'
      */
     @Test
     public void testGetCMLValue() {
@@ -38,7 +38,7 @@ public class DoubleAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.DoubleAttribute.setCMLValue(String)'
+     * Test method for 'org.xmlcml.cml.base.DoubleSTAttribute.setCMLValue(String)'
      */
     @Test
     public void testSetCMLValueString() {
@@ -50,12 +50,12 @@ public class DoubleAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleAttribute.DoubleAttribute(DoubleAttribute)'
+     * 'org.xmlcml.cml.base.DoubleSTAttribute.DoubleAttribute(DoubleSTAttribute)'
      */
     @Test
     public void testDoubleAttributeDoubleAttribute() {
         daa1.setCMLValue("3.4");
-        daa2 = new DoubleAttribute(daa1);
+        daa2 = new DoubleSTAttribute(daa1);
         String dd = (String) daa2.getCMLValue();
         Assert.assertEquals("get CMLValue", "3.4", dd);
 
@@ -63,7 +63,7 @@ public class DoubleAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleAttribute.setCMLValue(double[])'
+     * 'org.xmlcml.cml.base.DoubleSTAttribute.setCMLValue(double[])'
      */
     @Test
     public void testSetCMLValueDouble() {
@@ -73,7 +73,7 @@ public class DoubleAttributeTest extends AttributeBaseTest {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.base.DoubleAttribute.checkValue(double[])'
+     * 'org.xmlcml.cml.base.DoubleSTAttribute.checkValue(double[])'
      */
     @Test
     public void testCheckValue() {
@@ -82,7 +82,7 @@ public class DoubleAttributeTest extends AttributeBaseTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.base.DoubleAttribute.getDouble()'
+     * Test method for 'org.xmlcml.cml.base.DoubleSTAttribute.getDouble()'
      */
     @Test
     public void testGetDouble() {

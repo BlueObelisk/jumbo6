@@ -13,15 +13,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.element.IndexableListManager;
 import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.cml.map.IndexableListManager;
 
 /**
  * @author pm286

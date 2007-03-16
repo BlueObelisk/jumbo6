@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
@@ -20,31 +21,31 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
-    
+
     /** direction of link */
     public enum Direction {
 
         /**
          * atomicSymbol to inidcate Direction.TO attribute is to be used.
-         * 
+         *
          */
         TO("to"),
 
         /**
          * atomicSymbol to inidcate Direction.FROM attribute is to be used.
-         * 
+         *
          */
         FROM("from"),
 
         /**
          * atomicSymbol indicating that both ends of link matter
-         * 
+         *
          */
         BOTH("both"),
 
         /**
          * atomicSymbol indicating that either end of link matters
-         * 
+         *
          */
         EITHER("either"),
 
@@ -65,7 +66,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
         /**
          * to string
-         * 
+         *
          * @return string
          */
         public String toString() {
@@ -95,7 +96,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * constructor.
-     * 
+     *
      * @param old
      */
     public CMLMap(CMLMap old) {
@@ -105,7 +106,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -119,18 +120,18 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent
      *            parent of element to be constructed (ignored by default)
      * @return CMLMap
      */
-    public static CMLMap makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLMap();
     }
 
     /**
      * shouldn't be necessary.
-     * 
+     *
      * @param parent
      *            element
      */
@@ -158,7 +159,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * returns the opposite of Direction.TO or Direction.FROM.
-     * 
+     *
      * @param toFrom
      *            Direction.TO or Direction.FROM
      * @return Direction.FROM or Direction.TO or null if other argument
@@ -202,7 +203,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /**
      * add a link. adds links regardless of current links. normally this is not
      * safe so addUniqueLink should be used.
-     * 
+     *
      * @param link
      *            to add
      */
@@ -228,7 +229,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
      * attributes and adds if it does not duplicate existing link or is allowed
      * to overwrite. if neither to or from exists then link is added no warning
      * is given if link exists and is overwritten
-     * 
+     *
      * @param link
      *            to add
      * @param control
@@ -288,10 +289,10 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * add map.
-     * 
+     *
      * do not check duplicate links. results is simple sum of maps (in order)
      * map2 is not affected
-     * 
+     *
      * @param map2
      *            with links to add
      */
@@ -305,7 +306,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * add a link to table.
-     * 
+     *
      * @param link
      *            to add
      */
@@ -323,7 +324,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * remove a link.
-     * 
+     *
      * @param link
      *            to remove
      */
@@ -341,7 +342,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets array of to attributes. does not do toSet
-     * 
+     *
      * @return the to attributes
      */
     public List<String> getToRefs() {
@@ -354,7 +355,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets array of from attributes. does not do fromSet
-     * 
+     *
      * @return the from attributes
      */
     public List<String> getFromRefs() {
@@ -367,7 +368,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets mapped fromTo atomId. works with sets
-     * 
+     *
      * @param fromId
      *            in the from attributes
      * @return the atomIds in the to attributes
@@ -378,7 +379,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets mapped toFrom atomIds. works with sets
-     * 
+     *
      * @param toId
      *            in the to attributes
      * @return the atomId in the from attributes
@@ -389,7 +390,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets mapped fromTo ids.
-     * 
+     *
      * @param fromIds
      *            from attributes
      * @return List of corresponding to attributes (may include nulls if not
@@ -406,7 +407,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets mapped fromTo ids.
-     * 
+     *
      * @param toIds
      *            to attributes
      * @return List of corresponding from attributes (may include nulls if not
@@ -422,7 +423,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets array of to or from attributes. does not work with sets
-     * 
+     *
      * @param toFrom
      *            either Direction.TO or Direction.FROM
      * @return the to or from attributes
@@ -438,10 +439,10 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets array of mapped to or from attributes. does not work with sets
-     * 
+     *
      * if toFrom is Direction.FROM then the returned string are the
      * Direction.FROM refs corresponding to an array of Direction.TO values
-     * 
+     *
      * @param ids
      *            the ids to be mapped, type determined by toFrom
      * @param toFrom
@@ -459,11 +460,11 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets mapped to or from attribute. works with sets
-     * 
+     *
      * if toFrom is Direction.FROM, returns the from attribute corresponding to
      * the to attribute with value id thus for a map with some link <link
      * from="f" to="t"/> getRef("t", Direction.FROM) returns "f"
-     * 
+     *
      * @param id
      *            the id to be mapped, type determined by toFrom
      * @param toFrom
@@ -479,11 +480,11 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets link mapped to or from attribute. works with sets
-     * 
+     *
      * if toFrom is Direction.FROM, returns the link corresponding to the to
      * attribute with value id thus for a map with some link <link from="f"
      * to="t"/> getRef("t", Direction.FROM) returns the link
-     * 
+     *
      * @param id
      *            the id to be mapped, type determined by toFrom
      * @param toFrom
@@ -500,7 +501,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * gets link from to and from attributes. does not work with sets
-     * 
+     *
      * @param from
      *            value of the from attribute
      * @param to
@@ -521,7 +522,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
      * is present in this map BOTH. Add (and therefore replace) link if both to
      * and from exist in a single link EITHER. Adds link. if either to or from
      * is present removes old link existing links
-     * 
+     *
      * @param addMap
      *            map to add. Not altered (links are copied)
      * @param control
@@ -537,7 +538,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * set the Direction.FROM context for all links.
-     * 
+     *
      * @param context
      *            to set
      */
@@ -549,7 +550,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * set the Direction.TO context for all links.
-     * 
+     *
      * @param context
      *            to set
      */
@@ -562,7 +563,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /**
      * set the Direction.FROM type for all child links. only works on current
      * list (i,e, if more links are added it should be repeated
-     * 
+     *
      * @param type
      *            to set
      */
@@ -575,7 +576,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /**
      * set the Direction.TO type for all links. only works on current list (i,e,
      * if more links are added it should be repeated
-     * 
+     *
      * @param type
      *            to set
      */
@@ -589,7 +590,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
      * extract all links involving particular elements. requires the link to
      * have fromType='foo' and toType='foo' and toSet and fromSet attributes
      * does not yet process them
-     * 
+     *
      * @param tag
      * @return all links containing sets of atoms.
      */
@@ -614,7 +615,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
      * gets type of link. // FIXME - create LinkTool use toType or fromType on
      * link, else use toType/fromType on parent CMLMap. probably needs to be
      * recast for LinkTool when written
-     * 
+     *
      * @param link
      * @param toFrom
      *            Direction.TO or Direction.FROM
@@ -637,7 +638,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
 
     /**
      * annote each link with context and type. (often better done in parent map)
-     * 
+     *
      * @param fromType
      * @param fromContext
      * @param toType

@@ -1,23 +1,42 @@
 package org.xmlcml.cml.tools;
 
+/**
+ * 
+ * @author pm286
+ *
+ */
 public class DisorderToolControls {
 	
 	private RemoveControl removeControl;
 	private ProcessControl processControl;
-	
+
+	/** constructor
+	 */
 	public DisorderToolControls() {
 		this(ProcessControl.STRICT, RemoveControl.REMOVE_MINOR_DISORDER);
 	}
 	
+	/** constructor.
+	 * 
+	 * @param processControl
+	 */
 	public DisorderToolControls(ProcessControl processControl) {
 		this(processControl, RemoveControl.REMOVE_MINOR_DISORDER);
 	}
 	
+	/** constructor.
+	 * 
+	 * @param removeControl
+	 */
 	public DisorderToolControls(RemoveControl removeControl) {
 		this(ProcessControl.STRICT, removeControl);
 	}
 	
-	
+	/** constructor.
+	 * 
+	 * @param processControl
+	 * @param removeControl
+	 */
 	public DisorderToolControls(ProcessControl processControl, RemoveControl removeControl) {
 		this.processControl = processControl;
 		this.removeControl = removeControl;

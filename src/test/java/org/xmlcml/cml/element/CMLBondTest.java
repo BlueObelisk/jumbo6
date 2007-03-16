@@ -10,9 +10,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.StringAttribute;
+import org.xmlcml.cml.base.StringSTAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Point3;
 
@@ -92,8 +93,8 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         CMLAttribute orderAtt = bond.getOrderAttribute();
         Assert.assertTrue("order class is subclass of CMLAttribute",
                 CMLAttribute.class.isAssignableFrom(orderAtt.getClass()));
-        Assert.assertEquals("order class is StringAttribute", orderAtt
-                .getClass(), StringAttribute.class);
+        Assert.assertEquals("order class is StringSTAttribute", orderAtt
+                .getClass(), StringSTAttribute.class);
         Assert.assertEquals("order value", bond.getOrder(), xbond.getOrder());
         Assert.assertEquals("bond is identical", 0, bond.compareTo(xbond));
     }
@@ -293,12 +294,13 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         try {
             bond.incrementOrder(1);
         } catch (CMLRuntimeException e) {
-            Assert
-                    .assertEquals(
-                            "cannot increment bond order 3",
-                            CMLRuntimeException.class.getName()+": Cannot increment bond order 3",
-                            "" + e);
+            Assert.assertEquals(
+                    "cannot increment bond order 3",
+                    CMLRuntimeException.class.getName()+": Cannot increment bond order 3",
+                    "" + e);
         }
+        Assert.assertEquals("order", CMLBond.UNKNOWN_ORDER, bond.getOrder());
+        bond.setOrder(CMLBond.TRIPLE);
         Assert.assertEquals("order", CMLBond.TRIPLE, bond.getOrder());
         bond.incrementOrder(-1);
         Assert.assertEquals("order", CMLBond.DOUBLE, bond.getOrder());
@@ -307,8 +309,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
         try {
             bond.incrementOrder(-1);
         } catch (CMLRuntimeException e) {
-            Assert
-                    .assertEquals(
+            Assert.assertEquals(
                             "cannot decrement single",
                             CMLRuntimeException.class.getName()+": Cannot decrement bond order 1",
                             "" + e);

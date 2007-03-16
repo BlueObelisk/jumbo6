@@ -12,9 +12,13 @@ import nu.xom.ValidityException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.DictRefAttribute;
+import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -117,7 +121,7 @@ public class CMLScalarTest extends NumericTest {
 		if (unitsUnitListMap == null) {
 			try {
 				unitsUnitListMap = new NamespaceToUnitListMap(Util
-						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 			} catch (IOException e) {
 				Assert.fail("should not throw " + e);
 			}
@@ -200,11 +204,10 @@ public class CMLScalarTest extends NumericTest {
 		Assert.assertNotNull("new CMLScalar", copy);
 		Assert.assertEquals("data type", CMLElement.XSD_STRING, copy
 				.getDataType());
-		Assert.assertEquals("value", S_EMPTY, copy.getString());
-		Assert.assertEquals("value", S_EMPTY, copy.getXMLContent());
+		Assert.assertEquals("value", null, copy.getString());
+		Assert.assertEquals("value", null, copy.getXMLContent());
 		int nchild = copy.getChildCount();
-		Assert.assertEquals("should be a text child", 1, nchild);
-		// Assert.assertEquals("should be a text child - wrong", 0, nchild);
+		Assert.assertEquals("should be no text child", 0, nchild);
 
 	}
 
@@ -794,7 +797,7 @@ public class CMLScalarTest extends NumericTest {
 		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
 		Assert.assertEquals("scalar count", 3, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
-		UnitAttribute unitsAttribute = (UnitAttribute) scalar
+		UnitsAttribute unitsAttribute = (UnitsAttribute) scalar
 				.getUnitsAttribute();
 		Assert.assertNotNull("units attribute not null", unitsAttribute);
 		CMLUnit unit = unitsUnitListMap.getUnit(unitsAttribute);

@@ -57,7 +57,7 @@ public class CMLSymmetry extends AbstractSymmetry {
      *            parent of element to be constructed (ignored by default)
      * @return CMLSymmetry
      */
-    public static CMLSymmetry makeElementInContext(Element parent) {
+    public CMLSymmetry makeElementInContext(Element parent) {
         return new CMLSymmetry();
 
     }

@@ -10,7 +10,6 @@ import java.util.List;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
-
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -25,7 +24,6 @@ import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 import nu.xom.tests.XOMTestCase;
 
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.euclid.Util;
 
 /*-- @SuppressWarnings("all")
@@ -135,13 +133,12 @@ public abstract class CMLUtil implements CMLConstants {
 
     /**
      * debug an element. outputs XML to sysout
-     * 
-     * @param el
-     *            the element
+     * indent = 2
+     * @param el the element
      */
     public static void debug(Element el) {
         try {
-            debug(el, System.out);
+            debug(el, System.out, 2);
         } catch (IOException e) {
             throw new CMLRuntimeException("BUG " + e);
         }
@@ -155,7 +152,7 @@ public abstract class CMLUtil implements CMLConstants {
      */
     public static void debugToErr(Element el) {
         try {
-            debug(el, System.err);
+            debug(el, System.err, 2);
         } catch (IOException e) {
             throw new CMLRuntimeException("BUG " + e);
         }
@@ -164,13 +161,12 @@ public abstract class CMLUtil implements CMLConstants {
 	/**
 	 * debug an element.
 	 * 
-	 * @param el
-	 *            the element
-	 * @param os
-	 *            output stream
+	 * @param el the element
+	 * @param os output stream
+	 * @param indent indentation
 	 * @throws IOException
 	 */
-	public static void debug(Element el, OutputStream os) throws IOException {
+	public static void debug(Element el, OutputStream os, int indent) throws IOException {
 		Document document;
 		Node parent = el.getParent();
 		if (parent instanceof Document) {
@@ -180,7 +176,9 @@ public abstract class CMLUtil implements CMLConstants {
 			document = new Document(copyElem);
 		}
 		Serializer serializer = new Serializer(os);
-		// serializer.setLineSeparator("\r\n");
+		if (indent > 0) {
+			serializer.setIndent(indent);
+		}
 		serializer.write(document);
 	}
 
@@ -564,6 +562,7 @@ public abstract class CMLUtil implements CMLConstants {
      * @param refNode first node
      * @param testNode second node
      * @param stripWhite if tru remove w/s nodes
+     * @return is equal
      */
     public static boolean equalsCanonically(
             Element refNode, Element testNode, boolean stripWhite) {
@@ -586,4 +585,32 @@ public abstract class CMLUtil implements CMLConstants {
     	}
         return equals;
     }
+
+    /** create local CML class name.
+     * e.g. CMLFooBar from fooBar
+     * @param name
+     * @return name
+     */
+	public static String makeCMLName(String name) {
+		return "CML"+capitalize(name);
+	}
+	
+    /** create local Abstract class name.
+     * e.g. AbstractFooBar from fooBar
+     * @param name
+     * @return name
+     */
+	public static String makeAbstractName(String name) {
+		return "Abstract"+capitalize(name);
+	}
+	
+    /** capitalize name
+     * e.g. FooBar from fooBar
+     * @param name
+     * @return name
+     */
+	public static String capitalize(String name) {
+		return name.substring(0, 1).toUpperCase()+ name.substring(1);
+	}
+	
 }

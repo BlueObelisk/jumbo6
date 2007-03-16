@@ -7,9 +7,9 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 
 /** tests atomTree.
@@ -214,7 +214,7 @@ public class AtomTreeTest extends AbstractToolTest {
             if (obj instanceof CMLAtom) {
   //              System.out.println("A "+((CMLAtom)obj).getId());
             } else if (obj instanceof CMLAtomSet) {
- //               System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), "/"));
+ //               System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), S_SLASH));
             }
         }
     }

@@ -11,10 +11,10 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLScalar;
 
@@ -90,7 +90,8 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 
 	/**
 	 * normal constructor.
-	 * @param catalogUrl
+	 * @param catalogListUrl
+	 * @return manager
 	 */
 	public CatalogManager(URL catalogListUrl) {
 		this.url = catalogListUrl;
@@ -240,7 +241,10 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 		}
 		return catalog;
 	}
-	
+
+	/** get URL.
+	 * @return url
+	 */
 	public URL getURL() {
 		return this.url;
 	}

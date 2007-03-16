@@ -8,6 +8,7 @@ import nu.xom.Elements;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.EuclidException;
@@ -471,7 +472,7 @@ public class CMLMatrixTest extends NumericTest {
         List<CMLElement> matrixs = cml.getElements(".//"+CMLMatrix.NS);
         Assert.assertEquals("matrix count", 3, matrixs.size());
         CMLMatrix matrix = (CMLMatrix) matrixs.get(0);
-        UnitAttribute unitsAttribute = (UnitAttribute) matrix
+        UnitsAttribute unitsAttribute = (UnitsAttribute) matrix
                 .getUnitsAttribute();
         Assert.assertNotNull("units attribute not null", unitsAttribute);
         CMLUnit unit = unitsUnitListMap.getUnit(unitsAttribute);

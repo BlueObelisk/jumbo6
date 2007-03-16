@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import org.xmlcml.cml.base.CMLRuntimeException;
-
 import nu.xom.Element;
 import nu.xom.Node;
+
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.interfacex.GenericEntry;
+import org.xmlcml.cml.interfacex.Indexable;
+import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.map.IndexableListManager;
 
 /**
  * The enumerations are managed by the IndexableList mechanism
@@ -17,7 +22,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-	
+
     private IndexableListManager indexableListManager;
     /**
      * constructor.
@@ -25,7 +30,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
     public CMLEntry() {
     	ensureManager();
     }
-    
+
     private void ensureManager() {
     	if (this.indexableListManager == null) {
     		this.indexableListManager = new IndexableListManager(this);
@@ -42,7 +47,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     /**
      * constructor.
-     * 
+     *
      * @param old
      */
     public CMLEntry(CMLEntry old) {
@@ -52,7 +57,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     /**
      * normal constructor.
-     * 
+     *
      * @param id of entry (should be unique within dictionary);
      */
     public CMLEntry(String id) {
@@ -62,7 +67,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     /**
      * copy node .
-     * 
+     *
      * @return Node
      */
     public Node copy() {
@@ -72,15 +77,15 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     /**
      * create new instance in context of parent, overridable by subclasses.
-     * 
+     *
      * @param parent of element to be constructed (ignored by default)
      * @return CMLEntry
      */
-    public static CMLEntry makeElementInContext(Element parent) {
+    public CMLElement makeElementInContext(Element parent) {
         return new CMLEntry();
 
     }
-    
+
     /** get list of enumerations.
      * @return list
      */
@@ -130,7 +135,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
     	ensureManager();
     	return indexableListManager.getById(id);
     }
-    
+
     /** get index
      * @return enumeration or null
      */
@@ -152,14 +157,14 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
     public String getIndexableLocalName() {
     	return CMLEnumeration.TAG;
     }
-    
+
     /** update the index.
      */
     public void updateIndex() {
     	ensureManager();
     	this.indexableListManager.indexList();
     }
-    
+
 	/** sort enumerations in each entry
 	 */
     public void sortEnumerations() {

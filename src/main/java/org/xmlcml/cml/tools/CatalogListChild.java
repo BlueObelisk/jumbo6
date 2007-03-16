@@ -24,6 +24,7 @@ public interface CatalogListChild extends CMLConstants {
 		CATALOG(C_A+"catalog"),
 		/** catalogList */
 		CATALOGLIST(C_A+"catalogList");
+		/** value */
 		public String value;
 		private Type(String s) {
 			this.value = s;
@@ -38,6 +39,7 @@ public interface CatalogListChild extends CMLConstants {
 		RELATIVE(C_A+"relativeUrl"),
 		/** relative to classpath/resource*/
 		RESOURCE(C_A+"resourceUrl");
+		/** value */
 		public String value;
 		private Address(String s) {
 			this.value = s;

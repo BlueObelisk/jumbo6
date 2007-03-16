@@ -6,6 +6,9 @@ package org.xmlcml.util;
 
 import java.math.BigInteger;
 
+/** generate combinations.
+ * 
+ */
 public class CombinationGenerator {
 
 	private int[] a;
@@ -18,6 +21,10 @@ public class CombinationGenerator {
 	// Constructor
 	//------------
 
+	/** constructor.
+	 * @param n
+	 * @param r
+	 */
 	public CombinationGenerator (int n, int r) {
 		if (r > n) {
 			throw new IllegalArgumentException ();
@@ -39,6 +46,9 @@ public class CombinationGenerator {
 	// Reset
 	//------
 
+	/** reset.
+	 * 
+	 */
 	public void reset () {
 		for (int i = 0; i < a.length; i++) {
 			a[i] = i;
@@ -50,6 +60,9 @@ public class CombinationGenerator {
 	// Return number of combinations not yet generated
 	//------------------------------------------------
 
+	/** 
+	 * @return big int
+	 */
 	public BigInteger getNumLeft () {
 		return numLeft;
 	}
@@ -58,14 +71,17 @@ public class CombinationGenerator {
 	// Are there more combinations?
 	//-----------------------------
 
+	/**
+	 * @return has more
+	 */
 	public boolean hasMore () {
 		return numLeft.compareTo (BigInteger.ZERO) == 1;
 	}
 
-	//------------------------------------
-	// Return total number of combinations
-	//------------------------------------
-
+	/**
+	* Return total number of combinations
+	 * @return big int
+	 */
 	public BigInteger getTotal () {
 		return total;
 	}
@@ -82,9 +98,10 @@ public class CombinationGenerator {
 		return fact;
 	}
 
-	//--------------------------------------------------------
-	// Generate next combination (algorithm from Rosen p. 286)
-	//--------------------------------------------------------
+	/** Generate next combination (algorithm from Rosen p. 286)
+	 * 
+	 * @return combinations
+	 */
 
 	public int[] getNext () {
 

@@ -209,7 +209,7 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
         } catch (IOException e) {
             Assert.fail("Should not throw IOException");
         } catch (ParsingException e) {
-            Assert.assertEquals("duplicate id", "Duplicate atom: a1", e
+            Assert.assertEquals("duplicate id", "Index atom: duplicate atom: a1", e
                     .getMessage());
         }
 

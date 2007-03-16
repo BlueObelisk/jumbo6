@@ -11,15 +11,15 @@ import java.util.Map;
 import nu.xom.Document;
 import nu.xom.Element;
 
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.Indexable;
-import org.xmlcml.cml.element.IndexableList;
-import org.xmlcml.cml.element.IndexableListManager;
+import org.xmlcml.cml.interfacex.Indexable;
+import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.map.IndexableListManager;
 
 /**
  * simple catalog for CML. 
@@ -52,7 +52,9 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	public final static String CATALOG_XML = "catalog.xml";
 	/** molecule */
 	public final static String DICTIONARY_CATALOG = C_A+"dictionaryCatalog";
+	/** */
 	public final static String FRAGMENT_CATALOG = C_A+"fragmentCatalog";
+	/** */
 	public final static String MOLECULE_CATALOG = C_A+"moleculeCatalog";
 
 	// this is the direct content of the catalog.xml file
@@ -114,6 +116,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	/** get map of indexables under namespace.
 	 * also updates the index
 	 * @param namespace
+	 * @param type
 	 * @return map indexed by id
 	 */
 	public IndexableList getIndexableList(

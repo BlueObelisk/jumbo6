@@ -6,6 +6,7 @@ import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.euclid.Util;
 

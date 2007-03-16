@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import nu.xom.Element;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.test.StringTest;
 
@@ -49,7 +52,15 @@ public class CMLAngleTest extends AbstractTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        CMLCml cml = (CMLCml) parseValidString(s1);
+        Element element = null;
+        try {
+        	element = parseValidString(s1);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	System.out.println("EXC "+e);
+        	throw e;
+        }
+        CMLCml cml = (CMLCml) element;
         molecule1 = (CMLMolecule) cml.getChildCMLElements("molecule").get(0);
         angle0 = (CMLAngle) cml.getChildCMLElements("angle").get(0);
         angle1 = (CMLAngle) cml.getChildCMLElements("angle").get(1);

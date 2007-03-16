@@ -119,10 +119,10 @@ public class DisorderAssembly implements CMLConstants {
      * which doesn't comply with the CIF specification.
      * 
      * @param disorderedAtomList atoms to use
-     * @exception Exception
      * @return list of assemblies (or empty list)
      */
-    public static List<DisorderAssembly> getDisorderedAssemblyList (List<CMLAtom> disorderedAtomList) {
+    public static List<DisorderAssembly> getDisorderedAssemblyList
+        (List<CMLAtom> disorderedAtomList) {
 
     	List<DisorderAssembly> assemblyList = new ArrayList<DisorderAssembly>();
     	Map<String, DisorderAssembly> assemblyMap = new HashMap<String, DisorderAssembly>();
@@ -165,7 +165,6 @@ public class DisorderAssembly implements CMLConstants {
     /** add atom.
      * no checking at present
      * @param atom
-     * @exception Exception
      */
     public void addAtom(CMLAtom atom) {
     	String groupCode = DisorderGroup.getAtomCode(atom);

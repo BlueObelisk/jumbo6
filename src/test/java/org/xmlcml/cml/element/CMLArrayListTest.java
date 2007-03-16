@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.cml.interfacex.HasArraySize;
 
 /**
  * @author pm286
@@ -108,7 +109,7 @@ public class CMLArrayListTest extends AbstractTableTest {
     @Test
     public final void testGetCommonDelimiter() {
         String delim = arrayList.getCommonDelimiter();
-        Assert.assertEquals("delim", S_SPACE, delim);
+        Assert.assertEquals("slashDelim", S_EMPTY, delim);
     }
 
     /**

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -32,7 +33,7 @@ public class NumericTest extends AbstractTest {
 		if (unitsUnitListMap == null) {
 			try {
 				unitsUnitListMap = new NamespaceToUnitListMap(Util
-						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML));
+						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 			} catch (IOException e) {
 				Assert.fail("should not throw " + e);
 			}

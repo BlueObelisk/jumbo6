@@ -128,8 +128,7 @@ public abstract class GeomTestBase extends AbstractTest {
         xmlP001S = "<point3 " + CML_XMLNS + ">0 0 1</point3>";
         xmlP123S = "<point3 " + CML_XMLNS + ">1 2 3</point3>";
 
-        xmlP111 = (CMLPoint3) builder.build(new StringReader(xmlP111S))
-                .getRootElement();
+        xmlP111 = (CMLPoint3) builder.build(new StringReader(xmlP111S)).getRootElement();
         xmlP123 = (CMLPoint3) builder.build(new StringReader(xmlP123S))
                 .getRootElement();
         xmlP100 = (CMLPoint3) builder.build(new StringReader(xmlP100S))

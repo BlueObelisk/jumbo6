@@ -5,9 +5,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.DelimiterAttribute;
+import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.attribute.DelimiterAttribute.Action;
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.test.DoubleTest;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.euclid.test.StringTest;
@@ -34,7 +40,7 @@ public class CMLArrayTest extends NumericTest {
 
     String[] s1 = { "v", "w", "x", "y", "z" };
 
-    String delim = S_SLASH;
+    String slashDelim = S_SLASH;
 
     CMLArray xomS;
 
@@ -51,41 +57,6 @@ public class CMLArrayTest extends NumericTest {
     CMLArray xomS1;
 
     String xmlSS = "<array " + CML_XMLNS + "/>";
-
-    // note these are String arrays
-    String xmlS0S = "<array " + CML_XMLNS + ">1 2 3 4 5</array>";
-
-    String xmlS1S = "<array delimiter='/' " + CML_XMLNS
-            + ">/10/20/30/40/50/</array>";
-
-    // while these are ints
-    String xmlI0S = "<array dataType='xsd:integer' " + CML_XMLNS
-            + ">1 2 3 4 5</array>";
-
-    String xmlI1S = "<array dataType='xsd:integer' delimiter='/' " + CML_XMLNS
-            + ">/10/20/30/40/50/</array>";
-
-    String xmlD0S = "<array dataType='xsd:double' " + CML_XMLNS
-            + ">1. 2. 3. 4. 5.</array>";
-
-    String xmlD1S = "<array dataType='xsd:double' delimiter='/' " + CML_XMLNS
-            + ">/10./20./30./40./50./</array>";
-
-    String xmlBad1 = "<array dataType='xsd:double' delimiter='/' " + CML_XMLNS
-            + ">/a/b/</array>";
-
-    String xmlBad2 = "<array size='2' delimiter='/' " + CML_XMLNS
-            + ">a b c</array>";
-
-    String xmlBad3 = "<array size='3' dataType='xsd:double'  " + CML_XMLNS
-            + ">1 2 c</array>";
-
-    String xmlBad4 = "<array size='3' dataType='xsd:integer'  " + CML_XMLNS
-            + ">1 2 c</array>";
-
-    String xmlBad5 = "<array delimiter=' ' " + CML_XMLNS + ">a b c</array>";
-
-    String xmlBad6 = "<array size='2' " + CML_XMLNS + ">a b c</array>";
 
     CMLArray xmlS;
 
@@ -120,24 +91,48 @@ public class CMLArrayTest extends NumericTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        xomS = new CMLArray();
+        try {
+        
+	        xomS = new CMLArray();
+	        xmlS = (CMLArray) parseValidString(xmlSS);
+	        xomD0 = new CMLArray(d0);
+	        xomI0 = new CMLArray(i0);
+	        xomS0 = new CMLArray(s0);
+	        
+	        xomD1 = new CMLArray(d1, slashDelim);
+	        xomI1 = new CMLArray(i1, slashDelim);
+	        xomS1 = new CMLArray(s1, slashDelim);
+	
+	        // note these are String arrays
+	        String xmlS0S = "<array " + CML_XMLNS + ">1 2 3 4 5</array>";
+	
+	        String xmlS1S = "<array delimiter='/' " + CML_XMLNS
+	        + ">/100/200/300/400/500/</array>";
+	
+	        // while these are ints
+	        String xmlI0S = "<array dataType='xsd:integer' " + CML_XMLNS
+	                + ">1 2 3 4 5</array>";
+	
+	        String xmlI1S = "<array dataType='xsd:integer' delimiter='/' " + CML_XMLNS
+	                + ">/10/20/30/40/50/</array>";
+	
+	        String xmlD0S = "<array dataType='xsd:double' " + CML_XMLNS
+	                + ">1. 2. 3. 4. 5.</array>";
+	
+	        String xmlD1S = "<array dataType='xsd:double' delimiter='/' " + CML_XMLNS
+	                + ">/10./20./30./40./50./</array>";
+	
+	        xmlS0 = (CMLArray) parseValidString(xmlS0S);
+	        xmlS1 = (CMLArray) parseValidString(xmlS1S);
+	        	xmlI0 = (CMLArray) parseValidString(xmlI0S);
+	        xmlI1 = (CMLArray) parseValidString(xmlI1S);
+	        xmlD0 = (CMLArray) parseValidString(xmlD0S);
+	        xmlD1 = (CMLArray) parseValidString(xmlD1S);
 
-        xomD0 = new CMLArray(d0);
-        xomI0 = new CMLArray(i0);
-        xomS0 = new CMLArray(s0);
-
-        xomD1 = new CMLArray(d1, delim);
-        xomI1 = new CMLArray(i1, delim);
-        xomS1 = new CMLArray(s1, delim);
-
-        xmlS = (CMLArray) parseValidString(xmlSS);
-        xmlS0 = (CMLArray) parseValidString(xmlS0S);
-        xmlS1 = (CMLArray) parseValidString(xmlS1S);
-        xmlI0 = (CMLArray) parseValidString(xmlI0S);
-        xmlI1 = (CMLArray) parseValidString(xmlI1S);
-        xmlD0 = (CMLArray) parseValidString(xmlD0S);
-        xmlD1 = (CMLArray) parseValidString(xmlD1S);
-
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	throw new CMLRuntimeException("EXC "+e);
+        }
     }
 
     /**
@@ -176,8 +171,7 @@ public class CMLArrayTest extends NumericTest {
     /**
      * equality test. true if both args not null and equal within epsilon
      *
-     * @param msg
-     *            message
+     * @param msg message
      * @param test
      * @param expected
      * @param epsilon
@@ -236,9 +230,12 @@ public class CMLArrayTest extends NumericTest {
      * 'org.xmlcml.cml.element.CMLArray.finishMakingElement()'
      */
     @Test
-    public void testFinishMakingElement() {
+    public void testCatchErrors() {
+
         CMLArray a = null;
         try {
+            String xmlBad1 = "<array dataType='xsd:double' delimiter='/' " + CML_XMLNS
+            + ">/a/b/</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad1);
             Assert.fail("bad 1 should not parse");
         } catch (Exception e) {
@@ -246,6 +243,8 @@ public class CMLArrayTest extends NumericTest {
                     e.getMessage());
         }
         try {
+        	String xmlBad2 = "<array size='2' delimiter='/' " + CML_XMLNS
+            + ">a b c</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad2);
             Assert.fail("bad 2 should not parse - inconsistent size");
         } catch (Exception e) {
@@ -254,6 +253,8 @@ public class CMLArrayTest extends NumericTest {
                             .getMessage());
         }
         try {
+        	String xmlBad3 = "<array size='3' dataType='xsd:double'  " + CML_XMLNS
+            + ">1 2 c</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad3);
             Assert.fail("bad 3 should not parse");
         } catch (Exception e) {
@@ -261,6 +262,8 @@ public class CMLArrayTest extends NumericTest {
                     e.getMessage());
         }
         try {
+        	String xmlBad4 = "<array size='3' dataType='xsd:integer'  " + CML_XMLNS
+            + ">1 2 c</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad4);
             Assert.fail("bad 4 should not parse");
         } catch (Exception e) {
@@ -268,16 +271,19 @@ public class CMLArrayTest extends NumericTest {
                     .getMessage());
         }
         try {
+    		String xmlBad5 = "<array " + CML_XMLNS + ">a b c d</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad5);
-            Assert.assertNull("whitespace delim", a.getDelimiterAttribute());
-            Assert.assertEquals("token length", 3, a.getStrings().length);
-            Assert.assertEquals("token 0", "a", a.getStrings()[0]);
+            Assert.assertNotNull("whitespace delimiter should not be null", a.getDelimiterAttribute());
+            Assert.assertEquals("whitespace delimiter", S_EMPTY, a.getDelimiter());
+            Assert.assertEquals("token length", 4, a.getStrings().length);
+            Assert.assertEquals("token 0", "c", a.getStrings()[2]);
         } catch (Exception e) {
             Assert.assertEquals("inconsistent length",
                     "Size attribute: 2 incompatible with content: 3", e
                             .getMessage());
         }
         try {
+        	String xmlBad6 = "<array size='2' " + CML_XMLNS + ">a b c</array>";
             a = (CMLArray) new CMLBuilder().parseString(xmlBad6);
             Assert.fail("bad 6 should not parse - inconsistent size");
         } catch (Exception e) {
@@ -348,24 +354,26 @@ public class CMLArrayTest extends NumericTest {
      * Test method for 'org.xmlcml.cml.element.CMLArray.getDelimiter()'
      */
     @Test
-    public void testGetDelimiter() {
-        Assert.assertNull("default", xomS.getDelimiterAttribute());
-
-        Assert.assertNull("string", xomS0.getDelimiterAttribute());
-        Assert.assertNull("double", xomD0.getDelimiterAttribute());
-        Assert.assertNull("int", xomI0.getDelimiterAttribute());
-
-        Assert.assertEquals("string", S_SLASH, xomS1.getDelimiter());
-        Assert.assertEquals("double", S_SLASH, xomD1.getDelimiter());
-        Assert.assertEquals("int", S_SLASH, xomI1.getDelimiter());
-
-        Assert.assertNull("string", xmlS0.getDelimiterAttribute());
-        Assert.assertNull("double", xmlD0.getDelimiterAttribute());
-        Assert.assertNull("int", xmlI0.getDelimiterAttribute());
-
-        Assert.assertEquals("string", S_SLASH, xmlS1.getDelimiter());
-        Assert.assertEquals("double", S_SLASH, xmlD1.getDelimiter());
-        Assert.assertEquals("int", S_SLASH, xmlI1.getDelimiter());
+    public void testGetDelimiterSplitterConcat() {
+    	
+    	CMLArray arrayS = new CMLArray();
+        DelimiterAttribute delimiterAttribute = (DelimiterAttribute) arrayS.getDelimiterAttribute();
+        Assert.assertNotNull("default", delimiterAttribute);
+        Assert.assertEquals("default", S_EMPTY, delimiterAttribute.getValue());
+        Assert.assertEquals("default", S_WHITEREGEX, delimiterAttribute.getSplitter());
+        Assert.assertEquals("default", S_SPACE, delimiterAttribute.getConcat());
+    	
+        Assert.assertEquals("default", S_EMPTY, arrayS.getDelimiter());
+    	
+        arrayS.setDelimiter(S_COMMA);
+        delimiterAttribute = (DelimiterAttribute) arrayS.getDelimiterAttribute();
+        Assert.assertNotNull("default", delimiterAttribute);
+        Assert.assertEquals("default", S_COMMA, delimiterAttribute.getValue());
+        Assert.assertEquals("default", S_COMMA, delimiterAttribute.getSplitter());
+        Assert.assertEquals("default", S_COMMA, delimiterAttribute.getConcat());
+    	
+        Assert.assertEquals("default", S_COMMA, arrayS.getDelimiter());
+    	
     }
 
     /**
@@ -400,9 +408,16 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testCMLArray() {
+
+    	CMLArray array0 = new CMLArray();
+        Assert.assertEquals("size", 0, array0.getSize());
+        Assert.assertNotNull("delimiter", array0.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, array0.getDelimiter());
+        Assert.assertEquals("dataType", XSD_STRING, array0.getDataType());
+    	
         Assert.assertEquals("size", 0, xomS.getSize());
-        Assert.assertNull("delimiter", xomS.getDelimiterAttribute());
-        Assert.assertEquals("delimiter", S_SPACE, xomS.getDelimiter());
+        Assert.assertNotNull("delimiter", xomS.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, xomS.getDelimiter());
         Assert.assertEquals("dataType", XSD_STRING, xomS.getDataType());
     }
 
@@ -413,8 +428,8 @@ public class CMLArrayTest extends NumericTest {
     public void testCMLArrayCMLArray() {
 
         CMLArray s2 = new CMLArray(xomS0);
-        Assert.assertNull("delimiter", s2.getDelimiterAttribute());
-        Assert.assertEquals("delimiter", S_SPACE, s2.getDelimiter());
+        Assert.assertNotNull("delimiter", s2.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, s2.getDelimiter());
         Assert.assertEquals("size", 5, s2.getSize());
         Assert.assertEquals("dataType", XSD_STRING, s2.getDataType());
         String[] ss = s2.getStrings();
@@ -422,8 +437,8 @@ public class CMLArrayTest extends NumericTest {
         Assert.assertEquals("element", "e", ss[4]);
 
         s2 = new CMLArray(xomD0);
-        Assert.assertNull("delimiter", s2.getDelimiterAttribute());
-        Assert.assertEquals("delimiter", S_SPACE, s2.getDelimiter());
+        Assert.assertNotNull("delimiter", s2.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, s2.getDelimiter());
         Assert.assertEquals("size", 5, s2.getSize());
         Assert.assertEquals("dataType", XSD_DOUBLE, s2.getDataType());
         double[] dd = null;
@@ -436,8 +451,8 @@ public class CMLArrayTest extends NumericTest {
         Assert.assertEquals("element", 5., dd[4], EPS);
 
         s2 = new CMLArray(xomI0);
-        Assert.assertNull("delimiter", s2.getDelimiterAttribute());
-        Assert.assertEquals("delimiter", S_SPACE, s2.getDelimiter());
+        Assert.assertNotNull("delimiter", s2.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, s2.getDelimiter());
         Assert.assertEquals("size", 5, s2.getSize());
         Assert.assertEquals("dataType", XSD_INTEGER, s2.getDataType());
         int[] ii = null;
@@ -450,8 +465,8 @@ public class CMLArrayTest extends NumericTest {
         Assert.assertEquals("element", 5, ii[4]);
 
         s2 = new CMLArray(xmlI0);
-        Assert.assertNull("delimiter", s2.getDelimiterAttribute());
-        Assert.assertEquals("delimiter", S_SPACE, s2.getDelimiter());
+        Assert.assertNotNull("delimiter", s2.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, s2.getDelimiter());
         Assert.assertEquals("size", 5, s2.getSize());
         Assert.assertEquals("dataType", XSD_INTEGER, s2.getDataType());
         ii = null;
@@ -483,15 +498,45 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testCMLArrayStringArray() {
-        Assert.assertEquals("data type", XSD_STRING, xomS0.getDataType());
-        Assert.assertEquals("size", 5, xomS0.getSize());
-        Assert.assertEquals("content", "a b c d e", xomS0.getXMLContent());
-        Assert.assertEquals("delimiter", S_SPACE, xomS0.getDelimiter());
-        Assert.assertNull("delimiter", xomS0.getDelimiterAttribute());
+    	CMLArray arrayS = new CMLArray(new String[]{"a", "b", "c"}); 
+        Assert.assertEquals("data type", XSD_STRING, arrayS.getDataType());
+        Assert.assertEquals("size", 3, arrayS.getSize());
+        Assert.assertEquals("content", "a b c", arrayS.getXMLContent());
+        Assert.assertEquals("delimiter", S_EMPTY, arrayS.getDelimiter());
+        DelimiterAttribute delimiterAttribute = (DelimiterAttribute) arrayS.getDelimiterAttribute();
+        Assert.assertNotNull("delimiter attribute", delimiterAttribute);
+        Assert.assertEquals("concat", S_SPACE, delimiterAttribute.getConcat());
+        
+        Assert.assertEquals("delimiter", S_EMPTY, xomS0.getDelimiter());
+        Assert.assertNotNull("delimiter", xomS0.getDelimiterAttribute());
         String[] ss = xomS0.getStrings();
         Assert.assertEquals("length", 5, ss.length);
         Assert.assertEquals("array0", "a", ss[0]);
         Assert.assertEquals("array4", "e", ss[4]);
+    	
+        Assert.assertEquals("data type", XSD_STRING, xomS0.getDataType());
+        Assert.assertEquals("size", 5, xomS0.getSize());
+        Assert.assertEquals("content", "a b c d e", xomS0.getXMLContent());
+        Assert.assertEquals("delimiter", S_EMPTY, xomS0.getDelimiter());
+        Assert.assertNotNull("delimiter", xomS0.getDelimiterAttribute());
+        ss = xomS0.getStrings();
+        Assert.assertEquals("length", 5, ss.length);
+        Assert.assertEquals("array0", "a", ss[0]);
+        Assert.assertEquals("array4", "e", ss[4]);
+    }
+
+    /** test ensureDelimiter
+     */
+    @Test
+    public void testEnsureDelimiterAttribute() {
+    	CMLArray array = new CMLArray();
+        array.ensureDelimiterAttribute(Action.PRESERVE);
+        DelimiterAttribute delimiterAttribute = 
+        	(DelimiterAttribute) array.getDelimiterAttribute();
+        Assert.assertNotNull("delimiter", delimiterAttribute);
+        Assert.assertEquals("delimiter", S_SPACE, delimiterAttribute.getConcat());
+        Assert.assertEquals("delimiter", S_WHITEREGEX, delimiterAttribute.getSplitter());
+        Assert.assertEquals("delimiter", S_EMPTY, delimiterAttribute.getValue());
     }
 
     /**
@@ -517,12 +562,21 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testCMLArrayDoubleArray() {
+    	
+    	double[] dd = new double[]{10.0, 20.0, 30.0, 40.0, 50.0};
+    	CMLArray arrayD = new CMLArray(dd);
+        Assert.assertEquals("data type", XSD_DOUBLE, arrayD.getDataType());
+        Assert.assertEquals("size", 5, arrayD.getSize());
+        Assert.assertEquals("content", "10.0 20.0 30.0 40.0 50.0", arrayD.getXMLContent());
+        Assert.assertEquals("delimiter", S_EMPTY, arrayD.getDelimiter());
+        Assert.assertNotNull("delimiter", arrayD.getDelimiterAttribute());
+    	
         Assert.assertEquals("data type", XSD_DOUBLE, xomD0.getDataType());
         Assert.assertEquals("size", 5, xomD0.getSize());
         Assert.assertEquals("content", "1.0 2.0 3.0 4.0 5.0", xomD0
                 .getXMLContent());
-        Assert.assertEquals("delimiter", S_SPACE, xomD0.getDelimiter());
-        Assert.assertNull("delimiter", xomD0.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, xomD0.getDelimiter());
+        Assert.assertNotNull("delimiter", xomD0.getDelimiterAttribute());
         double[] ss = null;
         try {
             ss = xomD0.getDoubles();
@@ -541,12 +595,15 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testCMLArrayDoubleArrayString() {
-        Assert.assertEquals("data type", XSD_DOUBLE, xomD1.getDataType());
-        Assert.assertEquals("size", 5, xomD1.getSize());
-        Assert.assertEquals("content", "/10.0/20.0/30.0/40.0/50.0/", xomD1
-                .getXMLContent());
-        Assert.assertEquals("delimiter", S_SLASH, xomD1.getDelimiter());
-        Assert.assertNotNull("delimiter", xomD1.getDelimiterAttribute());
+
+    	double[] dd = new double[]{10.0, 20.0, 30.0, 40.0, 50.0};
+    	CMLArray arrayD = new CMLArray(dd, S_SLASH);
+    	DelimiterAttribute delimiterAttribute = (DelimiterAttribute) arrayD.getDelimiterAttribute();
+        Assert.assertEquals("data type", XSD_DOUBLE, arrayD.getDataType());
+        Assert.assertEquals("size", 5, arrayD.getSize());
+        Assert.assertEquals("content", "/10.0/20.0/30.0/40.0/50.0/", arrayD.getXMLContent());
+        Assert.assertEquals("delimiter", S_SLASH, arrayD.getDelimiter());
+        Assert.assertNotNull("delimiter", arrayD.getDelimiterAttribute());
         double[] ss = null;
         try {
             ss = xomD1.getDoubles();
@@ -564,11 +621,12 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testCMLArrayIntArray() {
+    	
         Assert.assertEquals("data type", XSD_INTEGER, xomI0.getDataType());
         Assert.assertEquals("size", 5, xomI0.getSize());
         Assert.assertEquals("content", "1 2 3 4 5", xomI0.getXMLContent());
-        Assert.assertEquals("delimiter", S_SPACE, xomI0.getDelimiter());
-        Assert.assertNull("delimiter", xomI0.getDelimiterAttribute());
+        Assert.assertEquals("delimiter", S_EMPTY, xomI0.getDelimiter());
+        Assert.assertNotNull("delimiter", xomI0.getDelimiterAttribute());
         int[] ss = null;
         try {
             ss = xomI0.getInts();
@@ -650,8 +708,8 @@ public class CMLArrayTest extends NumericTest {
         ss = xmlS1.getStrings();
         Assert.assertNotNull("content", ss);
         Assert.assertEquals("content", 5, ss.length);
-        Assert.assertEquals("array0", "10", ss[0]);
-        Assert.assertEquals("array4", "50", ss[4]);
+        Assert.assertEquals("array0", "100", ss[0]);
+        Assert.assertEquals("array4", "500", ss[4]);
 
         ss = xmlD0.getStrings();
         Assert.assertNull("content", ss);
@@ -850,7 +908,7 @@ public class CMLArrayTest extends NumericTest {
             Assert.assertEquals("int", 5, xomI0.getInts().length);
 
             xomS.setArray(i0);
-            Assert.assertEquals("d delim", S_SPACE, xomS.getDelimiter());
+            Assert.assertEquals("d elim", S_EMPTY, xomS.getDelimiter());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert.assertEquals("d XML", "1 2 3 4 5", xomS.getXMLContent());
@@ -861,7 +919,7 @@ public class CMLArrayTest extends NumericTest {
             Assert.assertEquals("i1 ", 5, i1.length);
             xomS.setArray(i1);
             Assert.assertNotNull("xomS i1 ", xomS);
-            Assert.assertEquals("d delim", S_SPACE, xomS.getDelimiter());
+            Assert.assertEquals("d delim", S_EMPTY, xomS.getDelimiter());
             Assert.assertEquals("d type", XSD_INTEGER, xomS.getDataType());
             Assert
                     .assertEquals("d XML", "10 20 30 40 50", xomS
@@ -979,15 +1037,20 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testAppendString() {
-        xomS0.append("f");
-        // FIXME - this fails
-        // Assert.assertEquals("append", 6, xomS0.getSize());
-        Assert.assertEquals("append", "a b c d e f", xomS0.getXMLContent());
 
-        xomS1.append(S_QUERY);
-        // FIXME
-        // Assert.assertEquals("append", 6, xomS0.getSize());
-        Assert.assertEquals("append", "/v/w/x/y/z/?/", xomS1.getXMLContent());
+    	String[] ss = new String[]{"a", "b", "c", "d", "e"};
+    	CMLArray arrayS = new CMLArray(ss);
+        StringTest.assertEquals("append", ss, arrayS.getStrings());
+        Assert.assertEquals("append", "a b c d e", arrayS.getXMLContent());
+        arrayS.append("f");
+        Assert.assertEquals("append", "a b c d e f", arrayS.getXMLContent());
+
+    	arrayS = new CMLArray(ss, S_SLASH);
+        StringTest.assertEquals("append", ss, arrayS.getStrings());
+        Assert.assertEquals("append", "/a/b/c/d/e/", arrayS.getXMLContent());
+        arrayS.append("f");
+        Assert.assertEquals("append", "/a/b/c/d/e/f/", arrayS.getXMLContent());
+
     }
 
     /**
@@ -1039,7 +1102,7 @@ public class CMLArrayTest extends NumericTest {
         List<CMLElement> arrays = cml.getElements(".//"+CMLArray.NS);
         Assert.assertEquals("array count", 3, arrays.size());
         CMLArray array = (CMLArray) arrays.get(0);
-        UnitAttribute unitsAttribute = (UnitAttribute) array.getUnitsAttribute();
+        UnitsAttribute unitsAttribute = (UnitsAttribute) array.getUnitsAttribute();
         Assert.assertNotNull("units attribute not null", unitsAttribute);
         Assert.assertEquals("units attribute", "units:deg", unitsAttribute.getValue());
         String namespaceURIString = unitsAttribute.getNamespaceURIString();
@@ -1113,6 +1176,8 @@ public class CMLArrayTest extends NumericTest {
         CMLArray array = new CMLArray();
         array.setDataType(XSD_DOUBLE);
         array.setDelimiter(S_SLASH);
+        DelimiterAttribute da = (DelimiterAttribute) array.getDelimiterAttribute();
+        Assert.assertNotNull("delimiter", da);
         array.setXMLContent("1./2.");
         double[] dd = array.getDoubles();
         Assert.assertNotNull("dd null", dd);
@@ -1165,7 +1230,7 @@ public class CMLArrayTest extends NumericTest {
         unitsS = xmlD0.getUnits();
         Assert.assertNotNull("units on D0", unitsS);
         Assert.assertEquals("units on D0", "siUnits:m", unitsS);
-        UnitAttribute unitsAttribute = (UnitAttribute) xmlD0.getUnitsAttribute();
+        UnitsAttribute unitsAttribute = (UnitsAttribute) xmlD0.getUnitsAttribute();
         Assert.assertEquals("units namespace on D0", SIUNIT_NS,
                 unitsAttribute.getNamespaceURIString());
 

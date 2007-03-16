@@ -37,7 +37,9 @@ import org.xmlcml.euclid.Util;
  */
 public class EntryTool extends AbstractTool {
 
+	/** */
 	public final static String ESCAPED_WHITESPACE = S_BACKSLASH+S_BACKSLASH+"s";
+	/** */
 	public final static String DELIMITERS = 
 		ESCAPED_WHITESPACE+S_PIPE+S_COMMA+S_PIPE+S_SLASH;
     Logger logger = Logger.getLogger(EntryTool.class.getName());
@@ -195,7 +197,7 @@ public class EntryTool extends AbstractTool {
     		}
     	} else {
     		if (!dataDataType.equals(entryDataType)) {
-    			throw new CMLRuntimeException(id+"/"+dictRef+": entry ("+entryDataType+") and data {"+dataDataType+"} are of different types");
+    			throw new CMLRuntimeException(id+S_SLASH+dictRef+": entry ("+entryDataType+") and data {"+dataDataType+"} are of different types");
     		}
     	}
     }
@@ -288,8 +290,8 @@ public class EntryTool extends AbstractTool {
     
 	/** add string array to a CMLElement.
 	 * @param name localname
-	 * @param intArray
-	 * @return TODO
+	 * @param values
+	 * @return Array
 	 */
     public CMLArray createStringArray(String name, String[] values) {
     	EntryTool.checkEmptyName(name);
@@ -300,6 +302,12 @@ public class EntryTool extends AbstractTool {
 		return array;
     }
     
+    /** create data.
+     * 
+     * @param name
+     * @param value
+     * @return data
+     */
     public CMLElement createDoubleScalarOrDoubleArray(String name, String value) {
 
     	CMLElement element = null;
@@ -351,6 +359,12 @@ public class EntryTool extends AbstractTool {
 		return element;
     }
     
+    /** create integer data.
+     * 
+     * @param name
+     * @param value
+     * @return integer
+     */
 	public CMLElement createIntegerScalarOrIntegerArray(String name, String value) {
 
 		CMLElement element = null;
@@ -390,6 +404,12 @@ public class EntryTool extends AbstractTool {
 		return element;
 	}
 
+	/** create string data.
+	 * 
+	 * @param name
+	 * @param value
+	 * @return string
+	 */
 	public CMLElement createStringScalarOrStringArray(String name, String value) {
 		
 		CMLElement element = null;
@@ -418,6 +438,12 @@ public class EntryTool extends AbstractTool {
 		return element;
 	}
 	
+	/** create parameter.
+	 * 
+	 * @param name
+	 * @param value
+	 * @return parameter
+	 */
 	public CMLParameter createParameter(
     		String name, String value) {
 		CMLParameter parameter = new CMLParameter();
@@ -439,7 +465,6 @@ public class EntryTool extends AbstractTool {
 	 * CMLRuntimeException
 	 * @param name localname
 	 * @param value of date 
-	 * @param cmlElement to add to
 	 */
     public CMLScalar createDate(String name, String value) {
     	EntryTool.checkEmptyName(name);
@@ -517,6 +542,11 @@ public class EntryTool extends AbstractTool {
 		return matrix;
     }
 
+    /** check length.
+     * 
+     * @param ss
+     * @param name
+     */
 	public void checkArrayLength(String[] ss, String name) {
 		if (entry.getLengthAttribute() != null) {
 			int l = entry.getLength();
@@ -537,7 +567,10 @@ public class EntryTool extends AbstractTool {
 			}
 		}
 	}
-	
+	/** check value of data.
+	 * 
+	 * @param value
+	 */
     public void checkNumericValue(double value) {
     	if (entry.getMinInclusiveAttribute() != null) {
     		if (value < entry.getMinInclusive()) {
@@ -553,6 +586,11 @@ public class EntryTool extends AbstractTool {
     	}
     }
 
+    /** check against range.
+     * 
+     * @param minInclusive
+     * @param maxInclusive
+     */
     public void checkDoubleRange(double minInclusive, double maxInclusive) {
 		Attribute minInclusiveAttribute = (entry == null) ?
 				null : entry.getMinInclusiveAttribute();
@@ -574,6 +612,11 @@ public class EntryTool extends AbstractTool {
 		}
     }
     
+    /** check integer range.
+     * 
+     * @param minInclusive
+     * @param maxInclusive
+     */
     public void checkIntegerRange(int minInclusive, int maxInclusive) {
 		Attribute minInclusiveAttribute = (entry == null) ?
 				null : entry.getMinInclusiveAttribute();
@@ -595,10 +638,18 @@ public class EntryTool extends AbstractTool {
 		}
     }
         
+    /** check against enumerations.
+     * 
+     * @param value
+     */
     public void checkValueAgainstEnumerations(int value) {
     	checkValueAgainstEnumerations(""+value);
     }
 	
+    /** check value.
+     * 
+     * @param value
+     */
     public void checkValueAgainstEnumerations(String value) {
     	CMLElements<CMLEnumeration> enumerations = entry.getEnumerationElements();
     	if (enumerations != null && enumerations.size() > 0) {
@@ -616,6 +667,10 @@ public class EntryTool extends AbstractTool {
     	}
     }
     
+    /** check pattern.
+     * 
+     * @param value
+     */
     public void checkPattern(String value) {
     	String patternS = entry.getPattern();
     	if (patternS != null) {
@@ -627,7 +682,11 @@ public class EntryTool extends AbstractTool {
 	    	}
     	}
     }
-    
+
+    /** check empty.
+     * 
+     * @param name
+     */
     public static void checkEmptyName(String name) {
 		if (name == null) {
 			throw new CMLRuntimeException("null name");
@@ -639,7 +698,11 @@ public class EntryTool extends AbstractTool {
 			throw new CMLRuntimeException("name cannot contain colon");
 		}
     }
-    
+
+    /** add value.
+     * 
+     * @param value
+     */
     public void addValue(String value) {
     	ensureValueSet();
     	valueSet.add(value);
@@ -686,7 +749,9 @@ public class EntryTool extends AbstractTool {
 		entry.setDataType(type);
 		return type;
 	 }
-    
+
+	 /** update enumerations.
+	  */
 	public void updateEnumerations() {
 		ensureValueSet();
 		System.out.println("===="+entry.getId()+"===");
@@ -745,7 +810,7 @@ public class EntryTool extends AbstractTool {
 	/** create term from title or name.
 	 * term = title else = name
 	 * @param element
-	 * @return
+	 * @return term
 	 */
 	public static String createTerm(CMLElement element) {
 		String term = null;

@@ -139,7 +139,7 @@ public class Util implements EuclidConstants {
      */
     public static void BUG(String msg, Exception e) {
         msg = (msg == null || msg.trim().length() == 0) ? S_EMPTY : S_LBRAK+msg+S_RBRAK;
-        throw new RuntimeException("BUG: "+msg+"should never throw", e);
+        throw new RuntimeException("BUG: "+msg+"should never throw: "+e, e);
     }
     
     /** traps a bug.
@@ -1921,7 +1921,7 @@ public class Util implements EuclidConstants {
      * 
      * @param s
      *            the string
-     * @param delim
+     * @param slashDelim
      *            delimiter (use S_WHITEREGEX to split whitespace)
      * @return array
      * @throws EuclidException
@@ -1946,7 +1946,7 @@ public class Util implements EuclidConstants {
      * 
      * @param s
      *            the string
-     * @param delim
+     * @param slashDelim
      *            delimiter (use S_WHITEREGEX to split whitespace)
      * @return array
      * @throws EuclidException
@@ -2138,6 +2138,7 @@ public class Util implements EuclidConstants {
     }
     
     /** parse string as integer.
+     * @param s
      * @return true if can be parsed.
      */
     public static boolean isInt(String s) {
@@ -2151,6 +2152,8 @@ public class Util implements EuclidConstants {
     }
     
     /** parse string as integerArray.
+     * @param s
+     * @param delimiterRegex
      * @return true if can be parsed.
      */
     public static boolean isIntArray(String s, String delimiterRegex) {
@@ -2165,6 +2168,8 @@ public class Util implements EuclidConstants {
     }
     
     /** parse string as realArray.
+     * @param s
+     * @param delimiterRegex
      * @return true if can be parsed.
      */
     public static boolean isFloatArray(String s, String delimiterRegex) {
@@ -2179,6 +2184,7 @@ public class Util implements EuclidConstants {
     }
     
     /** parse string as float.
+     * @param s
      * @return true if can be parsed.
      */
     public static boolean isFloat(String s) {
@@ -2200,6 +2206,8 @@ public class Util implements EuclidConstants {
     public final static String DATE_REGEX2 =
     	"\\d\\d\\d\\d\\-[0-1][0-9]\\-[0-3][0-9]";
 
+    /** month data .
+     */
     public final static String[] months = {
     	"jan",
     	"feb",
@@ -2217,6 +2225,7 @@ public class Util implements EuclidConstants {
     /** parse string as date.
      * tries several formats (case insensitive)
      * can be used to test whether string is parsable as date
+     * @param s
      * @return ISO 8601 format if can be parsed or null
      */
     public static String getCanonicalDate(String s) {

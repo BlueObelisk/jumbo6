@@ -244,7 +244,7 @@ public class StereochemistryTool extends AbstractTool {
      * 
      * @param bond
      * @return bondstereo (null if cannot calculate as CIS/TRANS)
-     * @throws CMLException
+     * @throws CMLRuntimeException
      */
     public CMLBondStereo get2DBondStereo(CMLBond bond) {
     	for (CMLAtom atom : bond.getAtoms()) {
@@ -583,7 +583,6 @@ public class StereochemistryTool extends AbstractTool {
 	/**
 	 * uses atomParity to create wedge or hatch.
 	 *
-	 * @param tool TODO
 	 * @param atom
 	 * @throws CMLRuntimeException
 	 *             inconsistentencies in diagram, etc.

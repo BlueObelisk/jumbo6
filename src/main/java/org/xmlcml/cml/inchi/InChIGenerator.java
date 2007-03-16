@@ -317,7 +317,7 @@ public class InChIGenerator implements EuclidConstants {
             throw new CMLException("Failed to generate InChI");
         }
         
-        CMLIdentifier identifier = CMLIdentifier.makeElementInContext(molecule);
+        CMLIdentifier identifier = new CMLIdentifier();
         identifier.setConvention(CML_INCHI_CONVENTION);
         identifier.appendChild(new Text(output.getInchi()));
         

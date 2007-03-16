@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 
 /**

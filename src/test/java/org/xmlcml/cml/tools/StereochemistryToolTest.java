@@ -3,8 +3,6 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
-
 import java.net.URL;
 import java.util.List;
 
@@ -14,6 +12,7 @@ import nu.xom.Node;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
@@ -23,7 +22,6 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
@@ -43,6 +41,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		try {
 			document = new CMLBuilder().build(url.openStream());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CMLRuntimeException("should not throw "+e.getMessage());
 		}
 		CMLMolecule molecule = (CMLMolecule) CMLUtil.getQueryNodes(document, "//"+CMLMolecule.NS, X_CML).get(0);
@@ -94,14 +93,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		Assert.assertEquals("acyclic double", 1, bonds.size());
 		StereochemistryTool cisMolTool = new StereochemistryTool(cisMol);
 		cisMolTool.add2DStereo();
-//		  <bondArray>
-//		    <bond id="b12" atomRefs2="a1 a2" userCyclic="ACYCLIC" order="1"/>
-//		    <bond id="b23" atomRefs2="a2 a3" userCyclic="ACYCLIC" order="2">
-//		      <bondStereo atomRefs4="a1 a2 a3 a4">C</bondStereo>
-//		    </bond>
-//		    <bond id="b34" atomRefs2="a3 a4" userCyclic="ACYCLIC" order="1"/>
-//		  </bondArray>
-		List<Node> bondStereos = CMLUtil.getQueryNodes(cisMol, CMLBondArray.NS+"/"+CMLBond.NS+"/"+CMLBondStereo.NS, X_CML);
+		List<Node> bondStereos = CMLUtil.getQueryNodes(cisMol, CMLBondArray.NS+S_SLASH+CMLBond.NS+S_SLASH+CMLBondStereo.NS, X_CML);
 		Assert.assertEquals("bondStereo", 1, bondStereos.size());
 		CMLBondStereo bondStereo = (CMLBondStereo) bondStereos.get(0);
 		String[] atomRefs4 = bondStereo.getAtomRefs4();
@@ -128,7 +120,6 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		CMLMolecule molecule1 = makeMolecule1();
 		StereochemistryTool stereochemistryTool = new StereochemistryTool(molecule1);
 		stereochemistryTool.addWedgeHatchBonds();
-//		molecule1.debug("WHB");
 	}
 
 	/**
@@ -184,7 +175,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testGet2DBondStereo() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -193,7 +184,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testLayoutDoubleBond() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -202,7 +193,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testFlip2D() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -211,7 +202,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testGet3DBondStereo() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -386,7 +377,6 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
   "</bondArray>"+
 "</molecule>";
 		CMLMolecule molecule = (CMLMolecule) parseValidString(molS);
-//		molecule1.debug();
 		assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
@@ -396,7 +386,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testGet2DLigandScalarProduct() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -405,7 +395,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testGet3DLigandScalarProduct() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -414,7 +404,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	@Test
 	@Ignore
 	public final void testAddWedgeHatchBond() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 }

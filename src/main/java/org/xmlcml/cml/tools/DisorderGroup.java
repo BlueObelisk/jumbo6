@@ -68,7 +68,6 @@ public class DisorderGroup implements CMLConstants, Comparable<DisorderGroup> {
     /** adds a atom with disorder flag to the group.
      * atom must have same disorderGroup flag and same disorderAssembly
      * @param atom
-     * @exception Exception
      */
     public void addAtom(CMLAtom atom) {
     	String groupCode = getAtomCode(atom);
