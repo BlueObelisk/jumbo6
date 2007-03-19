@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.GenericDictionary;
 import org.xmlcml.cml.interfacex.IDictionary;
-import org.xmlcml.cml.interfacex.IUnitList;
 
 
 /**

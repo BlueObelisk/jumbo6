@@ -1,10 +1,14 @@
 package org.xmlcml.cml.element;
 
 
-import nu.xom.*;
+import nu.xom.Attribute;
+import nu.xom.Elements;
 
-import org.xmlcml.cml.base.*;
-import org.xmlcml.cml.attribute.*;
+import org.xmlcml.cml.attribute.IdAttribute;
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLRuntimeException;
 
 // end of part 1
 /** CLASS DOCUMENTATION */

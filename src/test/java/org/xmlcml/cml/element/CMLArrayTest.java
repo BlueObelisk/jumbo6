@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.xmlcml.cml.attribute.DelimiterAttribute;
 import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.attribute.DelimiterAttribute.Action;
-import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;

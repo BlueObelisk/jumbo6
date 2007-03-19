@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLAttribute;

@@ -1,6 +1,5 @@
 package org.xmlcml.cml.attribute;
 
-import static org.junit.Assert.fail;
 import nu.xom.Attribute;
 
 import org.junit.Assert;
