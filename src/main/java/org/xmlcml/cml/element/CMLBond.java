@@ -10,7 +10,6 @@ import nu.xom.Node;
 import nu.xom.ParentNode;
 
 import org.xmlcml.cml.attribute.IdAttribute;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;

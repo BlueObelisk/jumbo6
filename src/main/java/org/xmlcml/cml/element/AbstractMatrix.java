@@ -1,10 +1,18 @@
 package org.xmlcml.cml.element;
 
 
-import nu.xom.*;
+import nu.xom.Attribute;
 
-import org.xmlcml.cml.base.*;
-import org.xmlcml.cml.attribute.*;
+import org.xmlcml.cml.attribute.DelimiterAttribute;
+import org.xmlcml.cml.attribute.DictRefAttribute;
+import org.xmlcml.cml.attribute.IdAttribute;
+import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.DoubleArraySTAttribute;
+import org.xmlcml.cml.base.IntSTAttribute;
+import org.xmlcml.cml.base.StringSTAttribute;
 
 // end of part 1
 /** CLASS DOCUMENTATION */

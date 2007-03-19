@@ -102,7 +102,7 @@ public class CMLAttribute extends Attribute implements CMLConstants {
      * @return copy of node
      */
     public Node copy() {
-    	CMLAttribute newAttribute = (CMLAttribute) this.copy();
+    	CMLAttribute newAttribute = new CMLAttribute(this);
         newAttribute.setValue(this.getValue());
         return newAttribute;
     }

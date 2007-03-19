@@ -8,7 +8,6 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
 
 /**
  * user-modifiable class supporting DictRefAttribute. supports dictRef attribute
