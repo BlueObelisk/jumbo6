@@ -205,7 +205,8 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.0</version>
-      <scope>test</scope>
+      <!-- There is a dependency leak in CMLUtil that requires JUnit at runtime -->
+      <!-- <scope>test</scope> -->
     </dependency>
     <dependency>
       <groupId>xom</groupId>
