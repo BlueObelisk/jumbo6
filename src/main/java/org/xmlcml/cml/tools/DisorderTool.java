@@ -24,7 +24,7 @@ import org.xmlcml.util.CombinationGenerator;
 import org.xmlcml.util.Partition;
 
 /**
- * 
+ *
  * @author pm286
  *
  */
@@ -36,9 +36,12 @@ public class DisorderTool extends AbstractTool {
 
 	private DisorderToolControls disorderOptions;
 
+	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
+	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
+
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param molecule
 	 */
 	private DisorderTool() {
@@ -46,7 +49,7 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	/** constructor.
-	 * 
+	 *
 	 * @param molecule
 	 */
 	public DisorderTool(CMLMolecule molecule) {
@@ -54,7 +57,7 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	/** constructor.
-	 * 
+	 *
 	 * @param mol
 	 * @param disorderMan
 	 */
@@ -72,7 +75,7 @@ public class DisorderTool extends AbstractTool {
 
 	/**
 	 * gets the cml molecule.
-	 * 
+	 *
 	 * @return molecule
 	 */
 	public CMLMolecule getMolecule() {
@@ -81,24 +84,24 @@ public class DisorderTool extends AbstractTool {
 
 	/**
 	 * Resolves crystallographic disorder.
-	 * 
+	 *
 	 * At present the only RemoveDisorderControl is to remove minor disorder.
 	 * These are components with occupancies <= 0.5.
-	 * 
+	 *
 	 * Can provide two different kinds of ProcessDisorderControl: 1. STRICT -
 	 * this tries to process the disorder as set out in the CIF specification
 	 * (http://www.iucr.org/iucr-top/cif/#spec) If it comes across disorder
 	 * which does not comply with the spec then throws an error.
-	 * 
+	 *
 	 * 2. LOOSE - this tries to process the disorder as with STRICT, but does
 	 * not throw an error if it comes across disorder not valid with respect to
 	 * the CIF spec. Instead it tags the provided molecule with metadata stating
 	 * that the disorder cannot currently be processed and does nothing more.
-	 * 
+	 *
 	 * NOTE: if the disorder is successfully processed then the molecule is
 	 * tagged with metadata stating that the molecule did contain disorder, but
 	 * has now been removed.
-	 * 
+	 *
 	 * @param pControl
 	 * @param rControl
 	 * @exception CMLRuntimeException
@@ -113,7 +116,7 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param disorderAssemblyList
 	 */
 	private void processDisorder(List<DisorderAssembly> disorderAssemblyList) {
@@ -148,9 +151,9 @@ public class DisorderTool extends AbstractTool {
 	/**
 	 * checks that the disorder complies with the CIF specification.
 	 * http://www.iucr.org/iucr-top/cif/#spec
-	 * 
+	 *
 	 * called only from processDisorder().
-	 * 
+	 *
 	 * @param disorderAssemblyList
 	 * @param pControl
 	 * @return list of disorder assemblies in the given molecule
@@ -163,7 +166,7 @@ public class DisorderTool extends AbstractTool {
 			containsDisorder = true;
 			ProcessControl pControl = disorderOptions.getProcessControl();
 			boolean isMetadataSet = false;
-			for (DisorderAssembly da : disorderAssemblyList) {	
+			for (DisorderAssembly da : disorderAssemblyList) {
 				List<DisorderGroup> disorderGroupList = da.getDisorderGroupList();
 				if (disorderGroupList.size() < 2) {
 					if (ProcessControl.LOOSE.equals(pControl)) {
@@ -232,7 +235,7 @@ public class DisorderTool extends AbstractTool {
 			boolean fixed = false;
 			if (failedAssemblyList.size() > 0) {
 				fixed = fixFailedAssemblies(failedAssemblyList);
-				if (fixed) {	
+				if (fixed) {
 					// if process reaches this point then failed assemblies have been
 					// fixed - add them to finished list
 					//molecule.debug();
@@ -265,9 +268,9 @@ public class DisorderTool extends AbstractTool {
 
 	/**
 	 * takes a list of disorder assemblies that are invalid with respect to the CIF
-	 * specification and tries to create a set of assemblies that are valid so that 
+	 * specification and tries to create a set of assemblies that are valid so that
 	 * they can be parsed.
-	 * 
+	 *
 	 * @param failedAssemblyList
 	 * @return whether a set of valid assemblies has been found.
 	 */
@@ -301,7 +304,7 @@ public class DisorderTool extends AbstractTool {
 				return false;
 			}
 			//System.out.println("occupancy is: "+occupancy);
-			// if atom has unit occupancy then we can ignore it for the rest of 
+			// if atom has unit occupancy then we can ignore it for the rest of
 			// the method
 			if (Math.abs(1.0 - occupancy) < CrystalTool.OCCUPANCY_EPS) {
 				unityAtoms.add(disorderedAtom);
@@ -348,7 +351,7 @@ public class DisorderTool extends AbstractTool {
 	 * Takes a map of occupancies related to their atoms with that occupancy.  Tries
 	 * to decipher the correct disorder assemblies and groups from the occupancies
 	 * supplied.
-	 * 
+	 *
 	 * @param atomMap
 	 * @return whether or not the disorder groups have been successfully reassigned
 	 */
@@ -388,14 +391,14 @@ public class DisorderTool extends AbstractTool {
 							if (!inDList) dList.add(occ);
 							List<CMLAtom> atoms = atomMap.get(occ);
 							for (CMLAtom atom : atoms) {
-								replaceAtomDisorderInformation(atom, assemblyCode, 
+								replaceAtomDisorderInformation(atom, assemblyCode,
 										String.valueOf(groupCode));
 							}
 							groupCode++;
 						}
 					}
 				}
-				// if the number of occupancies used is the same as the total 
+				// if the number of occupancies used is the same as the total
 				// number then we have found a solution
 				if (dList.size() == occupancyList.size()) {
 					return true;
@@ -442,29 +445,31 @@ public class DisorderTool extends AbstractTool {
 	}
 
 	/**
-	 * adds metadata to molecule stating whether or not the disorder 
+	 * adds metadata to molecule stating whether or not the disorder
 	 * has been successfully processed.
-	 * 
+	 *
 	 * @param processed - whether or not the disorder has been successfully processed
 	 */
 	public void addDisorderMetadata(boolean processed) {
-		CMLMetadataList metList = new CMLMetadataList();
-		molecule.appendChild(metList);
-		CMLMetadata met = new CMLMetadata();
-		metList.appendChild(met);
-		if (!processed) {
-			disorderProcessed = false;
-			met.setAttribute("dictRef", "cif:unprocessedDisorder");
-		} else if (processed) {
-			disorderProcessed = true;
-			met.setAttribute("dictRef", "cif:processedDisorder");
+		List<CMLAtom> disorderedAtoms = DisorderAssembly.getDisorderedAtoms(molecule);
+		for (CMLAtom atom : disorderedAtoms) {
+			CMLScalar scalar = new CMLScalar();
+			atom.appendChild(scalar);
+			if (!processed) {
+				disorderProcessed = false;
+				scalar.setDictRef(this.UNRESOLVED_DISORDER_DICTREF);
+			} else if (processed) {
+				disorderProcessed = true;
+				scalar.setDictRef(this.RESOLVED_DISORDER_DICTREF);
+			}
+
 		}
 	}
 
 	/**
 	 * Checks for CIF disorder flags on each atom, plus some other telling
 	 * things like methyl groups with 6 H/Cl/F attached etc.
-	 * 
+	 *
 	 * @param molecule
 	 * @return
 	 */
@@ -497,38 +502,38 @@ public class DisorderTool extends AbstractTool {
 
 	/**
 	 * analyze atoms with disorder flags.
-	 * 
+	 *
 	 * This may need to be rafactored to CIF Converter
-	 * 
+	 *
 	 * CIF currently provides two flags atom_disorder_assembly identifies
 	 * different independent groups atom_disorder_group identifies the different
 	 * instances of atoms within a single group from the CIF dictionary:
-	 * 
+	 *
 	 * ===atom_site_disorder_assembly
-	 * 
+	 *
 	 * _name _atom_site_disorder_assembly _category atom_site _type char _list
 	 * yes _list_reference _atom_site_label
-	 * 
+	 *
 	 * _example _detail A disordered methyl assembly with groups 1 and 2 B
 	 * disordered sites related by a mirror S disordered sites independent of
 	 * symmetry
-	 * 
+	 *
 	 * _definition A code which identifies a cluster of atoms that show
 	 * long-range positional disorder but are locally ordered. Within each such
 	 * cluster of atoms, _atom_site_disorder_group is used to identify the sites
 	 * that are simultaneously occupied. This field is only needed if there is
 	 * more than one cluster of disordered atoms showing independent local
 	 * order.
-	 * 
+	 *
 	 * ===atom_site_disorder_group
-	 * 
-	 * 
+	 *
+	 *
 	 * _name _atom_site_disorder_group _category atom_site _type char _list yes
 	 * _list_reference _atom_site_label
-	 * 
+	 *
 	 * _example _detail 1 unique disordered site in group 1 2 unique disordered
 	 * site in group 2 -1 symmetry-independent disordered site
-	 * 
+	 *
 	 * _definition A code which identifies a group of positionally disordered
 	 * atom sites that are locally simultaneously occupied. Atoms that are
 	 * positionally disordered over two or more sites (e.g. the hydrogen atoms
@@ -537,7 +542,7 @@ public class DisorderTool extends AbstractTool {
 	 * occupied, but those belonging to different groups are not. A minus prefix
 	 * (e.g. "-1") is used to indicate sites disordered about a special
 	 * position.
-	 * 
+	 *
 	 * we analyse this as follows: if there is no disorder_assembly we assume a
 	 * single disorder_assembly containing all disordered atoms. if there are
 	 * several disorder_assemblies, each is treated separately. within a
@@ -546,12 +551,12 @@ public class DisorderTool extends AbstractTool {
 	 * occupancies within in group must be identical. We also check for whether
 	 * the groups contain the same number of atoms and whether the occupancies
 	 * of the groups sum to 1.0
-	 * 
+	 *
 	 * At this stage it may not be known whether the assemblies are in different
 	 * chemical molecules. It is unusual for disorder_groups to belong to
 	 * different subMolecules though it could happen with partial proton
 	 * transfer
-	 * 
+	 *
 	 * @exception Exception
 	 * @return list of disorderAssembly
 	 */
