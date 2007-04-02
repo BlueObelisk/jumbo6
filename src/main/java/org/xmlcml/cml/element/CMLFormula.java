@@ -1781,52 +1781,60 @@ public class CMLFormula extends AbstractFormula {
     }
 
     /**
-     * output HTML.
-     *
-     * @param w
-     * @throws IOException
-     */
-    public void writeHTML(Writer w) throws IOException {
-        w.write("<span class='formula'>");
-        CMLElements<CMLFormula> formulas = this.getFormulaElements();
-        if (formulas.size() > 0) {
-            for (CMLFormula formula : formulas) {
-                w.write(S_LBRAK);
-                formula.writeHTML(w);
-                w.write(S_RBRAK);
-            }
-        } else {
-            String[] elementTypes = this.getElementTypes();
-            double[] counts = this.getCounts();
-            for (int i = 0; i < elementTypes.length; i++) {
-                w.write(elementTypes[i]);
-                double d = counts[i];
-                int c = (int) Math.round(d);
-                String countS = S_EMPTY;
-                if (Math.abs(d - c) < EPS) {
-                    countS = S_EMPTY+c;
-                } else {
-                    countS = S_EMPTY+d;
-                }
-                if (!countS.equals("1")) {
-                    w.write("<sub>"+countS+"</sub>");
-                }
-            }
-            if (this.getFormalChargeAttribute() != null) {
-                int fc = this.getFormalCharge();
-                int signum = Integer.signum(fc);
-                String sign = S_EMPTY;
+	     * output HTML.
+	     *
+	     * @param w
+	     * @throws IOException
+	     */
+	    public void writeHTML(Writer w) throws IOException {
+	        w.write("<span class='formula'>");
+	        CMLElements<CMLFormula> formulas = this.getFormulaElements();
+	        if (formulas.size() > 0) {
+	            for (CMLFormula formula : formulas) {
+	            	double count = formula.getCount();
+	            	w.write(S_LBRAK);
+	            	formula.writeHTML(w);
+	            	w.write(S_RBRAK);
+	            	String cStr = String.valueOf(count);
+	            	if (cStr.endsWith(".0")) {
+	            		cStr = cStr.substring(0, cStr.length()-2);
+	            	}
+	            	if (!cStr.equals("1")) {
+	            		w.write("<sub>"+cStr+"</sub>");
+	            	}
+	            }
+	        } else {
+	            String[] elementTypes = this.getElementTypes();
+	            double[] counts = this.getCounts();
+	            for (int i = 0; i < elementTypes.length; i++) {
+	                w.write(elementTypes[i]);
+	                double d = counts[i];
+	                int c = (int) Math.round(d);
+	                String countS = S_EMPTY;
+	                if (Math.abs(d - c) < EPS) {
+	                    countS = S_EMPTY+c;
+	                } else {
+	                    countS = S_EMPTY+d;
+	                }
+	                if (!countS.equals("1")) {
+	                    w.write("<sub>"+countS+"</sub>");
+	                }
+	            }
+	            if (this.getFormalChargeAttribute() != null) {
+	                int fc = this.getFormalCharge();
+	                int signum = Integer.signum(fc);
+	                String sign = S_EMPTY;
 
-                //no need to assign S_MINUS to sign if signum is negative as the S_MINUS will be in the formalChargeAttribute
-                if (signum == 1) {
-                    sign = S_PLUS;
-                }
-                if (fc != 0) {
-                    w.write("<sup>"+fc+sign+"</sup>");
-                }
-            }
-            w.write("</span>");
-        }
+	                //no need to assign S_MINUS to sign if signum is negative as the S_MINUS will be in the formalChargeAttribute
+	                if (signum == 1) {
+	                    sign = S_PLUS;
+	                }
+	                if (fc != 0) {
+	                    w.write("<sup>"+fc+sign+"</sup>");
+	                }
+	            }
+	            w.write("</span>");
+	        }
     }
 
     /**
