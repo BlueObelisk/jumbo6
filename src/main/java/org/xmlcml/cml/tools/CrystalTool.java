@@ -34,9 +34,9 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
  * tool for managing crystals
- * 
+ *
  * @author pmr
- * 
+ *
  */
 public class CrystalTool extends AbstractTool {
 	final static Logger logger = Logger.getLogger(CrystalTool.class.getName());
@@ -50,13 +50,13 @@ public class CrystalTool extends AbstractTool {
 	/** cif stuff */
 	public final static String IUCR = "iucr";
 	/** cif stuff */
-	public final static String DISORDER_GROUP = 
+	public final static String DISORDER_GROUP =
 		IUCR+S_COLON+"_atom_site_disorder_group";
 	/** cif stuff */
-	public final static String DISORDER_ASSEMBLY = 
+	public final static String DISORDER_ASSEMBLY =
 		IUCR+S_COLON+"_atom_site_disorder_assembly";
 	/** cif stuff */
-	public final static String ATOM_LABEL = 
+	public final static String ATOM_LABEL =
 		IUCR+S_COLON+"_atom_site_label";
 
 	/** tolerance for comparing occupancies.
@@ -97,16 +97,16 @@ public class CrystalTool extends AbstractTool {
 	}
 
 	/** constructor.
-	 * 
+	 *
 	 * @param molecule
-	 * @param crystal may, but not must, contain symmetry 
-	 * 
+	 * @param crystal may, but not must, contain symmetry
+	 *
 	 */
 	public CrystalTool(CMLMolecule molecule, CMLCrystal crystal) {
 		init();
 		setMolecule(molecule);
 		this.crystal = crystal;
-		try {   
+		try {
 			this.symmetry = CMLSymmetry.getContainedSymmetry(crystal);
 		} catch (CMLRuntimeException e) {
 			// ignore no symmetry
@@ -121,7 +121,7 @@ public class CrystalTool extends AbstractTool {
 	}
 
 	/** constructor with embedded molecule.
-	 * 
+	 *
 	 * @param molecule (should include a crystal child)
 	 * @param symmetry
 	 * @throws CMLRuntimeException molecule does not contain <crystal> child
@@ -136,11 +136,11 @@ public class CrystalTool extends AbstractTool {
 	}
 
 	/** constructor.
-	 * 
+	 *
 	 * @param molecule
 	 * @param crystal
-	 * @param symmetry 
-	 * 
+	 * @param symmetry
+	 *
 	 */
 	public CrystalTool(CMLMolecule molecule, CMLCrystal crystal, CMLSymmetry symmetry) {
 		init();
@@ -151,7 +151,7 @@ public class CrystalTool extends AbstractTool {
 
 	/**
 	 * get crystal.
-	 * 
+	 *
 	 * @return the crystal or null
 	 */
 	public CMLCrystal getCrystal() {
@@ -170,7 +170,7 @@ public class CrystalTool extends AbstractTool {
 				molecule, contactList);
 		ct.flattenMolecules();
 		return mergedMolecule;
-	}  
+	}
 
 	/** normalize fractionals.
 	 */
@@ -190,10 +190,10 @@ public class CrystalTool extends AbstractTool {
     		Point3 point = new Point3(dList.get(0), dList.get(1), dList.get(2));
     		atom.setXYZFract(point);
     		point = point.transform(t3);
-    		atom.setXYZ3(point);	
+    		atom.setXYZ3(point);
     	}
     }
-    
+
     /** populate edges and faces.
      */
     public void addAtomsToAllCornersEdgesAndFaces() {
@@ -278,12 +278,14 @@ public class CrystalTool extends AbstractTool {
     		}
     	}
     }
-	
+
 	/**
-	 * 
+	 *
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell() {
+		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
 		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
@@ -433,7 +435,7 @@ public class CrystalTool extends AbstractTool {
 	}
 
 	private List<Contact> findMoleculeMoleculeContacts(
-			CMLMolecule origMolecule, Real3Range range3Fract, 
+			CMLMolecule origMolecule, Real3Range range3Fract,
 			CMLSymmetry symmetry, Transform3 orthMat,
 			RealRange dist2Range, List<Type> typeIgnoreList) {
 		boolean sameMolecule = true;
@@ -448,7 +450,7 @@ public class CrystalTool extends AbstractTool {
 			// and transform it
 			symMolecule.transformFractionalsAndCartesians(
 					operator, orthMat);
-			// 
+			//
 			RealRange xr = range3Fract.getXRange();
 			RealRange yr = range3Fract.getYRange();
 			RealRange zr = range3Fract.getZRange();
@@ -472,7 +474,7 @@ public class CrystalTool extends AbstractTool {
 				double z0 = minPoint.getArray()[2];
 				double z1 = maxPoint.getArray()[2]+Util.EPS;
 
-				// create a point at the minimum outside the bounding box and translate it 
+				// create a point at the minimum outside the bounding box and translate it
 				// thought the bounding box
 				double x = x0;
 				for (double deltax = shiftToMinx; x < x1; deltax++, x += 1) {
@@ -507,7 +509,7 @@ public class CrystalTool extends AbstractTool {
 		return contactList;
 	}
 
-	private Contact checkDistances(CMLMolecule origMolecule, 
+	private Contact checkDistances(CMLMolecule origMolecule,
 			Point3 atomXYZ3, Point3 atomXYZFract,
 			double distMax, CMLAtom atom,
 			CMLTransform3 operator) {
@@ -518,8 +520,8 @@ public class CrystalTool extends AbstractTool {
 		for (CMLAtom origAtom : origAtomList) {
 			double d = origAtom.getXYZ3().getDistanceFromPoint(atomXYZ3);
 			if (d < distMax && d > SYMMETRY_CONTACT_TOLERANCE) {
-				ChemicalElement cElem = ChemicalElement.getChemicalElement(atom.getElementType()); 
-				ChemicalElement cElemOrig = ChemicalElement.getChemicalElement(origAtom.getElementType()); 
+				ChemicalElement cElem = ChemicalElement.getChemicalElement(atom.getElementType());
+				ChemicalElement cElemOrig = ChemicalElement.getChemicalElement(origAtom.getElementType());
 				double maxBondLength = cElem.getCovalentRadius() + cElemOrig.getCovalentRadius() +
 				ChemicalElement.getBondingRadiusTolerance();
 				if (maxBondLength > d) {
@@ -527,7 +529,7 @@ public class CrystalTool extends AbstractTool {
 					translateVector.round();
 					Transform3 mergeOperator = new Transform3(operator.getEuclidTransform3());
 					mergeOperator.incrementTranslation(translateVector);
-					contact = new Contact(origAtom, atom, null, 
+					contact = new Contact(origAtom, atom, null,
 							new CMLTransform3(mergeOperator), d);
 					break;
 				}
@@ -538,9 +540,9 @@ public class CrystalTool extends AbstractTool {
 
 	/** uses the atoms in a contact to merge molecules.
 	 * the molecules containing the from- and to- atoms are found
-	 * with getMolecule() and the symmetry operator is applied to 
+	 * with getMolecule() and the symmetry operator is applied to
 	 * these. Then any overlapping atoms are removed.
-	 * 
+	 *
 	 * @param mergedMolecule molecule which grows as new atoms are added
 	 * @param contact
 	 * @param serial number of contact (to generate unique id)
@@ -603,7 +605,7 @@ public class CrystalTool extends AbstractTool {
 		return targetMolecule;
 	}
 
-	private Point3 translateOutsidePositiveBox(Point3 xyzFract, 
+	private Point3 translateOutsidePositiveBox(Point3 xyzFract,
 			RealRange xr, RealRange yr, RealRange zr) {
 		double x = xyzFract.getArray()[0];
 		double y = xyzFract.getArray()[1];
@@ -621,7 +623,7 @@ public class CrystalTool extends AbstractTool {
 		return new Point3(x, y, z);
 	}
 
-	private Point3 translateOutsideNegativeBox(Point3 xyzFract, 
+	private Point3 translateOutsideNegativeBox(Point3 xyzFract,
 			RealRange xr, RealRange yr, RealRange zr) {
 		double x = xyzFract.getArray()[0];
 		double y = xyzFract.getArray()[1];
@@ -640,7 +642,7 @@ public class CrystalTool extends AbstractTool {
 	}
 
 	/** convenience routine to apply mergeSymmetryMolecules
-	 * 
+	 *
 	 * @param mol
 	 * @param contactList
 	 * @return new molecule
@@ -650,7 +652,7 @@ public class CrystalTool extends AbstractTool {
 		 CMLMolecule mergedMolecule = new CMLMolecule(mol);
 		 if (contactList.size() > 0) {
 			 for (int icontact = 0; icontact < contactList.size(); icontact++) {
-				 this.mergeSymmetryMolecules(mergedMolecule, 
+				 this.mergeSymmetryMolecules(mergedMolecule,
 						 contactList.get(icontact), icontact+1, orthMat);
 			 }
 		 } else {
@@ -989,12 +991,12 @@ public class CrystalTool extends AbstractTool {
 	 }
 
 	 /** disambiguouating code.
-	  * 
+	  *
 	  * @param atom
 	  * @return comniation of id and child label
 	  */
 	 public static String getFullLabel(CMLAtom atom) {
-		 return (atom == null) ? null : 
+		 return (atom == null) ? null :
 			 atom.getMolecule().getId()+S_COLON+atom.getId()+"/"+CrystalTool.getCIFLabel(atom);
 	 }
 
