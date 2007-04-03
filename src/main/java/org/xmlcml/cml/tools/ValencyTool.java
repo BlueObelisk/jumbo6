@@ -36,7 +36,9 @@ public class ValencyTool extends AbstractTool {
 		CMLFormula formula = new CMLFormula(molecule);
 		formula.normalize();
 		formulaS = formula.getConcise();
-		formulaS = CMLFormula.removeChargeFromConcise(formulaS);
+		if (formulaS != null) {
+			formulaS = CMLFormula.removeChargeFromConcise(formulaS);
+		}
 		molecule.addToLog(Severity.INFO, "Formula " + formulaS);
 	}
 	/**
