@@ -1168,7 +1168,7 @@ public class MoleculeTool extends AbstractTool {
 		List<CMLMolecule> ligandList = new ArrayList<CMLMolecule>();
 		for (CMLMolecule splitMol : this.getMoleculeList()) {
 			CMLMolecule subMolecule = new CMLMolecule(splitMol);
-			subMolecule.setId("NEW_" + subMolecule.getId());
+			//subMolecule.setId("NEW_" + subMolecule.getId());
 			boolean deleted = false;
 			List<CMLAtom> atomList = subMolecule.getAtoms();
 			for (CMLAtom atom : atomList) {

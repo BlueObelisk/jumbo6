@@ -959,7 +959,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 		for (CMLAtom atom : this.getAtoms()) {
 			for (CMLAtom ligand : atom.getLigandAtoms()) {
 				if (contactMap.containsKey(ligand)) {
-					double valenceDist = atom.getChemicalElement().getVDWRadius()+ligand.getChemicalElement().getVDWRadius();
+					double valenceDist = atom.getChemicalElement().getCovalentRadius()+ligand.getChemicalElement().getVDWRadius();
 					double dist = atom.getDistanceTo(ligand);
 					if ((valenceDist/2) > dist) {
 						contactMap.put(atom, ligand);
