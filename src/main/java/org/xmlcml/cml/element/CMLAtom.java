@@ -1088,4 +1088,14 @@ public class CMLAtom extends AbstractAtom {
 		}
 		return cyclicAtom4;
 	}
+	
+	public boolean hasCloseContact(CMLAtom atom) {
+		double valenceDist = this.getChemicalElement().getCovalentRadius()+atom.getChemicalElement().getVDWRadius();
+		double dist = this.getDistanceTo(atom);
+		if ((valenceDist/2) > dist) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
