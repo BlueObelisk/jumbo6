@@ -75,7 +75,6 @@ public class CrystalTool extends AbstractTool {
 	 */
 	public final static double OCCUPANCY_EPS = 0.005;
 	public final static double FRACT_EPS = 0.005;
-	//public final static double FRACT_EPS = 0.02;
 
 	/** constructor.
 	 * requires molecule to contain <crystal> and optionally <symmetry>
