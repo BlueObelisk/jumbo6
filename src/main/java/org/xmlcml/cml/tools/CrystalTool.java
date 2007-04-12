@@ -199,103 +199,6 @@ public class CrystalTool extends AbstractTool {
 		}
 	}
 
-	/*
-	public void addAtomsToAllCornersEdgesAndFaces() {
-		List<Plane3> planeList = getCellPlaneList();
-		molecule.createCartesiansFromFractionals(crystal);
-		for (CMLAtom atom : molecule.getAtoms()) {
-			System.out.println(atom.getId());
-			int count = 0;
-			int zeroCount = 0;
-			int nonInteger = -1;
-			for (Plane3 p : planeList) {
-				double dist = p.getDistanceFromPoint(atom.getPoint3(CoordinateType.CARTESIAN));
-				double radius = atom.getChemicalElement().getCovalentRadius();
-				if (Math.abs(dist) < (radius/3)) {
-					zeroCount++;
-					System.out.println(Math.abs(dist)+" , "+radius);
-				} else {
-					nonInteger = count;
-				}
-				count++;
-			}
-
-			if (zeroCount > 0) {
-
-				double[] coordArray = atom.getPoint3(CoordinateType.FRACTIONAL).getArray();
-				if (nonInteger > 3) nonInteger -= 3;
-				List<Point3> p3List = new ArrayList<Point3>();
-				if (zeroCount == 1) {
-					System.out.println("found face atom");
-					// atom is on a face of the unit cell
-					List<Double> dList = new ArrayList<Double>(3);
-					for (Double coord : coordArray) {
-						if (coord < FRACT_EPS) {
-							dList.add(1.0);
-						} else if (1.0 - coord < FRACT_EPS) {
-							dList.add(0.0);
-						} else {
-							dList.add(coord);
-						}
-					}
-					p3List.add(new Point3(dList.get(0), dList.get(1), dList.get(2)));
-				} else if (zeroCount == 2) {
-					System.out.println("found edge atom");
-					// atom is on an edge of the unit cell
-					if (nonInteger == -1) throw new CMLRuntimeException("Should be one non-intger coordinate to reach this point.");
-					double[] array = {0.0, 0.0,
-							1.0, 0.0,
-							1.0, 1.0,
-							0.0, 1.0
-					};
-					for (int i = 0; i < 4; i++) {
-						if (nonInteger == 0) {
-							p3List.add(new Point3(coordArray[0], array[(1+(i*2))-1], array[(2+(i*2))-1]));
-						} else if (nonInteger == 1) {
-							p3List.add(new Point3(array[(1+(i*2))-1], coordArray[1], array[(2+(i*2))-1]));
-						} else if (nonInteger == 2) {
-							p3List.add(new Point3(array[(1+(i*2))-1], array[(2+(i*2))-1], coordArray[2]));
-						}
-					}
-				} else if (zeroCount == 3) {
-					System.out.println("found corner atom");
-					// atom is at a corner of the unit cell
-					double[] array = {0.0, 0.0, 0.0,
-							1.0, 0.0, 0.0,
-							1.0, 1.0, 0.0,
-							1.0, 0.0, 1.0,
-							1.0, 1.0, 1.0,
-							0.0, 1.0, 0.0,
-							0.0, 1.0, 1.0,
-							0.0, 0.0, 1.0
-					};
-					for (int i = 0; i < 8; i++) {
-						p3List.add(new Point3(array[(1+(i*3))-1], array[(2+(i*3))-1], array[(3+(i*3))-1]));
-					}
-				} else if (zeroCount > 3) {
-					throw new CMLRuntimeException("Should never throw");
-				}
-				int serial = 1;
-				Transform3 t = crystal.getOrthogonalizationTransform();
-
-				for (Point3 point3 : p3List) {
-					CMLAtom newAtom = new CMLAtom(atom);
-					newAtom.setPoint3(point3, CoordinateType.FRACTIONAL);
-					Point3 cart = point3.transform(t);
-					newAtom.setXYZ3(cart);
-					if (!atom.hasCloseContact(newAtom)) { 
-						String newId = atom.getId()+S_UNDER+serial+S_UNDER+serial;
-						newAtom.resetId(newId);
-						molecule.addAtom(newAtom);
-						serial++;
-					}
-				}
-
-			}
-		}
-	}
-	 */
-
 	/** populate edges and faces.
 	 */
 
@@ -323,9 +226,9 @@ public class CrystalTool extends AbstractTool {
 					List<Double> dList = new ArrayList<Double>(3);
 					for (Double coord : coordArray) {
 						if (coord < FRACT_EPS) {
-							dList.add(1.0);
+							dList.add(1.0+coord);
 						} else if (1.0 - coord < FRACT_EPS) {
-							dList.add(0.0);
+							dList.add(0.0-coord);
 						} else {
 							dList.add(coord);
 						}
@@ -341,12 +244,14 @@ public class CrystalTool extends AbstractTool {
 							0.0, 1.0
 					};
 					for (int i = 0; i < 4; i++) {
+						double firstCoord = array[(1+(i*2))-1];
+						double secondCoord = array[(2+(i*2))-1];
 						if (nonInteger == 0) {
-							p3List.add(new Point3(coordArray[0], array[(1+(i*2))-1], array[(2+(i*2))-1]));
+							p3List.add(new Point3(coordArray[0], getCoord(firstCoord, coordArray[1]), getCoord(secondCoord, coordArray[2])));
 						} else if (nonInteger == 1) {
-							p3List.add(new Point3(array[(1+(i*2))-1], coordArray[1], array[(2+(i*2))-1]));
+							p3List.add(new Point3(getCoord(firstCoord, coordArray[0]), coordArray[1], getCoord(secondCoord, coordArray[2])));
 						} else if (nonInteger == 2) {
-							p3List.add(new Point3(array[(1+(i*2))-1], array[(2+(i*2))-1], coordArray[2]));
+							p3List.add(new Point3(getCoord(firstCoord, coordArray[0]), getCoord(secondCoord, coordArray[2]), coordArray[2]));
 						}
 					}
 				} else if (zeroCount == 3) {
@@ -362,7 +267,8 @@ public class CrystalTool extends AbstractTool {
 							0.0, 0.0, 1.0
 					};
 					for (int i = 0; i < 8; i++) {
-						p3List.add(new Point3(array[(1+(i*3))-1], array[(2+(i*3))-1], array[(3+(i*3))-1]));
+						p3List.add(new Point3(getCoord(array[(1+(i*3))-1], coordArray[0]), 
+								getCoord(array[(2+(i*3))-1], coordArray[1]), getCoord(array[(3+(i*3))-1], coordArray[2])));
 					}
 				} else if (zeroCount > 3) {
 					throw new CMLRuntimeException("Should never throw");
@@ -376,9 +282,8 @@ public class CrystalTool extends AbstractTool {
 					newAtom.setXYZ3(cart);
 					boolean add = true;
 					for (CMLAtom at : molecule.getAtoms()) {
-						if (at.hasCloseContact(newAtom)) {
+						if (point3.equals(at.getXYZFract())) {
 							add = false;
-							break;
 						}
 					}
 					if (add) { 
@@ -392,52 +297,25 @@ public class CrystalTool extends AbstractTool {
 		}
 	}
 
-	/*
-	private List<Plane3> getCellPlaneList() {
-//		 get cell lengths
-		Double lengthA = null;
-		Nodes aNodes = crystal.query(".//"+CMLScalar.NS+"[contains(@dictRef,'"+CELL_LENGTH_A_DICTREF+"')]", X_CML);
-		if (aNodes.size() == 1) {
-			lengthA = Double.valueOf(aNodes.get(0).getValue());
-		} else {
-			throw new CMLRuntimeException("Should be 1 node with cell length A");
+	private double getCoord(double first, double coord) {
+		boolean nearZero = false;
+		boolean nearOne = false;
+		if (coord < FRACT_EPS) {
+			nearZero = true;
+		} else if (1.0 - coord < FRACT_EPS) {
+			nearOne = true;
 		}
-		Double lengthB = null;
-		Nodes bNodes = crystal.query(".//"+CMLScalar.NS+"[contains(@dictRef,'"+CELL_LENGTH_B_DICTREF+"')]", X_CML);
-		if (bNodes.size() == 1) {
-			lengthB = Double.valueOf(aNodes.get(0).getValue());
-		} else {
-			throw new CMLRuntimeException("Should be 1 node with cell length A");
-		}
-		Double lengthC = null;
-		Nodes cNodes = crystal.query(".//"+CMLScalar.NS+"[contains(@dictRef,'"+CELL_LENGTH_C_DICTREF+"')]", X_CML);
-		if (cNodes.size() == 1) {
-			lengthC = Double.valueOf(aNodes.get(0).getValue());
-		} else {
-			throw new CMLRuntimeException("Should be 1 node with cell length A");
-		}
-		Double[] dArray = {lengthA, 0.0, 0.0, 0.0, lengthB, 0.0, 0.0, 0.0, 0.0,
-				lengthA, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, lengthC,
-				0.0, 0.0, 0.0, 0.0, lengthB, 0.0, 0.0, 0.0, lengthC,
-				lengthA, 0.0, lengthC, 0.0, 0.0, lengthC, 0.0, lengthB, lengthC,
-				lengthA, lengthB, 0.0, 0.0, lengthB, 0.0, 0.0, lengthB, lengthC,
-				lengthA, 0.0, 0.0, lengthA, lengthB, 0.0, lengthA, 0.0, lengthC};
-		List<Plane3> planeList = new ArrayList<Plane3>(6);
-		for (int i = 0; i < 6; i++) {
-			Point3 p1 = new Point3(dArray[(i*9)+0], dArray[(i*9)+1], dArray[(i*9)+2]);
-			Point3 p2 = new Point3(dArray[(i*9)+3], dArray[(i*9)+4], dArray[(i*9)+5]);
-			Point3 p3 = new Point3(dArray[(i*9)+6], dArray[(i*9)+7], dArray[(i*9)+8]);
-			Plane3 plane3;
-			try {
-				plane3 = new Plane3(p1, p2, p3);
-				planeList.add(plane3);
-			} catch (EuclidException e) {
-				e.printStackTrace();
+		if (new Double(first).equals(0.0)) {
+			if (nearOne) {
+				coord = coord-1.0;
+			}
+		} else if (new Double(first).equals(1.0)) {
+			if (nearZero) {
+				coord = coord+1.0;
 			}
 		}
-		return planeList;
+		return coord;
 	}
-	 */
 
 	/**
 	 *
@@ -484,18 +362,12 @@ public class CrystalTool extends AbstractTool {
 						newAtomMap.put(p3, atom);
 					}
 				}
-				/*
-				if (!newAtomMap.containsKey(p3) && !originalAtomMap.containsKey(p3)) {
-					newAtomMap.put(p3, atom);
-				}
-				*/
 			}
 		}
 		int count = 1;
 		for (CMLAtom atom : newAtomMap.values()) {
 			CMLAtom newAtom = new CMLAtom(atom);
 			String newId = atom.getId()+S_UNDER+count;
-			//String newId = "a"+count+S_UNDER+"1";
 			newAtom.resetId(newId);
 			molecule.addAtom(newAtom);
 			count++;
