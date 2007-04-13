@@ -60,10 +60,6 @@ public class CrystalTool extends AbstractTool {
 	public final static String ATOM_LABEL =
 		IUCR+S_COLON+"_atom_site_label";
 
-	public final static String CELL_LENGTH_A_DICTREF = "iucr:_cell_length_a";
-	public final static String CELL_LENGTH_B_DICTREF = "iucr:_cell_length_b";
-	public final static String CELL_LENGTH_C_DICTREF = "iucr:_cell_length_c";
-
 	CMLMolecule molecule;
 	MoleculeTool moleculeTool = null;
 	CMLCrystal crystal = null;
@@ -194,8 +190,13 @@ public class CrystalTool extends AbstractTool {
 			}
 			Point3 point = new Point3(dList.get(0), dList.get(1), dList.get(2));
 			atom.setXYZFract(point);
-			point = point.transform(t3);
-			atom.setXYZ3(point);
+			Point3 newP3 = point.transform(t3);
+			atom.setXYZ3(newP3);
+			for (CMLAtom at : molecule.getAtoms()) {
+				if (point.equals(at.getXYZFract()) && !at.getId().equals(atom.getId())) {
+					atom.detach();
+				}
+			}
 		}
 	}
 
@@ -284,6 +285,7 @@ public class CrystalTool extends AbstractTool {
 					for (CMLAtom at : molecule.getAtoms()) {
 						if (point3.equals(at.getXYZFract())) {
 							add = false;
+							break;
 						}
 					}
 					if (add) { 
@@ -367,10 +369,19 @@ public class CrystalTool extends AbstractTool {
 		int count = 1;
 		for (CMLAtom atom : newAtomMap.values()) {
 			CMLAtom newAtom = new CMLAtom(atom);
-			String newId = atom.getId()+S_UNDER+count;
-			newAtom.resetId(newId);
-			molecule.addAtom(newAtom);
-			count++;
+			boolean add = true;
+			for (CMLAtom at : molecule.getAtoms()) {
+				if (newAtom.getXYZFract().equals(at.getXYZFract())) {
+					add = false;
+					break;
+				}
+			}
+			if (add) {
+				String newId = atom.getId()+S_UNDER+count;
+				newAtom.resetId(newId);
+				molecule.addAtom(newAtom);
+				count++;
+			}
 		}
 		this.addAtomsToAllCornersEdgesAndFaces();
 		mt.calculateBondedAtoms();
