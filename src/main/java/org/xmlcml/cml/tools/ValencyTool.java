@@ -21,7 +21,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 
 public class ValencyTool extends AbstractTool {
 	
-	public final static int UNREALISTIC_CHARGE = 99999;
+	public final static int UNKNOWN_CHARGE = 99999;
 	
 	private boolean isMetalComplex = false;
 	private CMLMolecule molecule;
@@ -896,7 +896,7 @@ public class ValencyTool extends AbstractTool {
 				isMetalComplex = true;
 				// as we can't take metals into account when calculating bonds and charges, then
 				// the supplid molecular charge is useless.
-				molCharge = UNREALISTIC_CHARGE;
+				molCharge = UNKNOWN_CHARGE;
 			}
 			// if the removing of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
@@ -1035,6 +1035,11 @@ public class ValencyTool extends AbstractTool {
 										atom.setFormalCharge(-1);
 										chargedAtoms.add(atom);
 									}
+									
+									// FIXME - get molecule formal charge then add/subtract the above - if mol
+									// charge not unknown and not equal to that calculated, then stop here - will save unnecessary
+									// calculations.
+									
 									PiSystem newPiS = new PiSystem(subMolAtomList);
 									newPiS.setPiSystemManager(piSystemManager);
 									List<PiSystem> newPiSList = newPiS.generatePiSystemList();
@@ -1140,7 +1145,7 @@ public class ValencyTool extends AbstractTool {
 						if (finalMolList.size() > 0) {
 							// remember that molCharge is the charge given to the molecule from the CIF file
 							CMLMolecule theMol = null;
-							if (molCharge != UNREALISTIC_CHARGE && !isMetalComplex) {
+							if (molCharge != UNKNOWN_CHARGE && !isMetalComplex) {
 								for (CMLMolecule n : finalMolList) {
 									if (molCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
 										theMol = n;
@@ -1227,7 +1232,7 @@ public class ValencyTool extends AbstractTool {
 		piSystemManager.setUpdateBonds(true);
 		piSystemManager.setKnownUnpaired(0);
 		piSystemManager.setDistributeCharge(true);
-		this.adjustBondOrdersAndChargesToValency(piSystemManager, ValencyTool.UNREALISTIC_CHARGE);
+		this.adjustBondOrdersAndChargesToValency(piSystemManager, ValencyTool.UNKNOWN_CHARGE);
 	}
 	
 	private void setAtomCharge(CMLAtom atom, int charge) {
