@@ -90,11 +90,11 @@ public class StereochemistryTool extends AbstractTool {
      * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
      *         there isnt enough stereo information to calculate parity
      */
-    public static CMLAtomParity calculateAtomParity(CMLAtom atom) {
+    public CMLAtomParity calculateAtomParity(CMLAtom atom) {
         if (!isChiralCentre(atom)) {
             return null;
         }
-        List<CMLAtom> ligandList = atom.getLigandAtoms();
+        List<CMLAtom> ligandList = this.getLigandsInCahnIngoldPrelogOrder(atom);
         if (ligandList.size() == 3) {
             ligandList.add(atom); // use this atom as 4th atom
         }
@@ -142,6 +142,49 @@ public class StereochemistryTool extends AbstractTool {
             return null;
         }
     }
+    
+    /**
+	 * Does exactly what it says on the tin.  In the returned list the first atom
+	 * has the highest priority, the last has the lowest priority.
+	 * 
+	 * Currently only works for C atoms with 4 ligands.
+	 * 
+	 * @param centralAtom
+	 * @return
+	 */
+	public List<CMLAtom> getLigandsInCahnIngoldPrelogOrder(CMLAtom centralAtom) {
+		List<CMLAtom> ligandList = centralAtom.getLigandAtoms();
+		if (!"C".equals(centralAtom.getElementType()) || ligandList.size() != 4) {
+			return null;
+		}
+		List<CMLAtom> orderedLigandList = new ArrayList<CMLAtom>();
+		orderedLigandList.add(ligandList.get(0));
+		for (CMLAtom atom : ligandList) {
+			for (int i = 0; i < orderedLigandList.size(); i++) {
+				if (orderedLigandList.get(i) == atom) continue;
+				CMLAtomSet markedAtoms = new CMLAtomSet();
+				CMLAtomSet otherMarkedAtoms = new CMLAtomSet();
+				int value = this.compareByAtomicNumber(orderedLigandList.get(i), 
+						atom, markedAtoms, otherMarkedAtoms);
+				if (value == 1) {
+					if (i+1 == orderedLigandList.size()) {
+						orderedLigandList.add(i+1, atom);
+						break;
+					} else {
+						continue;
+					}
+				} else if (value == -1) {
+					orderedLigandList.add(i, atom);
+					break;
+				} else {
+					throw new CMLRuntimeException("Should never reach here.");
+				}
+			}
+		}
+		System.out.println(orderedLigandList.size());
+		return orderedLigandList;
+	}  
+    
     private static double determinant(double[][] matrix) {
         double determinant = 0;
         int matrixSize = matrix.length;

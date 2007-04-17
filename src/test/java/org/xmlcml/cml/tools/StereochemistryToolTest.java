@@ -129,12 +129,13 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 	public final void testCalculateAtomParity() {
 		CMLMolecule molecule1 = makeMolecule1();
 		CMLAtom atom = molecule1.getAtomById("a1");
+		StereochemistryTool st = new StereochemistryTool(molecule1);
 		// not chiral
-		CMLAtomParity atomParity1 = StereochemistryTool.calculateAtomParity(atom);
+		CMLAtomParity atomParity1 = st.calculateAtomParity(atom);
 		Assert.assertNull("non-chiral", atomParity1);
 		atom = molecule1.getAtomById("a9");
 		// chiral
-		atomParity1 = StereochemistryTool.calculateAtomParity(atom);
+		atomParity1 = st.calculateAtomParity(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
 		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a10", "a28", "a49"}, atomRefs4);
 		Assert.assertEquals("atomRefs4", 11.158571879456787, atomParity1.getXMLContent(), 0.000001);
