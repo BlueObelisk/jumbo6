@@ -1172,6 +1172,15 @@ public class CMLFormula extends AbstractFormula {
                 : getAtomArrayElements().get(0);
         return (atomArray == null) ? null : atomArray.getCount();
     }
+    
+    public double getTotalAtomCount() {
+    	double[] counts = getCounts();
+    	double total = 0;
+    	for (double count : counts) {
+    		total += count;
+    	}
+    	return total;
+    }
 
     /**
      * Count for corresponding element.

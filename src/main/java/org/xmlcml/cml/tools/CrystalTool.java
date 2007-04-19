@@ -323,7 +323,7 @@ public class CrystalTool extends AbstractTool {
 	 *
 	 * @return molecule containing completed unit cell
 	 */
-	public CMLMolecule addAllAtomsToUnitCell() {
+	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
@@ -385,6 +385,21 @@ public class CrystalTool extends AbstractTool {
 		}
 		this.addAtomsToAllCornersEdgesAndFaces();
 		mt.calculateBondedAtoms();
+		
+		if (!includeAllCornerEdgeAndFaceAtoms) {
+			for (CMLAtom atom : molecule.getAtoms()) {
+				Point3 fract3 = atom.getXYZFract();
+				if (fract3 == null) {
+					throw new RuntimeException("Each atom must have fractional coordinates.");
+				}
+				for (Double fract :	fract3.getArray()) {
+					if (fract < 0.0 || fract.equals(1.0) || fract > 1.0) {
+						atom.detach();
+					}
+				}
+			}
+		}
+		
 		// detach all bonds to group 1 or 2 atoms
 		for (CMLAtom atom : molecule.getAtoms()) {
 			ChemicalElement ce = atom.getChemicalElement();
