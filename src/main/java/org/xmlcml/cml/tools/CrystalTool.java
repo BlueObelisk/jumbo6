@@ -178,13 +178,13 @@ public class CrystalTool extends AbstractTool {
 	public void resetAllFractionalsToZeroOneRange() {
 		Transform3 t3 = crystal.getOrthogonalizationTransform();
 		for (CMLAtom atom : molecule.getAtoms()) {
-			Point3 p3 = atom.getFractCoord();
+			Point3 p3 = atom.getXYZFract();
 			List<Double> dList = new ArrayList<Double>(3);
 			for (Double fractCoord : p3.getArray()) {
 				if (fractCoord < 0.0) {
-					fractCoord += 1;
+					fractCoord += 1.0;
 				} else if (fractCoord > 1.0 || fractCoord.equals(1.0)) {
-					fractCoord -= 1;
+					fractCoord -= 1.0;
 				}
 				dList.add(fractCoord);
 			}
@@ -193,7 +193,8 @@ public class CrystalTool extends AbstractTool {
 			Point3 newP3 = point.transform(t3);
 			atom.setXYZ3(newP3);
 			for (CMLAtom at : molecule.getAtoms()) {
-				if (point.equals(at.getXYZFract()) && !at.getId().equals(atom.getId())) {
+				if (point.isEqualTo(at.getXYZFract(), Point3.CRYSTALFRACTEPSILON) 
+						&& !at.getId().equals(atom.getId())) {
 					atom.detach();
 				}
 			}
@@ -205,6 +206,7 @@ public class CrystalTool extends AbstractTool {
 
 	public void addAtomsToAllCornersEdgesAndFaces() {		
 		for (CMLAtom atom : molecule.getAtoms()) {
+			System.out.println(atom.getId());
 			Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
 			double[] coordArray = p3.getArray();
 			int zeroCount = 0;
@@ -222,7 +224,7 @@ public class CrystalTool extends AbstractTool {
 			if (zeroCount > 0) {
 				List<Point3> p3List = new ArrayList<Point3>();
 				if (zeroCount == 1) {
-					//System.out.println("found face atom");
+					System.out.println("found face atom");
 					// atom is on a face of the unit cell
 					List<Double> dList = new ArrayList<Double>(3);
 					for (Double coord : coordArray) {
@@ -236,7 +238,7 @@ public class CrystalTool extends AbstractTool {
 					}
 					p3List.add(new Point3(dList.get(0), dList.get(1), dList.get(2)));
 				} else if (zeroCount == 2) {
-					//System.out.println("found edge atom");
+					System.out.println("found edge atom");
 					// atom is on an edge of the unit cell
 					if (nonInteger == -1) throw new CMLRuntimeException("Should be one non-intger coordinate to reach this point.");
 					double[] array = {0.0, 0.0,
@@ -256,7 +258,7 @@ public class CrystalTool extends AbstractTool {
 						}
 					}
 				} else if (zeroCount == 3) {
-					//System.out.println("found corner atom");
+					System.out.println("found corner atom");
 					// atom is at a corner of the unit cell
 					double[] array = {0.0, 0.0, 0.0,
 							1.0, 0.0, 0.0,
@@ -283,7 +285,7 @@ public class CrystalTool extends AbstractTool {
 					newAtom.setXYZ3(cart);
 					boolean add = true;
 					for (CMLAtom at : molecule.getAtoms()) {
-						if (point3.equals(at.getXYZFract())) {
+						if (point3.isEqualTo(at.getXYZFract(), Point3.CRYSTALFRACTEPSILON)) {
 							add = false;
 							break;
 						}
@@ -383,7 +385,7 @@ public class CrystalTool extends AbstractTool {
 				count++;
 			}
 		}
-		this.addAtomsToAllCornersEdgesAndFaces();
+		//this.addAtomsToAllCornersEdgesAndFaces();
 		mt.calculateBondedAtoms();
 		
 		if (!includeAllCornerEdgeAndFaceAtoms) {
@@ -413,8 +415,6 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
-		ConnectionTableTool ct2 = new ConnectionTableTool(molecule);
-		ct2.partitionIntoMolecules();
 		for (CMLBond bond : molecule.getBonds()) {
 			bond.setOrder(CMLBond.SINGLE);
 		}
