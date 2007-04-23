@@ -20,16 +20,16 @@ import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
 public class ValencyTool extends AbstractTool {
-	
+
 	public final static int UNKNOWN_CHARGE = 99999;
-	
+
 	private boolean isMetalComplex = false;
 	private CMLMolecule molecule;
 	private MoleculeTool moleculeTool;
 	private String formulaS;
-	
+
 	private List<CMLAtom> alreadySetAtoms = new ArrayList<CMLAtom>();
-	
+
 	public ValencyTool(CMLMolecule molecule) {
 		this.molecule = molecule;
 		moleculeTool = new MoleculeTool(molecule);
@@ -127,7 +127,7 @@ public class ValencyTool extends AbstractTool {
 		}
 		return marked;
 	}
-	
+
 	private void addCharge(String elementType, int charge) {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
@@ -161,7 +161,7 @@ public class ValencyTool extends AbstractTool {
 		if (formulaS.equals("N 1 O 1")) {
 			this.markNO(atoms);
 		}
-		
+
 		this.markCarboxyAnion(atoms);
 		this.markKetone(atoms);
 		this.markCS2(atoms);
@@ -225,7 +225,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markKetone(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			// may already have been set in markCarboxyAnion if so
@@ -243,7 +243,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -254,7 +254,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markHydride(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -264,7 +264,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markEarthMetals(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -276,7 +276,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markLoneNonMetalAnions(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (("F".equals(atom.getElementType()) 
@@ -297,7 +297,7 @@ public class ValencyTool extends AbstractTool {
 			}	
 		}
 	}
-	
+
 	private void markSNH(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -311,7 +311,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markMCC(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -326,7 +326,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markMNN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -347,7 +347,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markPNP(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -364,7 +364,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markMCN(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -380,7 +380,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markM_PN_C(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
@@ -393,7 +393,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markSandwichLigands(List<CMLAtom> atoms) {
 		CMLAtomSet atomSet = new CMLAtomSet(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
@@ -419,7 +419,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	private void markPyridineN(List<CMLAtom> atoms) {
 		CMLAtomSet atomSet = new CMLAtomSet(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
@@ -868,7 +868,7 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adjust bond orders and charges to satisfy valence. empirical, and
 	 * containing several special cases:
@@ -898,7 +898,7 @@ public class ValencyTool extends AbstractTool {
 				// the supplid molecular charge is useless.
 				molCharge = UNKNOWN_CHARGE;
 			}
-			// if the removing of metal atoms takes the molecules atom count 
+			// if the removal of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
 			if (mol.getAtomCount() == 1) {
 				ValencyTool valencyTool = new ValencyTool(mol);
@@ -907,8 +907,10 @@ public class ValencyTool extends AbstractTool {
 				// now the metal atoms and bonds have been removed, partition 
 				// molecule into submolecules and then calculate the bond orders
 				// and charges
-				ConnectionTableTool ctt = new ConnectionTableTool(mol);
-				ctt.partitionIntoMolecules();
+				if (isMetalComplex) {
+					ConnectionTableTool ctt = new ConnectionTableTool(mol);
+					ctt.partitionIntoMolecules();
+				}
 				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
 				for (CMLMolecule subMol : subMols) {
 					MoleculeTool subMolTool = new MoleculeTool(subMol);
@@ -951,19 +953,6 @@ public class ValencyTool extends AbstractTool {
 									int ligandNum = piAtom.getLigandBonds().size();
 									piAtom.setFormalCharge(-3+ligandNum);
 									alreadySetAtomIds.add(piAtom.getId());
-								} else if ("C".equals(atomElType)) {
-									for (CMLAtom ligand : piAtom.getLigandAtoms()) {
-										if ("N".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-											ligand.setFormalCharge(+1);
-											CMLBond bond = subMol.getBond(piAtom, ligand);
-											bond.setOrder(CMLBond.DOUBLE);
-											singleBonds.remove(bond);
-											alreadySetAtomIds.add(piAtom.getId());
-											alreadySetAtomIds.add(ligand.getId());
-											break;
-										}
-									}
-									piAtom.setFormalCharge(-1);
 								}
 							} else {
 								List<CMLAtom> piAtomList = piSys.getAtomList();
@@ -1035,11 +1024,14 @@ public class ValencyTool extends AbstractTool {
 										atom.setFormalCharge(-1);
 										chargedAtoms.add(atom);
 									}
-									
-									// FIXME - get molecule formal charge then add/subtract the above - if mol
-									// charge not unknown and not equal to that calculated, then stop here - will save unnecessary
-									// calculations.
-									
+
+									// if the charge is known and the charges set on the atoms don't
+									// add up to it, then don't try to calculate the bonds and move on
+									// to the next combination
+									int fCharge = subMol.calculateFormalCharge();
+									if (molCharge != UNKNOWN_CHARGE && molCharge != fCharge) 
+										continue;
+
 									PiSystem newPiS = new PiSystem(subMolAtomList);
 									newPiS.setPiSystemManager(piSystemManager);
 									List<PiSystem> newPiSList = newPiS.generatePiSystemList();
@@ -1206,13 +1198,16 @@ public class ValencyTool extends AbstractTool {
 				}
 				// return the mol to its original state before adding metal
 				// atoms and bonds back in
-				ctt.flattenMolecules();
+				if (isMetalComplex) {
+					ConnectionTableTool ctt = new ConnectionTableTool(mol);
+					ctt.flattenMolecules();
+				}
 			}
 			// reattach metal atoms and bonds now bonds have been calculated
 			MoleculeTool.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
 		}
 	}
-	
+
 	/**
 	 * add double bonds through PiSystemManager.
 	 */
@@ -1223,7 +1218,7 @@ public class ValencyTool extends AbstractTool {
 		piSystemManager.setDistributeCharge(true);
 		this.adjustBondOrdersAndChargesToValency(piSystemManager, molCharge);
 	}
-	
+
 	/**
 	 * add double bonds through PiSystemManager.
 	 */
@@ -1234,7 +1229,7 @@ public class ValencyTool extends AbstractTool {
 		piSystemManager.setDistributeCharge(true);
 		this.adjustBondOrdersAndChargesToValency(piSystemManager, ValencyTool.UNKNOWN_CHARGE);
 	}
-	
+
 	private void setAtomCharge(CMLAtom atom, int charge) {
 		atom.setFormalCharge(charge);
 		alreadySetAtoms.add(atom);
@@ -1247,7 +1242,7 @@ public class ValencyTool extends AbstractTool {
 			alreadySetAtoms.add(at);
 		}
 	}
-	
+
 	public List<CMLAtom> getAlreadySetAtoms() {
 		return this.alreadySetAtoms;
 	}

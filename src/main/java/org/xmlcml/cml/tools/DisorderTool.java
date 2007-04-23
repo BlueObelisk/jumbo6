@@ -131,7 +131,6 @@ public class DisorderTool extends AbstractTool {
 		if (disorderProcessed || !containsDisorder) {
 			removeAtomDisorderInformation();
 		}
-		//molecule.debug();
 	}
 
 	/**
@@ -248,7 +247,6 @@ public class DisorderTool extends AbstractTool {
 					isMetadataSet = true;
 					return newDA;
 				} else {
-					System.out.println("not fixed");
 					if (!isMetadataSet) {
 						addDisorderMetadata(false);
 						isMetadataSet = true;
