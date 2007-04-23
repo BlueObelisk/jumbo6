@@ -598,6 +598,17 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 		form = atomSet.getCalculatedFormula(control);
 		return form;
 	}
+	
+	/**
+	 * calculate formal charge from charges on atoms in the molecule
+	 */
+	public int calculateFormalCharge() {
+		int formalCharge = 0;
+		for (CMLAtom atom : this.getAtoms()) {
+			formalCharge += atom.getFormalCharge();
+		}
+		return formalCharge;
+	}
 
 //	/**
 //	* clear wedge and hatch bonds.
