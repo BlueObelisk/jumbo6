@@ -24,6 +24,8 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.euclid.EuclidConstants;
+import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
@@ -39,7 +41,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  * @author pmr
  *
  */
-public class CrystalTool extends AbstractTool {
+public class CrystalTool extends AbstractTool implements EuclidConstants {
 	final static Logger logger = Logger.getLogger(CrystalTool.class.getName());
 
 	Map<String, Integer> formulaCountMap = new HashMap<String, Integer>();
@@ -71,6 +73,7 @@ public class CrystalTool extends AbstractTool {
 	 */
 	public final static double OCCUPANCY_EPS = 0.005;
 	public final static double FRACT_EPS = 0.005;
+	public final static double HEXAGONAL_CELL_FRACT_EPS = 0.0001;
 
 	/** constructor.
 	 * requires molecule to contain <crystal> and optionally <symmetry>
@@ -175,27 +178,16 @@ public class CrystalTool extends AbstractTool {
 
 	/** normalize fractionals.
 	 */
-	public void resetAllFractionalsToZeroOneRange() {
+	public void normalizeCrystallographically() {
 		Transform3 t3 = crystal.getOrthogonalizationTransform();
 		for (CMLAtom atom : molecule.getAtoms()) {
 			Point3 p3 = atom.getXYZFract();
-			List<Double> dList = new ArrayList<Double>(3);
-			for (Double fractCoord : p3.getArray()) {
-				if (fractCoord < 0.0) {
-					double i = Math.abs(Math.ceil(fractCoord))+1.0;
-					fractCoord += i;
-				} else if (fractCoord > 1.0 || fractCoord.equals(1.0)) {
-					double i = Math.floor(fractCoord);
-					fractCoord -= i;
-				}
-				dList.add(fractCoord);
-			}
-			Point3 point = new Point3(dList.get(0), dList.get(1), dList.get(2));
-			atom.setXYZFract(point);
-			Point3 newP3 = point.transform(t3);
+			p3 = p3.normaliseCrystallographically();
+			atom.setXYZFract(p3);
+			Point3 newP3 = p3.transform(t3);
 			atom.setXYZ3(newP3);
 			for (CMLAtom at : molecule.getAtoms()) {
-				if (point.isEqualTo(at.getXYZFract(), Point3.CRYSTALFRACTEPSILON) 
+				if (p3.equalsCrystallographically(at.getXYZFract())
 						&& !at.getId().equals(atom.getId())) {
 					atom.detach();
 				}
@@ -208,7 +200,7 @@ public class CrystalTool extends AbstractTool {
 
 	public void addAtomsToAllCornersEdgesAndFaces() {		
 		for (CMLAtom atom : molecule.getAtoms()) {
-			Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
+			Point3 p3 = atom.getXYZFract();
 			double[] coordArray = p3.getArray();
 			int zeroCount = 0;
 			int count = 0;
@@ -293,12 +285,12 @@ public class CrystalTool extends AbstractTool {
 				Transform3 t = crystal.getOrthogonalizationTransform();
 				for (Point3 point3 : p3List) {
 					CMLAtom newAtom = new CMLAtom(atom);
-					newAtom.setPoint3(point3, CoordinateType.FRACTIONAL);
+					newAtom.setXYZFract(point3);
 					Point3 cart = point3.transform(t);
 					newAtom.setXYZ3(cart);
 					boolean add = true;
 					for (CMLAtom at : molecule.getAtoms()) {
-						if (point3.isEqualTo(at.getXYZFract(), Point3.CRYSTALFRACTEPSILON)) {
+						if (point3.isEqualTo(at.getXYZFract())) {
 							add = false;
 							break;
 						}
@@ -344,21 +336,59 @@ public class CrystalTool extends AbstractTool {
 		MoleculeTool mt = new MoleculeTool(molecule);
 		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
-		this.resetAllFractionalsToZeroOneRange();
+		this.normalizeCrystallographically();
 		CMLElements<CMLTransform3> allSymmElements = symmetry.getTransform3Elements();
 		Map<Point3, CMLAtom> newAtomMap = new HashMap<Point3, CMLAtom>();
 		for (int i = 0; i < allSymmElements.size(); i++) {
 			CMLMolecule symmetryMolecule = new CMLMolecule(molecule);
 			CMLTransform3 transform = allSymmElements.get(i);
-			symmetryMolecule.transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
-			new CrystalTool(symmetryMolecule).resetAllFractionalsToZeroOneRange();
+
+			// look at transform to see if is a hexagonal unit cell
+			// if so then the transformations around elements of symmetry with fractional coordinates of 1/3 or 2/3
+			// will not be exact, so we have to allow for this error in our calculations.
+			boolean isHexagonalTransform = false;
+			for (Double d : transform.getMatrixAsArray()) {
+				if (d.equals(EuclidConstants.ONE_THIRD) || d.equals(EuclidConstants.TWO_THIRDS)) {
+					isHexagonalTransform = true;
+					break;
+				}
+			}
+
 			for (CMLAtom atom : symmetryMolecule.getAtoms()) {
+				Point3 originalP3 = atom.getXYZFract();
+				atom.transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
 				Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
+				p3 = p3.normaliseCrystallographically();
+				if (isHexagonalTransform && 
+						(originalP3.isOnNonExactHexagonalSymmetryElement() || originalP3.isOnUnitCellFaceEdgeOrCorner())) {
+					double[] array = p3.getArray();
+					int count = 0;
+					boolean changed = false;
+					for (Double d : array) {
+						if (1-d < FRACT_EPS) {
+							array[count] = 1.0;
+							changed = true;
+						} else if (d < FRACT_EPS) {
+							array[count] = 0.0;
+							changed = true;
+						}
+						count++;
+					}
+					if (changed) {
+						try {
+							p3 = new Point3(array);
+							p3.normaliseCrystallographically();
+						} catch (EuclidException e) {
+							throw new CMLRuntimeException("Could not create Point3 with values: "+array.toString());
+						}
+					}
+				}
+
 				boolean inNMap = false;
 				boolean inOMap = false;
 				for (Iterator it = newAtomMap.keySet().iterator(); it.hasNext(); ) {
 					Point3 key = (Point3)it.next();
-					if (key.isEqualTo(p3, Point3.CRYSTALFRACTEPSILON)) {
+					if (key.equalsCrystallographically(p3)) {
 						inNMap = true;
 						break;
 					}
@@ -366,12 +396,13 @@ public class CrystalTool extends AbstractTool {
 				if (!inNMap) {
 					for (CMLAtom at : molecule.getAtoms()) {
 						Point3 key = at.getXYZFract();
-						if (key.isEqualTo(p3, Point3.CRYSTALFRACTEPSILON)) {
+						if (key.equalsCrystallographically(p3)) {
 							inOMap = true;
 							break;
 						}
 					}
 					if (!inOMap) {
+						atom.setXYZFract(p3);
 						newAtomMap.put(p3, atom);
 					}
 				}
@@ -409,7 +440,7 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
-		
+
 		// detach all bonds to group 1 or 2 atoms
 		for (CMLAtom atom : molecule.getAtoms()) {
 			ChemicalElement ce = atom.getChemicalElement();
