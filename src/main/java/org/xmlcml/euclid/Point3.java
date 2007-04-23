@@ -2,6 +2,8 @@ package org.xmlcml.euclid;
 
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.tools.CrystalTool;
+
 /**
  * 3-dimensional point class
  * 
@@ -688,5 +690,27 @@ public class Point3 implements EuclidConstants {
     	if (one == two) {
     		System.out.println("same object");
     	}
+    }
+    
+    public boolean isOnUnitCellFaceEdgeOrCorner() {
+    	for (Double d : this.getArray()) {
+    		if (d.equals(0.0) || d.equals(1.0)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public boolean isOnNonExactHexagonalSymmetryElement() {
+    	for (Double d : this.getArray()) {
+    		if (d < (EuclidConstants.ONE_THIRD+CrystalTool.HEXAGONAL_CELL_FRACT_EPS) &&
+    				d > (EuclidConstants.ONE_THIRD-CrystalTool.HEXAGONAL_CELL_FRACT_EPS)) {
+    			return true;
+    		} else if (d < (EuclidConstants.TWO_THIRDS+CrystalTool.HEXAGONAL_CELL_FRACT_EPS) &&
+    				d > (EuclidConstants.TWO_THIRDS-CrystalTool.HEXAGONAL_CELL_FRACT_EPS)) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 }
