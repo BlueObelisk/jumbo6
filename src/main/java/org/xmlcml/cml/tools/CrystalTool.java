@@ -334,7 +334,6 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
-		mt.calculateBondedAtoms();
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
 		this.normalizeCrystallographically();
 		CMLElements<CMLTransform3> allSymmElements = symmetry.getTransform3Elements();
@@ -426,7 +425,6 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 			}
 		}
 		this.addAtomsToAllCornersEdgesAndFaces();
-		mt.calculateBondedAtoms();	
 		if (!includeAllCornerEdgeAndFaceAtoms) {
 			for (CMLAtom atom : molecule.getAtoms()) {
 				Point3 fract3 = atom.getXYZFract();
@@ -441,6 +439,8 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 			}
 		}
 
+		mt.createCartesiansFromFractionals();
+		mt.calculateBondedAtoms();	
 		// detach all bonds to group 1 or 2 atoms
 		for (CMLAtom atom : molecule.getAtoms()) {
 			ChemicalElement ce = atom.getChemicalElement();
