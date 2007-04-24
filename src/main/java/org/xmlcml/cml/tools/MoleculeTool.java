@@ -1616,9 +1616,8 @@ public class MoleculeTool extends AbstractTool {
 					if (atomi.getDistanceTo(atomj) < 0.2) {
 						// remove overlapping atoms
 						atomj.detach();
-						System.out
-						.println("OVERLAP........................... "
-								+ atomj.getId());
+						//System.out.println("OVERLAP........................... "
+						//		+ atomj.getId());
 					} else {
 						// transfer atom and add new bond
 						atomj.detach();
