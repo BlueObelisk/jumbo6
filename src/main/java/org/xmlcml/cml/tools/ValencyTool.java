@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -884,7 +885,8 @@ public class ValencyTool extends AbstractTool {
 	 * @param piSystemManager, charge on molecule provided
 	 */
 	public void adjustBondOrdersAndChargesToValency(
-			PiSystemControls piSystemManager, int knownMolCharge) {	
+			PiSystemControls piSystemManager, int knownMolCharge) {
+		System.out.println("known charge: "+knownMolCharge);
 		List<CMLMolecule> mols = molecule.getDescendantsOrMolecule();
 		for (CMLMolecule mol : mols) {
 			// reset all bond orders to single
@@ -892,12 +894,16 @@ public class ValencyTool extends AbstractTool {
 			// remove metal atoms so we can calculate bond orders on organic species, 
 			// then we will reattach the metal atoms later in the method
 			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = MoleculeTool.removeMetalAtomsAndBonds(molecule, true);
-			if (metalAtomAndBondMap.size() > 0) {
-				isMetalComplex = true;
-				// as we can't take metals into account when calculating bonds and charges, then
-				// the supplid molecular charge is useless.
-				knownMolCharge = UNKNOWN_CHARGE;
-			}
+			for (Iterator it=metalAtomAndBondMap.keySet().iterator(); it.hasNext(); ) {
+				List<CMLAtom> atomList = (List<CMLAtom>)it.next();
+				if (atomList.size() > 0) {
+					isMetalComplex = true;
+					// as we can't take metals into account when calculating bonds and charges, then
+					// the supplid molecular charge is useless.
+					System.out.println("surelt not");
+					knownMolCharge = UNKNOWN_CHARGE;
+				}
+		    }
 			// if the removal of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
 			if (mol.getAtomCount() == 1) {
@@ -1106,7 +1112,7 @@ public class ValencyTool extends AbstractTool {
 							}
 						}
 						cAttempt:
-							if (finalMolList.size() == 0) {
+							if (finalMolList.size() == 0  && knownMolCharge != UNKNOWN_CHARGE) {
 								for (int l = 0; l < n2ComboList.size(); l++) {
 									for (int i = 0; i < n3ComboList.size(); i++) {
 										for (int j = osComboList.size()-1; j >= 0; j--) {
@@ -1135,6 +1141,7 @@ public class ValencyTool extends AbstractTool {
 												for (CMLAtom ato : subMol.getAtoms()) {
 													if ("C".equals(ato.getElementType())) {
 														ato.setFormalCharge(-1);
+														chargedAtoms.add(ato);
 														PiSystem newPiS = new PiSystem(subMolAtomList);
 														newPiS.setPiSystemManager(piSystemManager);
 														List<PiSystem> newPiSList = newPiS.generatePiSystemList();
@@ -1193,8 +1200,14 @@ public class ValencyTool extends AbstractTool {
 												}
 											} else if (fCharge+1 == knownMolCharge) {
 												for (CMLAtom ato : subMol.getAtoms()) {
-													if ("C".equals(ato.getElementType())) {
+													if ("C".equals(ato.getElementType())) {													
 														ato.setFormalCharge(1);
+														chargedAtoms.add(ato);
+														
+														if ("a19".equals(ato.getId())) {
+															subMol.debug();
+														}
+														
 														PiSystem newPiS = new PiSystem(subMolAtomList);
 														newPiS.setPiSystemManager(piSystemManager);
 														List<PiSystem> newPiSList = newPiS.generatePiSystemList();
@@ -1226,6 +1239,8 @@ public class ValencyTool extends AbstractTool {
 																		}
 																	}
 																	if (add) {
+																		System.out
+																				.println("here");
 																		CMLMolecule copy = (CMLMolecule)subMol.copy();
 																		validMolList.add(copy);
 																		finalMolList.add(copy);
