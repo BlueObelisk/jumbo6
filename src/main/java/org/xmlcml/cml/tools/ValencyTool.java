@@ -123,10 +123,29 @@ public class ValencyTool extends AbstractTool {
 					this.setBondOrder(bond, CMLBond.TRIPLE);
 				}
 			}
+		} else if (formulaS.equals("C 1 S 2")) {
+			for (CMLBond bond : molecule.getBonds()) {
+				this.setBondOrder(bond, CMLBond.DOUBLE);
+			}
 		} else {
 			marked = false;
 		}
 		return marked;
+	}
+
+	private void markMetalCarbons(List<CMLAtom> atoms) {
+		// if carbon bonded to certain metal atoms, then add - to carbon atom
+		for (CMLAtom atom : atoms) {
+			if ("Ag".equals(atom.getElementType()) ||
+					"Sn".equals(atom.getElementType()) ||
+					"Hg".equals(atom.getElementType())) {
+				for (CMLAtom ligand : atom.getLigandAtoms()) {
+					if ("C".equals(ligand.getElementType())) {
+						this.setAtomCharge(ligand, -1);
+					}
+				}
+			}
+		}
 	}
 
 	private void addCharge(String elementType, int charge) {
@@ -162,7 +181,7 @@ public class ValencyTool extends AbstractTool {
 		if (formulaS.equals("N 1 O 1")) {
 			this.markNO(atoms);
 		}
-
+		this.markMetalCNN(atoms);
 		this.markCarboxyAnion(atoms);
 		this.markKetone(atoms);
 		this.markCS2(atoms);
@@ -182,6 +201,7 @@ public class ValencyTool extends AbstractTool {
 		this.markMNN(atoms);
 		this.markPNP(atoms);
 		this.markMCC(atoms);
+		this.markSNS(atoms);
 		this.markSNH(atoms);
 		this.markSandwichLigands(atoms);
 		this.markPyridineN(atoms);
@@ -222,6 +242,29 @@ public class ValencyTool extends AbstractTool {
 						molecule.getBond(centralA, atom).setOrder(
 								CMLBond.DOUBLE);
 					}
+				}
+			}
+		}
+	}
+	
+	private void markMetalCNN(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if (alreadySetAtoms.contains(atom)) continue;
+			if ("C".equals(atom.getElementType()) && atom.isBondedToMetal()
+					&& atom.getLigandAtoms().size() == 2) {
+				int nCount = 0;
+				for (CMLAtom ligand : atom.getLigandAtoms()) {
+					if ("N".equals(ligand.getElementType()) &&
+							ligand.getLigandAtoms().size() == 3) {
+						nCount++;
+					}
+				}
+				if (nCount == 2) {
+					System.out.println("setting "+atom.getId());
+					this.setAtomCharge(atom, -1);
+					CMLAtom nAtom = atom.getLigandAtoms().get(0);
+					this.setAtomCharge(nAtom, 1);
+					this.setBondOrder(molecule.getBond(atom, nAtom), CMLBond.DOUBLE);
 				}
 			}
 		}
@@ -303,10 +346,39 @@ public class ValencyTool extends AbstractTool {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
 			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
+				int count = 0;
+				CMLAtom sAtom = null;
 				for (CMLAtom ligand : atom.getLigandAtoms()) {
 					if ("S".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-						CMLBond bond = molecule.getBond(atom, ligand);
-						this.setBondOrder(bond, CMLBond.DOUBLE);
+						count++;
+						sAtom = ligand;
+					}
+					if ("H".equals(ligand.getElementType())) {
+						count++;
+					}
+				}
+				if (count == 2) {
+					CMLBond bond = molecule.getBond(atom, sAtom);
+					this.setBondOrder(bond, CMLBond.DOUBLE);
+				}
+			}
+		}
+	}
+
+	private void markSNS(List<CMLAtom> atoms) {
+		for (CMLAtom atom : atoms) {
+			if (alreadySetAtoms.contains(atom)) continue;
+			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
+				int sCount = 0;
+				for (CMLAtom ligand : atom.getLigandAtoms()) {
+					if ("S".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
+						sCount++;
+					}
+				}
+				if (sCount == 2) {
+					this.setAtomCharge(atom, -1);
+					for (CMLAtom ligand : atom.getLigandAtoms()) {
+						this.setAtomCharge(ligand, 1);
 					}
 				}
 			}
@@ -616,6 +688,16 @@ public class ValencyTool extends AbstractTool {
 									}
 								}
 							}
+							for (CMLAtom oAtom : oxyList) {
+								this.setAtomCharge(oAtom, -1);
+								for (CMLAtom oAt : oxyList) {
+									if (oAt != oAtom) {
+										CMLBond bond = molecule.getBond(atom, oAt);
+										this.setBondOrder(bond, CMLBond.DOUBLE);
+										break marker;
+									}
+								}
+							}
 						}
 				}
 			}
@@ -886,11 +968,12 @@ public class ValencyTool extends AbstractTool {
 	 */
 	public void adjustBondOrdersAndChargesToValency(
 			PiSystemControls piSystemManager, int knownMolCharge) {
-		System.out.println("known charge: "+knownMolCharge);
 		List<CMLMolecule> mols = molecule.getDescendantsOrMolecule();
 		for (CMLMolecule mol : mols) {
 			// reset all bond orders to single
 			mol.setBondOrders(CMLBond.SINGLE);
+			ValencyTool vTool = new ValencyTool(mol);
+			vTool.markMetalCarbons(mol.getAtoms());
 			// remove metal atoms so we can calculate bond orders on organic species, 
 			// then we will reattach the metal atoms later in the method
 			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = MoleculeTool.removeMetalAtomsAndBonds(molecule, true);
@@ -900,25 +983,26 @@ public class ValencyTool extends AbstractTool {
 					isMetalComplex = true;
 					// as we can't take metals into account when calculating bonds and charges, then
 					// the supplid molecular charge is useless.
-					System.out.println("surelt not");
 					knownMolCharge = UNKNOWN_CHARGE;
 				}
-		    }
+			}
 			// if the removal of metal atoms takes the molecules atom count 
 			// to zero or one then don't bother calculating bonds
-			if (mol.getAtomCount() == 1) {
-				ValencyTool valencyTool = new ValencyTool(mol);
-				valencyTool.markLoneNonMetalAnions(mol.getAtoms());
-			} else if (mol.getAtomCount() > 1) {
-				// now the metal atoms and bonds have been removed, partition 
-				// molecule into submolecules and then calculate the bond orders
-				// and charges
-				if (isMetalComplex) {
-					ConnectionTableTool ctt = new ConnectionTableTool(mol);
-					ctt.partitionIntoMolecules();
-				}
-				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
-				for (CMLMolecule subMol : subMols) {
+			// now the metal atoms and bonds have been removed, partition 
+			// molecule into submolecules and then calculate the bond orders
+			// and charges
+			if (isMetalComplex) {
+				ConnectionTableTool ctt = new ConnectionTableTool(mol);
+				ctt.partitionIntoMolecules();
+			}
+			List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
+			for (CMLMolecule subMol : subMols) {
+				// if the removal of metal atoms takes the molecules atom count 
+				// to zero or one then don't bother calculating bonds
+				if (subMol.getAtomCount() == 1) {
+					ValencyTool valencyTool = new ValencyTool(mol);
+					valencyTool.markLoneNonMetalAnions(mol.getAtoms());
+				} else {
 					MoleculeTool subMolTool = new MoleculeTool(subMol);
 					ValencyTool valencyTool = new ValencyTool(subMol);
 					boolean common = valencyTool.markupCommonMolecules();
@@ -969,6 +1053,7 @@ public class ValencyTool extends AbstractTool {
 										if ("O".equals(atom.getElementType()) || "S".equals(atom.getElementType())) {
 											if (atom.getLigandAtoms().size() == 1) {
 												osList.add(atom);
+												System.out.println("os: "+atom.getId());
 											}
 										}
 										if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2
@@ -981,6 +1066,7 @@ public class ValencyTool extends AbstractTool {
 											}
 											if (count == 0) {
 												n2List.add(atom);
+												System.out.println("n2: "+atom.getId());
 											}
 										}
 										// see if there are any Ns with 3 ligands next to the pi-system that
@@ -996,6 +1082,7 @@ public class ValencyTool extends AbstractTool {
 													}
 													if (count < 2 && !n3List.contains(ligand)) {
 														n3List.add(ligand);
+														System.out.println("n3: "+atom.getId());
 													}
 												}
 											}
@@ -1132,7 +1219,7 @@ public class ValencyTool extends AbstractTool {
 												atom.setFormalCharge(-1);
 												chargedAtoms.add(atom);
 											}
-											
+
 											// if the charge is known and is within + or - 1 of the charge set on
 											// the atoms, then add a +/- to carbon atoms until a valid structure
 											// is found
@@ -1203,11 +1290,11 @@ public class ValencyTool extends AbstractTool {
 													if ("C".equals(ato.getElementType())) {													
 														ato.setFormalCharge(1);
 														chargedAtoms.add(ato);
-														
+
 														if ("a19".equals(ato.getId())) {
 															subMol.debug();
 														}
-														
+
 														PiSystem newPiS = new PiSystem(subMolAtomList);
 														newPiS.setPiSystemManager(piSystemManager);
 														List<PiSystem> newPiSList = newPiS.generatePiSystemList();
@@ -1240,7 +1327,7 @@ public class ValencyTool extends AbstractTool {
 																	}
 																	if (add) {
 																		System.out
-																				.println("here");
+																		.println("here");
 																		CMLMolecule copy = (CMLMolecule)subMol.copy();
 																		validMolList.add(copy);
 																		finalMolList.add(copy);
@@ -1347,15 +1434,17 @@ public class ValencyTool extends AbstractTool {
 							}
 							MoleculeTool theMolTool = new MoleculeTool(theMol);
 							theMolTool.copyAtomAndBondAttributesById(subMol, true);
+						} else {
+
 						}
 					}
 				}
-				// return the mol to its original state before adding metal
-				// atoms and bonds back in
-				if (isMetalComplex) {
-					ConnectionTableTool ctt = new ConnectionTableTool(mol);
-					ctt.flattenMolecules();
-				}
+			}
+			// return the mol to its original state before adding metal
+			// atoms and bonds back in
+			if (isMetalComplex) {
+				ConnectionTableTool ctt = new ConnectionTableTool(mol);
+				ctt.flattenMolecules();
 			}
 			// reattach metal atoms and bonds now bonds have been calculated
 			MoleculeTool.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);

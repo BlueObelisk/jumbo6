@@ -120,10 +120,12 @@ public class DisorderTool extends AbstractTool {
 	 * @param disorderAssemblyList
 	 */
 	private void processDisorder(List<DisorderAssembly> disorderAssemblyList) {
-		if (RemoveControl.REMOVE_MINOR_DISORDER.equals(disorderOptions
-				.getRemoveControl())) {
-			for (DisorderAssembly assembly : disorderAssemblyList) {
-				assembly.removeMinorDisorder();
+		if (disorderProcessed) {
+			if (RemoveControl.REMOVE_MINOR_DISORDER.equals(disorderOptions
+					.getRemoveControl())) {
+				for (DisorderAssembly assembly : disorderAssemblyList) {
+					assembly.removeMinorDisorder();
+				}
 			}
 		}
 		// remove atom disorder information after processing IF disorder
@@ -229,7 +231,7 @@ public class DisorderTool extends AbstractTool {
 					}
 				}
 				finishedAssemblyList.add(da);
-			}
+			}			
 			// attempt to reconcile errors in disorder assemblies
 			boolean fixed = false;
 			if (failedAssemblyList.size() > 0) {
@@ -449,18 +451,20 @@ public class DisorderTool extends AbstractTool {
 	 * @param processed - whether or not the disorder has been successfully processed
 	 */
 	public void addDisorderMetadata(boolean processed) {
+		if (processed) {
+			disorderProcessed = true;
+		} else {
+			disorderProcessed = false;
+		}
 		List<CMLAtom> disorderedAtoms = DisorderAssembly.getDisorderedAtoms(molecule);
 		for (CMLAtom atom : disorderedAtoms) {
 			CMLScalar scalar = new CMLScalar();
 			atom.appendChild(scalar);
-			if (!processed) {
-				disorderProcessed = false;
+			if (!processed) {	
 				scalar.setDictRef(this.UNRESOLVED_DISORDER_DICTREF);
 			} else if (processed) {
-				disorderProcessed = true;
 				scalar.setDictRef(this.RESOLVED_DISORDER_DICTREF);
 			}
-
 		}
 	}
 
