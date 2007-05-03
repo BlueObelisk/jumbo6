@@ -172,7 +172,6 @@ public class StereochemistryTool extends AbstractTool {
 				}
 			}
 		}
-		System.out.println(orderedLigandList.size());
 		return orderedLigandList;
 	}  
 
