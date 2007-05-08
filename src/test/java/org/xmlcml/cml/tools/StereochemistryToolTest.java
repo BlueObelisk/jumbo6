@@ -137,8 +137,9 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		// chiral
 		atomParity1 = st.calculateAtomParity(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
-		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a10", "a28", "a49"}, atomRefs4);
-		Assert.assertEquals("atomRefs4", 11.158571879456787, atomParity1.getXMLContent(), 0.000001);
+		//System.out.println(atomRefs4[0]+atomRefs4[1]+atomRefs4[2]+atomRefs4[3]);
+		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a28", "a10", "a49"}, atomRefs4);
+		Assert.assertEquals("atomRefs4", -11.158571879456787, atomParity1.getXMLContent(), 0.000001);
 	}
 
 	/**
