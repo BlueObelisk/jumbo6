@@ -168,7 +168,7 @@ public class StereochemistryTool extends AbstractTool {
 					orderedLigandList.add(i, atom);
 					break;
 				} else {
-					throw new CMLRuntimeException("Should never reach here.");
+					throw new CMLRuntimeException("Error getting ligands in CIP order.");
 				}
 			}
 		}
