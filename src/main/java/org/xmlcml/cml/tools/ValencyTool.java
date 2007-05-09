@@ -289,10 +289,10 @@ public class ValencyTool extends AbstractTool {
 	private void markNO(List<CMLAtom> atoms) {
 		for (CMLAtom atom : atoms) {
 			if (alreadySetAtoms.contains(atom)) continue;
-			if ("O".equals(atom.getElementType())) {
-				this.setAtomCharge(atom, 1);
+			if ("N".equals(atom.getElementType())) {
+				this.setAtomCharge(atom, -1);
 				CMLBond bond = atom.getLigandBonds().get(0);
-				this.setBondOrder(bond, CMLBond.TRIPLE);
+				this.setBondOrder(bond, CMLBond.DOUBLE);
 			}
 		}
 	}
@@ -713,9 +713,9 @@ public class ValencyTool extends AbstractTool {
 					if ("O".equals(ligands.get(0).getElementType())) {
 						CMLBond bond = atom.getLigandBonds().get(0);
 						this.setBondOrder(bond, CMLBond.TRIPLE);
-						this.setAtomCharge(atom, -1);
-						CMLAtom lig = ligands.get(0);
-						this.setAtomCharge(lig, 1);
+						//this.setAtomCharge(atom, -1);
+						//CMLAtom lig = ligands.get(0);
+						//this.setAtomCharge(lig, 1);
 					} else if ("N".equals(ligands.get(0).getElementType())) {
 						CMLBond bond = atom.getLigandBonds().get(0);
 						this.setBondOrder(bond, CMLBond.TRIPLE);

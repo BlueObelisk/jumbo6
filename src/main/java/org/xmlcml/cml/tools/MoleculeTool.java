@@ -1118,7 +1118,6 @@ public class MoleculeTool extends AbstractTool {
 		boolean change = false;
 		List<CMLAtom> unusedAtomList = unusedAtomSet.getAtoms();
 		for (CMLAtom currentAtom : unusedAtomList) {
-			unusedAtomSet.removeAtom(currentAtom);
 			if (sproutAtom(currentAtom, clusterSet,
 					unusedAtomSet, typeList)) {
 				change = true;
@@ -1131,6 +1130,7 @@ public class MoleculeTool extends AbstractTool {
 	private boolean sproutAtom(CMLAtom currentAtom, CMLAtomSet clusterSet,
 			CMLAtomSet unusedAtomSet, List<Type> typeList) {
 		boolean change = false;
+		unusedAtomSet.removeAtom(currentAtom);
 		if (currentAtom.atomIsCompatible(typeList)) {
 			change = true;
 			if (!clusterSet.contains(currentAtom)) {
@@ -1151,6 +1151,7 @@ public class MoleculeTool extends AbstractTool {
 				if (bonded) {
 					clusterSet.addAtom(ligand);
 				}
+				sproutAtom(ligand, clusterSet, unusedAtomSet, typeList);
 			}
 		}
 		return change;

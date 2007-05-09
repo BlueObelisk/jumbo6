@@ -690,9 +690,9 @@ public class CMLBond extends AbstractBond {
     		double radius = el.getCovalentRadius();
     		if (el.isChemicalElementType(Type.ACTINIDE) ||
     				el.isChemicalElementType(Type.LANTHANIDE)) {
-    			radius = radius * 1.4;
+    			radius = radius * 1.5;
     		} else if (el.isChemicalElementType(Type.TRANSITION_METAL)) { 
-    			radius = radius * 1.25;
+    			radius = radius * 1.325;
     		} else if (el.isChemicalElementType(Type.GROUP_B)){
     			radius = radius * 1.2;
     		} else if (el.isChemicalElementType(Type.GROUP_A)) {
