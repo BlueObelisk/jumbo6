@@ -202,7 +202,6 @@ public class ValencyTool extends AbstractTool {
 		this.markPNP(atoms);
 		this.markMCC(atoms);
 		this.markSNS(atoms);
-		this.markSNH(atoms);
 		this.markSandwichLigands(atoms);
 		this.markPyridineN(atoms);
 		this.markHydride(atoms);
@@ -337,29 +336,6 @@ public class ValencyTool extends AbstractTool {
 					&& atom.getLigandAtoms().size() == 0) {
 				this.setAtomCharge(atom, -3);
 			}	
-		}
-	}
-
-	private void markSNH(List<CMLAtom> atoms) {
-		for (CMLAtom atom : atoms) {
-			if (alreadySetAtoms.contains(atom)) continue;
-			if ("N".equals(atom.getElementType()) && atom.getLigandAtoms().size() == 2) {
-				int count = 0;
-				CMLAtom sAtom = null;
-				for (CMLAtom ligand : atom.getLigandAtoms()) {
-					if ("S".equals(ligand.getElementType()) && ligand.getLigandAtoms().size() == 3) {
-						count++;
-						sAtom = ligand;
-					}
-					if ("H".equals(ligand.getElementType())) {
-						count++;
-					}
-				}
-				if (count == 2) {
-					CMLBond bond = molecule.getBond(atom, sAtom);
-					this.setBondOrder(bond, CMLBond.DOUBLE);
-				}
-			}
 		}
 	}
 

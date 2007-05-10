@@ -137,7 +137,6 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		// chiral
 		atomParity1 = st.calculateAtomParity(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
-		//System.out.println(atomRefs4[0]+atomRefs4[1]+atomRefs4[2]+atomRefs4[3]);
 		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a28", "a10", "a49"}, atomRefs4);
 		Assert.assertEquals("atomRefs4", -11.158571879456787, atomParity1.getXMLContent(), 0.000001);
 	}
@@ -245,10 +244,10 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
     "<atom id='a7' z3='0.4810453400000005' y3='8.8741176' x3='-0.6251362399999999' zFract='0.0218' yFract='0.8579' xFract='-0.0683' elementType='H'/>"+
     "<atom id='a8' z3='1.2776387700000003' y3='9.2382264' x3='-1.9303255199999998' zFract='0.0579' yFract='0.8931' xFract='-0.2109' elementType='H'/>"+
     "<atom id='a9' z3='2.4317062600000003' y3='9.426487199999999' x3='-0.226714856' zFract='0.1102' yFract='0.9113' xFract='-0.02477' elementType='C'>"+
-      "<atomParity atomRefs4='a6 a10 a28 a49'>11.158571879456787</atomParity>"+
+      "<atomParity atomRefs4='a6 a28 a10 a49'>-11.158571879456787</atomParity>"+
     "</atom>"+
     "<atom id='a10' z3='3.1340765889999997' y3='8.033150399999998' x3='-0.24309836799999998' zFract='0.14203' yFract='0.7766' xFract='-0.02656' elementType='C'>"+
-      "<atomParity atomRefs4='a9 a11 a12 a21'>7.957964065552208</atomParity>"+
+      "<atomParity atomRefs4='a9 a12 a21 a11'>7.957964065552211</atomParity>"+
     "</atom>"+
     "<atom id='a11' z3='4.040339530000001' y3='8.2162392' x3='0.08329048' zFract='0.1831' yFract='0.7943' xFract='0.0091' elementType='H'/>"+
     "<atom id='a12' z3='3.3487816880000003' y3='7.47354' x3='-1.6557415199999999' zFract='0.15176' yFract='0.7225' xFract='-0.1809' elementType='C'/>"+
@@ -259,11 +258,11 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
     "<atom id='a17' z3='4.417673259999999' y3='5.9302152' x3='-2.4959685599999997' zFract='0.2002' yFract='0.5733' xFract='-0.2727' elementType='H'/>"+
     "<atom id='a18' z3='4.025113782999999' y3='5.2847496' x3='-0.6040848' zFract='0.18241' yFract='0.5109' xFract='-0.066' elementType='C'/>"+
     "<atom id='a19' z3='3.719936854' y3='5.82760272' x3='0.7743268799999998' zFract='0.16858' yFract='0.56338' xFract='0.0846' elementType='C'>"+
-      "<atomParity atomRefs4='a18 a20 a21 a30'>-7.85269065764569</atomParity>"+
+      "<atomParity atomRefs4='a21 a30 a18 a20'>-7.852690657645688</atomParity>"+
     "</atom>"+
     "<atom id='a20' z3='4.5346246500000005' y3='6.2777736' x3='1.08094568' zFract='0.2055' yFract='0.6069' xFract='0.1181' elementType='H'/>"+
     "<atom id='a21' z3='2.6009547810000004' y3='6.930376559999999' x3='0.71117256' zFract='0.11787' yFract='0.66999' xFract='0.0777' elementType='C'>"+
-      "<atomParity atomRefs4='a10 a19 a22 a53'>-11.408273230609858</atomParity>"+
+      "<atomParity atomRefs4='a22 a10 a19 a53'>-11.408273230609858</atomParity>"+
     "</atom>"+
     "<atom id='a22' z3='2.4219970880000004' y3='7.537672799999999' x3='2.102764272' zFract='0.10976' yFract='0.7287' xFract='0.22974' elementType='C'/>"+
     "<atom id='a23' z3='3.2900853300000006' y3='7.7797224' x3='2.4584420799999998' zFract='0.1491' yFract='0.7521' xFract='0.2686' elementType='H'/>"+
