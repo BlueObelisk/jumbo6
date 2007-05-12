@@ -293,6 +293,23 @@ public class ChemicalElement {
         return (covalentRadius > 0.1) ? covalentRadius
                 : DEFAULT_COVALENT_RADIUS;
     }
+    
+    public double getTypeAdjustedCovalentRadius() {
+    	double radius = this.getCovalentRadius();
+		if (this.isChemicalElementType(Type.ACTINIDE) ||
+				this.isChemicalElementType(Type.LANTHANIDE)) {
+			radius = radius * 1.5;
+		} else if (this.isChemicalElementType(Type.TRANSITION_METAL)) { 
+			radius = radius * 1.325;
+		} else if (this.isChemicalElementType(Type.GROUP_B)){
+			radius = radius * 1.2;
+		} else if (this.isChemicalElementType(Type.GROUP_A)) {
+			radius = 0;
+		} else {
+			radius = radius * 1.10;
+		}
+		return radius;
+    }
 
     /**
      * set atomic radius.

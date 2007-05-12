@@ -639,6 +639,24 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		for (CMLAtom origAtom : origAtomList) {
 			double d = origAtom.getXYZ3().getDistanceFromPoint(atomXYZ3);
 			if (d < distMax && d > SYMMETRY_CONTACT_TOLERANCE) {
+				ChemicalElement cElem = ChemicalElement.getChemicalElement(atom.getElementType());
+				ChemicalElement cElemOrig = ChemicalElement.getChemicalElement(origAtom.getElementType());
+				double maxBondLength = cElem.getTypeAdjustedCovalentRadius() + cElemOrig.getTypeAdjustedCovalentRadius();
+				if (maxBondLength > d) {
+					Vector3 translateVector = atomXYZFract.subtract(atom.getXYZFract());
+					translateVector.round();
+					Transform3 mergeOperator = new Transform3(operator.getEuclidTransform3());
+					mergeOperator.incrementTranslation(translateVector);
+					contact = new Contact(origAtom, atom, null,
+							new CMLTransform3(mergeOperator), d);
+					break;
+				}
+			}
+		}
+		/*
+		for (CMLAtom origAtom : origAtomList) {
+			double d = origAtom.getXYZ3().getDistanceFromPoint(atomXYZ3);
+			if (d < distMax && d > SYMMETRY_CONTACT_TOLERANCE) {
 				if (CMLBond.areWithinBondingDistance(atom, origAtom)) {
 					Vector3 translateVector = atomXYZFract.subtract(atom.getXYZFract());
 					translateVector.round();
@@ -650,6 +668,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 				}
 			}
 		}
+		*/
 		return contact;
 	}
 
