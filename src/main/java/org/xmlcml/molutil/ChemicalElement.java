@@ -298,9 +298,9 @@ public class ChemicalElement {
     	double radius = this.getCovalentRadius();
 		if (this.isChemicalElementType(Type.ACTINIDE) ||
 				this.isChemicalElementType(Type.LANTHANIDE)) {
-			radius = radius * 1.5;
+			radius = radius * 1.35;
 		} else if (this.isChemicalElementType(Type.TRANSITION_METAL)) { 
-			radius = radius * 1.325;
+			radius = radius * 1.25;
 		} else if (this.isChemicalElementType(Type.GROUP_B)){
 			radius = radius * 1.2;
 		} else if (this.isChemicalElementType(Type.GROUP_A)) {

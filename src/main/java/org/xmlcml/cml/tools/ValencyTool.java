@@ -689,9 +689,9 @@ public class ValencyTool extends AbstractTool {
 					if ("O".equals(ligands.get(0).getElementType())) {
 						CMLBond bond = atom.getLigandBonds().get(0);
 						this.setBondOrder(bond, CMLBond.TRIPLE);
-						//this.setAtomCharge(atom, -1);
-						//CMLAtom lig = ligands.get(0);
-						//this.setAtomCharge(lig, 1);
+						this.setAtomCharge(atom, -1);
+						CMLAtom lig = ligands.get(0);
+						this.setAtomCharge(lig, 1);
 					} else if ("N".equals(ligands.get(0).getElementType())) {
 						CMLBond bond = atom.getLigandBonds().get(0);
 						this.setBondOrder(bond, CMLBond.TRIPLE);
@@ -975,7 +975,7 @@ public class ValencyTool extends AbstractTool {
 			}
 			if (mol.getAtomCount() != 0 ) {
 				List<CMLMolecule> subMols = mol.getDescendantsOrMolecule();
-				for (CMLMolecule subMol : subMols) {					
+				for (CMLMolecule subMol : subMols) {	
 					if (success) {
 						// if the removal of metal atoms takes the molecules atom count 
 						// to zero or one then don't bother calculating bonds
@@ -1011,6 +1011,10 @@ public class ValencyTool extends AbstractTool {
 								List<CMLAtom> n3List = new ArrayList<CMLAtom>();
 								List<CMLAtom> osList = new ArrayList<CMLAtom>();
 								List<CMLAtom> n2List = new ArrayList<CMLAtom>();
+								boolean hasPiElectrons = false;
+								if (piSList.size() > 0) {
+									hasPiElectrons = true;
+								}
 								for (PiSystem piSys : piSList) {
 									if (piSys.getSize() == 1) {
 										CMLAtom piAtom = piSys.getAtomList().get(0);
@@ -1410,7 +1414,9 @@ public class ValencyTool extends AbstractTool {
 									MoleculeTool theMolTool = new MoleculeTool(theMol);
 									theMolTool.copyAtomAndBondAttributesById(subMol, true);
 								} else {
-									success = false;
+									if (hasPiElectrons) {
+										success = false;
+									}
 								}
 							}
 						}
