@@ -271,7 +271,7 @@ public class InChIGenerator implements EuclidConstants {
             INCHI_BOND_TYPE order;
             String bo = bond.getOrder();
             
-            if (CMLBond.SINGLE.equals(bo) || CMLBond.SINGLE_S.equals(bo)) {
+            if (CMLBond.SINGLE.equals(bo) || CMLBond.SINGLE_S.equals(bo) || bo == null) {
                 order = INCHI_BOND_TYPE.SINGLE;
             } else if (CMLBond.DOUBLE.equals(bo) || CMLBond.DOUBLE_D.equals(bo)) {
                 order = INCHI_BOND_TYPE.DOUBLE;
