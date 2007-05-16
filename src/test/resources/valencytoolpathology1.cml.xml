@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<molecule id="mol0" xmlns="http://www.xml-cml.org/schema">
+    <crystal z="4">
+        <scalar dictRef="iucr:_cell_length_a" dataType="xsd:double" errorValue="0.0015">31.6406</scalar>
+        <scalar dictRef="iucr:_cell_length_b" dataType="xsd:double" errorValue="3.0E-4">8.931</scalar>
+        <scalar dictRef="iucr:_cell_length_c" dataType="xsd:double" errorValue="8.0E-4">18.6514</scalar>
+        <scalar dictRef="iucr:_cell_angle_alpha" dataType="xsd:double"
+        errorValue="0.0">90.0</scalar>
+        <scalar dictRef="iucr:_cell_angle_beta" dataType="xsd:double" errorValue="0.0020">113.982</scalar>
+        <scalar dictRef="iucr:_cell_angle_gamma" dataType="xsd:double"
+        errorValue="0.0">90.0</scalar>
+        <symmetry spaceGroup="C2/c">
+            <transform3>1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0
+                0.0 0.0 0.0 1.0</transform3>
+            <transform3>-1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 -1.0 0.5
+                0.0 0.0 0.0 1.0</transform3>
+            <transform3>1.0 0.0 0.0 0.5 0.0 1.0 0.0 0.5 0.0 0.0 1.0 0.0
+                0.0 0.0 0.0 1.0</transform3>
+            <transform3>-1.0 0.0 0.0 0.5 0.0 1.0 0.0 0.5 0.0 0.0 -1.0 0.5
+                0.0 0.0 0.0 1.0</transform3>
+            <transform3>-1.0 0.0 0.0 0.0 0.0 -1.0 0.0 0.0 0.0 0.0 -1.0
+                0.0 0.0 0.0 0.0 1.0</transform3>
+            <transform3>1.0 0.0 0.0 0.0 0.0 -1.0 0.0 0.0 0.0 0.0 1.0 0.5
+                0.0 0.0 0.0 1.0</transform3>
+            <transform3>-1.0 0.0 0.0 0.5 0.0 -1.0 0.0 0.5 0.0 0.0 -1.0
+                0.0 0.0 0.0 0.0 1.0</transform3>
+            <transform3>1.0 0.0 0.0 0.5 0.0 -1.0 0.0 0.5 0.0 0.0 1.0 0.5
+                0.0 0.0 0.0 1.0</transform3>
+        </symmetry>
+    </crystal>
+    <molecule id="mol0_sub1">
+        <atomArray>
+            <atom id="a23" elementType="H" xFract="0.1721" yFract="-0.3931"
+            zFract="0.9253" x3="4.9752678160984845" y3="-3.5107760999999993"
+            z3="15.044881072321981">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a36" elementType="H" xFract="-0.0653" yFract="0.3099"
+            zFract="1.0214" x3="-1.8877686716515458" y3="2.7677169" z3="19.89031820173954">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a1" elementType="Sn" xFract="-0.013022" yFract="0.18222"
+            zFract="0.82859" x3="-0.37645518594558086" y3="1.6274068199999998"
+            z3="15.62183048256864">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.02497</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">Sn1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a3" elementType="N" xFract="0.04889" yFract="0.202"
+            zFract="0.8021" x3="1.4133692244570304" y3="1.8040620000000003"
+            z3="14.331547385043706">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0221</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">N1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.1179" yFract="-0.244" zFract="0.6691"
+            x3="-3.4083909094596825" y3="-2.179164" z3="13.99588228672422"
+            id="a11_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.042</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H5</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.1141" yFract="0.3434" zFract="0.4751000000000001"
+            x3="3.298536070986851" y3="3.0669054" z3="7.393918771202432"
+            id="a35_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="Sn" xFract="0.013022" yFract="0.18222" zFract="0.67141"
+            x3="0.37645518594558086" y3="1.6274068199999998" z3="12.355269517431358"
+            id="a1_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.02497</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">Sn1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.0864" yFract="0.1007" zFract="0.661"
+            x3="-2.4977521168559504" y3="0.8993516999999996" z3="13.439706182332253"
+            id="a5_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0244</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.1601" yFract="-0.0991" zFract="0.5905"
+            x3="-4.628357799868491" y3="-0.8850621000000003" z3="13.07258732790965"
+            id="a9_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0344</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C4</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.064" yFract="0.5675" zFract="0.5489"
+            x3="1.8501867532266298" y3="5.0683425" z3="9.414693621235369"
+            id="a27_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0262</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C11</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a28" elementType="C" xFract="-0.0585" yFract="0.7236"
+            zFract="0.9473" x3="-1.6911863291212166" y3="6.4624716" z3="18.420799353870798">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0285</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C12</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.1891" yFract="-0.3295" zFract="0.6388"
+            x3="-5.466723672424307" y3="-2.9427645000000004" z3="14.346398937349873"
+            id="a22_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0426" yFract="1.0022" zFract="0.5067"
+            x3="1.2315305576164755" y3="8.9506482" z3="8.902815174822294"
+            id="a42_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="Sn" xFract="-0.056077" yFract="0.4463" zFract="0.68837"
+            x3="-1.621139415010777" y3="3.9859052999999993" z3="13.560231820787568"
+            id="a2_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.02569</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">Sn2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a26" elementType="H" xFract="-0.0517" yFract="0.3678"
+            zFract="0.9128" x3="-1.4946039865908871" y3="3.2848218" z3="17.68987594600205">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.034</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H10</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0745" yFract="0.9687" zFract="0.5213"
+            x3="2.1537330174278737" y3="8.651459699999998" z3="8.764881726438045"
+            id="a39_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.04</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C16</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0929" yFract="0.9919" zFract="0.5767"
+            x3="2.68566170898053" y3="8.8586589" z3="9.561539582793213"
+            id="a41_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a20" elementType="C" xFract="0.1963" yFract="-0.3356"
+            zFract="0.9174" x3="5.674869682162304" y3="-2.9972435999999996"
+            z3="14.586315510789106">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.053</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C8</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0061" yFract="0.7185" zFract="0.6721"
+            x3="0.17634592491691317" y3="6.416923499999999" z3="12.457158049117746"
+            id="a32_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.037</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H14</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.0839" yFract="-0.0451" zFract="0.6857"
+            x3="-2.4254791968080354" y3="-0.4027881000000002" z3="13.868244987380509"
+            id="a12_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.032</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C6</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="N" xFract="-0.04889" yFract="0.202" zFract="0.6979"
+            x3="-1.4133692244570304" y3="1.8040619999999998" z3="13.645552614956292"
+            id="a3_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0221</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">N1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.2052" yFract="0.229" zFract="0.4650000000000001"
+            x3="-5.932161277532882" y3="2.0451989999999993" z3="11.311836608039101"
+            id="a15_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.075</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C7</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a30" elementType="H" xFract="-0.0331" yFract="0.8813"
+            zFract="0.8976" x3="-0.9568934614343976" y3="7.870890299999999"
+            z3="17.16717290036108">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.039</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H13</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a31" elementType="C" xFract="-0.0209" yFract="0.679"
+            zFract="0.859" x3="-0.6042016116005713" y3="6.064149" z3="16.290333078596575">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0308</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C14</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0877" yFract="1.0204" zFract="0.4887999999999999"
+            x3="2.5353340352808664" y3="9.113192399999999" z3="7.988955134692839"
+            id="a40_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a10" elementType="C" xFract="0.1205" yFract="-0.1438"
+            zFract="0.8494" x3="3.483554746309514" y3="-1.2842777999999997"
+            z3="14.292831807325966">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0351</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C5</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a9" elementType="C" xFract="0.1601" yFract="-0.0991"
+            zFract="0.9095" x3="4.628357799868491" y3="-0.8850620999999994"
+            z3="14.90451267209035">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0344</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C4</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0479" yFract="0.4727" zFract="0.5907"
+            x3="1.3847491481180558" y3="4.2216837" z3="10.401373131924595"
+            id="a25_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.028</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C10</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0331" yFract="0.8813" zFract="0.6024"
+            x3="0.9568934614343976" y3="7.870890299999999" z3="10.809927099638918"
+            id="a30_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.039</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H13</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="O" xFract="-0.1984" yFract="-0.1879" zFract="0.5515"
+            x3="-5.735578935002552" y3="-1.6781349000000003" z3="12.837732600170359"
+            id="a19_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0472</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O8</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a29" elementType="C" xFract="-0.037" yFract="0.7764"
+            zFract="0.901" x3="-1.0696392167091453" y3="6.934028399999999"
+            z3="17.280742869285802">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0328</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C13</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0517" yFract="0.3678" zFract="0.5872"
+            x3="1.4946039865908871" y3="3.2848218" z3="10.287224053997946"
+            id="a26_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.034</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H10</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a14" elementType="O" xFract="0.2029" yFract="0.0841"
+            zFract="1.0005" x3="5.8656701910888" y3="0.7510971000000004"
+            z3="16.0513688049165">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.05</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O7</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a8" elementType="C" xFract="0.1629" yFract="0.0485"
+            zFract="0.9379" x3="4.709303470322156" y3="0.4331535000000004"
+            z3="15.398203564144398">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0334</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C3</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="O" xFract="0.0859" yFract="0.522" zFract="0.5025"
+            x3="2.4832975328463673" y3="4.661982" z3="8.267627872658094"
+            id="a33_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0349</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O15</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a6" elementType="C" xFract="0.1268" yFract="0.1464"
+            zFract="0.9021" x3="3.66568250483026" y3="1.3074984000000003"
+            z3="15.194740634447573">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0298</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.037" yFract="0.7764" zFract="0.599"
+            x3="1.0696392167091453" y3="6.934028399999999" z3="10.696357130714196"
+            id="a29_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0328</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C13</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a13" elementType="H" xFract="0.0565" yFract="-0.0793"
+            zFract="0.7725" x3="1.6333679930828842" y3="-0.7082282999999998"
+            z3="13.681598986090597">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.038</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H6</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a22" elementType="H" xFract="0.1891" yFract="-0.3295"
+            zFract="0.8612" x3="5.466723672424307" y3="-2.9427644999999996"
+            z3="13.630701062650125">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a33" elementType="O" xFract="-0.0859" yFract="0.522"
+            zFract="0.9975" x3="-2.4832975328463673" y3="4.661982" z3="19.709472127341904">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0349</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O15</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a24" elementType="C" xFract="-0.0263" yFract="0.5246"
+            zFract="0.8622" x3="-0.7603111189040682" y3="4.685202599999999"
+            z3="16.41946323249234">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0244</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C9</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.1782" yFract="0.2434" zFract="0.4528000000000001"
+            x3="-5.151613741015398" y3="2.1738053999999996" z3="10.737061158560273"
+            id="a17_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a5" elementType="C" xFract="0.0864" yFract="0.1007"
+            zFract="0.839" x3="2.4977521168559504" y3="0.8993517000000001"
+            z3="14.537393817667745">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0244</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C1</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a39" elementType="C" xFract="-0.0745" yFract="0.9687"
+            zFract="0.9787" x3="-2.1537330174278737" y3="8.651459699999998"
+            z3="19.212218273561955">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.04</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C16</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a11" elementType="H" xFract="0.1179" yFract="-0.244"
+            zFract="0.8309" x3="3.4083909094596825" y3="-2.179163999999999"
+            z3="13.981217713275779">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.042</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H5</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.0653" yFract="0.3099" zFract="0.4785999999999999"
+            x3="1.8877686716515458" y3="2.7677169" z3="8.08678179826046"
+            id="a36_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a21" elementType="H" xFract="0.2262" yFract="-0.3855"
+            zFract="0.9445" x3="6.53925380593537" y3="-3.4429004999999995"
+            z3="14.707245182366252">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0947" yFract="0.3637" zFract="0.5037"
+            x3="2.737698211415029" y3="3.2482047000000005" z3="8.176838824827959"
+            id="a34_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.04</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C15</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a40" elementType="H" xFract="-0.0877" yFract="1.0204"
+            zFract="1.0112" x3="-2.5353340352808664" y3="9.113192399999999"
+            z3="19.98814486530716">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a16" elementType="H" xFract="0.2335" yFract="0.2363"
+            zFract="1.0833" x3="6.750290732475283" y3="2.1103953000000004"
+            z3="17.20217923950716">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.2056" yFract="0.3063" zFract="0.5021"
+            x3="-5.9437249447405485" y3="2.7355652999999993" z3="12.008947672031379"
+            id="a18_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a19" elementType="O" xFract="0.1984" yFract="-0.1879"
+            zFract="0.9485" x3="5.735578935002552" y3="-1.6781348999999994"
+            z3="15.139367399829641">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0472</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O8</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a12" elementType="C" xFract="0.0839" yFract="-0.0451"
+            zFract="0.8143" x3="2.4254791968080354" y3="-0.40278809999999976"
+            z3="14.10885501261949">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.032</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C6</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.0565" yFract="-0.0793" zFract="0.7275"
+            x3="-1.6333679930828842" y3="-0.7082283" z3="14.295501013909401"
+            id="a13_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.038</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H6</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a27" elementType="C" xFract="-0.064" yFract="0.5675"
+            zFract="0.9511" x3="-1.8501867532266298" y3="5.0683425" z3="18.56240637876463">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0262</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C11</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a7" elementType="H" xFract="0.1293" yFract="0.2466"
+            zFract="0.9205" x3="3.7379554248781757" y3="2.2023846000000002"
+            z3="15.505775619495829">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.036</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a15" elementType="C" xFract="0.2052" yFract="0.229"
+            zFract="1.035" x3="5.932161277532882" y3="2.045199" z3="16.665263391960895">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.075</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C7</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.1721" yFract="-0.3931" zFract="0.5747"
+            x3="-4.9752678160984845" y3="-3.5107761" z3="12.932218927678019"
+            id="a23_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="N" xFract="0.0118" yFract="0.4254" zFract="0.6838"
+            x3="0.3411281826261599" y3="3.7992473999999996" z3="12.60207566222777"
+            id="a4_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0242</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">N2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.1268" yFract="0.1464" zFract="0.5979"
+            x3="-3.66568250483026" y3="1.3074983999999994" z3="12.782359365552427"
+            id="a6_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0298</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.1293" yFract="0.2466" zFract="0.5795"
+            x3="-3.7379554248781757" y3="2.2023845999999994" z3="12.471324380504171"
+            id="a7_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.036</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a25" elementType="C" xFract="-0.0479" yFract="0.4727"
+            zFract="0.9093" x3="-1.3847491481180558" y3="4.2216837" z3="17.575726868075403">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.028</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C10</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a17" elementType="H" xFract="0.1782" yFract="0.2434"
+            zFract="1.0472" x3="5.151613741015398" y3="2.1738054000000004"
+            z3="17.240038841439727">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0209" yFract="0.679" zFract="0.641"
+            x3="0.6042016116005713" y3="6.064149" z3="11.686766921403425"
+            id="a31_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0308</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C14</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a32" elementType="H" xFract="-0.0061" yFract="0.7185"
+            zFract="0.8279" x3="-0.17634592491691317" y3="6.416923499999999"
+            z3="15.519941950882252">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.037</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H14</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a34" elementType="C" xFract="-0.0947" yFract="0.3637"
+            zFract="0.9963" x3="-2.737698211415029" y3="3.2482046999999996"
+            z3="19.80026117517204">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.04</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C15</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.2262" yFract="-0.3855" zFract="0.5555"
+            x3="-6.53925380593537" y3="-3.4429005000000004" z3="13.269854817633744"
+            id="a21_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.08</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H8A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a38" elementType="O" xFract="-0.075" yFract="0.811"
+            zFract="0.9906" x3="-2.168187601437457" y3="7.243041" z3="19.440600088552305">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0353</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O16</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0263" yFract="0.5246" zFract="0.6378"
+            x3="0.7603111189040682" y3="4.685202599999999" z3="11.55763676750766"
+            id="a24_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0244</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C9</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.1963" yFract="-0.3356" zFract="0.5826"
+            x3="-5.674869682162304" y3="-2.9972436000000005" z3="13.390784489210894"
+            id="a20_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.053</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C8</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a41" elementType="H" xFract="-0.0929" yFract="0.9919"
+            zFract="0.9233" x3="-2.68566170898053" y3="8.8586589" z3="18.415560417206784">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="O" xFract="-0.2029" yFract="0.0841" zFract="0.49950000000000006"
+            x3="-5.8656701910888" y3="0.7510970999999993" z3="11.925731195083497"
+            id="a14_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.05</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O7</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a4" elementType="N" xFract="-0.0118" yFract="0.4254"
+            zFract="0.8162" x3="-0.3411281826261599" y3="3.7992473999999996"
+            z3="15.375024337772228">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0242</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">N2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="O" xFract="0.075" yFract="0.811" zFract="0.5094"
+            x3="2.168187601437457" y3="7.243041" z3="8.536499911447697"
+            id="a38_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0353</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">O16</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a2" elementType="Sn" xFract="0.056077" yFract="0.4463"
+            zFract="0.81163" x3="1.621139415010777" y3="3.9859052999999993"
+            z3="14.41686817921243">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.02569</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">Sn2</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom elementType="H" xFract="-0.2335" yFract="0.2363" zFract="0.41670000000000007"
+            x3="-6.750290732475283" y3="2.1103952999999995" z3="10.774920760492837"
+            id="a16_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.1629" yFract="0.0485" zFract="0.5621"
+            x3="-4.709303470322156" y3="0.4331534999999995" z3="12.578896435855603"
+            id="a8_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0334</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C3</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a35" elementType="H" xFract="-0.1141" yFract="0.3434"
+            zFract="1.0249" x3="-3.298536070986851" y3="3.066905399999999"
+            z3="20.583181228797567">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15A</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a37" elementType="H" xFract="-0.1107" yFract="0.3299"
+            zFract="0.9419" x3="-3.2002448997216866" y3="2.9463368999999995"
+            z3="18.991389974863196">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a18" elementType="H" xFract="0.2056" yFract="0.3063"
+            zFract="0.9979" x3="5.9437249447405485" y3="2.7355653" z3="15.968152327968621">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.112</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H7C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="H" xFract="0.1107" yFract="0.3299" zFract="0.5581"
+            x3="3.2002448997216866" y3="2.9463369000000004" z3="8.985710025136802"
+            id="a37_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.059</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H15C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="-0.1205" yFract="-0.1438" zFract="0.6506"
+            x3="-3.483554746309514" y3="-1.2842778000000001" z3="13.684268192674033"
+            id="a10_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0351</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C5</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+            <atom id="a42" elementType="H" xFract="-0.0426" yFract="1.0022"
+            zFract="0.9933" x3="-1.2315305576164755" y3="8.9506482" z3="19.074284825177706">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.06</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H16C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom elementType="C" xFract="0.0585" yFract="0.7236" zFract="0.5527"
+            x3="1.6911863291212166" y3="6.4624716" z3="9.556300646129204"
+            id="a28_1">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.0285</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C12</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">.</scalar>
+            </atom>
+        </atomArray>
+        <bondArray>
+            <bond atomRefs2="a9 a19" id="a9_a19"/>
+            <bond atomRefs2="a33_1 a34_1" id="a33_1_a34_1"/>
+            <bond atomRefs2="a27 a33" id="a27_a33"/>
+            <bond atomRefs2="a6_1 a8_1" id="a6_1_a8_1"/>
+            <bond atomRefs2="a15_1 a16_1" id="a15_1_a16_1"/>
+            <bond atomRefs2="a1 a4" id="a1_a4"/>
+            <bond atomRefs2="a42 a39" id="a42_a39"/>
+            <bond atomRefs2="a33 a34" id="a33_a34"/>
+            <bond atomRefs2="a2 a4" id="a2_a4"/>
+            <bond atomRefs2="a28 a27" id="a28_a27"/>
+            <bond atomRefs2="a25 a26" id="a25_a26"/>
+            <bond atomRefs2="a3_1 a5_1" id="a3_1_a5_1"/>
+            <bond atomRefs2="a1_1 a4_1" id="a1_1_a4_1"/>
+            <bond atomRefs2="a8_1 a14_1" id="a8_1_a14_1"/>
+            <bond atomRefs2="a27 a25" id="a27_a25"/>
+            <bond atomRefs2="a41_1 a39_1" id="a41_1_a39_1"/>
+            <bond atomRefs2="a15 a17" id="a15_a17"/>
+            <bond atomRefs2="a6_1 a7_1" id="a6_1_a7_1"/>
+            <bond atomRefs2="a1 a3_1" id="a1_a3_1"/>
+            <bond atomRefs2="a28_1 a29_1" id="a28_1_a29_1"/>
+            <bond atomRefs2="a30 a29" id="a30_a29"/>
+            <bond atomRefs2="a35_1 a34_1" id="a35_1_a34_1"/>
+            <bond atomRefs2="a24 a25" id="a24_a25"/>
+            <bond atomRefs2="a15 a14" id="a15_a14"/>
+            <bond atomRefs2="a35 a34" id="a35_a34"/>
+            <bond atomRefs2="a10_1 a12_1" id="a10_1_a12_1"/>
+            <bond atomRefs2="a13 a12" id="a13_a12"/>
+            <bond atomRefs2="a9_1 a8_1" id="a9_1_a8_1"/>
+            <bond atomRefs2="a2 a3" id="a2_a3"/>
+            <bond atomRefs2="a20 a19" id="a20_a19"/>
+            <bond atomRefs2="a38 a39" id="a38_a39"/>
+            <bond atomRefs2="a32 a31" id="a32_a31"/>
+            <bond atomRefs2="a40_1 a39_1" id="a40_1_a39_1"/>
+            <bond atomRefs2="a22_1 a20_1" id="a22_1_a20_1"/>
+            <bond atomRefs2="a42_1 a39_1" id="a42_1_a39_1"/>
+            <bond atomRefs2="a29_1 a31_1" id="a29_1_a31_1"/>
+            <bond atomRefs2="a2 a4_1" id="a2_a4_1"/>
+            <bond atomRefs2="a6 a8" id="a6_a8"/>
+            <bond atomRefs2="a41 a39" id="a41_a39"/>
+            <bond atomRefs2="a10_1 a11_1" id="a10_1_a11_1"/>
+            <bond atomRefs2="a28 a29" id="a28_a29"/>
+            <bond atomRefs2="a32_1 a31_1" id="a32_1_a31_1"/>
+            <bond atomRefs2="a2_1 a3_1" id="a2_1_a3_1"/>
+            <bond atomRefs2="a3 a5" id="a3_a5"/>
+            <bond atomRefs2="a27_1 a25_1" id="a27_1_a25_1"/>
+            <bond atomRefs2="a6 a7" id="a6_a7"/>
+            <bond atomRefs2="a37 a34" id="a37_a34"/>
+            <bond atomRefs2="a13_1 a12_1" id="a13_1_a12_1"/>
+            <bond atomRefs2="a21_1 a20_1" id="a21_1_a20_1"/>
+            <bond atomRefs2="a40 a39" id="a40_a39"/>
+            <bond atomRefs2="a10 a9" id="a10_a9"/>
+            <bond atomRefs2="a6 a5" id="a6_a5"/>
+            <bond atomRefs2="a9 a8" id="a9_a8"/>
+            <bond atomRefs2="a10 a12" id="a10_a12"/>
+            <bond atomRefs2="a38_1 a39_1" id="a38_1_a39_1"/>
+            <bond atomRefs2="a15_1 a17_1" id="a15_1_a17_1"/>
+            <bond atomRefs2="a8 a14" id="a8_a14"/>
+            <bond atomRefs2="a6_1 a5_1" id="a6_1_a5_1"/>
+            <bond atomRefs2="a1 a3" id="a1_a3"/>
+            <bond atomRefs2="a9_1 a19_1" id="a9_1_a19_1"/>
+            <bond atomRefs2="a22 a20" id="a22_a20"/>
+            <bond atomRefs2="a20_1 a23_1" id="a20_1_a23_1"/>
+            <bond atomRefs2="a12_1 a5_1" id="a12_1_a5_1"/>
+            <bond atomRefs2="a1_1 a3_1" id="a1_1_a3_1"/>
+            <bond atomRefs2="a12 a5" id="a12_a5"/>
+            <bond atomRefs2="a15_1 a14_1" id="a15_1_a14_1"/>
+            <bond atomRefs2="a4 a2_1" id="a4_a2_1"/>
+            <bond atomRefs2="a20 a23" id="a20_a23"/>
+            <bond atomRefs2="a24 a31" id="a24_a31"/>
+            <bond atomRefs2="a28_1 a27_1" id="a28_1_a27_1"/>
+            <bond atomRefs2="a24_1 a25_1" id="a24_1_a25_1"/>
+            <bond atomRefs2="a25_1 a26_1" id="a25_1_a26_1"/>
+            <bond atomRefs2="a15 a18" id="a15_a18"/>
+            <bond atomRefs2="a37_1 a34_1" id="a37_1_a34_1"/>
+            <bond atomRefs2="a38 a28" id="a38_a28"/>
+            <bond atomRefs2="a20_1 a19_1" id="a20_1_a19_1"/>
+            <bond atomRefs2="a3 a1_1" id="a3_a1_1"/>
+            <bond atomRefs2="a29 a31" id="a29_a31"/>
+            <bond atomRefs2="a21 a20" id="a21_a20"/>
+            <bond atomRefs2="a24_1 a31_1" id="a24_1_a31_1"/>
+            <bond atomRefs2="a24 a4" id="a24_a4"/>
+            <bond atomRefs2="a36 a34" id="a36_a34"/>
+            <bond atomRefs2="a2_1 a4_1" id="a2_1_a4_1"/>
+            <bond atomRefs2="a36_1 a34_1" id="a36_1_a34_1"/>
+            <bond atomRefs2="a38_1 a28_1" id="a38_1_a28_1"/>
+            <bond atomRefs2="a27_1 a33_1" id="a27_1_a33_1"/>
+            <bond atomRefs2="a30_1 a29_1" id="a30_1_a29_1"/>
+            <bond atomRefs2="a24_1 a4_1" id="a24_1_a4_1"/>
+            <bond atomRefs2="a10_1 a9_1" id="a10_1_a9_1"/>
+            <bond atomRefs2="a10 a11" id="a10_a11"/>
+            <bond atomRefs2="a15_1 a18_1" id="a15_1_a18_1"/>
+            <bond atomRefs2="a15 a16" id="a15_a16"/>
+        </bondArray>
+    </molecule>
+    <molecule id="mol0_sub2">
+        <atomArray>
+            <atom id="a56" elementType="C" xFract="-0.2043" yFract="0.1827"
+            zFract="0.845" x3="-5.9061430263156325" y3="1.6316936999999991"
+            z3="18.387794329056472">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C106</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">GD</scalar>
+            </atom>
+            <atom id="a45" elementType="H" xFract="-0.2057" yFract="-0.1005"
+            zFract="0.7672" x3="-5.946615861542465" y3="-0.8975655000000006"
+            z3="16.954719843029448">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.177</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H10C</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a52" elementType="C" xFract="-0.1879" yFract="0.4137"
+            zFract="0.7961" x3="-5.432032670801309" y3="3.6947546999999994"
+            z3="17.264831785373037">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C104</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">G</scalar>
+            </atom>
+            <atom id="a50" elementType="C" xFract="-0.1687" yFract="0.3206"
+            zFract="0.7549" x3="-4.876976644833319" y3="2.8632785999999992"
+            z3="16.249476153743647">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C103</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">G</scalar>
+            </atom>
+            <atom id="a49" elementType="H" xFract="-0.1564" yFract="0.1247"
+            zFract="0.7248" x3="-4.5213938781975775" y3="1.1136956999999994"
+            z3="15.529887200981069">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.142</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H102</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a55" elementType="H" xFract="-0.2229" yFract="0.3855"
+            zFract="0.868" x3="-6.443853551472121" y3="3.4429004999999995"
+            z3="19.055978294697443">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.142</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H105</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a46" elementType="H" xFract="-0.1719" yFract="-0.091"
+            zFract="0.8583" x3="-4.969485982494652" y3="-0.8127210000000004"
+            z3="18.219183905681877">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.177</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H10D</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a54" elementType="C" xFract="-0.2076" yFract="0.3334"
+            zFract="0.8411" x3="-6.001543280778881" y3="2.977595399999999"
+            z3="18.357492891992774">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C105</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">G</scalar>
+            </atom>
+            <atom id="a57" elementType="H" xFract="-0.216" yFract="0.1307"
+            zFract="0.8775" x3="-6.244380292139875" y3="1.1672816999999993"
+            z3="19.14443045583063">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.142</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H106</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a43" elementType="C" xFract="-0.178" yFract="-0.0523"
+            zFract="0.8059" x3="-5.145831907411564" y3="-0.46709130000000043"
+            z3="17.32029843656413">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C100</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">D</scalar>
+            </atom>
+            <atom id="a44" elementType="H" xFract="-0.1515" yFract="-0.074"
+            zFract="0.7931" x3="-4.3797389549036625" y3="-0.6608940000000003"
+            z3="16.74076230207565">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.177</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H10B</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a51" elementType="H" xFract="-0.1553" yFract="0.3687"
+            zFract="0.7238" x3="-4.489593793376494" y3="3.2928596999999993"
+            z3="15.4970894600023">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.142</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H103</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a53" elementType="H" xFract="-0.1875" yFract="0.5199"
+            zFract="0.7939" x3="-5.4204690035936425" y3="4.643226899999999"
+            z3="17.218654581380758">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.142</scalar>
+                <scalar dictRef="iucr:_atom_site_calc_flag" dataType="xsd:string">calc</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">H104</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">R</scalar>
+            </atom>
+            <atom id="a48" elementType="C" xFract="-0.1682" yFract="0.1788"
+            zFract="0.7564" x3="-4.8625220608237365" y3="1.5968627999999994"
+            z3="16.271023098753297">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C102</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">GD</scalar>
+            </atom>
+            <atom id="a47" elementType="C" xFract="-0.1849" yFract="0.1023"
+            zFract="0.8044" x3="-5.3453051667438105" y3="0.9136412999999993"
+            z3="17.381057475430943">
+                <scalar dictRef="iucr:_atom_site_u_iso_or_equiv" dataType="xsd:double">0.118</scalar>
+                <scalar dictRef="iucr:_atom_site_label" dataType="xsd:string">C101</scalar>
+                <scalar dictRef="iucr:_atom_site_refinement_flags" dataType="xsd:string">G</scalar>
+            </atom>
+        </atomArray>
+        <bondArray>
+            <bond atomRefs2="a57 a56" id="a57_a56"/>
+            <bond atomRefs2="a47 a48" id="a47_a48"/>
+            <bond atomRefs2="a48 a49" id="a48_a49"/>
+            <bond atomRefs2="a54 a52" id="a54_a52"/>
+            <bond atomRefs2="a50 a52" id="a50_a52"/>
+            <bond atomRefs2="a43 a47" id="a43_a47"/>
+            <bond atomRefs2="a55 a54" id="a55_a54"/>
+            <bond atomRefs2="a53 a52" id="a53_a52"/>
+            <bond atomRefs2="a56 a54" id="a56_a54"/>
+            <bond atomRefs2="a43 a44" id="a43_a44"/>
+            <bond atomRefs2="a43 a45" id="a43_a45"/>
+            <bond atomRefs2="a50 a48" id="a50_a48"/>
+            <bond atomRefs2="a43 a46" id="a43_a46"/>
+            <bond atomRefs2="a47 a56" id="a47_a56"/>
+            <bond atomRefs2="a51 a50" id="a51_a50"/>
+        </bondArray>
+    </molecule>
+</molecule>

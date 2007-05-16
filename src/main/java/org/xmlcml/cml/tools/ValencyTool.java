@@ -938,6 +938,7 @@ public class ValencyTool extends AbstractTool {
 	 * atoms are marked as having piElectron childrens assumes explicit
 	 * hydrogens
 	 * 
+     * @TODO refactor me!
 	 * @param piSystemManager, charge on molecule provided
 	 */
 	public boolean adjustBondOrdersAndChargesToValency(
@@ -1430,7 +1431,7 @@ public class ValencyTool extends AbstractTool {
 				ctt.flattenMolecules();
 			}
 			// reattach metal atoms and bonds now bonds have been calculated
-			MoleculeTool.addMetalAtomsAndBonds(molecule, metalAtomAndBondMap);
+			MoleculeTool.addMetalAtomsAndBonds(mol, metalAtomAndBondMap);
 		}
 		if (!success) {
 			// if couldn't find a reasonable structure, then reset bond orders and formal charges
