@@ -17,7 +17,15 @@ public class CMLException extends Exception implements CMLConstants {
     /**
      * 
      */
-    private static final long serialVersionUID = -8429185396676978938L;
+    private static final long serialVersionUID = -5929440785347378130L;
+
+    public CMLException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CMLException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * constructor.
