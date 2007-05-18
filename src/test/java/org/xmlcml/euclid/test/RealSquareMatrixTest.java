@@ -70,7 +70,7 @@ public class RealSquareMatrixTest extends MatrixTest {
                 .getRows(), expected.getRows());
         Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
                 .getCols(), expected.getCols());
-        DoubleTest.assertEquals(msg, test.getMatrixAsArray(), expected
+        DoubleTestBase.assertEquals(msg, test.getMatrixAsArray(), expected
                 .getMatrixAsArray(), epsilon);
     }
 
@@ -90,7 +90,7 @@ public class RealSquareMatrixTest extends MatrixTest {
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
         Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, rows,
                 expected.getRows());
-        DoubleTest
+        DoubleTestBase
                 .assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
     }
 

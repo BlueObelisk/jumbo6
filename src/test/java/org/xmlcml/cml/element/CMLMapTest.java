@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 /**
  * test CMLMap.
  *
@@ -171,19 +171,19 @@ public class CMLMapTest extends AbstractTest {
         List<String> toRefs = xmlMap1.getToRefs();
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a11", "a12", "a13" },
+        StringTestBase.assertEquals("toRefs", new String[] { "a11", "a12", "a13" },
                 toRefs.toArray(new String[0]));
         List<String> fromRefs = xmlMap1.getFromRefs();
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a1", "a2", "a3" },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a1", "a2", "a3" },
                 fromRefs.toArray(new String[0]));
         xmlMap1.mergeMap(xmlMap2, Direction.NEITHER);
         toRefs = xmlMap1.getToRefs();
-        StringTest.assertEquals("toRefs", new String[] { "a11", "a12", "a13",
+        StringTestBase.assertEquals("toRefs", new String[] { "a11", "a12", "a13",
                 "a14", "a15", "a16" }, toRefs.toArray(new String[0]));
         fromRefs = xmlMap1.getFromRefs();
-        StringTest.assertEquals("fromRefs", new String[] { "a1", "a2", "a3", "a4",
+        StringTestBase.assertEquals("fromRefs", new String[] { "a1", "a2", "a3", "a4",
                 "a5", "a6" }, fromRefs.toArray(new String[0]));
     }
     /**
@@ -225,23 +225,23 @@ public class CMLMapTest extends AbstractTest {
         toRefs = xmlMap1.getToRefs(fromIds);
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a13", "a11", null },
+        StringTestBase.assertEquals("toRefs", new String[] { "a13", "a11", null },
                 toRefs.toArray(new String[0]));
         fromRefs = xmlMap1.getFromRefs(toIds);
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a3", "a1", null },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a3", "a1", null },
                 fromRefs.toArray(new String[0]));
         xmlMap1.mergeMap(xmlMap2, Direction.NEITHER);
         toRefs = xmlMap1.getToRefs(fromIds);
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a13", "a11", "a14" },
+        StringTestBase.assertEquals("toRefs", new String[] { "a13", "a11", "a14" },
                 toRefs.toArray(new String[0]));
         fromRefs = xmlMap1.getFromRefs(toIds);
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a3", "a1", "a4" },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a3", "a1", "a4" },
                 fromRefs.toArray(new String[0]));
     }
     /**
@@ -252,12 +252,12 @@ public class CMLMapTest extends AbstractTest {
         List<String> toRefs = xmlMap1.getRefs(Direction.TO);
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a11", "a12", "a13" },
+        StringTestBase.assertEquals("toRefs", new String[] { "a11", "a12", "a13" },
                 toRefs.toArray(new String[0]));
         List<String> fromRefs = xmlMap1.getRefs(Direction.FROM);
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a1", "a2", "a3" },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a1", "a2", "a3" },
                 fromRefs.toArray(new String[0]));
         xmlMap1.mergeMap(xmlMap2, Direction.NEITHER);
         toRefs = xmlMap1.getRefs(Direction.TO);
@@ -281,23 +281,23 @@ public class CMLMapTest extends AbstractTest {
         toRefs = xmlMap1.getRefs(fromIds, Direction.TO);
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a13", "a11", null },
+        StringTestBase.assertEquals("toRefs", new String[] { "a13", "a11", null },
                 toRefs.toArray(new String[0]));
         fromRefs = xmlMap1.getRefs(toIds, Direction.FROM);
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a3", "a1", null },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a3", "a1", null },
                 fromRefs.toArray(new String[0]));
         xmlMap1.mergeMap(xmlMap2, Direction.NEITHER);
         toRefs = xmlMap1.getRefs(fromIds, Direction.TO);
         Assert.assertNotNull("toRefs", toRefs);
         Assert.assertEquals("toRefs", 3, toRefs.size());
-        StringTest.assertEquals("toRefs", new String[] { "a13", "a11", "a14" },
+        StringTestBase.assertEquals("toRefs", new String[] { "a13", "a11", "a14" },
                 toRefs.toArray(new String[0]));
         fromRefs = xmlMap1.getRefs(toIds, Direction.FROM);
         Assert.assertNotNull("fromRefs", fromRefs);
         Assert.assertEquals("fromRefs", 3, fromRefs.size());
-        StringTest.assertEquals("fromRefs", new String[] { "a3", "a1", "a4" },
+        StringTestBase.assertEquals("fromRefs", new String[] { "a3", "a1", "a4" },
                 fromRefs.toArray(new String[0]));
     }
     /**
@@ -431,7 +431,7 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testGetToRefs() {
         List<String> toRefList = xmlMap1.getToRefs();
-        StringTest.assertEquals("toRefs", new String[]{"a11", "a12", "a13"},
+        StringTestBase.assertEquals("toRefs", new String[]{"a11", "a12", "a13"},
                 (String[])toRefList.toArray(new String[0]));
     }
     /** Test method for 'org.xmlcml.cml.element.CMLMap.getFromRefs()'
@@ -439,7 +439,7 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testGetFromRefs() {
         List<String> fromRefList = xmlMap1.getFromRefs();
-        StringTest.assertEquals("fromRefs", new String[]{"a1", "a2", "a3"},
+        StringTestBase.assertEquals("fromRefs", new String[]{"a1", "a2", "a3"},
                 (String[])fromRefList.toArray(new String[0]));
     }
     /** Test method for 'org.xmlcml.cml.element.CMLMap.getToRef(String)'
@@ -465,7 +465,7 @@ public class CMLMapTest extends AbstractTest {
         fromList.add("a3");
         fromList.add("a1");
         List<String> toRef = xmlMap1.getToRefs(fromList);
-        StringTest.assertEquals("toRef", new String[]{"a12", "a13", "a11"},
+        StringTestBase.assertEquals("toRef", new String[]{"a12", "a13", "a11"},
                 (String[]) toRef.toArray(new String[0]));
     }
     /** Test method for 'org.xmlcml.cml.element.CMLMap.getFromRefs(List<String>)'
@@ -477,7 +477,7 @@ public class CMLMapTest extends AbstractTest {
         toList.add("a13");
         toList.add("a11");
         List<String> fromRef = xmlMap1.getFromRefs(toList);
-        StringTest.assertEquals("toRef", new String[]{"a2", "a3", "a1"},
+        StringTestBase.assertEquals("toRef", new String[]{"a2", "a3", "a1"},
                 (String[]) fromRef.toArray(new String[0]));
     }
     /**
@@ -486,19 +486,19 @@ public class CMLMapTest extends AbstractTest {
     @Test
     public void testGetRefsDirection() {
         List<String> ref = xmlMap1.getRefs(Direction.EITHER);
-        StringTest.assertEquals("ref", new String[]{"a1", "a2", "a3"},
+        StringTestBase.assertEquals("ref", new String[]{"a1", "a2", "a3"},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(Direction.BOTH);
-        StringTest.assertEquals("ref", new String[]{"a1", "a2", "a3"},
+        StringTestBase.assertEquals("ref", new String[]{"a1", "a2", "a3"},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(Direction.NEITHER);
-        StringTest.assertEquals("ref", new String[]{"a1", "a2", "a3"},
+        StringTestBase.assertEquals("ref", new String[]{"a1", "a2", "a3"},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(Direction.FROM);
-        StringTest.assertEquals("ref", new String[]{"a1", "a2", "a3"},
+        StringTestBase.assertEquals("ref", new String[]{"a1", "a2", "a3"},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(Direction.TO);
-        StringTest.assertEquals("ref", new String[]{"a11", "a12", "a13"},
+        StringTestBase.assertEquals("ref", new String[]{"a11", "a12", "a13"},
                 (String[]) ref.toArray(new String[0]));
     }
     /** Test method for 'org.xmlcml.cml.element.CMLMap.getRefs(List<String>,
@@ -512,19 +512,19 @@ public class CMLMapTest extends AbstractTest {
         list.add("a3");
         list.add("a11");
         List<String> ref = xmlMap1.getRefs(list, Direction.EITHER);
-        StringTest.assertEquals("ref", new String[]{null, "a13", null},
+        StringTestBase.assertEquals("ref", new String[]{null, "a13", null},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(list, Direction.BOTH);
-        StringTest.assertEquals("ref", new String[]{null, "a13", null},
+        StringTestBase.assertEquals("ref", new String[]{null, "a13", null},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(list, Direction.NEITHER);
-        StringTest.assertEquals("ref", new String[]{null, "a13", null},
+        StringTestBase.assertEquals("ref", new String[]{null, "a13", null},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(list, Direction.FROM);
-        StringTest.assertEquals("ref", new String[]{"a2", null, "a1"},
+        StringTestBase.assertEquals("ref", new String[]{"a2", null, "a1"},
                 (String[]) ref.toArray(new String[0]));
         ref = xmlMap1.getRefs(list, Direction.TO);
-        StringTest.assertEquals("ref", new String[]{null, "a13", null},
+        StringTestBase.assertEquals("ref", new String[]{null, "a13", null},
                 (String[]) ref.toArray(new String[0]));
     }
     /**

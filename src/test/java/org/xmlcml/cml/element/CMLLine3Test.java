@@ -12,7 +12,7 @@ import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Line3Test;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Vector3Test;
@@ -338,7 +338,7 @@ public class CMLLine3Test extends GeomTestBase {
     @Test
     public void testSetVector3CMLVector3() {
         double s = Math.sqrt(14.);
-        DoubleTest.assertEquals("set vector", new double[] { 1. / s, 2. / s,
+        DoubleTestBase.assertEquals("set vector", new double[] { 1. / s, 2. / s,
                 3. / s }, ll.getVector3(), EPS);
     }
 

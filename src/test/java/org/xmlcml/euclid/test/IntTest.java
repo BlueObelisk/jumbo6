@@ -10,7 +10,7 @@ import org.xmlcml.euclid.Int;
  * @author pmr
  *
  */
-public class IntTest extends EuclidTest {
+public class IntTest extends EuclidTestBase {
 
     /**
      * tests equality of int arrays. arrays must be of same length

@@ -13,9 +13,9 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntTest;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * test Array
@@ -152,11 +152,11 @@ public class CMLArrayTest extends NumericTest {
                 .equals(XSD_STRING))
                 && (expected.getDataType() == null || expected.getDataType()
                         .equals(XSD_STRING))) {
-            StringTest.assertEquals(msg, test.getStrings(), expected
+            StringTestBase.assertEquals(msg, test.getStrings(), expected
                     .getStrings());
         } else if (test.getDataType().equals(XSD_DOUBLE)
                 && expected.getDataType().equals(XSD_DOUBLE)) {
-            DoubleTest.assertEquals(msg, test.getDoubles(), expected
+            DoubleTestBase.assertEquals(msg, test.getDoubles(), expected
                     .getDoubles(), EPS);
         } else if (test.getDataType().equals(XSD_INTEGER)
                 && expected.getDataType().equals(XSD_INTEGER)) {
@@ -183,7 +183,7 @@ public class CMLArrayTest extends NumericTest {
         if (!expected.getDataType().equals(XSD_DOUBLE)) {
             Assert.fail("expected should be double");
         }
-        DoubleTest.assertEquals(msg, test, expected.getDoubles(), EPS);
+        DoubleTestBase.assertEquals(msg, test, expected.getDoubles(), EPS);
     }
 
     /**
@@ -220,7 +220,7 @@ public class CMLArrayTest extends NumericTest {
                 && !expected.getDataType().equals(XSD_STRING)) {
             Assert.fail("expected should be String");
         }
-        StringTest.assertEquals(msg, test, expected.getStrings());
+        StringTestBase.assertEquals(msg, test, expected.getStrings());
     }
 
     /**
@@ -1039,13 +1039,13 @@ public class CMLArrayTest extends NumericTest {
 
     	String[] ss = new String[]{"a", "b", "c", "d", "e"};
     	CMLArray arrayS = new CMLArray(ss);
-        StringTest.assertEquals("append", ss, arrayS.getStrings());
+        StringTestBase.assertEquals("append", ss, arrayS.getStrings());
         Assert.assertEquals("append", "a b c d e", arrayS.getXMLContent());
         arrayS.append("f");
         Assert.assertEquals("append", "a b c d e f", arrayS.getXMLContent());
 
     	arrayS = new CMLArray(ss, S_SLASH);
-        StringTest.assertEquals("append", ss, arrayS.getStrings());
+        StringTestBase.assertEquals("append", ss, arrayS.getStrings());
         Assert.assertEquals("append", "/a/b/c/d/e/", arrayS.getXMLContent());
         arrayS.append("f");
         Assert.assertEquals("append", "/a/b/c/d/e/f/", arrayS.getXMLContent());
@@ -1146,10 +1146,10 @@ public class CMLArrayTest extends NumericTest {
     private void testArray(CMLArray array, double[] expected0, String units0,
             double[] expected1, String units1) {
         try {
-            DoubleTest.assertEquals("array", expected0, array.getDoubles(), EPS);
+            DoubleTestBase.assertEquals("array", expected0, array.getDoubles(), EPS);
             Assert.assertEquals("array", units0, array.getUnits());
             array.convertToSI(unitsUnitListMap);
-            DoubleTest.assertEquals("array", expected1, array.getDoubles(), EPS);
+            DoubleTestBase.assertEquals("array", expected1, array.getDoubles(), EPS);
             Assert.assertEquals("array", units1, array.getUnits());
         } catch (CMLRuntimeException e) {
             neverThrow(e);
@@ -1180,7 +1180,7 @@ public class CMLArrayTest extends NumericTest {
         array.setXMLContent("1./2.");
         double[] dd = array.getDoubles();
         Assert.assertNotNull("dd null", dd);
-        DoubleTest.assertEquals("double delimiter", new double[] { 1., 2. },
+        DoubleTestBase.assertEquals("double delimiter", new double[] { 1., 2. },
                 dd, EPS);
     }
 
@@ -1190,13 +1190,13 @@ public class CMLArrayTest extends NumericTest {
     @Test
     public void testGetStringValues() {
         CMLArray array = new CMLArray(new String[] { "a", "b" });
-        StringTest.assertEquals("strings", new String[] { "a", "b" },
+        StringTestBase.assertEquals("strings", new String[] { "a", "b" },
                 (String[]) array.getStringValues().toArray(new String[0]));
         array = new CMLArray(new int[] { 1, 2 });
-        StringTest.assertEquals("ints", new String[] { "1", "2" },
+        StringTestBase.assertEquals("ints", new String[] { "1", "2" },
                 (String[]) array.getStringValues().toArray(new String[0]));
         array = new CMLArray(new double[] { 1, 2 });
-        StringTest.assertEquals("ints", new String[] { "1.0", "2.0" },
+        StringTestBase.assertEquals("ints", new String[] { "1.0", "2.0" },
                 (String[]) array.getStringValues().toArray(new String[0]));
     }
 

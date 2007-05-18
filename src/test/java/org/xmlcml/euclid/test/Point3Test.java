@@ -45,7 +45,7 @@ public class Point3Test extends GeomTest {
             double epsilon) {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
+        DoubleTestBase.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
 
@@ -64,7 +64,7 @@ public class Point3Test extends GeomTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 3", 3, test.length);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 
     /**

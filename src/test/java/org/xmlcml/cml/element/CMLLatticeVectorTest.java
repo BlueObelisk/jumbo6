@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 
 /**
  * test latticeVector.
@@ -45,7 +45,7 @@ public class CMLLatticeVectorTest extends AbstractTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getXMLContent(), expected
+        DoubleTestBase.assertEquals(msg, test.getXMLContent(), expected
                 .getXMLContent(), epsilon);
     }
 
@@ -65,7 +65,7 @@ public class CMLLatticeVectorTest extends AbstractTest {
         Assert.assertEquals("must be of length 3", 3, test.length);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test, expected.getXMLContent(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getXMLContent(), epsilon);
     }
 
     /**

@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /** test AtomMatcher
  *
@@ -69,10 +69,10 @@ public class AtomMatcherTest extends AbstractToolTest {
     @Test
     public void testAtomMatcher() {
         AtomMatcher atomMatcher = new AtomMatcher();
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
-        StringTest.assertEquals("INCLUDE_LIGAND_ELEMENT_TYPES", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
-        StringTest.assertEquals("EXCLUDE_LIGAND_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
+        StringTestBase.assertEquals("INCLUDE_LIGAND_ELEMENT_TYPES", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_LIGAND_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
         Assert.assertEquals("USE_CHARGE", false, atomMatcher.isUseCharge());
         Assert.assertEquals("USE_LABEL", false, atomMatcher.isUseLabel());
         Assert.assertEquals("MAXIMUM_ATOM_TREE_LEVEL", 10, atomMatcher.getMaximumAtomTreeLevel());
@@ -87,14 +87,14 @@ public class AtomMatcherTest extends AbstractToolTest {
     public void testGetSetIncludeExcludeElementTypes() {
         AtomMatcher atomMatcher = new AtomMatcher();
         atomMatcher.setIncludeElementTypes(new String[]{"C", "N"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
         atomMatcher.setExcludeElementTypes(new String[]{"N", "O"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeElementTypes());
         atomMatcher.setIncludeElementTypes(new String[]{});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
     }
 
     /** Test method for 'org.xmlcml.cml.tools.AtomMatcher.getIncludeLigandElementTypes()'
@@ -103,14 +103,14 @@ public class AtomMatcherTest extends AbstractToolTest {
     public void testGetSetIncludeExcludeLigandElementTypes() {
         AtomMatcher atomMatcher = new AtomMatcher();
         atomMatcher.setIncludeLigandElementTypes(new String[]{"C", "N"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeLigandElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeLigandElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
         atomMatcher.setExcludeLigandElementTypes(new String[]{"N", "O"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeLigandElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeLigandElementTypes());
         atomMatcher.setIncludeLigandElementTypes(new String[]{});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
     }
 
     /** Test method for 'org.xmlcml.cml.tools.AtomMatcher.skipAtom(CMLAtom)'
@@ -120,19 +120,19 @@ public class AtomMatcherTest extends AbstractToolTest {
         makeMol1();
         AtomMatcher atomMatcher = new AtomMatcher();
         atomMatcher.setIncludeElementTypes(new String[]{"C", "N"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"},
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"},
                 atomMatcher.getIncludeElementTypes());
         CMLAtom atomO = mol1.getAtom(3);
         Assert.assertEquals("O", "O", atomO.getElementType());
         Assert.assertTrue("skip O", atomMatcher.skipAtom(atomO));
 
         atomMatcher.setIncludeElementTypes(new String[]{"C", "O"});
-        StringTest.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
                 atomMatcher.getIncludeElementTypes());
         Assert.assertFalse("include O", atomMatcher.skipAtom(atomO));
 
         atomMatcher.setExcludeElementTypes(new String[]{"C", "O"});
-        StringTest.assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
                 atomMatcher.getExcludeElementTypes());
         Assert.assertTrue("exclude O", atomMatcher.skipAtom(atomO));
     }

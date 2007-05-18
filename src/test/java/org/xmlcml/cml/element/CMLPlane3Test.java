@@ -8,7 +8,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Plane3Test;
 
 /**
@@ -43,7 +43,7 @@ public class CMLPlane3Test extends GeomTestBase {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
+        DoubleTestBase.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
 
@@ -63,7 +63,7 @@ public class CMLPlane3Test extends GeomTestBase {
         Assert.assertEquals("must be of length 4", 4, test.length);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 
     /**
@@ -205,7 +205,7 @@ public class CMLPlane3Test extends GeomTestBase {
     public void testGetArray() {
         double x = Math.sqrt(1. / 3.);
         double[] array = xomPl1115.getArray();
-        DoubleTest
+        DoubleTestBase
                 .assertEquals("get", new double[] { x, x, x, 5. }, array, EPS);
 
     }

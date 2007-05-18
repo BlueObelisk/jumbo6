@@ -13,7 +13,7 @@ import org.xmlcml.euclid.DoubleTool;
  * @version 5.0
  *
  */
-public class DoubleTest extends EuclidTest {
+public class DoubleTestBase extends EuclidTestBase {
 
 
 

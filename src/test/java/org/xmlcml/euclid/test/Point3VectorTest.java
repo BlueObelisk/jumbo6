@@ -26,7 +26,7 @@ import org.xmlcml.euclid.Axis.Axis3;
  * @author pmr
  *
  */
-public class Point3VectorTest extends EuclidTest {
+public class Point3VectorTest extends EuclidTestBase {
 
     Point3Vector p0;
 
@@ -67,7 +67,7 @@ public class Point3VectorTest extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
+        DoubleTestBase.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
 
@@ -88,7 +88,7 @@ public class Point3VectorTest extends EuclidTest {
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getArray().length);
-        DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 
     /**

@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /** test length.
  *
@@ -52,7 +52,7 @@ public class CMLLengthTest extends AbstractTest {
     @Test
     public final void testCopy() {
         CMLLength length00 = (CMLLength) length0.copy();
-        StringTest.assertEquals("atomRefs2", new String[] { "a1", "a2"},
+        StringTestBase.assertEquals("atomRefs2", new String[] { "a1", "a2"},
                 length00.getAtomRefs2());
     }
 
@@ -118,12 +118,12 @@ public class CMLLengthTest extends AbstractTest {
         // retrieve by atom ids
         CMLLength length = map.get(CMLBond.atomHash("a1", "a2"));
         Assert.assertNotNull("length not null", length);
-        StringTest.assertEquals("atomRefs2 ",
+        StringTestBase.assertEquals("atomRefs2 ",
                 new String[] { "a2", "a1"}, length.getAtomRefs2());
         // retrieve in other order
         length = map.get(CMLBond.atomHash("a2", "a1"));
         Assert.assertNotNull("length not null", length);
-        StringTest.assertEquals("atomRefs2 ",
+        StringTestBase.assertEquals("atomRefs2 ",
                 new String[] { "a2", "a1"}, length.getAtomRefs2());
         // non existent
         length = map.get(CMLBond.atomHash("a4", "a2"));

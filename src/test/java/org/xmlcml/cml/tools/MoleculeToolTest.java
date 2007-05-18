@@ -37,7 +37,7 @@ import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.cml.interfacex.IndexableList;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.Molutils;
 
 /**
@@ -1017,7 +1017,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         for (CMLBond bond : bonds) {
             found[i++] = bond.getOrder();
         }
-        StringTest.assertEquals("expected orders", found, expected);
+        StringTestBase.assertEquals("expected orders", found, expected);
     }
 
     /**
@@ -1433,16 +1433,16 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             Assert.fail("test bug " + e);
         }
         Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        StringTest.assertEquals("calculated bonds",
+        StringTestBase.assertEquals("calculated bonds",
                 new String[] { "a1", "a2" }, mol5.getBonds().get(0)
                         .getAtomRefs2());
-        StringTest.assertEquals("calculated bonds",
+        StringTestBase.assertEquals("calculated bonds",
                 new String[] { "a1", "a4" }, mol5.getBonds().get(1)
                         .getAtomRefs2());
-        StringTest.assertEquals("calculated bonds",
+        StringTestBase.assertEquals("calculated bonds",
                 new String[] { "a1", "a5" }, mol5.getBonds().get(2)
                         .getAtomRefs2());
-        StringTest.assertEquals("calculated bonds",
+        StringTestBase.assertEquals("calculated bonds",
                 new String[] { "a2", "a3" }, mol5.getBonds().get(3)
                         .getAtomRefs2());
         List<CMLBond> bonds = mol5.getBonds();

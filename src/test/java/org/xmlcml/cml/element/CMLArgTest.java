@@ -14,7 +14,7 @@ import org.xmlcml.cml.attribute.RefAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * test CMLArg.
@@ -127,7 +127,7 @@ public class CMLArgTest extends AbstractTest {
 		Assert.assertEquals("bond count", 2, atoms.size());
 		Assert.assertEquals("bond id", "b_oh42_a1_oh42_r1", bonds.get(0)
 				.getId());
-		StringTest.assertEquals("bond atomRefs2", new String[] { "oh42_a1",
+		StringTestBase.assertEquals("bond atomRefs2", new String[] { "oh42_a1",
 				"oh42_r1" }, bonds.get(0).getAtomRefs2());
 
 	}
@@ -237,19 +237,19 @@ public class CMLArgTest extends AbstractTest {
 		 Assert.assertEquals("mol id", "prop4_r1", mol5.getHead());
 		 Assert.assertEquals("mol id", "prop4_r2", mol5.getTail());
 		 CMLLength length5 = mol5.getLengthElements().get(0);
-		 StringTest.assertEquals("length atomRefs2", new String[]{"prop4_a4", "prop5_a1"},
+		 StringTestBase.assertEquals("length atomRefs2", new String[]{"prop4_a4", "prop5_a1"},
 		 length5.getAtomRefs2());
 		 CMLAngle angle5 = mol5.getAngleElements().get(0);
-		 StringTest.assertEquals("angle atomRefs3", new String[]{"prop4_a2", "prop4_a4", "prop5_a1"},
+		 StringTestBase.assertEquals("angle atomRefs3", new String[]{"prop4_a2", "prop4_a4", "prop5_a1"},
 		 angle5.getAtomRefs3());
 		 CMLTorsion torsion5 = mol5.getTorsionElements().get(0);
-		 StringTest.assertEquals("torsion atomRefs3", new String[]{"prop4_a1", "prop4_a3", "prop4_a4", "prop5_a1"},
+		 StringTestBase.assertEquals("torsion atomRefs3", new String[]{"prop4_a1", "prop4_a3", "prop4_a4", "prop5_a1"},
 		 torsion5.getAtomRefs4());
 		 CMLJoin join1 = peoMol.getJoinElements().get(0);
-		 StringTest.assertEquals("join1 atomRefs2", new String[]{"prop1_r2", "prop2_r1"},
+		 StringTestBase.assertEquals("join1 atomRefs2", new String[]{"prop1_r2", "prop2_r1"},
 		 join1.getAtomRefs2());
 		 CMLJoin join3 = peoMol.getJoinElements().get(2);
-		 StringTest.assertEquals("join2 atomRefs2", new String[]{"prop3_r2", "prop4_r1"},
+		 StringTestBase.assertEquals("join2 atomRefs2", new String[]{"prop3_r2", "prop4_r1"},
 		 join3.getAtomRefs2());
 		 System.out.println("------------------peoCml--------------------");
 		 peoCml.debug();

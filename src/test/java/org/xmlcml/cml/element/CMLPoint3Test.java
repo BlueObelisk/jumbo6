@@ -13,7 +13,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 
 /**
  * test CMLPoint3
@@ -47,7 +47,7 @@ public class CMLPoint3Test extends GeomTestBase {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getXYZ3(), expected.getXYZ3(),
+        DoubleTestBase.assertEquals(msg, test.getXYZ3(), expected.getXYZ3(),
                 epsilon);
     }
 
@@ -67,7 +67,7 @@ public class CMLPoint3Test extends GeomTestBase {
         Assert.assertEquals("must be of length 3", 3, test.length);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test, expected.getXYZ3(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getXYZ3(), epsilon);
     }
 
     /**

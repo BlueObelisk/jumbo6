@@ -11,7 +11,7 @@ import org.xmlcml.euclid.IntRange;
  * @author pmr
  *
  */
-public class IntRangeTest extends EuclidTest {
+public class IntRangeTest extends EuclidTestBase {
 
     IntRange i0;
 

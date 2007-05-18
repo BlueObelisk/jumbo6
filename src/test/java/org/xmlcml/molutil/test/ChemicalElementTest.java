@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.BaseTest;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -150,7 +150,7 @@ public class ChemicalElementTest extends BaseTest {
         double[] dd = el.getIsotopeAbundances();
         Assert.assertNotNull("iso", dd);
         Assert.assertEquals("iso", 4, dd.length);
-        DoubleTest.assertEquals("iso", new double[] { 0.0001, 98.9, 1.01,
+        DoubleTestBase.assertEquals("iso", new double[] { 0.0001, 98.9, 1.01,
                 0.0001 }, dd, EPS);
         masses = new int[] { 1, 2, 3 };
         abundances = new double[] { .2, .3, .5 };
@@ -162,7 +162,7 @@ public class ChemicalElementTest extends BaseTest {
         dd = el.getIsotopeAbundances();
         Assert.assertNotNull("iso", dd);
         Assert.assertEquals("iso", 3, dd.length);
-        DoubleTest.assertEquals("iso", new double[] { .2, .3, .5 }, dd, EPS);
+        DoubleTestBase.assertEquals("iso", new double[] { .2, .3, .5 }, dd, EPS);
     }
 
     /**
@@ -195,7 +195,7 @@ public class ChemicalElementTest extends BaseTest {
         iso = el.getIsotopeAbundances();
         Assert.assertNotNull("iso", iso);
         Assert.assertEquals("iso", 2, iso.length);
-        DoubleTest.assertEquals("iso", new double[] { 98.93, 1.07 }, iso, EPS);
+        DoubleTestBase.assertEquals("iso", new double[] { 98.93, 1.07 }, iso, EPS);
     }
 
     /**

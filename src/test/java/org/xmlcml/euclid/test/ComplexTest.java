@@ -15,7 +15,7 @@ import org.xmlcml.euclid.Real2;
  * @author pmr
  *
  */
-public class ComplexTest extends EuclidTest {
+public class ComplexTest extends EuclidTestBase {
 
     Complex c0;
 

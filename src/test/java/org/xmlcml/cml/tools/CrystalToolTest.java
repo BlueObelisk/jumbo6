@@ -36,7 +36,7 @@ import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.inchi.InChIGenerator;
 import org.xmlcml.cml.inchi.InChIGeneratorFactory;
 import org.xmlcml.euclid.RealRange;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
@@ -97,21 +97,21 @@ public class CrystalToolTest extends AbstractToolTest {
         tool1.calculateCartesiansAndBonds();
         List<CMLBond> bonds = mol1.getBonds();
         Assert.assertEquals("bond count", 2, bonds.size());
-        StringTest.assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
+        StringTestBase.assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
                 .getAtomRefs2());
-        StringTest.assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
+        StringTestBase.assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
                 .getAtomRefs2());
         // adds the length elements
         new GeometryTool(mol1).createValenceLengths(true, true);
         CMLElements<CMLLength> lengths = mol1.getLengthElements();
         Assert.assertEquals("lengths", 2, lengths.size());
         CMLLength length = lengths.get(0);
-        StringTest.assertEquals("length 0 atoms", new String[] { "a1", "a2" },
+        StringTestBase.assertEquals("length 0 atoms", new String[] { "a1", "a2" },
                 length.getAtomRefs2());
         Assert.assertEquals("length 0 value", 0.956, length.getXMLContent(),
                 0.001);
         length = lengths.get(1);
-        StringTest.assertEquals("length 0 atoms", new String[] { "a1", "a3" },
+        StringTestBase.assertEquals("length 0 atoms", new String[] { "a1", "a3" },
                 length.getAtomRefs2());
         Assert.assertEquals("length 0 value", 0.955, length.getXMLContent(),
                 0.001);
@@ -121,7 +121,7 @@ public class CrystalToolTest extends AbstractToolTest {
         // FIXME
         Assert.assertEquals("angles", 1, angles.size());
         CMLAngle angle = angles.get(0);
-        StringTest.assertEquals("length 0 atoms",
+        StringTestBase.assertEquals("length 0 atoms",
                 new String[] { "a2", "a1", "a3" }, angle.getAtomRefs3());
         Assert.assertEquals("length 0 value", 116.875, angle.getXMLContent(),
                 0.001);

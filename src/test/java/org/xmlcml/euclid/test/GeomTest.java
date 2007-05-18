@@ -15,7 +15,7 @@ import org.xmlcml.euclid.Vector3;
  * @author pmr
  *
  */
-public class GeomTest extends EuclidTest {
+public class GeomTest extends EuclidTestBase {
 
     Line3 l0;
 

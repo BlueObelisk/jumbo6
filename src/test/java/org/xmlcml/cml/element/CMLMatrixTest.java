@@ -14,7 +14,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.RealMatrix;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntMatrixTest;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.euclid.test.RealMatrixTest;
@@ -283,7 +283,7 @@ public class CMLMatrixTest extends NumericTest {
     @Test
     public void testSetMatrixDoubleArrayArray() {
         CMLMatrix mat = matrixList.get(0);
-        DoubleTest.assertEquals("set matrix double[][]", new double[] { 180.,
+        DoubleTestBase.assertEquals("set matrix double[][]", new double[] { 180.,
                 90., 45, 0. }, mat.getDoubleArray(), EPS);
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         try {
@@ -297,7 +297,7 @@ public class CMLMatrixTest extends NumericTest {
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         Assert.assertEquals("set mat", 4, mat.getRows());
         Assert.assertEquals("set mat", 3, mat.getColumns());
-        DoubleTest.assertEquals("set matrix double[][]", new double[] { 11.,
+        DoubleTestBase.assertEquals("set matrix double[][]", new double[] { 11.,
                 12., 13., 21., 22., 23., 31., 32., 33., 41., 42., 43. }, mat
                 .getDoubleArray(), EPS);
     }
@@ -309,7 +309,7 @@ public class CMLMatrixTest extends NumericTest {
     public void testSetMatrixIntArrayArray() {
         CMLMatrix mat = matrixList.get(0);
         // deliberately set doubles and change later
-        DoubleTest.assertEquals("set matrix int[][]", new double[] { 180., 90.,
+        DoubleTestBase.assertEquals("set matrix int[][]", new double[] { 180., 90.,
                 45, 0. }, mat.getDoubleArray(), EPS);
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         try {
@@ -333,7 +333,7 @@ public class CMLMatrixTest extends NumericTest {
     @Test
     public void testSetArrayIntIntDoubleArray() {
         CMLMatrix mat = matrixList.get(0);
-        DoubleTest.assertEquals("set matrix double[][]", new double[] { 180.,
+        DoubleTestBase.assertEquals("set matrix double[][]", new double[] { 180.,
                 90., 45, 0. }, mat.getDoubleArray(), EPS);
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         try {
@@ -345,7 +345,7 @@ public class CMLMatrixTest extends NumericTest {
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         Assert.assertEquals("set mat", 4, mat.getRows());
         Assert.assertEquals("set mat", 3, mat.getColumns());
-        DoubleTest.assertEquals("set matrix double[][]", new double[] { 11.,
+        DoubleTestBase.assertEquals("set matrix double[][]", new double[] { 11.,
                 12., 13., 21., 22., 23., 31., 32., 33., 41., 42., 43. }, mat
                 .getDoubleArray(), EPS);
     }
@@ -357,7 +357,7 @@ public class CMLMatrixTest extends NumericTest {
     @Test
     public void testSetArrayIntIntIntArray() {
         CMLMatrix mat = matrixList.get(0);
-        DoubleTest.assertEquals("set matrix int, int, []", new double[] { 180.,
+        DoubleTestBase.assertEquals("set matrix int, int, []", new double[] { 180.,
                 90., 45, 0. }, mat.getDoubleArray(), EPS);
         Assert.assertEquals("set mat", XSD_DOUBLE, mat.getDataType());
         try {
@@ -379,7 +379,7 @@ public class CMLMatrixTest extends NumericTest {
     @Test
     public void testGetDoubleArray() {
         CMLMatrix mat = matrixList.get(0);
-        DoubleTest.assertEquals("get array []", new double[] { 180., 90., 45,
+        DoubleTestBase.assertEquals("get array []", new double[] { 180., 90., 45,
                 0. }, mat.getDoubleArray(), EPS);
         Assert.assertEquals("get array", XSD_DOUBLE, mat.getDataType());
     }
@@ -392,9 +392,9 @@ public class CMLMatrixTest extends NumericTest {
         CMLMatrix mat = matrixList.get(0);
         double[][] doubleMatrix = mat.getDoubleMatrix();
         Assert.assertEquals("get matrix double[][]", 2, doubleMatrix.length);
-        DoubleTest.assertEquals("get matrix double[][]", new double[] { 180.,
+        DoubleTestBase.assertEquals("get matrix double[][]", new double[] { 180.,
                 90. }, doubleMatrix[0], EPS);
-        DoubleTest.assertEquals("get matrix double[][]",
+        DoubleTestBase.assertEquals("get matrix double[][]",
                 new double[] { 45., 0. }, doubleMatrix[1], EPS);
     }
 
@@ -508,11 +508,11 @@ public class CMLMatrixTest extends NumericTest {
 
     private void testMatrix(CMLMatrix matrix, double[] expected0,
             String units0, double[] expected1, String units1) {
-        DoubleTest.assertEquals("matrix", expected0, matrix.getDoubleArray(),
+        DoubleTestBase.assertEquals("matrix", expected0, matrix.getDoubleArray(),
                 EPS);
         Assert.assertEquals("matrix", units0, matrix.getUnits());
         matrix.convertToSI(unitsUnitListMap);
-        DoubleTest.assertEquals("matrix", expected1, matrix.getDoubleArray(),
+        DoubleTestBase.assertEquals("matrix", expected1, matrix.getDoubleArray(),
                 EPS * 10);
         Assert.assertEquals("matrix", units1, matrix.getUnits());
     }

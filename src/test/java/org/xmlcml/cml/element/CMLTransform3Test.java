@@ -14,7 +14,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Transform3.Type;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Transform3Test;
 
@@ -472,14 +472,14 @@ public class CMLTransform3Test extends GeomTestBase {
 
         double[] aa = t.getAxisAndAngle();
         double x = Math.sqrt(1. / 3.);
-        DoubleTest.assertEquals("axis and angle", new double[] { x, x, x,
+        DoubleTestBase.assertEquals("axis and angle", new double[] { x, x, x,
                 Math.PI * 2. / 3. }, aa, EPS);
 
         v = new CMLVector3(new double[] { 1., 2., 3. });
         t = new CMLTransform3(v, 1.234);
         aa = t.getAxisAndAngle();
         double xx = 1. / Math.sqrt(14.);
-        DoubleTest.assertEquals("axis and angle", new double[] { xx, 2 * xx,
+        DoubleTestBase.assertEquals("axis and angle", new double[] { xx, 2 * xx,
                 3 * xx, 1.234 }, aa, EPS);
     }
 
@@ -531,7 +531,7 @@ public class CMLTransform3Test extends GeomTestBase {
                 0, 0, 1 };
         CMLTransform3 t = new CMLTransform3(d);
         double[] sc = t.getScales();
-        DoubleTest.assertEquals("equals", new double[] { 10, 20, 30 }, sc, EPS);
+        DoubleTestBase.assertEquals("equals", new double[] { 10, 20, 30 }, sc, EPS);
 
     }
 
@@ -803,13 +803,13 @@ public class CMLTransform3Test extends GeomTestBase {
             neverThrow(e);
         }
         double[] r = t.getRow(0);
-        DoubleTest.assertEquals("row 0", new double[] { 1., -1., 0., 0.5 }, r,
+        DoubleTestBase.assertEquals("row 0", new double[] { 1., -1., 0., 0.5 }, r,
                 EPS);
         r = t.getRow(1);
-        DoubleTest.assertEquals("row 1", new double[] { 0., 1., -1., 0.25 }, r,
+        DoubleTestBase.assertEquals("row 1", new double[] { 0., 1., -1., 0.25 }, r,
                 EPS);
         r = t.getRow(2);
-        DoubleTest.assertEquals("row 2", new double[] { -1., 0., 0., 0. }, r,
+        DoubleTestBase.assertEquals("row 2", new double[] { -1., 0., 0., 0. }, r,
                 EPS);
     }
 

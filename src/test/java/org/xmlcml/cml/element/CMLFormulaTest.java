@@ -19,8 +19,8 @@ import org.xmlcml.cml.base.CMLSerializer;
 import org.xmlcml.cml.base.DoubleSTAttribute;
 import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLFormula.Type;
-import org.xmlcml.euclid.test.DoubleTest;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * test CMLFormula.
@@ -471,24 +471,24 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     public void testAdd() {
         // FIXME - sorting
         String[] elements = xomForm1.getElementTypes();
-        StringTest.assertEquals("start xomForm1",
+        StringTestBase.assertEquals("start xomForm1",
                 new String[] { "H", "O", "N" }, elements);
         double[] counts = xomForm1.getCounts();
-        DoubleTest.assertEquals("start xomForm1",
+        DoubleTestBase.assertEquals("start xomForm1",
                 new double[] { 1.0, 3.0, 1.0 }, counts, 0.000001);
         xomForm1.add("S", 2.0);
         elements = xomForm1.getElementTypes();
-        StringTest.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
+        StringTestBase.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
                 "S" }, elements);
         counts = xomForm1.getCounts();
-        DoubleTest.assertEquals("add1 xomForm1", new double[] { 1.0, 3.0, 1.0,
+        DoubleTestBase.assertEquals("add1 xomForm1", new double[] { 1.0, 3.0, 1.0,
                 2.0 }, counts, 0.000001);
         xomForm1.add("H", 2.0);
         elements = xomForm1.getElementTypes();
-        StringTest.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
+        StringTestBase.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
                 "S" }, elements);
         counts = xomForm1.getCounts();
-        DoubleTest.assertEquals("add1 xomForm1", new double[] { 3.0, 3.0, 1.0,
+        DoubleTestBase.assertEquals("add1 xomForm1", new double[] { 3.0, 3.0, 1.0,
                 2.0 }, counts, 0.000001);
 
         xomForm1.setFormalCharge(-1);
@@ -508,11 +508,11 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     public void testGetElementTypes() {
         String[] el = xomForm1.getElementTypes();
-        StringTest.assertEquals("element types",
+        StringTestBase.assertEquals("element types",
                 new String[] { "H", "O", "N" }, el);
 
         el = xmlForm1.getElementTypes();
-        StringTest.assertEquals("element types", new String[] { "C", "H", "Br",
+        StringTestBase.assertEquals("element types", new String[] { "C", "H", "Br",
                 "O" }, el);
 
     }
@@ -524,13 +524,13 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     public void testGetElementCounts() {
         double[] c = xomForm1.getCounts();
-        DoubleTest.assertEquals("element counts", new double[] { 1., 3., 1. },
+        DoubleTestBase.assertEquals("element counts", new double[] { 1., 3., 1. },
                 c, 0.00001);
 
         String concise = xmlForm1.getConcise();
         Assert.assertEquals("concise", "C 2 H 2 Br 1 O 2 -1", concise);
         c = xmlForm1.getCounts();
-        DoubleTest.assertEquals("element counts",
+        DoubleTestBase.assertEquals("element counts",
                 new double[] { 2., 2., 1., 2. }, c, 0.00001);
 
     }
@@ -1062,10 +1062,10 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     public void testGetCounts() throws Exception {
         CMLFormula form = CMLFormula.createFormula("C 2 H 4 O 2");
-        DoubleTest.assertEquals("concise",
+        DoubleTestBase.assertEquals("concise",
                 new double[]{2, 4, 2}, form.getCounts(), EPS);
         form = CMLFormula.createFormula("C 2 H 4 O 2 -1");
-        DoubleTest.assertEquals("concise",
+        DoubleTestBase.assertEquals("concise",
                 new double[]{2, 4, 2}, form.getCounts(), EPS);
     }
 

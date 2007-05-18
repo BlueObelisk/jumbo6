@@ -12,7 +12,7 @@ import org.junit.Assert;
  * @version 5.0
  * 
  */
-public class StringTest extends EuclidTest {
+public class StringTestBase extends EuclidTestBase {
 
     /**
      * Assert.asserts equality of String arrays.

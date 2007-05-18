@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 
 /**
  * test for CellParameter.
@@ -85,7 +85,7 @@ public class CMLCellParameterTest extends AbstractTest {
                 "expected should not have null type (" + msg + S_RBRAK, expected
                         .getType());
         Assert.assertEquals("types must be equal", 3, test.length);
-        DoubleTest.assertEquals(msg, test, expected.getXMLContent(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getXMLContent(), epsilon);
     }
 
     /**
@@ -225,7 +225,7 @@ public class CMLCellParameterTest extends AbstractTest {
         // S_SPACE+CML_XMLNS+">4.500 5.500 6.500</cellParameter>"+
         Assert.assertEquals(IdAttribute.NAME, "scp1", cellParameter1.getId());
         Assert.assertEquals("units", U_ANGSTROM, cellParameter1.getUnits());
-        DoubleTest.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
+        DoubleTestBase.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
                 cellParameter1.getError(), EPS);
         CMLCellParameterTest.assertEquals("content",
                 CMLCellParameter.Type.LENGTH.s, new double[] { 4.5, 5.5, 6.5 },
@@ -244,7 +244,7 @@ public class CMLCellParameterTest extends AbstractTest {
         Assert.assertNotNull("cell parameter not null", cellParameter1);
         Assert.assertEquals(IdAttribute.NAME, "scp1", cellParameter1.getId());
         Assert.assertEquals("units", U_ANGSTROM, cellParameter1.getUnits());
-        DoubleTest.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
+        DoubleTestBase.assertEquals("error", new double[] { 0.001, 0.002, 0.003 },
                 cellParameter1.getError(), EPS);
         CMLCellParameterTest.assertEquals("content",
                 CMLCellParameter.Type.LENGTH.s, new double[] { 4.5, 5.5, 6.5 },

@@ -76,7 +76,7 @@ public class RealMatrixTest extends MatrixTest {
                 .getRows(), expected.getRows());
         Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
                 .getCols(), expected.getCols());
-        DoubleTest.assertEquals(msg, test.getMatrixAsArray(), expected
+        DoubleTestBase.assertEquals(msg, test.getMatrixAsArray(), expected
                 .getMatrixAsArray(), epsilon);
     }
 
@@ -99,7 +99,7 @@ public class RealMatrixTest extends MatrixTest {
                 expected.getRows());
         Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, cols,
                 expected.getCols());
-        DoubleTest
+        DoubleTestBase
                 .assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
     }
 
@@ -288,7 +288,7 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testGetMatrixAsArray() {
         double[] array = m2.getMatrixAsArray();
-        DoubleTest.assertEquals("matrix as array", new double[] { 11.0, 12.0,
+        DoubleTestBase.assertEquals("matrix as array", new double[] { 11.0, 12.0,
                 13.0, 14.0, 21.0, 22.0, 23.0, 24.0, 31.0, 32.0, 33.0, 34.0 },
                 array, EPS);
     }

@@ -14,7 +14,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * @author pm286
@@ -298,7 +298,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         Assert.assertNotNull("AtomSets list should be set", atomSets);
         Assert.assertEquals("equivalence classes", test.length, atomSets.size());
         for (int i = 0; i < test.length; i++) {
-            StringTest.assertEquals("class "+i, test[i], atomSets.get(i).getXMLContent());
+            StringTestBase.assertEquals("class "+i, test[i], atomSets.get(i).getXMLContent());
         }
     }
 

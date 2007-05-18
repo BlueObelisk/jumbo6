@@ -10,7 +10,7 @@ import org.xmlcml.euclid.Real;
  * @author pmr
  *
  */
-public class RealTest extends EuclidTest {
+public class RealTest extends EuclidTestBase {
 
     /**
      * setup.
@@ -29,7 +29,7 @@ public class RealTest extends EuclidTest {
     public void testZeroArray() {
         double[] rr = new double[5];
         Real.zeroArray(5, rr);
-        DoubleTest.assertEquals("double[] ", new double[] { 0.0, 0.0, 0.0, 0.0,
+        DoubleTestBase.assertEquals("double[] ", new double[] { 0.0, 0.0, 0.0, 0.0,
                 0.0 }, rr, EPS);
     }
 
@@ -41,7 +41,7 @@ public class RealTest extends EuclidTest {
     public void testInitArray() {
         double[] rr = new double[5];
         Real.initArray(5, rr, 3.0);
-        DoubleTest.assertEquals("double[] ", new double[] { 3.0, 3.0, 3.0, 3.0,
+        DoubleTestBase.assertEquals("double[] ", new double[] { 3.0, 3.0, 3.0, 3.0,
                 3.0 }, rr, EPS);
     }
 

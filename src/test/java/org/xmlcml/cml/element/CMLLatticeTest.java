@@ -3,7 +3,7 @@ package org.xmlcml.cml.element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 
 /**
  * tests Lattice.
@@ -76,7 +76,7 @@ public class CMLLatticeTest extends AbstractTest {
     @Test
     public void testGetCellParameters() {
         double[] params = lattice1.getCellParameters();
-        DoubleTest.assertEquals("params", new double[] { 12.328828005937952,
+        DoubleTestBase.assertEquals("params", new double[] { 12.328828005937952,
                 13.96424004376894, 11.968291440301744, 104.34229064539636,
                 86.89206686722031, 25.025508299339933 }, params, EPS);
     }
@@ -125,7 +125,7 @@ public class CMLLatticeTest extends AbstractTest {
                 2).getLength(), EPS);
         Assert.assertEquals("vol", -619.2, lattice1.getVolume(), EPS);
         double[] params = lattice1.getCellParameters();
-        DoubleTest.assertEquals("params", new double[] { 12.328828005937952,
+        DoubleTestBase.assertEquals("params", new double[] { 12.328828005937952,
                 13.96424004376894, 11.968291440301744, 104.34229064539636,
                 86.89206686722031, 25.025508299339933 }, params, EPS);
 
@@ -144,7 +144,7 @@ public class CMLLatticeTest extends AbstractTest {
                 .getCMLVector3(2).getLength(), EPS);
         Assert.assertEquals("vol", 619.2, reducedLattice.getVolume(), EPS);
         params = reducedLattice.getCellParameters();
-        DoubleTest.assertEquals("params", new double[] { 5.916079783099616,
+        DoubleTestBase.assertEquals("params", new double[] { 5.916079783099616,
                 8.912911982062877, 12.328828005937952, 83.73054962879554,
                 93.14372638090103, 74.15166267765416 }, params, EPS);
 

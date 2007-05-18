@@ -147,6 +147,7 @@ public class InChIGenerator implements EuclidConstants {
     protected InChIGenerator(CMLMolecule molecule, String options)
             throws CMLException {
         try {
+            this.molecule = molecule;
             input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
             throw new CMLException(jie);
@@ -170,6 +171,7 @@ public class InChIGenerator implements EuclidConstants {
     protected InChIGenerator(CMLMolecule molecule, List options)
             throws CMLException {
         try {
+            this.molecule = molecule;
             input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
             throw new CMLException(jie);

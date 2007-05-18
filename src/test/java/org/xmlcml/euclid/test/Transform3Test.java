@@ -45,7 +45,7 @@ public class Transform3Test extends GeomTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getMatrixAsArray(), expected
+        DoubleTestBase.assertEquals(msg, test.getMatrixAsArray(), expected
                 .getMatrixAsArray(), epsilon);
     }
 
@@ -65,7 +65,7 @@ public class Transform3Test extends GeomTest {
         Assert.assertEquals("test should have 16 elements (" + msg + S_RBRAK, 16,
                 test.length);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest
+        DoubleTestBase
                 .assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
     }
 
