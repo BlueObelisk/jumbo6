@@ -16,7 +16,7 @@ import nu.xom.tests.XOMTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.test.EuclidTest;
+import org.xmlcml.euclid.test.EuclidTestBase;
 
 /**
  * 
@@ -28,7 +28,7 @@ import org.xmlcml.euclid.test.EuclidTest;
  * @version 5.0
  * 
  */
-public class BaseTest extends EuclidTest implements CMLConstants {
+public class BaseTest extends EuclidTestBase implements CMLConstants {
 
     /** logger */
     public final static Logger logger = Logger.getLogger(BaseTest.class

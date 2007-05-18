@@ -12,7 +12,7 @@ import org.xmlcml.euclid.Angle.Units;
  * @author pmr
  *
  */
-public class AngleTest extends EuclidTest {
+public class AngleTest extends EuclidTestBase {
 
     Angle zero;
 

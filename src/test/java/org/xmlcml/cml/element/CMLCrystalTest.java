@@ -10,7 +10,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLCrystal.Centering;
 import org.xmlcml.euclid.RealSquareMatrix;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.RealSquareMatrixTest;
 
 /**
@@ -275,7 +275,7 @@ public class CMLCrystalTest extends AbstractTest {
         } catch (CMLException e) {
             Assert.fail("should not throw " + e);
         }
-        DoubleTest.assertEquals("cell contents ", new double[] { 4.5, 4.5, 4.5,
+        DoubleTestBase.assertEquals("cell contents ", new double[] { 4.5, 4.5, 4.5,
                 90., 90, 90 }, cell, EPS);
 
         try {
@@ -290,7 +290,7 @@ public class CMLCrystalTest extends AbstractTest {
         } catch (CMLException e) {
             Assert.fail("should not throw " + e);
         }
-        DoubleTest.assertEquals("cell contents ", new double[] { 10, 11, 12,
+        DoubleTestBase.assertEquals("cell contents ", new double[] { 10, 11, 12,
                 80, 90, 100 }, cell, EPS);
     }
 
@@ -305,7 +305,7 @@ public class CMLCrystalTest extends AbstractTest {
         } catch (CMLException e) {
             neverThrow(e);
         }
-        DoubleTest.assertEquals("cell params", new double[] { 8., 9., 10., 80.,
+        DoubleTestBase.assertEquals("cell params", new double[] { 8., 9., 10., 80.,
                 90., 100. }, param, EPS);
     }
 
@@ -388,7 +388,7 @@ public class CMLCrystalTest extends AbstractTest {
         } catch (CMLException e) {
             neverThrow(e);
         }
-        DoubleTest.assertEquals("recip cell", new double[] {
+        DoubleTestBase.assertEquals("recip cell", new double[] {
                 0.12698971945582077, 0.11462110273008476, 0.10159177556465662,
                 100.15588943429955, 91.7816819026984, 79.84411056570045 },
                 recipParams, EPS);
@@ -638,7 +638,7 @@ public class CMLCrystalTest extends AbstractTest {
         CMLCellParameterTest.assertEquals("cell lengths",
                 CMLCellParameter.Type.LENGTH.s,
                 new double[] { 8.0, 9.0, 10.0 }, cellParameterList.get(0), EPS);
-        DoubleTest.assertEquals("cell length errors", new double[] { 0.001,
+        DoubleTestBase.assertEquals("cell length errors", new double[] { 0.001,
                 0.002, 0.003 }, cellParameterList.get(0).getError(), EPS);
         CMLCellParameterTest.assertEquals("cell angles",
                 CMLCellParameter.Type.ANGLE.s, new double[] { 80., 90., 100. },

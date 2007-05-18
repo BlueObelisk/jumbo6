@@ -27,7 +27,7 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
-public class UtilTest extends EuclidTest implements EuclidConstants {
+public class UtilTest extends EuclidTestBase implements EuclidConstants {
 
     /**
      * Test method for 'org.xmlcml.cml.base.Util.getTEMP_DIRECTORY()'
@@ -71,7 +71,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
         String[] array = new String[] { "a", "b" };
         String[] array1 = Util.addElementToStringArray(array, "c");
         Assert.assertEquals("array", 3, array1.length);
-        StringTest
+        StringTestBase
                 .assertEquals("array", new String[] { "a", "b", "c" }, array1);
     }
 
@@ -84,7 +84,7 @@ public class UtilTest extends EuclidTest implements EuclidConstants {
         String[] array = new String[] { "a", "b", "c" };
         String[] array1 = Util.removeElementFromStringArray(array, "b");
         Assert.assertEquals("array", 2, array1.length);
-        StringTest.assertEquals("array", new String[] { "a", "c" }, array1);
+        StringTestBase.assertEquals("array", new String[] { "a", "c" }, array1);
     }
 
     /**

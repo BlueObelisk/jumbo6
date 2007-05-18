@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.AbstractTest;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /** test
  * 
@@ -96,29 +96,29 @@ public class DelimiterAttributeTest extends AbstractTest {
 		String content = "/1/2/3/4/5/";
 		String[] ss = delimiterAttribute.getSplitContent(content);
 		String[] sss = new String[] {"1", "2", "3", "4", "5"};
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = "1/2/3/4/5/";
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = "1/2/3/4/5";
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = "/1/2/3/4/5";
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = "/1/2/3/4//5";
 		sss = new String[] {"1", "2", "3", "4", "", "5"};
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = "//1/2/3/4//5";
 		sss = new String[] {"", "1", "2", "3", "4", "", "5"};
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		delimiterAttribute = new DelimiterAttribute(S_SPACE);
 		Assert.assertEquals("concat ", S_SPACE, delimiterAttribute.getConcat());
@@ -128,12 +128,12 @@ public class DelimiterAttributeTest extends AbstractTest {
 		content = "1 2 3 4 5";
 		sss = new String[] {"1", "2", "3", "4", "5"};
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 		
 		content = " 1   2     3\n  4 \t 5  ";
 		sss = new String[] {"1", "2", "3", "4", "5"};
 		ss = delimiterAttribute.getSplitContent(content);
-		StringTest.assertEquals("split ", sss, ss);
+		StringTestBase.assertEquals("split ", sss, ss);
 	}
 
 	/**

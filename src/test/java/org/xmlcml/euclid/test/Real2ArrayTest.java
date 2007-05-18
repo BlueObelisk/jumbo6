@@ -15,7 +15,7 @@ import org.xmlcml.euclid.RealRange;
  * @author pmr
  *
  */
-public class Real2ArrayTest extends EuclidTest {
+public class Real2ArrayTest extends EuclidTestBase {
 
     Real2Array ra0;
 

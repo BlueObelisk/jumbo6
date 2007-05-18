@@ -14,7 +14,7 @@ import org.xmlcml.euclid.IntSet;
  * @author pmr
  *
  */
-public class IntSetTest extends EuclidTest {
+public class IntSetTest extends EuclidTestBase {
 
     IntSet i0;
 

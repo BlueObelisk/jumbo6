@@ -18,7 +18,7 @@ import org.xmlcml.euclid.RealArray.Filter;
  * @author pmr
  *
  */
-public class RealArrayTest extends EuclidTest {
+public class RealArrayTest extends EuclidTestBase {
 
     RealArray a0;
 
@@ -58,7 +58,7 @@ public class RealArrayTest extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
+        DoubleTestBase.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
 
@@ -79,7 +79,7 @@ public class RealArrayTest extends EuclidTest {
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getArray().length);
-        DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 
     /**
@@ -405,7 +405,7 @@ public class RealArrayTest extends EuclidTest {
     @Test
     public void testGetReverseArray() {
         double[] d = a1.getReverseArray();
-        DoubleTest.assertEquals("clear", new double[] { 6., 4., 2., 1. }, d,
+        DoubleTestBase.assertEquals("clear", new double[] { 6., 4., 2., 1. }, d,
                 EPS);
     }
 
@@ -917,7 +917,7 @@ public class RealArrayTest extends EuclidTest {
     @Test
     public void testGetStringValues() {
         String[] ss = a1.getStringValues();
-        StringTest.assertEquals("string values", new String[] { "1.0", "2.0",
+        StringTestBase.assertEquals("string values", new String[] { "1.0", "2.0",
                 "4.0", "6.0" }, ss);
     }
 

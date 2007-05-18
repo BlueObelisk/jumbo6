@@ -11,7 +11,7 @@ import org.xmlcml.euclid.Int2;
  * @author pmr
  *
  */
-public class Int2Test extends EuclidTest {
+public class Int2Test extends EuclidTestBase {
 
     Int2 i0;
 

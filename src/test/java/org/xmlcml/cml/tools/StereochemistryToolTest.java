@@ -26,7 +26,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * @author pm286
@@ -97,7 +97,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		Assert.assertEquals("bondStereo", 1, bondStereos.size());
 		CMLBondStereo bondStereo = (CMLBondStereo) bondStereos.get(0);
 		String[] atomRefs4 = bondStereo.getAtomRefs4();
-		StringTest.assertEquals("atomRefs4", new String[]{"a1", "a2", "a3", "a4"}, atomRefs4);
+		StringTestBase.assertEquals("atomRefs4", new String[]{"a1", "a2", "a3", "a4"}, atomRefs4);
 		String value = bondStereo.getXMLContent();
 		Assert.assertEquals("cid", CMLBond.CIS, value);
 		
@@ -137,7 +137,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		// chiral
 		atomParity1 = st.calculateAtomParity(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
-		StringTest.assertEquals("atomRefs4", new String[]{"a6", "a28", "a10", "a49"}, atomRefs4);
+		StringTestBase.assertEquals("atomRefs4", new String[]{"a6", "a28", "a10", "a49"}, atomRefs4);
 		Assert.assertEquals("atomRefs4", -11.158571879456787, atomParity1.getXMLContent(), 0.000001);
 	}
 

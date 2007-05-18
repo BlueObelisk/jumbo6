@@ -13,7 +13,7 @@ import org.xmlcml.euclid.IntRange;
  * @author pmr
  *
  */
-public class Int2RangeTest extends EuclidTest {
+public class Int2RangeTest extends EuclidTestBase {
 
     Int2Range i2r0;
 

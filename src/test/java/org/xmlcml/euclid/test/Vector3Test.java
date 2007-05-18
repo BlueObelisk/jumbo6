@@ -40,7 +40,7 @@ public class Vector3Test extends GeomTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getArray(), expected.getArray(),
+        DoubleTestBase.assertEquals(msg, test.getArray(), expected.getArray(),
                 epsilon);
     }
 
@@ -60,7 +60,7 @@ public class Vector3Test extends GeomTest {
         Assert.assertEquals("must be of length 3", 3, test.length);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test, expected.getArray(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
     }
 
     /**
@@ -146,7 +146,7 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testGetArray() {
-        DoubleTest.assertEquals("array", new double[] { 1., 2., 3. }, v123
+        DoubleTestBase.assertEquals("array", new double[] { 1., 2., 3. }, v123
                 .getArray(), EPS);
     }
 

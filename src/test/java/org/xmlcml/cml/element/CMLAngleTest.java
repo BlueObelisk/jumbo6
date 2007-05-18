@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * tests CMLAngle.
@@ -72,7 +72,7 @@ public class CMLAngleTest extends AbstractTest {
     @Test
     public final void testCopy() {
         CMLAngle angle00 = (CMLAngle) angle0.copy();
-        StringTest.assertEquals("atomRefs3", new String[] { "a1", "a2", "a3" },
+        StringTestBase.assertEquals("atomRefs3", new String[] { "a1", "a2", "a3" },
                 angle00.getAtomRefs3());
     }
 
@@ -82,7 +82,7 @@ public class CMLAngleTest extends AbstractTest {
     @Test
     public final void testCMLAngle() {
         CMLAngle angle00 = new CMLAngle(angle0);
-        StringTest.assertEquals("atomRefs3", new String[] { "a1", "a2", "a3" },
+        StringTestBase.assertEquals("atomRefs3", new String[] { "a1", "a2", "a3" },
                 angle00.getAtomRefs3());
     }
 
@@ -168,12 +168,12 @@ public class CMLAngleTest extends AbstractTest {
         // retrieve by atom ids
         CMLAngle angle = map.get(CMLAngle.atomHash("a1", "a2", "a3"));
         Assert.assertNotNull("angle not null", angle);
-        StringTest.assertEquals("atomRefs3 ",
+        StringTestBase.assertEquals("atomRefs3 ",
                 new String[] { "a1", "a2", "a3" }, angle.getAtomRefs3());
         // retrieve in other order
         angle = map.get(CMLAngle.atomHash("a3", "a2", "a1"));
         Assert.assertNotNull("angle not null", angle);
-        StringTest.assertEquals("atomRefs3 ",
+        StringTestBase.assertEquals("atomRefs3 ",
                 new String[] { "a1", "a2", "a3" }, angle.getAtomRefs3());
         // non existent
         angle = map.get(CMLAngle.atomHash("a4", "a2", "a1"));
@@ -296,7 +296,7 @@ public class CMLAngleTest extends AbstractTest {
         CMLAngle angle = new CMLAngle();
         List<CMLAtom> atoms = molecule1.getAtoms();
         angle.setAtomRefs3(atoms.get(1), atoms.get(2), atoms.get(0));
-        StringTest.assertEquals("atoms", new String[]{"a2", "a3", "a1"}, angle.getAtomRefs3());
+        StringTestBase.assertEquals("atoms", new String[]{"a2", "a3", "a1"}, angle.getAtomRefs3());
     }
 
 }

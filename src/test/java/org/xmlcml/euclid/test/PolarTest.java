@@ -14,7 +14,7 @@ import org.xmlcml.euclid.Real2;
  * @author pmr
  *
  */
-public class PolarTest extends EuclidTest {
+public class PolarTest extends EuclidTestBase {
 
     Polar p0;
 

@@ -3,7 +3,7 @@ package org.xmlcml.cml.base;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 
 /**
  * tests for doubleAttribute.
@@ -51,7 +51,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
     public void testSetCMLValueString() {
         daa1.setCMLValue("3.4  5.6");
         double[] dd = (double[]) daa1.getCMLValue();
-        DoubleTest.assertEquals("get CMLValue", new double[] { 3.4, 5.6 }, dd,
+        DoubleTestBase.assertEquals("get CMLValue", new double[] { 3.4, 5.6 }, dd,
                 EPS);
 
     }
@@ -65,7 +65,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
         daa1.setCMLValue("3.4  5.6");
         daa2 = new DoubleArraySTAttribute(daa1);
         double[] dd = (double[]) daa2.getCMLValue();
-        DoubleTest.assertEquals("get CMLValue", new double[] { 3.4, 5.6 }, dd,
+        DoubleTestBase.assertEquals("get CMLValue", new double[] { 3.4, 5.6 }, dd,
                 EPS);
 
     }
@@ -98,11 +98,11 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
     public void testSplit() {
         double[] dd = DoubleArraySTAttribute.split("1.2 3.4 5.6", S_SPACE);
         Assert.assertEquals("split", 3, dd.length);
-        DoubleTest.assertEquals("split", new double[] { 1.2, 3.4, 5.6 }, dd,
+        DoubleTestBase.assertEquals("split", new double[] { 1.2, 3.4, 5.6 }, dd,
                 EPS);
         dd = DoubleArraySTAttribute.split("1.7 3.4 5.6", null);
         Assert.assertEquals("split", 3, dd.length);
-        DoubleTest.assertEquals("split", new double[] { 1.7, 3.4, 5.6 }, dd,
+        DoubleTestBase.assertEquals("split", new double[] { 1.7, 3.4, 5.6 }, dd,
                 EPS);
     }
 
@@ -113,7 +113,7 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
     @Test
     public void testGetDoubleArray() {
         daa1.setCMLValue(new double[] { 5.6, 7.8 });
-        DoubleTest.assertEquals("get Value", new double[] { 5.6, 7.8 }, daa1
+        DoubleTestBase.assertEquals("get Value", new double[] { 5.6, 7.8 }, daa1
                 .getDoubleArray(), EPS);
     }
 

@@ -33,10 +33,10 @@ import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
-import org.xmlcml.euclid.test.DoubleTest;
+import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Real3RangeTest;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * test CMLMolecule.
@@ -772,9 +772,9 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula.getConcise());
         CMLAtomArray atomArray = (CMLAtomArray) 
             formula.getChildCMLElements(CMLAtomArray.TAG).get(0);
-        StringTest.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
+        StringTestBase.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
                 atomArray.getElementType());
-        DoubleTest.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
+        DoubleTestBase.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
                 atomArray.getCount(), 0.000001);
         
     }
@@ -921,9 +921,9 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula.getConcise());
         CMLAtomArray atomArray = (CMLAtomArray) 
             formula.getChildCMLElements(CMLAtomArray.TAG).get(0);
-        StringTest.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
+        StringTestBase.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
                 atomArray.getElementType());
-        DoubleTest.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
+        DoubleTestBase.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
                 atomArray.getCount(), 0.000001);
     }
 
@@ -963,7 +963,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     public void testCalculateCentroid3() {
         makeMol5a();
         Point3 p = mol5a.calculateCentroid3(CoordinateType.CARTESIAN);
-        DoubleTest.assertEquals("p", new double[]{0.24, 0.484, 0.0}, p.getArray(), 0.00001);
+        DoubleTestBase.assertEquals("p", new double[]{0.24, 0.484, 0.0}, p.getArray(), 0.00001);
         makeMol7();
         p = mol7.calculateCentroid3(CoordinateType.CARTESIAN);
         Assert.assertNull("centroid null", p);
@@ -1085,7 +1085,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     public void testGetCoordinates3() {
         makeMol5a();
         Point3Vector p3v = mol5a.getCoordinates3(CoordinateType.CARTESIAN);
-        DoubleTest.assertEquals("p", new double[]{
+        DoubleTestBase.assertEquals("p", new double[]{
                 0.0, 0.0, 0.0,
                 0.0, 1.3, 0.0,
                 1.2, 2.2, 0.0,

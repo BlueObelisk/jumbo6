@@ -18,7 +18,7 @@ import org.xmlcml.euclid.EuclidRuntimeException;
  * @version 5.0
  * 
  */
-public class EuclidTest implements EuclidConstants {
+public class EuclidTestBase implements EuclidConstants {
 
     private static Set<Class> classSet = new HashSet<Class>();
     /** setup.

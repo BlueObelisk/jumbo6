@@ -16,7 +16,7 @@ import org.xmlcml.euclid.ArrayBase.Trim;
  * @author pmr
  *
  */
-public class IntArrayTest extends EuclidTest {
+public class IntArrayTest extends EuclidTestBase {
 
     IntArray a0;
 
@@ -660,7 +660,7 @@ public class IntArrayTest extends EuclidTest {
     @Test
     public void testGetStringValues() {
         String[] ss = a1.getStringValues();
-        StringTest.assertEquals("string values", new String[] { "1", "2", "4",
+        StringTestBase.assertEquals("string values", new String[] { "1", "2", "4",
                 "6" }, ss);
     }
 

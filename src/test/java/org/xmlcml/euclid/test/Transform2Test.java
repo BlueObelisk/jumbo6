@@ -17,7 +17,7 @@ import org.xmlcml.euclid.Transform2.Type;
  * @author pmr
  *
  */
-public class Transform2Test extends EuclidTest {
+public class Transform2Test extends EuclidTestBase {
 
     Transform2 t0;
 
@@ -54,7 +54,7 @@ public class Transform2Test extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getMatrixAsArray(), expected
+        DoubleTestBase.assertEquals(msg, test.getMatrixAsArray(), expected
                 .getMatrixAsArray(), epsilon);
     }
 
@@ -74,7 +74,7 @@ public class Transform2Test extends EuclidTest {
         Assert.assertEquals("test should have 16 elements (" + msg + S_RBRAK, 9,
                 test.length);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest
+        DoubleTestBase
                 .assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
     }
 
@@ -217,7 +217,7 @@ public class Transform2Test extends EuclidTest {
         } catch (EuclidException e) {
             neverFail(e);
         }
-        DoubleTest.assertEquals("rsm", new double[] { 1., 0., 2., 0., 1., 3.,
+        DoubleTestBase.assertEquals("rsm", new double[] { 1., 0., 2., 0., 1., 3.,
                 0., 0., 1. }, t.getMatrixAsArray(), EPS);
         Assert.assertEquals("transform2", Type.NULL.s, t
                 .getTransformationType().s);
@@ -355,7 +355,7 @@ public class Transform2Test extends EuclidTest {
         } catch (EuclidException e) {
             neverThrow(e);
         }
-        DoubleTest.assertEquals("flip", new double[] { 0.0, 1., 0.0, 1., 0.0,
+        DoubleTestBase.assertEquals("flip", new double[] { 0.0, 1., 0.0, 1., 0.0,
                 0.0, 0.0, 0.0, 1.0, }, t.getMatrixAsArray(), 0.0000000001);
     }
 
@@ -395,7 +395,7 @@ public class Transform2Test extends EuclidTest {
             neverFail(e);
         }
         RealSquareMatrix rsm = t.getRotationMatrix();
-        DoubleTest.assertEquals("getRotationMatrix", new double[] { 0.0, 1.0,
+        DoubleTestBase.assertEquals("getRotationMatrix", new double[] { 0.0, 1.0,
                 -1.0, 0.0, }, rsm.getMatrixAsArray(), EPS);
     }
 

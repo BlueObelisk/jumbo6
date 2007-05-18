@@ -25,7 +25,7 @@ import org.xmlcml.euclid.Axis.Axis2;
  * @author pmr
  *
  */
-public class Real2VectorTest extends EuclidTest {
+public class Real2VectorTest extends EuclidTestBase {
 
     Real2Vector r0;
 
@@ -69,7 +69,7 @@ public class Real2VectorTest extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getXY().getArray(), expected.getXY()
+        DoubleTestBase.assertEquals(msg, test.getXY().getArray(), expected.getXY()
                 .getArray(), epsilon);
     }
 
@@ -90,7 +90,7 @@ public class Real2VectorTest extends EuclidTest {
                 expected);
         Assert.assertEquals("must be of equal length ", test.length, expected
                 .getXY().getArray().length);
-        DoubleTest
+        DoubleTestBase
                 .assertEquals(msg, test, expected.getXY().getArray(), epsilon);
     }
 
@@ -522,7 +522,7 @@ public class Real2VectorTest extends EuclidTest {
             neverThrow(e);
         }
         double[] d = r1.getSquaredDistances(r);
-        DoubleTest.assertEquals("squared distances", new double[] { 0.05, 0.25,
+        DoubleTestBase.assertEquals("squared distances", new double[] { 0.05, 0.25,
                 0.61 }, d, EPS);
     }
 
@@ -593,7 +593,7 @@ public class Real2VectorTest extends EuclidTest {
         pointList.add(new Real2(1.1, 2.2));
         pointList.add(new Real2(3.3, 4.4));
         RealMatrix rsm = r1.getDistanceMatrix(pointList);
-        DoubleTest.assertEquals("distance matrix", new double[] {
+        DoubleTestBase.assertEquals("distance matrix", new double[] {
                 0.22360679774997916, 3.3241540277189325, 2.6172504656604803,
                 0.5000000000000001, 5.445181356024793, 2.33452350598575 }, rsm
                 .getMatrixAsArray(), EPS);

@@ -5,7 +5,7 @@ package org.xmlcml.cml.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * @author pm286
@@ -24,7 +24,7 @@ public class CMLTableContentTest extends AbstractTableTest {
     @Test
     public final void testGetStrings() {
         String[] ss = tableContent.getStrings();
-        StringTest.assertEquals("strings", 
+        StringTestBase.assertEquals("strings", 
                 new String[]{"1", "a", "2", "b", "3", "c"}, ss);
     }
 

@@ -13,7 +13,7 @@ import org.xmlcml.euclid.Vector2;
  * @author pmr
  *
  */
-public class Vector2Test extends EuclidTest {
+public class Vector2Test extends EuclidTestBase {
 
     Vector2 v0;
 
@@ -45,7 +45,7 @@ public class Vector2Test extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        DoubleTest.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
+        DoubleTestBase.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
     }
 
     /**

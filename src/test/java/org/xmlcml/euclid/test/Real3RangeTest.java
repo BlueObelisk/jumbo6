@@ -16,7 +16,7 @@ import org.xmlcml.euclid.Axis.Axis3;
  * @author pmr
  *
  */
-public class Real3RangeTest extends EuclidTest {
+public class Real3RangeTest extends EuclidTestBase {
 
     Real3Range r0 = null;
 

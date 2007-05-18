@@ -18,7 +18,7 @@ import org.xmlcml.euclid.Transform2;
  * @author pmr
  *
  */
-public class Real2Test extends EuclidTest {
+public class Real2Test extends EuclidTestBase {
 
     Real2 r0;
 
@@ -54,7 +54,7 @@ public class Real2Test extends EuclidTest {
             double epsilon) {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
+        DoubleTestBase.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Real2Test extends EuclidTest {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertEquals("must be of length 2", 2, test.length);
         Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
-        DoubleTest.assertEquals(msg, test, expected.getXY(), epsilon);
+        DoubleTestBase.assertEquals(msg, test, expected.getXY(), epsilon);
     }
 
     /**

@@ -18,7 +18,7 @@ import org.xmlcml.euclid.RealMatrix;
  * @author pmr
  *
  */
-public class MatrixTest extends EuclidTest {
+public class MatrixTest extends EuclidTestBase {
 
     static Logger logger = Logger.getLogger(MatrixTest.class.getName());
 

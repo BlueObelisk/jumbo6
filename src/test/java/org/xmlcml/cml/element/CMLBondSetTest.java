@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * test BondSet.
@@ -255,7 +255,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
     @Test
     public void testCopy() {
         CMLBondSet bondSet1 = (CMLBondSet) bondSet.copy();
-        StringTest.assertEquals("copy", bondSet1.getXMLContent(), bondSet
+        StringTestBase.assertEquals("copy", bondSet1.getXMLContent(), bondSet
                 .getXMLContent());
     }
 

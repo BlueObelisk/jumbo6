@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.test.StringTest;
+import org.xmlcml.euclid.test.StringTestBase;
 
 /**
  * tests torsion.
@@ -67,7 +67,7 @@ public class CMLTorsionTest extends AbstractTest {
     @Test
     public void testCopy() {
         CMLTorsion torsion00 = (CMLTorsion) torsion0.copy();
-        StringTest.assertEquals("atomRefs4", new String[] { "a1", "a2", "a3", "a4" },
+        StringTestBase.assertEquals("atomRefs4", new String[] { "a1", "a2", "a3", "a4" },
                 torsion00.getAtomRefs4());
     }
 
