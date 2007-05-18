@@ -3,7 +3,7 @@
   <groupId>cml</groupId>
   <artifactId>jumbo</artifactId>
   <name>Jumbo</name>
-  <version>5.4-SNAPSHOT</version>
+  <version>5.5-SNAPSHOT</version>
   <description>A Java library for processing CML</description>
   <url>http://sourceforge.net/projects/cml/</url>
   <inceptionYear>1994</inceptionYear>
