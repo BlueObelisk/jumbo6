@@ -1,6 +1,7 @@
 package org.xmlcml.cml.inchi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import net.sf.jniinchi.JniInchiOutput;
 import net.sf.jniinchi.JniInchiWrapper;
 import nu.xom.Text;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -26,15 +29,24 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.EuclidConstants;
 
 /**
- * <p>This class generates the IUPAC International Chemical Identifier (InChI) for
+ * <p>
+ * This class generates the IUPAC International Chemical Identifier (InChI) for
  * a CMLMolecule. It places calls to a JNI wrapper for the InChI C++ library.
  * 
- * <p>If the molecule has 3D coordinates for all of its atoms then they will be
+ * <p>
+ * If the molecule has 3D coordinates for all of its atoms then they will be
  * used, otherwise 2D coordinates will be used if available.
  * 
- * <p>Bond stereochemistry and atom parities are not currently
- * processed. If 3D coordinates are available then the bond stereochemistry and
- * atom parities would be ignored by InChI anyway.
+ * <p>
+ * Bond stereochemistry and atom parities are not currently processed. If 3D
+ * coordinates are available then the bond stereochemistry and atom parities
+ * would be ignored by InChI anyway.
+ * 
+ * <p>
+ * 
+ * <p>
+ * Not typesafe.
+ * </p>
  * 
  * <h3>Example usage</h3>
  * 
@@ -42,7 +54,9 @@ import org.xmlcml.euclid.EuclidConstants;
  * <code>InChIGeneratorFactory factory = new InChIGeneratorFactory();</code><br>
  * <code>// Get InChIGenerator</code><br>
  * <code>InChIGenerator gen = factory.getInChIGenerator(molecule);</code><br>
- * <code></code><br>
+ * <code>// Optionally</code><br>
+ * <code>gen.setProcessingOptions(new ProcessingOptions[]{ProcessingOptions.USE_BONDS});
+ * <code>gen.generate();
  * <code>INCHI_RET ret = gen.getReturnStatus();</code><br>
  * <code>if (ret == INCHI_RET.WARNING) {</code><br>
  * <code>  // InChI generated, but with warning message</code><br>
@@ -56,125 +70,176 @@ import org.xmlcml.euclid.EuclidConstants;
  * <code>String inchi = gen.getInchi();</code><br>
  * <code>String auxinfo = gen.getAuxInfo();</code><br>
  * 
- * <p><tt><b>
+ * <p>
+ * <tt><b>
  * TODO: bond stereochemistry<br>
  * TODO: atom parities.
  * </b></tt>
  * 
  * @author Sam Adams
+ * @author Jim Downing
+ * 
+ * @since 5.3
  */
 public class InChIGenerator implements EuclidConstants {
-	
-	protected JniInchiInput input;
-	
-	protected JniInchiOutput output;
-	
-    
-	/**
-	 * Convention to use when constructing CMLIdentifier to hold InChI.
-	 */
+
+    protected JniInchiInput input;
+
+    protected JniInchiOutput output;
+
+    /**
+     * Convention to use when constructing CMLIdentifier to hold InChI.
+     */
     protected static final String CML_INCHI_CONVENTION = "iupac:inchi";
-    
+
+    private static final Log LOG = LogFactory.getLog(InChIGenerator.class);
+
+    private static final ProcessingOptions[] DEFAULT_PROCESSING_OPTIONS = new ProcessingOptions[] { ProcessingOptions.USE_BONDS };
+
     /**
      * Molecule instance refers to.
      */
     protected CMLMolecule molecule;
-    
+
+    private Problems preInChiProblem = null;
+
+    private ProcessingOptions[] processingOptions = DEFAULT_PROCESSING_OPTIONS;
+
+    private boolean generated;
+
     /**
-     * <p>Constructor. Generates InChI from CMLMolecule.
+     * <p>
+     * Constructor. Generates InChI from CMLMolecule.
      * 
-     * <p>Reads atoms, bonds etc from molecule and converts to format InChI library
+     * <p>
+     * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
      * 
-     * @param molecule      Molecule to generate InChI for.
+     * @param molecule
+     *            Molecule to generate InChI for.
      * @throws CMLException
      */
     protected InChIGenerator(CMLMolecule molecule) throws CMLException {
-    	try {
-    		input = new JniInchiInput("");
-            generateInchiFromCMLMolecule(molecule);
-        } catch (JniInchiException jie) {
-            throw new CMLException("InChI generation failed: " + jie.getMessage());
+        this.molecule = molecule;
+        try {
+            input = new JniInchiInput("");
+        } catch (JniInchiException e) {
+            throw new CMLException(e);
         }
     }
-    
-    
+
     /**
-     * <p>Constructor. Generates InChI from CMLMolecule.
+     * <p>
+     * Constructor. Generates InChI from CMLMolecule.
      * 
-     * <p>Reads atoms, bonds etc from molecule and converts to format InChI library
+     * <p>
+     * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
      * 
-     * @param molecule  Molecule to generate InChI for.
-     * @param options   Space delimited string of options to pass to InChI library.
-     * 					Each option may optionally be preceded by a command line
-     * 					switch (/ or -).
+     * @param molecule
+     *            Molecule to generate InChI for.
+     * @param options
+     *            Space delimited string of options to pass to InChI library.
+     *            Each option may optionally be preceded by a command line
+     *            switch (/ or -).
      * @throws CMLException
      */
-    protected InChIGenerator(CMLMolecule molecule, String options) throws CMLException {
-    	try {
-    		input = new JniInchiInput(options);
-            generateInchiFromCMLMolecule(molecule);
+    protected InChIGenerator(CMLMolecule molecule, String options)
+            throws CMLException {
+        try {
+            input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
-            throw new CMLException("InChI generation failed: " + jie.getMessage());
+            throw new CMLException(jie);
         }
     }
-    
-    
+
     /**
-     * <p>Constructor. Generates InChI from CMLMolecule.
+     * <p>
+     * Constructor. Generates InChI from CMLMolecule.
      * 
-     * <p>Reads atoms, bonds etc from molecule and converts to format InChI library
+     * <p>
+     * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
      * 
-     * @param molecule      Molecule to generate InChI for.
-     * @param options       List of INCHI_OPTION.
+     * @param molecule
+     *            Molecule to generate InChI for.
+     * @param options
+     *            List of INCHI_OPTION.
      * @throws CMLException
      */
-    protected InChIGenerator(CMLMolecule molecule, List options) throws CMLException {
-    	try {
-    		input = new JniInchiInput(options);
-            generateInchiFromCMLMolecule(molecule);
+    protected InChIGenerator(CMLMolecule molecule, List options)
+            throws CMLException {
+        try {
+            input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
-            throw new CMLException("InChI generation failed: " + jie.getMessage());
+            throw new CMLException(jie);
         }
     }
-    
-    
+
     /**
-     * <p>Reads atoms, bonds etc from molecule and converts to format InChI library
+     * Does the work of calling InChI. Can be called only once for each
+     * generator.
+     * 
+     * @throws CMLException
+     * @throws IllegalStateException
+     *             if generation has already been done.
+     * @since 5.4
+     */
+    public void generate() throws CMLException {
+        if (generated) {
+            throw new IllegalStateException("Generator cannot be reused");
+        }
+        generateInchiFromCMLMolecule(molecule);
+        generated = true;
+    }
+
+    /**
+     * Called from the output getter methods for API back compatibility. This
+     * means that errors that formerly throw a checked exception now throw a
+     * Runtime.
+     */
+    private void lazyGenerate() {
+        if (!generated) {
+            try {
+                generate();
+            } catch (CMLException e) {
+                throw new CMLRuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then makes call to library, generating InChI.
-     * 
-     * <p>Used by constructors.
      * 
      * @param molecule
      * @throws CMLException
      */
-    protected void generateInchiFromCMLMolecule(CMLMolecule molecule) throws CMLException {
-    	
-        this.molecule = molecule;
-        
+    protected void generateInchiFromCMLMolecule(CMLMolecule molecule)
+            throws CMLException {
+
         List<CMLAtom> atoms = molecule.getAtoms();
         List<CMLBond> bonds = molecule.getBonds();
-        
+
         // Create map of atom neighbours - required to calculate implicit
         // hydrogen counts
         Map<CMLAtom, List<CMLAtom>> atomNeighbours = new HashMap<CMLAtom, List<CMLAtom>>();
-        for (int i = 0; i < atoms.size(); i ++) {
+        for (int i = 0; i < atoms.size(); i++) {
             atomNeighbours.put(atoms.get(i), new ArrayList<CMLAtom>(4));
         }
-        for (int i = 0; i < bonds.size(); i ++) {
+        for (int i = 0; i < bonds.size(); i++) {
             CMLBond bond = (CMLBond) bonds.get(i);
             CMLAtom at0 = bond.getAtom(0);
             CMLAtom at1 = bond.getAtom(1);
             atomNeighbours.get(at0).add(at1);
             atomNeighbours.get(at1).add(at0);
         }
-        
+
         // Check for 3d coordinates
         boolean all3d = true;
         boolean all2d = true;
-        for (int i = 0; i < atoms.size(); i ++) {
+        for (int i = 0; i < atoms.size(); i++) {
             CMLAtom atom = atoms.get(i);
             if (!atom.hasCoordinates(CMLElement.CoordinateType.CARTESIAN)) {
                 all3d = false;
@@ -183,10 +248,10 @@ public class InChIGenerator implements EuclidConstants {
                 all2d = false;
             }
         }
-        
+
         // Process atoms
         Map<CMLAtom, JniInchiAtom> atomMap = new HashMap<CMLAtom, JniInchiAtom>();
-        for (int i = 0; i < atoms.size(); i ++) {
+        for (int i = 0; i < atoms.size(); i++) {
             CMLAtom atom = atoms.get(i);
             double x, y, z;
             if (all3d) {
@@ -203,15 +268,16 @@ public class InChIGenerator implements EuclidConstants {
                 z = 0;
             }
             String el = atom.getElementType();
-            
+
             JniInchiAtom iatom = input.addAtom(new JniInchiAtom(x, y, z, el));
             atomMap.put(atom, iatom);
-            
-            int charge = atom.getFormalCharge(CMLElement.FormalChargeControl.DEFAULT);
+
+            int charge = atom
+                    .getFormalCharge(CMLElement.FormalChargeControl.DEFAULT);
             if (charge != 0) {
                 iatom.setCharge(charge);
             }
-            
+
             try {
                 int spinMultiplicity = atom.getSpinMultiplicity();
                 if (spinMultiplicity == 0) {
@@ -223,79 +289,92 @@ public class InChIGenerator implements EuclidConstants {
                 } else if (spinMultiplicity == 3) {
                     iatom.setRadical(INCHI_RADICAL.TRIPLET);
                 } else {
-                    throw new CMLException("Failed to generate InChI: Unsupported spin multiplicity: " + spinMultiplicity);
+                    throw new CMLException(
+                            "Failed to generate InChI: Unsupported spin multiplicity: "
+                                    + spinMultiplicity);
                 }
             } catch (CMLRuntimeException cre) {
-                // Spin multiplicity not set 
+                // Spin multiplicity not set
             }
-            
+
             try {
                 int isotopeNumber = atom.getIsotopeNumber();
                 iatom.setIsotopicMass(isotopeNumber);
             } catch (CMLRuntimeException cre) {
-                // Isotope number not set 
+                // Isotope number not set
             }
-            
+
             // Calculate implicit hydrogens
             int hcount = -1;
             try {
                 hcount = atom.getHydrogenCount();
             } catch (CMLRuntimeException cre) {
-                // Hydrogen count not set 
+                // Hydrogen count not set
             }
-            
+
             if (hcount > -1) {
                 List<CMLAtom> neighbours = atomNeighbours.get(atom);
-                for (int j = 0; j < neighbours.size(); j ++) {
-                	CMLAtom neigh = neighbours.get(j);
-                	if (neigh.getElementType().equals("H")) {
-                		hcount --;
-                	}
+                for (int j = 0; j < neighbours.size(); j++) {
+                    CMLAtom neigh = neighbours.get(j);
+                    if (neigh.getElementType().equals("H")) {
+                        hcount--;
+                    }
                 }
-                
+
                 if (hcount < 0) {
-                	throw new CMLRuntimeException("Negative implicit hydrogen count: " + atom);
+                    throw new CMLRuntimeException(
+                            "Negative implicit hydrogen count: " + atom);
                 }
-                
+
                 iatom.setImplicitH(hcount);
             }
         }
-        
-        // Process bonds
-        for (int i = 0; i < bonds.size(); i ++) {
-            CMLBond bond = (CMLBond) bonds.get(i);
-            
-            JniInchiAtom at0 = atomMap.get(bond.getAtom(0));
-            JniInchiAtom at1 = atomMap.get(bond.getAtom(1));
-            
-            INCHI_BOND_TYPE order;
-            String bo = bond.getOrder();
-            
-            if (CMLBond.SINGLE.equals(bo) || CMLBond.SINGLE_S.equals(bo) || bo == null) {
-                order = INCHI_BOND_TYPE.SINGLE;
-            } else if (CMLBond.DOUBLE.equals(bo) || CMLBond.DOUBLE_D.equals(bo)) {
-                order = INCHI_BOND_TYPE.DOUBLE;
-            } else if (CMLBond.TRIPLE.equals(bo) || CMLBond.TRIPLE_T.equals(bo)) {
-                order = INCHI_BOND_TYPE.TRIPLE;
-            } else if (CMLBond.AROMATIC.equals(bo)) {
-                order = INCHI_BOND_TYPE.ALTERN;
-            } else {
-                throw new CMLException("Failed to generate InChI: Unsupported bond order (" + bo + S_RBRAK);
+
+        if (optionsContains(ProcessingOptions.USE_BONDS)) {
+            // Process bonds
+            for (int i = 0; i < bonds.size(); i++) {
+                CMLBond bond = (CMLBond) bonds.get(i);
+
+                JniInchiAtom at0 = atomMap.get(bond.getAtom(0));
+                JniInchiAtom at1 = atomMap.get(bond.getAtom(1));
+
+                INCHI_BOND_TYPE order;
+                String bo = bond.getOrder();
+
+                if (CMLBond.SINGLE.equals(bo) || CMLBond.SINGLE_S.equals(bo)
+                        || bo == null) {
+                    order = INCHI_BOND_TYPE.SINGLE;
+                } else if (CMLBond.DOUBLE.equals(bo)
+                        || CMLBond.DOUBLE_D.equals(bo)) {
+                    order = INCHI_BOND_TYPE.DOUBLE;
+                } else if (CMLBond.TRIPLE.equals(bo)
+                        || CMLBond.TRIPLE_T.equals(bo)) {
+                    order = INCHI_BOND_TYPE.TRIPLE;
+                } else if (CMLBond.AROMATIC.equals(bo)) {
+                    order = INCHI_BOND_TYPE.ALTERN;
+                } else {
+                    LOG.warn("Unsupported bond order: " + bo);
+                    preInChiProblem = Problems.BOND_ORDER;
+                    return;
+                }
+
+                input.addBond(new JniInchiBond(at0, at1, order));
             }
-            
-            
-            input.addBond(new JniInchiBond(at0, at1, order));
+
+            // TODO: Stereo chemistry
         }
-        
-        // TODO: Stereo chemistry
         try {
-        	output = JniInchiWrapper.getInchi(input);
+            output = JniInchiWrapper.getInchi(input);
         } catch (JniInchiException jie) {
-        	throw new CMLException("Failed to generate InChI: " + jie.getMessage());
+            throw new CMLException("Failed to generate InChI: "
+                    + jie.getMessage());
         }
     }
-    
-    
+
+    private boolean optionsContains(ProcessingOptions option) {
+        return Arrays.asList(processingOptions).contains(option);
+    }
+
     /**
      * Adds CMLIdentifier containing InChI to CMLMolecule.
      * 
@@ -304,8 +383,7 @@ public class InChIGenerator implements EuclidConstants {
     public void appendToMolecule() throws CMLException {
         appendToElement(molecule);
     }
-    
-    
+
     /**
      * Adds CMLIdentifier containing InChI to specified element.
      * 
@@ -316,54 +394,105 @@ public class InChIGenerator implements EuclidConstants {
         if (output.getInchi() == null) {
             throw new CMLException("Failed to generate InChI");
         }
-        
+
         CMLIdentifier identifier = new CMLIdentifier();
         identifier.setConvention(CML_INCHI_CONVENTION);
         identifier.appendChild(new Text(output.getInchi()));
-        
+
         element.appendChild(identifier);
     }
-    
+
     /**
-     * Gets return status from InChI process.  OKAY and WARNING indicate
-     * InChI has been generated, in all other cases InChI generation
-     * has failed.
+     * Gets return status from InChI process. OKAY and WARNING indicate InChI
+     * has been generated, in all other cases InChI generation has failed.
+     * 
      * @return INCHI_RET
      */
     public INCHI_RET getReturnStatus() {
-        return(output.getReturnStatus());
+        lazyGenerate();
+        return (output.getReturnStatus());
     }
-    
+
     /**
      * Gets generated InChI string.
+     * 
      * @return string
      */
     public String getInchi() {
-    	return(output.getInchi());
+        lazyGenerate();
+        return (output.getInchi());
     }
-    
+
     /**
      * Gets generated InChI string.
+     * 
      * @return string
      */
     public String getAuxInfo() {
-    	return(output.getAuxInfo());
+        lazyGenerate();
+        return (output.getAuxInfo());
     }
-    
+
     /**
      * Gets generated (error/warning) messages.
+     * 
      * @return string
      */
     public String getMessage() {
-    	return(output.getMessage());
+        lazyGenerate();
+        return (output.getMessage());
     }
-    
+
     /**
      * Gets generated log.
+     * 
      * @return string
      */
     public String getLog() {
-    	return(output.getLog());
+        lazyGenerate();
+        return (output.getLog());
     }
-    
+
+    /**
+     * Get the array (for convenience) of processing options used by this
+     * generator.
+     * 
+     * @return
+     * @since 5.4
+     */
+    public ProcessingOptions[] getProcessingOptions() {
+        return processingOptions;
+    }
+
+    /**
+     * Set the processing options for this generator to use.
+     * 
+     * @param processingOptions
+     * @since 5.4
+     */
+    public void setProcessingOptions(ProcessingOptions[] processingOptions) {
+        this.processingOptions = processingOptions;
+    }
+
+    /**
+     * Has this generator been used (or is it safe to call generate?).
+     * 
+     * @return
+     * @since 5.4
+     */
+    public boolean isGenerated() {
+        return generated;
+    }
+
+    /**
+     * If a problem occurred before we got to InChI it will be here, else this
+     * will return null.
+     * 
+     * @return The problem
+     * @since 5.4
+     */
+    public Problems getPreInChiProblem() {
+        return preInChiProblem;
+    }
+
 }

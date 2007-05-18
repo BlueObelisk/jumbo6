@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.INCHI_RET;
+import net.sf.jniinchi.JniInchiNativeCodeLoader;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -132,6 +133,7 @@ public class InChIGeneratorTest {
 	 */
     @Test
 	public void testInChIGeneratorCMLAtomContainer() throws CMLException {
+        JniInchiNativeCodeLoader.setDebug(true);
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
 		
 		CMLMolecule lAlanine = getLAlanineInput();

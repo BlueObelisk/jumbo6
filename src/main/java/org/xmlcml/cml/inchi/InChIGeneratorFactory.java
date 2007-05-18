@@ -43,7 +43,7 @@ public class InChIGeneratorFactory {
         try {
             JniInchiWrapper.loadLibrary();
         } catch (LoadNativeLibraryException lnle) {
-            throw new CMLException("Unable to load native code; " + lnle.getMessage());
+            throw new CMLException("Unable to load native code; " + lnle.getMessage(), lnle);
         }
     }
     
