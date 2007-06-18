@@ -125,11 +125,11 @@ public class CMLBondSet extends AbstractBondSet {
      *
      * @param bonds
      *            must all be in same molecule
-     * @throws CMLException
+     * @throws CMLRuntimeException
      *             one or more bonds has no id
      *
      */
-    public CMLBondSet(CMLBond[] bonds) throws CMLException {
+    public CMLBondSet(CMLBond[] bonds) throws CMLRuntimeException {
         addBonds(bonds);
     }
 

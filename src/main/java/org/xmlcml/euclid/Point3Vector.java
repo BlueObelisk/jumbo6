@@ -49,17 +49,17 @@ public class Point3Vector implements EuclidConstants {
      * constructor.
      * 
      * @param flarray
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      */
-    public Point3Vector(double[] flarray) throws EuclidException {
+    public Point3Vector(double[] flarray) throws EuclidRuntimeException {
         this();
         if (flarray == null) {
-            throw new EuclidException("null array");
+            throw new EuclidRuntimeException("null array");
         }
         int count = 0;
         int n = flarray.length / 3;
         if (flarray.length != 3 * n) {
-            throw new EuclidException("array length must be multiple of 3");
+            throw new EuclidRuntimeException("array length must be multiple of 3");
         }
         for (int i = 0; i < n; i++) {
             Point3 p = new Point3(flarray[count++], flarray[count++],
@@ -74,11 +74,11 @@ public class Point3Vector implements EuclidConstants {
      * @param x
      * @param y
      * @param z
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * 
      */
     public Point3Vector(int n, double[] x, double[] y, double[] z)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         this();
         Util.check(x, n);
         Util.check(y, n);
@@ -91,15 +91,15 @@ public class Point3Vector implements EuclidConstants {
      * constructor from RealArray - by REFERENCE
      * 
      * @param m
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                size of flarray must be multiple of 3
      */
-    public Point3Vector(RealArray m) throws EuclidException {
+    public Point3Vector(RealArray m) throws EuclidRuntimeException {
         this();
         double[] marray = m.getArray();
         int count = marray.length / 3;
         if (marray == null || marray.length != count * 3) {
-            throw new EuclidException("null array or count not divisible by 3");
+            throw new EuclidRuntimeException("null array or count not divisible by 3");
         }
         int j = 0;
         for (int i = 0; i < count; i++) {
@@ -210,9 +210,9 @@ public class Point3Vector implements EuclidConstants {
     public Point3 get(int i) {
         return (Point3) vector.get(i);
     }
-    private void checkConformable(Point3Vector v) throws EuclidException {
+    private void checkConformable(Point3Vector v) throws EuclidRuntimeException {
         if (size() != v.size()) {
-            throw new EuclidException("incompatible Point3Vector sizes: "
+            throw new EuclidRuntimeException("incompatible Point3Vector sizes: "
                     + size() + S_SLASH + v.size());
         }
     }
@@ -225,15 +225,15 @@ public class Point3Vector implements EuclidConstants {
         vector.add(p);
     }
     /**
-     * sets a given coordinate (i) to v
+     * sets a given coordinate (i) to vector
      * 
      * @param v
      * @param i
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                i is >= number of current points (cann use this to
      *                increase size of Point3Vector)
      */
-    public void setElementAt(Vector3 v, int i) throws EuclidException {
+    public void setElementAt(Vector3 v, int i) throws EuclidRuntimeException {
         vector.set(i, new Point3(v));
     }
     /*--
@@ -287,19 +287,19 @@ public class Point3Vector implements EuclidConstants {
     /**
      * gets sums of squared distances between points.
      * 
-     * result = sigma[i = 1, npoints] (this.point(i)getDistanceFrom(v.point(i)) **
+     * result = sigma[i = 1, npoints] (this.point(i)getDistanceFrom(vector.point(i)) **
      * 2
      * 
      * @param v
      *            the other vector
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             vectors not of same length
      * @return the sums of squared distances
      */
-    public double getSigmaDeltaSquared(Point3Vector v) throws EuclidException {
+    public double getSigmaDeltaSquared(Point3Vector v) throws EuclidRuntimeException {
         int np = size();
         if (v.size() != np) {
-            throw new EuclidException("Vectors of different lengths");
+            throw new EuclidRuntimeException("Vectors of different lengths");
         }
         double d = 0.0;
         for (int i = 0; i < np; i++) {
@@ -315,15 +315,15 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param is
      * @return vector
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                an element of <TT>is</TT> is outside range of <TT>this</TT>
      */
-    public Point3Vector subArray(IntSet is) throws EuclidException {
+    public Point3Vector subArray(IntSet is) throws EuclidRuntimeException {
         Point3Vector sub = new Point3Vector();
         for (int i = 0; i < is.size(); i++) {
             int ix = is.elementAt(i);
             if (ix < 0 || ix >= this.size()) {
-                throw new EuclidException();
+                throw new EuclidRuntimeException("element out of range: "+ix);
             }
             sub.addElement(new Point3(this.getPoint3(ix)));
         }
@@ -333,11 +333,11 @@ public class Point3Vector implements EuclidConstants {
      * form the point+point sum for two vectors of points
      * 
      * @param pv2
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                pv2 is different size from <TT>this</TT>
      * @return vector
      */
-    public Point3Vector plus(Point3Vector pv2) throws EuclidException {
+    public Point3Vector plus(Point3Vector pv2) throws EuclidRuntimeException {
         checkConformable(pv2);
         Point3Vector pv1 = new Point3Vector();
         for (int i = 0; i < this.size(); i++) {
@@ -351,10 +351,10 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param pv2
      * @return vector
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                pv2 is different size from <TT>this</TT>
      */
-    public Point3Vector subtract(Point3Vector pv2) throws EuclidException {
+    public Point3Vector subtract(Point3Vector pv2) throws EuclidRuntimeException {
         checkConformable(pv2);
         Point3Vector pv1 = new Point3Vector();
         for (int i = 0; i < size(); i++) {
@@ -451,18 +451,9 @@ public class Point3Vector implements EuclidConstants {
         // subtract centroid from each coord and sum outerproduct of result
         for (int i = 0; i < size(); i++) {
             Point3 temp = new Point3(this.getPoint3(i).subtract(centre));
-            RealArray delta = null;
-            try {
-                delta = new RealArray(3, temp.getArray());
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            RealArray delta = new RealArray(3, temp.getArray());
             RealSquareMatrix op = RealSquareMatrix.outerProduct(delta);
-            try {
-                tensor = tensor.plus(op);
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            tensor = tensor.plus(op);
         }
         return tensor;
     }
@@ -511,13 +502,13 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param is
      *            of exactly 2 integers
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>is</TT> must have exactly 2 points
      * @return distance
      */
-    public double distance(IntSet is) throws EuclidException {
+    public double distance(IntSet is) throws EuclidRuntimeException {
         if (is.size() != 2) {
-            throw new EuclidException("int set must have exactly 2 points");
+            throw new EuclidRuntimeException("int set must have exactly 2 points");
         }
         return distance(is.elementAt(0), is.elementAt(1));
     }
@@ -530,11 +521,11 @@ public class Point3Vector implements EuclidConstants {
      *            serial of second point
      * @param i3
      *            serial of third point
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                two points are coincident or identical
      * @return the angle
      */
-    public Angle angle(int i1, int i2, int i3) throws EuclidException {
+    public Angle angle(int i1, int i2, int i3) throws EuclidRuntimeException {
         Angle a;
         a = Point3.getAngle(getPoint3(i1), getPoint3(i2), getPoint3(i3));
         return a;
@@ -544,15 +535,15 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param is
      *            of exactly 3 integers
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>is</TT> must have exactly 3 points
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                two points are coincident or identical
      * @return the angle
      */
-    public Angle angle(IntSet is) throws EuclidException, EuclidException {
+    public Angle angle(IntSet is) throws EuclidRuntimeException {
         if (is.size() != 3) {
-            throw new EuclidException("size must be 3");
+            throw new EuclidRuntimeException("size must be 3");
         }
         return angle(is.elementAt(0), is.elementAt(1), is.elementAt(2));
     }
@@ -567,12 +558,12 @@ public class Point3Vector implements EuclidConstants {
      *            serial of third point
      * @param i4
      *            serial of fourth point
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                either 2 points are identical or coincident or 3
      *                successive points are colinear
      * @return the angle
      */
-    public Angle torsion(int i1, int i2, int i3, int i4) throws EuclidException {
+    public Angle torsion(int i1, int i2, int i3, int i4) throws EuclidRuntimeException {
         return Point3.getTorsion(getPoint3(i1), getPoint3(i2), getPoint3(i3),
                 getPoint3(i4));
     }
@@ -581,16 +572,16 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param is
      *            of exactly 3 integers
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>is</TT> must have exactly 4 points
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                either 2 points are identical or coincident or 3
      *                successive points are colinear
      * @return the angle
      */
-    public Angle torsion(IntSet is) throws EuclidException, EuclidException {
+    public Angle torsion(IntSet is) throws EuclidRuntimeException {
         if (is.size() != 4) {
-            throw new EuclidException("size must be 4");
+            throw new EuclidRuntimeException("size must be 4");
         }
         return torsion(is.elementAt(0), is.elementAt(1), is.elementAt(2), is
                 .elementAt(3));
@@ -624,33 +615,29 @@ public class Point3Vector implements EuclidConstants {
      * @param eigval
      * @param eigvect
      * @param illCond
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                must have at least 3 points
      */
     public void inertialAxes(RealArray eigval, RealSquareMatrix eigvect,
-            EuclidException illCond) throws EuclidException {
+    		EuclidRuntimeException illCond) throws EuclidRuntimeException {
         RealArray val = new RealArray(3);
         RealSquareMatrix vect = new RealSquareMatrix(3);
         illCond = null;
         eigval.shallowCopy(val);
-        try {
-            eigvect.shallowCopy(vect);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        eigvect.shallowCopy(vect);
     }
     /**
      * get best plane
      * 
      * @return plane
      * 
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                must have at least 3 points
      */
-    public Plane3 bestPlane() throws EuclidException {
+    public Plane3 bestPlane() throws EuclidRuntimeException {
         RealSquareMatrix eigvect = new RealSquareMatrix(3);
         RealArray eigval = new RealArray(3);
-        EuclidException illCond = null;
+        EuclidRuntimeException illCond = null;
         inertialAxes(eigval, eigvect, illCond);
         // smallest eigenvalue
         RealArray temp = eigvect.extractRowData(2);
@@ -809,11 +796,7 @@ public class Point3Vector implements EuclidConstants {
     public double rms(Point3Vector c) {
         RealArray tt = getXYZ();
         RealArray cc = c.getXYZ();
-        try {
-            tt = tt.subtract(cc);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        tt = tt.subtract(cc);
         return Math.sqrt(tt.innerProduct())
                 / (new Double(size())).doubleValue();
     }
@@ -879,17 +862,17 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param ref
      * @return transformation
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                some unusual geometry (for example one coordinate set is
      *                linear, has coincident points, etc.)
      */
     public Transform3 alignUsing3Points(Point3Vector ref)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         if (this.size() != ref.size()) {
-            throw new EuclidException("this and ref must be same size");
+            throw new EuclidRuntimeException("this and ref must be same size");
         }
         if (this.size() < 3) {
-            throw new EuclidException("Need at least 3 points");
+            throw new EuclidRuntimeException("Need at least 3 points");
         }
         int[] serial = get3SeparatedPoints();
         Point3Vector thisVector = new Point3Vector();
@@ -943,11 +926,11 @@ public class Point3Vector implements EuclidConstants {
      * smallest value of p1-p3-p2
      * 
      * @return array with serial numbers of points
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                this or ref do not have 3 points or one has colinear or
      *                coincident points
      */
-    public int[] get3SeparatedPoints() throws EuclidException {
+    public int[] get3SeparatedPoints() throws EuclidRuntimeException {
         int[] serial = new int[3];
         Point3 c1 = this.getCentroid();
         serial[0] = this.getFurthestPointFrom(c1);
@@ -955,15 +938,15 @@ public class Point3Vector implements EuclidConstants {
         serial[1] = this.getFurthestPointFrom(p1);
         Point3 p2 = this.getPoint3(serial[1]);
         if (p1.isEqualTo(p2)) {
-            throw new EuclidException("Cannot find 3 separated points");
+            throw new EuclidRuntimeException("Cannot find 3 separated points");
         }
         serial[2] = this.getPointMakingSmallestAngle(p1, p2);
         Point3 p3 = this.getPoint3(serial[2]);
         if (p1.isEqualTo(p3) || p2.isEqualTo(p3)) {
-            throw new EuclidException("Cannot find 3 separated points");
+            throw new EuclidRuntimeException("Cannot find 3 separated points");
         }
         if ((p3.subtract(p1)).cross(p3.subtract(p2)).isZero()) {
-            throw new EuclidException("Cannot find 3 non-colinear points");
+            throw new EuclidRuntimeException("Cannot find 3 non-colinear points");
         }
         return serial;
     }
@@ -978,17 +961,17 @@ public class Point3Vector implements EuclidConstants {
      * @param ref
      *            reference points
      * @return transform such that ttansform * this = ref
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                this or ref do not have 3 points or one has colinear or
      *                coincident points
      */
     public Transform3 align3PointVectors(Point3Vector ref)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         if (this.size() != 3) {
-            throw new EuclidException("this requires 3 points");
+            throw new EuclidRuntimeException("this requires 3 points");
         }
         if (ref.size() != 3) {
-            throw new EuclidException("ref requires 3 points");
+            throw new EuclidRuntimeException("ref requires 3 points");
         }
         RealSquareMatrix unit = new RealSquareMatrix(3, new double[] { 1., 0.,
                 0., 0., 1., 0., 0., 0., 1. });
@@ -1037,11 +1020,11 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param ref
      * @return transformation
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                some unusual geometry (for example one coordinate set is
      *                linear, has coincident points, etc.)
      */
-    public Transform3 roughAlign(Point3Vector ref) throws EuclidException {
+    public Transform3 roughAlign(Point3Vector ref) throws EuclidRuntimeException {
         int nn = ref.size();
         if (nn < 3 || nn != size()) {
             return new Transform3();
@@ -1057,17 +1040,12 @@ public class Point3Vector implements EuclidConstants {
         int i1, i2, i3;
         RealSquareMatrix eigvec = new RealSquareMatrix(4);
         RealArray eigval = new RealArray(4);
-        EuclidException illCond = null;
+        EuclidRuntimeException illCond = null;
         pv2.inertialAxes(eigval, eigvec, illCond);
         if (illCond != null) {
             throw illCond;
         }
-        Transform3 axes = new Transform3();
-        try {
-            axes = new Transform3(eigvec);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        Transform3 axes = new Transform3(eigvec);
         axes.transpose();
         Point3Vector pv22 = new Point3Vector(pv2);
         pv22.transform(axes);
@@ -1113,12 +1091,7 @@ public class Point3Vector implements EuclidConstants {
         // (s2.transpose().concatenate(s1)).transpose();
         RealSquareMatrix s2 = new RealSquareMatrix(t2);
         s2.transpose();
-        Transform3 r = new Transform3();
-        try {
-            r = new Transform3(s2).concatenate(t1);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        Transform3 r = new Transform3(s2).concatenate(t1);
         return r;
     }
     /**
@@ -1128,11 +1101,11 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @param ref
      * @return transformation
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                some unusual geometry (for example one coordinate set is
      *                linear, has coincident points, etc.)
      */
-    public Transform3 fitTo(Point3Vector ref) throws EuclidException {
+    public Transform3 fitTo(Point3Vector ref) throws EuclidRuntimeException {
         // these should be set as parameters?
         double damp = 1.0;
         double converge = 0.0002;
@@ -1146,12 +1119,7 @@ public class Point3Vector implements EuclidConstants {
         /**
          * roughly rotate moving molecule onto reference one
          */
-        Transform3 t = null;
-        try {
-            t = movtmp.roughAlign(reftmp);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        Transform3 t = movtmp.roughAlign(reftmp);
         movtmp.transform(t);
         RealArray shift = new RealArray(3);
         int NCYC = 20;

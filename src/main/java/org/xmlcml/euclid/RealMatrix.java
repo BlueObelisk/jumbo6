@@ -62,11 +62,11 @@ public class RealMatrix implements EuclidConstants {
      * @param rows
      * @param cols
      * @param array
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                size of array is not rows*cols
      */
     public RealMatrix(int rows, int cols, double[] array)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         this(rows, cols);
         check(rows, cols, array);
         this.rows = rows;
@@ -112,18 +112,18 @@ public class RealMatrix implements EuclidConstants {
      *            lowest row index
      * @param hirow
      *            highest row index
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                impossible value of hirow, hicol, lowrow, lowcol
      */
     public RealMatrix(RealMatrix m, int lowrow, int hirow, int lowcol, int hicol)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         this(hirow - lowrow + 1, hicol - lowcol + 1);
         if (hirow >= m.getRows() || lowrow < 0) {
-            throw new EuclidException("bad row index: " + lowrow + S_SLASH + hirow
+            throw new EuclidRuntimeException("bad row index: " + lowrow + S_SLASH + hirow
                     + " outside 0/" + m.getRows());
         }
         if (hicol >= m.getCols() || lowcol < 0) {
-            throw new EuclidException("bad col index: " + lowcol + S_SLASH + hicol
+            throw new EuclidRuntimeException("bad col index: " + lowcol + S_SLASH + hicol
                     + " outside 0/" + m.getCols());
         }
         for (int i = 0, mrow = lowrow; i < rows; i++, mrow++) {
@@ -191,14 +191,14 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param m
      *            natrix to copy from
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m has rows of different lengths
      */
-    public RealMatrix(double[][] m) throws EuclidException {
+    public RealMatrix(double[][] m) throws EuclidRuntimeException {
         this(m.length, m[0].length);
         for (int i = 0; i < rows; i++) {
             if (m[i].length != cols) {
-                throw new EuclidException("non-rectangular matrix cols: "
+                throw new EuclidRuntimeException("non-rectangular matrix cols: "
                         + cols + " row: " + i + " length: " + m[i].length);
             }
             for (int j = 0; j < cols; j++) {
@@ -283,31 +283,31 @@ public class RealMatrix implements EuclidConstants {
                     }
                 }
             }
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             ok = false;
         }
         return ok;
     }
     // check that plus, subtract is possible
-    private void checkConformable(RealMatrix m) throws EuclidException {
+    private void checkConformable(RealMatrix m) throws EuclidRuntimeException {
         if (rows != m.rows || cols != m.cols) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
     }
     // check that multiply is possible
-    private void checkConformable2(RealMatrix m) throws EuclidException {
+    private void checkConformable2(RealMatrix m) throws EuclidRuntimeException {
         if (m.rows != this.cols) {
-            throw new EuclidException("unequal matrices (" + this.cols + ", "
+            throw new EuclidRuntimeException("unequal matrices (" + this.cols + ", "
                     + m.rows + S_RBRAK);
         }
     }
     private void check(int rows, int cols, double[] array)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         if (array == null) {
-            throw new EuclidException("RealMatrix(null)");
+            throw new EuclidRuntimeException("RealMatrix(null)");
         }
         if (array.length != rows * cols) {
-            throw new EuclidException("rows * cols (" + rows + S_STAR + cols
+            throw new EuclidRuntimeException("rows * cols (" + rows + S_STAR + cols
                     + ") != array (" + array.length + S_RBRAK);
         }
     }
@@ -316,11 +316,11 @@ public class RealMatrix implements EuclidConstants {
      * unaltered
      * 
      * @param m2
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public RealMatrix plus(RealMatrix m2) throws EuclidException {
+    public RealMatrix plus(RealMatrix m2) throws EuclidRuntimeException {
         RealMatrix m = new RealMatrix(m2.rows, m2.cols);
         checkConformable(m2);
         for (int i = 0; i < rows; i++) {
@@ -335,11 +335,11 @@ public class RealMatrix implements EuclidConstants {
      * is unaltered
      * 
      * @param m2
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public RealMatrix subtract(RealMatrix m2) throws EuclidException {
+    public RealMatrix subtract(RealMatrix m2) throws EuclidRuntimeException {
         RealMatrix m = new RealMatrix(m2.rows, m2.cols);
         checkConformable(m2);
         for (int i = 0; i < rows; i++) {
@@ -366,11 +366,11 @@ public class RealMatrix implements EuclidConstants {
      * result = 'this' * m; (order matters)
      * 
      * @param m
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public RealMatrix multiply(RealMatrix m) throws EuclidException {
+    public RealMatrix multiply(RealMatrix m) throws EuclidRuntimeException {
         checkConformable2(m);
         RealMatrix m1 = new RealMatrix(rows, m.cols);
         for (int i = 0; i < rows; i++) {
@@ -403,10 +403,10 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param m
      *            matrix to multiply by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      */
-    public void multiplyEquals(RealMatrix m) throws EuclidException {
+    public void multiplyEquals(RealMatrix m) throws EuclidRuntimeException {
         RealMatrix mm = this.multiply(m);
         this.rows = mm.rows;
         this.cols = mm.cols;
@@ -418,9 +418,9 @@ public class RealMatrix implements EuclidConstants {
     }
     /**
      * subtract value from each row. this[i,j] = this[i,j] - d[j] modifies this
-     * 
      * @param d
      *            array of doubles to subtract
+     * @throws EuclidRuntimeException
      */
     /*--
      public void translateByRow(double[] d) {
@@ -432,13 +432,13 @@ public class RealMatrix implements EuclidConstants {
      }
      }
      --*/
-    /* private */void checkColumns(double[] d) throws EuclidException {
+    void checkColumns(double[] d) throws EuclidRuntimeException {
         if (d.length != cols) {
             throw new EuclidRuntimeException("array size " + d.length
                     + "!= cols length " + cols);
         }
     }
-    private void checkRows(double[] d) throws EuclidException {
+    private void checkRows(double[] d) throws EuclidRuntimeException {
         if (d.length != rows) {
             throw new EuclidRuntimeException("array size " + d.length
                     + "!= rows length " + rows);
@@ -450,9 +450,9 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param d
      *            array of doubles to subtract
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void translateByColumn(double[] d) throws EuclidException {
+    public void translateByColumn(double[] d) throws EuclidRuntimeException {
         checkRows(d);
         for (int i = cols - 1; i >= 0; --i) {
             for (int j = rows - 1; j >= 0; --j) {
@@ -465,13 +465,13 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param f
      *            vector to multiply
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() differs from cols
      * @return transformed array
      */
-    public RealArray multiply(RealArray f) throws EuclidException {
+    public RealArray multiply(RealArray f) throws EuclidRuntimeException {
         if (f.size() != this.cols) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
         double[] temp = new double[rows];
         double[] farray = f.getArray();
@@ -490,12 +490,12 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param f
      *            array to divide by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and rows differ
      */
-    public void columnwiseDivide(RealArray f) throws EuclidException {
+    public void columnwiseDivide(RealArray f) throws EuclidRuntimeException {
         if (this.cols != f.size()) {
-            throw new EuclidException("unequal matrices " + this.cols + S_SLASH
+            throw new EuclidRuntimeException("unequal matrices " + this.cols + S_SLASH
                     + f.size());
         }
         for (int i = 0; i < rows; i++) {
@@ -509,11 +509,11 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param row
      * @param col
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of row or column
      * @return the element at row,col
      */
-    public double elementAt(int row, int col) throws EuclidException {
+    public double elementAt(int row, int col) throws EuclidRuntimeException {
         checkRow(row);
         checkColumn(col);
         return flmat[row][col];
@@ -524,19 +524,19 @@ public class RealMatrix implements EuclidConstants {
      * @throws EuclidRuntimeException
      *             if it isn't
      */
-    private void checkRow(int row) throws EuclidException {
+    private void checkRow(int row) throws EuclidRuntimeException {
         if (row < 0 || row >= rows)
-            throw new EuclidException("Bad value of row: " + row + S_SLASH + rows);
+            throw new EuclidRuntimeException("Bad value of row: " + row + S_SLASH + rows);
     }
     /**
      * checks a col is in range.
      * 
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if it isn't
      */
-    private void checkColumn(int col) throws EuclidException {
+    private void checkColumn(int col) throws EuclidRuntimeException {
         if (col < 0 || col >= cols)
-            throw new EuclidException("Bad value of col: " + col + S_SLASH + cols);
+            throw new EuclidRuntimeException("Bad value of col: " + col + S_SLASH + cols);
     }
     /**
      * extracts a given element.
@@ -544,9 +544,9 @@ public class RealMatrix implements EuclidConstants {
      * @param rowcol
      *            represents row,col
      * @return the element at row,col
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double elementAt(Int2 rowcol) throws EuclidException {
+    public double elementAt(Int2 rowcol) throws EuclidRuntimeException {
         return elementAt(rowcol.elementAt(0), rowcol.elementAt(1));
     }
     /**
@@ -555,9 +555,9 @@ public class RealMatrix implements EuclidConstants {
      * @param row
      * @param col
      * @param f
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void setElementAt(int row, int col, double f) throws EuclidException {
+    public void setElementAt(int row, int col, double f) throws EuclidRuntimeException {
         checkRow(row);
         checkColumn(col);
         flmat[row][col] = f;
@@ -572,13 +572,7 @@ public class RealMatrix implements EuclidConstants {
         if (temp == null) {
             throw new EuclidRuntimeException("bug; null index for largest element");
         }
-        double d = Double.NaN;
-        try {
-            d = this.elementAt(temp);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException("bug: " + e);
-        }
-        return d;
+        return this.elementAt(temp);
     }
     /**
      * get index of largest element.
@@ -609,9 +603,9 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param jcol
      * @return the value
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double largestElementInColumn(int jcol) throws EuclidException {
+    public double largestElementInColumn(int jcol) throws EuclidRuntimeException {
         return this.elementAt(indexOfLargestElementInColumn(jcol), jcol);
     }
     /**
@@ -620,10 +614,10 @@ public class RealMatrix implements EuclidConstants {
      * @param jcol
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of jcol
      */
-    public int indexOfLargestElementInColumn(int jcol) throws EuclidException {
+    public int indexOfLargestElementInColumn(int jcol) throws EuclidRuntimeException {
         checkColumn(jcol);
         int imax = -1;
         double max = Double.NEGATIVE_INFINITY;
@@ -641,10 +635,10 @@ public class RealMatrix implements EuclidConstants {
      * @param irow
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of irow
      */
-    public int indexOfLargestElementInRow(int irow) throws EuclidException {
+    public int indexOfLargestElementInRow(int irow) throws EuclidRuntimeException {
         checkRow(irow);
         int imax = -1;
         double max = Double.NEGATIVE_INFINITY;
@@ -662,10 +656,10 @@ public class RealMatrix implements EuclidConstants {
      * @param jcol
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of jcol
      */
-    public int indexOfSmallestElementInColumn(int jcol) throws EuclidException {
+    public int indexOfSmallestElementInColumn(int jcol) throws EuclidRuntimeException {
         checkColumn(jcol);
         int imin = -1;
         double min = Double.POSITIVE_INFINITY;
@@ -685,12 +679,12 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param irow
      * @return value (0 if no columns)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double largestElementInRow(int irow) throws EuclidException {
+    public double largestElementInRow(int irow) throws EuclidRuntimeException {
         int idx = indexOfLargestElementInRow(irow);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(irow, idx);
     }
@@ -700,10 +694,10 @@ public class RealMatrix implements EuclidConstants {
      * @param irow
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of irow
      */
-    public int indexOfSmallestElementInRow(int irow) throws EuclidException {
+    public int indexOfSmallestElementInRow(int irow) throws EuclidRuntimeException {
         checkRow(irow);
         int imin = -1;
         double min = Double.POSITIVE_INFINITY;
@@ -719,9 +713,9 @@ public class RealMatrix implements EuclidConstants {
      * get value of smallest element.
      * 
      * @return value
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double smallestElement() throws EuclidException {
+    public double smallestElement() throws EuclidRuntimeException {
         Int2 temp = indexOfSmallestElement();
         return this.elementAt(temp);
     }
@@ -750,13 +744,13 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param jcol
      * @return smallest value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                bad value of jcol
      */
-    public double smallestElementInColumn(int jcol) throws EuclidException {
+    public double smallestElementInColumn(int jcol) throws EuclidRuntimeException {
         int idx = indexOfSmallestElementInColumn(jcol);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(idx, jcol);
     }
@@ -765,13 +759,13 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param irow
      * @return smallest value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                bad value of irow
      */
-    public double smallestElementInRow(int irow) throws EuclidException {
+    public double smallestElementInRow(int irow) throws EuclidRuntimeException {
         int idx = indexOfSmallestElementInRow(irow);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(irow, idx);
     }
@@ -803,21 +797,11 @@ public class RealMatrix implements EuclidConstants {
      */
     public boolean isOrthogonal() {
         for (int i = 1; i < rows; i++) {
-            RealArray rowi = null;
-            try {
-                rowi = extractRowData(i);
-            } catch (EuclidException e) {
-                Util.BUG(e);
-            }
+            RealArray rowi = extractRowData(i);
             double dot = 0.0;
             for (int j = i + 1; j < rows; j++) {
-                RealArray rowj;
-                try {
-                    rowj = extractRowData(j);
-                    dot = rowi.dotProduct(rowj);
-                } catch (EuclidException e) {
-                    Util.BUG(e);
-                }
+                RealArray rowj = extractRowData(j);
+                dot = rowi.dotProduct(rowj);
                 if (!Real.isZero(dot))
                     return false;
             }
@@ -830,10 +814,10 @@ public class RealMatrix implements EuclidConstants {
      * @param i
      *            the row
      * @return length of row
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad row number
      */
-    public double euclideanRowLength(int i) throws EuclidException {
+    public double euclideanRowLength(int i) throws EuclidRuntimeException {
         checkRow(i);
         RealArray f = extractRowData(i);
         return f.euclideanLength();
@@ -846,13 +830,7 @@ public class RealMatrix implements EuclidConstants {
     public RealArray euclideanRowLengths() {
         RealArray fa = new RealArray(rows);
         for (int i = 0; i < rows; i++) {
-            try {
-                fa.setElementAt(i, this.euclideanRowLength(i));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                Util.BUG(e);
-            } catch (EuclidException e) {
-                Util.BUG(e);
-            }
+            fa.setElementAt(i, this.euclideanRowLength(i));
         }
         return fa;
     }
@@ -862,9 +840,9 @@ public class RealMatrix implements EuclidConstants {
      * @param jcol
      *            the column
      * @return the length
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double euclideanColumnLength(int jcol) throws EuclidException {
+    public double euclideanColumnLength(int jcol) throws EuclidRuntimeException {
         RealArray f = extractColumnData(jcol);
         return f.euclideanLength();
     }
@@ -891,10 +869,10 @@ public class RealMatrix implements EuclidConstants {
      * @param col
      *            the column
      * @return the column data (or length rows)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad index
      */
-    public RealArray extractColumnData(int col) throws EuclidException {
+    public RealArray extractColumnData(int col) throws EuclidRuntimeException {
         checkColumn(col);
         RealArray fa = new RealArray(rows);
         for (int i = 0; i < rows; i++) {
@@ -908,10 +886,10 @@ public class RealMatrix implements EuclidConstants {
      * @param row
      *            the column
      * @return the row data (of length cols)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad index
      */
-    public RealArray extractRowData(int row) throws EuclidException {
+    public RealArray extractRowData(int row) throws EuclidRuntimeException {
         checkRow(row);
         return new RealArray(flmat[row]);
     }
@@ -954,11 +932,7 @@ public class RealMatrix implements EuclidConstants {
      */
     public void normaliseByColumns() {
         RealArray ra = euclideanColumnLengths();
-        try {
-            this.columnwiseDivide(ra);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException("bug: " + e);
-        }
+        this.columnwiseDivide(ra);
     }
     /**
      * transpose matrix - creates new Matrix
@@ -972,12 +946,7 @@ public class RealMatrix implements EuclidConstants {
                 m[j][i] = this.flmat[i][j];
             }
         }
-        RealMatrix mm = null;
-        try {
-            mm = new RealMatrix(m);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        RealMatrix mm = new RealMatrix(m);
         return mm;
     }
     /**
@@ -1068,10 +1037,10 @@ public class RealMatrix implements EuclidConstants {
      * @param column
      * @param f
      *            data must be of length rows
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void replaceColumnData(int column, RealArray f)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         checkRows(f);
         checkColumn(column);
         double[] temp = f.getArray();
@@ -1079,33 +1048,33 @@ public class RealMatrix implements EuclidConstants {
             flmat[i][column] = temp[i];
         }
     }
-    private void checkRows(RealArray f) throws EuclidException {
+    private void checkRows(RealArray f) throws EuclidRuntimeException {
         if (f == null || f.size() != rows) {
-            throw new EuclidException("incompatible value of array size: "
+            throw new EuclidRuntimeException("incompatible value of array size: "
                     + f.size() + S_SLASH + rows);
         }
     }
-    private void checkColumns(RealArray f) throws EuclidException {
+    private void checkColumns(RealArray f) throws EuclidRuntimeException {
         if (f == null || f.size() != cols) {
-            throw new EuclidException("incompatible value of array size: "
+            throw new EuclidRuntimeException("incompatible value of array size: "
                     + f.size() + S_SLASH + cols);
         }
     }
-    private void checkColumns(IntSet is) throws EuclidException {
+    private void checkColumns(IntSet is) throws EuclidRuntimeException {
         if (is == null || is.size() != cols) {
-            throw new EuclidException("incompatible value of IntSet size: "
+            throw new EuclidRuntimeException("incompatible value of IntSet size: "
                     + is.size() + S_SLASH + cols);
         }
     }
-    private void checkColumns(RealMatrix m) throws EuclidException {
+    private void checkColumns(RealMatrix m) throws EuclidRuntimeException {
         if (m == null || m.getCols() != cols) {
-            throw new EuclidException("incompatible value of matrix size: "
+            throw new EuclidRuntimeException("incompatible value of matrix size: "
                     + m.getCols() + S_SLASH + cols);
         }
     }
-    private void checkRows(RealMatrix m) throws EuclidException {
+    private void checkRows(RealMatrix m) throws EuclidRuntimeException {
         if (m == null || m.getRows() != rows) {
-            throw new EuclidException("incompatible value of matrix size: "
+            throw new EuclidRuntimeException("incompatible value of matrix size: "
                     + m.getRows() + S_SLASH + rows);
         }
     }
@@ -1119,11 +1088,7 @@ public class RealMatrix implements EuclidConstants {
      */
     public void replaceColumnData(int starting_col, double[] f)
             throws EuclidRuntimeException {
-        try {
-            replaceColumnData(starting_col, new RealArray(rows, f));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e);
-        }
+        replaceColumnData(starting_col, new RealArray(rows, f));
     }
     /**
      * replace data in a block of columns.
@@ -1132,10 +1097,10 @@ public class RealMatrix implements EuclidConstants {
      *            (gets overwritten)
      * @param m
      *            must have same row count and fit into gap
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void replaceColumnData(int start_column, RealMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1144,12 +1109,12 @@ public class RealMatrix implements EuclidConstants {
         int mcols = m.getCols();
         checkRows(m);
         if (start_column < 0) {
-            throw new EuclidException("cannot start at negative column: "
+            throw new EuclidRuntimeException("cannot start at negative column: "
                     + start_column);
         }
         int end_column = start_column + mcols;
         if (end_column > cols) {
-            throw new EuclidException("too many columns to copy: "
+            throw new EuclidRuntimeException("too many columns to copy: "
                     + start_column + "|" + mcols + S_SLASH + cols);
         }
         copyColumns(m.flmat, start_column, mcols);
@@ -1189,10 +1154,10 @@ public class RealMatrix implements EuclidConstants {
      * @param after_col
      *            -1 to cols-1
      * @param f
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void insertColumnData(int after_col, RealArray f)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         checkRows(f);
         if (cols == 0) {
             rows = f.size();
@@ -1215,10 +1180,10 @@ public class RealMatrix implements EuclidConstants {
      * @param afterCol
      *            -1 to cols-1
      * @param m
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void insertColumnData(int afterCol, RealMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1227,7 +1192,7 @@ public class RealMatrix implements EuclidConstants {
         int mcols = m.getCols();
         cols = this.getCols();
         if (afterCol < -1 || afterCol >= cols) {
-            throw new EuclidException("afterCol must be >= -1 or < cols: "
+            throw new EuclidRuntimeException("afterCol must be >= -1 or < cols: "
                     + afterCol);
         }
         makeSpaceForNewColumns(afterCol + 1, mcols);
@@ -1263,10 +1228,10 @@ public class RealMatrix implements EuclidConstants {
      *            to replace
      * @param f
      *            row to use
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and cols differ
      */
-    public void replaceRowData(int row, RealArray f) throws EuclidException {
+    public void replaceRowData(int row, RealArray f) throws EuclidRuntimeException{
         checkColumns(f);
         int mcols = f.size();
         System.arraycopy(f.getArray(), 0, flmat[row], 0, mcols);
@@ -1278,16 +1243,11 @@ public class RealMatrix implements EuclidConstants {
      *            to replace
      * @param f
      *            row to use
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.length and cols differ
      */
-    public void replaceRowData(int row, double[] f) throws EuclidException {
-        RealArray temp = null;
-        try {
-            temp = new RealArray(cols, f);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(S_EMPTY + e);
-        }
+    public void replaceRowData(int row, double[] f) throws EuclidRuntimeException {
+        RealArray temp = new RealArray(cols, f);
         replaceRowData(row, temp);
     }
     /**
@@ -1297,20 +1257,20 @@ public class RealMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param m
      *            data to replace with
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.rows and <TT>this.rows</TT> differ
      */
     public void replaceRowData(int afterRow, RealMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m)
             return;
         checkColumns(m);
         if (afterRow < -1) {
-            throw new EuclidException("afterRow must be >= -1 :" + afterRow);
+            throw new EuclidRuntimeException("afterRow must be >= -1 :" + afterRow);
         }
         if (!(afterRow <= (rows - m.rows))) {
-            throw new EuclidException("afterRow (" + afterRow
+            throw new EuclidRuntimeException("afterRow (" + afterRow
                     + ")must be <= rows (" + rows + ") - m.rows (" + m.rows
                     + S_RBRAK);
         }
@@ -1323,11 +1283,11 @@ public class RealMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param m
      *            data to insert
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT>differ
      */
     public void insertRowData(int afterRow, RealMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1336,10 +1296,10 @@ public class RealMatrix implements EuclidConstants {
         int mrows = m.getRows();
         checkColumns(m);
         if (afterRow < -1) {
-            throw new EuclidException("must insert after -1 or higher");
+            throw new EuclidRuntimeException("must insert after -1 or higher");
         }
         if (afterRow >= rows) {
-            throw new EuclidException("must insert after nrows-1 or lower");
+            throw new EuclidRuntimeException("must insert after nrows-1 or lower");
         }
         insertRows(afterRow + 1, mrows);
         copyRowData(m.flmat, afterRow + 1, mrows);
@@ -1358,18 +1318,18 @@ public class RealMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param f
      *            data to insert
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and <TT>this.cols</TT> differ
      */
     public void insertRowData(int after_row, RealArray f)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         checkColumns(f);
         int mcols = f.size();
         if (after_row >= -1 && after_row <= rows && mcols == cols) {
             insertRows(after_row + 1, 1);
             replaceRowData(after_row + 1, f);
         } else {
-            throw new EuclidException("Cannot add array after  row" + after_row
+            throw new EuclidRuntimeException("Cannot add array after  row" + after_row
                     + S_SLASH + rows + "==" + mcols + S_SLASH + cols);
         }
     }
@@ -1378,10 +1338,10 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param f
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and <TT>this.rows</TT> differ
      */
-    public void appendColumnData(RealArray f) throws EuclidException {
+    public void appendColumnData(RealArray f) throws EuclidRuntimeException {
         if (cols == 0) {
             rows = f.size();
         }
@@ -1392,10 +1352,10 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param m
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.rows and <TT>this.rows</TT> differ
      */
-    public void appendColumnData(RealMatrix m) throws EuclidException {
+    public void appendColumnData(RealMatrix m) throws EuclidRuntimeException {
         if (cols == 0) {
             rows = m.getRows();
         }
@@ -1406,10 +1366,10 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param f
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT> differ
      */
-    public void appendRowData(RealArray f) throws EuclidException {
+    public void appendRowData(RealArray f) throws EuclidRuntimeException {
         if (rows == 0) {
             cols = f.size();
         }
@@ -1420,10 +1380,10 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param m
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT> differ
      */
-    public void appendRowData(RealMatrix m) throws EuclidException {
+    public void appendRowData(RealMatrix m) throws EuclidRuntimeException {
         if (rows == 0) {
             cols = m.getCols();
         }
@@ -1460,17 +1420,17 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param is
      *            indexes to reorder by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                is.size() and <TT>this.cols</TT> differ
      * @return matrix
      */
-    public RealMatrix reorderColumnsBy(IntSet is) throws EuclidException {
+    public RealMatrix reorderColumnsBy(IntSet is) throws EuclidRuntimeException {
         checkColumns(is);
         RealMatrix temp = new RealMatrix(rows, is.size());
         for (int i = 0; i < is.size(); i++) {
             int icol = is.elementAt(i);
             if (icol >= cols || icol < 0) {
-                throw new ArrayIndexOutOfBoundsException();
+                throw new EuclidRuntimeException("bad value of column "+icol);
             }
             RealArray coldat = this.extractColumnData(icol);
             temp.replaceColumnData(i, coldat);
@@ -1482,13 +1442,13 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param is
      *            indexes to reprder by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                is.size() and <TT>this.rows</TT> differ
      * @return matrix
      */
-    public RealMatrix reorderRowsBy(IntSet is) throws EuclidException {
+    public RealMatrix reorderRowsBy(IntSet is) throws EuclidRuntimeException {
         if (is.size() != rows) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
         RealMatrix temp = new RealMatrix(is.size(), cols);
         for (int i = 0; i < is.size(); i++) {
@@ -1512,12 +1472,12 @@ public class RealMatrix implements EuclidConstants {
      *            starting col
      * @param high_col
      *            end col
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                low/high_row/col are outside range of <TT>this</TT>
      * @return matrix
      */
     public RealMatrix extractSubMatrixData(int low_row, int high_row,
-            int low_col, int high_col) throws EuclidException {
+            int low_col, int high_col) throws EuclidRuntimeException {
         return new RealMatrix(this, low_row, high_row, low_col, high_col);
     }
     /**
@@ -1525,11 +1485,11 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param col1
      * @param col2
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of columns
      * @return 2*rows data
      */
-    public Real2Array extractColumns(int col1, int col2) throws EuclidException {
+    public Real2Array extractColumns(int col1, int col2) throws EuclidRuntimeException {
         RealArray x = this.extractColumnData(col1);
         RealArray y = this.extractColumnData(col2);
         return new Real2Array(x, y);
@@ -1539,11 +1499,11 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param row1
      * @param row2
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of rows
      * @return 2*cols data
      */
-    public Real2Array extractRows(int row1, int row2) throws EuclidException {
+    public Real2Array extractRows(int row1, int row2) throws EuclidRuntimeException {
         RealArray x = this.extractRowData(row1);
         RealArray y = this.extractRowData(row2);
         return new Real2Array(x, y);
@@ -1554,11 +1514,11 @@ public class RealMatrix implements EuclidConstants {
      * 
      * @param r
      *            the range
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of rows
      * @return matrix with 1s where data is in range else 0
      */
-    public IntMatrix elementsInRange(RealRange r) throws EuclidException {
+    public IntMatrix elementsInRange(RealRange r) throws EuclidRuntimeException {
         IntMatrix m = new IntMatrix(rows, cols);
         for (int irow = 0; irow < rows; irow++) {
             for (int jcol = 0; jcol < cols; jcol++) {

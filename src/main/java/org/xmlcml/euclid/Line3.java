@@ -10,10 +10,10 @@ package org.xmlcml.euclid;
  * 
  * 
  * A line is a vector which is located in space. It is described by a unit
- * vector (v) and a point (p) on the line. Any point on the line can be used for
+ * vector (vector) and a point (p) on the line. Any point on the line can be used for
  * p, and p could change during the existence of a calculation without affecting
- * the integrity of the line, for example p = {1,1,1}, v = {1,0,0} is the same
- * line as p = {2,1,1}, v = {1,0,0}. However the absolute direction of v IS
+ * the integrity of the line, for example p = {1,1,1}, vector = {1,0,0} is the same
+ * line as p = {2,1,1}, vector = {1,0,0}. However the absolute direction of vector IS
  * important, giving the line a direction.
  * 
  * Default is a default Point3 (0.0, 0.0, 0.0) and default Vector3 (0.0, 0.0,
@@ -43,7 +43,7 @@ public class Line3 implements EuclidConstants {
     }
     /**
      * construct from point and vector. the line will not necessarily retain the
-     * exact point and the vector need not be normalized p and v are copied
+     * exact point and the vector need not be normalized p and vector are copied
      * 
      * @param p
      *            a point on the line
@@ -63,10 +63,9 @@ public class Line3 implements EuclidConstants {
      * 
      * @param array
      *            of length 6. first 3 are VECTOR, next are POINT
-     * @throws EuclidException
      */
     /*--
-     public Line3(double[] array) throws EuclidException {
+     public Line3(double[] array) throws EuclidRuntimeException {
      Util.check(array, 6);
      vect = new Vector3();
      System.arraycopy(array, 0, vect.flarray, 0, 3);

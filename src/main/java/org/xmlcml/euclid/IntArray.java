@@ -127,14 +127,14 @@ public class IntArray extends ArrayBase {
      *            number of elements to use
      * @param arr
      *            array to read from
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             n larger than arraysize
      */
-    public IntArray(int n, int[] arr) throws EuclidException {
+    public IntArray(int n, int[] arr) throws EuclidRuntimeException {
         if (!checkSize(n))
-            throw new EuclidException("Cannot have negative array length");
+            throw new EuclidRuntimeException("Cannot have negative array length");
         if (n > arr.length) {
-            throw new EuclidException("Array would overflow");
+            throw new EuclidRuntimeException("Array would overflow");
         }
         array = new int[n];
         bufsize = n;
@@ -161,12 +161,12 @@ public class IntArray extends ArrayBase {
      *            inclusive start index of array
      * @param high
      *            inclusive end index of array
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             low > high or negative indices or outside size of m
      */
-    public IntArray(IntArray m, int low, int high) throws EuclidException {
+    public IntArray(IntArray m, int low, int high) throws EuclidRuntimeException {
         if (low < 0 || low > high || high >= m.size()) {
-            throw new EuclidException("index out of range: " + low + S_SLASH + high);
+            throw new EuclidRuntimeException("index out of range: " + low + S_SLASH + high);
         }
         nelem = high - low + 1;
         checkSize(nelem);
@@ -183,15 +183,15 @@ public class IntArray extends ArrayBase {
      *            matrix to slice
      * @param sub
      *            subscripts.
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if any of I(sub) lies outside 0...refmax-1
      */
-    public IntArray(IntArray ref, IntArray sub) throws EuclidException {
+    public IntArray(IntArray ref, IntArray sub) throws EuclidRuntimeException {
         this(sub.size());
         for (int i = 0; i < sub.size(); i++) {
             int j = sub.elementAt(i);
             if (j < 0 || j >= ref.size()) {
-                throw new EuclidException();
+                throw new EuclidRuntimeException();
             }
             this.setElementAt(i, ref.elementAt(j));
         }
@@ -395,9 +395,9 @@ public class IntArray extends ArrayBase {
      maxelem = max;
      }
      --*/
-    private void checkConformable(IntArray m) throws EuclidException {
+    private void checkConformable(IntArray m) throws EuclidRuntimeException {
         if (nelem != m.nelem) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException();
         }
     }
     /**
@@ -428,11 +428,11 @@ public class IntArray extends ArrayBase {
      * 
      * @param f
      *            array to add
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return new array as this + f
      */
-    public IntArray plus(IntArray f) throws EuclidException {
+    public IntArray plus(IntArray f) throws EuclidRuntimeException {
         checkConformable(f);
         IntArray m = (IntArray) this.clone();
         for (int i = 0; i < nelem; i++) {
@@ -445,11 +445,11 @@ public class IntArray extends ArrayBase {
      * 
      * @param f
      *            array to substract
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return new array as this - f
      */
-    public IntArray subtract(IntArray f) throws EuclidException {
+    public IntArray subtract(IntArray f) throws EuclidRuntimeException {
         checkConformable(f);
         IntArray m = (IntArray) this.clone();
         for (int i = 0; i < nelem; i++) {
@@ -462,10 +462,10 @@ public class IntArray extends ArrayBase {
      * 
      * @param f
      *            array to subtract
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      */
-    public void subtractEquals(IntArray f) throws EuclidException {
+    public void subtractEquals(IntArray f) throws EuclidRuntimeException {
         checkConformable(f);
         for (int i = 0; i < nelem; i++) {
             array[i] -= f.array[i];
@@ -610,7 +610,7 @@ public class IntArray extends ArrayBase {
         int result = Integer.MIN_VALUE;
         try {
             result = this.dotProduct(this);
-        } catch (EuclidException x) {
+        } catch (EuclidRuntimeException x) {
             throw new EuclidRuntimeException("bug " + x);
         }
         return result;
@@ -620,11 +620,11 @@ public class IntArray extends ArrayBase {
      * 
      * @param f
      *            array to multiply
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return dot
      */
-    public int dotProduct(IntArray f) throws EuclidException {
+    public int dotProduct(IntArray f) throws EuclidRuntimeException {
         checkConformable(f);
         int sum = 0;
         for (int i = 0; i < nelem; i++) {
@@ -958,16 +958,16 @@ public class IntArray extends ArrayBase {
      * 
      * @param idx
      *            array of indexes
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                an element of idx is outside range of <TT>this</TT>
      * @return array
      */
-    public IntArray getReorderedArray(IntSet idx) throws EuclidException {
+    public IntArray getReorderedArray(IntSet idx) throws EuclidRuntimeException {
         IntArray temp = new IntArray(nelem);
         for (int i = 0; i < nelem; i++) {
             int index = idx.elementAt(i);
             if (index > nelem) {
-                throw new EuclidException();
+                throw new EuclidRuntimeException();
             }
             temp.array[i] = array[index];
         }

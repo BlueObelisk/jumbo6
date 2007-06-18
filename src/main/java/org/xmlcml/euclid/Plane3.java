@@ -61,13 +61,13 @@ public class Plane3 implements EuclidConstants {
      *            component
      * @param d
      *            distance
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public Plane3(double l, double m, double n, double d)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         vect = new Vector3(l, m, n);
         if (vect.isZero()) {
-            throw new EuclidException("zero length normal");
+            throw new EuclidRuntimeException("zero length normal");
         }
         dist = d;
         // normalise vector
@@ -81,9 +81,9 @@ public class Plane3 implements EuclidConstants {
      *            component
      * @param d
      *            distance
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Plane3(double[] lmn, double d) throws EuclidException {
+    public Plane3(double[] lmn, double d) throws EuclidRuntimeException {
         Util.check(lmn, 3);
         vect = new Vector3(lmn);
         dist = d;
@@ -96,9 +96,9 @@ public class Plane3 implements EuclidConstants {
      *
      * @param array
      *            4-components
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Plane3(double[] array) throws EuclidException {
+    public Plane3(double[] array) throws EuclidRuntimeException {
         Util.check(array, 4);
         vect = new Vector3();
         System.arraycopy(array, 0, vect.flarray, 0, 3);
@@ -113,11 +113,11 @@ public class Plane3 implements EuclidConstants {
      *            vector
      * @param d
      *            distance
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Plane3(Vector3 v, double d) throws EuclidException {
+    public Plane3(Vector3 v, double d) throws EuclidRuntimeException {
         if (v.isZero()) {
-            throw new EuclidException("zero length normal");
+            throw new EuclidRuntimeException("zero length normal");
         }
         vect = new Vector3(v);
         dist = d;
@@ -144,14 +144,14 @@ public class Plane3 implements EuclidConstants {
      *            point
      * @param p3
      *            point
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Plane3(Point3 p1, Point3 p2, Point3 p3) throws EuclidException {
+    public Plane3(Point3 p1, Point3 p2, Point3 p3) throws EuclidRuntimeException {
         vect = new Vector3();
         dist = 0.0;
         vect = (p2.subtract(p1)).cross(p3.subtract(p2));
         if (vect.isZero()) {
-            throw new EuclidException("zero length normal");
+            throw new EuclidRuntimeException("zero length normal");
         }
         vect.normalize();
         Vector3 vp1 = new Vector3(p1);
@@ -165,9 +165,9 @@ public class Plane3 implements EuclidConstants {
      *            point
      * @param p
      *            point
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Plane3(Line3 l, Point3 p) throws EuclidException {
+    public Plane3(Line3 l, Point3 p) throws EuclidRuntimeException {
         // oKness dealt with by previous constructor
         this(l.getPoint(), (Point3) (l.getPoint().plus(l.getVector())), p);
     }

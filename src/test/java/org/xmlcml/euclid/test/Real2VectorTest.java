@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntSet;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
@@ -16,7 +16,6 @@ import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Axis.Axis2;
 
 /**
@@ -42,17 +41,9 @@ public class Real2VectorTest extends EuclidTestBase {
     public void setUp() throws Exception {
         super.setUp();
         r0 = new Real2Vector();
-        try {
-            r1 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        try {
-            r2 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., 7., 8.,
+        r1 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., });
+        r2 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., 7., 8.,
                     9., 10. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
     }
 
     /**
@@ -107,16 +98,11 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testReal2VectorDoubleArray() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector r = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6. });
         Assert.assertEquals("r2v", 3, r.size());
         try {
             r = new Real2Vector(new double[] { 1., 2., 3., 4., 5. });
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("r2v", "size must be multiple of 2", e
                     .getMessage());
         }
@@ -128,18 +114,13 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testReal2VectorIntDoubleArrayDoubleArray() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(3, new double[] { 1., 2., 3. }, new double[] {
+        Real2Vector r = new Real2Vector(3, new double[] { 1., 2., 3. }, new double[] {
                     4., 5., 6. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         Assert.assertEquals("r2v", 3, r.size());
         try {
             r = new Real2Vector(3, new double[] { 1., 2., 3. }, new double[] {
                     4., 5. });
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("r2v", "array size required (3) found 2", e
                     .getMessage());
         }
@@ -150,18 +131,13 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testReal2VectorRealArray() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new RealArray(new double[] { 1., 2., 3., 4.,
+        Real2Vector r = new Real2Vector(new RealArray(new double[] { 1., 2., 3., 4.,
                     5., 6. }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         Assert.assertEquals("r2v", 3, r.size());
         try {
             r = new Real2Vector(new RealArray(
                     new double[] { 1., 2., 3., 4., 5. }));
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("r2v", "size must be multiple of 2", e
                     .getMessage());
         }
@@ -193,11 +169,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testSet() {
-        try {
-            r1.set(1, new Real2(9., 8.));
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        r1.set(1, new Real2(9., 8.));
         Assert.assertEquals("set", 9., r1.get(1).getX());
         Assert.assertEquals("set", 8., r1.get(1).getY());
         Assert.assertEquals("add", 3, r1.size());
@@ -211,24 +183,16 @@ public class Real2VectorTest extends EuclidTestBase {
         RealRange r = r1.getRange(Axis2.X);
         Assert.assertEquals("range", 1., r.getMin());
         Assert.assertEquals("range", 5., r.getMax());
-        try {
-            r1.set(0, new Real2(-9., 8.));
-            r1.set(1, new Real2(9., 8.));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        r1.set(0, new Real2(-9., 8.));
+        r1.set(1, new Real2(9., 8.));
         r = r1.getRange(Axis2.X);
         Assert.assertEquals("range", -9., r.getMin());
         Assert.assertEquals("range", 9., r.getMax());
         r = r1.getRange(Axis2.Y);
         Assert.assertEquals("range", 6., r.getMin());
         Assert.assertEquals("range", 8., r.getMax());
-        try {
-            r1.set(0, new Real2(-9., 8.));
-            r1.set(1, new Real2(9., 8.));
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        r1.set(0, new Real2(-9., 8.));
+        r1.set(1, new Real2(9., 8.));
         r = r1.getRange(Axis2.Y);
         Assert.assertEquals("range", 6., r.getMin());
         Assert.assertEquals("range", 8., r.getMax());
@@ -246,12 +210,8 @@ public class Real2VectorTest extends EuclidTestBase {
         Assert.assertEquals("range", 5., xr.getMax());
         Assert.assertEquals("range", 2., yr.getMin());
         Assert.assertEquals("range", 6., yr.getMax());
-        try {
-            r1.set(0, new Real2(-9., 8.));
-            r1.set(1, new Real2(9., 8.));
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        r1.set(0, new Real2(-9., 8.));
+        r1.set(1, new Real2(9., 8.));
         r2 = r1.getRange2();
         xr = r2.getXRange();
         yr = r2.getYRange();
@@ -266,12 +226,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testSubArray() {
-        Real2Vector sub = null;
-        try {
-            sub = r2.subArray(new IntSet(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector sub = r2.subArray(new IntSet(new int[] { 3, 1, 2 }));
         Real2VectorTest.assertEquals("sub", new double[] { 7., 8., 3., 4., 5.,
                 6. }, sub, EPS);
     }
@@ -363,13 +318,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testDistanceIntSet() {
-        double d = 0;
-        ;
-        try {
-            d = r2.distance(new IntSet(new int[] { 2, 3 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d = r2.distance(new IntSet(new int[] { 2, 3 }));
         Assert.assertEquals("distance", Math.sqrt(8.), d, EPS);
     }
 
@@ -378,12 +327,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testAngleIntIntInt() {
-        Angle a = null;
-        try {
-            a = r2.angle(1, 2, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle a = r2.angle(1, 2, 3);
         Assert.assertEquals("angle", -Math.PI, a.getRadian(), EPS);
     }
 
@@ -392,12 +336,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testAngleIntSet() {
-        Angle a = null;
-        try {
-            a = r2.angle(new IntSet(new int[] { 1, 2, 3 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle a = r2.angle(new IntSet(new int[] { 1, 2, 3 }));
         Assert.assertEquals("angle", -Math.PI, a.getRadian(), EPS);
     }
 
@@ -460,13 +399,8 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testSortAscending() {
-        Real2Vector r2v = null;
-        try {
-            r2v = new Real2Vector(
+        Real2Vector r2v = new Real2Vector(
                     new double[] { 1., 3., 5., 2., 7., 1., 2., 6. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         r2v = r2v.sortAscending(Axis2.X);
         Real2VectorTest.assertEquals("sortAsc", new double[] { 1.0, 3.0, 2.0,
                 6.0, 5.0, 2.0, 7.0, 1.0 }, r2v, EPS);
@@ -499,12 +433,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testGetSquaredDifference() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
         double d = r1.getSquaredDifference(r);
         Assert.assertEquals("squared difference", 0.91, d, EPS);
     }
@@ -515,12 +444,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testGetSquaredDistances() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
         double[] d = r1.getSquaredDistances(r);
         DoubleTestBase.assertEquals("squared distances", new double[] { 0.05, 0.25,
                 0.61 }, d, EPS);
@@ -557,12 +481,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testGetCentroid() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
         Real2 c = r.getCentroid();
         Assert.assertEquals("centroid", 3.3, c.getX(), EPS);
         Assert.assertEquals("centroid", 4.4, c.getY(), EPS);
@@ -574,12 +493,7 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Test
     public void testGetSerialOfNearestPoint() {
-        Real2Vector r = null;
-        try {
-            r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Vector r = new Real2Vector(new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 });
         int idx = r.getSerialOfNearestPoint(new Real2(3., 4.));
         Assert.assertEquals("nearest point", 1, idx);
     }

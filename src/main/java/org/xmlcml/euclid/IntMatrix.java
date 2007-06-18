@@ -62,10 +62,10 @@ public class IntMatrix implements EuclidConstants {
      * @param rows
      * @param cols
      * @param array
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                size of array is not rows*cols
      */
-    public IntMatrix(int rows, int cols, int[] array) throws EuclidException {
+    public IntMatrix(int rows, int cols, int[] array) throws EuclidRuntimeException {
         this(rows, cols);
         check(rows, cols, array);
         this.rows = rows;
@@ -111,18 +111,18 @@ public class IntMatrix implements EuclidConstants {
      *            lowest row index
      * @param hirow
      *            highest row index
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                impossible value of hirow, hicol, lowrow, lowcol
      */
     public IntMatrix(IntMatrix m, int lowrow, int hirow, int lowcol, int hicol)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         this(hirow - lowrow + 1, hicol - lowcol + 1);
         if (hirow >= m.getRows() || lowrow < 0) {
-            throw new EuclidException("bad row index: " + lowrow + S_SLASH + hirow
+            throw new EuclidRuntimeException("bad row index: " + lowrow + S_SLASH + hirow
                     + " outside 0/" + m.getRows());
         }
         if (hicol >= m.getCols() || lowcol < 0) {
-            throw new EuclidException("bad col index: " + lowcol + S_SLASH + hicol
+            throw new EuclidRuntimeException("bad col index: " + lowcol + S_SLASH + hicol
                     + " outside 0/" + m.getCols());
         }
         for (int i = 0, mrow = lowrow; i < rows; i++, mrow++) {
@@ -176,14 +176,14 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param m
      *            natrix to copy from
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m has rows of different lengths
      */
-    public IntMatrix(int[][] m) throws EuclidException {
+    public IntMatrix(int[][] m) throws EuclidRuntimeException {
         this(m.length, m[0].length);
         for (int i = 0; i < rows; i++) {
             if (m[i].length != cols) {
-                throw new EuclidException("non-rectangular matrix cols: "
+                throw new EuclidRuntimeException("non-rectangular matrix cols: "
                         + cols + " row: " + i + " length: " + m[i].length);
             }
             for (int j = 0; j < cols; j++) {
@@ -268,30 +268,32 @@ public class IntMatrix implements EuclidConstants {
                     }
                 }
             }
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             ok = false;
         }
         return ok;
     }
+    
     // check that plus, subtract is possible
-    private void checkConformable(IntMatrix m) throws EuclidException {
+    private void checkConformable(IntMatrix m) throws EuclidRuntimeException {
         if (rows != m.rows || cols != m.cols) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
     }
     // check that multiply is possible
-    private void checkConformable2(IntMatrix m) throws EuclidException {
+    private void checkConformable2(IntMatrix m) throws EuclidRuntimeException {
         if (m.rows != this.cols) {
-            throw new EuclidException("unequal matrices (" + this.cols + ", "
+            throw new EuclidRuntimeException("unequal matrices (" + this.cols + ", "
                     + m.rows + S_RBRAK);
         }
     }
-    private void check(int rows, int cols, int[] array) throws EuclidException {
+    
+    private void check(int rows, int cols, int[] array) throws EuclidRuntimeException {
         if (array == null) {
-            throw new EuclidException("IntMatrix(null)");
+            throw new EuclidRuntimeException("IntMatrix(null)");
         }
         if (array.length != rows * cols) {
-            throw new EuclidException("rows * cols (" + rows + S_STAR + cols
+            throw new EuclidRuntimeException("rows * cols (" + rows + S_STAR + cols
                     + ") != array (" + array.length + S_RBRAK);
         }
     }
@@ -299,13 +301,12 @@ public class IntMatrix implements EuclidConstants {
      * matrix addition. adds conformable matrices giving NEW matrix. this is
      * unaltered
      * 
-     * @param m2
-     *            matrix
-     * @exception EuclidException
+     * @param m2 matrix
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public IntMatrix plus(IntMatrix m2) throws EuclidException {
+    public IntMatrix plus(IntMatrix m2) throws EuclidRuntimeException {
         IntMatrix m = new IntMatrix(m2.rows, m2.cols);
         checkConformable(m2);
         for (int i = 0; i < rows; i++) {
@@ -320,11 +321,11 @@ public class IntMatrix implements EuclidConstants {
      * is unaltered
      * 
      * @param m2
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public IntMatrix subtract(IntMatrix m2) throws EuclidException {
+    public IntMatrix subtract(IntMatrix m2) throws EuclidRuntimeException {
         IntMatrix m = new IntMatrix(m2.rows, m2.cols);
         checkConformable(m2);
         for (int i = 0; i < rows; i++) {
@@ -351,11 +352,11 @@ public class IntMatrix implements EuclidConstants {
      * result = 'this' * m; (order matters)
      * 
      * @param m
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      * @return new matrix
      */
-    public IntMatrix multiply(IntMatrix m) throws EuclidException {
+    public IntMatrix multiply(IntMatrix m) throws EuclidRuntimeException {
         checkConformable2(m);
         IntMatrix m1 = new IntMatrix(rows, m.cols);
         for (int i = 0; i < rows; i++) {
@@ -388,10 +389,10 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param m
      *            matrix to multiply by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m and <TT>this</TT> are different sizes
      */
-    public void multiplyEquals(IntMatrix m) throws EuclidException {
+    public void multiplyEquals(IntMatrix m) throws EuclidRuntimeException {
         IntMatrix mm = this.multiply(m);
         this.rows = mm.rows;
         this.cols = mm.cols;
@@ -421,15 +422,15 @@ public class IntMatrix implements EuclidConstants {
      * check.
      * 
      * @param d
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    /* private */void checkColumns(int[] d) throws EuclidException {
+    /* private */void checkColumns(int[] d) throws EuclidRuntimeException {
         if (d.length != cols) {
             throw new EuclidRuntimeException("array size " + d.length
                     + "!= cols length " + cols);
         }
     }
-    private void checkRows(int[] d) throws EuclidException {
+    private void checkRows(int[] d) throws EuclidRuntimeException {
         if (d.length != rows) {
             throw new EuclidRuntimeException("array size " + d.length
                     + "!= rows length " + rows);
@@ -441,9 +442,9 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param d
      *            array of ints to subtract
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void translateByColumn(int[] d) throws EuclidException {
+    public void translateByColumn(int[] d) throws EuclidRuntimeException {
         checkRows(d);
         for (int i = cols - 1; i >= 0; --i) {
             for (int j = rows - 1; j >= 0; --j) {
@@ -456,13 +457,13 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param f
      *            vector to multiply
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() differs from cols
      * @return transformed array
      */
-    public IntArray multiply(IntArray f) throws EuclidException {
+    public IntArray multiply(IntArray f) throws EuclidRuntimeException {
         if (f.size() != this.cols) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
         int[] temp = new int[rows];
         int[] farray = f.getArray();
@@ -481,12 +482,12 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param f
      *            array to divide by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and rows differ
      */
-    public void columnwiseDivide(IntArray f) throws EuclidException {
+    public void columnwiseDivide(IntArray f) throws EuclidRuntimeException {
         if (this.cols != f.size()) {
-            throw new EuclidException("unequal matrices " + this.cols + S_SLASH
+            throw new EuclidRuntimeException("unequal matrices " + this.cols + S_SLASH
                     + f.size());
         }
         for (int i = 0; i < rows; i++) {
@@ -500,11 +501,11 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param row
      * @param col
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of row or column
      * @return the element at row,col
      */
-    public int elementAt(int row, int col) throws EuclidException {
+    public int elementAt(int row, int col) throws EuclidRuntimeException {
         checkRow(row);
         checkColumn(col);
         return flmat[row][col];
@@ -515,19 +516,19 @@ public class IntMatrix implements EuclidConstants {
      * @throws EuclidRuntimeException
      *             if it isn't
      */
-    private void checkRow(int row) throws EuclidException {
+    private void checkRow(int row) throws EuclidRuntimeException {
         if (row < 0 || row >= rows)
-            throw new EuclidException("Bad value of row: " + row + S_SLASH + rows);
+            throw new EuclidRuntimeException("Bad value of row: " + row + S_SLASH + rows);
     }
     /**
      * checks a col is in range.
      * 
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if it isn't
      */
-    private void checkColumn(int col) throws EuclidException {
+    private void checkColumn(int col) throws EuclidRuntimeException {
         if (col < 0 || col >= cols)
-            throw new EuclidException("Bad value of col: " + col + S_SLASH + cols);
+            throw new EuclidRuntimeException("Bad value of col: " + col + S_SLASH + cols);
     }
     /**
      * extracts a given element.
@@ -535,9 +536,9 @@ public class IntMatrix implements EuclidConstants {
      * @param rowcol
      *            represents row,col
      * @return the element at row,col
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public int elementAt(Int2 rowcol) throws EuclidException {
+    public int elementAt(Int2 rowcol) throws EuclidRuntimeException {
         return elementAt(rowcol.elementAt(0), rowcol.elementAt(1));
     }
     /**
@@ -546,9 +547,9 @@ public class IntMatrix implements EuclidConstants {
      * @param row
      * @param col
      * @param f
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void setElementAt(int row, int col, int f) throws EuclidException {
+    public void setElementAt(int row, int col, int f) throws EuclidRuntimeException {
         checkRow(row);
         checkColumn(col);
         flmat[row][col] = f;
@@ -563,12 +564,7 @@ public class IntMatrix implements EuclidConstants {
         if (temp == null) {
             throw new EuclidRuntimeException("bug; null index for largest element");
         }
-        int d = Integer.MIN_VALUE;
-        try {
-            d = this.elementAt(temp);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException("bug: " + e);
-        }
+        int d = this.elementAt(temp);
         return d;
     }
     /**
@@ -599,10 +595,10 @@ public class IntMatrix implements EuclidConstants {
      * get value of largest element in a column
      * 
      * @param jcol
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * @return the value
      */
-    public int largestElementInColumn(int jcol) throws EuclidException {
+    public int largestElementInColumn(int jcol) throws EuclidRuntimeException {
         return this.elementAt(indexOfLargestElementInColumn(jcol), jcol);
     }
     /**
@@ -611,10 +607,10 @@ public class IntMatrix implements EuclidConstants {
      * @param jcol
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of jcol
      */
-    public int indexOfLargestElementInColumn(int jcol) throws EuclidException {
+    public int indexOfLargestElementInColumn(int jcol) throws EuclidRuntimeException {
         checkColumn(jcol);
         int imax = -1;
         int max = Integer.MIN_VALUE;
@@ -632,10 +628,10 @@ public class IntMatrix implements EuclidConstants {
      * @param irow
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of irow
      */
-    public int indexOfLargestElementInRow(int irow) throws EuclidException {
+    public int indexOfLargestElementInRow(int irow) throws EuclidRuntimeException {
         checkRow(irow);
         int imax = -1;
         int max = Integer.MIN_VALUE;
@@ -653,10 +649,10 @@ public class IntMatrix implements EuclidConstants {
      * @param jcol
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of jcol
      */
-    public int indexOfSmallestElementInColumn(int jcol) throws EuclidException {
+    public int indexOfSmallestElementInColumn(int jcol) throws EuclidRuntimeException {
         checkColumn(jcol);
         int imin = -1;
         int min = Integer.MAX_VALUE;
@@ -676,12 +672,12 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param irow
      * @return value (0 if no columns)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public int largestElementInRow(int irow) throws EuclidException {
+    public int largestElementInRow(int irow) throws EuclidRuntimeException {
         int idx = indexOfLargestElementInRow(irow);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(irow, idx);
     }
@@ -691,10 +687,10 @@ public class IntMatrix implements EuclidConstants {
      * @param irow
      *            index
      * @return index (-1 if empty matrix)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad value of irow
      */
-    public int indexOfSmallestElementInRow(int irow) throws EuclidException {
+    public int indexOfSmallestElementInRow(int irow) throws EuclidRuntimeException {
         checkRow(irow);
         int imin = -1;
         int min = Integer.MAX_VALUE;
@@ -710,9 +706,9 @@ public class IntMatrix implements EuclidConstants {
      * get value of smallest element.
      * 
      * @return value
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public int smallestElement() throws EuclidException {
+    public int smallestElement() throws EuclidRuntimeException {
         Int2 temp = indexOfSmallestElement();
         return this.elementAt(temp);
     }
@@ -741,13 +737,13 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param jcol
      * @return smallest value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                bad value of jcol
      */
-    public int smallestElementInColumn(int jcol) throws EuclidException {
+    public int smallestElementInColumn(int jcol) throws EuclidRuntimeException {
         int idx = indexOfSmallestElementInColumn(jcol);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(idx, jcol);
     }
@@ -756,13 +752,13 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param irow
      * @return smallest value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                bad value of irow
      */
-    public int smallestElementInRow(int irow) throws EuclidException {
+    public int smallestElementInRow(int irow) throws EuclidRuntimeException {
         int idx = indexOfSmallestElementInRow(irow);
         if (idx < 0) {
-            throw new EuclidException("empty matrix");
+            throw new EuclidRuntimeException("empty matrix");
         }
         return this.elementAt(irow, idx);
     }
@@ -779,11 +775,7 @@ public class IntMatrix implements EuclidConstants {
             int dot = 0;
             for (int j = i + 1; j < rows; j++) {
                 IntArray rowj = extractRowData(j);
-                try {
-                    dot = rowi.dotProduct(rowj);
-                } catch (EuclidException e) {
-                    throw new EuclidRuntimeException(e.toString());
-                }
+                dot = rowi.dotProduct(rowj);
                 if (dot != 0)
                     return false;
             }
@@ -796,9 +788,9 @@ public class IntMatrix implements EuclidConstants {
      * @param col
      *            the column
      * @return the column data (or length rows)
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public IntArray extractColumnData(int col) throws EuclidException {
+    public IntArray extractColumnData(int col) throws EuclidRuntimeException {
         checkColumn(col);
         IntArray fa = new IntArray(rows);
         for (int i = 0; i < rows; i++) {
@@ -850,13 +842,7 @@ public class IntMatrix implements EuclidConstants {
                 m[j][i] = this.flmat[i][j];
             }
         }
-        IntMatrix mm = null;
-        try {
-            mm = new IntMatrix(m);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        return mm;
+        return new IntMatrix(m);
     }
     /**
      * is the matrix square
@@ -946,10 +932,10 @@ public class IntMatrix implements EuclidConstants {
      * @param column
      * @param f
      *            data must be of length rows
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void replaceColumnData(int column, IntArray f)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         checkRows(f);
         checkColumn(column);
         int[] temp = f.getArray();
@@ -957,33 +943,33 @@ public class IntMatrix implements EuclidConstants {
             flmat[i][column] = temp[i];
         }
     }
-    private void checkRows(IntArray f) throws EuclidException {
+    private void checkRows(IntArray f) throws EuclidRuntimeException {
         if (f == null || f.size() != rows) {
-            throw new EuclidException("incompatible value of array size: "
+            throw new EuclidRuntimeException("incompatible value of array size: "
                     + f.size() + S_SLASH + rows);
         }
     }
-    private void checkColumns(IntArray f) throws EuclidException {
+    private void checkColumns(IntArray f) throws EuclidRuntimeException {
         if (f == null || f.size() != cols) {
-            throw new EuclidException("incompatible value of array size: "
+            throw new EuclidRuntimeException("incompatible value of array size: "
                     + f.size() + S_SLASH + cols);
         }
     }
-    private void checkColumns(IntSet is) throws EuclidException {
+    private void checkColumns(IntSet is) throws EuclidRuntimeException {
         if (is == null || is.size() != cols) {
-            throw new EuclidException("incompatible value of IntSet size: "
+            throw new EuclidRuntimeException("incompatible value of IntSet size: "
                     + is.size() + S_SLASH + cols);
         }
     }
-    private void checkColumns(IntMatrix m) throws EuclidException {
+    private void checkColumns(IntMatrix m) throws EuclidRuntimeException {
         if (m == null || m.getCols() != cols) {
-            throw new EuclidException("incompatible value of matrix size: "
+            throw new EuclidRuntimeException("incompatible value of matrix size: "
                     + m.getCols() + S_SLASH + cols);
         }
     }
-    private void checkRows(IntMatrix m) throws EuclidException {
+    private void checkRows(IntMatrix m) throws EuclidRuntimeException {
         if (m == null || m.getRows() != rows) {
-            throw new EuclidException("incompatible value of matrix size: "
+            throw new EuclidRuntimeException("incompatible value of matrix size: "
                     + m.getRows() + S_SLASH + rows);
         }
     }
@@ -997,11 +983,7 @@ public class IntMatrix implements EuclidConstants {
      */
     public void replaceColumnData(int starting_col, int[] f)
             throws EuclidRuntimeException {
-        try {
-            replaceColumnData(starting_col, new IntArray(rows, f));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e);
-        }
+        replaceColumnData(starting_col, new IntArray(rows, f));
     }
     /**
      * replace data in a block of columns.
@@ -1010,10 +992,10 @@ public class IntMatrix implements EuclidConstants {
      *            (gets overwritten)
      * @param m
      *            must have same row count and fit into gap
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void replaceColumnData(int start_column, IntMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1022,12 +1004,12 @@ public class IntMatrix implements EuclidConstants {
         int mcols = m.getCols();
         checkRows(m);
         if (start_column < 0) {
-            throw new EuclidException("cannot start at negative column: "
+            throw new EuclidRuntimeException("cannot start at negative column: "
                     + start_column);
         }
         int end_column = start_column + mcols;
         if (end_column > cols) {
-            throw new EuclidException("too many columns to copy: "
+            throw new EuclidRuntimeException("too many columns to copy: "
                     + start_column + "|" + mcols + S_SLASH + cols);
         }
         copyColumns(m.flmat, start_column, mcols);
@@ -1067,10 +1049,10 @@ public class IntMatrix implements EuclidConstants {
      * @param after_col
      *            -1 to cols-1
      * @param f
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void insertColumnData(int after_col, IntArray f)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         checkRows(f);
         if (cols == 0) {
             rows = f.size();
@@ -1093,10 +1075,10 @@ public class IntMatrix implements EuclidConstants {
      * @param afterCol
      *            -1 to cols-1
      * @param m
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
     public void insertColumnData(int afterCol, IntMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1105,7 +1087,7 @@ public class IntMatrix implements EuclidConstants {
         int mcols = m.getCols();
         cols = this.getCols();
         if (afterCol < -1 || afterCol >= cols) {
-            throw new EuclidException("afterCol must be >= -1 or < cols: "
+            throw new EuclidRuntimeException("afterCol must be >= -1 or < cols: "
                     + afterCol);
         }
         makeSpaceForNewColumns(afterCol + 1, mcols);
@@ -1141,10 +1123,10 @@ public class IntMatrix implements EuclidConstants {
      *            to replace
      * @param f
      *            row to use
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and cols differ
      */
-    public void replaceRowData(int row, IntArray f) throws EuclidException {
+    public void replaceRowData(int row, IntArray f) throws EuclidRuntimeException {
         checkColumns(f);
         int mcols = f.size();
         System.arraycopy(f.getArray(), 0, flmat[row], 0, mcols);
@@ -1156,16 +1138,11 @@ public class IntMatrix implements EuclidConstants {
      *            to replace
      * @param f
      *            row to use
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.length and cols differ
      */
-    public void replaceRowData(int row, int[] f) throws EuclidException {
-        IntArray temp = null;
-        try {
-            temp = new IntArray(cols, f);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(S_EMPTY + e);
-        }
+    public void replaceRowData(int row, int[] f) throws EuclidRuntimeException {
+        IntArray temp = new IntArray(cols, f);
         replaceRowData(row, temp);
     }
     /**
@@ -1175,20 +1152,20 @@ public class IntMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param m
      *            data to replace with
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.rows and <TT>this.rows</TT> differ
      */
     public void replaceRowData(int afterRow, IntMatrix m)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m)
             return;
         checkColumns(m);
         if (afterRow < -1) {
-            throw new EuclidException("afterRow must be >= -1 :" + afterRow);
+            throw new EuclidRuntimeException("afterRow must be >= -1 :" + afterRow);
         }
         if (!(afterRow <= (rows - m.rows))) {
-            throw new EuclidException("afterRow (" + afterRow
+            throw new EuclidRuntimeException("afterRow (" + afterRow
                     + ")must be <= rows (" + rows + ") - m.rows (" + m.rows
                     + S_RBRAK);
         }
@@ -1201,10 +1178,10 @@ public class IntMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param m
      *            data to insert
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT>differ
      */
-    public void insertRowData(int afterRow, IntMatrix m) throws EuclidException {
+    public void insertRowData(int afterRow, IntMatrix m) throws EuclidRuntimeException {
         // must trap copying a matrix into itself!
         if (this == m) {
             return;
@@ -1213,10 +1190,10 @@ public class IntMatrix implements EuclidConstants {
         int mrows = m.getRows();
         checkColumns(m);
         if (afterRow < -1) {
-            throw new EuclidException("must insert after -1 or higher");
+            throw new EuclidRuntimeException("must insert after -1 or higher");
         }
         if (afterRow >= rows) {
-            throw new EuclidException("must insert after nrows-1 or lower");
+            throw new EuclidRuntimeException("must insert after nrows-1 or lower");
         }
         insertRows(afterRow + 1, mrows);
         copyRowData(m.flmat, afterRow + 1, mrows);
@@ -1235,17 +1212,17 @@ public class IntMatrix implements EuclidConstants {
      *            from -1 to rows-1
      * @param f
      *            data to insert
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and <TT>this.cols</TT> differ
      */
-    public void insertRowData(int after_row, IntArray f) throws EuclidException {
+    public void insertRowData(int after_row, IntArray f) throws EuclidRuntimeException {
         checkColumns(f);
         int mcols = f.size();
         if (after_row >= -1 && after_row <= rows && mcols == cols) {
             insertRows(after_row + 1, 1);
             replaceRowData(after_row + 1, f);
         } else {
-            throw new EuclidException("Cannot add array after  row" + after_row
+            throw new EuclidRuntimeException("Cannot add array after  row" + after_row
                     + S_SLASH + rows + "==" + mcols + S_SLASH + cols);
         }
     }
@@ -1254,10 +1231,10 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param f
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f.size() and <TT>this.rows</TT> differ
      */
-    public void appendColumnData(IntArray f) throws EuclidException {
+    public void appendColumnData(IntArray f) throws EuclidRuntimeException {
         if (cols == 0) {
             rows = f.size();
         }
@@ -1266,12 +1243,10 @@ public class IntMatrix implements EuclidConstants {
     /**
      * append data to matrix columnwise.
      * 
-     * @param m
-     *            data to append
-     * @exception EuclidException
-     *                m.rows and <TT>this.rows</TT> differ
+     * @param m data to append
+     * @exception EuclidRuntimeException m.rows and <TT>this.rows</TT> differ
      */
-    public void appendColumnData(IntMatrix m) throws EuclidException {
+    public void appendColumnData(IntMatrix m) throws EuclidRuntimeException {
         if (cols == 0) {
             rows = m.getRows();
         }
@@ -1282,10 +1257,10 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param f
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT> differ
      */
-    public void appendRowData(IntArray f) throws EuclidException {
+    public void appendRowData(IntArray f) throws EuclidRuntimeException {
         if (rows == 0) {
             cols = f.size();
         }
@@ -1296,10 +1271,10 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param m
      *            data to append
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                m.cols and <TT>this.cols</TT> differ
      */
-    public void appendRowData(IntMatrix m) throws EuclidException {
+    public void appendRowData(IntMatrix m) throws EuclidRuntimeException {
         if (rows == 0) {
             cols = m.getCols();
         }
@@ -1336,11 +1311,11 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param is
      *            indexes to reorder by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                is.size() and <TT>this.cols</TT> differ
      * @return new matrix
      */
-    public IntMatrix reorderColumnsBy(IntSet is) throws EuclidException {
+    public IntMatrix reorderColumnsBy(IntSet is) throws EuclidRuntimeException {
         checkColumns(is);
         IntMatrix temp = new IntMatrix(rows, is.size());
         for (int i = 0; i < is.size(); i++) {
@@ -1358,19 +1333,19 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param is
      *            indexes to reprder by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                is.size() and <TT>this.rows</TT> differ
      * @return matrix
      */
-    public IntMatrix reorderRowsBy(IntSet is) throws EuclidException {
+    public IntMatrix reorderRowsBy(IntSet is) throws EuclidRuntimeException {
         if (is.size() != rows) {
-            throw new EuclidException("unequal matrices");
+            throw new EuclidRuntimeException("unequal matrices");
         }
         IntMatrix temp = new IntMatrix(is.size(), cols);
         for (int i = 0; i < is.size(); i++) {
             int irow = is.elementAt(i);
             if (irow >= rows || irow < 0) {
-                throw new EuclidException("irow: " + irow);
+                throw new EuclidRuntimeException("irow: " + irow);
             }
             IntArray rowdat = this.extractRowData(irow);
             temp.replaceRowData(i, rowdat);
@@ -1388,12 +1363,12 @@ public class IntMatrix implements EuclidConstants {
      *            starting col
      * @param high_col
      *            end col
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                low/high_row/col are outside range of <TT>this</TT>
      * @return matrix
      */
     public IntMatrix extractSubMatrixData(int low_row, int high_row,
-            int low_col, int high_col) throws EuclidException {
+            int low_col, int high_col) throws EuclidRuntimeException {
         return new IntMatrix(this, low_row, high_row, low_col, high_col);
     }
     /**
@@ -1401,11 +1376,11 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param col1
      * @param col2
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of columns
      * @return 2*rows data
      */
-    public Int2Array extractColumns(int col1, int col2) throws EuclidException {
+    public Int2Array extractColumns(int col1, int col2) throws EuclidRuntimeException {
         IntArray x = this.extractColumnData(col1);
         IntArray y = this.extractColumnData(col2);
         return new Int2Array(x, y);
@@ -1415,11 +1390,11 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param row1
      * @param row2
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of rows
      * @return 2*cols data
      */
-    public Int2Array extractRows(int row1, int row2) throws EuclidException {
+    public Int2Array extractRows(int row1, int row2) throws EuclidRuntimeException {
         IntArray x = this.extractRowData(row1);
         IntArray y = this.extractRowData(row2);
         return new Int2Array(x, y);
@@ -1430,11 +1405,11 @@ public class IntMatrix implements EuclidConstants {
      * 
      * @param r
      *            the range
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             bad values of rows
      * @return matrix with 1s where data is in range else 0
      */
-    public IntMatrix elementsInRange(IntRange r) throws EuclidException {
+    public IntMatrix elementsInRange(IntRange r) throws EuclidRuntimeException {
         IntMatrix m = new IntMatrix(rows, cols);
         for (int irow = 0; irow < rows; irow++) {
             for (int jcol = 0; jcol < cols; jcol++) {

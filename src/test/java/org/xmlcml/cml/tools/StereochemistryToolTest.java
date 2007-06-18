@@ -81,9 +81,8 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 			"  </bondArray>" +
 			"</molecule>";
 		CMLMolecule cisMol = (CMLMolecule) parseValidString(cisMolS);
-		CMLAtom atom1 = cisMol.getAtomById("a1");
-		CMLAtom atom2 = cisMol.getAtomById("a2");
-		CMLBond bond = cisMol.getBond(atom1, atom2);
+//		CMLAtom atom1 = cisMol.getAtomById("a1");
+//		CMLAtom atom2 = cisMol.getAtomById("a2");
 		ConnectionTableTool ctTool = new ConnectionTableTool(cisMol);
 		List<CMLBond> bonds = ctTool.getCyclicBonds();
 		Assert.assertEquals("cyclic", 0, bonds.size());
@@ -216,6 +215,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		CMLAtom ligand0 = molecule.getAtomById("a19");
 		CMLAtom ligand1 = molecule.getAtomById("a34");
 		StereochemistryTool st = new StereochemistryTool(molecule);
+		@SuppressWarnings("unused")
 		CMLBondStereo bondStereo = null;
 		try {
 			bondStereo = st.create3DBondStereo(bond, ligand0, ligand1);

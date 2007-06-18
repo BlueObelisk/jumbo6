@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.IntSet;
@@ -16,7 +16,6 @@ import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.RealRange;
-import org.xmlcml.euclid.Util;
 
 /**
  * test RealMatrix
@@ -155,12 +154,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testRealMatrixRealMatrixIntIntIntInt() {
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(m2, 1, 2, 1, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix m = new RealMatrix(m2, 1, 2, 1, 3);
         Assert.assertEquals("int int double[]", "{2,3}" + "\n(22.0,23.0,24.0)"
                 + "\n(32.0,33.0,34.0)", m.toString());
         Assert.assertEquals("int int double[] rows", 2, m.getRows());
@@ -185,13 +179,8 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testRealMatrixIntMatrix() {
-        IntMatrix i2 = null;
-        try {
-            i2 = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
+        IntMatrix i2 = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
                     24, 31, 32, 33, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrix m = new RealMatrix(i2);
         Assert.assertEquals("int int double[]", "{3,4}"
                 + "\n(11.0,12.0,13.0,14.0)" + "\n(21.0,22.0,23.0,24.0)"
@@ -205,13 +194,8 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testGetIntMatrix() {
-        RealMatrix mm2 = null;
-        try {
-            mm2 = new RealMatrix(3, 4, new double[] { 11.1, 12.1, 13.1, 14.1,
+        RealMatrix mm2 = new RealMatrix(3, 4, new double[] { 11.1, 12.1, 13.1, 14.1,
                     21.1, 22.1, 23.1, 24.1, 31.1, 32.1, 33.1, 34.1, });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         IntMatrix m = mm2.getIntMatrix();
         Assert.assertEquals("int int double[]", "{3,4}" + "\n(11,12,13,14)"
                 + "\n(21,22,23,24)" + "\n(31,32,33,34)", m.toString());
@@ -224,15 +208,10 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testRealMatrixDoubleArrayArray() {
-        RealMatrix mm2 = null;
-        try {
-            mm2 = new RealMatrix(new double[][] {
+        RealMatrix mm2 = new RealMatrix(new double[][] {
                     new double[] { 11.1, 12.1, 13.1, 14.1 },
                     new double[] { 21.1, 22.1, 23.1, 24.1 },
                     new double[] { 31.1, 32.1, 33.1, 34.1 } });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         IntMatrix m = mm2.getIntMatrix();
         Assert.assertEquals("int int double[]", "{3,4}" + "\n(11,12,13,14)"
                 + "\n(21,22,23,24)" + "\n(31,32,33,34)", m.toString());
@@ -259,15 +238,10 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testGetRowsCols() {
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(new double[][] {
+        RealMatrix m = new RealMatrix(new double[][] {
                     new double[] { 11.1, 12.1, 13.1, 14.1 },
                     new double[] { 21.1, 22.1, 23.1, 24.1 },
                     new double[] { 31.1, 32.1, 33.1, 34.1 } });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         Assert.assertEquals("int int double[] rows", 3, m.getRows());
         Assert.assertEquals("int int double[] cols", 4, m.getCols());
     }
@@ -306,12 +280,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testPlus() {
-        RealMatrix m = null;
-        try {
-            m = m2.plus(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealMatrix m = m2.plus(m2);
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 22.0, 24.0, 26.0, 28.0, 42.0, 44.0, 46.0, 48.0, 62.0, 64.0,
                 66.0, 68.0 }, m, EPS);
@@ -322,21 +291,11 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testSubtract() {
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(new double[][] {
+        RealMatrix m = new RealMatrix(new double[][] {
                     new double[] { 11.1, 12.1, 13.1, 14.1 },
                     new double[] { 21.1, 22.1, 23.1, 24.1 },
                     new double[] { 31.1, 32.1, 33.1, 34.1 } });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        RealMatrix mm = null;
-        try {
-            mm = m2.subtract(m);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealMatrix mm = m2.subtract(m);
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1,
                 -0.1, -0.1, }, mm, EPS);
@@ -358,19 +317,9 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testMultiplyRealMatrix() {
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(new double[][] { new double[] { 10, 20, 30 },
+        RealMatrix m = new RealMatrix(new double[][] { new double[] { 10, 20, 30 },
                     new double[] { 40, 50, 60 }, });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        RealMatrix mm = null;
-        try {
-            mm = m.multiply(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealMatrix mm = m.multiply(m2);
         RealMatrixTest.assertEquals("matrix as array", 2, 4,
                 new double[] { 1460.0, 1520.0, 1580.0, 1640.0, 3350.0, 3500.0,
                         3650.0, 3800.0, }, mm, EPS);
@@ -392,25 +341,16 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testMultiplyEquals() {
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(new double[][] { new double[] { 10, 20, 30 },
+        RealMatrix m = new RealMatrix(new double[][] { new double[] { 10, 20, 30 },
                     new double[] { 40, 50, 60 }, });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
         try {
             m2.multiplyEquals(m);
             alwaysFail("non-conformable matrices");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("multiplyEquals", "unequal matrices (4, 2)", e
                     .getMessage());
         }
-        try {
-            m.multiplyEquals(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m.multiplyEquals(m2);
         RealMatrixTest.assertEquals("matrix as array", 2, 4,
                 new double[] { 1460.0, 1520.0, 1580.0, 1640.0, 3350.0, 3500.0,
                         3650.0, 3800.0, }, m, EPS);
@@ -422,12 +362,7 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testMultiplyRealArray() {
         RealArray ra = new RealArray(new double[] { 1., 2., 3., 4. });
-        RealArray raa = null;
-        try {
-            raa = m2.multiply(ra);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealArray raa = m2.multiply(ra);
         RealArrayTest.assertEquals("array",
                 new double[] { 130.0, 230.0, 330.0 }, raa, EPS);
     }
@@ -439,11 +374,7 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testColumnwiseDivide() {
         RealArray ra = new RealArray(new double[] { 1., 2., 3., 4. });
-        try {
-            m2.columnwiseDivide(ra);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.columnwiseDivide(ra);
         RealMatrixTest.assertEquals("array", 3, 4, new double[] { 11.0, 6.0,
                 4.333333, 3.5, 21.0, 11.0, 7.66666666, 6.0, 31.0, 16.0, 11.0,
                 8.5, }, m2, 0.00001);
@@ -454,14 +385,10 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementAtIntInt() {
-        try {
-            Assert.assertEquals("elementAt ", 32.0, m2.elementAt(2, 1), EPS);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Assert.assertEquals("elementAt ", 32.0, m2.elementAt(2, 1), EPS);
         try {
             m2.elementAt(5, 5);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "Bad value of row: 5/3", e
                     .getMessage());
         }
@@ -472,15 +399,11 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementAtInt2() {
-        try {
-            Assert.assertEquals("elementAt ", 32.0, m2
-                    .elementAt(new Int2(2, 1)), EPS);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Assert.assertEquals("elementAt ", 32.0, m2
+                .elementAt(new Int2(2, 1)), EPS);
         try {
             m2.elementAt(new Int2(5, 5));
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "Bad value of row: 5/3", e
                     .getMessage());
         }
@@ -492,11 +415,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testSetElementAt() {
-        try {
-            m2.setElementAt(1, 2, 15.);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.setElementAt(1, 2, 15.);
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 11.0, 12.0, 13.0, 14.0, 21.0, 22.0, 15.0, 24.0, 31.0, 32.0,
                 33.0, 34.0, }, m2, EPS);
@@ -527,12 +446,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testLargestElementInColumn() {
-        double d = Double.NaN;
-        try {
-            d = m2.largestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = m2.largestElementInColumn(1);
         Assert.assertEquals("largestElement", 32., d, EPS);
     }
 
@@ -542,12 +456,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfLargestElementInColumn() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfLargestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfLargestElementInColumn(1);
         Assert.assertEquals("largestElement", 2, i);
     }
 
@@ -556,12 +465,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testLargestElementInRow() {
-        double d = Double.NaN;
-        try {
-            d = m2.largestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = m2.largestElementInRow(1);
         Assert.assertEquals("largestElement", 24., d, EPS);
     }
 
@@ -571,12 +475,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfLargestElementInRow() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfLargestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfLargestElementInRow(1);
         Assert.assertEquals("largestElement", 3, i);
     }
 
@@ -585,12 +484,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElement() {
-        double d = Double.NaN;
-        try {
-            d = m2.smallestElement();
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = m2.smallestElement();
         Assert.assertEquals("smallestElement", 11., d, EPS);
     }
 
@@ -610,12 +504,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElementInColumn() {
-        double d = Double.NaN;
-        try {
-            d = m2.smallestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d =  m2.smallestElementInColumn(1);
         Assert.assertEquals("smallestElement", 12., d, EPS);
     }
 
@@ -625,12 +514,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfSmallestElementInColumn() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfSmallestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfSmallestElementInColumn(1);
         Assert.assertEquals("largestElement", 0, i);
     }
 
@@ -639,12 +523,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElementInRow() {
-        double d = Double.NaN;
-        try {
-            d = m2.smallestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = m2.smallestElementInRow(1);
         Assert.assertEquals("smallestElement", 21., d, EPS);
     }
 
@@ -654,12 +533,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfSmallestElementInRow() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfSmallestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfSmallestElementInRow(1);
         Assert.assertEquals("largestElement", 0, i);
     }
 
@@ -669,16 +543,11 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testIsOrthogonal() {
         Assert.assertFalse("orthogonal", m2.isOrthogonal());
-        RealMatrix m = null;
-        try {
-            m = new RealMatrix(2, 2, new double[] { 1., 0., 0., 1. });
+        RealMatrix m = new RealMatrix(2, 2, new double[] { 1., 0., 0., 1. });
             Assert.assertTrue("orthogonal", m.isOrthogonal());
             m = new RealMatrix(2, 2, new double[] { Math.cos(Math.PI / 3.),
                     Math.sin(Math.PI / 3.), -Math.sin(Math.PI / 3.),
                     Math.cos(Math.PI / 3.) });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Assert.assertTrue("orthogonal", m.isOrthogonal());
     }
 
@@ -687,12 +556,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testEuclideanRowLength() {
-        double d = -1.0;
-        try {
-            d = m2.euclideanRowLength(1);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d = m2.euclideanRowLength(1);
         Assert.assertEquals("euclidean row length", 45.05552130427524, d, EPS);
     }
 
@@ -712,12 +576,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testEuclideanColumnLength() {
-        double d = Double.NaN;
-        try {
-            d = m2.euclideanColumnLength(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = m2.euclideanColumnLength(1);
         Assert.assertEquals("euclidean row length", 40.64480286580315, d, EPS);
     }
 
@@ -737,12 +596,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractColumnData() {
-        RealArray ra = null;
-        try {
-            ra = m2.extractColumnData(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealArray ra = m2.extractColumnData(1);
         RealArrayTest.assertEquals("euclidean column lengths", new double[] {
                 12., 22., 32. }, ra, EPS);
     }
@@ -752,12 +606,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractRowData() {
-        RealArray ra = null;
-        try {
-            ra = m2.extractRowData(1);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealArray ra = m2.extractRowData(1);
         RealArrayTest.assertEquals("euclidean column lengths", new double[] {
                 21., 22., 23., 24. }, ra, EPS);
     }
@@ -828,12 +677,8 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testIsSquare() {
         Assert.assertFalse("isSquare", m2.isSquare());
-        try {
-            Assert.assertTrue("isSquare", new RealMatrix(2, 2, new double[] {
+        Assert.assertTrue("isSquare", new RealMatrix(2, 2, new double[] {
                     11., 12., 21., 22. }).isSquare());
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
     }
 
     /**
@@ -884,12 +729,8 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceColumnDataIntRealArray() {
-        try {
-            m2.replaceColumnData(1, new RealArray(
+        m2.replaceColumnData(1, new RealArray(
                     new double[] { 19., 29., 39. }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 11.0, 19., 13., 14.0, 21.0, 29., 23., 24.0, 31.0, 39., 33.,
                 34.0, }, m2, EPS);
@@ -913,18 +754,12 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceColumnDataIntRealMatrix() {
-        RealMatrix m = null;
-        RealMatrix expect = null;
-        try {
-            m = new RealMatrix(3, 2, new double[] { 72., 73., 82., 83., 92.,
+        RealMatrix m = new RealMatrix(3, 2, new double[] { 72., 73., 82., 83., 92.,
                     93. });
             logger.info("\n--OK replace-- 1 " + m + "\n----");
             m2.replaceColumnData(1, m);
-            expect = new RealMatrix(3, 4, new double[] { 11.0, 72.0, 73.0,
+            RealMatrix expect = new RealMatrix(3, 4, new double[] { 11.0, 72.0, 73.0,
                     14.0, 21.0, 82.0, 83.0, 24.0, 31.0, 92.0, 93.0, 34.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -935,14 +770,9 @@ public class RealMatrixTest extends MatrixTest {
     public void testInsertColumns() {
         // inserts 3 empty columns
         m2.makeSpaceForNewColumns(1, 3);
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(3, 7, new double[] { 11.0, 0.0, 0.0, 0.0,
+        RealMatrix expect = new RealMatrix(3, 7, new double[] { 11.0, 0.0, 0.0, 0.0,
                     12.0, 13.0, 14.0, 21.0, 0.0, 0.0, 0.0, 22.0, 23.0, 24.0,
                     31.0, 0.0, 0.0, 0.0, 32.0, 33.0, 34.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -953,20 +783,11 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testInsertColumnDataIntRealArray() {
         // inserts a column
-        try {
-            m2.insertColumnData(1,
+        m2.insertColumnData(1,
                     new RealArray(new double[] { 91., 92., 93. }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(3, 5, new double[] { 11.0, 12.0, 91.0,
+        RealMatrix expect = new RealMatrix(3, 5, new double[] { 11.0, 12.0, 91.0,
                     13.0, 14.0, 21.0, 22.0, 92.0, 23.0, 24.0, 31.0, 32.0, 93.0,
                     33.0, 34.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -977,26 +798,12 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testInsertColumnDataIntRealMatrix() {
         logger.info("+++insertColumnData>>>");
-        RealMatrix insert = null;
-        try {
-            insert = new RealMatrix(3, 2, new double[] { 72., 73., 82., 83.,
+        RealMatrix insert = new RealMatrix(3, 2, new double[] { 72., 73., 82., 83.,
                     92., 93., });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
             m2.insertColumnData(1, insert);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(3, 6, new double[] { 11.0, 12.0, 72.0,
+        RealMatrix expect = new RealMatrix(3, 6, new double[] { 11.0, 12.0, 72.0,
                     73.0, 13.0, 14.0, 21.0, 22.0, 82.0, 83.0, 23.0, 24.0, 31.0,
                     32.0, 92.0, 93.0, 33.0, 34.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -1017,12 +824,8 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceRowDataIntRealArray() {
-        try {
             m2.replaceRowData(1, new RealArray(new double[] { 71.0, 72., 73.,
                     74. }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 11.0, 12.0, 13.0, 14.0, 71.0, 72.0, 73.0, 74.0, 31.0, 32.0,
                 33.0, 34.0, }, m2, EPS);
@@ -1034,11 +837,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceRowDataIntDoubleArray() {
-        try {
             m2.replaceRowData(1, new double[] { 71.0, 72., 73., 74. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 11.0, 12.0, 13.0, 14.0, 71.0, 72.0, 73.0, 74.0, 31.0, 32.0,
                 33.0, 34.0, }, m2, EPS);
@@ -1052,25 +851,11 @@ public class RealMatrixTest extends MatrixTest {
     public void testReplaceRowDataIntRealMatrix() {
         logger.info("+++replaceRowData>>>");
         // FIXME
-        RealMatrix insert = null;
-        try {
-            insert = new RealMatrix(new RealMatrix(2, 4, new double[] { 71.0,
+        RealMatrix insert = new RealMatrix(new RealMatrix(2, 4, new double[] { 71.0,
                     72.0, 73.0, 74.0, 81.0, 82.0, 83.0, 84.0, }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            m2.replaceRowData(0, insert);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(3, 4, new double[] { 11.0, 12.0, 13.0,
+        m2.replaceRowData(0, insert);
+        RealMatrix expect = new RealMatrix(3, 4, new double[] { 11.0, 12.0, 13.0,
                     14.0, 71.0, 72.0, 73.0, 74.0, 81.0, 82.0, 83.0, 84.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         // rows 2 and 3 are not filled
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
@@ -1082,20 +867,11 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testInsertRowDataIntRealMatrix() {
         // FIXME
-        try {
             m2.insertRowData(1, new RealMatrix(2, 4, new double[] { 71.0, 72.,
                     73., 74., 81.0, 82., 83., 84., }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(5, 4, new double[] { 11.0, 12.0, 13.0,
+        RealMatrix expect = new RealMatrix(5, 4, new double[] { 11.0, 12.0, 13.0,
                     14.0, 21.0, 22.0, 23.0, 24.0, 71.0, 72.0, 73.0, 74.0, 81.0,
                     82.0, 83.0, 84.0, 31.0, 32.0, 33.0, 34.0, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -1105,12 +881,8 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testInsertRowDataIntRealArray() {
-        try {
             m2.insertRowData(1, new RealArray(new double[] { 71.0, 72., 73.,
                     74., }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", 4, 4, new double[] {
                 11.0, 12.0, 13.0, 14.0, 21.0, 22.0, 23.0, 24.0, 71.0, 72.0,
                 73.0, 74.0, 31.0, 32.0, 33.0, 34.0, }, m2, EPS);
@@ -1122,11 +894,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testAppendColumnDataRealArray() {
-        try {
-            m2.appendColumnData(new RealArray(new double[] { 17., 27., 37., }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.appendColumnData(new RealArray(new double[] { 17., 27., 37., }));
         RealMatrixTest.assertEquals("matrix as array", 3, 5, new double[] {
                 11.0, 12.0, 13.0, 14.0, 17.0, 21.0, 22.0, 23.0, 24.0, 27.0,
                 31.0, 32.0, 33.0, 34.0, 37.0 }, m2, EPS);
@@ -1139,26 +907,12 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testAppendColumnDataRealMatrix() {
         // logger.info("+++appendColumnData>>>");
-        RealMatrix rm = null;
-        try {
-            rm = new RealMatrix(3, 2, new double[] { 17., 18., 27., 28., 37.,
+        RealMatrix rm = new RealMatrix(3, 2, new double[] { 17., 18., 27., 28., 37.,
                     38. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            m2.appendColumnData(rm);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(3, 6, new double[] { 11.0, 12.0, 13.0,
+        m2.appendColumnData(rm);
+        RealMatrix expect = new RealMatrix(3, 6, new double[] { 11.0, 12.0, 13.0,
                     14.0, 17.0, 18.0, 21.0, 22.0, 23.0, 24.0, 27.0, 28.0, 31.0,
                     32.0, 33.0, 34.0, 37.0, 38.0 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -1168,11 +922,7 @@ public class RealMatrixTest extends MatrixTest {
     @Test
     public void testAppendRowDataRealArray() {
         RealArray ra = new RealArray(new double[] { 41., 42., 43., 44. });
-        try {
-            m2.appendRowData(ra);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.appendRowData(ra);
         // fails to insert data
         RealMatrixTest.assertEquals("matrix as array", 4, 4, new double[] {
                 11.0, 12.0, 13.0, 14.0, 21.0, 22.0, 23.0, 24.0, 31.0, 32.0,
@@ -1186,26 +936,12 @@ public class RealMatrixTest extends MatrixTest {
     public void testAppendRowDataRealMatrix() {
         logger.info("+++appendRowData>>>");
         // FIXME
-        RealMatrix rm = null;
-        try {
-            rm = new RealMatrix(2, 4, new double[] { 41., 42., 43., 44., 51.,
+        RealMatrix rm = new RealMatrix(2, 4, new double[] { 41., 42., 43., 44., 51.,
                     52., 53., 54. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        try {
-            m2.appendRowData(rm);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        RealMatrix expect = null;
-        try {
-            expect = new RealMatrix(5, 4, new double[] { 11.0, 12.0, 13.0,
-                    14.0, 21.0, 22.0, 23.0, 24.0, 31.0, 32.0, 33.0, 34.0, 41.0,
-                    42.0, 43.0, 44.0, 51.0, 52.0, 53.0, 54.0 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.appendRowData(rm);
+        RealMatrix expect = new RealMatrix(5, 4, new double[] { 11.0, 12.0, 13.0,
+            14.0, 21.0, 22.0, 23.0, 24.0, 31.0, 32.0, 33.0, 34.0, 41.0,
+            42.0, 43.0, 44.0, 51.0, 52.0, 53.0, 54.0 });
         RealMatrixTest.assertEquals("matrix as array", m2, expect, EPS);
     }
 
@@ -1215,12 +951,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceSubMatrixData() {
-        RealMatrix rm = null;
-        try {
-            rm = new RealMatrix(2, 2, new double[] { 71., 72., 81., 82. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix rm = new RealMatrix(2, 2, new double[] { 71., 72., 81., 82. });
         m2.replaceSubMatrixData(1, 1, rm);
         // fails to insert data
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
@@ -1233,12 +964,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReorderColumnsBy() {
-        RealMatrix mm = null;
-        try {
-            mm = m2.reorderColumnsBy(new IntSet(new int[] { 3, 1, 2, 0 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix mm = m2.reorderColumnsBy(new IntSet(new int[] { 3, 1, 2, 0 }));
         // fails to insert data
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 14.0, 12.0, 13.0, 11.0, 24.0, 22.0, 23.0, 21.0, 34.0, 32.0,
@@ -1250,12 +976,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testReorderRowsBy() {
-        RealMatrix mm = null;
-        try {
-            mm = m2.reorderRowsBy(new IntSet(new int[] { 1, 2, 0 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix mm = m2.reorderRowsBy(new IntSet(new int[] { 1, 2, 0 }));
         // fails to insert data
         RealMatrixTest.assertEquals("matrix as array", 3, 4, new double[] {
                 21.0, 22.0, 23.0, 24.0, 31.0, 32.0, 33.0, 34.0, 11.0, 12.0,
@@ -1268,12 +989,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractSubMatrixData() {
-        RealMatrix mm = null;
-        try {
-            mm = m2.extractSubMatrixData(1, 2, 2, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix mm = m2.extractSubMatrixData(1, 2, 2, 3);
         RealMatrixTest.assertEquals("sub matrix", 2, 2, new double[] { 23.0,
                 24.0, 33.0, 34.0 }, mm, EPS);
     }
@@ -1283,12 +999,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractColumns() {
-        Real2Array mm = null;
-        try {
-            mm = m2.extractColumns(1, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Array mm = m2.extractColumns(1, 3);
         RealArrayTest.assertEquals("extract columns", new double[] { 12.0,
                 22.0, 32.0 }, mm.getXArray(), EPS);
         RealArrayTest.assertEquals("extract columns", new double[] { 14.0,
@@ -1300,12 +1011,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractRows() {
-        Real2Array mm = null;
-        try {
-            mm = m2.extractRows(2, 0);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Real2Array mm = m2.extractRows(2, 0);
         RealArrayTest.assertEquals("extract rows", new double[] { 31.0, 32.0,
                 33.0, 34.0 }, mm.getXArray(), EPS);
         RealArrayTest.assertEquals("extract rows", new double[] { 11.0, 12.0,
@@ -1317,12 +1023,7 @@ public class RealMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementsInRange() {
-        IntMatrix im = null;
-        try {
-            im = m2.elementsInRange(new RealRange(13.1, 31.1));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix im = m2.elementsInRange(new RealRange(13.1, 31.1));
         IntTest.assertEquals("sub matrix", new int[] { 0, 0, 0, 1, 1, 1, 1, 1,
                 1, 0, 0, 0 }, im.getMatrixAsArray());
     }

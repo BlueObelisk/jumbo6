@@ -6,7 +6,6 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
 
@@ -207,19 +206,11 @@ public class CMLEigen extends AbstractEigen {
                     && XSD_DOUBLE.equals(matrix.getDataType())) {
                 RealMatrix mat = matrix.getEuclidRealMatrix();
                 if (Orientation.VALUES_COLS.value.equals(this.getOrientation())) {
-                    try {
-                        array = mat.extractColumnData(serial);
-                    } catch (EuclidException e) {
-                        throw new CMLRuntimeException("bug " + e);
-                    }
+                    array = mat.extractColumnData(serial);
                 } else if (Orientation.VALUES_ROWS.value.equals(this
                         .getOrientation())) {
                     System.out.println("ROW");
-                    try {
-                        array = mat.extractRowData(serial);
-                    } catch (EuclidException e) {
-                        throw new CMLRuntimeException("bug " + e);
-                    }
+                    array = mat.extractRowData(serial);
                 } else {
                     throw new CMLRuntimeException("unknown orientation: "
                             + this.getOrientation());

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -144,12 +144,7 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testTransform2Vector2Vector2() {
-        Transform2 ta = null;
-        try {
-            ta = new Transform2(new Vector2(1., 2.), new Vector2(3., 4.));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Transform2 ta = new Transform2(new Vector2(1., 2.), new Vector2(3., 4.));
         Transform2Test.assertEquals("transform2",
                 new double[] { 0.9838699100999074, 0.17888543819998318, 0.0,
                         -0.17888543819998318, 0.9838699100999074, 0.0, 0.0,
@@ -176,13 +171,8 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testTransform2DoubleArray() {
-        Transform2 ta = null;
-        try {
-            ta = new Transform2(new double[] { 1., 0., 1., 0., -1., 2., 0., 0.,
+        Transform2 ta = new Transform2(new double[] { 1., 0., 1., 0., -1., 2., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Transform2Test.assertEquals("transform2", new double[] { 1., 0., 1.,
                 0., -1., 2., 0., 0., 1. }, ta, EPS);
         Assert.assertEquals("transform2", Type.ROT_ORIG.s, ta
@@ -204,19 +194,9 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testTransform2RealSquareMatrix() {
-        RealSquareMatrix rsm = null;
-        try {
-            rsm = new RealSquareMatrix(3, new double[] { 1., 0., 2., 0., 1.,
+        RealSquareMatrix rsm = new RealSquareMatrix(3, new double[] { 1., 0., 2., 0., 1.,
                     3., 0., 0., 1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Transform2 t = null;
-        try {
-            t = new Transform2(rsm);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Transform2 t = new Transform2(rsm);
         DoubleTestBase.assertEquals("rsm", new double[] { 1., 0., 2., 0., 1., 3.,
                 0., 0., 1. }, t.getMatrixAsArray(), EPS);
         Assert.assertEquals("transform2", Type.NULL.s, t
@@ -229,32 +209,18 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testTransform2RealSquareMatrixVector2() {
-        RealSquareMatrix rsm = null;
-        try {
-            rsm = new RealSquareMatrix(2, new double[] { 1., 0., 0., 1., });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Transform2 t = null;
-        try {
-            t = new Transform2(rsm, new Vector2(2., 3.));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealSquareMatrix rsm = new RealSquareMatrix(2, new double[] { 1., 0., 0., 1., });
+        Transform2 t = new Transform2(rsm, new Vector2(2., 3.));
         Transform2Test.assertEquals("rsm", new double[] { 1., 0., 2., 0., 1.,
                 3., 0., 0., 1. }, t, EPS);
         Assert.assertEquals("transform2", Type.NULL.s, t
                 .getTransformationType().s);
-        try {
             rsm = new RealSquareMatrix(3, new double[] { 1., 0., 2., 0., 1.,
                     3., 0., 0., 1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         try {
             t = new Transform2(rsm, new Vector2(2., 3.));
             alwaysFail("must have 2*2 rotation matrix");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("matrix vector",
                     "must have 2*2 rotation matrix", e.getMessage());
         }
@@ -298,33 +264,17 @@ public class Transform2Test extends EuclidTestBase {
     @Test
     public void testCheckMatrix() {
         // not sure this works
-        Transform2 t = null;
-        try {
-            t = new Transform2(new double[] { 0., 1., 0., -1., 0., 0., 0., 0.,
+        Transform2 t = new Transform2(new double[] { 0., 1., 0., -1., 0., 0., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Assert
-                .assertEquals("getType", Type.NULL.s,
+        Assert.assertEquals("getType", Type.NULL.s,
                         t.getTransformationType().s);
-        try {
             t = new Transform2(new double[] { 1., 0., 0., 0., 1., 0., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Assert
-                .assertEquals("getType", Type.NULL.s,
+        Assert.assertEquals("getType", Type.NULL.s,
                         t.getTransformationType().s);
-        try {
             t = new Transform2(new double[] { 1., 0., 2., 0., 1., 3., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Assert
-                .assertEquals("getType", Type.NULL.s,
+        Assert.assertEquals("getType", Type.NULL.s,
                         t.getTransformationType().s);
     }
 
@@ -333,13 +283,8 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testGetAngleOfRotation() {
-        Transform2 t = null;
-        try {
-            t = new Transform2(new double[] { 0., 1., 0., -1., 0., 0., 0., 0.,
+        Transform2 t = new Transform2(new double[] { 0., 1., 0., -1., 0., 0., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Angle a = t.getAngleOfRotation();
         Assert.assertEquals("getAngle", Math.PI / 2., a.getRadian(), EPS);
     }
@@ -349,12 +294,7 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testFlipAboutVector() {
-        Transform2 t = null;
-        try {
-            t = Transform2.flipAboutVector(new Vector2(1., 1.));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform2 t = Transform2.flipAboutVector(new Vector2(1., 1.));
         DoubleTestBase.assertEquals("flip", new double[] { 0.0, 1., 0.0, 1., 0.0,
                 0.0, 0.0, 0.0, 1.0, }, t.getMatrixAsArray(), 0.0000000001);
     }
@@ -387,13 +327,8 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Test
     public void testGetRotationMatrix() {
-        Transform2 t = null;
-        try {
-            t = new Transform2(new double[] { 0., 1., 2., -1., 0., 3., 0., 0.,
+        Transform2 t = new Transform2(new double[] { 0., 1., 2., -1., 0., 3., 0., 0.,
                     1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealSquareMatrix rsm = t.getRotationMatrix();
         DoubleTestBase.assertEquals("getRotationMatrix", new double[] { 0.0, 1.0,
                 -1.0, 0.0, }, rsm.getMatrixAsArray(), EPS);

@@ -1177,6 +1177,9 @@ public class CMLFormula extends AbstractFormula {
 		return (atomArray == null) ? null : atomArray.getCount();
 	}
 
+	/** get atom count
+	 * @return count
+	 */
 	public double getTotalAtomCount() {
 		double[] counts = getCounts();
 		double total = 0;

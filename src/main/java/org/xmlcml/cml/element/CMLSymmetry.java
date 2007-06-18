@@ -9,7 +9,6 @@ import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Point3;
@@ -69,10 +68,8 @@ public class CMLSymmetry extends AbstractSymmetry {
      * 
      * @param xyz
      *            the strings
-     * @throws CMLException
-     *             bad string
      */
-    public CMLSymmetry(String[] xyz) throws CMLException {
+    public CMLSymmetry(String[] xyz) {
         this();
         for (String s : xyz) {
             CMLTransform3 t = new CMLTransform3(s);
@@ -99,10 +96,8 @@ public class CMLSymmetry extends AbstractSymmetry {
      * 
      * @param trStringList transforms to add
      * @return the symmetry operations
-     * @throws CMLException
      */
-    public static CMLSymmetry createFromXYZStrings(List<String> trStringList)
-            throws CMLException {
+    public static CMLSymmetry createFromXYZStrings(List<String> trStringList) {
         List<CMLTransform3> trList = new ArrayList<CMLTransform3>();
         for (String trString : trStringList) {
             trList.add(new CMLTransform3(trString));

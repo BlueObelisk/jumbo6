@@ -3,12 +3,11 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntSet;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealRange;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.ArrayBase.Trim;
 import org.xmlcml.euclid.RealArray.Filter;
 
@@ -131,18 +130,13 @@ public class RealArrayTest extends EuclidTestBase {
     @Test
     public void testRealArrayIntDoubleArray() {
         double[] d = { 1.0, 2.0, 3.0, 4.0 };
-        RealArray r = null;
-        try {
-            r = new RealArray(3, d);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        RealArray r = new RealArray(3, d);
         Assert.assertEquals("r", 3, r.size());
         RealArrayTest.assertEquals("r", new double[] { 1.0, 2.0, 3.0 }, r, EPS);
         try {
             r = new RealArray(5, d);
             alwaysFail("Array size too small");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("double[]", "Array size too small", e
                     .getMessage());
         }
@@ -178,17 +172,12 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testRealArrayRealArrayIntInt() {
-        RealArray r = null;
-        try {
-            r = new RealArray(a1, 1, 2);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        RealArray r = new RealArray(a1, 1, 2);
         Assert.assertEquals("r", 2, r.size());
         RealArrayTest.assertEquals("r", new double[] { 2.0, 4.0 }, r, EPS);
         try {
             r = new RealArray(a1, 0, 5);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("real array", "index out of range 0/5", e
                     .getMessage());
         }
@@ -200,12 +189,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testRealArrayRealArrayIntArray() {
-        RealArray r = null;
-        try {
-            r = new RealArray(a1, new IntArray(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealArray r = new RealArray(a1, new IntArray(new int[] { 3, 1, 2 }));
         Assert.assertEquals("r", 3, r.size());
         RealArrayTest.assertEquals("r", new double[] { 6.0, 2.0, 4.0 }, r, EPS);
     }
@@ -442,12 +426,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testPlus() {
-        RealArray a2 = null;
-        try {
-            a2 = a1.plus(new RealArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealArray a2 = a1.plus(new RealArray("10 20 30 40"));
         RealArrayTest.assertEquals("plus", new double[] { 11.0, 22.0, 34.0,
                 46.0 }, a2, EPS);
     }
@@ -457,11 +436,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testPlusEquals() {
-        try {
-            a1.plusEquals(new RealArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a1.plusEquals(new RealArray("10 20 30 40"));
         RealArrayTest.assertEquals("plus", new double[] { 11.0, 22.0, 34.0,
                 46.0 }, a1, EPS);
     }
@@ -471,12 +446,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testSubtract() {
-        RealArray a2 = null;
-        try {
-            a2 = a1.subtract(new RealArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealArray a2 = a1.subtract(new RealArray("10 20 30 40"));
         RealArrayTest.assertEquals("subtract", new double[] { -9.0, -18.0,
                 -26.0, -34.0 }, a2, EPS);
     }
@@ -486,11 +456,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testSubtractEquals() {
-        try {
-            a1.subtractEquals(new RealArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a1.subtractEquals(new RealArray("10 20 30 40"));
         RealArrayTest.assertEquals("subtract", new double[] { -9.0, -18.0,
                 -26.0, -34.0 }, a1, EPS);
     }
@@ -625,19 +591,14 @@ public class RealArrayTest extends EuclidTestBase {
     @Test
     public void testDotProduct() {
         RealArray a = new RealArray("1 2 3 4");
-        double d = 0.0;
-        try {
-            d = a1.dotProduct(a);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d = a1.dotProduct(a);
         Assert.assertEquals("dot", 41., d, EPS);
         a = new RealArray("1 2 3");
         try {
             a1.dotProduct(a);
             alwaysFail("ArrayIndexOutOfBoundsException");
-        } catch (EuclidException e) {
-            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidException", ""
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidRuntimeException", ""
                     + e);
         }
     }
@@ -657,12 +618,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testRms() {
-        double d = 0.0;
-        try {
-            d = a1.rms();
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d = a1.rms();
         Assert.assertEquals("rms", 3.7749172176, d, 1.0E-06);
     }
 
@@ -671,12 +627,7 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testUnitVector() {
-        RealArray v = null;
-        try {
-            v = a1.unitVector();
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealArray v = a1.unitVector();
         RealArrayTest.assertEquals("unit vector", new double[] {
                 0.13245323570650439, 0.26490647141300877, 0.5298129428260175,
                 0.7947194142390264 }, v, 1.0E-10);
@@ -861,18 +812,9 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Test
     public void testGetReorderedArray() {
-        IntSet intSet = null;
-        try {
-            intSet = new IntSet(new int[] { 3, 1, 0, 2 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntSet intSet = new IntSet(new int[] { 3, 1, 0, 2 });
         RealArray a = null;
-        try {
-            a = a1.getReorderedArray(intSet);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a = a1.getReorderedArray(intSet);
         RealArrayTest.assertEquals("insert", new double[] { 6., 2., 1., 4. },
                 a, EPS);
     }

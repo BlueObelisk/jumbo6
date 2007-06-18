@@ -5,10 +5,7 @@ import java.io.StringReader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
@@ -82,18 +79,10 @@ public class CMLLine3Test extends GeomTestBase {
                 testPoint);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
-        try {
-            Vector3Test.assertEquals(msg, testVector.getEuclidVector3(),
-                    new Vector3(expected.getVector3()), epsilon);
-        } catch (EuclidException e) {
-            Assert.fail("" + e + " (" + msg + S_RBRAK);
-        }
-        try {
-            Point3Test.assertEquals(msg, testPoint.getEuclidPoint3(),
-                    new Point3(expected.getPoint3()), epsilon);
-        } catch (EuclidException e) {
-            Assert.fail("" + e + " (" + msg + S_RBRAK);
-        }
+        Vector3Test.assertEquals(msg, testVector.getEuclidVector3(),
+                new Vector3(expected.getVector3()), epsilon);
+        Point3Test.assertEquals(msg, testPoint.getEuclidPoint3(),
+                new Point3(expected.getPoint3()), epsilon);
     }
 
     /**
@@ -141,12 +130,7 @@ public class CMLLine3Test extends GeomTestBase {
         double x = 1. / Math.sqrt(14.);
         double[] v = new double[] { 1., 2., 3. };
         double[] p = new double[] { 4., 5., 6. };
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(new CMLPoint3(p), new CMLVector3(v));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 l = new CMLLine3(new CMLPoint3(p), new CMLVector3(v));
         CMLLine3Test.assertEquals("line", new CMLPoint3(p), new CMLVector3(x,
                 2 * x, 3 * x), l, EPS);
     }
@@ -161,12 +145,7 @@ public class CMLLine3Test extends GeomTestBase {
         double[] d2 = new double[] { 4., 5., 6. };
         CMLPoint3 p1 = new CMLPoint3(d1);
         CMLPoint3 p2 = new CMLPoint3(d2);
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(p1, p2);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 l = new CMLLine3(p1, p2);
         CMLLine3Test.assertEquals("line", new CMLPoint3(d1), new CMLVector3(
                 -3., -3., -3.), l, EPS);
     }
@@ -176,12 +155,7 @@ public class CMLLine3Test extends GeomTestBase {
      */
     @Test
     public void testEqualsCMLLine3() {
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(pp, vv);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 l = new CMLLine3(pp, vv);
         Assert.assertTrue("equals", l.isEqualTo(ll));
     }
 
@@ -217,12 +191,7 @@ public class CMLLine3Test extends GeomTestBase {
     public void testIsParallelTo() {
         CMLLine3 l2 = new CMLLine3(ll);
         Assert.assertTrue("parallel", ll.isParallelTo(l2));
-        CMLLine3 l3 = null;
-        try {
-            l3 = new CMLLine3(pp, new CMLVector3(1.1, 2.1, 3.1));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 l3 = new CMLLine3(pp, new CMLVector3(1.1, 2.1, 3.1));
         Assert.assertFalse("parallel", ll.isParallelTo(l3));
     }
 
@@ -264,13 +233,8 @@ public class CMLLine3Test extends GeomTestBase {
     @Test
     public void testGetDistanceFromPoint() {
         CMLPoint3 p = new CMLPoint3(1., 1., 1.);
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(new CMLPoint3(4., 5., 6.), new CMLVector3(1., 2.,
+        CMLLine3 l = new CMLLine3(new CMLPoint3(4., 5., 6.), new CMLVector3(1., 2.,
                     3.));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
         double d = l.getDistanceFromPoint(p);
         Assert.assertEquals("distance", 1.3093073414159544, d, EPS);
     }
@@ -281,19 +245,9 @@ public class CMLLine3Test extends GeomTestBase {
      */
     @Test
     public void testGetIntersectionWith() {
-        CMLPlane3 pl = null;
-        try {
-            pl = new CMLPlane3(new CMLVector3(1., 2., 3.), 4.);
-        } catch (CMLRuntimeException e) {
-            neverThrow(e);
-        }
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(new CMLPoint3(4., 5., 6.), new CMLVector3(1., 2.,
+        CMLPlane3 pl = new CMLPlane3(new CMLVector3(1., 2., 3.), 4.);
+        CMLLine3 l = new CMLLine3(new CMLPoint3(4., 5., 6.), new CMLVector3(1., 2.,
                     3.));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
         CMLPoint3 pp = l.getIntersectionWith(pl);
         CMLPoint3Test.assertEquals("intersection", new double[] {
                 2.7833306819354116, 2.5666613638708236, 2.349992045806235 },

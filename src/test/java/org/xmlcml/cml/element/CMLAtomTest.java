@@ -8,12 +8,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLAttribute;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -509,12 +507,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformXYZTransform3() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("y, -x, y+z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("y, -x, y+z");
         xomAtom[0].setPoint3(new Point3(1.1, 1.2, 1.3),
                 CoordinateType.CARTESIAN);
         Point3 p = xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
@@ -532,12 +525,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformCMLTransform3() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("y, -x, y+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("y, -x, y+z");
         xomAtom[0].setPoint3(new Point3(1.1, 1.2, 1.3),
                 CoordinateType.CARTESIAN);
         Point3 p = xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
@@ -572,12 +560,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformFractionalCoordinatesTransform3() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("y, 1/2-x, y+z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("y, 1/2-x, y+z");
         xomAtom[0].setPoint3(new Point3(0.1, 0.2, 0.3),
                 CoordinateType.FRACTIONAL);
         Point3 p = xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
@@ -595,12 +578,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformFractionalCoordinatesCMLTransform3() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("y, 1/2-x, y+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("y, 1/2-x, y+z");
         xomAtom[0].setPoint3(new Point3(0.1, 0.2, 0.3),
                 CoordinateType.FRACTIONAL);
         Point3 p = xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
@@ -632,11 +610,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
         fc = xmlAtom[0].getFormalCharge(FormalChargeControl.DEFAULT);
         Assert.assertEquals("formal charge", 1, fc);
         err = "org.xmlcml.cml.base.CMLRuntime: unset attribute: formalCharge";
-        try {
-            fc = xmlAtom[0].getFormalCharge(FormalChargeControl.NO_DEFAULT);
-        } catch (CMLRuntimeException e) {
-            neverThrow(e);
-        }
+        fc = xmlAtom[0].getFormalCharge(FormalChargeControl.NO_DEFAULT);
     }
 
     /**
@@ -755,12 +729,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     public final void testCalculateSpaceGroupMultiplicity() {
         String[] ss = { "x, y, z", "-x, -y, -z", "x, 1/2-y, 1/2-z",
                 "-x, 1/2+y, 1/2+z" };
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(ss);
-        } catch (CMLException e) {
-            neverFail(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(ss);
         CMLAtom atom1 = new CMLAtom();
         atom1.setElementType("C");
         atom1.setPoint3(new Point3(0.0, 0.0, 0.0), CoordinateType.CARTESIAN);
@@ -787,11 +756,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
 
         ss = new String[] { "x, y, z", "-x, -y, -z", "x, -y, -z", "-x, y, z" };
 
-        try {
-            symmetry = new CMLSymmetry(ss);
-        } catch (CMLException e) {
-            neverFail(e);
-        }
+        symmetry = new CMLSymmetry(ss);
         atom1 = new CMLAtom();
         atom1.setElementType("C");
         atom1.setPoint3(new Point3(0.0, 0.0, 0.0), CoordinateType.CARTESIAN);

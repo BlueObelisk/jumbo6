@@ -465,6 +465,7 @@ public class EntryTool extends AbstractTool {
 	 * CMLRuntimeException
 	 * @param name localname
 	 * @param value of date 
+	 * @return data 
 	 */
     public CMLScalar createDate(String name, String value) {
     	EntryTool.checkEmptyName(name);
@@ -484,6 +485,7 @@ public class EntryTool extends AbstractTool {
 	 * If fails, throws CMLRuntimeException
 	 * @param name localname
 	 * @param value of formula 
+	 * @return formula 
 	 */
     public CMLFormula createFormula(String name, String value) {
     	EntryTool.checkEmptyName(name);
@@ -498,6 +500,7 @@ public class EntryTool extends AbstractTool {
 	/** create Vector3 from string.
 	 * @param name localname
 	 * @param value of vector
+	 * @return vector 
  */
     public CMLVector3 createVector3(String name, String value) {
     	EntryTool.checkEmptyName(name);
@@ -510,6 +513,7 @@ public class EntryTool extends AbstractTool {
 	/** create Vector3 from string.
 	 * @param name localname
 	 * @param value of vector
+	 * @return matrix 
  */
     public CMLMatrix createMatrix(String name, String value) {
     	// FIXME needs to return property

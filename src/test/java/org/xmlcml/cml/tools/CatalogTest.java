@@ -29,7 +29,6 @@ import org.xmlcml.cml.map.IndexableListManager;
 public class CatalogTest extends AbstractTest {
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Catalog#CatalogTool(java.net.URL)}.
 	 */
 	@Test
 	@Ignore
@@ -38,7 +37,6 @@ public class CatalogTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Catalog#CatalogTool(java.io.File)}.
 	 */
 	@Test
 	@Ignore
@@ -47,7 +45,6 @@ public class CatalogTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Catalog#getCatalogList()}.
 	 */
 	@Test
 	public void testGetTopCatalogManager() {
@@ -68,7 +65,6 @@ public class CatalogTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Catalog#getTopCatalogTool()}.
 	 */
 	@Test
 	public void testGetTopCatalogUrl() {
@@ -88,7 +84,6 @@ public class CatalogTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Catalog#getCatalog(java.lang.String)}.
 	 */
 	@Test
 	public void testGetCatalogToolFromListString() {

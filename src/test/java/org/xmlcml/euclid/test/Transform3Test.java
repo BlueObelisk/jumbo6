@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealSquareMatrix;
@@ -203,13 +202,8 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testTransform3DoubleArray() {
-        Transform3 t = null;
-        try {
-            t = new Transform3(new double[] { 0., 0., 1., 4., 0., 1., 0., 8.,
+        Transform3 t = new Transform3(new double[] { 0., 0., 1., 4., 0., 1., 0., 8.,
                     -1., 0., 0., 9., 0., 0., 0., 1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Transform3Test.assertEquals("transform3 double[]", new double[] { 0.,
                 0., 1., 4., 0., 1., 0., 8., -1., 0., 0., 9., 0., 0., 0., 1. },
                 t, EPS);
@@ -231,13 +225,8 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testTransform3RealSquareMatrix() {
-        Transform3 t = null;
-        try {
-            t = new Transform3(new RealSquareMatrix(4, new double[] { 0., 0.,
+        Transform3 t = new Transform3(new RealSquareMatrix(4, new double[] { 0., 0.,
                     1., 4., 0., 1., 0., 8., -1., 0., 0., 9., 0., 0., 0., 1. }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Transform3Test.assertEquals("transform3 rsm", new double[] { 0., 0.,
                 1., 4., 0., 1., 0., 8., -1., 0., 0., 9., 0., 0., 0., 1. }, t,
                 EPS);
@@ -249,13 +238,8 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testTransform3RealSquareMatrixVector3() {
-        Transform3 t = null;
-        try {
-            t = new Transform3(new RealSquareMatrix(3, new double[] { 0., 0.,
+        Transform3 t = new Transform3(new RealSquareMatrix(3, new double[] { 0., 0.,
                     1., 0., 1., 0., -1., 0., 0., }), new Vector3(4., 8., 9.));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Transform3Test.assertEquals("transform3 rsm vector", new double[] { 0.,
                 0., 1., 4., 0., 1., 0., 8., -1., 0., 0., 9., 0., 0., 0., 1. },
                 t, EPS);
@@ -266,12 +250,7 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testTransform3String() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("x, -y, 1/2+z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("x, -y, 1/2+z");
         Transform3Test.assertEquals("transform3 string", new double[] { 1.0,
                 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0,
                 0.0, 0.0, 0.0 }, t, EPS);
@@ -282,18 +261,8 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testConcatenate() {
-        Transform3 t1 = null;
-        try {
-            t1 = new Transform3("x, -y, z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        Transform3 t2 = null;
-        try {
-            t2 = new Transform3("-x, -y, -z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t1 = new Transform3("x, -y, z");
+        Transform3 t2 = new Transform3("-x, -y, -z");
         Transform3 t = t1.concatenate(t2);
         Transform3Test.assertEquals("transform3 concatenate", new double[] {
                 -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0,
@@ -315,11 +284,7 @@ public class Transform3Test extends GeomTest {
         Vector3Test.assertEquals("vector angle", new Vector3(1. / s3, 1. / s3,
                 1. / s3), v, EPS);
         Assert.assertEquals("vector angle", Math.PI / 3., a.getRadian(), EPS);
-        try {
-            t = new Transform3("y, -x, z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        t = new Transform3("y, -x, z");
         t.getAxisAndAngle(v, a);
         // not sure if this is right
         Vector3Test.assertEquals("vector angle", new double[] { 0., 0., -1. },
@@ -332,12 +297,7 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testGetTranslation() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("x+1/2, y+1/4, z+1/6");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("x+1/2, y+1/4, z+1/6");
         Vector3Test.assertEquals("transform3 translation", new double[] {
                 0.5, 0.25, 1. / 6.}, t.getTranslation(), EPS);
     }
@@ -346,12 +306,7 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testSetTranslation() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("x+1/2, y+1/4, z+1/6");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("x+1/2, y+1/4, z+1/6");
         t.incrementTranslation(new Vector3(0.6, 0.7, 0.8));
         Vector3Test.assertEquals("transform3 increment translation", new double[] {
                 1.1, 0.95, 0.8+(1. / 6.)}, t.getTranslation(), EPS);
@@ -362,12 +317,7 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testGetCentreOfRotation() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("-x+1/2, -y+1/2, z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("-x+1/2, -y+1/2, z");
         Transform3Test.assertEquals("transform3 translation", new double[] {
                 -1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.,
                 0.0, 0.0, 0.0, 0.0 }, t, EPS);
@@ -382,15 +332,10 @@ public class Transform3Test extends GeomTest {
      */
     @Test
     public void testGetScales() {
-        Transform3 t = null;
-        try {
-            t = new Transform3(new double[] { 10., 0., 0., 0., 0., 20., 0., 0.,
+        Transform3 t = new Transform3(new double[] { 10., 0., 0., 0., 0., 20., 0., 0.,
                     0., 0., 30., 0., 0., 0., 0., 1.
 
             });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealArray scales = t.getScales();
         RealArrayTest.assertEquals("scales", new double[] { 10., 20., 30. },
                 scales, EPS);

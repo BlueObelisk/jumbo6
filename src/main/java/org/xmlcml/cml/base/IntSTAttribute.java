@@ -53,6 +53,7 @@ public class IntSTAttribute extends CMLAttribute {
     }
     /** copy.
      * uses copy constructor.
+     * @return copy 
      */
     public Node copy() {
     	return new IntSTAttribute(this);

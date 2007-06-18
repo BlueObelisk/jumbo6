@@ -1202,7 +1202,7 @@ public class OscarTool implements CMLConstants {
                 try {
                     d = new Double(v);
                 } catch (NumberFormatException e) {
-    //                System.out.println("Isolated unit: Cannot parse as double: "+v);
+    //                System.out.println("Isolated unit: Cannot parse as double: "+vector);
                 }
             }
             if (d != null) {

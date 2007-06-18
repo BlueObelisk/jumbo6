@@ -39,12 +39,12 @@ public class Real2Array implements EuclidConstants {
      * 
      * @param x
      * @param y
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                x and x must have number of elements
      */
-    public Real2Array(RealArray x, RealArray y) throws EuclidException {
+    public Real2Array(RealArray x, RealArray y) throws EuclidRuntimeException {
         if (x.size() != y.size()) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException("incompatible array sizes "+x.size()+"/"+y.size());
         }
         nelem = x.size();
         xarr = (RealArray) x.clone();

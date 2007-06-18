@@ -170,7 +170,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     /** compare elements on id value.
      * if id is missing returns 0
      * @param element
-     * @return
+     * @return -1, 0, 1
      */
 	public int compareTo(Object element) {
 		int i = 0;

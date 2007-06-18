@@ -45,10 +45,14 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real2Interval;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealRange;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
@@ -656,12 +660,8 @@ public class MoleculeTool extends AbstractTool {
 		List<CMLAtom> coordAtoms = coordsLigandsAS.getAtoms();
 		List<CMLAtom> noCoordAtoms = noCoordsLigandsAS.getAtoms();
 		if (nWithCoords == 0) {
-			try {
-				newPoints = Molutils.calculate3DCoordinates0(thisPoint,
-						geometry, length);
-			} catch (EuclidException je) {
-				throw new CMLException(S_EMPTY + je);
-			}
+			newPoints = Molutils.calculate3DCoordinates0(thisPoint,
+				geometry, length);
 		} else if (nWithCoords == 1) {
 			// ligand on A
 			CMLAtom bAtom = (CMLAtom) coordAtoms.get(0);
@@ -674,22 +674,14 @@ public class MoleculeTool extends AbstractTool {
 					break;
 				}
 			}
-			try {
-				newPoints = Molutils.calculate3DCoordinates1(thisPoint, bAtom
-						.getXYZ3(), (jAtom != null) ? jAtom.getXYZ3() : null,
-								geometry, length, angle);
-			} catch (EuclidException je) {
-				throw new CMLException(S_EMPTY + je);
-			}
+			newPoints = Molutils.calculate3DCoordinates1(thisPoint, bAtom
+					.getXYZ3(), (jAtom != null) ? jAtom.getXYZ3() : null,
+							geometry, length, angle);
 		} else if (nWithCoords == 2) {
 			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
 			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
-			try {
-				newPoints = Molutils.calculate3DCoordinates2(thisPoint, bPoint,
-						cPoint, geometry, length, angle);
-			} catch (EuclidException je) {
-				throw new CMLException(S_EMPTY + je);
-			}
+			newPoints = Molutils.calculate3DCoordinates2(thisPoint, bPoint,
+					cPoint, geometry, length, angle);
 		} else if (nWithCoords == 3) {
 			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
 			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
@@ -1568,29 +1560,29 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 
-	private double getCovalentRadius(String sym) {
-		double radius = getCustomCovalentRadius(sym);
-		if (radius <= 0.0) {
-			ChemicalElement element = ChemicalElement.getChemicalElement(sym);
-			if (element == null) {
-				logger.severe("Unknown element: " + sym);
-			} else {
-				radius = element.getCovalentRadius();
-			}
-		}
-		return radius;
-	}
+//	private double getCovalentRadius(String sym) {
+//		double radius = getCustomCovalentRadius(sym);
+//		if (radius <= 0.0) {
+//			ChemicalElement element = ChemicalElement.getChemicalElement(sym);
+//			if (element == null) {
+//				logger.severe("Unknown element: " + sym);
+//			} else {
+//				radius = element.getCovalentRadius();
+//			}
+//		}
+//		return radius;
+//	}
 
-	private double getCustomCovalentRadius(String sym) {
-		double radius = 0.0;
-		if (sym.equals("Li") || sym.equals("Na") || sym.equals("K")
-				|| sym.equals("Rb") || sym.equals("Cs") ||
-				//
-				sym.equals("Ca") || sym.equals("Sr") || sym.equals("Ba")) {
-			radius = 0.1;
-		}
-		return radius;
-	}
+//	private double getCustomCovalentRadius(String sym) {
+//		double radius = 0.0;
+//		if (sym.equals("Li") || sym.equals("Na") || sym.equals("K")
+//				|| sym.equals("Rb") || sym.equals("Cs") ||
+//				//
+//				sym.equals("Ca") || sym.equals("Sr") || sym.equals("Ba")) {
+//			radius = 0.1;
+//		}
+//		return radius;
+//	}
 
 	/**
 	 * calculate all bonds from this to molecule and join. will transfer all
@@ -2100,6 +2092,9 @@ public class MoleculeTool extends AbstractTool {
 	 * removes metal atoms and bonds from the supplied molecule.  Optional to tag atoms that were metal ligands
 	 * with a 'bonded to metal tag'.
 	 * returns a map containing the list of metal atoms and bonds removed.
+	 * @param mol 
+	 * @param tagMetalLigandAtoms 
+	 * @return map 
 	 */
 	public static Map<List<CMLAtom>, List<CMLBond>> removeMetalAtomsAndBonds(CMLMolecule mol, boolean tagMetalLigandAtoms) {
 		List<CMLAtom> metalAtomList = new ArrayList<CMLAtom>();
@@ -2165,4 +2160,49 @@ public class MoleculeTool extends AbstractTool {
 			nodes.get(i).detach();
 		}
 	}
+	
+    /** returns a "g" element
+     * will require to be added to an svg element
+     * @param moleculeDisplay
+     * @return null if problem
+     */
+    public SVGElement createSVG(MoleculeDisplay moleculeDisplay) {
+    	Real2Range moleculeBoundingBox = new AtomSetTool(new CMLAtomSet(molecule)).getExtent2();
+    	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
+    	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
+    	double scale = moleculeInterval.scaleTo(screenBoundingBox);
+    	double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
+    	
+    	SVGG g = new SVGG();
+    	g.setTransform(new Transform2 (
+			new double[]{
+			scale, 0., offsets[0],
+			0.,-scale, offsets[1],
+			0.,    0.,   1.}
+		));
+    	g.setProperties(moleculeDisplay);
+    	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
+    	for (CMLBond bond : molecule.getBonds()) {
+    		SVGElement b = new BondTool(bond).createSVG(bondDisplay);
+    		b.setStrokeWidth(0.2);
+    		if (b != null) {
+    			g.appendChild(b);
+    		}
+		}
+    	for (CMLAtom atom : molecule.getAtoms()) {
+    		AtomTool atomTool = new AtomTool(atom);
+    		SVGElement a = atomTool.createSVG();
+    		if (a != null) {
+    			g.appendChild(a);
+    		}
+		}
+    	return g;
+    }
+    
+//	private double getScale(Real2Range moleculeBoundingBox, Real2Interval screenBoundingBox) {
+//		double scale = Double.NaN;
+//		Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
+//		scale = moleculeInterval.scaleTo(screenBoundingBox);
+//		return scale;
+//	}
 }

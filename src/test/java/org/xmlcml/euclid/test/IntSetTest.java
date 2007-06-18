@@ -3,7 +3,6 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntRange;
 import org.xmlcml.euclid.IntSet;
@@ -138,18 +137,8 @@ public class IntSetTest extends EuclidTestBase {
      */
     @Test
     public void testIntSetIntSetIntSet() {
-        IntSet is0 = null;
-        try {
-            is0 = new IntSet(new int[] { 0, 1, 2, 3 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntSet is = null;
-        try {
-            is = i1.getSubscriptedIntSet(is0);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntSet is0 = new IntSet(new int[] { 0, 1, 2, 3 });
+        IntSet is = i1.getSubscriptedIntSet(is0);
         IntSetTest.assertEquals("copy", new int[] { 3, 4, 1, 2 }, is);
     }
 
@@ -186,8 +175,7 @@ public class IntSetTest extends EuclidTestBase {
         try {
             i1.addElement(8);
         } catch (EuclidRuntimeException e) {
-            Assert
-                    .assertEquals(
+            Assert.assertEquals(
                             "addElement",
                             "org.xmlcml.euclid.EuclidRuntimeException: value (8)outside range (-2147483648...7)",
                             S_EMPTY + e);
@@ -201,16 +189,14 @@ public class IntSetTest extends EuclidTestBase {
     public void testSetMin() {
         i1.setMin(-3);
         i1.addElement(-2);
-        IntSetTest
-                .assertEquals("getElements", new int[] { 3, 4, 1, 2, -2 }, i1);
+        IntSetTest.assertEquals("getElements", new int[] { 3, 4, 1, 2, -2 }, i1);
         i1.addElement(-3);
         IntSetTest.assertEquals("getElements",
                 new int[] { 3, 4, 1, 2, -2, -3 }, i1);
         try {
             i1.addElement(-4);
         } catch (EuclidRuntimeException e) {
-            Assert
-                    .assertEquals(
+            Assert.assertEquals(
                             "addElement",
                             "org.xmlcml.euclid.EuclidRuntimeException: value (-4)outside range (-3...2147483647)",
                             S_EMPTY + e);
@@ -286,20 +272,12 @@ public class IntSetTest extends EuclidTestBase {
      */
     @Test
     public void testAddSet() {
-        try {
-            i1.addSet(new IntSet(new int[] { 5, 19, 8, 33 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        i1.addSet(new IntSet(new int[] { 5, 19, 8, 33 }));
         IntSetTest.assertEquals("addSet",
                 new int[] { 3, 4, 1, 2, 5, 19, 8, 33 }, i1);
         IntSetTest.assertEquals("addSet", new int[] { 0, 1, 2, 3 }, i2);
         IntSet newIs = null;
-        try {
-            newIs = new IntSet(new int[] { 3, 4, 5, 6 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        newIs = new IntSet(new int[] { 3, 4, 5, 6 });
         try {
             i2.addSet(newIs);
         } catch (EuclidRuntimeException e) {
@@ -317,12 +295,8 @@ public class IntSetTest extends EuclidTestBase {
     public void testIntersectionWith() {
         IntSet is1 = null;
         IntSet is2 = null;
-        try {
-            is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
-            is2 = new IntSet(new int[] { 4, 5, 6, 7, 3 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
+        is2 = new IntSet(new int[] { 4, 5, 6, 7, 3 });
         IntSet is = is1.intersectionWith((is2));
         IntSetTest.assertEquals("intersection", new int[] { 4, 5, 3 }, is);
     }
@@ -334,12 +308,8 @@ public class IntSetTest extends EuclidTestBase {
     public void testNotIn() {
         IntSet is1 = null;
         IntSet is2 = null;
-        try {
-            is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
-            is2 = new IntSet(new int[] { 4, 5, 6, 7, 3 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
+        is2 = new IntSet(new int[] { 4, 5, 6, 7, 3 });
         IntSet is = is1.notIn(is2);
         IntSetTest.assertEquals("notIn", new int[] { 1, 2 }, is);
     }
@@ -349,12 +319,7 @@ public class IntSetTest extends EuclidTestBase {
      */
     @Test
     public void testAddRange() {
-        IntSet is1 = null;
-        try {
-            is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntSet is1 = new IntSet(new int[] { 1, 2, 3, 4, 5 });
         is1.addRange(new IntRange(-2, 0));
         IntSetTest.assertEquals("addRange", new int[] { 1, 2, 3, 4, 5, -2, -1,
                 0 }, is1);
@@ -365,12 +330,7 @@ public class IntSetTest extends EuclidTestBase {
      */
     @Test
     public void testInverseMap() {
-        IntSet is1 = null;
-        try {
-            is1 = new IntSet(new int[] { 4, 0, 1, 3, 2 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntSet is1 = new IntSet(new int[] { 4, 0, 1, 3, 2 });
         IntSet is = is1.inverseMap();
         IntSetTest.assertEquals("inverse", new int[] { 1, 2, 4, 3, 0 }, is);
     }

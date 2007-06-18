@@ -91,12 +91,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         Assert.assertEquals("bonds size ", 4, bonds.size());
         bonds.remove(2);
         Assert.assertEquals("bonds size ", 3, bonds.size());
-        CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet((CMLBond[]) bonds.toArray(new CMLBond[0]));
-        } catch (CMLException e) {
-            neverFail(e);
-        }
+        CMLBondSet bondSet = new CMLBondSet((CMLBond[]) bonds.toArray(new CMLBond[0]));
         Assert.assertEquals("bond set size ", 3, bondSet.size());
         List<CMLBond> bonds1 = bondSet.getBonds();
         Assert.assertEquals("bonds size ", 3, bonds1.size());
@@ -108,11 +103,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testAddBonds() {
-        try {
-            bondSet = new CMLBondSet((CMLBond[]) bonds.toArray(new CMLBond[0]));
-        } catch (CMLException e) {
-            neverFail(e);
-        }
+        bondSet = new CMLBondSet((CMLBond[]) bonds.toArray(new CMLBond[0]));
     }
 
     /**
@@ -121,18 +112,10 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
     @Test
     public void testAddBond() {
         bondSet = new CMLBondSet();
-        try {
-            bondSet.addBond(bonds.get(0));
-        } catch (CMLRuntimeException e) {
-            neverFail(e);
-        }
+        bondSet.addBond(bonds.get(0));
         Assert.assertEquals("bond set size", 1, bondSet.size());
         Assert.assertEquals("bond set ", "b1", bondSet.getStringContent());
-        try {
-            bondSet.addBond(bonds.get(2));
-        } catch (CMLRuntimeException e) {
-            neverFail(e);
-        }
+        bondSet.addBond(bonds.get(2));
         Assert.assertEquals("bond set size", 2, bondSet.size());
         Assert.assertEquals("bond set ", "b1 b3", bondSet.getStringContent());
         try {
@@ -166,11 +149,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
             neverThrow(e);
         }
         Assert.assertEquals("bondset2", 1, bondSet2.size());
-        try {
-            bondSet1.addBondSet(bondSet2);
-        } catch (CMLRuntimeException e) {
-            neverFail(e);
-        }
+        bondSet1.addBondSet(bondSet2);
         Assert.assertEquals("bondset2", 3, bondSet1.size());
         try {
             bondSet1.addBondSet(bondSet2);
@@ -222,12 +201,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testGetBondsById() {
-        CMLBondSet bondSet1 = null;
-        try {
-            bondSet1 = bondSet.getBondsById(new String[] { "b3", "b1" });
-        } catch (CMLRuntimeException e) {
-            neverFail(e);
-        }
+        CMLBondSet bondSet1 = bondSet.getBondsById(new String[] { "b3", "b1" });
         Assert.assertEquals("bonds by id", 2, bondSet1.size());
         Assert
                 .assertEquals("bond id", "b3", bondSet1.getBonds().get(0)
@@ -286,11 +260,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         bonds[1] = new CMLBond();
         bonds[1].setId("b11");
         bonds[1].setAtomRefs2(new String[] { "a2", "a4" });
-        try {
-            bondSet.addBonds(bonds);
-        } catch (CMLRuntimeException e) {
-            neverThrow(e);
-        }
+        bondSet.addBonds(bonds);
         Assert.assertEquals("new bondSet", new String[] { "b1", "b2", "b3",
                 "b4", "b10", "b11" }, bondSet.getXMLContent());
     }

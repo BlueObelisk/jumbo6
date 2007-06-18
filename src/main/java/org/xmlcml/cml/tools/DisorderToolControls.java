@@ -89,8 +89,7 @@ public class DisorderToolControls {
 	
 	/**
      * gets disorder remove control.
-     * 
-     * @param removeControl
+	 * @return control
      */
 	public RemoveControl getRemoveControl() {
 		return this.removeControl;
@@ -98,8 +97,7 @@ public class DisorderToolControls {
 	
 	/**
      * gets disorder process control.
-     * 
-     * @param removeControl
+	 * @return control
      */
 	public ProcessControl getProcessControl() {
 		return this.processControl;

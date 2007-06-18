@@ -182,6 +182,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     /** set term if not already set.
      * if entry already has different term, throw exception
+     * @param term 
      */
     public void checkAndSetTerm(String term) {
     	if (term != null) {

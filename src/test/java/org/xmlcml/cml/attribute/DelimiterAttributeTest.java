@@ -16,7 +16,8 @@ import org.xmlcml.euclid.test.StringTestBase;
  */
 public class DelimiterAttributeTest extends AbstractTest {
 
-	/** set up */
+	/** set up 
+	 * @throws Exception */
 	@Before
 	public void setUp() throws Exception {
 	}

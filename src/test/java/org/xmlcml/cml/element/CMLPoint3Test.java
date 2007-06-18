@@ -402,11 +402,10 @@ public class CMLPoint3Test extends GeomTestBase {
             xomP123.elementAt(3);
             alwaysFail("index out of range");
         } catch (CMLRuntimeException e) {
-            Assert
-                    .assertEquals(
-                            "element at",
-                            "org.xmlcml.euclid.EuclidException: index (3)out of range: 0/2",
-                            e.getMessage());
+            Assert.assertEquals(
+                "element at",
+                "org.xmlcml.euclid.EuclidRuntimeException: index (3)out of range: 0/2",
+                e.getMessage());
         }
     }
 
@@ -504,12 +503,7 @@ public class CMLPoint3Test extends GeomTestBase {
         CMLPoint3 pp = new CMLPoint3(p);
         double[] v = { 2., 0., 0. };
         CMLVector3 vv = new CMLVector3(v);
-        CMLLine3 ll = null;
-        try {
-            ll = new CMLLine3(pp, vv);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 ll = new CMLLine3(pp, vv);
         double d = pp.distanceFromLine(ll);
         Assert.assertTrue("is on line", pp.isOnLine(ll));
         d = d * 2; // to avoid not use warning
@@ -521,12 +515,7 @@ public class CMLPoint3Test extends GeomTestBase {
     @Test
     public void testIsOnPlane() {
         double xx = Math.sqrt(1. / 3.);
-        CMLPlane3 pl = null;
-        try {
-            pl = new CMLPlane3(new double[] { 1., 1., 1., xx });
-        } catch (Exception e) {
-            neverThrow(e);
-        }
+        CMLPlane3 pl = new CMLPlane3(new double[] { 1., 1., 1., xx });
         Assert.assertTrue("on plane", xomP100.isOnPlane(pl));
     }
 
@@ -537,29 +526,25 @@ public class CMLPoint3Test extends GeomTestBase {
     @Test
     public void testDistanceFromLine() {
         // FIXME
-        try {
-            double[] p = { 0., 0., 0. };
-            CMLPoint3 pp = new CMLPoint3(p);
-            double[] l = { 2., 0., 0. };
-            CMLVector3 vv = new CMLVector3(l);
-            CMLLine3 ll = new CMLLine3(pp, vv);
-            double d;
-            d = pp.distanceFromLine(ll);
-            // FIXME must change distanceFrom
-            // Assert.assertEquals("distance from line", 0., d, EPS);
+        double[] p = { 0., 0., 0. };
+        CMLPoint3 pp = new CMLPoint3(p);
+        double[] l = { 2., 0., 0. };
+        CMLVector3 vv = new CMLVector3(l);
+        CMLLine3 ll = new CMLLine3(pp, vv);
+        double d;
+        d = pp.distanceFromLine(ll);
+        // FIXME must change distanceFrom
+        // Assert.assertEquals("distance from line", 0., d, EPS);
 
-            p = new double[] { 1., 2., 3. };
-            pp = new CMLPoint3(p);
-            l = new double[] { 10., 0., 0. };
-            vv = new CMLVector3(l);
-            ll = new CMLLine3(pp, vv);
-            d = pp.distanceFromLine(ll);
-            d += 0.0;
-            // FIXME
-            // Assert.assertEquals("distance from line", 0., d, EPS);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        p = new double[] { 1., 2., 3. };
+        pp = new CMLPoint3(p);
+        l = new double[] { 10., 0., 0. };
+        vv = new CMLVector3(l);
+        ll = new CMLLine3(pp, vv);
+        d = pp.distanceFromLine(ll);
+        d += 0.0;
+        // FIXME
+        // Assert.assertEquals("distance from line", 0., d, EPS);
     }
 
     /**

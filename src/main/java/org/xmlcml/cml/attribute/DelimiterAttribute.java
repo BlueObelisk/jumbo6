@@ -195,6 +195,7 @@ public class DelimiterAttribute extends StringSTAttribute {
      *
      * @param s previous string
      * @param snew to append
+     * @return xml content
      */
     public String appendXMLContent(String s, String snew) {
     	s = getDelimitedXMLContent(s);
@@ -229,6 +230,7 @@ public class DelimiterAttribute extends StringSTAttribute {
     /** set double content. if delimiter is not whitespace, prepend and append it
      *
      * @param dd array of doubles
+     * @return string
      */
     public String getDelimitedXMLContent(double[] dd) {
     	for (double d: dd) {

@@ -367,8 +367,8 @@ public class XercesValidator implements EuclidConstants {
                     namespaces = option.equals("n");
                     continue;
                 }
-                if (option.equalsIgnoreCase("v")) {
-                    validation = option.equals("v");
+                if (option.equalsIgnoreCase("vector")) {
+                    validation = option.equals("vector");
                     continue;
                 }
                 if (option.equalsIgnoreCase("s")) {
@@ -558,7 +558,7 @@ public class XercesValidator implements EuclidConstants {
         System.err.println("  -p name     Select parser by name.");
         System.err.println("  -x number   Select number of repetitions.");
         System.err.println("  -n  | -N    Turn on/off namespace processing.");
-        System.err.println("  -v  | -V    Turn on/off validation.");
+        System.err.println("  -vector  | -V    Turn on/off validation.");
         System.err
                 .println("  -s  | -S    Turn on/off Schema validation support.");
         System.err.println("              NOTE: Not supported by all parsers.");

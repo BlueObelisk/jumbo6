@@ -93,16 +93,16 @@ public class IntSet implements EuclidConstants {
      * make from an int[] - all values must be distinct;
      * 
      * @param is
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                values were not distinct
      */
-    public IntSet(int[] is) throws EuclidException {
+    public IntSet(int[] is) throws EuclidRuntimeException {
         nelem = is.length;
         initialise(0, nelem, false);
         int i = 0;
         for (int ii : is) {
             if (this.contains(ii)) {
-                throw new EuclidException("Duplicate value: " + i);
+                throw new EuclidRuntimeException("Duplicate value: " + i);
             }
             array[i++] = ii;
             set.add(new Integer(ii));
@@ -117,14 +117,14 @@ public class IntSet implements EuclidConstants {
      * @param sub
      * @return the matrix
      * 
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public IntSet getSubscriptedIntSet(IntSet sub) throws EuclidException {
+    public IntSet getSubscriptedIntSet(IntSet sub) throws EuclidRuntimeException {
         IntSet is = new IntSet(sub.size());
         for (int i = 0; i < sub.size(); i++) {
             int j = sub.elementAt(i);
             if (j < 0 || j >= this.nelem) {
-                throw new EuclidException("sub index (" + j
+                throw new EuclidRuntimeException("sub index (" + j
                         + ") too large for " + this.toString());
             }
             is.setElementAt(i, this.array[j]);

@@ -51,6 +51,7 @@ public class StringSTAttribute extends CMLAttribute {
 
     /** copy.
      * uses copy constructor.
+     * @return copy
      */
     public Node copy() {
     	return new StringSTAttribute(this);

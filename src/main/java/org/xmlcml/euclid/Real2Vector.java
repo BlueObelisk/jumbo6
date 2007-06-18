@@ -32,16 +32,16 @@ public class Real2Vector implements EuclidConstants {
      * flarray(0,1). Primarily for compatibility with other apps
      * 
      * @param flarray
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                array must have even number of elements
      * 
      */
-    public Real2Vector(double[] flarray) throws EuclidException {
+    public Real2Vector(double[] flarray) throws EuclidRuntimeException {
         this();
         int count = 0;
         int n = flarray.length / 2;
         if (flarray.length != 2 * n) {
-            throw new EuclidException("size must be multiple of 2");
+            throw new EuclidRuntimeException("size must be multiple of 2");
         }
         for (int i = 0; i < n; i++) {
             Real2 p = new Real2(flarray[count++], flarray[count++]);
@@ -54,10 +54,10 @@ public class Real2Vector implements EuclidConstants {
      * @param n
      * @param x
      * @param y
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * 
      */
-    public Real2Vector(int n, double[] x, double[] y) throws EuclidException {
+    public Real2Vector(int n, double[] x, double[] y) throws EuclidRuntimeException {
         this();
         Util.check(x, n);
         Util.check(y, n);
@@ -69,14 +69,14 @@ public class Real2Vector implements EuclidConstants {
      * constructor from RealArray - by REFERENCE
      * 
      * @param m
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                array must have even number of elements
      */
-    public Real2Vector(RealArray m) throws EuclidException {
+    public Real2Vector(RealArray m) throws EuclidRuntimeException {
         this();
         int count = m.size() / 2;
         if (m.size() != count * 2) {
-            throw new EuclidException("size must be multiple of 2");
+            throw new EuclidRuntimeException("size must be multiple of 2");
         }
         double[] marray = m.getArray();
         int j = 0;
@@ -129,10 +129,10 @@ public class Real2Vector implements EuclidConstants {
     /**
      * @param i
      * @param v
-     * @exception EuclidException
-     *                v does not have an i'th element
+     * @exception EuclidRuntimeException
+     *                vector does not have an i'th element
      */
-    public void set(int i, Real2 v) throws EuclidException {
+    public void set(int i, Real2 v) throws EuclidRuntimeException {
         vector.set(i, v);
     }
     /**
@@ -182,15 +182,15 @@ public class Real2Vector implements EuclidConstants {
      * 
      * @param is
      * @return sub array
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                an element of is is out of range of <TT>this</TT>
      */
-    public Real2Vector subArray(IntSet is) throws EuclidException {
+    public Real2Vector subArray(IntSet is) throws EuclidRuntimeException {
         Real2Vector sub = new Real2Vector();
         for (int i = 0; i < is.size(); i++) {
             int ix = is.elementAt(i);
             if (ix < 0 || ix >= vector.size()) {
-                throw new EuclidException("index out of range " + ix);
+                throw new EuclidRuntimeException("index out of range " + ix);
             }
             sub.add(new Real2(this.getReal2(ix)));
         }
@@ -310,12 +310,12 @@ public class Real2Vector implements EuclidConstants {
      * 
      * @param is
      * @return distance
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                a value in IntSet is not in the range 0 ... nelem-1
      */
-    public double distance(IntSet is) throws EuclidException {
+    public double distance(IntSet is) throws EuclidRuntimeException {
         if (is.size() != 2) {
-            throw new EuclidException("index must be multiple of 2");
+            throw new EuclidRuntimeException("index must be multiple of 2");
         }
         return distance(is.elementAt(0), is.elementAt(1));
     }
@@ -326,25 +326,23 @@ public class Real2Vector implements EuclidConstants {
      * @param i2
      * @param i3
      * @return angle
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                two points are coincident
      */
-    public Angle angle(int i1, int i2, int i3) throws EuclidException {
-        Angle a;
-        a = Real2.getAngle(getReal2(i1), getReal2(i2), getReal2(i3));
-        return a;
+    public Angle angle(int i1, int i2, int i3) throws EuclidRuntimeException {
+        return Real2.getAngle(getReal2(i1), getReal2(i2), getReal2(i3));
     }
     /**
      * get angle between 3 points
      * 
      * @param is
      * @return angle
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                a value in IntSet is not in the range 0 ... nelem-1
      */
-    public Angle angle(IntSet is) throws EuclidException {
+    public Angle angle(IntSet is) throws EuclidRuntimeException {
         if (is.size() != 3) {
-            throw new EuclidException("index must be multiple of 3");
+            throw new EuclidRuntimeException("index must be multiple of 3");
         }
         return angle(is.elementAt(0), is.elementAt(1), is.elementAt(2));
     }

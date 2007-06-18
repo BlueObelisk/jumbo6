@@ -3,11 +3,10 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntRange;
 import org.xmlcml.euclid.IntSet;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.ArrayBase.Trim;
 
 /**
@@ -111,21 +110,15 @@ public class IntArrayTest extends EuclidTestBase {
     @Test
     public void testIntArrayIntDoubleArray() {
         int[] d = { 1, 2, 3, 4 };
-        IntArray r = null;
-        try {
-            r = new IntArray(3, d);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntArray r = new IntArray(3, d);
         Assert.assertEquals("r", 3, r.size());
         IntArrayTest.assertEquals("r", new int[] { 1, 2, 3 }, r);
         try {
             r = new IntArray(5, d);
             alwaysFail("Array size too small");
-        } catch (EuclidException e) {
-            Assert
-                    .assertEquals("int[]", "Array would overflow", e
-                            .getMessage());
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals("int[]", "Array would overflow", 
+            		e.getMessage());
         }
     }
 
@@ -145,17 +138,12 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Test
     public void testIntArrayIntArrayIntInt() {
-        IntArray r = null;
-        try {
-            r = new IntArray(a1, 1, 2);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        IntArray r = new IntArray(a1, 1, 2);
         Assert.assertEquals("r", 2, r.size());
         IntArrayTest.assertEquals("r", new int[] { 2, 4 }, r);
         try {
             r = new IntArray(a1, 0, 5);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("int array", "index out of range: 0/5", e
                     .getMessage());
         }
@@ -166,12 +154,7 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Test
     public void testIntArrayIntArrayIntArray() {
-        IntArray r = null;
-        try {
-            r = new IntArray(a1, new IntArray(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntArray r = new IntArray(a1, new IntArray(new int[] { 3, 1, 2 }));
         Assert.assertEquals("r", 3, r.size());
         IntArrayTest.assertEquals("r", new int[] { 6, 2, 4 }, r);
     }
@@ -284,12 +267,7 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Test
     public void testPlus() {
-        IntArray a2 = null;
-        try {
-            a2 = a1.plus(new IntArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntArray a2 = a1.plus(new IntArray("10 20 30 40"));
         IntArrayTest.assertEquals("plus", new int[] { 11, 22, 34, 46 }, a2);
     }
 
@@ -298,12 +276,7 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Test
     public void testSubtract() {
-        IntArray a2 = null;
-        try {
-            a2 = a1.subtract(new IntArray("10 20 30 40"));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntArray a2 = a1.subtract(new IntArray("10 20 30 40"));
         IntArrayTest.assertEquals("subtract", new int[] { -9, -18, -26, -34 },
                 a2);
     }
@@ -314,11 +287,7 @@ public class IntArrayTest extends EuclidTestBase {
     @Test
     public void testSubtractEquals() {
         IntArray ia = new IntArray("10 20 30 40");
-        try {
-            a1.subtractEquals(ia);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a1.subtractEquals(ia);
         IntArrayTest.assertEquals("subtract", new int[] { -9, -18, -26, -34 },
                 a1);
     }
@@ -438,19 +407,14 @@ public class IntArrayTest extends EuclidTestBase {
     @Test
     public void testDotProduct() {
         IntArray a = new IntArray("1 2 3 4");
-        int d = 0;
-        try {
-            d = a1.dotProduct(a);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        int d = a1.dotProduct(a);
         Assert.assertEquals("dot", 41, d);
         a = new IntArray("1 2 3");
         try {
             a1.dotProduct(a);
             alwaysFail("ArrayIndexOutOfBoundsException");
-        } catch (EuclidException e) {
-            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidException", S_EMPTY
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals("dot", "org.xmlcml.euclid.EuclidRuntimeException", S_EMPTY
                     + e);
         }
     }
@@ -611,13 +575,9 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Test
     public void testGetReorderedArray() {
-        try {
-            IntSet intSet = new IntSet(new int[] { 3, 1, 0, 2 });
-            IntArray a = a1.getReorderedArray(intSet);
-            IntArrayTest.assertEquals("insert", new int[] { 6, 2, 1, 4 }, a);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        IntSet intSet = new IntSet(new int[] { 3, 1, 0, 2 });
+        IntArray a = a1.getReorderedArray(intSet);
+        IntArrayTest.assertEquals("insert", new int[] { 6, 2, 1, 4 }, a);
     }
 
     /**

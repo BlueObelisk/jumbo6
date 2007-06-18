@@ -25,6 +25,8 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Real3Range;
 
 /**
  * tool to support atom set. not sure if useful
@@ -473,6 +475,38 @@ public class AtomSetTool implements CMLConstants {
        }
 
        return map;
+   }
+   
+   /** gets extend (bounding box).
+    * 
+    * @return real2range
+    */
+   public Real2Range getExtent2() {
+	   Real2Range r2r = new Real2Range();
+	   List<CMLAtom> atoms = molecule.getAtoms();
+	   for (CMLAtom atom : atoms) {
+		   Real2 xy = atom.getXY2();
+		   if (xy != null) {
+			   r2r.add(xy);
+		   }
+	   }
+	   return r2r;
+   }
+    
+   /** gets extend (bounding box).
+    * 
+    * @return {@link Real3Range}
+    */
+   public Real3Range getExtent3() {
+	   Real3Range r3r = new Real3Range();
+	   List<CMLAtom> atoms = molecule.getAtoms();
+	   for (CMLAtom atom : atoms) {
+		   Point3 xyz = atom.getXYZ3();
+		   if (xyz != null) {
+			   r3r.add(xyz);
+		   }
+	   }
+	   return r3r;
    }
     
 }

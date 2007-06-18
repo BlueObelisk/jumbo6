@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntSet;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
@@ -16,7 +16,6 @@ import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform3;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Axis.Axis3;
 
@@ -109,7 +108,7 @@ public class Point3VectorTest extends EuclidTestBase {
         Assert.assertEquals("p3v", 4, p1.size());
         try {
             new Point3Vector(new double[] { 1., 2., 3., 4. });
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("bad array",
                     "array length must be multiple of 3", e.getMessage());
         }
@@ -122,16 +121,12 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testPoint3VectorIntDoubleArrayDoubleArrayDoubleArray() {
-        try {
-            new Point3Vector(3, new double[] { 11., 12., 13., }, new double[] {
+        new Point3Vector(3, new double[] { 11., 12., 13., }, new double[] {
                     21., 22., 23., }, new double[] { 31., 32., 33., });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         try {
             new Point3Vector(3, new double[] { 11., 12., 13., }, new double[] {
                     21., 22., 23., }, new double[] { 31., 32., });
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("bad array", "array size required (3) found 2",
                     e.getMessage());
         }
@@ -142,13 +137,8 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testPoint3VectorRealArray() {
-        Point3Vector p3v = null;
-        try {
-            p3v = new Point3Vector(new RealArray(new double[] { 11., 12., 13.,
+        Point3Vector p3v = new Point3Vector(new RealArray(new double[] { 11., 12., 13.,
                     21., 22., 23., 31., 32., 33., 41., 42., 43., }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         Assert.assertEquals("p3v", 4, p3v.size());
     }
 
@@ -233,11 +223,7 @@ public class Point3VectorTest extends EuclidTestBase {
     @Test
     public void testSetElementAtVector3Int() {
         Vector3 p = new Vector3(51., 52., 53.);
-        try {
-            p1.setElementAt(p, 2);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        p1.setElementAt(p, 2);
         Point3VectorTest.assertEquals("set", new double[] { 11., 21., 31., 12.,
                 22., 32., 51., 52., 53., 14., 24., 34., }, p1, EPS);
     }
@@ -293,21 +279,12 @@ public class Point3VectorTest extends EuclidTestBase {
     @Test
     public void testGetSigmaDeltaSquared() {
         Point3Vector p = new Point3Vector(p1);
-        double d = -1.;
-        try {
-            d = p1.getSigmaDeltaSquared(p);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        double d = p1.getSigmaDeltaSquared(p);
         Assert.assertEquals("sigma", 0.0, d, EPS);
         for (Point3 pp : p.getPoint3List()) {
             pp.plusEquals(new Vector3(0.1, 0.2, 0.3));
         }
-        try {
-            d = p1.getSigmaDeltaSquared(p);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        d = p1.getSigmaDeltaSquared(p);
         Assert.assertEquals("sigma", 0.56, d, EPS);
     }
 
@@ -316,12 +293,7 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testSubArray() {
-        Point3Vector sub = null;
-        try {
-            sub = p1.subArray(new IntSet(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3Vector sub = p1.subArray(new IntSet(new int[] { 3, 1, 2 }));
         Point3VectorTest.assertEquals("set", new double[] { 14.0, 24.0, 34.0,
                 12.0, 22.0, 32.0, 13.0, 23.0, 33.0 }, sub, EPS);
     }
@@ -331,30 +303,17 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testPlusPoint3Vector() {
-        Point3Vector p = null;
-        try {
-            p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3Vector p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73. });
         try {
             p1.plus(p);
             alwaysFail("incompatible sizes");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("plus", "incompatible Point3Vector sizes: 4/2",
                     e.getMessage());
         }
-        try {
-            p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73.,
+        p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73.,
                     81., 82., 83., 91., 92., 93. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            p1 = p1.plus(p);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        p1 = p1.plus(p);
         Point3VectorTest.assertEquals("plus", new double[] { 72.0, 83.0, 94.0,
                 83.0, 94.0, 105.0, 94.0, 105.0, 116.0, 105.0, 116.0, 127.0 },
                 p1, EPS);
@@ -365,30 +324,17 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testSubtractPoint3Vector() {
-        Point3Vector p = null;
-        try {
-            p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3Vector p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73. });
         try {
             p1.subtract(p);
             alwaysFail("incompatible sizes");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("plus", "incompatible Point3Vector sizes: 4/2",
                     e.getMessage());
         }
-        try {
-            p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73.,
+        p = new Point3Vector(new double[] { 61., 62., 63., 71., 72., 73.,
                     81., 82., 83., 91., 92., 93. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            p1 = p.subtract(p1);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        p1 = p.subtract(p1);
         Point3VectorTest
                 .assertEquals("plus", new double[] { 50.0, 41.0, 32.0, 59.0,
                         50.0, 41.0, 68.0, 59.0, 50.0, 77.0, 68.0, 59.0 }, p1,
@@ -455,13 +401,8 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testInertialTensor() {
-        Point3Vector p = null;
-        try {
-            p = new Point3Vector(new double[] { 1., 2., 3., 2., 4., 6., 3., 6.,
+        Point3Vector p = new Point3Vector(new double[] { 1., 2., 3., 2., 4., 6., 3., 6.,
                     9., 4., 1., 0., 3., 6., 1. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         RealMatrix m = p.inertialTensor();
         RealMatrixTest.assertEquals("move to centroid", 3, 3, new double[] {
                 5.2, 0.6, -4.4, 0.6, 20.8, 17.8, -4.4, 17.8, 54.8 }, m, EPS);
@@ -472,12 +413,7 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testTransformTransform3() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("y, -x, z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("y, -x, z");
         p1.transform(t);
         Point3VectorTest.assertEquals("transform",
                 new double[] { 21.0, -11.0, 31.0, 22.0, -12.0, 32.0, 23.0,
@@ -490,17 +426,8 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testTransformTransform3IntSet() {
-        Transform3 t = null;
-        try {
-            t = new Transform3("y, -x, z");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        try {
-            p1.transform(t, new IntSet(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = new Transform3("y, -x, z");
+        p1.transform(t, new IntSet(new int[] { 3, 1, 2 }));
         Point3VectorTest.assertEquals("transform",
                 new double[] { 11.0, 21.0, 31.0, 22.0, -12.0, 32.0, 23.0,
                         -13.0, 33.0, 24.0, -14.0, 34.0 }, p1, EPS);
@@ -523,15 +450,11 @@ public class Point3VectorTest extends EuclidTestBase {
         double d = 0;
         try {
             d = p1.distance(new IntSet(new int[] { 3, 1, 2 }));
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("distance",
                     "int set must have exactly 2 points", e.getMessage());
         }
-        try {
-            d = p1.distance(new IntSet(new int[] { 3, 1 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        d = p1.distance(new IntSet(new int[] { 3, 1 }));
         Assert.assertEquals("distance", 3.464101, d, 0.00001);
     }
 
@@ -540,18 +463,9 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testAngleIntIntInt() {
-        Angle a = null;
-        try {
-            a = p2.angle(1, 2, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle a = p2.angle(1, 2, 3);
         Assert.assertEquals("angle", Math.PI / 2., a.getRadian(), EPS);
-        try {
-            a = p2.angle(3, 1, 2);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a = p2.angle(3, 1, 2);
         Assert.assertEquals("angle", Math.PI / 4., a.getRadian(), EPS);
     }
 
@@ -560,18 +474,9 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testAngleIntSet() {
-        Angle a = null;
-        try {
-            a = p2.angle(new IntSet(new int[] { 1, 2, 3 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle a = p2.angle(new IntSet(new int[] { 1, 2, 3 }));
         Assert.assertEquals("angle", Math.PI / 2., a.getRadian(), EPS);
-        try {
-            a = p2.angle(new IntSet(new int[] { 2, 0, 1 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        a = p2.angle(new IntSet(new int[] { 2, 0, 1 }));
         Assert.assertEquals("angle", Math.PI / 4., a.getRadian(), EPS);
     }
 
@@ -581,12 +486,7 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testTorsionIntIntIntInt() {
-        Angle t = null;
-        try {
-            t = p2.torsion(0, 1, 2, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle t = p2.torsion(0, 1, 2, 3);
         Assert.assertEquals("torsion", -Math.PI / 2., t.getRadian(), EPS);
     }
 
@@ -595,12 +495,7 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testTorsionIntSet() {
-        Angle t = null;
-        try {
-            t = p2.torsion(new IntSet(new int[] { 0, 1, 2, 3 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Angle t = p2.torsion(new IntSet(new int[] { 0, 1, 2, 3 }));
         Assert.assertEquals("torsion", -Math.PI / 2., t.getRadian(), EPS);
     }
 
@@ -624,12 +519,8 @@ public class Point3VectorTest extends EuclidTestBase {
         // FIXME - I think this fails
         RealArray eigval = new RealArray();
         RealSquareMatrix eigvec = new RealSquareMatrix();
-        EuclidException exc = new EuclidException("dummy");
-        try {
-            p2.inertialAxes(eigval, eigvec, exc);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        EuclidRuntimeException exc = new EuclidRuntimeException("dummy");
+        p2.inertialAxes(eigval, eigvec, exc);
     }
 
     /**
@@ -646,12 +537,7 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testDeviationsFromPlane() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(1., 0., 0., 0.5);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Plane3 pl = new Plane3(1., 0., 0., 0.5);
         RealArray ra = p2.deviationsFromPlane(pl);
         RealArrayTest.assertEquals("deviations", new double[] { 0.5, -0.5,
                 -0.5, -0.5 }, ra, EPS);
@@ -740,12 +626,7 @@ public class Point3VectorTest extends EuclidTestBase {
     public void testAlignUsing3Points() {
         p1.add(new Point3(20., 10., 0.));
         p2.add(new Point3(5., 10., 5.));
-        Transform3 t = null;
-        try {
-            t = p1.alignUsing3Points(p2);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 t = p1.alignUsing3Points(p2);
         Transform3Test.assertEquals("align", new double[] {
                 0.11432809806666633, 0.8588003169190181, -0.4993907304428592,
                 0.0, 0.6186208633307761, -0.45487483749749846,
@@ -760,12 +641,7 @@ public class Point3VectorTest extends EuclidTestBase {
     @Test
     public void testGet3SeparatedPoints() {
         p1.add(new Point3(20., 10., 0.));
-        int[] idx = null;
-        try {
-            idx = p1.get3SeparatedPoints();
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        int[] idx = p1.get3SeparatedPoints();
         IntTest.assertEquals("separated points", new int[] { 4, 3, 0 }, idx);
     }
 
@@ -778,29 +654,15 @@ public class Point3VectorTest extends EuclidTestBase {
         Transform3 t = null;
         try {
             t = p1.align3PointVectors(p2);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("align", "this requires 3 points", e
                     .getMessage());
         }
-        Point3Vector pa = null;
-        try {
-            pa = new Point3Vector(new double[] { 1., 0., 0., 0., 1., 0., 0.,
+        Point3Vector pa = new Point3Vector(new double[] { 1., 0., 0., 0., 1., 0., 0.,
                     0., 1. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        Point3Vector pb = null;
-        try {
-            pb = new Point3Vector(new double[] { 0., 1., 0., 1., 0., 0., 0.,
+        Point3Vector pb = new Point3Vector(new double[] { 0., 1., 0., 1., 0., 0., 0.,
                     0., 1. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        try {
-            t = pa.align3PointVectors(pb);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        t = pa.align3PointVectors(pb);
         Transform3Test.assertEquals("align", new double[] { 0.0, 0.0, 1.0, 0.0,
                 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 },
                 t, EPS);
@@ -817,11 +679,11 @@ public class Point3VectorTest extends EuclidTestBase {
          * (EuclidException e) { Assert.assertEquals("align", "zero length
          * normal", e.getMessage()); } // Assert.assertNotNull(t); Point3Vector
          * pa = null; try { pa = new Point3Vector(new double[]{ 1., 0., 0., 0.,
-         * 1., 0., 0., 0., 1. }); } catch (EuclidException e) { neverThrow(e); }
+         * 1., 0., 0., 0., 1. }); } catch (EuclidException e) { neve rThrow(e); }
          * Point3Vector pb = null; try { pb = new Point3Vector(new double[]{ 0.,
          * 1., 0., 1., 0., 0., 0., 0., 1. }); } catch (EuclidException e) {
-         * neverThrow(e); } try { t = pa.roughAlign(pb); } catch
-         * (EuclidException e) { // FIXME this fails // neverThrow(e); }
+         * never Throw(e); } try { t = pa.roughAlign(pb); } catch
+         * (EuclidException e) { // FIXME this fails // never Throw(e); }
          * Assert.assertEquals("align", new double[]{ 0.0,0.0,1.0,0.0,
          * 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,0.0,1.0 },
          * t.getMatrixAsArray(), EPS); --
@@ -849,7 +711,7 @@ public class Point3VectorTest extends EuclidTestBase {
          0., 0., 1.
          });
          } catch (EuclidException e) {
-         neverThrow(e);
+         never Throw(e);
          }
          Point3Vector pb = null;
          try {

@@ -14,8 +14,6 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLMetadata;
-import org.xmlcml.cml.element.CMLMetadataList;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
@@ -35,8 +33,9 @@ public class DisorderTool extends AbstractTool {
 	private boolean containsDisorder;
 
 	private DisorderToolControls disorderOptions;
-
+	/** */
 	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
+	/** */
 	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
 
 	/**
@@ -102,8 +101,6 @@ public class DisorderTool extends AbstractTool {
 	 * tagged with metadata stating that the molecule did contain disorder, but
 	 * has now been removed.
 	 *
-	 * @param pControl
-	 * @param rControl
 	 * @exception CMLRuntimeException
 	 */
 	public void resolveDisorder() {
@@ -461,9 +458,9 @@ public class DisorderTool extends AbstractTool {
 			CMLScalar scalar = new CMLScalar();
 			atom.appendChild(scalar);
 			if (!processed) {	
-				scalar.setDictRef(this.UNRESOLVED_DISORDER_DICTREF);
+				scalar.setDictRef(UNRESOLVED_DISORDER_DICTREF);
 			} else if (processed) {
-				scalar.setDictRef(this.RESOLVED_DISORDER_DICTREF);
+				scalar.setDictRef(RESOLVED_DISORDER_DICTREF);
 			}
 		}
 	}
@@ -473,7 +470,7 @@ public class DisorderTool extends AbstractTool {
 	 * things like methyl groups with 6 H/Cl/F attached etc.
 	 *
 	 * @param molecule
-	 * @return
+	 * @return true if disordered
 	 */
 	public static boolean isDisordered(CMLMolecule molecule) {
 		for (CMLAtom atom : molecule.getAtoms()) {

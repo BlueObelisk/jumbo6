@@ -134,10 +134,10 @@ public class Transform2 extends RealSquareMatrix {
      *            Description of the Parameter
      * @param v2
      *            Description of the Parameter
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>v1</TT> or <TT>v2</TT> is zero length
      */
-    public Transform2(Vector2 v1, Vector2 v2) throws EuclidException {
+    public Transform2(Vector2 v1, Vector2 v2) throws EuclidRuntimeException {
         super(3);
         Angle a = v1.getAngleMadeWith(v2);
         Transform2 temp = new Transform2(a);
@@ -171,10 +171,10 @@ public class Transform2 extends RealSquareMatrix {
      * 
      * @param array
      *            to create the Transform from
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                array must have 9 elements
      */
-    public Transform2(double[] array) throws EuclidException {
+    public Transform2(double[] array) throws EuclidRuntimeException {
         super(3, array);
         trnsfrm = calculateMatrixType();
     }
@@ -193,10 +193,10 @@ public class Transform2 extends RealSquareMatrix {
      * 
      * @param m
      *            Description of the Parameter
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must be 2*2 or 3*3
      */
-    public Transform2(RealSquareMatrix m) throws EuclidException {
+    public Transform2(RealSquareMatrix m) throws EuclidRuntimeException {
         this();
         // 2x2 matrix. convert to 3x3
         if (m.getCols() == 2) {
@@ -207,7 +207,7 @@ public class Transform2 extends RealSquareMatrix {
                 }
             }
         } else if (m.getCols() != 3) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException("bad size for transform "+m.getCols());
         } else {
             this.flmat = m.flmat;
         }
@@ -220,10 +220,10 @@ public class Transform2 extends RealSquareMatrix {
      *            Description of the Parameter
      * @param v
      *            Description of the Parameter
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must be 2*2
      */
-    public Transform2(RealSquareMatrix m, Vector2 v) throws EuclidException {
+    public Transform2(RealSquareMatrix m, Vector2 v) throws EuclidRuntimeException {
         this(m);
         // 2x2 matrix. convert to 3x3
         if (m.getCols() == 2) {
@@ -231,7 +231,7 @@ public class Transform2 extends RealSquareMatrix {
             flmat[0][2] = v.x;
             flmat[1][2] = v.y;
         } else {
-            throw new EuclidException("must have 2*2 rotation matrix");
+            throw new EuclidRuntimeException("must have 2*2 rotation matrix");
         }
     }
     /**
@@ -243,12 +243,7 @@ public class Transform2 extends RealSquareMatrix {
      */
     public Transform2 clone(Transform2 m) {
         // delete existing matrix in this
-        Transform2 temp = new Transform2();
-        try {
-            temp = new Transform2((RealSquareMatrix) m);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        Transform2 temp = new Transform2((RealSquareMatrix) m);
         temp.trnsfrm = m.trnsfrm;
         return temp;
     }
@@ -260,12 +255,7 @@ public class Transform2 extends RealSquareMatrix {
      * @return Description of the Return Value
      */
     Transform2 clone(RealSquareMatrix m) {
-        Transform2 temp = new Transform2();
-        try {
-            temp = new Transform2(m);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        Transform2 temp = new Transform2(m);
         temp.trnsfrm = calculateMatrixType();
         return temp;
     }
@@ -287,20 +277,10 @@ public class Transform2 extends RealSquareMatrix {
      * @return Description of the Return Value
      */
     public Transform2 concatenate(Transform2 m2) {
-        RealSquareMatrix temp = new RealSquareMatrix();
-        try {
-            temp = new RealSquareMatrix(((RealSquareMatrix) this)
+        RealSquareMatrix temp = new RealSquareMatrix(((RealSquareMatrix) this)
                     .multiply((RealSquareMatrix) m2));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
         // maximum value is matrix of greatest generality (horrible)
-        Transform2 temp1 = new Transform2();
-        try {
-            temp1 = new Transform2(temp);
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        Transform2 temp1 = new Transform2(temp);
         temp1.trnsfrm = (trnsfrm.i > m2.trnsfrm.i) ? trnsfrm : m2.trnsfrm;
         return temp1;
     }
@@ -315,54 +295,29 @@ public class Transform2 extends RealSquareMatrix {
     public int setTransformationType(Type option) {
         RealSquareMatrix s3 = new RealSquareMatrix();
         if (option == Type.ROT_ORIG) {
-            s3 = new RealSquareMatrix();
-            try {
-                s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
             s3.orthonormalize();
             this.replaceSubMatrixData(0, 0, s3);
         } else if (option == Type.ROT_TRANS) {
-            try {
-                s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
             s3.orthonormalize();
             this.replaceSubMatrixData(0, 0, s3);
         } else if (option == Type.ROT_TRANS_SCALE) {
-            try {
-                s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
             double[] scale = s3.euclideanColumnLengths().getArray();
             double scale3 = Math.exp(Math.log(scale[0] * scale[1]) / 2.0);
             s3.orthonormalize();
             RealArray sc1 = new RealArray(3, scale3);
             RealSquareMatrix s = RealSquareMatrix.diagonal(sc1);
-            try {
-                s3 = s.multiply(s3);
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = s.multiply(s3);
             replaceSubMatrixData(0, 0, s3);
         } else if (option == Type.ROT_TRANS_SCALE_PERSP) {
         } else if (option == Type.ROT_TRANS_AXIAL_SCALE) {
-            try {
-                s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 1, 0, 1));
             RealArray scale = s3.euclideanColumnLengths();
             s3.orthonormalize();
             RealSquareMatrix s = RealSquareMatrix.diagonal(scale);
-            try {
-                s3 = s.multiply(s3);
-            } catch (EuclidException e) {
-                throw new EuclidRuntimeException(e.toString());
-            }
+            s3 = s.multiply(s3);
             replaceSubMatrixData(0, 0, s3);
         } else if (option == Type.ANY) {
         } else if (option == Type.NULL) {
@@ -386,18 +341,8 @@ public class Transform2 extends RealSquareMatrix {
      * @return Description of the Return Value
      */
     public Type calculateMatrixType() {
-        RealSquareMatrix s3 = new RealSquareMatrix();
-        try {
-            s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
-        RealArray c3 = null;
-        try {
-            c3 = extractColumnData(2);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        RealSquareMatrix s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
+        RealArray c3 = extractColumnData(2);
         if (c3 != null) {
             if (Real.isZero(c3.elementAt(0)) && Real.isZero(c3.elementAt(1))) {
                 return Type.NULL;
@@ -441,10 +386,10 @@ public class Transform2 extends RealSquareMatrix {
      * @param r
      *            Description of the Parameter
      * @return Description of the Return Value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>r</TT> is zero length
      */
-    public static Transform2 flipAboutVector(Real2 r) throws EuclidException {
+    public static Transform2 flipAboutVector(Real2 r) throws EuclidRuntimeException {
         r = r.getUnitVector();
         double cost = r.x;
         double sint = r.y;
@@ -469,12 +414,7 @@ public class Transform2 extends RealSquareMatrix {
      */
     RealArray getScales() {
         RealArray scales;
-        RealSquareMatrix s3 = new RealSquareMatrix();
-        try {
-            s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        RealSquareMatrix s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
         scales = s3.euclideanColumnLengths();
         return scales;
     }
@@ -485,12 +425,7 @@ public class Transform2 extends RealSquareMatrix {
      */
     public RealSquareMatrix getRotationMatrix() {
         RealSquareMatrix s;
-        RealSquareMatrix s3 = new RealSquareMatrix();
-        try {
-            s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        RealSquareMatrix s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
         s3.normaliseByColumns();
         s = s3;
         return s;

@@ -91,7 +91,6 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 	/**
 	 * normal constructor.
 	 * @param catalogListUrl
-	 * @return manager
 	 */
 	public CatalogManager(URL catalogListUrl) {
 		this.url = catalogListUrl;

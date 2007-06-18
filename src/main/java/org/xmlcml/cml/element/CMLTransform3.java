@@ -8,7 +8,6 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Transform3;
@@ -130,7 +129,7 @@ public class CMLTransform3 extends AbstractTransform3 {
     }
 
     /**
-     * identity matrix with translation component. T = I|v
+     * identity matrix with translation component. T = I|vector
      * 
      * @param v
      *            translation vector
@@ -262,16 +261,9 @@ public class CMLTransform3 extends AbstractTransform3 {
      * 
      * @param opString
      *            for example 1/2-x,1/2+y,-z
-     * @throws CMLException
-     *             corrupt/invalid string
      */
-    public CMLTransform3(String opString) throws CMLException {
-        Transform3 teucl3 = null;
-        try {
-            teucl3 = new Transform3(opString);
-        } catch (EuclidException e) {
-            throw new CMLException("" + e);
-        }
+    public CMLTransform3(String opString) {
+        Transform3 teucl3 = new Transform3(opString);
         double[] array = teucl3.getMatrixAsArray();
         // fix bug
         array[15] = 1.0;
@@ -304,13 +296,7 @@ public class CMLTransform3 extends AbstractTransform3 {
      * @return the transform
      */
     public Transform3 getEuclidTransform3() {
-        Transform3 teucl3;
-        try {
-            teucl3 = new Transform3(this.getXMLContent());
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
-        return teucl3;
+        return new Transform3(this.getXMLContent());
     }
 
     // ====================== main accessors =====================

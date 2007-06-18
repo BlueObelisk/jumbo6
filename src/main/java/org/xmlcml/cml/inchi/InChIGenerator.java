@@ -459,7 +459,7 @@ public class InChIGenerator implements EuclidConstants {
      * Get the array (for convenience) of processing options used by this
      * generator.
      * 
-     * @return
+     * @return array
      * @since 5.4
      */
     public ProcessingOptions[] getProcessingOptions() {
@@ -479,7 +479,7 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * Has this generator been used (or is it safe to call generate?).
      * 
-     * @return
+     * @return true if so
      * @since 5.4
      */
     public boolean isGenerated() {

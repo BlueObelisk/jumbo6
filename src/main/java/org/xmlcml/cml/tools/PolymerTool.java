@@ -446,8 +446,6 @@ formula='
         }
         CMLElements<CMLMolecule> subMoleculeList = molecule.getMoleculeElements();
         for (int i = 0; i < subMoleculeList.size(); i++) {
-            CMLMolecule subMolecule = (CMLMolecule) subMoleculeList.get(i);
-//            moleculeCatalog.lookupAndExpandMolecule(subMolecule);
         }
         molecule.setConvention(Convention.PML_EXPLICIT.value);
     }
@@ -667,7 +665,6 @@ formula='
             Convention targetLevel = null;
             String template = S_EMPTY;
             List<XSLParam> paramList = new ArrayList<XSLParam>();
-            String catalog = S_EMPTY;
             int i = 0;
             boolean debug = true;
         	@SuppressWarnings("unused")
@@ -693,8 +690,8 @@ formula='
                     i++;
                 } else if (args[i].equalsIgnoreCase("-TEMPLATE")) {
                     template = args[++i]; i++;
-                } else if (args[i].equalsIgnoreCase("-CATALOG")) {
-                    catalog = args[++i]; i++;
+//                } else if (args[i].equalsIgnoreCase("-CATALOG")) {
+//                    catalog = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-PARAM")) {
                     paramList.add(new XSLParam(args[++i], args[++i])); i++;
                 }else {
@@ -704,9 +701,8 @@ formula='
             }
             
             if (!S_EMPTY.equals(template)) {
-            	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
-        		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
-            	CMLFragment fragment = createFromTemplate(template, paramList, moleculeCatalog);
+  //          	CatalogManager catalogManager = CatalogManager.getTopCatalogManager();
+//        		Catalog moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
             	if (!S_EMPTY.equals(outfileName)) {
 //            		FileWriter fw = new FileWriter(outfileName);
             	}

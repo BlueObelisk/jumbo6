@@ -26,7 +26,6 @@ import org.xmlcml.cml.base.AttributeFactory;
 import org.xmlcml.cml.base.AttributeGenerator;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElementType;
-import org.xmlcml.cml.base.CMLNodeFactory;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.base.CMLUtil;
@@ -42,7 +41,6 @@ import org.xmlcml.euclid.Util;
 public class Schemagen implements SchemagenConstants {
 
 	private SchemaManager schemaManager;
-	private static CMLNodeFactory nodeFactory = CMLNodeFactory.nodeFactory;
 	private AttributeGenerator attributeGenerator;
 	private ElementGenerator elementGenerator;
 	private TypeGenerator typeGenerator;
@@ -57,9 +55,9 @@ public class Schemagen implements SchemagenConstants {
 // used in attribute routines
 	private String elementName;
 	private String attributeName;
+	@SuppressWarnings("unused")
 	private String attributeGroupName;
 	private String javaType;
-	private String javaTypeNullValue;
 	private String javaGetMethod;
 	private String attClassName;
 	private String nullAttributeActionString;
@@ -93,7 +91,6 @@ public class Schemagen implements SchemagenConstants {
     /** called from subclasses.
      * recurses through directories by instantiating new converters
      * @param args
-     * @param level
      * @throws Exception
      */
     public void runCommands(String[] args) throws Exception {
@@ -245,6 +242,7 @@ public class Schemagen implements SchemagenConstants {
 // =========================== java code generation ========================	
 	
 	/** write java for elements.
+	 * @throws Exception 
 	 */
 	public void writeJavaForElements() throws Exception {
 		System.out.println("============ CODE GENERATION ==============");
@@ -369,7 +367,7 @@ public class Schemagen implements SchemagenConstants {
 		attributeGroupName = attribute.getAttributeGroupName();
 		attributeName = attribute.getLocalName();
 		attClassName = attribute.getJavaShortClassName();
-	    CMLAttribute specialAttribute = AttributeFactory.attributeFactory.createSpecialAttribute(attributeName);
+	    CMLAttribute specialAttribute = AttributeFactory.createSpecialAttribute(attributeName);
 	    if (specialAttribute != null) {
 	    	attribute = specialAttribute;
 			attClassName = attribute.getClass().getSimpleName();
@@ -379,17 +377,13 @@ public class Schemagen implements SchemagenConstants {
 		javaGetMethod = attribute.getJavaGetMethod();
 		attributeVariable = "_att_"+attributeName.toLowerCase();
 
-		javaTypeNullValue = "null";
 		nullAttributeActionString = "return null";
 		if (javaType.equals(JAVA_BOOL)) {
 			nullAttributeActionString = "throw new CMLRuntimeException(\"boolean attribute is unset: "+attributeName+"\")";
-			javaTypeNullValue = "false";
 		} else if (javaType.equals(JAVA_INT)) {
 				nullAttributeActionString = "throw new CMLRuntimeException(\"int attribute is unset: "+attributeName+"\")";
-				javaTypeNullValue = "0";
 		} else if (javaType.equals(JAVA_DOUB)) {
 			nullAttributeActionString = "return Double.NaN";
-			javaTypeNullValue = "Double.NaN";
 		}
 		
 		summary = attribute.getSummary();
@@ -533,7 +527,7 @@ public class Schemagen implements SchemagenConstants {
 		attributeName = CMLXSD_XMLCONTENT;
 		attributeVariable = CMLXSD_XMLCONTENT;
 		type = elementType.getSimpleContentType();
-		attribute = AttributeFactory.attributeFactory.createCMLAttribute(attributeName, type);
+		attribute = AttributeFactory.createCMLAttribute(attributeName, type);
 		javaType = attribute.getJavaType();
 		javaGetMethod = attribute.getJavaGetMethod();
 		attClassName = attribute.getJavaShortClassName();
@@ -695,6 +689,7 @@ public class Schemagen implements SchemagenConstants {
 	/** add attribute.
 	 * @param w
 	 * @param attributeList
+	 * @throws IOException 
 	 */
 	public void writeAddAttribute(Writer w, List<CMLAttribute> attributeList) throws IOException {
 		w.write("" +

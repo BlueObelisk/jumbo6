@@ -1060,12 +1060,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformCMLTransform3() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("y, -x, y+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("y, -x, y+z");
         atomSet1.transformCartesians(t);
         Point3Vector p3v = atomSet1.getCoordinates3(CoordinateType.CARTESIAN);
         Assert.assertEquals("point3vector", 3, p3v.size());
@@ -1083,12 +1078,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testTransformFractionalCoordinatesCMLTransform3() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("y, -x, y+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("y, -x, y+z");
         atomSet1.getAtom(0).setPoint3(new Point3(0.1, 0.2, 0.3),
                 CoordinateType.FRACTIONAL);
         atomSet1.getAtom(1).setPoint3(new Point3(0.4, 0.5, 0.6),

@@ -508,12 +508,7 @@ public class CMLCrystalTest extends AbstractTest {
         vol = primitiveCrystal.getCellVolume();
         Assert.assertEquals("prim vol", 720., vol, EPS);
 
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(CMLSymmetryTest.abm2);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(CMLSymmetryTest.abm2);
         crystal3.appendChild(symmetry);
         primitiveLattice = crystal3.getPrimitiveLattice();
         CMLVector3Test.assertEquals("a", new double[] { 8.0, 0.0, 0.0 },
@@ -527,11 +522,7 @@ public class CMLCrystalTest extends AbstractTest {
         Assert.assertEquals("prim vol", 720. / 2., vol, EPS);
 
         symmetry.detach();
-        try {
-            symmetry = new CMLSymmetry(CMLSymmetryTest.fdd2);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        symmetry = new CMLSymmetry(CMLSymmetryTest.fdd2);
         crystal3.appendChild(symmetry);
         primitiveLattice = crystal3.getPrimitiveLattice();
         CMLVector3Test.assertEquals("a", new double[] { 0.0, 4.5, 5.0 },

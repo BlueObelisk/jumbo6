@@ -49,6 +49,7 @@ public class NamespaceToUnitListMap extends org.xmlcml.cml.attribute.GenericDict
      * unitType dictionaries
      * 
      * @param url catalog
+     * @param genericDictionary 
      * @throws IOException
      */
     public NamespaceToUnitListMap(URL url, GenericDictionary genericDictionary) throws IOException {

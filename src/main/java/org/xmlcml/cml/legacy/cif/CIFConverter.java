@@ -945,12 +945,7 @@ public class CIFConverter implements LegacyConverterOld, CMLConstants {
 			throw new CMLRuntimeException("no "+names[0]);
 		}
 		
-		CMLSymmetry symmetry = null;
-		try {
-			symmetry = CMLSymmetry.createFromXYZStrings(operators);
-		} catch (CMLException e) {
-			e.printStackTrace();
-		}
+		CMLSymmetry symmetry = CMLSymmetry.createFromXYZStrings(operators);
 		crystal.addSymmetry(symmetry);
 	}
 	private void addAtomSiteAniso(CIFLoop loop, CMLCml cml0) {

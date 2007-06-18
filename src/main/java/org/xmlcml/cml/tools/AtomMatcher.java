@@ -27,7 +27,6 @@ import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.CMLSpectatorList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLReaction.Component;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.Real2;
@@ -1509,12 +1508,7 @@ public class AtomMatcher extends AbstractTool {
                 }
             }
         }
-        IntMatrix linkMatrix = null;
-        try {
-            linkMatrix = new IntMatrix(linkCount);
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        IntMatrix linkMatrix = new IntMatrix(linkCount);
         logger.info("LINKS-1 " + linkMatrix);
 
         // extract next best matches
@@ -1574,11 +1568,7 @@ public class AtomMatcher extends AbstractTool {
             }
         }
 
-        try {
-            linkMatrix = new IntMatrix(linkCount);
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        linkMatrix = new IntMatrix(linkCount);
         logger.info("LINKS-2 " + linkMatrix);
 
         logger.info("**********************PROD2REACT");

@@ -20,6 +20,7 @@ public class AttributeGenerator extends AbstractGenerator {
 	private Map<String, CMLAttribute> attributeGroupMap;
 	
 	/**
+	 * @param schemaManager 
 	 * 
 	 */
 	public AttributeGenerator(SchemaManager schemaManager) {

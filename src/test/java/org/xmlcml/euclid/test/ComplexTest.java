@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Complex;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Polar;
 import org.xmlcml.euclid.Real2;
 
@@ -157,12 +156,7 @@ public class ComplexTest extends EuclidTestBase {
      */
     @Test
     public void testDivideBy() {
-        Complex c = null;
-        try {
-            c = c1.divideBy(c2);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Complex c = c1.divideBy(c2);
         Assert.assertEquals("divide", 0.2, c.getReal(), 1.0E-08);
         Assert.assertEquals("divide", -0.4, c.getImaginary(), 1.0E-08);
     }

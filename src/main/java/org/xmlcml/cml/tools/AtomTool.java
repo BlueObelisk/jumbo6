@@ -10,7 +10,13 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.graphics.SVGCircle;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -21,12 +27,15 @@ import org.xmlcml.molutil.ChemicalElement;
  * @author pmr
  * 
  */
-public class AtomTool {
+public class AtomTool extends AbstractTool {
 
     CMLAtom atom;
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
     Logger logger = Logger.getLogger(AtomTool.class.getName());
+    double fontSize = 0.5;
+    String stroke = "none";
+    double strokeWidth = 0.001;
 
     /**
      * constructor
@@ -43,6 +52,20 @@ public class AtomTool {
     }
 
     /**
+	 * @return the fontSize
+	 */
+	public double getFontSize() {
+		return fontSize;
+	}
+
+	/**
+	 * @param fontSize the fontSize to set
+	 */
+	public void setFontSize(double fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	/**
      * make atom tool from a atom.
      * 
      * @param atom
@@ -317,6 +340,64 @@ public class AtomTool {
          Point3 newGroupPoint = atomPoint.plus(vector);
          atom.setXYZ3(newGroupPoint);
      }
-     
+
+     /** returns a "g" element
+      * this contains the text for symbol and charge
+      * @return null if no symbol or charge
+      */
+     public SVGElement createSVG() {
+    	 double x = atom.getX2();
+    	 double y = atom.getY2();
+    	 SVGG g = new SVGG();
+    	 g.setTransform(new Transform2(
+    			 new double[]{
+    			 1., 0., x,
+    			 0.,-1., y,
+    			 0., 0., 1.
+    	 }));
+    	 String elementType = atom.getElementType();
+    	 String fill = "black";
+    	 if (!elementType.equals("C")) {
+    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), 0.8*fontSize);
+    		 g.appendChild(circle);
+    		 circle.setFill("white");
+    		 SVGElement text = new SVGText(new Real2(-0.7*fontSize, 0.7*fontSize), atom.getElementType());
+    		 if (elementType.equals("N")) {
+    			 fill = "blue";
+    		 } else if (elementType.equals("O")) {
+    			 fill = "red";
+    		 } else if (elementType.equals("S")) {
+    			 fill = "orange";
+    		 } else if (elementType.equals("Cl")) {
+    			 fill = "green";
+    		 } else if (elementType.equals("F")) {
+    			 fill = "#77ff00";
+    		 } else if (elementType.equals("Br")) {
+    			 fill = "#ff7700";
+    		 } else if (elementType.equals("I")) {
+    			 fill = "#ff00ff";
+    		 } else if (elementType.equals("H")) {
+    			 fill = "gray";
+    		 }
+    		 g.setFill(fill);
+    		 g.appendChild(text);
+    	 }
+    	 if (atom.getFormalChargeAttribute() != null) {
+    		 int formalCharge = atom.getFormalCharge();
+    		 String chargeS = "";
+    		 if (formalCharge == -1) {
+    			 chargeS = "-";
+    		 } else if (formalCharge == 1) {
+    			 chargeS = "+";
+    		 } else if (formalCharge > 1) {
+    			 chargeS = "+"+formalCharge;
+    		 } else if (formalCharge <  -1) {
+    			 chargeS = ""+formalCharge;
+    		 }
+    		 SVGElement text = new SVGText(new Real2(0.5*fontSize, -0.2*fontSize), chargeS);
+    		 g.appendChild(text);
+    	 }
+    	 return (g.getChildElements().size() == 0) ? null : g;
+     }
 
 }
