@@ -20,7 +20,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -601,6 +601,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	
 	/**
 	 * calculate formal charge from charges on atoms in the molecule
+	 * @return charge
 	 */
 	public int calculateFormalCharge() {
 		int formalCharge = 0;
@@ -692,7 +693,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 		}
 		try {
 			t = new Transform3(orthogonalMatrix);
-		} catch (EuclidException e) {
+		} catch (EuclidRuntimeException e) {
 			throw new CMLException("invalid orthogonalMatrix");
 		}
 		createCartesiansFromFractionals(t);

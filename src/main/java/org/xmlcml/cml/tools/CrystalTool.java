@@ -25,7 +25,6 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.EuclidConstants;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
@@ -72,7 +71,9 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	/** tolerance for comparing occupancies.
 	 */
 	public final static double OCCUPANCY_EPS = 0.005;
+	/** allowed deviation in fractional */
 	public final static double FRACT_EPS = 0.005;
+	/** allowed deviation in hexagonal cell fractional */
 	public final static double HEXAGONAL_CELL_FRACT_EPS = 0.0001;
 
 	/** constructor.
@@ -328,6 +329,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 
 	/**
 	 *
+	 * @param includeAllCornerEdgeAndFaceAtoms 
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
@@ -374,12 +376,8 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 						count++;
 					}
 					if (changed) {
-						try {
-							p3 = new Point3(array);
-							p3.normaliseCrystallographically();
-						} catch (EuclidException e) {
-							throw new CMLRuntimeException("Could not create Point3 with values: "+array.toString());
-						}
+						p3 = new Point3(array);
+						p3.normaliseCrystallographically();
 					}
 				}
 

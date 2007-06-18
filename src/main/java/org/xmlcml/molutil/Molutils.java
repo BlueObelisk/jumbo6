@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
 
@@ -86,13 +86,13 @@ public abstract class Molutils implements CMLConstants {
      * @param length
      *            from aPoint
      *
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * @return Point3[] ANY => 1, LINEAR => 2, TRIGONAL => 3, TETRAHEDRAL => 4
      */
     public static List<Point3> calculate3DCoordinates0(Point3 aPoint,
-            int geometry, double length) throws EuclidException {
+            int geometry, double length) throws EuclidRuntimeException {
         if (geometry < ANY || geometry > TETRAHEDRAL) {
-            throw new EuclidException("Unknown value of geometry: " + geometry);
+            throw new EuclidRuntimeException("Unknown value of geometry: " + geometry);
         }
         List<Point3> points = new ArrayList<Point3>(geometry);
         if (geometry == ANY) {
@@ -146,14 +146,14 @@ public abstract class Molutils implements CMLConstants {
      * @param angle
      *            B-A-X angle in radians
      *
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * @return Point3d[] nwanted points (or zero if failed)
      */
     public static List<Point3> calculate3DCoordinates1(Point3 aPoint,
             Point3 bPoint, Point3 cPoint, int geometry, double length,
-            double angle) throws EuclidException {
+            double angle) throws EuclidRuntimeException {
         if (geometry < LINEAR || geometry > TETRAHEDRAL) {
-            throw new EuclidException("Unknown value of geometry: " + geometry);
+            throw new EuclidRuntimeException("Unknown value of geometry: " + geometry);
         }
         List<Point3> points = new ArrayList<Point3>(geometry - 1);
         // BA vector
@@ -222,14 +222,14 @@ public abstract class Molutils implements CMLConstants {
      * @param angle
      *            B-A-X angle
      *
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * @return Point3d[] nwanted points (or zero if failed)
      */
     public static List<Point3> calculate3DCoordinates2(Point3 aPoint,
             Point3 bPoint, Point3 cPoint, int geometry, double length,
-            double angle) throws EuclidException {
+            double angle) throws EuclidRuntimeException {
         if (geometry < TRIGONAL || geometry > TETRAHEDRAL) {
-            throw new EuclidException("Unknown value of geometry: " + geometry);
+            throw new EuclidRuntimeException("Unknown value of geometry: " + geometry);
         }
         List<Point3> points = new ArrayList<Point3>(geometry - 2);
         double ang2 = angle / 2.0;
@@ -278,7 +278,7 @@ public abstract class Molutils implements CMLConstants {
         Vector3 v1 = new Vector3(aPoint).subtract(new Vector3(bPoint));
         Vector3 v2 = new Vector3(aPoint).subtract(new Vector3(cPoint));
         Vector3 v3 = new Vector3(aPoint).subtract(new Vector3(dPoint));
-        // FIXME Vector3 v = new Vector3(bPoint).plus(new
+        // FIXME Vector3 vector = new Vector3(bPoint).plus(new
         // Vector3(cPoint)).plus(new Vector3(dPoint));
         Vector3 v = new Vector3(v1).plus(new Vector3(v2)).plus(new Vector3(v3));
         if (v.getLength() < 0.00001) {
@@ -319,7 +319,7 @@ public abstract class Molutils implements CMLConstants {
                 for (int i = 0; i < ligands.size(); i++) {
                     logger.info("...ligand:" + ligands.get(i));
                 }
-            } catch (EuclidException e) {
+            } catch (EuclidRuntimeException e) {
                 logger.info("Exception: " + e);
             }
         }
@@ -330,38 +330,34 @@ public abstract class Molutils implements CMLConstants {
         logger.info("reference atom: " + pOne);
         for (int geometry = LINEAR; geometry <= TETRAHEDRAL; geometry++) {
             logger.info("\nType of geometry: " + geometry + S_COLON);
-            try {
-                List<Point3> ligands = calculate3DCoordinates1(pZero, pOne,
-                        pStaggered, geometry, length, angles[geometry - 2]);
-                for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("...ligand:" + ligands.get(i));
-                }
-                for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("distance: ref-" + i + " = "
-                            + ligands.get(i).getDistanceFromPoint(pZero));
-                }
-                for (int i = 0; i < ligands.size(); i++) {
-                    for (int j = i + 1; j < ligands.size(); j++) {
-                        logger.info("angle: "
-                                + i
-                                + "-ref-"
-                                + j
-                                + " = "
-                                + Point3.getAngle(ligands.get(i), pZero,
-                                        ligands.get(j)));
-                    }
-                    logger.info("angle: lig-ref-refa = "
-                            + Point3.getAngle(ligands.get(i), pZero, pOne));
-                }
-                for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("torsion: "
+            List<Point3> ligands = calculate3DCoordinates1(pZero, pOne,
+                    pStaggered, geometry, length, angles[geometry - 2]);
+            for (int i = 0; i < ligands.size(); i++) {
+                logger.info("...ligand:" + ligands.get(i));
+            }
+            for (int i = 0; i < ligands.size(); i++) {
+                logger.info("distance: ref-" + i + " = "
+                        + ligands.get(i).getDistanceFromPoint(pZero));
+            }
+            for (int i = 0; i < ligands.size(); i++) {
+                for (int j = i + 1; j < ligands.size(); j++) {
+                    logger.info("angle: "
                             + i
-                            + "-ref-ref1-ref2 = "
-                            + Point3.getTorsion(ligands.get(i), pZero, pOne,
-                                    pStaggered));
+                            + "-ref-"
+                            + j
+                            + " = "
+                            + Point3.getAngle(ligands.get(i), pZero,
+                                    ligands.get(j)));
                 }
-            } catch (EuclidException e) {
-                logger.info("Exception: " + e);
+                logger.info("angle: lig-ref-refa = "
+                        + Point3.getAngle(ligands.get(i), pZero, pOne));
+            }
+            for (int i = 0; i < ligands.size(); i++) {
+                logger.info("torsion: "
+                        + i
+                        + "-ref-ref1-ref2 = "
+                        + Point3.getTorsion(ligands.get(i), pZero, pOne,
+                                pStaggered));
             }
         }
 
@@ -371,33 +367,29 @@ public abstract class Molutils implements CMLConstants {
         logger.info("reference atoms: " + pTwoa + S_SLASH + pTwob);
         for (int geometry = TRIGONAL; geometry <= TETRAHEDRAL; geometry++) {
             logger.info("\nType of geometry: " + geometry + S_COLON);
-            try {
-                List<Point3> ligands = calculate3DCoordinates2(pZero, pTwoa,
-                        pTwob, geometry, length, angles[geometry - 2]);
-                for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("...ligand:" + ligands.get(i));
+            List<Point3> ligands = calculate3DCoordinates2(pZero, pTwoa,
+                    pTwob, geometry, length, angles[geometry - 2]);
+            for (int i = 0; i < ligands.size(); i++) {
+                logger.info("...ligand:" + ligands.get(i));
+            }
+            for (int i = 0; i < ligands.size(); i++) {
+                logger.info("distance: ref-" + i + " = "
+                        + ligands.get(i).getDistanceFromPoint(pZero));
+            }
+            for (int i = 0; i < ligands.size(); i++) {
+                for (int j = i + 1; j < ligands.size(); j++) {
+                    logger.info("angle: "
+                            + i
+                            + "-ref-"
+                            + j
+                            + " = "
+                            + Point3.getAngle(ligands.get(i), pZero,
+                                    ligands.get(j)));
                 }
-                for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("distance: ref-" + i + " = "
-                            + ligands.get(i).getDistanceFromPoint(pZero));
-                }
-                for (int i = 0; i < ligands.size(); i++) {
-                    for (int j = i + 1; j < ligands.size(); j++) {
-                        logger.info("angle: "
-                                + i
-                                + "-ref-"
-                                + j
-                                + " = "
-                                + Point3.getAngle(ligands.get(i), pZero,
-                                        ligands.get(j)));
-                    }
-                    logger.info("angle: lig-ref-refa = "
-                            + Point3.getAngle(ligands.get(i), pZero, pTwoa));
-                    logger.info("angle: lig-ref-refb = "
-                            + Point3.getAngle(ligands.get(i), pZero, pTwob));
-                }
-            } catch (EuclidException e) {
-                logger.info("Exception: " + e);
+                logger.info("angle: lig-ref-refa = "
+                        + Point3.getAngle(ligands.get(i), pZero, pTwoa));
+                logger.info("angle: lig-ref-refb = "
+                        + Point3.getAngle(ligands.get(i), pZero, pTwob));
             }
         }
 

@@ -110,9 +110,9 @@ public class Vector3 implements EuclidConstants {
      *
      * @param array
      *            components
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Vector3(double[] array) throws EuclidException {
+    public Vector3(double[] array) throws EuclidRuntimeException {
         this();
         Util.check(array, 3);
         System.arraycopy(array, 0, flarray, 0, 3);
@@ -212,14 +212,14 @@ public class Vector3 implements EuclidConstants {
      *
      * @param v
      *            vector to compare
-     * @return true if this > v
+     * @return true if this > vector
      */
     public boolean longerThan(Vector3 v) {
         return (getLength() > v.getLength());
     }
 
     /**
-     * scalar multiplication. create new vector v = this*f does not alter this
+     * scalar multiplication. create new vector vector = this*f does not alter this
      *
      * @param f
      *            multiplier for all components
@@ -309,9 +309,9 @@ public class Vector3 implements EuclidConstants {
      * @param n
      *            the zero-based index
      * @return the n'th component
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public double elementAt(int n) throws EuclidException {
+    public double elementAt(int n) throws EuclidRuntimeException {
         Util.check(n, 0, 2);
         return flarray[n];
     }
@@ -323,9 +323,9 @@ public class Vector3 implements EuclidConstants {
      *            the zero-based index
      * @param f
      *            component value
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void setElementAt(int n, double f) throws EuclidException {
+    public void setElementAt(int n, double f) throws EuclidRuntimeException {
         Util.check(n, 0, 2);
         flarray[n] = f;
     }
@@ -527,18 +527,18 @@ public class Vector3 implements EuclidConstants {
     }
 
     /**
-     * projection of this onto vector. does not alter this. result = v.norm() *
-     * (this.norm() dot v.norm())
+     * projection of this onto vector. does not alter this. result = vector.norm() *
+     * (this.norm() dot vector.norm())
      *
      * @param v
      *            vector to project onto
-     * @exception EuclidException
-     *                v or <TT>this</TT> is zero length
+     * @exception EuclidRuntimeException
+     *                vector or <TT>this</TT> is zero length
      * @return projected vector
      */
-    public Vector3 projectOnto(Vector3 v) throws EuclidException {
+    public Vector3 projectOnto(Vector3 v) throws EuclidRuntimeException {
         if (this.isZero() || v.isZero()) {
-            throw new EuclidException("zero length vector");
+            throw new EuclidRuntimeException("zero length vector");
         }
         Vector3 projection = new Vector3();
         Vector3 unit3 = v.getUnitVector();

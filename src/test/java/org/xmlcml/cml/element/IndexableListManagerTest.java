@@ -19,7 +19,6 @@ import org.xmlcml.cml.map.IndexableListManager;
 public class IndexableListManagerTest extends AbstractTest {
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#IndexableListManager(org.xmlcml.cml.element.IndexableList)}.
 	 */
 	@Test
 	public void testIndexableListManager() {

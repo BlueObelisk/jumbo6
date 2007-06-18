@@ -71,9 +71,9 @@ public class Point3 implements EuclidConstants {
      * constructor from a double[] (or a RealArray).
      * 
      * @param f
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Point3(double[] f) throws EuclidException {
+    public Point3(double[] f) throws EuclidRuntimeException {
         Util.check(f, 3);
         System.arraycopy(f, 0, flarray, 0, 3);
     }
@@ -365,10 +365,10 @@ public class Point3 implements EuclidConstants {
      * 
      * @param n
      *            the index
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      * @return the element
      */
-    public double elementAt(int n) throws EuclidException {
+    public double elementAt(int n) throws EuclidRuntimeException {
         Util.check(n, 0, 2);
         return flarray[n];
     }
@@ -380,9 +380,9 @@ public class Point3 implements EuclidConstants {
      *            the index
      * @param d
      *            the value
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public void setElementAt(int n, double d) throws EuclidException {
+    public void setElementAt(int n, double d) throws EuclidRuntimeException {
         Util.check(n, 0, 2);
         flarray[n] = d;
     }
@@ -398,18 +398,8 @@ public class Point3 implements EuclidConstants {
         RealArray col3 = new RealArray(4, 1.0);
         // set the translation in col 3
         col3.setElements(0, this.flarray);
-        RealArray result = null;
-        try {
-            result = t.multiply(col3);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        Point3 pout = null;
-        try {
-            pout = new Point3(result.getSubArray(0, 2).getArray());
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        RealArray result = t.multiply(col3);
+        Point3 pout = new Point3(result.getSubArray(0, 2).getArray());
         return pout;
     }
 
@@ -423,12 +413,7 @@ public class Point3 implements EuclidConstants {
         RealArray col3 = new RealArray(4, 1.0);
         // set the translation in col 3
         col3.setElements(0, this.flarray);
-        RealArray result = null;
-        try {
-            result = t.multiply(col3);
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        RealArray result = t.multiply(col3);
         System.arraycopy(result.getSubArray(0, 2).getArray(), 0, flarray, 0, 3);
     }
 
@@ -603,14 +588,14 @@ public class Point3 implements EuclidConstants {
      *            p2-p3-p4
      * @param torsion
      *            this-p2-p3-p4
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                two points are coincident or 3 colinear
      * @return new point; null if two points are coincident or three points are
      *         colinear
      */
     public static Point3 calculateFromInternalCoordinates(Point3 p1, Point3 p2,
             Point3 p3, double length, Angle angle, Angle torsion)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         Vector3 v32 = p2.subtract(p3);
         Vector3 v12 = p2.subtract(p1);
         // perp to p1-2-3
@@ -691,7 +676,10 @@ public class Point3 implements EuclidConstants {
     		System.out.println("same object");
     	}
     }
-    
+    /**
+     * 
+     * @return is on face or corner
+     */
     public boolean isOnUnitCellFaceEdgeOrCorner() {
     	for (Double d : this.getArray()) {
     		if (d.equals(0.0) || d.equals(1.0)) {
@@ -701,6 +689,9 @@ public class Point3 implements EuclidConstants {
     	return false;
     }
     
+    /**
+     * @return true if on element
+     */
     public boolean isOnNonExactHexagonalSymmetryElement() {
     	for (Double d : this.getArray()) {
     		if (d < (EuclidConstants.ONE_THIRD+CrystalTool.HEXAGONAL_CELL_FRACT_EPS) &&

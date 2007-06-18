@@ -294,6 +294,9 @@ public class ChemicalElement {
                 : DEFAULT_COVALENT_RADIUS;
     }
     
+    /**
+     * @return cov rad
+     */
     public double getTypeAdjustedCovalentRadius() {
     	double radius = this.getCovalentRadius();
 		if (this.isChemicalElementType(Type.ACTINIDE) ||

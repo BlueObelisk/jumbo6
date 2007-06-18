@@ -21,7 +21,7 @@ public class CatalogUtil implements CMLConstants {
 	 * 
 	 * @param catalogThing
 	 * @param scalar
-	 * @return
+	 * @return url
 	 */
 	public static URL getURLFromScalar(CatalogListChild catalogThing, CMLScalar scalar) {
 		String urlS = scalar.getValue();
@@ -54,8 +54,8 @@ public class CatalogUtil implements CMLConstants {
 	/** getURL from scalar in CMLList.
 	 * 
 	 * @param catalogThing
-	 * @param scalar
-	 * @return
+	 * @param link 
+	 * @return url
 	 */
 	public static URL getURLFromLink(CatalogListChild catalogThing, CMLLink link) {
 		String urlS = link.getTo();
@@ -68,7 +68,7 @@ public class CatalogUtil implements CMLConstants {
 	 * else assumes it is relative to the classpath and
 	 * uses Util.getResource()
 	 * @param resourceName
-	 * @return
+	 * @return url
 	 */
 	public static URL getURLFromResource(String resourceName) {
 		URL catalogUrl = null;

@@ -8,7 +8,7 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
@@ -91,9 +91,8 @@ public class CMLPlane3 extends AbstractPlane3 {
      *
      * @param array
      *            4-component
-     * @throws CMLException
      */
-    public CMLPlane3(double[] array) throws CMLException {
+    public CMLPlane3(double[] array) {
         this.setArray(array);
     }
 
@@ -104,11 +103,7 @@ public class CMLPlane3 extends AbstractPlane3 {
      */
     public CMLPlane3(Plane3 plane) {
         this();
-        try {
-            setArrayNoCheck(plane.getArray());
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        setArrayNoCheck(plane.getArray());
     }
 
     /**
@@ -126,7 +121,7 @@ public class CMLPlane3 extends AbstractPlane3 {
             Util.check(lmn, 3);
             Plane3 pp = new Plane3(lmn, d);
             this.setArrayNoCheck(pp.getArray());
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             throw new CMLException("" + e);
         }
     }
@@ -161,18 +156,9 @@ public class CMLPlane3 extends AbstractPlane3 {
      *            point
      */
     public CMLPlane3(CMLPoint3 p1, CMLPoint3 p2, CMLPoint3 p3) {
-        Plane3 pp;
-        try {
-            pp = new Plane3(p1.getEuclidPoint3(), p2.getEuclidPoint3(), p3
+        Plane3 pp= new Plane3(p1.getEuclidPoint3(), p2.getEuclidPoint3(), p3
                     .getEuclidPoint3());
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("" + e);
-        }
-        try {
-            this.setArrayNoCheck(pp.getArray());
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("" + e);
-        }
+        this.setArrayNoCheck(pp.getArray());
     }
 
     /**
@@ -184,17 +170,8 @@ public class CMLPlane3 extends AbstractPlane3 {
      *            point
      */
     public CMLPlane3(CMLLine3 l, CMLPoint3 p) {
-        Plane3 pp;
-        try {
-            pp = new Plane3(l.getEuclidLine3(), p.getEuclidPoint3());
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
-        try {
-            this.setArrayNoCheck(pp.getArray());
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        Plane3 pp = new Plane3(l.getEuclidLine3(), p.getEuclidPoint3());
+        this.setArrayNoCheck(pp.getArray());
     }
 
     // ====================== housekeeping methods =====================
@@ -210,7 +187,7 @@ public class CMLPlane3 extends AbstractPlane3 {
         Plane3 pleucl3 = null;
         try {
             pleucl3 = new Plane3(this.getXMLContent());
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             throw new CMLRuntimeException("" + e);
         }
         return pleucl3;
@@ -223,22 +200,16 @@ public class CMLPlane3 extends AbstractPlane3 {
      *
      * @param array
      *            4 components
-     * @throws CMLException
-     *             array must be of length 4
      */
-    public void setArray(double[] array) throws CMLException {
-        try {
-            Util.check(array, 4);
-            setArrayNoCheck(array);
-        } catch (EuclidException e) {
-            throw new CMLException("" + e);
-        }
+    public void setArray(double[] array) {
+        Util.check(array, 4);
+        setArrayNoCheck(array);
     }
 
-    private void setArrayNoCheck(double[] array) throws CMLException {
+    private void setArrayNoCheck(double[] array) throws CMLRuntimeException {
         Vector3 v = new Vector3(array[0], array[1], array[2]);
         if (v.isZero()) {
-            throw new CMLException("Cannot make plane with zero vector");
+            throw new CMLRuntimeException("Cannot make plane with zero vector");
         }
         v.normalize();
         double[] vv = v.getArray();

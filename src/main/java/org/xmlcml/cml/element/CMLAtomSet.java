@@ -599,7 +599,7 @@ public class CMLAtomSet extends AbstractAtomSet {
 
      try {
      newCoord = transMat.multiply (oldCoord);
-     } catch (EuclidException ume) {
+     } catch (EuclidRuntimeException ume) {
      logger.info("AtomSetToolImpl :: applySymmetry: UnequalMatricesException");
      logger.info("matrix " + transMat.getRows () + "x" + transMat.getCols ());
      logger.info ("coord " + oldCoord.size ());
@@ -613,7 +613,7 @@ public class CMLAtomSet extends AbstractAtomSet {
 
      try {
      cartCoord = orthMat.multiply (newCoord);
-     } catch (EuclidException ume) {
+     } catch (EuclidRuntimeException ume) {
      logger.info ("AtomSetToolImpl :: applySymmetry -> Couldn't apply orthMat" + orthMat + " to " + newCoord);
 
      return false;

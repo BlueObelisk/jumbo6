@@ -59,6 +59,7 @@ public class IntArraySTAttribute extends CMLAttribute {
     
     /** copy.
      * uses copy constructor.
+     * @return copy 
      */
     public Node copy() {
     	return new IntArraySTAttribute(this);

@@ -20,6 +20,7 @@ public class ElementGenerator extends AbstractGenerator {
 
 	private Map<String, CMLElementType> elementTypeMap;
 	/**
+	 * @param schemaManager 
 	 */
 	public ElementGenerator(SchemaManager schemaManager) {
 		this.schemaManager= schemaManager;

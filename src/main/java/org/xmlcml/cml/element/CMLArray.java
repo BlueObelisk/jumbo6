@@ -20,7 +20,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.HasArraySize;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.RealArray;
 
@@ -628,7 +628,7 @@ public class CMLArray extends AbstractArray
                         .subtract(new IntArray(this.getInts()));
                 resultArray = new CMLArray(result.getArray());
             }
-        } catch (EuclidException je) {
+        } catch (EuclidRuntimeException je) {
             throw new CMLException(S_EMPTY + je);
         }
         return resultArray;
@@ -661,7 +661,7 @@ public class CMLArray extends AbstractArray
                         .plus(new IntArray(array.getInts()));
                 resultArray = new CMLArray(result.getArray());
             }
-        } catch (EuclidException je) {
+        } catch (EuclidRuntimeException je) {
             throw new CMLException(S_EMPTY + je);
         }
         return resultArray;

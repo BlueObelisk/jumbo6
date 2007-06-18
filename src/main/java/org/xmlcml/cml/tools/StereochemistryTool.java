@@ -139,7 +139,7 @@ public class StereochemistryTool extends AbstractTool {
 	 * Currently only works for C atoms with 4 ligands.
 	 * 
 	 * @param centralAtom
-	 * @return
+	 * @return ligands
 	 */
 	public List<CMLAtom> getLigandsInCahnIngoldPrelogOrder(CMLAtom centralAtom) {
 		List<CMLAtom> ligandList = centralAtom.getLigandAtoms();

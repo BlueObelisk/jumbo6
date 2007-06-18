@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.DoubleTestBase;
@@ -102,11 +101,10 @@ public class CMLPlane3Test extends GeomTestBase {
         try {
             p = new CMLPlane3(new double[] { 1., 2., 3. });
         } catch (Exception e) {
-            Assert
-                    .assertEquals(
-                            "bad length",
-                            "org.xmlcml.euclid.EuclidException: array size required (4) found 3",
-                            e.getMessage());
+            Assert.assertEquals(
+                "bad length",
+                "array size required (4) found 3",
+                e.getMessage());
         }
         try {
             p = new CMLPlane3(new double[] { 0., 0., 0., 1. });
@@ -134,11 +132,10 @@ public class CMLPlane3Test extends GeomTestBase {
         try {
             p = new CMLPlane3(new double[] { 1., 2. }, 20.);
         } catch (CMLException e) {
-            Assert
-                    .assertEquals(
-                            "bad length",
-                            "org.xmlcml.euclid.EuclidException: array size required (3) found 2",
-                            e.getMessage());
+            Assert.assertEquals(
+                "bad length",
+                "org.xmlcml.euclid.EuclidRuntimeException: array size required (3) found 2",
+                e.getMessage());
         }
     }
 
@@ -393,12 +390,7 @@ public class CMLPlane3Test extends GeomTestBase {
     @Test
     public void testCMLPlane3Plane3() {
         CMLPlane3 p = new CMLPlane3(new CMLVector3(1., 2., 3.), 4.);
-        CMLPlane3 pp = null;
-        try {
-            pp = new CMLPlane3(new Plane3(1., 2., 3., 4.));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        CMLPlane3 pp = new CMLPlane3(new Plane3(1., 2., 3., 4.));
         CMLPlane3Test.assertEquals("constructor", pp, p, EPS);
     }
 

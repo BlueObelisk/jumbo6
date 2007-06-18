@@ -16,7 +16,6 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 public class CMLFragmentTest extends MoleculeAtomBondTest {
 
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLFragment#calculateCountExpression()}.
      */
     @Test
     public final void testCalculateCountExpression() {
@@ -51,7 +50,6 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
     }
 
     /**
-     * Test method for {@link org.xmlcml.cml.element.CMLFragment#expandCountExpression()}.
      */
     @Test
     @Ignore

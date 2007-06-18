@@ -7,7 +7,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
@@ -126,13 +126,7 @@ public class CMLPoint3 extends AbstractPoint3 {
      *                does not have 3 valid coordinates
      */
     public Point3 getEuclidPoint3() throws CMLRuntimeException {
-        Point3 peucl3 = null;
-        try {
-            peucl3 = new Point3(this.getXMLContent());
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bad point; must have 3 coordinates" + e);
-        }
-        return peucl3;
+        return new Point3(this.getXMLContent());
     }
 
     // ====================== subdiary accessors =====================
@@ -390,7 +384,7 @@ public class CMLPoint3 extends AbstractPoint3 {
         Point3 peucl3 = getEuclidPoint3();
         try {
             return peucl3.elementAt(n);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             throw new CMLRuntimeException("" + e);
         }
     }
@@ -409,7 +403,7 @@ public class CMLPoint3 extends AbstractPoint3 {
         Point3 peucl3 = getEuclidPoint3();
         try {
             peucl3.setElementAt(n, d);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             throw new CMLException("" + e);
         }
         this.setXMLContent(peucl3.getArray());
@@ -593,7 +587,7 @@ public class CMLPoint3 extends AbstractPoint3 {
                 pp = Point3.calculateFromInternalCoordinates(peucl3, p2
                         .getEuclidPoint3(), p3.getEuclidPoint3(), length,
                         new Angle(angle), new Angle(torsion));
-            } catch (EuclidException je) {
+            } catch (EuclidRuntimeException je) {
                 throw new CMLRuntimeException("bug " + je);
             }
         }

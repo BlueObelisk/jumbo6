@@ -4,9 +4,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real;
@@ -107,18 +105,18 @@ public class CMLLine3 extends AbstractLine3 {
     /**
      * construct from point and vector. takes doc from p the line will not
      * necessarily retain the exact point and the vector need not be normalized
-     * p and v are copied
+     * p and vector are copied
      *
      * @param p
      *            a point on the line
      * @param v
      *            non-zero vector through the point
-     * @exception CMLException
+     * @exception CMLRuntimeException
      *                zero length vector
      */
-    public CMLLine3(CMLPoint3 p, CMLVector3 v) throws CMLException {
+    public CMLLine3(CMLPoint3 p, CMLVector3 v) throws CMLRuntimeException {
         if (v.isZero()) {
-            throw new CMLException("zero vector");
+            throw new CMLRuntimeException("zero vector");
         }
         v.normalize();
         setPoint3(p.getXYZ3());
@@ -133,13 +131,13 @@ public class CMLLine3 extends AbstractLine3 {
      *            a point on the line
      * @param p2
      *            another point on the line
-     * @exception CMLException
+     * @exception CMLRuntimeException
      *                points are coincident
      */
-    public CMLLine3(CMLPoint3 p1, CMLPoint3 p2) throws CMLException {
+    public CMLLine3(CMLPoint3 p1, CMLPoint3 p2) throws CMLRuntimeException {
         CMLVector3 v = p1.subtract(p2);
         if (v.isZero()) {
-            throw new CMLException("coincident points");
+            throw new CMLRuntimeException("coincident points");
         }
         this.setPoint3(p1.getXYZ3());
         this.setVector3(v.getXYZ3());
@@ -154,14 +152,8 @@ public class CMLLine3 extends AbstractLine3 {
      * @exception CMLRuntimeException
      */
     public Line3 getEuclidLine3() throws CMLRuntimeException {
-        Line3 line = null;
-        try {
-            line = new Line3(new Point3(this.getPoint3()), new Vector3(this
+        return new Line3(new Point3(this.getPoint3()), new Vector3(this
                     .getVector3()));
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
-        return line;
     }
 
     // ====================== subsidiary accessors =====================
@@ -245,12 +237,7 @@ public class CMLLine3 extends AbstractLine3 {
      */
     public boolean isAntiparallelTo(CMLLine3 l2) {
         double[] v = this.getVector3();
-        Vector3 vv;
-        try {
-            vv = new Vector3(v);
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        Vector3 vv = new Vector3(v);
         vv = vv.multiplyBy(-1);
         return Util.isEqual(vv.getArray(), v, EPS);
     }

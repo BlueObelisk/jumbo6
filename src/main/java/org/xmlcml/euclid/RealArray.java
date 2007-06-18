@@ -149,14 +149,14 @@ public class RealArray extends ArrayBase {
      *            number of elements to use
      * @param arr
      *            array to read from
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             n larger than arraysize
      */
-    public RealArray(int n, double[] arr) throws EuclidException {
+    public RealArray(int n, double[] arr) throws EuclidRuntimeException {
         if (!checkSize(n))
-            throw new EuclidException("Cannot have negative array length");
+            throw new EuclidRuntimeException("Cannot have negative array length");
         if (n > arr.length) {
-            throw new EuclidException("Array size too small");
+            throw new EuclidRuntimeException("Array size too small");
         }
         array = new double[n];
         bufsize = n;
@@ -195,12 +195,12 @@ public class RealArray extends ArrayBase {
      *            inclusive start index of array
      * @param high
      *            inclusive end index of array
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             low > high or negative indices or outside size of m
      */
-    public RealArray(RealArray m, int low, int high) throws EuclidException {
+    public RealArray(RealArray m, int low, int high) throws EuclidRuntimeException {
         if (low < 0 || low > high || high >= m.size()) {
-            throw new EuclidException("index out of range " + low + S_SLASH + high);
+            throw new EuclidRuntimeException("index out of range " + low + S_SLASH + high);
         }
         nelem = high - low + 1;
         checkSize(nelem);
@@ -217,15 +217,15 @@ public class RealArray extends ArrayBase {
      *            matrix to slice
      * @param sub
      *            subscripts.
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if any of I(sub) lies outside 0...refmax-1
      */
-    public RealArray(RealArray ref, IntArray sub) throws EuclidException {
+    public RealArray(RealArray ref, IntArray sub) throws EuclidRuntimeException {
         this(sub.size());
         for (int i = 0; i < sub.size(); i++) {
             int j = sub.elementAt(i);
             if (j < 0 || j >= ref.size()) {
-                throw new EuclidException("index out of range " + j);
+                throw new EuclidRuntimeException("index out of range " + j);
             }
             this.setElementAt(i, ref.elementAt(j));
         }
@@ -323,7 +323,7 @@ public class RealArray extends ArrayBase {
      * 
      * @param strings
      *            values as Strings
-     * @exception NumberFormatException
+     * @exception EuclidRuntimeException
      *                a string could not be interpreted as doubles
      */
     public RealArray(String[] strings) throws EuclidRuntimeException {
@@ -603,9 +603,9 @@ public class RealArray extends ArrayBase {
         }
         return temp;
     }
-    private void checkConformable(RealArray m) throws EuclidException {
+    private void checkConformable(RealArray m) throws EuclidRuntimeException {
         if (nelem != m.nelem) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException();
         }
     }
     /**
@@ -649,11 +649,11 @@ public class RealArray extends ArrayBase {
      * 
      * @param f
      *            array to add
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return new array as this + f
      */
-    public RealArray plus(RealArray f) throws EuclidException {
+    public RealArray plus(RealArray f) throws EuclidRuntimeException {
         checkConformable(f);
         RealArray m = (RealArray) this.clone();
         for (int i = 0; i < nelem; i++) {
@@ -666,10 +666,10 @@ public class RealArray extends ArrayBase {
      * 
      * @param f
      *            array to add
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      */
-    public void plusEquals(RealArray f) throws EuclidException {
+    public void plusEquals(RealArray f) throws EuclidRuntimeException {
         checkConformable(f);
         for (int i = nelem - 1; i >= 0; --i) {
             array[i] += f.array[i];
@@ -680,11 +680,11 @@ public class RealArray extends ArrayBase {
      * 
      * @param f
      *            array to substract
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return new array as this - f
      */
-    public RealArray subtract(RealArray f) throws EuclidException {
+    public RealArray subtract(RealArray f) throws EuclidRuntimeException {
         checkConformable(f);
         RealArray m = (RealArray) this.clone();
         for (int i = 0; i < nelem; i++) {
@@ -697,10 +697,10 @@ public class RealArray extends ArrayBase {
      * 
      * @param f
      *            array to subtract
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      */
-    public void subtractEquals(RealArray f) throws EuclidException {
+    public void subtractEquals(RealArray f) throws EuclidRuntimeException {
         checkConformable(f);
         for (int i = nelem - 1; i >= 0; --i) {
             array[i] -= f.array[i];
@@ -851,24 +851,18 @@ public class RealArray extends ArrayBase {
      * @return sigma(this(i)**2)
      */
     public double innerProduct() {
-        double result = Double.NEGATIVE_INFINITY;
-        try {
-            result = this.dotProduct(this);
-        } catch (EuclidException x) {
-            throw new EuclidRuntimeException("bug " + x);
-        }
-        return result;
+        return this.dotProduct(this);
     }
     /**
      * dot product of two arrays. sigma(this(i)*(f(i));
      * 
      * @param f
      *            array to multiply
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                f is different size from <TT>this</TT>
      * @return dot product
      */
-    public double dotProduct(RealArray f) throws EuclidException {
+    public double dotProduct(RealArray f) throws EuclidRuntimeException {
         checkConformable(f);
         double sum = 0.0;
         for (int i = 0; i < nelem; i++) {
@@ -887,27 +881,27 @@ public class RealArray extends ArrayBase {
     /**
      * root mean square sqrt(sigma(x(i)**2)/n)
      * 
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                must have at least 1 point
      * @return rms
      */
-    public double rms() throws EuclidException {
+    public double rms() throws EuclidRuntimeException {
         if (nelem == 0) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException("must have at least one point");
         }
         return euclideanLength() / Math.sqrt((double) nelem);
     }
     /**
      * get unit vector
      * 
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                elements of <TT>this</TT> are all zero
      * @return the unit vector
      */
-    public RealArray unitVector() throws EuclidException {
+    public RealArray unitVector() throws EuclidRuntimeException {
         double l = euclideanLength();
         if (Real.isZero(l)) {
-            throw new EuclidException("zero length vector");
+            throw new EuclidRuntimeException("zero length vector");
         }
         double scale = 1.0 / l;
         RealArray f = new RealArray(nelem);
@@ -1224,17 +1218,17 @@ public class RealArray extends ArrayBase {
      * 
      * @param idx
      *            array of indexes
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                an element of idx is outside range of <TT>this</TT>
      * @return array
      * 
      */
-    public RealArray getReorderedArray(IntSet idx) throws EuclidException {
+    public RealArray getReorderedArray(IntSet idx) throws EuclidRuntimeException {
         RealArray temp = new RealArray(nelem);
         for (int i = 0; i < nelem; i++) {
             int index = idx.elementAt(i);
             if (index > nelem) {
-                throw new EuclidException("index out of range " + index);
+                throw new EuclidRuntimeException("index out of range " + index);
             }
             temp.array[i] = array[index];
         }

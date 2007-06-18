@@ -156,7 +156,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	/** get referenced indexable
 	 * @param ref (local "foo", or namespaced ("f:bar"))
 	 * @param namespace
-	 * @param elementType localName for type (e.g. CMLMolecule.TAG)
+	 * @param type 
 	 * @return the indexableor null
 	 */
 	public Indexable getIndexable (

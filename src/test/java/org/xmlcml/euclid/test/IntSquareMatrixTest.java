@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.IntSquareMatrix;
@@ -49,13 +48,8 @@ public class IntSquareMatrixTest extends MatrixTest {
     @Test
     public void testIsOrthogonal() {
         Assert.assertFalse("isOrthogonal", m2.isOrthogonal());
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3,
+        IntSquareMatrix m = new IntSquareMatrix(3,
                     new int[] { 0, 1, 0, -1, 0, 0, 0, 0, 1, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         Assert.assertTrue("isOrthogonal", m.isOrthogonal());
     }
 
@@ -83,19 +77,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testOuterProduct() {
-        IntArray ra = null;
-        try {
-            ra = new IntArray(3, new int[] { 1, 2, 3 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntArray ra = new IntArray(3, new int[] { 1, 2, 3 });
         IntSquareMatrix rsm = IntSquareMatrix.outerProduct(ra);
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
         MatrixTest.assertEquals("outer product", rm, (IntMatrix) rsm);
     }
 
@@ -104,19 +88,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testDiagonal() {
-        IntArray ra = null;
-        try {
-            ra = new IntArray(3, new int[] { 1, 2, 3 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntArray ra = new IntArray(3, new int[] { 1, 2, 3 });
         IntMatrix rsm = IntSquareMatrix.diagonal(ra);
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 1, 0, 0, 0, 2, 0, 0, 0, 3, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 1, 0, 0, 0, 2, 0, 0, 0, 3, });
         MatrixTest.assertEquals("diagonal", rm, (IntMatrix) rsm);
     }
 
@@ -126,19 +100,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIntSquareMatrixIntIntegerArray() {
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = new IntSquareMatrix(3,
-                    new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
+        IntSquareMatrix rsm = new IntSquareMatrix(3,
+            new int[] { 1, 2, 3, 2, 4, 6, 3, 6, 9, });
         MatrixTest.assertEquals("int int[]", rm, (IntMatrix) rsm);
     }
 
@@ -160,24 +124,10 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIntSquareMatrixIntMatrixIntIntInt() {
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
+        IntMatrix rm = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
                     24, 31, 32, 33, 34 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = new IntSquareMatrix(rm, 1, 1, 2);
-        } catch (EuclidException e) {
-        }
-        IntMatrix rm1 = null;
-        try {
-            rm1 = new IntMatrix(2, 2, new int[] { 22, 23, 32, 33, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix rsm = new IntSquareMatrix(rm, 1, 1, 2);
+        IntMatrix rm1 = new IntMatrix(2, 2, new int[] { 22, 23, 32, 33, });
         MatrixTest.assertEquals("rsm int int int", rm1, (IntMatrix) rsm);
     }
 
@@ -197,18 +147,8 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIntSquareMatrixIntMatrix() {
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(2, 2, new int[] { 22, 23, 32, 33, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = new IntSquareMatrix(rm);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix rm = new IntMatrix(2, 2, new int[] { 22, 23, 32, 33, });
+        IntSquareMatrix rsm = new IntSquareMatrix(rm);
         MatrixTest.assertEquals("real matrix", rm, rsm);
     }
 
@@ -220,19 +160,9 @@ public class IntSquareMatrixTest extends MatrixTest {
     public void testIntSquareMatrixIntegerArrayArray() {
         int[][] mat = new int[][] { new int[] { 11, 12, 13 },
                 new int[] { 21, 22, 23 }, new int[] { 31, 32, 33 }, };
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = new IntSquareMatrix(mat);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 11, 12, 13, 21, 22, 23, 31,
+        IntSquareMatrix rsm = new IntSquareMatrix(mat);
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 11, 12, 13, 21, 22, 23, 31,
                     32, 33, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         MatrixTest.assertEquals("real matrix", rm, rsm);
     }
 
@@ -251,19 +181,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testPlusIntSquareMatrix() {
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = m2.plus(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 22, 24, 26, 42, 44, 46, 62,
+        IntSquareMatrix rsm = m2.plus(m2);
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 22, 24, 26, 42, 44, 46, 62,
                     64, 66, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         MatrixTest.assertEquals("real matrix", rm, rsm);
     }
 
@@ -273,21 +193,10 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testSubtractIntSquareMatrix() {
-        IntSquareMatrix rsm = null;
-        IntSquareMatrix rsm1 = null;
-        try {
-            rsm = m2.plus(m2);
-            rsm1 = m2.subtract(rsm);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { -11, -12, -13, -21, -22, -23,
+        IntSquareMatrix rsm = m2.plus(m2);
+        IntSquareMatrix rsm1 = m2.subtract(rsm);
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { -11, -12, -13, -21, -22, -23,
                     -31, -32, -33, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         MatrixTest.assertEquals("real matrix", rm, rsm1);
 
     }
@@ -298,19 +207,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testMultiplyIntSquareMatrix() {
-        IntSquareMatrix rsm = null;
-        try {
-            rsm = m2.multiply(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 3, new int[] { 776, 812, 848, 1406, 1472,
+        IntSquareMatrix rsm = m2.multiply(m2);
+        IntMatrix rm = new IntMatrix(3, 3, new int[] { 776, 812, 848, 1406, 1472,
                     1538, 2036, 2132, 2228, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         MatrixTest.assertEquals("real matrix", rm, rsm);
     }
 
@@ -319,18 +218,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIsUnit() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 1 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 1 });
         Assert.assertTrue("unit", m.isUnit());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
         Assert.assertFalse("unit", m.isUnit());
     }
 
@@ -339,18 +229,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIsSymmetric() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 0, 3, 0, 1, 0, 3, 0, 1 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 1, 0, 3, 0, 1, 0, 3, 0, 1 });
         Assert.assertTrue("unit", m.isSymmetric());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
         Assert.assertFalse("unit", m.isSymmetric());
     }
 
@@ -359,24 +240,11 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIsUpperTriangular() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 0, 2, 3, 0, 0, 2, 0, 0, 0 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 0, 2, 3, 0, 0, 2, 0, 0, 0 });
         Assert.assertTrue("upper triangular", m.isUpperTriangular());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 2, 3, 0, 1, 2, 0, 0, 1 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 2, 3, 0, 1, 2, 0, 0, 1 });
         Assert.assertTrue("upper triangular", m.isUpperTriangular());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
         Assert.assertFalse("upper triangular false", m.isUpperTriangular());
     }
 
@@ -385,24 +253,11 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testIsLowerTriangular() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 0, 0, 0, 2, 0, 0, 3, 2, 0 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 0, 0, 0, 2, 0, 0, 3, 2, 0 });
         Assert.assertTrue("lower triangular", m.isLowerTriangular());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 0, 0, 2, 1, 0, 3, 2, 1 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 0, 0, 2, 1, 0, 3, 2, 1 });
         Assert.assertTrue("lower triangular", m.isLowerTriangular());
-        try {
-            m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m = new IntSquareMatrix(3, new int[] { 1, 1, 1, 2, 3, 4, 3, 4, 7 });
         Assert.assertFalse("lower triangular false", m.isLowerTriangular());
     }
 
@@ -411,19 +266,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testCopyUpperToLower() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
         m.copyUpperToLower();
-        IntSquareMatrix mm = null;
-        try {
-            mm = new IntSquareMatrix(3, new int[] { 6, 7, 8, 7, 5, 4, 8, 4, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix mm = new IntSquareMatrix(3, new int[] { 6, 7, 8, 7, 5, 4, 8, 4, 9 });
         MatrixTest.assertEquals("copy upper", mm, m);
     }
 
@@ -432,19 +277,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testCopyLowerToUpper() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
         m.copyLowerToUpper();
-        IntSquareMatrix mm = null;
-        try {
-            mm = new IntSquareMatrix(3, new int[] { 6, 2, 3, 2, 5, 2, 3, 2, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix mm = new IntSquareMatrix(3, new int[] { 6, 2, 3, 2, 5, 2, 3, 2, 9 });
         MatrixTest.assertEquals("copy upper", mm, m);
     }
 
@@ -453,12 +288,7 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testLowerTriangle() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 2, 9 });
         IntArray ra = m.lowerTriangle();
         IntTest.assertEquals("lower triangle", new int[] { 6, 2, 5, 3, 2, 9 },
                 ra.getArray());
@@ -469,19 +299,9 @@ public class IntSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testTranspose() {
-        IntSquareMatrix m = null;
-        try {
-            m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 1, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix m = new IntSquareMatrix(3, new int[] { 6, 7, 8, 2, 5, 4, 3, 1, 9 });
         m.transpose();
-        IntSquareMatrix mm = null;
-        try {
-            mm = new IntSquareMatrix(3, new int[] { 6, 2, 3, 7, 5, 1, 8, 4, 9 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntSquareMatrix mm = new IntSquareMatrix(3, new int[] { 6, 2, 3, 7, 5, 1, 8, 4, 9 });
         MatrixTest.assertEquals("transpose", mm, m);
     }
 

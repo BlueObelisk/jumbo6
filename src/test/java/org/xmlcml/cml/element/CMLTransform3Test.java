@@ -247,12 +247,7 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     @Test
     public void testCMLTransform3CMLTransform3CMLPoint3() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("x, -y, -z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("x, -y, -z");
         CMLPoint3 p = new CMLPoint3(1., 2., 3);
         CMLTransform3 tt = new CMLTransform3(t, p);
         CMLTransform3Test.assertEquals("transform", new double[] { 1.0, 0.0,
@@ -293,13 +288,8 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     @Test
     public void testCMLTransform3CMLLine3Double() {
-        CMLLine3 l = null;
-        try {
-            l = new CMLLine3(new CMLPoint3(4., 5., 6.), new CMLVector3(1., 2.,
-                    3.));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLLine3 l = new CMLLine3(new CMLPoint3(4., 5., 6.), 
+        		new CMLVector3(1., 2., 3.));
         CMLTransform3 t = new CMLTransform3(l, Math.PI / 3.);
         CMLTransform3Test.assertEquals("transform", new double[] {
                 0.5357142857142858, -0.6229365034008422, 0.5700529070291328,
@@ -508,11 +498,7 @@ public class CMLTransform3Test extends GeomTestBase {
         CMLTransform3 t = null;
 
         s = "-x+1/2, -y+1/2, z";
-        try {
-            t = new CMLTransform3(s);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        t = new CMLTransform3(s);
         CMLTransform3Test.assertEquals("type", new double[] { -1, 0, 0, 0.5, 0,
                 -1, 0, 0.5, 0, 0, 1, 0, 0, 0, 0, 1 }, t, EPS);
         CMLPoint3 p = t.getCentreOfRotation();
@@ -860,12 +846,7 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     @Test
     public void testCopy() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("x, y-x, 1/2+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("x, y-x, 1/2+z");
         CMLTransform3 tt = (CMLTransform3) t.copy();
         Assert.assertNotNull("copy not null", tt);
     }
@@ -876,12 +857,7 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     @Test
     public void testIsEqualToCMLTransform3Double() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("x, y-x, 1/2+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("x, y-x, 1/2+z");
         CMLTransform3 tt = (CMLTransform3) t.copy();
         Assert.assertTrue("isEquals", t.isEqualTo(tt, EPS));
     }
@@ -891,12 +867,7 @@ public class CMLTransform3Test extends GeomTestBase {
      */
     @Test
     public void testGetString() {
-        CMLTransform3 t = null;
-        try {
-            t = new CMLTransform3("x, y-x, 1/2+z");
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLTransform3 t = new CMLTransform3("x, y-x, 1/2+z");
         String s = t.getString();
         String ss = "{4,4}\n"+
         "(1.0,0.0,0.0,0.0)\n"+

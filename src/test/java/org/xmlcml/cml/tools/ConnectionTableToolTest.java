@@ -396,7 +396,6 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     }
 
     /**
-     * Test method for {@link org.xmlcml.cml.tools.ConnectionTableTool#createSubMolecule(org.xmlcml.cml.element.CMLMolecule, java.lang.String[])}.
      */
     @Test
     public final void testCreateSubMolecule() {

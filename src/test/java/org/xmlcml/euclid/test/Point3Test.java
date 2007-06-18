@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
@@ -103,19 +103,14 @@ public class Point3Test extends GeomTest {
      */
     @Test
     public void testPoint3DoubleArray() {
-        Point3 pp = null;
-        try {
-            pp = new Point3(new double[] { 1., 3., 5. });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3 pp = new Point3(new double[] { 1., 3., 5. });
         Assert.assertNotNull("point", pp);
         Point3Test.assertEquals("point copy", new double[] { 1., 3., 5. }, pp,
                 EPS);
         try {
             pp = new Point3(new double[] { 1., 3. });
             alwaysFail("must have 3 coordinates");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("bad coordinates",
                     "array size required (3) found 2", e.getMessage());
         }
@@ -342,16 +337,11 @@ public class Point3Test extends GeomTest {
      */
     @Test
     public void testElementAt() {
-        double d = Double.NaN;
-        try {
-            d = p123.elementAt(1);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d = p123.elementAt(1);
         Assert.assertEquals("element at", 2., d, EPS);
         try {
             d = p123.elementAt(3);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("element at", "index (3)out of range: 0/2", e
                     .getMessage());
         }
@@ -362,16 +352,12 @@ public class Point3Test extends GeomTest {
      */
     @Test
     public void testSetElementAt() {
-        try {
-            p123.setElementAt(1, 10.);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        p123.setElementAt(1, 10.);
         Point3Test.assertEquals("set element at", new double[] { 1., 10., 3. },
                 p123, EPS);
         try {
             p123.setElementAt(3, 10.);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("element at", "index (3)out of range: 0/2", e
                     .getMessage());
         }
@@ -543,13 +529,8 @@ public class Point3Test extends GeomTest {
         Point3 p0 = new Point3(1., 0., 0.);
         Point3 p1 = new Point3(0., 0., 0.);
         Point3 p2 = new Point3(0., 1., 0.);
-        Point3 p = null;
-        try {
-            p = Point3.calculateFromInternalCoordinates(p0, p1, p2, 2.0,
+        Point3 p = Point3.calculateFromInternalCoordinates(p0, p1, p2, 2.0,
                     new Angle(Math.PI / 2), new Angle(Math.PI / 2));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         Point3Test.assertEquals("internals", new double[] { 0.0, 1.0, -2.0 },
                 p, EPS);
 

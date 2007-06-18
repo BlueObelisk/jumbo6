@@ -42,7 +42,7 @@ public class FragmentConverter extends AbstractTool {
 		this.molecule = molecule;
 	}
 	/** processes conventional molecule into fragment.
-	 * @param tool TODO
+	 * @return fragment
 	 */
 	public CMLFragment convertToFragment() {
 		// <molecule role="fragment" id="acet"

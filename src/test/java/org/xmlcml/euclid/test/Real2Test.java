@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -53,7 +52,7 @@ public class Real2Test extends EuclidTestBase {
     public static void assertEquals(String msg, Real2 test, Real2 expected,
             double epsilon) {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-        Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK, expected);
+        Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK, expected);
         DoubleTestBase.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
     }
 
@@ -281,13 +280,9 @@ public class Real2Test extends EuclidTestBase {
      */
     @Test
     public void testGetUnitVector() {
-        try {
-            Real2 unit = r12.getUnitVector();
-            Assert.assertEquals("vector", Math.sqrt(1. / 5.), unit.getX(), EPS);
-            Assert.assertEquals("vector", Math.sqrt(4. / 5.), unit.getY(), EPS);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Real2 unit = r12.getUnitVector();
+        Assert.assertEquals("vector", Math.sqrt(1. / 5.), unit.getX(), EPS);
+        Assert.assertEquals("vector", Math.sqrt(4. / 5.), unit.getY(), EPS);
     }
 
     /**

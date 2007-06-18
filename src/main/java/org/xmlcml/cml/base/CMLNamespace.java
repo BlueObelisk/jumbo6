@@ -27,6 +27,7 @@ public class CMLNamespace implements CMLConstants {
      * iterates up ancestry namespace prefixes until finds match
      * @param prefix
      * @param element
+     * @return namespace
      */
     public static CMLNamespace createNamespace(String prefix, CMLElement element) {
     	String namespaceURI = element.getNamespaceURIForPrefix(prefix);

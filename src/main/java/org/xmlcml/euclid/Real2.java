@@ -31,6 +31,19 @@ public class Real2 implements EuclidConstants {
         this.x = x;
         this.y = y;
     }
+    
+    /**
+     * constructor.
+     * 
+     * @param x the two components
+     */
+    public Real2(double[] x) {
+    	if (x == null || x.length != 2) {
+    		throw new EuclidRuntimeException("requires non-null array of length 2");
+    	}
+        this.x = x[0];
+        this.y = x[1];
+    }
     /**
      * copy constructor
      * 
@@ -40,6 +53,7 @@ public class Real2 implements EuclidConstants {
         this.x = r.x;
         this.y = r.y;
     }
+    
     /**
      * swaps the x and y values
      */
@@ -94,6 +108,16 @@ public class Real2 implements EuclidConstants {
     public boolean isEqualTo(Real2 r) {
         return (Real.isEqual(x, r.x) && Real.isEqual(y, r.y));
     }
+    
+    /**
+     * is the point the origin.
+     * 
+     * @return true if origin
+     */
+    public boolean isOrigin() {
+    	return Real.isZero(x) && Real.isZero(y);
+    }
+
     /**
      * add two points to give vector sum
      * 
@@ -103,6 +127,16 @@ public class Real2 implements EuclidConstants {
      */
     public Real2 plus(Real2 r2) {
         return new Real2(x + r2.x, y + r2.y);
+    }
+    /**
+     * add two points to give vector sum
+     * 
+     * @param r2
+     * 
+     */
+    public void plusEquals(Real2 r2) {
+        this.x = x + r2.x;
+        this.y = y + r2.y;
     }
     /**
      * subtract two points to give vector difference
@@ -202,13 +236,13 @@ public class Real2 implements EuclidConstants {
      * get unit vector
      * 
      * @return unit vector
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>this</TT> was of zero length
      */
-    public Real2 getUnitVector() throws EuclidException {
+    public Real2 getUnitVector() {
         double length = this.getLength();
         if (Real.isZero(length)) {
-            throw new EuclidException("zero length vector");
+            throw new EuclidRuntimeException("zero length vector");
         }
         Real2 temp = new Real2(this.x, this.y);
         temp = temp.multiplyBy(1.0 / length);

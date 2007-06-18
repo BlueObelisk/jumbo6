@@ -1552,7 +1552,7 @@ public class Util implements EuclidConstants {
         // is url alreday a valid URL?
         boolean ok = true;
         try {
-            /* URL u = */new URL(url);
+            /* URL unitVector = */new URL(url);
         } catch (MalformedURLException mue) {
             ok = false;
             // DOS filenames (for example C:\foo) gives problems
@@ -1565,7 +1565,7 @@ public class Util implements EuclidConstants {
                 if (mueString.length() == 1) {
                     url = "file:/" + url;
                     // throws MalformedURL if wrong
-                    /* URL u = */new URL(url);
+                    /* URL unitVector = */new URL(url);
                     ok = true;
                 }
             }
@@ -1622,11 +1622,11 @@ public class Util implements EuclidConstants {
      * @param value
      *            Description of the Parameter
      * @return Description of the Return Value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                Description of the Exception
      */
     public static String outputInteger(int nPlaces, int value)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // cache formatter
         String f = "i" + nPlaces;
         DecimalFormat form = formTable.get(f);
@@ -1644,7 +1644,7 @@ public class Util implements EuclidConstants {
         String result = form.format(value).trim();
         int l = result.length();
         if (l > nPlaces) {
-            throw new EuclidException("Integer too big");
+            throw new EuclidRuntimeException("Integer too big");
         }
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < nPlaces - l; i++) {
@@ -1664,11 +1664,11 @@ public class Util implements EuclidConstants {
      * @param value
      *            Description of the Parameter
      * @return Description of the Return Value
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                Description of the Exception
      */
     public static String outputFloat(int nPlaces, int nDec, double value)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         String f = "f" + nPlaces + S_PERIOD + nDec;
         DecimalFormat form = formTable.get(f);
         if (form == null) {
@@ -1733,12 +1733,7 @@ public class Util implements EuclidConstants {
      * @return Description of the Return Value
      */
     public static String outputNumber(int nPlaces, int nDec, double c) {
-        String s = null;
-        try {
-            s = Util.outputFloat(nPlaces, nDec, c).trim();
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        String s = Util.outputFloat(nPlaces, nDec, c).trim();
         if (s.indexOf(S_PERIOD) != -1) {
             while (s.endsWith("0")) {
                 s = s.substring(0, s.length() - 1);
@@ -1778,14 +1773,14 @@ public class Util implements EuclidConstants {
      *            to check
      * @param size
      *            required size
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if null or wrong size
      */
-    public static void check(double[] array, int size) throws EuclidException {
+    public static void check(double[] array, int size) throws EuclidRuntimeException {
         if (array == null) {
-            throw new EuclidException("null array");
+            throw new EuclidRuntimeException("null array");
         } else if (array.length != size) {
-            throw new EuclidException("array size required (" + size
+            throw new EuclidRuntimeException("array size required (" + size
                     + ") found " + array.length);
         }
     }
@@ -1799,12 +1794,12 @@ public class Util implements EuclidConstants {
      *            inclusive lower
      * @param high
      *            inclusive higher
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             if out of range
      */
-    public static void check(int n, int low, int high) throws EuclidException {
+    public static void check(int n, int low, int high) throws EuclidRuntimeException {
         if (n < low || n > high) {
-            throw new EuclidException("index (" + n + ")out of range: " + low
+            throw new EuclidRuntimeException("index (" + n + ")out of range: " + low
                     + S_SLASH + high);
         }
     }
@@ -1921,21 +1916,20 @@ public class Util implements EuclidConstants {
      * 
      * @param s
      *            the string
-     * @param slashDelim
-     *            delimiter (use S_WHITEREGEX to split whitespace)
+     * @param delim 
      * @return array
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             cannot parse as ints
      */
     public final static int[] splitToIntArray(String s, String delim)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         String[] ss = s.split(delim);
         int[] ii = new int[ss.length];
         for (int i = 0; i < ss.length; i++) {
             try {
                 ii[i] = Integer.parseInt(ss[i]);
             } catch (NumberFormatException nfe) {
-                throw new EuclidException(S_EMPTY + nfe);
+                throw new EuclidRuntimeException(S_EMPTY + nfe);
             }
         }
         return ii;
@@ -1946,21 +1940,20 @@ public class Util implements EuclidConstants {
      * 
      * @param s
      *            the string
-     * @param slashDelim
-     *            delimiter (use S_WHITEREGEX to split whitespace)
+     * @param delim 
      * @return array
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             cannot parse as ints
      */
     public final static double[] splitToDoubleArray(String s, String delim)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         String[] ss = s.split(delim);
         double[] dd = new double[ss.length];
         for (int i = 0; i < ss.length; i++) {
             try {
                 dd[i] = new Double(ss[i]).doubleValue();
             } catch (NumberFormatException nfe) {
-                throw new EuclidException(S_EMPTY + nfe);
+                throw new EuclidRuntimeException(S_EMPTY + nfe);
             }
         }
         return dd;

@@ -8,5 +8,6 @@ package org.xmlcml.cml.inchi;
  * @since 5.4
  */
 public enum Problems {
+	/** */
     BOND_ORDER
 }

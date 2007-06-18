@@ -261,7 +261,6 @@ public class ConnectionTableTool extends AbstractTool {
 
 	/** create new sub molecule.
 	 * 
-	 * @param molecule
 	 * @param atomIds
 	 * @return new molecule
 	 */

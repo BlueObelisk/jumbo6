@@ -9,9 +9,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 /**
  * tests CMLSymmetry.
@@ -121,12 +118,7 @@ public class CMLSymmetryTest extends BaseTest {
     @Test
     public void testCMLSymmetryStringArray() {
         Assert.assertEquals("opercount", 8, pbca.length);
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(pbca);
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(pbca);
         CMLElements<CMLMatrix> matrices = symmetry.getMatrixElements();
         Assert.assertEquals("matrixcount", 0, matrices.size());
         CMLElements<CMLTransform3> transform3s = symmetry
@@ -143,36 +135,23 @@ public class CMLSymmetryTest extends BaseTest {
      */
     @Test
     public void testIsGroup() {
-        try {
-            CMLSymmetry symmetry = new CMLSymmetry(pbca);
-            Assert.assertEquals("group", false, symmetry.isGroup());
-            symmetry = new CMLSymmetry(pmmm);
-            Assert.assertEquals("group", true, symmetry.isGroup());
-            symmetry = new CMLSymmetry(oper3);
-            Assert.assertEquals("group", false, symmetry.isGroup());
-            symmetry = new CMLSymmetry(p212121);
-            Assert.assertEquals("group", false, symmetry.isGroup());
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(pbca);
+        Assert.assertEquals("group", false, symmetry.isGroup());
+        symmetry = new CMLSymmetry(pmmm);
+        Assert.assertEquals("group", true, symmetry.isGroup());
+        symmetry = new CMLSymmetry(oper3);
+        Assert.assertEquals("group", false, symmetry.isGroup());
+        symmetry = new CMLSymmetry(p212121);
+        Assert.assertEquals("group", false, symmetry.isGroup());
     }
     /**
      * Test method for 'org.xmlcml.cml.element.CMLSymmetry.isSpaceGroup()'
      */
     @Test
     public void testIsSpaceGroup() {
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(pbca);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(pbca);
         // Assert.assertEquals("group", true, symmetry.isSpaceGroup());
-        try {
-            symmetry = new CMLSymmetry(p212121);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        symmetry = new CMLSymmetry(p212121);
         Assert.assertEquals("group", true, symmetry.isSpaceGroup());
     }
     /**
@@ -181,29 +160,14 @@ public class CMLSymmetryTest extends BaseTest {
      */
     @Test
     public void testCMLSymmetrymultiplyCMLSymmetry() {
-        CMLSymmetry sym1 = null;
-        try {
-            sym1 = new CMLSymmetry(new String[] { "x, y, z", "-x, -y, -z" });
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry sym1 = new CMLSymmetry(new String[] { "x, y, z", "-x, -y, -z" });
         CMLSymmetry sym1Copy = new CMLSymmetry(sym1);
         Assert.assertTrue("convolute", sym1Copy.isEqualTo(sym1, EPS));
-        CMLSymmetry mmmGenerators = null;
-        try {
-            mmmGenerators = new CMLSymmetry(new String[] { "x, y, z",
+        CMLSymmetry mmmGenerators = new CMLSymmetry(new String[] { "x, y, z",
                     "-x, y, z", "x, -y, z", "x, y, -z", });
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
-        CMLSymmetry mmm = null;
-        try {
-            mmm = new CMLSymmetry(new String[] { "x, y, z", "-x, y, z",
+        CMLSymmetry mmm = new CMLSymmetry(new String[] { "x, y, z", "-x, y, z",
                     "x, -y, z", "x, y, -z", "-x, -y, -z", "x, -y, -z",
                     "-x, y, -z", "-x, -y, z", });
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
         CMLSymmetry sym2Copy = new CMLSymmetry(mmmGenerators);
         Assert.assertTrue("convolute", sym2Copy.isEqualTo(mmmGenerators, EPS));
         // this generates a complete group
@@ -218,14 +182,9 @@ public class CMLSymmetryTest extends BaseTest {
         sym = mmmGenerators.convolute(mmmGenerators);
         // this does not generate a complete group (-x, -y, -z is missing)
         Assert.assertEquals("convolute", 7, sym.getTransform3Elements().size());
-        CMLSymmetry sym4 = null;
-        try {
-            sym4 = new CMLSymmetry(new String[] { "x, y, z", "-x, y, z",
-                    "x, -y, z", "x, y, -z", "-x, -y, z", "-x, y, -z",
-                    "x, -y, -z", });
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry sym4 = new CMLSymmetry(new String[] { "x, y, z", "-x, y, z",
+            "x, -y, z", "x, y, -z", "-x, -y, z", "-x, y, -z",
+            "x, -y, -z", });
         Assert.assertTrue("convolute", sym.isEqualTo(sym4, EPS));
     }
     /** test. */
@@ -234,63 +193,37 @@ public class CMLSymmetryTest extends BaseTest {
         CMLSymmetry fullGroup = null;
         CMLSymmetry nonTranslationSubGroup = null;
         CMLElements<CMLTransform3> subGroupElements = null;
-        try {
-            fullGroup = new CMLSymmetry(p212121);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(p212121);
         Assert.assertTrue("is group", fullGroup.isSpaceGroup());
         nonTranslationSubGroup = fullGroup.getNonTranslations();
         subGroupElements = nonTranslationSubGroup.getTransform3Elements();
         Assert.assertEquals("group elements", 0, subGroupElements.size());
-        try {
-            fullGroup = new CMLSymmetry(p21c);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(p21c);
         Assert.assertTrue("is group", fullGroup.isSpaceGroup());
         nonTranslationSubGroup = fullGroup.getNonTranslations();
         Assert.assertFalse("is group", nonTranslationSubGroup.isSpaceGroup());
         subGroupElements = nonTranslationSubGroup.getTransform3Elements();
         Assert.assertEquals("group elements", 1, subGroupElements.size());
-        try {
-            fullGroup = new CMLSymmetry(pbca);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(pbca);
         Assert.assertTrue("is group", fullGroup.isSpaceGroup());
         nonTranslationSubGroup = fullGroup.getNonTranslations();
         Assert.assertFalse("is group", nonTranslationSubGroup.isSpaceGroup());
         subGroupElements = nonTranslationSubGroup.getTransform3Elements();
         Assert.assertEquals("group elements", 1, subGroupElements.size());
-        try {
-            fullGroup = new CMLSymmetry(abm2);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(abm2);
         Assert.assertTrue("is group", fullGroup.isSpaceGroup());
         nonTranslationSubGroup = fullGroup.getNonTranslations();
-        Assert.assertFalse("is not space group", nonTranslationSubGroup
-                .isSpaceGroup());
+        Assert.assertFalse("is not space group", nonTranslationSubGroup.isSpaceGroup());
         subGroupElements = nonTranslationSubGroup.getTransform3Elements();
         Assert.assertEquals("group elements", 2, subGroupElements.size());
     }
     /** test. */
     @Test
     public void testGetPureTranslations() {
-        CMLSymmetry fullGroup = null;
-        try {
-            fullGroup = new CMLSymmetry(p212121);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry fullGroup = new CMLSymmetry(p212121);
         List<CMLTransform3> operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 0, operators.size());
-        try {
-            fullGroup = new CMLSymmetry(ibar42d);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(ibar42d);
         operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 1, operators.size());
         CMLVector3Test.assertEquals("centering",
@@ -299,11 +232,7 @@ public class CMLSymmetryTest extends BaseTest {
         CMLCrystal.Centering centering = fullGroup.getCentering();
         Assert.assertTrue("centering type", CMLCrystal.Centering.I
                 .equals(centering));
-        try {
-            fullGroup = new CMLSymmetry(c2c);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(c2c);
         operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 1, operators.size());
         CMLVector3Test.assertEquals("centering", new double[] { 0.5, 0.5, 0 },
@@ -311,11 +240,7 @@ public class CMLSymmetryTest extends BaseTest {
         centering = fullGroup.getCentering();
         Assert.assertTrue("centering type", CMLCrystal.Centering.C
                 .equals(centering));
-        try {
-            fullGroup = new CMLSymmetry(rbar3);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(rbar3);
         operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 2, operators.size());
         CMLVector3Test.assertEquals("centering", new double[] { 2. / 3.,
@@ -325,11 +250,7 @@ public class CMLSymmetryTest extends BaseTest {
         centering = fullGroup.getCentering();
         Assert.assertTrue("centering type", CMLCrystal.Centering.R
                 .equals(centering));
-        try {
-            fullGroup = new CMLSymmetry(abar22a);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(abar22a);
         operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 1, operators.size());
         CMLVector3Test.assertEquals("centering", new double[] { 0, 0.5, 0.5 },
@@ -337,11 +258,7 @@ public class CMLSymmetryTest extends BaseTest {
         centering = fullGroup.getCentering();
         Assert.assertTrue("centering type", CMLCrystal.Centering.A
                 .equals(centering));
-        try {
-            fullGroup = new CMLSymmetry(fdd2);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        fullGroup = new CMLSymmetry(fdd2);
         operators = fullGroup.getPureTranslations();
         Assert.assertEquals("translations", 3, operators.size());
         CMLVector3Test.assertEquals("centering", new double[] { 0, 0.5, 0.5 },
@@ -359,26 +276,13 @@ public class CMLSymmetryTest extends BaseTest {
     public void testGetPointGroupMultiplicity() {
         double eps = 0.0000001;
         CMLSymmetry group = null;
-        Point3 p000 = null;
-        Point3 p123 = null;
-        Point3 p300 = null;
-        Point3 p304 = null;
-        Point3 p555 = null;
-        try {
-            p000 = new Point3(new double[] { 0., 0., 0. });
-            p123 = new Point3(new double[] { 0.1, 0.2, 0.3 });
-            p300 = new Point3(new double[] { 0.3, 0.0, 0.0 });
-            p304 = new Point3(new double[] { 0.3, 0.0, 0.4 });
-            p555 = new Point3(new double[] { 0.5, 0.5, 0.5 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3 p000 = new Point3(new double[] { 0., 0., 0. });
+        Point3 p123 = new Point3(new double[] { 0.1, 0.2, 0.3 });
+        Point3 p300 = new Point3(new double[] { 0.3, 0.0, 0.0 });
+        Point3 p304 = new Point3(new double[] { 0.3, 0.0, 0.4 });
+        Point3 p555 = new Point3(new double[] { 0.5, 0.5, 0.5 });
         int multiplicity = 0;
-        try {
-            group = new CMLSymmetry(pmmm);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        group = new CMLSymmetry(pmmm);
         Assert.assertTrue("is group", group.isSpaceGroup());
         multiplicity = group.getPointGroupMultiplicity(p000, eps);
         Assert.assertEquals("multiplicity ", 8, multiplicity);
@@ -392,11 +296,7 @@ public class CMLSymmetryTest extends BaseTest {
         Assert.assertEquals("multiplicity ", 1, multiplicity);
         multiplicity = group.getSpaceGroupMultiplicity(p555);
         Assert.assertEquals("multiplicity ", 8, multiplicity);
-        try {
-            group = new CMLSymmetry(p212121);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        group = new CMLSymmetry(p212121);
         Assert.assertTrue("is group", group.isSpaceGroup());
         multiplicity = group.getPointGroupMultiplicity(p000, eps);
         Assert.assertEquals("multiplicity ", 1, multiplicity);
@@ -433,28 +333,14 @@ public class CMLSymmetryTest extends BaseTest {
          </atom>
          --*/
         CMLSymmetry group = null;
-        Point3 p1 = null;
-        Point3 p1a = null;
-        Point3 p1b = null;
-        Point3 p2 = null;
-        Point3 p3a = null;
-        Point3 p3b = null;
-        try {
-            p1 = new Point3(new double[] { 0.0, 0.5, 0.8011 });
-            p1a = new Point3(new double[] { 1.0, 0.5, 0.8011 });
-            p1b = new Point3(new double[] { 0.0, -0.5, 0.8011 });
-            p2 = new Point3(new double[] { 0.33569, 0.98239, 0.88892 });
-            p3a = new Point3(new double[] { 0.5, 1.0, 0.8011 });
-            p3b = new Point3(new double[] { -0.5, 1.0, 0.8011 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Point3 p1 = new Point3(new double[] { 0.0, 0.5, 0.8011 });
+        Point3 p1a = new Point3(new double[] { 1.0, 0.5, 0.8011 });
+        Point3 p1b = new Point3(new double[] { 0.0, -0.5, 0.8011 });
+        Point3 p2 = new Point3(new double[] { 0.33569, 0.98239, 0.88892 });
+        Point3 p3a = new Point3(new double[] { 0.5, 1.0, 0.8011 });
+        Point3 p3b = new Point3(new double[] { -0.5, 1.0, 0.8011 });
         int multiplicity = 0;
-        try {
-            group = new CMLSymmetry(p21212);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        group = new CMLSymmetry(p21212);
         Assert.assertTrue("is group", group.isSpaceGroup());
         multiplicity = group.getSpaceGroupMultiplicity(p1);
         Assert.assertEquals("multiplicity ", 2, multiplicity);
@@ -476,19 +362,14 @@ public class CMLSymmetryTest extends BaseTest {
         //'-x, -y, -z'
         //'-x-1/2, y-1/2, -z-1/2'
         Point3 point = new Point3(0.0000, 0.0000, 0.5000);
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(
-                new String[]{
-                        "x, y, z",
-                        "x+1/2, -y+1/2, z+1/2",
-                        "-x, -y, -z",
-                        "-x-1/2, y-1/2, -z-1/2"
-                }
-            );
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(
+            new String[]{
+                    "x, y, z",
+                    "x+1/2, -y+1/2, z+1/2",
+                    "-x, -y, -z",
+                    "-x-1/2, y-1/2, -z-1/2"
+            }
+        );
         int mult = symmetry.getSpaceGroupMultiplicity(point);
         Assert.assertEquals("Multiplicity ", 2, mult);
     }
@@ -497,12 +378,7 @@ public class CMLSymmetryTest extends BaseTest {
      */
     @Test
     public void testCopy() {
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(pbca);
-        } catch (CMLException e) {
-            throw new CMLRuntimeException("bug " + e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(pbca);
         CMLSymmetry symmetry1 = (CMLSymmetry) symmetry.copy();
         Assert.assertEquals("copy", symmetry.getMatrixElements().size(),
                 symmetry1.getMatrixElements().size());
@@ -513,12 +389,8 @@ public class CMLSymmetryTest extends BaseTest {
     @Test
     public void testCMLSymmetryListOfCMLTransform3() {
         List<CMLTransform3> list = new ArrayList<CMLTransform3>();
-        try {
-            list.add(new CMLTransform3("x, y, z"));
-            list.add(new CMLTransform3("-x, 1/2+y, -z"));
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        list.add(new CMLTransform3("x, y, z"));
+        list.add(new CMLTransform3("-x, 1/2+y, -z"));
         CMLSymmetry symmetry = new CMLSymmetry(list);
         Assert.assertEquals("symmetry", 2, symmetry.getTransform3Elements().size());
         CMLTransform3 tr = symmetry.getTransform3Elements().get(1);
@@ -539,12 +411,7 @@ public class CMLSymmetryTest extends BaseTest {
         List<String> list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = CMLSymmetry.createFromXYZStrings(list);
         Assert.assertEquals("symmetry", 2, symmetry.getTransform3Elements().size());
         CMLTransform3 tr = symmetry.getTransform3Elements().get(1);
         CMLTransform3Test.assertEquals("symmetry 2",
@@ -565,20 +432,10 @@ public class CMLSymmetryTest extends BaseTest {
         List<String> list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry1 = null;
-        try {
-            symmetry1 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
         list = new ArrayList<String>();
         list.add("-x, -y, -z");
-        CMLSymmetry symmetry2 = null;
-        try {
-            symmetry2 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
         CMLSymmetry symmetry3 = symmetry1.convolute(symmetry2);
         symmetry3.debug();
     }
@@ -591,21 +448,11 @@ public class CMLSymmetryTest extends BaseTest {
         List<String> list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry1 = null;
-        try {
-            symmetry1 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
         list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry2 = null;
-        try {
-            symmetry2 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
         Assert.assertTrue("is equal", symmetry1.isEqualTo(symmetry2, EPS));
     }
     /**
@@ -617,22 +464,12 @@ public class CMLSymmetryTest extends BaseTest {
         List<String> list = new ArrayList<String>();
         list.add("x, y, 2+z");
         list.add("1-x, 1/2+y, 3-z");
-        CMLSymmetry symmetry1 = null;
-        try {
-            symmetry1 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
 
         list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry2 = null;
-        try {
-            symmetry2 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
         Assert.assertFalse("is equal", symmetry1.isEqualTo(symmetry2, EPS));
         symmetry1.normalizeCrystallographically();
 
@@ -648,12 +485,7 @@ public class CMLSymmetryTest extends BaseTest {
         list.add("-x, +y, -z");
         list.add("1/2+x, 1/2+y, z");
         list.add("1/2-x, 1/2+y, -z");
-        CMLSymmetry symmetry1 = null;
-        try {
-            symmetry1 = CMLSymmetry.createFromXYZStrings(list);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
         CMLCrystal.Centering center = symmetry1.getCentering();
         Assert.assertEquals("center", CMLCrystal.Centering.C, center);
     }

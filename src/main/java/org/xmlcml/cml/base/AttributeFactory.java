@@ -156,9 +156,7 @@ public class AttributeFactory implements CMLConstants {
     
     /** new...
      * @param attributeGroupName
-     * @param value
-     * @param URI
-     * @return
+     * @return attribute
      */
 	public CMLAttribute getAttributeByGroupName(String attributeGroupName) {
 		Map<String, CMLAttribute> attributeGroupMap = 
@@ -172,7 +170,7 @@ public class AttributeFactory implements CMLConstants {
 
 
     /** create subclassed attribute template with dummy value.
-     * @param name
+     * @param attributeName 
      * @param element
      * @return subclassed attribute
      */
@@ -187,7 +185,7 @@ public class AttributeFactory implements CMLConstants {
      * 
      * @param name
      * @param type
-     * @return
+     * @return attribute
      */
     public static CMLAttribute createCMLAttribute(String name, CMLType type) {
         CMLAttribute newAtt = createSpecialAttribute(name);

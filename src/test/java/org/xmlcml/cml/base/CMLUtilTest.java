@@ -264,7 +264,6 @@ public class CMLUtilTest extends BaseTest {
 
     /**
      * Test method for
-     * {@link org.xmlcml.cml.base.CMLUtil#output(java.lang.String)}.
      */
     @Test
     public final void testOutput() {

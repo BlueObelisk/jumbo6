@@ -8,13 +8,12 @@ import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.IntRange;
 import org.xmlcml.euclid.IntSet;
-import org.xmlcml.euclid.Util;
 
 /**
  * test IntMatrix
@@ -146,12 +145,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIntMatrixIntMatrixIntIntIntInt() {
-        IntMatrix m = null;
-        try {
-            m = new IntMatrix(m2, 1, 2, 1, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix m = new IntMatrix(m2, 1, 2, 1, 3);
         Assert.assertEquals("int int int[]", "{2,3}" + "\n(22,23,24)"
                 + "\n(32,33,34)", m.toString());
         Assert.assertEquals("int int int[] rows", 2, m.getRows());
@@ -175,13 +169,8 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testGetIntMatrix() {
-        IntMatrix mm2 = null;
-        try {
-            mm2 = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
+        IntMatrix mm2 = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23,
                     24, 31, 32, 33, 34, });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         IntMatrix m = mm2.getIntMatrix();
         Assert.assertEquals("int int int[]", "{3,4}" + "\n(11,12,13,14)"
                 + "\n(21,22,23,24)" + "\n(31,32,33,34)", m.toString());
@@ -194,15 +183,10 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIntMatrixIntegerArrayArray() {
-        IntMatrix mm2 = null;
-        try {
-            mm2 = new IntMatrix(
-                    new int[][] { new int[] { 11, 12, 13, 14 },
-                            new int[] { 21, 22, 23, 24 },
-                            new int[] { 31, 32, 33, 34 } });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix mm2 = new IntMatrix(
+            new int[][] { new int[] { 11, 12, 13, 14 },
+            new int[] { 21, 22, 23, 24 },
+            new int[] { 31, 32, 33, 34 } });
         IntMatrix m = mm2.getIntMatrix();
         Assert.assertEquals("int int int[]", "{3,4}" + "\n(11,12,13,14)"
                 + "\n(21,22,23,24)" + "\n(31,32,33,34)", m.toString());
@@ -229,15 +213,10 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testGetRowsCols() {
-        IntMatrix m = null;
-        try {
-            m = new IntMatrix(
-                    new int[][] { new int[] { 11, 12, 13, 14 },
-                            new int[] { 21, 22, 23, 24 },
-                            new int[] { 31, 32, 33, 34 } });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix m = new IntMatrix(
+            new int[][] { new int[] { 11, 12, 13, 14 },
+            new int[] { 21, 22, 23, 24 },
+            new int[] { 31, 32, 33, 34 } });
         Assert.assertEquals("int int int[] rows", 3, m.getRows());
         Assert.assertEquals("int int int[] cols", 4, m.getCols());
     }
@@ -275,12 +254,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testPlus() {
-        IntMatrix m = null;
-        try {
-            m = m2.plus(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix m = m2.plus(m2);
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 22, 24,
                 26, 28, 42, 44, 46, 48, 62, 64, 66, 68 }, m);
     }
@@ -290,21 +264,11 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testSubtract() {
-        IntMatrix m = null;
-        try {
-            m = new IntMatrix(
-                    new int[][] { new int[] { 11, 12, 13, 14 },
-                            new int[] { 21, 22, 23, 24 },
-                            new int[] { 31, 32, 33, 34 } });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        IntMatrix mm = null;
-        try {
-            mm = m2.subtract(m);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix m = new IntMatrix(
+	        new int[][] { new int[] { 11, 12, 13, 14 },
+            new int[] { 21, 22, 23, 24 },
+            new int[] { 31, 32, 33, 34 } });
+        IntMatrix mm = m2.subtract(m);
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { -0, -0,
                 -0, -0, -0, -0, -0, -0, -0, -0, -0, -0, }, mm);
     }
@@ -316,7 +280,7 @@ public class IntMatrixTest extends MatrixTest {
     public void testNegative() {
         m2.negative();
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { -11,
-                -12, -13, -14, -21, -22, -23, -24, -31, -32, -33, -34 }, m2);
+            -12, -13, -14, -21, -22, -23, -24, -31, -32, -33, -34 }, m2);
     }
 
     /**
@@ -324,19 +288,9 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testMultiplyIntMatrix() {
-        IntMatrix m = null;
-        try {
-            m = new IntMatrix(new int[][] { new int[] { 10, 20, 30 },
-                    new int[] { 40, 50, 60 }, });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
-        IntMatrix mm = null;
-        try {
-            mm = m.multiply(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix m = new IntMatrix(new int[][] { new int[] { 10, 20, 30 },
+            new int[] { 40, 50, 60 }, });
+        IntMatrix mm = m.multiply(m2);
         IntMatrixTest.assertEquals("matrix as array", 2, 4, new int[] { 1460,
                 1520, 1580, 1640, 3350, 3500, 3650, 3800, }, mm);
     }
@@ -356,25 +310,16 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testMultiplyEquals() {
-        IntMatrix m = null;
-        try {
-            m = new IntMatrix(new int[][] { new int[] { 10, 20, 30 },
+        IntMatrix m = new IntMatrix(new int[][] { new int[] { 10, 20, 30 },
                     new int[] { 40, 50, 60 }, });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
         try {
             m2.multiplyEquals(m);
             alwaysFail("non-conformable matrices");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("multiplyEquals", "unequal matrices (4, 2)", e
                     .getMessage());
         }
-        try {
-            m.multiplyEquals(m2);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m.multiplyEquals(m2);
         IntMatrixTest.assertEquals("matrix as array", 2, 4, new int[] { 1460,
                 1520, 1580, 1640, 3350, 3500, 3650, 3800, }, m);
     }
@@ -385,12 +330,7 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testMultiplyIntArray() {
         IntArray ra = new IntArray(new int[] { 1, 2, 3, 4 });
-        IntArray raa = null;
-        try {
-            raa = m2.multiply(ra);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntArray raa = m2.multiply(ra);
         IntArrayTest.assertEquals("array", new int[] { 130, 230, 330 }, raa);
     }
 
@@ -400,11 +340,7 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testColumnwiseDivide() {
         IntArray ra = new IntArray(new int[] { 1, 2, 3, 4 });
-        try {
-            m2.columnwiseDivide(ra);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.columnwiseDivide(ra);
         IntMatrixTest.assertEquals("array", 3, 4, new int[] { 11, 6, 4, 3, 21,
                 11, 7, 6, 31, 16, 11, 8, }, m2);
     }
@@ -414,14 +350,10 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementAtIntInt() {
-        try {
-            Assert.assertEquals("elementAt ", 32, m2.elementAt(2, 1));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Assert.assertEquals("elementAt ", 32, m2.elementAt(2, 1));
         try {
             m2.elementAt(5, 5);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "Bad value of row: 5/3", e
                     .getMessage());
         }
@@ -432,14 +364,10 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementAtInt2() {
-        try {
-            Assert.assertEquals("elementAt ", 32, m2.elementAt(new Int2(2, 1)));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Assert.assertEquals("elementAt ", 32, m2.elementAt(new Int2(2, 1)));
         try {
             m2.elementAt(new Int2(5, 5));
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "Bad value of row: 5/3", e
                     .getMessage());
         }
@@ -450,11 +378,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testSetElementAt() {
-        try {
-            m2.setElementAt(1, 2, 15);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.setElementAt(1, 2, 15);
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 11, 12,
                 13, 14, 21, 22, 15, 24, 31, 32, 33, 34, }, m2);
     }
@@ -483,12 +407,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testLargestElementInColumn() {
-        int d = Integer.MIN_VALUE;
-        try {
-            d = m2.largestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int d = m2.largestElementInColumn(1);
         Assert.assertEquals("largestElement", 32, d);
     }
 
@@ -498,12 +417,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfLargestElementInColumn() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfLargestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfLargestElementInColumn(1);
         Assert.assertEquals("largestElement", 2, i);
     }
 
@@ -512,12 +426,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testLargestElementInRow() {
-        int d = Integer.MIN_VALUE;
-        try {
-            d = m2.largestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int d = m2.largestElementInRow(1);
         Assert.assertEquals("largestElement", 24, d);
     }
 
@@ -527,12 +436,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfLargestElementInRow() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfLargestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfLargestElementInRow(1);
         Assert.assertEquals("largestElement", 3, i);
     }
 
@@ -541,12 +445,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElement() {
-        int d = Integer.MIN_VALUE;
-        try {
-            d = m2.smallestElement();
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int d = m2.smallestElement();
         Assert.assertEquals("smallestElement", 11, d);
     }
 
@@ -566,12 +465,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElementInColumn() {
-        int d = Integer.MIN_VALUE;
-        try {
-            d = m2.smallestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int d = m2.smallestElementInColumn(1);
         Assert.assertEquals("smallestElement", 12, d);
     }
 
@@ -581,12 +475,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfSmallestElementInColumn() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfSmallestElementInColumn(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfSmallestElementInColumn(1);
         Assert.assertEquals("largestElement", 0, i);
     }
 
@@ -595,12 +484,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testSmallestElementInRow() {
-        int d = Integer.MIN_VALUE;
-        try {
-            d = m2.smallestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int d = m2.smallestElementInRow(1);
         Assert.assertEquals("smallestElement", 21, d);
     }
 
@@ -610,12 +494,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testIndexOfSmallestElementInRow() {
-        int i = Integer.MIN_VALUE;
-        try {
-            i = m2.indexOfSmallestElementInRow(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        int i = m2.indexOfSmallestElementInRow(1);
         Assert.assertEquals("largestElement", 0, i);
     }
 
@@ -624,12 +503,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractColumnData() {
-        IntArray ra = null;
-        try {
-            ra = m2.extractColumnData(1);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntArray ra= m2.extractColumnData(1);
         IntArrayTest.assertEquals("euclidean column lengths", new int[] { 12,
                 22, 32 }, ra);
     }
@@ -680,12 +554,8 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testIsSquare() {
         Assert.assertFalse("isSquare", m2.isSquare());
-        try {
-            Assert.assertTrue("isSquare", new IntMatrix(2, 2, new int[] { 11,
-                    12, 21, 22 }).isSquare());
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Assert.assertTrue("isSquare", new IntMatrix(2, 2, new int[] { 11,
+            12, 21, 22 }).isSquare());
     }
 
     /**
@@ -735,11 +605,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceColumnDataIntIntArray() {
-        try {
-            m2.replaceColumnData(1, new IntArray(new int[] { 19, 29, 39 }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.replaceColumnData(1, new IntArray(new int[] { 19, 29, 39 }));
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 11, 19,
                 13, 14, 21, 29, 23, 24, 31, 39, 33, 34, }, m2);
     }
@@ -761,16 +627,11 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceColumnDataIntIntMatrix() {
-        IntMatrix m = null;
         IntMatrix expect = null;
-        try {
-            m = new IntMatrix(3, 2, new int[] { 72, 73, 82, 83, 92, 93 });
+        IntMatrix m = new IntMatrix(3, 2, new int[] { 72, 73, 82, 83, 92, 93 });
             m2.replaceColumnData(1, m);
             expect = new IntMatrix(3, 4, new int[] { 11, 72, 73, 14, 21, 82,
                     83, 24, 31, 92, 93, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -781,13 +642,8 @@ public class IntMatrixTest extends MatrixTest {
     public void testInsertColumns() {
         // inserts 3 empty columns
         m2.makeSpaceForNewColumns(1, 3);
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(3, 7, new int[] { 11, 0, 0, 0, 12, 13, 14,
-                    21, 0, 0, 0, 22, 23, 24, 31, 0, 0, 0, 32, 33, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix expect = new IntMatrix(3, 7, new int[] { 11, 0, 0, 0, 12, 13, 14,
+                21, 0, 0, 0, 22, 23, 24, 31, 0, 0, 0, 32, 33, 34, });
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -798,18 +654,9 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testInsertColumnDataIntIntArray() {
         // inserts a column
-        try {
-            m2.insertColumnData(1, new IntArray(new int[] { 91, 92, 93 }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(3, 5, new int[] { 11, 12, 91, 13, 14, 21,
+        m2.insertColumnData(1, new IntArray(new int[] { 91, 92, 93 }));
+        IntMatrix expect = new IntMatrix(3, 5, new int[] { 11, 12, 91, 13, 14, 21,
                     22, 92, 23, 24, 31, 32, 93, 33, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -820,24 +667,10 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testInsertColumnDataIntIntMatrix() {
         logger.info("+++insertColumnData>>>");
-        IntMatrix insert = null;
-        try {
-            insert = new IntMatrix(3, 2, new int[] { 72, 73, 82, 83, 92, 93, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            m2.insertColumnData(1, insert);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(3, 6, new int[] { 11, 12, 72, 73, 13, 14,
+        IntMatrix insert = new IntMatrix(3, 2, new int[] { 72, 73, 82, 83, 92, 93, });
+        m2.insertColumnData(1, insert);
+        IntMatrix expect = new IntMatrix(3, 6, new int[] { 11, 12, 72, 73, 13, 14,
                     21, 22, 82, 83, 23, 24, 31, 32, 92, 93, 33, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -858,11 +691,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceRowDataIntIntArray() {
-        try {
-            m2.replaceRowData(1, new IntArray(new int[] { 71, 72, 73, 74 }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.replaceRowData(1, new IntArray(new int[] { 71, 72, 73, 74 }));
         int[] array = m2.getMatrixAsArray();
         IntTest.assertEquals("matrix as array", new int[] { 11, 12, 13, 14, 71,
                 72, 73, 74, 31, 32, 33, 34, }, array);
@@ -873,11 +702,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceRowDataIntIntegerArray() {
-        try {
-            m2.replaceRowData(1, new int[] { 71, 72, 73, 74 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        m2.replaceRowData(1, new int[] { 71, 72, 73, 74 });
         int[] array = m2.getMatrixAsArray();
         IntTest.assertEquals("matrix as array", new int[] { 11, 12, 13, 14, 71,
                 72, 73, 74, 31, 32, 33, 34, }, array);
@@ -891,25 +716,11 @@ public class IntMatrixTest extends MatrixTest {
     public void testReplaceRowDataIntIntMatrix() {
         logger.info("+++replaceRowData>>>");
         // FIXME
-        IntMatrix insert = null;
-        try {
-            insert = new IntMatrix(new IntMatrix(2, 4, new int[] { 71, 72, 73,
+        IntMatrix insert = new IntMatrix(new IntMatrix(2, 4, new int[] { 71, 72, 73,
                     74, 81, 82, 83, 84, }));
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            m2.replaceRowData(0, insert);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 71, 72,
+        m2.replaceRowData(0, insert);
+        IntMatrix expect = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 71, 72,
                     73, 74, 81, 82, 83, 84, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         // rows 2 and 3 are not filled
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
@@ -921,19 +732,10 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testInsertRowDataIntIntMatrix() {
         // FIXME
-        try {
-            m2.insertRowData(1, new IntMatrix(2, 4, new int[] { 71, 72, 73, 74,
+        m2.insertRowData(1, new IntMatrix(2, 4, new int[] { 71, 72, 73, 74,
                     81, 82, 83, 84, }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(5, 4, new int[] { 11, 12, 13, 14, 21, 22,
+        IntMatrix expect = new IntMatrix(5, 4, new int[] { 11, 12, 13, 14, 21, 22,
                     23, 24, 71, 72, 73, 74, 81, 82, 83, 84, 31, 32, 33, 34, });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
         IntTest.assertEquals("matrix as array", expect.getMatrixAsArray(), m2
                 .getMatrixAsArray());
     }
@@ -946,11 +748,7 @@ public class IntMatrixTest extends MatrixTest {
     public void testInsertRowDataIntIntArray() {
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 11, 12,
                 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, }, m2);
-        try {
-            m2.insertRowData(1, new IntArray(new int[] { 71, 72, 73, 74, }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.insertRowData(1, new IntArray(new int[] { 71, 72, 73, 74, }));
         IntMatrixTest.assertEquals("matrix as array", 4, 4, new int[] { 11, 12,
                 13, 14, 21, 22, 23, 24, 71, 72, 73, 74, 31, 32, 33, 34, }, m2);
     }
@@ -960,11 +758,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testAppendColumnDataIntArray() {
-        try {
-            m2.appendColumnData(new IntArray(new int[] { 17, 27, 37, }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.appendColumnData(new IntArray(new int[] { 17, 27, 37, }));
         int[] array = m2.getMatrixAsArray();
         IntTest.assertEquals("matrix as array", new int[] { 11, 12, 13, 14, 17,
                 21, 22, 23, 24, 27, 31, 32, 33, 34, 37 }, array);
@@ -976,24 +770,10 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testAppendColumnDataIntMatrix() {
         // logger.info("+++appendColumnData>>>");
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(3, 2, new int[] { 17, 18, 27, 28, 37, 38 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            m2.appendColumnData(rm);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(3, 6, new int[] { 11, 12, 13, 14, 17, 18,
-                    21, 22, 23, 24, 27, 28, 31, 32, 33, 34, 37, 38 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix rm = new IntMatrix(3, 2, new int[] { 17, 18, 27, 28, 37, 38 });
+        m2.appendColumnData(rm);
+        IntMatrix expect = new IntMatrix(3, 6, new int[] { 11, 12, 13, 14, 17, 18,
+                21, 22, 23, 24, 27, 28, 31, 32, 33, 34, 37, 38 });
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -1003,11 +783,7 @@ public class IntMatrixTest extends MatrixTest {
     @Test
     public void testAppendRowDataIntArray() {
         IntArray ra = new IntArray(new int[] { 41, 42, 43, 44 });
-        try {
-            m2.appendRowData(ra);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        m2.appendRowData(ra);
         // fails to insert data
         IntMatrixTest.assertEquals("matrix as array", 4, 4, new int[] { 11, 12,
                 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44 }, m2);
@@ -1020,25 +796,11 @@ public class IntMatrixTest extends MatrixTest {
     public void testAppendRowDataIntMatrix() {
         logger.info("+++appendRowData>>>");
         // FIXME
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(2, 4,
+        IntMatrix rm = new IntMatrix(2, 4,
                     new int[] { 41, 42, 43, 44, 51, 52, 53, 54 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        try {
-            m2.appendRowData(rm);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
-        IntMatrix expect = null;
-        try {
-            expect = new IntMatrix(5, 4, new int[] { 11, 12, 13, 14, 21, 22,
+        m2.appendRowData(rm);
+        IntMatrix expect = new IntMatrix(5, 4, new int[] { 11, 12, 13, 14, 21, 22,
                     23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 53, 54 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
         IntMatrixTest.assertEquals("matrix as array", m2, expect);
     }
 
@@ -1048,12 +810,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceSubMatrixData() {
-        IntMatrix rm = null;
-        try {
-            rm = new IntMatrix(2, 2, new int[] { 71, 72, 81, 82 });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix rm = new IntMatrix(2, 2, new int[] { 71, 72, 81, 82 });
         m2.replaceSubMatrixData(1, 1, rm);
         // fails to insert data
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 71, 72,
@@ -1065,12 +822,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReorderColumnsBy() {
-        IntMatrix mm = null;
-        try {
-            mm = m2.reorderColumnsBy(new IntSet(new int[] { 3, 1, 2, 0 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix mm = m2.reorderColumnsBy(new IntSet(new int[] { 3, 1, 2, 0 }));
         // fails to insert data
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 14, 12,
                 13, 11, 24, 22, 23, 21, 34, 32, 33, 31 }, mm);
@@ -1081,12 +833,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReorderRowsBy() {
-        IntMatrix mm = null;
-        try {
-            mm = m2.reorderRowsBy(new IntSet(new int[] { 1, 2, 0 }));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix mm = m2.reorderRowsBy(new IntSet(new int[] { 1, 2, 0 }));
         // fails to insert data
         IntMatrixTest.assertEquals("matrix as array", 3, 4, new int[] { 21, 22,
                 23, 24, 31, 32, 33, 34, 11, 12, 13, 14, }, mm);
@@ -1098,12 +845,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testExtractSubMatrixData() {
-        IntMatrix mm = null;
-        try {
-            mm = m2.extractSubMatrixData(1, 2, 2, 3);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix mm = m2.extractSubMatrixData(1, 2, 2, 3);
         IntMatrixTest.assertEquals("sub matrix", 2, 2, new int[] { 23, 24, 33,
                 34 }, mm);
     }
@@ -1113,12 +855,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testElementsInRange() {
-        IntMatrix im = null;
-        try {
-            im = m2.elementsInRange(new IntRange(13, 31));
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix im = m2.elementsInRange(new IntRange(13, 31));
         IntMatrixTest.assertEquals("sub matrix", 3, 4, new int[] { 0, 0, 1, 1,
                 1, 1, 1, 1, 1, 0, 0, 0 }, im);
     }

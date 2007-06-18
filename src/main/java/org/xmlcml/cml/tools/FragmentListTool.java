@@ -18,8 +18,7 @@ public class FragmentListTool extends AbstractTool {
 
     /**
      * constructor
-     * 
-     * @param fragment
+     * @param fragmentList 
      */
     public FragmentListTool(CMLFragmentList fragmentList) {
         this.fragmentList = fragmentList;

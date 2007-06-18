@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Axis.Axis3;
 
@@ -87,12 +87,7 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testVector3DoubleArray() {
-        Vector3 v = null;
-        try {
-            v = new Vector3(new double[] { 4., 5., 6. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Vector3 v = new Vector3(new double[] { 4., 5., 6. });
         Vector3Test.assertEquals("vector", new double[] { 4., 5., 6. }, v, EPS);
     }
 
@@ -123,12 +118,7 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testVector3RealArray() {
-        Vector3 v = null;
-        try {
-            v = new Vector3(new double[] { 1., 2., 3. });
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Vector3 v = new Vector3(new double[] { 1., 2., 3. });
         Vector3Test.assertEquals("vector", new double[] { 1., 2., 3. }, v, EPS);
     }
 
@@ -222,26 +212,21 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testElementAt() {
-        double d = 0.0;
-        try {
-            d = v123.elementAt(0);
-            Assert.assertEquals("elementAt", 1., d, EPS);
-            d = v123.elementAt(1);
-            Assert.assertEquals("elementAt", 2., d, EPS);
-            d = v123.elementAt(2);
-            Assert.assertEquals("elementAt", 3., d, EPS);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        double d =v123.elementAt(0);
+        Assert.assertEquals("elementAt", 1., d, EPS);
+        d = v123.elementAt(1);
+        Assert.assertEquals("elementAt", 2., d, EPS);
+        d = v123.elementAt(2);
+        Assert.assertEquals("elementAt", 3., d, EPS);
         try {
             v123.elementAt(-1);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "index (-1)out of range: 0/2", e
                     .getMessage());
         }
         try {
             v123.elementAt(3);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "index (3)out of range: 0/2", e
                     .getMessage());
         }
@@ -252,28 +237,24 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testSetElementAt() {
-        try {
-            v123.setElementAt(0, 10.);
-            Vector3Test.assertEquals("elementAt", new double[] { 10., 2., 3. },
-                    v123, EPS);
-            v123.setElementAt(1, 20.);
-            Vector3Test.assertEquals("elementAt",
-                    new double[] { 10., 20., 3. }, v123, EPS);
-            v123.setElementAt(2, 30.);
-            Vector3Test.assertEquals("elementAt",
-                    new double[] { 10., 20., 30. }, v123, EPS);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        v123.setElementAt(0, 10.);
+        Vector3Test.assertEquals("elementAt", new double[] { 10., 2., 3. },
+                v123, EPS);
+        v123.setElementAt(1, 20.);
+        Vector3Test.assertEquals("elementAt",
+                new double[] { 10., 20., 3. }, v123, EPS);
+        v123.setElementAt(2, 30.);
+        Vector3Test.assertEquals("elementAt",
+                new double[] { 10., 20., 30. }, v123, EPS);
         try {
             v123.elementAt(-1);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "index (-1)out of range: 0/2", e
                     .getMessage());
         }
         try {
             v123.elementAt(3);
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("elementAt", "index (3)out of range: 0/2", e
                     .getMessage());
         }
@@ -406,21 +387,10 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testProjectOnto() {
-        Vector3 v = null;
-        try {
-            v = v123.projectOnto(v100);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Vector3Test
-                .assertEquals("project", new double[] { 1., 0., 0. }, v, EPS);
-        try {
-            v = v123.projectOnto(v001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        Vector3Test
-                .assertEquals("project", new double[] { 0., 0., 3. }, v, EPS);
+        Vector3 v = v123.projectOnto(v100);
+        Vector3Test.assertEquals("project", new double[] { 1., 0., 0. }, v, EPS);
+        v = v123.projectOnto(v001);
+        Vector3Test.assertEquals("project", new double[] { 0., 0., 3. }, v, EPS);
     }
 
     /**

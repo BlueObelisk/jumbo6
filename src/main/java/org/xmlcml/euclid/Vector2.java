@@ -30,7 +30,7 @@ public class Vector2 extends Real2 {
 
     /**
      * I *think* I have written this so that the angle is positive as this
-     * rotates anticlockwise to v.
+     * rotates anticlockwise to vector.
      * 
      * @param v
      * @return angle
@@ -41,4 +41,35 @@ public class Vector2 extends Real2 {
         return new Angle(theta0 - theta1);
     }
 
+    /** is vector parallel to another
+     * calculates angle between vectors
+     * @param v
+     * @param eps tolerance in radians (should be non-negative)
+     * @return true if abs(angle) (rad) < eps
+     */
+    public boolean isParallelTo(Vector2 v, double eps) {
+    	Angle a = this.getAngleMadeWith(v);
+    	return Math.abs(a.getRadian()) < eps;
+    }
+
+
+    /** is vector antiparallel to another
+     * calculates angle between vectors
+     * @param v
+     * @param eps tolerance in radians (should be non-negative)
+     * @return true if abs(angle) (rad) < eps
+     */
+    public boolean isAntiParallelTo(Vector2 v, double eps) {
+    	Angle a = this.getAngleMadeWith(v);
+    	return Math.abs(Math.abs(a.getRadian())-Math.PI) < eps;
+    }
+
+    /** perp product (Hill).
+     * this.getX() * vector.getY() - this.getY() * vector.getX();
+     * @param v
+     * @return product 
+     */
+    public double getPerpProduct(Vector2 v) {
+    	return this.getX() * v.getY() - this.getY() * v.getX();
+    }
 }

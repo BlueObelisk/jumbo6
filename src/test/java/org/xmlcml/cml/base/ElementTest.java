@@ -103,7 +103,7 @@ public class ElementTest extends BaseTest {
 	 -p name  	Select parser wrapper by name.
 	 -x number  	Select number of repetitions.
 	 -n | -N  	Turn on/off namespace processing.
-	 -v | -V  	Turn on/off validation.
+	 -vector | -V  	Turn on/off validation.
 	 -s | -S  	Turn on/off Schema validation support.
 	 NOTE: Not supported by all parsers.
 	 -f | -F  	Turn on/off Schema full checking.
@@ -124,9 +124,9 @@ public class ElementTest extends BaseTest {
         Util.output("  === xerces validation: " + file + " ====");
 		String[] args = null;
 		try {
-			// args = new String[]{"-v", "-s", new
+			// args = new String[]{"-vector", "-s", new
 			// URL("file://"+file).toString()};
-			args = new String[] { "-v", "-s", file };
+			args = new String[] { "-vector", "-s", file };
 		} catch (Exception e) {
 			neverFail(e);
 		}

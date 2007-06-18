@@ -219,12 +219,11 @@ class Int2Array {
      * 
      * @param x
      * @param y
-     * @exception EuclidException
-     *                unqual sized arrays
+     * @exception EuclidRuntimeException unequal sized arrays
      */
-    public Int2Array(IntArray x, IntArray y) throws EuclidException {
+    public Int2Array(IntArray x, IntArray y) throws EuclidRuntimeException {
         if (x.size() != y.size()) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException("arrays of different sizes");
         }
         nelem = x.size();
         xarr = (IntArray) x.clone();

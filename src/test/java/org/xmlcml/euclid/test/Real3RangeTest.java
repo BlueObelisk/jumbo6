@@ -3,7 +3,6 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
@@ -166,12 +165,7 @@ public class Real3RangeTest extends EuclidTestBase {
      */
     @Test
     public void testTransformEquals() {
-        Transform3 tr = null;
-        try {
-            tr = new Transform3("y, -z, -x");
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        Transform3 tr = new Transform3("y, -z, -x");
         r1.transformEquals(tr);
         Assert.assertEquals("transformed x range min",
                 3., r1.getXRange().getMin(), EPS);

@@ -58,6 +58,7 @@ public class StringArraySTAttribute extends CMLAttribute {
     }
     /** copy.
      * uses copy constructor.
+     * @return copy 
      */
     public Node copy() {
     	return new StringArraySTAttribute(this);

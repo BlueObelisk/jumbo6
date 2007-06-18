@@ -122,6 +122,7 @@ public class FragmentTool extends AbstractTool {
     /** process basic convention.
 	 * @param catalog to find molecules
 	 * "return fragmentList for Markush; null for simple fragment
+     * @return element 
      */
     public CMLElement processBasic(Catalog catalog) {
     	BasicProcessor basicProcessor = new BasicProcessor(rootFragment);
@@ -193,7 +194,7 @@ public class FragmentTool extends AbstractTool {
     /** create a molecule ref to a named resource in the repository.
      * use with care as there is no guarantee that the molecule exists
      * @param ref of the form "g:dummy2"
-     * @return
+     * @return molecule
      */
     public static CMLMolecule createMoleculeRef(String ref) {
     	
@@ -206,7 +207,7 @@ public class FragmentTool extends AbstractTool {
     /** creates a dummy fragment.
      * may be required if dummy cannot be resolved in repository.
      * 
-     * @return
+     * @return molecule
      */
     public static CMLMolecule createDummyMolecule() {
     	
@@ -400,8 +401,8 @@ class CountExpander implements CMLConstants {
      *       
      * where fragment and joins are clones
      * public mainly for testing
-     *@return fragment (if countExpression evalues to 0, returns null; 
      *if expression is 1 returns the fragment)
+     *@param fragment
      */
     void expandCountExpression(CMLFragment fragment) {
     	

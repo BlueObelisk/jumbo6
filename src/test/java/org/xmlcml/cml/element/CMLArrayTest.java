@@ -37,7 +37,7 @@ public class CMLArrayTest extends NumericTest {
 
     String[] s0 = { "a", "b", "c", "d", "e" };
 
-    String[] s1 = { "v", "w", "x", "y", "z" };
+    String[] s1 = { "vector", "w", "x", "y", "z" };
 
     String slashDelim = S_SLASH;
 
@@ -546,12 +546,12 @@ public class CMLArrayTest extends NumericTest {
     public void testCMLArrayStringArrayString() {
         Assert.assertEquals("data type", XSD_STRING, xomS1.getDataType());
         Assert.assertEquals("size", 5, xomS1.getSize());
-        Assert.assertEquals("content", "/v/w/x/y/z/", xomS1.getXMLContent());
+        Assert.assertEquals("content", "/vector/w/x/y/z/", xomS1.getXMLContent());
         Assert.assertEquals("delimiter", S_SLASH, xomS1.getDelimiter());
         Assert.assertNotNull("delimiter", xomS1.getDelimiterAttribute());
         String[] ss = xomS1.getStrings();
         Assert.assertEquals("length", 5, ss.length);
-        Assert.assertEquals("array0", "v", ss[0]);
+        Assert.assertEquals("array0", "vector", ss[0]);
         Assert.assertEquals("array4", "z", ss[4]);
 
     }
@@ -597,7 +597,7 @@ public class CMLArrayTest extends NumericTest {
 
     	double[] dd = new double[]{10.0, 20.0, 30.0, 40.0, 50.0};
     	CMLArray arrayD = new CMLArray(dd, S_SLASH);
-    	DelimiterAttribute delimiterAttribute = (DelimiterAttribute) arrayD.getDelimiterAttribute();
+//    	DelimiterAttribute delimiterAttribute = (DelimiterAttribute) arrayD.getDelimiterAttribute();
         Assert.assertEquals("data type", XSD_DOUBLE, arrayD.getDataType());
         Assert.assertEquals("size", 5, arrayD.getSize());
         Assert.assertEquals("content", "/10.0/20.0/30.0/40.0/50.0/", arrayD.getXMLContent());
@@ -679,7 +679,7 @@ public class CMLArrayTest extends NumericTest {
         ss = xomS1.getStrings();
         Assert.assertNotNull("content", ss);
         Assert.assertEquals("content", 5, ss.length);
-        Assert.assertEquals("array0", "v", ss[0]);
+        Assert.assertEquals("array0", "vector", ss[0]);
         Assert.assertEquals("array4", "z", ss[4]);
 
         ss = xomD0.getStrings();
@@ -1145,15 +1145,11 @@ public class CMLArrayTest extends NumericTest {
 
     private void testArray(CMLArray array, double[] expected0, String units0,
             double[] expected1, String units1) {
-        try {
-            DoubleTestBase.assertEquals("array", expected0, array.getDoubles(), EPS);
-            Assert.assertEquals("array", units0, array.getUnits());
-            array.convertToSI(unitsUnitListMap);
-            DoubleTestBase.assertEquals("array", expected1, array.getDoubles(), EPS);
-            Assert.assertEquals("array", units1, array.getUnits());
-        } catch (CMLRuntimeException e) {
-            neverThrow(e);
-        }
+        DoubleTestBase.assertEquals("array", expected0, array.getDoubles(), EPS);
+        Assert.assertEquals("array", units0, array.getUnits());
+        array.convertToSI(unitsUnitListMap);
+        DoubleTestBase.assertEquals("array", expected1, array.getDoubles(), EPS);
+        Assert.assertEquals("array", units1, array.getUnits());
     }
 
     /**

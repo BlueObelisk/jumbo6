@@ -223,7 +223,7 @@ public class CMLType implements CMLConstants {
     /** creates javaType from base.
      * only uses XSD builtins.
      * Id derived from other types has to be managed from outside this class. 
-     * @return
+     * @return type
      */
     String createJavaType() {
     	if (javaType == null) {

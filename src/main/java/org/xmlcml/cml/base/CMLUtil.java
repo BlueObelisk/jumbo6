@@ -463,6 +463,7 @@ public abstract class CMLUtil implements CMLConstants {
     
     /** returns all prefixes in attributes in descendants.
      * currently accesses all elements
+     * @param element 
      * @param attName attribute name (e.g. ref, dictRef)
      * @return prefixes
      */

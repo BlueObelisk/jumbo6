@@ -20,8 +20,13 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
+/**
+ * @author pm286
+ *
+ */
+		
 public class ValencyTool extends AbstractTool {
-
+	/** */
 	public final static int UNKNOWN_CHARGE = 99999;
 
 	private boolean isMetalComplex = false;
@@ -31,6 +36,9 @@ public class ValencyTool extends AbstractTool {
 
 	private List<CMLAtom> alreadySetAtoms = new ArrayList<CMLAtom>();
 
+	/** constructor
+	 * @param molecule
+	 */
 	public ValencyTool(CMLMolecule molecule) {
 		this.molecule = molecule;
 		moleculeTool = new MoleculeTool(molecule);
@@ -159,7 +167,6 @@ public class ValencyTool extends AbstractTool {
 	/**
 	 * special routines. mark common groups with charges and 
 	 * bond orders
-	 * @param tool TODO
 	 * 
 	 */
 	public void markupSpecial() {
@@ -939,7 +946,9 @@ public class ValencyTool extends AbstractTool {
 	 * hydrogens
 	 * 
      * @TODO refactor me!
-	 * @param piSystemManager, charge on molecule provided
+	 * @param piSystemManager
+	 * @param knownMolCharge charge on molecule provided
+	 * @return obsolete
 	 */
 	public boolean adjustBondOrdersAndChargesToValency(
 			PiSystemControls piSystemManager, int knownMolCharge) {
@@ -1447,6 +1456,8 @@ public class ValencyTool extends AbstractTool {
 
 	/**
 	 * add double bonds through PiSystemManager.
+	 * @param molCharge 
+	 * @return obsolete
 	 */
 	public boolean adjustBondOrdersAndChargesToValency(int molCharge) {
 		PiSystemControls piSystemManager = new PiSystemControls();
@@ -1459,6 +1470,7 @@ public class ValencyTool extends AbstractTool {
 
 	/**
 	 * add double bonds through PiSystemManager.
+	 * @return obsolete
 	 */
 	public boolean adjustBondOrdersAndChargesToValency() {
 		PiSystemControls piSystemManager = new PiSystemControls();
@@ -1482,6 +1494,9 @@ public class ValencyTool extends AbstractTool {
 		}
 	}
 
+	/**
+	 * @return list of atoms
+	 */
 	public List<CMLAtom> getAlreadySetAtoms() {
 		return this.alreadySetAtoms;
 	}

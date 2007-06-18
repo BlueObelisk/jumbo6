@@ -193,6 +193,17 @@ public class RealRange implements EuclidConstants {
         double range = maxval - minval;
         return minval + Math.random() * range;
     }
+
+    /** get scale to convert this range to same extent as other.
+     * 
+     * @param range to scale to
+     * @return scale or Double.NaN
+     */
+    public double getScaleTo(RealRange range) {
+    	double scale = Double.NaN;
+    	
+    	return scale;
+    }
     /**
      * to string. format: "NULL" or S_LBRAK+minval+S_COMMA+maxval+S_RBRAK;
      * 

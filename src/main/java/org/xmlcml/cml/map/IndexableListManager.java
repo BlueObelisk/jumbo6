@@ -90,6 +90,7 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @param url
      * @param indexableListClass
+     * @return list of indexables
      */
     public static IndexableList createFrom(URL url, Class indexableListClass) {
         IndexableList indexableList = null;
@@ -249,7 +250,6 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @param indexable
      *            to add
-     * @param position
      * @throws CMLRuntimeException
      *             if id already in map
      */

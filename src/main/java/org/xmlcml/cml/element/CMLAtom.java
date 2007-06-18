@@ -1089,6 +1089,11 @@ public class CMLAtom extends AbstractAtom {
 		return cyclicAtom4;
 	}
 	
+	/** is this atom clode to another.
+	 * 
+	 * @param atom
+	 * @return true if close
+	 */
 	public boolean hasCloseContact(CMLAtom atom) {
 		double valenceDist = this.getChemicalElement().getCovalentRadius()+atom.getChemicalElement().getVDWRadius();
 		double dist = this.getDistanceTo(atom);

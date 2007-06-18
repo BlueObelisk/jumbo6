@@ -125,12 +125,12 @@ public class Complex extends Real2 {
      * 
      * @param f
      * @return complex
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      */
-    public Complex divideBy(Complex f) throws EuclidException {
+    public Complex divideBy(Complex f) throws EuclidRuntimeException {
         double denom = f.x * f.x + f.y * f.y;
         if (Real.isZero(denom)) {
-            throw new EuclidException("cannot divide by zero");
+            throw new EuclidRuntimeException("cannot divide by zero");
         }
         Complex temp = new Complex(f.x, -f.y);
         temp = new Complex((temp.multiply(this)).multiplyBy(1 / denom));

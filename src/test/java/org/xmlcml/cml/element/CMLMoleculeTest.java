@@ -23,7 +23,6 @@ import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -31,7 +30,6 @@ import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform3;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Point3Test;
@@ -1209,17 +1207,12 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     @Test
     public void testTransformFractionalCoordinatesCMLSymmetry() {
         makeMolCryst();
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(
-                    new String[]{
-                            "x, y, z",
-                            "y, -x, 1/2+z"
-                    }
-                    );
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(
+            new String[]{
+                    "x, y, z",
+                    "y, -x, 1/2+z"
+            }
+            );
         List<CMLMolecule> molList = cmlCrystMol.transformFractionalCoordinates(symmetry);
         Assert.assertEquals("after t", 2, molList.size());
         CMLMoleculeTest.assertEqualsCanonically("mols equals", molList.get(0), cmlCrystMol);
@@ -1794,18 +1787,13 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     @Test
     public final void testTransformCartesiansTransform3() {
         makeMol5();
-        Transform3 t3 = null;
-        try {
-            t3 = new Transform3(
-                    new double[] {
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    1.0, 0.0, 0.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0,
-            });
-        } catch (EuclidException e) {
-            Util.BUG(e);
-        }
+        Transform3 t3 = new Transform3(
+            new double[] {
+            0.0, 1.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0,
+            1.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 1.0,
+        });
         CMLAtom atom4 = mol5.getAtom(3);
         Point3 p = atom4.getPoint3(CoordinateType.CARTESIAN);
         Point3Test.assertEquals("orig", new Point3(0.85, -0.54, 0.5),
@@ -1823,12 +1811,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
     public final void testTransformFractionalsAndCartesians() {
         makeMolCryst();
         Transform3 orthMat = cmlCrystCryst.getOrthogonalizationTransform();
-        CMLTransform3 transform = null;
-        try {
-            transform = new CMLTransform3("-y, x, 1/2+z");
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        CMLTransform3 transform = new CMLTransform3("-y, x, 1/2+z");
         CMLAtom atom = cmlCrystMol.getAtom(2);
         Point3 px = atom.getPoint3(CoordinateType.CARTESIAN);
         Assert.assertNull("no 3dcart", px);

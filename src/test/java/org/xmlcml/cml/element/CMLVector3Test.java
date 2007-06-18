@@ -3,9 +3,9 @@ package org.xmlcml.cml.element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Vector3Test;
@@ -212,34 +212,27 @@ public class CMLVector3Test extends GeomTestBase {
      */
     @Test
     public void testElementAt() {
-        double d;
-        try {
-            d = xomV123.elementAt(0);
-            Assert.assertEquals("element", 1., d, EPS);
-            d = xomV123.elementAt(1);
-            Assert.assertEquals("element", 2., d, EPS);
-            d = xomV123.elementAt(2);
-            Assert.assertEquals("element", 3., d, EPS);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        double d = xomV123.elementAt(0);
+        Assert.assertEquals("element", 1., d, EPS);
+        d = xomV123.elementAt(1);
+        Assert.assertEquals("element", 2., d, EPS);
+        d = xomV123.elementAt(2);
+        Assert.assertEquals("element", 3., d, EPS);
         try {
             xomV123.elementAt(-1);
-        } catch (CMLException e) {
-            Assert
-                    .assertEquals(
-                            "set",
-                            "org.xmlcml.euclid.EuclidException: index (-1)out of range: 0/2",
-                            e.getMessage());
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals(
+                "set",
+                "index (-1)out of range: 0/2",
+                e.getMessage());
         }
         try {
             xomV123.elementAt(3);
-        } catch (CMLException e) {
-            Assert
-                    .assertEquals(
-                            "set",
-                            "org.xmlcml.euclid.EuclidException: index (3)out of range: 0/2",
-                            e.getMessage());
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals(
+                "set",
+                "index (3)out of range: 0/2",
+                e.getMessage());
         }
     }
 
@@ -252,35 +245,29 @@ public class CMLVector3Test extends GeomTestBase {
 
         CMLVector3Test.assertEquals("set", new double[] { 1., 2., 3. },
                 xomV123, EPS);
-        try {
-            xomV123.setElementAt(0, 11.);
-            CMLVector3Test.assertEquals("set", new double[] { 11., 2., 3. },
-                    xomV123, EPS);
-            xomV123.setElementAt(1, 12.);
-            CMLVector3Test.assertEquals("set", new double[] { 11., 12., 3. },
-                    xomV123, EPS);
-            xomV123.setElementAt(2, 13.);
-            CMLVector3Test.assertEquals("set", new double[] { 11., 12., 13. },
-                    xomV123, EPS);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        xomV123.setElementAt(0, 11.);
+        CMLVector3Test.assertEquals("set", new double[] { 11., 2., 3. },
+                xomV123, EPS);
+        xomV123.setElementAt(1, 12.);
+        CMLVector3Test.assertEquals("set", new double[] { 11., 12., 3. },
+                xomV123, EPS);
+        xomV123.setElementAt(2, 13.);
+        CMLVector3Test.assertEquals("set", new double[] { 11., 12., 13. },
+                xomV123, EPS);
         try {
             xomV123.setElementAt(-1, 20.);
-        } catch (CMLException e) {
-            Assert
-                    .assertEquals(
-                            "set",
-                            "org.xmlcml.euclid.EuclidException: index (-1)out of range: 0/2",
-                            e.getMessage());
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals(
+                "set",
+                "index (-1)out of range: 0/2",
+                e.getMessage());
         }
         try {
             xomV123.setElementAt(3, 20.);
-        } catch (CMLException e) {
-            Assert
-                    .assertEquals(
+        } catch (EuclidRuntimeException e) {
+            Assert.assertEquals(
                             "set",
-                            "org.xmlcml.euclid.EuclidException: index (3)out of range: 0/2",
+                            "index (3)out of range: 0/2",
                             e.getMessage());
         }
     }

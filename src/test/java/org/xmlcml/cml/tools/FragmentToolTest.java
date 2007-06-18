@@ -15,7 +15,6 @@ import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.AbstractTest;
-import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
@@ -25,7 +24,6 @@ import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.interfacex.IndexableList;
-import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -337,7 +335,6 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#processBasic(org.xmlcml.cml.element.CMLMolecule)}.
 	 * * test basic concatenation
 	 */
 	@Test
@@ -780,37 +777,36 @@ public class FragmentToolTest extends AbstractTest {
 				intermediateS, explicitS, completeS, check);
 	}
 
-	private void testLength(CMLMolecule molecule, String id0, String id1, double lengthE, double eps) {
-		CMLAtom atom0 = molecule.getAtomById(id0);
-		CMLAtom atom1 = molecule.getAtomById(id1);
-		double length = GeometryTool.getCalculatedLength(atom0, atom1);
-		Assert.assertEquals("length "+id0+" "+id1, lengthE, length, eps);
-	}
+//	private void testLength(CMLMolecule molecule, String id0, String id1, double lengthE, double eps) {
+//		CMLAtom atom0 = molecule.getAtomById(id0);
+//		CMLAtom atom1 = molecule.getAtomById(id1);
+//		double length = GeometryTool.getCalculatedLength(atom0, atom1);
+//		Assert.assertEquals("length "+id0+" "+id1, lengthE, length, eps);
+//	}
 
-	private void testAngle(
-			CMLMolecule molecule, String id0, String id1, String id2, 
-			double angleE, double eps) {
-		CMLAtom atom0 = molecule.getAtomById(id0);
-		CMLAtom atom1 = molecule.getAtomById(id1);
-		CMLAtom atom2 = molecule.getAtomById(id2);
-		Angle angle = GeometryTool.getCalculatedAngle(atom0, atom1, atom2);
-		Assert.assertNotNull("angle not null", angle);
-		Assert.assertEquals("angle "+id0+" "+id1+" "+id2, angleE, angle.getDegrees(), eps);
-	}
+//	private void testAngle(
+//			CMLMolecule molecule, String id0, String id1, String id2, 
+//			double angleE, double eps) {
+//		CMLAtom atom0 = molecule.getAtomById(id0);
+//		CMLAtom atom1 = molecule.getAtomById(id1);
+//		CMLAtom atom2 = molecule.getAtomById(id2);
+//		Angle angle = GeometryTool.getCalculatedAngle(atom0, atom1, atom2);
+//		Assert.assertNotNull("angle not null", angle);
+//		Assert.assertEquals("angle "+id0+" "+id1+" "+id2, angleE, angle.getDegrees(), eps);
+//	}
 
-	private void testTorsion(
-			CMLMolecule molecule, String id0, String id1, String id2, 
-			String id3, double angleE, double eps) {
-		CMLAtom atom0 = molecule.getAtomById(id0);
-		CMLAtom atom1 = molecule.getAtomById(id1);
-		CMLAtom atom2 = molecule.getAtomById(id2);
-		CMLAtom atom3 = molecule.getAtomById(id3);
-		Angle angle = GeometryTool.getCalculatedTorsion(atom0, atom1, atom2, atom3);
-		Assert.assertEquals("torsion "+id0+" "+id1+" "+id2+" "+id3, angleE, angle.getDegrees(), eps);
-	}
+//	private void testTorsion(
+//			CMLMolecule molecule, String id0, String id1, String id2, 
+//			String id3, double angleE, double eps) {
+//		CMLAtom atom0 = molecule.getAtomById(id0);
+//		CMLAtom atom1 = molecule.getAtomById(id1);
+//		CMLAtom atom2 = molecule.getAtomById(id2);
+//		CMLAtom atom3 = molecule.getAtomById(id3);
+//		Angle angle = GeometryTool.getCalculatedTorsion(atom0, atom1, atom2, atom3);
+//		Assert.assertEquals("torsion "+id0+" "+id1+" "+id2+" "+id3, angleE, angle.getDegrees(), eps);
+//	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#expandCountExpressions()}.
 	 */
 	@Test
 	@Ignore
@@ -819,7 +815,6 @@ public class FragmentToolTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#recursivelyCreateAtomsRefs2OnJoins(org.xmlcml.cml.element.CMLMolecule)}.
 	 */
 	@Test
 	@Ignore
@@ -1005,169 +1000,6 @@ public class FragmentToolTest extends AbstractTest {
 		// maybe defer this...
 		fragmentTool.basic_processRecursively();
 		fragment = fragmentTool.getFragment();
-
-		String fragment1S = "" +
-		"<fragment xmlns='http://www.xml-cml.org/schema'>"+
-		 "<fragment id='f1'/>"+
-		 "<join id='j1' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f2'>"+
-		   "<molecule>"+
-		     "<join id='br1' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf1'/>"+
-		     "</join>"+
-		     "<join id='br2' moleculeRefs2='PARENT CHILD' atomRefs2='r4 r1'>"+
-		       "<fragment id='brf2'/>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<fragment id='f2'/>"+
-		 "<join id='j2' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f3'/>"+
-		 "<join id='j3' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j4' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j4' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		 "<join id='j5' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		 "<join id='j11' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j4' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		 "<join id='j5' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		 "<join id='j11' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j4' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j4' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f4'>"+
-		   "<molecule id='glu'>"+
-		     "<join id='br4' moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>"+
-		       "<fragment id='brf4'>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		         "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		         "<fragment id='f4444'/>"+
-		       "</fragment>"+
-		     "</join>"+
-		   "</molecule>"+
-		 "</fragment>"+
-		 "<join id='j44' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		 "<join id='j5' atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
-		 "<fragment id='f5'/>"+
-		"</fragment>";
-		
-		CMLFragment fragment1E = (CMLFragment) parseValidString(fragment1S);
-		// FIXME - this fails although the files seem to be identical
-//		assertEqualsCanonically("fragment1", fragment1E, fragment, true);
 	}
 
 	 /** expand arguments (cml:arg).

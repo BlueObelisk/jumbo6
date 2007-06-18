@@ -10,8 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.test.DoubleTestBase;
@@ -272,8 +271,8 @@ public class CMLMatrixTest extends NumericTest {
     public void testGetEuclidIntMatrix() {
         try {
             matrixList.get(0).getEuclidIntMatrix();
-            Assert.fail("int matrix should throw CMLRuntime");
-        } catch (CMLRuntimeException e) {
+            Assert.fail("int matrix should throw EuclidRuntimeException");
+        } catch (EuclidRuntimeException e) {
         }
     }
 
@@ -553,14 +552,8 @@ public class CMLMatrixTest extends NumericTest {
                 new int[]{1, 2, 3, 11, 12, 13}, mat);
         ii = mat.getIntegerMatrix();
         
-        IntMatrix imat = null;
-        try {
-            imat = new IntMatrix(ii);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        IntMatrix imat = new IntMatrix(ii);
         IntMatrixTest.assertEquals("int mat", 2, 3, new int[]{1, 2, 3, 11, 12, 13}, imat);
-            
     }
 
 }

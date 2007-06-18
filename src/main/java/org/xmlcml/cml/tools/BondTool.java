@@ -6,8 +6,13 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGLine;
+import org.xmlcml.euclid.Real2;
 
 
 /**
@@ -16,12 +21,13 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pmr
  * 
  */
-public class BondTool {
+public class BondTool extends AbstractTool {
 
     CMLBond bond;
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
     Logger logger = Logger.getLogger(BondTool.class.getName());
+//    private double bondWidth = 0.2;
 
     /**
      * constructor
@@ -67,4 +73,45 @@ public class BondTool {
         return map;
     }
 
+    /** returns a "g" element
+     * this contains the lines for bond
+     * @return null if problem
+     */
+    public SVGElement createSVG(BondDisplay bondDisplay) {
+    	SVGG g = new SVGG();
+    	List<CMLAtom> atoms = bond.getAtoms();    	
+    	Real2 xy0 = atoms.get(0).getXY2();
+    	Real2 xy1 = atoms.get(1).getXY2();
+    	double bondWidth = bondDisplay.getWidth();
+//		boolean writeLabel = false;
+//		double width = 1.0;
+//		String dash = "";
+//		String color = "black";
+//		if (this.wedgeType == Type.SOLID_NEITHER) {
+//			width = 2*width;
+//		}
+//		if (wedgeType == Type.HATCH_NEITHER) {
+//			dash = "stroke-dasharray:2,2;";
+//		}
+		String order = bond.getOrder();
+		if (order == null || order.equals(CMLBond.SINGLE)) {
+			g.appendChild(createBond("black", bondWidth, xy0, xy1));
+		} else if (order.equals(CMLBond.DOUBLE)) {
+			g.appendChild(createBond("black", 3*bondWidth, xy0, xy1));
+			g.appendChild(createBond("white", 1*bondWidth, xy0, xy1));
+		} else if (order.equals(CMLBond.TRIPLE)) {
+			g.appendChild(createBond("black", 5*bondWidth, xy0, xy1));
+			g.appendChild(createBond("white", 3*bondWidth, xy0, xy1));
+			g.appendChild(createBond("black", bondWidth, xy0, xy1));
+		}
+		return g;
+    }
+    
+    private SVGElement createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
+    	SVGLine line = new SVGLine(xy0, xy1);
+    	line.setStroke(stroke);
+    	line.setStrokeWidth(width);
+    	return line;
+    }
+    	
 }

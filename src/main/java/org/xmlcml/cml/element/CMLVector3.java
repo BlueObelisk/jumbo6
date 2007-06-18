@@ -4,10 +4,9 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
@@ -130,15 +129,15 @@ public class CMLVector3 extends AbstractVector3 {
 
     // convenience routine
     /*--
-     static Vector3 getEuclidVector3(CMLVector3 v) {
-     return (v == null) ? null : v.getEuclidVector3();
+     static Vector3 getEuclidVector3(CMLVector3 vector) {
+     return (vector == null) ? null : vector.getEuclidVector3();
      }
      --*/
 
     /**
      * create new CMLVector3 from Vector3.
      *
-     * @param v
+     * @param vector
      *            Vector3 to create from
      * @return the vector
      */
@@ -156,13 +155,7 @@ public class CMLVector3 extends AbstractVector3 {
      */
     public Vector3 getEuclidVector3() {
         // does CMLVector contain array elements?
-        Vector3 veucl3 = null;
-        try {
-            veucl3 = new Vector3(this.getXMLContent());
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("bad point; must have 3 coordinates" + e);
-        }
-        return veucl3;
+        return new Vector3(this.getXMLContent());
     }
 
     // ====================== subsidiary accessors =====================
@@ -254,7 +247,7 @@ public class CMLVector3 extends AbstractVector3 {
      *
      * @param v
      *            vector to compare
-     * @return true if this > v
+     * @return true if this > vector
      */
     public boolean longerThan(CMLVector3 v) {
         Vector3 veucl3 = this.getEuclidVector3();
@@ -263,7 +256,7 @@ public class CMLVector3 extends AbstractVector3 {
     }
 
     /**
-     * scalar multiplication. create new vector v = this*f does not alter this
+     * scalar multiplication. create new vector vector = this*f does not alter this
      *
      * @param f
      *            multiplier for all components
@@ -310,20 +303,12 @@ public class CMLVector3 extends AbstractVector3 {
      * @param n
      *            the zero-based index
      * @return the n'th component
-     * @throws CMLException
+     * @throws CMLRuntimeException
      */
-    public double elementAt(int n) throws CMLException {
-        try {
-            Util.check(n, 0, 2);
-        } catch (EuclidException e) {
-            throw new CMLException("" + e);
-        }
+    public double elementAt(int n) throws CMLRuntimeException {
+        Util.check(n, 0, 2);
         Vector3 veucl3 = this.getEuclidVector3();
-        try {
-            return (veucl3 == null) ? Double.NaN : veucl3.elementAt(n);
-        } catch (EuclidException e) {
-            throw new CMLRuntimeException("" + e);
-        }
+        return (veucl3 == null) ? Double.NaN : veucl3.elementAt(n);
     }
 
     /**
@@ -333,17 +318,13 @@ public class CMLVector3 extends AbstractVector3 {
      *            the zero-based index
      * @param f
      *            component value
-     * @throws CMLException
+     * @throws EuclidRuntimeException
      */
-    public void setElementAt(int n, double f) throws CMLException {
-        try {
-            Util.check(n, 0, 2);
-            Vector3 veucl3 = this.getEuclidVector3();
-            veucl3.setElementAt(n, f);
-            this.setXMLContent(veucl3.getArray());
-        } catch (EuclidException e) {
-            throw new CMLException("" + e);
-        }
+    public void setElementAt(int n, double f) throws EuclidRuntimeException {
+        Util.check(n, 0, 2);
+        Vector3 veucl3 = this.getEuclidVector3();
+        veucl3.setElementAt(n, f);
+        this.setXMLContent(veucl3.getArray());
     }
 
     /**
@@ -434,8 +415,8 @@ public class CMLVector3 extends AbstractVector3 {
     }
 
     /**
-     * projection of this onto vector. does not alter this. result = v.norm() *
-     * (this.norm() dot v.norm())
+     * projection of this onto vector. does not alter this. result = vector.norm() *
+     * (this.norm() dot vector.norm())
      *
      * @param v
      *            vector to project onto
@@ -447,7 +428,7 @@ public class CMLVector3 extends AbstractVector3 {
         try {
             vv = (veucl3 == null) ? null : veucl3.projectOnto(v
                     .getEuclidVector3());
-        } catch (EuclidException je) {
+        } catch (EuclidRuntimeException je) {
         }
         return (vv == null) ? null : CMLVector3.createCMLVector3(vv);
     }

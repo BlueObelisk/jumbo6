@@ -147,8 +147,6 @@ public class DictionaryTool extends AbstractTool {
      * map is indexed by dictRef name. Objects are maps of dictRef values 
      * against occurrence counts
      * @param cmlElement to analyse
-     * @param map indexed by dictRefName; can be used to aggregate examples of cml
-     * into single map
      */
     public void extractAndAnalyseDictRef(CMLElement cmlElement) {
 
@@ -312,7 +310,7 @@ public class DictionaryTool extends AbstractTool {
     /** analise the tempDictRefMap.
      * @param tempDictRefMap created as above.
      */
-    private void analyzeMap() {
+//    private void analyzeMap() {
 //    	for (String key : tempDictRefMap.keySet()) {
 //    		Map<String, ValueCount> map = 
 //    			(Map<String, ValueCount>) tempDictRefMap.get(key);
@@ -322,7 +320,7 @@ public class DictionaryTool extends AbstractTool {
 //    			System.out.println(termCount.count+" ... "+s);
 //    		}
 //    	}
-    }
+//    }
 
     /** update index in dictionary entries.
      */
@@ -336,7 +334,6 @@ public class DictionaryTool extends AbstractTool {
     /** update current dictionary with observed dictRefs.
      * uses observed names and values of dictRefs to add dictionary
      * entries, and where possible add types or enuemrations to these
-     * @param tempDictRefMap as above
      */
     public void updateDictionary() {
     	ensureEntryToolMap();

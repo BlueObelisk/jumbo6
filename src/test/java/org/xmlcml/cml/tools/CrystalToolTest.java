@@ -9,17 +9,12 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
-import nu.xom.Attribute;
-import nu.xom.Elements;
-import nu.xom.Nodes;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLLog;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLLog.Severity;
@@ -27,7 +22,6 @@ import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -150,12 +144,7 @@ public class CrystalToolTest extends AbstractToolTest {
         } catch (Exception e) {
             neverThrow(e);
         }
-        CMLSymmetry symmetry = null;
-        try {
-            symmetry = new CMLSymmetry(new String[] { "x, y, z", "-x, -y, -z" });
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        CMLSymmetry symmetry = new CMLSymmetry(new String[] { "x, y, z", "-x, -y, -z" });
         CMLCrystal crystal = new CMLCrystal(new double[] { 10., 20., 30., 90.,
                 90., 90. });
         CrystalTool crystalTool = new CrystalTool(mol, crystal, symmetry);
@@ -299,13 +288,13 @@ public class CrystalToolTest extends AbstractToolTest {
 //        }
     }
 
-    private CMLMolecule getMolecule(CMLElement cml) {
-        Nodes moleculeNodes = cml.query(CMLMolecule.NS, X_CML);
-        if (moleculeNodes.size() != 1) {
-            throw new CMLRuntimeException("NO MOLECULE FOUND");
-        }
-        return (CMLMolecule) moleculeNodes.get(0);
-    }
+//    private CMLMolecule getMolecule(CMLElement cml) {
+//        Nodes moleculeNodes = cml.query(CMLMolecule.NS, X_CML);
+//        if (moleculeNodes.size() != 1) {
+//            throw new CMLRuntimeException("NO MOLECULE FOUND");
+//        }
+//        return (CMLMolecule) moleculeNodes.get(0);
+//    }
 
     /**
      * test structure generation;
@@ -502,15 +491,15 @@ public class CrystalToolTest extends AbstractToolTest {
 //        }
     }
     
-    private void writeCML(String filename, CMLCml cml, String message) {
-    	try {
-            File file = new File(filename);
-            cml.serialize(new FileOutputStream(file), 1);
-            //log.add(file, message);
-        } catch (IOException e) {
-            throw new CMLRuntimeException("ERROR "+e);
-        }
-    }
+//    private void writeCML(String filename, CMLCml cml, String message) {
+//    	try {
+//            File file = new File(filename);
+//            cml.serialize(new FileOutputStream(file), 1);
+//            //log.add(file, message);
+//        } catch (IOException e) {
+//            throw new CMLRuntimeException("ERROR "+e);
+//        }
+//    }
     
     private void writeXML(String filename, CMLMolecule molecule, String message) {
         try {
@@ -727,59 +716,59 @@ public class CrystalToolTest extends AbstractToolTest {
         return s;
     }
 
-    private List<String> getCifPathList(String user) {
-    	System.out.println(user);
-        String dir = getDir(user);
-        if (dir == null) {
-            throw new CMLRuntimeException("Unknown user: "+user);
-        }
-        List<String> cifPathList = new ArrayList<String>();
-        File[] fileList = new File(dir).listFiles();
-        if (fileList == null) {
-        	throw new CMLRuntimeException("CIF TEST NOT CONFIGURED - IGNORE");
-        }
+//    private List<String> getCifPathList(String user) {
+//    	System.out.println(user);
+//        String dir = getDir(user);
+//        if (dir == null) {
+//            throw new CMLRuntimeException("Unknown user: "+user);
+//        }
+//        List<String> cifPathList = new ArrayList<String>();
+//        File[] fileList = new File(dir).listFiles();
+//        if (fileList == null) {
+//        	throw new CMLRuntimeException("CIF TEST NOT CONFIGURED - IGNORE");
+//        }
+//
+//        for (File file : fileList) {
+////        	System.out.println(file.getAbsolutePath());
+//            if (file.toString().startsWith(S_PERIOD)) {
+//            	System.out.println("File starts with .");
+//                continue;
+//            }
+//            if (user.equals("NED")) {
+//            } else if (user.startsWith("PMR")) {
+//            	if(!file.toString().endsWith(".cif")) {
+//            		continue;
+//            	}
+//            }
+//
+//            String fileName = file.getName();
+//            if (user.equals("NED")) {
+//            	cifPathList.add(file.getAbsolutePath());
+//            } else if (user.startsWith("HEATH")) {
+//                cifPathList.add(dir + File.separator + fileName);
+//            } else if (
+//                    user.startsWith("PMR")) {
+//                cifPathList.add(dir + File.separator + fileName);
+//            }
+//        }
+////        System.out.println("Found "+cifPathList.size()+" files.");
+//        return cifPathList;
+//    }
 
-        for (File file : fileList) {
-//        	System.out.println(file.getAbsolutePath());
-            if (file.toString().startsWith(S_PERIOD)) {
-            	System.out.println("File starts with .");
-                continue;
-            }
-            if (user.equals("NED")) {
-            } else if (user.startsWith("PMR")) {
-            	if(!file.toString().endsWith(".cif")) {
-            		continue;
-            	}
-            }
-
-            String fileName = file.getName();
-            if (user.equals("NED")) {
-            	cifPathList.add(file.getAbsolutePath());
-            } else if (user.startsWith("HEATH")) {
-                cifPathList.add(dir + File.separator + fileName);
-            } else if (
-                    user.startsWith("PMR")) {
-                cifPathList.add(dir + File.separator + fileName);
-            }
-        }
-//        System.out.println("Found "+cifPathList.size()+" files.");
-        return cifPathList;
-    }
-
-    private String getCrystalName(String user, String cifname) {
-        String s = getDir(user);
-        if (user.startsWith("PMR")) {
-            s += File.separator + "xml" + File.separator + cifname + ".cml.xml";
-        } else if (user.equals("NED")) {
-            @SuppressWarnings("unused")
-            int idx = cifname.lastIndexOf(S_UNDER);
-            s += File.separator + cifname
-                    + ".cml.xml";
-        } else if (user.startsWith("HEATH")) {
-            s += File.separator + "xml" + File.separator + cifname + ".cml.xml";
-        }
-        return s;
-    }
+//    private String getCrystalName(String user, String cifname) {
+//        String s = getDir(user);
+//        if (user.startsWith("PMR")) {
+//            s += File.separator + "xml" + File.separator + cifname + ".cml.xml";
+//        } else if (user.equals("NED")) {
+//            @SuppressWarnings("unused")
+//            int idx = cifname.lastIndexOf(S_UNDER);
+//            s += File.separator + cifname
+//                    + ".cml.xml";
+//        } else if (user.startsWith("HEATH")) {
+//            s += File.separator + "xml" + File.separator + cifname + ".cml.xml";
+//        }
+//        return s;
+//    }
 
     private String getOutfile(String user, String fragType, 
         String cifname, int mol, int subMol, int serial) {
@@ -850,18 +839,18 @@ public class CrystalToolTest extends AbstractToolTest {
 	}
     */
     
-    private void addSpaceGroup(CMLCml cml) {
-		Nodes hmGroupNodes = cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']", X_CML);
-		if (hmGroupNodes.size() > 0) {
-			String hmGroup = hmGroupNodes.get(0).getValue();
-			Elements crystals = cml.getChildCMLElements(CMLCrystal.TAG);
-			if (crystals.size() > 0) {
-				CMLCrystal crystal = (CMLCrystal)crystals.get(0);
-				Elements symmetrys = crystal.getChildCMLElements("symmetry");
-				if (symmetrys.size() > 0) {
-					symmetrys.get(0).addAttribute(new Attribute("spaceGroup", hmGroup));
-				}
-			}
-		}
-	}
+//    private void addSpaceGroup(CMLCml cml) {
+//		Nodes hmGroupNodes = cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']", X_CML);
+//		if (hmGroupNodes.size() > 0) {
+//			String hmGroup = hmGroupNodes.get(0).getValue();
+//			Elements crystals = cml.getChildCMLElements(CMLCrystal.TAG);
+//			if (crystals.size() > 0) {
+//				CMLCrystal crystal = (CMLCrystal)crystals.get(0);
+//				Elements symmetrys = crystal.getChildCMLElements("symmetry");
+//				if (symmetrys.size() > 0) {
+//					symmetrys.get(0).addAttribute(new Attribute("spaceGroup", hmGroup));
+//				}
+//			}
+//		}
+//	}
 }

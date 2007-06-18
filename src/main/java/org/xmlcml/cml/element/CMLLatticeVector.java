@@ -54,9 +54,7 @@ public class CMLLatticeVector extends AbstractLatticeVector {
 
     /**
      * constructor.
-     *
      * @param v
-     *            vector
      */
     public CMLLatticeVector(double[] v) {
         this.setXMLContent(v);

@@ -68,6 +68,7 @@ public class DoubleArraySTAttribute extends CMLAttribute {
     
     /** copy.
      * uses copy constructor.
+     * @return copy
      */
     public Node copy() {
     	return new DoubleArraySTAttribute(this);

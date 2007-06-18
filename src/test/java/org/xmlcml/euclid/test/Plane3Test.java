@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.EuclidException;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
@@ -125,18 +125,13 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testPlane3Point3Point3Point3() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(p100, p010, p001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Plane3 pl =new Plane3(p100, p010, p001);
         Plane3Test.assertEquals("plane", new double[] { 1. / s3, 1. / s3,
                 1. / s3, 1. / s3 }, pl, EPS);
         try {
             pl = new Plane3(p100, p010, p100);
             alwaysFail("zero normal");
-        } catch (EuclidException e) {
+        } catch (EuclidRuntimeException e) {
             Assert.assertEquals("plane", "zero length normal", e.getMessage());
         }
     }
@@ -146,19 +141,10 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testPlane3Line3Point3() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(l100000, p001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Plane3 pl = new Plane3(l100000, p001);
         Plane3Test.assertEquals("plane", new double[] { 0., -1., 0., 0. }, pl,
                 EPS);
-        try {
-            pl = new Plane3(l123456, p321);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        pl = new Plane3(l123456, p321);
         Assert.assertNotNull("plane", pl);
         Plane3Test.assertEquals("plane",
                 new double[] { -0.40824829046386013, 0.816496580927727,
@@ -170,12 +156,7 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testGetVector() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(p100, p010, p001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Plane3 pl = new Plane3(p100, p010, p001);
         Vector3 v = pl.getVector();
         Vector3Test.assertEquals("vector", new double[] { 1. / s3, 1. / s3,
                 1. / s3 }, v, EPS);
@@ -186,12 +167,7 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testGetDistance() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(p100, p010, p001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Plane3 pl = new Plane3(p100, p010, p001);
         Assert.assertEquals("distance", 1. / s3, pl.getDistance(), EPS);
     }
 
@@ -200,12 +176,7 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testNegative() {
-        Plane3 pl = null;
-        try {
-            pl = new Plane3(p100, p010, p001);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        Plane3 pl = new Plane3(p100, p010, p001);
         Plane3Test.assertEquals("negative", new double[] { 1. / s3, 1. / s3,
                 1. / s3, 1. / s3 }, pl, EPS);
         pl.negative();

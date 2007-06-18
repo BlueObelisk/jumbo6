@@ -20,6 +20,7 @@ public class TypeGenerator extends AbstractGenerator {
 
 	Map<String, CMLType> map;
 	/**
+	 * @param schemaManager 
 	 * 
 	 */
 	public TypeGenerator(SchemaManager schemaManager) {

@@ -99,10 +99,10 @@ public class RealSquareMatrix extends RealMatrix {
      *            the final rows and cols of real square matrix
      * @param array
      *            of size (rows * rows)
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>array</TT> size must be multiple of <TT>rows</TT>
      */
-    public RealSquareMatrix(int rows, double[] array) throws EuclidException {
+    public RealSquareMatrix(int rows, double[] array) throws EuclidRuntimeException {
         super(rows, rows, array);
     }
     /**
@@ -127,12 +127,12 @@ public class RealSquareMatrix extends RealMatrix {
      *            the start column inclusive (count from 0)
      * @param rows
      *            size of final matrix
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                lowrow, lowcol or rows are not consistent with size of
      *                <TT>m</TT>
      */
     public RealSquareMatrix(RealMatrix m, int lowrow, int lowcol, int rows)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         super(m, lowrow, lowrow + rows - 1, lowcol, lowcol + rows - 1);
     }
     /**
@@ -152,13 +152,13 @@ public class RealSquareMatrix extends RealMatrix {
      * @param m
      *            matrix to copy reference from
      * 
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must be square (that is cols = rows)
      */
-    public RealSquareMatrix(RealMatrix m) throws EuclidException {
+    public RealSquareMatrix(RealMatrix m) throws EuclidRuntimeException {
         super(m.rows, m.cols);
         if (m.cols != m.rows) {
-            throw new EuclidException("non square matrix");
+            throw new EuclidRuntimeException("non square matrix");
         }
         this.flmat = m.flmat;
     }
@@ -169,14 +169,14 @@ public class RealSquareMatrix extends RealMatrix {
      * 
      * @param matrix
      *            to copy
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>matrix</TT> is not square (might even not be
      *                rectangular!)
      */
-    public RealSquareMatrix(double[][] matrix) throws EuclidException {
+    public RealSquareMatrix(double[][] matrix) throws EuclidRuntimeException {
         super(matrix);
         if (cols != rows) {
-            throw new EuclidException("non square matrix");
+            throw new EuclidRuntimeException("non square matrix");
         }
     }
     /**
@@ -184,11 +184,11 @@ public class RealSquareMatrix extends RealMatrix {
      * 
      * @param m
      *            matrix to shallow copy
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must have the same number of rows and cols as
      *                <TT>this</TT>
      */
-    public void shallowCopy(RealSquareMatrix m) throws EuclidException {
+    public void shallowCopy(RealSquareMatrix m) throws EuclidRuntimeException {
         super.shallowCopy((RealMatrix) m);
     }
     
@@ -257,12 +257,12 @@ public class RealSquareMatrix extends RealMatrix {
      * 
      * @param m
      *            matrix to add
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must have the same number of rows and cols as
      *                <TT>this</TT>
      * @return resultant matrix
      */
-    public RealSquareMatrix plus(RealSquareMatrix m) throws EuclidException {
+    public RealSquareMatrix plus(RealSquareMatrix m) throws EuclidRuntimeException {
         RealMatrix temp = super.plus((RealMatrix) m);
         RealSquareMatrix sqm = new RealSquareMatrix(temp);
         return sqm;
@@ -272,12 +272,12 @@ public class RealSquareMatrix extends RealMatrix {
      * 
      * @param m
      *            matrix to subtract from this
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must have the same number of rows and cols as
      *                <TT>this</TT>
      * @return resultant matrix
      */
-    public RealSquareMatrix subtract(RealSquareMatrix m) throws EuclidException {
+    public RealSquareMatrix subtract(RealSquareMatrix m) throws EuclidRuntimeException {
         RealMatrix temp = super.subtract((RealMatrix) m);
         RealSquareMatrix sqm = new RealSquareMatrix(temp);
         return sqm;
@@ -289,12 +289,12 @@ public class RealSquareMatrix extends RealMatrix {
      * 
      * @param m
      *            matrix to multiply by
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                <TT>m</TT> must have the same number of rows as <TT>this</TT>
      *                has cols
      * @return new matrix
      */
-    public RealSquareMatrix multiply(RealSquareMatrix m) throws EuclidException {
+    public RealSquareMatrix multiply(RealSquareMatrix m) throws EuclidRuntimeException {
         RealMatrix temp = super.multiply((RealMatrix) m);
         RealSquareMatrix sqm = new RealSquareMatrix(temp);
         return sqm;
@@ -416,31 +416,21 @@ public class RealSquareMatrix extends RealMatrix {
             flmat[1][0] = v2.flarray[0];
             flmat[1][1] = v2.flarray[1];
         } else if (cols == 3) {
-            Vector3 v0 = null;
-            Vector3 v1 = null;
-            Vector3 v2 = null;
-            try {
-                v0 = new Vector3(extractRowData(0));
-                v1 = new Vector3(extractRowData(1));
-                v2 = new Vector3(extractRowData(2));
-            } catch (EuclidException e) {
-                Util.BUG(e);
-            }
+            Vector3 v0 = new Vector3(extractRowData(0));
+            Vector3 v1 = new Vector3(extractRowData(1));
+            Vector3 v2 = new Vector3(extractRowData(2));
             // check handedness
             double det = v0.getScalarTripleProduct(v1, v2);
             v0.normalize();
             v2 = v0.cross(v1);
             v2.normalize();
             v1 = v2.cross(v0);
-            if (det < 0.0)
+            if (det < 0.0) {
                 v2.negative();
-            try {
-                replaceRowData(0, v0.getArray());
-                replaceRowData(1, v1.getArray());
-                replaceRowData(2, v2.getArray());
-            } catch (EuclidException e) {
-                Util.BUG(e);
             }
+            replaceRowData(0, v0.getArray());
+            replaceRowData(1, v1.getArray());
+            replaceRowData(2, v2.getArray());
         } else {
             throw new EuclidRuntimeException(
                     "Sorry: orthonormalise only up to 3x3 matrices: had "
@@ -503,7 +493,8 @@ public class RealSquareMatrix extends RealMatrix {
     public boolean isOrthogonal() {
         for (int i = 0; i < rows - 1; i++) {
             for (int j = i + 1; j < rows; j++) {
-                if (!Real.isZero(rowDotproduct(i, j))) {
+                double dp = rowDotproduct(i, j);
+                if (!Real.isZero(dp)) {
                     return false;
                 }
             }
@@ -594,13 +585,13 @@ public class RealSquareMatrix extends RealMatrix {
      * @param eigenvalues
      * @param eigenvectors
      * @param illCond
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                must have at least order 2
      * @return flag
      */
     public int diagonaliseAndReturnRank(RealArray eigenvalues,
-            RealSquareMatrix eigenvectors, EuclidException illCond)
-            throws EuclidException {
+            RealSquareMatrix eigenvectors, EuclidRuntimeException illCond)
+            throws EuclidRuntimeException {
         // because this was translated from FORTRAN there are some offsets
         // store current matrix as 1-D array lower Triangle
         RealArray lowert = this.lowerTriangle();
@@ -610,7 +601,7 @@ public class RealSquareMatrix extends RealMatrix {
         int order = rows;
         // size must be at least 2!
         if (rows < 2) {
-            throw new EuclidException();
+            throw new EuclidRuntimeException("need at least 2 rows");
         }
         double[] eigenval77 = new double[rows + 1];
         double[] eigenvect77 = new double[rows * rows + 1];
@@ -623,11 +614,7 @@ public class RealSquareMatrix extends RealMatrix {
         double[] eigenvect = new double[rows * rows];
         System.arraycopy(eigenvect77, 1, eigenvect, 0, rows * rows);
         eigenvalues.shallowCopy(new RealArray(eigenval));
-        try {
-            eigenvectors.shallowCopy(new RealSquareMatrix(rows, eigenvect));
-        } catch (EuclidException e) {
-            throw new EuclidRuntimeException(e.toString());
-        }
+        eigenvectors.shallowCopy(new RealSquareMatrix(rows, eigenvect));
         return rank;
     }
     /**
@@ -639,16 +626,9 @@ public class RealSquareMatrix extends RealMatrix {
      */
     public void orthogonalise() throws EuclidRuntimeException {
         if (cols == 3) {
-            Vector3 v0 = null;
-            Vector3 v1 = null;
-            Vector3 v2 = null;
-            try {
-                v0 = new Vector3(extractRowData(0));
-                v1 = new Vector3(extractRowData(1));
-                v2 = new Vector3(extractRowData(2));
-            } catch (EuclidException e) {
-                Util.BUG(e);
-            }
+            Vector3 v0 = new Vector3(extractRowData(0));
+            Vector3 v1 = new Vector3(extractRowData(1));
+            Vector3 v2 = new Vector3(extractRowData(2));
             double l0 = v0.getLength();
             double l1 = v1.getLength();
             double l2 = v2.getLength();
@@ -660,18 +640,15 @@ public class RealSquareMatrix extends RealMatrix {
             v2 = v0.cross(v1);
             v2.normalize();
             v1 = v2.cross(v0);
-            if (det < 0.0)
+            if (det < 0.0) {
                 v2 = v2.negative();
+            }
             v0 = v0.multiplyBy(l0);
             v1 = v1.multiplyBy(l1);
             v2 = v2.multiplyBy(l2);
-            try {
-                replaceRowData(0, v0.getArray());
-                replaceRowData(1, v1.getArray());
-                replaceRowData(2, v2.getArray());
-            } catch (EuclidException e) {
-                Util.BUG(e);
-            }
+            replaceRowData(0, v0.getArray());
+            replaceRowData(1, v1.getArray());
+            replaceRowData(2, v2.getArray());
         } else {
             throw new EuclidRuntimeException(
                     "Sorry: orthogonalise only up to 3x3 matrices");
@@ -714,17 +691,17 @@ public class RealSquareMatrix extends RealMatrix {
      * inversion of matrix. creates NEW matrix
      * Hard-coded up to 3x3, if matrix is larger uses JAMA
      * 
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                singular matrix (or worse!)
      * @return inverse matrix
      */
-    public RealSquareMatrix getInverse() throws EuclidException {
+    public RealSquareMatrix getInverse() throws EuclidRuntimeException {
     	double[][] inv = new double[rows][rows];
     	double[][] temp = getMatrix();
     	
     	double det = this.determinant();
     	if (det == 0) {
-    		throw new EuclidException("Cannot invert matrix: determinant=0");
+    		throw new EuclidRuntimeException("Cannot invert matrix: determinant=0");
     	}
     	double detr = 1 / det;
     	
@@ -746,7 +723,7 @@ public class RealSquareMatrix extends RealMatrix {
 			inv[2][1] = detr * (temp[0][1] * temp[2][0] - temp[0][0] * temp[2][1]);
 			inv[2][2] = detr * (temp[0][0] * temp[1][1] - temp[0][1] * temp[1][0]);
         } else {
-            throw new EuclidException("Inverse of larger than 3x3 matricies: NYI");
+            throw new EuclidRuntimeException("Inverse of larger than 3x3 matricies: NYI");
         }
     	
     	RealSquareMatrix imat = new RealSquareMatrix(inv);
@@ -776,7 +753,7 @@ public class RealSquareMatrix extends RealMatrix {
     }
     @SuppressWarnings("unused")
     private void matinv(double[][] A, double[][] I, int nelem)
-            throws EuclidException {
+            throws EuclidRuntimeException {
         // identity
         for (int i = 0; i < nelem; i++) {
             for (int j = 0; j < nelem; j++) {
@@ -786,7 +763,7 @@ public class RealSquareMatrix extends RealMatrix {
         }
         for (int diag = 0; diag < nelem; diag++) {
             if (!dopivot(A, I, diag, nelem)) {
-                throw new EuclidException("singular matrix");
+                throw new EuclidRuntimeException("singular matrix");
             }
             double div = A[diag][diag];
             if (div != 1.0) {
@@ -828,14 +805,14 @@ class Diagonalise implements EuclidConstants {
      * @param eigvec
      *            egenvectors as 1d array
      * @param illCond
-     * @throws EuclidException
+     * @throws EuclidRuntimeException
      *             contains reason for failure (probably illconditioned)
-     * @exception EuclidException
+     * @exception EuclidRuntimeException
      *                order < 2
      * @return flag
      */
     public static int vneigl(int order, double[] a, double[] eigval,
-            double[] eigvec, EuclidException illCond) throws EuclidException {
+            double[] eigvec, EuclidRuntimeException illCond) throws EuclidRuntimeException {
         /***********************************************************************
          * // translated from FORTRAN
          * 
@@ -918,7 +895,7 @@ class Diagonalise implements EuclidConstants {
         RealSquareMatrix.logger.info("O..." + order);
         /* Function Body */
         if (order < 2) {
-            throw new EuclidException("order too small");
+            throw new EuclidRuntimeException("order too small");
         }
         /* generate identity matrix */
         range = 1e-6f;

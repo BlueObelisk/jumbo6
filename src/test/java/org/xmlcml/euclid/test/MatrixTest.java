@@ -8,7 +8,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.DoubleTool;
-import org.xmlcml.euclid.EuclidException;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.RealMatrix;
 
@@ -112,34 +111,20 @@ public class MatrixTest extends EuclidTestBase {
     /** test */
     @Test
     public void testRealMatrix() {
-        try {
-            RealMatrix a = new RealMatrix(2, 3, new double[] { 11.0, 12.0,
-                    13.0, 21.0, 22.0, 23.0 });
-            RealMatrix b = new RealMatrix(2, 3, new double[] { 11.0, 12.0,
-                    13.0, 21.0, 28.0, 23.0 });
-            MatrixTest.assertEquals("MatrixTest", a, a, EPS);
-            Assert.assertNotNull(b);
-        } catch (EuclidException e) {
-            neverThrow(e);
-        }
+        RealMatrix a = new RealMatrix(2, 3, new double[] { 11.0, 12.0,
+                13.0, 21.0, 22.0, 23.0 });
+        RealMatrix b = new RealMatrix(2, 3, new double[] { 11.0, 12.0,
+                13.0, 21.0, 28.0, 23.0 });
+        MatrixTest.assertEquals("MatrixTest", a, a, EPS);
+        Assert.assertNotNull(b);
     }
 
     /** test */
     @Test
     public void testIntMatrix() {
-        IntMatrix a = null;
-        try {
-            a = new IntMatrix(2, 3, new int[] { 11, 12, 13, 21, 22, 23 });
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
-        try {
-            IntMatrix b = new IntMatrix(2, 3, new int[] { 11, 12, 13, 21, 28,
-                    23 });
-            Assert.assertNotNull(b);
-        } catch (EuclidException e) {
-            neverFail(e);
-        }
+        IntMatrix a = new IntMatrix(2, 3, new int[] { 11, 12, 13, 21, 22, 23 });
+        IntMatrix b = new IntMatrix(2, 3, new int[] { 11, 12, 13, 21, 28, 23 });
+        Assert.assertNotNull(b);
         Assert.assertEquals("MatrixTest", a, a);
     }
 

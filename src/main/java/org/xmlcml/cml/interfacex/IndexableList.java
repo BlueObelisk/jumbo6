@@ -84,6 +84,7 @@ public interface IndexableList {
 	 * requires CMLMolecule children). This method might be
 	 * wrapped in a convenience method (e.g. add(CMLMolecule)
 	 * @param indexable
+	 * @return list of indexable 
 	 */
 	List<Indexable> getIndexables();
 	
