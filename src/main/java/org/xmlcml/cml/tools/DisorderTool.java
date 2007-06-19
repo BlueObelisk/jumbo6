@@ -236,7 +236,6 @@ public class DisorderTool extends AbstractTool {
 				if (fixed) {
 					// if process reaches this point then failed assemblies have been
 					// fixed - add them to finished list
-					//molecule.debug();
 					DisorderTool newDt = new DisorderTool(molecule);
 					List<DisorderAssembly> newDA = newDt.getDisorderAssemblyList();
 

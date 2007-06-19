@@ -1282,10 +1282,6 @@ public class ValencyTool extends AbstractTool {
 																ato.setFormalCharge(1);
 																chargedAtoms.add(ato);
 
-																if ("a19".equals(ato.getId())) {
-																	subMol.debug();
-																}
-
 																PiSystem newPiS = new PiSystem(subMolAtomList);
 																newPiS.setPiSystemManager(piSystemManager);
 																List<PiSystem> newPiSList = newPiS.generatePiSystemList();
