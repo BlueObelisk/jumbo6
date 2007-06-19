@@ -116,6 +116,8 @@ public interface CMLConstants extends EuclidConstants {
 	String XSD_SIMPLE_CONTENT = "xsd:simpleContent";
     /** */
 	String XSD_UNION = "xsd:union";
+	/** */
+	String FPX_REAL = "fpx:real";
     /** */
 	String PATTERN_ANYURI = "http://.*";    //crude!
     /** */
