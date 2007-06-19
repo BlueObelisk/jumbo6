@@ -309,7 +309,7 @@ public class ChemicalElement {
 		} else if (this.isChemicalElementType(Type.GROUP_A)) {
 			radius = 0;
 		} else {
-			radius = radius * 1.10;
+			radius = radius * 1.15;
 		}
 		return radius;
     }
