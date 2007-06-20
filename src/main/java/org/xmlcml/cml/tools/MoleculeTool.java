@@ -2182,8 +2182,15 @@ public class MoleculeTool extends AbstractTool {
 		));
     	g.setProperties(moleculeDisplay);
     	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
+    	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+    	atomDisplay.setOmitHydrogens(true);
     	for (CMLBond bond : molecule.getBonds()) {
-    		SVGElement b = new BondTool(bond).createSVG(bondDisplay);
+    		BondTool bondTool = new BondTool(bond);
+    		bondTool.setBondDisplay(bondDisplay);
+    		if (bondTool.omitFromDisplay(atomDisplay)) {
+    			continue;
+    		}
+    		SVGElement b = bondTool.createSVG();
     		b.setStrokeWidth(0.2);
     		if (b != null) {
     			g.appendChild(b);
@@ -2191,6 +2198,10 @@ public class MoleculeTool extends AbstractTool {
 		}
     	for (CMLAtom atom : molecule.getAtoms()) {
     		AtomTool atomTool = new AtomTool(atom);
+    		atomTool.setAtomDisplay(atomDisplay);
+    		if (atomDisplay.omitAtom(atom)) {
+    			continue;
+    		}
     		SVGElement a = atomTool.createSVG();
     		if (a != null) {
     			g.appendChild(a);

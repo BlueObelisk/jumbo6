@@ -23,11 +23,10 @@ import org.xmlcml.euclid.Real2;
  */
 public class BondTool extends AbstractTool {
 
-    CMLBond bond;
-    CMLMolecule molecule;
-    MoleculeTool moleculeTool;
+    private CMLBond bond;
+    private CMLMolecule molecule;
     Logger logger = Logger.getLogger(BondTool.class.getName());
-//    private double bondWidth = 0.2;
+    private BondDisplay bondDisplay;
 
     /**
      * constructor
@@ -40,7 +39,7 @@ public class BondTool extends AbstractTool {
         if (molecule == null) {
             throw new CMLRuntimeException("Bond must be in molecule");
         }
-        moleculeTool = new MoleculeTool(molecule);
+//        moleculeTool = new MoleculeTool(molecule);
     }
 
     /**
@@ -77,7 +76,7 @@ public class BondTool extends AbstractTool {
      * this contains the lines for bond
      * @return null if problem
      */
-    public SVGElement createSVG(BondDisplay bondDisplay) {
+    public SVGElement createSVG() {
     	SVGG g = new SVGG();
     	List<CMLAtom> atoms = bond.getAtoms();    	
     	Real2 xy0 = atoms.get(0).getXY2();
@@ -113,5 +112,34 @@ public class BondTool extends AbstractTool {
     	line.setStrokeWidth(width);
     	return line;
     }
-    	
+
+	/**
+	 * @return the bondDisplay
+	 */
+	public BondDisplay getBondDisplay() {
+		return bondDisplay;
+	}
+
+	/**
+	 * @param bondDisplay the bondDisplay to set
+	 */
+	public void setBondDisplay(BondDisplay bondDisplay) {
+		this.bondDisplay = bondDisplay;
+	}
+	
+	/**
+	 * 
+	 * @return true =>omit
+	 */
+	public boolean omitFromDisplay(AtomDisplay atomDisplay) {
+		boolean omit = false;
+		if (atomDisplay != null && atomDisplay.isOmitHydrogens()) {
+			List<CMLAtom> atoms = bond.getAtoms();
+			if (atomDisplay.omitAtom(atoms.get(0)) ||
+			    atomDisplay.omitAtom(atoms.get(1))) {
+				omit = true;
+			}
+		}
+		return omit;
+	}
 }
