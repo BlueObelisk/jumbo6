@@ -33,9 +33,7 @@ public class AtomTool extends AbstractTool {
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
     Logger logger = Logger.getLogger(AtomTool.class.getName());
-    double fontSize = 0.5;
-    String stroke = "none";
-    double strokeWidth = 0.001;
+    private AtomDisplay atomDisplay;
 
     /**
      * constructor
@@ -50,20 +48,6 @@ public class AtomTool extends AbstractTool {
         }
         moleculeTool = new MoleculeTool(molecule);
     }
-
-    /**
-	 * @return the fontSize
-	 */
-	public double getFontSize() {
-		return fontSize;
-	}
-
-	/**
-	 * @param fontSize the fontSize to set
-	 */
-	public void setFontSize(double fontSize) {
-		this.fontSize = fontSize;
-	}
 
 	/**
      * make atom tool from a atom.
@@ -356,12 +340,23 @@ public class AtomTool extends AbstractTool {
     			 0., 0., 1.
     	 }));
     	 String elementType = atom.getElementType();
-    	 String fill = "black";
+    	 String fill = atomDisplay.getFill();
+    	 double fontSize = atomDisplay.getFontSize();
+    	 double xOffsetFactor = atomDisplay.getXOffsetFactor();
+    	 double yOffsetFactor = atomDisplay.getYOffsetFactor();
+    	 double radiusFactor = atomDisplay.getBackgroundRadiusFactor();
+    	 
+    	 double xChargeOffsetFactor = atomDisplay.getXChargeOffsetFactor();
+    	 double yChargeOffsetFactor = atomDisplay.getYChargeOffsetFactor();
+    	 double chargeFontFactor = atomDisplay.getChargeFontFactor();
+    	 double backgroundChargeRadiusFactor = atomDisplay.getBackgroundChargeRadiusFactor();
+    	 
     	 if (!elementType.equals("C")) {
-    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), 0.8*fontSize);
+    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
     		 g.appendChild(circle);
     		 circle.setFill("white");
-    		 SVGElement text = new SVGText(new Real2(-0.7*fontSize, 0.7*fontSize), atom.getElementType());
+    		 SVGElement text = new SVGText(
+    				 new Real2(xOffsetFactor*fontSize, yOffsetFactor*fontSize), atom.getElementType());
     		 if (elementType.equals("N")) {
     			 fill = "blue";
     		 } else if (elementType.equals("O")) {
@@ -394,10 +389,37 @@ public class AtomTool extends AbstractTool {
     		 } else if (formalCharge <  -1) {
     			 chargeS = ""+formalCharge;
     		 }
-    		 SVGElement text = new SVGText(new Real2(0.5*fontSize, -0.2*fontSize), chargeS);
-    		 g.appendChild(text);
+    		 // skip zero charge
+    		 if (!chargeS.equals("")) {
+	    		 double chargeFontSize = chargeFontFactor*fontSize;
+	    		 Real2 chargeXY = new Real2(xChargeOffsetFactor*fontSize, yChargeOffsetFactor*fontSize);
+	    		 SVGElement circle = new SVGCircle(chargeXY, backgroundChargeRadiusFactor*chargeFontSize);
+	    		 circle.setFill("white");
+	    		 circle.setStroke("black");
+	    		 circle.setStrokeWidth(0.05);
+	    		 g.appendChild(circle);
+	    		 Real2 chargeXYd = new Real2((xChargeOffsetFactor-0.3)*(fontSize), (yChargeOffsetFactor+0.3)*(fontSize));
+	    		 SVGElement text = new SVGText(chargeXYd, chargeS);
+	    		 text.setFontSize(chargeFontSize);
+	    		 g.appendChild(text);
+    		 }
     	 }
     	 return (g.getChildElements().size() == 0) ? null : g;
      }
 
+	/**
+	 * @return the atomDisplay
+	 */
+	public AtomDisplay getAtomDisplay() {
+		return atomDisplay;
+	}
+
+	/**
+	 * @param atomDisplay the atomDisplay to set
+	 */
+	public void setAtomDisplay(AtomDisplay atomDisplay) {
+		this.atomDisplay = atomDisplay;
+	}
+
+	
 }

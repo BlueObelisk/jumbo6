@@ -2291,22 +2291,34 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     
     /** test display.
      * 
-     * @param infile
-     * @param outfile
+     * @param args
      * @throws Exception
      */
-    public static void testSVG(String infile, String outfile) throws Exception {
-    	InputStream is = Util.getInputStreamFromResource(infile);
-    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
-    	FileOutputStream fos = new FileOutputStream(outfile);
-    	SVGElement g = new MoleculeTool(molecule).
-    	    createSVG(MoleculeDisplay.getDEFAULT());
-    	int indent = 2;
-    	SVGSVG svg = new SVGSVG();
-    	svg.appendChild(g);
-    	CMLUtil.debug(svg, fos, indent);
-    	fos.close();
-    	System.out.println("wrote SVG "+outfile);
+    public static void testSVG(String[] args) throws Exception {
+    	if (args.length < 3 ) {
+    		System.out.println("SVG infile outfile");
+    	} else {
+    		String infile = args[1];
+    		String outfile = args[2];
+	    	InputStream is = Util.getInputStreamFromResource(infile);
+	    	System.out.println("reading CML "+infile);
+	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
+	    	FileOutputStream fos = new FileOutputStream(outfile);
+	    	SVGElement g = new MoleculeTool(molecule).
+	    	    createSVG(MoleculeDisplay.getDEFAULT());
+	    	int indent = 2;
+	    	SVGSVG svg = new SVGSVG();
+	    	svg.appendChild(g);
+	    	CMLUtil.debug(svg, fos, indent);
+	    	fos.close();
+	    	System.out.println("wrote SVG "+outfile);
+    	}
+    }
+    
+    static void usage() {
+    	System.out.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");
+    	System.out.println("... options ...");
+    	System.out.println("-SVG inputfile outputfile <options>");
     }
     
     /** main
@@ -2315,8 +2327,12 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-    	if (args.length == 2) {
-    		testSVG(args[0], args[1]);
+    	if (args.length == 0) {
+    		usage();
+    	} else {
+    		if (args[0].equalsIgnoreCase("-SVG")) {
+    			testSVG(args);
+    		}
     	}
     }
 
