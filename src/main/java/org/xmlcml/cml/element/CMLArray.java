@@ -136,7 +136,7 @@ public class CMLArray extends AbstractArray
         if (dataType.equals(XSD_STRING)) {
             String[] ss = this.getStrings();
             ll = ss.length;
-        } else if (dataType.equals(XSD_DOUBLE)) {
+        } else if (dataType.equals(XSD_DOUBLE) || dataType.equals(FPX_REAL)) {
             try {
                 double[] ss = this.getDoubles();
                 ll = ss.length;
