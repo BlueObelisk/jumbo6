@@ -11,6 +11,7 @@ import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 
@@ -84,7 +85,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
         if (dataType.equals(XSD_STRING)) {
         } else if (dataType.equals(XSD_BOOLEAN)) {
             this.getDouble();
-        } else if (dataType.equals(XSD_DOUBLE)) {
+        } else if (XSD_DOUBLE.equals(CMLType.getNormalizedValue(dataType))) {
             this.getDouble();
         } else if (dataType.equals(XSD_INTEGER)) {
             this.getInt();

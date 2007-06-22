@@ -1469,5 +1469,32 @@ public class CMLType implements CMLConstants {
 		}
 		return s;
 	}
+	
+	/** maps datatypes onto simpler values.
+	 * mainly maps float, real, etc. to XSD_FLOAT
+	 * @param value
+	 * @return normalized value
+	 */
+	public static String getNormalizedValue(String value) {
+		String dataType = null;
+	    if (value == null || value.trim().equals("") || value.equals(XSD_STRING)) {
+	    	dataType = XSD_STRING;
+	    } else {
+	    	value = value.trim();
+	        if (value.equals(XSD_INTEGER)) {
+	        	dataType = XSD_INTEGER;
+	        } else if (
+	        		value.equals(XSD_FLOAT) ||
+	        		value.equals(FPX_REAL) ||
+	        		value.equals(XSD_DOUBLE)) {
+	        	dataType = XSD_DOUBLE;
+	        } else if (value.equals(XSD_DATE)) {
+	        	dataType = XSD_DATE;
+	        } else {
+	        	throw new CMLRuntimeException("Unknown data type: "+value);
+	        }
+	    }
+	    return dataType;
+	}
 
 }
