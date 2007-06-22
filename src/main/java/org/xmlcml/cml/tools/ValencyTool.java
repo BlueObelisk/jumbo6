@@ -24,7 +24,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  * @author pm286
  *
  */
-		
+
 public class ValencyTool extends AbstractTool {
 	/** */
 	public final static int UNKNOWN_CHARGE = 99999;
@@ -945,7 +945,7 @@ public class ValencyTool extends AbstractTool {
 	 * atoms are marked as having piElectron childrens assumes explicit
 	 * hydrogens
 	 * 
-     * @TODO refactor me!
+	 * @TODO refactor me!
 	 * @param piSystemManager
 	 * @param knownMolCharge charge on molecule provided
 	 * @return obsolete
@@ -1089,31 +1089,92 @@ public class ValencyTool extends AbstractTool {
 								List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
 								List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
 								List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
-								for (int l = 0; l < n2ComboList.size(); l++) {
-									for (int i = 0; i < n3ComboList.size(); i++) {
-										for (int j = osComboList.size()-1; j >= 0; j--) {
-											List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-											for (Integer in : n3ComboList.get(i)) {
-												CMLAtom atom = n3List.get(in);
-												atom.setFormalCharge(1);
-												chargedAtoms.add(atom);
-											}
-											for (Integer in : osComboList.get(j)) {
-												CMLAtom atom = osList.get(in);
-												atom.setFormalCharge(-1);
-												chargedAtoms.add(atom);
-											}
-											for (Integer in : n2ComboList.get(l)) {
-												CMLAtom atom = n2List.get(in);
-												atom.setFormalCharge(-1);
-												chargedAtoms.add(atom);
-											}
+								first: 
+									for (int l = 0; l < n2ComboList.size(); l++) {
+										for (int i = 0; i < n3ComboList.size(); i++) {
+											for (int j = osComboList.size()-1; j >= 0; j--) {
+												List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
+												for (Integer in : n3ComboList.get(i)) {
+													CMLAtom atom = n3List.get(in);
+													atom.setFormalCharge(1);
+													chargedAtoms.add(atom);
+												}
+												for (Integer in : osComboList.get(j)) {
+													CMLAtom atom = osList.get(in);
+													atom.setFormalCharge(-1);
+													chargedAtoms.add(atom);
+												}
+												for (Integer in : n2ComboList.get(l)) {
+													CMLAtom atom = n2List.get(in);
+													atom.setFormalCharge(-1);
+													chargedAtoms.add(atom);
+												}
 
-											// if the charge is known and the charges set on the atoms don't
-											// add up to it, then don't try to calculate the bonds and move on
-											// to the next combination
-											int fCharge = subMol.calculateFormalCharge();
-											if (knownMolCharge != UNKNOWN_CHARGE && knownMolCharge != fCharge) {
+												// if the charge is known and the charges set on the atoms don't
+												// add up to it, then don't try to calculate the bonds and move on
+												// to the next combination
+												int fCharge = subMol.calculateFormalCharge();
+												if (knownMolCharge != UNKNOWN_CHARGE && knownMolCharge != fCharge) {
+													// reset charges on charged atoms
+													for (CMLAtom atom : chargedAtoms) {
+														if (!alreadySetAtoms.contains(atom)) {
+															atom.setFormalCharge(0);
+														}
+													}
+													// reset only those bonds that were single to start with
+													for (CMLBond bond : singleBonds) {
+														bond.setOrder(CMLBond.SINGLE);
+													}
+													// reset all pi-electrons
+													Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+													for (int e = 0; e < piElectrons.size(); e++) {
+														((CMLElectron)piElectrons.get(e)).detach();
+													}
+													continue;
+												}
+
+
+												PiSystem newPiS = new PiSystem(subMolAtomList);
+												newPiS.setPiSystemManager(piSystemManager);
+												List<PiSystem> newPiSList = newPiS.generatePiSystemList();
+												int sysCount = 0;
+												boolean piRemaining = false;
+												for (PiSystem system : newPiSList) {
+													sysCount++;
+													system.identifyDoubleBonds();
+													for (CMLAtom a : system.getAtomList()) {
+														Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+														if (nodes.size() > 0) {
+															piRemaining = true;
+														}
+													}
+													if (sysCount == newPiSList.size()) {
+														// when a valid pi-system found, check whether a molecule with the same
+														// overall charge has already been found.  If so, take the system with 
+														// the fewest charged atoms.
+														if (!piRemaining) {
+															boolean add = true;
+															for (CMLMolecule m : validMolList) {
+																MoleculeTool mTool = new MoleculeTool(m);
+																if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
+																	if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
+																		finalMolList.remove(m);
+																	} else {
+																		add = false;
+																	}
+																}
+															}
+															if (add) {
+																CMLMolecule copy = (CMLMolecule)subMol.copy();
+																validMolList.add(copy);
+																finalMolList.add(copy);
+																if (system.getAtomList().size() > 10) {
+																	break first;
+																}
+															}
+														}
+													}
+												}
 												// reset charges on charged atoms
 												for (CMLAtom atom : chargedAtoms) {
 													if (!alreadySetAtoms.contains(atom)) {
@@ -1129,66 +1190,9 @@ public class ValencyTool extends AbstractTool {
 												for (int e = 0; e < piElectrons.size(); e++) {
 													((CMLElectron)piElectrons.get(e)).detach();
 												}
-												continue;
-											}
-
-
-											PiSystem newPiS = new PiSystem(subMolAtomList);
-											newPiS.setPiSystemManager(piSystemManager);
-											List<PiSystem> newPiSList = newPiS.generatePiSystemList();
-											int sysCount = 0;
-											boolean piRemaining = false;
-											for (PiSystem system : newPiSList) {
-												sysCount++;
-												system.identifyDoubleBonds();
-												for (CMLAtom a : system.getAtomList()) {
-													Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-													if (nodes.size() > 0) {
-														piRemaining = true;
-													}
-												}
-												if (sysCount == newPiSList.size()) {
-													// when a valid pi-system found, check whether a molecule with the same
-													// overall charge has already been found.  If so, take the system with 
-													// the fewest charged atoms.
-													if (!piRemaining) {
-														boolean add = true;
-														for (CMLMolecule m : validMolList) {
-															MoleculeTool mTool = new MoleculeTool(m);
-															if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
-																if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
-																	finalMolList.remove(m);
-																} else {
-																	add = false;
-																}
-															}
-														}
-														if (add) {
-															CMLMolecule copy = (CMLMolecule)subMol.copy();
-															validMolList.add(copy);
-															finalMolList.add(copy);
-														}
-													}
-												}
-											}
-											// reset charges on charged atoms
-											for (CMLAtom atom : chargedAtoms) {
-												if (!alreadySetAtoms.contains(atom)) {
-													atom.setFormalCharge(0);
-												}
-											}
-											// reset only those bonds that were single to start with
-											for (CMLBond bond : singleBonds) {
-												bond.setOrder(CMLBond.SINGLE);
-											}
-											// reset all pi-electrons
-											Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
-											for (int e = 0; e < piElectrons.size(); e++) {
-												((CMLElectron)piElectrons.get(e)).detach();
 											}
 										}
 									}
-								}
 								cAttempt:
 									if (finalMolList.size() == 0  && knownMolCharge != UNKNOWN_CHARGE) {
 										for (int l = 0; l < n2ComboList.size(); l++) {
@@ -1360,70 +1364,70 @@ public class ValencyTool extends AbstractTool {
 											}
 										}
 									}
-								if (finalMolList.size() > 0) {
-									// remember that molCharge is the charge given to the molecule from the CIF file
-									CMLMolecule theMol = null;
-									if (knownMolCharge != UNKNOWN_CHARGE && !isMetalComplex) {
-										for (CMLMolecule n : finalMolList) {
-											if (knownMolCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
-												theMol = n;
-											}
-										}
-
-									} 
-									// if theMol not set above OR part of metal complex OR no corresponding formal charge
-									if (theMol == null) {
-										if (isMetalComplex) {
-											int count = 0;
-											int currentCharge2 = 0;
+									if (finalMolList.size() > 0) {
+										// remember that molCharge is the charge given to the molecule from the CIF file
+										CMLMolecule theMol = null;
+										if (knownMolCharge != UNKNOWN_CHARGE && !isMetalComplex) {
 											for (CMLMolecule n : finalMolList) {
-												MoleculeTool nTool = new MoleculeTool(n);
-												if (count == 0) {
+												if (knownMolCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
 													theMol = n;
-													currentCharge2 = nTool.getFormalCharge();
-												} else {
-													int nCharge = nTool.getFormalCharge();
-													if (currentCharge2 < 0) {
-														if (nCharge > currentCharge2 && nCharge <= 0) {
-															currentCharge2 = nCharge;
-															theMol = n;
+												}
+											}
+
+										} 
+										// if theMol not set above OR part of metal complex OR no corresponding formal charge
+										if (theMol == null) {
+											if (isMetalComplex) {
+												int count = 0;
+												int currentCharge2 = 0;
+												for (CMLMolecule n : finalMolList) {
+													MoleculeTool nTool = new MoleculeTool(n);
+													if (count == 0) {
+														theMol = n;
+														currentCharge2 = nTool.getFormalCharge();
+													} else {
+														int nCharge = nTool.getFormalCharge();
+														if (currentCharge2 < 0) {
+															if (nCharge > currentCharge2 && nCharge <= 0) {
+																currentCharge2 = nCharge;
+																theMol = n;
+															}
+														}
+														if (currentCharge2 >= 0) {
+															if (nCharge < currentCharge2) {
+																currentCharge2 = nCharge;
+																theMol = n;
+															}
 														}
 													}
-													if (currentCharge2 >= 0) {
+													count++;
+												}
+											} else {
+												int count = 0;
+												int currentCharge2 = 0;
+												for (CMLMolecule n : finalMolList) {
+													MoleculeTool nTool = new MoleculeTool(n);
+													if (count == 0) {
+														theMol = n;
+														currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
+													} else {
+														int nCharge = (int)Math.pow(nTool.getFormalCharge(), 2);
 														if (nCharge < currentCharge2) {
 															currentCharge2 = nCharge;
 															theMol = n;
 														}
 													}
+													count++;
 												}
-												count++;
-											}
-										} else {
-											int count = 0;
-											int currentCharge2 = 0;
-											for (CMLMolecule n : finalMolList) {
-												MoleculeTool nTool = new MoleculeTool(n);
-												if (count == 0) {
-													theMol = n;
-													currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
-												} else {
-													int nCharge = (int)Math.pow(nTool.getFormalCharge(), 2);
-													if (nCharge < currentCharge2) {
-														currentCharge2 = nCharge;
-														theMol = n;
-													}
-												}
-												count++;
 											}
 										}
+										MoleculeTool theMolTool = new MoleculeTool(theMol);
+										theMolTool.copyAtomAndBondAttributesById(subMol, true);
+									} else {
+										if (hasPiElectrons) {
+											success = false;
+										}
 									}
-									MoleculeTool theMolTool = new MoleculeTool(theMol);
-									theMolTool.copyAtomAndBondAttributesById(subMol, true);
-								} else {
-									if (hasPiElectrons) {
-										success = false;
-									}
-								}
 							}
 						}
 					}
