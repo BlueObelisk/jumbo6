@@ -17,6 +17,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.interfacex.HasArraySize;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
@@ -136,7 +137,7 @@ public class CMLArray extends AbstractArray
         if (dataType.equals(XSD_STRING)) {
             String[] ss = this.getStrings();
             ll = ss.length;
-        } else if (dataType.equals(XSD_DOUBLE) || dataType.equals(FPX_REAL)) {
+        } else if (XSD_DOUBLE.equals(CMLType.getNormalizedValue(dataType))) {
             try {
                 double[] ss = this.getDoubles();
                 ll = ss.length;
@@ -353,7 +354,7 @@ public class CMLArray extends AbstractArray
      */
     public double[] getDoubles() throws CMLRuntimeException {
         double[] dd = null;
-        if (this.getDataType().equals(XSD_DOUBLE)) {
+        if (XSD_DOUBLE.equals(CMLType.getNormalizedValue(this.getDataType()))) {
             String[] ss = getSplitContent();
             dd = new double[ss.length];
             for (int i = 0; i < dd.length; i++) {
