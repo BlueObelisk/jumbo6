@@ -1821,35 +1821,37 @@ public class CMLFormula extends AbstractFormula {
 			}
 		} else {
 			String[] elementTypes = this.getElementTypes();
-			double[] counts = this.getCounts();
-			for (int i = 0; i < elementTypes.length; i++) {
-				w.write(elementTypes[i]);
-				double d = counts[i];
-				int c = (int) Math.round(d);
-				String countS = S_EMPTY;
-				if (Math.abs(d - c) < EPS) {
-					countS = S_EMPTY+c;
-				} else {
-					countS = S_EMPTY+d;
+			if (elementTypes != null) {
+				double[] counts = this.getCounts();
+				for (int i = 0; i < elementTypes.length; i++) {
+					w.write(elementTypes[i]);
+					double d = counts[i];
+					int c = (int) Math.round(d);
+					String countS = S_EMPTY;
+					if (Math.abs(d - c) < EPS) {
+						countS = S_EMPTY+c;
+					} else {
+						countS = S_EMPTY+d;
+					}
+					if (!countS.equals("1")) {
+						w.write("<sub>"+countS+"</sub>");
+					}
 				}
-				if (!countS.equals("1")) {
-					w.write("<sub>"+countS+"</sub>");
-				}
-			}
-			if (this.getFormalChargeAttribute() != null) {
-				int fc = this.getFormalCharge();
-				int signum = Integer.signum(fc);
-				String sign = S_EMPTY;
+				if (this.getFormalChargeAttribute() != null) {
+					int fc = this.getFormalCharge();
+					int signum = Integer.signum(fc);
+					String sign = S_EMPTY;
 
-				//no need to assign S_MINUS to sign if signum is negative as the S_MINUS will be in the formalChargeAttribute
-				if (signum == 1) {
-					sign = S_PLUS;
+					//no need to assign S_MINUS to sign if signum is negative as the S_MINUS will be in the formalChargeAttribute
+					if (signum == 1) {
+						sign = S_PLUS;
+					}
+					if (fc != 0) {
+						w.write("<sup>"+fc+sign+"</sup>");
+					}
 				}
-				if (fc != 0) {
-					w.write("<sup>"+fc+sign+"</sup>");
-				}
+				w.write("</span>");
 			}
-			w.write("</span>");
 		}
 	}
 
