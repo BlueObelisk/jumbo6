@@ -520,7 +520,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits {
      */
     public double[] getDoubleArray() {
         double[] dd = null;
-        if (this.getDataType().equals(XSD_DOUBLE)) {
+        if (this.getDataType().equals(XSD_DOUBLE) || this.getDataType().equals(FPX_REAL)) {
             dd = Util.splitToDoubleArray(this.getXMLContent(), S_WHITEREGEX);
         }
         return dd;
