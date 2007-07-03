@@ -326,13 +326,21 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		}
 		return coord;
 	}
+	
+	public CMLMolecule addAllAtomsToUnitCell() {
+		return addAllAtomsToUnitCell(false, false);
+	}
+	
+	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
+		return addAllAtomsToUnitCell(includeAllCornerEdgeAndFaceAtoms, false);
+	}
 
 	/**
 	 *
 	 * @param includeAllCornerEdgeAndFaceAtoms 
 	 * @return molecule containing completed unit cell
 	 */
-	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
+	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms, boolean addTransformsToAtoms) {
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.flattenMolecules();
 		MoleculeTool mt = new MoleculeTool(molecule);
@@ -400,6 +408,12 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 					}
 					if (!inOMap) {
 						atom.setXYZFract(p3);
+						if (addTransformsToAtoms) {
+							CMLScalar t3 = new CMLScalar();
+							t3.setValue(transform.getValue());
+							t3.setDictRef("cml:transform3");
+							atom.addScalar(t3);
+						}
 						newAtomMap.put(p3, atom);
 					}
 				}
