@@ -148,15 +148,18 @@ public class Point3 implements EuclidConstants {
 
     /**
      * normalise crystallographically. shifts x, y, z so that values lie between
-     * 0.0 (inclusive) and 0.1 (exclusive) modifies this
+     * 0.0 (inclusive) and 1.0 (exclusive) modifies this
      * 
-     * @return modified point
+     * @return Vector3 corresponding to the translation vector to crystallographically normalise Point3
      */
-    public Point3 normaliseCrystallographically() {
+    public Vector3 normaliseCrystallographically() {
+    	double[] arr = new double[3];
         for (int i = 0; i < 3; i++) {
+        	double start = flarray[i];
             flarray[i] = normaliseCrystallographically(flarray[i]);
+            arr[i] = Math.round(flarray[i] - start);
         }
-        return this;
+        return new Vector3(arr);
     }
 
     private static double normaliseCrystallographically(double d) {

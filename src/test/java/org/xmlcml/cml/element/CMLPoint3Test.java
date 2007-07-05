@@ -231,19 +231,6 @@ public class CMLPoint3Test extends GeomTestBase {
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLPoint3.normaliseCrystallographically()'
-     */
-    @Test
-    public void testNormaliseCrystallographically() {
-        CMLPoint3 pp = new CMLPoint3(new double[] { 0.1, 1.2, 2.3 });
-        pp.normaliseCrystallographically();
-        // FIXME this does not work
-        // Assert.assertEquals("equals", new double[]{.1, .2, .3}, pp.getXYZ3(),
-        // EPS);
-    }
-
-    /**
-     * Test method for
      * 'org.xmlcml.cml.element.CMLPoint3.isInvariant(CMLTransform3, boolean)'
      */
     @Test

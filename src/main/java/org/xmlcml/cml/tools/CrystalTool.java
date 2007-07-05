@@ -28,6 +28,7 @@ import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
+import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
@@ -72,7 +73,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	 */
 	public final static double OCCUPANCY_EPS = 0.005;
 	/** allowed deviation in fractional */
-	public final static double FRACT_EPS = 0.005;
+	public final static double FRACT_EPS = 0.00001;
 	/** allowed deviation in hexagonal cell fractional */
 	public final static double HEXAGONAL_CELL_FRACT_EPS = 0.0001;
 
@@ -183,7 +184,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		Transform3 t3 = crystal.getOrthogonalizationTransform();
 		for (CMLAtom atom : molecule.getAtoms()) {
 			Point3 p3 = atom.getXYZFract();
-			p3 = p3.normaliseCrystallographically();
+			p3.normaliseCrystallographically();
 			atom.setXYZFract(p3);
 			Point3 newP3 = p3.transform(t3);
 			atom.setXYZ3(newP3);
@@ -218,8 +219,6 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 			if (zeroCount > 0) {
 				List<Point3> p3List = new ArrayList<Point3>();
 				if (zeroCount == 1) {
-					//System.out.println("face: "+atom.getId());
-					//System.out.println("              - "+atom.getXYZFract());
 					// atom is on a face of the unit cell
 					List<Double> dList = new ArrayList<Double>(3);
 					for (Double coord : coordArray) {
@@ -234,10 +233,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 					}
 					Point3 newP3 = new Point3(new Point3(dList.get(0), dList.get(1), dList.get(2)));
 					p3List.add(newP3);
-					//System.out.println("              + "+newP3);
 				} else if (zeroCount == 2) {
-					//System.out.println("edge: "+atom.getId());
-					//System.out.println("              - "+atom.getXYZFract());
 					// atom is on an edge of the unit cell
 					if (nonInteger == -1) throw new CMLRuntimeException("Should be one non-intger coordinate to reach this point.");
 					double[] array = {0.0, 0.0,
@@ -251,20 +247,15 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 						if (nonInteger == 0) {
 							Point3 newP3 = new Point3(coordArray[0], getCoord(firstCoord, coordArray[1]), getCoord(secondCoord, coordArray[2]));
 							p3List.add(newP3);
-							//System.out.println("              + "+newP3);
 						} else if (nonInteger == 1) {
 							Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), coordArray[1], getCoord(secondCoord, coordArray[2]));
 							p3List.add(newP3);
-							//System.out.println("              + "+newP3);
 						} else if (nonInteger == 2) {
 							Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), getCoord(secondCoord, coordArray[1]), coordArray[2]);
 							p3List.add(newP3);
-							//System.out.println("              + "+newP3);
 						}
 					}
 				} else if (zeroCount == 3) {
-					//System.out.println("corner: "+atom.getId());
-					//System.out.println("              - "+atom.getXYZFract());
 					// atom is at a corner of the unit cell
 					double[] array = {0.0, 0.0, 0.0,
 							1.0, 0.0, 0.0,
@@ -326,11 +317,11 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		}
 		return coord;
 	}
-	
+
 	public CMLMolecule addAllAtomsToUnitCell() {
 		return addAllAtomsToUnitCell(false, false);
 	}
-	
+
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
 		return addAllAtomsToUnitCell(includeAllCornerEdgeAndFaceAtoms, false);
 	}
@@ -367,7 +358,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 				Point3 originalP3 = atom.getXYZFract();
 				atom.transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
 				Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
-				p3 = p3.normaliseCrystallographically();
+				Vector3 v3 = p3.normaliseCrystallographically();
 				if (isHexagonalTransform && 
 						(originalP3.isOnNonExactHexagonalSymmetryElement() || originalP3.isOnUnitCellFaceEdgeOrCorner())) {
 					double[] array = p3.getArray();
@@ -409,10 +400,12 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 					if (!inOMap) {
 						atom.setXYZFract(p3);
 						if (addTransformsToAtoms) {
-							CMLScalar t3 = new CMLScalar();
-							t3.setValue(transform.getValue());
-							t3.setDictRef("cml:transform3");
-							atom.addScalar(t3);
+							Transform3 trans = new Transform3(transform.getMatrixAsArray());
+							trans.incrementTranslation(v3);
+							CMLScalar scalar = new CMLScalar();
+							scalar.setValue(new CMLTransform3(trans).getValue());
+							scalar.setDictRef("cml:transform3");
+							atom.addScalar(scalar);
 						}
 						newAtomMap.put(p3, atom);
 					}
@@ -680,7 +673,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 				}
 			}
 		}
-		*/
+		 */
 		return contact;
 	}
 
