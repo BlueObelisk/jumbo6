@@ -200,19 +200,6 @@ public class CMLPoint3 extends AbstractPoint3 {
     }
 
     /**
-     * normalise crystallographically. shifts x, y, z so that values lie between
-     * 0.0 (inclusive) and 0.1 (exclusive) modifies this
-     *
-     * @return point
-     */
-    public CMLPoint3 normaliseCrystallographically() {
-        Point3 peucl3 = getEuclidPoint3();
-        Point3 pp = (peucl3 == null) ? null : peucl3
-                .normaliseCrystallographically();
-        return (pp == null) ? null : new CMLPoint3(pp);
-    }
-
-    /**
      * is point invariant wrt symmetry operation.
      *
      * tolerance is decided by Real.isEqual()
