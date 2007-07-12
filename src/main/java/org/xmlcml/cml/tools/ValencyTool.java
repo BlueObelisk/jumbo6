@@ -1168,7 +1168,7 @@ public class ValencyTool extends AbstractTool {
 																CMLMolecule copy = (CMLMolecule)subMol.copy();
 																validMolList.add(copy);
 																finalMolList.add(copy);
-																if (system.getAtomList().size() > 10) {
+																if (finalMolList.size() > 5) {
 																	break first;
 																}
 															}

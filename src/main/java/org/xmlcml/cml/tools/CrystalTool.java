@@ -337,6 +337,18 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		MoleculeTool mt = new MoleculeTool(molecule);
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
 		this.normalizeCrystallographically();
+		
+		if (addTransformsToAtoms) {
+			// add unit symmetry element to all atoms in general positions
+			for (CMLAtom atom : molecule.getAtoms()) {
+				System.out.println(atom.getId());
+				CMLScalar scalar = new CMLScalar();
+				scalar.setValue(new CMLTransform3(CMLTransform3.UNIT44).getValue());
+				scalar.setDictRef("cml:transform3");
+				atom.addScalar(scalar);
+			}
+		}
+		
 		CMLElements<CMLTransform3> allSymmElements = symmetry.getTransform3Elements();
 		Map<Point3, CMLAtom> newAtomMap = new HashMap<Point3, CMLAtom>();
 		for (int i = 0; i < allSymmElements.size(); i++) {
