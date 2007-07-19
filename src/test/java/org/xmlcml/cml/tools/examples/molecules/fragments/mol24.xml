@@ -1,0 +1,71 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragmentList>
+    <fragment id='acetyl'>
+      <molecule ref='g:acetyl'/>
+    </fragment>
+    <fragment id='cl'>
+      <molecule ref='g:cl'/>
+    </fragment>
+    <fragment id='eo'>
+      <molecule ref='g:eo'/>
+    </fragment>
+    <fragment id='benzene'>
+      <molecule ref='g:benzene'/>
+    </fragment>
+    <fragment id='eE'>
+      <fragment ref='eo'/>
+      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='EE'/>
+    </fragment>
+    <fragment id='eB'>
+      <fragment ref='eo'/>
+      <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='BB'/>
+    </fragment>
+    <fragment id='EE'>
+      <fragmentList role='markushMixture'>
+	<fragment ref='eo'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.01</scalar>
+	</fragment>
+	<fragment ref='eE'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.84</scalar>
+	</fragment>
+	<fragment ref='eB'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>
+	</fragment>
+      </fragmentList>
+    </fragment>
+    <fragment id='bE'>
+      <fragment ref='benzene'/>
+      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='EE'/>
+    </fragment>
+    <fragment id='bB'>
+      <fragment ref='benzene'/>
+      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='BB'/>
+    </fragment>
+    <fragment id='BB'>
+      <fragmentList role='markushMixture'>
+	<fragment ref='benzene'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.01</scalar>
+	</fragment>
+	<fragment ref='bB'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.84</scalar>
+	</fragment>
+	<fragment ref='bE'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.15</scalar>
+	</fragment>
+      </fragmentList>
+    </fragment>
+  </fragmentList>
+
+  <fragment id='f0'>
+    <fragment ref='cl'/>
+    <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>
+    <fragment ref='EE'/>
+    <join atomRefs2='r2 r1' moleculeRefs2='PREVIOUS NEXT'/>
+    <fragment ref='acetyl'/>
+  </fragment>
+</fragment>

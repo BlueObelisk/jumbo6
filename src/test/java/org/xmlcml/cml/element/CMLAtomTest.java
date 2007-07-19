@@ -636,6 +636,27 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     }
 
     /**
+     * Test method for 'org.xmlcml.cml.element.CMLAtom.getDistanceTo(CMLAtom)'
+     */
+    @Test
+    public final void testIsWithinRadiusSum() {
+    	CMLAtom atom0 = new CMLAtom("a0");
+    	atom0.setElementType("C");
+    	CMLAtom atom1 = new CMLAtom("a1");
+    	atom1.setElementType("O");
+        boolean b = atom0.isWithinRadiusSum(atom1, ChemicalElement.RadiusType.VDW);
+        Assert.assertFalse("sum", b);
+        atom0.setPoint3(new Point3(0.,0.,0.), CoordinateType.CARTESIAN);
+        atom1.setPoint3(new Point3(2.,0.,0.), CoordinateType.CARTESIAN);
+        b = atom0.isWithinRadiusSum(atom1, ChemicalElement.RadiusType.VDW);
+        Assert.assertTrue("sum", b);
+        atom1.setPoint3(new Point3(4.,0.,0.), CoordinateType.CARTESIAN);
+        b = atom0.isWithinRadiusSum(atom1, ChemicalElement.RadiusType.VDW);
+        Assert.assertFalse("sum", b);
+        
+    }
+
+    /**
      * Test method for 'org.xmlcml.cml.element.CMLAtom.roundCoords(double)'
      */
     @Test

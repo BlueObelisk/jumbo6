@@ -1,0 +1,49 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragmentList>
+    <fragment id='eo'>
+      <molecule ref='g:eo'/>
+    </fragment>
+    <fragment id='po'>
+      <molecule ref='g:po'/>
+    </fragment>
+    <fragment id='eocl'>
+      <fragment>
+	<molecule ref='g:eo'/>
+      </fragment>
+      <join moleculeRefs2='PREVIOUS NEXT' atomRefs2='r1 r1'/>
+      <fragment>
+	<molecule ref='g:cl'/>
+      </fragment>
+    </fragment>
+    <fragment id='eopoeo'>
+      <fragment ref='eo'/>
+      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='po'/>
+      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='eo'/>
+    </fragment>
+  </fragmentList>
+  <fragment>
+    <molecule ref='g:triazene'>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='po'/>
+	</fragment>
+      </join>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='eocl'/>
+	</fragment>
+      </join>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='eopoeo'/>
+	</fragment>
+      </join>
+    </molecule>
+  </fragment>
+</fragment>

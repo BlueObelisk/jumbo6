@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-complete" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="2pyr_1">
+    <atomArray>
+      <atom elementType="C" x3="0.9130440201297267" y3="2.8881300000000003" z3="24.75205498269886" id="2pyr_1_a1">
+        <label dictRef="cml:torsionEnd">r6</label>
+      </atom> 
+      <atom elementType="C" x3="0.6710034793604291" y3="1.5629880000000003" z3="24.99245916290205" id="2pyr_1_a2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="R" x3="1.0407687745715524" y3="1.0167533171021161" z3="24.595217048245413" id="2pyr_1_r2"> </atom>
+      <atom elementType="N" x3="0.2765492911364054" y3="3.8757572000000002" z3="25.381508959946053" id="2pyr_1_a3">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="-0.2506677283610746" y3="1.2254732000000002" z3="25.965836532665875" id="2pyr_1_a4">
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="R" x3="-0.3812304106029923" y3="0.48743690707544074" z3="26.14234663530017" id="2pyr_1_r4"> </atom>
+      <atom elementType="C" x3="-0.9274226661160216" y3="2.2244264" z3="26.61004448473895" id="2pyr_1_a5">
+        <label dictRef="cml:torsionEnd">r4</label>
+      </atom>
+      <atom elementType="R" x3="-1.4642755092148265" y3="2.0584636784491517" z3="27.136490493283194" id="2pyr_1_r5"> </atom>
+      <atom elementType="C" x3="-0.638411881791494" y3="3.5031318000000002" z3="26.308615162238905" id="2pyr_1_a6">
+        <label dictRef="cml:torsionEnd">r5</label>
+      </atom>
+      <atom elementType="R" x3="-1.0162393566378534" y3="4.057405011259368" z3="26.686672838435875" id="2pyr_1_r6"> </atom>
+      <atom elementType="C" id="benzene_2_a1" x3="1.9134044499930045" y3="4.779322854745493" z3="23.401718866756852">
+        <label dictRef="cml:torsionEnd">r6</label>
+      </atom>
+      <atom elementType="R" id="benzene_2_r1" x3="1.4274846777630092" y3="5.253593983545907" z3="23.764828865713547"/>
+      <atom elementType="C" id="benzene_2_a2" x3="1.9146811645262725" y3="3.3888780441460686" z3="23.694901054810863">
+        <label dictRef="cml:torsionEnd">r1</label> 
+      </atom>
+      <atom elementType="C" id="benzene_2_a6" x3="2.86406756831792" y3="5.221300392145023" z3="22.439429551597364">
+        <label dictRef="cml:torsionEnd">r5</label>
+      </atom>
+      <atom elementType="R" id="benzene_2_r6" x3="2.907791535984223" y3="5.983430251237611" z3="22.338700744739405"/>
+      <atom elementType="C" id="benzene_2_a3" x3="2.811972505936997" y3="2.5296322997947955" z3="23.040730739139857">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" id="benzene_2_a4" x3="3.7050999055672755" y3="3.0009933793723422" z3="22.11810505005718">
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="C" id="benzene_2_a5" x3="3.7319209177744277" y3="4.381623993310667" z3="21.821418763688317">
+        <label dictRef="cml:torsionEnd">r4</label>
+      </atom>
+      <atom elementType="R" id="benzene_2_r5" x3="4.237610230082442" y3="4.657551188339373" z3="21.310495577229688"/>
+      <atom elementType="C" id="po_3_a2" x3="2.7896830871486165" y3="1.025100911570407" z3="23.368585102627176"/>
+      <atom elementType="C" id="po_3_a3" x3="1.3977759281552669" y3="0.4594498903611599" z3="23.077326827297533">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" id="po_3_a4" x3="0.3488797059599986" y3="1.2668578061538396" z3="23.843433982061025"/>
+      <atom elementType="O" id="po_3_a5" x3="1.1335024584424414" y3="0.5451304077299939" z3="21.674846031653846"/>
+      <atom elementType="H" id="po_3_a7" x3="3.527146672970428" y3="0.5085439782908068" z3="22.754439847603894"/>
+      <atom elementType="H" id="po_3_a8" x3="3.0270886431800004" y3="0.8793908720974519" z3="24.421913250149217"/>
+      <atom elementType="H" id="po_3_a9" x3="1.3561124227979136" y3="-0.5831935029060953" z3="23.391481099586613"/>
+      <atom elementType="H" id="po_3_a10" x3="-0.642482892629459" y3="0.864338840719004" z3="23.636002835452746"/>
+      <atom elementType="H" id="po_3_a11" x3="0.5496600777330873" y3="1.2020220557179957" z3="24.913222544243332"/>
+      <atom elementType="H" id="po_3_a12" x3="0.3905432113173517" y3="2.309501199421095" z3="23.52927970977195"/>
+      <atom elementType="R" id="po_3_r2" x3="0.465954749614784" y3="0.2692113053961904" z3="21.56925860150114"/>
+      <atom elementType="C" xFract="0.9966" yFract="0.38915" zFract="0.12895" formalCharge="0" hydrogenCount="0" id="acetyl_4_a71" x3="4.667333890346795" y3="2.002495401534097" z3="21.448248687253738"/>
+      <atom elementType="O" xFract="1.0168" yFract="0.33492" zFract="0.15894" formalCharge="0" hydrogenCount="0" id="acetyl_4_a72" x3="4.464268196906201" y3="0.8363713781134425" z3="21.361657405013545">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="C" xFract="1.1216" yFract="0.45146" zFract="0.13125" formalCharge="0" hydrogenCount="0" id="acetyl_4_a73" x3="5.872872751064367" y3="2.7171786824991018" z3="20.947763496328008"/>
+      <atom elementType="H" xFract="1.2394" yFract="0.4318" zFract="0.1298" formalCharge="0" hydrogenCount="0" id="acetyl_4_a74" x3="6.05080305049709" y3="2.3727086426610393" z3="20.069290568246164"/>
+      <atom elementType="H" xFract="1.1125" yFract="0.476" zFract="0.1716" formalCharge="0" hydrogenCount="0" id="acetyl_4_a75" x3="6.60719062096423" y3="2.5059695057987366" z3="21.529458386884365"/>
+      <atom elementType="H" xFract="1.0988" yFract="0.4849" zFract="0.0963" formalCharge="0" hydrogenCount="0" id="acetyl_4_a76" x3="5.764764645101332" y3="3.670237577412034" z3="20.903196561031553"/>
+    </atomArray>
+    <bondArray> 
+      <bond order="2" id="2pyr_1_a1_2pyr_1_a2" atomRefs2="2pyr_1_a1 2pyr_1_a2"/>
+      <bond order="1" id="2pyr_1_a1_2pyr_1_a3" atomRefs2="2pyr_1_a1 2pyr_1_a3"/>
+      <bond order="1" id="2pyr_1_a2_2pyr_1_r2" atomRefs2="2pyr_1_a2 2pyr_1_r2"/>
+      <bond order="1" id="2pyr_1_a2_2pyr_1_a4" atomRefs2="2pyr_1_a2 2pyr_1_a4"/>
+      <bond order="2" id="2pyr_1_a6_2pyr_1_a3" atomRefs2="2pyr_1_a6 2pyr_1_a3"/>
+      <bond order="1" id="2pyr_1_a4_2pyr_1_r4" atomRefs2="2pyr_1_a4 2pyr_1_r4"/>
+      <bond order="2" id="2pyr_1_a4_2pyr_1_a5" atomRefs2="2pyr_1_a4 2pyr_1_a5"/>
+      <bond order="1" id="2pyr_1_a5_2pyr_1_r5" atomRefs2="2pyr_1_a5 2pyr_1_r5"/>
+      <bond order="1" id="2pyr_1_a5_2pyr_1_a6" atomRefs2="2pyr_1_a5 2pyr_1_a6"/>
+      <bond order="1" id="2pyr_1_a6_2pyr_1_r6" atomRefs2="2pyr_1_a6 2pyr_1_r6"/>
+      <bond order="1" id="benzene_2_a1_benzene_2_r1" atomRefs2="benzene_2_a1 benzene_2_r1"/>
+      <bond order="2" id="benzene_2_a1_benzene_2_a2" atomRefs2="benzene_2_a1 benzene_2_a2"/>
+      <bond order="1" id="benzene_2_a1_benzene_2_a6" atomRefs2="benzene_2_a1 benzene_2_a6"/>
+      <bond order="1" id="benzene_2_a3_benzene_2_a2" atomRefs2="benzene_2_a3 benzene_2_a2"/>
+      <bond order="1" id="benzene_2_r6_benzene_2_a6" atomRefs2="benzene_2_r6 benzene_2_a6"/>
+      <bond order="2" id="benzene_2_a5_benzene_2_a6" atomRefs2="benzene_2_a5 benzene_2_a6"/>
+      <bond order="2" id="benzene_2_a3_benzene_2_a4" atomRefs2="benzene_2_a3 benzene_2_a4"/>
+      <bond order="1" id="benzene_2_a5_benzene_2_a4" atomRefs2="benzene_2_a5 benzene_2_a4"/>
+      <bond order="1" id="benzene_2_a5_benzene_2_r5" atomRefs2="benzene_2_a5 benzene_2_r5"/>
+      <bond atomRefs2="2pyr_1_a1 benzene_2_a2" order="S" id="2pyr_1_a1_benzene_2_a2"/>
+      <bond order="1" id="po_3_a2_po_3_a3" atomRefs2="po_3_a2 po_3_a3"/>
+      <bond order="1" id="po_3_a2_po_3_a7" atomRefs2="po_3_a2 po_3_a7"/>
+      <bond order="1" id="po_3_a2_po_3_a8" atomRefs2="po_3_a2 po_3_a8"/>
+      <bond order="1" id="po_3_a3_po_3_a4" atomRefs2="po_3_a3 po_3_a4"/>
+      <bond order="1" id="po_3_a3_po_3_a5" atomRefs2="po_3_a3 po_3_a5"/>
+      <bond order="1" id="po_3_a3_po_3_a9" atomRefs2="po_3_a3 po_3_a9"/>
+      <bond order="1" id="po_3_a4_po_3_a10" atomRefs2="po_3_a4 po_3_a10"/>
+      <bond order="1" id="po_3_a4_po_3_a11" atomRefs2="po_3_a4 po_3_a11"/>
+      <bond order="1" id="po_3_a4_po_3_a12" atomRefs2="po_3_a4 po_3_a12"/>
+      <bond order="1" id="po_3_a5_po_3_r2" atomRefs2="po_3_a5 po_3_r2"/>
+      <bond atomRefs2="benzene_2_a3 po_3_a2" order="S" id="benzene_2_a3_po_3_a2"/>
+      <bond order="D" id="acetyl_4_a71_acetyl_4_a72" atomRefs2="acetyl_4_a71 acetyl_4_a72"/>
+      <bond order="S" id="acetyl_4_a71_acetyl_4_a73" atomRefs2="acetyl_4_a71 acetyl_4_a73"/>
+      <bond order="S" id="acetyl_4_a73_acetyl_4_a74" atomRefs2="acetyl_4_a73 acetyl_4_a74"/>
+      <bond order="S" id="acetyl_4_a73_acetyl_4_a75" atomRefs2="acetyl_4_a73 acetyl_4_a75"/>
+      <bond order="S" id="acetyl_4_a73_acetyl_4_a76" atomRefs2="acetyl_4_a73 acetyl_4_a76"/>
+      <bond atomRefs2="benzene_2_a4 acetyl_4_a71" order="S" id="benzene_2_a4_acetyl_4_a71"/>
+    </bondArray>
+    <torsion id="po_3_tor2" atomRefs4="po_3_a2 po_3_a3 po_3_a5 po_3_r2"/>
+    <torsion id="po_3_tor1" atomRefs4="po_3_r1 po_3_a2 po_3_a3 po_3_a5"/>
+    <angle id="po_3_ang352" atomRefs3="po_3_a3 po_3_a5 po_3_r2"/>
+    <angle id="po_3_ang123" atomRefs3="po_3_r1 po_3_a2 po_3_a3"/>
+    <angle id="po_3_ang234" atomRefs3="po_3_a2 po_3_a3 po_3_a4"/>
+    <length id="po_3_len23" atomRefs2="po_3_a2 po_3_a3"/>
+  </molecule>
+</fragment>

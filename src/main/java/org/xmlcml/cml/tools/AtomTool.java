@@ -9,6 +9,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
@@ -29,11 +30,13 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class AtomTool extends AbstractTool {
 
-    CMLAtom atom;
-    CMLMolecule molecule;
-    MoleculeTool moleculeTool;
-    Logger logger = Logger.getLogger(AtomTool.class.getName());
+    private CMLAtom atom;
+    private CMLMolecule molecule;
+    private MoleculeTool moleculeTool;
+    private Logger logger = Logger.getLogger(AtomTool.class.getName());
     private AtomDisplay atomDisplay;
+    private List<CMLAtomSet> coordinationSphereList;
+    private CMLAtomSet coordinationSphereSet;
 
     /**
      * constructor
@@ -94,7 +97,77 @@ public class AtomTool extends AbstractTool {
         return sortedList;
     }
 
+     
     /**
+     * lazy evaluation
+     * @param depth 0 = atom itself, 1 = first coord sphere...
+	 */
+	private void ensureCoordinationSphereList(int depth) {
+		if (coordinationSphereList == null) {
+			coordinationSphereList = new ArrayList<CMLAtomSet>();
+			CMLAtomSet atomSet = new CMLAtomSet();
+			atomSet.addAtom(atom);
+			coordinationSphereList.add(atomSet);
+		}
+		if (coordinationSphereList.size() < depth+1) {
+			ensureCoordinationSphereList(depth-1);
+			CMLAtomSet nextLigandSphereSet = new CMLAtomSet();
+			coordinationSphereList.add(nextLigandSphereSet);
+			CMLAtomSet outerAtomSet = coordinationSphereList.get(depth-1);
+			List<CMLAtom> outerAtomList = outerAtomSet.getAtoms();
+			CMLAtomSet innerAtomSet = (depth <= 1) ? null : coordinationSphereList.get(depth-1);
+			for (CMLAtom rootAtom : outerAtomList) {
+				List<CMLAtom> ligandList = rootAtom.getLigandAtoms();
+				for (CMLAtom ligand : ligandList) {
+					// atom already in outer sphere
+					if (outerAtomSet.contains(ligand)) {
+						continue;
+					}
+					// or in inner sphere?
+					if (innerAtomSet != null && innerAtomSet.contains(ligand)) {
+						continue;
+					}
+					// form next sphere
+					nextLigandSphereSet.addAtom(ligand);
+				}
+				coordinationSphereSet = null;
+			}
+		}
+	}
+
+    /**
+     * @param depth 0 = atom itself, 1 = first coord sphere...
+	 * @return the coordinationSphereList
+	 */
+	public List<CMLAtomSet> getCoordinationSphereList(int depth) {
+		ensureCoordinationSphereList(depth);
+		return coordinationSphereList;
+	}
+
+	/**
+	 * reset to null
+	 */
+	public void resetCoordinationSphereList() {
+		this.coordinationSphereList = null;
+	}
+
+    /**
+     * always recalculated
+     * @param depth 0 = atom itself, 1 = first coord sphere...
+	 * @return the coordinationSphereList
+	 */
+	public CMLAtomSet getCoordinationSphereSet(int depth) {
+		ensureCoordinationSphereList(depth);
+		// always recalculate - slower but safer
+		coordinationSphereSet = new CMLAtomSet();
+		for (int iSphere = 0; iSphere <= depth; iSphere++) {
+			CMLAtomSet atomSet = coordinationSphereList.get(iSphere);
+			coordinationSphereSet.addAtomSet(atomSet);
+		}
+		return coordinationSphereSet;
+	}
+
+	/**
      * Computes a ligand list and sorts the ligands in it by atomic number if
      * two ligands have the same atomic number their order is unchanged.
      * 
@@ -128,13 +201,26 @@ public class AtomTool extends AbstractTool {
     }
 
      /** convenience method to get single atom ligand.
-      * useful for R graoups know to have single attachment
+      * useful for R groups know to have single attachment
       * @return the single atom (null if zero or > 1 ligands
       */
     public CMLAtom getSingleLigand() {
          List<CMLAtom> ligands = atom.getLigandAtoms();
          return (ligands.size() != 1) ? null : ligands.get(0);
-     }
+    }
+
+    /** gets sphere of atoms - topological depth
+     * 
+     * @param depth
+     * @return atom set
+     */
+    public CMLAtomSet getSproutedSet(int depth) {
+    	CMLAtomSet atomSet = new CMLAtomSet();
+    	for (int d = 0; d < depth; d++) {
+    		//
+    	}
+    	return atomSet;
+    }
 
      
     /**

@@ -128,7 +128,7 @@ public class BondTool extends AbstractTool {
 	}
 	
 	/**
-	 * 
+	 * @param atomDisplay
 	 * @return true =>omit
 	 */
 	public boolean omitFromDisplay(AtomDisplay atomDisplay) {

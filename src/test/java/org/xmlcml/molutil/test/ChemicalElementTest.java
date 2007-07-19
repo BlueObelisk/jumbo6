@@ -255,7 +255,7 @@ public class ChemicalElementTest extends BaseTest {
     public void testGetAtomicRadius() {
         ChemicalElement el = ChemicalElement.getChemicalElement("C");
         double en = el.getVDWRadius();
-        Assert.assertEquals("get", 2.0, en, EPS);
+        Assert.assertEquals("get", 1.7, en, EPS);
     }
 
     /**
@@ -277,7 +277,7 @@ public class ChemicalElementTest extends BaseTest {
     public void testGetVDWRadius() {
         ChemicalElement el = ChemicalElement.getChemicalElement("C");
         double en = el.getVDWRadius();
-        Assert.assertEquals("get", 2.0, en, EPS);
+        Assert.assertEquals("get", 1.7, en, EPS);
     }
 
     /**

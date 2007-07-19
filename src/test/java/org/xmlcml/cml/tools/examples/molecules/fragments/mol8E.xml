@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-explicit" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="triazene_1">
+    <atomArray>
+      <atom elementType="N" x3="0.2765492911364054" y3="3.8757572000000002" z3="25.381508959946053" id="triazene_1_a1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.9130440201297267" y3="2.8881300000000003" z3="24.75205498269886" id="triazene_1_a2"> </atom>
+      <atom elementType="R" x3="1.413862592327999" y3="3.1385040220730342" z3="24.22347801875486" id="triazene_1_r2"> </atom>
+      <atom elementType="N" x3="0.6710034793604291" y3="1.5629880000000003" z3="24.99245916290205" id="triazene_1_a3">
+        <label dictRef="cml:torsionEnd">r4</label>
+      </atom>
+      <atom elementType="C" x3="-0.2506677283610746" y3="1.2254732000000002" z3="25.965836532665875" id="triazene_1_a4"> </atom>
+      <atom elementType="R" x3="-0.3812304106029923" y3="0.48743690707544074" z3="26.14234663530017" id="triazene_1_r4"> </atom>
+      <atom elementType="N" x3="-0.9274226661160216" y3="2.2244264" z3="26.61004448473895" id="triazene_1_a5">
+        <label dictRef="cml:torsionEnd">r6</label>
+      </atom>
+      <atom elementType="C" x3="-0.638411881791494" y3="3.5031318000000002" z3="26.308615162238905" id="triazene_1_a6">
+        <label dictRef="cml:torsionEnd">r5</label>
+      </atom>
+      <atom elementType="R" x3="-1.0162393566378534" y3="4.057405011259368" z3="26.686672838435875" id="triazene_1_r6"> </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="triazene_1_a1_triazene_1_a2" atomRefs2="triazene_1_a1 triazene_1_a2"/>
+      <bond order="2" id="triazene_1_a2_triazene_1_a3" atomRefs2="triazene_1_a2 triazene_1_a3"/>
+      <bond order="1" id="triazene_1_a3_triazene_1_a4" atomRefs2="triazene_1_a3 triazene_1_a4"/>
+      <bond order="2" id="triazene_1_a4_triazene_1_a5" atomRefs2="triazene_1_a4 triazene_1_a5"/>
+      <bond order="1" id="triazene_1_a5_triazene_1_a6" atomRefs2="triazene_1_a5 triazene_1_a6"/>
+      <bond order="2" id="triazene_1_a6_triazene_1_a1" atomRefs2="triazene_1_a6 triazene_1_a1"/>
+      <bond order="1" id="triazene_1_r2_triazene_1_a2" atomRefs2="triazene_1_r2 triazene_1_a2"/>
+      <bond order="1" id="triazene_1_a4_triazene_1_r4" atomRefs2="triazene_1_a4 triazene_1_r4"/>
+      <bond order="1" id="triazene_1_a6_triazene_1_r6" atomRefs2="triazene_1_a6 triazene_1_r6"/>
+    </bondArray>
+    <join atomRefs2="g:triazene_1_r2 g:benzene_2_r1" moleculeRefs2="g:triazene_1 g:benzene_2" order="S">
+      <torsion>45</torsion>
+      <molecule role="fragment" id="benzene_2">
+        <atomArray>
+          <atom elementType="C" x3="9.526706134000763" y3="3.869733600000001" z3="5.213518402229052" id="benzene_2_a1">
+            <label dictRef="cml:torsionEnd">r6</label>
+          </atom>
+          <atom elementType="R" x3="9.59902744852545" y3="4.430492482197403" z3="4.690814754353756" id="benzene_2_r1"/>
+          <atom elementType="C" x3="10.243299413197152" y3="3.932398500000001" z3="6.439022942911609" id="benzene_2_a2">
+            <label dictRef="cml:torsionEnd">r1</label>
+          </atom>
+          <atom elementType="C" x3="8.713504556428543" y3="2.7185301000000006" z3="5.01720505576243" id="benzene_2_a6">
+            <label dictRef="cml:torsionEnd">r5</label>
+          </atom>
+          <atom elementType="R" x3="8.385888936961882" y3="2.655387420737078" z3="4.323244676535362" id="benzene_2_r6"/>
+          <atom elementType="C" x3="10.119474056141831" y3="2.9008920000000007" z3="7.3834992125284815" id="benzene_2_a3">
+            <label dictRef="cml:torsionEnd">r2</label>
+          </atom>
+          <atom elementType="R" x3="10.509388371349742" y3="2.947556560950007" z3="8.045835415334345" id="benzene_2_r3"/>
+          <atom elementType="C" x3="9.320371405363035" y3="1.8151698000000005" z3="7.151684115065878" id="benzene_2_a4">
+            <label dictRef="cml:torsionEnd">r3</label>
+          </atom>
+          <atom elementType="R" x3="9.280916015724046" y3="1.2657016684721403" z3="7.6896692864820775" id="benzene_2_r4"/>
+          <atom elementType="C" x3="8.610030693701125" y3="1.7243409000000007" z3="5.934289686115539" id="benzene_2_a5">
+            <label dictRef="cml:torsionEnd">r4</label>
+          </atom>
+          <atom elementType="R" x3="8.16522311995263" y3="1.112386804675892" z3="5.790907652540795" id="benzene_2_r5"/>
+          <atom elementType="R" x3="10.697234803620145" y3="4.543958438540135" z3="6.552323882423661" id="benzene_2_r2"/>
+        </atomArray>
+        <bondArray>
+          <bond order="1" id="benzene_2_a1_benzene_2_r1" atomRefs2="benzene_2_a1 benzene_2_r1"/>
+          <bond order="2" id="benzene_2_a1_benzene_2_a2" atomRefs2="benzene_2_a1 benzene_2_a2"/>
+          <bond order="1" id="benzene_2_a1_benzene_2_a6" atomRefs2="benzene_2_a1 benzene_2_a6"/>
+          <bond order="1" id="benzene_2_a3_benzene_2_a2" atomRefs2="benzene_2_a3 benzene_2_a2"/>
+          <bond order="1" id="benzene_2_a2_benzene_2_r2" atomRefs2="benzene_2_a2 benzene_2_r2"/>
+          <bond order="1" id="benzene_2_r6_benzene_2_a6" atomRefs2="benzene_2_r6 benzene_2_a6"/>
+          <bond order="2" id="benzene_2_a5_benzene_2_a6" atomRefs2="benzene_2_a5 benzene_2_a6"/>
+          <bond order="1" id="benzene_2_a3_benzene_2_r3" atomRefs2="benzene_2_a3 benzene_2_r3"/>
+          <bond order="2" id="benzene_2_a3_benzene_2_a4" atomRefs2="benzene_2_a3 benzene_2_a4"/>
+          <bond order="1" id="benzene_2_a5_benzene_2_a4" atomRefs2="benzene_2_a5 benzene_2_a4"/>
+          <bond order="1" id="benzene_2_a4_benzene_2_r4" atomRefs2="benzene_2_a4 benzene_2_r4"/>
+          <bond order="1" id="benzene_2_a5_benzene_2_r5" atomRefs2="benzene_2_a5 benzene_2_r5"/>
+        </bondArray>
+      </molecule>
+    </join>
+  </molecule>
+</fragment>

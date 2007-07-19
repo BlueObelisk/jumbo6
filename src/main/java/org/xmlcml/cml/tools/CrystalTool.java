@@ -28,7 +28,6 @@ import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
-import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
@@ -318,10 +317,21 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		return coord;
 	}
 
+	/** expand atoms by symmetry
+	 * use defaults false, false
+	 * alters current molecule
+	 * 
+	 * @return molecule
+	 */
 	public CMLMolecule addAllAtomsToUnitCell() {
 		return addAllAtomsToUnitCell(false, false);
 	}
 
+	/** expand atoms by symmetry
+	 * alters current molecule
+	 * @param includeAllCornerEdgeAndFaceAtoms
+	 * @return molecule
+	 */
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms) {
 		return addAllAtomsToUnitCell(includeAllCornerEdgeAndFaceAtoms, false);
 	}
@@ -329,6 +339,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	/**
 	 *
 	 * @param includeAllCornerEdgeAndFaceAtoms 
+	 * @param addTransformsToAtoms
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms, boolean addTransformsToAtoms) {

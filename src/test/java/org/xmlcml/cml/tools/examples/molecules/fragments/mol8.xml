@@ -1,0 +1,17 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragment>
+    <molecule ref='g:triazene'>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r1'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment>
+	    <molecule ref='g:benzene'>
+	    </molecule>
+	  </fragment>
+	</fragment>
+      </join>
+    </molecule>
+  </fragment>
+</fragment>
+

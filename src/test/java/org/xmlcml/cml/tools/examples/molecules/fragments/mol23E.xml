@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-explicit" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="acetyl_1">
+    <atomArray>
+      <atom elementType="R" xFract="0.853" yFract="0.40329" zFract="0.08749" formalCharge="0" hydrogenCount="0" x3="6.858584288887507" y3="7.368205459562712" z3="1.672120540673427" id="acetyl_1_r1"/>
+      <atom elementType="C" x3="7.470354790502688" y3="7.21912165" z3="2.1153032017509776" xFract="0.9966" yFract="0.38915" zFract="0.12895" formalCharge="0" hydrogenCount="0" id="acetyl_1_a71"/>
+      <atom elementType="O" x3="7.621770771606594" y3="6.2131009200000005" z3="2.7265105769419966" xFract="1.0168" yFract="0.33492" zFract="0.15894" formalCharge="0" hydrogenCount="0" id="acetyl_1_a72">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="C" x3="8.407334871591223" y3="8.375034459999998" z3="2.09259931555679" xFract="1.1216" yFract="0.45146" zFract="0.13125" formalCharge="0" hydrogenCount="0" id="acetyl_1_a73"/>
+      <atom elementType="H" x3="9.290344900009062" y3="8.0103218" z3="1.9961034580073869" xFract="1.2394" yFract="0.4318" zFract="0.1298" formalCharge="0" hydrogenCount="0" id="acetyl_1_a74"/>
+      <atom elementType="H" x3="8.339122721687978" y3="8.830276" z3="2.9353942128717265" xFract="1.1125" yFract="0.476" zFract="0.1716" formalCharge="0" hydrogenCount="0" id="acetyl_1_a75"/>
+      <atom elementType="H" x3="8.236429704800676" y3="8.9953799" z3="1.3798877395986096" xFract="1.0988" yFract="0.4849" zFract="0.0963" formalCharge="0" hydrogenCount="0" id="acetyl_1_a76"/>
+    </atomArray>
+    <bondArray>
+      <bond order="S" id="acetyl_1_r1_acetyl_1_a71" atomRefs2="acetyl_1_r1 acetyl_1_a71"/>
+      <bond order="D" id="acetyl_1_a71_acetyl_1_a72" atomRefs2="acetyl_1_a71 acetyl_1_a72"/>
+      <bond order="S" id="acetyl_1_a71_acetyl_1_a73" atomRefs2="acetyl_1_a71 acetyl_1_a73"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a74" atomRefs2="acetyl_1_a73 acetyl_1_a74"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a75" atomRefs2="acetyl_1_a73 acetyl_1_a75"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a76" atomRefs2="acetyl_1_a73 acetyl_1_a76"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:acetyl_1_r1 g:eo_2_r2" moleculeRefs2="g:acetyl_1 g:eo_2" order="S"/>
+  <molecule role="fragment" id="eo_2">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_2_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_2_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_2_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_2_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_2_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_2_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_2_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_2_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_2_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_2_r1_eo_2_a2" atomRefs2="eo_2_r1 eo_2_a2"/>
+      <bond order="1" id="eo_2_a2_eo_2_a3" atomRefs2="eo_2_a2 eo_2_a3"/>
+      <bond order="1" id="eo_2_a2_eo_2_a6" atomRefs2="eo_2_a2 eo_2_a6"/>
+      <bond order="1" id="eo_2_a2_eo_2_a7" atomRefs2="eo_2_a2 eo_2_a7"/>
+      <bond order="1" id="eo_2_a3_eo_2_a4" atomRefs2="eo_2_a3 eo_2_a4"/>
+      <bond order="1" id="eo_2_a3_eo_2_a8" atomRefs2="eo_2_a3 eo_2_a8"/>
+      <bond order="1" id="eo_2_a3_eo_2_a9" atomRefs2="eo_2_a3 eo_2_a9"/>
+      <bond order="1" id="eo_2_a4_eo_2_r2" atomRefs2="eo_2_a4 eo_2_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_2_r1 g:eo_3_r2" moleculeRefs2="g:eo_2 g:eo_3" order="S"/>
+  <molecule role="fragment" id="eo_3">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_3_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_3_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_3_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_3_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_3_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_3_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_3_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_3_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_3_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_3_r1_eo_3_a2" atomRefs2="eo_3_r1 eo_3_a2"/>
+      <bond order="1" id="eo_3_a2_eo_3_a3" atomRefs2="eo_3_a2 eo_3_a3"/>
+      <bond order="1" id="eo_3_a2_eo_3_a6" atomRefs2="eo_3_a2 eo_3_a6"/>
+      <bond order="1" id="eo_3_a2_eo_3_a7" atomRefs2="eo_3_a2 eo_3_a7"/>
+      <bond order="1" id="eo_3_a3_eo_3_a4" atomRefs2="eo_3_a3 eo_3_a4"/>
+      <bond order="1" id="eo_3_a3_eo_3_a8" atomRefs2="eo_3_a3 eo_3_a8"/>
+      <bond order="1" id="eo_3_a3_eo_3_a9" atomRefs2="eo_3_a3 eo_3_a9"/>
+      <bond order="1" id="eo_3_a4_eo_3_r2" atomRefs2="eo_3_a4 eo_3_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_3_r1 g:eo_4_r2" moleculeRefs2="g:eo_3 g:eo_4" order="S"/>
+  <molecule role="fragment" id="eo_4">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_4_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_4_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_4_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_4_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_4_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_4_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_4_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_4_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_4_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_4_r1_eo_4_a2" atomRefs2="eo_4_r1 eo_4_a2"/>
+      <bond order="1" id="eo_4_a2_eo_4_a3" atomRefs2="eo_4_a2 eo_4_a3"/>
+      <bond order="1" id="eo_4_a2_eo_4_a6" atomRefs2="eo_4_a2 eo_4_a6"/>
+      <bond order="1" id="eo_4_a2_eo_4_a7" atomRefs2="eo_4_a2 eo_4_a7"/>
+      <bond order="1" id="eo_4_a3_eo_4_a4" atomRefs2="eo_4_a3 eo_4_a4"/>
+      <bond order="1" id="eo_4_a3_eo_4_a8" atomRefs2="eo_4_a3 eo_4_a8"/>
+      <bond order="1" id="eo_4_a3_eo_4_a9" atomRefs2="eo_4_a3 eo_4_a9"/>
+      <bond order="1" id="eo_4_a4_eo_4_r2" atomRefs2="eo_4_a4 eo_4_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_4_r1 g:eo_5_r2" moleculeRefs2="g:eo_4 g:eo_5" order="S"/>
+  <molecule role="fragment" id="eo_5">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_5_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_5_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_5_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_5_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_5_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_5_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_5_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_5_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_5_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_5_r1_eo_5_a2" atomRefs2="eo_5_r1 eo_5_a2"/>
+      <bond order="1" id="eo_5_a2_eo_5_a3" atomRefs2="eo_5_a2 eo_5_a3"/>
+      <bond order="1" id="eo_5_a2_eo_5_a6" atomRefs2="eo_5_a2 eo_5_a6"/>
+      <bond order="1" id="eo_5_a2_eo_5_a7" atomRefs2="eo_5_a2 eo_5_a7"/>
+      <bond order="1" id="eo_5_a3_eo_5_a4" atomRefs2="eo_5_a3 eo_5_a4"/>
+      <bond order="1" id="eo_5_a3_eo_5_a8" atomRefs2="eo_5_a3 eo_5_a8"/>
+      <bond order="1" id="eo_5_a3_eo_5_a9" atomRefs2="eo_5_a3 eo_5_a9"/>
+      <bond order="1" id="eo_5_a4_eo_5_r2" atomRefs2="eo_5_a4 eo_5_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_5_r1 g:eo_6_r2" moleculeRefs2="g:eo_5 g:eo_6" order="S"/>
+  <molecule role="fragment" id="eo_6">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_6_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_6_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_6_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_6_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_6_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_6_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_6_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_6_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_6_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_6_r1_eo_6_a2" atomRefs2="eo_6_r1 eo_6_a2"/>
+      <bond order="1" id="eo_6_a2_eo_6_a3" atomRefs2="eo_6_a2 eo_6_a3"/>
+      <bond order="1" id="eo_6_a2_eo_6_a6" atomRefs2="eo_6_a2 eo_6_a6"/>
+      <bond order="1" id="eo_6_a2_eo_6_a7" atomRefs2="eo_6_a2 eo_6_a7"/>
+      <bond order="1" id="eo_6_a3_eo_6_a4" atomRefs2="eo_6_a3 eo_6_a4"/>
+      <bond order="1" id="eo_6_a3_eo_6_a8" atomRefs2="eo_6_a3 eo_6_a8"/>
+      <bond order="1" id="eo_6_a3_eo_6_a9" atomRefs2="eo_6_a3 eo_6_a9"/>
+      <bond order="1" id="eo_6_a4_eo_6_r2" atomRefs2="eo_6_a4 eo_6_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_6_r1 g:eo_7_r2" moleculeRefs2="g:eo_6 g:eo_7" order="S"/>
+  <molecule role="fragment" id="eo_7">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_7_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_7_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_7_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_7_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_7_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_7_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_7_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_7_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_7_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_7_r1_eo_7_a2" atomRefs2="eo_7_r1 eo_7_a2"/>
+      <bond order="1" id="eo_7_a2_eo_7_a3" atomRefs2="eo_7_a2 eo_7_a3"/>
+      <bond order="1" id="eo_7_a2_eo_7_a6" atomRefs2="eo_7_a2 eo_7_a6"/>
+      <bond order="1" id="eo_7_a2_eo_7_a7" atomRefs2="eo_7_a2 eo_7_a7"/>
+      <bond order="1" id="eo_7_a3_eo_7_a4" atomRefs2="eo_7_a3 eo_7_a4"/>
+      <bond order="1" id="eo_7_a3_eo_7_a8" atomRefs2="eo_7_a3 eo_7_a8"/>
+      <bond order="1" id="eo_7_a3_eo_7_a9" atomRefs2="eo_7_a3 eo_7_a9"/>
+      <bond order="1" id="eo_7_a4_eo_7_r2" atomRefs2="eo_7_a4 eo_7_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_7_r1 g:eo_8_r2" moleculeRefs2="g:eo_7 g:eo_8" order="S"/>
+  <molecule role="fragment" id="eo_8">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_8_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_8_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_8_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_8_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_8_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_8_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_8_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_8_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_8_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_8_r1_eo_8_a2" atomRefs2="eo_8_r1 eo_8_a2"/>
+      <bond order="1" id="eo_8_a2_eo_8_a3" atomRefs2="eo_8_a2 eo_8_a3"/>
+      <bond order="1" id="eo_8_a2_eo_8_a6" atomRefs2="eo_8_a2 eo_8_a6"/>
+      <bond order="1" id="eo_8_a2_eo_8_a7" atomRefs2="eo_8_a2 eo_8_a7"/>
+      <bond order="1" id="eo_8_a3_eo_8_a4" atomRefs2="eo_8_a3 eo_8_a4"/>
+      <bond order="1" id="eo_8_a3_eo_8_a8" atomRefs2="eo_8_a3 eo_8_a8"/>
+      <bond order="1" id="eo_8_a3_eo_8_a9" atomRefs2="eo_8_a3 eo_8_a9"/>
+      <bond order="1" id="eo_8_a4_eo_8_r2" atomRefs2="eo_8_a4 eo_8_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_8_r1 g:eo_9_r2" moleculeRefs2="g:eo_8 g:eo_9" order="S"/>
+  <molecule role="fragment" id="eo_9">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_9_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_9_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_9_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_9_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_9_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_9_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_9_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_9_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_9_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_9_r1_eo_9_a2" atomRefs2="eo_9_r1 eo_9_a2"/>
+      <bond order="1" id="eo_9_a2_eo_9_a3" atomRefs2="eo_9_a2 eo_9_a3"/>
+      <bond order="1" id="eo_9_a2_eo_9_a6" atomRefs2="eo_9_a2 eo_9_a6"/>
+      <bond order="1" id="eo_9_a2_eo_9_a7" atomRefs2="eo_9_a2 eo_9_a7"/>
+      <bond order="1" id="eo_9_a3_eo_9_a4" atomRefs2="eo_9_a3 eo_9_a4"/>
+      <bond order="1" id="eo_9_a3_eo_9_a8" atomRefs2="eo_9_a3 eo_9_a8"/>
+      <bond order="1" id="eo_9_a3_eo_9_a9" atomRefs2="eo_9_a3 eo_9_a9"/>
+      <bond order="1" id="eo_9_a4_eo_9_r2" atomRefs2="eo_9_a4 eo_9_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_9_r1 g:eo_10_r2" moleculeRefs2="g:eo_9 g:eo_10" order="S"/>
+  <molecule role="fragment" id="eo_10">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_10_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_10_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_10_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_10_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_10_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_10_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_10_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_10_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_10_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_10_r1_eo_10_a2" atomRefs2="eo_10_r1 eo_10_a2"/>
+      <bond order="1" id="eo_10_a2_eo_10_a3" atomRefs2="eo_10_a2 eo_10_a3"/>
+      <bond order="1" id="eo_10_a2_eo_10_a6" atomRefs2="eo_10_a2 eo_10_a6"/>
+      <bond order="1" id="eo_10_a2_eo_10_a7" atomRefs2="eo_10_a2 eo_10_a7"/>
+      <bond order="1" id="eo_10_a3_eo_10_a4" atomRefs2="eo_10_a3 eo_10_a4"/>
+      <bond order="1" id="eo_10_a3_eo_10_a8" atomRefs2="eo_10_a3 eo_10_a8"/>
+      <bond order="1" id="eo_10_a3_eo_10_a9" atomRefs2="eo_10_a3 eo_10_a9"/>
+      <bond order="1" id="eo_10_a4_eo_10_r2" atomRefs2="eo_10_a4 eo_10_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_10_r1 g:eo_11_r2" moleculeRefs2="g:eo_10 g:eo_11" order="S"/>
+  <molecule role="fragment" id="eo_11">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_11_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_11_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_11_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_11_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_11_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_11_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_11_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_11_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_11_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_11_r1_eo_11_a2" atomRefs2="eo_11_r1 eo_11_a2"/>
+      <bond order="1" id="eo_11_a2_eo_11_a3" atomRefs2="eo_11_a2 eo_11_a3"/>
+      <bond order="1" id="eo_11_a2_eo_11_a6" atomRefs2="eo_11_a2 eo_11_a6"/>
+      <bond order="1" id="eo_11_a2_eo_11_a7" atomRefs2="eo_11_a2 eo_11_a7"/>
+      <bond order="1" id="eo_11_a3_eo_11_a4" atomRefs2="eo_11_a3 eo_11_a4"/>
+      <bond order="1" id="eo_11_a3_eo_11_a8" atomRefs2="eo_11_a3 eo_11_a8"/>
+      <bond order="1" id="eo_11_a3_eo_11_a9" atomRefs2="eo_11_a3 eo_11_a9"/>
+      <bond order="1" id="eo_11_a4_eo_11_r2" atomRefs2="eo_11_a4 eo_11_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_11_r1 g:eo_12_r2" moleculeRefs2="g:eo_11 g:eo_12" order="S"/>
+  <molecule role="fragment" id="eo_12">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_12_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_12_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_12_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_12_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_12_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_12_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_12_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_12_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_12_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_12_r1_eo_12_a2" atomRefs2="eo_12_r1 eo_12_a2"/>
+      <bond order="1" id="eo_12_a2_eo_12_a3" atomRefs2="eo_12_a2 eo_12_a3"/>
+      <bond order="1" id="eo_12_a2_eo_12_a6" atomRefs2="eo_12_a2 eo_12_a6"/>
+      <bond order="1" id="eo_12_a2_eo_12_a7" atomRefs2="eo_12_a2 eo_12_a7"/>
+      <bond order="1" id="eo_12_a3_eo_12_a4" atomRefs2="eo_12_a3 eo_12_a4"/>
+      <bond order="1" id="eo_12_a3_eo_12_a8" atomRefs2="eo_12_a3 eo_12_a8"/>
+      <bond order="1" id="eo_12_a3_eo_12_a9" atomRefs2="eo_12_a3 eo_12_a9"/>
+      <bond order="1" id="eo_12_a4_eo_12_r2" atomRefs2="eo_12_a4 eo_12_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_12_r1 g:eo_13_r2" moleculeRefs2="g:eo_12 g:eo_13" order="S"/>
+  <molecule role="fragment" id="eo_13">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_13_r1"/>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_13_a2"/>
+      <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_13_a3">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_13_a4"/>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_13_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_13_a7"/>
+      <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_13_a8"/>
+      <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_13_a9"/>
+      <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_13_r2"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="eo_13_r1_eo_13_a2" atomRefs2="eo_13_r1 eo_13_a2"/>
+      <bond order="1" id="eo_13_a2_eo_13_a3" atomRefs2="eo_13_a2 eo_13_a3"/>
+      <bond order="1" id="eo_13_a2_eo_13_a6" atomRefs2="eo_13_a2 eo_13_a6"/>
+      <bond order="1" id="eo_13_a2_eo_13_a7" atomRefs2="eo_13_a2 eo_13_a7"/>
+      <bond order="1" id="eo_13_a3_eo_13_a4" atomRefs2="eo_13_a3 eo_13_a4"/>
+      <bond order="1" id="eo_13_a3_eo_13_a8" atomRefs2="eo_13_a3 eo_13_a8"/>
+      <bond order="1" id="eo_13_a3_eo_13_a9" atomRefs2="eo_13_a3 eo_13_a9"/>
+      <bond order="1" id="eo_13_a4_eo_13_r2" atomRefs2="eo_13_a4 eo_13_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:eo_13_r1 g:cl_14_r1" moleculeRefs2="g:eo_13 g:cl_14" order="S"/>
+  <molecule role="fragment" id="cl_14">
+    <atomArray>
+      <atom elementType="Cl" x3="1.998" y3="-0.064" z3="-0.0" formalCharge="0" hydrogenCount="0" id="cl_14_a1"/>
+      <atom title="H" elementType="R" formalCharge="0" hydrogenCount="0" x3="1.195035329805453" y3="0.5150921674650439" z3="0.0" id="cl_14_r1"/>
+    </atomArray>
+    <bondArray>
+      <bond order="S" id="cl_14_a1_cl_14_r1" atomRefs2="cl_14_a1 cl_14_r1"/>
+    </bondArray>
+  </molecule>
+</fragment>

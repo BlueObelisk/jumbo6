@@ -143,7 +143,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 		if (to != null) {
 			URL toUrl = null;
 			try {
-                System.out.println("To URL is ctx: "+ url +" + "+ to);
+//                System.out.println("To URL is ctx: "+ url +" + "+ to);
 				toUrl = new URL(this.getURL(), to);
 			} catch (MalformedURLException e1) {
 				throw new CMLRuntimeException("Bad catalogue reference: " + to, e1);

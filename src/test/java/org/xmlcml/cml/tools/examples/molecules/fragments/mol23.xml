@@ -1,0 +1,36 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragmentList>
+    <fragment id='cl'>
+      <molecule ref='g:cl'/>
+    </fragment>
+    <fragment id='eo'>
+      <molecule ref='g:eo'/>
+    </fragment>
+    <fragment id='eoA'>
+      <fragment ref='eo'/>
+      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='AAA'/>
+    </fragment>
+    <fragment id='AAA'>
+      <fragmentList role='markushMixture'>
+	<fragment ref='eo'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.05</scalar>
+	</fragment>
+	<fragment ref='eoA'>
+	  <scalar dictRef='cml:ratio' dataType='xsd:double'>0.95</scalar>
+	</fragment>
+      </fragmentList>
+    </fragment>
+  </fragmentList>
+
+  <fragment id='f0'>
+    <fragment>
+      <molecule ref='g:acetyl'/>
+    </fragment>
+    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>
+    <fragment ref='AAA'/>
+    <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>
+    <fragment ref='cl'/>
+  </fragment>
+</fragment>

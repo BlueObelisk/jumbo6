@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment  convention="cml:PML-complete" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <!-- nylon3 alternative repeat-->
+  <molecule role="fragment" id="nsp2_1">
+    <atomArray>
+      <atom elementType="R" formalCharge="0" hydrogenCount="0" x3="6.874474431786602" y3="7.364333152820824" z3="1.6836317786234933" id="nsp2_1_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="N" x3="7.470354790502688" y3="7.21912165" z3="2.1153032017509776" formalCharge="0" hydrogenCount="0" id="nsp2_1_n1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom> 
+      <atom elementType="H" formalCharge="0" hydrogenCount="0" id="h_2_a1" x3="7.613243902893128" y3="6.269754165088102" z3="2.6920909271338345"> </atom>
+      <atom elementType="C" formalCharge="0" hydrogenCount="0" id="carbonyl_3_c1" x3="8.427390419980714" y3="8.39977614422882" z3="2.092113351236536">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" formalCharge="0" hydrogenCount="0" id="carbonyl_3_o2" x3="8.245664428979488" y3="9.393386044438554" z3="1.4689809460359151"> </atom>
+      <atom elementType="C" id="ch2_4_a2" x3="9.650931423211077" y3="8.101608525103401" z3="2.9784786733916375">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" id="ch2_4_a6" x3="10.325701031234228" y3="7.4264027236278505" z3="2.4516379937340766"/>
+      <atom elementType="H" id="ch2_4_a7" x3="10.171925510283986" y3="9.032084200329432" z3="3.2048173113828735"/>
+      <atom elementType="C" id="ch2_5_a2" x3="9.185973226125281" y3="7.441442891165606" z3="4.289812044708876">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="H" id="ch2_5_a6" x3="8.520559673447233" y3="6.608441223857009" z3="4.061533648504859"/>
+      <atom elementType="H" id="ch2_5_a7" x3="10.052623005068423" y3="7.073831015312363" z3="4.839565325180639"/>
+      <atom elementType="N" formalCharge="0" hydrogenCount="0" id="nsp2_6_n1" x3="8.445014661253284" y3="8.463499122369731" z3="5.136441518209328">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" formalCharge="0" hydrogenCount="0" id="h_7_a1" x3="7.881618351744858" y3="8.215827667359484" z3="6.0721997395493235"> </atom>
+      <atom elementType="C" formalCharge="0" hydrogenCount="0" id="carbonyl_8_c1" x3="8.578192085600097" y3="9.844808112122562" z3="4.516240543949888">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" formalCharge="0" hydrogenCount="0" id="carbonyl_8_o2" x3="9.183719086925938" y3="10.0736072963204" z3="3.5214707474708096"> </atom>
+      <atom elementType="C" id="ch2_9_a2" x3="7.827484065927152" y3="10.880312451632003" z3="5.374009878943764">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" id="ch2_9_a6" x3="7.067631353150841" y3="11.373096729009978" z3="4.766913913831535"/>
+      <atom elementType="H" id="ch2_9_a7" x3="7.350376615129913" y3="10.37839540007482" z3="6.215969945544256"/>
+      <atom elementType="C" id="ch2_10_a2" x3="8.823839028920847" y3="11.930291065207049" z3="5.899768092149091">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="H" id="ch2_10_a6" x3="9.423524569938309" y3="12.309154366024309" z3="5.0717476508624975"/>
+      <atom elementType="H" id="ch2_10_a7" x3="8.276475903029947" y3="12.75398710790274" z3="6.358426393788123"/>
+      <atom elementType="N" formalCharge="0" hydrogenCount="0" id="nsp2_11_n1" x3="9.735886566804359" y3="11.290057363134226" z3="6.933533101892964">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" formalCharge="0" hydrogenCount="0" id="h_12_a1" x3="9.55596300101378" y3="10.285826757850131" z3="7.3956460771316435"> </atom>
+      <atom elementType="C" formalCharge="0" hydrogenCount="0" id="carbonyl_13_c1" x3="10.900505880430442" y3="12.216751892433676" z3="7.242238630990808">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" formalCharge="0" hydrogenCount="0" id="carbonyl_13_o2" x3="11.062088779726189" y3="13.276898650791408" z3="6.733751874614544"> </atom>
+      <atom elementType="C" id="ch2_14_a2" x3="11.824554043812427" y3="11.568094062701999" z3="8.289605811915521">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" id="ch2_14_a6" x3="12.240044442826154" y3="10.644519266317074" z3="7.8856809131905745"/>
+      <atom elementType="H" id="ch2_14_a7" x3="12.635346889987702" y3="12.254413864014827" z3="8.534614160583311"/>
+      <atom elementType="C" id="ch2_15_a2" x3="11.016358340202384" y3="11.253093670965828" z3="9.562081531869474">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="H" id="ch2_15_a6" x3="10.110060864787961" y3="10.710371604795707" z3="9.292163683349823"/>
+      <atom elementType="H" id="ch2_15_a7" x3="11.619055854895134" y3="10.641955329191221" z3="10.234178722011023"/>
+      <atom elementType="N" formalCharge="0" hydrogenCount="0" id="nsp2_16_n1" x3="10.640435270216626" y3="12.551266165311997" z3="10.257660442112972">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" formalCharge="0" hydrogenCount="0" id="h_17_a1" x3="10.443450539951405" y3="12.642336398139262" z3="11.356433953231221"> </atom>
+      <atom elementType="C" formalCharge="0" hydrogenCount="0" id="carbonyl_18_c1" x3="10.564450609438833" y3="13.68014328911417" z3="9.242641836035911">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" formalCharge="0" hydrogenCount="0" id="carbonyl_18_o2" x3="10.779517976213576" y3="13.549654838179094" z3="8.082772120967695"> </atom>
+      <atom elementType="C" id="ch2_19_a2" x3="10.183581183269059" y3="14.995397000491208" z3="9.947373100361562">
+        <label dictRef="cml:torsionEnd">r1</label> 
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="H" id="ch2_19_a6" x3="9.73237629676025" y3="15.677058122519483" z3="9.225895266255947"/>
+      <atom elementType="H" id="ch2_19_a7" x3="9.47077139524828" y3="14.787546023377478" z3="10.745589347637097"/>
+      <atom elementType="C" id="ch2_20_a2" x3="11.447376066287648" y3="15.642876368370215" z3="10.543353772721856">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="R" id="ch2_20_r2" x3="11.697075246690963" y3="15.219918424361818" z3="11.136360431121323">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" id="ch2_20_a6" x3="12.224688853425455" y3="15.692750184273757" z3="9.780415090100984"/>
+      <atom elementType="H" id="ch2_20_a7" x3="11.212271867628367" y3="16.649830697555192" z3="10.888633361907798"/>
+    </atomArray>
+    <bondArray>
+      <bond order="S" id="nsp2_1_r1_nsp2_1_n1" atomRefs2="nsp2_1_r1 nsp2_1_n1"/> 
+      <bond atomRefs2="nsp2_1_n1 h_2_a1" order="S" id="nsp2_1_n1_h_2_a1"/>
+      <bond order="D" id="carbonyl_3_c1_carbonyl_3_o2" atomRefs2="carbonyl_3_c1 carbonyl_3_o2"/>
+      <bond atomRefs2="nsp2_1_n1 carbonyl_3_c1" order="S" id="nsp2_1_n1_carbonyl_3_c1"/>
+      <bond order="1" id="ch2_4_a2_ch2_4_a6" atomRefs2="ch2_4_a2 ch2_4_a6"/>
+      <bond order="1" id="ch2_4_a2_ch2_4_a7" atomRefs2="ch2_4_a2 ch2_4_a7"/>
+      <bond atomRefs2="carbonyl_3_c1 ch2_4_a2" order="S" id="carbonyl_3_c1_ch2_4_a2"/>
+      <bond order="1" id="ch2_5_a2_ch2_5_a6" atomRefs2="ch2_5_a2 ch2_5_a6"/>
+      <bond order="1" id="ch2_5_a2_ch2_5_a7" atomRefs2="ch2_5_a2 ch2_5_a7"/>
+      <bond atomRefs2="ch2_4_a2 ch2_5_a2" order="S" id="ch2_4_a2_ch2_5_a2"/>
+      <bond atomRefs2="ch2_5_a2 nsp2_6_n1" order="S" id="ch2_5_a2_nsp2_6_n1"/>
+      <bond atomRefs2="nsp2_6_n1 h_7_a1" order="S" id="nsp2_6_n1_h_7_a1"/>
+      <bond order="D" id="carbonyl_8_c1_carbonyl_8_o2" atomRefs2="carbonyl_8_c1 carbonyl_8_o2"/>
+      <bond atomRefs2="nsp2_6_n1 carbonyl_8_c1" order="S" id="nsp2_6_n1_carbonyl_8_c1"/>
+      <bond order="1" id="ch2_9_a2_ch2_9_a6" atomRefs2="ch2_9_a2 ch2_9_a6"/>
+      <bond order="1" id="ch2_9_a2_ch2_9_a7" atomRefs2="ch2_9_a2 ch2_9_a7"/>
+      <bond atomRefs2="carbonyl_8_c1 ch2_9_a2" order="S" id="carbonyl_8_c1_ch2_9_a2"/>
+      <bond order="1" id="ch2_10_a2_ch2_10_a6" atomRefs2="ch2_10_a2 ch2_10_a6"/>
+      <bond order="1" id="ch2_10_a2_ch2_10_a7" atomRefs2="ch2_10_a2 ch2_10_a7"/>
+      <bond atomRefs2="ch2_9_a2 ch2_10_a2" order="S" id="ch2_9_a2_ch2_10_a2"/>
+      <bond atomRefs2="ch2_10_a2 nsp2_11_n1" order="S" id="ch2_10_a2_nsp2_11_n1"/>
+      <bond atomRefs2="nsp2_11_n1 h_12_a1" order="S" id="nsp2_11_n1_h_12_a1"/>
+      <bond order="D" id="carbonyl_13_c1_carbonyl_13_o2" atomRefs2="carbonyl_13_c1 carbonyl_13_o2"/>
+      <bond atomRefs2="nsp2_11_n1 carbonyl_13_c1" order="S" id="nsp2_11_n1_carbonyl_13_c1"/>
+      <bond order="1" id="ch2_14_a2_ch2_14_a6" atomRefs2="ch2_14_a2 ch2_14_a6"/>
+      <bond order="1" id="ch2_14_a2_ch2_14_a7" atomRefs2="ch2_14_a2 ch2_14_a7"/>
+      <bond atomRefs2="carbonyl_13_c1 ch2_14_a2" order="S" id="carbonyl_13_c1_ch2_14_a2"/>
+      <bond order="1" id="ch2_15_a2_ch2_15_a6" atomRefs2="ch2_15_a2 ch2_15_a6"/>
+      <bond order="1" id="ch2_15_a2_ch2_15_a7" atomRefs2="ch2_15_a2 ch2_15_a7"/>
+      <bond atomRefs2="ch2_14_a2 ch2_15_a2" order="S" id="ch2_14_a2_ch2_15_a2"/>
+      <bond atomRefs2="ch2_15_a2 nsp2_16_n1" order="S" id="ch2_15_a2_nsp2_16_n1"/>
+      <bond atomRefs2="nsp2_16_n1 h_17_a1" order="S" id="nsp2_16_n1_h_17_a1"/>
+      <bond order="D" id="carbonyl_18_c1_carbonyl_18_o2" atomRefs2="carbonyl_18_c1 carbonyl_18_o2"/>
+      <bond atomRefs2="nsp2_16_n1 carbonyl_18_c1" order="S" id="nsp2_16_n1_carbonyl_18_c1"/>
+      <bond order="1" id="ch2_19_a2_ch2_19_a6" atomRefs2="ch2_19_a2 ch2_19_a6"/>
+      <bond order="1" id="ch2_19_a2_ch2_19_a7" atomRefs2="ch2_19_a2 ch2_19_a7"/>
+      <bond atomRefs2="carbonyl_18_c1 ch2_19_a2" order="S" id="carbonyl_18_c1_ch2_19_a2"/>
+      <bond order="1" id="ch2_20_a2_ch2_20_r2" atomRefs2="ch2_20_a2 ch2_20_r2"/>
+      <bond order="1" id="ch2_20_a2_ch2_20_a6" atomRefs2="ch2_20_a2 ch2_20_a6"/>
+      <bond order="1" id="ch2_20_a2_ch2_20_a7" atomRefs2="ch2_20_a2 ch2_20_a7"/>
+      <bond atomRefs2="ch2_19_a2 ch2_20_a2" order="S" id="ch2_19_a2_ch2_20_a2"/>
+    </bondArray>
+  </molecule>
+</fragment>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment  convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <!-- PVC as head-head etc.-->
+  <molecule ref="g:ch2" id="1">
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_1_r2 g:ch_2_r1" moleculeRefs2="g:ch2_1 g:ch_2"/>
+  <molecule ref="g:ch" id="2">
+    <join atomRefs2="g:ch_2_r3 g:cl_3_r1" moleculeRefs2="g:ch_2 g:cl_3">
+      <molecule ref="g:cl" id="3">
+        <arg name="idx">
+          <scalar dataType="xsd:string">3</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">2</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_2_r2 g:ch_4_r1" moleculeRefs2="g:ch_2 g:ch_4">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:ch" id="4">
+    <join atomRefs2="g:ch_4_r3 g:cl_5_r1" moleculeRefs2="g:ch_4 g:cl_5">
+      <molecule ref="g:cl" id="5">
+        <arg name="idx">
+          <scalar dataType="xsd:string">5</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">4</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_4_r2 g:ch2_6_r1" moleculeRefs2="g:ch_4 g:ch2_6"/>
+  <molecule ref="g:ch2" id="6">
+    <arg name="idx">
+      <scalar dataType="xsd:string">6</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_6_r2 g:ch2_7_r1" moleculeRefs2="g:ch2_6 g:ch2_7">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:ch2" id="7">
+    <arg name="idx">
+      <scalar dataType="xsd:string">7</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_7_r2 g:ch_8_r1" moleculeRefs2="g:ch2_7 g:ch_8"/>
+  <molecule ref="g:ch" id="8">
+    <join atomRefs2="g:ch_8_r3 g:cl_9_r1" moleculeRefs2="g:ch_8 g:cl_9">
+      <molecule ref="g:cl" id="9">
+        <arg name="idx">
+          <scalar dataType="xsd:string">9</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">8</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_8_r2 g:ch_10_r1" moleculeRefs2="g:ch_8 g:ch_10">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:ch" id="10">
+    <join atomRefs2="g:ch_10_r3 g:cl_11_r1" moleculeRefs2="g:ch_10 g:cl_11">
+      <molecule ref="g:cl" id="11">
+        <arg name="idx">
+          <scalar dataType="xsd:string">11</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">10</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_10_r2 g:ch2_12_r1" moleculeRefs2="g:ch_10 g:ch2_12"/>
+  <molecule ref="g:ch2" id="12">
+    <arg name="idx">
+      <scalar dataType="xsd:string">12</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_12_r2 g:ch2_13_r1" moleculeRefs2="g:ch2_12 g:ch2_13">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:ch2" id="13">
+    <arg name="idx">
+      <scalar dataType="xsd:string">13</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_13_r2 g:ch_14_r1" moleculeRefs2="g:ch2_13 g:ch_14"/>
+  <molecule ref="g:ch" id="14">
+    <join atomRefs2="g:ch_14_r3 g:cl_15_r1" moleculeRefs2="g:ch_14 g:cl_15">
+      <molecule ref="g:cl" id="15">
+        <arg name="idx">
+          <scalar dataType="xsd:string">15</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">14</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_14_r2 g:ch_16_r1" moleculeRefs2="g:ch_14 g:ch_16">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:ch" id="16">
+    <join atomRefs2="g:ch_16_r3 g:cl_17_r1" moleculeRefs2="g:ch_16 g:cl_17">
+      <molecule ref="g:cl" id="17">
+        <arg name="idx">
+          <scalar dataType="xsd:string">17</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">16</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch_16_r2 g:ch2_18_r1" moleculeRefs2="g:ch_16 g:ch2_18"/>
+  <molecule ref="g:ch2" id="18">
+    <arg name="idx">
+      <scalar dataType="xsd:string">18</scalar>
+    </arg>
+  </molecule>
+</fragment>

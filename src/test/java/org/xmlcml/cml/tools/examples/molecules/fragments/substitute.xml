@@ -1,0 +1,41 @@
+<fragment convention='cml:PML-explicit' 
+  xmlns:g='http://www.xml-cml.org/mols/geom1' 
+  xmlns='http://www.xml-cml.org/schema'>
+  <molecule ref='g:oh' id='1'>
+    <arg name='idx'>
+      <scalar dataType='xsd:string'>1</scalar>
+    </arg>
+    <arg name='l1'>
+      <scalar dataType='xsd:string'>1.56</scalar>
+    </arg>
+    <atomArray>
+      <atom id='r1' elementType='R' x3='-1.0360501610646575' y3='0.23396440893831422' z3='0.0'>
+        <arg parentAttribute='id'>oh_{$idx}_r1</arg>
+      </atom>
+      <atom id='a5' elementType='O' x3='-1.696' y3='0.546' z3='-0.0'>
+        <arg parentAttribute='id'>oh_{$idx}_a5</arg>
+      </atom>
+      <atom id='a11' elementType='H' x3='-2.49' y3='-0.0050' z3='0.0'>
+        <arg parentAttribute='id'>oh_{$idx}_a11</arg>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond atomRefs2='r1 a5' order='1'>
+        <arg parentAttribute='id'>oh_{$idx}_r1_oh_{$idx}_a5</arg>
+        <arg parentAttribute='atomRefs2'>oh_{$idx}_r1 oh_{$idx}_a5</arg>
+      </bond>
+      <bond atomRefs2='a5 a11' order='1'>
+        <arg parentAttribute='id'>oh_{$idx}_a5_oh_{$idx}_a11</arg>
+        <arg parentAttribute='atomRefs2'>oh_{$idx}_a5 oh_{$idx}_a11</arg>
+      </bond>
+    </bondArray>
+    <length id='l1' atomRefs2='a1 a2'>
+      <arg parentAttribute='id'>m1_{$idx}_l1</arg>
+      <arg parentAttribute='atomRefs2'>m1_{$idx}_a1 m1_{$idx}_a2</arg>
+      <arg substitute='.'>{$l1}</arg>
+    </length>
+    <arg parameterName='l1'/>
+    <arg parameterName='idx'/>
+    <arg parentAttribute='id'>oh_{$idx}</arg>
+  </molecule>
+</fragment>

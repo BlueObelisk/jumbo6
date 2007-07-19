@@ -779,6 +779,44 @@ public class CMLAtom extends AbstractAtom {
     }
 
     /**
+     * get squared distance between atoms.
+     *
+     * @param atom2 the other atom
+     *
+     * @return squared distance (NaN if atom(s) lack coordinates)
+     */
+    public double getSquaredDistanceTo(CMLAtom atom2) {
+    	double dist2 = Double.NaN;
+    	Point3 p = this.getPoint3(CoordinateType.CARTESIAN);
+    	Point3 p2 = atom2.getPoint3(CoordinateType.CARTESIAN);
+        if (p != null || p2 != null) {
+        	dist2 = p.getSquaredDistanceFromPoint(p2);
+        }
+        return dist2;
+    }
+
+    /**are two atoms within sum of radii.
+     * 
+     * @param atom2
+     * @param radiusType
+     * @return true if atoms are within sum
+     */
+    public boolean isWithinRadiusSum (
+    	CMLAtom atom2, ChemicalElement.RadiusType radiusType) {
+    	boolean within = false;
+    	ChemicalElement elem = this.getChemicalElement();
+    	ChemicalElement elem2 = atom2.getChemicalElement();
+    	if (elem != null && elem2 != null) {
+        	double radsum = 
+        		elem.getRadius(radiusType) + 
+        	    elem2.getRadius(radiusType);
+        	double radsum2 = radsum * radsum;
+        	within = (radsum2 > this.getSquaredDistanceTo(atom2));
+    	}
+    	return within;
+    }
+    
+    /**
      * Rounds the coords that are within epsilon of 0 to 0. works coordinates
      * (XY2, XYZ3, XYZFract) according to coordinateType
      *

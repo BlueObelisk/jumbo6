@@ -1,0 +1,11 @@
+<molecule ref='g:oh' id='oh_1' xmlns='http://www.xml-cml.org/schema'>
+  <atomArray>
+    <atom elementType='R' x3='-1.0360501610646575' y3='0.23396440893831422' z3='0.0' id='oh_1_r1'></atom>
+    <atom elementType='O' x3='-1.696' y3='0.546' z3='-0.0' id='oh_1_a5'></atom>
+    <atom elementType='H' x3='-2.49' y3='-0.0050' z3='0.0' id='oh_1_a11'></atom>
+  </atomArray>
+  <bondArray>
+    <bond order='1' id='oh_1_r1_oh_1_a5' atomRefs2='oh_1_r1 oh_1_a5'></bond>
+    <bond order='1' id='oh_1_a5_oh_1_a11' atomRefs2='oh_1_a5 oh_1_a11'></bond>
+  </bondArray>
+</molecule>
