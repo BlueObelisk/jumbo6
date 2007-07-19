@@ -71,11 +71,9 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
      * tests 2 XML objects for equality using canonical XML.
      * 
      * @param message
-     * @param refNode
-     *            first node
-     * @param testNode
-     *            second node
-     * @param stripWhite if tru remove w/s nodes
+     * @param refNode first node
+     * @param testNode second node
+     * @param stripWhite if true remove w/s nodes
      */
     public static void assertEqualsCanonically(
             String message, Element refNode, Element testNode, boolean stripWhite) {
@@ -88,14 +86,28 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
         try {
             XOMTestCase.assertEquals(message, refNode, testNode);
         } catch (ComparisonFailure e) {
-            reportXMLDiff(message, e.getMessage(), refNode, testNode);
+            reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
         } catch (AssertionFailedError e) {
-            reportXMLDiff(message, e.getMessage(), refNode, testNode);
+            reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
         }
     }
     
     static protected void reportXMLDiff(String message, String errorMessage,
             Node refNode, Node testNode) {
+        Assert.fail(message+" ~ "+errorMessage);
+    }
+
+    static protected void reportXMLDiffInFull(String message, String errorMessage,
+            Node refNode, Node testNode) {
+        try {
+	        System.err.println("=========="+"XMLDIFF"+"=========");
+	        CMLUtil.debug((Element) refNode, System.err, 2); 
+	        System.err.println("---------------------------------");
+	        CMLUtil.debug((Element) testNode, System.err, 2); 
+	        System.err.println("=================================");
+        } catch (Exception e) {
+        	throw new CMLRuntimeException(e);
+        }
         Assert.fail(message+" ~ "+errorMessage);
     }
 

@@ -62,6 +62,21 @@ public class ChemicalElement {
         }
     }
     
+    /** types of radius.
+     */
+    public enum RadiusType {
+    	/** */
+    	ATOMIC,
+    	/** */
+    	COVALENT,
+    	/** */
+    	IONIC,
+    	/** */
+    	VDW;
+    	private RadiusType() {
+    	}
+    }
+    
     /** enumeration of element in symbolic form.
      * 
      * @author pm286
@@ -294,6 +309,25 @@ public class ChemicalElement {
                 : DEFAULT_COVALENT_RADIUS;
     }
     
+    /** get various types of radii
+     * 
+     * @param radiusType
+     * @return radius
+     */
+    public double getRadius(RadiusType radiusType) {
+    	double radius = Double.NaN;
+    	if (radiusType.equals(RadiusType.ATOMIC)) {
+		radius = getAtomicRadius();
+    	} else if (radiusType.equals(RadiusType.COVALENT)) {
+    		radius = getCovalentRadius();
+    	} else if (radiusType.equals(RadiusType.IONIC)) {
+//    		radius = getIonicRadius();
+    	} else if (radiusType.equals(RadiusType.VDW)) {
+    		radius = getVDWRadius();
+    	}
+    	return radius;
+    }
+    
     /**
      * @return cov rad
      */
@@ -497,72 +531,72 @@ public class ChemicalElement {
 		return isType;
 	}
 
-		/**
-		 * is element of given type.
-		 * @param type
-		 *            TRANSITION METAL, LANTHANIDE, ACTINIDE, METAL,
-		 *            NON_METAL, PBLOCK, GROUP_A, GROUP_B
-		 *
-		 * @return true if of type
-		 */
-		public boolean isChemicalElementType(
-				Type type) {
-			int atNum = this.getAtomicNumber();
-			// String symbol = chemicalElement.getSymbol();
-			boolean isType = false;
-			if (type.equals(Type.TRANSITION_METAL)) {
-				isType = (atNum > 20 && atNum <= 30) ||
-				(atNum > 38 && atNum <= 48) ||
-				(atNum > 56 && atNum <= 80);
-			} else if (type.equals(Type.LANTHANIDE)) {
-				isType = (atNum >= 58 && atNum <= 71);
-			} else if (type.equals(Type.ACTINIDE)) {
-				isType = atNum >= 90 && atNum <= 103;
-			} else if (type.equals(Type.METAL)) {
-				isType = isChemicalElementType(Type.TRANSITION_METAL) ||
-				isChemicalElementType(Type.LANTHANIDE) ||
-				isChemicalElementType(Type.ACTINIDE) ||
-				isChemicalElementType(Type.GROUP_A) ||
-				isChemicalElementType(Type.GROUP_B) ||
-				// include metalloids on left of step
-				(atNum == 13) ||
-				(atNum >= 31 && atNum <= 32) ||
-				(atNum >= 49 && atNum <= 51) ||
-				(atNum >= 81 && atNum <=84);
-			} else if (type.equals(Type.METAL_NOT_SEMI_METAL)) {
-				isType = isChemicalElementType(Type.TRANSITION_METAL) ||
-				isChemicalElementType(Type.LANTHANIDE) ||
-				isChemicalElementType(Type.ACTINIDE) ||
-				isChemicalElementType(Type.GROUP_A) ||
-				isChemicalElementType(Type.GROUP_B);
-			} else if (type.equals(Type.NON_METAL)) {
-				isType = atNum >=5 && atNum <= 10 ||
-				atNum >=14 && atNum <= 18 ||
-				atNum >=33 && atNum <= 36 ||
-				atNum >=52 && atNum <= 54 ||
-				atNum >=85 && atNum <= 86;
-			} else if (type.equals(Type.PBLOCK)) {
-				isType = atNum >= 5 && atNum <= 10 || // B, C, N, O, F,Ne
-				atNum >= 14 && atNum <= 18 || // Si, P, S,Cl,Ar
-				atNum >= 32 && atNum <= 36 || // Ge,As,Se,Br,Kr
-				atNum >= 53 && atNum <= 54 // I,Xe
-				;
-			} else if (type.equals(Type.GROUP_A)) {
-				isType = atNum == 3 || atNum == 11 || atNum == 19 ||
-				atNum == 37 || atNum == 55 || atNum ==87;
-			} else if (type.equals(Type.GROUP_B)) {
-				isType = atNum == 4 || atNum == 12 || atNum == 20 ||
-				atNum == 38 || atNum == 56 || atNum ==88;
-			} else if (type.equals(Type.SEMI_METAL)) {
-				isType = atNum == 13 || atNum == 31 || atNum == 32 ||
-				atNum >= 49 && atNum <= 51 ||
-				atNum >= 81 && atNum <= 84
-				;
-			} else {
-				throw new CMLRuntimeException("Bad type for " + type);
-			}
-			return isType;
+	/**
+	 * is element of given type.
+	 * @param type
+	 *            TRANSITION METAL, LANTHANIDE, ACTINIDE, METAL,
+	 *            NON_METAL, PBLOCK, GROUP_A, GROUP_B
+	 *
+	 * @return true if of type
+	 */
+	public boolean isChemicalElementType(
+			Type type) {
+		int atNum = this.getAtomicNumber();
+		// String symbol = chemicalElement.getSymbol();
+		boolean isType = false;
+		if (type.equals(Type.TRANSITION_METAL)) {
+			isType = (atNum > 20 && atNum <= 30) ||
+			(atNum > 38 && atNum <= 48) ||
+			(atNum > 56 && atNum <= 80);
+		} else if (type.equals(Type.LANTHANIDE)) {
+			isType = (atNum >= 58 && atNum <= 71);
+		} else if (type.equals(Type.ACTINIDE)) {
+			isType = atNum >= 90 && atNum <= 103;
+		} else if (type.equals(Type.METAL)) {
+			isType = isChemicalElementType(Type.TRANSITION_METAL) ||
+			isChemicalElementType(Type.LANTHANIDE) ||
+			isChemicalElementType(Type.ACTINIDE) ||
+			isChemicalElementType(Type.GROUP_A) ||
+			isChemicalElementType(Type.GROUP_B) ||
+			// include metalloids on left of step
+			(atNum == 13) ||
+			(atNum >= 31 && atNum <= 32) ||
+			(atNum >= 49 && atNum <= 51) ||
+			(atNum >= 81 && atNum <=84);
+		} else if (type.equals(Type.METAL_NOT_SEMI_METAL)) {
+			isType = isChemicalElementType(Type.TRANSITION_METAL) ||
+			isChemicalElementType(Type.LANTHANIDE) ||
+			isChemicalElementType(Type.ACTINIDE) ||
+			isChemicalElementType(Type.GROUP_A) ||
+			isChemicalElementType(Type.GROUP_B);
+		} else if (type.equals(Type.NON_METAL)) {
+			isType = atNum >=5 && atNum <= 10 ||
+			atNum >=14 && atNum <= 18 ||
+			atNum >=33 && atNum <= 36 ||
+			atNum >=52 && atNum <= 54 ||
+			atNum >=85 && atNum <= 86;
+		} else if (type.equals(Type.PBLOCK)) {
+			isType = atNum >= 5 && atNum <= 10 || // B, C, N, O, F,Ne
+			atNum >= 14 && atNum <= 18 || // Si, P, S,Cl,Ar
+			atNum >= 32 && atNum <= 36 || // Ge,As,Se,Br,Kr
+			atNum >= 53 && atNum <= 54 // I,Xe
+			;
+		} else if (type.equals(Type.GROUP_A)) {
+			isType = atNum == 3 || atNum == 11 || atNum == 19 ||
+			atNum == 37 || atNum == 55 || atNum ==87;
+		} else if (type.equals(Type.GROUP_B)) {
+			isType = atNum == 4 || atNum == 12 || atNum == 20 ||
+			atNum == 38 || atNum == 56 || atNum ==88;
+		} else if (type.equals(Type.SEMI_METAL)) {
+			isType = atNum == 13 || atNum == 31 || atNum == 32 ||
+			atNum >= 49 && atNum <= 51 ||
+			atNum >= 81 && atNum <= 84
+			;
+		} else {
+			throw new CMLRuntimeException("Bad type for " + type);
 		}
+		return isType;
+	}
 
 	/**
      * get the element corresponding to a (case-insensitive) atomicSymbol; else
@@ -676,13 +710,12 @@ public class ChemicalElement {
                 el.period = 0;
             }
 
-            el.setCovalentRadius(getRadius(element, "webelements", "covalent",
-                    "empirical"));
-            el.setAtomicRadius(getRadius(element, "webelements", "atomic",
-                    "empirical"));
-            el
-                    .setVDWRadius(getRadius(element, "webelements",
-                            "vanderwaals", ""));
+            double d = getRadius(element, "webelements", "covalent", "empirical");
+            el.setCovalentRadius(d);
+            d = getRadius(element, "webelements", "atomic", "empirical");
+            el.setAtomicRadius(d);
+            d = getRadius(element, "webelements", "vanderwaals", null);
+            el.setVDWRadius(d);
 
             el.setElectronegativity(getElectronegativity(element,
                     "webelements", "pauling"));
@@ -758,15 +791,13 @@ public class ChemicalElement {
             for (int j = 0; j < radiusList.size(); j++) {
                 Element radius = (Element) radiusList.get(j);
                 if (type != null
-                        && type.equals(radius.getAttributeValue("type"))
-                        && context != null
-                        && context.equals(radius.getAttributeValue("context"))) {
+                    && type.equals(radius.getAttributeValue("type"))
+                    && (context == null ||
+                    context.equals(radius.getAttributeValue("context")))) {
                     double rad = Double.parseDouble(radius.getValue());
-
                     if (radius.getAttributeValue("unit").equals("pm")) {
-                        rad = rad / 100;
+                        rad /= 100.0;
                     }
-
                     return rad;
                 }
             }

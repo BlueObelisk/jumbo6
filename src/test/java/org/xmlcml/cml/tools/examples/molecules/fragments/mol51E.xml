@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment  convention="cml:PML-explicit" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="ch2_1">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_1_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_1_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_1_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_1_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_1_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_1_r1_ch2_1_a2" atomRefs2="ch2_1_r1 ch2_1_a2"/>
+      <bond order="1" id="ch2_1_a2_ch2_1_r2" atomRefs2="ch2_1_a2 ch2_1_r2"/>
+      <bond order="1" id="ch2_1_a2_ch2_1_a6" atomRefs2="ch2_1_a2 ch2_1_a6"/>
+      <bond order="1" id="ch2_1_a2_ch2_1_a7" atomRefs2="ch2_1_a2 ch2_1_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_1_r2 g:ch2_2_r1" moleculeRefs2="g:ch2_1 g:ch2_2" order="S"/>
+  <molecule role="fragment" id="ch2_2">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_2_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_2_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_2_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_2_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_2_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_2_r1_ch2_2_a2" atomRefs2="ch2_2_r1 ch2_2_a2"/>
+      <bond order="1" id="ch2_2_a2_ch2_2_r2" atomRefs2="ch2_2_a2 ch2_2_r2"/>
+      <bond order="1" id="ch2_2_a2_ch2_2_a6" atomRefs2="ch2_2_a2 ch2_2_a6"/>
+      <bond order="1" id="ch2_2_a2_ch2_2_a7" atomRefs2="ch2_2_a2 ch2_2_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_2_r2 g:o_3_r1" moleculeRefs2="g:ch2_2 g:o_3" order="S"/>
+  <molecule role="fragment" id="o_3">
+    <atomArray>
+      <atom elementType="R" x3="-1.0360501610646575" y3="0.23396440893831422" z3="0.0" id="o_3_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.696" y3="0.546" z3="-0.0" id="o_3_a5"/>
+      <atom elementType="R" x3="-2.2957376621755117" y3="0.1298092545860114" z3="0.0" id="o_3_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="o_3_r1_o_3_a5" atomRefs2="o_3_r1 o_3_a5"/>
+      <bond order="1" id="o_3_a5_o_3_r2" atomRefs2="o_3_a5 o_3_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:o_3_r2 g:ch2_4_r1" moleculeRefs2="g:o_3 g:ch2_4" order="S"/>
+  <molecule role="fragment" id="ch2_4">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_4_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_4_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_4_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_4_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_4_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_4_r1_ch2_4_a2" atomRefs2="ch2_4_r1 ch2_4_a2"/>
+      <bond order="1" id="ch2_4_a2_ch2_4_r2" atomRefs2="ch2_4_a2 ch2_4_r2"/>
+      <bond order="1" id="ch2_4_a2_ch2_4_a6" atomRefs2="ch2_4_a2 ch2_4_a6"/>
+      <bond order="1" id="ch2_4_a2_ch2_4_a7" atomRefs2="ch2_4_a2 ch2_4_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_4_r2 g:ch2_5_r1" moleculeRefs2="g:ch2_4 g:ch2_5" order="S"/>
+  <molecule role="fragment" id="ch2_5">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_5_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_5_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_5_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_5_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_5_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_5_r1_ch2_5_a2" atomRefs2="ch2_5_r1 ch2_5_a2"/>
+      <bond order="1" id="ch2_5_a2_ch2_5_r2" atomRefs2="ch2_5_a2 ch2_5_r2"/>
+      <bond order="1" id="ch2_5_a2_ch2_5_a6" atomRefs2="ch2_5_a2 ch2_5_a6"/>
+      <bond order="1" id="ch2_5_a2_ch2_5_a7" atomRefs2="ch2_5_a2 ch2_5_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_5_r2 g:o_6_r1" moleculeRefs2="g:ch2_5 g:o_6" order="S"/>
+  <molecule role="fragment" id="o_6">
+    <atomArray>
+      <atom elementType="R" x3="-1.0360501610646575" y3="0.23396440893831422" z3="0.0" id="o_6_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.696" y3="0.546" z3="-0.0" id="o_6_a5"/>
+      <atom elementType="R" x3="-2.2957376621755117" y3="0.1298092545860114" z3="0.0" id="o_6_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="o_6_r1_o_6_a5" atomRefs2="o_6_r1 o_6_a5"/>
+      <bond order="1" id="o_6_a5_o_6_r2" atomRefs2="o_6_a5 o_6_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:o_6_r2 g:ch2_7_r1" moleculeRefs2="g:o_6 g:ch2_7" order="S"/>
+  <molecule role="fragment" id="ch2_7">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_7_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_7_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_7_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_7_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_7_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_7_r1_ch2_7_a2" atomRefs2="ch2_7_r1 ch2_7_a2"/>
+      <bond order="1" id="ch2_7_a2_ch2_7_r2" atomRefs2="ch2_7_a2 ch2_7_r2"/>
+      <bond order="1" id="ch2_7_a2_ch2_7_a6" atomRefs2="ch2_7_a2 ch2_7_a6"/>
+      <bond order="1" id="ch2_7_a2_ch2_7_a7" atomRefs2="ch2_7_a2 ch2_7_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_7_r2 g:ch2_8_r1" moleculeRefs2="g:ch2_7 g:ch2_8" order="S"/>
+  <molecule role="fragment" id="ch2_8">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_8_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_8_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_8_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_8_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_8_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_8_r1_ch2_8_a2" atomRefs2="ch2_8_r1 ch2_8_a2"/>
+      <bond order="1" id="ch2_8_a2_ch2_8_r2" atomRefs2="ch2_8_a2 ch2_8_r2"/>
+      <bond order="1" id="ch2_8_a2_ch2_8_a6" atomRefs2="ch2_8_a2 ch2_8_a6"/>
+      <bond order="1" id="ch2_8_a2_ch2_8_a7" atomRefs2="ch2_8_a2 ch2_8_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_8_r2 g:o_9_r1" moleculeRefs2="g:ch2_8 g:o_9" order="S"/>
+  <molecule role="fragment" id="o_9">
+    <atomArray>
+      <atom elementType="R" x3="-1.0360501610646575" y3="0.23396440893831422" z3="0.0" id="o_9_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.696" y3="0.546" z3="-0.0" id="o_9_a5"/>
+      <atom elementType="R" x3="-2.2957376621755117" y3="0.1298092545860114" z3="0.0" id="o_9_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="o_9_r1_o_9_a5" atomRefs2="o_9_r1 o_9_a5"/>
+      <bond order="1" id="o_9_a5_o_9_r2" atomRefs2="o_9_a5 o_9_r2"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:o_9_r2 g:ch2_10_r1" moleculeRefs2="g:o_9 g:ch2_10" order="S"/>
+  <molecule role="fragment" id="ch2_10">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_10_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_10_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_10_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_10_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_10_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_10_r1_ch2_10_a2" atomRefs2="ch2_10_r1 ch2_10_a2"/>
+      <bond order="1" id="ch2_10_a2_ch2_10_r2" atomRefs2="ch2_10_a2 ch2_10_r2"/>
+      <bond order="1" id="ch2_10_a2_ch2_10_a6" atomRefs2="ch2_10_a2 ch2_10_a6"/>
+      <bond order="1" id="ch2_10_a2_ch2_10_a7" atomRefs2="ch2_10_a2 ch2_10_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_10_r2 g:ch2_11_r1" moleculeRefs2="g:ch2_10 g:ch2_11" order="S"/>
+  <molecule role="fragment" id="ch2_11">
+    <atomArray>
+      <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="ch2_11_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="ch2_11_a2"/>
+      <atom elementType="R" x3="-0.00448114334248928" y3="-0.593" z3="0.0019250430859626966" id="ch2_11_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="ch2_11_a6"/>
+      <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="ch2_11_a7"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="ch2_11_r1_ch2_11_a2" atomRefs2="ch2_11_r1 ch2_11_a2"/>
+      <bond order="1" id="ch2_11_a2_ch2_11_r2" atomRefs2="ch2_11_a2 ch2_11_r2"/>
+      <bond order="1" id="ch2_11_a2_ch2_11_a6" atomRefs2="ch2_11_a2 ch2_11_a6"/>
+      <bond order="1" id="ch2_11_a2_ch2_11_a7" atomRefs2="ch2_11_a2 ch2_11_a7"/>
+    </bondArray>
+  </molecule>
+  <join atomRefs2="g:ch2_11_r2 g:o_12_r1" moleculeRefs2="g:ch2_11 g:o_12" order="S"/>
+  <molecule role="fragment" id="o_12">
+    <atomArray>
+      <atom elementType="R" x3="-1.0360501610646575" y3="0.23396440893831422" z3="0.0" id="o_12_r1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" x3="-1.696" y3="0.546" z3="-0.0" id="o_12_a5"/>
+      <atom elementType="R" x3="-2.2957376621755117" y3="0.1298092545860114" z3="0.0" id="o_12_r2">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="o_12_r1_o_12_a5" atomRefs2="o_12_r1 o_12_a5"/>
+      <bond order="1" id="o_12_a5_o_12_r2" atomRefs2="o_12_a5 o_12_r2"/>
+    </bondArray>
+  </molecule>
+</fragment>

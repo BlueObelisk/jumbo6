@@ -1,0 +1,37 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragmentList>
+    <fragment id='benzene'>
+      <molecule ref='g:benzene'/>
+    </fragment>
+    <fragment id='benzene3'>
+      <fragment ref='benzene'/>
+      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='benzene'/>
+      <join atomRefs2='r4 r1' moleculeRefs2='PREVIOUS NEXT'/>
+      <fragment ref='benzene'/>
+    </fragment>
+  </fragmentList>
+  <fragment>
+    <molecule ref='g:triazene'>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r2 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='benzene3'/>
+	</fragment>
+      </join>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r4 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='benzene3'/>
+	</fragment>
+      </join>
+      <join moleculeRefs2='PARENT CHILD' atomRefs2='r6 r2'>
+	<torsion>45</torsion>
+	<fragment>
+	  <fragment ref='benzene3'/>
+	</fragment>
+      </join>
+    </molecule>
+  </fragment>
+</fragment>

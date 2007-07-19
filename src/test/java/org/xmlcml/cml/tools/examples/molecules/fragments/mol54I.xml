@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment  convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <!-- nylon44 explicit-->
+  <molecule ref="g:carbonyl" id="1">
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_1_r2 g:ch2_2_r1" moleculeRefs2="g:carbonyl_1 g:ch2_2"/>
+  <molecule ref="g:ch2" id="2">
+    <arg name="idx">
+      <scalar dataType="xsd:string">2</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_2_r2 g:ch2_3_r1" moleculeRefs2="g:ch2_2 g:ch2_3"/>
+  <molecule ref="g:ch2" id="3">
+    <arg name="idx">
+      <scalar dataType="xsd:string">3</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_3_r2 g:carbonyl_4_r1" moleculeRefs2="g:ch2_3 g:carbonyl_4"/>
+  <molecule ref="g:carbonyl" id="4">
+    <arg name="idx">
+      <scalar dataType="xsd:string">4</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_4_r2 g:nsp2_5_r1" moleculeRefs2="g:carbonyl_4 g:nsp2_5">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:nsp2" id="5">
+    <join atomRefs2="g:nsp2_5_r3 g:h_6_r1" moleculeRefs2="g:nsp2_5 g:h_6">
+      <molecule ref="g:h" id="6">
+        <arg name="idx">
+          <scalar dataType="xsd:string">6</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">5</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:nsp2_5_r2 g:ch2_7_r1" moleculeRefs2="g:nsp2_5 g:ch2_7"/>
+  <molecule ref="g:ch2" id="7">
+    <arg name="idx">
+      <scalar dataType="xsd:string">7</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_7_r2 g:ch2_8_r1" moleculeRefs2="g:ch2_7 g:ch2_8"/>
+  <molecule ref="g:ch2" id="8">
+    <arg name="idx">
+      <scalar dataType="xsd:string">8</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_8_r2 g:ch2_9_r1" moleculeRefs2="g:ch2_8 g:ch2_9"/>
+  <molecule ref="g:ch2" id="9">
+    <arg name="idx">
+      <scalar dataType="xsd:string">9</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_9_r2 g:ch2_10_r1" moleculeRefs2="g:ch2_9 g:ch2_10"/>
+  <molecule ref="g:ch2" id="10">
+    <arg name="idx">
+      <scalar dataType="xsd:string">10</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_10_r2 g:ch2_11_r1" moleculeRefs2="g:ch2_10 g:ch2_11"/>
+  <molecule ref="g:ch2" id="11">
+    <arg name="idx">
+      <scalar dataType="xsd:string">11</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_11_r2 g:nsp2_12_r1" moleculeRefs2="g:ch2_11 g:nsp2_12"/>
+  <molecule ref="g:nsp2" id="12">
+    <join atomRefs2="g:nsp2_12_r3 g:h_13_r1" moleculeRefs2="g:nsp2_12 g:h_13">
+      <molecule ref="g:h" id="13">
+        <arg name="idx">
+          <scalar dataType="xsd:string">13</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">12</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:nsp2_12_r2 g:carbonyl_14_r1" moleculeRefs2="g:nsp2_12 g:carbonyl_14">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:carbonyl" id="14">
+    <arg name="idx">
+      <scalar dataType="xsd:string">14</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_14_r2 g:ch2_15_r1" moleculeRefs2="g:carbonyl_14 g:ch2_15"/>
+  <molecule ref="g:ch2" id="15">
+    <arg name="idx">
+      <scalar dataType="xsd:string">15</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_15_r2 g:ch2_16_r1" moleculeRefs2="g:ch2_15 g:ch2_16"/>
+  <molecule ref="g:ch2" id="16">
+    <arg name="idx">
+      <scalar dataType="xsd:string">16</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_16_r2 g:carbonyl_17_r1" moleculeRefs2="g:ch2_16 g:carbonyl_17"/>
+  <molecule ref="g:carbonyl" id="17">
+    <arg name="idx">
+      <scalar dataType="xsd:string">17</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_17_r2 g:nsp2_18_r1" moleculeRefs2="g:carbonyl_17 g:nsp2_18">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:nsp2" id="18">
+    <join atomRefs2="g:nsp2_18_r3 g:h_19_r1" moleculeRefs2="g:nsp2_18 g:h_19">
+      <molecule ref="g:h" id="19">
+        <arg name="idx">
+          <scalar dataType="xsd:string">19</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">18</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:nsp2_18_r2 g:ch2_20_r1" moleculeRefs2="g:nsp2_18 g:ch2_20"/>
+  <molecule ref="g:ch2" id="20">
+    <arg name="idx">
+      <scalar dataType="xsd:string">20</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_20_r2 g:ch2_21_r1" moleculeRefs2="g:ch2_20 g:ch2_21"/>
+  <molecule ref="g:ch2" id="21">
+    <arg name="idx">
+      <scalar dataType="xsd:string">21</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_21_r2 g:ch2_22_r1" moleculeRefs2="g:ch2_21 g:ch2_22"/>
+  <molecule ref="g:ch2" id="22">
+    <arg name="idx">
+      <scalar dataType="xsd:string">22</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_22_r2 g:ch2_23_r1" moleculeRefs2="g:ch2_22 g:ch2_23"/>
+  <molecule ref="g:ch2" id="23">
+    <arg name="idx">
+      <scalar dataType="xsd:string">23</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_23_r2 g:ch2_24_r1" moleculeRefs2="g:ch2_23 g:ch2_24"/>
+  <molecule ref="g:ch2" id="24">
+    <arg name="idx">
+      <scalar dataType="xsd:string">24</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_24_r2 g:nsp2_25_r1" moleculeRefs2="g:ch2_24 g:nsp2_25"/>
+  <molecule ref="g:nsp2" id="25">
+    <join atomRefs2="g:nsp2_25_r3 g:h_26_r1" moleculeRefs2="g:nsp2_25 g:h_26">
+      <molecule ref="g:h" id="26">
+        <arg name="idx">
+          <scalar dataType="xsd:string">26</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">25</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:nsp2_25_r2 g:carbonyl_27_r1" moleculeRefs2="g:nsp2_25 g:carbonyl_27">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:carbonyl" id="27">
+    <arg name="idx">
+      <scalar dataType="xsd:string">27</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_27_r2 g:ch2_28_r1" moleculeRefs2="g:carbonyl_27 g:ch2_28"/>
+  <molecule ref="g:ch2" id="28">
+    <arg name="idx">
+      <scalar dataType="xsd:string">28</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_28_r2 g:ch2_29_r1" moleculeRefs2="g:ch2_28 g:ch2_29"/>
+  <molecule ref="g:ch2" id="29">
+    <arg name="idx">
+      <scalar dataType="xsd:string">29</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_29_r2 g:carbonyl_30_r1" moleculeRefs2="g:ch2_29 g:carbonyl_30"/>
+  <molecule ref="g:carbonyl" id="30">
+    <arg name="idx">
+      <scalar dataType="xsd:string">30</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:carbonyl_30_r2 g:nsp2_31_r1" moleculeRefs2="g:carbonyl_30 g:nsp2_31">
+    <torsion>180</torsion>
+  </join>
+  <molecule ref="g:nsp2" id="31">
+    <join atomRefs2="g:nsp2_31_r3 g:h_32_r1" moleculeRefs2="g:nsp2_31 g:h_32">
+      <molecule ref="g:h" id="32">
+        <arg name="idx">
+          <scalar dataType="xsd:string">32</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">31</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:nsp2_31_r2 g:ch2_33_r1" moleculeRefs2="g:nsp2_31 g:ch2_33"/>
+  <molecule ref="g:ch2" id="33">
+    <arg name="idx">
+      <scalar dataType="xsd:string">33</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_33_r2 g:ch2_34_r1" moleculeRefs2="g:ch2_33 g:ch2_34"/>
+  <molecule ref="g:ch2" id="34">
+    <arg name="idx">
+      <scalar dataType="xsd:string">34</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_34_r2 g:ch2_35_r1" moleculeRefs2="g:ch2_34 g:ch2_35"/>
+  <molecule ref="g:ch2" id="35">
+    <arg name="idx">
+      <scalar dataType="xsd:string">35</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_35_r2 g:ch2_36_r1" moleculeRefs2="g:ch2_35 g:ch2_36"/>
+  <molecule ref="g:ch2" id="36">
+    <arg name="idx">
+      <scalar dataType="xsd:string">36</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_36_r2 g:ch2_37_r1" moleculeRefs2="g:ch2_36 g:ch2_37"/>
+  <molecule ref="g:ch2" id="37">
+    <arg name="idx">
+      <scalar dataType="xsd:string">37</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:ch2_37_r2 g:nsp2_38_r1" moleculeRefs2="g:ch2_37 g:nsp2_38"/>
+  <molecule ref="g:nsp2" id="38">
+    <join atomRefs2="g:nsp2_38_r3 g:h_39_r1" moleculeRefs2="g:nsp2_38 g:h_39">
+      <molecule ref="g:h" id="39">
+        <arg name="idx">
+          <scalar dataType="xsd:string">39</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">38</scalar>
+    </arg>
+  </molecule>
+</fragment>

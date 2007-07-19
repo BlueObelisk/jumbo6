@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule ref="g:oh" id="1">
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:oh_1_r1 g:benzene_2_r1" moleculeRefs2="g:oh_1 g:benzene_2"/>
+  <molecule ref="g:benzene" id="2">
+    <arg name="idx">
+      <scalar dataType="xsd:string">2</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:benzene_2_r3 g:cl_3_r1" moleculeRefs2="g:benzene_2 g:cl_3"/>
+  <molecule ref="g:cl" id="3">
+    <arg name="idx">
+      <scalar dataType="xsd:string">3</scalar>
+    </arg>
+  </molecule>
+</fragment>

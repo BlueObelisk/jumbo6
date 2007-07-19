@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule ref="g:propanoic" id="1">
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:propanoic_1_r1 g:2pyr_2_r2" moleculeRefs2="g:propanoic_1 g:2pyr_2"/>
+  <molecule ref="g:2pyr" id="2">
+    <join atomRefs2="g:2pyr_2_r5 g:phenylethane_3_r1" moleculeRefs2="g:2pyr_2 g:phenylethane_3">
+      <molecule ref="g:phenylethane" id="3">
+        <arg name="idx">
+          <scalar dataType="xsd:string">3</scalar>
+        </arg>
+      </molecule>
+      <join id="j2" atomRefs2="g:phenylethane_3_r2 g:po_4_r1" moleculeRefs2="g:phenylethane_3 g:po_4"/>
+      <molecule ref="g:po" id="4">
+        <arg name="idx">
+          <scalar dataType="xsd:string">4</scalar>
+        </arg>
+      </molecule>
+      <join id="j3" atomRefs2="g:po_4_r2 g:adgluc_5_r1" moleculeRefs2="g:po_4 g:adgluc_5"/>
+      <molecule ref="g:adgluc" id="5">
+        <arg name="idx">
+          <scalar dataType="xsd:string">5</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">2</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:2pyr_2_r1 g:acetyl_6_r1" moleculeRefs2="g:2pyr_2 g:acetyl_6"/>
+  <molecule ref="g:acetyl" id="6">
+    <arg name="idx">
+      <scalar dataType="xsd:string">6</scalar>
+    </arg>
+  </molecule>
+</fragment>

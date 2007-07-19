@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-complete" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="propanoic_1">
+    <atomArray>
+      <atom elementType="C" x3="1.998" y3="-0.064" z3="-0.0" id="propanoic_1_a1"/>
+      <atom elementType="C" x3="0.757" y3="0.831" z3="-0.0" id="propanoic_1_a2"/>
+      <atom elementType="C" x3="-0.482" y3="-0.028" z3="0.0" id="propanoic_1_a3"/>
+      <atom elementType="O" formalCharge="-1" x3="-0.382" y3="-1.232" z3="0.0" id="propanoic_1_a4"/>
+      <atom elementType="O" x3="-1.696" y3="0.546" z3="-0.0" id="propanoic_1_a5"> </atom>
+      <atom elementType="H" x3="1.992" y3="-0.694" z3="0.89" id="propanoic_1_a6"/>
+      <atom elementType="H" x3="1.992" y3="-0.694" z3="-0.89" id="propanoic_1_a7"/>
+      <atom elementType="H" x3="2.893" y3="0.557" z3="-0.0" id="propanoic_1_a8"/>
+      <atom elementType="H" x3="0.763" y3="1.46" z3="0.89" id="propanoic_1_a9"/>
+      <atom elementType="H" x3="0.763" y3="1.46" z3="-0.89" id="propanoic_1_a10"/> 
+      <atom elementType="C" id="2pyr_2_a1" x3="-4.170829562859505" y3="0.25382293082701435" z3="-0.10776554165974116">
+        <label dictRef="cml:torsionEnd">r6</label>
+      </atom>
+      <atom elementType="C" id="2pyr_2_a2" x3="-2.9283376620044756" y3="-0.3091864631794285" z3="0.0">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="N" id="2pyr_2_a3" x3="-5.29708954249401" y3="-0.45780919954227356" z3="-0.15093387482406218">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" id="2pyr_2_a4" x3="-2.832980053283631" y3="-1.6837544145830117" z3="0.11102897263054767">
+        <label dictRef="cml:torsionEnd">r3</label>
+      </atom>
+      <atom elementType="R" id="2pyr_2_r4" x3="-2.147865206389991" y3="-2.0223851135864064" z3="0.20508691359448916"> </atom>
+      <atom elementType="C" id="2pyr_2_a5" x3="-3.97598522674068" y3="-2.432610991308706" z3="0.0505175850640498">
+        <label dictRef="cml:torsionEnd">r4</label>
+      </atom>
+      <atom elementType="C" id="2pyr_2_a6" x3="-5.1588789179592665" y3="-1.8029194511378257" z3="-0.0666380781382423">
+        <label dictRef="cml:torsionEnd">r5</label>
+      </atom>
+      <atom elementType="R" id="2pyr_2_r6" x3="-5.796752004526688" y3="-2.233749749051467" z3="-0.08671741658836374"> </atom>
+      <atom elementType="C" id="phenylethane_3_a1" x3="-3.911362871358155" y3="-3.969853923154703" z3="0.11615385304403379">
+        <label dictRef="cml:torsionEnd">r2</label> 
+      </atom>
+      <atom elementType="C" id="phenylethane_3_a2" x3="-4.235298666522911" y3="-4.552955776015999" z3="-1.2603761429243432">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="C" id="phenylethane_3_a3" x3="-4.1707782146580135" y3="-6.057391763401713" z3="-1.196732831021831"/>
+      <atom elementType="C" id="phenylethane_3_a4" x3="-5.303199253237199" y3="-6.784282067169023" z3="-0.8784529578405273"/>
+      <atom elementType="C" id="phenylethane_3_a5" x3="-5.244015794071455" y3="-8.163619357495675" z3="-0.8199896558853236"/>
+      <atom elementType="C" id="phenylethane_3_a6" x3="-4.05435478479529" y3="-8.817118373175063" z3="-1.0794655112439455"/>
+      <atom elementType="C" id="phenylethane_3_a7" x3="-2.922178593212289" y3="-8.090086382637121" z3="-1.398704537597317"/>
+      <atom elementType="C" id="phenylethane_3_a8" x3="-2.9825862873589553" y3="-6.710040658457306" z3="-1.4619636054128582"/>
+      <atom elementType="H" id="phenylethane_3_a9" x3="-4.636063113209182" y3="-4.33321442834762" z3="0.8448771906194205"/>
+      <atom elementType="H" id="phenylethane_3_a10" x3="-2.909530726657353" y3="-4.278903565122774" z3="0.4152887267107425"/>
+      <atom elementType="H" id="phenylethane_3_a13" x3="-3.5105984246718838" y3="-4.189595270823082" z3="-1.98909948049973"/>
+      <atom elementType="H" id="phenylethane_3_a14" x3="-6.233115169982339" y3="-6.274285732252402" z3="-0.6752040312611793"/>
+      <atom elementType="H" id="phenylethane_3_a15" x3="-6.128621016870843" y3="-8.731906538523589" z3="-0.5707342052420263"/>
+      <atom elementType="H" id="phenylethane_3_a16" x3="-4.008074539034705" y3="-9.89537058274886" z3="-1.033701864081956"/>
+      <atom elementType="H" id="phenylethane_3_a17" x3="-1.9922626764671485" y3="-8.600082717553743" z3="-1.6019534641766648"/>
+      <atom elementType="H" id="phenylethane_3_a18" x3="-2.097985449398667" y3="-6.142742893807961" z3="-1.7113640939925971"/>
+      <atom elementType="C" id="po_4_a2" x3="-5.650397185002607" y3="-4.1164198824544" z3="-1.6829073212164825"/>
+      <atom elementType="C" id="po_4_a3" x3="-5.7117966459848795" y3="-3.988550627059935" z3="-3.2067437821649505">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" id="po_4_a4" x3="-4.612035748602094" y3="-3.03857993735265" z3="-3.683286180367749"/>
+      <atom elementType="O" id="po_4_a5" x3="-5.519638464129619" y3="-5.275075030289045" z3="-3.8000937573415436"/>
+      <atom elementType="H" id="po_4_a7" x3="-6.37423963622966" y3="-4.860886064109518" z3="-1.3517272943829506"/>
+      <atom elementType="H" id="po_4_a8" x3="-5.884406666616895" y3="-3.1541446890163476" z3="-1.228639762823446"/>
+      <atom elementType="H" id="po_4_a9" x3="-6.685088886982166" y3="-3.595513267197184" z3="-3.4995881902840007"/>
+      <atom elementType="H" id="po_4_a10" x3="-4.655430865559971" y3="-2.947522311364774" z3="-4.768493244744711"/>
+      <atom elementType="H" id="po_4_a11" x3="-4.757851804964316" y3="-2.057070391246417" z3="-3.231245597444816"/>
+      <atom elementType="H" id="po_4_a12" x3="-3.638743507604806" y3="-3.4316172972154018" z3="-3.390441772248699"/>
+      <atom elementType="C" id="adgluc_5_a1" x3="-6.687704916997549" y3="-4.067363838929092" z3="-5.61590438407548"/>
+      <atom elementType="H" id="adgluc_5_a2" x3="-6.757349090569135" y3="-3.942733829242192" z3="-6.695828478525167"/>
+      <atom elementType="O" id="adgluc_5_a3" x3="-6.376770009451617" y3="-2.8117350688522267" z3="-5.008409630991422"/>
+      <atom elementType="C" id="adgluc_5_a4" x3="-5.590262362000132" y3="-5.080932004126325" z3="-5.2857992296482035"/>
+      <atom elementType="H" id="adgluc_5_a5" x3="-4.6321213613778545" y3="-4.708332979550344" z3="-5.6485357591176895"/>
+      <atom elementType="O" id="adgluc_5_a7" x3="-5.8814156739073145" y3="-6.329424244426075" z3="-5.912832621802712"/>
+      <atom elementType="C" id="adgluc_5_a8" x3="-7.04363943616303" y3="-6.867326649855479" z3="-5.283996451817689"/>
+      <atom elementType="H" id="adgluc_5_a9" x3="-6.893727294171349" y3="-6.8870814697795755" z3="-4.204570170512091"/>
+      <atom elementType="C" id="adgluc_5_a10" x3="-7.283409070301522" y3="-8.29044299304763" z3="-5.791050094230887"/>
+      <atom elementType="O" id="adgluc_5_a11" x3="-6.205476004981949" y3="-9.131279343075773" z3="-5.3779925447754895"/>
+      <atom elementType="C" id="adgluc_5_a12" x3="-8.259488754670706" y3="-5.999360615692347" z3="-5.612738597310996"/>
+      <atom elementType="H" id="adgluc_5_a13" x3="-8.39789392384504" y3="-5.958363609491253" z3="-6.693330682525565"/>
+      <atom elementType="O" id="adgluc_5_a14" x3="-9.42489148510251" y3="-6.558386704463496" z3="-5.00302529749269"/>
+      <atom elementType="C" id="adgluc_5_a15" x3="-8.02609959008214" y3="-4.582164117822224" z3="-5.071519986879583"/>
+      <atom elementType="H" id="adgluc_5_a16" x3="-7.992935595568447" y3="-4.607031434718124" z3="-3.9826739160236992"/>
+      <atom elementType="O" id="adgluc_5_a17" x3="-9.08565527098334" y3="-3.723568534932657" z3="-5.499405934431639"/>
+      <atom elementType="H" id="adgluc_5_a18" x3="-5.529093294340512" y3="-2.526272212038521" z3="-5.37549701028715"/>
+      <atom elementType="H" id="adgluc_5_a20" x3="-8.219194421430988" y3="-8.669348664273699" z3="-5.380038818322031"/>
+      <atom elementType="H" id="adgluc_5_a21" x3="-7.342393348635696" y3="-8.28299147441486" z3="-6.879950149231098"/>
+      <atom elementType="H" id="adgluc_5_a22" x3="-6.3953168495332235" y3="-10.016909414673485" z3="-5.716996718823376"/>
+      <atom elementType="R" id="adgluc_5_r2" x3="-9.98406655348473" y3="-6.12309590812205" z3="-5.1783682914222195"/>
+      <atom elementType="H" id="adgluc_5_a24" x3="-8.897604943067488" y3="-2.8466646691783413" z3="-5.138071346555143"/>
+      <atom elementType="C" xFract="0.9966" yFract="0.38915" zFract="0.12895" formalCharge="0" hydrogenCount="0" id="acetyl_6_a71" x3="-4.406181212057981" y3="1.7701799097726028" z3="-0.23765439269231925"> </atom>
+      <atom elementType="O" xFract="1.0168" yFract="0.33492" zFract="0.15894" formalCharge="0" hydrogenCount="0" id="acetyl_6_a72" x3="-4.058770499097088" y3="2.570305588422381" z3="0.5671335662735945">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="C" xFract="1.1216" yFract="0.45146" zFract="0.13125" formalCharge="0" hydrogenCount="0" id="acetyl_6_a73" x3="-5.1341828796600915" y3="2.0643852699702228" z3="-1.501789805188395"/>
+      <atom elementType="H" xFract="1.2394" yFract="0.4318" zFract="0.1298" formalCharge="0" hydrogenCount="0" id="acetyl_6_a74" x3="-4.701750155976688" y3="2.8255054033140534" z3="-1.896418196566113"/>
+      <atom elementType="H" xFract="1.1125" yFract="0.476" zFract="0.1716" formalCharge="0" hydrogenCount="0" id="acetyl_6_a75" x3="-6.040107806781336" y3="2.291043937116801" z3="-1.2778994947598403"/>
+      <atom elementType="H" xFract="1.0988" yFract="0.4849" zFract="0.0963" formalCharge="0" hydrogenCount="0" id="acetyl_6_a76" x3="-5.13255276447644" y3="1.3346873272090403" z3="-2.125915663107997"/>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="propanoic_1_a1_propanoic_1_a2" atomRefs2="propanoic_1_a1 propanoic_1_a2"/>
+      <bond order="1" id="propanoic_1_a1_propanoic_1_a6" atomRefs2="propanoic_1_a1 propanoic_1_a6"/>
+      <bond order="1" id="propanoic_1_a1_propanoic_1_a7" atomRefs2="propanoic_1_a1 propanoic_1_a7"/>
+      <bond order="1" id="propanoic_1_a1_propanoic_1_a8" atomRefs2="propanoic_1_a1 propanoic_1_a8"/>
+      <bond order="1" id="propanoic_1_a2_propanoic_1_a3" atomRefs2="propanoic_1_a2 propanoic_1_a3"/>
+      <bond order="1" id="propanoic_1_a2_propanoic_1_a9" atomRefs2="propanoic_1_a2 propanoic_1_a9"/>
+      <bond order="1" id="propanoic_1_a2_propanoic_1_a10" atomRefs2="propanoic_1_a2 propanoic_1_a10"/>
+      <bond order="2" id="propanoic_1_a3_propanoic_1_a4" atomRefs2="propanoic_1_a3 propanoic_1_a4"/>
+      <bond order="1" id="propanoic_1_a3_propanoic_1_a5" atomRefs2="propanoic_1_a3 propanoic_1_a5"/> 
+      <bond order="2" id="2pyr_2_a1_2pyr_2_a2" atomRefs2="2pyr_2_a1 2pyr_2_a2"/>
+      <bond order="1" id="2pyr_2_a1_2pyr_2_a3" atomRefs2="2pyr_2_a1 2pyr_2_a3"/>
+      <bond order="1" id="2pyr_2_a2_2pyr_2_a4" atomRefs2="2pyr_2_a2 2pyr_2_a4"/>
+      <bond order="2" id="2pyr_2_a6_2pyr_2_a3" atomRefs2="2pyr_2_a6 2pyr_2_a3"/>
+      <bond order="1" id="2pyr_2_a4_2pyr_2_r4" atomRefs2="2pyr_2_a4 2pyr_2_r4"/>
+      <bond order="2" id="2pyr_2_a4_2pyr_2_a5" atomRefs2="2pyr_2_a4 2pyr_2_a5"/>
+      <bond order="1" id="2pyr_2_a5_2pyr_2_a6" atomRefs2="2pyr_2_a5 2pyr_2_a6"/>
+      <bond order="1" id="2pyr_2_a6_2pyr_2_r6" atomRefs2="2pyr_2_a6 2pyr_2_r6"/>
+      <bond atomRefs2="propanoic_1_a5 2pyr_2_a2" order="S" id="propanoic_1_a5_2pyr_2_a2"/>
+      <bond order="1" id="phenylethane_3_a1_phenylethane_3_a2" atomRefs2="phenylethane_3_a1 phenylethane_3_a2"/>
+      <bond order="1" id="phenylethane_3_a1_phenylethane_3_a9" atomRefs2="phenylethane_3_a1 phenylethane_3_a9"/>
+      <bond order="1" id="phenylethane_3_a1_phenylethane_3_a10" atomRefs2="phenylethane_3_a1 phenylethane_3_a10"/>
+      <bond order="1" id="phenylethane_3_a2_phenylethane_3_a3" atomRefs2="phenylethane_3_a2 phenylethane_3_a3"/>
+      <bond order="1" id="phenylethane_3_a2_phenylethane_3_a13" atomRefs2="phenylethane_3_a2 phenylethane_3_a13"/>
+      <bond order="2" id="phenylethane_3_a3_phenylethane_3_a8" atomRefs2="phenylethane_3_a3 phenylethane_3_a8"/>
+      <bond order="1" id="phenylethane_3_a3_phenylethane_3_a4" atomRefs2="phenylethane_3_a3 phenylethane_3_a4"/>
+      <bond order="2" id="phenylethane_3_a4_phenylethane_3_a5" atomRefs2="phenylethane_3_a4 phenylethane_3_a5"/>
+      <bond order="1" id="phenylethane_3_a4_phenylethane_3_a14" atomRefs2="phenylethane_3_a4 phenylethane_3_a14"/>
+      <bond order="1" id="phenylethane_3_a5_phenylethane_3_a6" atomRefs2="phenylethane_3_a5 phenylethane_3_a6"/>
+      <bond order="1" id="phenylethane_3_a5_phenylethane_3_a15" atomRefs2="phenylethane_3_a5 phenylethane_3_a15"/>
+      <bond order="2" id="phenylethane_3_a6_phenylethane_3_a7" atomRefs2="phenylethane_3_a6 phenylethane_3_a7"/>
+      <bond order="1" id="phenylethane_3_a6_phenylethane_3_a16" atomRefs2="phenylethane_3_a6 phenylethane_3_a16"/>
+      <bond order="1" id="phenylethane_3_a7_phenylethane_3_a8" atomRefs2="phenylethane_3_a7 phenylethane_3_a8"/>
+      <bond order="1" id="phenylethane_3_a7_phenylethane_3_a17" atomRefs2="phenylethane_3_a7 phenylethane_3_a17"/>
+      <bond order="1" id="phenylethane_3_a8_phenylethane_3_a18" atomRefs2="phenylethane_3_a8 phenylethane_3_a18"/>
+      <bond atomRefs2="2pyr_2_a5 phenylethane_3_a1" order="S" id="2pyr_2_a5_phenylethane_3_a1"/>
+      <bond order="1" id="po_4_a2_po_4_a3" atomRefs2="po_4_a2 po_4_a3"/>
+      <bond order="1" id="po_4_a2_po_4_a7" atomRefs2="po_4_a2 po_4_a7"/>
+      <bond order="1" id="po_4_a2_po_4_a8" atomRefs2="po_4_a2 po_4_a8"/>
+      <bond order="1" id="po_4_a3_po_4_a4" atomRefs2="po_4_a3 po_4_a4"/>
+      <bond order="1" id="po_4_a3_po_4_a5" atomRefs2="po_4_a3 po_4_a5"/>
+      <bond order="1" id="po_4_a3_po_4_a9" atomRefs2="po_4_a3 po_4_a9"/>
+      <bond order="1" id="po_4_a4_po_4_a10" atomRefs2="po_4_a4 po_4_a10"/>
+      <bond order="1" id="po_4_a4_po_4_a11" atomRefs2="po_4_a4 po_4_a11"/>
+      <bond order="1" id="po_4_a4_po_4_a12" atomRefs2="po_4_a4 po_4_a12"/>
+      <bond atomRefs2="phenylethane_3_a2 po_4_a2" id="j2" order="S"/>
+      <bond order="1" id="adgluc_5_a1_adgluc_5_a2" atomRefs2="adgluc_5_a1 adgluc_5_a2"/>
+      <bond order="1" id="adgluc_5_a1_adgluc_5_a15" atomRefs2="adgluc_5_a1 adgluc_5_a15"/>
+      <bond order="1" id="adgluc_5_a1_adgluc_5_a3" atomRefs2="adgluc_5_a1 adgluc_5_a3"/>
+      <bond order="1" id="adgluc_5_a1_adgluc_5_a4" atomRefs2="adgluc_5_a1 adgluc_5_a4"/>
+      <bond order="1" id="adgluc_5_a3_adgluc_5_a18" atomRefs2="adgluc_5_a3 adgluc_5_a18"/>
+      <bond order="1" id="adgluc_5_a4_adgluc_5_a5" atomRefs2="adgluc_5_a4 adgluc_5_a5"/>
+      <bond order="1" id="adgluc_5_a4_adgluc_5_a7" atomRefs2="adgluc_5_a4 adgluc_5_a7"/>
+      <bond order="1" id="adgluc_5_a7_adgluc_5_a8" atomRefs2="adgluc_5_a7 adgluc_5_a8"/>
+      <bond order="1" id="adgluc_5_a8_adgluc_5_a9" atomRefs2="adgluc_5_a8 adgluc_5_a9"/>
+      <bond order="1" id="adgluc_5_a8_adgluc_5_a10" atomRefs2="adgluc_5_a8 adgluc_5_a10"/>
+      <bond order="1" id="adgluc_5_a8_adgluc_5_a12" atomRefs2="adgluc_5_a8 adgluc_5_a12"/>
+      <bond order="1" id="adgluc_5_a10_adgluc_5_a11" atomRefs2="adgluc_5_a10 adgluc_5_a11"/>
+      <bond order="1" id="adgluc_5_a10_adgluc_5_a20" atomRefs2="adgluc_5_a10 adgluc_5_a20"/>
+      <bond order="1" id="adgluc_5_a10_adgluc_5_a21" atomRefs2="adgluc_5_a10 adgluc_5_a21"/>
+      <bond order="1" id="adgluc_5_a11_adgluc_5_a22" atomRefs2="adgluc_5_a11 adgluc_5_a22"/>
+      <bond order="1" id="adgluc_5_a12_adgluc_5_a13" atomRefs2="adgluc_5_a12 adgluc_5_a13"/>
+      <bond order="1" id="adgluc_5_a12_adgluc_5_a14" atomRefs2="adgluc_5_a12 adgluc_5_a14"/>
+      <bond order="1" id="adgluc_5_a12_adgluc_5_a15" atomRefs2="adgluc_5_a12 adgluc_5_a15"/>
+      <bond order="1" id="adgluc_5_a14_adgluc_5_r2" atomRefs2="adgluc_5_a14 adgluc_5_r2"/>
+      <bond order="1" id="adgluc_5_a15_adgluc_5_a16" atomRefs2="adgluc_5_a15 adgluc_5_a16"/>
+      <bond order="1" id="adgluc_5_a15_adgluc_5_a17" atomRefs2="adgluc_5_a15 adgluc_5_a17"/>
+      <bond order="1" id="adgluc_5_a17_adgluc_5_a24" atomRefs2="adgluc_5_a17 adgluc_5_a24"/>
+      <bond atomRefs2="po_4_a5 adgluc_5_a4" id="j3" order="S"/>
+      <bond order="D" id="acetyl_6_a71_acetyl_6_a72" atomRefs2="acetyl_6_a71 acetyl_6_a72"/>
+      <bond order="S" id="acetyl_6_a71_acetyl_6_a73" atomRefs2="acetyl_6_a71 acetyl_6_a73"/>
+      <bond order="S" id="acetyl_6_a73_acetyl_6_a74" atomRefs2="acetyl_6_a73 acetyl_6_a74"/>
+      <bond order="S" id="acetyl_6_a73_acetyl_6_a75" atomRefs2="acetyl_6_a73 acetyl_6_a75"/>
+      <bond order="S" id="acetyl_6_a73_acetyl_6_a76" atomRefs2="acetyl_6_a73 acetyl_6_a76"/>
+      <bond atomRefs2="2pyr_2_a1 acetyl_6_a71" order="S" id="2pyr_2_a1_acetyl_6_a71"/>
+    </bondArray>
+    <torsion id="phenylethane_3_side" atomRefs4="phenylethane_3_a1 phenylethane_3_a2 phenylethane_3_a3 phenylethane_3_a4"/>
+    <torsion id="phenylethane_3_main" atomRefs4="phenylethane_3_r1 phenylethane_3_a1 phenylethane_3_a2 phenylethane_3_r2"/>
+    <torsion id="po_4_tor2" atomRefs4="po_4_a2 po_4_a3 po_4_a5 po_4_r2"/>
+    <torsion id="po_4_tor1" atomRefs4="po_4_r1 po_4_a2 po_4_a3 po_4_a5"/>
+    <angle id="po_4_ang352" atomRefs3="po_4_a3 po_4_a5 po_4_r2"/>
+    <angle id="po_4_ang123" atomRefs3="po_4_r1 po_4_a2 po_4_a3"/>
+    <angle id="po_4_ang234" atomRefs3="po_4_a2 po_4_a3 po_4_a4"/>
+    <length id="po_4_len23" atomRefs2="po_4_a2 po_4_a3"/>
+    <torsion id="adgluc_5_tau" atomRefs4="adgluc_5_a15 adgluc_5_a12 adgluc_5_a14 adgluc_5_r2"/>
+  </molecule>
+</fragment>

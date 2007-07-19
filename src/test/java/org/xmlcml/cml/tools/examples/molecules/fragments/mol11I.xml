@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment  convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule ref="g:triazene" id="1">
+    <join atomRefs2="g:triazene_1_r2 g:benzene_2_r2" moleculeRefs2="g:triazene_1 g:benzene_2">
+      <torsion>45</torsion>
+      <molecule ref="g:benzene" id="2">
+        <arg name="idx">
+          <scalar dataType="xsd:string">2</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_2_r4 g:benzene_3_r1" moleculeRefs2="g:benzene_2 g:benzene_3"/>
+      <molecule ref="g:benzene" id="3">
+        <arg name="idx">
+          <scalar dataType="xsd:string">3</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_3_r4 g:benzene_4_r1" moleculeRefs2="g:benzene_3 g:benzene_4"/>
+      <molecule ref="g:benzene" id="4">
+        <arg name="idx">
+          <scalar dataType="xsd:string">4</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <join atomRefs2="g:triazene_1_r4 g:benzene_5_r2" moleculeRefs2="g:triazene_1 g:benzene_5">
+      <torsion>45</torsion>
+      <molecule ref="g:benzene" id="5">
+        <arg name="idx">
+          <scalar dataType="xsd:string">5</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_5_r4 g:benzene_6_r1" moleculeRefs2="g:benzene_5 g:benzene_6"/>
+      <molecule ref="g:benzene" id="6">
+        <arg name="idx">
+          <scalar dataType="xsd:string">6</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_6_r4 g:benzene_7_r1" moleculeRefs2="g:benzene_6 g:benzene_7"/>
+      <molecule ref="g:benzene" id="7">
+        <arg name="idx">
+          <scalar dataType="xsd:string">7</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <join atomRefs2="g:triazene_1_r6 g:benzene_8_r2" moleculeRefs2="g:triazene_1 g:benzene_8">
+      <torsion>45</torsion>
+      <molecule ref="g:benzene" id="8">
+        <arg name="idx">
+          <scalar dataType="xsd:string">8</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_8_r4 g:benzene_9_r1" moleculeRefs2="g:benzene_8 g:benzene_9"/>
+      <molecule ref="g:benzene" id="9">
+        <arg name="idx">
+          <scalar dataType="xsd:string">9</scalar>
+        </arg>
+      </molecule>
+      <join atomRefs2="g:benzene_9_r4 g:benzene_10_r1" moleculeRefs2="g:benzene_9 g:benzene_10"/>
+      <molecule ref="g:benzene" id="10">
+        <arg name="idx">
+          <scalar dataType="xsd:string">10</scalar>
+        </arg>
+      </molecule>
+    </join>
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+</fragment>

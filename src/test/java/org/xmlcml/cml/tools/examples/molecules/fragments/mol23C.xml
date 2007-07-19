@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-complete" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="acetyl_1">
+    <atomArray> 
+      <atom elementType="C" x3="7.470354790502688" y3="7.21912165" z3="2.1153032017509776" xFract="0.9966" yFract="0.38915" zFract="0.12895" formalCharge="0" hydrogenCount="0" id="acetyl_1_a71"/>
+      <atom elementType="O" x3="7.621770771606594" y3="6.2131009200000005" z3="2.7265105769419966" xFract="1.0168" yFract="0.33492" zFract="0.15894" formalCharge="0" hydrogenCount="0" id="acetyl_1_a72">
+        <label dictRef="cml:torsionEnd">r1</label>
+      </atom>
+      <atom elementType="C" x3="8.407334871591223" y3="8.375034459999998" z3="2.09259931555679" xFract="1.1216" yFract="0.45146" zFract="0.13125" formalCharge="0" hydrogenCount="0" id="acetyl_1_a73"/>
+      <atom elementType="H" x3="9.290344900009062" y3="8.0103218" z3="1.9961034580073869" xFract="1.2394" yFract="0.4318" zFract="0.1298" formalCharge="0" hydrogenCount="0" id="acetyl_1_a74"/>
+      <atom elementType="H" x3="8.339122721687978" y3="8.830276" z3="2.9353942128717265" xFract="1.1125" yFract="0.476" zFract="0.1716" formalCharge="0" hydrogenCount="0" id="acetyl_1_a75"/>
+      <atom elementType="H" x3="8.236429704800676" y3="8.9953799" z3="1.3798877395986096" xFract="1.0988" yFract="0.4849" zFract="0.0963" formalCharge="0" hydrogenCount="0" id="acetyl_1_a76"/>
+      <atom elementType="C" id="eo_2_a2" x3="5.300380141817883" y3="7.079502772878176" z3="-0.9154534222060056"/>
+      <atom elementType="C" id="eo_2_a3" x3="6.486467922025208" y3="6.823210156511273" z3="0.01683509131256522">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_2_a4" x3="6.278594073070518" y3="7.509544655641647" z3="1.2519603554960086"/>
+      <atom elementType="H" id="eo_2_a6" x3="4.375403985754359" y3="6.797338156197662" z3="-0.4118859095451044"/>
+      <atom elementType="H" id="eo_2_a7" x3="5.415935202921861" y3="6.48558179853613" z3="-1.8222907307072882"/>
+      <atom elementType="H" id="eo_2_a8" x3="6.575216932431568" y3="5.752917651776468" z3="0.20559834902018026"/>
+      <atom elementType="H" id="eo_2_a9" x3="7.401432491742795" y3="7.186564637690514" z3="-0.45167569529589313"/>
+      <atom elementType="C" id="eo_3_a2" x3="6.62154172768423" y3="10.43936558984942" z3="-1.8533356299527002"/>
+      <atom elementType="C" id="eo_3_a3" x3="6.600193909812827" y3="8.95460636792364" z3="-1.4836244946342125">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_3_a4" x3="5.251212486359647" y3="8.535418296295937" z3="-1.2730740736342063"/>
+      <atom elementType="H" id="eo_3_a6" x3="5.974604187934773" y3="10.608225491986573" z3="-2.7145766839632195"/>
+      <atom elementType="H" id="eo_3_a7" x3="7.640523234982073" y3="10.73774508323323" z3="-2.100510397501968"/>
+      <atom elementType="H" id="eo_3_a8" x3="7.040046345054841" y3="8.372349939635546" z3="-2.2938968481850797"/>
+      <atom elementType="H" id="eo_3_a9" x3="7.175922693478331" y3="8.799608299947316" z3="-0.5708260685933659"/>
+      <atom elementType="C" id="eo_4_a2" x3="6.218229680461157" y3="11.447241060140115" z3="1.7153189553768573"/>
+      <atom elementType="C" id="eo_4_a3" x3="6.683686863932372" y3="10.663162142977113" z3="0.48640811157429065">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_4_a4" x3="6.129822794690682" y3="11.250861483167997" z3="-0.6915753680816153"/>
+      <atom elementType="H" id="eo_4_a6" x3="6.474994690575075" y3="12.499790884191702" z3="1.592891027720727"/>
+      <atom elementType="H" id="eo_4_a7" x3="6.710694679804454" y3="11.054407695162176" z3="2.6050431664568503"/>
+      <atom elementType="H" id="eo_4_a8" x3="7.772287787994786" y3="10.690209211371531" z3="0.42939509357204053"/>
+      <atom elementType="H" id="eo_4_a9" x3="6.3497874138731705" y3="9.628507741938835" z3="0.5682031460341173"/>
+      <atom elementType="C" id="eo_5_a2" x3="2.9006493972202767" y3="9.742417659351776" z3="1.6835800704173418"/>
+      <atom elementType="C" id="eo_5_a3" x3="4.410696994354474" y3="9.952414959130278" z3="1.5520149212517118">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_5_a4" x3="4.73195918918591" y3="11.308814598715415" z3="1.8630962930909774"/>
+      <atom elementType="H" id="eo_5_a6" x3="2.577070744885433" y3="10.048332508851674" z3="2.678814193932317"/>
+      <atom elementType="H" id="eo_5_a7" x3="2.665817360707149" y3="8.688507181132854" z3="1.5333282200877665"/>
+      <atom elementType="H" id="eo_5_a8" x3="4.931176248061936" y3="9.287602777509996" z3="2.24205847757943"/>
+      <atom elementType="H" id="eo_5_a9" x3="4.720320626209409" y3="9.730374253671435" z3="0.5304865899185571"/>
+      <atom elementType="C" id="eo_6_a2" x3="2.282418820696619" y3="11.297029036365053" z3="-1.6502980828982134"/>
+      <atom elementType="C" id="eo_6_a3" x3="2.9562268008151653" y3="10.47380933922545" z3="-0.5503234758413305">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_6_a4" x3="2.1896258860155813" y3="10.566177244994385" z3="0.6511723449638449"/>
+      <atom elementType="H" id="eo_6_a6" x3="1.2492731973756253" y3="10.969017030859813" z3="-1.7677555018086673"/>
+      <atom elementType="H" id="eo_6_a7" x3="2.8173974645528923" y3="11.155473812584024" z3="-2.589557881483251"/>
+      <atom elementType="H" id="eo_6_a8" x3="3.0180046644879264" y3="9.431133245248304" z3="-0.8634433548151734"/>
+      <atom elementType="H" id="eo_6_a9" x3="3.9602084151421053" y3="10.859590809927083" z3="-0.37176655226580313"/>
+      <atom elementType="C" id="eo_7_a2" x3="3.675474588918919" y3="14.473998683974038" z3="-0.279156731601256"/>
+      <atom elementType="C" id="eo_7_a3" x3="3.5844296154931845" y3="13.002332769462699" z3="-0.6885004122406565">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_7_a4" x3="2.3066125612460575" y3="12.748842130200911" z3="-1.2739293760627801"/>
+      <atom elementType="H" id="eo_7_a6" x3="3.460035769195348" y3="15.104681790703314" z3="-1.142060511777483"/>
+      <atom elementType="H" id="eo_7_a7" x3="4.680234503871148" y3="14.688321039222455" z3="0.08549713351737998"/>
+      <atom elementType="H" id="eo_7_a8" x3="4.367773161488612" y3="12.777918321371493" z3="-1.4131003324968128"/>
+      <atom elementType="H" id="eo_7_a9" x3="3.7126126918314992" y3="12.372172899848625" z3="0.19192939056500657"/>
+      <atom elementType="C" id="eo_8_a2" x3="1.69636854943962" y3="13.848825013329021" z3="2.8202087335337325"/>
+      <atom elementType="C" id="eo_8_a3" x3="2.6974205074107105" y3="13.62729322592212" z3="1.6842198935310906">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_8_a4" x3="2.6784777197774634" y3="14.753530335085992" z3="0.806135532698439"/>
+      <atom elementType="H" id="eo_8_a6" x3="1.916958805934122" y3="14.792733910120129" z3="3.319361949789307"/>
+      <atom elementType="H" id="eo_8_a7" x3="1.7741673490111116" y3="13.031744549248785" z3="3.537687556917157"/>
+      <atom elementType="H" id="eo_8_a8" x3="3.6980885137013515" y3="13.507019190517223" z3="2.1004310149511403"/>
+      <atom elementType="H" id="eo_8_a9" x3="2.4242162446279485" y3="12.729162156335168" z3="1.1297751148200612"/>
+      <atom elementType="C" id="eo_9_a2" x3="-1.1659739792164396" y3="12.87317961419146" z3="0.6364320910560335"/>
+      <atom elementType="C" id="eo_9_a3" x3="0.23460451678821959" y3="12.881901293647832" z3="1.2528376465442903">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_9_a4" x3="0.30576138143090215" y3="13.892452758657374" z3="2.259576657997255"/>
+      <atom elementType="H" id="eo_9_a6" x3="-1.9089502342753724" y3="12.753613638051856" z3="1.42539866941559"/>
+      <atom elementType="H" id="eo_9_a7" x3="-1.247870988668664" y3="12.045244695037503" z3="-0.06802915662783615"/>
+      <atom elementType="H" id="eo_9_a8" x3="0.44100783043949776" y3="11.908528737915974" z3="1.6989066320855415"/>
+      <atom elementType="H" id="eo_9_a9" x3="0.9714702047384938" y3="13.089352836256174" z3="0.4765118029766624"/>
+      <atom elementType="C" id="eo_10_a2" x3="-0.3606959259881841" y3="15.81691674223441" z3="-1.5082609169087389"/>
+      <atom elementType="C" id="eo_10_a3" x3="-0.18586330209710766" y3="14.498480294893856" z3="-0.7514182067321933">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_10_a4" x3="-1.403720687121482" y3="14.168002977192156" z3="-0.08253171993022268"/>
+      <atom elementType="H" id="eo_10_a6" x3="-1.2173706200737213" y3="15.739876789030541" z3="-2.1782992099366796"/>
+      <atom elementType="H" id="eo_10_a7" x3="0.5377893514549297" y3="16.02401565633324" z3="-2.089882139008704"/>
+      <atom elementType="H" id="eo_10_a8" x3="0.0689116307796045" y3="13.706344398371616" z3="-1.4561482649946274"/>
+      <atom elementType="H" id="eo_10_a9" x3="0.6145028360838753" y3="14.604065414867996" z3="-0.018646190827310227"/>
+      <atom elementType="C" id="eo_11_a2" x3="0.10093239220649097" y3="17.80002039509643" z3="1.617113991528442"/>
+      <atom elementType="C" id="eo_11_a3" x3="0.2862729108259098" y3="16.6952891693018" z3="0.5745835071241796">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_11_a4" x3="-0.5904852632280699" y3="16.929096172483604" z3="-0.5283355241254744"/>
+      <atom elementType="H" id="eo_11_a6" x3="0.24585841889575022" y3="18.772229581668643" z3="1.1453261744616412"/>
+      <atom elementType="H" id="eo_11_a7" x3="0.8311576567999074" y3="17.671735999686188" z3="2.4163406032248407"/>
+      <atom elementType="H" id="eo_11_a8" x3="1.3191313442187953" y3="16.6956248128773" z3="0.22495893145395485"/>
+      <atom elementType="H" id="eo_11_a9" x3="0.05532703523057869" y3="15.72936786022151" z3="1.024415728302391"/>
+      <atom elementType="C" id="eo_12_a2" x3="-2.990102744252306" y3="16.18509100361055" z3="2.9404710733981974"/>
+      <atom elementType="C" id="eo_12_a3" x3="-1.5825314366637624" y3="16.33602959591168" z3="2.3594267072714508">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_12_a4" x3="-1.2843792912924257" y3="17.72210194666385" z3="2.187061581184944"/>
+      <atom elementType="H" id="eo_12_a6" x3="-3.066532054967795" y3="16.76378112240634" z3="3.861369714330886"/>
+      <atom elementType="H" id="eo_12_a7" x3="-3.1839737120832887" y3="15.133964631515012" z3="3.154938781264782"/>
+      <atom elementType="H" id="eo_12_a8" x3="-0.8583277970383791" y3="15.890032343107546" z3="3.0418118909064082"/>
+      <atom elementType="H" id="eo_12_a9" x3="-1.531985014653639" y3="15.830413225012482" z3="1.3948096098173886"/>
+      <atom elementType="C" id="eo_13_a2" x3="-4.549057184934389" y3="16.734403006338738" z3="-0.4034318103559036"/>
+      <atom elementType="C" id="eo_13_a3" x3="-3.5608523451770715" y3="16.251591836612292" z3="0.6605214635558767">
+        <label dictRef="cml:torsionEnd">r1</label>
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="O" id="eo_13_a4" x3="-3.9968284205667346" y3="16.687926014315295" z3="1.9486745394968041"/>
+      <atom elementType="H" id="eo_13_a6" x3="-5.553039803925491" y3="16.39548331730126" z3="-0.14666276014442214"/>
+      <atom elementType="H" id="eo_13_a7" x3="-4.265541033636924" y3="16.327367478525897" z3="-1.3741993783409465"/>
+      <atom elementType="H" id="eo_13_a8" x3="-3.5114815273088995" y3="15.16242956813254" z3="0.6425750081100265"/>
+      <atom elementType="H" id="eo_13_a9" x3="-2.5731582359459155" y3="16.663501466590237" z3="0.4520033508617889"/>
+      <atom elementType="Cl" formalCharge="0" hydrogenCount="0" id="cl_14_a1" x3="-4.523064659976213" y3="18.49283100486321" z3="-0.4731122426990626"/>
+    </atomArray>
+    <bondArray> 
+      <bond order="D" id="acetyl_1_a71_acetyl_1_a72" atomRefs2="acetyl_1_a71 acetyl_1_a72"/>
+      <bond order="S" id="acetyl_1_a71_acetyl_1_a73" atomRefs2="acetyl_1_a71 acetyl_1_a73"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a74" atomRefs2="acetyl_1_a73 acetyl_1_a74"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a75" atomRefs2="acetyl_1_a73 acetyl_1_a75"/>
+      <bond order="S" id="acetyl_1_a73_acetyl_1_a76" atomRefs2="acetyl_1_a73 acetyl_1_a76"/>
+      <bond order="1" id="eo_2_a2_eo_2_a3" atomRefs2="eo_2_a2 eo_2_a3"/>
+      <bond order="1" id="eo_2_a2_eo_2_a6" atomRefs2="eo_2_a2 eo_2_a6"/>
+      <bond order="1" id="eo_2_a2_eo_2_a7" atomRefs2="eo_2_a2 eo_2_a7"/>
+      <bond order="1" id="eo_2_a3_eo_2_a4" atomRefs2="eo_2_a3 eo_2_a4"/>
+      <bond order="1" id="eo_2_a3_eo_2_a8" atomRefs2="eo_2_a3 eo_2_a8"/>
+      <bond order="1" id="eo_2_a3_eo_2_a9" atomRefs2="eo_2_a3 eo_2_a9"/>
+      <bond atomRefs2="acetyl_1_a71 eo_2_a4" order="S" id="acetyl_1_a71_eo_2_a4"/>
+      <bond order="1" id="eo_3_a2_eo_3_a3" atomRefs2="eo_3_a2 eo_3_a3"/>
+      <bond order="1" id="eo_3_a2_eo_3_a6" atomRefs2="eo_3_a2 eo_3_a6"/>
+      <bond order="1" id="eo_3_a2_eo_3_a7" atomRefs2="eo_3_a2 eo_3_a7"/>
+      <bond order="1" id="eo_3_a3_eo_3_a4" atomRefs2="eo_3_a3 eo_3_a4"/>
+      <bond order="1" id="eo_3_a3_eo_3_a8" atomRefs2="eo_3_a3 eo_3_a8"/>
+      <bond order="1" id="eo_3_a3_eo_3_a9" atomRefs2="eo_3_a3 eo_3_a9"/>
+      <bond atomRefs2="eo_2_a2 eo_3_a4" order="S" id="eo_2_a2_eo_3_a4"/>
+      <bond order="1" id="eo_4_a2_eo_4_a3" atomRefs2="eo_4_a2 eo_4_a3"/>
+      <bond order="1" id="eo_4_a2_eo_4_a6" atomRefs2="eo_4_a2 eo_4_a6"/>
+      <bond order="1" id="eo_4_a2_eo_4_a7" atomRefs2="eo_4_a2 eo_4_a7"/>
+      <bond order="1" id="eo_4_a3_eo_4_a4" atomRefs2="eo_4_a3 eo_4_a4"/>
+      <bond order="1" id="eo_4_a3_eo_4_a8" atomRefs2="eo_4_a3 eo_4_a8"/>
+      <bond order="1" id="eo_4_a3_eo_4_a9" atomRefs2="eo_4_a3 eo_4_a9"/>
+      <bond atomRefs2="eo_3_a2 eo_4_a4" order="S" id="eo_3_a2_eo_4_a4"/>
+      <bond order="1" id="eo_5_a2_eo_5_a3" atomRefs2="eo_5_a2 eo_5_a3"/>
+      <bond order="1" id="eo_5_a2_eo_5_a6" atomRefs2="eo_5_a2 eo_5_a6"/>
+      <bond order="1" id="eo_5_a2_eo_5_a7" atomRefs2="eo_5_a2 eo_5_a7"/>
+      <bond order="1" id="eo_5_a3_eo_5_a4" atomRefs2="eo_5_a3 eo_5_a4"/>
+      <bond order="1" id="eo_5_a3_eo_5_a8" atomRefs2="eo_5_a3 eo_5_a8"/>
+      <bond order="1" id="eo_5_a3_eo_5_a9" atomRefs2="eo_5_a3 eo_5_a9"/>
+      <bond atomRefs2="eo_4_a2 eo_5_a4" order="S" id="eo_4_a2_eo_5_a4"/>
+      <bond order="1" id="eo_6_a2_eo_6_a3" atomRefs2="eo_6_a2 eo_6_a3"/>
+      <bond order="1" id="eo_6_a2_eo_6_a6" atomRefs2="eo_6_a2 eo_6_a6"/>
+      <bond order="1" id="eo_6_a2_eo_6_a7" atomRefs2="eo_6_a2 eo_6_a7"/>
+      <bond order="1" id="eo_6_a3_eo_6_a4" atomRefs2="eo_6_a3 eo_6_a4"/>
+      <bond order="1" id="eo_6_a3_eo_6_a8" atomRefs2="eo_6_a3 eo_6_a8"/>
+      <bond order="1" id="eo_6_a3_eo_6_a9" atomRefs2="eo_6_a3 eo_6_a9"/>
+      <bond atomRefs2="eo_5_a2 eo_6_a4" order="S" id="eo_5_a2_eo_6_a4"/>
+      <bond order="1" id="eo_7_a2_eo_7_a3" atomRefs2="eo_7_a2 eo_7_a3"/>
+      <bond order="1" id="eo_7_a2_eo_7_a6" atomRefs2="eo_7_a2 eo_7_a6"/>
+      <bond order="1" id="eo_7_a2_eo_7_a7" atomRefs2="eo_7_a2 eo_7_a7"/>
+      <bond order="1" id="eo_7_a3_eo_7_a4" atomRefs2="eo_7_a3 eo_7_a4"/>
+      <bond order="1" id="eo_7_a3_eo_7_a8" atomRefs2="eo_7_a3 eo_7_a8"/>
+      <bond order="1" id="eo_7_a3_eo_7_a9" atomRefs2="eo_7_a3 eo_7_a9"/>
+      <bond atomRefs2="eo_6_a2 eo_7_a4" order="S" id="eo_6_a2_eo_7_a4"/>
+      <bond order="1" id="eo_8_a2_eo_8_a3" atomRefs2="eo_8_a2 eo_8_a3"/>
+      <bond order="1" id="eo_8_a2_eo_8_a6" atomRefs2="eo_8_a2 eo_8_a6"/>
+      <bond order="1" id="eo_8_a2_eo_8_a7" atomRefs2="eo_8_a2 eo_8_a7"/>
+      <bond order="1" id="eo_8_a3_eo_8_a4" atomRefs2="eo_8_a3 eo_8_a4"/>
+      <bond order="1" id="eo_8_a3_eo_8_a8" atomRefs2="eo_8_a3 eo_8_a8"/>
+      <bond order="1" id="eo_8_a3_eo_8_a9" atomRefs2="eo_8_a3 eo_8_a9"/>
+      <bond atomRefs2="eo_7_a2 eo_8_a4" order="S" id="eo_7_a2_eo_8_a4"/>
+      <bond order="1" id="eo_9_a2_eo_9_a3" atomRefs2="eo_9_a2 eo_9_a3"/>
+      <bond order="1" id="eo_9_a2_eo_9_a6" atomRefs2="eo_9_a2 eo_9_a6"/>
+      <bond order="1" id="eo_9_a2_eo_9_a7" atomRefs2="eo_9_a2 eo_9_a7"/>
+      <bond order="1" id="eo_9_a3_eo_9_a4" atomRefs2="eo_9_a3 eo_9_a4"/>
+      <bond order="1" id="eo_9_a3_eo_9_a8" atomRefs2="eo_9_a3 eo_9_a8"/>
+      <bond order="1" id="eo_9_a3_eo_9_a9" atomRefs2="eo_9_a3 eo_9_a9"/>
+      <bond atomRefs2="eo_8_a2 eo_9_a4" order="S" id="eo_8_a2_eo_9_a4"/>
+      <bond order="1" id="eo_10_a2_eo_10_a3" atomRefs2="eo_10_a2 eo_10_a3"/>
+      <bond order="1" id="eo_10_a2_eo_10_a6" atomRefs2="eo_10_a2 eo_10_a6"/>
+      <bond order="1" id="eo_10_a2_eo_10_a7" atomRefs2="eo_10_a2 eo_10_a7"/>
+      <bond order="1" id="eo_10_a3_eo_10_a4" atomRefs2="eo_10_a3 eo_10_a4"/>
+      <bond order="1" id="eo_10_a3_eo_10_a8" atomRefs2="eo_10_a3 eo_10_a8"/>
+      <bond order="1" id="eo_10_a3_eo_10_a9" atomRefs2="eo_10_a3 eo_10_a9"/>
+      <bond atomRefs2="eo_9_a2 eo_10_a4" order="S" id="eo_9_a2_eo_10_a4"/>
+      <bond order="1" id="eo_11_a2_eo_11_a3" atomRefs2="eo_11_a2 eo_11_a3"/>
+      <bond order="1" id="eo_11_a2_eo_11_a6" atomRefs2="eo_11_a2 eo_11_a6"/>
+      <bond order="1" id="eo_11_a2_eo_11_a7" atomRefs2="eo_11_a2 eo_11_a7"/>
+      <bond order="1" id="eo_11_a3_eo_11_a4" atomRefs2="eo_11_a3 eo_11_a4"/>
+      <bond order="1" id="eo_11_a3_eo_11_a8" atomRefs2="eo_11_a3 eo_11_a8"/>
+      <bond order="1" id="eo_11_a3_eo_11_a9" atomRefs2="eo_11_a3 eo_11_a9"/>
+      <bond atomRefs2="eo_10_a2 eo_11_a4" order="S" id="eo_10_a2_eo_11_a4"/>
+      <bond order="1" id="eo_12_a2_eo_12_a3" atomRefs2="eo_12_a2 eo_12_a3"/>
+      <bond order="1" id="eo_12_a2_eo_12_a6" atomRefs2="eo_12_a2 eo_12_a6"/>
+      <bond order="1" id="eo_12_a2_eo_12_a7" atomRefs2="eo_12_a2 eo_12_a7"/>
+      <bond order="1" id="eo_12_a3_eo_12_a4" atomRefs2="eo_12_a3 eo_12_a4"/>
+      <bond order="1" id="eo_12_a3_eo_12_a8" atomRefs2="eo_12_a3 eo_12_a8"/>
+      <bond order="1" id="eo_12_a3_eo_12_a9" atomRefs2="eo_12_a3 eo_12_a9"/>
+      <bond atomRefs2="eo_11_a2 eo_12_a4" order="S" id="eo_11_a2_eo_12_a4"/>
+      <bond order="1" id="eo_13_a2_eo_13_a3" atomRefs2="eo_13_a2 eo_13_a3"/>
+      <bond order="1" id="eo_13_a2_eo_13_a6" atomRefs2="eo_13_a2 eo_13_a6"/>
+      <bond order="1" id="eo_13_a2_eo_13_a7" atomRefs2="eo_13_a2 eo_13_a7"/>
+      <bond order="1" id="eo_13_a3_eo_13_a4" atomRefs2="eo_13_a3 eo_13_a4"/>
+      <bond order="1" id="eo_13_a3_eo_13_a8" atomRefs2="eo_13_a3 eo_13_a8"/>
+      <bond order="1" id="eo_13_a3_eo_13_a9" atomRefs2="eo_13_a3 eo_13_a9"/>
+      <bond atomRefs2="eo_12_a2 eo_13_a4" order="S" id="eo_12_a2_eo_13_a4"/>
+      <bond atomRefs2="eo_13_a2 cl_14_a1" order="S" id="eo_13_a2_cl_14_a1"/>
+    </bondArray>
+  </molecule>
+</fragment>

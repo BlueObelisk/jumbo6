@@ -1,0 +1,67 @@
+<fragment  xmlns='http://www.xml-cml.org/schema'
+  xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragmentList>
+    <fragment id='f'>
+      <molecule ref='g:f'/>
+    </fragment>
+    <fragment id='br'>
+      <molecule ref='g:br'/>
+    </fragment>
+    <fragment id='cl'>
+      <molecule ref='g:cl'/>
+    </fragment>
+    <fragment id='nsp2'>
+      <molecule ref='g:nsp2'/>
+    </fragment>
+    <fragment id='oh'>
+      <molecule ref='g:oh'/>
+    </fragment>
+    <fragment id='ethyl'>
+      <molecule ref='g:et'/>
+    </fragment>
+    <fragment id='methyl'>
+      <molecule ref='g:me'/>
+    </fragment>
+    <fragment id='benzene'>
+      <molecule ref='g:benzene'/>
+    </fragment>
+  </fragmentList>
+  <fragmentList role='markush'>
+    <fragmentList role='markushList' id='halogen'>
+      <fragment ref='f'/>
+      <fragment ref='cl'/>
+      <fragment ref='br'/>
+    </fragmentList>
+    <fragmentList role='markushList' id='polar'>
+      <fragment ref='nsp2'/>
+      <fragment ref='oh'/>
+    </fragmentList>
+    <fragmentList role='markushList' id='alkyl'>
+      <fragment ref='ethyl'/>
+      <fragment ref='methyl'/>
+    </fragmentList>
+    <fragment role='markushTarget'>
+      <molecule ref='g:benzene'>
+	<join moleculeRefs2='PARENT CHILD' atomRefs2='r1 r1'>
+	  <torsion>45</torsion>
+	  <fragment>
+	    <fragment ref='halogen'/>
+	  </fragment>
+	</join>
+	<join moleculeRefs2='PARENT CHILD' atomRefs2='r3 r1'>
+	  <torsion>45</torsion>
+	  <fragment>
+	    <fragment ref='polar'/>
+	  </fragment>
+	</join>
+	<join moleculeRefs2='PARENT CHILD' atomRefs2='r5 r1'>
+	  <torsion>45</torsion>
+	  <fragment>
+	    <fragment ref='alkyl'/>
+	  </fragment>
+	</join>
+      </molecule>
+    </fragment>
+  </fragmentList>
+</fragment>
+

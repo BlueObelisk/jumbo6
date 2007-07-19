@@ -1,0 +1,47 @@
+<fragment  convention='cml:PML-intermediate' 
+   xmlns='http://www.xml-cml.org/schema'
+   xmlns:g='http://www.xml-cml.org/mols/geom1'>
+  <fragment>
+    <molecule ref='g:2pyr'/>
+  </fragment>
+  <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
+    <torsion>121</torsion>
+    <length>1.51</length>
+  </join>
+  <fragment countExpression='*(2)'>
+    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
+      <torsion>170</torsion>
+      <length>1.41</length>
+    </join>
+    <fragment>
+      <molecule ref='g:po'>
+	<arg name='len23'>
+	  <scalar>1.53</scalar>
+	</arg>
+	<arg name='ang123'>
+	  <scalar>110.1</scalar>
+	</arg>
+	<arg name='ang234'>
+	  <scalar>111.2</scalar>
+	</arg>
+	<arg name='ang352'>
+	  <scalar>112.3</scalar>
+	</arg>
+	<arg name='tor1'>
+	  <scalar>-65</scalar>
+	</arg>
+	<arg name='tor2'>
+	  <scalar>165</scalar>
+	</arg>
+      </molecule>
+    </fragment>
+  </fragment>
+  <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'>
+    <torsion>23</torsion>
+    <length>1.52</length>
+  </join>
+  <fragment>
+    <molecule ref='g:acetyl'/>
+  </fragment>
+</fragment>
+

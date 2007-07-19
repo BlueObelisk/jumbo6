@@ -102,6 +102,7 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
     protected CMLMolecule mol8 = null;
     protected CMLMolecule mol9 = null;
     protected CMLMolecule mol10 = null;
+    protected CMLMolecule mol11 = null;
     
     protected CMLCrystal crystal = null;
 
@@ -456,4 +457,32 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
             "</molecule>" +
             S_EMPTY);
     }
+    
+    protected void makeMol11() {
+        mol11 = (CMLMolecule) parseValidString(
+        "<molecule "+CML_XMLNS+">" +
+        "  <atomArray>" +
+        "    <atom id='a1' elementType='N' hydrogenCount='2'/>" +
+        "    <atom id='a2' elementType='C' hydrogenCount='1'/>" +
+        "    <atom id='a3' elementType='C' hydrogenCount='1'/>" +
+        "    <atom id='a4' elementType='O' hydrogenCount='0'/>" +
+        "    <atom id='a5' elementType='S' hydrogenCount='0'/>" +
+        "    <atom id='a6' elementType='N' hydrogenCount='0'/>" +
+        "    <atom id='a7' elementType='Cl' hydrogenCount='0'/>" +
+        "    <atom id='a8' elementType='Br' hydrogenCount='0'/>" +
+        "  </atomArray>" +
+        "  <bondArray>" +
+        "    <bond atomRefs2='a1 a2' order='S'/>" +
+        "    <bond atomRefs2='a2 a3' order='S'/>" +
+        "    <bond atomRefs2='a2 a4' order='S'/>" +
+        "    <bond atomRefs2='a3 a4' order='S'/>" +
+        "    <bond atomRefs2='a3 a5' order='S'/>" +
+        "    <bond atomRefs2='a5 a6' order='S'/>" +
+        "    <bond atomRefs2='a6 a7' order='S'/>" +
+        "    <bond atomRefs2='a6 a8' order='S'/>" +
+        "  </bondArray>" +
+        "</molecule>" +
+        S_EMPTY);
+}
+
 }
