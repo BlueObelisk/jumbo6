@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-explicit" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+  <molecule role="fragment" id="triazene_1">
+    <atomArray>
+      <atom elementType="N" x3="0.2765492911364054" y3="3.8757572000000002" z3="25.381508959946053" id="triazene_1_a1">
+        <label dictRef="cml:torsionEnd">r2</label>
+      </atom>
+      <atom elementType="C" x3="0.9130440201297267" y3="2.8881300000000003" z3="24.75205498269886" id="triazene_1_a2"> </atom>
+      <atom elementType="R" x3="1.413862592327999" y3="3.1385040220730342" z3="24.22347801875486" id="triazene_1_r2"> </atom>
+      <atom elementType="N" x3="0.6710034793604291" y3="1.5629880000000003" z3="24.99245916290205" id="triazene_1_a3">
+        <label dictRef="cml:torsionEnd">r4</label>
+      </atom>
+      <atom elementType="C" x3="-0.2506677283610746" y3="1.2254732000000002" z3="25.965836532665875" id="triazene_1_a4"> </atom>
+      <atom elementType="R" x3="-0.3812304106029923" y3="0.48743690707544074" z3="26.14234663530017" id="triazene_1_r4"> </atom>
+      <atom elementType="N" x3="-0.9274226661160216" y3="2.2244264" z3="26.61004448473895" id="triazene_1_a5">
+        <label dictRef="cml:torsionEnd">r6</label>
+      </atom>
+      <atom elementType="C" x3="-0.638411881791494" y3="3.5031318000000002" z3="26.308615162238905" id="triazene_1_a6">
+        <label dictRef="cml:torsionEnd">r5</label>
+      </atom>
+      <atom elementType="R" x3="-1.0162393566378534" y3="4.057405011259368" z3="26.686672838435875" id="triazene_1_r6"> </atom>
+    </atomArray>
+    <bondArray>
+      <bond order="1" id="triazene_1_a1_triazene_1_a2" atomRefs2="triazene_1_a1 triazene_1_a2"/>
+      <bond order="2" id="triazene_1_a2_triazene_1_a3" atomRefs2="triazene_1_a2 triazene_1_a3"/>
+      <bond order="1" id="triazene_1_a3_triazene_1_a4" atomRefs2="triazene_1_a3 triazene_1_a4"/>
+      <bond order="2" id="triazene_1_a4_triazene_1_a5" atomRefs2="triazene_1_a4 triazene_1_a5"/>
+      <bond order="1" id="triazene_1_a5_triazene_1_a6" atomRefs2="triazene_1_a5 triazene_1_a6"/>
+      <bond order="2" id="triazene_1_a6_triazene_1_a1" atomRefs2="triazene_1_a6 triazene_1_a1"/>
+      <bond order="1" id="triazene_1_r2_triazene_1_a2" atomRefs2="triazene_1_r2 triazene_1_a2"/>
+      <bond order="1" id="triazene_1_a4_triazene_1_r4" atomRefs2="triazene_1_a4 triazene_1_r4"/>
+      <bond order="1" id="triazene_1_a6_triazene_1_r6" atomRefs2="triazene_1_a6 triazene_1_r6"/>
+    </bondArray>
+    <join atomRefs2="g:triazene_1_r2 g:po_2_r1" moleculeRefs2="g:triazene_1 g:po_2" order="S">
+      <torsion>45</torsion>
+      <molecule role="fragment" id="po_2">
+        <atomArray>
+          <atom elementType="R" x3="1.2718481659602687" y3="-0.056654043087598735" z3="0.02401534139488537" id="po_2_r1"/>
+          <atom elementType="C" x3="0.912" y3="-0.145" z3="0.699" id="po_2_a2"/>
+          <atom elementType="C" x3="-0.599" y3="-0.016" z3="0.493" id="po_2_a3">
+            <label dictRef="cml:torsionEnd">r1</label>
+            <label dictRef="cml:torsionEnd">r2</label>
+          </atom>
+          <atom elementType="C" x3="-0.908" y3="1.315" z3="-0.194" id="po_2_a4"/>
+          <atom elementType="O" x3="-1.061" y3="-1.093" z3="-0.326" id="po_2_a5"/>
+          <atom elementType="H" x3="1.14" y3="-1.13" z3="1.106" id="po_2_a7"/>
+          <atom elementType="H" x3="1.25" y3="0.623" z3="1.394" id="po_2_a8"/>
+          <atom elementType="H" x3="-1.102" y3="-0.053" z3="1.459" id="po_2_a9"/>
+          <atom elementType="H" x3="-1.984" y3="1.407" z3="-0.341" id="po_2_a10"/>
+          <atom elementType="H" x3="-0.556" y3="2.137" z3="0.43" id="po_2_a11"/>
+          <atom elementType="H" x3="-0.405" y3="1.352" z3="-1.16" id="po_2_a12"/>
+          <atom elementType="R" x3="-1.7811041326297956" y3="-1.0031756899549835" z3="-0.40525674415736745" id="po_2_r2"/>
+        </atomArray>
+        <bondArray>
+          <bond order="1" id="po_2_r1_po_2_a2" atomRefs2="po_2_r1 po_2_a2"/>
+          <bond order="1" id="po_2_a2_po_2_a3" atomRefs2="po_2_a2 po_2_a3"/>
+          <bond order="1" id="po_2_a2_po_2_a7" atomRefs2="po_2_a2 po_2_a7"/>
+          <bond order="1" id="po_2_a2_po_2_a8" atomRefs2="po_2_a2 po_2_a8"/>
+          <bond order="1" id="po_2_a3_po_2_a4" atomRefs2="po_2_a3 po_2_a4"/>
+          <bond order="1" id="po_2_a3_po_2_a5" atomRefs2="po_2_a3 po_2_a5"/>
+          <bond order="1" id="po_2_a3_po_2_a9" atomRefs2="po_2_a3 po_2_a9"/>
+          <bond order="1" id="po_2_a4_po_2_a10" atomRefs2="po_2_a4 po_2_a10"/>
+          <bond order="1" id="po_2_a4_po_2_a11" atomRefs2="po_2_a4 po_2_a11"/>
+          <bond order="1" id="po_2_a4_po_2_a12" atomRefs2="po_2_a4 po_2_a12"/>
+          <bond order="1" id="po_2_a5_po_2_r2" atomRefs2="po_2_a5 po_2_r2"/>
+        </bondArray>
+        <length id="po_2_len23" atomRefs2="po_2_a2 po_2_a3"/>
+        <angle id="po_2_ang234" atomRefs3="po_2_a2 po_2_a3 po_2_a4"/>
+        <angle id="po_2_ang123" atomRefs3="po_2_r1 po_2_a2 po_2_a3"/>
+        <angle id="po_2_ang352" atomRefs3="po_2_a3 po_2_a5 po_2_r2"/>
+        <torsion id="po_2_tor1" atomRefs4="po_2_r1 po_2_a2 po_2_a3 po_2_a5"/>
+        <torsion id="po_2_tor2" atomRefs4="po_2_a2 po_2_a3 po_2_a5 po_2_r2"/>
+        <arg parameterName="len23"/>
+        <arg parameterName="ang234"/>
+        <arg parameterName="ang123"/>
+        <arg parameterName="ang352"/>
+        <arg parameterName="tor1"/>
+        <arg parameterName="tor2"/>
+      </molecule>
+    </join>
+    <join atomRefs2="g:triazene_1_r4 g:eo_3_r2" moleculeRefs2="g:triazene_1 g:eo_3" order="S">
+      <torsion>45</torsion>
+      <molecule role="fragment" id="eo_3">
+        <atomArray>
+          <atom elementType="R" x3="1.0927029508094934" y3="0.019313350096244575" z3="-0.04489307394726355" id="eo_3_r1"/>
+          <atom elementType="C" x3="0.703" y3="-0.593" z3="-0.302" id="eo_3_a2"/>
+          <atom elementType="C" x3="-0.703" y3="-0.593" z3="0.302" id="eo_3_a3">
+            <label dictRef="cml:torsionEnd">r1</label>
+            <label dictRef="cml:torsionEnd">r2</label>
+          </atom>
+          <atom elementType="O" x3="-1.426" y3="0.543" z3="-0.174" id="eo_3_a4"/>
+          <atom elementType="H" x3="0.631" y3="-0.548" z3="-1.389" id="eo_3_a6"/>
+          <atom elementType="H" x3="1.224" y3="-1.505" z3="-0.01" id="eo_3_a7"/>
+          <atom elementType="H" x3="-1.224" y3="-1.505" z3="0.0090" id="eo_3_a8"/>
+          <atom elementType="H" x3="-0.631" y3="-0.549" z3="1.389" id="eo_3_a9"/>
+          <atom elementType="R" x3="-2.088651624700404" y3="0.5143203169264062" z3="0.1309103147824182" id="eo_3_r2"/>
+        </atomArray>
+        <bondArray>
+          <bond order="1" id="eo_3_r1_eo_3_a2" atomRefs2="eo_3_r1 eo_3_a2"/>
+          <bond order="1" id="eo_3_a2_eo_3_a3" atomRefs2="eo_3_a2 eo_3_a3"/>
+          <bond order="1" id="eo_3_a2_eo_3_a6" atomRefs2="eo_3_a2 eo_3_a6"/>
+          <bond order="1" id="eo_3_a2_eo_3_a7" atomRefs2="eo_3_a2 eo_3_a7"/>
+          <bond order="1" id="eo_3_a3_eo_3_a4" atomRefs2="eo_3_a3 eo_3_a4"/>
+          <bond order="1" id="eo_3_a3_eo_3_a8" atomRefs2="eo_3_a3 eo_3_a8"/>
+          <bond order="1" id="eo_3_a3_eo_3_a9" atomRefs2="eo_3_a3 eo_3_a9"/>
+          <bond order="1" id="eo_3_a4_eo_3_r2" atomRefs2="eo_3_a4 eo_3_r2"/>
+        </bondArray>
+      </molecule>
+      <join atomRefs2="g:eo_3_r1 g:cl_4_r1" moleculeRefs2="g:eo_3 g:cl_4" order="S"/>
+      <molecule role="fragment" id="cl_4">
+        <atomArray>
+          <atom elementType="Cl" x3="1.998" y3="-0.064" z3="-0.0" formalCharge="0" hydrogenCount="0" id="cl_4_a1"/>
+          <atom title="H" elementType="R" formalCharge="0" hydrogenCount="0" x3="1.195035329805453" y3="0.5150921674650439" z3="0.0" id="cl_4_r1"/>
+        </atomArray>
+        <bondArray>
+          <bond order="S" id="cl_4_a1_cl_4_r1" atomRefs2="cl_4_a1 cl_4_r1"/>
+        </bondArray>
+      </molecule>
+    </join>
+  </molecule>
+</fragment>
