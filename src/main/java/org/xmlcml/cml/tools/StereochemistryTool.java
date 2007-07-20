@@ -651,7 +651,6 @@ public class StereochemistryTool extends AbstractTool {
 							}
 						}
 					}
-					System.out.println(intStr);
 					String[] clockwiseStrings = {"012", "201", "120", 
 							"023", "302", "230",
 							"013", "301", "130",
