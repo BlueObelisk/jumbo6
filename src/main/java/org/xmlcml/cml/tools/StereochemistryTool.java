@@ -84,6 +84,7 @@ public class StereochemistryTool extends AbstractTool {
 			return null;
 		}
 		List<CMLAtom> ligandList = this.getLigandsInCahnIngoldPrelogOrder(atom);
+
 		if (ligandList.size() == 3) {
 			ligandList.add(atom); // use this atom as 4th atom
 		}
@@ -155,8 +156,9 @@ public class StereochemistryTool extends AbstractTool {
 				CMLAtomSet otherMarkedAtoms = new CMLAtomSet();
 				markedAtoms.addAtom(centralAtom);
 				otherMarkedAtoms.addAtom(centralAtom);
-				int value = this.compareByAtomicNumber(orderedLigandList.get(i), 
+				int value = this.compareRecursivelyByAtomicNumber(orderedLigandList.get(i), 
 						atom, markedAtoms, otherMarkedAtoms);
+				//System.out.println(orderedLigandList.get(i).getId()+"/"+atom.getId()+" = "+value);
 				if (value == 1) {
 					if (i+1 == orderedLigandList.size()) {
 						orderedLigandList.add(i+1, atom);
@@ -619,7 +621,7 @@ public class StereochemistryTool extends AbstractTool {
 						sense = (d < 0) ? -1 : 1;
 						totalParity = sense * atomParityValue;
 					}
-				// 4 explicit ligands
+					// 4 explicit ligands
 				} else {
 					CMLAtom otherAtom = null;
 					for (CMLAtom at : bond.getAtoms()) {
@@ -642,6 +644,7 @@ public class StereochemistryTool extends AbstractTool {
 							}
 						}
 					}
+					System.out.println(intStr);
 					String[] clockwiseStrings = {"012", "201", "120", 
 							"023", "302", "230",
 							"013", "301", "130",
@@ -674,7 +677,7 @@ public class StereochemistryTool extends AbstractTool {
 			}
 		}
 	}
-	
+
 	/**
 	 * not fully written.
 	 *
@@ -746,10 +749,11 @@ public class StereochemistryTool extends AbstractTool {
 	 *
 	 * @return int the comparison
 	 */
-	private int compareByAtomicNumber(CMLAtom atom, CMLAtom otherAtom,
+	private int compareRecursivelyByAtomicNumber(CMLAtom atom, CMLAtom otherAtom,
 			CMLAtomSet markedAtoms, CMLAtomSet otherMarkedAtoms) {
 		// compare on atomic number
 		int comp = atom.compareByAtomicNumber(otherAtom);
+
 		if (comp == 0) {
 			markedAtoms.addAtom(atom);
 			otherMarkedAtoms.addAtom(otherAtom);
@@ -757,16 +761,30 @@ public class StereochemistryTool extends AbstractTool {
 					atom, markedAtoms);
 			CMLAtom[] otherSortedLigands = getNewLigandsSortedByAtomicNumber(
 					otherAtom, otherMarkedAtoms);
+
 			int length = Math.min(thisSortedLigands.length,
 					otherSortedLigands.length);
 			for (int i = 0; i < length; i++) {
 				CMLAtom thisLigand = thisSortedLigands[i];
-				comp = this.compareByAtomicNumber(thisLigand, otherSortedLigands[i],
-						markedAtoms, otherMarkedAtoms);
+				CMLAtom otherLigand = otherSortedLigands[i];
+				comp = this.compareByAtomicNumber(thisLigand, otherLigand);
+
 				if (comp != 0) {
 					break;
 				}
 			}
+			if (comp == 0) {
+				for (int i = 0; i < length; i++) {
+					CMLAtom thisLigand = thisSortedLigands[i];
+					CMLAtom otherLigand = otherSortedLigands[i];		
+					comp = this.compareRecursivelyByAtomicNumber(thisLigand, otherLigand, markedAtoms, otherMarkedAtoms);
+
+					if (comp != 0) {
+						break;
+					}
+				}
+			}
+
 			if (comp == 0) {
 				// if matched so far, prioritize longer list
 				if (thisSortedLigands.length > otherSortedLigands.length) {
@@ -777,6 +795,19 @@ public class StereochemistryTool extends AbstractTool {
 			}
 		}
 		return comp;
+	}
+
+	private int compareByAtomicNumber(CMLAtom atom, CMLAtom otherAtom) {	
+		int a = atom.getAtomicNumber();
+		int b = otherAtom.getAtomicNumber();
+
+		if (a > b) {
+			return 1;
+		} else if (a < b) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
 	private int getHeaviestAtom(List<CMLAtom> newAtomVector) {
