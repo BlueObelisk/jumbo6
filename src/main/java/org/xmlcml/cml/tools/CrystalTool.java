@@ -352,7 +352,6 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		if (addTransformsToAtoms) {
 			// add unit symmetry element to all atoms in general positions
 			for (CMLAtom atom : molecule.getAtoms()) {
-				System.out.println(atom.getId());
 				CMLScalar scalar = new CMLScalar();
 				scalar.setValue(new CMLTransform3(CMLTransform3.UNIT44).getValue());
 				scalar.setDictRef("cml:transform3");
@@ -423,6 +422,12 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 					if (!inOMap) {
 						atom.setXYZFract(p3);
 						if (addTransformsToAtoms) {
+							//remove any previous Transform3 elements
+							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", X_CML);
+							for (int t = 0; t < t3s.size(); t++) {
+								t3s.get(t).detach();
+							}
+							
 							Transform3 trans = new Transform3(transform.getMatrixAsArray());
 							trans.incrementTranslation(v3);
 							CMLScalar scalar = new CMLScalar();
