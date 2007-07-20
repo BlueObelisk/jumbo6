@@ -614,6 +614,7 @@ public class StereochemistryTool extends AbstractTool {
 			if (atomParity != null) {
 				CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
 				int atomParityValue = atomParity.getIntegerValue();
+				int highestPriorityAtom = 1;
 				// 3 explicit ligands
 				if (atomRefs4x[3].equals(atom)) {
 					double d = this.getSenseOf3Ligands(atom, atomRefs4x);
@@ -635,8 +636,14 @@ public class StereochemistryTool extends AbstractTool {
 					for (CMLAtom cyclicAtom : cyclicAtom4) {
 						list.add(cyclicAtom);
 					}
+					
+					if (otherAtom == atomRefs4x[0]) {
+						highestPriorityAtom = -1;
+					}
+					
 					String intStr = "";
-					for (CMLAtom at : list) {
+					for (int l = 0; l < list.size(); l++) {
+						CMLAtom at = list.get(l);
 						if (at.getId().equals(otherAtom.getId())) continue;
 						for (int i = 0; i < atomRefs4x.length; i++) {
 							if (at.getId().equals(atomRefs4x[i].getId())) {
@@ -667,7 +674,7 @@ public class StereochemistryTool extends AbstractTool {
 							}
 						}
 					}
-					totalParity = sense * atomParityValue;
+					totalParity = sense * atomParityValue * highestPriorityAtom;
 				}
 				String bondType = (totalParity > 0) ? CMLBond.WEDGE
 						: CMLBond.HATCH;
