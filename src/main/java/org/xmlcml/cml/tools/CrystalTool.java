@@ -1184,5 +1184,43 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	public static boolean hasUnitOccupancy(CMLAtom atom) {
 		return Math.abs(getOccupancy(atom) - 1.0) < OCCUPANCY_EPS;
 	}
+	
+	/**
+	 * creates a supercell from the supplied crystal.
+	 * 
+	 * @param cellsAlongA - number of unit cells in the output supercell along axis A
+	 * @param cellsAlongB - number of unit cells in the output supercell along axis B
+	 * @param cellsAlongC - number of unit cells in the output supercell along axis C
+	 */
+	public void createSupercell(int cellsAlongA, int cellsAlongB, int cellsAlongC) {
+		List<CMLAtom> originalAtoms = molecule.getAtoms();
+		List<CMLAtom> newAtoms = new ArrayList<CMLAtom>();
+		for (int i = 0; i < cellsAlongA; i++) {
+			for (int j = 0; j < cellsAlongB; j++) {
+				for (int k = 0; k < cellsAlongC; k++) {
+					// corresponds to the unit cell we already have
+					if (i == 0 && j == 0 && k == 0) continue;
+					// else
+					for (CMLAtom atom : originalAtoms) {
+						CMLAtom newAtom = (CMLAtom)atom.copy();
+						Point3 p3 = newAtom.getXYZFract();
+						double[] coords = p3.getArray();
+						Point3 newP3 = new Point3(coords[0]+new Double(i), coords[1]+new Double(j), coords[2]+new Double(k));
+						newAtom.setXYZFract(newP3);
+						String newId = atom.getId()+S_UNDER+"x"+i+"y"+j+"z"+k;
+						newAtom.resetId(newId);
+						newAtoms.add(newAtom);
+					}
+				}
+			}
+		}
+
+		// now add new atoms to molecule
+		for (CMLAtom atom : newAtoms) {
+			molecule.addAtom(atom);
+		}
+		// reset the cartesian coordinates now we have changed the fractionals
+		molecule.createCartesiansFromFractionals(crystal);
+	}
 
 };
