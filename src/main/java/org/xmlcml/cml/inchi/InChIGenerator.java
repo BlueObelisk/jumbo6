@@ -32,24 +32,24 @@ import org.xmlcml.euclid.EuclidConstants;
  * <p>
  * This class generates the IUPAC International Chemical Identifier (InChI) for
  * a CMLMolecule. It places calls to a JNI wrapper for the InChI C++ library.
- * 
+ *
  * <p>
  * If the molecule has 3D coordinates for all of its atoms then they will be
  * used, otherwise 2D coordinates will be used if available.
- * 
+ *
  * <p>
  * Bond stereochemistry and atom parities are not currently processed. If 3D
  * coordinates are available then the bond stereochemistry and atom parities
  * would be ignored by InChI anyway.
- * 
+ *
  * <p>
- * 
+ *
  * <p>
  * Not typesafe.
  * </p>
- * 
+ *
  * <h3>Example usage</h3>
- * 
+ *
  * <code>// Generate factory - throws CMLException if native code does not load</code><br>
  * <code>InChIGeneratorFactory factory = new InChIGeneratorFactory();</code><br>
  * <code>// Get InChIGenerator</code><br>
@@ -69,16 +69,16 @@ import org.xmlcml.euclid.EuclidConstants;
  * <code></code><br>
  * <code>String inchi = gen.getInchi();</code><br>
  * <code>String auxinfo = gen.getAuxInfo();</code><br>
- * 
+ *
  * <p>
  * <tt><b>
  * TODO: bond stereochemistry<br>
  * TODO: atom parities.
  * </b></tt>
- * 
+ *
  * @author Sam Adams
  * @author Jim Downing
- * 
+ *
  * @since 5.3
  */
 public class InChIGenerator implements EuclidConstants {
@@ -110,11 +110,11 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * <p>
      * Constructor. Generates InChI from CMLMolecule.
-     * 
+     *
      * <p>
      * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
-     * 
+     *
      * @param molecule
      *            Molecule to generate InChI for.
      * @throws CMLException
@@ -131,11 +131,11 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * <p>
      * Constructor. Generates InChI from CMLMolecule.
-     * 
+     *
      * <p>
      * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
-     * 
+     *
      * @param molecule
      *            Molecule to generate InChI for.
      * @param options
@@ -157,11 +157,11 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * <p>
      * Constructor. Generates InChI from CMLMolecule.
-     * 
+     *
      * <p>
      * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then calls the library.
-     * 
+     *
      * @param molecule
      *            Molecule to generate InChI for.
      * @param options
@@ -181,7 +181,7 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * Does the work of calling InChI. Can be called only once for each
      * generator.
-     * 
+     *
      * @throws CMLException
      * @throws IllegalStateException
      *             if generation has already been done.
@@ -214,7 +214,7 @@ public class InChIGenerator implements EuclidConstants {
      * <p>
      * Reads atoms, bonds etc from molecule and converts to format InChI library
      * requires, then makes call to library, generating InChI.
-     * 
+     *
      * @param molecule
      * @throws CMLException
      */
@@ -307,18 +307,18 @@ public class InChIGenerator implements EuclidConstants {
             }
 
             // Calculate implicit hydrogens
-            int hcount = -1;
-            try {
+            int hcount;
+            if (atom.getHydrogenCountAttribute() == null) {
+                hcount = -1;
+            } else {
                 hcount = atom.getHydrogenCount();
-            } catch (CMLRuntimeException cre) {
-                // Hydrogen count not set
-            }
 
-            if (hcount > -1) {
+                // getHydrogenCount returns total hydrogens, InChI wants implict
+                // so we must remove number of hydrogen ligands
                 List<CMLAtom> neighbours = atomNeighbours.get(atom);
                 for (int j = 0; j < neighbours.size(); j++) {
                     CMLAtom neigh = neighbours.get(j);
-                    if (neigh.getElementType().equals("H")) {
+                    if ("H".equals(neigh.getElementType())) {
                         hcount--;
                     }
                 }
@@ -327,10 +327,10 @@ public class InChIGenerator implements EuclidConstants {
                     throw new CMLRuntimeException(
                             "Negative implicit hydrogen count: " + atom);
                 }
-
-                iatom.setImplicitH(hcount);
             }
+            iatom.setImplicitH(hcount);
         }
+
 
         if (optionsContains(ProcessingOptions.USE_BONDS)) {
             // Process bonds
@@ -379,7 +379,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Adds CMLIdentifier containing InChI to CMLMolecule.
-     * 
+     *
      * @throws CMLException
      */
     public void appendToMolecule() throws CMLException {
@@ -388,7 +388,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Adds CMLIdentifier containing InChI to specified element.
-     * 
+     *
      * @param element
      * @throws CMLException
      */
@@ -407,7 +407,7 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * Gets return status from InChI process. OKAY and WARNING indicate InChI
      * has been generated, in all other cases InChI generation has failed.
-     * 
+     *
      * @return INCHI_RET
      */
     public INCHI_RET getReturnStatus() {
@@ -417,7 +417,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Gets generated InChI string.
-     * 
+     *
      * @return string
      */
     public String getInchi() {
@@ -427,7 +427,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Gets generated InChI string.
-     * 
+     *
      * @return string
      */
     public String getAuxInfo() {
@@ -437,7 +437,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Gets generated (error/warning) messages.
-     * 
+     *
      * @return string
      */
     public String getMessage() {
@@ -447,7 +447,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Gets generated log.
-     * 
+     *
      * @return string
      */
     public String getLog() {
@@ -458,7 +458,7 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * Get the array (for convenience) of processing options used by this
      * generator.
-     * 
+     *
      * @return array
      * @since 5.4
      */
@@ -468,7 +468,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Set the processing options for this generator to use.
-     * 
+     *
      * @param processingOptions
      * @since 5.4
      */
@@ -478,7 +478,7 @@ public class InChIGenerator implements EuclidConstants {
 
     /**
      * Has this generator been used (or is it safe to call generate?).
-     * 
+     *
      * @return true if so
      * @since 5.4
      */
@@ -489,7 +489,7 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * If a problem occurred before we got to InChI it will be here, else this
      * will return null.
-     * 
+     *
      * @return The problem
      * @since 5.4
      */

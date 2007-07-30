@@ -16,15 +16,15 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Point3;
 
 /** test for inchi generation.
- * 
+ *
  * @author pm286
  *
  */
 public class InChIGeneratorTest {
-    
+
     protected static CMLMolecule getLAlanineInput() {
     	CMLMolecule molecule = new CMLMolecule();
-    	
+
         CMLAtom a1 = new CMLAtom("a1");
         a1.setElementType("C");
         a1.setXYZ3(new Point3(-0.358, 0.819, 20.655));
@@ -47,14 +47,14 @@ public class InChIGeneratorTest {
         a6.setElementType("O");
         a6.setXYZ3(new Point3(-1.596, -1.239, 20.958));
         a6.setHydrogenCount(1);
-    	
+
         molecule.addAtom(a1);
         molecule.addAtom(a2);
         molecule.addAtom(a3);
         molecule.addAtom(a4);
         molecule.addAtom(a5);
         molecule.addAtom(a6);
-    	
+
         CMLBond b0 = new CMLBond(a1, a2);
         b0.setOrder(CMLBond.SINGLE);
         molecule.addBond(b0);
@@ -70,14 +70,14 @@ public class InChIGeneratorTest {
         CMLBond b4 = new CMLBond(a2, a6);
         b4.setOrder(CMLBond.SINGLE);
         molecule.addBond(b4);
-    	
+
     	return(molecule);
     }
-    
-    
+
+
     protected static CMLMolecule getRAlanineInput() {
     	CMLMolecule molecule = new CMLMolecule();
-    	
+
         CMLAtom a1 = new CMLAtom("a1");
         a1.setElementType("C");
         a1.setXYZ3(new Point3(0.358, 0.819, 20.655));
@@ -100,14 +100,14 @@ public class InChIGeneratorTest {
         a6.setElementType("O");
         a6.setXYZ3(new Point3(1.596, -1.239, 20.958));
         a6.setHydrogenCount(1);
-    	
+
         molecule.addAtom(a1);
         molecule.addAtom(a2);
         molecule.addAtom(a3);
         molecule.addAtom(a4);
         molecule.addAtom(a5);
         molecule.addAtom(a6);
-    	
+
         CMLBond b0 = new CMLBond(a1, a2);
         b0.setOrder(CMLBond.SINGLE);
         molecule.addBond(b0);
@@ -123,11 +123,11 @@ public class InChIGeneratorTest {
         CMLBond b4 = new CMLBond(a2, a6);
         b4.setOrder(CMLBond.SINGLE);
         molecule.addBond(b4);
-    	
+
     	return(molecule);
-    }	
-    
-	
+    }
+
+
 	/** Test method for 'org.xmlcml.cml.inchi.InChIGenerator.InChIGenerator(CMLAtomContainer)'
     * @throws CMLException
 	 */
@@ -135,34 +135,34 @@ public class InChIGeneratorTest {
 	public void testInChIGeneratorCMLAtomContainer() throws CMLException {
         JniInchiNativeCodeLoader.setDebug(true);
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
-		
+
 		CMLMolecule lAlanine = getLAlanineInput();
 		InChIGenerator gen = factory.getInChIGenerator(lAlanine);
 		Assert.assertEquals(gen.getReturnStatus(), INCHI_RET.OKAY);
 		Assert.assertEquals(gen.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
 		Assert.assertEquals(gen.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;s1;s1;d2;s2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-		
+
 		CMLMolecule rAlanine = getRAlanineInput();
 		gen = factory.getInChIGenerator(rAlanine);
 		Assert.assertEquals(gen.getReturnStatus(), INCHI_RET.OKAY);
 		Assert.assertEquals(gen.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
 		Assert.assertEquals(gen.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/it:im/rA:6CCNCOO/rB:s1;s1;s1;d2;s2;/rC:.358,.819,20.655;1.598,-.032,20.905;.275,2.014,21.574;-.952,.043,20.838;2.678,.479,21.093;1.596,-1.239,20.958;");
 	}
-	
-	
+
+
 	/** Test method for 'org.xmlcml.cml.inchi.InChIGenerator.InChIGenerator(CMLMolecule, String)'
     * @throws CMLException
 	 */
     @Test
 	public void testInChIGeneratorCMLMoleculeString() throws CMLException {
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
-		
+
 		CMLMolecule lAlanine = getLAlanineInput();
 		InChIGenerator gen = factory.getInChIGenerator(lAlanine, "-SRel");
 		Assert.assertEquals(gen.getReturnStatus(), INCHI_RET.OKAY);
 		Assert.assertEquals(gen.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/s2");
 		Assert.assertEquals(gen.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;d2;s2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-		
+
 		CMLMolecule rAlanine = getRAlanineInput();
 		gen = factory.getInChIGenerator(rAlanine, "/cOmPRess");
 		Assert.assertEquals(gen.getReturnStatus(), INCHI_RET.OKAY);
@@ -176,7 +176,7 @@ public class InChIGeneratorTest {
     @Test
 	public void testInChIGeneratorCMLMoleculeList() throws CMLException {
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
-		
+
 		CMLMolecule lAlanine = getLAlanineInput();
 		List<INCHI_OPTION> ops = new ArrayList<INCHI_OPTION>();
 		ops.add(INCHI_OPTION.SRel);
@@ -184,7 +184,7 @@ public class InChIGeneratorTest {
 		Assert.assertEquals(gen.getReturnStatus(), INCHI_RET.OKAY);
 		Assert.assertEquals(gen.getInchi(), "InChI=1/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/s2");
 		Assert.assertEquals(gen.getAuxInfo(), "AuxInfo=1/1/N:4,1,2,3,5,6/E:(5,6)/rA:6CCNCOO/rB:s1;s1;s1;d2;s2;/rC:-.358,.819,20.655;-1.598,-.032,20.905;-.275,2.014,21.574;.952,.043,20.838;-2.678,.479,21.093;-1.596,-1.239,20.958;");
-		
+
 		CMLMolecule rAlanine = getRAlanineInput();
 		ops = new ArrayList<INCHI_OPTION>();
 		ops.add(INCHI_OPTION.Compress);
@@ -193,4 +193,36 @@ public class InChIGeneratorTest {
 		Assert.assertEquals(gen.getInchi(), "InChI=1/C3H7NO2/cABBCC/hB1D2A3,1EF/tB1/m1/s1");
 		Assert.assertEquals(gen.getAuxInfo(), "AuxInfo=1/1/N:DABCEF/E:EF/it:im/rA:6CCNCOO/rB:s1;s1;s1;d2;s2;/rC:.358,.819,20.655;1.598,-.032,20.905;.275,2.014,21.574;-.952,.043,20.838;2.678,.479,21.093;1.596,-1.239,20.958;");
 	}
+
+
+    @Test
+    public void testInChIWithImplicitHydrogen() throws CMLException {
+        InChIGeneratorFactory factory = new InChIGeneratorFactory();
+        CMLMolecule mol = new CMLMolecule();
+        CMLAtom atom = new CMLAtom("a1");
+        atom.setElementType("C");
+        mol.addAtom(atom);
+
+        InChIGenerator gen = factory.getInChIGenerator(mol);
+        String inchi = gen.getInchi();
+
+        Assert.assertEquals("InChI=1/CH4/h1H4", inchi);
+    }
+
+    @Test
+    public void testInChIWithExplicitHydrogens() throws CMLException {
+        InChIGeneratorFactory factory = new InChIGeneratorFactory();
+        CMLMolecule mol = new CMLMolecule();
+        CMLAtom atom = new CMLAtom("a1");
+        atom.setElementType("C");
+        atom.setHydrogenCount("3");
+        atom.setSpinMultiplicity(2);
+        mol.addAtom(atom);
+
+        InChIGenerator gen = factory.getInChIGenerator(mol);
+        String inchi = gen.getInchi();
+
+        Assert.assertEquals("InChI=1/CH3/h1H3", inchi);
+    }
+
 }
