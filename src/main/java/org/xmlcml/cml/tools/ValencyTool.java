@@ -1088,7 +1088,6 @@ public class ValencyTool extends AbstractTool {
 								List<List<Integer>> osComboList = CMLUtil.generateCombinationList(osList.size());
 								List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
 								List<CMLMolecule> validMolList = new ArrayList<CMLMolecule>();
-								List<CMLMolecule> finalMolList = new ArrayList<CMLMolecule>();
 								first: 
 									for (int l = 0; l < n2ComboList.size(); l++) {
 										for (int i = 0; i < n3ComboList.size(); i++) {
@@ -1154,11 +1153,12 @@ public class ValencyTool extends AbstractTool {
 														// the fewest charged atoms.
 														if (!piRemaining) {
 															boolean add = true;
-															for (CMLMolecule m : validMolList) {
+															List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
+															for (CMLMolecule m : tempMolList) {
 																MoleculeTool mTool = new MoleculeTool(m);
 																if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																	if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
-																		finalMolList.remove(m);
+																		validMolList.remove(m);
 																	} else {
 																		add = false;
 																	}
@@ -1167,8 +1167,7 @@ public class ValencyTool extends AbstractTool {
 															if (add) {
 																CMLMolecule copy = (CMLMolecule)subMol.copy();
 																validMolList.add(copy);
-																finalMolList.add(copy);
-																if (finalMolList.size() > 5) {
+																if (validMolList.size() > 2) {
 																	break first;
 																}
 															}
@@ -1194,7 +1193,7 @@ public class ValencyTool extends AbstractTool {
 										}
 									}
 								cAttempt:
-									if (finalMolList.size() == 0  && knownMolCharge != UNKNOWN_CHARGE) {
+									if (validMolList.size() == 0  && knownMolCharge != UNKNOWN_CHARGE) {
 										for (int l = 0; l < n2ComboList.size(); l++) {
 											for (int i = 0; i < n3ComboList.size(); i++) {
 												for (int j = osComboList.size()-1; j >= 0; j--) {
@@ -1244,11 +1243,12 @@ public class ValencyTool extends AbstractTool {
 																		// the fewest charged atoms.
 																		if (!piRemaining) {
 																			boolean add = true;
-																			for (CMLMolecule m : validMolList) {
+																			List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
+																			for (CMLMolecule m : tempMolList) {
 																				MoleculeTool mTool = new MoleculeTool(m);
 																				if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																					if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
-																						finalMolList.remove(m);
+																						validMolList.remove(m);
 																					} else {
 																						add = false;
 																					}
@@ -1257,7 +1257,6 @@ public class ValencyTool extends AbstractTool {
 																			if (add) {
 																				CMLMolecule copy = (CMLMolecule)subMol.copy();
 																				validMolList.add(copy);
-																				finalMolList.add(copy);
 																				break cAttempt;
 																			}
 																		}
@@ -1306,11 +1305,12 @@ public class ValencyTool extends AbstractTool {
 																		// the fewest charged atoms.
 																		if (!piRemaining) {
 																			boolean add = true;
-																			for (CMLMolecule m : validMolList) {
+																			List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
+																			for (CMLMolecule m : tempMolList) {
 																				MoleculeTool mTool = new MoleculeTool(m);
 																				if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																					if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
-																						finalMolList.remove(m);
+																						validMolList.remove(m);
 																					} else {
 																						add = false;
 																					}
@@ -1319,7 +1319,6 @@ public class ValencyTool extends AbstractTool {
 																			if (add) {
 																				CMLMolecule copy = (CMLMolecule)subMol.copy();
 																				validMolList.add(copy);
-																				finalMolList.add(copy);
 																				break cAttempt;
 																			}
 																		}
@@ -1364,11 +1363,11 @@ public class ValencyTool extends AbstractTool {
 											}
 										}
 									}
-									if (finalMolList.size() > 0) {
+									if (validMolList.size() > 0) {
 										// remember that molCharge is the charge given to the molecule from the CIF file
 										CMLMolecule theMol = null;
 										if (knownMolCharge != UNKNOWN_CHARGE && !isMetalComplex) {
-											for (CMLMolecule n : finalMolList) {
+											for (CMLMolecule n : validMolList) {
 												if (knownMolCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
 													theMol = n;
 												}
@@ -1380,7 +1379,7 @@ public class ValencyTool extends AbstractTool {
 											if (isMetalComplex) {
 												int count = 0;
 												int currentCharge2 = 0;
-												for (CMLMolecule n : finalMolList) {
+												for (CMLMolecule n : validMolList) {
 													MoleculeTool nTool = new MoleculeTool(n);
 													if (count == 0) {
 														theMol = n;
@@ -1405,7 +1404,7 @@ public class ValencyTool extends AbstractTool {
 											} else {
 												int count = 0;
 												int currentCharge2 = 0;
-												for (CMLMolecule n : finalMolList) {
+												for (CMLMolecule n : validMolList) {
 													MoleculeTool nTool = new MoleculeTool(n);
 													if (count == 0) {
 														theMol = n;
