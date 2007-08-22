@@ -1,6 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -20,7 +19,6 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.AbstractTest;
@@ -36,8 +34,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.cml.interfacex.IndexableList;
 import org.xmlcml.euclid.Real2;
@@ -2303,15 +2299,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 	    	InputStream is = Util.getInputStreamFromResource(infile);
 	    	System.out.println("reading CML "+infile);
 	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
-	    	FileOutputStream fos = new FileOutputStream(outfile);
-	    	SVGElement g = new MoleculeTool(molecule).
-	    	    createSVG(MoleculeDisplay.getDEFAULT());
-	    	int indent = 2;
-	    	SVGSVG svg = new SVGSVG();
-	    	svg.appendChild(g);
-	    	CMLUtil.debug(svg, fos, indent);
-	    	fos.close();
-	    	System.out.println("wrote SVG "+outfile);
+	    	SVGObject svgFile = new SVGObject(outfile);
+	    	svgFile.createOrDisplayGraphics(new MoleculeTool(molecule), MoleculeDisplay.getDEFAULT());
     	}
     }
     

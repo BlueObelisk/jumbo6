@@ -531,7 +531,7 @@ public class CMLAtomArray extends AbstractAtomArray {
     */
     public void setX2(double[] value) throws CMLRuntimeException {
         if (value == null) {
-            throw new CMLRuntimeException("null x2");
+            throw new CMLRuntimeException("null x2: "+this.getId());
         }
         List<CMLAtom> atomList = this.getAtoms(value.length, "x2");
         int i = 0;

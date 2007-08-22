@@ -148,7 +148,11 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 */
 	public CMLMolecule() {
 		super();
+//    	System.out.println("MOLECULE: ");
+//    	System.out.flush();
 		init();
+//    	System.out.println("MOLECULE1: ");
+//    	System.out.flush();
 	}
 
 	/** recommended creator.

@@ -1,11 +1,17 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /** test AtomMatcher
@@ -49,13 +55,17 @@ public class AtomMatcherTest extends AbstractToolTest {
 
     CMLMolecule mol1;
     CMLMolecule mol2;
-
+    AtomTreeTest att = new AtomTreeTest();
+    CMLMolecule dmf;
+    
     /** setup.
      *@exception Exception
      */
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        att.setUp();
+        dmf = att.dmf;
     }
 
     private void makeMol1() {
@@ -260,11 +270,43 @@ public class AtomMatcherTest extends AbstractToolTest {
 
     /** Test method for 'org.xmlcml.cml.tools.AtomMatcher.getUniqueMatchedAtoms(CMLAtomSet, CMLAtomSet, AtomMatcher)'
      */
-    @Ignore
     @Test
     public void testGetUniqueMatchedAtomsCMLAtomSetCMLAtomSetAtomMatcher() {
-
+//        CMLMap map = getUniqueMatchedAtoms(atomSet, targetAtomSet,
+//                atomMatcher) throws CMLException {
     }
 
+    /** Test method for 'org.xmlcml.cml.tools.AtomTree.getAtomTreeLabelling(CMLAtomSet, AtomMatcher)'
+     */
+    @SuppressWarnings("all")
+    @Test
+    public void testGetAtomTreeLabelling() {
+        CMLAtomSet atomSet = new CMLAtomSet(dmf.getAtoms());
+        Map<String, Object> map = new AtomMatcher().getAtomTreeLabelling(atomSet);
+        Assert.assertNotNull("atom tree map not null", map);
+        Assert.assertEquals("atom tree map size", 4, map.size());
+        String[] treeS = new String[]{
+            "O",
+            "C(N(C)(C(O)))",
+            "C(N)(O)",
+            "N",
+        };
+
+        List list = new ArrayList();
+        for (String t : treeS) {
+//            System.out.println("T "+t);
+            Object obj = map.get(t);
+            list.add(obj);
+        }
+        for (Object obj : list) {
+            if (obj instanceof CMLAtom) {
+                System.out.println("A "+((CMLAtom)obj).getId());
+            } else if (obj instanceof CMLAtomSet) {
+                System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), S_SLASH));
+            }
+        }
+        
+        
+    }
 
 }

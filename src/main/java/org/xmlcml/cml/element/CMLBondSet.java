@@ -11,7 +11,6 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Util;
 
@@ -51,6 +50,10 @@ public class CMLBondSet extends AbstractBondSet {
     public CMLBondSet(CMLBondSet old) {
         super(old);
         init();
+        // copy bond references
+        for (CMLBond bond : old.set) {
+        	this.addBond(bond);
+        }
     }
 
     /**
@@ -97,6 +100,7 @@ public class CMLBondSet extends AbstractBondSet {
      *            the molecule
      */
     public CMLBondSet(CMLMolecule mol) {
+    	this();
         try {
             for (CMLBond bond : mol.getBonds()) {
                 this.addBond(bond);
@@ -109,13 +113,10 @@ public class CMLBondSet extends AbstractBondSet {
     /**
      * creates bondSet from list of bonds.
      *
-     * @param bonds
-     *            must all be in same molecule
-     * @throws CMLException
-     *             one or more bonds has no id
+     * @param bonds must all be in same molecule
      *
      */
-    public CMLBondSet(List<CMLBond> bonds) throws CMLException {
+    public CMLBondSet(List<CMLBond> bonds) {
         this();
         addBonds(bonds);
     }
@@ -130,12 +131,15 @@ public class CMLBondSet extends AbstractBondSet {
      *
      */
     public CMLBondSet(CMLBond[] bonds) throws CMLRuntimeException {
+    	this();
         addBonds(bonds);
     }
 
     void init() {
         set = new LinkedHashSet<CMLBond>();
         idTable = new HashMap<String, CMLBond>();
+        setSize(0);
+        setXMLContent(S_EMPTY);
     }
 
     /** bondSet from a molecule with bondIds.
@@ -380,8 +384,7 @@ public class CMLBondSet extends AbstractBondSet {
      * (as1) complement (as2) = {a1, a3}<br>
      * (as2) complement (as1) = {a4}
      *
-     * @param bondSet2
-     *            bondSet to complement; if null assumed empty
+     * @param bondSet2 bondSet to complement; if null assumed empty
      * @return bondSet
      */
     public CMLBondSet complement(CMLBondSet bondSet2) {
@@ -426,6 +429,32 @@ public class CMLBondSet extends AbstractBondSet {
         }
         return newBondSet;
     }
+    
+    /**
+     * Returns intersection of this bondSet with another.
+     *
+     * Creates new bondSet containing the bonds that are in this bondSet, and
+     * the one supplied. (and)
+     * <p>
+     * eg. as1 = {a1, a2, a3}; as2 = {a2, a4}<br>
+     * (as1) union (as2) = (as2) intersection (as1) = {a2}
+     *
+     * @param bondSet2 bondSet to intersect with
+     * @throws CMLRuntimeException
+     * @return bond set
+     */
+    public CMLBondSet intersection(CMLBondSet bondSet2) throws CMLRuntimeException {
+        CMLBondSet newBondSet = new CMLBondSet();
+
+        List<CMLBond> bonds2 =  bondSet2.getBonds();
+        for (CMLBond bond2 : bonds2) {
+            if (this.contains(bond2)) {
+                newBondSet.addBond(bond2);
+            }
+        }
+        return newBondSet;
+    }
+
 
     /**
      * Returns symmetric difference of this bondSet with another.
@@ -438,12 +467,10 @@ public class CMLBondSet extends AbstractBondSet {
      *
      * @param bondSet2
      *            bondSet to xor with
-     * @throws CMLException
      * @return bondSet
      *
      */
-    public CMLBondSet symmetricDifference(CMLBondSet bondSet2)
-            throws CMLException {
+    public CMLBondSet symmetricDifference(CMLBondSet bondSet2) {
         CMLBondSet newBondSet = new CMLBondSet();
 
         List<CMLBond> bonds = this.getBonds();

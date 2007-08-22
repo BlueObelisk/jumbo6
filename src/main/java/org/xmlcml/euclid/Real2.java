@@ -1,5 +1,7 @@
 package org.xmlcml.euclid;
 import java.util.List;
+
+import org.xmlcml.cml.base.CMLRuntimeException;
 /**
  * A pair of FPt numbers with no other assumptions
  * 
@@ -266,6 +268,9 @@ public class Real2 implements EuclidConstants {
      * @return angle is CLOCKWISE from p1 to p3
      */
     public static Angle getAngle(Real2 p1, Real2 p2, Real2 p3) {
+    	if (p1 == null || p2 == null || p3 == null) {
+    		throw new CMLRuntimeException("null coordinates");
+    	}
         double x1 = p1.x - p2.x;
         double y1 = p1.y - p2.y;
         double x3 = p3.x - p2.x;
@@ -282,12 +287,12 @@ public class Real2 implements EuclidConstants {
      * 
      */
     public void transformBy(Transform2 t) {
-        double x = t.flmat[0][0] * this.x + t.flmat[0][1] * this.y
+        double xx = t.flmat[0][0] * this.x + t.flmat[0][1] * this.y
                 + t.flmat[0][2];
-        double y = t.flmat[1][0] * this.x + t.flmat[1][1] * this.y
+        double yy = t.flmat[1][0] * this.x + t.flmat[1][1] * this.y
                 + t.flmat[1][2];
-        this.x = x;
-        this.y = y;
+        this.x = xx;
+        this.y = yy;
     }
     /**
      * gets a point transformed by a rot-trans matrix does NOT MODIFY 'this'

@@ -189,15 +189,6 @@ public class AtomToolTest extends MoleculeAtomBondTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.AtomTool#createSVG()}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateSVG() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
 	 * Test method for {@link org.xmlcml.cml.tools.AtomTool#getAtomDisplay()}.
 	 */
 	@Test

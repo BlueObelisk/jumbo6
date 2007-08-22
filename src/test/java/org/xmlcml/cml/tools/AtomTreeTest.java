@@ -1,16 +1,11 @@
 package org.xmlcml.cml.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 
 /** tests atomTree.
  * 
@@ -188,37 +183,6 @@ public class AtomTreeTest extends AbstractToolTest {
         Assert.assertEquals("compare 0 1 ", -1, atomTree1.compareTo(atomTree2));
     }
 
-    /** Test method for 'org.xmlcml.cml.tools.AtomTree.getAtomTreeLabelling(CMLAtomSet, AtomMatcher)'
-     */
-    @SuppressWarnings("all")
-    @Test
-    public void testGetAtomTreeLabelling() {
-        CMLAtomSet atomSet = new CMLAtomSet(dmf.getAtoms());
-        Map<String, Object> map = AtomTree.getAtomTreeLabelling(atomSet, new AtomMatcher());
-        Assert.assertNotNull("atom tree map not null", map);
-        Assert.assertEquals("atom tree map size", 4, map.size());
-        String[] treeS = new String[]{
-            "O",
-            "C(N(C)(C(O)))",
-            "C(N)(O)",
-            "N",
-        };
-
-        List list = new ArrayList();
-        for (String t : treeS) {
-//            System.out.println("T "+t);
-            Object obj = map.get(t);
-            list.add(obj);
-        }
-        for (Object obj : list) {
-            if (obj instanceof CMLAtom) {
-  //              System.out.println("A "+((CMLAtom)obj).getId());
-            } else if (obj instanceof CMLAtomSet) {
- //               System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), S_SLASH));
-            }
-        }
-    }
-
     /** typical example with symmetry.
      *
      */
@@ -303,4 +267,145 @@ public class AtomTreeTest extends AbstractToolTest {
                "O(C)(C)(C(C(C))(C(C)))(C(C(C))(C(C)))", atomTree.toString());
    }
    
+   /** typical example with symmetry.
+   *
+   */
+  @Test
+  public void testPhenylCyclohexane() {
+      String phcS = "<molecule "+CML_XMLNS+">"+
+          "  <atomArray>" +
+          "    <atom id='a1' elementType='C' hydrogenCount='0'/>" +
+          "    <atom id='a2' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a3' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a4' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a5' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a6' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a7' elementType='C' hydrogenCount='1'/>" +
+          "    <atom id='a8' elementType='C' hydrogenCount='2'/>" +
+          "    <atom id='a9' elementType='C' hydrogenCount='2'/>" +
+          "    <atom id='a10' elementType='C' hydrogenCount='2'/>" +
+          "    <atom id='a11' elementType='C' hydrogenCount='2'/>" +
+          "    <atom id='a12' elementType='C' hydrogenCount='2'/>" +
+          "  </atomArray>" +
+          "  <bondArray>" +
+          "    <bond atomRefs2='a1 a2' order='A'/>" +
+          "    <bond atomRefs2='a1 a6' order='A'/>" +
+          "    <bond atomRefs2='a3 a2' order='A'/>" +
+          "    <bond atomRefs2='a3 a4' order='A'/>" +
+          "    <bond atomRefs2='a4 a5' order='A'/>" +
+          "    <bond atomRefs2='a5 a6' order='A'/>" +
+          "    <bond atomRefs2='a1 a7' order='1'/>" +
+          "    <bond atomRefs2='a7 a12' order='1'/>" +
+          "    <bond atomRefs2='a7 a8' order='1'/>" +
+          "    <bond atomRefs2='a8 a9' order='1'/>" +
+          "    <bond atomRefs2='a9 a10' order='1'/>" +
+          "    <bond atomRefs2='a10 a11' order='1'/>" +
+          "    <bond atomRefs2='a11 a12' order='1'/>" +
+                    "  </bondArray>" +
+          "</molecule>";
+      CMLMolecule phc = null;
+      try {
+          phc = (CMLMolecule) new CMLBuilder().parseString(phcS);
+      } catch (Exception e) {
+          neverThrow(e);
+      }
+      AtomTree atomTree = new AtomTree(phc.getAtom(6));
+      atomTree.setUseExplicitHydrogens(false);
+      atomTree.expandTo(3);
+      Assert.assertEquals("new AtomTree", "C(C(C(C)))(C(C(C)))(C(C(C))(C(C)))", atomTree.toString());
+      atomTree.setUseExplicitHydrogens(true);
+      atomTree.expandTo(3);
+      Assert.assertEquals("new AtomTree", 
+              "C(C(C(C)))(C(C(C)))(C(C(C)))(C(C(C)))(C(C(C))(C(C)))(C(C(C))(C(C)))", atomTree.toString());
+      atomTree = new AtomTree(phc.getAtom(0));
+      atomTree.setUseExplicitHydrogens(false);
+      atomTree.expandTo(3);
+      Assert.assertEquals("new AtomTree", "C(C(C(C)))(C(C(C)))(C(C(C))(C(C)))", atomTree.toString());
+      atomTree.setUseExplicitHydrogens(true);
+      atomTree.expandTo(3);
+      Assert.assertEquals("new AtomTree", 
+              "C(C(C(C)))(C(C(C)))(C(C(C)))(C(C(C)))(C(C(C))(C(C)))(C(C(C))(C(C)))", atomTree.toString());
+	  }
+	  
+	  /** typical example with symmetry.
+	  *
+	  */
+	 @Test
+	 public void testAnisoleH() {
+	     String anisoleS = "<molecule "+CML_XMLNS+">"+
+	         "  <atomArray>" +
+	         "    <atom id='a1' elementType='C' hydrogenCount='0'/>" +
+	         "    <atom id='a2' elementType='C' hydrogenCount='1'/>" +
+	         "    <atom id='a3' elementType='C' hydrogenCount='1'/>" +
+	         "    <atom id='a4' elementType='C' hydrogenCount='1'/>" +
+	         "    <atom id='a5' elementType='C' hydrogenCount='1'/>" +
+	         "    <atom id='a6' elementType='C' hydrogenCount='1'/>" +
+	         "    <atom id='a7' elementType='O'/>" +
+	         "    <atom id='a8' elementType='C' hydrogenCount='3'/>" +
+	         "  </atomArray>" +
+	         "  <bondArray>" +
+	         "    <bond atomRefs2='a1 a2' order='A'/>" +
+	         "    <bond atomRefs2='a1 a6' order='A'/>" +
+	         "    <bond atomRefs2='a1 a7' order='1'/>" +
+	         "    <bond atomRefs2='a3 a2' order='A'/>" +
+	         "    <bond atomRefs2='a3 a4' order='A'/>" +
+	         "    <bond atomRefs2='a4 a5' order='A'/>" +
+	         "    <bond atomRefs2='a5 a6' order='A'/>" +
+	         "    <bond atomRefs2='a8 a7' order='1'/>" +
+	                   "  </bondArray>" +
+	         "</molecule>";
+	     
+	     CMLMolecule anisole = null;
+	     try {
+	         anisole = (CMLMolecule) new CMLBuilder().parseString(anisoleS);
+	     } catch (Exception e) {
+	         neverThrow(e);
+	     }
+	     MoleculeTool moleculeTool = new MoleculeTool(anisole);
+	     moleculeTool.expandImplicitHydrogens(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
+	     anisole.debug();
+	     AtomTree atomTree = new AtomTree(anisole.getAtom(6));
+	     atomTree.setUseExplicitHydrogens(true);
+	     atomTree.expandTo(3);
+	     Assert.assertEquals("new AtomTree", "O(C(C(C)(H))(C(C)(H)))(C(H)(H)(H))", atomTree.toString());
+	     
+	     String methoxycyclohexeneS = "<molecule "+CML_XMLNS+">"+
+	     "  <atomArray>" +
+	     "    <atom id='a1' elementType='C' hydrogenCount='1'/>" +
+	     "    <atom id='a2' elementType='C' hydrogenCount='2'/>" +
+	     "    <atom id='a3' elementType='C' hydrogenCount='2'/>" +
+	     "    <atom id='a4' elementType='C' hydrogenCount='2'/>" +
+	     "    <atom id='a5' elementType='C' hydrogenCount='1'/>" +
+	     "    <atom id='a6' elementType='C' hydrogenCount='1'/>" +
+	     "    <atom id='a7' elementType='O'/>" +
+	     "    <atom id='a8' elementType='C' hydrogenCount='3'/>" +
+	     "  </atomArray>" +
+	     "  <bondArray>" +
+	     "    <bond atomRefs2='a1 a2' order='1'/>" +
+	     "    <bond atomRefs2='a1 a6' order='1'/>" +
+	     "    <bond atomRefs2='a1 a7' order='1'/>" +
+	     "    <bond atomRefs2='a3 a2' order='1'/>" +
+	     "    <bond atomRefs2='a3 a4' order='1'/>" +
+	     "    <bond atomRefs2='a4 a5' order='1'/>" +
+	     "    <bond atomRefs2='a5 a6' order='2'/>" +
+	     "    <bond atomRefs2='a8 a7' order='1'/>" +
+	               "  </bondArray>" +
+	     "</molecule>";
+		 CMLMolecule methoxycyclohexene = null;
+		 try {
+			 methoxycyclohexene = (CMLMolecule) new CMLBuilder().parseString(methoxycyclohexeneS);
+		 } catch (Exception e) {
+		     neverThrow(e);
+		 }
+		 moleculeTool = new MoleculeTool(methoxycyclohexene);
+		 moleculeTool.expandImplicitHydrogens(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
+		 anisole.debug();
+		 atomTree = new AtomTree(methoxycyclohexene.getAtom(6));
+		 atomTree.setUseExplicitHydrogens(true);
+		 atomTree.expandTo(3);
+		 Assert.assertEquals("new AtomTree", "O(C(C(C)(H))(C(C)(H)(H))(H))(C(H)(H)(H))", atomTree.toString());
+    }
+ 
+
+	 
 }

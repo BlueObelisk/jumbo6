@@ -33,16 +33,8 @@ public class ConnectionTableTool extends AbstractTool {
 	CMLMolecule molecule;
 	MoleculeTool moleculeTool;
 
-
 	// Used by ring detection methods
-	protected List<Set<CMLAtom>> rings = null;
-	protected List<CMLAtom> path = null;
-	protected Set<CMLAtom> visitedAtoms;
-	protected Set<CMLAtom> ringAtoms;
-
-
-
-
+	private List<Set<CMLAtom>> ringNucleusAtoms = null;
 
 	/**
 	 * constructor with embedded molecule.
@@ -50,6 +42,9 @@ public class ConnectionTableTool extends AbstractTool {
 	 * @param molecule
 	 */
 	public ConnectionTableTool(CMLMolecule molecule) {
+		if (molecule == null) {
+			throw new CMLRuntimeException("null molecule");
+		}
 		this.molecule = molecule;
 		moleculeTool = new MoleculeTool(molecule);
 	}
@@ -465,10 +460,10 @@ public class ConnectionTableTool extends AbstractTool {
 	 * 
 	 * @return List of CMLAtomSets - one atomset for each discrete ring system
 	 */
-	public List<CMLAtomSet> getRingNucleiAtomSets() {
-		findRings();
-		List<CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>(rings.size());
-		for (Set<CMLAtom> set : rings) {
+	List<CMLAtomSet> getRingNucleiAtomSets() {
+		findRingNuclei();
+		List<CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>(ringNucleusAtoms.size());
+		for (Set<CMLAtom> set : ringNucleusAtoms) {
 			CMLAtomSet atomSet = new CMLAtomSet(set);
 			atomSetList.add(atomSet);
 		}
@@ -476,15 +471,14 @@ public class ConnectionTableTool extends AbstractTool {
 		return atomSetList;
 	}
 
-
 	/** Gets cyclic bonds in molecule.
 	 * 
 	 * @return List of CMLBondSets - one bondset for each ring system
 	 */
-	public List<CMLBondSet> getRingNucleiBondSets() {
-		findRings();
+	List<CMLBondSet> getRingNucleiBondSets() {
+		findRingNuclei();
 		List<CMLBondSet> bondSetList = new ArrayList<CMLBondSet>();
-		for (Set<CMLAtom> set : rings) {
+		for (Set<CMLAtom> set : ringNucleusAtoms) {
 			CMLBondSet bondSet = new CMLBondSet();
 			for (CMLBond bond : molecule.getBonds()) {
 				String[] atomRefs2 = bond.getAtomRefs2();
@@ -533,13 +527,13 @@ public class ConnectionTableTool extends AbstractTool {
 		return atoms;
 	}
 
-	/** calculate rings and cyclic bonds. Returns list of all cyclic bonds
+	/** calculate ringNucleusAtoms and cyclic bonds. Returns list of all cyclic bonds
 	 * in molecule, and sets CYCLIC or ACYCLIC flag on each bond, as appropriate
 	 * 
 	 * @return cyclic bonds (or zero array)
 	 */
 	public List<CMLBond> getCyclicBonds() {
-		findRings();
+		findRingNuclei();
 		List<CMLBond> cyclicBondList = new ArrayList<CMLBond>();
 
 		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
@@ -758,29 +752,51 @@ public class ConnectionTableTool extends AbstractTool {
 
 
 	/**
-	 * Identifies rings and ring systems.
+	 * Identifies ringNucleusAtoms and ring systems.
 	 * 
 	 * @author Sam Adams
 	 */
-	protected void findRings() {
-		if (rings != null) {
-			return;
-		}
-
-		rings = new ArrayList<Set<CMLAtom>>();
-		path = new ArrayList<CMLAtom>();
-		visitedAtoms = new HashSet<CMLAtom>();
-		ringAtoms = new HashSet<CMLAtom>();
-
-		List<CMLAtom> atoms = molecule.getAtoms();
-		Iterator<CMLAtom> iterator = atoms.iterator();
-		while (visitedAtoms.size() < atoms.size()) {
-			CMLAtom atom = iterator.next();
-			if (!visitedAtoms.contains(atom)) {
-				traceRingPaths(atom, null);
+	private void findRingNuclei() {
+		if (ringNucleusAtoms == null) {
+			ringNucleusAtoms = new ArrayList<Set<CMLAtom>>();
+			List<CMLAtom> path = new ArrayList<CMLAtom>();
+			Set<CMLAtom> visitedAtoms = new HashSet<CMLAtom>();
+	
+			List<CMLAtom> atoms = molecule.getAtoms();
+			Iterator<CMLAtom> iterator = atoms.iterator();
+			while (visitedAtoms.size() < atoms.size()) {
+				CMLAtom atom = iterator.next();
+				if (!visitedAtoms.contains(atom)) {
+					traceRingPaths(atom, null, visitedAtoms, path);
+				}
 			}
 		}
 	}
+	
+//	/** get the ringNucleusAtoms as atomsets.
+//	 * maybe rewrite as RingTools
+//	 * @return list of ringNucleusAtoms
+//	 * 
+//	 */
+//	private List<Set<CMLAtom>> calculateRings() {
+//		findRingNuclei();
+//		return ringNucleusAtoms;
+//	}
+	
+	/** get ringNucleusSet.
+	 * @return ringNucleusSet
+	 */
+	public RingNucleusSet getRingNucleusSet() {
+		List<CMLAtomSet> atomSetLists = this.getRingNucleiAtomSets();
+		List<CMLBondSet> bondSetLists = this.getRingNucleiBondSets();
+		RingNucleusSet ringNucleusSet = new RingNucleusSet();
+		for (int i = 0; i < atomSetLists.size(); i++) {
+			RingNucleus ringNucleus = new RingNucleus(atomSetLists.get(i), bondSetLists.get(i));
+			ringNucleusSet.addRingNucleus(ringNucleus);
+		}
+		return ringNucleusSet;
+	}
+
 
 	/**
 	 * Iterative part of ring finder.
@@ -788,9 +804,11 @@ public class ConnectionTableTool extends AbstractTool {
 	 * @param nextAtom          Atom to move to
 	 * @param lastAtom          Last atom in path
 	 */
-	protected void traceRingPaths(CMLAtom nextAtom, CMLAtom lastAtom) {
-		if (rings.size() > 1000) {
-			throw new CMLRuntimeException("too many rings");
+	protected void traceRingPaths(
+			CMLAtom nextAtom, CMLAtom lastAtom, 
+			Set<CMLAtom> visitedAtoms, List<CMLAtom> path) {
+		if (ringNucleusAtoms.size() > 1000) {
+			throw new CMLRuntimeException("too many ringNucleusAtoms");
 		}
 		if (path.contains(nextAtom)) {
 
@@ -808,8 +826,8 @@ public class ConnectionTableTool extends AbstractTool {
 			}
 
 			// Check whether new ring, or merge with existing
-			for (int i = 0; i < rings.size(); i ++) {
-				Set<CMLAtom> existingRing = rings.get(i);
+			for (int i = 0; i < ringNucleusAtoms.size(); i ++) {
+				Set<CMLAtom> existingRing = ringNucleusAtoms.get(i);
 
 				boolean overlap = false;
 				for (CMLAtom at : newRing) {
@@ -820,11 +838,11 @@ public class ConnectionTableTool extends AbstractTool {
 				}
 				if (overlap) {
 					newRing.addAll(existingRing);
-					rings.remove(i);
+					ringNucleusAtoms.remove(i);
 					i --;
 				}
 			}
-			rings.add(newRing);
+			ringNucleusAtoms.add(newRing);
 		} else if (!visitedAtoms.contains(nextAtom)) {
 			visitedAtoms.add(nextAtom);
 			// Add atom to path
@@ -833,7 +851,7 @@ public class ConnectionTableTool extends AbstractTool {
 			// Proceed to each neighbour in turn
 			for (CMLAtom atom : nextAtom.getLigandAtoms()) {
 				if (atom != lastAtom) {
-					traceRingPaths(atom, nextAtom);
+					traceRingPaths(atom, nextAtom, visitedAtoms, path);
 				}
 			}
 

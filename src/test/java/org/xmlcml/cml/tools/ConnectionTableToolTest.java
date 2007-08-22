@@ -25,6 +25,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  */
 public class ConnectionTableToolTest extends AbstractToolTest {
 
+	static String MOLECULES = "org"+U_S+"xmlcml"+U_S+"cml"+U_S+"tools"+U_S+"examples"+U_S+"molecules";
     String ringMolS = S_EMPTY +
             "  <molecule id='m1' "+CML_XMLNS+">" +
             "    <atomArray>" +
@@ -109,6 +110,18 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     "  </molecule>" +
     S_EMPTY;
     
+//    private CMLMolecule getMoleculeByFileRoot(String fileRoot) {
+//    	CMLMolecule molecule = (CMLMolecule) parseValidResource(fileRoot+".xml");
+//    	
+//    	CMLMolecule molecule = null;
+//		try {
+//			molecule = (CMLMolecule) CMLUtil.getXMLResource("org/xmlcml/cml/tools/examples/molecules/"+fileRoot+".xml").getRootElement();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	return molecule;
+//    }
     /** setup
      * @exception Exception
      */
@@ -216,11 +229,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
         cyclicBondList = ringMolTool.getCyclicBonds();
         Assert.assertEquals("cyclic bond count", 10, cyclicBondList.size());
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(cyclicBondList);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        bondSet = new CMLBondSet(cyclicBondList);
         CMLBondSet bondSet1 = new CMLBondSet(ringMolTool.getMolecule(), 
             new String[]{"b12", "b23", "b34", "b14", "b56", "b57", "b67", "b78", "b69", "b89"});
         Assert.assertTrue("bond set bonds ", bondSet.hasContentEqualTo(bondSet1));
@@ -281,11 +290,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
         acyclicBondList = ringMolTool.getAcyclicBonds();
         Assert.assertEquals("cyclic bond count", 3, acyclicBondList.size());
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(acyclicBondList);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        bondSet = new CMLBondSet(acyclicBondList);
         CMLBondSet bondSet1 = new CMLBondSet(ringMolTool.getMolecule(), 
             new String[]{"b15", "b910", "b1011"});
         Assert.assertTrue("bond set bonds ", bondSet.hasContentEqualTo(bondSet1));
@@ -299,11 +304,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
         acyclicDoubleBondList = ringMolTool.getAcyclicDoubleBonds();
         Assert.assertEquals("cyclic bond count", 1, acyclicDoubleBondList.size());
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(acyclicDoubleBondList);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        bondSet = new CMLBondSet(acyclicDoubleBondList);
         CMLBondSet bondSet1 = new CMLBondSet(ringMolTool.getMolecule(), 
             new String[]{"b910"});
         Assert.assertTrue("bond set bonds ", bondSet.hasContentEqualTo(bondSet1));
@@ -317,11 +318,7 @@ public class ConnectionTableToolTest extends AbstractToolTest {
         cyclicBondList = ringMolTool.getCyclicBonds();
         Assert.assertEquals("cyclic bond count", 10, cyclicBondList.size());
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(cyclicBondList);
-        } catch (CMLException e) {
-            neverThrow(e);
-        }
+        bondSet = new CMLBondSet(cyclicBondList);
         CMLBondSet bondSet1 = new CMLBondSet(ringMolTool.getMolecule(), 
             new String[]{"b12", "b23", "b34", "b14", "b56", "b57", "b67", "b78", "b69", "b89"});
         Assert.assertTrue("bond set bonds ", bondSet.hasContentEqualTo(bondSet1));
@@ -471,4 +468,5 @@ public class ConnectionTableToolTest extends AbstractToolTest {
         CMLAtomSet atomSet2 = new CMLAtomSet(ringMol, new String[]{"a3", "a4", "a2", "a1"});
         Assert.assertTrue("atomSet should have equal content", atomSet2.hasContentEqualTo(atomSet));
     }
+    
 }

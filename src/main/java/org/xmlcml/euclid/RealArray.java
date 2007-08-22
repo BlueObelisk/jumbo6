@@ -332,7 +332,7 @@ public class RealArray extends ArrayBase {
         	try {
         		array[i] = (Double.valueOf(strings[i])).doubleValue();
         	} catch (NumberFormatException e) {
-        		throw new EuclidRuntimeException("Bad array element at ("+i+") :"+strings[i]);
+        		throw new EuclidRuntimeException("Bad array element at ("+i+") :"+strings[i]+":");
         	}
         }
     }

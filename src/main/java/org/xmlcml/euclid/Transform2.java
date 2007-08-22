@@ -79,11 +79,9 @@ public class Transform2 extends RealSquareMatrix {
         this();
         trnsfrm = t;
     }
-    /**
-     * identity matrix with translation component
+    /** identity matrix with translation component
      * 
-     * @param v
-     *            Description of the Parameter
+     * @param v amount to translate by
      */
     public Transform2(Vector2 v) {
         this();
@@ -91,11 +89,9 @@ public class Transform2 extends RealSquareMatrix {
         flmat[0][2] = v.x;
         flmat[1][2] = v.y;
     }
-    /**
-     * rotation about z- axis
+    /** clockwise rotation about z- axis
      * 
-     * @param zrot
-     *            Description of the Parameter
+     * @param zrot radians clockwise rotation
      */
     public Transform2(Angle zrot) {
         this();
@@ -269,11 +265,11 @@ public class Transform2 extends RealSquareMatrix {
     public boolean isEqualTo(Transform2 m) {
         return super.isEqualTo((RealSquareMatrix) m) && trnsfrm == m.trnsfrm;
     }
+    
     /**
      * concatenate
      * 
-     * @param m2
-     *            Description of the Parameter
+     * @param m2 postmultiplies this
      * @return Description of the Return Value
      */
     public Transform2 concatenate(Transform2 m2) {
