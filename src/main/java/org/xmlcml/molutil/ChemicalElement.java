@@ -338,10 +338,9 @@ public class ChemicalElement {
 			radius = radius * 1.35;
 		} else if (this.isChemicalElementType(Type.TRANSITION_METAL)) { 
 			radius = radius * 1.25;
-		} else if (this.isChemicalElementType(Type.GROUP_B)){
+		} else if (this.isChemicalElementType(Type.GROUP_B) ||
+				this.isChemicalElementType(Type.GROUP_A)){
 			radius = radius * 1.2;
-		} else if (this.isChemicalElementType(Type.GROUP_A)) {
-			radius = 0;
 		} else {
 			radius = radius * 1.15;
 		}
