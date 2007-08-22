@@ -1547,6 +1547,20 @@ public class MoleculeTool extends AbstractTool {
 			calculateBondedAtoms(atoms, mol);
 		}
 	}
+	
+	public void calculateBondedAtoms(List<CMLAtom> atoms) {
+		CMLMolecule mol = null;
+		for (CMLAtom atom : atoms) {
+			CMLMolecule m = atom.getMolecule();
+			if (mol != null) {
+				if (mol != atom.getMolecule()) {
+					throw new CMLRuntimeException("All CMLAtoms must belong to the same CMLMolecule");
+				}
+			}
+			mol = m;
+		}
+		calculateBondedAtoms(atoms, mol);
+	}
 
 	private void calculateBondedAtoms(List<CMLAtom> atoms, CMLMolecule molecule) {
 		for (int i = 0; i < atoms.size(); i++) {
@@ -1559,30 +1573,6 @@ public class MoleculeTool extends AbstractTool {
 			}
 		}
 	}
-
-//	private double getCovalentRadius(String sym) {
-//		double radius = getCustomCovalentRadius(sym);
-//		if (radius <= 0.0) {
-//			ChemicalElement element = ChemicalElement.getChemicalElement(sym);
-//			if (element == null) {
-//				logger.severe("Unknown element: " + sym);
-//			} else {
-//				radius = element.getCovalentRadius();
-//			}
-//		}
-//		return radius;
-//	}
-
-//	private double getCustomCovalentRadius(String sym) {
-//		double radius = 0.0;
-//		if (sym.equals("Li") || sym.equals("Na") || sym.equals("K")
-//				|| sym.equals("Rb") || sym.equals("Cs") ||
-//				//
-//				sym.equals("Ca") || sym.equals("Sr") || sym.equals("Ba")) {
-//			radius = 0.1;
-//		}
-//		return radius;
-//	}
 
 	/**
 	 * calculate all bonds from this to molecule and join. will transfer all

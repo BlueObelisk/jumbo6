@@ -953,7 +953,6 @@ public class ValencyTool extends AbstractTool {
 	public boolean adjustBondOrdersAndChargesToValency(
 			PiSystemControls piSystemManager, int knownMolCharge) {
 		boolean success = true;
-
 		List<CMLMolecule> mols = molecule.getDescendantsOrMolecule();
 		for (CMLMolecule mol : mols) {
 			// reset all bond orders to single
@@ -1084,6 +1083,10 @@ public class ValencyTool extends AbstractTool {
 								}
 								// take all combinations of charges on the atoms found and attempt to 
 								// get a completed pi-system.
+								if (n3List.size() > 10 || osList.size() > 10 || n2List.size() > 10) {
+									success = false;
+									break;
+								}
 								List<List<Integer>> n3ComboList = CMLUtil.generateCombinationList(n3List.size());
 								List<List<Integer>> osComboList = CMLUtil.generateCombinationList(osList.size());
 								List<List<Integer>> n2ComboList = CMLUtil.generateCombinationList(n2List.size());
