@@ -454,14 +454,16 @@ public class AtomMatcher extends AbstractTool {
     }
 
     /**
-     * map two atomSets returns ordered list of equivalence classes. if several
-     * atoms in class uses atomSet Map may not be as large as atomSet if there
-     * are equivalence classes does not annotate links
+     * map two atomSets returns ordered list of equivalence classes.
+     * if several atoms in class uses atomSet 
+     * Map may not be as large as atomSet if there
+     * are equivalence classes 
+     * does not annotate links
      * 
      * currently has two methods, Morgan and UniqueAtomLabels
      * 
-     * if the atomSets are of different lengths returns null if the Morgan
-     * fails, returns null
+     * if the atomSets are of different lengths returns null
+     * if the Morgan fails, returns null
      * 
      * @param atomSet0
      * @param atomSet1
@@ -543,8 +545,8 @@ public class AtomMatcher extends AbstractTool {
 
             // match by unique extended atom label
 
-            Map uniqueAtomMap0 = AtomTree.getAtomTreeLabelling(atomSet0, this);
-            Map uniqueAtomMap1 = AtomTree.getAtomTreeLabelling(atomSet1, this);
+            Map uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet0);
+            Map uniqueAtomMap1 = this.getAtomTreeLabelling(atomSet1);
             if (uniqueAtomMap0.size() != 0 || uniqueAtomMap0.size() != 0) {
                 Set keySet0 = uniqueAtomMap0.keySet();
                 for (Iterator it = keySet0.iterator(); it.hasNext();) {
@@ -787,19 +789,14 @@ public class AtomMatcher extends AbstractTool {
      * atomSet instead of atom
      * 
      * @param atomSet
-     * @param targetAtomSet
-     *            atomSet to match
-     * @param atomMatcher
-     *            to use
+     * @param targetAtomSet to match
      * @return the map
      * @throws CMLException
      */
-     public CMLMap getUniqueMatchedAtoms(CMLAtomSet atomSet, CMLAtomSet targetAtomSet,
-            AtomMatcher atomMatcher) throws CMLException {
+     public CMLMap getUniqueMatchedAtoms(CMLAtomSet atomSet, CMLAtomSet targetAtomSet) throws CMLException {
         // note unique atoms
-        Map uniqueAtomMap0 = AtomTree.getAtomTreeLabelling(atomSet, atomMatcher);
-        Map uniqueAtomMap1 = AtomTree.getAtomTreeLabelling(targetAtomSet,
-                atomMatcher);
+        Map uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet);
+        Map uniqueAtomMap1 = this.getAtomTreeLabelling(targetAtomSet);
         CMLMap cmlMap = new CMLMap();
         cmlMap.setToType(CMLAtom.TAG);
         cmlMap.setFromType(CMLAtom.TAG);
@@ -1807,7 +1804,102 @@ public class AtomMatcher extends AbstractTool {
             spectatorList.detach();
         }
     }
+    
 
+    /**
+     * returns containing atomTree labelling (was in AtomSet)
+     * the atomTree is
+     * calculated for each atom and expanded until that atom can be seen to be
+     * unique in the atomSet or until maxAtomTreeLevel is reached For those
+     * atoms which have unique atomTreeStrings and are keyed by these. If there
+     * are sets of atoms which have the same string they are mapped to atomSets.
+     * Example (maxAtomTreeLevel = 1: O1-C2-O3 has map = {"C", "a2"}, {"O(C)",
+     * atomSet(a1, a3)}
+     * 
+     * @param atomSet
+     * @param atomMatcher
+     *            to use
+     * @return the maps
+     */
+    @SuppressWarnings("all")
+    // FIXME at present map elements are either atoms or lists of atoms; messy
+    public Map<String, Object> getAtomTreeLabelling(CMLAtomSet atomSet) {
+        // FIXME this is broken - does not do atomsets
+        Map<String, Object> atomMap = null;
+        Map<String, Object> uniqueAtomMap = new HashMap<String, Object>();
+        // iterate through levels
+        List<CMLAtom> atoms = atomSet.getAtoms();
+        int atomTreeLevel = this.getAtomTreeLevel();
+        boolean variableLevel = (atomTreeLevel < 0);
+        int startLevel = (variableLevel) ? 0 : atomTreeLevel;
+        int endLevel = (variableLevel) ? this.maximumAtomTreeLevel
+                : atomTreeLevel + 1;
+        for (int level = startLevel; level < endLevel; level++) {
+            atomMap = new HashMap<String, Object>();
+            for (int i = 0; i < atoms.size(); i++) {
+                CMLAtom atom = atoms.get(i);
+                boolean omit = false;
+                String elementType = atom.getElementType();
+                for (int j = 0; j < this.excludeElementTypes.length; j++) {
+                    if (this.excludeElementTypes[j].equals(elementType)) {
+                        omit = true;
+                        break;
+                    }
+                }
+                if (!omit) {
+                    // atom still not unique?
+                    if (!variableLevel || !uniqueAtomMap.containsValue(atom)) {
+                        AtomTree atomTree = new AtomTree(atom);
+                        atomTree.setUseCharge(this.isUseCharge());
+                        atomTree.setUseLabel(this.isUseLabel());
+                        atomTree.setUseExplicitHydrogens(elementType
+                                .equals("H"));
+                        atomTree.expandTo(level);
+                        String atval = atomTree.toString();
+                        if (variableLevel) {
+                            // logger.info((CMLAtom)atoms.get(i).getId()+"....."+atval);
+                        }
+                        List<CMLAtom> atomList = (List<CMLAtom>) atomMap.get(atval);
+                        if (atomList == null) {
+                            atomList = new ArrayList<CMLAtom>();
+                            atomMap.put(atval, atomList);
+                        }
+                        atomList.add(atom);
+                    }
+                }
+            }
+
+            // mark any unique atoms
+            Set<String> keySet = atomMap.keySet();
+            for (Iterator<String> it = keySet.iterator(); it.hasNext();) {
+                String atomTreeString = it.next();
+                List list = (List) atomMap.get(atomTreeString);
+                // if only one element, mark as unique
+                if (list.size() == 1) {
+                    uniqueAtomMap.put(atomTreeString, (CMLAtom) list.get(0));
+                }
+            }
+        }
+        Map<String, Object> finalMap = (variableLevel) ? uniqueAtomMap
+                : atomMap;
+        Set<String> keySet = atomMap.keySet();
+        for (Iterator<String> it = keySet.iterator(); it.hasNext();) {
+            String atomTreeString = it.next();
+            List<CMLAtom> atomList = (List<CMLAtom>) atomMap.get(atomTreeString);
+            // just mapped?
+            if (atomList != null && atomList.size() == 1) {
+                CMLAtom atom = atomList.get(0);
+                finalMap.put(atomTreeString, atom);
+            } else {
+                CMLAtomSet atomSet1 = new CMLAtomSet(atomList);
+                finalMap.put(atomTreeString, atomSet1);
+            }
+        }
+        // }
+
+        return finalMap;
+    }
+    
     // this is to overlap 2D atoms within a tolerance
     final static int RESOLUTION = 2;
 

@@ -166,7 +166,7 @@ public class Morgan extends AbstractTool {
         for (CMLAtom atom : constantAtomSet.getAtoms()) {
             // start with ligand count for each atom
             atom.setProperty(Annotation.NUMBER.toString(), new Long(Morgan
-                    .getNumber(atom)));
+                    .getNumber(atom, constantAtomSet)));
         }
     }
 
@@ -250,12 +250,11 @@ public class Morgan extends AbstractTool {
      */
     private int classifyMorganNumbers() {
         for (CMLAtom atom : constantAtomSet.getAtoms()) {
-            // start with ligand count for each atom
             Long morganNumber = (Long) atom.getProperty(Annotation.NUMBER.toString());
             CMLAtomSet atomSet = equivalenceMap.get(morganNumber);
             if (atomSet == null) {
                 atomSet = new CMLAtomSet();
-                add(morganNumber, atomSet);
+                addMorganNumber(morganNumber, atomSet);
             }
             atomSet.addAtom(atom);
         }
@@ -263,7 +262,7 @@ public class Morgan extends AbstractTool {
         return equivalenceMap.size();
     }
     
-    private void add(Long morganNumber, CMLAtomSet atomSet) {
+    private void addMorganNumber(Long morganNumber, CMLAtomSet atomSet) {
         if (equivalenceMap == null) {
             equivalenceMap = new HashMap<Long, CMLAtomSet>();
         }
@@ -274,6 +273,15 @@ public class Morgan extends AbstractTool {
         morganList.add(morganNumber);
     }
 
+    private static List<CMLAtom> getLigandAtomsInAtomSetList(CMLAtom atom, CMLAtomSet atomSet) {
+    	List<CMLAtom> ligandsInAtomSetList = new ArrayList<CMLAtom>();
+    	for (CMLAtom ligand : atom.getLigandAtoms()) {
+	    	if (atomSet.contains(ligand)) {
+	    		ligandsInAtomSetList.add(ligand);
+	    	}
+    	}
+    	return ligandsInAtomSetList;
+    }
 
     /** expand shell by adding numbers from ligands
      *
@@ -282,10 +290,16 @@ public class Morgan extends AbstractTool {
         for (CMLAtom atom : constantAtomSet.getAtoms()) {
             // iterate through all ligands
             long newMorgan = ((Long) atom.getProperty(Annotation.NUMBER.toString())).longValue();
-            List<CMLAtom> ligandList = atom.getLigandAtoms();
+            List<CMLAtom> ligandList = Morgan.getLigandAtomsInAtomSetList(atom, constantAtomSet);
+            int ii = 0;
             for (CMLAtom ligand : ligandList) {
-                newMorgan += ((Long) (ligand).getProperty(Annotation.NUMBER.toString()))
-                        .longValue();
+                Long llong = (Long) ligand.getProperty(Annotation.NUMBER.toString());
+                if (llong == null) {
+                	System.err.println(ligand.getId()+"/"+ii);
+                	throw new CMLRuntimeException("null long in morgan");
+                }
+                ii++;
+                newMorgan += llong.longValue();
             }
             atom.setProperty(Annotation.NEXTNUMBER.toString(), new Long(newMorgan));
         }
@@ -323,12 +337,12 @@ public class Morgan extends AbstractTool {
      * @param atom
      * @return int
      */
-    private static long getNumber(CMLAtom atom) {
+    private static long getNumber(CMLAtom atom, CMLAtomSet atomSet) {
         ChemicalElement chemicalElement = ChemicalElement
                 .getChemicalElement(atom.getElementType());
         int atomicNumber = (chemicalElement == null) ? 0 : chemicalElement
                 .getAtomicNumber();
-        List<CMLAtom> ligandList = atom.getLigandAtoms();
+        List<CMLAtom> ligandList = Morgan.getLigandAtomsInAtomSetList(atom, atomSet);
         int nLigand = ligandList.size();
         int np = 10;
         long morgan = nLigand;

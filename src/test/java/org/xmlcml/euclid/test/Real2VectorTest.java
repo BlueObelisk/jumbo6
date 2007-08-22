@@ -49,19 +49,20 @@ public class Real2VectorTest extends EuclidTestBase {
     /**
      * equality test. true if both args not null and equal within epsilon
      *
-     * @param msg
-     *            message
+     * @param msg message
      * @param test
      * @param expected
      * @param epsilon
      */
-    public static void assertEquals(String msg, Real2Vector test,
-            Real2Vector expected, double epsilon) {
+    public static void assertEquals(String msg, Real2Vector expected, 
+    		Real2Vector test, double epsilon) {
         Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
-                expected);
-        DoubleTestBase.assertEquals(msg, test.getXY().getArray(), expected.getXY()
-                .getArray(), epsilon);
+            expected);
+        DoubleTestBase.assertEquals(msg, 
+    		expected.getXY().getArray(), 
+    		test.getXY().getArray(), 
+            epsilon);
     }
 
     /**
@@ -513,6 +514,181 @@ public class Real2VectorTest extends EuclidTestBase {
                 .getMatrixAsArray(), EPS);
 
     }
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#Real2Vector(java.util.List)}.
+	 */
+	@Test
+	public final void testReal2VectorListOfReal2() {
+		List<Real2> lr2 = new ArrayList<Real2>();
+		lr2.add(new Real2(1., 2.));
+		lr2.add(new Real2(3., 4.));
+		Real2Vector r2v = new Real2Vector(lr2);
+		Real2VectorTest.assertEquals("copy", 
+			new Real2Vector(
+			new double[] {1., 2., 3., 4.}),
+			r2v, EPS);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#get(int)}.
+	 */
+	@Test
+	public final void testGet() {
+		Real2Test.assertEquals("real list", 
+				new Real2(3., 4.), r2.get(1), EPS);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#size()}.
+	 */
+	@Test
+	public final void testSize() {
+		Assert.assertEquals("real list", 5, r2.size());
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#getReal2List()}.
+	 */
+	@Test
+	public final void testGetReal2List() {
+		List<Real2> r2l = r2.getReal2List();
+		Assert.assertEquals("real list", 5, r2l.size());
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#sortDescending(org.xmlcml.euclid.Axis.Axis2)}.
+	 */
+	@Test
+	public final void testSortDescending() {
+		List<Real2> lr = new ArrayList<Real2>();
+		lr.add(new Real2(3., 5.));
+		lr.add(new Real2(1., 2.));
+		lr.add(new Real2(7., 1.));
+		lr.add(new Real2(5., 4.));
+		Real2Vector r2v = new Real2Vector(lr);
+		r2v = r2v.sortDescending(Axis2.X);
+		Real2VectorTest.assertEquals("sort",
+		new double[]{
+		7.0,1.0,
+		5.0,4.0,
+		3.0,5.0,
+		1.0,2.0,
+		},
+		r2v, EPS);
+		r2v = r2v.sortDescending(Axis2.Y);
+		Real2VectorTest.assertEquals("sort",
+		new double[]{
+		3.0,5.0,
+		5.0,4.0,
+		1.0,2.0,
+		7.0,1.0,
+		},
+		r2v, EPS);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#regularPolygon(int, double)}.
+	 */
+	@Test
+	public final void testRegularPolygonIntDouble() {
+		Real2Vector v = Real2Vector.regularPolygon(4, 1.0);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+						0.0, 1.0,
+						1.0, 0.0,
+						0.0, -1.0,
+						-1.0, 0.0
+				})
+				), v, EPS);
+		v = Real2Vector.regularPolygon(6, 1.0);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#regularPolygon(int, double, double)}.
+	 */
+	@Test
+	public final void testRegularPolygonIntDoubleDouble() {
+		Real2Vector v = Real2Vector.regularPolygon(4, 1, 0.1);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+					0.09983341664682815,0.9950041652780258,
+					0.9950041652780257,-0.09983341664682818,
+					-0.09983341664682811,-0.9950041652780258,
+					-0.9950041652780258,0.09983341664682761,
+				})
+			), v, EPS);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.euclid.Real2Vector#regularPolygon(int, org.xmlcml.euclid.Real2, org.xmlcml.euclid.Real2, boolean)}.
+	 */
+	@Test
+	public final void testRegularPolygonIntReal2Real2Boolean() {
+		Real2Vector v = null;
+		v = Real2Vector.regularPolygon(5, 
+				new Real2(0.0, 0.0), new Real2(1.0, 0.0), false);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+				0.0,0.0,
+				1.0,0.0,
+				1.3090169943749475,-0.9510565162951536,
+				0.5,-1.5388417685876266,
+				-0.30901699437494745,-0.9510565162951539
+				})
+			), v, EPS);
+
+		v = Real2Vector.regularPolygon(4, 
+				new Real2(0.0, 0.0), new Real2(3.0, 5.0), false);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+				0.0,0.0,
+				3.0,5.0,
+				8.0,2.0,
+				5.0,-3.0,
+				})
+			), v, EPS);
+		
+		v = Real2Vector.regularPolygon(4, 
+				new Real2(1.0, 2.0), new Real2(3.0, 5.0), false);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+				1.0,2.0,
+				3.0,5.0,
+				6.0,3.0,
+				4.0,0.0,				})
+			), v, EPS);
+		
+		v = Real2Vector.regularPolygon(4, 
+				new Real2(3.0, 5.0),
+				new Real2(1.0, 2.0), false);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+				3.0,5.0,
+				1.0,2.0,
+				-2.0, 4.0,
+				0.0, 7.0})
+			), v, EPS);
+		
+		
+		v = Real2Vector.regularPolygon(4, 
+				new Real2(3.0, 5.0),
+				new Real2(1.0, 2.0), true);
+		Real2VectorTest.assertEquals("polygon", 
+			new Real2Vector(
+				new Real2Vector(new double[] {
+				3.0,5.0,
+				6.0,3.0,
+				8.0, 6.0,
+				5.0, 8.0})
+			), v, EPS);
+	}
 
 
 }

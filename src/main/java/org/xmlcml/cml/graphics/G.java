@@ -12,12 +12,15 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
-public class SVGG extends G {
+public abstract class G extends SVGElement {
+
+	final static String TAG ="g";
+	Transform2 transform = new Transform2();
 
 	/** constructor.
 	 */
-	public SVGG() {
-		super();
+	public G() {
+		super(TAG);
 	}
 	/**
 	 * @return tag

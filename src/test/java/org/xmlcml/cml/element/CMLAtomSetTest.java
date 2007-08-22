@@ -1238,4 +1238,26 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
                 .getXMLContent());
     }
 
+    /** tests equality against list of ids.
+     * (order of elements in set is undefined)
+     * @param message
+     * @param expectedAtomIds
+     * @param atomSet
+     */
+    public static void assertEquals(String message, String[] expectedAtomIds, CMLAtomSet atomSet) {
+    	Assert.assertEquals(message+"; unequal sizes; expected "+
+    			expectedAtomIds.length+", found: "+atomSet.size(), 
+    			expectedAtomIds.length, atomSet.size());
+    	Set<String> expectedSet = new HashSet<String>();
+    	for (String es : expectedAtomIds) {
+    		expectedSet.add(es);
+    	}
+    	Set<String> foundSet = new HashSet<String>();
+    	String[] fss = atomSet.getAtomIDs();
+    	for (String fs : fss) {
+    		foundSet.add(fs);
+    	}
+    	Assert.assertTrue("compare atom sets", expectedSet.equals(foundSet));
+    }
+
  }

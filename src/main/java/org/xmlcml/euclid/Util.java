@@ -2066,8 +2066,7 @@ public class Util implements EuclidConstants {
     /**
      * translate array of Strings to a List.
      * 
-     * @param ss
-     *            strings (can include null)
+     * @param ss strings (can include null)
      * @return the list
      */
     public static List<String> createList(String[] ss) {
@@ -2077,7 +2076,7 @@ public class Util implements EuclidConstants {
         }
         return list;
     }
-
+    
     private static List<Integer> primeList;
     /** get i'th prime.
      * calculates it on demand if not already present and caches result.

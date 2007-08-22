@@ -1,1093 +1,1093 @@
 <fragmentList title="fragment dictionary"
-	xmlns="http://www.xml-cml.org/schema"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<!-- one R group -->
+  xmlns="http://www.xml-cml.org/schema"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- one R group -->
 
-	<!-- acetate -->
-	<fragment>
-		<molecule role="fragment" id="acetate">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">acetate_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="3">
-					<arg parentAttribute="id">acetate_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">acetate_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">acetate_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">acetate_{$idx}_a4</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">acetate_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						acetate_{$idx}_a1_acetate_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acetate_{$idx}_a1 acetate_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="2">
-					<arg parentAttribute="id">
-						acetate_{$idx}_a2_acetate_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acetate_{$idx}_a2 acetate_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a4" order="1">
-					<arg parentAttribute="id">
-						acetate_{$idx}_a2_acetate_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acetate_{$idx}_a2 acetate_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 r1" order="1">
-					<arg parentAttribute="id">
-						acetate_{$idx}_a4_acetate_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acetate_{$idx}_a4 acetate_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">acetate_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!-- acetate -->
+  <fragment>
+    <molecule role="fragment" id="acetate">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">acetate_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="3">
+          <arg parentAttribute="id">acetate_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">acetate_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">acetate_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">acetate_{$idx}_a4</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">acetate_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            acetate_{$idx}_a1_acetate_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acetate_{$idx}_a1 acetate_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="2">
+          <arg parentAttribute="id">
+            acetate_{$idx}_a2_acetate_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acetate_{$idx}_a2 acetate_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a4" order="1">
+          <arg parentAttribute="id">
+            acetate_{$idx}_a2_acetate_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acetate_{$idx}_a2 acetate_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 r1" order="1">
+          <arg parentAttribute="id">
+            acetate_{$idx}_a4_acetate_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acetate_{$idx}_a4 acetate_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">acetate_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!-- carboxy -->
-	<fragment>
-		<molecule role="fragment" id="carboxy">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">carboxy_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="O" hydrogenCount="1">
-					<arg parentAttribute="id">carboxy_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">carboxy_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">carboxy_{$idx}_a3</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">carboxy_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						carboxy_{$idx}_a1_carboxy_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						carboxy_{$idx}_a1 carboxy_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="2">
-					<arg parentAttribute="id">
-						carboxy_{$idx}_a2_carboxy_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						carboxy_{$idx}_a2 carboxy_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r1" order="1">
-					<arg parentAttribute="id">
-						carboxy_{$idx}_a2_carboxy_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						carboxy_{$idx}_a2 carboxy_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">carboxy_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!-- carboxy -->
+  <fragment>
+    <molecule role="fragment" id="carboxy">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">carboxy_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="O" hydrogenCount="1">
+          <arg parentAttribute="id">carboxy_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">carboxy_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">carboxy_{$idx}_a3</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">carboxy_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            carboxy_{$idx}_a1_carboxy_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            carboxy_{$idx}_a1 carboxy_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="2">
+          <arg parentAttribute="id">
+            carboxy_{$idx}_a2_carboxy_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            carboxy_{$idx}_a2 carboxy_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r1" order="1">
+          <arg parentAttribute="id">
+            carboxy_{$idx}_a2_carboxy_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            carboxy_{$idx}_a2 carboxy_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">carboxy_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  H-R1 hydrogen -->
-	<fragment>
-		<molecule id="h" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">h_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="H">
-					<arg parentAttribute="id">h_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">h_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						h_{$idx}_a1_h_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						h_{$idx}_a1 h_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">hydrogen_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  H-R1 hydrogen -->
+  <fragment>
+    <molecule id="h" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">h_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="H">
+          <arg parentAttribute="id">h_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">h_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            h_{$idx}_a1_h_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            h_{$idx}_a1 h_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">hydrogen_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  F-R1 fluorine -->
-	<fragment>
-		<molecule id="f" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">f_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="F">
-					<arg parentAttribute="id">f_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">f_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						f_{$idx}_a1_f_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						f_{$idx}_a1 f_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">fluorine_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  F-R1 fluorine -->
+  <fragment>
+    <molecule id="f" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">f_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="F">
+          <arg parentAttribute="id">f_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">f_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            f_{$idx}_a1_f_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            f_{$idx}_a1 f_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">fluorine_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  Cl-R1 chlorine -->
-	<fragment>
-		<molecule id="cl" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">cl_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="Cl">
-					<arg parentAttribute="id">cl_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">cl_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						cl_{$idx}_a1_cl_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						cl_{$idx}_a1 cl_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">chlorine_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  Cl-R1 chlorine -->
+  <fragment>
+    <molecule id="cl" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">cl_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="Cl">
+          <arg parentAttribute="id">cl_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">cl_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            cl_{$idx}_a1_cl_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            cl_{$idx}_a1 cl_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">chlorine_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  Br-R1 bromine -->
-	<fragment>
-		<molecule id="br" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">br_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="Br">
-					<arg parentAttribute="id">br_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">br_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						br_{$idx}_a1_br_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						br_{$idx}_a1 br_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">bromine_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  Br-R1 bromine -->
+  <fragment>
+    <molecule id="br" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">br_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="Br">
+          <arg parentAttribute="id">br_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">br_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            br_{$idx}_a1_br_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            br_{$idx}_a1 br_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">bromine_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  I-R1 iodine -->
-	<fragment>
-		<molecule id="i" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">i_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="I">
-					<arg parentAttribute="id">i_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">i_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						i_{$idx}_a1_i_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						i_{$idx}_a1 i_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">iodine_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  I-R1 iodine -->
+  <fragment>
+    <molecule id="i" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">i_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="I">
+          <arg parentAttribute="id">i_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">i_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            i_{$idx}_a1_i_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            i_{$idx}_a1 i_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">iodine_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!-- HO-R1 hydroxy -->
-	<fragment>
-		<molecule role="fragment" id="oh">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">oh_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="O" hydrogenCount="1">
-					<arg parentAttribute="id">oh_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">oh_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						oh_{$idx}_a1_oh_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						oh_{$idx}_a1 oh_{$idx}_r1
-					</arg>
-					<bondStereo />
-					<label />
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">hydroxy_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!-- HO-R1 hydroxy -->
+  <fragment>
+    <molecule role="fragment" id="oh">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">oh_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="O" hydrogenCount="1">
+          <arg parentAttribute="id">oh_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">oh_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            oh_{$idx}_a1_oh_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            oh_{$idx}_a1 oh_{$idx}_r1
+          </arg>
+          <bondStereo />
+          <label />
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">hydroxy_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  H-R1 hydrogen -->
-	<fragment>
-		<molecule id="h" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">h_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="H">
-					<arg parentAttribute="id">h_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">h_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						h_{$idx}_a1_h_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						h_{$idx}_a1 h_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">hydrogen_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  H-R1 hydrogen -->
+  <fragment>
+    <molecule id="h" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">h_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="H">
+          <arg parentAttribute="id">h_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">h_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            h_{$idx}_a1_h_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            h_{$idx}_a1 h_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">hydrogen_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  CH3-R1 methyl -->
-	<fragment>
-		<molecule id="me" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">me_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="3">
-					<arg parentAttribute="id">me_{$idx}_a1</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">me_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						me_{$idx}_a1_me_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						me_{$idx}_a1 me_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">methyl_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  CH3-R1 methyl -->
+  <fragment>
+    <molecule id="me" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">me_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="3">
+          <arg parentAttribute="id">me_{$idx}_a1</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">me_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            me_{$idx}_a1_me_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            me_{$idx}_a1 me_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">methyl_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  C2H5-R1 ethyl -->
-	<fragment>
-		<molecule id="et" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">et_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="3">
-					<arg parentAttribute="id">et_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">et_{$idx}_a2</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">et_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						et_{$idx}_a1_et_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						et_{$idx}_a1 et_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r1" order="1">
-					<arg parentAttribute="id">
-						et_{$idx}_a2_et_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						et_{$idx}_a2 et_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">ethyl_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!--  C2H5-R1 ethyl -->
+  <fragment>
+    <molecule id="et" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">et_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="3">
+          <arg parentAttribute="id">et_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">et_{$idx}_a2</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">et_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            et_{$idx}_a1_et_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            et_{$idx}_a1 et_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r1" order="1">
+          <arg parentAttribute="id">
+            et_{$idx}_a2_et_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            et_{$idx}_a2 et_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">ethyl_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!--  CH3O-R1 methoxy -->
-	<fragment>
-		<molecule id="meo" role="fragment">
-			<arg parameterName="idx" dataType="xsd:string" />
-			<arg parentAttribute="id">meo_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="3">
-					<arg parentAttribute="id">meo_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">meo_{$idx}_a2</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">meo_{$idx}_r1</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						meo_{$idx}_a1_meo_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						meo_{$idx}_a1 meo_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r1" order="1">
-					<arg parentAttribute="id">
-						meo_{$idx}_a2_meo_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						meo_{$idx}_a2 meo_{$idx}_r1
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">methoxy_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
-
-
-	<!-- two R groups -->
-
-	<!-- ophenylene -->
-	<fragment>
-		<molecule role="fragment" id="ophenylene">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">ophenylene_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">ophenylene_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">ophenylene_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">ophenylene_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">ophenylene_{$idx}_a4</arg>
-				</atom>
-				<atom id="a5" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">ophenylene_{$idx}_a5</arg>
-				</atom>
-				<atom id="a6" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">ophenylene_{$idx}_a6</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">ophenylene_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">ophenylene_{$idx}_r2</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a1_ophenylene_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a1 ophenylene_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a2_ophenylene_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a2 ophenylene_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 a4" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a3_ophenylene_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a3 ophenylene_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 a5" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a4_ophenylene_{$idx}_a5
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a4 ophenylene_{$idx}_a5
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 a6" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a5_ophenylene_{$idx}_a6
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a5 ophenylene_{$idx}_a6
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 a6" order="A">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a1_ophenylene_{$idx}_a6
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a1 ophenylene_{$idx}_a6
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 r1" order="1">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a5_ophenylene_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a5 ophenylene_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a6 r2" order="1">
-					<arg parentAttribute="id">
-						ophenylene_{$idx}_a6_ophenylene_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						ophenylene_{$idx}_a6 ophenylene_{$idx}_r2
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">ophenylene_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
-
-	<!-- R1-CH2-CH2-O-R2 ethyleneoxy -->
-	<fragment>
-		<molecule id="eo" role="fragment">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">eo_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">eo_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">eo_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">eo_{$idx}_a3</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">eo_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">eo_{$idx}_r2</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						eo_{$idx}_a1_eo_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						eo_{$idx}_a1 eo_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="1">
-					<arg parentAttribute="id">
-						eo_{$idx}_a2_eo_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						eo_{$idx}_a2 eo_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						eo_{$idx}_a1_eo_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						eo_{$idx}_a1 eo_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 r2" order="1">
-					<arg parentAttribute="id">
-						eo_{$idx}_a3_eo_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						eo_{$idx}_a3 eo_{$idx}_r2
-					</arg>
-				</bond>
-			</bondArray>
-		</molecule>
-	</fragment>
-
-	<!-- R1-CH2-CH2-N(R2)(R3) aminoethyl -->
-	<fragment>
-		<molecule id="aminoethyl" role="fragment">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">aminoethyl_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">aminoethyl_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">aminoethyl_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="N" hydrogenCount="0">
-					<arg parentAttribute="id">aminoethyl_{$idx}_a3</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">aminoethyl_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">aminoethyl_{$idx}_r2</arg>
-				</atom>
-				<atom id="r3" elementType="R">
-					<arg parentAttribute="id">aminoethyl_{$idx}_r3</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						aminoethyl_{$idx}_a1_aminoethyl_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						aminoethyl_{$idx}_a1 aminoethyl_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="1">
-					<arg parentAttribute="id">
-						aminoethyl_{$idx}_a2_aminoethyl_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						aminoethyl_{$idx}_a2 aminoethyl_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						aminoethyl_{$idx}_a1_aminoethyl_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						aminoethyl_{$idx}_a1 aminoethyl_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 r2" order="1">
-					<arg parentAttribute="id">
-						aminoethyl_{$idx}_a3_aminoethyl_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						aminoethyl_{$idx}_a3 aminoethyl_{$idx}_r2
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 r3" order="1">
-					<arg parentAttribute="id">
-						aminoethyl_{$idx}_a3_aminoethyl_{$idx}_r3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						aminoethyl_{$idx}_a3 aminoethyl_{$idx}_r3
-					</arg>
-				</bond>
-			</bondArray>
-		</molecule>
-	</fragment>
-
-	<!-- R1-CH2-CH(CH3)-O-R2 propyleneoxy -->
-	<fragment>
-		<molecule id="po" role="fragment">
-			<arg parameterName="idx" />
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">po_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">po_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="C" hydrogenCount="3">
-					<arg parentAttribute="id">po_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">po_{$idx}_a4</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">po_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">po_{$idx}_r2</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						po_{$idx}_a1_po_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						po_{$idx}_a1 po_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="1">
-					<arg parentAttribute="id">
-						po_{$idx}_a2_po_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						po_{$idx}_a2 po_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a4" order="1">
-					<arg parentAttribute="id">
-						po_{$idx}_a2_po_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						po_{$idx}_a2 po_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						po_{$idx}_a1_po_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						po_{$idx}_a1 po_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 r2" order="1">
-					<arg parentAttribute="id">
-						po_{$idx}_a4_po_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						po_{$idx}_a4 po_{$idx}_r2
-					</arg>
-				</bond>
-			</bondArray>
-		</molecule>
-	</fragment>
+  <!--  CH3O-R1 methoxy -->
+  <fragment>
+    <molecule id="meo" role="fragment">
+      <arg parameterName="idx" dataType="xsd:string" />
+      <arg parentAttribute="id">meo_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="3">
+          <arg parentAttribute="id">meo_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">meo_{$idx}_a2</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">meo_{$idx}_r1</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            meo_{$idx}_a1_meo_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            meo_{$idx}_a1 meo_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r1" order="1">
+          <arg parentAttribute="id">
+            meo_{$idx}_a2_meo_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            meo_{$idx}_a2 meo_{$idx}_r1
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">methoxy_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
 
-	<!-- three R groups -->
+  <!-- two R groups -->
 
-	<!-- R1-CH2-CH(C(=O)-O-R3)-R2 "acrylate" (ethylenediylcarboxylate) esters -->
-	<fragment>
-		<molecule id="acryl" role="fragment">
-			<arg parameterName="idx" />
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="2">
-					<arg parentAttribute="id">acryl_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="1">
-					<arg parentAttribute="id">acryl_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">acryl_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">acryl_{$idx}_a4</arg>
-				</atom>
-				<atom id="a5" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">acryl_{$idx}_a5</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">acryl_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">acryl_{$idx}_r2</arg>
-				</atom>
-				<atom id="r3" elementType="R">
-					<arg parentAttribute="id">acryl_{$idx}_r3</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a1_acryl_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a1 acryl_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a2_acryl_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a2 acryl_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 a4" order="2">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a3_acryl_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a3 acryl_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 a5" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a3_acryl_{$idx}_a5
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a3 acryl_{$idx}_a5
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a1_acryl_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a1 acryl_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r2" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a2_acryl_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a2 acryl_{$idx}_r2
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 r3" order="1">
-					<arg parentAttribute="id">
-						acryl_{$idx}_a5_acryl_{$idx}_r3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						acryl_{$idx}_a5 acryl_{$idx}_r3
-					</arg>
-				</bond>
-			</bondArray>
-		</molecule>
-	</fragment>
+  <!-- ophenylene -->
+  <fragment>
+    <molecule role="fragment" id="ophenylene">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">ophenylene_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">ophenylene_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">ophenylene_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">ophenylene_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">ophenylene_{$idx}_a4</arg>
+        </atom>
+        <atom id="a5" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">ophenylene_{$idx}_a5</arg>
+        </atom>
+        <atom id="a6" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">ophenylene_{$idx}_a6</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">ophenylene_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">ophenylene_{$idx}_r2</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a1_ophenylene_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a1 ophenylene_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a2_ophenylene_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a2 ophenylene_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 a4" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a3_ophenylene_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a3 ophenylene_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 a5" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a4_ophenylene_{$idx}_a5
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a4 ophenylene_{$idx}_a5
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 a6" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a5_ophenylene_{$idx}_a6
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a5 ophenylene_{$idx}_a6
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 a6" order="A">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a1_ophenylene_{$idx}_a6
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a1 ophenylene_{$idx}_a6
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 r1" order="1">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a5_ophenylene_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a5 ophenylene_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a6 r2" order="1">
+          <arg parentAttribute="id">
+            ophenylene_{$idx}_a6_ophenylene_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            ophenylene_{$idx}_a6 ophenylene_{$idx}_r2
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">ophenylene_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 
-	<!-- multiple -->
+  <!-- R1-CH2-CH2-O-R2 ethyleneoxy -->
+  <fragment>
+    <molecule id="eo" role="fragment">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">eo_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">eo_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">eo_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">eo_{$idx}_a3</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">eo_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">eo_{$idx}_r2</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            eo_{$idx}_a1_eo_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            eo_{$idx}_a1 eo_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="1">
+          <arg parentAttribute="id">
+            eo_{$idx}_a2_eo_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            eo_{$idx}_a2 eo_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            eo_{$idx}_a1_eo_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            eo_{$idx}_a1 eo_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 r2" order="1">
+          <arg parentAttribute="id">
+            eo_{$idx}_a3_eo_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            eo_{$idx}_a3 eo_{$idx}_r2
+          </arg>
+        </bond>
+      </bondArray>
+    </molecule>
+  </fragment>
 
-	<!-- furan -->
-	<fragment>
-		<molecule role="fragment" id="furan">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">furan_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="O" hydrogenCount="0">
-					<arg parentAttribute="id">furan_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">furan_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">furan_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">furan_{$idx}_a4</arg>
-				</atom>
-				<atom id="a5" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">furan_{$idx}_a5</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">furan_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">furan_{$idx}_r2</arg>
-				</atom>
-				<atom id="r3" elementType="R">
-					<arg parentAttribute="id">furan_{$idx}_r3</arg>
-				</atom>
-				<atom id="r4" elementType="R">
-					<arg parentAttribute="id">furan_{$idx}_r4</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a1_furan_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a1 furan_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="2">
-					<arg parentAttribute="id">
-						furan_{$idx}_a2_furan_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a2 furan_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 a4" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a3_furan_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a3 furan_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 a5" order="2">
-					<arg parentAttribute="id">
-						furan_{$idx}_a4_furan_{$idx}_a5
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a4 furan_{$idx}_a5
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 a1" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a5_furan_{$idx}_a1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a5 furan_{$idx}_a1
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r1" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a2_furan_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a2 furan_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 r2" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a3_furan_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a3 furan_{$idx}_r2
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 r3" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a4_furan_{$idx}_r3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a4 furan_{$idx}_r3
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 r4" order="1">
-					<arg parentAttribute="id">
-						furan_{$idx}_a5_furan_{$idx}_r4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						furan_{$idx}_a5 furan_{$idx}_r4
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">furan_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!-- R1-CH2-CH2-N(R2)(R3) aminoethyl -->
+  <fragment>
+    <molecule id="aminoethyl" role="fragment">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">aminoethyl_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">aminoethyl_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">aminoethyl_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="N" hydrogenCount="0">
+          <arg parentAttribute="id">aminoethyl_{$idx}_a3</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">aminoethyl_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">aminoethyl_{$idx}_r2</arg>
+        </atom>
+        <atom id="r3" elementType="R">
+          <arg parentAttribute="id">aminoethyl_{$idx}_r3</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            aminoethyl_{$idx}_a1_aminoethyl_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            aminoethyl_{$idx}_a1 aminoethyl_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="1">
+          <arg parentAttribute="id">
+            aminoethyl_{$idx}_a2_aminoethyl_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            aminoethyl_{$idx}_a2 aminoethyl_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            aminoethyl_{$idx}_a1_aminoethyl_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            aminoethyl_{$idx}_a1 aminoethyl_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 r2" order="1">
+          <arg parentAttribute="id">
+            aminoethyl_{$idx}_a3_aminoethyl_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            aminoethyl_{$idx}_a3 aminoethyl_{$idx}_r2
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 r3" order="1">
+          <arg parentAttribute="id">
+            aminoethyl_{$idx}_a3_aminoethyl_{$idx}_r3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            aminoethyl_{$idx}_a3 aminoethyl_{$idx}_r3
+          </arg>
+        </bond>
+      </bondArray>
+    </molecule>
+  </fragment>
 
-	<!-- benzene -->
-	<fragment>
-		<molecule role="fragment" id="benzene">
-			<arg parameterName="idx" />
-			<arg parentAttribute="id">benzene_{$idx}</arg>
-			<atomArray>
-				<atom id="a1" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a1</arg>
-				</atom>
-				<atom id="a2" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a2</arg>
-				</atom>
-				<atom id="a3" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a3</arg>
-				</atom>
-				<atom id="a4" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a4</arg>
-				</atom>
-				<atom id="a5" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a5</arg>
-				</atom>
-				<atom id="a6" elementType="C" hydrogenCount="0">
-					<arg parentAttribute="id">benzene_{$idx}_a6</arg>
-				</atom>
-				<atom id="r1" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r1</arg>
-				</atom>
-				<atom id="r2" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r2</arg>
-				</atom>
-				<atom id="r3" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r3</arg>
-				</atom>
-				<atom id="r4" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r4</arg>
-				</atom>
-				<atom id="r5" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r5</arg>
-				</atom>
-				<atom id="r6" elementType="R">
-					<arg parentAttribute="id">benzene_{$idx}_r6</arg>
-				</atom>
-			</atomArray>
-			<bondArray>
-				<bond atomRefs2="a1 a2" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a1_benzene_{$idx}_a2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a1 benzene_{$idx}_a2
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 a3" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a2_benzene_{$idx}_a3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a2 benzene_{$idx}_a3
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 a4" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a3_benzene_{$idx}_a4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a3 benzene_{$idx}_a4
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 a5" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a4_benzene_{$idx}_a5
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a4 benzene_{$idx}_a5
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 a6" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a5_benzene_{$idx}_a6
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a5 benzene_{$idx}_a6
-					</arg>
-				</bond>
-				<bond atomRefs2="a6 a1" order="A">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a6_benzene_{$idx}_a1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a6 benzene_{$idx}_a1
-					</arg>
-				</bond>
-				<bond atomRefs2="a1 r1" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a1_benzene_{$idx}_r1
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a1 benzene_{$idx}_r1
-					</arg>
-				</bond>
-				<bond atomRefs2="a2 r2" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a2_benzene_{$idx}_r2
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a2 benzene_{$idx}_r2
-					</arg>
-				</bond>
-				<bond atomRefs2="a3 r3" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a3_benzene_{$idx}_r3
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a3 benzene_{$idx}_r3
-					</arg>
-				</bond>
-				<bond atomRefs2="a4 r4" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a4_benzene_{$idx}_r4
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a4 benzene_{$idx}_r4
-					</arg>
-				</bond>
-				<bond atomRefs2="a5 r5" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a5_benzene_{$idx}_r5
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a5 benzene_{$idx}_r5
-					</arg>
-				</bond>
-				<bond atomRefs2="a6 r6" order="1">
-					<arg parentAttribute="id">
-						benzene_{$idx}_a6_benzene_{$idx}_r6
-					</arg>
-					<arg parentAttribute="atomRefs2">
-						benzene_{$idx}_a6 benzene_{$idx}_r6
-					</arg>
-				</bond>
-			</bondArray>
-			<name>
-				<arg substitute=".">benzene_{$idx}</arg>
-			</name>
-		</molecule>
-	</fragment>
+  <!-- R1-CH2-CH(CH3)-O-R2 propyleneoxy -->
+  <fragment>
+    <molecule id="po" role="fragment">
+      <arg parameterName="idx" />
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">po_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">po_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="C" hydrogenCount="3">
+          <arg parentAttribute="id">po_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">po_{$idx}_a4</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">po_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">po_{$idx}_r2</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            po_{$idx}_a1_po_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            po_{$idx}_a1 po_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="1">
+          <arg parentAttribute="id">
+            po_{$idx}_a2_po_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            po_{$idx}_a2 po_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a4" order="1">
+          <arg parentAttribute="id">
+            po_{$idx}_a2_po_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            po_{$idx}_a2 po_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            po_{$idx}_a1_po_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            po_{$idx}_a1 po_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 r2" order="1">
+          <arg parentAttribute="id">
+            po_{$idx}_a4_po_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            po_{$idx}_a4 po_{$idx}_r2
+          </arg>
+        </bond>
+      </bondArray>
+    </molecule>
+  </fragment>
+
+
+  <!-- three R groups -->
+
+  <!-- R1-CH2-CH(C(=O)-O-R3)-R2 "acrylate" (ethylenediylcarboxylate) esters -->
+  <fragment>
+    <molecule id="acryl" role="fragment">
+      <arg parameterName="idx" />
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="2">
+          <arg parentAttribute="id">acryl_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="1">
+          <arg parentAttribute="id">acryl_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">acryl_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">acryl_{$idx}_a4</arg>
+        </atom>
+        <atom id="a5" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">acryl_{$idx}_a5</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">acryl_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">acryl_{$idx}_r2</arg>
+        </atom>
+        <atom id="r3" elementType="R">
+          <arg parentAttribute="id">acryl_{$idx}_r3</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a1_acryl_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a1 acryl_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a2_acryl_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a2 acryl_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 a4" order="2">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a3_acryl_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a3 acryl_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 a5" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a3_acryl_{$idx}_a5
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a3 acryl_{$idx}_a5
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a1_acryl_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a1 acryl_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r2" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a2_acryl_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a2 acryl_{$idx}_r2
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 r3" order="1">
+          <arg parentAttribute="id">
+            acryl_{$idx}_a5_acryl_{$idx}_r3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            acryl_{$idx}_a5 acryl_{$idx}_r3
+          </arg>
+        </bond>
+      </bondArray>
+    </molecule>
+  </fragment>
+
+  <!-- multiple -->
+
+  <!-- furan -->
+  <fragment>
+    <molecule role="fragment" id="furan">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">furan_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="O" hydrogenCount="0">
+          <arg parentAttribute="id">furan_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">furan_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">furan_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">furan_{$idx}_a4</arg>
+        </atom>
+        <atom id="a5" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">furan_{$idx}_a5</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">furan_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">furan_{$idx}_r2</arg>
+        </atom>
+        <atom id="r3" elementType="R">
+          <arg parentAttribute="id">furan_{$idx}_r3</arg>
+        </atom>
+        <atom id="r4" elementType="R">
+          <arg parentAttribute="id">furan_{$idx}_r4</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a1_furan_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a1 furan_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="2">
+          <arg parentAttribute="id">
+            furan_{$idx}_a2_furan_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a2 furan_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 a4" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a3_furan_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a3 furan_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 a5" order="2">
+          <arg parentAttribute="id">
+            furan_{$idx}_a4_furan_{$idx}_a5
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a4 furan_{$idx}_a5
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 a1" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a5_furan_{$idx}_a1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a5 furan_{$idx}_a1
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r1" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a2_furan_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a2 furan_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 r2" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a3_furan_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a3 furan_{$idx}_r2
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 r3" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a4_furan_{$idx}_r3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a4 furan_{$idx}_r3
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 r4" order="1">
+          <arg parentAttribute="id">
+            furan_{$idx}_a5_furan_{$idx}_r4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            furan_{$idx}_a5 furan_{$idx}_r4
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">furan_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
+
+  <!-- benzene -->
+  <fragment>
+    <molecule role="fragment" id="benzene">
+      <arg parameterName="idx" />
+      <arg parentAttribute="id">benzene_{$idx}</arg>
+      <atomArray>
+        <atom id="a1" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a1</arg>
+        </atom>
+        <atom id="a2" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a2</arg>
+        </atom>
+        <atom id="a3" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a3</arg>
+        </atom>
+        <atom id="a4" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a4</arg>
+        </atom>
+        <atom id="a5" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a5</arg>
+        </atom>
+        <atom id="a6" elementType="C" hydrogenCount="0">
+          <arg parentAttribute="id">benzene_{$idx}_a6</arg>
+        </atom>
+        <atom id="r1" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r1</arg>
+        </atom>
+        <atom id="r2" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r2</arg>
+        </atom>
+        <atom id="r3" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r3</arg>
+        </atom>
+        <atom id="r4" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r4</arg>
+        </atom>
+        <atom id="r5" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r5</arg>
+        </atom>
+        <atom id="r6" elementType="R">
+          <arg parentAttribute="id">benzene_{$idx}_r6</arg>
+        </atom>
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a1_benzene_{$idx}_a2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a1 benzene_{$idx}_a2
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 a3" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a2_benzene_{$idx}_a3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a2 benzene_{$idx}_a3
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 a4" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a3_benzene_{$idx}_a4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a3 benzene_{$idx}_a4
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 a5" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a4_benzene_{$idx}_a5
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a4 benzene_{$idx}_a5
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 a6" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a5_benzene_{$idx}_a6
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a5 benzene_{$idx}_a6
+          </arg>
+        </bond>
+        <bond atomRefs2="a6 a1" order="A">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a6_benzene_{$idx}_a1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a6 benzene_{$idx}_a1
+          </arg>
+        </bond>
+        <bond atomRefs2="a1 r1" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a1_benzene_{$idx}_r1
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a1 benzene_{$idx}_r1
+          </arg>
+        </bond>
+        <bond atomRefs2="a2 r2" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a2_benzene_{$idx}_r2
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a2 benzene_{$idx}_r2
+          </arg>
+        </bond>
+        <bond atomRefs2="a3 r3" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a3_benzene_{$idx}_r3
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a3 benzene_{$idx}_r3
+          </arg>
+        </bond>
+        <bond atomRefs2="a4 r4" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a4_benzene_{$idx}_r4
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a4 benzene_{$idx}_r4
+          </arg>
+        </bond>
+        <bond atomRefs2="a5 r5" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a5_benzene_{$idx}_r5
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a5 benzene_{$idx}_r5
+          </arg>
+        </bond>
+        <bond atomRefs2="a6 r6" order="1">
+          <arg parentAttribute="id">
+            benzene_{$idx}_a6_benzene_{$idx}_r6
+          </arg>
+          <arg parentAttribute="atomRefs2">
+            benzene_{$idx}_a6 benzene_{$idx}_r6
+          </arg>
+        </bond>
+      </bondArray>
+      <name>
+        <arg substitute=".">benzene_{$idx}</arg>
+      </name>
+    </molecule>
+  </fragment>
 </fragmentList>

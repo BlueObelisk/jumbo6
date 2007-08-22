@@ -34,6 +34,23 @@ public class StringTestBase extends EuclidTestBase {
     }
 
     /**
+     * Assert.asserts equality of String arrays.
+     * 
+     * convenience method where test is a whitespace-separated set of tokens
+     * 
+     * @param message
+     * @param a expected array as space concatenated
+     * @param b actual array may not include nulls
+     */
+    public static void assertEquals(String message, String a, String[] b) {
+    	String[] aa = a.split(S_SPACE);
+        String s = testEquals(aa, b);
+        if (s != null) {
+            Assert.fail(message + "; " + s);
+        }
+    }
+
+    /**
      * match arrays. error is a == null or b == null or a.length != b.length or
      * a[i] != b[i] nulls match
      * 
@@ -54,7 +71,7 @@ public class StringTestBase extends EuclidTestBase {
                 if (a[i] == null && b[i] == null) {
                     // both null, match
                 } else if (a[i] == null || b[i] == null || !a[i].equals(b[i])) {
-                    s = "unequal element (" + i + "), " + a[i] + " != " + b[i];
+                    s = "unequal element (" + i + "), expected: " + a[i] + " found: " + b[i];
                     break;
                 }
             }

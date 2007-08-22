@@ -1,16 +1,14 @@
 package org.xmlcml.cml.element;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /**
@@ -47,12 +45,8 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         List<CMLBond> bonds2 = xmlMolecule.getBonds();
         bonds1.remove(1);
         bonds2.remove(2);
-        try {
-            bondSet1 = new CMLBondSet(bonds1);
-            bondSet2 = new CMLBondSet(bonds2);
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        bondSet1 = new CMLBondSet(bonds1);
+        bondSet2 = new CMLBondSet(bonds2);
     }
 
     private void makeBondSet34() {
@@ -62,12 +56,8 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         bonds3.remove(1);
         bonds4.remove(3);
         bonds4.remove(2);
-        try {
-            bondSet3 = new CMLBondSet(bonds3);
-            bondSet4 = new CMLBondSet(bonds4);
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        bondSet3 = new CMLBondSet(bonds3);
+        bondSet4 = new CMLBondSet(bonds4);
     }
 
     /**
@@ -312,11 +302,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         List<CMLBond> bondList = mol5a.getBonds();
         Assert.assertEquals("mol5a bonds", 4, bondList.size());
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(bondList);
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        bondSet = new CMLBondSet(bondList);
         Assert.assertEquals("mol5a bondSet", 4, bondSet.size());
         CMLBond bond1 = bondList.get(1);
         CMLBond bond2 = bondList.get(2);
@@ -324,11 +310,7 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         Assert.assertTrue("mol5a bonds", bondSet.contains(bond2));
         bondList .remove(bondList.get(2));
         Assert.assertEquals("mol5a bonds", 3, bondList.size());
-        try {
-            bondSet = new CMLBondSet(bondList);
-        } catch (CMLException e) {
-            Util.BUG(e);
-        }
+        bondSet = new CMLBondSet(bondList);
         Assert.assertEquals("mol5a bondSet", 3, bondSet.size());
         Assert.assertTrue("mol5a bonds", bondSet.contains(bond1));
         Assert.assertFalse("mol5a bonds", bondSet.contains(bond2));
@@ -409,15 +391,11 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         makeBondSet12();
         makeBondSet34();
         CMLBondSet bondSetx = null;
-        try {
             bondSetx = bondSet1.symmetricDifference(bondSet2);
             Assert.assertEquals("symmetricDifference", 2, bondSetx.size());
             Assert.assertEquals("complement", "b3", bondSetx.getBonds().get(0).getId());
             Assert.assertEquals("complement", "b2", bondSetx.getBonds().get(1).getId());
             bondSetx = bondSet3.symmetricDifference(bondSet4);
-        } catch (CMLException e) {
-            fail("bug");
-        }
         Assert.assertEquals("symmetricDifference", 2, bondSetx.size());
         // fragile
         Assert.assertEquals("complement", "b4", bondSetx.getBonds().get(0).getId());
@@ -431,5 +409,27 @@ public class CMLBondSetTest extends MoleculeAtomBondTest {
         CMLMolecule molecule = bondSet.getMolecule();
         Assert.assertNotNull("get molecule", molecule);
         Assert.assertEquals("get molecule", xmlMolecule, molecule);
+    }
+    
+    /** tests equality against list of ids.
+     * (order of elements in set is undefined)
+     * @param message
+     * @param expectedBondIds
+     * @param bondSet
+     */
+    public static void assertEquals(String message, String[] expectedBondIds, CMLBondSet bondSet) {
+    	Assert.assertEquals(message+"; unequal sizes; expected "+
+    			expectedBondIds.length+", found: "+bondSet.size(), 
+    			expectedBondIds.length, bondSet.size());
+    	Set<String> expectedSet = new HashSet<String>();
+    	for (String es : expectedBondIds) {
+    		expectedSet.add(es);
+    	}
+    	Set<String> foundSet = new HashSet<String>();
+    	List<String> fss = bondSet.getBondIDs();
+    	for (String fs : fss) {
+    		foundSet.add(fs);
+    	}
+    	Assert.assertTrue("compare atom sets", expectedSet.equals(foundSet));
     }
  }

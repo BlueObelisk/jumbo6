@@ -1362,12 +1362,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         makeMol5a();
         CMLAtomSet atomSet = mol5a.getAtomSet();
         CMLBondSet bondSet = null;
-        try {
-            bondSet = new CMLBondSet(mol5a.getBonds());
-        } catch (CMLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        bondSet = new CMLBondSet(mol5a.getBonds());
         CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
 //        CMLMoleculeTest.assertEqualsCanonically("new mol", mol, mol5a);
         Assert.assertEquals("atoms", 5, mol.getAtomCount());

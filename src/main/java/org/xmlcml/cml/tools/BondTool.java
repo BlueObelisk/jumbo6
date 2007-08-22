@@ -9,6 +9,8 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
@@ -74,35 +76,43 @@ public class BondTool extends AbstractTool {
 
     /** returns a "g" element
      * this contains the lines for bond
-     * @return null if problem
+     * @param drawable
+     * @return null if problem or atom has no coords
      */
-    public SVGElement createSVG() {
-    	SVGG g = new SVGG();
+    public GraphicsElement createGraphicsElement(CMLDrawable drawable) {
+    	SVGG g = null;
     	List<CMLAtom> atoms = bond.getAtoms();    	
     	Real2 xy0 = atoms.get(0).getXY2();
     	Real2 xy1 = atoms.get(1).getXY2();
-    	double bondWidth = bondDisplay.getWidth();
-//		boolean writeLabel = false;
-//		double width = 1.0;
-//		String dash = "";
-//		String color = "black";
-//		if (this.wedgeType == Type.SOLID_NEITHER) {
-//			width = 2*width;
-//		}
-//		if (wedgeType == Type.HATCH_NEITHER) {
-//			dash = "stroke-dasharray:2,2;";
-//		}
-		String order = bond.getOrder();
-		if (order == null || order.equals(CMLBond.SINGLE)) {
-			g.appendChild(createBond("black", bondWidth, xy0, xy1));
-		} else if (order.equals(CMLBond.DOUBLE)) {
-			g.appendChild(createBond("black", 3*bondWidth, xy0, xy1));
-			g.appendChild(createBond("white", 1*bondWidth, xy0, xy1));
-		} else if (order.equals(CMLBond.TRIPLE)) {
-			g.appendChild(createBond("black", 5*bondWidth, xy0, xy1));
-			g.appendChild(createBond("white", 3*bondWidth, xy0, xy1));
-			g.appendChild(createBond("black", bondWidth, xy0, xy1));
-		}
+    	if (xy0 == null) {
+    		System.err.println("No bond coordinates for: "+atoms.get(0).getId());
+    	} else if (xy1 == null) {
+    		System.err.println("No bond coordinates for: "+atoms.get(1).getId());
+    	} else {
+        	g = drawable.createGraphicsElement();
+	    	double bondWidth = bondDisplay.getWidth();
+	//		boolean writeLabel = false;
+	//		double width = 1.0;
+	//		String dash = "";
+	//		String color = "black";
+	//		if (this.wedgeType == Type.SOLID_NEITHER) {
+	//			width = 2*width;
+	//		}
+	//		if (wedgeType == Type.HATCH_NEITHER) {
+	//			dash = "stroke-dasharray:2,2;";
+	//		}
+			String order = bond.getOrder();
+			if (order == null || order.equals(CMLBond.SINGLE)) {
+				g.appendChild(createBond("black", bondWidth, xy0, xy1));
+			} else if (order.equals(CMLBond.DOUBLE)) {
+				g.appendChild(createBond("black", 3*bondWidth, xy0, xy1));
+				g.appendChild(createBond("white", 1*bondWidth, xy0, xy1));
+			} else if (order.equals(CMLBond.TRIPLE)) {
+				g.appendChild(createBond("black", 5*bondWidth, xy0, xy1));
+				g.appendChild(createBond("white", 3*bondWidth, xy0, xy1));
+				g.appendChild(createBond("black", bondWidth, xy0, xy1));
+			}
+    	}
 		return g;
     }
     

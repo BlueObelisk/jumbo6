@@ -143,6 +143,14 @@ public class Real2Vector implements EuclidConstants {
     public int size() {
         return vector.size();
     }
+
+    /** access the vector.
+     * this is the only storage so should be safe
+     * @return vector
+     */
+    public List<Real2> getVector() {
+    	return vector;
+    }
     /**
      * get range of one coordinate
      * 
@@ -507,18 +515,39 @@ public class Real2Vector implements EuclidConstants {
         t2 = new Transform2(t2, temp);
         this.transformBy(t2);
     }
+    
+    /** creates mirror image
+     * changes sign of x-coords
+     */
+    public void flipX() {
+    	for (Real2 r2 : vector) {
+    		r2.setX(-r2.getX());
+    	}
+    }
+    
+    /** creates mirror image
+     * changes sign of y-coords
+     */
+    public void flipY() {
+    	for (Real2 r2 : vector) {
+    		r2.setY(-r2.getY());
+    	}
+    }
+    
     /**
-     * create regular polygon. centre is at 0.0, first point at 0, rad points go
-     * clockwise (rad*cos, rad*sin)
+     * create regular polygon. 
+     * centre is at 0.0, first point at 
+     * (rad*cos(angle+dangle), rad*sin(angle+dangle))
+     * points go anticlockwise 
      * 
      * @param nsides
-     * @param rad
-     *            the radius
+     * @param rad the radius
+     * @param angle offset to vertical (radians) 
+     *     (point 0 is at rad*cos(angle), rad*sin(angle))
      * @return array of points
      */
-    public static Real2Vector regularPolygon(int nsides, double rad) {
+    public static Real2Vector regularPolygon(int nsides, double rad, double angle) {
         Real2Vector temp = new Real2Vector();
-        double angle = 0.0;
         double dangle = 2 * Math.PI / (new Integer(nsides).doubleValue());
         for (int i = 0; i < nsides; i++) {
             Real2 p = new Real2(rad * Math.sin(angle), rad * Math.cos(angle));
@@ -527,6 +556,83 @@ public class Real2Vector implements EuclidConstants {
         }
         return temp;
     }
+
+    /**
+     * create part of regular polygon. 
+     * centre is at 0.0, last point at (rad, 0)
+     * points go anticlockwise 
+     * produces points pointn, pointn+1, ... nsides-1, 0
+     * if npoint is 1 we get full polygon
+     * if npoint >= nsides returns null
+     * @param nsides
+     * @param pointn
+     * @param dist0n between point0 and npoint
+     * @return array of points
+     */
+    public static Real2Vector partOfRegularPolygon(int nsides, int pointn, double dist0n) {
+        Real2Vector temp = new Real2Vector();
+        double dangle = 2 * Math.PI / (new Integer(nsides).doubleValue());
+        double sinAngle2 = Math.sin((double) pointn * dangle / 2.);
+    	double rad = 0.5 * dist0n / sinAngle2;
+    	double angle = dangle;
+        for (int i = pointn; i <= nsides; i++) {
+            Real2 p = new Real2(rad * Math.sin(angle), rad * Math.cos(angle));
+            temp.add(p);
+            angle += dangle;
+        }
+        return temp;
+    }
+    
+    
+    /**
+     * create regular polygon. 
+     * centre is at 0.0, first point at (0, rad)
+     * points go anticlockwise (rad*cos, -rad*sin)
+     * 
+     * @param nsides
+     * @param rad the radius
+     * @return array of points
+     */
+    public static Real2Vector regularPolygon(int nsides, double rad) {
+    	return regularPolygon(nsides, rad, 0.0);
+    }
+    
+    /** create regular polygon. 
+     * goes through points p1, p2
+     * if m = (p1 +p2)/2
+     * and c is centre of circle
+     * and pp = p2 - p1
+     * and d = c-m
+     * then signed angle(pp, d) is 90
+     * 
+     * points go clockwise
+     * to make the polygon go the other way reverse p1 and p2
+     * @param nsides
+     * @param p1 first point
+     * @param p2 second point
+     * @param flip use mirror image
+     * @return array of points
+     */
+    public static Real2Vector regularPolygon(int nsides, Real2 p1, Real2 p2, boolean flip) {
+    	double halfAngle = Math.PI / (double) nsides;
+        Vector2 p1top2 = new Vector2(p2.subtract(p1));
+        double halfSidelength = p1top2.getLength() / 2.0;
+        double rad = halfSidelength / Math.sin(halfAngle);
+        Real2Vector temp = regularPolygon(nsides, rad);
+        if (flip) {
+        	temp.flipY();
+        }
+        // deviation between p1p2 and the y-axis
+        Angle rot = null;
+        rot = p1top2.getAngleMadeWith(new Vector2(0.0, 1.0));
+        rot = new Vector2(1.0, 0.0).getAngleMadeWith(p1top2);
+        temp.transformBy(new Transform2(rot));
+        temp.transformBy(new Transform2(new Angle(-halfAngle)));
+        Real2 shift = p1.subtract(new Vector2(temp.get(0)));
+        temp.transformBy(new Transform2(new Vector2(shift)));
+        return temp;
+    }
+    
     /**
      * get centroid of all points. does not modify this
      * 

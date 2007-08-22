@@ -11,6 +11,7 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -413,84 +414,90 @@ public class AtomTool extends AbstractTool {
 
      /** returns a "g" element
       * this contains the text for symbol and charge
+      * @param drawable
       * @return null if no symbol or charge
       */
-     public SVGElement createSVG() {
-    	 double x = atom.getX2();
-    	 double y = atom.getY2();
-    	 SVGG g = new SVGG();
-    	 g.setTransform(new Transform2(
-    			 new double[]{
-    			 1., 0., x,
-    			 0.,-1., y,
-    			 0., 0., 1.
-    	 }));
-    	 String elementType = atom.getElementType();
-    	 String fill = atomDisplay.getFill();
-    	 double fontSize = atomDisplay.getFontSize();
-    	 double xOffsetFactor = atomDisplay.getXOffsetFactor();
-    	 double yOffsetFactor = atomDisplay.getYOffsetFactor();
-    	 double radiusFactor = atomDisplay.getBackgroundRadiusFactor();
-    	 
-    	 double xChargeOffsetFactor = atomDisplay.getXChargeOffsetFactor();
-    	 double yChargeOffsetFactor = atomDisplay.getYChargeOffsetFactor();
-    	 double chargeFontFactor = atomDisplay.getChargeFontFactor();
-    	 double backgroundChargeRadiusFactor = atomDisplay.getBackgroundChargeRadiusFactor();
-    	 
-    	 if (!elementType.equals("C")) {
-    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
-    		 g.appendChild(circle);
-    		 circle.setFill("white");
-    		 SVGElement text = new SVGText(
-    				 new Real2(xOffsetFactor*fontSize, yOffsetFactor*fontSize), atom.getElementType());
-    		 if (elementType.equals("N")) {
-    			 fill = "blue";
-    		 } else if (elementType.equals("O")) {
-    			 fill = "red";
-    		 } else if (elementType.equals("S")) {
-    			 fill = "orange";
-    		 } else if (elementType.equals("Cl")) {
-    			 fill = "green";
-    		 } else if (elementType.equals("F")) {
-    			 fill = "#77ff00";
-    		 } else if (elementType.equals("Br")) {
-    			 fill = "#ff7700";
-    		 } else if (elementType.equals("I")) {
-    			 fill = "#ff00ff";
-    		 } else if (elementType.equals("H")) {
-    			 fill = "gray";
-    		 }
-    		 g.setFill(fill);
-    		 g.appendChild(text);
-    	 }
-    	 if (atom.getFormalChargeAttribute() != null) {
-    		 int formalCharge = atom.getFormalCharge();
-    		 String chargeS = "";
-    		 if (formalCharge == -1) {
-    			 chargeS = "-";
-    		 } else if (formalCharge == 1) {
-    			 chargeS = "+";
-    		 } else if (formalCharge > 1) {
-    			 chargeS = "+"+formalCharge;
-    		 } else if (formalCharge <  -1) {
-    			 chargeS = ""+formalCharge;
-    		 }
-    		 // skip zero charge
-    		 if (!chargeS.equals("")) {
-	    		 double chargeFontSize = chargeFontFactor*fontSize;
-	    		 Real2 chargeXY = new Real2(xChargeOffsetFactor*fontSize, yChargeOffsetFactor*fontSize);
-	    		 SVGElement circle = new SVGCircle(chargeXY, backgroundChargeRadiusFactor*chargeFontSize);
-	    		 circle.setFill("white");
-	    		 circle.setStroke("black");
-	    		 circle.setStrokeWidth(0.05);
+     public SVGG createGraphicsElement(CMLDrawable drawable) {
+    	 SVGG g = null;
+    	 if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
+    		 System.err.println("No coordinates for "+atom.getId());
+    	 } else {
+	    	 double x = atom.getX2();
+	    	 double y = atom.getY2();
+	    	 g = drawable.createGraphicsElement();
+	    	 g.setTransform(new Transform2(
+	    			 new double[]{
+	    			 1., 0., x,
+	    			 0.,-1., y,
+	    			 0., 0., 1.
+	    	 }));
+	    	 String elementType = atom.getElementType();
+	    	 String fill = atomDisplay.getFill();
+	    	 double fontSize = atomDisplay.getFontSize();
+	    	 double xOffsetFactor = atomDisplay.getXOffsetFactor();
+	    	 double yOffsetFactor = atomDisplay.getYOffsetFactor();
+	    	 double radiusFactor = atomDisplay.getBackgroundRadiusFactor();
+	    	 
+	    	 double xChargeOffsetFactor = atomDisplay.getXChargeOffsetFactor();
+	    	 double yChargeOffsetFactor = atomDisplay.getYChargeOffsetFactor();
+	    	 double chargeFontFactor = atomDisplay.getChargeFontFactor();
+	    	 double backgroundChargeRadiusFactor = atomDisplay.getBackgroundChargeRadiusFactor();
+	    	 
+	    	 if (!elementType.equals("C")) {
+	    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
 	    		 g.appendChild(circle);
-	    		 Real2 chargeXYd = new Real2((xChargeOffsetFactor-0.3)*(fontSize), (yChargeOffsetFactor+0.3)*(fontSize));
-	    		 SVGElement text = new SVGText(chargeXYd, chargeS);
-	    		 text.setFontSize(chargeFontSize);
+	    		 circle.setFill("white");
+	    		 SVGElement text = new SVGText(
+	    				 new Real2(xOffsetFactor*fontSize, yOffsetFactor*fontSize), atom.getElementType());
+	    		 if (elementType.equals("N")) {
+	    			 fill = "blue";
+	    		 } else if (elementType.equals("O")) {
+	    			 fill = "red";
+	    		 } else if (elementType.equals("S")) {
+	    			 fill = "orange";
+	    		 } else if (elementType.equals("Cl")) {
+	    			 fill = "green";
+	    		 } else if (elementType.equals("F")) {
+	    			 fill = "#77ff00";
+	    		 } else if (elementType.equals("Br")) {
+	    			 fill = "#ff7700";
+	    		 } else if (elementType.equals("I")) {
+	    			 fill = "#ff00ff";
+	    		 } else if (elementType.equals("H")) {
+	    			 fill = "gray";
+	    		 }
+	    		 g.setFill(fill);
 	    		 g.appendChild(text);
-    		 }
+	    	 }
+	    	 if (atom.getFormalChargeAttribute() != null) {
+	    		 int formalCharge = atom.getFormalCharge();
+	    		 String chargeS = "";
+	    		 if (formalCharge == -1) {
+	    			 chargeS = "-";
+	    		 } else if (formalCharge == 1) {
+	    			 chargeS = "+";
+	    		 } else if (formalCharge > 1) {
+	    			 chargeS = "+"+formalCharge;
+	    		 } else if (formalCharge <  -1) {
+	    			 chargeS = ""+formalCharge;
+	    		 }
+	    		 // skip zero charge
+	    		 if (!chargeS.equals("")) {
+		    		 double chargeFontSize = chargeFontFactor*fontSize;
+		    		 Real2 chargeXY = new Real2(xChargeOffsetFactor*fontSize, yChargeOffsetFactor*fontSize);
+		    		 SVGElement circle = new SVGCircle(chargeXY, backgroundChargeRadiusFactor*chargeFontSize);
+		    		 circle.setFill("white");
+		    		 circle.setStroke("black");
+		    		 circle.setStrokeWidth(0.05);
+		    		 g.appendChild(circle);
+		    		 Real2 chargeXYd = new Real2((xChargeOffsetFactor-0.3)*(fontSize), (yChargeOffsetFactor+0.3)*(fontSize));
+		    		 SVGElement text = new SVGText(chargeXYd, chargeS);
+		    		 text.setFontSize(chargeFontSize);
+		    		 g.appendChild(text);
+	    		 }
+	    	 }
     	 }
-    	 return (g.getChildElements().size() == 0) ? null : g;
+    	 return (g == null || g.getChildElements().size() == 0) ? null : g;
      }
 
 	/**

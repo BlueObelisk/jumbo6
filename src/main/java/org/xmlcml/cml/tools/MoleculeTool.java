@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Angle;
@@ -350,36 +353,37 @@ public class MoleculeTool extends AbstractTool {
 
 	/**
 	 * Add or delete hydrogen atoms to satisy valence.
-	 *
+	 * ignore if hydrogenCount attribute is set
 	 * Uses algorithm: nH = 8 - group - sumbondorder + formalCharge, where group
 	 * is 0-8 in first two rows
 	 *
 	 * @param atom
-	 * @param control
-	 *            specifies whether H are explicit or in hydrogenCount
+	 * @param control specifies whether H are explicit or in hydrogenCount
 	 */
 	public void adjustHydrogenCountsToValency(CMLAtom atom,
 			CMLMolecule.HydrogenControl control) {
-		int group = this.getHydrogenValencyGroup(atom);
-		if (group == -1) {
-			return;
-		} else if (group == -2) {
-			return;
+		if (atom.getHydrogenCountAttribute() == null) {
+			int group = this.getHydrogenValencyGroup(atom);
+			if (group == -1) {
+				return;
+			} else if (group == -2) {
+				return;
+			}
+			// hydrogen and metals
+			if (group < 4) {
+				return;
+			}
+			int sumBo = this.getSumNonHydrogenBondOrder(atom);
+			int fc = (atom.getFormalChargeAttribute() == null) ? 0 : atom
+					.getFormalCharge();
+			int nh = 8 - group - sumBo + fc;
+			// non-octet species
+			if (group == 4 && fc == 1) {
+				nh -= 2;
+			}
+			atom.setHydrogenCount(nh);
+			this.expandImplicitHydrogens(atom, control);
 		}
-		// hydrogen and metals
-		if (group < 4) {
-			return;
-		}
-		int sumBo = this.getSumNonHydrogenBondOrder(atom);
-		int fc = (atom.getFormalChargeAttribute() == null) ? 0 : atom
-				.getFormalCharge();
-		int nh = 8 - group - sumBo + fc;
-		// non-octet species
-		if (group == 4 && fc == 1) {
-			nh -= 2;
-		}
-		atom.setHydrogenCount(nh);
-		this.expandImplicitHydrogens(atom, control);
 	}
 
 	/**
@@ -801,7 +805,8 @@ public class MoleculeTool extends AbstractTool {
 	 *
 	 * This needs looking at
 	 *
-	 * CMLMolecule.NO_EXPLICIT_HYDROGENS CMLMolecule.USE_HYDROGEN_COUNT // no
+	 * CMLMolecule.NO_EXPLICIT_HYDROGENS 
+	 * CMLMolecule.USE_HYDROGEN_COUNT // no
 	 * action
 	 *
 	 * @param atom
@@ -1349,9 +1354,16 @@ public class MoleculeTool extends AbstractTool {
 	 *            specifies whether H are explicit or in hydorgenCount
 	 */
 	public void adjustHydrogenCountsToValency(HydrogenControl control) {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			this.adjustHydrogenCountsToValency(atom, control);
+		if (molecule.isMoleculeContainer()) {
+			CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
+			for (CMLMolecule mol : molecules) {
+				new MoleculeTool(mol).adjustHydrogenCountsToValency(control);
+			}
+		} else {
+			List<CMLAtom> atoms = molecule.getAtoms();
+			for (CMLAtom atom : atoms) {
+				this.adjustHydrogenCountsToValency(atom, control);
+			}
 		}
 	}
 
@@ -1418,10 +1430,9 @@ public class MoleculeTool extends AbstractTool {
 	}
 
 	/**
-	 * Traverses all non-H atoms and calls CMLAtom on each.
+	 * Traverses all non-H atoms and calls CMLAtom.expandImplicitHydrogens on each.
 	 *
-	 * @param control
-	 *            as in CMLAtom
+	 * @param control as in CMLAtom
 	 * @see CMLAtom
 	 */
 	public void expandImplicitHydrogens(HydrogenControl control) {
@@ -2154,16 +2165,20 @@ public class MoleculeTool extends AbstractTool {
     /** returns a "g" element
      * will require to be added to an svg element
      * @param moleculeDisplay
+     * @param drawable
+	 * @throws IOException
      * @return null if problem
      */
-    public SVGElement createSVG(MoleculeDisplay moleculeDisplay) {
+    public SVGElement createSVG(MoleculeDisplay moleculeDisplay, CMLDrawable drawable) throws IOException {
+    	System.out.println("CREATE SVG");
     	Real2Range moleculeBoundingBox = new AtomSetTool(new CMLAtomSet(molecule)).getExtent2();
     	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
     	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
     	double scale = moleculeInterval.scaleTo(screenBoundingBox);
     	double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
     	
-    	SVGG g = new SVGG();
+//    	SVGG g = new SVGG();
+    	SVGG g = drawable.createGraphicsElement();
     	g.setTransform(new Transform2 (
 			new double[]{
 			scale, 0., offsets[0],
@@ -2180,10 +2195,10 @@ public class MoleculeTool extends AbstractTool {
     		if (bondTool.omitFromDisplay(atomDisplay)) {
     			continue;
     		}
-    		SVGElement b = bondTool.createSVG();
-    		b.setStrokeWidth(0.2);
+    		GraphicsElement b = bondTool.createGraphicsElement(drawable);
     		if (b != null) {
     			g.appendChild(b);
+        		b.setStrokeWidth(0.2);
     		}
 		}
     	for (CMLAtom atom : molecule.getAtoms()) {
@@ -2192,13 +2207,23 @@ public class MoleculeTool extends AbstractTool {
     		if (atomDisplay.omitAtom(atom)) {
     			continue;
     		}
-    		SVGElement a = atomTool.createSVG();
+    		GraphicsElement a = atomTool.createGraphicsElement(drawable);
     		if (a != null) {
     			g.appendChild(a);
     		}
 		}
+    	drawable.output(g);
     	return g;
     }
+
+//    /** default molecular display to CMDrawable
+//     * convenience
+//     * @param drawable
+//     * @exception IOException
+//     */
+//    public void defaultDisplay(CMLDrawable drawable) throws IOException {
+//    	drawable.createOrDisplayGraphics(this, MoleculeDisplay.getDEFAULT());
+//    }
     
 //	private double getScale(Real2Range moleculeBoundingBox, Real2Interval screenBoundingBox) {
 //		double scale = Double.NaN;
@@ -2207,3 +2232,4 @@ public class MoleculeTool extends AbstractTool {
 //		return scale;
 //	}
 }
+

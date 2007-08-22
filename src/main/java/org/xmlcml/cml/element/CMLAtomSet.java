@@ -55,30 +55,34 @@ public class CMLAtomSet extends AbstractAtomSet {
         super();
         checkDuplicates = true;
     }
+    
+    private void init() {
+    	set = new LinkedHashSet<CMLAtom>();
+    	idTable = new HashMap<String, CMLAtom>();
+    	this.setXMLContent(S_EMPTY);
+    	this.setSize(0);
+    }
 
-    /**
-     * copy constructor. copies references to atoms
+    /** copy constructor. copies references to atoms
      *
-     * @param old
-     *            to copy
+     * @param old to copy
      */
     public CMLAtomSet(CMLAtomSet old) {
         super(old);
+        init();
         for (CMLAtom atom : old.set) {
-            set.add(atom);
+            this.addAtom(atom);
         }
-        idTable = new HashMap<String, CMLAtom>();
-        copyTable(old.idTable, idTable);
     }
 
-    private void copyTable(Map<String, CMLAtom> fromMap,
-            Map<String, CMLAtom> toMap) {
-        if (fromMap != null) {
-            for (String s : fromMap.keySet()) {
-                toMap.put(s, fromMap.get(s));
-            }
-        }
-    }
+//    private void copyTable(Map<String, CMLAtom> fromMap,
+//            Map<String, CMLAtom> toMap) {
+//        if (fromMap != null) {
+//            for (String s : fromMap.keySet()) {
+//                toMap.put(s, fromMap.get(s));
+//            }
+//        }
+//    }
 
     /**
      * copy node .

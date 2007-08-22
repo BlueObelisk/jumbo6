@@ -3,8 +3,10 @@ package org.xmlcml.cml.graphics;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
 
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
@@ -14,34 +16,102 @@ import org.xmlcml.euclid.Real2;
  * @author pm286
  *
  */
-public abstract class SVGElement extends GraphicsElement {
+public abstract class GraphicsElement extends Element {
 
-	/** standard namespace for SVG
-	 * 
-	 */
-	public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-
+//	private String stroke = "black";
+//	private double strokeWidth = 1.0;
+//	private String fill = "none";
+//	private double opacity = 1.0;
+//	private String dashed = "none";
+	
+	protected Map<String, String> styleMap;
+	String styleString;
+		
 	/** constructor.
 	 * 
 	 * @param name
+	 * @param namespace
 	 */
-	public SVGElement(String name) {
-		super(name,SVG_NAMESPACE);
+	public GraphicsElement(String name, String namespace) {
+		super(name, namespace);
 		styleMap = new HashMap<String, String>();
 		styleString = "";
-//		setStroke("black");
-//		setFill("red");
-//		setStrokeWidth(1.0);
-//		setOpacity(1.0);
+	}
+
+//	/**
+//	 * @return the dashed
+//	 */
+//	public String getDashed() {
+//		return dashed;
+//	}
+
+//	/**
+//	 * @param dashed the dashed to set
+//	 */
+//	public void setDashed(String dashed) {
+//		this.dashed = dashed;
+//	}
+
+	/**
+	 * @return the fill
+	 */
+	public String getFill() {
+		return this.getAttributeValue("fill");
 	}
 
 	/**
-	 * @return the sVG_NAMESPACE
+	 * @param fill the fill to set
 	 */
-	public static String getSVG_NAMESPACE() {
-		return SVG_NAMESPACE;
+	public void setFill(String fill) {
+		this.addAttribute(new Attribute("fill", fill));
 	}
 
+	/**
+	 * @return the opacity
+	 */
+	public double getOpacity() {
+		return new Double(this.getAttributeValue("opacity")).doubleValue();
+	}
+
+	/**
+	 * @param opacity the opacity to set
+	 */
+	public void setOpacity(double opacity) {
+		this.addAttribute(new Attribute("opacity", ""+opacity));
+	}
+
+	/**
+	 * @return the stroke
+	 */
+	public String getStroke() {
+		return this.getAttributeValue("stroke");
+	}
+
+	/**
+	 * @param stroke the stroke to set
+	 */
+	public void setStroke(String stroke) {
+		if (stroke == null) {
+		} else {
+			this.addAttribute(new Attribute("stroke", stroke));
+		}
+	}
+
+	/**
+	 * @return the strokeWidth
+	 */
+	public double getStrokeWidth() {
+		String strokeWidth = styleMap.get("stroke-width");
+		return (strokeWidth == null) ? Double.NaN : new Double(strokeWidth).doubleValue();
+	}
+
+	/**
+	 * @param strokeWidth the strokeWidth to set
+	 */
+	public void setStrokeWidth(double strokeWidth) {
+		addStyle("stroke-width", ""+strokeWidth);
+	}
+	
 	protected abstract String getTag();
 	
 	protected void addStyle(String style, String value) {

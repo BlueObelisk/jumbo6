@@ -15,7 +15,6 @@ import nu.xom.tests.XOMTestCase;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.xmlcml.euclid.test.EuclidTestBase;
 
 /**
@@ -138,8 +137,7 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
      * equalsCanonically.
      * 
      */
-    @Test
-    public void testAssertEqualsCanonically() {
+    public static void testAssertEqualsCanonically() {
         String s1 = "<a b='c' d='e'><f g='h' i='j'>&amp;x</f><g/></a>";
         String s2 = "<a d='e' b='c'><f i='j' g='h'>&#38;x</f><g></g></a>";
         String s3 = "<a d='e' b='c'><f i='j' g='h'><![CDATA[&]]><![CDATA[x]]></f><g></g></a>";
