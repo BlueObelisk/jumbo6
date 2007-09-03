@@ -339,6 +339,25 @@ public class FragmentTool extends AbstractTool {
 			}
 		}
     }
+    /**
+     * 
+     * @param element to be changed to R
+     * Changes all occurances of the specified element to R
+     */
+    public void ElementtoR(String element){
+    	List<Node> ratoms= CMLUtil.getQueryNodes(
+				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", X_CML);
+		if (ratoms.size() == 0) {
+			return;
+		}
+		
+		for (Node node : ratoms) {
+			if(element.equals(node.getValue())){
+				Attribute a=(Attribute)node;
+				a.setValue("R");
+			}
+		}
+    }
 }
 
 
