@@ -1,12 +1,21 @@
 package org.xmlcml.cml.tools;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import nu.xom.Attribute;
+import nu.xom.Document;
 import nu.xom.Node;
+import nu.xom.Serializer;
 
 import org.xmlcml.cml.attribute.IdAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
@@ -286,13 +295,115 @@ public class FragmentConverter extends AbstractTool {
     	}
     	return fragmentList;
     }
-
-	/**
+    
+	/**Call with to set up polinfo fragments:
+	 * -indir src/test/java/org/xmlcml/cml/tools/examples/molecules/polyinfomol -outdir src/test/java/org/xmlcml/cml/tools/examples/molecules/polyinfo/
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		CommandlineFragmentConverter converter = new CommandlineFragmentConverter(args);	
+		
+		if (converter.indir != null) {
+			File[] files = new File(converter.indir).listFiles();
+			for (File file : files) {
+				try {
+					CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(new FileInputStream(file)).getRootElement();
+					FragmentConverter fragmentConverter = new FragmentConverter(molecule);
+					CMLFragment fragment = fragmentConverter.convertToFragment();
+					if(converter.outdir!=null){converter.setOutputFile(converter.outdir+"/"+file.getName());}
+					else{System.err.println("indir but no outdir");
+					System.exit(-1);
+					}
+					converter.writeFragment(fragment);
+				} catch (Exception e) {
+					System.err.println("Cannot find/parse file: "+file.getAbsolutePath());
+				}
+			}
+		}
+		else if(converter.infile !=null){
+			File file = new File(converter.infile);
+			try {
+				CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(new FileInputStream(file)).getRootElement();
+				FragmentConverter fragmentConverter = new FragmentConverter(molecule);
+				CMLFragment fragment = fragmentConverter.convertToFragment();
+				if(converter.outfile!=null){converter.setOutputFile(converter.outfile);}
+				else{System.err.println("infile but no outfile");
+				System.exit(-1);
+				}
+				converter.writeFragment(fragment);
+			} catch (Exception e) {
+				System.err.println("Cannot find/parse file: "+file.getAbsolutePath());
+			}
+			
+		}
 	}
 
+	
+	private static class CommandlineFragmentConverter {
+		String infile = null;
+		String outfile = null;
+		String indir = null;
+		String outdir = null;
+		File output=null;
+		
+		public CommandlineFragmentConverter(String[] args){
+			if (args.length==0 || args.length%2==1){
+				usage();
+				System.exit(-1);
+			}
+			for(int i=0;i<args.length;i++){
+				if(args[i].equalsIgnoreCase("-in")) {
+					infile = args[++i];
+				} else if(args[i].equalsIgnoreCase("-indir")) {
+					indir = args[++i];
+				} else if(args[i].equalsIgnoreCase("-out")) {
+					outfile = args[++i];
+				} else if(args[i].equalsIgnoreCase("-outdir")) {
+					outdir = args[++i];
+				} else {
+					System.out.println("Unknown arg: "+args[i]);
+				}
+			}
+		}
+		
+		private void usage(){
+	    	System.out.println("Usage: java "+FragmentConverter.class.getName()+" <options>");
+	    	System.out.println("  -in (filename) //Input File");
+	    	System.out.println("  -out (filename) //Output File");
+	    	System.out.println("  -indir (dirname) //Whole directory to be input");
+	    	System.out.println("  -outdir (dirname) //Whole directory to be output");
+	    }
+		
+		private void setOutputFile(String file){
+			output = new File(file);
+		}
+		private void writeFragment(CMLFragment fragment){
+			OutputStream out=null;
+			Document doc = new Document(fragment);
+			try{
+			out = new BufferedOutputStream(new FileOutputStream(output));
+			Serializer serializer = new Serializer(out, "ISO-8859-1");
+		      serializer.setIndent(4);
+		      serializer.write(doc);
+			}
+			catch (IOException ex){
+				System.err.println("Failed outputting "+ex); 
+			}
+			finally{
+				if (out != null) {
+					System.out.println("Writing fragment "+output.getAbsolutePath());
+		    		try {
+						out.close();
+					} catch (IOException e) {
+						System.err.println("Error while closing outputstrem");
+						e.printStackTrace();
+					}
+		    	}
+				
+			}
+	    	
+	    }
+	}
+	
 }
