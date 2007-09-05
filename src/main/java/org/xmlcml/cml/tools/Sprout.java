@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -24,7 +25,7 @@ public class Sprout extends AbstractTool {
 	private Chain chain;
 	private CMLAtomSet ringAtomSet;
 	private RingNucleus ringNucleus;
-	private MoleculeDraw moleculeDraw;
+	private Molecule2DCoordinates moleculeDraw;
 	
 	private Sprout() {
 		// 
@@ -60,16 +61,19 @@ public class Sprout extends AbstractTool {
 	Real2 getSproutVector() throws CMLRuntimeException {
 		double bondLength = ringNucleus.getMoleculeDraw().getDrawParameters().getBondLength();
 		if (ringAtom.getX2Attribute() == null) {
-			throw new CMLRuntimeException("ringAtom has no coordinates");
+			throw new CMLRuntimeException("ringAtom has no coordinates; "+ringAtom.getId());
 		}
 		if (ringAtomSet == null) {
 			ringAtomSet = new CMLAtomSet();
 			for (CMLAtom atom : ringAtom.getLigandAtoms()) {
 				if (ringNucleus.getAtomSet().contains(atom)) {
 					if (atom.getX2Attribute() == null) {
-						throw new CMLRuntimeException("ring has no coordinates");
+						// this happens when adding sprout to ring within
+						// ringSet
+//						System.err.println("ring has no coordinates: ");
+					} else {
+						ringAtomSet.addAtom(atom);
 					}
-					ringAtomSet.addAtom(atom);
 				}
 			}
 		}
@@ -123,13 +127,13 @@ public class Sprout extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public MoleculeDraw getMoleculeDraw() {
+	public Molecule2DCoordinates getMoleculeDraw() {
 		return moleculeDraw;
 	}
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(MoleculeDraw moleculeDraw) {
+	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 	/**

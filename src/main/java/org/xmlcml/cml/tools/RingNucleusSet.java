@@ -10,6 +10,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -31,8 +32,8 @@ public class RingNucleusSet extends AbstractTool {
 	private Map<CMLBond, RingNucleus> bondMap;
 	private List<RingNucleus> ringNucleusList;
 	private Map<CMLBond, Sprout> bondSproutMap;
-	private MoleculeDraw moleculeDraw;
-	private MoleculeDrawParameters drawParameters;
+	private Molecule2DCoordinates moleculeDraw;
+	private Molecule2DParameters drawParameters;
 	
 	/**
 	 */
@@ -224,14 +225,14 @@ public class RingNucleusSet extends AbstractTool {
 	/**
 	 * @return the drawParameters
 	 */
-	public MoleculeDrawParameters getDrawParameters() {
+	public Molecule2DParameters getDrawParameters() {
 		return drawParameters;
 	}
 
 	/**
 	 * @param drawParameters the drawParameters to set
 	 */
-	public void setDrawParameters(MoleculeDrawParameters drawParameters) {
+	public void setDrawParameters(Molecule2DParameters drawParameters) {
 		this.drawParameters = drawParameters;
 		for (RingNucleus nucleus : nucleusSet) {
 			nucleus.setMoleculeDraw(moleculeDraw);
@@ -241,14 +242,14 @@ public class RingNucleusSet extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public MoleculeDraw getMoleculeDraw() {
+	public Molecule2DCoordinates getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(MoleculeDraw moleculeDraw) {
+	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

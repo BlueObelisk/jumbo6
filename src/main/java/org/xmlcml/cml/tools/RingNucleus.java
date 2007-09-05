@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -34,7 +35,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	private List<Ring> ringList = null;
 	private List<Junction> junctionList = null;
 	private Map<CMLAtom, BridgeAtom> bridgeAtomMap = null;
-	private MoleculeDraw moleculeDraw;
+	private Molecule2DCoordinates moleculeDraw;
 	private List<RingNucleus> connectedNucleusList;
 	private List<Sprout> sproutList;
 	private List<Sprout> remoteSproutList;
@@ -306,6 +307,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		}
 		// get largest ring
 		Collections.sort(ringList);
+		Collections.reverse(ringList);
 		List<Ring> oldRingList = new ArrayList<Ring>();
 		for (Ring ring : ringList) {
 			oldRingList.add(ring);
@@ -313,17 +315,22 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		List<Ring> newRingList = new ArrayList<Ring>();
 // add first ring
 		Ring currentRing = ringList.get(0);
-		currentRing.add2DCoordinates(moleculeDraw.getDrawParameters());
+		currentRing.calculate2DCoordinates(moleculeDraw);
+		currentRing.updateCoordinates();
+		currentRing.debug();
 		oldRingList.remove(currentRing);
 		newRingList.add(currentRing);
 		
 		Junction junction = null;
+//		findSprouts(true);
 		while (true) {
-			junction = findNextJunctionUpdateListsAdd2DCoordinates(oldRingList, newRingList);
+			junction = findNextJunctionUpdateListsAdd2DCoordinates(
+				oldRingList, newRingList);
 			if (junction == null) {
 				break;
 			}
 		}
+		currentRing.debug();
 		if (oldRingList.size() > 0) {
 			throw new CMLRuntimeException("Undrawn rings ");
 		}
@@ -363,11 +370,14 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		}
 		// did we find any junctions?
 		if (junction0 != null) {
-			for (CMLAtom atom : existingRing0.getCyclicAtomList()) {
-				System.out.println(atom.getElementType()+"/"+atom.getXY2());
-			}
+//			for (CMLAtom atom : existingRing0.getCyclicAtomList()) {
+//				System.out.println("JUNCT: "+atom.getElementType()+"/"+atom.getXY2());
+//			}
 			try {
-				add2DCoordinates(junction0, ringToBeAdded0, existingRing0);
+				calculate2DCoordinates(junction0, ringToBeAdded0, existingRing0, moleculeDraw);
+				ringToBeAdded0.debug();
+				ringToBeAdded0.updateCoordinates();
+				ringToBeAdded0.debug();
 				growingRingList.add(ringToBeAdded0);
 				remainingRingList.remove(ringToBeAdded0);
 			} catch (CMLRuntimeException e) {
@@ -377,100 +387,201 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		return junction0;
 	}
 	
-	private void add2DCoordinates(
-			Junction junction, Ring ringToBeAdded, Ring existingRing) 
-			throws CMLRuntimeException {
-		coordinateList = new ArrayList<Real2>();
-		CyclicAtomList existingRingCyclicAtomList = existingRing.getCyclicAtomList();
-		existingRingCyclicAtomList.debug();
-		CyclicAtomList ringToBeAddedCyclicAtomList = ringToBeAdded.getCyclicAtomList();
-		ringToBeAddedCyclicAtomList.debug();
-		
-		int nsides = ringToBeAdded.size();
+	private void calculate2DCoordinates(
+		Junction junction, Ring ringToBeAdded, Ring existingRing, Molecule2DCoordinates moleculeDraw) 
+		throws CMLRuntimeException {
+		ringToBeAdded.calculate2DCoordinates(moleculeDraw);
 		List<CMLAtom> junctionCommonAtomList = junction.getCommonAtomList();
 		int commonAtomCount = junctionCommonAtomList.size();
 		CMLAtom tailAtom = junctionCommonAtomList.get(0);
 		CMLAtom leadAtom = junctionCommonAtomList.get(commonAtomCount-1);
-		existingRingCyclicAtomList.getIndexOfAndCache(tailAtom);
-		int steps = existingRingCyclicAtomList.getStepCount(tailAtom, leadAtom);
-		if (steps == -1) {
-			throw new CMLRuntimeException("dir not determined");
-		}
-		// swap atoms to ensure direction is always positive
-		if (steps > nsides) {
-			CMLAtom temp = tailAtom;
-			tailAtom = leadAtom;
-			leadAtom = temp;
-		}
-		steps = existingRingCyclicAtomList.getStepCount(tailAtom, leadAtom);
-		if (steps > nsides) {
-			existingRingCyclicAtomList.debug();
-			System.err.println(tailAtom.getId()+"/"+leadAtom.getId());
-			throw new CMLRuntimeException("DIR must be positive...");
-		}
-		// reset to start at leadAtom
-		existingRingCyclicAtomList.getIndexOfAndCache(leadAtom);
-		CMLAtom atom11 = existingRingCyclicAtomList.getNext();
-		if (junctionCommonAtomList.contains(atom11)) {
-			throw new CMLRuntimeException("WRONG DIRECTION");
-		}
+// distance between existing bridge atoms	
+		Real2 oldVector = leadAtom.getXY2().subtract(tailAtom.getXY2());
+		Real2 tailXY2 = ringToBeAdded.getAtomCoordMap().get(tailAtom);
+		Real2 leadXY2 = ringToBeAdded.getAtomCoordMap().get(leadAtom);
+		// and distance in initial new ring
+		Real2 newVector = leadXY2.subtract(tailXY2);
+		// get scale and scale new ring to be of correct size
+		double scale = oldVector.getLength() / newVector.getLength();
+		ringToBeAdded.multiplyCoordMap(scale);
 		
-		int toBeAddedSteps = ringToBeAddedCyclicAtomList.getStepCount(tailAtom, leadAtom);
-		CMLAtom startAtom = leadAtom;
-		CMLAtom endAtom = tailAtom;
-		int addedDir = 1;
-		if (toBeAddedSteps != steps) {
-			startAtom = tailAtom;
-			endAtom = leadAtom;
-			addedDir = -1;
-		}
+		tailXY2 = ringToBeAdded.getAtomCoordMap().get(tailAtom);
+		leadXY2 = ringToBeAdded.getAtomCoordMap().get(leadAtom);
+		// new vector should be of same length as old one
+		newVector = leadXY2.subtract(tailXY2);
+		// rotate new ring so old and new coordinates of bridge atoms 
+		// are aligned.
+		Angle angle = new Vector2(newVector).getAngleMadeWith(new Vector2(oldVector));
 		
-		Vector2 junctionVector = new Vector2(startAtom.getXY2().subtract(endAtom.getXY2()));
-		double dist0n = startAtom.getXY2().getDistance(endAtom.getXY2());
-		int pointn = commonAtomCount-1;
-		Real2Vector polyPoints = Real2Vector.partOfRegularPolygon(
-				nsides, pointn, dist0n);
-		Vector2 polygonVector = alignPolygon(startAtom, endAtom, pointn, polyPoints, junctionVector);
-		
-		Real2 polyCentroid = polyPoints.getCentroid();
-		Real2 existingCentroid = existingRing.getAtomSet().getCentroid2D();
-		double interCentroid = polyCentroid.getDistance(existingCentroid);
-
-		Transform2 tt = Transform2.flipAboutVector(polygonVector);
-		Real2Vector flipPolyPoints = new Real2Vector(polyPoints);
-		flipPolyPoints.transformBy(tt);
-		
-//		Vector2 flipPolygonVector = alignPolygon(startAtom, endAtom, pointn, flipPolyPoints, junctionVector);
-		Real2 flipPolyCentroid = flipPolyPoints.getCentroid();
-		double interFlipCentroid = flipPolyCentroid.getDistance(existingCentroid);
-		if (interFlipCentroid > interCentroid) {
-			polyPoints = flipPolyPoints;
-		}
-		
-		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
-		double distStartPointN = startAtom.getXY2().getDistance(polyPoints.get(pointn));
-		if (distStartPointN > 0.1) {
-			System.err.println("DIST TOO LARGE "+distStartPointN);
-			System.err.println("DIST "+startAtom.getXY2().getDistance(polyPoints.get(0)));
-			addedDir *= -1;
-		}
-		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
-		CMLAtom atom1 = (addedDir == 1) ? ringToBeAddedCyclicAtomList.getNext() : ringToBeAddedCyclicAtomList.getPrevious();
-		if (junctionCommonAtomList.contains(atom1)) {
-			addedDir *= -1;
-		}
-		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
-		for (int i = polyPoints.size() - 1; i >= 2; i--) {
-			CMLAtom atom = (addedDir == 1) ? ringToBeAddedCyclicAtomList.getNext() : ringToBeAddedCyclicAtomList.getPrevious();
-			if (junctionCommonAtomList.contains(atom)) {
-				System.err.println("START "+startAtom.getId());
-				System.err.println("END "+endAtom.getId());
-				throw new CMLRuntimeException("WRONG DIR: "+atom.getId());
+		Transform2 transform = new Transform2(angle);
+		ringToBeAdded.transformBy(transform);
+		// now find if the new ring is oriented "away" from old ring
+		Sprout tailSprout = getSprout(ringToBeAdded, tailAtom);
+		Sprout leadSprout = getSprout(ringToBeAdded, leadAtom);
+		if (tailSprout == null || leadSprout == null) {
+			System.err.println("Null sprout");
+		} else {
+			//resultant sprout from old ring
+			Real2 oldRingMedianSprout = tailSprout.getSproutVector().plus(leadSprout.getSproutVector());
+			CMLAtom nextLeadAtom = getNextNewRingAtom(ringToBeAdded, existingRing, leadAtom);
+			CMLAtom nextTailAtom = getNextNewRingAtom(ringToBeAdded, existingRing, tailAtom);
+			Real2 nextTailXY2 = ringToBeAdded.getAtomCoordMap().get(nextTailAtom);
+			Real2 nextLeadXY2 = ringToBeAdded.getAtomCoordMap().get(nextLeadAtom);
+			
+			Real2 nextLeadVector = leadXY2.subtract(nextLeadXY2);
+			Real2 nextTailVector = tailXY2.subtract(nextTailXY2);
+			//resultant sprout from new ring
+			Real2 newRingMedianSprout = nextLeadVector.plus(nextTailVector);
+			
+			angle = new Vector2(oldRingMedianSprout).getAngleMadeWith(
+					new Vector2(newRingMedianSprout));
+			double angleRad = Math.abs(angle.getRadian());
+			// if point in same direction flip the ring
+			if (angleRad < Math.PI/2) {
+				Transform2 tt = Transform2.flipAboutVector(oldVector);
+				ringToBeAdded.transformBy(tt);
 			}
-//			atom.setXY2(polyPoints.get(i)); 
-			coordinateList.add(polyPoints.get(i));
+			// and translate to merge the rings
+			Real2 delta = leadAtom.getXY2().subtract(leadXY2);
+			ringToBeAdded.translateCoordMap(delta);
 		}
 	}
+	
+	private CMLAtom getNextNewRingAtom(
+			Ring ringToBeAdded, Ring existingRing, CMLAtom ringAtom) {
+		List<CMLAtom> ligands = ringAtom.getLigandAtoms();
+		CMLAtom nextAtom = null;
+		for (CMLAtom ligand : ligands) {
+			if (ringToBeAdded.getAtomSet().contains(ligand) &&
+					!existingRing.getAtomSet().contains(ligand)) {
+				nextAtom = ligand;
+				break;
+			}
+		}
+		return nextAtom;
+	}
+	/**
+	 * @param ringToBeAdded
+	 * @param ringAtom
+	 * @return sprout
+	 */
+	private Sprout getSprout(Ring ringToBeAdded, CMLAtom ringAtom) {
+//		ringAtom.debug();
+//		System.out.println("RINGATOM.. "+ringAtom.getId()+"/"+ringAtom.getElementType()+"/"+ringAtom.getXY2());
+		Sprout sprout = null;
+		CMLBond sproutBond = null;
+		List<CMLAtom> ligands = ringAtom.getLigandAtoms();
+		List<CMLBond> ligandBonds = ringAtom.getLigandBonds();
+		for (int i = 0; i < ligands.size(); i++) {
+			CMLAtom ligand = ligands.get(i);
+//			ligand.debug();
+//			System.out.println("LIG "+ligand.getId()+"/"+ligand.getXY2());
+			if (ligand.getXY2() == null && 
+					ringToBeAdded.getAtomSet().contains(ligand)) {
+//				System.out.println("SPROUT ATOM "+ligand.getId());
+				sproutBond = ligandBonds.get(i);
+			}
+		}
+		if (sproutBond != null) {
+			sprout = new Sprout(ringAtom, sproutBond, this);
+		}
+		return sprout;
+	}
+	
+//	private void add2DCoordinatesOld(
+//			Junction junction, Ring ringToBeAdded, Ring existingRing) 
+//			throws CMLRuntimeException {
+//		coordinateList = new ArrayList<Real2>();
+//		CyclicAtomList existingRingCyclicAtomList = existingRing.getCyclicAtomList();
+//		existingRingCyclicAtomList.debug();
+//		CyclicAtomList ringToBeAddedCyclicAtomList = ringToBeAdded.getCyclicAtomList();
+//		ringToBeAddedCyclicAtomList.debug();
+//		
+//		int nsides = ringToBeAdded.size();
+//		List<CMLAtom> junctionCommonAtomList = junction.getCommonAtomList();
+//		int commonAtomCount = junctionCommonAtomList.size();
+//		CMLAtom tailAtom = junctionCommonAtomList.get(0);
+//		CMLAtom leadAtom = junctionCommonAtomList.get(commonAtomCount-1);
+//		existingRingCyclicAtomList.getIndexOfAndCache(tailAtom);
+//		int steps = existingRingCyclicAtomList.getStepCount(tailAtom, leadAtom);
+//		if (steps == -1) {
+//			throw new CMLRuntimeException("dir not determined");
+//		}
+//		// swap atoms to ensure direction is always positive
+//		if (steps > nsides) {
+//			CMLAtom temp = tailAtom;
+//			tailAtom = leadAtom;
+//			leadAtom = temp;
+//		}
+//		steps = existingRingCyclicAtomList.getStepCount(tailAtom, leadAtom);
+//		if (steps > nsides) {
+//			existingRingCyclicAtomList.debug();
+//			System.err.println(tailAtom.getId()+"/"+leadAtom.getId());
+//			throw new CMLRuntimeException("DIR must be positive...");
+//		}
+//		// reset to start at leadAtom
+//		existingRingCyclicAtomList.getIndexOfAndCache(leadAtom);
+//		CMLAtom atom11 = existingRingCyclicAtomList.getNext();
+//		if (junctionCommonAtomList.contains(atom11)) {
+//			throw new CMLRuntimeException("WRONG DIRECTION");
+//		}
+//		
+//		int toBeAddedSteps = ringToBeAddedCyclicAtomList.getStepCount(tailAtom, leadAtom);
+//		CMLAtom startAtom = leadAtom;
+//		CMLAtom endAtom = tailAtom;
+//		int addedDir = 1;
+//		if (toBeAddedSteps != steps) {
+//			startAtom = tailAtom;
+//			endAtom = leadAtom;
+//			addedDir = -1;
+//		}
+//		
+//		Vector2 junctionVector = new Vector2(startAtom.getXY2().subtract(endAtom.getXY2()));
+//		double dist0n = startAtom.getXY2().getDistance(endAtom.getXY2());
+//		int pointn = commonAtomCount-1;
+//		Real2Vector polyPoints = Real2Vector.partOfRegularPolygon(
+//				nsides, pointn, dist0n);
+//		Vector2 polygonVector = alignPolygon(startAtom, endAtom, pointn, polyPoints, junctionVector);
+//		
+//		Real2 polyCentroid = polyPoints.getCentroid();
+//		Real2 existingCentroid = existingRing.getAtomSet().getCentroid2D();
+//		double interCentroid = polyCentroid.getDistance(existingCentroid);
+//
+//		Transform2 tt = Transform2.flipAboutVector(polygonVector);
+//		Real2Vector flipPolyPoints = new Real2Vector(polyPoints);
+//		flipPolyPoints.transformBy(tt);
+//		
+////		Vector2 flipPolygonVector = alignPolygon(startAtom, endAtom, pointn, flipPolyPoints, junctionVector);
+//		Real2 flipPolyCentroid = flipPolyPoints.getCentroid();
+//		double interFlipCentroid = flipPolyCentroid.getDistance(existingCentroid);
+//		if (interFlipCentroid > interCentroid) {
+//			polyPoints = flipPolyPoints;
+//		}
+//		
+//		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
+//		double distStartPointN = startAtom.getXY2().getDistance(polyPoints.get(pointn));
+//		if (distStartPointN > 0.1) {
+//			System.err.println("DIST TOO LARGE "+distStartPointN);
+//			System.err.println("DIST "+startAtom.getXY2().getDistance(polyPoints.get(0)));
+//			addedDir *= -1;
+//		}
+//		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
+//		CMLAtom atom1 = (addedDir == 1) ? ringToBeAddedCyclicAtomList.getNext() : ringToBeAddedCyclicAtomList.getPrevious();
+//		if (junctionCommonAtomList.contains(atom1)) {
+//			addedDir *= -1;
+//		}
+//		ringToBeAddedCyclicAtomList.getIndexOfAndCache(startAtom);
+//		for (int i = polyPoints.size() - 1; i >= 2; i--) {
+//			CMLAtom atom = (addedDir == 1) ? ringToBeAddedCyclicAtomList.getNext() : ringToBeAddedCyclicAtomList.getPrevious();
+//			if (junctionCommonAtomList.contains(atom)) {
+//				System.err.println("START "+startAtom.getId());
+//				System.err.println("END "+endAtom.getId());
+//				throw new CMLRuntimeException("WRONG DIR: "+atom.getId());
+//			}
+////			atom.setXY2(polyPoints.get(i)); 
+//			coordinateList.add(polyPoints.get(i));
+//		}
+//	}
 	
 	/**
 	 * @param startAtom
@@ -609,13 +720,13 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	/**
 	 * @return the moleculeDraw
 	 */
-	public MoleculeDraw getMoleculeDraw() {
+	public Molecule2DCoordinates getMoleculeDraw() {
 		return moleculeDraw;
 	}
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(MoleculeDraw moleculeDraw) {
+	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 	/**

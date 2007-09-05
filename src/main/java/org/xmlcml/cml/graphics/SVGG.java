@@ -1,5 +1,7 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.Graphics2D;
+
 import nu.xom.Attribute;
 
 import org.xmlcml.cml.tools.AbstractDisplay;
@@ -26,7 +28,24 @@ public class SVGG extends G {
 	public String getTag() {
 		return TAG;
 	}
+	
+	/** overrides normal append so as to include transformation
+	 * @param element
+	 */
+	public void appendChild(SVGElement element) {
+		super.appendChild(element);
+		element.setCumulativeTransformRecursively();
+	}
 
+	/** draws children recursively
+	 * 
+	 * @param g2d
+	 */
+	protected void drawElement(Graphics2D g2d) {
+//		System.out.println("G ID: "+this.getAttributeValue("id"));
+		super.drawElement(g2d);
+	}
+	
 	/**
 	 * @return the transform
 	 */

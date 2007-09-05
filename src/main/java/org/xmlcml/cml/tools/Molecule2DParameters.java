@@ -8,14 +8,14 @@ package org.xmlcml.cml.tools;
  * @author pm286
  *
  */
-public class MoleculeDrawParameters {
+public class Molecule2DParameters {
 
 	private double bondLength = 2.0;
 	private boolean omitHydrogens = true;
 
 	/** new parameters
 	 */
-	public MoleculeDrawParameters() {
+	public Molecule2DParameters() {
 		
 	}
 	

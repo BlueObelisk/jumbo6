@@ -17,6 +17,7 @@ import nu.xom.ParentNode;
 import nu.xom.xslt.XSLTransform;
 
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;

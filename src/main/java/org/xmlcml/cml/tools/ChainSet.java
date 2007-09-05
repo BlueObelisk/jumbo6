@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -26,7 +27,7 @@ public class ChainSet extends AbstractTool {
 	private Map<Sprout, Chain> sproutMap;
 	private Map<CMLAtom, Chain> atomMap;
 	private Map<CMLBond, Chain> bondMap;
-	private MoleculeDraw moleculeDraw;
+	private Molecule2DCoordinates moleculeDraw;
 	
 	/**
 	 */
@@ -44,7 +45,7 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @param moleculeDraw
 	 */
-	public ChainSet(MoleculeDraw moleculeDraw) {
+	public ChainSet(Molecule2DCoordinates moleculeDraw) {
 		this();
 		this.setMoleculeDraw(moleculeDraw);
 	}
@@ -168,7 +169,7 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @param moleculeDraw
 	 */
-	public void layout(MoleculeDraw moleculeDraw) {
+	public void layout(Molecule2DCoordinates moleculeDraw) {
 		for (Chain chain : this.chainSet) {
 			chain.calculate2DCoordinates(null, moleculeDraw);
 		}
@@ -215,14 +216,14 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public MoleculeDraw getMoleculeDraw() {
+	public Molecule2DCoordinates getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(MoleculeDraw moleculeDraw) {
+	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

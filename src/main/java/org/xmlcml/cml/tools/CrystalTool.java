@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Nodes;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;

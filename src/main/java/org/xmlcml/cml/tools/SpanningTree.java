@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -27,17 +28,14 @@ public class SpanningTree extends AbstractTool {
 	private CMLBondSet includedBondSet;
 	private boolean omitHydrogens;
 	private CMLAtomSet usedAtomSet;
-	private Map<CMLAtom, SpanningTreeElement> atomMap;
+	private Map<CMLAtom, SpanningTreeElement> atomSpanningTreeElementMap;
 	private CMLAtomSet branchPoints;
 	private SpanningTreeElement rootElement;
 	private Map<SpanningTreeElement, List<SpanningTreeElement>> elementAncestorMap;
 	private Map<CMLAtom, List<CMLAtom>> atomAncestorMap;
 	private Map<CMLAtom, Map<CMLAtom, AtomPath>> pathMap;
-
 	private Map<CMLAtom, List<CMLAtom>> ligandAtomMap;
-
 	private Map<CMLAtom, List<CMLBond>> ligandBondMap;
-
 	private List<CMLAtom> terminalAtomList;
 	
 	/**
@@ -80,7 +78,6 @@ public class SpanningTree extends AbstractTool {
 	}
 	
 	private void init() {
-		atomMap = new HashMap<CMLAtom, SpanningTreeElement>();
 		branchPoints = new CMLAtomSet();
 	}
 
@@ -98,15 +95,17 @@ public class SpanningTree extends AbstractTool {
 		usedAtomSet = new CMLAtomSet();
 		rootElement = new SpanningTreeElement(null, rootAtom, null);
 		expand(rootAtom, rootElement);
-		System.out.println("USED "+usedAtomSet.size());
+//		System.out.println("USED "+usedAtomSet.size());
 	}
 
 	private void generateTerminals() {
 		terminalAtomList = new ArrayList<CMLAtom>();
 		List<CMLAtom> atomList = includedAtomSet.getAtoms();
 		for (CMLAtom atom : atomList) {
-			if (ligandAtomMap.get(atom).size() == 1) {
-				terminalAtomList.add(atom);
+			if (includeAtom(atom)) {
+				if (ligandAtomMap.get(atom).size() == 1) {
+					terminalAtomList.add(atom);
+				}
 			}
 		}
 	}
@@ -116,10 +115,11 @@ public class SpanningTree extends AbstractTool {
 	 * @param element to start at
 	 * @return list of ancestors (root is last)
 	 */
-	public List<SpanningTreeElement> getAncestors(SpanningTreeElement element) {
-		if (elementAncestorMap == null) {
-			elementAncestorMap = new HashMap<SpanningTreeElement, List<SpanningTreeElement>>();
+	private List<SpanningTreeElement> getAncestors(SpanningTreeElement element) {
+		if (element == null) {
+			throw new CMLRuntimeException("null spanningTreeElement");
 		}
+		ensureElementAncestorMap();
 		List<SpanningTreeElement> ancestors = elementAncestorMap.get(element);
 		if (ancestors == null) {
 			ancestors = new ArrayList<SpanningTreeElement>();
@@ -143,20 +143,17 @@ public class SpanningTree extends AbstractTool {
 	 * @return list finishing at root
 	 */
 	private List<CMLAtom> getAncestorAtoms(CMLAtom atom) {
-		if (atomAncestorMap == null) {
-			atomAncestorMap = new HashMap<CMLAtom, List<CMLAtom>>();
-		}
+		ensureAtomAncestorMap();
 		List<CMLAtom> ancestorAtoms = atomAncestorMap.get(atom);
 		if (ancestorAtoms == null) {
-			SpanningTreeElement startElement = atomMap.get(atom);
+//			System.out.println("AAA "+atom.getId());
+			SpanningTreeElement startElement = atomSpanningTreeElementMap.get(atom);
 			List<SpanningTreeElement> ancestorElements = getAncestors(startElement);
 			ancestorAtoms = new ArrayList<CMLAtom>();
 			for (SpanningTreeElement spanningTreeElement : ancestorElements) {
 				ancestorAtoms.add(spanningTreeElement.getAtom());
 			}
-			if (atomAncestorMap == null) {
-				atomAncestorMap = new HashMap<CMLAtom, List<CMLAtom>>();
-			}
+			ensureAtomAncestorMap();
 			atomAncestorMap.put(atom, ancestorAtoms);
 		}
 		return ancestorAtoms;
@@ -167,6 +164,25 @@ public class SpanningTree extends AbstractTool {
 			pathMap = new HashMap<CMLAtom, Map<CMLAtom, AtomPath>>();
 		}
 	}
+	
+	private void ensureAtomAncestorMap() {
+		if (atomAncestorMap == null) {
+			atomAncestorMap = new HashMap<CMLAtom, List<CMLAtom>>();
+		}
+	}
+	
+	private void ensureAtomSpanningTreeElementMap() {
+		if (atomSpanningTreeElementMap == null) {
+			atomSpanningTreeElementMap = new HashMap<CMLAtom, SpanningTreeElement>();
+		}
+	}
+
+	private void ensureElementAncestorMap() {
+		if (elementAncestorMap == null) {
+			elementAncestorMap = new HashMap<SpanningTreeElement, List<SpanningTreeElement>>();
+		}
+	}
+
 	/**
 	 */
 	public void generateTerminalPaths() {
@@ -187,6 +203,7 @@ public class SpanningTree extends AbstractTool {
 	 * @return path as list of atoms
 	 */
 	public AtomPath getPath(CMLAtom startAtom, CMLAtom endAtom) {
+//		System.out.println("XX "+startAtom.getId()+"/"+endAtom.getId());
 		ensurePathMap();
 		Map<CMLAtom, AtomPath> endAtomMap = pathMap.get(startAtom);
 		if (endAtomMap == null) {
@@ -238,9 +255,10 @@ public class SpanningTree extends AbstractTool {
 	}
 	
 	private void expand(CMLAtom atom, SpanningTreeElement element) {
-//		System.out.println(atom.getId());
+		ensureAtomSpanningTreeElementMap();
 		usedAtomSet.addAtom(atom);
-		atomMap.put(atom, element);
+		atomSpanningTreeElementMap.put(atom, element);
+//		System.out.println("PUT "+atom.getId());
 		List<CMLAtom> ligands = ligandAtomMap.get(atom);
 		List<CMLBond> ligandBonds = ligandBondMap.get(atom);
 		int nbranches = 0;
@@ -250,8 +268,6 @@ public class SpanningTree extends AbstractTool {
 			if (!includeAtom(ligand) || !includeBond(ligandBond)) {
 				continue;
 			}
-			System.out.println(atom.getId()+"->"+ligand.getId());
-//			System.out.println(ligand.getId()+"/"+ligandBond.getId());
 			nbranches++;
 			SpanningTreeElement spe = new SpanningTreeElement(element, ligand, ligandBond);
 			expand(ligand, spe);
@@ -287,7 +303,6 @@ public class SpanningTree extends AbstractTool {
 	}
 	
 	private boolean includeAtom(CMLAtom atom) {
-//		System.out.println(omitHydrogens);
 		boolean include = true;
 		if (includedAtomSet != null && !includedAtomSet.contains(atom)) {
 			include = false;
@@ -366,10 +381,10 @@ public class SpanningTree extends AbstractTool {
 	}
 
 	/**
-	 * @return the atomMap
+	 * @return the atomSpanningTreeElementMap
 	 */
 	public Map<CMLAtom, SpanningTreeElement> getAtomMap() {
-		return atomMap;
+		return atomSpanningTreeElementMap;
 	}
 
 	/**

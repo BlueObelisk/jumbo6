@@ -1,5 +1,9 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+
 import nu.xom.Attribute;
 
 import org.xmlcml.euclid.Real2;
@@ -30,12 +34,21 @@ public class SVGCircle extends SVGElement {
 		setX1(x1);
 		setRad(rad);
 	}
-//	/**
-//	 * @return the x1
-//	 */
-//	public Real2 getX1() {
-//		return x1;
-//	}
+	
+	protected void drawElement(Graphics2D g2d) {
+		double x = this.getDouble("cx");
+		double y = this.getDouble("cy");
+		double r = this.getDouble("r");
+		Real2 xy0 = new Real2(x, y);
+		xy0 = transform(xy0, cumulativeTransform);
+		double rad = r * cumulativeTransform.getMatrixAsArray()[0] * 0.5;
+		
+		Ellipse2D ellipse = new Ellipse2D.Double(xy0.x-rad, xy0.y-rad, rad+rad, rad+rad);
+		Color color = this.getColor("fill");
+		g2d.setColor(color);
+		g2d.fill(ellipse);
+	}
+	
 	/**
 	 * @param x1 the x1 to set
 	 */
@@ -50,13 +63,6 @@ public class SVGCircle extends SVGElement {
 	public String getTag() {
 		return TAG;
 	}
-
-//	/**
-//	 * @return the rad
-//	 */
-//	public double getRad() {
-//		return ra
-//	}
 
 	/**
 	 * @param rad the rad to set

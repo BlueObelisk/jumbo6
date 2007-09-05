@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;

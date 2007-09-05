@@ -97,11 +97,12 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     final static Logger logger = Logger.getLogger(CMLElement.class.getName());
     final static String ID = "id";
 
-    protected Map<String, Object> propertyMap;
+    private Map<String, Object> propertyMap;
 
-    Map<String, List<CMLElement>> idMap;
+    private Map<String, List<CMLElement>> idMap;
+    private CMLLog log = null;
+    private AbstractTool tool;
     
-    CMLLog log = null;
     protected static CMLNodeFactory nodeFactory = CMLNodeFactory.nodeFactory;
     protected static AttributeFactory attributeFactory = AttributeFactory.attributeFactory;
     
@@ -1119,4 +1120,39 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     public CMLElement makeElementInContext(Element parent) {
     	return new CMLElement();
     }
+
+	/**
+	 * @return the propertyMap
+	 */
+	public Map<String, Object> getPropertyMap() {
+		return propertyMap;
+	}
+
+	/**
+	 * @param propertyMap the propertyMap to set
+	 */
+	public void setPropertyMap(Map<String, Object> propertyMap) {
+		this.propertyMap = propertyMap;
+	}
+
+	/**
+	 * @return the log
+	 */
+	public CMLLog getLog() {
+		return log;
+	}
+
+	/**
+	 * @return the tool
+	 */
+	public AbstractTool getTool() {
+		return tool;
+	}
+
+	/**
+	 * @param tool the tool to set
+	 */
+	public void setTool(AbstractTool tool) {
+		this.tool = tool;
+	}
 }

@@ -1,13 +1,22 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.ParentNode;
 
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.RealArray;
+import org.xmlcml.euclid.Transform2;
 
 /** base class for lightweight generic SVG element.
  * no checking - i.e. can take any name or attributes
@@ -60,7 +69,175 @@ public abstract class SVGElement extends GraphicsElement {
 			styleString += style+":"+styleMap.get(style)+";";
 		}
 	}
+	
+	/**
+	 * @param g2d
+	 */
+	public void draw(Graphics2D g2d) {
+		drawElement(g2d);
+	}
+	
+	/** draws children recursively
+	 * 
+	 * @param g2d
+	 */
+	protected void drawElement(Graphics2D g2d) {
+		Elements gList = this.getChildElements();
+		for (int i = 0; i < gList.size(); i++) {
+			SVGElement svge = (SVGElement) gList.get(i);
+			svge.drawElement(g2d);
+		}
+	}
+	
+	/**
+	 */
+	public void setCumulativeTransformRecursively() {
+		setCumulativeTransformRecursively("set");
+	}
 
+	/**
+	 */
+	public void clearCumulativeTransformRecursively() {
+		setCumulativeTransformRecursively(null);
+	}
+	
+	/**
+	 * @param value if null clear the transform else concantenate
+	 * may be overridden by children such as Text
+	 */
+	protected void setCumulativeTransformRecursively(Object value) {
+		if (cumulativeTransform == null && value != null) {
+			
+			Transform2 thisTransform = this.getTransform2FromAttribute();
+			System.out.println("TR "+thisTransform);
+			ParentNode parentNode = this.getParent();
+			Transform2 parentTransform = (parentNode instanceof GraphicsElement) ?
+					((GraphicsElement) parentNode).getCumulativeTransform() : new Transform2();
+			this.cumulativeTransform = (thisTransform == null) ? parentTransform : parentTransform.concatenate(thisTransform);
+			for (int i = 0; i < this.getChildElements().size(); i++) {
+				Node child = this.getChild(i);
+				if (child instanceof SVGElement) {
+					((SVGElement) child).setCumulativeTransformRecursively(value);
+				}
+			}
+		}
+	}
+	
+	static Map<String, Color> colorMap;
+	static {
+		colorMap = new HashMap<String, Color>();
+		colorMap.put("black", new Color(0, 0, 0));
+		colorMap.put("white", new Color(255, 255, 255));
+		colorMap.put("red", new Color(255, 0, 0));
+		colorMap.put("green", new Color(0, 255, 0));
+		colorMap.put("blue", new Color(0, 0, 255));
+		colorMap.put("yellow", new Color(255, 255, 0));
+		colorMap.put("orange", new Color(255, 127, 0));
+		colorMap.put("#ff00ff", new Color(255, 0, 255));
+	}
+
+	/**
+	 * 
+	 * @param attName
+	 * @return color
+	 */
+	public Color getColor(String attName) {
+		Color color = null;
+		String attVal = this.getAttributeValue(attName);
+		if ("none".equals(attVal)) {
+//			System.out.println("COLOR NONE");
+		} else if (attVal != null) {
+			color = colorMap.get(attVal);
+			if (color == null) {
+				System.err.println("Unknown color: "+attVal);
+			}
+		}
+		if (color != null) {
+			double opacity = this.getOpacity();
+			color = (Double.isNaN(opacity)) ? color : new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0 * opacity));
+		} else {
+			color = new Color(255, 255, 255, 0);
+		}
+		return color;
+	}
+	
+	/**
+	 * transforms xy to fit on page
+	 * messy
+	 * @param xy is transformed
+	 * @param transform
+	 * @return transformed xy
+	 */
+	public static Real2 transform(Real2 xy, Transform2 transform) {
+		xy.transformBy(transform);
+		xy = xy.plus(new Real2(250, 250));
+		return xy;
+	}
+
+	protected double getDouble(String attName) {
+		String attVal = this.getAttributeValue(attName);
+		double xx = Double.NaN;
+		if (attVal != null) {
+			try {
+				xx = new Double(attVal).doubleValue();
+			} catch (NumberFormatException e) {
+				throw e;
+			}
+		}
+		return xx;
+	}
+
+	/**
+	 * uses attribute value to calculate transform
+	 * @return current transform
+	 */
+	public Transform2 getTransform2FromAttribute() {
+		Transform2 t = null;
+		String ts = this.getAttributeValue("transform");
+		if (ts != null) {
+			if (!ts.startsWith("matrix(")) {
+				throw new CMLRuntimeException("Bad transform: "+ts);
+			}
+			ts = ts.substring("matrix(".length());
+			ts = ts.substring(0, ts.length()-1);
+			ts = ts.replace(S_COMMA, S_SPACE);
+			RealArray realArray = new RealArray(ts);
+			double[] dd = new double[9];
+			dd[0] = realArray.elementAt(0);
+			dd[1] = realArray.elementAt(1);
+			dd[2] = realArray.elementAt(4);
+			dd[3] = realArray.elementAt(2);
+			dd[4] = realArray.elementAt(3);
+			dd[5] = realArray.elementAt(5);
+			dd[6] = 0.0;
+			dd[7] = 0.0;
+			dd[8] = 1.0;
+			t = new Transform2(dd);
+		}
+		return t;
+	}
+	
+	/**
+	 * sets attribute value from transform
+	 * @param transform
+	 */
+	public void setAttributeFromTransform2(Transform2 transform) {
+		if (transform != null) {
+			double[] dd = transform.getMatrixAsArray();
+			String ts = "matrix"+
+			S_LBRAK+
+			dd[0]+S_COMMA+
+			dd[1]+S_COMMA+
+			dd[3]+S_COMMA+
+			dd[4]+S_COMMA+
+			dd[2]+S_COMMA+
+			dd[5]+
+			S_RBRAK;
+			this.addAttribute(new Attribute("transform", ts));
+		}
+	}
+	
+	
 	/**
 	 * @return the fontFamily
 	 */
@@ -79,14 +256,24 @@ public abstract class SVGElement extends GraphicsElement {
 	 * @return the fontSize
 	 */
 	public double getFontSize() {
-		return new Double(this.getAttributeValue("font-size")).doubleValue();
+		double fontSize = 40.0;
+		if (this.getAttribute("font-size") != null) {
+			String fontSizeS = this.getAttributeValue("font-size");
+			try {
+				fontSize = new Double(fontSizeS).doubleValue();
+			} catch (NumberFormatException nfe) {
+				System.err.println(nfe);
+				// bad font
+			}
+		}
+		return fontSize;
 	}
 
 	/**
 	 * @param fontSize the fontSize to set
 	 */
 	public void setFontSize(double fontSize) {
-	//		this.addAttribute(new Attribute("font-size", ""+fontSize));
+			this.addAttribute(new Attribute("font-size", ""+fontSize));
 			this.addStyle("font-size", ""+fontSize);
 		}
 

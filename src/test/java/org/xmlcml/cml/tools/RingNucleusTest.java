@@ -181,18 +181,19 @@ public class RingNucleusTest extends AbstractToolTest {
 //			nucleus.debug();
 //			System.out.println("...................");
 			junctionList = nucleus.getJunctions();
-			for (Junction junction : junctionList) {
+//			for (Junction junction : junctionList) {
 //				System.out.println("======Junction=======");
 //				junction.debug();
-			}
+//			}
 		}
 		RingNucleus nucleus5 = ringNucleusSet.get(5);
 		junctionList = nucleus5.getJunctions();
 		Assert.assertEquals("junctions", 14, junctionList.size());
-		for (Junction junction : junctionList) {
+//		@SuppressWarnings("unused")
+//		for (Junction junction : junctionList) {
 //			System.out.println("======Junction=======");
 //			junction.debug();
-		}
+//		}
 	}
 	
     /** Test method for {@link org.xmlcml.cml.tools.ConnectionTableTool#getRingNucleusSet()}.

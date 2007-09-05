@@ -1,5 +1,7 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.Graphics2D;
+
 /** container for SVG
  * "svg"
  * @author pm286
@@ -21,5 +23,15 @@ public class SVGSVG extends SVGElement {
 
 	public String getTag() {
 		return TAG;
+	}
+
+	/** just draw first g element
+	 * 
+	 */
+	protected void drawElement(Graphics2D g2d) {
+		if (this.getChildElements().size() > 0) {
+			SVGG g = (SVGG) this.getChildElements().get(0);
+			g.drawElement(g2d);
+		}
 	}
 }

@@ -872,20 +872,22 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 */
 	public CMLAtom getAtomById(String id) {
 		CMLAtom atom = null;
-		CMLAtomArray atomArray = getAtomArray();
-		// use atomArray first in case there are child molecules
-		if (atomArray != null) {
-			// crude check for update index
-			if (atomArray.atomMap.size() !=
-				atomArray.getAtomElements().size()) {
-				atomArray.indexAtoms();
-			}
-			atom = atomArray.getAtomById(id);
-		} else if (getMoleculeCount() > 0) {
-			getChildMoleculeAtomMap();
-			List<CMLAtom> atomList = childMoleculeAtomMap.get(id);
-			if (atomList != null && atomList.size() == 1) {
-				atom = atomList.get(0);
+		if (id != null) {
+			CMLAtomArray atomArray = getAtomArray();
+			// use atomArray first in case there are child molecules
+			if (atomArray != null) {
+				// crude check for update index
+				if (atomArray.atomMap.size() !=
+					atomArray.getAtomElements().size()) {
+					atomArray.indexAtoms();
+				}
+				atom = atomArray.getAtomById(id);
+			} else if (getMoleculeCount() > 0) {
+				getChildMoleculeAtomMap();
+				List<CMLAtom> atomList = childMoleculeAtomMap.get(id);
+				if (atomList != null && atomList.size() == 1) {
+					atom = atomList.get(0);
+				}
 			}
 		}
 		return atom;
@@ -1210,6 +1212,20 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 */
 	public CMLFormula getCalculatedFormula(CMLMolecule.HydrogenControl control) {
 		return this.getAtomSet().getCalculatedFormula(control);
+	}
+	
+	/**
+	 * get calculated molecular mass.
+	 * @param control
+	 * @return calculated molecular mass.
+	 * @throws CMLRuntimeException unknown/unsupported element type (Dummy counts as zero mass)
+	 */
+	public double getCalculatedMolecularMass(CMLMolecule.HydrogenControl control) throws CMLRuntimeException {
+		CMLFormula formula = this.getCalculatedFormula(control);
+		if (formula == null) {
+			throw new CMLRuntimeException("Cannot caclulate formula");
+		}
+		return formula.getCalculatedMolecularMass();
 	}
 
 	/**

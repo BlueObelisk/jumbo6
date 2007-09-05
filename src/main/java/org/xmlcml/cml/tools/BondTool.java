@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.euclid.Real2;
@@ -29,8 +29,9 @@ public class BondTool extends AbstractTool {
     private CMLMolecule molecule;
     Logger logger = Logger.getLogger(BondTool.class.getName());
     private BondDisplay bondDisplay;
+    private MoleculeTool moleculeTool;
 
-    /**
+	/**
      * constructor
      * 
      * @param bond
@@ -102,6 +103,20 @@ public class BondTool extends AbstractTool {
 	//			dash = "stroke-dasharray:2,2;";
 	//		}
 			String order = bond.getOrder();
+	    	 // highlight
+	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
+	    	 if (selectionTool != null && selectionTool.isSelected(bond)) {
+	    		 double factor = 3.0;
+	    	 	 if (order.equals(CMLBond.DOUBLE)) {
+	    	 		 factor = 5.0;
+	    	 	 } else if (order.equals(CMLBond.TRIPLE)) {
+	    	 		 factor = 7.0;
+	    	 	 }
+	    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
+	    		 g.appendChild(line);
+	    		 line.setFill("yellow");
+	    		 line.setOpacity(0.40);
+	    	 }
 			if (order == null || order.equals(CMLBond.SINGLE)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.DOUBLE)) {
@@ -116,7 +131,7 @@ public class BondTool extends AbstractTool {
 		return g;
     }
     
-    private SVGElement createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
+    private SVGLine createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
     	SVGLine line = new SVGLine(xy0, xy1);
     	line.setStroke(stroke);
     	line.setStrokeWidth(width);
@@ -151,5 +166,19 @@ public class BondTool extends AbstractTool {
 			}
 		}
 		return omit;
+	}
+
+	/**
+	 * @return the moleculeTool
+	 */
+	public MoleculeTool getMoleculeTool() {
+		return moleculeTool;
+	}
+
+	/**
+	 * @param moleculeTool the moleculeTool to set
+	 */
+	public void setMoleculeTool(MoleculeTool moleculeTool) {
+		this.moleculeTool = moleculeTool;
 	}
 }
