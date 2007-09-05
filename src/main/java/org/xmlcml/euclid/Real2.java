@@ -158,13 +158,23 @@ public class Real2 implements EuclidConstants {
         this.y = -this.y;
     }
     /**
-     * multiply a point by a scalar
-     * 
+     * retuen multiplication of a point by a scalar
+     * does not alter this
      * @param f
      * @return point
      */
     public Real2 multiplyBy(double f) {
         return new Real2(x * f, y * f);
+    }
+    
+    /**
+     * multiply a point by a scalar 
+     * alters this
+     * @param f
+     */
+    public void multiplyEquals(double f) {
+    	this.x = x * f;
+    	this.y = y * f;
     }
     /**
      * get X value

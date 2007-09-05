@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Vector;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
 /**
  * tool to support a ring. not fully developed
@@ -22,8 +26,7 @@ import org.xmlcml.euclid.Util;
  * 
  */
 public class Ring extends AbstractTool implements Comparable<Ring> {
-	final static Logger logger = Logger.getLogger(Ring.class
-		.getName());
+	final static Logger logger = Logger.getLogger(Ring.class.getName());
 	private CMLAtomSet atomSet;
 	private CMLBondSet bondSet;
 	// cyclic array of bonds
@@ -35,8 +38,11 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	private CMLBond canonicalBond = null;
 	private CMLAtom canonicalAtom = null;
 	private Map<Ring, List<Junction>> junctionMap = null;
-	private MoleculeDrawParameters drawParameters;
-
+	private Molecule2DCoordinates moleculeDraw;
+	private Map<CMLAtom, Real2> atomCoordMap;
+	
+	private static double RINGSCALE = 0.75;
+	
 	/** constructor.
 	 * copies reference to sets
 	 * 
@@ -119,6 +125,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 		return currentAtom;
 	}
 	
+	
 	/**
 	 * @return the atomSet
 	 */
@@ -163,15 +170,62 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	}
 	
 	/** add coordinates to isolated ring
-	 * 
-	 * @param drawParameters
+	 * actually adds coordinates
+	 * @param moleculeDraw
 	 */
-	public void add2DCoordinates(MoleculeDrawParameters drawParameters) {
-		this.drawParameters = drawParameters;
-		Real2Vector points = Real2Vector.regularPolygon(size(), drawParameters.getBondLength());
+	public void calculate2DCoordinates(Molecule2DCoordinates moleculeDraw) {
+		ensureAtomCoordMap();
+		this.setMoleculeDraw(moleculeDraw);
+		Real2Vector points = Real2Vector.regularPolygon(size(), moleculeDraw.getDrawParameters().getBondLength()*RINGSCALE);
 		List<CMLAtom> atoms = this.getCyclicAtomList();
 		for (int i = 0; i < atoms.size(); i++) {
-			atoms.get(i).setXY2(points.get(i));
+			atomCoordMap.put(atoms.get(i), points.get(i));
+		}
+	}
+	
+	/**
+	 * transfers coordinates to atoms
+	 */
+	public void updateCoordinates() {
+		Set<CMLAtom> atoms = atomCoordMap.keySet();
+		for (CMLAtom atom : atoms) {
+			atom.setXY2(atomCoordMap.get(atom));
+		}
+	}
+	
+	/**
+	 * @param scale
+	 */
+	public void multiplyCoordMap(double scale) {
+		for (CMLAtom atom : atomCoordMap.keySet()) {
+			Real2 xy2 = atomCoordMap.get(atom);
+			xy2.multiplyEquals(scale);
+		}
+	}
+	
+	/**
+	 * @param trans
+	 */
+	public void translateCoordMap(Real2 trans) {
+		for (CMLAtom atom : atomCoordMap.keySet()) {
+			Real2 xy2 = atomCoordMap.get(atom);
+			xy2.plusEquals(trans);
+		}
+	}
+	
+	/**
+	 * @param transform
+	 */
+	public void transformBy(Transform2 transform) {
+		for (CMLAtom atom : atomCoordMap.keySet()) {
+			Real2 xy2 = atomCoordMap.get(atom);
+			xy2.transformBy(transform);
+		}
+	}
+	
+	private void ensureAtomCoordMap() {
+		if (atomCoordMap == null) {
+			atomCoordMap = new HashMap<CMLAtom, Real2>();
 		}
 	}
 
@@ -281,6 +335,35 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 		return canonicalAtom;
 	}
 
+	
+	/**
+	 * @return the atomCoordMap
+	 */
+	public Map<CMLAtom, Real2> getAtomCoordMap() {
+		return atomCoordMap;
+	}
+
+	/**
+	 * @return the atomToBondMap
+	 */
+	public Map<CMLAtom, List<CMLBond>> getAtomToBondMap() {
+		return atomToBondMap;
+	}
+
+	/**
+	 * @return the canonicalAtom
+	 */
+	public CMLAtom getCanonicalAtom() {
+		return canonicalAtom;
+	}
+
+	/**
+	 * @return the canonicalBond
+	 */
+	public CMLBond getCanonicalBond() {
+		return canonicalBond;
+	}
+
 	/** get difference between canonical starts.
 	 * 
 	 * @return atomStart - bondStart
@@ -312,11 +395,22 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	}
 	
 	/** debug.
+	 * not sure this works
 	 */
 	public void debug() {
+		ensureAtomCoordMap();
 		System.out.print("atoms ");
 		for (CMLAtom atom : cyclicAtomList) {
 			System.out.print(" .. "+atom.getId());
+			System.out.print("["+atom.getXY2()+"]");
+			System.out.print(" <xy2> ["+atomCoordMap.get(atom)+"]");
+		}
+		System.out.println();
+		if (cyclicAtomList.get(0).getXY2() != null) {
+			for (int i = 0; i < cyclicAtomList.size(); i++) {
+				int j = (i+1) % cyclicAtomList.size();
+//				System.out.print(" .. "+cyclicAtomList.get(i).getXY2().getDistance(cyclicAtomList.get(j).getXY2()));
+			}
 		}
 		System.out.println();
 		System.out.print("bonds ");
@@ -324,6 +418,20 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 			System.out.print(" .. "+bond.getId());
 		}
 		System.out.println();
+	}
+
+	/**
+	 * @return the moleculeDraw
+	 */
+	public Molecule2DCoordinates getMoleculeDraw() {
+		return moleculeDraw;
+	}
+
+	/**
+	 * @param moleculeDraw the moleculeDraw to set
+	 */
+	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+		this.moleculeDraw = moleculeDraw;
 	}
 
 };
@@ -493,6 +601,7 @@ abstract class CyclicList<E> extends ArrayList<E> {
 		}
 		return sb.toString();
 	}
+	
 	
 	protected abstract String stringId(E e);
 	

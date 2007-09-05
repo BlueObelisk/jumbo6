@@ -8,15 +8,17 @@ import java.util.Map;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Transform2;
 
 /** base class for lightweight generic SVG element.
  * no checking - i.e. can take any name or attributes
  * @author pm286
  *
  */
-public abstract class GraphicsElement extends Element {
+public abstract class GraphicsElement extends Element implements CMLConstants {
 
 //	private String stroke = "black";
 //	private double strokeWidth = 1.0;
@@ -25,7 +27,8 @@ public abstract class GraphicsElement extends Element {
 //	private String dashed = "none";
 	
 	protected Map<String, String> styleMap;
-	String styleString;
+	protected String styleString;
+	protected Transform2 cumulativeTransform;
 		
 	/** constructor.
 	 * 
@@ -37,20 +40,6 @@ public abstract class GraphicsElement extends Element {
 		styleMap = new HashMap<String, String>();
 		styleString = "";
 	}
-
-//	/**
-//	 * @return the dashed
-//	 */
-//	public String getDashed() {
-//		return dashed;
-//	}
-
-//	/**
-//	 * @param dashed the dashed to set
-//	 */
-//	public void setDashed(String dashed) {
-//		this.dashed = dashed;
-//	}
 
 	/**
 	 * @return the fill
@@ -67,10 +56,19 @@ public abstract class GraphicsElement extends Element {
 	}
 
 	/**
-	 * @return the opacity
+	 * @return the opacity (1.0 if not present or error
 	 */
 	public double getOpacity() {
-		return new Double(this.getAttributeValue("opacity")).doubleValue();
+		double opacity = 1.0;
+		if (this.getAttribute("opacity") != null) {
+			String opacityS = this.getAttributeValue("opacity");
+			try {
+				opacity = new Double(opacityS).doubleValue();
+			} catch (NumberFormatException nfe) {
+				System.err.println("bad opacity: "+opacityS);
+			}
+		}
+		return opacity;
 	}
 
 	/**
@@ -242,5 +240,40 @@ public abstract class GraphicsElement extends Element {
 		if (args.length > 0) {
 			test(args[0]);
 		}
+	}
+
+	/**
+	 * @return the cumulativeTransform
+	 */
+	public Transform2 getCumulativeTransform() {
+		return cumulativeTransform;
+	}
+
+	/**
+	 * @param cumulativeTransform the cumulativeTransform to set
+	 */
+	public void setCumulativeTransform(Transform2 cumulativeTransform) {
+		this.cumulativeTransform = cumulativeTransform;
+	}
+
+	/**
+	 * @return the styleString
+	 */
+	public String getStyleString() {
+		return styleString;
+	}
+
+	/**
+	 * @param styleString the styleString to set
+	 */
+	public void setStyleString(String styleString) {
+		this.styleString = styleString;
+	}
+
+	/**
+	 * @return the styleMap
+	 */
+	public Map<String, String> getStyleMap() {
+		return styleMap;
 	}
 }

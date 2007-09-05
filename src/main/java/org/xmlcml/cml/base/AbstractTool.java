@@ -1,6 +1,5 @@
-package org.xmlcml.cml.tools;
+package org.xmlcml.cml.base;
 
-import org.xmlcml.cml.base.CMLConstants;
 
 /**
  * is this used?

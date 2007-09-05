@@ -1,8 +1,14 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+
 import nu.xom.Attribute;
+import nu.xom.ParentNode;
 
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Transform2;
 
 /** draws text.
  * 
@@ -26,6 +32,25 @@ public class SVGText extends SVGElement {
 //		this.setFontWeight("normal");
 	}
 	
+	protected void drawElement(Graphics2D g2d) {
+		double fontSize = this.getFontSize();
+		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
+		fontSize = (fontSize < 8) ? 8 : fontSize;
+		
+		double x = this.getDouble("x");
+		double y = this.getDouble("y");
+		String text = this.getValue();
+		Real2 xy = new Real2(x, y);
+		xy = transform(xy, cumulativeTransform);
+		xy.plusEquals(new Real2(fontSize*0.65, -0.65*fontSize));
+		Color color = this.getColor("fill");
+		color = (color == null) ? Color.DARK_GRAY : color;
+		g2d.setColor(color);
+		g2d.setFont(new Font("SansSerif", Font.PLAIN, (int)fontSize));
+		g2d.drawString(text, (int)xy.x, (int)xy.y);
+	}
+	
+	
 	/** constructor.
 	 * 
 	 * @param x1
@@ -35,6 +60,19 @@ public class SVGText extends SVGElement {
 		this();
 		setX1(x1);
 		setText(text);
+	}
+
+	/** this has a special transform for inverting SVG which doesn't occur
+	 * in Swing.
+	 */
+	protected void setCumulativeTransformRecursively(Object value) {
+		if (cumulativeTransform == null && value != null) {
+//			Transform2 thisTransform = this.getTransform2();
+			ParentNode parentNode = this.getParent();
+			Transform2 parentTransform = (parentNode instanceof GraphicsElement) ?
+					((GraphicsElement) parentNode).getCumulativeTransform() : new Transform2();
+			this.cumulativeTransform = parentTransform;
+		}
 	}
 	/**
 	 * @return the x1
@@ -46,7 +84,8 @@ public class SVGText extends SVGElement {
 		);
 	}
 	/**
-	 * @param x1 the x1 to set
+9	 * @param x1 the x1 to set
+	 * @param x1 
 	 */
 	public void setX1(Real2 x1) {
 		this.addAttribute(new Attribute("x", ""+x1.getX()));

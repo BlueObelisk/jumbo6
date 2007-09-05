@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import nu.xom.Attribute;
 import nu.xom.Node;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;

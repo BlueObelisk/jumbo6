@@ -2299,7 +2299,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 	    	InputStream is = Util.getInputStreamFromResource(infile);
 	    	System.out.println("reading CML "+infile);
 	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
-	    	SVGObject svgFile = new SVGObject(outfile);
+	    	GraphicsManager svgFile = new GraphicsManager(outfile);
 	    	svgFile.createOrDisplayGraphics(new MoleculeTool(molecule), MoleculeDisplay.getDEFAULT());
     	}
     }

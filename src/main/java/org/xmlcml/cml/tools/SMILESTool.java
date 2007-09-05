@@ -1,7 +1,10 @@
 package org.xmlcml.cml.tools;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -80,6 +83,7 @@ public class SMILESTool extends AbstractTool {
     private char bondChar;
     private int natoms;
     private HydrogenControl hydrogenControl;
+    private Map<Integer, String> atomCharacterMap = new HashMap<Integer, String>();
     /** constructor
      */
     public SMILESTool() {
@@ -124,9 +128,11 @@ public class SMILESTool extends AbstractTool {
                 if (idx == -1) {
                     throw new CMLRuntimeException("Unbalanced "+C_LSQUARE);
                 }
+                int atomStartChar = i;
                 String atomString = s.substring(i+1, idx);
                 i = idx + 1;
                 currentAtom = addExtendedAtom(atomString, slashChar);
+            	atomCharacterMap.put(new Integer(atomStartChar), currentAtom.getId());
                 bondChar = C_NONE;
             } else if(
                 c == C_SINGLE ||
@@ -161,10 +167,12 @@ public class SMILESTool extends AbstractTool {
                 }
                 i++;
             } else if(Character.isLetter(c)) {
+            	int atomStartChar = i;
                 final String atomString = grabAtom(s.substring(i));
                 i += atomString.length();
-                addAtom(atomString, slashChar);
+                CMLAtom atom = addAtom(atomString, slashChar);
                 bondChar = C_NONE;
+            	atomCharacterMap.put(new Integer(atomStartChar), atom.getId());
             } else {
                 throw new CMLRuntimeException("Cannot interpret SMILES: "+s.substring(i));
             }
@@ -177,7 +185,15 @@ public class SMILESTool extends AbstractTool {
         }
         addHydrogens();
     }
-   private String expandString(String s) {
+    
+    /**
+     * @param i
+     * @return id of atom starting at character i
+     */
+    public String getAtomIdAtChar(int i) {
+    	return atomCharacterMap.get(new Integer(i));
+    }
+    private String expandString(String s) {
 	   String ss = s;
 	   while (true) {
 		   int ii = ss.indexOf(C_LCURLY);
@@ -213,7 +229,7 @@ public class SMILESTool extends AbstractTool {
    }
     
     private void addHydrogens() {
-    	MoleculeTool moleculeTool = new MoleculeTool(molecule);
+    	MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
     	// remember explicit H
 //    	hydrogenControl = HydrogenControl.;
     	moleculeTool.adjustHydrogenCountsToValency(hydrogenControl);

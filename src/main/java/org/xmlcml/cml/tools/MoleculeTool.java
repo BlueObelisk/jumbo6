@@ -19,6 +19,7 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -48,7 +49,6 @@ import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
@@ -73,7 +73,10 @@ public class MoleculeTool extends AbstractTool {
 	/** */
 	public static String metalLigandDictRef = "jumbo:metalLigand";
 
-	CMLMolecule molecule;
+	private CMLMolecule molecule;
+	private Map<CMLAtom, AtomTool> atomToolMap;
+	private Map<CMLBond, BondTool> bondToolMap;
+	private SelectionTool selectionTool;
 
 	/**
 	 * constructor
@@ -82,6 +85,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public MoleculeTool(CMLMolecule molecule) {
 		this.molecule = molecule;
+		this.molecule.setTool(this);
 	}
 
 	/**
@@ -91,6 +95,59 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public CMLMolecule getMolecule() {
 		return molecule;
+	}
+	
+	private void enableAtomToolMap() {
+		if (this.atomToolMap == null) {
+			this.atomToolMap = new HashMap<CMLAtom, AtomTool>();
+		}
+	}
+	private void enableBondToolMap() {
+		if (this.bondToolMap == null) {
+			this.bondToolMap = new HashMap<CMLBond, BondTool>();
+		}
+	}
+
+	/**
+	 * @param atom 
+	 * @return atomTool (created if not present)
+	 */
+	public AtomTool getOrCreateAtomTool(CMLAtom atom) {
+		enableAtomToolMap();
+		AtomTool atomTool = atomToolMap.get(atom);
+		if (atomTool== null) {
+			atomTool = AtomTool.getOrCreateAtomTool(atom);
+			atomToolMap.put(atom, atomTool);
+		}
+		return atomTool;
+	}
+
+	/**
+	 * @param bond 
+	 * @return bondTool (created if not present)
+	 */
+	public BondTool getOrCreateBondTool(CMLBond bond) {
+		enableBondToolMap();
+		BondTool bondTool = bondToolMap.get(bond);
+		if (bondTool== null) {
+			bondTool = new BondTool(bond);
+			bondToolMap.put(bond, bondTool);
+		}
+		return bondTool;
+	}
+	
+	/** gets MoleculeTool associated with molecule.
+	 * if null creates one and sets it in molecule
+	 * @param molecule
+	 * @return tool
+	 */
+	public static MoleculeTool getOrCreateMoleculeTool(CMLMolecule molecule) {
+		MoleculeTool moleculeTool = (MoleculeTool) molecule.getTool();
+		if (moleculeTool == null) {
+			moleculeTool = new MoleculeTool(molecule);
+			molecule.setTool(moleculeTool);
+		}
+		return moleculeTool;
 	}
 
 	/** get charge.
@@ -373,7 +430,7 @@ public class MoleculeTool extends AbstractTool {
 			if (group < 4) {
 				return;
 			}
-			int sumBo = this.getSumNonHydrogenBondOrder(atom);
+			int sumBo = getSumNonHydrogenBondOrder(molecule, atom);
 			int fc = (atom.getFormalChargeAttribute() == null) ? 0 : atom
 					.getFormalCharge();
 			int nh = 8 - group - sumBo + fc;
@@ -385,6 +442,7 @@ public class MoleculeTool extends AbstractTool {
 			this.expandImplicitHydrogens(atom, control);
 		}
 	}
+
 
 	/**
 	 * Sums the formal orders of all bonds from atom to non-hydrogen ligands.
@@ -399,7 +457,24 @@ public class MoleculeTool extends AbstractTool {
 	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
 	 *         H ligands
 	 */
-	public int getSumNonHydrogenBondOrder(CMLAtom atom)
+	public int getSumNonHydrogenBondOrder(CMLAtom atom) {
+		return MoleculeTool.getSumNonHydrogenBondOrder(this.molecule, atom);
+	}
+	/**
+	 * Sums the formal orders of all bonds from atom to non-hydrogen ligands.
+	 *
+	 * Uses 1,2,3,A orders and creates the nearest integer. Thus 2 aromatic
+	 * bonds sum to 3 and 3 sum to 4. Bonds without order are assumed to be
+	 * single
+	 * @param molecule 
+	 *
+	 * @param atom
+	 * @exception CMLRuntimeException
+	 *                null atom in argument
+	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
+	 *         H ligands
+	 */
+	public static int getSumNonHydrogenBondOrder(CMLMolecule molecule, CMLAtom atom)
 	throws CMLRuntimeException {
 		float sumBo = 0.0f;
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
@@ -862,7 +937,7 @@ public class MoleculeTool extends AbstractTool {
 		if (group == -1) {
 			return -1;
 		}
-		int sumNonHBo = this.getSumNonHydrogenBondOrder(atom);
+		int sumNonHBo = MoleculeTool.getSumNonHydrogenBondOrder(molecule, atom);
 		int nHyd = atom.getHydrogenCount();
 		int formalCharge = 0;
 		if (atom.getFormalChargeAttribute() != null) {
@@ -1559,6 +1634,9 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 	
+	/**
+	 * @param atoms
+	 */
 	public void calculateBondedAtoms(List<CMLAtom> atoms) {
 		CMLMolecule mol = null;
 		for (CMLAtom atom : atoms) {
@@ -2169,13 +2247,25 @@ public class MoleculeTool extends AbstractTool {
 	 * @throws IOException
      * @return null if problem
      */
-    public SVGElement createSVG(MoleculeDisplay moleculeDisplay, CMLDrawable drawable) throws IOException {
-    	System.out.println("CREATE SVG");
-    	Real2Range moleculeBoundingBox = new AtomSetTool(new CMLAtomSet(molecule)).getExtent2();
-    	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
-    	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
-    	double scale = moleculeInterval.scaleTo(screenBoundingBox);
-    	double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
+    public SVGG createSVG(MoleculeDisplay moleculeDisplay, CMLDrawable drawable) throws IOException {
+    	double scale = 1.0;
+    	double[] offsets = new double[] {100., 200.};
+    
+    	List<CMLAtom> atoms = molecule.getAtoms();
+    	if (atoms.size() == 0) {
+    		System.out.println("No atoms to display");
+    	} else if (atoms.size() == 1) {
+    	} else {
+    		try {
+		    	Real2Range moleculeBoundingBox = new AtomSetTool(new CMLAtomSet(molecule)).getExtent2();
+		    	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
+		    	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
+		    	scale = moleculeInterval.scaleTo(screenBoundingBox);
+		    	offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
+    		} catch (NullPointerException npe) {
+    			// happens with small number of atoms
+    		}
+    	}
     	
 //    	SVGG g = new SVGG();
     	SVGG g = drawable.createGraphicsElement();
@@ -2190,8 +2280,9 @@ public class MoleculeTool extends AbstractTool {
     	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
     	atomDisplay.setOmitHydrogens(true);
     	for (CMLBond bond : molecule.getBonds()) {
-    		BondTool bondTool = new BondTool(bond);
+    		BondTool bondTool = getOrCreateBondTool(bond);
     		bondTool.setBondDisplay(bondDisplay);
+    		bondTool.setMoleculeTool(this);
     		if (bondTool.omitFromDisplay(atomDisplay)) {
     			continue;
     		}
@@ -2202,8 +2293,9 @@ public class MoleculeTool extends AbstractTool {
     		}
 		}
     	for (CMLAtom atom : molecule.getAtoms()) {
-    		AtomTool atomTool = new AtomTool(atom);
+    		AtomTool atomTool = getOrCreateAtomTool(atom);
     		atomTool.setAtomDisplay(atomDisplay);
+    		atomTool.setMoleculeTool(this);
     		if (atomDisplay.omitAtom(atom)) {
     			continue;
     		}
@@ -2215,6 +2307,44 @@ public class MoleculeTool extends AbstractTool {
     	drawable.output(g);
     	return g;
     }
+
+	/**
+	 * @return the atomToolMap
+	 */
+	public Map<CMLAtom, AtomTool> getAtomToolMap() {
+		return atomToolMap;
+	}
+
+	/**
+	 * @return the bondToolMap
+	 */
+	public Map<CMLBond, BondTool> getBondToolMap() {
+		return bondToolMap;
+	}
+
+	/**
+	 * @return the selectionTool
+	 */
+	public SelectionTool getOrCreateSelectionTool() {
+		if (selectionTool == null) {
+			selectionTool = new SelectionTool();
+		}
+		return selectionTool;
+	}
+
+	/**
+	 * @return the selectionTool
+	 */
+	public SelectionTool getSelectionTool() {
+		return selectionTool;
+	}
+
+	/**
+	 * @param selectionTool the selectionTool to set
+	 */
+	public void setSelectionTool(SelectionTool selectionTool) {
+		this.selectionTool = selectionTool;
+	}
 
 //    /** default molecular display to CMDrawable
 //     * convenience

@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLFragmentList;
 
 /**

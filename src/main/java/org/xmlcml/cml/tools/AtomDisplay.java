@@ -43,6 +43,25 @@ public class AtomDisplay extends AbstractDisplay {
 	private double xChargeOffsetFactor = -0.5;
 	private double yChargeOffsetFactor = -0.7;
 	private double backgroundChargeRadiusFactor = 0.4;
+	
+	private boolean displayLabels = true;
+	private double idFontFactor = 0.5;
+	private double xIdOffsetFactor = -0.1;
+	private double yIdOffsetFactor = -0.0;
+	private double backgroundIdRadiusFactor = 0.4;
+	/**
+	 * @return the displayLabels
+	 */
+	public boolean isDisplayLabels() {
+		return displayLabels;
+	}
+
+	/**
+	 * @param displayLabels the displayLabels to set
+	 */
+	public void setDisplayLabels(boolean displayLabels) {
+		this.displayLabels = displayLabels;
+	}
 
 	/** constructor.
 	 */
@@ -192,6 +211,62 @@ public class AtomDisplay extends AbstractDisplay {
 			}
 		}
 		return omit;
+	}
+
+	/**
+	 * @return the backgroundIdRadiusFactor
+	 */
+	public double getBackgroundIdRadiusFactor() {
+		return backgroundIdRadiusFactor;
+	}
+
+	/**
+	 * @param backgroundIdRadiusFactor the backgroundIdRadiusFactor to set
+	 */
+	public void setBackgroundIdRadiusFactor(double backgroundIdRadiusFactor) {
+		this.backgroundIdRadiusFactor = backgroundIdRadiusFactor;
+	}
+
+	/**
+	 * @return the idFontFactor
+	 */
+	public double getIdFontFactor() {
+		return idFontFactor;
+	}
+
+	/**
+	 * @param idFontFactor the idFontFactor to set
+	 */
+	public void setIdFontFactor(double idFontFactor) {
+		this.idFontFactor = idFontFactor;
+	}
+
+	/**
+	 * @return the xIdOffsetFactor
+	 */
+	public double getXIdOffsetFactor() {
+		return xIdOffsetFactor;
+	}
+
+	/**
+	 * @param idOffsetFactor the xIdOffsetFactor to set
+	 */
+	public void setXIdOffsetFactor(double idOffsetFactor) {
+		xIdOffsetFactor = idOffsetFactor;
+	}
+
+	/**
+	 * @return the yIdOffsetFactor
+	 */
+	public double getYIdOffsetFactor() {
+		return yIdOffsetFactor;
+	}
+
+	/**
+	 * @param idOffsetFactor the yIdOffsetFactor to set
+	 */
+	public void setYIdOffsetFactor(double idOffsetFactor) {
+		yIdOffsetFactor = idOffsetFactor;
 	}
 	
 }

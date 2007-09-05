@@ -1,11 +1,17 @@
 package org.xmlcml.cml.tools;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import nu.xom.Document;
+import nu.xom.Nodes;
+
+import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -16,11 +22,11 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pmr
  * 
  */
-public class MoleculeDraw extends AbstractTool {
+public class Molecule2DCoordinates extends AbstractTool {
 	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
 	
 	private CMLMolecule molecule;
-	private MoleculeDrawParameters drawParameters = new MoleculeDrawParameters();
+	private Molecule2DParameters drawParameters = new Molecule2DParameters();
 	private RingNucleusSet ringNucleusSet;
 	private ChainSet chainSet;
 	private ConnectionTableTool connectionTable;
@@ -29,19 +35,19 @@ public class MoleculeDraw extends AbstractTool {
 	
 	/**
 	 */
-	public MoleculeDraw() {
+	public Molecule2DCoordinates() {
 	}
 	
 	/**
 	 * @param molecule
 	 */
-	public MoleculeDraw(CMLMolecule molecule) {
+	public Molecule2DCoordinates(CMLMolecule molecule) {
 		this.setMolecule(molecule);
 	}
 	
 	/**
 	 */
-	public void layout() {
+	public void create2DCoordinates() {
 		if (drawParameters == null) {
 			throw new CMLRuntimeException("must set drawParameters");
 		}
@@ -105,7 +111,7 @@ public class MoleculeDraw extends AbstractTool {
 	/**
 	 * @return the drawParameters
 	 */
-	public MoleculeDrawParameters getDrawParameters() {
+	public Molecule2DParameters getDrawParameters() {
 		return drawParameters;
 	}
 
@@ -137,7 +143,7 @@ public class MoleculeDraw extends AbstractTool {
 		this.molecule = molecule;
 	}
 	private static void usage() {
-		System.out.println("java "+new MoleculeDraw().getClass().getName()+" [options]" );
+		System.out.println("java "+new Molecule2DCoordinates().getClass().getName()+" [options]" );
 		System.out.println("... -SMILES smiles    // read smiles");
 		System.out.println("... -SVG    svgFile   // write to file");
 		System.out.println("... -JAVA             // display in Swing Panel");
@@ -154,24 +160,45 @@ public class MoleculeDraw extends AbstractTool {
 			System.exit(0);
 		}
 		int i = 0;
-		SVGObject svgObject = new SVGObject();
-		MoleculePanel moleculePanel = null;
+		GraphicsManager svgObject = new GraphicsManager();
+		CMLMolecule mol = null;
+		Molecule2DCoordinates molecule2DCoordinates = new Molecule2DCoordinates(mol);
+		MoleculeFrame moleculeFrame = null;
 		String smiles = null;
+		String cmlfile = null;
+		String inline = null;
 		while (i < args.length) {
 			if ("-SMILES".equals(args[i])) {
 				smiles = args[++i]; i++;
+			} else if ("-INLINE".equals(args[i])) {
+				inline = args[++i]; i++;
+			} else if ("-CML".equals(args[i])) {
+				cmlfile = args[++i]; i++;
 			} else if ("-SVG".equals(args[i])) {
 				svgObject.setOutfile(args[++i]); i++;
 			} else if ("-JAVA".equals(args[i])) {
-				moleculePanel = new MoleculePanel(); i++;
+				moleculeFrame = new MoleculeFrame(molecule2DCoordinates, svgObject); i++;
 			} else {
 				System.err.println("unknown arg: "+args[i++]);
 			}
 		}
-		CMLMolecule mol = null;
 //		svgFile = null;
 //		smiles = null;
-		if (smiles != null) {
+		if (cmlfile != null) {
+			Document doc;
+			try {
+				doc = new CMLBuilder().build(new FileReader(cmlfile));
+				Nodes nodes = doc.query("//*[local-name()='molecule']");
+				mol = (nodes.size() > 0) ? (CMLMolecule) nodes.get(0) : null;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (inline != null) {
+			System.out.println(inline);
+			InlineTool inlineTool = new InlineTool();
+			mol = inlineTool.getMolecule();
+//			mol.debug();
+		} else if (smiles != null) {
 			System.out.println(smiles);
 			SMILESTool smilesTool = new SMILESTool();
 			smilesTool.parseSMILES(smiles);
@@ -179,11 +206,11 @@ public class MoleculeDraw extends AbstractTool {
 //			mol.debug();
 		}
 		if (mol != null) {
-			MoleculeDraw moleculeDraw = new MoleculeDraw(mol);
-			moleculeDraw.layout();
+			molecule2DCoordinates.setMolecule(mol);
+			molecule2DCoordinates.create2DCoordinates();
 			try {
 				svgObject.setMolecule(mol);
-				svgObject.createOrDisplayGraphics(new MoleculeTool(mol), MoleculeDisplay.getDEFAULT());
+				svgObject.createOrDisplayGraphics(MoleculeTool.getOrCreateMoleculeTool(mol), MoleculeDisplay.getDEFAULT());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -193,13 +220,14 @@ public class MoleculeDraw extends AbstractTool {
 			try {
 				svgObject.write();
 //				new MoleculeTool(mol).defaultDisplay(svgObject);
-				svgObject.createOrDisplayGraphics(new MoleculeTool(mol), MoleculeDisplay.getDEFAULT());
+				svgObject.createOrDisplayGraphics(MoleculeTool.getOrCreateMoleculeTool(mol), MoleculeDisplay.getDEFAULT());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if (moleculePanel != null) {
-			moleculePanel.setSVGObject(svgObject);
+		if (moleculeFrame != null) {
+			moleculeFrame.getMoleculePanel().setSVGObject(svgObject);
+			moleculeFrame.displayInFrame();
 //			new MoleculeTool(mol).defaultDisplay(moleculePanel);
 		}
 		

@@ -2,8 +2,11 @@ package org.xmlcml.cml.tools;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
@@ -16,21 +19,24 @@ import org.xmlcml.cml.graphics.SVGSVG;
  * @author pm286
  *
  */
-public class SVGObject implements CMLDrawable {
+public class GraphicsManager implements CMLDrawable {
 	private String outfile;
 	private CMLMolecule molecule;
+	private MoleculeDisplay moleculeDisplay;
+	
 	SVGElement g;
 	SVGSVG svg;
+	private MoleculeTool moleculeTool;
 	
 	/** constructor
 	 */
-	public SVGObject() {
+	public GraphicsManager() {
 	}
 	
 	/** constructor
 	 * @param outfile
 	 */
-	public SVGObject(String outfile) {
+	public GraphicsManager(String outfile) {
 		setOutfile(outfile);
 	}
 	
@@ -38,7 +44,6 @@ public class SVGObject implements CMLDrawable {
 	 * @param outfile
 	 */
 	public void setOutfile(String outfile) {
-		System.out.println("OUT "+outfile);
 		this.outfile = outfile;
 	}
 
@@ -51,6 +56,33 @@ public class SVGObject implements CMLDrawable {
 	
 	void setMolecule(CMLMolecule molecule) {
 		this.molecule = molecule;
+		
+		moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+		SelectionTool selectionTool = moleculeTool.getOrCreateSelectionTool();
+		
+		List<CMLAtom> atoms = molecule.getAtoms();
+//		selectionTool.setSelected(atoms.get(0), true);
+		selectionTool.setSelected(atoms.get(atoms.size()-1), true);
+//		selectionTool.setSelected(atoms.get(3), true); // test only
+		List<CMLBond> bonds = molecule.getBonds();
+//		selectionTool.setSelected(bonds.get(0), true);
+		selectionTool.setSelected(bonds.get(bonds.size()-1), true);
+//		selectionTool.setSelected(bonds.get(2), true); // test only
+		
+//		System.out.println("MOL "+moleculeTool.getSelectionTool().isSelected(atoms.get(atoms.size()-1)));
+		
+		if (moleculeDisplay != null) {
+			g.detach();
+		    try {
+				g = moleculeTool.createSVG(moleculeDisplay, this);
+				g.detach();
+				svg.appendChild(g);
+			} catch (IOException e) {
+				System.err.println("Bad io: "+e);
+			}
+			svg.clearCumulativeTransformRecursively();
+			svg.setCumulativeTransformRecursively();
+		}
 	}
 
 	/**
@@ -68,6 +100,7 @@ public class SVGObject implements CMLDrawable {
 	public void createOrDisplayGraphics(
 		MoleculeTool moleculeTool, MoleculeDisplay moleculeDisplay) 
 	    throws IOException {
+		this.moleculeDisplay = moleculeDisplay;
 	    g = moleculeTool.createSVG(moleculeDisplay, this);
 	}
 	

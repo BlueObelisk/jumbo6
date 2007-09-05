@@ -1418,8 +1418,7 @@ public class CMLFormula extends AbstractFormula {
 	 * get calculated molecular mass.
 	 *
 	 * @return calculated molecular mass.
-	 * @throws CMLRuntimeException
-	 *             unknown/unsupported element type (Dummy counts as zero mass)
+	 * @throws CMLRuntimeException unknown/unsupported element type (Dummy counts as zero mass)
 	 */
 	public double getCalculatedMolecularMass() throws CMLRuntimeException {
 		double mwt = 0.0;

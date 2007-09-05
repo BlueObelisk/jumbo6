@@ -11,6 +11,7 @@ import nu.xom.Node;
 import nu.xom.Text;
 
 import org.xmlcml.cml.attribute.DictRefAttribute;
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import nu.xom.Nodes;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAtom;
