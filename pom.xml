@@ -193,8 +193,8 @@
   <dependencies>
     <dependency>
       <groupId>cml</groupId>
-      <artifactId>cifdom</artifactId>
-      <version>20061009</version>
+      <artifactId>cifxml</artifactId>
+      <version>1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.sf</groupId>
