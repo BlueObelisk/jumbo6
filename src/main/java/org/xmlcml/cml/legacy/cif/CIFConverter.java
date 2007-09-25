@@ -20,6 +20,15 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
 
+import org.xmlcml.cif.CIF;
+import org.xmlcml.cif.CIFDataBlock;
+import org.xmlcml.cif.CIFException;
+import org.xmlcml.cif.CIFItem;
+import org.xmlcml.cif.CIFLoop;
+import org.xmlcml.cif.CIFParser;
+import org.xmlcml.cif.CIFRuntimeException;
+import org.xmlcml.cif.CIFTableCell;
+import org.xmlcml.cif.CIFUtil;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
@@ -38,16 +47,6 @@ import org.xmlcml.cml.element.CMLTable.TableType;
 import org.xmlcml.cml.legacy.LegacyConverterFactoryOld;
 import org.xmlcml.cml.legacy.LegacyConverterOld;
 import org.xmlcml.molutil.ChemicalElement;
-
-import uk.co.demon.ursus.cif.CIF;
-import uk.co.demon.ursus.cif.CIFDataBlock;
-import uk.co.demon.ursus.cif.CIFException;
-import uk.co.demon.ursus.cif.CIFItem;
-import uk.co.demon.ursus.cif.CIFLoop;
-import uk.co.demon.ursus.cif.CIFParser;
-import uk.co.demon.ursus.cif.CIFRuntimeException;
-import uk.co.demon.ursus.cif.CIFTableCell;
-import uk.co.demon.ursus.cif.CIFUtil;
 
 /** converts CML to from CIF
  * @author pm286
