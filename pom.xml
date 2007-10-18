@@ -179,6 +179,11 @@
         <configuration><!--
           <skip>true</skip>
           --><version>2.3</version>
+          <excludes>
+          	<exclude>org/xmlcml/cml/tools/FragmentListToolTest.java</exclude>
+          	<exclude>org/xmlcml/cml/base/BaseTest.java</exclude>
+          	<exclude>org/xmlcml/cml/element/NumericTest.java</exclude>
+          </excludes>
         </configuration>
       </plugin>
     </plugins>

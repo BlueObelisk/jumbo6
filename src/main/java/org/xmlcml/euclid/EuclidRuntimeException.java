@@ -16,7 +16,11 @@ package org.xmlcml.euclid;
  */
 public class EuclidRuntimeException extends RuntimeException implements EuclidConstants {
 
-    /**
+    public EuclidRuntimeException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	/**
      * 
      */
     private static final long serialVersionUID = 3618697517584169017L;

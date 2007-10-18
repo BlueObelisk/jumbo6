@@ -1,5 +1,8 @@
 package org.xmlcml.cml.base;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 import nu.xom.Attribute;
 import nu.xom.Node;
 
@@ -10,150 +13,159 @@ import nu.xom.Node;
 
 public class DoubleSTAttribute extends CMLAttribute {
 
-    /** */
-    public final static String JAVA_TYPE = "double";
+	private static final String S_PLUS = "+";
 
-    /** */
-    public final static String JAVA_GET_METHOD = "getDouble";
+	/** */
+	public final static String JAVA_TYPE = "double";
 
-    /** */
-    public final static String JAVA_SHORT_CLASS = "DoubleSTAttribute";
+	/** */
+	public final static String JAVA_GET_METHOD = "getDouble";
 
-    protected Double d;
+	/** */
+	public final static String JAVA_SHORT_CLASS = "DoubleSTAttribute";
 
-    /**
-     * constructor.
-     * 
-     * @param name
-     */
-    public DoubleSTAttribute(String name) {
-        super(name);
-    }
+	protected Double d;
 
-    /**
-     * from DOM.
-     * 
-     * @param att
-     */
-    public DoubleSTAttribute(Attribute att) {
-        this(att.getLocalName());
-        String v = att.getValue();
-        if (v != null && !v.trim().equals(S_EMPTY)) {
-            this.setCMLValue(v);
-        }
-    }
+	/**
+	 * constructor.
+	 * 
+	 * @param name
+	 */
+	public DoubleSTAttribute(String name) {
+		super(name);
+	}
 
-    /**
-     * from DOM.
-     * 
-     * @param att
-     *            to copy, except value
-     * @param value
-     */
-    public DoubleSTAttribute(Attribute att, String value) {
-        super(att, value.trim());
-    }
+	/**
+	 * from DOM.
+	 * 
+	 * @param att
+	 */
+	public DoubleSTAttribute(Attribute att) {
+		this(att.getLocalName());
+		String v = att.getValue();
+		if (v != null && !v.trim().equals(S_EMPTY)) {
+			this.setCMLValue(v);
+		}
+	}
 
-    /**
-     * copy constructor
-     * 
-     * @param att
-     */
-    public DoubleSTAttribute(DoubleSTAttribute att) {
-        super(att);
-        if (att.d != null) {
-            this.d = new Double(att.d.doubleValue());
-        }
-    }
+	/**
+	 * from DOM.
+	 * 
+	 * @param att
+	 *            to copy, except value
+	 * @param value
+	 */
+	public DoubleSTAttribute(Attribute att, String value) {
+		super(att, value.trim());
+	}
 
-    /** copy.
-     * uses copy constructor.
-     * @return copy
-     */
-    public Node copy() {
-    	return new DoubleSTAttribute(this);
-    }
+	/**
+	 * copy constructor
+	 * 
+	 * @param att
+	 */
+	public DoubleSTAttribute(DoubleSTAttribute att) {
+		super(att);
+		if (att.d != null) {
+			this.d = new Double(att.d.doubleValue());
+		}
+	}
 
-    /**
-     * get java type.
-     * 
-     * @return java type
-     */
-    public String getJavaType() {
-        return "double";
-    }
+	/**
+	 * copy. uses copy constructor.
+	 * 
+	 * @return copy
+	 */
+	public Node copy() {
+		return new DoubleSTAttribute(this);
+	}
 
-    /**
-     * sets value. throws exception if of wrong type or violates restriction
-     * 
-     * @param s
-     *            the value
-     * @throws CMLRuntimeException
-     */
-    public void setCMLValue(String s) {
-    	if (s!= null && !s.trim().equals(S_EMPTY)) {
-	        double d;
-	        try {
-	            d = new Double(s.trim()).doubleValue();
-	        } catch (NumberFormatException nfe) {
-	            throw new CMLRuntimeException("" + nfe);
-	        }
-	        this.setCMLValue(d);
-    	}
-    }
+	/**
+	 * get java type.
+	 * 
+	 * @return java type
+	 */
+	public String getJavaType() {
+		return "double";
+	}
 
-    /**
-     * checks value of simpleType. throws CMLException if value does not check
-     * against SimpleType uses CMLType.checkvalue() fails if type is String or
-     * int or is a list
-     * 
-     * @param d
-     *            the double
-     * @throws CMLRuntimeException
-     *             wrong type or value fails
-     */
-    public void checkValue(double d) throws CMLRuntimeException {
-        if (cmlType != null) {
-            cmlType.checkValue(d);
-        }
-    }
+	/**
+	 * sets value. throws exception if of wrong type or violates restriction
+	 * 
+	 * @param s
+	 *            the value
+	 * @throws CMLRuntimeException
+	 */
+	public void setCMLValue(String s) {
+		if (s != null && !s.trim().equals(S_EMPTY)) {
+			double d;
+			try {
+				String ss = s.trim();
+				if (ss.startsWith(S_PLUS)) {
+					ss = ss.substring(1);
+				}
+				d = NumberFormat.getNumberInstance().parse(ss).doubleValue();
+			} catch (NumberFormatException nfe) {
+				throw new CMLRuntimeException("" + nfe, nfe);
+			} catch (ParseException e) {
+				throw new CMLRuntimeException("Bad double: " + s.trim(), e);
+			}
+			this.setCMLValue(d);
+		}
+	}
 
-    /**
-     * set and check value.
-     * 
-     * @param d
-     */
-    public void setCMLValue(double d) {
-        checkValue(d);
-        this.d = new Double(d);
-        this.setValue("" + d);
-    }
+	/**
+	 * checks value of simpleType. throws CMLException if value does not check
+	 * against SimpleType uses CMLType.checkvalue() fails if type is String or
+	 * int or is a list
+	 * 
+	 * @param d
+	 *            the double
+	 * @throws CMLRuntimeException
+	 *             wrong type or value fails
+	 */
+	public void checkValue(double d) throws CMLRuntimeException {
+		if (cmlType != null) {
+			cmlType.checkValue(d);
+		}
+	}
 
-    /**
-     * get double.
-     * 
-     * @return value
-     */
-    public double getDouble() {
-        return d.doubleValue();
-    }
+	/**
+	 * set and check value.
+	 * 
+	 * @param d
+	 */
+	public void setCMLValue(double d) {
+		checkValue(d);
+		this.d = new Double(d);
+		this.setValue("" + d);
+	}
 
-    /**
-     * get java method.
-     * 
-     * @return java method
-     */
-    public String getJavaGetMethod() {
-        return JAVA_GET_METHOD;
-    }
+	/**
+	 * get double.
+	 * 
+	 * @return value
+	 */
+	public double getDouble() {
+		return d.doubleValue();
+	}
 
-    /**
-     * get java short class name.
-     * 
-     * @return java short className
-     */
-    public String getJavaShortClassName() {
-        return JAVA_SHORT_CLASS;
-    }
+	/**
+	 * get java method.
+	 * 
+	 * @return java method
+	 */
+	public String getJavaGetMethod() {
+		return JAVA_GET_METHOD;
+	}
+
+	/**
+	 * get java short class name.
+	 * 
+	 * @return java short className
+	 */
+	public String getJavaShortClassName() {
+		return JAVA_SHORT_CLASS;
+	}
 
 };

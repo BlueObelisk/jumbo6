@@ -216,9 +216,9 @@ public class CMLArrayList extends org.xmlcml.cml.element.AbstractArrayList {
                     delimiter = delimiter0;
                 }
             } else {
-                if (delimiter0 != delimiter) {
-                    throw new CMLRuntimeException("Cannot find common delimiter: "
-                        +delimiter0+" / "+delimiter);
+                if (!delimiter0.equals(delimiter)) {
+                    throw new CMLRuntimeException("Cannot find common delimiter: >"
+                        +delimiter0+"::"+delimiter +"<");
                 }
             }
         }
