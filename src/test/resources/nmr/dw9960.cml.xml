@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<cml id="dw9960" title="dw9960" xmlns="http://www.xml-cml.org/schema">
+    <table tableType="columnBased" dictRef="iucr:_atom_type_[]">
+        <arrayList>
+            <array dictRef="iucr:_atom_type_symbol" delimiter="|" dataType="xsd:string">|C|H|N|O|Sn|</array>
+        </arrayList>
+    </table>
+</cml>

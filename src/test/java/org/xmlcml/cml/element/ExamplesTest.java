@@ -77,7 +77,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 	 * 
 	 */
 	@Test
-	public void testValidateX() {
+	public void testValidateX() throws Exception {
 
 		boolean parseXsdExamples = true;
 		boolean parseComplex = true;
@@ -88,15 +88,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		boolean checkDict = true;
 
 		if (parseXsdExamples) {
-			try {
-				validate(SIMPLE_RESOURCE, false);
-			} catch (Exception e) {
-				e.printStackTrace();
-                Assert.assertEquals("don't understand",
-                        "This parser does not support specification 'null' version 'null'",
-                        e.getMessage());
-//				throw new CMLRuntimeException("BUG" + e);
-			} // OK
+			validate(SIMPLE_RESOURCE, false);
 		}
 
 		if (parseComplex) {
@@ -121,10 +113,10 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		boolean validate = false;
 		validate(resource, Type.XOM, validate, print, checkData); // OK
 		validate(resource, Type.CML, validate, print, checkData); // OK
-        // XERCES still giving problems...
-//		validate(resource, Type.XERCES, validate, print, checkData); // OK
+		// XERCES still giving problems...
+		// validate(resource, Type.XERCES, validate, print, checkData); // OK
 		validate = true;
-//		validate(resource, Type.XERCES, validate, print, checkData); // OK
+		// validate(resource, Type.XERCES, validate, print, checkData); // OK
 	}
 
 	/**
@@ -140,7 +132,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		Document index = CMLUtil.getXMLResource(resource + S_SLASH + INDEX);
 		boolean fail = false;
 		Nodes files = index.query("//file");
-//		int count = 0;
+		// int count = 0;
 		DocumentBuilder docBuilder = null;
 		if (Type.XERCES.equals(type)) {
 			docBuilder = getXercesDocumentBuilder(validate);
@@ -150,8 +142,9 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 			Element f = (Element) files.get(i);
 			String name = f.getAttributeValue("name");
 			String filename = resource + S_SLASH + name;
-			System.out.print(" .. " + name.substring(0, name.length()-4));
-            if ((i+1) % 6 == 0) System.out.println();
+			System.out.print(" .. " + name.substring(0, name.length() - 4));
+			if ((i + 1) % 6 == 0)
+				System.out.println();
 			URL url = Util.getResource(filename);
 			long time = System.currentTimeMillis();
 			if (print) {
@@ -161,7 +154,12 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 				if (validate) {
 					// not yet implemented
 				} else {
-					fail |= !validateXerces1(url, docBuilder);
+					try {
+						fail |= !validateXerces1(url, docBuilder);
+					} catch (Exception e) {
+						throw new RuntimeException("Problem when validating: "
+								+ filename, e);
+					}
 				}
 			} else {
 				fail |= !parse(Type.CML, url, checkData);
@@ -173,8 +171,8 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		}
 		System.out.println("\n============ end of " + type + "==============");
 		if (fail) {
-			Assert.fail("one or more example files failed to validate in: "
-					+ type +"; see Console");
+			throw new RuntimeException(
+					"One or more files failed to validate, for a reason that has been consumed in the test harness :-(");
 		}
 	}
 
@@ -196,9 +194,10 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 	 *            check dictRefs work
 	 * 
 	 * @return true if parsed OK
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private boolean parse(Type type, URL url, boolean checkDict) throws Exception {
+	private boolean parse(Type type, URL url, boolean checkDict)
+			throws Exception {
 		boolean ok = true;
 		Exception ee = null;
 		Element rootElement = null;
@@ -214,9 +213,13 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 			ee = e;
 		}
 		if (ee != null) {
-			logger.severe("failed to cmlParse: " + url + "\n..... because: ["
-					+ ee + "] [" + ee.getMessage() + "] in [" + url + S_RSQUARE);
+			logger
+					.severe("failed to cmlParse: " + url + "\n..... because: ["
+							+ ee + "] [" + ee.getMessage() + "] in [" + url
+							+ S_RSQUARE);
 			ok = false;
+			throw new RuntimeException("Problem in test harness when parsing "
+					+ url, ee);
 		}
 		if (ok && checkDict) {
 			ok = checkDict(rootElement);
@@ -227,8 +230,8 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 	private boolean checkDict(Element rootElement) throws Exception {
 		boolean ok = true;
 		DictionaryMap dictionaryMap = null;
-		dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE
-				+ U_S + CATALOG_XML), new CMLDictionary());
+		dictionaryMap = new DictionaryMap(Util.getResource(DICT_RESOURCE + U_S
+				+ CATALOG_XML), new CMLDictionary());
 		List<String> errorList = new DictRefAttribute().checkAttribute(
 				rootElement, dictionaryMap);
 		if (errorList.size() > 0) {
@@ -246,14 +249,14 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 			ok = false;
 		}
 		NamespaceToUnitListMap unitListMap = null;
-		unitListMap = new NamespaceToUnitListMap(Util
-				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
+		unitListMap = new NamespaceToUnitListMap(Util.getResource(UNIT_RESOURCE
+				+ U_S + CATALOG_XML), new CMLUnitList());
 		// System.out.println("UNIT MAP "+unitListMap.size());
 		// for (String s : unitListMap.keySet()) {
 		// System.out.println(s+"|"+unitListMap.get(s));
 		// }
-		errorList = new UnitsAttribute()
-				.checkAttribute(rootElement, unitListMap);
+		errorList = new UnitsAttribute().checkAttribute(rootElement,
+				unitListMap);
 		if (errorList.size() > 0) {
 			for (String error : errorList) {
 				System.err.println(error);
@@ -263,7 +266,8 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 		return ok;
 	}
 
-	private DocumentBuilder getXercesDocumentBuilder(boolean validate) throws Exception{
+	private DocumentBuilder getXercesDocumentBuilder(boolean validate)
+			throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
 		dbf.setValidating(validate);
@@ -279,7 +283,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		// Schema schema = factory.newSchema(sources);
 		String schemaName = EXAMPLES_RESOURCE + S_SLASH + "schema.xsd";
-//		System.err.println("SCHEMA :" + schemaName);
+		// System.err.println("SCHEMA :" + schemaName);
 		InputStream in = Util.getInputStreamFromResource(schemaName);
 		Source schemaSource = new StreamSource(in);
 		Schema schema = null;

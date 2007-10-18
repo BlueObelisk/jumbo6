@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cml xmlns="http://www.xml-cml.org/schema">
+	<spectrum type="NMR" title="1H of ethyl benzene in CDCl3."
+		id="sid_a75837fab0885a06309e3f4e654c86d63b188518">
+		<spectrumData>
+			<xaxis title="jcampdx:ppm">
+				<array delimiter="" dataType="xsd:double" size="4">
+					6.271190271015764E-4 1.799125085022446E-15
+					-6.271190270979781E-4 -0.0012542380541977554
+				</array>
+			</xaxis>
+		</spectrumData>
+	</spectrum>
+</cml>

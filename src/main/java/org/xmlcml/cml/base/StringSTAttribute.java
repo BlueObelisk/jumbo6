@@ -78,24 +78,20 @@ public class StringSTAttribute extends CMLAttribute {
     		throw new CMLRuntimeException("Cannot set null attribute value");
     	}
     	String ss = s.trim();
-    	if (S_EMPTY.equals(ss)) {
-//    		throw new CMLRuntimeException("Cannot set empty string attribute value");
-    	} else {
-	        checkValue(ss);
-	        this.s = ss;
-	        this.setValue(ss);
-    	}
-    }
+		checkValue(ss);
+		this.s = ss;
+		this.setValue(ss);
+	}
 
     /**
-     * checks value of simpleType. uses CMLType.checkvalue() fails if type is
-     * int or double or is a list
-     * 
-     * @param s
-     *            the value
-     * @throws CMLRuntimeException
-     *             wrong type or value fails
-     */
+	 * checks value of simpleType. uses CMLType.checkvalue() fails if type is
+	 * int or double or is a list
+	 * 
+	 * @param s
+	 *            the value
+	 * @throws CMLRuntimeException
+	 *             wrong type or value fails
+	 */
     public void checkValue(String s) {
         if (cmlType != null) {
             cmlType.checkValue(s);
