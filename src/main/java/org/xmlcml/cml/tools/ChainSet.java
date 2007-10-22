@@ -27,7 +27,7 @@ public class ChainSet extends AbstractTool {
 	private Map<Sprout, Chain> sproutMap;
 	private Map<CMLAtom, Chain> atomMap;
 	private Map<CMLBond, Chain> bondMap;
-	private Molecule2DCoordinates moleculeDraw;
+	private MoleculeLayout moleculeDraw;
 	
 	/**
 	 */
@@ -45,7 +45,7 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @param moleculeDraw
 	 */
-	public ChainSet(Molecule2DCoordinates moleculeDraw) {
+	public ChainSet(MoleculeLayout moleculeDraw) {
 		this();
 		this.setMoleculeDraw(moleculeDraw);
 	}
@@ -169,7 +169,7 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @param moleculeDraw
 	 */
-	public void layout(Molecule2DCoordinates moleculeDraw) {
+	public void layout(MoleculeLayout moleculeDraw) {
 		for (Chain chain : this.chainSet) {
 			chain.calculate2DCoordinates(null, moleculeDraw);
 		}
@@ -216,14 +216,14 @@ public class ChainSet extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

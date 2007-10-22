@@ -28,7 +28,7 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 	
 	protected Map<String, String> styleMap;
 	protected String styleString;
-	protected Transform2 cumulativeTransform;
+	protected Transform2 cumulativeTransform = new Transform2();
 		
 	/** constructor.
 	 * 
@@ -187,8 +187,7 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 	}
 
 	/**
-	 */
-	public void draw() {
+	private void draw() {
 //		FileOutputStream fos = new FileOutputStream(outfile);
 //		SVGElement g = new MoleculeTool(molecule).
 //		    createSVG();
@@ -207,7 +206,7 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 	public static void test(String filename) throws IOException {
 		FileOutputStream fos = new FileOutputStream(filename);
 		SVGSVG svg = new SVGSVG();
-		SVGG g = new SVGG();
+		SVGElement g = new SVGG();
 		g.setFill("yellow");
 		svg.appendChild(g);
 		SVGLine line = new SVGLine(new Real2(100, 200), new Real2(300, 50));

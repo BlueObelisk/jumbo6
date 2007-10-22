@@ -27,6 +27,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.DoubleTool;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
@@ -191,7 +192,8 @@ public class CMLFormula extends AbstractFormula {
 	// only edit insertion module!
 
 	// marks whether concise has been processed before atomArray hass been read
-	boolean processedConcise;
+	private boolean processedConcise;
+	private boolean allowNegativeCounts;
 
 	/**
 	 * normal constructor.
@@ -440,7 +442,7 @@ public class CMLFormula extends AbstractFormula {
 							+ elements[i]);
 				}
 				elementSet.add(elements[i]);
-				if (counts[i] <= 0) {
+				if (counts[i] <= 0 && !allowNegativeCounts) {
 					throw new CMLRuntimeException(
 							"formula/atomArray@count has nonPositive value: "
 							+ counts[i]);
@@ -627,6 +629,18 @@ public class CMLFormula extends AbstractFormula {
 	}
 
 	/**
+	 * create formula from string. convention defaults to ANY
+	 *
+	 * @param s the String describing the formula
+	 * @param allowNegativeCounts
+	 * @exception CMLRuntimeException
+	 * @return the CMLFormula derived from the String s
+	 */
+	public static CMLFormula createFormula(String s, boolean allowNegativeCounts) {
+		return createFormula(s, Type.ANY, allowNegativeCounts);
+	}
+
+	/**
 	 * create formula from string using convention.
 	 *
 	 * @param s
@@ -640,6 +654,22 @@ public class CMLFormula extends AbstractFormula {
 		CMLFormula docFormula = new CMLFormula();
 		docFormula.createFromString(s, convention);
 
+		return docFormula;
+	}
+
+	/**
+	 * create formula from string using convention.
+	 *
+	 * @param s the String describing the formula
+	 * @param convention the convention
+	 * @param allowNegativeCounts
+	 * @return the CMLFormula derived from the String s
+	 */
+	// shouldn't this be a constructor instead?
+	public static CMLFormula createFormula(String s, Type convention, boolean allowNegativeCounts) {
+		CMLFormula docFormula = new CMLFormula();
+		docFormula.setAllowNegativeCounts(allowNegativeCounts);
+		docFormula.createFromString(s, convention);
 		return docFormula;
 	}
 
@@ -997,7 +1027,90 @@ public class CMLFormula extends AbstractFormula {
 		}
 	}
 
-	private void parseAny(String formulaString) {
+	private void parseAny(String formulString) {
+		// FIXME
+		// ANY - make whitespace separated string and then recurse
+		StringBuilder result = new StringBuilder();
+		String ss = formulString.trim();
+		int l = ss.length();
+		int i = 0;
+		char c;
+		int charge = 0;
+		String count = S_EMPTY;
+		while (i < l) {
+			// skip white
+			i = grabWhite(ss, i, l);
+			if (i >= l)
+				break;
+			c = ss.charAt(i);
+			// start element or charge
+			String el = S_EMPTY;
+			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
+			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
+				if (true) throw new RuntimeException("FIX ME");
+				charge = getFinalCharge(ss.substring(i).trim());
+				break;
+			}
+			// upper case required
+			if (!Character.isUpperCase(c)) {
+				throw new CMLRuntimeException("Formula: Cannot interpret element ("
+						+ c + ") at char (" + (i + 1) + ") in: "
+						+ ss);
+			}
+			el += c;
+			if (++i >= l) {
+				result.append(el + " 1");
+				break;
+			}
+			c = ss.charAt(i);
+			// lower case optional
+			if (Character.isLowerCase(c)) {
+				el += c;
+				i++;
+			}
+			// skip white
+			while (ss.charAt(i) == C_SPACE) {
+				if (++i >= l)
+					break;
+			}
+			if (i >= l) {
+				result.append(el + " 1");
+				break;
+			}
+			// multiplier?
+			c = ss.charAt(i);
+			// implied count of 1?
+			count = S_EMPTY;
+			if (!Character.isDigit(c)) {
+				count = "1";
+			} else {
+				while (true) {
+					c = ss.charAt(i);
+					if (!Character.isDigit(c) && c != C_PERIOD) {
+						break;
+					}
+					count += c;
+					if (++i == l)
+						break;
+				}
+			}
+			result.append(el + S_SPACE + count + S_SPACE);
+		}
+		createFromString(result.toString(), Type.ELEMENT_WHITESPACE_COUNT);
+		if (charge != 0) {
+			this.setFormalCharge(charge);
+		}
+	}
+	
+	private int grabWhite(String ss, int i, int l) {
+		while (i++  < l) {
+			
+		}
+		return i;
+	}
+
+	private void parseAnyOld(String formulaString) {
+		// FIXME
 		// ANY - make whitespace separated string and then recurse
 		String result = S_EMPTY;
 		formulaString += S_SPACE;
@@ -1019,6 +1132,7 @@ public class CMLFormula extends AbstractFormula {
 			String el = S_EMPTY;
 			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
 			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
+				if (true) throw new RuntimeException("FIX ME");
 				charge = getFinalCharge(formulaString.substring(i).trim());
 				break;
 			}
@@ -1074,7 +1188,7 @@ public class CMLFormula extends AbstractFormula {
 	}
 
 	private int getFinalCharge(String f) {
-		if (f.indexOf(' ') != -1) {
+		if (!allowNegativeCounts && f.indexOf(' ') != -1) {
 			throw new CMLRuntimeException("Charge must be final field: " + f);
 		}
 		int sign = 0;
@@ -1102,7 +1216,7 @@ public class CMLFormula extends AbstractFormula {
 			try {
 				charge = Integer.parseInt(ch);
 			} catch (NumberFormatException nfe) {
-				throw new CMLRuntimeException("Cannot parse as charge field: " + f);
+				throw new CMLRuntimeException("Cannot parse as charge field: " + f + "("+ch+")");
 			}
 		}
 		return sign * charge;
@@ -1158,8 +1272,7 @@ public class CMLFormula extends AbstractFormula {
 		} else {
 			atomArray.setElementTypeAndCount(elements, counts);
 		}
-		int formalCharge = (this.getFormalChargeAttribute() == null) ? 0 : this
-				.getFormalCharge();
+		int formalCharge = (this.getFormalChargeAttribute() == null) ? 0 : this.getFormalCharge();
 		String conciseS = generateConcise(atomArray, formalCharge);
 		super.setConcise(conciseS);
 	}
@@ -1703,26 +1816,24 @@ public class CMLFormula extends AbstractFormula {
 	 * Negative values are used where f has a greater element count that this.
 	 * Zero element counts are ommitted
 	 *
-	 * @param form
-	 *            formula to compare
-	 * @return difference in concise format (but may contain negative values)
+	 * @param form formula to compare
+	 * @return difference  (but may contain negative values)
 	 */
-	public String getDifference(CMLFormula form) {
+	public CMLFormula getDifference(CMLFormula form) {
 		Map<String, Double> countTable = new HashMap<String, Double>();
 		String[] elementTypes = this.getElementTypes();
 		double[] counts = this.getCounts();
-		double thisCount = (this.getCountAttribute() == null) ? 1.0 : this
-				.getCount();
+		double thisCount = (this.getCountAttribute() == null) ? 1.0 : this.getCount();
 		if (elementTypes != null && counts != null) {
 			for (int i = 0; i < elementTypes.length; i++) {
 				countTable.put(elementTypes[i], new Double(counts[i]));
 			}
 		}
-		String newFormula = S_EMPTY;
+		CMLFormula newFormula = new CMLFormula();
+		newFormula.setAllowNegativeCounts(true);
 		String[] fElementTypes = form.getElementTypes();
 		double[] fCounts = form.getCounts();
-		double fCount = (form.getCountAttribute() == null) ? 1.0 : form
-				.getCount();
+		double fCount = (form.getCountAttribute() == null) ? 1.0 : form.getCount();
 		if (fElementTypes != null && fCounts != null) {
 			for (int i = 0; i < fElementTypes.length; i++) {
 				String element = fElementTypes[i];
@@ -1736,7 +1847,7 @@ public class CMLFormula extends AbstractFormula {
 					                                                  * fCount;
 				}
 				if (Math.abs(delta) > 0.000001) {
-					newFormula += S_SPACE + element + S_SPACE + delta;
+					newFormula.add(element, delta);
 				}
 				countTable.remove(element);
 			}
@@ -1745,16 +1856,15 @@ public class CMLFormula extends AbstractFormula {
 		for (String element : countTable.keySet()) {
 			Double count = countTable.get(element);
 			if (count != null) {
-				newFormula += S_SPACE + element + S_SPACE
-				+ (count.doubleValue() * thisCount);
+				newFormula.add(element, count.doubleValue() * thisCount);
 			}
 		}
 		int charge = (int) Math.round(this.getFormalCharge() * thisCount
 				- form.getFormalCharge() * fCount);
 		if (charge != 0) {
-			newFormula += S_SPACE + charge;
+			newFormula.setFormalCharge(charge);
 		}
-		return newFormula.trim();
+		return newFormula;
 	}
 
 	/**
@@ -1762,13 +1872,31 @@ public class CMLFormula extends AbstractFormula {
 	 *
 	 * use aggregated formulae as basis
 	 *
-	 * @param form
-	 *            formula to compare
+	 * @param form formula to compare
 	 * @return true if equal
 	 */
 	public boolean equalsAggregate(CMLFormula form) {
-		String differenceFormula = this.getDifference(form).trim();
-		return differenceFormula.length() == 0;
+		CMLFormula differenceFormula = this.getDifference(form);
+		return differenceFormula.isEmpty();
+	}
+	
+	/** formula contains no element or elemnts with (near) zero counts
+	 * 
+	 * @return true if empty
+	 */
+	public boolean isEmpty() {
+		boolean zero = true;
+		String[] elementTypes = getElementTypes();
+		double[] counts = getCounts();
+		if (elementTypes != null && counts != null) {
+			for (int i = 0; i < elementTypes.length; i++) {
+				if (!Real.isZero(counts[i])) {
+					zero = false;
+					break;
+				}
+			}
+		}
+		return zero;
 	}
 
 	/**
@@ -1955,6 +2083,27 @@ public class CMLFormula extends AbstractFormula {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * @return the allowNegativeCounts
+	 */
+	public boolean isAllowNegativeCounts() {
+		return allowNegativeCounts;
+	}
+
+	/**
+	 * @param allowNegativeCounts the allowNegativeCounts to set
+	 */
+	public void setAllowNegativeCounts(boolean allowNegativeCounts) {
+		this.allowNegativeCounts = allowNegativeCounts;
+	}
+
+	/**
+	 * @return the processedConcise
+	 */
+	public boolean isProcessedConcise() {
+		return processedConcise;
 	}
 
 }

@@ -23,7 +23,6 @@ public class SVGLine extends SVGElement {
 	 */
 	public SVGLine() {
 		super(TAG);
-		// TODO Auto-generated constructor stub
 	}
 	
 	/** constructor.
@@ -68,7 +67,6 @@ public class SVGLine extends SVGElement {
 			style = style.substring("stroke-width:".length());
 			style = style.substring(0, (style+S_SEMICOLON).indexOf(S_SEMICOLON));
 			width = (float) new Double(style).doubleValue();
-//			width *= 30.f;
 			width *= 15.f;
 		}
 		
@@ -86,14 +84,10 @@ public class SVGLine extends SVGElement {
 		g2d.draw(line);
 	}
 	
-//	drawCircle(transform, prim, g2d);
-//	drawText(transform, prim, g2d, g);
-
 	/** get tag.
 	 * @return tag
 	 */
 	public String getTag() {
 		return TAG;
 	}
-	
 }

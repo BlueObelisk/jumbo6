@@ -1,6 +1,8 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nu.xom.Attribute;
@@ -10,7 +12,8 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.graphics.SVGCircle;
-import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.euclid.Real2;
 
 /**
@@ -111,11 +114,11 @@ public class SelectionTool implements CMLConstants {
 	public void highlightAtom(CMLAtom atom) {
 	 // highlight
 		 AtomTool atomTool = AtomTool.getOrCreateAtomTool(atom);
-   		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), atomTool.getRadiusFactor() * atomTool.getFontSize()*1.5);
+   		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), atomTool.getRadiusFactor() * atomTool.getFontSize()*2.3);
    		 circle.addAttribute(new Attribute("class", "highlight"));
    		 circle.setFill("yellow");
-   		 circle.setOpacity(0.40);
-   		 SVGG g = atomTool.getG();
+   		 circle.setOpacity(0.70);
+   		 SVGElement g = atomTool.getG();
    		 if (g != null) {
    			 g.appendChild(circle);
    		 } else {
@@ -130,7 +133,7 @@ public class SelectionTool implements CMLConstants {
 	public void deHighlightAtom(CMLAtom atom) {
 	 // highlight
 		 AtomTool atomTool = AtomTool.getOrCreateAtomTool(atom);
-   		 SVGG g = atomTool.getG();
+   		 SVGElement g = atomTool.getG();
    		 if (g != null) {
    			 Nodes nodes = g.query(".//*[@class='highlight']");
    			 for (int i = 0; i < nodes.size(); i++ ) {
@@ -140,6 +143,19 @@ public class SelectionTool implements CMLConstants {
    			 System.err.println("Atom has no SVGG: "+atom.getId());
    		 }
 	 }
+	
+	/** gets selected atoms.
+	 * @return list
+	 */
+	public List<CMLAtom> getSelectedAtoms() {
+		List<CMLAtom> atoms = new ArrayList<CMLAtom>();
+		for (CMLAtom atom : atomMap.keySet()) {
+			if (atomMap.get(atom)) {
+				atoms.add(atom);
+			}
+		}
+		return atoms;
+	}
 	
 	/**
 	 * @param bond
@@ -163,8 +179,68 @@ public class SelectionTool implements CMLConstants {
 		enableBondMap();
 		if (bond != null) {
 			bondMap.put(bond, new Boolean(selected));
+			System.out.println("SET SEL BOND "+bond.getId());
+			if (selected) {
+				highlightBond(bond);
+			} else {
+				deHighlightBond(bond);
+			}
 		}
 	}
+	
+	/**
+	 * draws circle or other thing on bond
+	 * @param bond
+	 */
+	public void highlightBond(CMLBond bond) {
+	 // highlight
+		 BondTool bondTool = BondTool.getOrCreateBondTool(bond);
+		 List<CMLAtom> atoms = bond.getAtoms();
+   		 SVGLine line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
+   		 line.setStrokeWidth(bondTool.getWidth() * 10.0);
+   		 line.addAttribute(new Attribute("class", "highlight"));
+   		 line.setFill("yellow");
+   		 line.setOpacity(0.70);
+   		 SVGElement g = bondTool.getG();
+   		 if (g != null) {
+   			 System.out.println("HBO "+bond.getId());
+   			 g.appendChild(line);
+   		 } else {
+   			 System.err.println("HI: Bond has no SVGG child "+bond.getId());
+   		 }
+	 }
+	
+	/**
+	 * undraws circle or other thing on bond
+	 * @param bond
+	 */
+	public void deHighlightBond(CMLBond bond) {
+	 // highlight
+		 BondTool bondTool = BondTool.getOrCreateBondTool(bond);
+   		 SVGElement g = bondTool.getG();
+   		 if (g != null) {
+   			 Nodes nodes = g.query(".//*[@class='highlight']");
+   			 for (int i = 0; i < nodes.size(); i++ ) {
+   				 nodes.get(i).detach();
+   			 }
+   		 } else {
+   			 System.err.println("DEHI: Bond has no SVGG: "+bond.getId());
+   		 }
+	}
+
+	/** gets selected bonds.
+	 * @return list
+	 */
+	public List<CMLBond> getSelectedBonds() {
+		List<CMLBond> bonds = new ArrayList<CMLBond>();
+		for (CMLBond bond : bondMap.keySet()) {
+			if (bondMap.get(bond)) {
+				bonds.add(bond);
+			}
+		}
+		return bonds;
+	}
+	
 
 	/**
 	 * @return string

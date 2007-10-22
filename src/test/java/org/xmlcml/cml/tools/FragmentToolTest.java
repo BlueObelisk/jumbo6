@@ -18,9 +18,9 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLJoin;
@@ -31,7 +31,6 @@ import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.interfacex.IndexableList;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.molutil.ChemicalElement;
 
 /**
  * @author pm286
@@ -563,31 +562,10 @@ public class FragmentToolTest extends AbstractTest {
  		CMLElement fragment = readElement0(molname);
  		CMLFragment fragmentx = processFragment((CMLFragment)fragment);
  		CMLMolecule molecule = (CMLMolecule)fragmentx.getMoleculeElements().get(0);
- 		List<CMLAtom> atomList = molecule.getAtoms();
- 		CMLAtomSet allAtomSet = new CMLAtomSet(molecule);
- 		int natoms = atomList.size();
- 		for (int i = 0; i < natoms; i++) {
- 			CMLAtom atomi = atomList.get(i);
- 			if ("H".equals(atomi.getElementType())) {
- 				continue;
- 			}
- 			// get all atoms within 3 bonds
- 			CMLAtomSet atomSet13 = new AtomTool(atomi).getCoordinationSphereSet(3);
- 			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
- 			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
- 	 		for (CMLAtom atomj : nonBondedAtomList) {
- 	 			if ("H".equals(atomj.getElementType())) {
- 	 				continue;
- 	 			}
- 	 			if (atomi.getId().compareTo(atomj.getId()) <= 0) {
- 	 				continue;
- 	 			}
- 	 			boolean bump = atomi.isWithinRadiusSum(atomj, ChemicalElement.RadiusType.VDW);
- 	 			if (bump) {
- 	 				double dist = atomi.getDistanceTo(atomj);
- 	 				System.out.println("BUMP "+atomi.getId()+"-"+atomj.getId()+": "+dist);
- 	 			}
- 	 		}
+ 		List<AtomPair> bumpList = new MoleculeTool(molecule).getBumps(CoordinateType.CARTESIAN, 0.0);
+ 		for (AtomPair bump : bumpList) {
+ 			CMLAtom[] atoms = bump.getAtoms();
+			System.out.println("BUMP "+atoms[0].getId()+"-"+atoms[1].getId()+": "+bump.getDistance3());
  		}
  	}
 

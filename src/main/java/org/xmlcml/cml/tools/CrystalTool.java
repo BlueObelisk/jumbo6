@@ -907,8 +907,8 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		// this requires that all child molecules (after splitting)
 		// are described by the reported moiety.
 //		String compositionMatch = "UNMATCHED COMPOSITION";
-		String diff = checkDiff(childFormulaList, publishedFormulaList, formulaUnitsPerOperator);
-		if (diff.equals(S_EMPTY)) {
+		CMLFormula diff = checkDiff(childFormulaList, publishedFormulaList, formulaUnitsPerOperator);
+		if (diff.isEmpty()) {
 //			compositionMatch = "MATCHED COMPOSITION";
 		} else {
 //			compositionMatch = "UNMATCHED COMPOSITION: atoms - formula = diff";
@@ -1096,8 +1096,8 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		return publishedFormulaList;
 	}
 
-	private String checkDiff(List<CMLFormula> childFormulaList, List<CMLFormula> parentFormulaList, double z2ops) {
-		String diff = "checkDiff";
+	private CMLFormula checkDiff(List<CMLFormula> childFormulaList, List<CMLFormula> parentFormulaList, double z2ops) {
+		CMLFormula diff = null;
 		try {
 			CMLFormula childAggregateFormula = new CMLFormula();
 			for (CMLFormula formula : childFormulaList) {
@@ -1111,9 +1111,9 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 			}
 			diff = childAggregateFormula.getDifference(parentAggregateFormula);
 		} catch (Throwable e) {
-			diff = "Cannot compare formula: "+e;
+			throw new CMLRuntimeException("exception "+e);
 		}
-		return diff.trim();
+		return diff;
 	}
 
 

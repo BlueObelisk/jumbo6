@@ -129,6 +129,8 @@ public class CMLReactant extends AbstractReactant implements ReactionComponent {
     }
 
     static CMLFormula getOrCreateFormula(ReactionComponent component) {
+    	// TODO
+    	if (true) throw new Error("FIX ME");
         CMLFormula formula = null;
         List<CMLFormula> formulaList = CMLReaction.getFormulas(component);
         if (formulaList.size() == 1) {

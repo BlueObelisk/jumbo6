@@ -25,7 +25,7 @@ public class Sprout extends AbstractTool {
 	private Chain chain;
 	private CMLAtomSet ringAtomSet;
 	private RingNucleus ringNucleus;
-	private Molecule2DCoordinates moleculeDraw;
+	private MoleculeLayout moleculeDraw;
 	
 	private Sprout() {
 		// 
@@ -83,6 +83,9 @@ public class Sprout extends AbstractTool {
 		// calculate sprout coordinates and then recurse to chain
 		Real2 centroid = ringAtomSet.getCentroid2D();
 		Vector2 v = new Vector2(ringAtom.getXY2().subtract(centroid));
+		if (v.getLength() < 0.00001) {
+			v = new Vector2(1., 0.);
+		}
 		Real2 vv = v.getUnitVector().multiplyBy(bondLength);
 		return vv;
 	}
@@ -127,13 +130,13 @@ public class Sprout extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 	/**

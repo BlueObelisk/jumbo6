@@ -779,6 +779,21 @@ public class CMLAtom extends AbstractAtom {
     }
 
     /**
+     * get 2D distance between atoms.
+     * @param atom2 the other atom
+     * @return distance (< 0.0 if atom(s) lack coordinates)
+     */
+    public double getDistance2(CMLAtom atom2) {
+    	Real2 xy0 = this.getXY2();
+    	Real2 xy1 = atom2.getXY2();
+    	double distance2 = -1;
+    	if (xy0 != null && xy1 != null) {
+    		distance2 = xy0.getDistance(xy1);
+    	}
+    	return distance2;
+    }
+
+    /**
      * get squared distance between atoms.
      *
      * @param atom2 the other atom

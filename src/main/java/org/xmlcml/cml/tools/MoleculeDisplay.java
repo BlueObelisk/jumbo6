@@ -34,6 +34,36 @@ public class MoleculeDisplay extends AbstractDisplay {
 	private AtomDisplay atomDisplay = new AtomDisplay(AtomDisplay.DEFAULT);
 	private BondDisplay bondDisplay = new BondDisplay(BondDisplay.DEFAULT);
 	
+	private double bondLength = 2.0;
+	private boolean omitHydrogens = true;
+	
+	/**
+	 * @return the bondLength
+	 */
+	public double getBondLength() {
+		return bondLength;
+	}
+	/**
+	 * @param bondLength the bondLength to set
+	 */
+	public void setBondLength(double bondLength) {
+		this.bondLength = bondLength;
+	}
+
+	/**
+	 * @return the omitHydrogens
+	 */
+	public boolean isOmitHydrogens() {
+		return omitHydrogens;
+	}
+
+	/**
+	 * @param omitHydrogens the omitHydrogens to set
+	 */
+	public void setOmitHydrogens(boolean omitHydrogens) {
+		this.omitHydrogens = omitHydrogens;
+	}
+
 	/**
 	 * @return the backgroundColor
 	 */

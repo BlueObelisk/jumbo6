@@ -38,7 +38,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	private CMLBond canonicalBond = null;
 	private CMLAtom canonicalAtom = null;
 	private Map<Ring, List<Junction>> junctionMap = null;
-	private Molecule2DCoordinates moleculeDraw;
+	private MoleculeLayout moleculeDraw;
 	private Map<CMLAtom, Real2> atomCoordMap;
 	
 	private static double RINGSCALE = 0.75;
@@ -173,7 +173,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	 * actually adds coordinates
 	 * @param moleculeDraw
 	 */
-	public void calculate2DCoordinates(Molecule2DCoordinates moleculeDraw) {
+	public void calculate2DCoordinates(MoleculeLayout moleculeDraw) {
 		ensureAtomCoordMap();
 		this.setMoleculeDraw(moleculeDraw);
 		Real2Vector points = Real2Vector.regularPolygon(size(), moleculeDraw.getDrawParameters().getBondLength()*RINGSCALE);
@@ -409,7 +409,11 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 		if (cyclicAtomList.get(0).getXY2() != null) {
 			for (int i = 0; i < cyclicAtomList.size(); i++) {
 				int j = (i+1) % cyclicAtomList.size();
-//				System.out.print(" .. "+cyclicAtomList.get(i).getXY2().getDistance(cyclicAtomList.get(j).getXY2()));
+				try {
+				System.out.print(" .. "+cyclicAtomList.get(i).getXY2().getDistance(cyclicAtomList.get(j).getXY2()));
+				} catch (Throwable t) {
+					System.err.println("DEBUG"+t);
+				}
 			}
 		}
 		System.out.println();
@@ -423,14 +427,14 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

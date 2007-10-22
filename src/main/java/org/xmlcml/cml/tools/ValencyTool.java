@@ -450,7 +450,7 @@ public class ValencyTool extends AbstractTool {
 	}
 
 	private void markSandwichLigands(List<CMLAtom> atoms) {
-		CMLAtomSet atomSet = new CMLAtomSet(atoms);
+		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
 		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
 		ConnectionTableTool ctool = new ConnectionTableTool(mol);
@@ -476,7 +476,7 @@ public class ValencyTool extends AbstractTool {
 	}
 
 	private void markPyridineN(List<CMLAtom> atoms) {
-		CMLAtomSet atomSet = new CMLAtomSet(atoms);
+		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
 		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
 		ConnectionTableTool ctool = new ConnectionTableTool(mol);
@@ -951,6 +951,7 @@ public class ValencyTool extends AbstractTool {
 	 * @param knownMolCharge charge on molecule provided
 	 * @return obsolete
 	 */
+	@SuppressWarnings("all")
 	public boolean adjustBondOrdersAndChargesToValency(
 			PiSystemControls piSystemManager, int knownMolCharge) {
 		boolean success = true;

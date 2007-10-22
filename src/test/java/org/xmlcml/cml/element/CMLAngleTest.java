@@ -266,7 +266,7 @@ public class CMLAngleTest extends AbstractTest {
         List<CMLAtom> moveableList = new ArrayList<CMLAtom>();
         moveableList.add(atomList.get(1));
         moveableList.add(atomList.get(2));
-        CMLAtomSet moveableAtomSet = new CMLAtomSet(moveableList);
+        CMLAtomSet moveableAtomSet = CMLAtomSet.createFromAtoms(moveableList);
         double d = angle0.getCalculatedAngle(molecule1);
         Assert.assertEquals("ang0 ", 90.0, d, EPS);
         angle0.adjustCoordinates(new Angle(45., Angle.Units.DEGREES),

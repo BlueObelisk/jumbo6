@@ -18,7 +18,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.ErrorHandler;
@@ -74,7 +73,7 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 
 	/**
 	 * tests.
-	 * 
+	 * @exception Exception
 	 */
 	@Test
 	public void testValidateX() throws Exception {

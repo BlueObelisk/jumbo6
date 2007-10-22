@@ -227,8 +227,7 @@ public class CMLArrayTest extends NumericTest {
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLArray.finishMakingElement()'
-     * /** Test method for
-     * 'org.xmlcml.cml.element.CMLArray.finishMakingElement()'
+     * @exception Exception
      */
     @Test
     public void testCatchErrors() throws Exception {

@@ -28,8 +28,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.xmlcml.cml.base.CMLRuntimeException;
-
 /**
  * A number of miscellaneous tools. Originally devised for jumbo.sgml, now
  * rewritten for jumbo.xml. Use these at your peril - some will be phased out

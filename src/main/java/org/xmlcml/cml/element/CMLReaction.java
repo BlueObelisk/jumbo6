@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLElement;
 
@@ -42,6 +43,12 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
             index = i;
         }
     }
+    
+    private static String ANYTAG =
+    	CMLReactant.TAG + " || "+
+    	CMLProduct.TAG + " || "+
+    	CMLSpectator.TAG;
+    
     /** component type */
     public enum Component {
         /** */
@@ -49,9 +56,17 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
         /** */
         PRODUCT(CMLProduct.TAG, 1),
         /** */
+        SPECTATOR(CMLSpectator.TAG, 2),
+        /** */
+        ANY(ANYTAG, 3),
+        /** */
         REACTANTLIST(CMLReactantList.TAG, 0),
         /** */
-        PRODUCTLIST(CMLProductList.TAG, 1);
+        PRODUCTLIST(CMLProductList.TAG, 1),
+        /** */
+        SPECTATORLIST(CMLSpectatorList.TAG, 2),
+        /** */
+        ANYLIST(ANYTAG, 3);
         /** */
         public String name;
 
@@ -210,7 +225,8 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
 
     /**
      * gets filename from components of CMLReaction. uses
-     * CMLName/@dictRef='cml:filename' content else reaction.getId()
+     * CMLName/@dictRef='cml:filename' content 
+     * else reaction.getId()
      *
      * @return the filename or null
      */
@@ -462,7 +478,7 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
 
     /**
      * utility for any ReactionComponent classes.
-     *
+     * requires <formula> element to exist
      * @param component
      * @return list of non-nested descendant formulas
      */
@@ -473,6 +489,22 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
             formulaList.add((CMLFormula) element);
         }
         return formulaList;
+    }
+
+    /**
+     * utility for any ReactionComponent classes.
+     * @param component
+     * @return list of non-nested descendant formulas
+     */
+    static List<CMLFormula> getOrCreateFormulas(ReactionComponent component) {
+    	
+    	
+//        List<CMLElement> elementList = ((CMLElement) component).getElements(".//"+CMLFormula.NS);
+//        for (CMLElement element : elementList) {
+        	// FIXME
+//            formulaList.add((CMLFormula) element);
+//        }
+        return getFormulas(component);
     }
 
     /**
@@ -542,6 +574,67 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
             productList.add((CMLProduct) elem);
         }
         return productList;
+    }
+
+    /** gets all molecules of given type.
+     * @param type (REACTANT, PRODUCT, SPECTATOR)
+     * @return list of molecules
+     */
+    public List<CMLMolecule> getMolecules(Component type) {
+    	String typeS = null;
+    	if (Component.PRODUCT.equals(type)) {
+    		typeS = "cml:product";
+    	} else if (Component.REACTANT.equals(type)) {
+    		typeS = "cml:reactant";
+    	} else if (Component.SPECTATOR.equals(type)) {
+    		typeS = "cml:spectator";
+    	}
+    	List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+    	Nodes nodes = null;
+    	if (typeS == null) {
+    	} else if(typeS.equals(CMLReaction.Component.ANY)) {
+    		nodes = this.query(".//cml:molecule", X_CML);
+    	} else {
+    		nodes = this.query(".//"+typeS+"/cml:molecule", X_CML);
+    	}
+    	if (nodes != null) {
+			for (int i = 0; i < nodes.size(); i++) {
+				moleculeList.add((CMLMolecule) nodes.get(i));
+			}
+    	}
+    	return moleculeList;
+    }
+
+    /**
+     * @param type (REACTANT, PRODUCT, ANY, SPECTATOR)
+     * @return list of atoms (assumed to be unique but no guarantee
+     */
+    public List<CMLAtom> getAtoms(Component type) {
+    	List<CMLAtom> allAtomList = new ArrayList<CMLAtom>();
+    	List<CMLMolecule> moleculeList = getMolecules(type);
+    	for (CMLMolecule molecule : moleculeList) {
+    		List<CMLAtom> atomList = molecule.getAtoms();
+    		for (CMLAtom atom : atomList) {
+    			allAtomList.add(atom);
+    		}
+    	}
+    	return allAtomList;
+    }
+
+    /**
+     * @param type (REACTANT, PRODUCT, ANY, SPECTATOR)
+     * @return list of bonds (assumed to be unique but no guarantee
+     */
+    public List<CMLBond> getBonds(Component type) {
+    	List<CMLBond> allBondList = new ArrayList<CMLBond>();
+    	List<CMLMolecule> moleculeList = getMolecules(type);
+    	for (CMLMolecule molecule : moleculeList) {
+    		List<CMLBond> bondList = molecule.getBonds();
+    		for (CMLBond bond : bondList) {
+    			allBondList.add(bond);
+    		}
+    	}
+    	return allBondList;
     }
 
     /**

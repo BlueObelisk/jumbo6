@@ -1630,8 +1630,8 @@ public class AtomMatcher extends AbstractTool {
             List<CMLAtom> productAtoms = ReactionTool.getAtoms(productList);
             // logger.info("XXR/P" +
             // reactantAtoms.length+S_SLASH+productAtoms.length);
-            CMLAtomSet reactantAtomSet = new CMLAtomSet(reactantAtoms);
-            CMLAtomSet productAtomSet = new CMLAtomSet(productAtoms);
+            CMLAtomSet reactantAtomSet = CMLAtomSet.createFromAtoms(reactantAtoms);
+            CMLAtomSet productAtomSet = CMLAtomSet.createFromAtoms(productAtoms);
             reactantAtomSet.overlap2DCentroids(productAtomSet);
         }
         return atomPairVector;
@@ -1892,7 +1892,7 @@ public class AtomMatcher extends AbstractTool {
                 CMLAtom atom = atomList.get(0);
                 finalMap.put(atomTreeString, atom);
             } else {
-                CMLAtomSet atomSet1 = new CMLAtomSet(atomList);
+                CMLAtomSet atomSet1 = CMLAtomSet.createFromAtoms(atomList);
                 finalMap.put(atomTreeString, atomSet1);
             }
         }

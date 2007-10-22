@@ -3,8 +3,16 @@ package org.xmlcml.cml;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 
+/**
+ * 
+ * @author pm286
+ *
+ */
 public class JCampBuildTest {
 
+	/**
+	 * @throws Exception
+	 */
 	@Test
 	public void regressionTestJCampConverted() throws Exception {
 		CMLBuilder builder = new CMLBuilder();

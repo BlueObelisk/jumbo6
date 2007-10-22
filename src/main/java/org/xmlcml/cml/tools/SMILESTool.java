@@ -1,7 +1,7 @@
 package org.xmlcml.cml.tools;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.xmlcml.cml.base.AbstractTool;
@@ -83,7 +83,14 @@ public class SMILESTool extends AbstractTool {
     private char bondChar;
     private int natoms;
     private HydrogenControl hydrogenControl;
-    private Map<Integer, String> atomCharacterMap = new HashMap<Integer, String>();
+    private List<String> atomIdList;
+    private List<String> atomChunkList;
+//    private List<String> bondIdList;
+//    private List<String> bondChunkList;
+//    private List<String> ringIdList;
+//    private List<String> ringChunkList;
+    private String rawSmiles;
+    
     /** constructor
      */
     public SMILESTool() {
@@ -92,27 +99,41 @@ public class SMILESTool extends AbstractTool {
     
 	/** parse SMILES.
      * 
-     * @param ss
+     * @param sss
      */
-    public void parseSMILES(String ss) {
+    public void parseSMILES(String sss) {
 
-    	ss = expandString(ss);
-        final String s = ss.trim();
+    	rawSmiles = expandString(sss);
+        rawSmiles = rawSmiles.trim();
         molecule = new CMLMolecule();
         currentAtom = null;
         currentBond = null;
         bondChar = 0;
+        final int l = rawSmiles.length();
+        atomIdList    = new ArrayList<String>();
+        atomChunkList = new ArrayList<String>();
+//        bondIdList    = new ArrayList<String>();
+//        bondChunkList = new ArrayList<String>();
+//        ringIdList    = new ArrayList<String>();
+//        ringChunkList = new ArrayList<String>();
+        
+        for (int i = 0; i < l; i++) {
+        	atomIdList.add(null);
+        	atomChunkList.add(null);
+//        	bondIdList.add(null);
+//        	bondChunkList.add(null);
+//        	ringIdList.add(null);
+//        	ringChunkList.add(null);
+        }
 
         final Stack<CMLAtom> stack = new Stack<CMLAtom>();
         final CMLAtom[] rings = new CMLAtom[10];
-//        boolean atomOrBracket = true;
-        final int l = s.length();
         int i = 0;
         char c = 0;
         char slashChar = C_NONE;
         boolean hasDot = false;
         while (i < l) {
-            c = s.charAt(i);
+            c = rawSmiles.charAt(i);
             if (c == C_LBRAK) {
                 stack.push(currentAtom);
                 i++;
@@ -124,15 +145,15 @@ public class SMILESTool extends AbstractTool {
                 bondChar = C_NONE;
                 i++;
             } else if (c == C_LSQUARE) {
-                final int idx = s.indexOf(C_RSQUARE, i);
+                final int idx = rawSmiles.indexOf(C_RSQUARE, i);
                 if (idx == -1) {
                     throw new CMLRuntimeException("Unbalanced "+C_LSQUARE);
                 }
                 int atomStartChar = i;
-                String atomString = s.substring(i+1, idx);
+//                String atomChunk = rawSmiles.substring(i, idx+1);
+                String atomString = rawSmiles.substring(i+1, idx);
                 i = idx + 1;
-                currentAtom = addExtendedAtom(atomString, slashChar);
-            	atomCharacterMap.put(new Integer(atomStartChar), currentAtom.getId());
+                currentAtom = addExtendedAtom(atomString, slashChar, atomStartChar, atomString);
                 bondChar = C_NONE;
             } else if(
                 c == C_SINGLE ||
@@ -141,7 +162,7 @@ public class SMILESTool extends AbstractTool {
                 c == C_TRIPLE
                 ) {
                 if (bondChar != C_NONE) {
-                    throw new CMLRuntimeException("Bond not expected here: "+s.substring(i));
+                    throw new CMLRuntimeException("Bond not expected here: "+rawSmiles.substring(i));
                 }
                 bondChar = c;
                 i++;
@@ -159,22 +180,23 @@ public class SMILESTool extends AbstractTool {
             } else if(Character.isDigit(c)) {
                 final int ring = c - C_ZERO;
                 if (rings[ring] == null) {
+                	// start of ring
                     rings[ring] = currentAtom;
                 } else {
-                    currentBond = addBond(rings[ring], currentAtom, bondChar);
+                	// end of ring
+                    currentBond = addBond(rings[ring], currentAtom, bondChar, rawSmiles);
                     currentBond.setOrder(CMLBond.SINGLE);
                     rings[ring] = null;
                 }
                 i++;
             } else if(Character.isLetter(c)) {
             	int atomStartChar = i;
-                final String atomString = grabAtom(s.substring(i));
+                final String atomString = grabAtom(rawSmiles.substring(i));
                 i += atomString.length();
-                CMLAtom atom = addAtom(atomString, slashChar);
+                /*CMLAtom atom = */ addAtom(atomString, slashChar, rawSmiles, atomStartChar, atomString);
                 bondChar = C_NONE;
-            	atomCharacterMap.put(new Integer(atomStartChar), atom.getId());
             } else {
-                throw new CMLRuntimeException("Cannot interpret SMILES: "+s.substring(i));
+                throw new CMLRuntimeException("Cannot interpret SMILES: "+rawSmiles.substring(i));
             }
         }
         if (hasDot) {
@@ -190,9 +212,50 @@ public class SMILESTool extends AbstractTool {
      * @param i
      * @return id of atom starting at character i
      */
-    public String getAtomIdAtChar(int i) {
-    	return atomCharacterMap.get(new Integer(i));
+    String getAtomIdAtChar(int i) {
+    	return (atomIdList == null || atomIdList.size() <= i) ? null : atomIdList.get(i);
     }
+    
+    /**
+     * @param i
+     * @return id of atom starting at character i
+     */
+    String getAtomChunkAtChar(int i) {
+    	return (atomChunkList == null || atomChunkList.size() <= i) ? null : atomChunkList.get(i);
+    }
+        
+//    /**
+//     * @param i
+//     * @return id of bond starting at character i
+//     */
+//    String getBondIdAtChar(int i) {
+//    	return (bondIdList == null || bondIdList.size() <= i) ? null : bondIdList.get(i);
+//    }
+//    
+//    /**
+//     * @param i
+//     * @return id of bond starting at character i
+//     */
+//    String getBondChunkAtChar(int i) {
+//    	return (bondChunkList == null || bondChunkList.size() <= i) ? null : bondChunkList.get(i);
+//    }
+//        
+//    /**
+//     * @param i
+//     * @return id of ring starting at character i
+//     */
+//    String getRingIdAtChar(int i) {
+//    	return (ringIdList == null || ringIdList.size() <= i) ? null : ringIdList.get(i);
+//    }
+//    
+//    /**
+//     * @param i
+//     * @return id of ring starting at character i
+//     */
+//    String getRingChunkAtChar(int i) {
+//    	return (ringChunkList == null || ringChunkList.size() <= i) ? null : ringChunkList.get(i);
+//    }
+        
     private String expandString(String s) {
 	   String ss = s;
 	   while (true) {
@@ -279,9 +342,9 @@ public class SMILESTool extends AbstractTool {
 
 //atom : '[' <mass> symbol <chiral> <hcount> <sign<charge>> ']'
 
-    private CMLAtom addExtendedAtom(final String s, final char slashChar) {
+    private CMLAtom addExtendedAtom(final String s, final char slashChar, int atomStartChar, String atomString) {
 // create atom with dummy elementType
-        final CMLAtom atom = addAtom(DU, slashChar);
+        final CMLAtom atom = addAtom(DU, slashChar, rawSmiles, atomStartChar, atomString);
         final int l = s.length();
         int i = 0;
 // isotope
@@ -362,23 +425,47 @@ public class SMILESTool extends AbstractTool {
     }
 
     @SuppressWarnings("unused")
-    private CMLAtom addAtom(String elementType, final char slashChar) {
+    private CMLAtom addAtom(String elementType, final char slashChar, String rawSmiles, int atomStartChar, String atomString) {
         final CMLAtom atom = new CMLAtom("a"+(++natoms));
         molecule.addAtom(atom);
         setElementType(atom, elementType);
         if (slashChar != C_NONE) {
             atom.setAttribute(SLASH, ""+slashChar);
         }
+    	atomIdList.add(atomStartChar, atom.getId());
+    	atomChunkList.add(atomStartChar, atomString);
         if (currentAtom != null) {
-        	final
-            CMLBond bond = addBond(currentAtom, atom, bondChar);
+            CMLBond bond = addBond(currentAtom, atom, bondChar, rawSmiles);
         }
         currentAtom = atom;
         return atom;
     }
 
-    private CMLBond addBond(final CMLAtom currentAtom, final CMLAtom atom, char bondChar) {
+//    private int getStartChar(CMLAtom atom) {
+//    	String id = atom.getId();
+//    	int i = 0;
+//    	System.out.println("======="+id);
+//    	for (; i < atomIdList.size(); i++) {
+//    		String idd = atomIdList.get(i);
+////    		String chunk = atomChunkList.get(i);
+//    		if (id.equals(idd)) {
+//    			break;
+//    		}
+//    	}
+//    	return i;
+//    }
+    
+    private CMLBond addBond(final CMLAtom currentAtom, 
+    		final CMLAtom atom, char bondChar, String rawSmiles) {
         final CMLBond bond = new CMLBond(currentAtom, atom);
+//        int lastAtomStart = getStartChar(currentAtom);
+//        int lastAtomEnd = lastAtomStart + atomChunkList.get(lastAtomStart).length();
+//        int atomStart = getStartChar(atom);
+//        System.out.println("BID "+lastAtomEnd+"/"+atom.getId());
+//    	bondIdList.add(lastAtomEnd, bond.getId());
+//    	String bondChunk = rawSmiles.substring(lastAtomEnd, atomStart);
+//    	bondChunkList.add(lastAtomEnd, bondChunk);
+//    	System.out.println("BOND "+lastAtomEnd+"/"+bondChunk);
         molecule.addBond(bond);
         if (bondChar == C_NONE) {
             bondChar = C_SINGLE;
@@ -396,6 +483,86 @@ public class SMILESTool extends AbstractTool {
         }
         return bond;
     }
+
+    /** crude writer
+     * NOT YET WRITTEN
+     * @param molecule
+     * @return string
+     */
+    public static String write(CMLMolecule molecule) {
+    	String s;
+    	if (true) throw new RuntimeException("SMILES write NYI");
+    	return s;
+    	
+    }
+    
+    /**
+     * normalizes ring numbers in SMILES to be as low as possible
+     * crude. assumes less than 9 rings open at any time
+     * neglect isotopes
+     * @param s
+     * @return SMILES
+     */
+    public static String normalizeRings(String s) {
+    	int start[] = new int[10];
+    	int end[] = new int[10];
+    	boolean inring[] = new boolean[10];
+    	for (int i = 0; i < 10; i++) {
+    		start[i] = -1;
+    		end[i] = -1;
+    		inring[i] = false;
+    	}
+    	StringBuilder sb = new StringBuilder();
+    	int i = 0;
+    	while (i < s.length()) {
+    		char c = s.charAt(i);
+    		if (c == C_LSQUARE) {
+    			int idx = Util.indexOfBalancedBracket(C_LSQUARE, s.substring(i));
+    			if (idx == -1) {
+    				throw new RuntimeException("No balanced []");
+    			}
+    			i += idx;
+    			sb.append(s.subSequence(i, i+idx));
+    		} else if (Character.isDigit(c)) {
+    			int currentRingNumber = c - '0';
+    			sb.append(c);
+    			if (inring[currentRingNumber]) {
+    				inring[currentRingNumber] = false;
+    				end[currentRingNumber] = i;
+					if (start[currentRingNumber] < 0) {
+						throw new RuntimeException("start not set for "+currentRingNumber);
+					}
+    				int lowestFreeRing = 0;
+    				for (int ring = 1; ring < currentRingNumber; ring++) {
+    					if (
+							(end[ring] < 0 && start[ring] < 0) ||
+							(start[ring] > 0 && end[ring] > 0 && end[ring] < start[currentRingNumber])) {
+    						lowestFreeRing = ring;
+    						if (lowestFreeRing < currentRingNumber) {
+	    						start[ring] = start[currentRingNumber];
+	    						end[ring] = end[currentRingNumber];
+	    						sb.setCharAt(start[ring], (char) ('0'+ring));
+	    						sb.setCharAt(end[ring], (char) ('0'+ring));
+	    						start[currentRingNumber] = -1;
+	    						end[currentRingNumber] = -1;
+    						}
+    						break;
+    					}
+    				}
+    			} else {
+    				inring[currentRingNumber] = true;
+    				start[currentRingNumber] = i;
+    			}
+    			i++;
+    		} else {
+    			sb.append(c);
+    			i++;
+    		}
+    	}
+    	String ss = sb.toString();
+    	return ss;
+    }
+    
 	/**
 	 * @return the molecule
 	 */
@@ -424,3 +591,7 @@ public class SMILESTool extends AbstractTool {
 	}
 
 }	
+//class AtomCharacterMap {
+//	private TreeMap<Integer, String> treeMap;
+//}
+

@@ -195,6 +195,9 @@ public class InChIGeneratorTest {
 	}
 
 
+    /**
+     * @throws CMLException
+     */
     @Test
     public void testInChIWithImplicitHydrogen() throws CMLException {
         InChIGeneratorFactory factory = new InChIGeneratorFactory();
@@ -208,6 +211,10 @@ public class InChIGeneratorTest {
 
         Assert.assertEquals("InChI=1/CH4/h1H4", inchi);
     }
+    
+    /**
+     * @throws CMLException
+     */
 
     @Test
     public void testInChIWithExplicitHydrogens() throws CMLException {

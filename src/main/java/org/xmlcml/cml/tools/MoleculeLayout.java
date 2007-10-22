@@ -12,7 +12,6 @@ import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 
@@ -22,11 +21,12 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pmr
  * 
  */
-public class Molecule2DCoordinates extends AbstractTool {
+public class MoleculeLayout extends AbstractTool {
 	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
 	
-	private CMLMolecule molecule;
-	private Molecule2DParameters drawParameters = new Molecule2DParameters();
+//	private CMLMolecule molecule;
+	private MoleculeTool moleculeTool;
+	private MoleculeDisplay moleculeDisplay;
 	private RingNucleusSet ringNucleusSet;
 	private ChainSet chainSet;
 	private ConnectionTableTool connectionTable;
@@ -35,44 +35,42 @@ public class Molecule2DCoordinates extends AbstractTool {
 	
 	/**
 	 */
-	public Molecule2DCoordinates() {
+	public MoleculeLayout() {
 	}
 	
 	/**
-	 * @param molecule
+	 * @param moleculeTool
 	 */
-	public Molecule2DCoordinates(CMLMolecule molecule) {
-		this.setMolecule(molecule);
+	public MoleculeLayout(MoleculeTool moleculeTool) {
+		this.setMoleculeTool(moleculeTool);
 	}
 	
 	/**
 	 */
 	public void create2DCoordinates() {
-		if (drawParameters == null) {
-			throw new CMLRuntimeException("must set drawParameters");
-		}
-		connectionTable = new ConnectionTableTool(molecule);
+		ensureMoleculeDisplay();
+		connectionTable = new ConnectionTableTool(moleculeTool.getMolecule());
 		ringNucleusSet = connectionTable.getRingNucleusSet();
 		ringNucleusSet.setMoleculeDraw(this);
-		ringNucleusSet.setDrawParameters(drawParameters);
+		ringNucleusSet.setMoleculeLayout(this);
 		chainSet = new ChainSet(this);
 		sproutMap = new HashMap<Sprout, Chain>();
 		sproutNucleusMap = new HashMap<Sprout, RingNucleus>();
 		if (ringNucleusSet.size() == 0) {
-			chainSet.findOrCreateAndAddChain(new CMLBondSet(molecule));
+			chainSet.findOrCreateAndAddChain(new CMLBondSet(moleculeTool.getMolecule()));
 			chainSet.layout(this);
 		} else {
 			// get coordinates for ring nuclei
 			Iterator<RingNucleus> nucleusIterator = ringNucleusSet.iterator();
 			for (;nucleusIterator.hasNext();) {
 				RingNucleus nucleus = nucleusIterator.next();
-				nucleus.findSprouts(drawParameters.isOmitHydrogens());
+				nucleus.findSprouts(moleculeDisplay.isOmitHydrogens());
 			}
 			// find chains starting at sprouts
 			nucleusIterator = ringNucleusSet.iterator();
 			for (;nucleusIterator.hasNext();) {
 				RingNucleus nucleus = nucleusIterator.next();
-				for (Sprout sprout : nucleus.getSproutList(drawParameters.isOmitHydrogens())) {
+				for (Sprout sprout : nucleus.getSproutList(moleculeDisplay.isOmitHydrogens())) {
 					Chain chain = chainSet.findOrCreateAndAddChain(sprout, ringNucleusSet);
 					sproutMap.put(sprout, chain);
 					sproutNucleusMap.put(sprout, nucleus);
@@ -94,6 +92,12 @@ public class Molecule2DCoordinates extends AbstractTool {
 		}
 	}
 	
+	private void ensureMoleculeDisplay() {
+		if (moleculeDisplay == null) {
+			moleculeDisplay = MoleculeDisplay.getDEFAULT();
+		}
+	}
+	
 	/**
 	 * @return the chainSet
 	 */
@@ -109,12 +113,26 @@ public class Molecule2DCoordinates extends AbstractTool {
 	}
 
 	/**
-	 * @return the drawParameters
+	 * @param moleculeDisplay
 	 */
-	public Molecule2DParameters getDrawParameters() {
-		return drawParameters;
+	public void setDrawParameters(MoleculeDisplay moleculeDisplay) {
+		this.moleculeDisplay = moleculeDisplay;
 	}
-
+	
+	/**
+	 * @return the moleculeDisplay
+	 */
+	public MoleculeDisplay getDrawParameters() {
+		ensureDrawParameters();
+		return moleculeDisplay;
+	}
+	
+	private void ensureDrawParameters() {
+		if (moleculeDisplay == null) {
+			moleculeDisplay = new MoleculeDisplay();
+		}
+	}
+	 
 	/**
 	 * @return the ringNucleusSet
 	 */
@@ -132,18 +150,18 @@ public class Molecule2DCoordinates extends AbstractTool {
 	/**
 	 * @return the molecule
 	 */
-	public CMLMolecule getMolecule() {
-		return molecule;
+	public MoleculeTool getMoleculeTool() {
+		return moleculeTool;
 	}
 
 	/**
-	 * @param molecule the molecule to set
+	 * @param moleculeTool the moleculeTool to set
 	 */
-	public void setMolecule(CMLMolecule molecule) {
-		this.molecule = molecule;
+	public void setMoleculeTool(MoleculeTool moleculeTool) {
+		this.moleculeTool = moleculeTool;
 	}
 	private static void usage() {
-		System.out.println("java "+new Molecule2DCoordinates().getClass().getName()+" [options]" );
+		System.out.println("java "+new MoleculeLayout().getClass().getName()+" [options]" );
 		System.out.println("... -SMILES smiles    // read smiles");
 		System.out.println("... -SVG    svgFile   // write to file");
 		System.out.println("... -JAVA             // display in Swing Panel");
@@ -160,9 +178,8 @@ public class Molecule2DCoordinates extends AbstractTool {
 			System.exit(0);
 		}
 		int i = 0;
-		GraphicsManager svgObject = new GraphicsManager();
+		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		CMLMolecule mol = null;
-		Molecule2DCoordinates molecule2DCoordinates = new Molecule2DCoordinates(mol);
 		MoleculeFrame moleculeFrame = null;
 		String smiles = null;
 		String cmlfile = null;
@@ -175,15 +192,13 @@ public class Molecule2DCoordinates extends AbstractTool {
 			} else if ("-CML".equals(args[i])) {
 				cmlfile = args[++i]; i++;
 			} else if ("-SVG".equals(args[i])) {
-				svgObject.setOutfile(args[++i]); i++;
+				displayList.setOutfile(args[++i]); i++;
 			} else if ("-JAVA".equals(args[i])) {
-				moleculeFrame = new MoleculeFrame(molecule2DCoordinates, svgObject); i++;
+				moleculeFrame = new MoleculeFrame(); i++;
 			} else {
 				System.err.println("unknown arg: "+args[i++]);
 			}
 		}
-//		svgFile = null;
-//		smiles = null;
 		if (cmlfile != null) {
 			Document doc;
 			try {
@@ -194,41 +209,39 @@ public class Molecule2DCoordinates extends AbstractTool {
 				e.printStackTrace();
 			}
 		} else if (inline != null) {
-			System.out.println(inline);
+//			System.out.println(inline);
 			InlineTool inlineTool = new InlineTool();
 			mol = inlineTool.getMolecule();
-//			mol.debug();
 		} else if (smiles != null) {
-			System.out.println(smiles);
 			SMILESTool smilesTool = new SMILESTool();
 			smilesTool.parseSMILES(smiles);
 			mol = smilesTool.getMolecule();
-//			mol.debug();
 		}
+		MoleculeTool moleculeTool = null;
 		if (mol != null) {
-			molecule2DCoordinates.setMolecule(mol);
-			molecule2DCoordinates.create2DCoordinates();
+			moleculeTool = new MoleculeTool(mol);
+			MoleculeLayout moleculeLayout = new MoleculeLayout(moleculeTool);
+			moleculeLayout.create2DCoordinates();
 			try {
-				svgObject.setMolecule(mol);
-				svgObject.createOrDisplayGraphics(MoleculeTool.getOrCreateMoleculeTool(mol), MoleculeDisplay.getDEFAULT());
+				displayList.setAndProcess(moleculeTool);
+				displayList.createOrDisplayGraphics();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 
-		if (svgObject.getOutfile() != null) {
+		if (displayList.getOutfile() != null && moleculeTool != null) {
 			try {
-				svgObject.write();
-//				new MoleculeTool(mol).defaultDisplay(svgObject);
-				svgObject.createOrDisplayGraphics(MoleculeTool.getOrCreateMoleculeTool(mol), MoleculeDisplay.getDEFAULT());
+				displayList.write();
+				displayList.setAndProcess(moleculeTool);
+				displayList.createOrDisplayGraphics();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		if (moleculeFrame != null) {
-			moleculeFrame.getMoleculePanel().setSVGObject(svgObject);
+			moleculeFrame.getMoleculePanel().setDisplayList(displayList);
 			moleculeFrame.displayInFrame();
-//			new MoleculeTool(mol).defaultDisplay(moleculePanel);
 		}
 		
 	}
@@ -238,6 +251,20 @@ public class Molecule2DCoordinates extends AbstractTool {
 	 */
 	public Map<Sprout, RingNucleus> getSproutNucleusMap() {
 		return sproutNucleusMap;
+	}
+
+	/**
+	 * @return the moleculeDisplay
+	 */
+	public MoleculeDisplay getMoleculeDisplay() {
+		return moleculeDisplay;
+	}
+
+	/**
+	 * @param moleculeDisplay the moleculeDisplay to set
+	 */
+	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
+		this.moleculeDisplay = moleculeDisplay;
 	}
 }
 

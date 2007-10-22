@@ -3,7 +3,10 @@
  */
 package org.xmlcml.cml.tools;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLMolecule;
 
@@ -32,6 +35,29 @@ public class SMILESToolTest {
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
 	 */
 	@Test
+	public final void testNormalizeRings() {
+		String s = "C1CCC1C2C3CCC3C2";
+		String ss = SMILESTool.normalizeRings(s);
+		Assert.assertEquals("after normalize", "C1CCC1C2C1CCC1C2", ss);
+		System.out.println("---------------");
+		s = "C1CCC2C1C3CCC3C2";
+		ss = SMILESTool.normalizeRings(s);
+		Assert.assertEquals("after normalize", "C1CCC2C1C1CCC1C2", ss);
+		System.out.println("---------------");
+		s = "CCCC9CCCCC9C";
+		ss = SMILESTool.normalizeRings(s);
+		Assert.assertEquals("after normalize", "CCCC1CCCCC1C", ss);
+		System.out.println("---------------");
+		s = "CCCC1CCC2CCCCC2CCC1C";
+		ss = SMILESTool.normalizeRings(s);
+		Assert.assertEquals("after normalize", "CCCC1CCC2CCCCC2CCC1C", ss);
+	}
+
+	/**
+	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
+	 */
+	@Test
+	@Ignore
 	public final void testParseSMILES() {
 		SMILESTool smilesTool = new SMILESTool();
 		// furan - atoms, rings bonds

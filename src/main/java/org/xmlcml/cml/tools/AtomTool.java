@@ -10,13 +10,13 @@ import nu.xom.Attribute;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGCircle;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Point3;
@@ -41,6 +41,9 @@ public class AtomTool extends AbstractTool {
     private AtomDisplay atomDisplay;
     private List<CMLAtomSet> coordinationSphereList;
     private CMLAtomSet coordinationSphereSet;
+	private SVGG g;
+	private double fontSize;
+	private double radiusFactor;
 
 	/**
      * constructor
@@ -327,9 +330,6 @@ public class AtomTool extends AbstractTool {
      static int[]    group  = { 1,   4,   5,   6,   7,   4,    5,   6,   7,    7,    7};
      static int[]    eneg0  = { 0,   0,   1,   0,   1,   0,    0,   1,   1,    1,    1};
      static int[]    eneg1  = { 0,   0,   0,   1,   1,   0,    0,   0,   1,    1,    1};
-	private SVGG g;
-	private double fontSize;
-	private double radiusFactor;
      /** a simple lookup for common atoms.
      *
      * examples are C, N, O, F, Si, P, S, Cl, Br, I
@@ -438,7 +438,7 @@ public class AtomTool extends AbstractTool {
       * @param drawable
       * @return null if no symbol or charge
       */
-     public SVGG createGraphicsElement(CMLDrawable drawable) {
+     public SVGElement createGraphicsElement(CMLDrawable drawable) {
 //    	g = null;
 		if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
     		 System.err.println("No coordinates for "+atom.getId());
@@ -509,7 +509,6 @@ public class AtomTool extends AbstractTool {
 	    	 if (atomDisplay.isDisplayLabels()) {
 	    		 drawLabel(xIdOffsetFactor, yIdOffsetFactor, idFontFactor, backgroundIdRadiusFactor);
 	    	 }
-//	    	 CMLUtil.debug(g);
     	 }
     	 return (g == null || g.getChildElements().size() == 0) ? null : g;
      }
@@ -656,7 +655,7 @@ public class AtomTool extends AbstractTool {
 	/**
 	 * @return the g
 	 */
-	public SVGG getG() {
+	public SVGElement getG() {
 		return g;
 	}
 

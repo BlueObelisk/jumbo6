@@ -84,7 +84,7 @@ public class CMLAtomArray extends AbstractAtomArray {
             CMLFormula formula = (CMLFormula) parent;
             CMLElements atomArrays = formula.getAtomArrayElements();
             if (atomArrays.size() > 0) {
-                if (formula.processedConcise && atomArrays.size() == 1) {
+                if (formula.isProcessedConcise() && atomArrays.size() == 1) {
                     formula.removeChild(atomArrays.get(0));
                 } else {
                     throw new CMLRuntimeException(

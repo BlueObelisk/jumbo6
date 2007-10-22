@@ -2049,7 +2049,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         atomList.add(atoms.get(0));
         atomList.add(atoms.get(1));
-        CMLAtomSet subAtomSet = new CMLAtomSet(atomList);
+        CMLAtomSet subAtomSet = CMLAtomSet.createFromAtoms(atomList);
         CMLMolecule subMolecule = sproutTool.sprout(subAtomSet);
         Assert.assertEquals("sub AS size", 6, subMolecule.getAtomCount());
         Assert.assertEquals("sub BS size", 5, subMolecule.getBondCount());
@@ -2297,10 +2297,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     		String infile = args[1];
     		String outfile = args[2];
 	    	InputStream is = Util.getInputStreamFromResource(infile);
-	    	System.out.println("reading CML "+infile);
 	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
-	    	GraphicsManager svgFile = new GraphicsManager(outfile);
-	    	svgFile.createOrDisplayGraphics(new MoleculeTool(molecule), MoleculeDisplay.getDEFAULT());
+	    	MoleculeDisplayList graphicsManager = new MoleculeDisplayList(outfile);
+	    	graphicsManager.setAndProcess(new MoleculeTool(molecule));
+	    	graphicsManager.createOrDisplayGraphics();
     	}
     }
     
