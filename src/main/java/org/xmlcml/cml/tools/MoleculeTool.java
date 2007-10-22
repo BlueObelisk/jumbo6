@@ -49,7 +49,7 @@ import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2Interval;
@@ -77,6 +77,10 @@ public class MoleculeTool extends AbstractTool {
 	private Map<CMLAtom, AtomTool> atomToolMap;
 	private Map<CMLBond, BondTool> bondToolMap;
 	private SelectionTool selectionTool;
+	private MoleculeDisplay moleculeDisplay;
+	private CMLAtom currentAtom;
+	private CMLBond currentBond;
+	
 
 	/**
 	 * constructor
@@ -813,7 +817,7 @@ public class MoleculeTool extends AbstractTool {
 				continue;
 			}
 	
-			CMLAtomSet ligand2Set = new CMLAtomSet(atom.getLigandAtoms());
+			CMLAtomSet ligand2Set = CMLAtomSet.createFromAtoms(atom.getLigandAtoms());
 	
 			// for each ligandList or atom2 loop through all atom1s to find
 			// match
@@ -1790,7 +1794,7 @@ public class MoleculeTool extends AbstractTool {
 	 * @return mapped bond or null
 	 */
 	@SuppressWarnings("unused")
-	private CMLBond getMappedBondViaAtoms(CMLMap map, CMLBond bond0,
+	public CMLBond getMappedBondViaAtoms(CMLMap map, CMLBond bond0,
 			Direction toFrom) {
 		CMLBond targetBond = null;
 		CMLAtom atom0 = bond0.getAtom(0);
@@ -1898,7 +1902,7 @@ public class MoleculeTool extends AbstractTool {
 					}
 				}
 
-				CMLAtomSet atomSet = new CMLAtomSet(acyclicAtoms);
+				CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(acyclicAtoms);
 				CMLMolecule newMol = new CMLMolecule(atomSet);
 				new MoleculeTool(newMol).calculateBondedAtoms();
 				new ConnectionTableTool(newMol).partitionIntoMolecules();
@@ -2240,14 +2244,67 @@ public class MoleculeTool extends AbstractTool {
 		}
 	}
 	
+	/**
+	 * @param type
+	 * @param contactDist
+	 * @return pairs of atoms which bump
+	 */
+	public List<AtomPair> getBumps(CoordinateType type, double contactDist) {
+		List<AtomPair> bumpList = new ArrayList<AtomPair>();
+		
+		List<CMLAtom> atomList = molecule.getAtoms();
+ 		CMLAtomSet allAtomSet = new CMLAtomSet(molecule);
+ 		int natoms = atomList.size();
+ 		for (int i = 0; i < natoms; i++) {
+ 			CMLAtom atomi = atomList.get(i);
+ 			if ("H".equals(atomi.getElementType())) {
+ 				continue;
+ 			}
+ 			// get all atoms within 3 bonds
+ 			CMLAtomSet atomSet13 = new AtomTool(atomi).getCoordinationSphereSet(3);
+ 			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
+ 			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
+ 	 		for (CMLAtom atomj : nonBondedAtomList) {
+ 	 			if ("H".equals(atomj.getElementType())) {
+ 	 				continue;
+ 	 			}
+ 	 			if (atomi.getId().compareTo(atomj.getId()) <= 0) {
+ 	 				continue;
+ 	 			}
+ 	 			boolean bump = false;
+ 	 			double dist = Double.NaN;
+ 	 			if (type == CoordinateType.CARTESIAN) {
+ 	 				bump = atomi.isWithinRadiusSum(atomj, ChemicalElement.RadiusType.VDW);
+ 	 				dist = atomi.getDistanceTo(atomj);
+ 	 			} else if (type == CoordinateType.TWOD) {
+ 	 				dist = atomi.getDistance2(atomj);
+ 	 				if (dist < contactDist) {
+ 	 					bump = true;
+ 	 				}
+ 	 			}
+ 	 			if (bump) {
+ 	 				AtomPair atomPair = new AtomPair(atomi, atomj);
+ 	 				atomPair.setDistance(dist, type);
+ 	 				bumpList.add(atomPair);
+ 	 			}
+ 	 		}
+ 		}
+ 		return bumpList;
+	}
+
+	
     /** returns a "g" element
      * will require to be added to an svg element
-     * @param moleculeDisplay
      * @param drawable
 	 * @throws IOException
      * @return null if problem
      */
-    public SVGG createSVG(MoleculeDisplay moleculeDisplay, CMLDrawable drawable) throws IOException {
+    public SVGElement createSVG(CMLDrawable drawable) throws IOException {
+    	AtomDisplay atomDisplayx = (moleculeDisplay == null) ? null :
+    		moleculeDisplay.getAtomDisplay();
+    	System.out.println("MOLD "+((atomDisplayx == null) ? "NULL" :
+    		atomDisplayx.isDisplayLabels()));
+    	enableMoleculeDisplay();
     	double scale = 1.0;
     	double[] offsets = new double[] {100., 200.};
     
@@ -2267,8 +2324,7 @@ public class MoleculeTool extends AbstractTool {
     		}
     	}
     	
-//    	SVGG g = new SVGG();
-    	SVGG g = drawable.createGraphicsElement();
+    	SVGElement g = drawable.createGraphicsElement();
     	g.setTransform(new Transform2 (
 			new double[]{
 			scale, 0., offsets[0],
@@ -2292,6 +2348,9 @@ public class MoleculeTool extends AbstractTool {
         		b.setStrokeWidth(0.2);
     		}
 		}
+    	if (molecule.getAtomCount() == 1) {
+    		atomDisplay.setDisplayCarbons(true);
+    	}
     	for (CMLAtom atom : molecule.getAtoms()) {
     		AtomTool atomTool = getOrCreateAtomTool(atom);
     		atomTool.setAtomDisplay(atomDisplay);
@@ -2306,6 +2365,12 @@ public class MoleculeTool extends AbstractTool {
 		}
     	drawable.output(g);
     	return g;
+    }
+    
+    private void enableMoleculeDisplay() {
+    	if (moleculeDisplay == null) {
+    		moleculeDisplay = MoleculeDisplay.getDEFAULT();
+    	}
     }
 
 	/**
@@ -2346,20 +2411,102 @@ public class MoleculeTool extends AbstractTool {
 		this.selectionTool = selectionTool;
 	}
 
-//    /** default molecular display to CMDrawable
-//     * convenience
-//     * @param drawable
-//     * @exception IOException
-//     */
-//    public void defaultDisplay(CMLDrawable drawable) throws IOException {
-//    	drawable.createOrDisplayGraphics(this, MoleculeDisplay.getDEFAULT());
-//    }
-    
-//	private double getScale(Real2Range moleculeBoundingBox, Real2Interval screenBoundingBox) {
-//		double scale = Double.NaN;
-//		Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
-//		scale = moleculeInterval.scaleTo(screenBoundingBox);
-//		return scale;
-//	}
+	/**
+	 * @return the MoleculeDisplay
+	 */
+	public MoleculeDisplay getMoleculeDisplay() {
+		if (moleculeDisplay == null) {
+			moleculeDisplay = new MoleculeDisplay();
+		}
+		return moleculeDisplay;
+	}
+
+	/**
+	 * @param MoleculeDisplay the MoleculeDisplay to set
+	 */
+	public void setMoleculeDisplay(MoleculeDisplay MoleculeDisplay) {
+		this.moleculeDisplay = MoleculeDisplay;
+	}
+
+	/**
+	 * @return the currentAtom
+	 */
+	public CMLAtom getCurrentAtom() {
+		return currentAtom;
+	}
+
+	/**
+	 * @param currentAtom the currentAtom to set
+	 */
+	public void setCurrentAtom(CMLAtom currentAtom) {
+		this.currentAtom = currentAtom;
+	}
+
+	/**
+	 * @return the currentBond
+	 */
+	public CMLBond getCurrentBond() {
+		return currentBond;
+	}
+
+	/**
+	 * @param currentBond the currentBond to set
+	 */
+	public void setCurrentBond(CMLBond currentBond) {
+		this.currentBond = currentBond;
+	}
+
+	/**
+	 * clears currentBond and then ensureCurrentBond()
+	 * @return currentBond
+	 */
+	public CMLBond resetCurrentBond() {
+		this.currentBond = null;
+		ensureCurrentBond();
+		return currentBond;
+	}
+
+	/** makes sure there is a current atom.
+	 * if none set, select first atom (fragile)
+	 * @return current atom or null if no atoms
+	 */
+	public CMLAtom ensureCurrentAtom() {
+		if (currentAtom == null && molecule.getAtomCount() > 0) {
+			currentAtom = molecule.getAtoms().get(0);
+		}
+		return currentAtom;
+	}
+
+	/** makes sure there is a current bond.
+	 * if none set, select first ligandBond on current atom (fragile)
+	 * @return current bond or null if currentAtom is null or has no ligands
+	 */
+	public CMLBond ensureCurrentBond() {
+		if (currentBond == null && currentAtom != null) {
+			List<CMLBond> ligandBonds = currentAtom.getLigandBonds();
+			if (ligandBonds.size() > 0) {
+				currentBond = ligandBonds.get(0);
+			}
+		}
+		return currentBond;
+	}
+	
+	/** steps through ligands of currentAtom.
+	 * if currentBond contains currentAtom, steps through
+	 * ligands of currentAtom else no-op
+	 * @return next ligand bond or null if no currentBond
+	 */
+	public CMLBond incrementCurrentBond() {
+		ensureCurrentBond();
+		if (currentBond != null) {
+			List<CMLBond> ligands = currentAtom.getLigandBonds();
+			int idx = ligands.indexOf(currentBond);
+			if (idx != -1) {
+				idx = (idx+1) % ligands.size();
+				currentBond = ligands.get(idx);
+			}
+		}
+		return currentBond;
+	}
 }
 

@@ -608,7 +608,7 @@ public class CrystalToolTest extends AbstractToolTest {
                 atomCount++;
                 List<CMLAtom> singleAtomList = new ArrayList<CMLAtom>();
                 singleAtomList.add(atom);
-                CMLAtomSet singleAtomSet = new CMLAtomSet(singleAtomList);
+                CMLAtomSet singleAtomSet = CMLAtomSet.createFromAtoms(singleAtomList);
                 CMLMolecule atomSprout = moleculeTool.sprout(singleAtomSet);
                 writeXML(outfile, atomSprout, "atom sprout");
                 

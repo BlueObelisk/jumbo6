@@ -598,7 +598,7 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 					+ S_RBRAK);
 		}
 
-		CMLAtomSet atomSet = new CMLAtomSet(getAtoms());
+		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(getAtoms());
 		form = atomSet.getCalculatedFormula(control);
 		return form;
 	}

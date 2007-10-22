@@ -16,6 +16,11 @@ package org.xmlcml.euclid;
  */
 public class EuclidRuntimeException extends RuntimeException implements EuclidConstants {
 
+	/** constructor
+	 * 
+	 * @param message
+	 * @param cause
+	 */
     public EuclidRuntimeException(String message, Throwable cause) {
 		super(message, cause);
 	}

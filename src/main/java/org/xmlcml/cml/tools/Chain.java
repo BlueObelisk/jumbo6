@@ -35,7 +35,7 @@ public class Chain extends AbstractTool {
 	private List<CMLBond> terminalBondList;
 	private List<CMLAtom> terminalAtomList;
 	private Map<CMLAtom, List<CMLBond>> bondMap;
-	private Molecule2DCoordinates moleculeDraw;
+	private MoleculeLayout moleculeDraw;
 	private IntMatrix distanceMatrix;
 	private SpanningTree spanningTree;
 	private SortedMap<CMLAtom, Real2> atomCoordinateMap;
@@ -66,7 +66,7 @@ public class Chain extends AbstractTool {
 	/**
 	 * @param moleculeDraw
 	 */
-	public Chain(Molecule2DCoordinates moleculeDraw) {
+	public Chain(MoleculeLayout moleculeDraw) {
 		init();
 		this.setMoleculeDraw(moleculeDraw);
 	}
@@ -197,14 +197,14 @@ public class Chain extends AbstractTool {
 
 	/**
 	 * @param sprout (can be null)
-	 * @param moleculeDraw
+	 * @param moleculeLayout
 	 */
-	public void calculate2DCoordinates(Sprout sprout, Molecule2DCoordinates moleculeDraw) {
-		this.setMoleculeDraw(moleculeDraw);
+	public void calculate2DCoordinates(Sprout sprout, MoleculeLayout moleculeLayout) {
+		this.setMoleculeDraw(moleculeLayout);
 		ensureAtomCoordinateMap();
-		bondLength = moleculeDraw.getDrawParameters().getBondLength();
+		bondLength = moleculeLayout.getMoleculeDisplay().getBondLength();
 		spanningTree = new SpanningTree(atomSet, bondSet);
-		spanningTree.setOmitHydrogens(moleculeDraw.getDrawParameters().isOmitHydrogens());
+		spanningTree.setOmitHydrogens(moleculeLayout.getMoleculeDisplay().isOmitHydrogens());
 		spanningTree.setIncludedAtomSet(atomSet);
 		spanningTree.setIncludedBondSet(bondSet);
 		spanningTree.generate(terminalAtomList.get(0));
@@ -512,14 +512,14 @@ public class Chain extends AbstractTool {
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

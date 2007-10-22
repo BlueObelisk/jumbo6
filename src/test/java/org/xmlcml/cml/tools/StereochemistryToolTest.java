@@ -164,7 +164,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		StereochemistryTool stereochemistryTool1 = new StereochemistryTool(molecule1);
 		List<CMLAtom> chiralAtoms = stereochemistryTool1.getChiralAtoms();
 		Assert.assertEquals("chiral atoms", 5, chiralAtoms.size());
-		CMLAtomSet chiralSet = new CMLAtomSet(chiralAtoms);
+		CMLAtomSet chiralSet = CMLAtomSet.createFromAtoms(chiralAtoms);
 		CMLAtomSet refSet = new CMLAtomSet(molecule1, new String[]{"a9", "a10", "a19", "a21", "a28"});
 		Assert.assertTrue("chiral atoms", chiralSet.hasContentEqualTo(refSet));
 	}

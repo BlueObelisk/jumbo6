@@ -19,7 +19,7 @@ public class InlineTool extends AbstractTool {
 	private String inline;
 	private CMLAtom currentAtom;
 	private CMLBond currentBond;
-	private Ring currentRing;
+//	private Ring currentRing;
 	
     /** constructor
      */
@@ -33,9 +33,9 @@ public class InlineTool extends AbstractTool {
     	molecule = new CMLMolecule();
     	currentAtom = null;
 		currentBond = null; 
-		currentRing = null;
+//		currentRing = null;
 		int len = inline.length();
-		int ringSize = 0;
+//		int ringSize = 0;
 		for (int i = 0; i < len; i++) {
 			char ch = inline.charAt(i);
 			if (ch == '0') {
@@ -46,9 +46,9 @@ public class InlineTool extends AbstractTool {
 				} else if (!Character.isDigit(ch)) {
 					throw new CMLRuntimeException("cannot make 1- or 2-membered ring");
 				}
-				ringSize = 10*(ch-'0') + (inline.charAt(++i)-'0');
+//				ringSize = 10*(ch-'0') + (inline.charAt(++i)-'0');
 			} else if (ch > '2' && ch <= '9') {
-				ringSize = ch-'0';
+//				ringSize = ch-'0';
 			} else if (ch == 'U') {
 				incrementCurrentAtom();
 				incrementCurrentBond();

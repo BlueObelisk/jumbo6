@@ -2,9 +2,6 @@ package org.xmlcml.cml.graphics;
 
 import java.io.IOException;
 
-import org.xmlcml.cml.tools.MoleculeDisplay;
-import org.xmlcml.cml.tools.MoleculeTool;
-
 /**
  * 
  * @author pm286
@@ -18,12 +15,9 @@ public interface CMLDrawable {
 	SVGG createGraphicsElement();
 
 	/**
-	 * @param moleculeTool
-	 * @param moleculeDisplay
 	 * @throws IOException
 	 */
-	void createOrDisplayGraphics(MoleculeTool moleculeTool, MoleculeDisplay moleculeDisplay)
-	 throws IOException;
+	void createOrDisplayGraphics() throws IOException;
 
 	/**
 	 * @param g

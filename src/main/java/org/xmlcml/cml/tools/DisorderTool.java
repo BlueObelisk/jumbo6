@@ -271,6 +271,7 @@ public class DisorderTool extends AbstractTool {
 	 * @param failedAssemblyList
 	 * @return whether a set of valid assemblies has been found.
 	 */
+	@SuppressWarnings("all")
 	private boolean fixFailedAssemblies(List<DisorderAssembly> failedAssemblyList) {
 		// aggregate all disordered atoms from the failed assemblies
 		List<CMLAtom> disorderedAtoms = new ArrayList<CMLAtom>();

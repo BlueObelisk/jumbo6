@@ -28,6 +28,7 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLSpectatorList;
 import org.xmlcml.cml.element.ReactionComponent;
+import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.ReactionComponent.Type;
 import org.xmlcml.euclid.Real2;
 
@@ -43,6 +44,10 @@ public class ReactionTool extends AbstractTool {
 
     CMLReaction reaction = null;
 
+	private CMLFormula aggregateReactantFormula;
+	private CMLFormula aggregateProductFormula;
+	private CMLFormula differenceFormula;
+
     /**
      * constructor.
      * 
@@ -55,41 +60,12 @@ public class ReactionTool extends AbstractTool {
     /**
      * output and analyse aggregate formula for products and reactants.
      * 
-     * 
-     * @param w
-     *            the output writer
+     * @param w the output writer
      * @throws CMLException
      * @throws IOException
      */
     public void outputBalance(Writer w) throws CMLException, IOException {
-        // get aggregate for reactants (null if no formulae)
-        List<CMLReactant> reactants = reaction.getDescendantReactants();
-        CMLFormula aggregateReactantFormula = null;
-        for (CMLReactant reactant : reactants) {
-            CMLFormula formula = reactant.getOrCreateFormula();
-            if (formula != null) {
-                if (aggregateReactantFormula == null) {
-                    aggregateReactantFormula = new CMLFormula();
-                }
-                aggregateReactantFormula = aggregateReactantFormula
-                        .createAggregatedFormula(formula);
-            }
-        }
-
-        // get aggregate for products
-        List<CMLProduct> products = reaction.getDescendantProducts();
-        CMLFormula aggregateProductFormula = null;
-        for (CMLProduct product : products) {
-            CMLFormula formula = product.getOrCreateFormula();
-            if (formula != null) {
-                if (aggregateProductFormula == null) {
-                    aggregateProductFormula = new CMLFormula();
-                }
-                aggregateProductFormula = aggregateProductFormula
-                        .createAggregatedFormula(formula);
-            }
-        }
-
+        calculateDifferenceFormula();
         if (aggregateReactantFormula != null) {
             w.write(aggregateReactantFormula.getFormattedString());
         } else {
@@ -101,15 +77,64 @@ public class ReactionTool extends AbstractTool {
         } else {
             w.write("Null productList");
         }
-
-        if (aggregateReactantFormula != null && aggregateProductFormula != null) {
+		if (differenceFormula != null) {
             w.write(" ; difference: ");
-
-            String differenceFormula = aggregateReactantFormula
-                    .getDifference(aggregateProductFormula);
-            w.write(differenceFormula);
+            differenceFormula.setAllowNegativeCounts(true);
+            w.write(differenceFormula.getFormattedString(CMLFormula.Type.ELEMENT_WHITESPACE_COUNT,
+    				Sort.CHFIRST, false));
         }
     }
+
+	/**
+	 * @return difference formula
+	 */
+	public CMLFormula calculateDifferenceFormula() {
+		differenceFormula = null;
+		aggregateReactantFormula = createAggregateReactantFormula();
+		aggregateProductFormula = createAggregateProductFormula();
+		if (aggregateReactantFormula != null && aggregateProductFormula != null) {
+            differenceFormula = aggregateReactantFormula.getDifference(aggregateProductFormula);
+        }
+		return differenceFormula;
+	}
+
+	/**
+	 * @return formula
+	 */
+	public CMLFormula createAggregateProductFormula() {
+		List<CMLProduct> products = reaction.getDescendantProducts();
+        CMLFormula aggregateProductFormula = null;
+        for (CMLProduct product : products) {
+            CMLFormula formula = product.getOrCreateFormula();
+            if (formula != null) {
+                if (aggregateProductFormula == null) {
+                    aggregateProductFormula = new CMLFormula();
+                }
+                aggregateProductFormula = aggregateProductFormula
+                        .createAggregatedFormula(formula);
+            }
+        }
+		return aggregateProductFormula;
+	}
+
+	/**
+	 * @return aggregate reaction formula
+	 */
+	public CMLFormula createAggregateReactantFormula() {
+		List<CMLReactant> reactants = reaction.getDescendantReactants();
+        CMLFormula aggregateReactantFormula = null;
+        for (CMLReactant reactant : reactants) {
+            CMLFormula formula = reactant.getOrCreateFormula();
+            if (formula != null) {
+                if (aggregateReactantFormula == null) {
+                    aggregateReactantFormula = new CMLFormula();
+                }
+                aggregateReactantFormula = aggregateReactantFormula
+                        .createAggregatedFormula(formula);
+            }
+        }
+		return aggregateReactantFormula;
+	}
 
     /**
      * output simple inline version of reaction.
@@ -227,6 +252,8 @@ public class ReactionTool extends AbstractTool {
              formula = (CMLFormula) ((CMLReactant)element).getFirstCMLChild(CMLFormula.TAG);
          } else if (element instanceof CMLProduct) {
              formula = (CMLFormula) ((CMLProduct)element).getFirstCMLChild(CMLFormula.TAG);
+         } else {
+        	 throw new ClassCastException("must use CMLReactant ot CMLProduct");
          }
          if (formula == null) {
              CMLMolecule molecule = null;

@@ -16,6 +16,8 @@ import org.xmlcml.cml.base.CMLElement;
  */
 public class CMLProduct extends AbstractProduct implements ReactionComponent {
 
+	
+	// TODO
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
@@ -94,23 +96,23 @@ public class CMLProduct extends AbstractProduct implements ReactionComponent {
         return CMLReaction.getBonds(this);
     }
 
-    /**
-     * get all descendant formulas.
-     *
-     * @return list of descendant formulas
-     */
-    public List<CMLFormula> getFormulas() {
-        return CMLReaction.getFormulas(this);
-    }
+//    /**
+//     * get all descendant formulas.
+//     *
+//     * @return list of descendant formulas
+//     */
+//    public List<CMLFormula> getFormulas() {
+//        return CMLReaction.getFormulas(this);
+//    }
 
-    /**
-     * get all descendant molecules.
-     *
-     * @return list of descendant molecules
-     */
-    public List<CMLMolecule> getMolecules() {
-        return CMLReaction.getMolecules(this);
-    }
+//    /**
+//     * get all descendant molecules.
+//     *
+//     * @return list of descendant molecules
+//     */
+//    public List<CMLMolecule> getMolecules() {
+//        return CMLReaction.getMolecules(this);
+//    }
 
     /**
      * gets descendant reactionComponents. only for interface compatibility
@@ -139,5 +141,21 @@ public class CMLProduct extends AbstractProduct implements ReactionComponent {
     public CMLFormula getOrCreateFormula() {
         return CMLReactant.getOrCreateFormula(this);
     }
+
+    /**
+     * @return all formula objects
+     */
+	public List<CMLFormula> getFormulas() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @return all molecules
+	 */
+	public List<CMLMolecule> getMolecules() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

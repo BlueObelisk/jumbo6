@@ -569,7 +569,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     }
 
     /**
-     * copy attributes from one AbstractBase to another. overwrites existing
+     * copy attributes from one CMLElement to another. overwrites existing
      * atts
      * 
      * @param from

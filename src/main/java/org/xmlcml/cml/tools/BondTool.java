@@ -12,6 +12,7 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.euclid.Real2;
@@ -30,6 +31,9 @@ public class BondTool extends AbstractTool {
     Logger logger = Logger.getLogger(BondTool.class.getName());
     private BondDisplay bondDisplay;
     private MoleculeTool moleculeTool;
+	private SVGG g;
+	private double width = 1.0;
+	private double widthFactor;
 
 	/**
      * constructor
@@ -42,8 +46,21 @@ public class BondTool extends AbstractTool {
         if (molecule == null) {
             throw new CMLRuntimeException("Bond must be in molecule");
         }
-//        moleculeTool = new MoleculeTool(molecule);
     }
+
+	/** gets BondTool associated with bond.
+	 * if null creates one and sets it in bond
+	 * @param bond
+	 * @return tool
+	 */
+	public static BondTool getOrCreateBondTool(CMLBond bond) {
+		BondTool bondTool = (BondTool) bond.getTool();
+		if (bondTool == null) {
+			bondTool = new BondTool(bond);
+			bond.setTool(bondTool);
+		}
+		return bondTool;
+	}
 
     /**
      * make bond tool from a bond.
@@ -81,7 +98,7 @@ public class BondTool extends AbstractTool {
      * @return null if problem or atom has no coords
      */
     public GraphicsElement createGraphicsElement(CMLDrawable drawable) {
-    	SVGG g = null;
+    	g = null;
     	List<CMLAtom> atoms = bond.getAtoms();    	
     	Real2 xy0 = atoms.get(0).getXY2();
     	Real2 xy1 = atoms.get(1).getXY2();
@@ -92,30 +109,25 @@ public class BondTool extends AbstractTool {
     	} else {
         	g = drawable.createGraphicsElement();
 	    	double bondWidth = bondDisplay.getWidth();
-	//		boolean writeLabel = false;
-	//		double width = 1.0;
-	//		String dash = "";
-	//		String color = "black";
-	//		if (this.wedgeType == Type.SOLID_NEITHER) {
-	//			width = 2*width;
-	//		}
-	//		if (wedgeType == Type.HATCH_NEITHER) {
-	//			dash = "stroke-dasharray:2,2;";
-	//		}
 			String order = bond.getOrder();
 	    	 // highlight
 	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
-	    	 if (selectionTool != null && selectionTool.isSelected(bond)) {
-	    		 double factor = 3.0;
-	    	 	 if (order.equals(CMLBond.DOUBLE)) {
-	    	 		 factor = 5.0;
-	    	 	 } else if (order.equals(CMLBond.TRIPLE)) {
-	    	 		 factor = 7.0;
-	    	 	 }
-	    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
-	    		 g.appendChild(line);
-	    		 line.setFill("yellow");
-	    		 line.setOpacity(0.40);
+	    	 System.out.println("SELBONDS: "+selectionTool.getSelectedBonds().get(0).getId());
+	    	 if (selectionTool != null) {
+	    		 System.out.println("SEL BOND? : "+bond.getId());
+	    		 if (selectionTool.isSelected(bond)) {
+		    		 double factor = 3.0;
+		    	 	 if (order.equals(CMLBond.DOUBLE)) {
+		    	 		 factor = 5.0;
+		    	 	 } else if (order.equals(CMLBond.TRIPLE)) {
+		    	 		 factor = 7.0;
+		    	 	 }
+		    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
+		    		 System.out.println("BBBBBBBBBBBBBBBB");
+		    		 g.appendChild(line);
+		    		 line.setFill("yellow");
+		    		 line.setOpacity(0.40);
+		    	 }
 	    	 }
 			if (order == null || order.equals(CMLBond.SINGLE)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
@@ -181,4 +193,40 @@ public class BondTool extends AbstractTool {
 	public void setMoleculeTool(MoleculeTool moleculeTool) {
 		this.moleculeTool = moleculeTool;
 	}
+	
+	/**
+	 * @return the g
+	 */
+	public SVGElement getG() {
+		return g;
+	}
+
+	/**
+	 * @return the width
+	 */
+	public double getWidth() {
+		return width;
+	}
+
+	/**
+	 * @param width the width to set
+	 */
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	/**
+	 * @return the widthFactor
+	 */
+	public double getWidthFactor() {
+		return widthFactor;
+	}
+
+	/**
+	 * @param widthFactor the widthFactor to set
+	 */
+	public void setWidthFactor(double widthFactor) {
+		this.widthFactor = widthFactor;
+	}
+
 }

@@ -14,6 +14,8 @@ import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.tools.AbstractDisplay;
+import org.xmlcml.cml.tools.MoleculeDisplay;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Transform2;
@@ -89,6 +91,86 @@ public abstract class SVGElement extends GraphicsElement {
 		}
 	}
 	
+	Transform2 transform = new Transform2();
+
+	/**
+	 * @return the transform
+	 */
+	public Transform2 getTransform() {
+		return transform;
+	}
+	/**
+	 * @param transform the transform to set
+	 */
+	public void setTransform(Transform2 transform) {
+		this.transform = transform;
+		processTransform();
+	}
+	
+	protected void processTransform() {
+		double[] matrix = transform.getMatrixAsArray();
+		this.addAttribute(new Attribute("transform", "matrix(" +
+			matrix[0] +"," +
+			"0., 0.," +
+			matrix[4] +"," +
+			matrix[2]+","+matrix[5]+
+			")"));
+	}
+	
+	/**
+	 * 
+	 * @param s
+	 */
+	public void setScale(double s) {
+		ensureTransform();
+		Transform2 t = new Transform2(
+				new double[]{
+				s, 0., 0.,
+				0., s, 0.,
+				0., 0., 1.
+				});
+		transform = transform.concatenate(t);
+		processTransform();
+	}
+
+	protected void ensureTransform() {
+		if (transform == null) {
+			transform = new Transform2();
+		}
+	}
+
+	/** set moleculeDisplay properties.
+	 * 
+	 * @param moleculeDisplay
+	 */
+	public void setProperties(MoleculeDisplay moleculeDisplay) {
+		this.setFontStyle(moleculeDisplay.getFontStyle());
+		this.setFontWeight(moleculeDisplay.getFontStyle());
+		this.setFontFamily(moleculeDisplay.getFontFamily());
+		this.setFontSize(moleculeDisplay.getFontSize());
+		this.setFill(moleculeDisplay.getFill());
+		this.setStroke(moleculeDisplay.getStroke());
+		this.setOpacity(moleculeDisplay.getOpacity());
+		
+		this.setProperties(moleculeDisplay.getAtomDisplay());
+		this.setProperties(moleculeDisplay.getBondDisplay());
+	}
+	
+	/** set properties.
+	 * 
+	 * @param abstractDisplay
+	 */
+	public void setProperties(AbstractDisplay abstractDisplay) {
+		this.setFontStyle(abstractDisplay.getFontStyle());
+		this.setFontWeight(abstractDisplay.getFontStyle());
+		this.setFontFamily(abstractDisplay.getFontFamily());
+		this.setFontSize(abstractDisplay.getFontSize());
+		this.setFill(abstractDisplay.getFill());
+		this.setStroke(abstractDisplay.getStroke());
+		this.setOpacity(abstractDisplay.getOpacity());
+		
+	}
+	
 	/**
 	 */
 	public void setCumulativeTransformRecursively() {
@@ -106,10 +188,8 @@ public abstract class SVGElement extends GraphicsElement {
 	 * may be overridden by children such as Text
 	 */
 	protected void setCumulativeTransformRecursively(Object value) {
-		if (cumulativeTransform == null && value != null) {
-			
+		if (value != null) {
 			Transform2 thisTransform = this.getTransform2FromAttribute();
-			System.out.println("TR "+thisTransform);
 			ParentNode parentNode = this.getParent();
 			Transform2 parentTransform = (parentNode instanceof GraphicsElement) ?
 					((GraphicsElement) parentNode).getCumulativeTransform() : new Transform2();
@@ -145,7 +225,6 @@ public abstract class SVGElement extends GraphicsElement {
 		Color color = null;
 		String attVal = this.getAttributeValue(attName);
 		if ("none".equals(attVal)) {
-//			System.out.println("COLOR NONE");
 		} else if (attVal != null) {
 			color = colorMap.get(attVal);
 			if (color == null) {
@@ -318,6 +397,23 @@ public abstract class SVGElement extends GraphicsElement {
 //		fos.close();
 //		System.out.println("wrote SVG "+outfile);
 	}
+
+	/**
+	 * 
+	 * @param xy
+	 */
+	public void translate(Real2 xy) {
+		ensureTransform();
+		Transform2 t = new Transform2(
+			new double[] {
+			1., 0., xy.getX(),
+			0., 1., xy.getY(),
+			0., 0., 1.
+		});
+		transform = transform.concatenate(t);
+		processTransform();
+	}
+
 	/**
 	 * 
 	 * @param filename
@@ -326,7 +422,7 @@ public abstract class SVGElement extends GraphicsElement {
 	public static void test(String filename) throws IOException {
 		FileOutputStream fos = new FileOutputStream(filename);
 		SVGSVG svg = new SVGSVG();
-		SVGG g = new SVGG();
+		SVGElement g = new SVGG();
 		g.setFill("yellow");
 		svg.appendChild(g);
 		SVGLine line = new SVGLine(new Real2(100, 200), new Real2(300, 50));

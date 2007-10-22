@@ -32,8 +32,8 @@ public class RingNucleusSet extends AbstractTool {
 	private Map<CMLBond, RingNucleus> bondMap;
 	private List<RingNucleus> ringNucleusList;
 	private Map<CMLBond, Sprout> bondSproutMap;
-	private Molecule2DCoordinates moleculeDraw;
-	private Molecule2DParameters drawParameters;
+	private MoleculeLayout moleculeDraw;
+//	private Molecule2DParameters drawParameters;
 	
 	/**
 	 */
@@ -222,34 +222,34 @@ public class RingNucleusSet extends AbstractTool {
 		return nucleusSet;
 	}
 
+//	/**
+//	 * @return the drawParameters
+//	 */
+//	public Molecule2DParameters getDrawParameters() {
+//		return drawParameters;
+//	}
+//
 	/**
-	 * @return the drawParameters
+	 * @param moleculeLayout the drawParameters to set
 	 */
-	public Molecule2DParameters getDrawParameters() {
-		return drawParameters;
-	}
-
-	/**
-	 * @param drawParameters the drawParameters to set
-	 */
-	public void setDrawParameters(Molecule2DParameters drawParameters) {
-		this.drawParameters = drawParameters;
+	public void setMoleculeLayout(MoleculeLayout moleculeLayout) {
+//		this.moleculeLayout = moleculeLayout;
 		for (RingNucleus nucleus : nucleusSet) {
-			nucleus.setMoleculeDraw(moleculeDraw);
+			nucleus.setMoleculeDraw(moleculeLayout);
 		}
 	}
 
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 

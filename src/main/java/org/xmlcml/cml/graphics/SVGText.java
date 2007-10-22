@@ -5,10 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import nu.xom.Attribute;
-import nu.xom.ParentNode;
 
 import org.xmlcml.euclid.Real2;
-import org.xmlcml.euclid.Transform2;
 
 /** draws text.
  * 
@@ -23,13 +21,7 @@ public class SVGText extends SVGElement {
 	 */
 	public SVGText() {
 		super(TAG);
-//		this.setFontFamily("timesRoman");
-//		this.setFontSize(0.1);
 		this.setStroke("none");
-//		this.setStrokeWidth(0.);
-//		this.setFill("blue");
-//		this.setFontStyle("normal");
-//		this.setFontWeight("normal");
 	}
 	
 	protected void drawElement(Graphics2D g2d) {
@@ -62,18 +54,6 @@ public class SVGText extends SVGElement {
 		setText(text);
 	}
 
-	/** this has a special transform for inverting SVG which doesn't occur
-	 * in Swing.
-	 */
-	protected void setCumulativeTransformRecursively(Object value) {
-		if (cumulativeTransform == null && value != null) {
-//			Transform2 thisTransform = this.getTransform2();
-			ParentNode parentNode = this.getParent();
-			Transform2 parentTransform = (parentNode instanceof GraphicsElement) ?
-					((GraphicsElement) parentNode).getCumulativeTransform() : new Transform2();
-			this.cumulativeTransform = parentTransform;
-		}
-	}
 	/**
 	 * @return the x1
 	 */

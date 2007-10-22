@@ -7,20 +7,24 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 
@@ -28,26 +32,61 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
-public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
+public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConstants {
 	
 	/**
 	 */
 	private static final long serialVersionUID = -8163558817500143947L;
+	private static Map<String, String> groupMap;
+	static {
+		groupMap = new HashMap<String, String>();
+		groupMap.put("A", "(C9=CC=CC=C9)");     // aromatic
+		groupMap.put("B", "(CCCC)");            // butyl
+		groupMap.put("C", "(CC(=O)O)");         // carboxy
+		groupMap.put("E", "(CC)");              // ethyl
+		groupMap.put("F", "(C(=O))");           // formyl
+		groupMap.put("M", "(C)");               // methyl
+		groupMap.put("N", "(N)");               // amiNe
+		groupMap.put("P", "(CCC)");             // propyl
+		groupMap.put("V", "(=O)");              // carbonyl
+		groupMap.put("Y", "(C(=O)C)");          // acetyl
+		groupMap.put("Z", "(C(C9=CC=CC=C9))");  // benZyl
+	};
+	
 
-//	private CMLMolecule molecule;
-	MoleculeFrame moleculeFrame;
-	private SVGElement g;
-	private SVGElement svg;
-	private GraphicsManager svgObject;
-
-	private Transform2 svgTransform; 
+	private MoleculeFrame moleculeFrame;
+	private MoleculeText moleculeText;
+	private MoleculeDisplayList displayList;
+	
+	// keep track of movements
+	private Transform2 move = new Transform2(); 
+	private int lastX = 0;
+	private int lastY = 0;
+	private double scale = 1.0;
+	private double angle = 0.0;
+	int x = 0;
+	int y = 0;
+	
 	
 	/**
 	 */	
-	public MoleculePanel() {
+	private MoleculePanel() {
 		this.addMouseMotionListener(new MoleculeMouseMotionListener());
 		this.addMouseListener(new MoleculeMouseListener());
-//		this.addKeyListener(new MoleculeKeyListener());
+	}
+
+	/**
+	 * @param moleculeFrame
+	 */
+	public MoleculePanel(MoleculeFrame moleculeFrame) {
+		this();
+		this.moleculeFrame = moleculeFrame;
+	}
+	
+	void ensureDisplayList() {
+		if (displayList == null) {
+			displayList = new MoleculeDisplayList();
+		}
 	}
 	
 	class MoleculeMouseMotionListener implements MouseMotionListener {
@@ -132,26 +171,205 @@ public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
   // Cast Graphics to Graphics2D
 		Graphics2D g2d = (Graphics2D)ggg;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
 		this.drawMolecule(g2d);
 		this.calculateAndDrawProperties(g2d);
 	}
 	
+
+	private static String[] rings = {
+		"",
+		"",
+		"",
+		"C9CC9",
+		"C9CCC9",
+		"C9CCCC9",
+		"C9CCCCC9",
+		"C9CCCCCC9",
+		"C9CCCCCCC9",
+		"C9CCCCCCCC9",
+	};
+	private static String[] fused = {
+		"",
+		"",
+		"",
+		"-C",
+		"-CC",
+		"-CCC",
+		"-CCCC",
+		"-CCCCC",
+		"-CCCCCC",
+		"-CCCCCCC",
+	};
+	
+	void sendAltKey(int ch, boolean shift) {
+		MoleculeDisplayList displayList = this.getDisplayList();
+		MoleculeDisplay moleculeDisplay = displayList.getMoleculeDisplay();
+		char c = (char) ch;
+		boolean arrow = false;
+		if (ch == KeyEvent.VK_ALT) {
+			// no other key (or shift)
+		} else if (ch == KeyEvent.VK_SHIFT) {
+			// no other key (or alt)
+		} else if (ch < 0) {
+			x = 0;
+			y = 0;
+		} else if (c == '1') {
+			// atom labels
+			AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+			atomDisplay.setDisplayLabels(!atomDisplay.isDisplayLabels());
+			System.out.println("LABEL: "+!atomDisplay.isDisplayLabels());
+			displayList.setAndProcess(moleculeFrame.getMoleculeTool());
+			this.repaint();
+		} else if (c == '2') {
+			// omit hydrogens
+			AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+			atomDisplay.setOmitHydrogens(!atomDisplay.isOmitHydrogens());
+			displayList.setAndProcess(moleculeFrame.getMoleculeTool());
+			this.repaint();
+			// rings
+		} else if (Character.isDigit(ch) || Character.isLetter(ch)) {
+			this.altCharacter(ch, shift);
+		} else if (ch == KeyEvent.VK_LEFT) {
+			x -= 1;
+			arrow = true;
+		} else if (ch == KeyEvent.VK_RIGHT) {
+			x += 1;
+			arrow = true;
+		} else if (ch == KeyEvent.VK_UP) {
+			y -= 1;
+			arrow = true;
+		} else if (ch == KeyEvent.VK_DOWN) {
+			y += 1;
+			arrow = true;
+		} else {
+			System.out.println("CHHHH "+ch+"/"+KeyEvent.VK_ALT);
+			this.altCharacter(ch, shift);
+		}
+		if (arrow) {
+			if (x != 0 || y != 0) {
+				if (!shift) {
+					this.shift(x, y);
+				} else {
+					this.rotScale(x,y);
+				}
+			}
+		}
+	}
+	
+	
+	void altCharacter(int ch, boolean shift) {
+		ensureMoleculeDisplay();
+		ensureMoleculeText();
+		char c = (char) ch;
+		int ringSize = c - '0';
+		String s = "";
+		// ALT only
+		if (!shift) {
+			if (c == '0') {
+				// unused
+			} else if (c > '2' && c <= '9') {
+				s = S_LBRAK+rings[ringSize]+S_RBRAK;
+				// groups
+			} else if (c == '\\') {
+				CMLBond currentBond = moleculeFrame.getMoleculeTool().incrementCurrentBond();
+				currentBond.debug("BB");
+			} else if (Character.isUpperCase(c)) {
+				s = groupMap.get(""+c);
+			} else {
+				System.out.println("ALT "+(int)c);
+			}
+			// substituent rings and groups
+			if (s != null && !"".equals(s)) {
+				moleculeText.insertSubstituent(s);
+			}
+			// ALT+SHIFT
+		} else {
+			if (c > '2' && c <= '9') {
+				s = fused[ringSize];
+			} else if (c == 'A') {
+				s = "=C=CC=C";
+			} else {
+				System.out.println("ALT SHIFT "+(int)c);
+			}
+			// fused rings
+			if (!"".equals(s)) {
+				moleculeText.insertFused(s.substring(0, 1), s.substring(1), 9);
+			}
+		}
+	}
+	
+	void ensureMoleculeDisplay() {
+		ensureDisplayList();
+		MoleculeDisplay moleculeDisplay = displayList.getMoleculeDisplay();
+		if (moleculeDisplay == null) {
+			if (moleculeFrame.getMoleculeTool() == null) {
+				throw new CMLRuntimeException("null molecule Tool");
+			}
+			moleculeDisplay = moleculeFrame.getMoleculeTool().getMoleculeDisplay();
+			displayList.setMoleculeDisplay(moleculeDisplay);
+		}
+	}
+	
+	void ensureMoleculeText() {
+		if (moleculeText == null) {
+			moleculeText = moleculeFrame.getMoleculeText();
+		}
+	}
+	
+	void rotScale(int x, int y) {
+		if (x == lastX) {
+			scale(y);
+		} else if (y == lastY) {
+			rotate(x);
+		}
+		lastX = x;
+		lastY = y;
+	}
+	
+	void rotate(int x) {
+		if (x < lastX) {
+			angle = -0.005;
+		} else if (x > lastX) {
+			angle = 0.005;
+		} else {
+		}
+		double cosa = Math.cos(angle);
+		double sina = Math.sin(angle);
+		Transform2 t2 = new Transform2(new double[] {
+			cosa, sina, 0.0,
+			-sina, cosa, 0.0,
+			0.0, 0.0, 1.0,
+		});
+		move = t2.concatenate(move);
+		this.repaint();
+	}
+
+	void scale(int y) {
+		if (y > lastY) {
+			scale = 0.99;
+		} else if (y < lastY) {
+			scale = 1.01;
+		} else {
+			scale = 1.0;
+		}
+		Transform2 t2 = new Transform2(new double[] {
+			scale, 0.0, 0.0,
+			0.0, scale, 0.0,
+			0.0, 0.0, 1.0,
+		});
+		move = t2.concatenate(move);
+		lastY = y;
+		this.repaint();
+	}
+
 	void shift(int x, int y) {
 		Real2 xy = new Real2((double) x, (double) y);
-		Transform2 move = new Transform2(new double[] {
-				1.0, 0.0, (double) x,
-				0.0, 1.0, (double) y,
-				0.0, 0.0, 1.0,
+		Transform2 t2 = new Transform2(new double[] {
+			1.0, 0.0, xy.getX(),
+			0.0, 1.0, xy.getY(),
+			0.0, 0.0, 1.0,
 		});
-		svgTransform = svg.getTransform2FromAttribute();
-		if (svgTransform == null) {
-			svgTransform = new Transform2();
-		}
-		svgTransform = svgTransform.concatenate(move);
-		svg.setAttributeFromTransform2(svgTransform);
-		svg.setCumulativeTransform(null);
-		svg.setCumulativeTransformRecursively();
+		move = t2.concatenate(move);
 		this.repaint();
 	}
 
@@ -159,33 +377,17 @@ public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
 	 * @param g2d 
 	 */
 	public void drawMolecule(Graphics2D g2d) {
-//		System.out.println("DRAW MOL");
-		if (svgObject != null) {
-			svg = svgObject.svg;
-			svg.clearCumulativeTransformRecursively();
-			svg.setAttributeFromTransform2(svgTransform);
-			svg.setCumulativeTransformRecursively();
-//			CMLUtil.debug(svg);
-			svg.draw(g2d);
+		if (displayList != null) {
+			SVGSVG svg = displayList.getSvg();
+			if (svg != null) {
+				svg.clearCumulativeTransformRecursively();
+				svg.setAttributeFromTransform2(move);
+				svg.setCumulativeTransformRecursively();
+				svg.draw(g2d);
+			}
 		}
-		
-	  // Set pen parameters
-//	  g2d.setPaint(fillColorOrPattern);
-//	  g2d.setStroke(penThicknessOrPattern);
-//	  g2d.setComposite(someAlphaComposite);
-//	  g2d.setFont(anyFont);
-//	  g2d.translate(...);
-//	  g2d.rotate(...);
-//	  g2d.scale(...);
-//	  g2d.shear(...);
-//	  g2d.setTransform(someAffineTransform);
-	  // Allocate a shape 
-//	  SomeShape s = new SomeShape(...);
-	  // Draw shape
-//		Line2D line = new Line2D.Double(40., 150., 280., 390.);
 		Stroke s = new BasicStroke(1.5f);
 		g2d.setStroke(s);
-//	  g2d.fill(s);  // solid
 	}
 	
 	/**
@@ -193,26 +395,27 @@ public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
 	 * @param g2d
 	 */
 	public void calculateAndDrawProperties(Graphics2D g2d) {
-		CMLMolecule molecule = moleculeFrame.getMolecule();
-		if (molecule != null) {
-			CMLFormula formula = molecule.getCalculatedFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		MoleculeTool moleculeTool = moleculeFrame.getMoleculeTool();
+		if (moleculeTool != null) {
+			CMLFormula formula = moleculeTool.getMolecule().getCalculatedFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
 			String f = formula.getConcise();
-			Font oldFont = g2d.getFont();
-			g2d.setFont(new Font("helvetica", Font.BOLD, 12));
-			g2d.drawString(f, 10, 10);
-			double d = formula.getCalculatedMolecularMass();
-			g2d.drawString(("MWt: "+d).substring(0, 10), 300, 10);
-			g2d.setFont(oldFont);
-		} else {
-			System.out.println("Null molecule");
+			if (f != null) {
+				g2d.setColor(Color.BLACK);
+				Font oldFont = g2d.getFont();
+				g2d.setFont(new Font("helvetica", Font.BOLD, 12));
+				g2d.drawString(f, 10, 10);
+				double d = formula.getCalculatedMolecularMass();
+				g2d.drawString(("MWt: "+d).substring(0, 10), 300, 10);
+				g2d.setFont(oldFont);
+			}
 		}
 	}
 	
 	/**
-	 * @param svgObject
+	 * @param displayList
 	 */
-	public void setSVGObject(GraphicsManager svgObject) {
-		this.svgObject = svgObject;
+	public void setDisplayList(MoleculeDisplayList displayList) {
+		this.displayList = displayList;
 	}
 	
 	/**
@@ -223,14 +426,14 @@ public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
 	}
 
 	/**
-	 * @param moleculeTool
-	 * @param moleculeDisplay
 	 * @throws IOException
 	 */
-	public void createOrDisplayGraphics(
-		MoleculeTool moleculeTool, MoleculeDisplay moleculeDisplay) 
-	    throws IOException {
-	    g = moleculeTool.createSVG(moleculeDisplay, this);
+	public void createOrDisplayGraphics()throws IOException {
+		if (moleculeFrame.getMoleculeTool() == null) {
+			throw new CMLRuntimeException("null molecule Tool");
+		}
+		// FIXME
+//	    /*g = */moleculeFrame.getMoleculeTool().createSVG(this);
 	}
 
 	/** dummy
@@ -253,6 +456,13 @@ public class MoleculePanel extends JPanel implements CMLDrawable, CMLConstants {
 	 */
 	public void setMoleculeFrame(MoleculeFrame moleculeFrame) {
 		this.moleculeFrame = moleculeFrame;
+	}
+
+	/**
+	 * @return the displayList
+	 */
+	public MoleculeDisplayList getDisplayList() {
+		return displayList;
 	}
 
 }

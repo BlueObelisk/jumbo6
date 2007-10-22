@@ -4,11 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 
 /**
  * frame contains panel and text
@@ -23,71 +26,52 @@ public class MoleculeFrame extends JPanel {
 	private static final long serialVersionUID = -5780889635256810687L;
 	private MoleculeText moleculeText;
 	private MoleculePanel moleculePanel;
-	private CMLMolecule molecule;
-	private Molecule2DCoordinates moleculeDraw;
-	private GraphicsManager svgObject;
-	
+	private MoleculeTool moleculeTool;
+
 	/**
-	 * @param moleculeDraw
-	 * @param svgObject
 	 */
-	public MoleculeFrame(Molecule2DCoordinates moleculeDraw, GraphicsManager svgObject) {
+	public MoleculeFrame() {
 		this.setLayout(new BorderLayout());
-		this.moleculePanel = new MoleculePanel();
-		moleculePanel.setMoleculeFrame(this);
+		this.moleculePanel = new MoleculePanel(this);
 		this.add(moleculePanel, BorderLayout.CENTER);
-		this.moleculeText = new MoleculeText(moleculeDraw, svgObject);
+		this.moleculeText = new MoleculeText();
 		moleculeText.setMoleculeFrame(this);
 		moleculePanel.setMoleculeFrame(this);
-// debug		
 		this.add(moleculeText, BorderLayout.SOUTH);
-		this.moleculeDraw = moleculeDraw;
-		this.setSVGObject(svgObject);
 		this.addKeyListener(new MoleculeKeyListenerX());
 	}
 	
+	/**
+	 */
+	public void repaint() {
+		if (moleculePanel != null) {
+			moleculePanel.repaint();
+		}
+		super.repaint();
+	}
+	
+	// I think these work
 	private class MoleculeKeyListenerX implements KeyListener {
 
 		/**
 		 * @param arg0
 		 */
 		public void keyPressed(KeyEvent arg0) {
-			System.out.println("KeyPress...x "+arg0);
+//			System.out.println("KeyPress...x "+arg0);
 		}
 		
 		/**
 		 * @param arg0
 		 */
 		public void keyReleased(KeyEvent arg0) {
-			System.out.println("KeyReleased...x "+arg0);
+//			System.out.println("KeyReleased...x "+arg0);
 		}
 		
 		/**
 		 * @param arg0
 		 */
 		public void keyTyped(KeyEvent arg0) {
-			System.out.println("KeyTyped..x "+arg0);
-		}
-	}
-	
-	int x = 0;
-	int y = 0;
-	void sendAltKey(int ch, boolean shift) {
-		if (ch < 0) {
-			x = 0;
-			y = 0;
-		} else if (ch == KeyEvent.VK_LEFT) {
-			x -= 1;
-		} else if (ch == KeyEvent.VK_RIGHT) {
-			x += 1;
-		} else if (ch == KeyEvent.VK_UP) {
-			y -= 1;
-		} else if (ch == KeyEvent.VK_DOWN) {
-			y += 1;
-		}
-		if (x != 0 || y != 0) {
-			moleculePanel.shift(x, y);
-			System.out.println((""+x+"/"+y));
+//			System.out.println("KeyTyped..x "+arg0);
 		}
 	}
 	
@@ -101,12 +85,14 @@ public class MoleculeFrame extends JPanel {
 		jFrame.setVisible(true);
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
 	/**
 	 * @return the moleculePanel
 	 */
 	public MoleculePanel getMoleculePanel() {
 		return moleculePanel;
 	}
+	
 
 	/**
 	 * @param moleculePanel the moleculePanel to set
@@ -130,39 +116,33 @@ public class MoleculeFrame extends JPanel {
 	}
 
 	/**
-	 * @param args
+	 * @return the moleculeTool
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public MoleculeTool getMoleculeTool() {
+		return moleculeTool;
 	}
 
 	/**
-	 * @return the svgObject
+	 * @param moleculeTool the moleculeTool to set
 	 */
-	public GraphicsManager getSVGObject() {
-		return svgObject;
+	public void setMoleculeTool(MoleculeTool moleculeTool) {
+		if (moleculeTool != null) {
+			this.moleculeTool = moleculeTool;
+			MoleculeDisplay moleculeDisplay = moleculeTool.getMoleculeDisplay();
+			moleculePanel.ensureDisplayList();
+			moleculePanel.getDisplayList().setAndProcess(moleculeTool);
+			// bump check
+			List<AtomPair> bumpList = moleculeTool.getBumps(CoordinateType.TWOD, 
+					moleculeDisplay.getBondLength() * 0.1);
+			for (AtomPair atomPair : bumpList) {
+				System.out.println("bump "+atomPair.getAtom1().getId()+" - "+atomPair.getAtom2().getId()+": .. "+atomPair.getDistance2());
+			}
+	
+			try {
+				moleculePanel.getDisplayList().createOrDisplayGraphics();
+			} catch (IOException ioe) {
+				throw new CMLRuntimeException("bug "+ioe, ioe);
+			}
+		}
 	}
-
-	/**
-	 * @param svgObject the svgObject to set
-	 */
-	public void setSVGObject(GraphicsManager svgObject) {
-		this.svgObject = svgObject;
-	}
-
-	/**
-	 * @return the molecule
-	 */
-	public CMLMolecule getMolecule() {
-		return molecule;
-	}
-
-	/**
-	 * @param molecule the molecule to set
-	 */
-	public void setMolecule(CMLMolecule molecule) {
-		this.molecule = molecule;
-	}
-
 }

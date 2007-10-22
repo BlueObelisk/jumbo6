@@ -18,7 +18,6 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Real2;
-import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector2;
 
@@ -35,7 +34,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	private List<Ring> ringList = null;
 	private List<Junction> junctionList = null;
 	private Map<CMLAtom, BridgeAtom> bridgeAtomMap = null;
-	private Molecule2DCoordinates moleculeDraw;
+	private MoleculeLayout moleculeDraw;
 	private List<RingNucleus> connectedNucleusList;
 	private List<Sprout> sproutList;
 	private List<Sprout> remoteSproutList;
@@ -388,7 +387,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	}
 	
 	private void calculate2DCoordinates(
-		Junction junction, Ring ringToBeAdded, Ring existingRing, Molecule2DCoordinates moleculeDraw) 
+		Junction junction, Ring ringToBeAdded, Ring existingRing, MoleculeLayout moleculeDraw) 
 		throws CMLRuntimeException {
 		ringToBeAdded.calculate2DCoordinates(moleculeDraw);
 		List<CMLAtom> junctionCommonAtomList = junction.getCommonAtomList();
@@ -583,40 +582,40 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 //		}
 //	}
 	
-	/**
-	 * @param startAtom
-	 * @param endAtom
-	 * @param pointn
-	 * @param polyPoints
-	 * @return vector
-	 * @throws CMLRuntimeException
-	 */
-	private Vector2 alignPolygon(CMLAtom startAtom, CMLAtom endAtom, int pointn, Real2Vector polyPoints, Vector2 junctionVector) throws CMLRuntimeException {
-		double dist0n;
-		Vector2 polygonVector = new Vector2(polyPoints.get(0).subtract(polyPoints.get(pointn)));
-		Angle rot = polygonVector.getAngleMadeWith(junctionVector);
-		System.out.println("ROT"+rot);
-		Transform2 rotPoly = new Transform2(rot);
-		polyPoints.transformBy(rotPoly);
-		polygonVector = new Vector2(polyPoints.get(0).subtract(polyPoints.get(pointn)));
-		rot = junctionVector.getAngleMadeWith(polygonVector);
-		if (Math.abs(rot.getRadian()) > 0.000001) {
-			throw new CMLRuntimeException("BAD ALIGN");
-		}
-		System.out.println("ROT"+rot);
-		System.out.println("EXIST"+startAtom.getXY2()+"/"+endAtom.getXY2());
-		dist0n = startAtom.getXY2().getDistance(endAtom.getXY2());
-		System.out.println(dist0n);
-		System.out.println("POLY"+polyPoints.get(0)+"/"+polyPoints.get(pointn));
-		double dpoly = polyPoints.get(0).getDistance(polyPoints.get(pointn));
-		System.out.println(dpoly);
-//		Real2 shift = points.get(0).subtract(leadAtom.getXY2());
-		Real2 shift = startAtom.getXY2().subtract(polyPoints.get(0));
-		System.out.println(shift);
-		polyPoints.translateBy(shift);
-		System.out.println(polyPoints.get(0)+"/"+polyPoints.get(pointn));
-		return polygonVector;
-	}
+//	/**
+//	 * @param startAtom
+//	 * @param endAtom
+//	 * @param pointn
+//	 * @param polyPoints
+//	 * @return vector
+//	 * @throws CMLRuntimeException
+//	 */
+//	private Vector2 alignPolygon(CMLAtom startAtom, CMLAtom endAtom, int pointn, Real2Vector polyPoints, Vector2 junctionVector) throws CMLRuntimeException {
+//		double dist0n;
+//		Vector2 polygonVector = new Vector2(polyPoints.get(0).subtract(polyPoints.get(pointn)));
+//		Angle rot = polygonVector.getAngleMadeWith(junctionVector);
+//		System.out.println("ROT"+rot);
+//		Transform2 rotPoly = new Transform2(rot);
+//		polyPoints.transformBy(rotPoly);
+//		polygonVector = new Vector2(polyPoints.get(0).subtract(polyPoints.get(pointn)));
+//		rot = junctionVector.getAngleMadeWith(polygonVector);
+//		if (Math.abs(rot.getRadian()) > 0.000001) {
+//			throw new CMLRuntimeException("BAD ALIGN");
+//		}
+//		System.out.println("ROT"+rot);
+//		System.out.println("EXIST"+startAtom.getXY2()+"/"+endAtom.getXY2());
+//		dist0n = startAtom.getXY2().getDistance(endAtom.getXY2());
+//		System.out.println(dist0n);
+//		System.out.println("POLY"+polyPoints.get(0)+"/"+polyPoints.get(pointn));
+//		double dpoly = polyPoints.get(0).getDistance(polyPoints.get(pointn));
+//		System.out.println(dpoly);
+////		Real2 shift = points.get(0).subtract(leadAtom.getXY2());
+//		Real2 shift = startAtom.getXY2().subtract(polyPoints.get(0));
+//		System.out.println(shift);
+//		polyPoints.translateBy(shift);
+//		System.out.println(polyPoints.get(0)+"/"+polyPoints.get(pointn));
+//		return polygonVector;
+//	}
 
 	/**
 	 * @param omitHydrogens
@@ -720,13 +719,13 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	/**
 	 * @return the moleculeDraw
 	 */
-	public Molecule2DCoordinates getMoleculeDraw() {
+	public MoleculeLayout getMoleculeDraw() {
 		return moleculeDraw;
 	}
 	/**
 	 * @param moleculeDraw the moleculeDraw to set
 	 */
-	public void setMoleculeDraw(Molecule2DCoordinates moleculeDraw) {
+	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
 	}
 	/**

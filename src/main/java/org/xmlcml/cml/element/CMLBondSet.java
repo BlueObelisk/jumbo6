@@ -120,6 +120,17 @@ public class CMLBondSet extends AbstractBondSet {
         this();
         addBonds(bonds);
     }
+    
+    /** adds bonds.
+     * fragile. May or may not be a good idea.
+     * @param bonds
+     * @return new bondSet
+     */
+    public static CMLBondSet createFromBonds(List<CMLBond> bonds) {
+        CMLBondSet bondSet = new CMLBondSet();
+        bondSet.addBonds(bonds);
+        return bondSet;
+    }
 
     /**
      * creates bondSet from list of bonds.

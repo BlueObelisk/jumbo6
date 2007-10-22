@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -10,30 +11,31 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 
 /** 
- * a textfiled for direct entry of molecule structure
+ * a textfield for direct entry of molecule structure
  * @author pm286
  *
  */
 public class MoleculeText extends JPanel implements CMLConstants {
 
 	/**
-	 * 
 	 */
 	private static final long serialVersionUID = 6703519834315672155L;
-	private Molecule2DCoordinates molecule2DCoordinates;
 	private JTextField jTextField;
-	private GraphicsManager svgObject;
 	private MoleculeFrame moleculeFrame;
-	private String smiles;
-	private SMILESTool smilesTool;
-	private CMLMolecule molecule;
-	private MoleculeTool moleculeTool;
+	private MoleculeTool smilesMoleculeTool;	// persisent for building only
+	private SMILESTool smilesTool;				// persistent for editing
+	private int caretPosition;
 	
 	/**
 	 * @return the moleculeFrame
@@ -47,20 +49,12 @@ public class MoleculeText extends JPanel implements CMLConstants {
 	 */
 	public void setMoleculeFrame(MoleculeFrame moleculeFrame) {
 		this.moleculeFrame = moleculeFrame;
-	}
-
-	/**
-	 * @param molecule2DCoordinates
-	 * @param svgObject
-	 */
-	public MoleculeText(Molecule2DCoordinates molecule2DCoordinates, GraphicsManager svgObject) {
-		this.setMoleculeDraw(molecule2DCoordinates);
-		this.setSVGObject(svgObject);
 		init();
 	}
-	
+
 	void init() {
 		jTextField = new JTextField();
+		jTextField.setHighlighter(new AtomBondHighlighter());
 		this.setLayout(new BorderLayout());
 		this.add(jTextField, BorderLayout.CENTER);
 		jTextField.getDocument().addDocumentListener(new InputParser());
@@ -81,8 +75,9 @@ public class MoleculeText extends JPanel implements CMLConstants {
 				alt = true;
 			} else if (ch == KeyEvent.VK_SHIFT) {
 				shift = true;
-			} else if (alt) {
-				moleculeFrame.sendAltKey(ch, shift);
+			} 
+			if (alt) {
+				moleculeFrame.getMoleculePanel().sendAltKey(ch, shift);
 			}
 		}
 		
@@ -97,35 +92,59 @@ public class MoleculeText extends JPanel implements CMLConstants {
 				shift = false;
 			}
 			if (alt) {
-				moleculeFrame.sendAltKey(-1, shift);
+				moleculeFrame.getMoleculePanel().sendAltKey(-1, shift);
 			}
+//			System.out.println("REL "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
 		}
 		
 		/**
 		 * @param arg0
 		 */
 		public void keyTyped(KeyEvent arg0) {
-			System.out.println("KeyTyped..x "+arg0);
-			if (arg0.getKeyChar() == 16) {
-				System.out.println("DOWN-ARROW");
-			}
+//			int ch = arg0.getKeyCode();
+//			System.out.println("TY "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
 		}
 	}
 
 	void processCurrentString() {
-		smiles = jTextField.getText();
+		String smiles = jTextField.getText();
 		smilesTool = new SMILESTool();
 		try {
 			smilesTool.parseSMILES(smiles);
-			molecule = smilesTool.getMolecule();
-			moleculeFrame.setMolecule(molecule);
-			moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
-			new Molecule2DCoordinates(molecule).create2DCoordinates();
-			svgObject.setMolecule(molecule);
-			moleculeFrame.getMoleculePanel().repaint();
+			CMLMolecule molecule = smilesTool.getMolecule();
+			smilesMoleculeTool = new MoleculeTool(molecule);
+			new MoleculeLayout(smilesMoleculeTool).create2DCoordinates();
+			moleculeFrame.setMoleculeTool(smilesMoleculeTool);
+			moleculeFrame.repaint();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("bad smiles or layout: "+smiles);
+		}
+	}
+	
+	void insertSubstituent(String s) {
+		String text = jTextField.getText();
+		text = SMILESTool.normalizeRings(text);
+		text = text.substring(0, caretPosition)+s+text.substring(caretPosition);
+		text = SMILESTool.normalizeRings(text);
+		jTextField.setText(text);
+	}
+
+	void insertFused(String bond, String ringAtoms, int ring) {
+		if (caretPosition >= 1) {
+			String text = jTextField.getText();
+			text = SMILESTool.normalizeRings(text);
+			text = text.substring(0, caretPosition-1)+
+			    S_LBRAK+
+			    ringAtoms+
+				ring+
+			    S_RBRAK+
+			    bond+
+			    text.substring(caretPosition, caretPosition+1)+
+			    ring+
+			    text.substring(caretPosition+1);
+			text = SMILESTool.normalizeRings(text);
+			jTextField.setText(text);
 		}
 	}
 
@@ -135,34 +154,35 @@ public class MoleculeText extends JPanel implements CMLConstants {
 		 * @param e
 		 */
 		public void caretUpdate(CaretEvent e) {
-			int pos = jTextField.getCaretPosition();
+			caretPosition = jTextField.getCaretPosition();
 			if (smilesTool != null) {
-				String atomId = smilesTool.getAtomIdAtChar(pos);
-				CMLAtom atom = molecule.getAtomById(atomId);
-				if (atom != null) {
-//					System.out.println("UPDATE CARET "+pos+" "+atomId);
-					SelectionTool selectionTool = moleculeTool.getOrCreateSelectionTool();
-					selectionTool.clearAllSelections();
-					selectionTool.setSelected(atom, true);
-//					System.out.println("SEL "+selectionTool);
-					moleculeFrame.repaint();
+				String atomId = smilesTool.getAtomIdAtChar(caretPosition);
+				if (atomId != null) {
+					CMLAtom currentAtom = smilesMoleculeTool.getMolecule().getAtomById(atomId);
+					smilesMoleculeTool.setCurrentAtom(currentAtom);
+					CMLBond currentBond = smilesMoleculeTool.resetCurrentBond();
+					if (currentAtom != null) {
+						SelectionTool selectionTool = smilesMoleculeTool.getOrCreateSelectionTool();
+						selectionTool.clearAllSelections();
+						selectionTool.setSelected(currentAtom, true);
+						if (currentBond != null) {
+							selectionTool.setSelected(currentBond, true);
+							System.out.println("SELBOND "+currentBond.getId());
+						}
+						moleculeFrame.repaint();
+					}
+					String atomChunk = smilesTool.getAtomChunkAtChar(caretPosition);
+					AtomBondHighlighter atomHighlighter = (AtomBondHighlighter) jTextField.getHighlighter();
+					try {
+						atomHighlighter.removeAllHighlights();
+						atomHighlighter.addHighlight(caretPosition, 
+							caretPosition+atomChunk.length(), new AtomHighlightPainter());
+					} catch (Exception ee) {
+						throw new CMLRuntimeException("HIGHLIGHT "+ee);
+					}
 				}
 			}
 		}
-	}
-	
-	/**
-	 * @return the molecule2DCoordinates
-	 */
-	public Molecule2DCoordinates getMolecule2DCoordinates() {
-		return molecule2DCoordinates;
-	}
-
-	/**
-	 * @param molecule2DCoordinates the molecule2DCoordinates to set
-	 */
-	public void setMoleculeDraw(Molecule2DCoordinates molecule2DCoordinates) {
-		this.molecule2DCoordinates = molecule2DCoordinates;
 	}
 	
 	class InputParser implements DocumentListener {
@@ -171,9 +191,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 		 * @param arg0
 		 */
 		public void changedUpdate(DocumentEvent arg0) {
-			// TODO Auto-generated method stub
-			System.out.println("changedUpdate");
-			// seems 
+			processCurrentString();
 		}
 
 		/**
@@ -192,25 +210,72 @@ public class MoleculeText extends JPanel implements CMLConstants {
 	}
 
 	/**
-	 * @return caretPosition
+	 * @return the jTextField
 	 */
-	public int getCaretPosition() {
-		return jTextField.getCaretPosition();
+	public JTextField getJTextField() {
+		return jTextField;
 	}
 
+}
+
+class AtomBondHighlighter extends DefaultHighlighter {
 	/**
-	 * @return the svgObject
 	 */
-	public GraphicsManager getSVGObject() {
-		return svgObject;
+	public AtomBondHighlighter() {
+		super();
 	}
-
 	/**
-	 * @param svgObject the svgObject to set
+	 * @param arg0 start
+	 * @param arg1 end
+	 * @param arg2 painter (e.g. for colour)
+	 * @return object = javax.swing.text.DefaultHighlighter$LayeredHighlightInfo ???
+	 * @throws BadLocationException
 	 */
-	public void setSVGObject(GraphicsManager svgObject) {
-		this.svgObject = svgObject;
+	public Object addHighlight(int arg0, int arg1, HighlightPainter arg2) throws BadLocationException {
+		return super.addHighlight(arg0, arg1, arg2);
 	}
+//	public void changeHighlight(Object arg0, int arg1, int arg2) throws BadLocationException {
+//	}
+//	public void deinstall(JTextComponent arg0) {
+//	}
+//	public Highlight[] getHighlights() {
+//		return null;
+//	}
+//	public void install(JTextComponent arg0) {
+//	}
+//	public void paint(Graphics arg0) {
+//	}
+//	public void removeAllHighlights() {
+//	}
+//	public void removeHighlight(Object arg0) {
+//	}
+//}
+}
+class AtomHighlightPainter extends DefaultHighlightPainter {
+	/**
+	 */
+	public AtomHighlightPainter() {
+		this(Color.PINK);
+	}
+	/**
+	 * @param color
+	 */
+	public AtomHighlightPainter(Color color) {
+		super(color);
+	}
+}
 
+class BondHighlightPainter extends DefaultHighlightPainter {
+	/**
+	 */
+	public BondHighlightPainter() {
+		this(Color.CYAN);
+	}
+	/**
+	 * @param color
+	 */
+	public BondHighlightPainter(Color color) {
+		super(color);
+	}
 }
 

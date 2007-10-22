@@ -348,6 +348,9 @@ public class FragmentConverter extends AbstractTool {
 		String outdir = null;
 		File output=null;
 		
+		/**
+		 * @param args
+		 */
 		public CommandlineFragmentConverter(String[] args){
 			if (args.length==0 || args.length%2==1){
 				usage();

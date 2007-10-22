@@ -943,7 +943,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         atomList.add(xmlMolecule.getAtom(0));
         atomList.add(xmlMolecule.getAtom(1));
-        CMLAtomSet atomSet = new CMLAtomSet(atomList);
+        CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(atomList);
         Assert.assertEquals("atom set constructor",
                 new String[] { "a1", "a2" }, atomSet.getXMLContent());
     }

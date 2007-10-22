@@ -44,7 +44,8 @@ public class AtomDisplay extends AbstractDisplay {
 	private double yChargeOffsetFactor = -0.7;
 	private double backgroundChargeRadiusFactor = 0.4;
 	
-	private boolean displayLabels = true;
+	private boolean displayCarbons = false;
+	private boolean displayLabels = false;
 	private double idFontFactor = 0.5;
 	private double xIdOffsetFactor = -0.1;
 	private double yIdOffsetFactor = -0.0;
@@ -267,6 +268,20 @@ public class AtomDisplay extends AbstractDisplay {
 	 */
 	public void setYIdOffsetFactor(double idOffsetFactor) {
 		yIdOffsetFactor = idOffsetFactor;
+	}
+
+	/**
+	 * @return the displayCarbons
+	 */
+	public boolean isDisplayCarbons() {
+		return displayCarbons;
+	}
+
+	/**
+	 * @param displayCarbons the displayCarbons to set
+	 */
+	public void setDisplayCarbons(boolean displayCarbons) {
+		this.displayCarbons = displayCarbons;
 	}
 	
 }

@@ -281,7 +281,7 @@ public class AtomMatcherTest extends AbstractToolTest {
     @SuppressWarnings("all")
     @Test
     public void testGetAtomTreeLabelling() {
-        CMLAtomSet atomSet = new CMLAtomSet(dmf.getAtoms());
+        CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(dmf.getAtoms());
         Map<String, Object> map = new AtomMatcher().getAtomTreeLabelling(atomSet);
         Assert.assertNotNull("atom tree map not null", map);
         Assert.assertEquals("atom tree map size", 4, map.size());
