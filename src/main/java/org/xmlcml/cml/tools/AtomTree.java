@@ -71,7 +71,7 @@ public class AtomTree extends AbstractTool implements Comparable {
 
     CMLMolecule molecule;
 
-    MoleculeTool moleculeTool;
+    AbstractTool moleculeTool;
 
     /**
      * create from given atom and parent.

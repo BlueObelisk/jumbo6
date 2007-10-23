@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
@@ -41,6 +42,7 @@ import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.Molutils;
 
+
 /**
  * tests moleculeTool.
  *
@@ -49,21 +51,21 @@ import org.xmlcml.molutil.Molutils;
  */
 public class MoleculeToolTest extends MoleculeAtomBondTest {
 
-    protected MoleculeTool moleculeTool1;
-    protected MoleculeTool moleculeTool2;
-    protected MoleculeTool moleculeTool3;
-    protected MoleculeTool moleculeTool4;
+    protected AbstractTool moleculeTool1;
+    protected AbstractTool moleculeTool2;
+    protected AbstractTool moleculeTool3;
+    protected AbstractTool moleculeTool4;
     protected MoleculeTool moleculeTool5;
     protected MoleculeTool moleculeTool5a;
-    protected MoleculeTool moleculeTool6;
-    protected MoleculeTool moleculeTool7;
-    protected MoleculeTool moleculeTool8;
-    protected MoleculeTool moleculeTool9;
+    protected AbstractTool moleculeTool6;
+    protected AbstractTool moleculeTool7;
+    protected AbstractTool moleculeTool8;
+    protected AbstractTool moleculeTool9;
     protected MoleculeTool moleculeTool10;
-    protected MoleculeTool moleculeToolXom0;
+    protected AbstractTool moleculeToolXom0;
     protected MoleculeTool moleculeToolXml0;
-    protected MoleculeTool moleculeToolBond0;
-    protected MoleculeTool moleculeToolXmlBonds;
+    protected AbstractTool moleculeToolBond0;
+    protected AbstractTool moleculeToolXmlBonds;
 
     String benzeneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='benzene'>"
             + "  <atomArray>"
@@ -2297,9 +2299,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     		String infile = args[1];
     		String outfile = args[2];
 	    	InputStream is = Util.getInputStreamFromResource(infile);
-	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
 	    	MoleculeDisplayList graphicsManager = new MoleculeDisplayList(outfile);
-	    	graphicsManager.setAndProcess(new MoleculeTool(molecule));
+	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
+	    	
+			graphicsManager.setAndProcess(new MoleculeTool(molecule));
 	    	graphicsManager.createOrDisplayGraphics();
     	}
     }
@@ -2317,6 +2320,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      */
     public static void main(String[] args) throws Exception {
     	if (args.length == 0) {
+    		System.out.println("Args is 0");
     		usage();
     	} else {
     		if (args[0].equalsIgnoreCase("-SVG")) {

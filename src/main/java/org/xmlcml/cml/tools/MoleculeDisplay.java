@@ -12,7 +12,7 @@ import org.xmlcml.euclid.RealInterval;
  */
 public class MoleculeDisplay extends AbstractDisplay {
 
-	final private static MoleculeDisplay DEFAULT = new MoleculeDisplay();
+	final static MoleculeDisplay DEFAULT = new MoleculeDisplay();
 	static {
 		DEFAULT.fontStyle = FONT_STYLE_NORMAL;
 		DEFAULT.fontWeight = FONT_WEIGHT_NORMAL;
@@ -36,6 +36,18 @@ public class MoleculeDisplay extends AbstractDisplay {
 	
 	private double bondLength = 2.0;
 	private boolean omitHydrogens = true;
+	
+	public MoleculeDisplay() {
+		super();
+	}
+
+
+	public MoleculeDisplay(MoleculeDisplay a) {
+		super(a.fontSize, a.color, a.fill, a.stroke, a.opacity, a.fontStyle, a.fontWeight,
+				a.fontFamily, a.omitHydrogens);
+		this.atomDisplay = new AtomDisplay(a.atomDisplay);
+		this.bondDisplay = new BondDisplay(a.bondDisplay);
+	}
 	
 	/**
 	 * @return the bondLength

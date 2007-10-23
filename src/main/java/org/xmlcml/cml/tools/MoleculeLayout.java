@@ -150,7 +150,7 @@ public class MoleculeLayout extends AbstractTool {
 	/**
 	 * @return the molecule
 	 */
-	public MoleculeTool getMoleculeTool() {
+	public AbstractTool getMoleculeTool() {
 		return moleculeTool;
 	}
 

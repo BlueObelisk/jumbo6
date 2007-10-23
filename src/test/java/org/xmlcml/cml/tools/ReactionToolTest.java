@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -21,10 +23,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionAllTestBase;
+import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -82,6 +89,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
 
     CMLReaction unbalancedR = null;
 
+	private CMLReaction reaction1;
+
     /**
      * setup.
      *
@@ -94,6 +103,9 @@ public class ReactionToolTest extends ReactionAllTestBase {
 
         balancedR = (CMLReaction) parseValidString(balancedS);
         unbalancedR = (CMLReaction) parseValidString(unbalancedS);
+        
+        InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction1.xml");
+        reaction1 = (CMLReaction) new CMLBuilder().build(is).getRootElement();
 
     }
 
@@ -354,6 +366,80 @@ public class ReactionToolTest extends ReactionAllTestBase {
         createFromOscar(dirS, null, 10);
     }
     
+	@Test
+    @Ignore
+	public void testCreateGraphicsElement() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testReactionTool() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testCalculateDifferenceFormula() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testCreateAggregateProductFormula() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testCreateAggregateReactantFormula() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testAnalyzeReaction() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testGetFormula() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+    @Ignore
+	public void testGetAggregateFormula() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetMolecules() {
+		List<CMLMolecule> molecules = reaction1.getMolecules(Component.REACTANT);
+		Assert.assertEquals("descendant reactant molecules", 2, molecules.size());
+	}
+
+	@Test
+	public void testGetAtoms() {
+		List<CMLAtom> atoms = reaction1.getAtoms(Component.REACTANT);
+		Assert.assertEquals("descendant reactant atoms", 12, atoms.size());
+	}
+
+	@Test
+	public void testGetBonds() {
+		List<CMLBond> bonds = reaction1.getBonds(Component.REACTANT);
+		Assert.assertEquals("descendant reactant bonds", 10, bonds.size());
+	}
+
+	@Test
+    @Ignore
+	public void testTranslateSpectatorProductsToReactants() {
+		fail("Not yet implemented");
+	}
+
+    
+// ===================================================    
     private void createFromOscar(String dirS, String xmlName, int max) {
         File dir = new File(dirS);
         String[] files = dir.list();
@@ -429,4 +515,41 @@ public class ReactionToolTest extends ReactionAllTestBase {
         }
         return fname;
     }
+    public static void testSVG(String[] args) throws Exception {
+    	if (args.length < 3 ) {
+    		System.out.println("SVG infile outfile");
+    	} else {
+    		String infile = args[1];
+    		String outfile = args[2];
+	    	InputStream is = Util.getInputStreamFromResource(infile);
+	    	MoleculeDisplayList graphicsManager = new MoleculeDisplayList(outfile);
+	    	CMLReaction reaction = (CMLReaction) new CMLBuilder().build(is).getRootElement();
+	    	
+			graphicsManager.setAndProcess(new ReactionTool(reaction));
+	    	graphicsManager.createOrDisplayGraphics();
+    	}
+    } 
+    
+    static void usage() {
+    	System.out.println("java org.xmlcml.cml.tools.ReactionToolTest <options>");
+    	System.out.println("... options ...");
+    	System.out.println("-SVG inputfile outputfile <options>");
+    }
+    
+    /** main
+     * 
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+    	if (args.length == 0) {
+    		System.out.println("Args is 0");
+    		usage();
+    	} else {
+    		if (args[0].equalsIgnoreCase("-SVG")) {
+    			testSVG(args);
+    		}
+    	}
+    }
+    
  }

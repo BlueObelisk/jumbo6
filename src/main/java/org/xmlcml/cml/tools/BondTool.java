@@ -97,7 +97,7 @@ public class BondTool extends AbstractTool {
      * @param drawable
      * @return null if problem or atom has no coords
      */
-    public GraphicsElement createGraphicsElement(CMLDrawable drawable) {
+    public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	g = null;
     	List<CMLAtom> atoms = bond.getAtoms();    	
     	Real2 xy0 = atoms.get(0).getXY2();
@@ -112,7 +112,7 @@ public class BondTool extends AbstractTool {
 			String order = bond.getOrder();
 	    	 // highlight
 	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
-	    	 System.out.println("SELBONDS: "+selectionTool.getSelectedBonds().get(0).getId());
+//	    	 System.out.println("SELBONDS: "+selectionTool.getSelectedBonds().get(0).getId());
 	    	 if (selectionTool != null) {
 	    		 System.out.println("SEL BOND? : "+bond.getId());
 	    		 if (selectionTool.isSelected(bond)) {
@@ -183,7 +183,7 @@ public class BondTool extends AbstractTool {
 	/**
 	 * @return the moleculeTool
 	 */
-	public MoleculeTool getMoleculeTool() {
+	public AbstractTool getMoleculeTool() {
 		return moleculeTool;
 	}
 

@@ -595,7 +595,8 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
     	} else if(typeS.equals(CMLReaction.Component.ANY)) {
     		nodes = this.query(".//cml:molecule", X_CML);
     	} else {
-    		nodes = this.query(".//"+typeS+"/cml:molecule", X_CML);
+    		String qs = ".//"+typeS+"/cml:molecule";
+    		nodes = this.query(qs, X_CML);
     	}
     	if (nodes != null) {
 			for (int i = 0; i < nodes.size(); i++) {
