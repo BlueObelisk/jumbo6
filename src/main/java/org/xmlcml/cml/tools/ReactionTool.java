@@ -29,8 +29,15 @@ import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLSpectatorList;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLFormula.Sort;
+import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.ReactionComponent.Type;
+import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.GraphicsElement;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Interval;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
 
 /**
  * too to support reactions. not fully developed
@@ -42,7 +49,8 @@ public class ReactionTool extends AbstractTool {
 
     Logger logger = Logger.getLogger(ReactionTool.class.getName());
 
-    CMLReaction reaction = null;
+    private CMLReaction reaction = null;
+	private ReactionDisplay reactionDisplay;
 
 	private CMLFormula aggregateReactantFormula;
 	private CMLFormula aggregateProductFormula;
@@ -55,6 +63,7 @@ public class ReactionTool extends AbstractTool {
      */
     public ReactionTool(CMLReaction reaction) {
         this.reaction = reaction;
+		this.reaction.setTool(this);
     }
 
     /**
@@ -551,4 +560,80 @@ public class ReactionTool extends AbstractTool {
             e.printStackTrace();
         }
     }
+
+	public CMLReaction getReaction() {
+		return reaction;
+	}
+	
+    /** returns a "g" element
+     * will require to be added to an svg element
+     * @param drawable
+	 * @throws IOException
+     * @return null if problem
+     */
+    public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
+    	MoleculeDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
+    		reactionDisplay.getMoleculeDisplay();
+    	enableReactionDisplay();
+    	double scale = 1.0;
+    	double[] offsets = new double[] {100., 200.};
+    
+    	reaction.debug("REACT");
+    	List<CMLMolecule> molecules = reaction.getMolecules(Component.REACTANT);
+    	if (molecules.size() == 0) {
+    		System.out.println("No molecules to display");
+    	} else {
+    		try {
+		    	Real2Range boundingBox = getBoundingBox(molecules);
+		    	Real2Interval screenBoundingBox = reactionDisplay.getMoleculeDisplay().getScreenExtent();
+		    	Real2Interval moleculeInterval = new Real2Interval(boundingBox);
+		    	scale = moleculeInterval.scaleTo(screenBoundingBox);
+		    	offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
+    		} catch (NullPointerException npe) {
+    			// happens with small number of atoms
+    		}
+    	}
+    	
+    	SVGElement g = createSVGElement(drawable, scale, offsets);
+    	g.setProperties(reactionDisplay);
+    	MoleculeDisplay moleculeDisplay = reactionDisplay.getMoleculeDisplay();
+    	displayMolecules(drawable, g, moleculeDisplay, molecules);
+    	drawable.output(g);
+    	return g;
+    }
+    
+	Real2Range getBoundingBox(List<CMLMolecule> molecules) {
+		Real2Range range = new Real2Range();
+		for (CMLMolecule molecule : molecules) {
+			MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+			Real2Range molRange = moleculeTool.getBoundingBox();
+			range.plus(molRange);
+		}
+		return range;
+	}
+
+    
+	private void displayMolecules(CMLDrawable drawable, SVGElement g,
+			MoleculeDisplay moleculeDisplay, List<CMLMolecule> molecules) throws IOException {
+		for (CMLMolecule molecule : molecules) {
+    		MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+    		moleculeTool.setMoleculeDisplay(moleculeDisplay);
+// ??    		atomTool.setMoleculeTool(this);
+    		GraphicsElement a = moleculeTool.createGraphicsElement(drawable);
+    		if (a != null) {
+    			a.detach();
+    			g.appendChild(a);
+    		}
+		}
+	}
+
+
+    private void enableReactionDisplay() {
+    	if (reactionDisplay == null) {
+    		reactionDisplay = ReactionDisplay.getDEFAULT();
+    	}
+    }
+
+
+
 }

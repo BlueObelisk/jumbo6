@@ -36,7 +36,7 @@ public class AtomTool extends AbstractTool {
 
     private CMLAtom atom;
     private CMLMolecule molecule;
-    private MoleculeTool moleculeTool;
+    private AbstractTool moleculeTool;
     private Logger logger = Logger.getLogger(AtomTool.class.getName());
     private AtomDisplay atomDisplay;
     private List<CMLAtomSet> coordinationSphereList;
@@ -592,14 +592,14 @@ public class AtomTool extends AbstractTool {
 	/**
 	 * @return the moleculeTool
 	 */
-	public MoleculeTool getMoleculeTool() {
+	public AbstractTool getMoleculeTool() {
 		return moleculeTool;
 	}
 
 	/**
 	 * @param moleculeTool the moleculeTool to set
 	 */
-	public void setMoleculeTool(MoleculeTool moleculeTool) {
+	public void setMoleculeTool(AbstractTool moleculeTool) {
 		this.moleculeTool = moleculeTool;
 	}
 

@@ -4,10 +4,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLReaction;
+import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
@@ -22,7 +25,9 @@ import org.xmlcml.cml.graphics.SVGSVG;
 public class MoleculeDisplayList implements CMLDrawable {
 	
 	private String outfile;
-	private MoleculeTool moleculeTool;
+//	private MoleculeTool moleculeTool;
+//	private ReactionTool reactionTool;
+	private AbstractTool abstractTool;
 	private MoleculeDisplay moleculeDisplay;
 	private SVGElement g;
 	private SVGSVG svg;
@@ -55,7 +60,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	
 	void setAndProcess(MoleculeTool moleculeTool) {
 		if (moleculeTool != null) {
-			this.moleculeTool = moleculeTool;
+			this.abstractTool = moleculeTool;
 			SelectionTool selectionTool = moleculeTool.getOrCreateSelectionTool();
 			CMLMolecule molecule = moleculeTool.getMolecule();
 			
@@ -71,7 +76,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 				g.detach();
 			    try {
 			    	System.out.println("REDRAW... MOL");
-					g = moleculeTool.createSVG(this);
+					g = moleculeTool.createGraphicsElement(this);
 					g.detach();
 					svg.appendChild(g);
 //					CMLUtil.debug(svg);
@@ -80,6 +85,18 @@ public class MoleculeDisplayList implements CMLDrawable {
 				}
 				svg.clearCumulativeTransformRecursively();
 				svg.setCumulativeTransformRecursively();
+			}
+		}
+	}
+
+	void setAndProcess(ReactionTool reactionTool) {
+		if (reactionTool != null) {
+			this.abstractTool = reactionTool;
+			CMLReaction reaction = reactionTool.getReaction();
+			List<CMLMolecule> molecules = reaction.getMolecules(Component.ANY);
+			for (CMLMolecule molecule : molecules) {
+				MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+				setAndProcess(moleculeTool);
 			}
 		}
 	}
@@ -95,7 +112,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 * @throws IOException
 	 */
 	public void createOrDisplayGraphics() throws IOException {
-	    g = moleculeTool.createSVG(this);
+	    g = abstractTool.createGraphicsElement(this);
 	}
 	
 	/**
@@ -149,17 +166,17 @@ public class MoleculeDisplayList implements CMLDrawable {
 	}
 
 	/**
-	 * @return the moleculeTool
+	 * @return the abstractTool (at present MoleculeTool or ReactionTool)
 	 */
-	public MoleculeTool getMoleculeTool() {
-		return moleculeTool;
+	public AbstractTool getAbstractTool() {
+		return abstractTool;
 	}
 
 	/**
-	 * @param moleculeTool the moleculeTool to set
+	 * @param abstractTool the abstractTool to set
 	 */
-	public void setMoleculeTool(MoleculeTool moleculeTool) {
-		this.moleculeTool = moleculeTool;
+	public void setAbstractTool(AbstractTool abstractTool) {
+		this.abstractTool = abstractTool;
 	}
 
 	/**

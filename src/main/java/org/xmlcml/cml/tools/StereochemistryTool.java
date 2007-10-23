@@ -27,7 +27,7 @@ import org.xmlcml.euclid.Vector3;
 public class StereochemistryTool extends AbstractTool {
 	Logger logger = Logger.getLogger(StereochemistryTool.class.getName());
 
-	MoleculeTool moleculeTool;
+	AbstractTool moleculeTool;
 	CMLMolecule molecule;
 	/**
 	 * constructor with embedded molecule.

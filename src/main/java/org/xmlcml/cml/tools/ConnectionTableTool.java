@@ -32,7 +32,7 @@ public class ConnectionTableTool extends AbstractTool {
 	final static Logger logger = Logger.getLogger(ConnectionTableTool.class
 			.getName());
 	CMLMolecule molecule;
-	MoleculeTool moleculeTool;
+	AbstractTool moleculeTool;
 
 	// Used by ring detection methods
 	private List<Set<CMLAtom>> ringNucleusAtoms = null;
