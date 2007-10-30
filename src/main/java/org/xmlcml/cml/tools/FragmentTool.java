@@ -3,6 +3,7 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -55,7 +56,20 @@ public class FragmentTool extends AbstractTool {
 	final static String IDX = "idx";
 	final static String F_PREFIX = "f_";
     private CMLFragment rootFragment;
+    private long seed=0L;
+   
     
+    /**
+     * Sets the seed for the random number generator used for markush mixture
+     * default is 0 which generates a random seed normally
+     * if seed is !=0 then that value is used giving predictable results
+     * @param seed 
+     * 
+     */
+	public void setSeed(long seed) {
+		this.seed = seed;
+	}
+
 	/**
 	 * @param fragment the fragment to set
 	 */
@@ -126,7 +140,7 @@ public class FragmentTool extends AbstractTool {
      * @return element 
      */
     public CMLElement processBasic(Catalog catalog) {
-    	BasicProcessor basicProcessor = new BasicProcessor(rootFragment);
+    	BasicProcessor basicProcessor = new BasicProcessor(rootFragment,seed);
     	CMLElement generatedElement = basicProcessor.process(catalog);
     	return generatedElement;
     }
@@ -276,7 +290,9 @@ public class FragmentTool extends AbstractTool {
     		// if so, get random fragment
     		if (flNodes.size() == 1) {
     			CMLFragmentList randomFragmentList = (CMLFragmentList) flNodes.get(0);
-    			refFragment0 = BasicProcessor.getRandomFragment(randomFragmentList);
+    			BasicProcessor bp = new BasicProcessor(rootFragment,seed);
+    			refFragment0 = bp.getRandomFragment(randomFragmentList);
+    			
     		}
     		// make copy of fragment so as not to deplete reference list
     		CMLFragment derefFragment = (CMLFragment) refFragment0.copy();
@@ -359,6 +375,11 @@ public class FragmentTool extends AbstractTool {
 			}
 		}
     }
+
+	public long getSeed() {
+		return seed;
+	}
+
 }
 
 
@@ -452,14 +473,22 @@ class BasicProcessor implements CMLConstants {
 
 	private CMLFragment fragment;
 	private FragmentTool fragmentTool;
-
+	private Random randomGenerator;
+	
 	/** constructor.
 	 * 
 	 * @param fragment
+	 * use the version which sets the seed instead.
 	 */
+	@Deprecated 
 	public BasicProcessor(CMLFragment fragment) {
 		this.fragment = fragment;
 		this.fragmentTool = new FragmentTool(fragment);
+	}
+	public BasicProcessor(CMLFragment fragment, long seed) {
+		this.fragment = fragment;
+		this.fragmentTool = new FragmentTool(fragment);
+		this.fragmentTool.setSeed(seed);
 	}
 	
 	/** get fragment.
@@ -615,7 +644,7 @@ class BasicProcessor implements CMLConstants {
     	return generatedFragmentList;
     }
     
-    static CMLFragment getRandomFragment(CMLFragmentList markushList) {
+     CMLFragment getRandomFragment(CMLFragmentList markushList) {
     	CMLElements<CMLFragment> fragments = markushList.getFragmentElements();
     	double sum = 0.0;
     	int nFragments = fragments.size();
@@ -634,8 +663,10 @@ class BasicProcessor implements CMLConstants {
     		sum += ratios[i];
     		i++;
     	}
+    	Random r = getRandomGenerator();
+    	    	
     	// get random fragment
-    	double rand = Math.random()*sum;
+    	double rand = r.nextFloat()*sum;
     	int j = nFragments - 1;
     	for (i = 0; i < nFragments; i++) {
     		if (rand < ratios[i]) {
@@ -778,6 +809,13 @@ class BasicProcessor implements CMLConstants {
     	CMLMolecule nextMolecule = (CMLMolecule) nodes.get(0);
     	join.processMoleculeRefs2AndAtomRefs2(previousMolecule, nextMolecule);
     }
+
+	public Random getRandomGenerator() {
+		if(randomGenerator==null){
+			randomGenerator=(fragmentTool.getSeed()==0)?new Random():new Random(fragmentTool.getSeed());
+		}
+		return randomGenerator;
+	}
 }
 
 class IntermediateProcessor implements CMLConstants {
