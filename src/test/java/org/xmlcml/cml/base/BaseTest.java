@@ -99,7 +99,7 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
     static protected void reportXMLDiffInFull(String message, String errorMessage,
             Node refNode, Node testNode) {
         try {
-	        System.err.println("=========="+"XMLDIFF"+"=========");
+	        System.err.println("==========XMLDIFF=========");
 	        CMLUtil.debug((Element) refNode, System.err, 2); 
 	        System.err.println("---------------------------------");
 	        CMLUtil.debug((Element) testNode, System.err, 2); 
