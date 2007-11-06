@@ -161,7 +161,7 @@ public abstract class Molutils implements CMLConstants {
                 .normalize();
         if (geometry == LINEAR) {
             Vector3 ax = ba.multiplyBy(length);
-            points.set(0, aPoint.plus(ax));
+            points.add(0, aPoint.plus(ax));
         } else {
             // if no cPoint, generate a random reference
             if (cPoint == null) {
@@ -192,7 +192,7 @@ public abstract class Molutils implements CMLConstants {
                 vy = vy.multiplyBy(Math.cos(rot) * length1);
                 Vector3 vz = new Vector3(cbxba);
                 vz = vz.multiplyBy(Math.sin(rot) * length1);
-                points.set(i, temp.plus(vx).plus(vy).plus(vz));
+                points.add(i, temp.subtract(vx).subtract(vy).subtract(vz));
             }
         }
         return points;
@@ -241,14 +241,14 @@ public abstract class Molutils implements CMLConstants {
         } else if (geometry == TRIGONAL) {
             Vector3 ax = new Vector3(ba).plus(ca).normalize()
                     .multiplyBy(length);
-            points.set(0, new Point3(aPoint).plus(ax));
+            points.add(0, new Point3(aPoint).plus(ax));
         } else if (geometry == TETRAHEDRAL) {
             baxca = baxca.normalize().multiplyBy(Math.sin(ang2) * length);
             Vector3 ax = new Vector3(ba).plus(ca).normalize().multiplyBy(
                     Math.cos(ang2) * length);
-            Point3 temp = new Point3(aPoint).plus(ax);
-            points.set(0, temp.plus(baxca));
-            points.set(1, temp.subtract(baxca));
+            Point3 temp = new Point3(aPoint).subtract(ax);
+            points.add(0, temp.plus(baxca));
+            points.add(1, temp.subtract(baxca));
         }
         return points;
     }
@@ -285,7 +285,7 @@ public abstract class Molutils implements CMLConstants {
             return null;
         }
         v = v.normalize().multiplyBy(length);
-        Point3 point = new Point3(aPoint).subtract(v);
+        Point3 point = new Point3(aPoint).plus(v);
         return point;
     }
 
