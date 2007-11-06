@@ -56,7 +56,9 @@ public class ChemicalElement {
         /** non-metal*/
         NON_METAL,
         /** semi-metal*/
-        SEMI_METAL
+        SEMI_METAL,
+        /** halogen **/
+        HALOGEN;
         ;
         private Type() {
         }
@@ -590,6 +592,10 @@ public class ChemicalElement {
 			isType = atNum == 13 || atNum == 31 || atNum == 32 ||
 			atNum >= 49 && atNum <= 51 ||
 			atNum >= 81 && atNum <= 84
+			;
+		} else if (type.equals(Type.HALOGEN)) {
+			isType = atNum == 9 || atNum == 17 || atNum == 35 ||
+			atNum == 53 || atNum == 85;
 			;
 		} else {
 			throw new CMLRuntimeException("Bad type for " + type);
