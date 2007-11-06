@@ -702,11 +702,10 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public CMLAtomSet calculate3DCoordinatesForLigands(CMLAtom atom,
 			int geometry, double length, double angle) throws CMLException {
-
 		Point3 thisPoint;
 		// create sets of atoms with and without ligands
 		CMLAtomSet noCoordsLigandsAS = new CMLAtomSet();
-		if (atom.getX3Attribute() != null) {
+		if (atom.getX3Attribute() == null) {
 			return noCoordsLigandsAS;
 		} else {
 			thisPoint = atom.getXYZ3();
@@ -716,7 +715,7 @@ public class MoleculeTool extends AbstractTool {
 		// atomSet containing atoms without coordinates
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligandAtom : ligandList) {
-			if (ligandAtom.getX3Attribute() != null) {
+			if (ligandAtom.getX3Attribute() == null) {
 				noCoordsLigandsAS.addAtom(ligandAtom);
 			} else {
 				coordsLigandsAS.addAtom(ligandAtom);
@@ -769,7 +768,7 @@ public class MoleculeTool extends AbstractTool {
 			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
 			Point3 dPoint = ((CMLAtom) coordAtoms.get(2)).getXYZ3();
 			newPoints = new ArrayList<Point3>(1);
-			newPoints.set(0, Molutils.calculate3DCoordinates3(thisPoint,
+			newPoints.add(Molutils.calculate3DCoordinates3(thisPoint,
 					bPoint, cPoint, dPoint, length));
 		}
 		int np = Math.min(noCoordsLigandsAS.size(), newPoints.size());
