@@ -112,7 +112,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 		try {
 			smilesTool.parseSMILES(smiles);
 			CMLMolecule molecule = smilesTool.getMolecule();
-			smilesMoleculeTool = new MoleculeTool(molecule);
+			smilesMoleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			new MoleculeLayout(smilesMoleculeTool).create2DCoordinates();
 			moleculeFrame.setMoleculeTool(smilesMoleculeTool);
 			moleculeFrame.repaint();

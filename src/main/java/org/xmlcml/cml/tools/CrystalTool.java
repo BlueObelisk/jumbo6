@@ -41,7 +41,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  * @author pmr
  *
  */
-public class CrystalTool extends AbstractTool implements EuclidConstants {
+public class CrystalTool extends AbstractTool {
 	final static Logger logger = Logger.getLogger(CrystalTool.class.getName());
 
 	Map<String, Integer> formulaCountMap = new HashMap<String, Integer>();
@@ -98,7 +98,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	void setMolecule(CMLMolecule molecule) {
 		this.molecule = molecule;
 		if (molecule != null) {
-			moleculeTool = new MoleculeTool(molecule);
+			moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		}
 	}
 
@@ -346,7 +346,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms, boolean addTransformsToAtoms) {
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.flattenMolecules();
-		MoleculeTool mt = new MoleculeTool(molecule);
+		MoleculeTool mt = MoleculeTool.getOrCreateTool(molecule);
 		// reset all atom fractional coordinates so that they fall inside the unit cell.
 		this.normalizeCrystallographically();
 		
@@ -500,7 +500,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 	 */
 	public void calculateCartesiansAndBonds() {
 		molecule.createCartesiansFromFractionals(crystal);
-		MoleculeTool moleculeTool = new MoleculeTool(molecule);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		moleculeTool.calculateBondedAtoms();
 		new ConnectionTableTool(molecule).partitionIntoMolecules();
 	}
@@ -828,7 +828,7 @@ public class CrystalTool extends AbstractTool implements EuclidConstants {
 		}
 		ConnectionTableTool ct = new ConnectionTableTool(mergedMolecule);
 		ct.flattenMolecules();
-		new MoleculeTool(mergedMolecule).calculateBondedAtoms();
+		MoleculeTool.getOrCreateTool(mergedMolecule).calculateBondedAtoms();
 		ct.partitionIntoMolecules();
 		return mergedMolecule;
 	}

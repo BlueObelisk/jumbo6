@@ -360,7 +360,7 @@ formula='
         if (fragment0 == null) {
             throw new CMLRuntimeException("expected fragment child");
         }
-        FragmentTool fragmentTool = new FragmentTool(fragment0);
+        FragmentTool fragmentTool = FragmentTool.getOrCreateTool(fragment0);
         fragmentTool.processBasic(moleculeCatalog);
     }
     
@@ -615,9 +615,7 @@ formula='
     	} catch (Exception e) {
     		throw new CMLRuntimeException("should not throw: "+e.getMessage());
     	}
-    	fragment.debug();
-    	new FragmentTool(fragment).processAll(catalog);
-    	fragment.debug();
+    	FragmentTool.getOrCreateTool(fragment).processAll(catalog);
     	return fragment;
     }
     

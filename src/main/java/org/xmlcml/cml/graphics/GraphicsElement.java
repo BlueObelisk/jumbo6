@@ -189,7 +189,7 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 	/**
 	private void draw() {
 //		FileOutputStream fos = new FileOutputStream(outfile);
-//		SVGElement g = new MoleculeTool(molecule).
+//		SVGElement g = MoleculeTool.getOrCreateTool(molecule).
 //		    createSVG();
 //		int indent = 2;
 //		SVGSVG svg = new SVGSVG();

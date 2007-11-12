@@ -81,20 +81,25 @@ public class FragmentTool extends AbstractTool {
      * constructor
      * 
      * @param fragment
+     * @deprecated use getOrCreateFragmentTool
      */
     public FragmentTool(CMLFragment fragment) {
         this.rootFragment = fragment;
     }
 
-    /**
-     * make fragment tool from a fragment.
-     * 
-     * @param fragment
-     * @return the tool
-     */
-    static FragmentTool createFragmentTool(CMLFragment fragment) {
-        return new FragmentTool(fragment);
-    }
+    /** gets FragmentTool associated with fragment.
+	 * if null creates one and sets it in fragment
+	 * @param fragment
+	 * @return tool
+	 */
+	public static FragmentTool getOrCreateTool(CMLFragment fragment) {
+		FragmentTool fragmentTool = (FragmentTool) fragment.getTool();
+		if (fragmentTool == null) {
+			fragmentTool = new FragmentTool(fragment);
+			fragment.setTool(fragmentTool);
+		}
+		return fragmentTool;
+	}
 
     /**
      * get fragment.
@@ -483,7 +488,7 @@ class BasicProcessor implements CMLConstants {
 	@Deprecated 
 	public BasicProcessor(CMLFragment fragment) {
 		this.fragment = fragment;
-		this.fragmentTool = new FragmentTool(fragment);
+		this.fragmentTool = FragmentTool.getOrCreateTool(fragment);
 	}
 	public BasicProcessor(CMLFragment fragment, long seed) {
 		this.fragment = fragment;
@@ -614,7 +619,7 @@ class BasicProcessor implements CMLConstants {
     	for (List<CMLFragment> markushGroupList : cartesianProductList) {
         	// clone the complete fragment
         	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
-        	FragmentTool newFragmentTool = new FragmentTool(newFragment);
+        	FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment);
         	newFragmentTool.processAll(catalog);
         	generatedFragmentList.addFragment(newFragment);
         }
@@ -634,7 +639,7 @@ class BasicProcessor implements CMLConstants {
         	}
         	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
         	if (newFragment != null) {
-	        	FragmentTool newFragmentTool = new FragmentTool(newFragment);
+	        	FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment);
 	        	newFragmentTool.processAll(catalog);
 	        	generatedFragmentList.addFragment(newFragment);
         	} else {
@@ -863,7 +868,7 @@ class IntermediateProcessor implements CMLConstants {
 		    FragmentConverter fragmentConverter = new FragmentConverter(dereferencedMol);
 		    // make a new fragment
 		    CMLFragment newFragment = fragmentConverter.convertToFragment();
-		    FragmentTool newFragmentTool = new FragmentTool(newFragment); 
+		    FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment); 
 		    // its molecule becomes the new molecule
 		    CMLMolecule newMolecule = newFragmentTool.getMolecule();
 		    // transfer anything meaningful from original one
@@ -892,7 +897,7 @@ class IntermediateProcessor implements CMLConstants {
 		        dereference(catalog, subFragment, IndexableList.Type.FRAGMENT_LIST);
 		    subFragment.removeAttribute("ref");
 		    // copy
-		    FragmentTool newFragmentTool = new FragmentTool(newFragment); 
+		    FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment); 
 		    // transfer anything meaningful from original one
 		    CMLUtil.transferChildren(subFragment, newFragment);
 		    newFragment.copyAttributesFrom(subFragment);
@@ -911,7 +916,7 @@ class IntermediateProcessor implements CMLConstants {
 	* CMLArg.substituteTextContent(molecule);
 	*/
 	void substituteParameters() {
-		CMLMolecule molecule = new FragmentTool(fragment).getMolecule();
+		CMLMolecule molecule = FragmentTool.getOrCreateTool(fragment).getMolecule();
 		Nodes nodes = molecule.query(CMLArg.NS+"[@name]", X_CML);
 		for (int i = 0; i < nodes.size(); i++) {
 			CMLArg arg = (CMLArg) nodes.get(i);
@@ -941,7 +946,7 @@ class IntermediateProcessor implements CMLConstants {
 		if (ref != null) {
 			String prefix = CMLUtil.getPrefix(ref);
 			if (S_EMPTY.equals(prefix)){
-				((CMLElement)deref).debug();
+				((CMLElement)deref).debug("FT");
 				throw new CMLRuntimeException("Cannot dereference empty prefix");
 			}
 			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, (CMLElement)indexable);
@@ -1006,7 +1011,7 @@ class ExplicitProcessor implements CMLConstants {
 //    	fragment.debug(" EXPLICIT 1");
         // immediate children
         growingMolecule = (CMLMolecule) moleculeAndJoinList.get(0);
-    	growingMoleculeTool = new MoleculeTool(growingMolecule);
+    	growingMoleculeTool = MoleculeTool.getOrCreateTool(growingMolecule);
         moleculeAndJoinList.remove(0);
         processMolecule(growingMolecule, null);
         processMoleculeAndJoin(moleculeAndJoinList);
@@ -1073,7 +1078,7 @@ class ExplicitProcessor implements CMLConstants {
     }
     
     private void adjustGeometry(CMLMolecule molecule) {
-        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
         // do them in this order to avoid interaction
         moleculeTool.adjustLengths();
         moleculeTool.adjustAngles();

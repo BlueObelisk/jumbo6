@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Elements;
 
-import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
@@ -34,7 +34,7 @@ import org.xmlcml.euclid.Real3Range;
  * @author pmr
  * 
  */
-public class AtomSetTool implements CMLConstants {
+public class AtomSetTool extends AbstractTool {
 
     Logger logger = Logger.getLogger(AtomSetTool.class.getName());
 
@@ -47,6 +47,7 @@ public class AtomSetTool implements CMLConstants {
      * constructor.
      * 
      * @param atomSet
+     * @deprecated use getOrCreateTool
      */
     public AtomSetTool(CMLAtomSet atomSet) {
         if (atomSet == null) {
@@ -58,6 +59,20 @@ public class AtomSetTool implements CMLConstants {
             molecule = atomList.get(0).getMolecule();
         }
     }
+
+	/** gets AtomSetTool associated with atomSet.
+	 * if null creates one and sets it in atomSet
+	 * @param atomSet
+	 * @return tool
+	 */
+	public static AtomSetTool getOrCreateTool(CMLAtomSet atomSet) {
+		AtomSetTool atomSetTool = (AtomSetTool) atomSet.getTool();
+		if (atomSetTool == null) {
+			atomSetTool = new AtomSetTool(atomSet);
+			atomSet.setTool(atomSetTool);
+		}
+		return atomSetTool;
+	}
 
     // =============== ATOMSET =========================
 

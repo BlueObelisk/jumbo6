@@ -11,7 +11,6 @@ import nu.xom.Node;
 import nu.xom.ParsingException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElements;
@@ -33,13 +32,9 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     // built in xom;
     CMLFormula xomForm1 = null;
-
     CMLFormula xomForm2 = null;
-
     CMLFormula xomForm3 = null;
-
     CMLFormula xomForm3a = null;
-
     CMLFormula xomForm3b = null;
 
     // read into xom;
@@ -53,7 +48,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     /**
      * setup.
-     *
      * @throws Exception
      */
     @Before
@@ -144,12 +138,9 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * checks for non-null, then equality of length, then individual elements
      *
      * @param message
-     * @param formula1
-     *            expected formula
-     * @param formula2
-     *            actual formula
-     * @param eps
-     *            tolerance for agreement
+     * @param formula1 expected formula
+     * @param formula2 actual formula
+     * @param eps tolerance for agreement
      */
     public static void assertEqualsConcise(String message, CMLFormula formula1,
             CMLFormula formula2, double eps) {
@@ -259,7 +250,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getCount()'
      */
     @Test
-
     public void testGetCount() {
         double count = xomForm1.getCount();
         Assert.assertEquals("xomForm1 count", 2.0, count, 0.00001);
@@ -272,21 +262,18 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.setCount(double)'
      */
     @Test
-
     public void testSetCount() {
         double cc = xmlForm1.getCount();
         Assert.assertEquals("count", 1.0, cc, 0.0000001);
         xmlForm1.setCount(1.5);
         cc = xmlForm1.getCount();
         Assert.assertEquals("count", 1.5, cc);
-
     }
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getFormalCharge()'
      */
     @Test
-
     public void testGetFormalCharge() {
         int fc = xmlForm1.getFormalCharge();
         Assert.assertEquals("formal charge", -1, fc);
@@ -299,7 +286,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.setFormalCharge(int)'
      */
     @Test
-
     public void testSetFormalCharge() {
         int fc = xmlForm1.getFormalCharge();
         Assert.assertEquals("formal charge", -1, fc);
@@ -313,7 +299,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.CMLFormula()'
      */
     @Test
-
     public void testCMLFormula() {
         CMLFormula formula = new CMLFormula();
         Assert.assertNotNull("constructor ", formula);
@@ -327,7 +312,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.CMLFormula(CMLFormula)'
      */
     @Test
-
     public void testCMLFormulaCMLFormula() {
         // copy constructor
         CMLFormula xformula = xomForm1;
@@ -357,7 +341,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.createFormula(String)'
      */
     @Test
-    @Ignore
     public void testCreateFormulaString() {
         String s;
         CMLFormula form = null;
@@ -378,7 +361,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * String)'
      */
     @Test
-    @Ignore
     public void testCreateFormulaStringConvention() {
 
         // CMLFormula.createFormula("C 2 H 4", Formula.Convention.)
@@ -432,7 +414,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.createFromString(String, String)'
      */
     @Test
-    @Ignore
     public void testCreateFromString() {
 
         String moiety = "C2 H6 N +, H1 S2 O4 -";
@@ -468,7 +449,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.add(String, double)'
      */
     @Test
-
     public void testAdd() {
         // FIXME - sorting
         String[] elements = xomForm1.getElementTypes();
@@ -506,7 +486,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getElementTypes()'
      */
     @Test
-
     public void testGetElementTypes() {
         String[] el = xomForm1.getElementTypes();
         StringTestBase.assertEquals("element types",
@@ -522,7 +501,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getElementCounts()'
      */
     @Test
-
     public void testGetElementCounts() {
         double[] c = xomForm1.getCounts();
         DoubleTestBase.assertEquals("element counts", new double[] { 1., 3., 1. },
@@ -541,7 +519,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.addFormula(CMLFormula)'
      */
     @Test
-
     public void testAddFormulaCMLFormula() {
         CMLSerializer serializer = new CMLSerializer();
         String s = serializer.getXML(xomForm3a).trim();
@@ -603,7 +580,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getAggregateFormula()'
      */
     @Test
-
     public void testGetAggregateFormula() {
         CMLFormula f = xmlForm1.getAggregateFormula();
         Assert.assertEquals("aggregate formula count", 1.0, f.getCount());
@@ -617,7 +593,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.aggregateFormula(CMLFormula)'
      */
     @Test
-
     public void testAggregateFormula() {
         CMLFormula formula1 = null;
         try {
@@ -657,7 +632,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.divideBy(CMLFormula)'
      */
     @Test
-    @Ignore
     public void testDivideBy() {
 
         CMLFormula fTop = null;
@@ -705,7 +679,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.getCalculatedMolecularMass()'
      */
     @Test
-
     public void testGetCalculatedMolecularMass() {
         double m = xomForm1.getCalculatedMolecularMass();
         Assert.assertEquals("xomForm1 mw", 126.02568, m, 0.00001);
@@ -735,7 +708,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      *
      */
     @Test
-
     public void testGetFormattedStringStringStringBoolean() {
         String s = xmlForm1.getFormattedString(Type.NOPUNCTUATION,
                 Sort.CHFIRST, true);
@@ -787,7 +759,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.getFormattedString()'
      */
     @Test
-
     public void testGetFormattedString() {
         String s = xomForm1.getFormattedString();
         Assert.assertEquals("xomForm1 string", "HNO3", s);
@@ -808,7 +779,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.getCalculatedMass(List, RealArray)'
      */
     @Test
-    @Ignore
     public void testGetCalculatedMass() {
         CMLFormula f1 = null;
         try {
@@ -824,7 +794,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.equalsFormula(Object)'
      */
     @Test
-    @Ignore
     public void testEqualsFormula() {
         CMLFormula f1 = null;
         try {
@@ -848,7 +817,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.getDifference(CMLFormula)'
      */
     @Test
-    @Ignore
     public void testGetDifference() {
         CMLFormula formula1 = null;
         try {
@@ -888,7 +856,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testEqualsAggregate() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
             "<formula "+CML_XMLNS+" concise='C 2 H 4'/>"
@@ -906,7 +873,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.toFormulaString()'
      */
     @Test
-    @Ignore
     public void testToFormulaString() {
         CMLFormula f1 = null;
         try {
@@ -921,7 +887,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     /** test */
     @Test
-    @Ignore
     public void testMultiplyBy() {
         CMLFormula f1 = null;
         try {
@@ -939,7 +904,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testWriteHTML() throws Exception {
         StringWriter w = new StringWriter();
         xomForm1.writeHTML(w);
@@ -953,7 +917,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLFormula.setConcise(String)'
      */
     @Test
-
     public void testSetConcise() {
         Assert.assertEquals("concise", "H 1 O 3 N 1", xomForm1.getConcise());
         try {
@@ -980,7 +943,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * 'org.xmlcml.cml.element.CMLFormula.CMLFormula(CMLMolecule)'
      */
     @Test
-
     public void testCMLFormulaCMLMolecule() {
         CMLFormula form = new CMLFormula(xmlMolecule);
         Assert.assertEquals("concise", "C 1 H 3 F 1 N 1 O 1 S 1", form.getConcise());
@@ -991,7 +953,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testNormalize() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
             "<formula "+CML_XMLNS+" concise='C 2 H 4'/>"
@@ -1006,7 +967,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testGenerateConcise() throws Exception {
         CMLAtomArray atomArray = new CMLAtomArray();
 //        atomArray.setElementType(new String[]{"C", "H", "O"});
@@ -1022,7 +982,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testRemoveChargeFromConcise() throws Exception {
         String concise = CMLFormula.removeChargeFromConcise("C 2 H 4 O 2 -2");
         Assert.assertEquals("concise", "C 2 H 4 O 2", concise);
@@ -1033,7 +992,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testGetConciseNoCharge() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
             "<formula "+CML_XMLNS+" concise='C 2 H 4 O 2 -2'/>"
@@ -1047,7 +1005,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-    @Ignore
     public void testCreateFormulaStringType() throws Exception {
         CMLFormula form = CMLFormula.createFormula("C 2 H 4 O 2");
         Assert.assertEquals("concise", "C 2 H 4 O 2", form.getConcise());
@@ -1060,7 +1017,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-    @Ignore
     public void testGetCounts() throws Exception {
         CMLFormula form = CMLFormula.createFormula("C 2 H 4 O 2");
         DoubleTestBase.assertEquals("concise",
@@ -1076,7 +1032,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testCreateAggregatedFormula() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
             "<formula "+CML_XMLNS+" concise='C 2 H 4 O 2 -2'/>"
@@ -1100,7 +1055,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testGetFormattedStringTypeSortBoolean() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
             "<formula "+CML_XMLNS+" concise='C 1 H 4 O 2 Br 1 -2'/>"
@@ -1131,7 +1085,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testGetFormalChargeString() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
                 "<formula "+CML_XMLNS+" concise='C 1 H 4 O 2 Br 1 -2'/>"
@@ -1146,7 +1099,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
      * @exception Exception
      */
     @Test
-
     public void testEqualsCMLFormulaDouble() throws Exception {
         CMLFormula form1 = (CMLFormula) parseValidString(
                 "<formula "+CML_XMLNS+" concise='C 1 H 4 O 2 Br 1 -2'/>"
@@ -1174,5 +1126,4 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertTrue("equals", form1.equals(form1));
         Assert.assertFalse("equals", form1.equals(form2));
     }
-
  }

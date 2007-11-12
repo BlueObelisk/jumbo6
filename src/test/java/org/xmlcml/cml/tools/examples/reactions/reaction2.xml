@@ -1,0 +1,293 @@
+<cml xmlns="http://www.xml-cml.org/schema">
+<moleculeList>
+  <molecule id="m1" title="2-phenyl....">
+    <formula concise="C 17 H 27 N 1 O 2"/>
+  </molecule>
+  <molecule id="m2" title="triethylamine">
+    <formula concise="C 6 H 15 N 1"/>
+  </molecule>
+  <molecule id="m3" title="2-bromopropanoyl bromide">
+    <formula concise="C 3 H 4 Br 2 O 1"/>
+  </molecule>
+</moleculeList>
+
+<reactionScheme title="Synthesis of Asymmetric initiators" id="ex2">
+  <reaction title="Synthesis of 2a">
+    <object id="o1" type="apparatus">Round Bottom Flask</object>
+    <reactantList>
+      <reactant id="r1" count="1" title="2-phenyl-2-1-ethanol">
+        <molecule ref="m1"/>
+        <amount id="a1" units="units:g">0.85</amount>
+        <amount id="a1m" units="units:mmol">3.06</amount>
+      </reactant>
+      <reactant id="r2" count="1" title="ET3N">
+        <molecule ref="m2"/>
+        <amount id="a2" units="units:g">0.7</amount>
+        <amount id="a2m" units="units:mmol">5</amount>
+      </reactant>
+      <reactant id="r3" count="1" title="2-bromo propanyol bromide">
+        <molecule ref="m3"/>
+        <amount id="a3" units="units:ml">0.53</amount>
+        <amount id="a3m" units="units:mmol">5</amount>
+      </reactant>
+    </reactantList>
+    <substanceList>
+      <substance id="ss1" count="2" role="subst:Solvent">
+        <molecule id="m4" ref="THF2"/>
+        <amount id="a4" units="units:ml">20</amount>
+      </substance>
+    </substanceList>
+    <conditionList>
+      <scalar id="sc1" dictRef="cml:method">stirred</scalar>
+      <scalar id="sc2" dictRef="cml:temp" units="units:celsius">0</scalar>
+      <scalar id="sc3" dictRef="cml:atmosphere">nitrogen</scalar>
+      <scalar id="sc4" dictRef="cml:time" units="units:hour">1</scalar>
+      <scalar id="sc5" dictRef="cml:temp" units="units:celsius">21</scalar>
+      <scalar id="sc6" dictRef="cml:time">overnight</scalar>
+    </conditionList>
+    <productList>
+      <product id="p1" count="1" title="2a" color="pale yellow" state="oil">
+        <molecule id="m9" ref="2-phenyl-2-ethyl 2 bromo-propanate"/>
+        <amount id="a5" units="units:gram">0.52</amount>
+        <amount id="a6" units="units:percent">41</amount>
+      </product>
+    </productList>
+    <actionList>
+    
+      <substanceList role="workup">
+        <substance id="ss2" role="subst:Solvent">
+        <molecule id="m5" ref="CH2CL2"/>
+      </substance>
+      <substance id="ss3" role="subst:Solvent">
+        <molecule id="m6" ref="NA2CO3"/>
+      </substance>
+      <substance id="ss4" role="subst:Solvent">
+        <molecule id="m7" ref="NA2SO4"/>
+      </substance>
+      <substance id="ss5" role="subst:Solvent">
+        <molecule id="m8" ref="hexane"/>
+        <amount id="a5" unitType="unitType:vol">8</amount>
+      </substance>
+      <substance id="ss6" role="subst:Solvent">
+        <molecule id="m9" ref="ethyl"/>
+        <amount id="a6" unitType="unitType:vol">2</amount>
+      </substance>
+      </substanceList>
+      
+      <action title="Step1">
+        <reactant>r1</reactant>
+        <reactant>r2</reactant>
+        <condition>sc1</condition>
+        <condition>sc2</condition>
+        <condition>sc3</condition>
+      </action> 
+      <action title="Step2">
+      <reactant>r3</reactant>
+    <substance>ss1</substance>
+    <condition>sc4</condition>
+    </action>
+    <action title="Step3">
+    <condition>sc1</condition>
+    <condition>sc5</condition>
+    <condition>sc6</condition>
+    </action>
+    <action title="Step4">
+    <substance>ss2</substance>
+    <substance>ss3</substance>
+    <substance>ss4</substance>
+    </action>
+    <action title="Step5-Purification">
+    <substance>ss5</substance>
+    <substance>ss6</substance>
+    </action>
+    </actionList>
+    </reaction>
+    
+    <reaction title="Synthesis of 2b">
+    <object id="o1" type="apparatus">Round Bottom Flask</object>
+    <reactantList>
+    <reactant id="r1" count="1" title="2-phenyl-2-1-ethanol">
+    <molecule id="m1" ref="2-phenyl-2-1-ethanol"/>
+    <amount id="a1" units="units:g">0.85</amount>
+    </reactant>
+    <reactant id="r2" count="1" title="ET3N">
+    <molecule id="m2" ref="ET3N"/>
+    <amount id="a2" units="units:g">0.7</amount>
+    </reactant>
+    <reactant id="r3" count="1" title="2-bromo propanyol bromide"
+    added="dropwise">
+    <molecule id="m3" ref="2-bromo propanyol bromide"/>
+    <amount id="a3" units="units:ml">0.53</amount>
+    </reactant>
+    </reactantList>
+    <substanceList>
+    <substance id="ss1" role="subst:Solvent">
+    <molecule id="m4" ref="DRY THF"/>
+    <amount id="a4" units="units:ml">40</amount>
+    </substance>
+    <substance id="ss2" role="subst:Solvent">
+    <molecule id="m5" ref="CH2CL2"/>
+    </substance>
+    <substance id="ss3" role="subst:Solvent">
+    <molecule id="m6" ref="NA2CO3"/>
+    </substance>
+    <substance id="ss4" role="subst:Solvent">
+    <molecule id="m7" ref="NA2SO4"/>
+    </substance>
+    <substance id="ss5" role="subst:Solvent">
+    <molecule id="m8" ref="hexane"/>
+    <amount id="a7" units="vol">9</amount>
+    </substance>
+    <substance id="ss6" role="subst:Solvent">
+    <molecule id="m9" ref="ethyl"/>
+    <amount id="a8" units="vol">1</amount>
+    </substance>
+    </substanceList>
+    <conditionList>
+    <scalar id="sc1" dictRef="cml:methord">stirred</scalar>
+    <scalar id="sc2" dictRef="cml:temp" units="units:celsius">0</scalar>
+    <scalar id="sc3" dictRef="cml:atmosphere">nitrogen</scalar>
+    <scalar id="sc4" dictRef="cml:time" units="units:hour">1</scalar>
+    <scalar id="sc5" dictRef="cml:temp" units="units:celsius">21</scalar>
+    <scalar id="sc6" dictRef="cml:time">overnight</scalar>
+    </conditionList>
+    <productList>
+    <product id="p1" count="1" title="2b" color="pale yellow" state="oil">
+    <molecule id="m9" ref="2-phenyl-2-ethyl 2 bromo-methyl-propanate"/>
+    <amount id="a9" units="units:gram">0.52</amount>
+    <amount id="a10" units="units:percent">41</amount>
+    </product>
+    </productList>
+    <actionList>
+    <action title="Step1">
+    <reactant>r1</reactant>
+    <reactant>r2</reactant>
+    <condition>sc1</condition>
+    <condition>sc2</condition>
+    <condition>sc3</condition>
+    </action>
+    <action title="Step2">
+    <reactant>r3</reactant>
+    <substance>ss1</substance>
+    <condition>sc4</condition>
+    </action>
+    <action title="Step3">
+    <condition>sc1</condition>
+    <condition>sc5</condition>
+    <condition>sc6</condition>
+    </action>
+    <action title="Step4">
+    <substance>ss2</substance>
+    <substance>ss3</substance>
+    <substance>ss4</substance>
+    </action>
+    <action title="Step5-Purification">
+    <substance>ss5</substance>
+    <substance>ss6</substance>
+    </action>
+    </actionList>
+    </reaction>
+    <reaction title="Synthesis of macroinitiators - General">
+    <object id="o2" type="apparatus">
+    Shlenk Tube equiped with magnetic stirring bar ligand
+    </object>
+    <object id="o3" type="apparatus">Column of Neutral Alumina</object>
+    <reactantList>
+    <reactant id="r4" count="1" title="catalyst">
+    </reactant>
+    <reactant id="r5" count="1" title="degassed monomer">
+    </reactant>
+    <reactant id="r7" count="1" title="initiator">
+    </reactant>
+    </reactantList>
+    <substanceList>
+    <substance id="ss6" role="subst:Solvent">
+    </substance>
+    <substance id="ss4" role="subst:Solvent">
+    <molecule id="m4" ref="DRY THF"/>
+    <amount id="a4" units="units:ml">40</amount>
+    </substance>
+    <substance id="ss7" role="subst:Solvent">
+    <molecule id="m9" ref="Methanol"/>
+    </substance>
+    </substanceList>
+    <conditionList>
+    <scalar id="sc7" dictRef="cml:cycle">three freeze pump cycles</scalar>
+    <scalar id="sc8" dictRef="cml:atmosphere">vacuum</scalar>
+    <scalar id="sc9" dictRef="cml:temp" units="units:celsius">given</scalar>
+    <scalar id="sc10" dictRef="cml:temp" units="units:celsius">50</scalar>
+    <scalar id="sc11" dictRef="cml:atmosphere">pressure</scalar>
+    </conditionList>
+    </reaction>
+    <reaction title="Synthesis of macroinitiators - PMMA">
+    <object id="o2" type="apparatus">
+    Shlenk Tube equiped with magnetic stirring bar ligand
+    </object>
+    <object id="o3" type="apparatus">Column of Neutral Alumina</object>
+    <reactantList>
+    <reactant id="r4" count="1" title="PMDETA">
+    </reactant>
+    <reactant id="r5" count="1" title="degassed monomer">
+    </reactant>
+    <reactant id="r7" count="1" title="2b">
+    
+    </reactant>
+    </reactantList>
+    <substanceList>
+    <substance id="ss6" role="subst:Solvent">
+    <molecule id="m8" ref="DPE"/>
+    <amount id="a6" units="units:ml">50</amount>
+    </substance>
+    <substance id="ss4" role="subst:Drying Agent-Solvent">
+    <molecule id="m4" ref="DRY THF"/>
+    <amount id="a4" units="units:ml">40</amount>
+    </substance>
+    <substance id="ss7" role="subst:Solvent">
+    <molecule id="m9" ref="Methanol"/>
+    </substance>
+    </substanceList>
+    <conditionList>
+    <scalar id="sc7" dictRef="cml:cycle">three freeze pump cycles</scalar>
+    <scalar id="sc8" dictRef="cml:atmosphere">vacuum</scalar>
+    <scalar id="sc9" dictRef="cml:temp" units="units:celsius">90</scalar>
+    <scalar id="sc10" dictRef="cml:temp" units="units:celsius">50</scalar>
+    <scalar id="sc11" dictRef="cml:atmosphere">pressure</scalar>
+    </conditionList>
+    </reaction>
+    <reaction title="Synthesis of macroinitiators - PtBA">
+    <object id="o2">
+    Shlenk Tube equiped with magnetic stirring bar ligand
+    </object>
+    <object id="o3">Column of Neutral Alumina</object>
+    <reactantList>
+    <reactant id="r4" count="1" title="CuBr/PMDETA">
+    </reactant>
+    <reactant id="r5" count="1" title="degassed monomer">
+    </reactant>
+    <reactant id="r7" count="1" title="2a">
+    
+    </reactant>
+    </reactantList>
+    <substanceList>
+    <substance id="ss6" role="subst:Solvent">
+    <molecule id="m8" ref="DPE"/>
+    <amount id="a6" units="units:ml">50</amount>
+    </substance>
+    <substance id="ss4" role="subst:Solvent">
+    <molecule id="m4" ref="DRY THF"/>
+    <amount id="a4" units="units:ml">40</amount>
+    </substance>
+    <substance id="ss7" role="subst:Solvent">
+    <molecule id="m9" ref="Methanol"/>
+    </substance>
+    </substanceList>
+    <conditionList>
+    <scalar id="sc7" dictRef="cml:cycle">three freeze pump cycles</scalar>
+    <scalar id="sc8" dictRef="cml:atmosphere">vacuum</scalar>
+    <scalar id="sc9" dictRef="cml:temp" units="units:celsius">90</scalar>
+    <scalar id="sc10" dictRef="cml:temp" units="units:celsius">50</scalar>
+    <scalar id="sc11" dictRef="cml:atmosphere">pressure</scalar>
+    </conditionList>
+  </reaction>
+</reactionScheme>
+</cml>

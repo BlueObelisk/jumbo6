@@ -202,7 +202,6 @@ public class SMILESTool extends AbstractTool {
         if (hasDot) {
         	new ConnectionTableTool(molecule).partitionIntoMolecules();
         	if (molecule.getMoleculeCount() > 0) {
-        		molecule.debug();
         	}
         }
         addHydrogens();
@@ -292,7 +291,7 @@ public class SMILESTool extends AbstractTool {
    }
     
     private void addHydrogens() {
-    	MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+    	MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	// remember explicit H
 //    	hydrogenControl = HydrogenControl.;
     	moleculeTool.adjustHydrogenCountsToValency(hydrogenControl);

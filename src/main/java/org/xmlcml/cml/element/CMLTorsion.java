@@ -300,7 +300,7 @@ public class CMLTorsion extends AbstractTorsion {
         CMLAtomSet fixedAtomSet = new CMLAtomSet(molecule, atomRefs4);
         CMLAtom atom0 = fixedAtomSet.getAtom(1);
         CMLAtom atom1 = fixedAtomSet.getAtom(2);
-        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
         CMLAtomSet moveableSet = moleculeTool.getDownstreamAtoms(atom1, atom0);
         adjustCoordinates(fixedAtomSet, moveableSet);
     }

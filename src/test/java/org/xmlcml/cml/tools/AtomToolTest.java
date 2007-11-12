@@ -43,7 +43,7 @@ public class AtomToolTest extends MoleculeAtomBondTest {
             bond.setAtomRefs2(new String[] { "a1", "h" + (i + 1) });
             molecule.addBond(bond);
         }
-        AtomTool atomTool = new AtomTool(atom);
+        AtomTool atomTool = AtomTool.getOrCreateTool(atom);
         atomTool.addCalculatedCoordinatesForHydrogens(HydrogenControl.USE_HYDROGEN_COUNT);
     }
 
@@ -62,10 +62,9 @@ public class AtomToolTest extends MoleculeAtomBondTest {
 	@Test
 	public final void testGetCoordinationSphereList() {
 		makeMol11();
-//		mol11.debug();
 		CMLAtom atom1 = mol11.getAtomById("a1");
 		
-		AtomTool atomTool1 = new AtomTool(atom1);
+		AtomTool atomTool1 = AtomTool.getOrCreateTool(atom1);
 		CMLAtomSet atomSet = atomTool1.getCoordinationSphereSet(0);
 		CMLAtomSet refAtomSet = (CMLAtomSet) parseValidString(
 			"<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
@@ -99,7 +98,7 @@ public class AtomToolTest extends MoleculeAtomBondTest {
 			"<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
 		assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
 // now a different atom
-		AtomTool atomTool5 = new AtomTool(mol11.getAtomById("a5"));
+		AtomTool atomTool5 = AtomTool.getOrCreateTool(mol11.getAtomById("a5"));
 		atomSet = atomTool5.getCoordinationSphereSet(2);
 		refAtomSet = (CMLAtomSet) parseValidString(
 			"<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");

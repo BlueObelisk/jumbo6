@@ -204,7 +204,7 @@ public class CMLLength extends AbstractLength {
         CMLAtomSet fixedAtomSet = new CMLAtomSet(molecule, atomRefs2);
         CMLAtom atom0 = fixedAtomSet.getAtom(0);
         CMLAtom atom1 = fixedAtomSet.getAtom(1);
-        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
         CMLAtomSet moveableSet = moleculeTool.getDownstreamAtoms(atom1, atom0);
         this.adjustCoordinates(atom0, atom1, moveableSet);
     }

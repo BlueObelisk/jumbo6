@@ -95,7 +95,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 			CMLReaction reaction = reactionTool.getReaction();
 			List<CMLMolecule> molecules = reaction.getMolecules(Component.ANY);
 			for (CMLMolecule molecule : molecules) {
-				MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+				MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 				setAndProcess(moleculeTool);
 			}
 		}

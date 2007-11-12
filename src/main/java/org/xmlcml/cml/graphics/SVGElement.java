@@ -388,7 +388,7 @@ public abstract class SVGElement extends GraphicsElement {
 	 */
 	public void draw() {
 //		FileOutputStream fos = new FileOutputStream(outfile);
-//		SVGElement g = new MoleculeTool(molecule).
+//		SVGElement g = MoleculeTool.getOrCreateTool(molecule).
 //		    createSVG();
 //		int indent = 2;
 //		SVGSVG svg = new SVGSVG();

@@ -243,25 +243,6 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
     }
 
     /**
-     * combine molecules.
-     *
-     * @param moleculeNodes1
-     * @param m2
-     * @return list of molecules
-     */
-    public List<CMLMolecule> concat(Elements moleculeNodes1,
-            List<CMLMolecule> m2) {
-        List<CMLMolecule> m = new ArrayList<CMLMolecule>();
-        for (int i = 0; i < moleculeNodes1.size(); i++) {
-            m.add((CMLMolecule) moleculeNodes1.get(i));
-        }
-        for (int i = 0; i < m2.size(); i++) {
-            m.add(m2.get(i));
-        }
-        return m;
-    }
-
-    /**
      * gets cmlSpectator molecules in order.
      *
      * assumes order is spectators under spectatorList, each with two molecules,
@@ -304,85 +285,6 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
         }
     }
 
-    /**
-     * this is MacieSpecific - transfer move substance labels to reactants. a
-     * substance may have a name child which identifies a reactant. this routine
-     * transfers the child labels in the substance to be children of the
-     * reactant
-     */
-    public void moveSubstancesToReactants() {
-        /*--
-         <substance id="sub1">
-         <name>Cys178</name>
-         <label dictRef="macie:sideChain" value="Cys178"/>
-         <label dictRef="macie:protonDonor" value="Cys178"/>
-         <label dictRef="macie:acid" value="Cys178"/>
-         </substance>
-         --*/
-        /*--
-         <reactant>
-         <molecule id="0001.stg03.r.6">
-         <atomArray>
-         <atom id="a39" elementType="R" x2="-0.1833" y2="-0.9292">
-         <label value="Cys178"/>
-         </atom>
-         </atomArray>
-         --*/
-        // catches any empty lists
-        try {
-            CMLReactantList reactantList = (CMLReactantList) this
-                    .getFirstCMLChild(CMLReactantList.TAG);
-            Elements reactants = (reactantList == null) ? null : reactantList
-                    .getChildCMLElements(CMLReactant.TAG);
-            Elements substanceLists = this
-                    .getChildCMLElements(CMLSubstanceList.TAG);
-            if (reactants != null && substanceLists.size() != 0) {
-                CMLSubstanceList substanceList = (CMLSubstanceList) substanceLists
-                        .get(0);
-                Elements substances = substanceList
-                        .getChildCMLElements("substance");
-                for (int i = 0; i < substances.size(); i++) {
-                    boolean matched = false;
-                    CMLName name = (CMLName) ((CMLSubstance) substances.get(i))
-                            .getFirstCMLChild("name");
-                    if (name != null) {
-                        String residue = name.getXMLContent();
-                        for (int j = 0; j < reactants.size(); j++) {
-                            Elements labels = ((CMLReactant) reactants.get(j))
-                                    .getChildCMLElements(CMLLabel.TAG);
-                            for (int k = 0; k < labels.size(); k++) {
-                                CMLLabel label = (CMLLabel) labels.get(k);
-                                if (label.getValue().equals(residue)) {
-                                    Elements substanceLabels = ((CMLSubstance) substances
-                                            .get(i))
-                                            .getChildCMLElements(CMLLabel.TAG);
-                                    for (int l = 0; l < substanceLabels.size(); l++) {
-                                        CMLLabel substanceLabel = (CMLLabel) substanceLabels
-                                                .get(l);
-                                        reactants.get(j).appendChild(
-                                                substanceLabel);
-                                    }
-                                    matched = true;
-                                    substances.get(i).detach();
-                                    break;
-                                }
-                            }
-                            if (matched) {
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (substanceList.getChildElements().size() == 0) {
-                    substanceList.detach();
-                } else {
-                    // Non-empty substanceList;
-                }
-            }
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-        }
-    }
 
     /**
      * get all descendant atoms.
@@ -420,31 +322,31 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
         return CMLReaction.getMolecules(this);
     }
 
-    /**
-     * gets descendant reactionComponents. note that this will return all
-     * containers as well as contained. thus calling this on: <reaction>
-     * <reactantList> <reactant/> </reactantList> </reaction> will return 2
-     * components, reactantList, followed by reactant.
-     *
-     * @return empty if no components (some components such as CMLProduct will
-     *         always return this)
-     */
-    public List<ReactionComponent> getReactionComponentDescendants() {
-        return CMLReaction.getReactionComponentDescendants(this, true);
-    }
-
-    /**
-     * gets child reactionComponents. note that this will return containers but
-     * not their contents. thus calling this on: <reaction> <reactantList>
-     * <reactant/> </reactantList> </reaction> will return 1 components,
-     * reactantList.
-     *
-     * @return empty if no components (some components such as CMLProduct will
-     *         always return this)
-     */
-    public List<ReactionComponent> getReactionComponentChildren() {
-        return CMLReaction.getReactionComponentDescendants(this, false);
-    }
+//    /**
+//     * gets descendant reactionComponents. note that this will return all
+//     * containers as well as contained. thus calling this on: <reaction>
+//     * <reactantList> <reactant/> </reactantList> </reaction> will return 2
+//     * components, reactantList, followed by reactant.
+//     *
+//     * @return empty if no components (some components such as CMLProduct will
+//     *         always return this)
+//     */
+//    public List<ReactionComponent> getReactionComponentDescendants() {
+//        return CMLReaction.getReactionComponentDescendants(this, true);
+//    }
+//
+//    /**
+//     * gets child reactionComponents. note that this will return containers but
+//     * not their contents. thus calling this on: <reaction> <reactantList>
+//     * <reactant/> </reactantList> </reaction> will return 1 components,
+//     * reactantList.
+//     *
+//     * @return empty if no components (some components such as CMLProduct will
+//     *         always return this)
+//     */
+//    public List<ReactionComponent> getReactionComponentChildren() {
+//        return CMLReaction.getReactionComponentDescendants(this, false);
+//    }
 
     /**
      * utility for any ReactionComponent classes.

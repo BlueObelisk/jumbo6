@@ -63,10 +63,26 @@ public class EntryTool extends AbstractTool {
 	/** constructor only used in package
      * use dictionaryTool.createEntryTool(entry) for normal use
      * @param entry
+     * @deprecated
      */
-    EntryTool(CMLEntry entry) {
+    private EntryTool(CMLEntry entry) {
         this.setEntry(entry);
     }
+    
+    /** gets EntryTool associated with entry.
+	 * if null creates one and sets it in entry
+	 * @param entry
+	 * @return tool
+	 */
+	public static EntryTool getOrCreateTool(CMLEntry entry) {
+		EntryTool entryTool = (EntryTool) entry.getTool();
+		if (entryTool == null) {
+			entryTool = new EntryTool(entry);
+			entry.setTool(entryTool);
+		}
+		return entryTool;
+	}
+
 
     /**
      * get entry.

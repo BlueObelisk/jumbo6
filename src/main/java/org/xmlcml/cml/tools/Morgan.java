@@ -319,7 +319,7 @@ public class Morgan extends AbstractTool {
              System.out.println("NO atoms in list");
          } else {
              System.out.println("==========="+message+"==========");
-             constantAtomSet.debug();
+             constantAtomSet.debug("MORGAN");
              for (int i = 0; i < morganList.size(); i++) {
                  if (i % 5 == 0) {
                      System.out.println();

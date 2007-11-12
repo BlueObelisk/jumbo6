@@ -396,21 +396,15 @@ public class OscarTool implements CMLConstants {
                     X_CML);
             if (nodes.size() == 0) {
                 // debug stuff
-//                System.out.println("===========NO MATCHING RBRACKET");
                 Nodes nn = lbrak.query("./preceding-sibling::*[1]");
                 if (nn.size() > 0) {
-    //                ((CMLElement) nn.get(0)).debug();
                 } else {
                     System.out.println("no preceding siblling");
                 }
-//                System.out.println("................");
                 nn = lbrak.query("./following-sibling::*[1]");
                 if (nn.size() > 0) {
-    //                ((CMLElement) nn.get(0)).debug();
                 } else {
-//                    System.out.println("no following siblling");
                 }
-//                System.out.println("===========");
                 continue;
             }
             CMLModule rbrak = (CMLModule) nodes.get(0);
@@ -427,7 +421,6 @@ public class OscarTool implements CMLConstants {
             }
             parent.replaceChild(lbrak, module1);
             rbrak.detach();
-    //        module1.debug();
         }
     }
     
@@ -820,8 +813,6 @@ public class OscarTool implements CMLConstants {
                     CMLSubstance substance = new CMLSubstance();
                     molecule.getParent().replaceChild(molecule, substance);
                     substance.appendChild(molecule);
-//                    System.out.println(">>>>"+value);
-//                    substance.debug();
                 }
             }
         }
@@ -893,27 +884,20 @@ public class OscarTool implements CMLConstants {
 //                System.err.println("VALUE "+value);
                 Nodes properties = module.query(CMLProperty.NS, X_CML);
                 if (properties.size() != 2) {
-//                    module.debug();
-//                    System.err.println("\nOnly "+properties.size()+" property children");
                     @SuppressWarnings("unused")
                     Element fs0 = (Element)module.query("./preceding-sibling::*[1]").get(0);
-//                    CMLUtil.debugToErr(fs0);
-//                    CMLUtil.debugToErr(module);
                     Nodes fs = module.query("./following-sibling::*");
                     if (fs.size() >= 1) {
                         @SuppressWarnings("unused")
                     Element fs1 = (Element)module.query("./following-sibling::*[1]").get(0);
-//                    CMLUtil.debugToErr(fs1);
                     }
                     if (fs.size() >= 2) {
                         @SuppressWarnings("unused")
                     Element fs2 = (Element)module.query("./following-sibling::*[2]").get(0);
-//                    CMLUtil.debugToErr(fs2);
                     }
                     if (fs.size() >= 3) {
                         @SuppressWarnings("unused")
                     Element fs3 = (Element)module.query("./following-sibling::*[3]").get(0);
-//                    CMLUtil.debugToErr(fs3);
                     }
                 } else {
                     System.out.println("OK PROPRTY");
@@ -2087,7 +2071,6 @@ public class OscarTool implements CMLConstants {
                 Element div0 = (Element) nodes.get(0);
                 if (div0 instanceof CMLMolecule) {
 //                    CMLMolecule molecule = (CMLMolecule) div0;
-//                    molecule.debug();
                 } else if (div0.getLocalName().equals("property")) {
                     Element quantity = div0.getFirstChildElement("quantity");
                     if (quantity != null) {
@@ -2107,7 +2090,6 @@ public class OscarTool implements CMLConstants {
         if (percent == null) {
             error("*no percent given in yield");
         }
-//        yield.debug();
     }
     
     private static void elementalAnalysis(Element div) {
@@ -2227,7 +2209,6 @@ public class OscarTool implements CMLConstants {
         }
         ParentNode parent = div.getParent();
         parent.replaceChild(div, nature);
-//        nature.debug();
     }
     
     private void state(Element prop) {

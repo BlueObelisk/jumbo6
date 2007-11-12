@@ -1,0 +1,103 @@
+<cml xmlns="http://www.xml-cml.org/schema">
+<moleculeList>
+  <molecule id="m1" title="2-phenyl....">
+    <formula concise="C 17 H 27 N 1 O 2"/>
+  </molecule>
+  <molecule id="m2" title="triethylamine">
+    <formula concise="C 6 H 15 N 1"/>
+    <property name="density">
+      <scalar dataType="xsd:float" dictRef="cml:density" units="units:g.cm-3">0.728</scalar>
+    </property>
+  </molecule>
+  <molecule id="m3" title="2-bromopropanoyl bromide">
+    <formula concise="C 3 H 4 Br 2 O 1"/>
+    <property name="density">
+      <scalar dataType="xsd:float" dictRef="cml:density" units="units:g.cm-3">2.061</scalar>
+    </property>
+  </molecule>
+</moleculeList>
+
+<reactionScheme title="Synthesis of Asymmetric initiators" id="ex2">
+  <reaction title="Synthesis of 2a">
+    <object id="o1" type="apparatus">Round Bottom Flask</object>
+    <reactantList>
+      <reactant id="r1" count="1" title="2-phenyl-2-1-ethanol">
+        <molecule ref="m1"/>
+        <amount id="a1" units="units:g" unitType="unitType:mass">0.85</amount>
+        <amount id="a1m" units="units:mmol">3.06</amount>
+      </reactant>
+      <reactant id="r2" count="1" title="ET3N">
+        <molecule ref="m2"/>
+        <amount id="a2" units="units:g">0.7</amount>
+        <amount id="a2m" units="units:mmol">5</amount>
+      </reactant>
+      <reactant id="r3" count="1" title="2-bromo propanyol bromide">
+        <molecule ref="m3"/>
+        <amount id="a3" units="units:ml">0.53</amount>
+        <amount id="a3m" units="units:mmol">5</amount>
+      </reactant>
+    </reactantList>
+    
+    <substanceList>
+      <substance id="ss1" count="2" role="subst:Solvent">
+        <molecule id="m4" ref="thf">
+        </molecule>
+        <amount id="a4" units="units:ml">20</amount>
+      </substance>
+    </substanceList>
+    <conditionList>
+      <scalar id="sc1" dictRef="cml:method">stirred</scalar>
+      <scalar id="sc2" dictRef="cml:temp" units="units:celsius">0</scalar>
+      <scalar id="sc3" dictRef="cml:atmosphere">nitrogen</scalar>
+      <scalar id="sc4" dictRef="cml:time" units="units:hour">1</scalar>
+      <scalar id="sc5" dictRef="cml:temp" units="units:celsius">21</scalar>
+      <scalar id="sc6" dictRef="cml:time">overnight</scalar>
+    </conditionList>
+    <productList>
+      <product id="p1" count="1" title="2a" color="pale yellow" state="oil">
+        <molecule id="m9" ref="2-phenyl-2-ethyl 2 bromo-propanate"/>
+        <amount id="a5" units="units:gram">0.52</amount>
+        <amount id="a6" units="units:percent">41</amount>
+      </product>
+    </productList>
+    <actionList>
+    
+      <substanceList role="workup">
+        <substance id="ss2" role="subst:Solvent">
+        <molecule id="m5" ref="CH2CL2"/>
+      </substance>
+      <substance id="ss3" role="subst:Solvent">
+        <molecule id="m6" ref="NA2CO3"/>
+      </substance>
+      <substance id="ss4" role="subst:Solvent">
+        <molecule id="m7" ref="NA2SO4"/>
+      </substance>
+      <substance id="ss5" role="subst:Solvent">
+        <molecule id="m8" ref="hexane"/>
+        <amount id="a5" unitType="unitType:vol">8</amount>
+      </substance>
+      <substance id="ss6" role="subst:Solvent">
+        <molecule id="m9" ref="ethyl"/>
+        <amount id="a6" unitType="unitType:vol">2</amount>
+      </substance>
+      </substanceList>
+      
+      <action title="Step1">
+      </action> 
+      <action title="Step2">
+    </action>
+    <action title="Step3">
+    </action>
+    <action title="Step4">
+    <substance>ss2</substance>
+    <substance>ss3</substance>
+    <substance>ss4</substance>
+    </action>
+    <action title="Step5-Purification">
+    <substance>ss5</substance>
+    <substance>ss6</substance>
+    </action>
+    </actionList>
+    </reaction>
+</reactionScheme>
+</cml>

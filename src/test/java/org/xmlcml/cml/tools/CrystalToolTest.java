@@ -249,7 +249,7 @@ public class CrystalToolTest extends AbstractToolTest {
 //                CMLSymmetry symmetry = CMLSymmetry.getContainedSymmetry(crystal);
 //                CMLMolecule mol = getMolecule(cml);
 //                mol.createCartesiansFromFractionals(crystal);
-//                MoleculeTool moleculeTool = new MoleculeTool(mol);
+//                MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 //                Assert.assertNotNull("molecule not null", mol);
 //
 //                CrystalTool crystalTool = new CrystalTool(mol, crystal, symmetry);
@@ -397,7 +397,7 @@ public class CrystalToolTest extends AbstractToolTest {
 //                try {
 //                    CMLMolecule molecule = getMolecule(cml);
 //                    //molecule.setLog(log);
-//                    MoleculeTool moleculeTool = new MoleculeTool(molecule);
+//                    MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
 //                    
 //                    moleculeTool.createCartesiansFromFractionals();
 //                    molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY : S_UNDER+molecule.getId()));
@@ -424,7 +424,6 @@ public class CrystalToolTest extends AbstractToolTest {
 //					/*
 //					// only want to move organic species the second time round to make sure all organic species
 //					// present are complete.
-//					mergedMolecule.debug();
 //					// 1. must remove metals atoms and bonds
 //					// 2. partition into molecules (? maybe don't need this step)
 //					// 3. calc crystallochemical unit
@@ -555,12 +554,12 @@ public class CrystalToolTest extends AbstractToolTest {
     private void outputRingNuclei(String user, String cifname, int mol, 
             CMLMolecule mergedMolecule, CMLLog log) {
         List<CMLMolecule> subMoleculeList =
-            new MoleculeTool(mergedMolecule).getMoleculeList();
+            MoleculeTool.getOrCreateTool(mergedMolecule).getMoleculeList();
         int subMol = 0;
         for (CMLMolecule subMolecule : subMoleculeList) {
             generateInChI(subMolecule, log);
             
-            MoleculeTool subMoleculeTool = new MoleculeTool(subMolecule);
+            MoleculeTool subMoleculeTool = MoleculeTool.getOrCreateTool(subMolecule);
             List<CMLMolecule> ringNucleusList =
                 subMoleculeTool.getRingNucleiMolecules();
             subMol++;
@@ -634,7 +633,7 @@ public class CrystalToolTest extends AbstractToolTest {
         typeList.add(ChemicalElement.Type.TRANSITION_METAL);
         CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
         for (CMLMolecule mol : molecules) {
-        	MoleculeTool moleculeTool = new MoleculeTool(mol);
+        	MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
         	List<CMLMolecule> clusterList = 
         		moleculeTool.createClusters(typeList);
         	log.add("CLUSTER"+clusterList.size());
@@ -646,7 +645,7 @@ public class CrystalToolTest extends AbstractToolTest {
         			if (cluster.getAtomCount() > 1) {
         				String[] atomIds = cluster.getAtomSet().getAtomIDs();
         				CMLAtomSet clAtomSet = new CMLAtomSet(mol, atomIds);
-        				CMLMolecule sproutCluster = new MoleculeTool(mol).sprout(clAtomSet);
+        				CMLMolecule sproutCluster = MoleculeTool.getOrCreateTool(mol).sprout(clAtomSet);
         				if (sproutCluster != null) {
         					writeXML(getOutfile(user, "clust", cifname+"_clust", 0, 0, ++clust),
         							sproutCluster, "nucleus");
@@ -664,7 +663,7 @@ public class CrystalToolTest extends AbstractToolTest {
         String user, String cifname, CMLMolecule molecule, CMLLog log) {
         List<Type> typeList = new ArrayList<Type>();
         typeList.add(ChemicalElement.Type.TRANSITION_METAL);
-        MoleculeTool moleculeTool = new MoleculeTool(molecule);
+        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
         List<CMLMolecule> ligandList = 
             moleculeTool.createLigands(typeList);
 //        System.out.println("LIGANDS"+ligandList.size());
@@ -672,7 +671,6 @@ public class CrystalToolTest extends AbstractToolTest {
         int ligCount = 0;
         for (CMLMolecule ligand : ligandList) {
             if (ligand.getAtomCount() >= 3) {
-//            ligand.debug();
                 writeXML(getOutfile(user, "ligand", cifname+"_lig", 0, 0, ++ligCount),
                     ligand, "ligand");
             }

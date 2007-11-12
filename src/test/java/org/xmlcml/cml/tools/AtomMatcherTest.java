@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /** test AtomMatcher
@@ -294,15 +293,14 @@ public class AtomMatcherTest extends AbstractToolTest {
 
         List list = new ArrayList();
         for (String t : treeS) {
-//            System.out.println("T "+t);
             Object obj = map.get(t);
             list.add(obj);
         }
         for (Object obj : list) {
             if (obj instanceof CMLAtom) {
-                System.out.println("A "+((CMLAtom)obj).getId());
+//                System.out.println("A "+((CMLAtom)obj).getId());
             } else if (obj instanceof CMLAtomSet) {
-                System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), S_SLASH));
+//                System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).getXMLContent(), S_SLASH));
             }
         }
         

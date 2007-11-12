@@ -66,7 +66,6 @@ public class RingTest extends AbstractToolTest {
 		bondSet.removeBond(bond);
 		bondSet.addBond(bond);
 		Ring newRing = new Ring(atomSet, bondSet);
-//		atomSet.debug();
 		assertEqualCyclicAtomList("ring constructor", 
 				new String[]{
 			"a51", "a65", "a57", "a59", "a62"},
@@ -89,7 +88,6 @@ public class RingTest extends AbstractToolTest {
 		bondSet.removeBond(bond);
 		bondSet.addBond(bond);
 		Ring newRing = new Ring(bondSet);
-//		newRing.debug();
 		assertEqualCyclicAtomList("ring constructor", 
 				new String[]{
 			"a51", "a65", "a57", "a59", "a62"},
@@ -103,7 +101,6 @@ public class RingTest extends AbstractToolTest {
 	@Ignore // order of sets is a problem
 	public final void testGetAtomSet() {
 		CMLAtomSet atomSet = new CMLAtomSet(ring.getAtomSet());
-		atomSet.debug();
 		CMLAtomSetTest.assertEquals("atom set", 
 			new String[] {"a52", "a54", "a51", "a65", "a57"},
 			atomSet);
@@ -117,7 +114,6 @@ public class RingTest extends AbstractToolTest {
 	@Ignore // order of bonds is a problem
 	public final void testGetBondSet() {
 		CMLBondSet bondSet = new CMLBondSet(ring.getBondSet());
-//		bondSet.debug();
 		CMLBondSetTest.assertEquals("bond set", 
 			new String[] {"a57_a65", "a57_a59", "a59_a62", "a51_a62", "a51_a65"},
 			bondSet);

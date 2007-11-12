@@ -39,6 +39,7 @@ public class BondTool extends AbstractTool {
      * constructor
      * 
      * @param bond
+     * @deprecated use getOrCreateTool
      */
     public BondTool(CMLBond bond) {
         this.bond = bond;
@@ -62,16 +63,6 @@ public class BondTool extends AbstractTool {
 		return bondTool;
 	}
 
-    /**
-     * make bond tool from a bond.
-     * 
-     * @param bond
-     * @return the tool
-     */
-    static BondTool createBondTool(CMLBond bond) {
-        return new BondTool(bond);
-    }
-    
     /** create a table to lookup bonds by atom Ids.
      * 
      * use lookupBond(Map, atom, atom) to retrieve

@@ -85,10 +85,7 @@ public class InlineMolecule implements CMLConstants {
         this.formula = formula;
         rootAtom = null;
         createFromString(formula);
-        cmlMolecule.debug();
-        System.out.println("===========xxxxxxxxxxxxxx================");
         makeMolecule();
-        cmlMolecule.debug();
     }
     
     /** create new molecule.
@@ -115,7 +112,6 @@ public class InlineMolecule implements CMLConstants {
                     rootAtom = inlineAtom;
                 }
                 if (currentBond != null) {
-                    System.out.println("III..."+inlineAtom);
                     inlineAtom.addBond(currentAtom, currentBond);
                     currentBond = null;
                 }
@@ -130,7 +126,6 @@ public class InlineMolecule implements CMLConstants {
                     serial = branch.serial;
                 } else {
                     currentBond = InlineBond.grab(formula.substring(i));
-                    currentBond.debug();
                     if (currentBond == null) {
                         throw new CMLRuntimeException("NULL bond");
                     }
@@ -569,7 +564,6 @@ class InlineBranch {
                     serial = branchbranch.serial;
                 } else {      		
                 	branchBond = InlineBond.grab(s.substring(j));
-                	branchBond.debug();
                 	if (branchBond == null){
                 		throw new CMLRuntimeException("NULL bond");
                 	}

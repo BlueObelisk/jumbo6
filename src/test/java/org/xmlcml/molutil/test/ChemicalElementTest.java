@@ -368,7 +368,6 @@ public class ChemicalElementTest extends BaseTest {
         Assert.assertNull("get", el);
         el = ChemicalElement.getChemicalElement("Dummy");
         Assert.assertNotNull("get", el);
-//        el.debug();
         Assert.assertEquals("get", "Dummy", el.getSymbol());
     }
 

@@ -653,7 +653,6 @@ public class CMLFormula extends AbstractFormula {
 	public static CMLFormula createFormula(String s, Type convention) {
 		CMLFormula docFormula = new CMLFormula();
 		docFormula.createFromString(s, convention);
-
 		return docFormula;
 	}
 
@@ -1028,199 +1027,209 @@ public class CMLFormula extends AbstractFormula {
 	}
 
 	private void parseAny(String formulString) {
-		// FIXME
 		// ANY - make whitespace separated string and then recurse
 		StringBuilder result = new StringBuilder();
 		String ss = formulString.trim();
 		int l = ss.length();
 		int i = 0;
-		char c;
+		int ii = 0;
 		int charge = 0;
-		String count = S_EMPTY;
 		while (i < l) {
 			// skip white
 			i = grabWhite(ss, i, l);
-			if (i >= l)
-				break;
-			c = ss.charAt(i);
-			// start element or charge
-			String el = S_EMPTY;
-			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
-			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
-				if (true) throw new RuntimeException("FIX ME");
-				charge = getFinalCharge(ss.substring(i).trim());
-				break;
-			}
-			// upper case required
-			if (!Character.isUpperCase(c)) {
-				throw new CMLRuntimeException("Formula: Cannot interpret element ("
-						+ c + ") at char (" + (i + 1) + ") in: "
-						+ ss);
-			}
-			el += c;
-			if (++i >= l) {
-				result.append(el + " 1");
-				break;
-			}
-			c = ss.charAt(i);
-			// lower case optional
-			if (Character.isLowerCase(c)) {
-				el += c;
-				i++;
-			}
-			// skip white
-			while (ss.charAt(i) == C_SPACE) {
-				if (++i >= l)
-					break;
-			}
 			if (i >= l) {
-				result.append(el + " 1");
+				break; // end of line
+			}
+			result.append(S_SPACE);
+			ii = grabElement(ss, i, l);
+			if (ii == i) {
+				ii = grabCharge(ss, i, l);
+				if (ii != i) {
+					charge = Integer.parseInt(ss.substring(i, ii));
+				}
 				break;
 			}
-			// multiplier?
-			c = ss.charAt(i);
-			// implied count of 1?
-			count = S_EMPTY;
-			if (!Character.isDigit(c)) {
-				count = "1";
+			result.append(ss.substring(i, ii));
+			result.append(S_SPACE);
+			i = ii;
+			i = grabWhite(ss, i, l);
+			ii = grabCount(ss, i, l);
+			if (ii == i) {
+				result.append(1);
 			} else {
-				while (true) {
-					c = ss.charAt(i);
-					if (!Character.isDigit(c) && c != C_PERIOD) {
-						break;
-					}
-					count += c;
-					if (++i == l)
-						break;
-				}
+				result.append(ss.substring(i, ii));
 			}
-			result.append(el + S_SPACE + count + S_SPACE);
+			i = ii;
+			i = grabWhite(ss, i, l);
 		}
-		createFromString(result.toString(), Type.ELEMENT_WHITESPACE_COUNT);
+		String sss = result.toString().trim();
+		createFromString(sss, Type.ELEMENT_WHITESPACE_COUNT);
 		if (charge != 0) {
 			this.setFormalCharge(charge);
 		}
 	}
 	
-	private int grabWhite(String ss, int i, int l) {
-		while (i++  < l) {
-			
+	private int grabCharge(String ss, int i, int l) {
+		char c = ss.charAt(i);
+		if (i < l && (c == C_MINUS || c == C_PLUS)) {
+			i++;
+		}
+		while (i < l) {
+			c = ss.charAt(i);
+			if (!Character.isDigit(c)) {
+				break;
+			}
+			i++;
 		}
 		return i;
 	}
 
-	private void parseAnyOld(String formulaString) {
-		// FIXME
-		// ANY - make whitespace separated string and then recurse
-		String result = S_EMPTY;
-		formulaString += S_SPACE;
-		int l = formulaString.length();
-		int i = 0;
-		char c;
-		int charge = 0;
-		String count = S_EMPTY;
+	private int grabCount(String ss, int i, int l) {
+		if (allowNegativeCounts && i < l && ss.charAt(i) == C_MINUS) {
+			i++;
+		}
 		while (i < l) {
-			// skip white
-			while (formulaString.charAt(i) == C_SPACE) {
-				if (++i >= l)
-					break;
-			}
-			if (i >= l)
-				break;
-			c = formulaString.charAt(i);
-			// start element or charge
-			String el = S_EMPTY;
-			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
-			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
-				if (true) throw new RuntimeException("FIX ME");
-				charge = getFinalCharge(formulaString.substring(i).trim());
+			char c = ss.charAt(i);
+			if (c != C_PERIOD && !Character.isDigit(c)) {
 				break;
 			}
-			// upper case required
-			if (!Character.isUpperCase(c)) {
-				throw new CMLRuntimeException("Formula: Cannot interpret element ("
-						+ c + ") at char (" + (i + 1) + ") in: "
-						+ formulaString);
-			}
-			el += c;
-			if (++i >= l) {
-				result += el + " 1";
-				break;
-			}
-			c = formulaString.charAt(i);
-			// lower case optional
-			if (Character.isLowerCase(c)) {
-				el += c;
-				i++;
-			}
-			// skip white
-			while (formulaString.charAt(i) == C_SPACE) {
-				if (++i >= l)
-					break;
-			}
-			if (i >= l) {
-				result += el + " 1";
-				break;
-			}
-			// multiplier?
-			c = formulaString.charAt(i);
-			// implied count of 1?
-			count = S_EMPTY;
-			if (!Character.isDigit(c)) {
-				count = "1";
-			} else {
-				while (true) {
-					c = formulaString.charAt(i);
-					if (!Character.isDigit(c) && c != C_PERIOD) {
-						break;
-					}
-					count += c;
-					if (++i == l)
-						break;
-				}
-			}
-			result += el + S_SPACE + count + S_SPACE;
+			i++;
 		}
-		createFromString(result, Type.ELEMENT_WHITESPACE_COUNT);
-		if (charge != 0) {
-			this.setFormalCharge(charge);
-		}
+		return i;
 	}
 
-	private int getFinalCharge(String f) {
-		if (!allowNegativeCounts && f.indexOf(' ') != -1) {
-			throw new CMLRuntimeException("Charge must be final field: " + f);
+	private int grabElement(String ss, int i, int l) {
+		if (i < l && Character.isUpperCase(ss.charAt(i))) {
+			i++;
 		}
-		int sign = 0;
-		int charge = 0;
-		String ch = S_EMPTY;
-		int l = f.length();
-		if (f.charAt(0) == C_PLUS) {
-			sign = 1;
-			ch = f.substring(1);
-		} else if (f.charAt(0) == C_MINUS) {
-			sign = -1;
-			ch = f.substring(1);
-		} else if (f.indexOf(C_PLUS) == l - 1) {
-			sign = 1;
-			ch = f.substring(0, l - 1);
-		} else if (f.indexOf(C_MINUS) == l - 1) {
-			sign = -1;
-			ch = f.substring(0, l - 1);
-		} else {
-			throw new CMLRuntimeException("Cannot parse as charge field: " + f);
+		if (i < l && Character.isLowerCase(ss.charAt(i))) {
+			i++;
 		}
-		if (ch.equals(S_EMPTY)) {
-			charge = 1;
-		} else {
-			try {
-				charge = Integer.parseInt(ch);
-			} catch (NumberFormatException nfe) {
-				throw new CMLRuntimeException("Cannot parse as charge field: " + f + "("+ch+")");
-			}
-		}
-		return sign * charge;
+		return i;
 	}
+
+	private int grabWhite(String ss, int i, int l) {
+		while (i  < l) {
+			if (!Character.isWhitespace(ss.charAt(i))) {
+				break;
+			}
+			i++;
+		}
+		return i;
+	}
+
+//	private void parseAnyOld(String formulaString) {
+//		// FIXME
+//		// ANY - make whitespace separated string and then recurse
+//		String result = S_EMPTY;
+//		formulaString += S_SPACE;
+//		int l = formulaString.length();
+//		int i = 0;
+//		char c;
+//		int charge = 0;
+//		String count = S_EMPTY;
+//		while (i < l) {
+//			// skip white
+//			while (formulaString.charAt(i) == C_SPACE) {
+//				if (++i >= l)
+//					break;
+//			}
+//			if (i >= l)
+//				break;
+//			c = formulaString.charAt(i);
+//			// start element or charge
+//			String el = S_EMPTY;
+//			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
+//			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
+//				if (true) throw new RuntimeException("FIX ME");
+//				charge = getFinalCharge(formulaString.substring(i).trim());
+//				break;
+//			}
+//			// upper case required
+//			if (!Character.isUpperCase(c)) {
+//				throw new CMLRuntimeException("Formula: Cannot interpret element ("
+//						+ c + ") at char (" + (i + 1) + ") in: "
+//						+ formulaString);
+//			}
+//			el += c;
+//			if (++i >= l) {
+//				result += el + " 1";
+//				break;
+//			}
+//			c = formulaString.charAt(i);
+//			// lower case optional
+//			if (Character.isLowerCase(c)) {
+//				el += c;
+//				i++;
+//			}
+//			// skip white
+//			while (formulaString.charAt(i) == C_SPACE) {
+//				if (++i >= l)
+//					break;
+//			}
+//			if (i >= l) {
+//				result += el + " 1";
+//				break;
+//			}
+//			// multiplier?
+//			c = formulaString.charAt(i);
+//			// implied count of 1?
+//			count = S_EMPTY;
+//			if (!Character.isDigit(c)) {
+//				count = "1";
+//			} else {
+//				while (true) {
+//					c = formulaString.charAt(i);
+//					if (!Character.isDigit(c) && c != C_PERIOD) {
+//						break;
+//					}
+//					count += c;
+//					if (++i == l)
+//						break;
+//				}
+//			}
+//			result += el + S_SPACE + count + S_SPACE;
+//		}
+//		createFromString(result, Type.ELEMENT_WHITESPACE_COUNT);
+//		if (charge != 0) {
+//			this.setFormalCharge(charge);
+//		}
+//	}
+
+//	private int getFinalCharge(String f) {
+//		if (!allowNegativeCounts && f.indexOf(' ') != -1) {
+//			throw new CMLRuntimeException("Charge must be final field: " + f);
+//		}
+//		int sign = 0;
+//		int charge = 0;
+//		String ch = S_EMPTY;
+//		int l = f.length();
+//		if (f.charAt(0) == C_PLUS) {
+//			sign = 1;
+//			ch = f.substring(1);
+//		} else if (f.charAt(0) == C_MINUS) {
+//			sign = -1;
+//			ch = f.substring(1);
+//		} else if (f.indexOf(C_PLUS) == l - 1) {
+//			sign = 1;
+//			ch = f.substring(0, l - 1);
+//		} else if (f.indexOf(C_MINUS) == l - 1) {
+//			sign = -1;
+//			ch = f.substring(0, l - 1);
+//		} else {
+//			throw new CMLRuntimeException("Cannot parse as charge field: " + f);
+//		}
+//		if (ch.equals(S_EMPTY)) {
+//			charge = 1;
+//		} else {
+//			try {
+//				charge = Integer.parseInt(ch);
+//			} catch (NumberFormatException nfe) {
+//				throw new CMLRuntimeException("Cannot parse as charge field: " + f + "("+ch+")");
+//			}
+//		}
+//		return sign * charge;
+//	}
 
 	/**
 	 * Adds element and count to formula. If element is already known,
@@ -1289,6 +1298,10 @@ public class CMLFormula extends AbstractFormula {
 				: getAtomArrayElements().get(0);
 		return (atomArray == null) ? null : atomArray.getCount();
 	}
+	
+//	CMLAtomArray atomArray = (getAtomArrayElements().size() == 0) ? null
+//			: getAtomArrayElements().get(0);
+//	return (atomArray == null) ? null : atomArray.getElementType();
 
 	/** get atom count
 	 * @return count

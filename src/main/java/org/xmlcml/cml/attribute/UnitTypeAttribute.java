@@ -53,6 +53,15 @@ public class UnitTypeAttribute extends NamespaceRefAttribute {
     /**
      * constructor.
      * 
+     * @param value
+     */
+    public UnitTypeAttribute(String value) {
+        super(NAME, value);
+    }
+
+    /**
+     * constructor.
+     * 
      * @param att
      */
     public UnitTypeAttribute(Attribute att) {

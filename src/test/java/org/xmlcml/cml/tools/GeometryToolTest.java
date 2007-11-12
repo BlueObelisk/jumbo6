@@ -29,7 +29,7 @@ public class GeometryToolTest extends MoleculeAtomBondTest {
     public void testCreateValenceLengthsAtomSet() {
         /*--
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
-        MoleculeTool moleculeTool = new MoleculeTool(xomAtom[0].getMolecule());
+        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(xomAtom[0].getMolecule());
         boolean calculate = true;
         boolean add = true;
         List<CMLLength> lengths = moleculeTool.createValenceLengths(atomSet,

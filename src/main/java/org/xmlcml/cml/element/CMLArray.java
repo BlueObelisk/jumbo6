@@ -21,6 +21,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.interfacex.HasArraySize;
+import org.xmlcml.cml.interfacex.HasDataType;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -32,7 +33,7 @@ import org.xmlcml.euclid.RealArray;
  * shell which can be edited
  * 
  */
-public class CMLArray extends AbstractArray implements HasUnits, HasArraySize {
+public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, HasDataType {
 
 	static Logger logger = Logger.getLogger(CMLArray.class.getName());
 	/** namespaced element name. */

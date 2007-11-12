@@ -38,7 +38,7 @@ public class ValencyToolTest extends MoleculeAtomBondTest {
     @Test
     public void testMarkSpecial() {
         CMLMolecule nitroMethane = (CMLMolecule) parseValidString(MoleculeToolTest.nitroMethaneS);
-        // MoleculeTool moleculeTool = new MoleculeTool(nitroMethane);
+        // MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(nitroMethane);
         CMLAtom nAtom = nitroMethane.getAtom(0);
         Assert.assertEquals("nitro", "a1", nAtom.getId());
         Assert.assertNotNull("nitro", nAtom.getFormalChargeAttribute());
