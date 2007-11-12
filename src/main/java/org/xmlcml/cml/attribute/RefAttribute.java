@@ -105,13 +105,11 @@ public class RefAttribute extends StringSTAttribute {
             newElem.addAttribute(new Attribute("id", idgen));
         } else {
         }
-//        newElem.debug();
         // substitute all args
         // transfer any args from referring element
 //        CMLArg.transferArgs(element, newElem);
 //        CMLArg.substituteNameByValue(newElem);
 //        System.out.println("%%%%%%%%%%%%%%%%%%%%");
-//        newElem.debug();
 //        System.out.println("%%%%%%%%%%%%%%%%%%%%");
         CMLElement parent = (CMLElement) element.getParent();
         int idx = parent.indexOf(element);

@@ -9,6 +9,7 @@ import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.interfacex.HasDataType;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -23,7 +24,7 @@ import org.xmlcml.euclid.Util;
  * shell which can be edited
  *
  */
-public class CMLMatrix extends AbstractMatrix implements HasUnits {
+public class CMLMatrix extends AbstractMatrix implements HasUnits, HasDataType {
 
 	/** types of matrix.
 	 */

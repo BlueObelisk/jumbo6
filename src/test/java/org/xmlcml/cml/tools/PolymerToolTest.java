@@ -152,7 +152,6 @@ public class PolymerToolTest extends AbstractToolTest {
 			polymerTool.processConventionExhaustively();
 		} catch (CMLRuntimeException e) {
 			System.err.println("ERROR " + e);
-			// molecule.debug();
 		}
 		String convention = molecule.getConvention();
 		convention = convention.substring(convention.indexOf(S_COLON) + 1);
@@ -175,35 +174,6 @@ public class PolymerToolTest extends AbstractToolTest {
 
 	@SuppressWarnings("unused")
 	private void testExample(String fileroot) throws Exception {
-//		System.out.println("Running example " + fileroot);
-//        CMLElement root = null;
-//        PolymerTool polymerTool = new PolymerTool();
-//        // try concise first
-//        try {
-//            File file = new File(fileroot + "_concise.xml");
-//            root = readElementFromResource(file.toString());
-//            System.out.println("Read from: "+file);
-//            polymerTool.setElement(root);
-//    		polymerTool.processConvention();
-//            debug("basic", root, fileroot);
-//        } catch (CMLRuntimeException e) {
-//            // if fails, try basic
-//            File file = new File(fileroot + "_basic.xml");
-//            root = readElementFromResource(file.toString());
-//            polymerTool.setElement(root);
-//            System.out.println("Read from: "+file);
-//        }
-//        polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
-//
-//		polymerTool.processConvention();
-//		debug("intermed", root, fileroot);
-//		// /*--------
-//
-//		polymerTool.processConvention();
-//		debug("explicit", root, fileroot);
-//
-//		polymerTool.processConvention();
-//		debug("complete", root, fileroot);
         
         PolymerTool polymerTool = new PolymerTool();
         File file = new File(fileroot + "_basic.xml");
@@ -237,11 +207,6 @@ public class PolymerToolTest extends AbstractToolTest {
 		polymerTool.setMoleculeList(molList);
 		polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
 		polymerTool.processConvention();
-//		try {
-//			debug("basic", molList, fileroot);
-//		} catch (AssertionError e) {
-//			System.err.println("NOT YET FIXED TRANSLATION");
-//		}
 		/*--
 
 		 polymerTool.processConvention();
@@ -314,7 +279,6 @@ public class PolymerToolTest extends AbstractToolTest {
 //            BaseTest.assertEqualsCanonically("comparing with previous result",
 //                    molListRef, molListTest, true);
 //        } catch (AssertionError e) {
-//            // molListTest.debug();
 //            Assert.fail(e + " for " + fileroot + S_SLASH + s);
 //        }
 //        System.out.println("============" + s + "==========");

@@ -803,9 +803,10 @@ public class CMLAtomSet extends AbstractAtomSet {
     public CMLFormula getCalculatedFormula(CMLMolecule.HydrogenControl control)
             throws CMLRuntimeException {
         CMLFormula formula = new CMLFormula();
-        if (!control.equals(CMLMolecule.HydrogenControl.USE_HYDROGEN_COUNT)
-                && !control
-                        .equals(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS)) {
+        if (control.equals(CMLMolecule.HydrogenControl.USE_HYDROGEN_COUNT)
+        	|| control.equals(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS)
+            || control.equals(CMLMolecule.HydrogenControl.NO_EXPLICIT_HYDROGENS)) {
+        } else {
             throw new CMLRuntimeException("No hydrogen count control on Formula");
         }
         double hCount = 0;

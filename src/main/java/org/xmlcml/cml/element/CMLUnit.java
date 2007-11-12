@@ -29,6 +29,28 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
 
     static String NULL_UNIT_LIST_MAP = "null unitListMap";
 
+    /** common units in chemistry */
+    public enum Units {
+    	/** mass*/
+    	GRAM			("units:g"),
+    	/** density*/
+    	GRAM_PER_CMCUBED("units:g.cm-3"),
+    	/** volume */
+    	ML				("units:ml"),
+    	/** volume */
+    	L				("units:l"),
+    	/** amount */
+    	MOL				("units:mol"),
+    	/** amount */
+    	MMOL			("units:mmol"),
+    	;
+    	/** */
+    	public final String value;
+    	private Units(String s) {
+    		value = s;
+    	}
+    };
+
     /**
      * can be cached within the unit.
      */

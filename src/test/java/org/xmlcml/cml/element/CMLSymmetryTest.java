@@ -437,7 +437,6 @@ public class CMLSymmetryTest extends BaseTest {
         list.add("-x, -y, -z");
         CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
         CMLSymmetry symmetry3 = symmetry1.convolute(symmetry2);
-        symmetry3.debug();
     }
     /**
      * Test method for

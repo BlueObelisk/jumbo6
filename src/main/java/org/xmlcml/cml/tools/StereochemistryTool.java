@@ -36,7 +36,7 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public StereochemistryTool(CMLMolecule molecule) {
 		this.molecule = molecule;
-		moleculeTool = new MoleculeTool(molecule);
+		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 */
 	public void add2DStereo() {
-		// MoleculeTool moleculeTool = new MoleculeTool(molecule);
+		// MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
 		List<CMLBond> acyclicDoubleBonds = new ConnectionTableTool(molecule)
 		.getAcyclicDoubleBonds();
 		for (CMLBond bond : acyclicDoubleBonds) {

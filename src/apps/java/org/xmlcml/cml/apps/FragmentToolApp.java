@@ -69,7 +69,7 @@ public class FragmentToolApp extends AbstractTest {
 	@Test
 	public void testGetAndSetMolecule() {
 		CMLFragment fragment = new CMLFragment();
-		FragmentTool fragmentTool = new FragmentTool(fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		CMLMolecule molecule = null;
 		CMLMolecule fragmentMolecule = fragmentTool.getMolecule();
 		Assert.assertNull("fragment molecule", fragmentMolecule);
@@ -260,7 +260,7 @@ public class FragmentToolApp extends AbstractTest {
 
 	private void testAll(CMLFragment fragment, boolean debug, int serial,
 			String intermediateS, String explicitS, String completeS, boolean check) {
-		FragmentTool fragmentTool = new FragmentTool(fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		// basic -> intermediate
 		String title = "basic"+serial;
 		outputXML(title, fragment);
@@ -346,7 +346,7 @@ public class FragmentToolApp extends AbstractTest {
 	@Test
 	public void testProcessIntermediate() {
 		CMLFragment fragment = makeMol();
-		FragmentTool fragmentTool = new FragmentTool(fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		fragmentTool.processBasic(moleculeCatalog);
 		
 		List<String> prefixes = CMLUtil.getPrefixes(fragment, "ref");
@@ -495,7 +495,7 @@ public class FragmentToolApp extends AbstractTest {
 		"</fragment>";		
 		
 		CMLFragment generatedFragment = (CMLFragment) parseValidString(generatedS);
-		FragmentTool generatedFragmentTool = new FragmentTool(generatedFragment);
+		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateFragmentTool(generatedFragment);
 		generatedFragmentTool.processAll(moleculeCatalog);
 		
 		String generatedES = "" +
@@ -3318,7 +3318,7 @@ public class FragmentToolApp extends AbstractTest {
 		testAll(fragment, debug, 5,
 				intermediateS, explicitS, completeS, check);
 		
-		CMLMolecule molecule = new FragmentTool(fragment).getMolecule();
+		CMLMolecule molecule = FragmentTool.getOrCreateFragmentTool(fragment).getMolecule();
 //		"    <torsion>121</torsion>" +
 //		"    <length>1.51</length>" +
 		testTorsion(molecule, "2pyr_1_a2", "2pyr_1_a1", "po_2_a5", "po_2_a3", 121, 0.001);
@@ -3734,7 +3734,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 //	@Test
-//	@Ignore
 	public void testAll9() {
 		CMLFragment fragment = makeMol9();
 		boolean debug = false;
@@ -5102,7 +5101,7 @@ public class FragmentToolApp extends AbstractTest {
 		String[] MOLREFS2 = new String[]{CMLJoin.PREVIOUS_S, CMLJoin.NEXT_S};
 		CMLFragment fragment = new CMLFragment();
 		@SuppressWarnings("unused")
-		FragmentTool fragmentTool = new FragmentTool(fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		CMLFragment fragment1 = new CMLFragment();
 		fragment1.setId("f1");
 		fragment.appendChild(fragment1);
@@ -5477,9 +5476,9 @@ public class FragmentToolApp extends AbstractTest {
    	"  </molecule>"+
    	"</fragment>";
    	CMLFragment fragment= (CMLFragment) parseValidString(fragmentS);
-   	FragmentTool fragmentTool = new FragmentTool(fragment);
+   	FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
    	CMLMolecule molecule = fragmentTool.getMolecule();
-//   	MoleculeTool moleculeTool = new MoleculeTool(molecule);
+//   	MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
 	fragmentTool.substituteParameters();
 		
    	String moleculeS = ""+
@@ -5550,7 +5549,7 @@ public class FragmentToolApp extends AbstractTest {
 	   	"  </molecule>"+
 	   	"</fragment>";
 	   	CMLFragment fragment= (CMLFragment) parseValidString(fragmentS);
-	   	FragmentTool fragmentTool = new FragmentTool(fragment);
+	   	FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		fragmentTool.substituteParameters();
 		
 	   	fragmentS = ""+
@@ -5636,7 +5635,7 @@ public class FragmentToolApp extends AbstractTest {
 		"      </propertyList>" +
 		"</fragment>";
 		CMLFragment fragment = (CMLFragment) parseValidString(fragmentS);
-		FragmentTool fragmentTool = new FragmentTool(fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateFragmentTool(fragment);
 		fragmentTool.processExplicit();
 		fragment = fragmentTool.getFragment();
 //		  <propertyList>

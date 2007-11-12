@@ -56,7 +56,6 @@ public class RingNucleusTest extends AbstractToolTest {
 	 */
 	@Test
 	public final void testGetAtomSet() {
-//		nucleus0.getAtomSet().debug();
 		CMLAtomSetTest.assertEquals("ringNucleus0", 
 			new String[]{"a47", "a43", "a40", "a41", "a49", "a45"},
 			nucleus0.getAtomSet());
@@ -67,7 +66,6 @@ public class RingNucleusTest extends AbstractToolTest {
 	 */
 	@Test
 	public final void testGetBondSet() {
-//		nucleus0.getBondSet().debug();
 		Assert.assertEquals("ringNucleus0", 
 			new String[]{"a40_a41", "a40_a49", "a41_a43", "a43_a45", "a45_a47", "a47_a49"},
 			nucleus0.getBondSet().getXMLContent());
@@ -89,7 +87,6 @@ public class RingNucleusTest extends AbstractToolTest {
 		};
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
-//			ring.debug();
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
 		
@@ -100,7 +97,6 @@ public class RingNucleusTest extends AbstractToolTest {
 		};
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
-//			ring.debug();
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
 		
@@ -113,7 +109,6 @@ public class RingNucleusTest extends AbstractToolTest {
 
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
-//			ring.debug();
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
 	}
@@ -178,22 +173,12 @@ public class RingNucleusTest extends AbstractToolTest {
 		Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
 		for (; iterator.hasNext();) {
 			RingNucleus nucleus = iterator.next();
-//			nucleus.debug();
-//			System.out.println("...................");
 			junctionList = nucleus.getJunctions();
-//			for (Junction junction : junctionList) {
-//				System.out.println("======Junction=======");
-//				junction.debug();
-//			}
 		}
 		RingNucleus nucleus5 = ringNucleusSet.get(5);
 		junctionList = nucleus5.getJunctions();
 		Assert.assertEquals("junctions", 14, junctionList.size());
 //		@SuppressWarnings("unused")
-//		for (Junction junction : junctionList) {
-//			System.out.println("======Junction=======");
-//			junction.debug();
-//		}
 	}
 	
     /** Test method for {@link org.xmlcml.cml.tools.ConnectionTableTool#getRingNucleusSet()}.
@@ -212,7 +197,6 @@ public class RingNucleusTest extends AbstractToolTest {
     	Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
     	for (int i = 0; i < 3; i++) {
 			CMLAtomSet atomSet = iterator.next().getAtomSet();
-//			atomSet.debug();
     		CMLAtomSetTest.assertEquals("ringNucleus "+i, 
 			expectedAtomIDs[i], 
 			atomSet);

@@ -106,7 +106,7 @@ public class AtomSetToolTest extends AbstractToolTest {
             Assert.fail("bug " + e);
         }
 
-        AtomSetTool atomSetTool1 = new AtomSetTool(mol1.getAtomSet());
+        AtomSetTool atomSetTool1 = AtomSetTool.getOrCreateTool(mol1.getAtomSet());
         CMLAtomSet atomSet = atomSetTool1.getOverlapping3DAtoms(mol2
                 .getAtomSet(), CoordinateType.CARTESIAN);
         Assert.assertEquals("overlap", new String[]{"a1", "a2"}, atomSet
@@ -163,7 +163,7 @@ public class AtomSetToolTest extends AbstractToolTest {
         Assert.assertEquals("sprout size", 1, ringNucleiAtomSets.size());
         CMLAtomSet sproutAtomSet = ringNucleiAtomSets.get(0);
         Assert.assertEquals("pre sprout size", 6, sproutAtomSet.size());
-        AtomSetTool sproutAtomSetTool = new AtomSetTool(sproutAtomSet);
+        AtomSetTool sproutAtomSetTool = AtomSetTool.getOrCreateTool(sproutAtomSet);
         CMLAtomSet sproutAtomSprout = sproutAtomSetTool.sprout();
         Assert.assertEquals("sprout size", 12, sproutAtomSprout.size());
     }

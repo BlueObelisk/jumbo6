@@ -20,20 +20,25 @@ public class FragmentListTool extends AbstractTool {
     /**
      * constructor
      * @param fragmentList 
+     * @deprecated use getOrCreateTool
      */
     public FragmentListTool(CMLFragmentList fragmentList) {
         this.fragmentList = fragmentList;
     }
-
-    /**
-     * make fragmentList tool from a fragmentList.
-     * 
-     * @param fragment
-     * @return the tool
-     */
-    static FragmentListTool createFragmentListTool(CMLFragmentList fragmentList) {
-        return new FragmentListTool(fragmentList);
-    }
+    
+    /** gets FragmentListTool associated with fragmentList.
+	 * if null creates one and sets it in fragmentList
+	 * @param fragmentList
+	 * @return tool
+	 */
+	public static FragmentListTool getOrCreateTool(CMLFragmentList fragmentList) {
+		FragmentListTool fragmentListTool = (FragmentListTool) fragmentList.getTool();
+		if (fragmentListTool == null) {
+			fragmentListTool = new FragmentListTool(fragmentList);
+			fragmentList.setTool(fragmentListTool);
+		}
+		return fragmentListTool;
+	}
 
     /**
      * get fragmentList.

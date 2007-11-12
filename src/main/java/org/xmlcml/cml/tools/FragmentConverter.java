@@ -85,14 +85,14 @@ public class FragmentConverter extends AbstractTool {
 				".//"+CMLAtom.NS+"[@elementType='R']", CMLConstants.X_CML);
 		for (Node node : rGroups) {
 			try {
-				new AtomTool((CMLAtom) node).translateToCovalentRadius();
+				AtomTool.getOrCreateTool((CMLAtom) node).translateToCovalentRadius();
 			} catch (CMLRuntimeException e) {
 				// no coordinates, not an error
 			}
 		}
 		CMLFragment fragment = new CMLFragment();
 		fragment.setId(molecule.getId());
-		new FragmentTool(fragment).setMolecule(molecule);
+		FragmentTool.getOrCreateTool(fragment).setMolecule(molecule);
 		molecule.removeAttribute(IdAttribute.NAME);
 		return fragment;
 	}

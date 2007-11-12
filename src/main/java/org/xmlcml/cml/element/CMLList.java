@@ -17,8 +17,7 @@ import org.xmlcml.cml.interfacex.HasArraySize;
  * shell which can be edited
  *
  */
-public class CMLList extends org.xmlcml.cml.element.AbstractList
-    implements HasArraySize {
+public class CMLList extends org.xmlcml.cml.element.AbstractList {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;

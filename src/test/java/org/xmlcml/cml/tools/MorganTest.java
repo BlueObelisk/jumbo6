@@ -75,7 +75,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         SMILESTool smilesTool = new SMILESTool();
         smilesTool.parseSMILES("RC1=[CH][NH][CH]=N1");
         CMLMolecule mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         
         morgan = new Morgan(mol.getAtomSet());
         morganList = morgan.getMorganList();
@@ -113,7 +113,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=N[CH0]=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = mol.getAtomSet();
         morgan = new Morgan(atomSet);
         morganList = morgan.getMorganList();
@@ -123,7 +123,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=NC(c2ccccc2)=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = new CMLAtomSet(mol, new String[]{
     	    "a1",
     	    "a2",
@@ -142,7 +142,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=NC(Cl)=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = new CMLAtomSet(mol, new String[]{
     	    "a1",
     	    "a2",
@@ -161,7 +161,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=NC(OCl)=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = new CMLAtomSet(mol, new String[]{
     	    "a1",
     	    "a2",
@@ -180,7 +180,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=NC(OCC)=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = new CMLAtomSet(mol, new String[]{
     	    "a1",
     	    "a2",
@@ -199,7 +199,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         smilesTool = new SMILESTool();
         smilesTool.parseSMILES("[NH]1[CH]=NC(C2ONSC2)=[CH]1");
         mol = smilesTool.getMolecule();
-        new MoleculeTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         atomSet = new CMLAtomSet(mol, new String[]{
     	    "a1",
     	    "a2",

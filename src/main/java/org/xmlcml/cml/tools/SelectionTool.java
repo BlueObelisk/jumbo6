@@ -113,7 +113,7 @@ public class SelectionTool implements CMLConstants {
 	 */
 	public void highlightAtom(CMLAtom atom) {
 	 // highlight
-		 AtomTool atomTool = AtomTool.getOrCreateAtomTool(atom);
+		 AtomTool atomTool = AtomTool.getOrCreateTool(atom);
    		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), atomTool.getRadiusFactor() * atomTool.getFontSize()*2.3);
    		 circle.addAttribute(new Attribute("class", "highlight"));
    		 circle.setFill("yellow");
@@ -132,7 +132,7 @@ public class SelectionTool implements CMLConstants {
 	 */
 	public void deHighlightAtom(CMLAtom atom) {
 	 // highlight
-		 AtomTool atomTool = AtomTool.getOrCreateAtomTool(atom);
+		 AtomTool atomTool = AtomTool.getOrCreateTool(atom);
    		 SVGElement g = atomTool.getG();
    		 if (g != null) {
    			 Nodes nodes = g.query(".//*[@class='highlight']");

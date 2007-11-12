@@ -21,8 +21,6 @@ public class CMLArrayListTest extends AbstractTableTest {
     @Test
     public final void testCreateTableHeader() {
         CMLTableHeader tableHeader1 = arrayList.createTableHeader();
-//        tableHeader1.debug();
-//        tableHeader.debug();
         assertEqualsCanonically("table header", tableHeader1, tableHeader, true);
     }
 

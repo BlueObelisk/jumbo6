@@ -40,7 +40,6 @@ public class CMLJoinTest extends AbstractTest {
             e.printStackTrace();
             throw new CMLRuntimeException("EXC"+e);
         }
-//        peo0Mol.debug();
         CMLElements<CMLJoin> joinList = peo0Mol.getJoinElements();
         Assert.assertEquals("joins ", 4, joinList.size());
 //        int i = 0;
@@ -51,7 +50,6 @@ public class CMLJoinTest extends AbstractTest {
 //            join.joinByAtomRefs2AndAdjustGeometry(takeAtomWithLowestId);
 //            System.out.println("===================="+i);
 //        }
-//        peo0Mol.debug();
     }
 
     /** Test method for 'org.xmlcml.cml.element.CMLJoin.joinAtomRefs2()'
@@ -68,7 +66,6 @@ public class CMLJoinTest extends AbstractTest {
             e.printStackTrace();
             throw new CMLRuntimeException("EXC",e);
         }
-//        peo1Mol.debug();
         CMLElements<CMLJoin> joinList = peo1Mol.getJoinElements();
         Assert.assertEquals("joins ", 4, joinList.size());
 //        int i = 0;
@@ -77,7 +74,6 @@ public class CMLJoinTest extends AbstractTest {
 //            boolean takeAtomWithLowestId = true;
 //            join.joinByAtomRefs2AndAdjustGeometry(takeAtomWithLowestId);
 //        }
-//        peo1Mol.debug();
     }
 
 }

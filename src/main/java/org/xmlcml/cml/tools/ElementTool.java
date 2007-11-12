@@ -16,7 +16,7 @@ import org.xmlcml.molutil.ChemicalElement;
  * @author pmr
  * 
  */
-public class ElementTool extends AbstractTool {
+public abstract class ElementTool extends AbstractTool {
     final static Logger logger = Logger.getLogger(ElementTool.class.getName());
 
     /** filter atoms by element set.

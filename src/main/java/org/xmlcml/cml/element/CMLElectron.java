@@ -55,4 +55,24 @@ public class CMLElectron extends AbstractElectron {
         return new CMLElectron();
 
     }
+    
+    /** simple count of electrons in bond
+     * 
+     * @param order
+     * @return 2 for S, 3 for A, 4 for D etc.
+     */
+    public static int getElectronCount(String order) {
+        int ec = 0;
+        if (order.equals("S") || order.equals("1")) {
+            ec = 2;
+        } else if (order.equals("A")) {
+            ec = 3;
+        } else if (order.equals("D") || order.equals("2")) {
+            ec = 4;
+        } else if (order.equals("T") || order.equals("3")) {
+            ec = 6;
+        }
+        return ec;
+    }
+
 }

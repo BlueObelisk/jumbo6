@@ -69,7 +69,6 @@ public class Applications {
                         rootElement.getNamespaceURI());
                 System.out.println("Document parsed to:");
                 CMLElement cmlElement = (CMLElement) rootElement;
-                cmlElement.debug();
             }
         }
     }
@@ -91,7 +90,7 @@ public class Applications {
             name.setXMLContent("benzene");
             molecule.appendChild(name);
             System.out.println("The following molecule has been craeted");
-            molecule.debug();
+            molecule.debug("MOL");
             if (args[1] != null) {
                 FileOutputStream fos = null;
                 try {

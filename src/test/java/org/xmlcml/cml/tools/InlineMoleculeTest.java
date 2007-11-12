@@ -71,7 +71,6 @@ public class InlineMoleculeTest extends AbstractToolTest {
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
-        inlineMolecule.debug();
         
         System.out.println("------branched------");
         // molecule with a branch
@@ -84,7 +83,6 @@ public class InlineMoleculeTest extends AbstractToolTest {
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
-        inlineMolecule.debug();      
         
         System.out.println("------branch within branch------");
         // molecule with a branch
@@ -97,7 +95,6 @@ public class InlineMoleculeTest extends AbstractToolTest {
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
-        inlineMolecule.debug();             
         
         System.out.println("------dendrimer------");
         // dedrimer
@@ -110,7 +107,6 @@ public class InlineMoleculeTest extends AbstractToolTest {
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
-        inlineMolecule.debug();       
     }
 /**     @Test InlineBranch not visible
      public void testGetLength(){

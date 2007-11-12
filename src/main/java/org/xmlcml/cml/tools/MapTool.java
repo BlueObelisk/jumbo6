@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMap;
@@ -14,27 +15,33 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  * 
  */
-public class MapTool {
+public class MapTool extends AbstractTool {
 
     protected CMLMap map;
     /**
      * constructor
      * 
      * @param map
+     * @deprecated
      */
     public MapTool(CMLMap map) {
         this.map = map;
     }
 
-    /**
-     * make bond tool from a bond.
-     * 
-     * @param bond
-     * @return the tool
-     */
-    static MapTool createMapTool(CMLMap map) {
-        return new MapTool(map);
-    }
+    /** gets MapTool associated with map.
+	 * if null creates one and sets it in map
+	 * @param map
+	 * @return tool
+	 */
+	public static MapTool getOrCreateTool(CMLMap map) {
+		MapTool mapTool = (MapTool) map.getTool();
+		if (mapTool == null) {
+			mapTool = new MapTool(map);
+			map.setTool(mapTool);
+		}
+		return mapTool;
+	}
+
 
     
     /** get matched bond using atom mapping.

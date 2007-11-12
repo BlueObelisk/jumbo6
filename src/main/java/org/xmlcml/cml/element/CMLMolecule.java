@@ -1205,13 +1205,20 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 
 	/**
 	 * get formula.
-	 *
+	 * if molecule has atoms uses those, else uses formula else null
 	 * @param control
 	 * @return calculated formula
 	 * @throws CMLRuntimeException
 	 */
 	public CMLFormula getCalculatedFormula(CMLMolecule.HydrogenControl control) {
-		return this.getAtomSet().getCalculatedFormula(control);
+		CMLFormula formula = null;
+		CMLAtomSet atomSet = getAtomSet();
+		if (atomSet == null || atomSet.size() == 0) {
+			formula = this.getFormulaElements().get(0);
+		} else {
+			formula = atomSet.getCalculatedFormula(control);
+		}
+		return formula;
 	}
 	
 	/**
@@ -1223,9 +1230,18 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	public double getCalculatedMolecularMass(CMLMolecule.HydrogenControl control) throws CMLRuntimeException {
 		CMLFormula formula = this.getCalculatedFormula(control);
 		if (formula == null) {
-			throw new CMLRuntimeException("Cannot caclulate formula");
+			throw new CMLRuntimeException("Cannot calculate formula");
 		}
 		return formula.getCalculatedMolecularMass();
+	}
+	
+	/**
+	 * get calculated molecular mass. Assumes correct hydrogen count
+	 * @return calculated molecular mass.
+	 * @throws CMLRuntimeException unknown/unsupported element type (Dummy counts as zero mass)
+	 */
+	public double getCalculatedMolecularMass() throws CMLRuntimeException {
+		return this.getCalculatedMolecularMass(HydrogenControl.NO_EXPLICIT_HYDROGENS);
 	}
 
 	/**

@@ -80,7 +80,7 @@ public class PiSystem implements CMLConstants {
      *            to create system from
      */
     public PiSystem(List<CMLAtom> atoms) {
-        this(new MoleculeTool(atoms.get(0).getMolecule()), atoms);
+        this(MoleculeTool.getOrCreateTool(atoms.get(0).getMolecule()), atoms);
     }
 
     /**
@@ -98,7 +98,7 @@ public class PiSystem implements CMLConstants {
             atomx = atom;
         }
         if (atomx != null) {
-            this.moleculeTool = new MoleculeTool(atomx.getMolecule());
+            this.moleculeTool = MoleculeTool.getOrCreateTool(atomx.getMolecule());
         }
         piSystemOptions = new PiSystemControls();
     }

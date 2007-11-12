@@ -289,8 +289,6 @@ public class Junction extends AbstractTool {
 	/** debug.
 	 */
 	public void debug() {
-//		commonAtomSet.debug();
-//		commonBondSet.debug();
 		ringList.get(0).debug();
 		if (commonBondList.size() > 0) {
 			System.out.print("..bond");

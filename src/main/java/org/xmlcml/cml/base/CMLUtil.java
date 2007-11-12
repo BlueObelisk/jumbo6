@@ -267,7 +267,7 @@ public abstract class CMLUtil implements CMLConstants {
     }
 
     /** convenience routine to get query nodes
-     * (iterating thorugh get(i) is fragile if nodes are removed)
+     * (iterating through get(i) is fragile if nodes are removed)
      * @param node
      * @param xpath
      * @return list of nodes (immutable) - empty if none or null node

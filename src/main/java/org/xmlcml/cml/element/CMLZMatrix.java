@@ -267,13 +267,10 @@ public class CMLZMatrix extends AbstractZMatrix {
             this.appendChild(new CMLLength(lengthList.get(1)));
             this.appendChild(new CMLAngle((CMLAngle)angleList.get(0)));
         } else {
-//            element.debug();
-//            debugPrint();
             addFirstFullTorsion();
             while (true) {
                 Sprout sprout = getNextSprout();
                 if (sprout == null) {
-//                    System.out.println("++++++++++++++++++++No more sprouts");
                     if (torsionList.size() != 0) {
 //                        for (CMLTorsion torsion : torsionList) {
 //                            System.out.println("UNUSED TOR: "+torsion.getString());
@@ -287,7 +284,6 @@ public class CMLZMatrix extends AbstractZMatrix {
 //                debugPrint();
             }
         }
-//        this.debug();
     }
 
     // a full torsion is one with 2 angles and 3 lengths

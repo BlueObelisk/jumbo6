@@ -64,20 +64,27 @@ public class DictionaryTool extends AbstractTool {
 	/** constructor
      * 
      * @param dictionary
+     * @deprecated use getOrCreateDictionaryTool
      */
     public DictionaryTool(CMLDictionary dictionary) {
         this.setDictionary(dictionary);
     }
 
-    /** make dictionary tool from a dictionary.
-     * 
-     * @param dictionary
-     * @return the tool
-     */
-    static DictionaryTool createDictionaryTool(CMLDictionary dictionary) {
-        return new DictionaryTool(dictionary);
-    }
+    /** gets DictionaryTool associated with dictionary.
+	 * if null creates one and sets it in dictionary
+	 * @param dictionary
+	 * @return tool
+	 */
+	public static DictionaryTool getOrCreateTool(CMLDictionary dictionary) {
+		DictionaryTool dictionaryTool = (DictionaryTool) dictionary.getTool();
+		if (dictionaryTool == null) {
+			dictionaryTool = new DictionaryTool(dictionary);
+			dictionary.setTool(dictionaryTool);
+		}
+		return dictionaryTool;
+	}
 
+    
     /**
      * get dictionary.
      * 
@@ -254,7 +261,6 @@ public class DictionaryTool extends AbstractTool {
 		if (term == null) {
 			term = parentTerm;
 		}
-//		cmlElement.debug();
 		CMLEntry entry = dictionary.getCMLEntry(CMLUtil.getLocalName(dictRef));
 		EntryTool entryTool = null;
 		if (entry == null) {
@@ -406,16 +412,21 @@ public class DictionaryTool extends AbstractTool {
     }
 
     /** create entry tool.
-     * 
+     * copies some attributes from dictionary
      * @param entry
      * @return tool
      */
     public EntryTool createEntryTool(CMLEntry entry) {
-    	EntryTool entryTool = new EntryTool(entry);
-    	entryTool.setPrefix(this.getPrefix());
-    	entryTool.setDelimiter(this.getDelimiter());
-    	entryTool.setFailOnError(this.isFailOnError());
-    	entryTool.setIgnoreCaseOfEnumerations(this.isIgnoreCaseOfEnumerations());
+    	EntryTool entryTool = null;
+    	if (entry.getTool() == null) {
+	    	entryTool = EntryTool.getOrCreateTool(entry);
+	    	entryTool.setPrefix(this.getPrefix());
+	    	entryTool.setDelimiter(this.getDelimiter());
+	    	entryTool.setFailOnError(this.isFailOnError());
+	    	entryTool.setIgnoreCaseOfEnumerations(this.isIgnoreCaseOfEnumerations());
+    	} else {
+	    	entryTool = EntryTool.getOrCreateTool(entry);
+    	}
     	return entryTool;
     }
     

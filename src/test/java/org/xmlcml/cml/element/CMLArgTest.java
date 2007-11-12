@@ -160,10 +160,8 @@ public class CMLArgTest extends AbstractTest {
 		Assert.assertEquals("atom count", 2, atoms.size());
 		Assert.assertEquals("atom id", "m_j__a1", atoms.get(0).getId());
 		Assert.assertEquals("atom id", "m_j__a2", atoms.get(1).getId());
-//		mol.debug();
         Util.output("----------------------------");
 		CMLArg.substituteNameByValue(mol);
-//		mol.debug();
 		Assert.assertEquals("untouched id", "a_i_", cml.getId());
 		Assert.assertEquals("mol id", "mol42", mol.getId());
 		Assert.assertEquals("atom count", 2, atoms.size());
@@ -201,60 +199,9 @@ public class CMLArgTest extends AbstractTest {
 		}
 		Elements peo0Mols = peo0Cml.getChildCMLElements(CMLMolecule.TAG);
 		CMLMolecule peo0Mol = (CMLMolecule) peo0Mols.get(3);
-		peo0Mol.debug();
 		CMLArg.substituteNameByValue(peo0Mol);
-		peo0Cml.debug();
 		RefAttribute.process(peo0Mol);
-//		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		peo0Mol.debug();
-//		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-//		System.out.println("------------------*****------------------------");
 
-		/*-------
-		 File peoFile = new File(
-		 CMLUtil.EXAMPLEDIRECTORY + File.separator+"complex"+
-		 File.separator+"peo.xml");
-		 CMLCml peoCml = null;
-		 try {
-		 peoCml = (CMLCml) build(peoFile).getRootElement();
-		 } catch (Exception e) {
-		 e.printStackTrace();
-		 throw new CMLRuntime("EXC"+e);
-		 }
-		 Elements peoMols = peoCml.getChildCMLElements(CMLMolecule.TAG);
-		 CMLMolecule peoMol = (CMLMolecule) peoMols.get(3);
-		 System.out.println("------------------*****------------------------");
-		 CMLArg.substituteNameByValue(peoMol);
-		 System.out.println("------------------peoMol--------------------");
-		 peoMol.debug();
-		 CMLMolecule mol1 = peoMol.getMoleculeElements().get(0);
-		 Assert.assertEquals("mol id", "oh1", mol1.getRef());
-		 Assert.assertEquals("mol id", "oh1_r1", mol1.getTail());
-		 CMLMolecule mol2 = peoMol.getMoleculeElements().get(1);
-		 Assert.assertEquals("mol id", "prop1_r1", mol2.getHead());
-		 Assert.assertEquals("mol id", "prop1_r2", mol2.getTail());
-		 CMLMolecule mol5 = peoMol.getMoleculeElements().get(4);
-		 Assert.assertEquals("mol id", "prop4_r1", mol5.getHead());
-		 Assert.assertEquals("mol id", "prop4_r2", mol5.getTail());
-		 CMLLength length5 = mol5.getLengthElements().get(0);
-		 StringTestBase.assertEquals("length atomRefs2", new String[]{"prop4_a4", "prop5_a1"},
-		 length5.getAtomRefs2());
-		 CMLAngle angle5 = mol5.getAngleElements().get(0);
-		 StringTestBase.assertEquals("angle atomRefs3", new String[]{"prop4_a2", "prop4_a4", "prop5_a1"},
-		 angle5.getAtomRefs3());
-		 CMLTorsion torsion5 = mol5.getTorsionElements().get(0);
-		 StringTestBase.assertEquals("torsion atomRefs3", new String[]{"prop4_a1", "prop4_a3", "prop4_a4", "prop5_a1"},
-		 torsion5.getAtomRefs4());
-		 CMLJoin join1 = peoMol.getJoinElements().get(0);
-		 StringTestBase.assertEquals("join1 atomRefs2", new String[]{"prop1_r2", "prop2_r1"},
-		 join1.getAtomRefs2());
-		 CMLJoin join3 = peoMol.getJoinElements().get(2);
-		 StringTestBase.assertEquals("join2 atomRefs2", new String[]{"prop3_r2", "prop4_r1"},
-		 join3.getAtomRefs2());
-		 System.out.println("------------------peoCml--------------------");
-		 peoCml.debug();
-		 System.out.println("------------------*****------------------------");
-		 -----------------*/
 	}
 
 	/**
@@ -276,11 +223,8 @@ public class CMLArgTest extends AbstractTest {
 		}
 		Elements peo1Mols = peo1Cml.getChildCMLElements(CMLMolecule.TAG);
 		CMLMolecule peo1Mol = (CMLMolecule) peo1Mols.get(1);
-//		peo1Mol.debug();
 		CMLArg.substituteNameByValue(peo1Mol);
-//		peo1Cml.debug();
 		RefAttribute.process(peo1Mol);
-//		peo1Mol.debug();
 	}
 
 	/**
@@ -310,23 +254,7 @@ public class CMLArgTest extends AbstractTest {
 		}
 		Elements peo2Mols = peo2Cml.getChildCMLElements(CMLMolecule.TAG);
 		CMLMolecule peo2Mol = (CMLMolecule) peo2Mols.get(1);
-		System.out
-				.println("================== cml ==============================");
-		peo2Mol.debug();
-		System.out
-				.println("================== substitute arg (and repeat) ==============================");
 		CMLArg.substituteNameByValue(peo2Mol);
-		System.out
-				.println("================== substituted ==============================");
-		peo2Cml.debug();
-		System.out
-				.println("=================== process ref =============================");
 		RefAttribute.process(peo2Mol);
-		System.out
-				.println("================== processed ref ==============================");
-		peo2Mol.debug();
-		System.out.println("=========end peo2 ============");
 	}
-
-
 }

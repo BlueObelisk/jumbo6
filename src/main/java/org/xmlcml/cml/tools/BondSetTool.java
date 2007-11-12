@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -18,7 +19,7 @@ import org.xmlcml.cml.element.CMLMap.Direction;
  * @author pmr
  * 
  */
-public class BondSetTool {
+public class BondSetTool extends AbstractTool {
 
     Logger logger = Logger.getLogger(BondSetTool.class.getName());
 
@@ -31,8 +32,9 @@ public class BondSetTool {
      * constructor.
      * 
      * @param bondSet
+     * @deprecated use getOrCreateTool
      */
-    public BondSetTool(CMLBondSet bondSet) {
+    private BondSetTool(CMLBondSet bondSet) {
         this.bondSet = bondSet;
         if (bondSet == null) {
             throw new CMLRuntimeException("Null bondSet");
@@ -42,6 +44,21 @@ public class BondSetTool {
             molecule = bondList.get(0).getMolecule();
         }
     }
+
+    /** gets BondSetTool associated with bondSet.
+	 * if null creates one and sets it in bondSet
+	 * @param bondSet
+	 * @return tool
+	 */
+	public static BondSetTool getOrCreateTool(CMLBondSet bondSet) {
+		BondSetTool bondSetTool = (BondSetTool) bondSet.getTool();
+		if (bondSetTool == null) {
+			bondSetTool = new BondSetTool(bondSet);
+			bondSet.setTool(bondSetTool);
+		}
+		return bondSetTool;
+	}
+
 
     /**
      * get matched bond using atom mapping.

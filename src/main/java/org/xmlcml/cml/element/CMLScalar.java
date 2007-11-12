@@ -14,6 +14,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
+import org.xmlcml.cml.interfacex.HasScalar;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 
@@ -22,7 +23,7 @@ import org.xmlcml.cml.map.NamespaceToUnitListMap;
  * shell which can be edited
  * 
  */
-public class CMLScalar extends AbstractScalar implements HasUnits {
+public class CMLScalar extends AbstractScalar implements HasUnits, HasScalar {
 
 	/** namespaced element name. */
 	public final static String NS = C_E + TAG;
@@ -131,19 +132,6 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
 	}
 
 	/**
-	 * gets String value. dataType must be XSD_STRING.
-	 * 
-	 * @return the value (null if not set)
-	 */
-	public String getString() {
-		String result = null;
-		if (getDataType().equals(XSD_STRING)) {
-			result = getXMLContent();
-		}
-		return result;
-	}
-
-	/**
 	 * gets real value. dataType must be XSD_DOUBLE.
 	 * 
 	 * @return the value (NaN if not set)
@@ -160,6 +148,19 @@ public class CMLScalar extends AbstractScalar implements HasUnits {
 					throw new CMLRuntimeException("Bad double :" + content, e);
 				}
 			}
+		}
+		return result;
+	}
+
+	/**
+	 * gets String value. dataType must be XSD_STRING.
+	 * 
+	 * @return the value (null if not set)
+	 */
+	public String getString() {
+		String result = null;
+		if (getDataType().equals(XSD_STRING)) {
+			result = getXMLContent();
 		}
 		return result;
 	}

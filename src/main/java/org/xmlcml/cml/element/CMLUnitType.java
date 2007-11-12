@@ -20,6 +20,27 @@ public class CMLUnitType extends AbstractUnitType implements GenericEntry {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
+	
+    /** common units in chemistry */
+    public enum UnitType {
+    	/** amount*/
+    	AMOUNT			("unitType:amount"),
+    	/** mass*/
+    	DENSITY			("unitType:density"),
+    	/** mass*/
+    	MASS			("unitType:mass"),
+    	/** temperature*/
+    	TEMP			("unitType:temp"),
+    	/** volume*/
+    	VOL				("unitType:volume"),
+    	;
+    	/** */
+    	public final String value;
+    	private UnitType(String s) {
+    		value = s;
+    	}
+    };
+
 
     /**
      * unit without valis CMLUnitType.

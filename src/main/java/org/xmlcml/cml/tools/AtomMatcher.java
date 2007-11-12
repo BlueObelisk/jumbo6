@@ -1424,7 +1424,7 @@ public class AtomMatcher extends AbstractTool {
                 .getChildCMLElements(CMLMolecule.TAG);
         List<CMLMolecule> spectatorMolecule0 = reaction0
                 .getSpectatorMolecules(Component.PRODUCT.number);
-        List<CMLMolecule> molecule0 = reaction0.concat(productMolecules0,
+        List<CMLMolecule> molecule0 = concat(productMolecules0,
                 spectatorMolecule0);
         // logger.info("PRODUCTS " + productMolecules0.size()
         // + " [cmlSpectator " + spectatorMolecule0.size() + "] ="
@@ -1441,7 +1441,7 @@ public class AtomMatcher extends AbstractTool {
                 .getChildCMLElements(CMLMolecule.TAG);
         List<CMLMolecule> spectatorMolecule1 = reaction1
                 .getSpectatorMolecules(Component.REACTANT.number);
-        List<CMLMolecule> molecule1 = reaction0.concat(reactantMolecules1,
+        List<CMLMolecule> molecule1 = concat(reactantMolecules1,
                 spectatorMolecule1);
         logger.info("REACTANTS " + reactantMolecules1.size()
                 + " [cmlSpectator " + spectatorMolecule1.size() + "] ="
@@ -1578,6 +1578,26 @@ public class AtomMatcher extends AbstractTool {
         return map;
 
     }
+    
+    /**
+     * combine molecules.
+     *
+     * @param moleculeNodes1
+     * @param m2
+     * @return list of molecules
+     */
+    private static List<CMLMolecule> concat(Elements moleculeNodes1,
+            List<CMLMolecule> m2) {
+        List<CMLMolecule> m = new ArrayList<CMLMolecule>();
+        for (int i = 0; i < moleculeNodes1.size(); i++) {
+            m.add((CMLMolecule) moleculeNodes1.get(i));
+        }
+        for (int i = 0; i < m2.size(); i++) {
+            m.add(m2.get(i));
+        }
+        return m;
+    }
+
 
     /**
      * translate reactants and products geometrically to get the best fit.
@@ -1625,9 +1645,10 @@ public class AtomMatcher extends AbstractTool {
             // + " atoms from reactant (" + reactant.getAtomCount()
             // + ") to product (" + reactant.getAtomCount() + S_RBRAK);
         } else {
+        	ReactionTool reactionTool = new ReactionTool(reaction);
             // general translate to centroids
-            List<CMLAtom> reactantAtoms = ReactionTool.getAtoms(reactantList);
-            List<CMLAtom> productAtoms = ReactionTool.getAtoms(productList);
+            List<CMLAtom> reactantAtoms = reactionTool.getAtoms(Component.REACTANTLIST);
+            List<CMLAtom> productAtoms = reactionTool.getAtoms(Component.PRODUCTLIST);
             // logger.info("XXR/P" +
             // reactantAtoms.length+S_SLASH+productAtoms.length);
             CMLAtomSet reactantAtomSet = CMLAtomSet.createFromAtoms(reactantAtoms);

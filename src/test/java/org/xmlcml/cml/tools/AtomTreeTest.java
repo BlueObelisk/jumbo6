@@ -361,9 +361,8 @@ public class AtomTreeTest extends AbstractToolTest {
 	     } catch (Exception e) {
 	         neverThrow(e);
 	     }
-	     MoleculeTool moleculeTool = new MoleculeTool(anisole);
+	     MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(anisole);
 	     moleculeTool.expandImplicitHydrogens(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
-	     anisole.debug();
 	     AtomTree atomTree = new AtomTree(anisole.getAtom(6));
 	     atomTree.setUseExplicitHydrogens(true);
 	     atomTree.expandTo(3);
@@ -397,9 +396,8 @@ public class AtomTreeTest extends AbstractToolTest {
 		 } catch (Exception e) {
 		     neverThrow(e);
 		 }
-		 moleculeTool = new MoleculeTool(methoxycyclohexene);
+		 moleculeTool = MoleculeTool.getOrCreateTool(methoxycyclohexene);
 		 moleculeTool.expandImplicitHydrogens(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
-		 anisole.debug();
 		 atomTree = new AtomTree(methoxycyclohexene.getAtom(6));
 		 atomTree.setUseExplicitHydrogens(true);
 		 atomTree.expandTo(3);

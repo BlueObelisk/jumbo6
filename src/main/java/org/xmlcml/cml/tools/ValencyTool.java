@@ -42,7 +42,7 @@ public class ValencyTool extends AbstractTool {
 	 */
 	public ValencyTool(CMLMolecule molecule) {
 		this.molecule = molecule;
-		moleculeTool = new MoleculeTool(molecule);
+		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		CMLFormula formula = new CMLFormula(molecule);
 		formula.normalize();
 		formulaS = formula.getConcise();
@@ -492,7 +492,7 @@ public class ValencyTool extends AbstractTool {
 					}
 				}
 				if (nCount == 1) {
-					CMLMolecule sprout = new MoleculeTool(mol).sprout(ringSet);
+					CMLMolecule sprout = MoleculeTool.getOrCreateTool(mol).sprout(ringSet);
 					if (sprout.getAtomCount() == 11) {
 						this.setAtomCharge(nAtom, 0);
 					}
@@ -994,7 +994,7 @@ public class ValencyTool extends AbstractTool {
 							ValencyTool valencyTool = new ValencyTool(mol);
 							valencyTool.markLoneNonMetalAnions(mol.getAtoms());
 						} else {
-							MoleculeTool subMolTool = new MoleculeTool(subMol);
+							MoleculeTool subMolTool = MoleculeTool.getOrCreateTool(subMol);
 							ValencyTool valencyTool = new ValencyTool(subMol);
 							boolean common = valencyTool.markupCommonMolecules();
 							if (!common) {
@@ -1160,7 +1160,7 @@ public class ValencyTool extends AbstractTool {
 															boolean add = true;
 															List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
 															for (CMLMolecule m : tempMolList) {
-																MoleculeTool mTool = new MoleculeTool(m);
+																MoleculeTool mTool = MoleculeTool.getOrCreateTool(m);
 																if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																	if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
 																		validMolList.remove(m);
@@ -1250,7 +1250,7 @@ public class ValencyTool extends AbstractTool {
 																			boolean add = true;
 																			List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
 																			for (CMLMolecule m : tempMolList) {
-																				MoleculeTool mTool = new MoleculeTool(m);
+																				MoleculeTool mTool = MoleculeTool.getOrCreateTool(m);
 																				if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																					if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
 																						validMolList.remove(m);
@@ -1312,7 +1312,7 @@ public class ValencyTool extends AbstractTool {
 																			boolean add = true;
 																			List<CMLMolecule> tempMolList = new ArrayList<CMLMolecule>(validMolList);
 																			for (CMLMolecule m : tempMolList) {
-																				MoleculeTool mTool = new MoleculeTool(m);
+																				MoleculeTool mTool = MoleculeTool.getOrCreateTool(m);
 																				if (subMolTool.getFormalCharge() == mTool.getFormalCharge()) {
 																					if (subMolTool.getChargedAtoms().size() <= mTool.getChargedAtoms().size()) {
 																						validMolList.remove(m);
@@ -1385,7 +1385,7 @@ public class ValencyTool extends AbstractTool {
 												int count = 0;
 												int currentCharge2 = 0;
 												for (CMLMolecule n : validMolList) {
-													MoleculeTool nTool = new MoleculeTool(n);
+													MoleculeTool nTool = MoleculeTool.getOrCreateTool(n);
 													if (count == 0) {
 														theMol = n;
 														currentCharge2 = nTool.getFormalCharge();
@@ -1410,7 +1410,7 @@ public class ValencyTool extends AbstractTool {
 												int count = 0;
 												int currentCharge2 = 0;
 												for (CMLMolecule n : validMolList) {
-													MoleculeTool nTool = new MoleculeTool(n);
+													MoleculeTool nTool = MoleculeTool.getOrCreateTool(n);
 													if (count == 0) {
 														theMol = n;
 														currentCharge2 = (int) Math.pow(nTool.getFormalCharge(), 2);
@@ -1425,7 +1425,7 @@ public class ValencyTool extends AbstractTool {
 												}
 											}
 										}
-										MoleculeTool theMolTool = new MoleculeTool(theMol);
+										MoleculeTool theMolTool = MoleculeTool.getOrCreateTool(theMol);
 										theMolTool.copyAtomAndBondAttributesById(subMol, true);
 									} else {
 										if (hasPiElectrons) {

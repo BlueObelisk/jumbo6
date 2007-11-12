@@ -148,8 +148,8 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         if (movableAtom == null) {
             throw new CMLRuntimeException("Cannot find movable atom: "+movableAtomId);
         }
-        CMLAtom atom0 = new AtomTool(staticAtom).getSingleLigand();
-        CMLAtom atom1 = new AtomTool(movableAtom).getSingleLigand();
+        CMLAtom atom0 = AtomTool.getOrCreateTool(staticAtom).getSingleLigand();
+        CMLAtom atom1 = AtomTool.getOrCreateTool(movableAtom).getSingleLigand();
 
         CMLMolecule molecule = atom0.getMolecule();
         if (molecule == null) {
@@ -169,7 +169,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         removeOldElements(staticMolecule, staticAtom, movableAtom, atom0, atom1);
 
         CMLAtomSet moleculeAtomSet = molecule.getAtomSet();
-        CMLAtomSet moveableAtomSet = new MoleculeTool(molecule).getDownstreamAtoms(atom1, atom0);
+        CMLAtomSet moveableAtomSet = MoleculeTool.getOrCreateTool(molecule).getDownstreamAtoms(atom1, atom0);
 
         adjustTorsion(staticAtom, atom0, atom1, movableAtom, moleculeAtomSet, moveableAtomSet);
         adjustLength(atom0, atom1, moveableAtomSet);
@@ -324,7 +324,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
             		" possibly because 2 or more links have been made to the same atom");
         }
         Point3 existingPoint = existingAtom.getPoint3(CoordinateType.CARTESIAN);
-        CMLAtom existingLigand = new AtomTool(existingAtom).getSingleLigand();
+        CMLAtom existingLigand = AtomTool.getOrCreateTool(existingAtom).getSingleLigand();
         if (existingLigand == null) {
             throw new CMLRuntimeException("Expected 1 ligand for: "+existingAtom.getId());
         }
@@ -343,7 +343,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
             throw new CMLRuntimeException("Cannot find movable atom: "+movableAtomId);
         }
         Point3 movablePoint = movableAtom.getPoint3(CoordinateType.CARTESIAN);
-        CMLAtom movableLigand = new AtomTool(movableAtom).getSingleLigand();
+        CMLAtom movableLigand = AtomTool.getOrCreateTool(movableAtom).getSingleLigand();
         if (movableLigand == null) {
             throw new CMLRuntimeException("expected single ligand for: "+movableAtom.getId());
         }
@@ -395,13 +395,13 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
 //            }
 //        } else if (CMLJoin.PREVIOUS_S.equals(moleculeRefs2[0])) {
 //        }
-//        CMLMolecule previousMolecule = new FragmentTool(previousFragment).getMolecule();
+//        CMLMolecule previousMolecule = FragmentTool.getOrCreateTool(previousFragment).getMolecule();
 //        if (previousMolecule == null) {
 //        	throw new CMLRuntimeException("Cannot find previous molecule to join");
 //        }
 //        CMLMolecule nextMolecule = null;
 //        if (CMLJoin.NEXT_S.equals(moleculeRefs2[1])) {
-//            nextMolecule = new FragmentTool(nextFragment).getMolecule();
+//            nextMolecule = FragmentTool.getOrCreateTool(nextFragment).getMolecule();
 //        }
 //        if (nextMolecule == null) {
 //        	throw new CMLRuntimeException("Cannot find next molecule to join");

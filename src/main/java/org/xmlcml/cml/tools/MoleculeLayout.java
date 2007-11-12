@@ -219,7 +219,7 @@ public class MoleculeLayout extends AbstractTool {
 		}
 		MoleculeTool moleculeTool = null;
 		if (mol != null) {
-			moleculeTool = new MoleculeTool(mol);
+			moleculeTool = MoleculeTool.getOrCreateTool(mol);
 			MoleculeLayout moleculeLayout = new MoleculeLayout(moleculeTool);
 			moleculeLayout.create2DCoordinates();
 			try {

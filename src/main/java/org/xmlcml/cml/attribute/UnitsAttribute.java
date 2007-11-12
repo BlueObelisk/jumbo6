@@ -61,4 +61,27 @@ public class UnitsAttribute extends NamespaceRefAttribute {
         return errorList;
     }
 
+    /** get the type of the unit.
+     * depends on having dictionaries set up.
+     * or gets unitType from amount itself
+     * @return null if cannot resolve (current default)
+     */
+    public UnitTypeAttribute getUnitTypeAttribute() {
+    	UnitTypeAttribute unitType = null; // until we know how to use dictionaries
+    	// try to get it from unitTypeAttribute
+    	if (unitType == null) {
+//    		unitType = (UnitTypeAttribute) ((Element)this.getParent()).getAttribute("unitType");
+    		Element parent = (Element) this.getParent();
+    		Attribute att = parent.getAttribute("unitType");
+    		if (att != null && !(att instanceof UnitTypeAttribute)) {
+    			String value = att.getValue();
+    			unitType = new UnitTypeAttribute(value);
+    			parent.addAttribute(unitType);
+    		} else {
+    			unitType = (UnitTypeAttribute) att;
+    		}
+    	}
+    	return unitType;
+    }
+
 }

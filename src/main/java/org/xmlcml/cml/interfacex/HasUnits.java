@@ -3,7 +3,8 @@ package org.xmlcml.cml.interfacex;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 
 /**
- * attached to elements that can carry units. eampkes are scalar, array, matrix
+ * attached to elements that can carry units. 
+ * examples are scalar, array, matrix
  * 
  * @author pmr
  * 

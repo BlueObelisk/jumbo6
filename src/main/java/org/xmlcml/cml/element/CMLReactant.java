@@ -130,13 +130,15 @@ public class CMLReactant extends AbstractReactant implements ReactionComponent {
 
     static CMLFormula getOrCreateFormula(ReactionComponent component) {
     	// TODO
-    	if (true) throw new Error("FIX ME");
         CMLFormula formula = null;
         List<CMLFormula> formulaList = CMLReaction.getFormulas(component);
         if (formulaList.size() == 1) {
             formula = formulaList.get(0);
         } else {
             List<CMLMolecule> molecules = component.getMolecules();
+            if (molecules == null) {
+            	((CMLElement)component).debug("NO MOLECULES");
+            }
             if (molecules.size() == 1) {
                 CMLMolecule molecule = molecules.get(0);
                 if (molecule.getFormulaElements().size() == 1) {

@@ -49,6 +49,7 @@ public class AtomTool extends AbstractTool {
      * constructor
      * 
      * @param atom
+     * @deprecated use getOrCreateTool
      */
     public AtomTool(CMLAtom atom) {
         this.atom = atom;
@@ -64,7 +65,7 @@ public class AtomTool extends AbstractTool {
 	 * @param atom
 	 * @return tool
 	 */
-	public static AtomTool getOrCreateAtomTool(CMLAtom atom) {
+	public static AtomTool getOrCreateTool(CMLAtom atom) {
 		AtomTool atomTool = (AtomTool) atom.getTool();
 		if (atomTool == null) {
 			atomTool = new AtomTool(atom);
@@ -72,17 +73,6 @@ public class AtomTool extends AbstractTool {
 		}
 		return atomTool;
 	}
-
-
-	/**
-     * make atom tool from a atom.
-     * 
-     * @param atom
-     * @return the tool
-     */
-    static AtomTool createAtomTool(CMLAtom atom) {
-        return new AtomTool(atom);
-    }
 
     /** sort list of atoms by atomic number.
      * TODO this is all incomplete.. 
@@ -261,7 +251,7 @@ public class AtomTool extends AbstractTool {
      * //TODO this is all incomplete.. 
      */
      public int recursiveCompare(CMLAtom otherAtom) {
-         AtomTool otherAtomTool = new AtomTool(otherAtom);
+         AtomTool otherAtomTool = AtomTool.getOrCreateTool(otherAtom);
         int thisAtomicNumber = atom.getAtomicNumber();
         int otherAtomicNumber = otherAtom.getAtomicNumber();
         if (thisAtomicNumber < otherAtomicNumber) {
@@ -277,7 +267,7 @@ public class AtomTool extends AbstractTool {
             int length = Math.min(thisAtomsLigands.size(), otherAtomsLigands
                     .size());
             for (int i = 0; i < length; i++) {
-                int compareResult = new AtomTool(thisAtomsLigands.get(i)).recursiveCompare(
+                int compareResult = AtomTool.getOrCreateTool(thisAtomsLigands.get(i)).recursiveCompare(
                         otherAtomsLigands.get(i));
                 if (compareResult != 0) { // we've found a mismatch here,
                                             // return the result
@@ -315,7 +305,7 @@ public class AtomTool extends AbstractTool {
      * @return number of lone electrons (< 0 means cannot calculate)
      */
      public int getLoneElectronCount() throws CMLException {
-         AtomTool atomTool = new AtomTool(atom);
+         AtomTool atomTool = AtomTool.getOrCreateTool(atom);
          int group = atomTool.getHydrogenValencyGroup();
          if (group == -1) {
              return -1;

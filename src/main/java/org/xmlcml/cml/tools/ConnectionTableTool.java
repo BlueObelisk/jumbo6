@@ -47,7 +47,7 @@ public class ConnectionTableTool extends AbstractTool {
 			throw new CMLRuntimeException("null molecule");
 		}
 		this.molecule = molecule;
-		moleculeTool = new MoleculeTool(molecule);
+		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 	}
 
 	/** splits given connection table into separate fragment molecules.

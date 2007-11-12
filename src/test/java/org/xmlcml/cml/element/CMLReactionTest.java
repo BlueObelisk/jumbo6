@@ -3,7 +3,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLReaction.Component;
@@ -225,43 +224,67 @@ public class CMLReactionTest extends ReactionAllTestBase {
      * Test method for 'org.xmlcml.cml.element.CMLReaction.mergeReactantLists()'
      */
     @Test
-    @Ignore
     public void testMergeReactantLists() {
-        // TODO Auto-generated method stub
+        String reactionS = "" +
+        "<reaction id='r1' " + CML_XMLNS + ">"
+        + "  <reactantList id='rl1'>"
+        + "    <reactant id='re1'>"
+        + "      <molecule id='rm1'>"
+        + "        <atomArray>"
+        + "          <atom id='a1' elementType='C' hydrogenCount='3'>"
+        + "          </atom>" +
+        "          <atom id='a2' elementType='Cl'>"
+        + "          </atom>" + 
+        "        </atomArray>"
+        + "        <bondArray>"
+        + "          <bond atomRefs2='a1 a2' id='r_a1_a2' order='1'/>"
+        + "        </bondArray>" +
+        "      </molecule>" 
+        + "		</reactant>" 
+        + "    <reactant id='re2'>" +
+        "      <molecule id='rm2'>"
+        + "        <atomArray>"
+        + "          <atom id='a3' elementType='O' hydrogenCount='2'>"
+        + "          </atom>" 
+        + "        </atomArray>"
+        + "      </molecule>"
+        + "    </reactant>"
+        + "  </reactantList>"
+        + "  <reactantList id='rl1a'>"
+        + "    <reactant id='re1a'>"
+        + "      <molecule id='rm1a'>"
+        + "        <atomArray>"
+        + "          <atom id='a1' elementType='C' hydrogenCount='3'>"
+        + "          </atom>" +
+        "          <atom id='a2' elementType='Cl'>"
+        + "          </atom>" + 
+        "        </atomArray>"
+        + "        <bondArray>"
+        + "          <bond atomRefs2='a1 a2' id='r_a1_a2' order='1'/>"
+        + "        </bondArray>" +
+        "      </molecule>" 
+        + "		</reactant>" 
+        + "    <reactant id='re2a'>" +
+        "      <molecule id='rm2a'>"
+        + "        <atomArray>"
+        + "          <atom id='a3' elementType='O' hydrogenCount='2'>"
+        + "          </atom>" 
+        + "        </atomArray>"
+        + "      </molecule>"
+        + "    </reactant>"
+        + "  </reactantList>"
+        + "</reaction>";
+
+        CMLReaction reaction = (CMLReaction) parseValidString(reactionS);
+        Assert.assertEquals("before merge", 2, reaction.getReactantListElements().size());
+        reaction.mergeReactantLists();
+        Assert.assertEquals("after merge", 1, reaction.getReactantListElements().size());
+        CMLReactantList reactantList = reaction.getReactantListElements().get(0);
+        Assert.assertEquals("after merge", 4, reactantList.getReactantElements().size());
+        Assert.assertEquals("after merge", "re1", reactantList.getReactantElements().get(0).getId());
+        Assert.assertEquals("after merge", "re2", reactantList.getReactantElements().get(1).getId());
+        Assert.assertEquals("after merge", "re1a", reactantList.getReactantElements().get(2).getId());
+        Assert.assertEquals("after merge", "re2a", reactantList.getReactantElements().get(3).getId());
     }
-    /**
-     * Test method for 'org.xmlcml.cml.element.CMLReaction.concat(Elements, List<CMLMolecule>)'
-     */
-    @Test
-    @Ignore
-    public void testConcat() {
-        // TODO Auto-generated method stub
-    }
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.moveSubstancesToReactants()'
-     */
-    @Test
-    @Ignore
-    public void testMoveSubstancesToReactants() {
-        // TODO Auto-generated method stub
-    }
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.getReactionComponentDescendants()'
-     */
-    @Test
-    @Ignore
-    public void testGetReactionComponentDescendants() {
-        // TODO Auto-generated method stub
-    }
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.getReactionComponentChildren()'
-     */
-    @Test
-    @Ignore
-    public void testGetReactionComponentChildren() {
-        // TODO Auto-generated method stub
-    }
+    
  }

@@ -93,7 +93,7 @@ public class AtomTree extends AbstractTool implements Comparable {
             explicitHydrogens = false;
         }
         molecule = atom.getMolecule();
-        moleculeTool = new MoleculeTool(molecule);
+        moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     }
 
     /**

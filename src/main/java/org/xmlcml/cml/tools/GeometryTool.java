@@ -52,7 +52,7 @@ public class GeometryTool extends AbstractTool {
      */
     public GeometryTool(CMLMolecule molecule) {
         this.molecule = molecule;
-        moleculeTool = new MoleculeTool(molecule);
+        moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     }
     /**
      * Add calculated 2D coordinates for hydrogen atoms.
@@ -72,7 +72,7 @@ public class GeometryTool extends AbstractTool {
                  if (!Double.isNaN(bondLength)) {
                      for (CMLAtom atom : molecule.getAtoms()) {
                          if (!ChemicalElement.Symbol.H.equals(atom.getElementType())) {
-                             AtomTool atomTool = new AtomTool(atom);
+                             AtomTool atomTool = AtomTool.getOrCreateTool(atom);
                              atomTool.addCalculatedCoordinatesForHydrogens(control);
                          }
                      }
@@ -694,7 +694,7 @@ public class GeometryTool extends AbstractTool {
             // nbm[a0][a3] = 1;
             // nbm[a3][a0] = 1;
             if (1 == 2)
-                torsion.debug(); // FIXME
+                torsion.debug("TOR"); // FIXME
         }
         List<CMLAngle> angleList = this.createValenceAngles(atomSet, false,
                 false);
@@ -707,7 +707,7 @@ public class GeometryTool extends AbstractTool {
             // nbm[a0][a2] = 1;
             // nbm[a2][a0] = 1;
             if (1 == 2)
-                angle.debug();
+                angle.debug("GEOM");
         }
         for (CMLBond bond : molecule.getBonds()) {
             // FIXME
@@ -718,7 +718,7 @@ public class GeometryTool extends AbstractTool {
             // nbm[a0][a1] = 1;
             // nbm[a1][a0] = 1;
             if (1 == 2)
-                bond.debug();
+                bond.debug("GEOMTOOL");
         }
         for (int i = 0; i < atoms.size(); i++) {
             for (int j = 0; j < atoms.size(); j++) {
