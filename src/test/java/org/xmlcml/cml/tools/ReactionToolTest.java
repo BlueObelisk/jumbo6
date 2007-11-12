@@ -23,14 +23,26 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.element.CMLAmount;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLReactant;
+import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionAllTestBase;
+import org.xmlcml.cml.element.CMLReaction.Component;
+import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.euclid.Util;
 
@@ -112,8 +124,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
     /**
      * Test method for 'org.xmlcml.cml.tools.ReactionTool.outputBalance(Writer)'
      */
-    @Test
     @Ignore
+    @Test
     public void testOutputBalance() {
 
         StringWriter w = new StringWriter();
@@ -153,9 +165,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
      * Test method for
      * 'org.xmlcml.cml.tools.ReactionTool.outputReaction(Writer)'
      */
-    @Test
     @Ignore
-
+    @Test
     public void testOutputReaction() {
 
         StringWriter w = new StringWriter();
@@ -189,127 +200,6 @@ public class ReactionToolTest extends ReactionAllTestBase {
         }
         Assert.assertEquals("output unbalance", "MgO + HCl = Cl2Mg", w
                 .toString());
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.ReactionTool.getMoleculesIncludingSpectators(String)'
-     */
-    @Test
-    @Ignore
-    public void testGetMoleculesIncludingSpectators() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.ReactionTool.splitAndReorganizeMolecules(CMLElement,
-     * Elements, int, String)'
-     */
-    @Test
-    @Ignore
-    public void testSplitAndReorganizeMolecules() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.ReactionTool.partitionIntoMolecules()'
-     */
-    @Test
-    @Ignore
-    public void testPartitionIntoMolecules() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.ReactionTool.mapReactantsToProducts(CMLReaction,
-     * String)'
-     */
-    @Test
-    @Ignore
-    public void testMapReactantsToProducts() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.translateProductsToReactants()'
-     */
-    @Test
-    @Ignore
-    public void testTranslateProductsToReactants() {
-        // TODO
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.matchProductsToNextReactants(CMLReaction,
-     * AtomMatcher)'
-     */
-    @Test
-    @Ignore
-    public void testMatchProductsToNextReactants() {
-        // TODO
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLReaction.moveReactantProductToSpectator(AtomMatcher)'
-     */
-    @Test
-    @Ignore
-    public void testMoveReactantProductToSpectator() {
-        /*--
-         <substance id="sub1">
-         <name>Cys178</name>
-         <label dictRef="macie:sideChain" value="Cys178"/>
-         <label dictRef="macie:protonDonor" value="Cys178"/>
-         <label dictRef="macie:acid" value="Cys178"/>
-         </substance>
-         <reactant>
-         <molecule id="0001.stg03.r.6">
-         <atomArray>
-         <atom id="a39" elementType="R" x2="-0.1833" y2="-0.9292">
-         <label value="Cys178"/>
-         </atom>
-         </atomArray>
-         --*/
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.ProductReactant.getFormula(Element)'
-     */
-    @Test
-    @Ignore
-    public void testProductReactantGetFormula() {
-        // CMLFormula formula;
-        /*--
-         CMLElements<CMLReactant> reactants = xmlReact1.getReactantList().getReactantElements();
-         Assert.assertEquals("reactants", 2, reactants.size());
-         formula = ReactionTool.getFormula(reactants.get(0));
-         Assert.assertNotNull("formula", formula);
-         // FIXME formula needs to count hydrogens
-         Assert.assertEquals("formula", "C 1 Cl 1", formula.getConcise());
-         formula = ReactionTool.getFormula(reactants.get(1));
-         Assert.assertNotNull("formula", formula);
-         // FIXME formula needs to count hydrogens
-         Assert.assertEquals("formula", "O 1", formula.getConcise());
-
-         CMLElements<CMLProduct> products = xmlReact1.getProductList().getProductElements();
-         Assert.assertEquals("products", 2, products.size());
-         formula = ReactionTool.getFormula(products.get(0));
-         Assert.assertNotNull("formula", formula);
-         // FIXME formula needs to count hydrogens
-         Assert.assertEquals("formula", "C 1 O 1", formula.getConcise());
-         // FIXME formula needs to fix charge
-         //		formula = ProductReactant.getFormula(products.get(1));
-         //		Assert.assertNotNull("formula", formula);
-         //		Assert.assertEquals("formula", "Cl 1", formula.getConcise());
-         --*/
     }
 
     /** test create from reaction scheme in literature.
@@ -515,6 +405,104 @@ public class ReactionToolTest extends ReactionAllTestBase {
         }
         return fname;
     }
+
+	/** 
+	 */
+	@Test
+	public final void testGetMolecules1() {
+		ReactionTool reactionTool = new ReactionTool(balancedR);
+		List<CMLMolecule> molecules = reactionTool.getMolecules(Component.REACTANTLIST);
+		Assert.assertEquals("reactant molecules", 2, molecules.size());
+		molecules = reactionTool.getMolecules(Component.PRODUCTLIST);
+		Assert.assertEquals("product molecules", 2, molecules.size());
+	}
+
+	/** 
+	 */
+	@Test
+	public final void testGetAtoms1() {
+		ReactionTool reactionTool = new ReactionTool(balancedR);
+		List<CMLAtom> atoms = reactionTool.getAtoms(Component.REACTANTLIST);
+		Assert.assertEquals("reactant atoms", 4, atoms.size());
+		atoms = reactionTool.getAtoms(Component.PRODUCTLIST);
+		Assert.assertEquals("reactant atoms", 4, atoms.size());
+	}
+
+	/** 
+	 */
+	@Test
+	public final void testGetBonds1() {
+		ReactionTool reactionTool = new ReactionTool(balancedR);
+		List<CMLBond> bonds = reactionTool.getBonds(Component.REACTANTLIST);
+		Assert.assertEquals("reactant bonds", 0, bonds.size());
+		bonds = reactionTool.getBonds(Component.PRODUCTLIST);
+		Assert.assertEquals("reactant bonds", 0, bonds.size());
+	}
+
+	/** 
+	 */
+	@Test
+	public final void testComplexReaction() {
+        Document doc = null;
+        try {
+            InputStream in = Util.getInputStreamFromResource(
+                    REACTION_EXAMPLES + U_S+ "reaction1.xml");
+            doc = new CMLBuilder().build(in);
+        } catch (Throwable e) {
+            System.err.println("SKIPPED" + e);
+        }
+        assertNotNull("reaction not null", doc);
+        CMLCml cml = (CMLCml) doc.getRootElement();
+        CMLMoleculeList moleculeList = (CMLMoleculeList) 
+            doc.query(".//cml:moleculeList", X_CML).get(0);
+        CMLReaction reaction1 = (CMLReaction) 
+            doc.query(".//cml:reaction", X_CML).get(0);
+        // get MWt for each molecule
+        CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
+        Assert.assertEquals("molecules", 3, molecules.size());
+        
+        double[] mwt = new double[]{277.40178,101.19, 215.87126};
+        for (int i = 0; i < molecules.size(); i++) {
+        	CMLMolecule molecule = molecules.get(i);
+        	CMLFormula formula = molecule.getFormulaElements().get(0);
+        	double d = formula.getCalculatedMolecularMass();
+            // check MWts
+        	Assert.assertEquals("mw ", mwt[i], d, EPS);
+        }
+        CMLReactantList reactantList = reaction1.getReactantList();
+        CMLElements<CMLReactant> reactants = reactantList.getReactantElements();
+    	Assert.assertEquals("reactants ", 3, reactants.size());
+        for (int i = 0; i < reactants.size(); i++) {
+        	CMLReactant reactant = reactants.get(i);
+//        	Assert.assertEquals("mw ", mwt[i], d, EPS);
+        	CMLMolecule moleculeRef = reactant.getMolecules().get(0);
+        	String idRef = moleculeRef.getRefAttribute().getValue();
+        	Nodes moleculeNodes = doc.query(".//cml:moleculeList/cml:molecule[@id='"+idRef+"']", X_CML);
+        	Assert.assertEquals("moleculeRefs ", 1, moleculeNodes.size());
+        	CMLMolecule molecule = (CMLMolecule) moleculeNodes.get(0);
+        	Nodes massAmounts = reactant.query(".//cml:amount[@units='"+Units.GRAM+"']", X_CML);
+        	CMLAmount massAmount = (massAmounts.size() == 0) ? null : (CMLAmount) massAmounts.get(0);
+        	Nodes volAmounts = reactant.query(".//cml:amount[@units='"+Units.ML+"']", X_CML);
+        	CMLAmount volAmount = (volAmounts.size() == 0) ? null : (CMLAmount) volAmounts.get(0);
+        	Nodes molarAmounts = reactant.query(".//cml:amount[@units='"+Units.MMOL+"']", X_CML);
+        	CMLAmount molarAmount = (molarAmounts.size() == 0) ? null : (CMLAmount) molarAmounts.get(0);
+        	CMLAmount calcMolarAmount = null;
+        	if (massAmount != null) {
+        		calcMolarAmount = massAmount.getMolarAmount(molecule);
+        	} else if (volAmount != null) {
+        		calcMolarAmount = volAmount.getMolarAmountFromVolume(molecule);
+        	}
+        	if (calcMolarAmount == null) {
+        		System.out.println("Null amount");
+        	} else {
+        		calcMolarAmount.debug("CALC");
+        	}
+        }
+	}
+
+
+
+
     public static void testSVG(String[] args) throws Exception {
     	if (args.length < 3 ) {
     		System.out.println("SVG infile outfile");

@@ -4,40 +4,35 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLProductList;
 import org.xmlcml.cml.element.CMLReactant;
-import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLSpectatorList;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLReaction.Component;
-import org.xmlcml.cml.element.ReactionComponent.Type;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.euclid.Transform2;
 
 /**
  * too to support reactions. not fully developed
@@ -55,6 +50,7 @@ public class ReactionTool extends AbstractTool {
 	private CMLFormula aggregateReactantFormula;
 	private CMLFormula aggregateProductFormula;
 	private CMLFormula differenceFormula;
+    private List<String> electronIdList;
 
     /**
      * constructor.
@@ -212,40 +208,39 @@ public class ReactionTool extends AbstractTool {
         return w.toString();
     }
 
-    /**
-     * get all molecules on reactant or product side. includes cmlSpectator
-     * 
-     * @param reactantProduct
-     *            ReactionComponent.Type.REACTANT or ReactionComponent.Type.PRODUCT
-     * @return all molecules
-     */
-    public List<CMLMolecule> getMoleculesIncludingSpectators(
-            ReactionComponent.Type reactantProduct) {
-        List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
-        if (reactantProduct.equals(Type.REACTANT)) {
-            CMLReactantList reactantList = (CMLReactantList) reaction
-                    .getFirstCMLChild(CMLReactantList.TAG);
-            if (reactantList != null) {
-                moleculeList = ReactionTool.getMolecules(reactantList);
-            }
-        } else if (reactantProduct.equals(Type.PRODUCT)) {
-            CMLProductList productList = (CMLProductList) reaction
-                    .getFirstCMLChild(CMLProductList.TAG);
-            if (productList != null) {
-                moleculeList = ReactionTool.getMolecules(productList);
-            }
-        }
-        CMLSpectatorList spectatorList = (CMLSpectatorList) reaction
-                .getFirstCMLChild(CMLSpectatorList.TAG);
-        if (spectatorList != null) {
-            List<CMLMolecule> moleculex = spectatorList
-                    .getMolecules(reactantProduct);
-            for (int i = 0; i < moleculex.size(); i++) {
-                moleculeList.add(moleculex.get(i));
-            }
-        }
-        return moleculeList;
-    }
+//    /**
+//     * get all molecules on reactant or product side. includes cmlSpectator
+//     * 
+//     * @param reactantProduct ReactionComponent.Type.REACTANT or ReactionComponent.Type.PRODUCT
+//     * @return all molecules
+//     */
+//    public List<CMLMolecule> getMoleculesIncludingSpectators(
+//            ReactionComponent.Type reactantProduct) {
+//        List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+//        if (reactantProduct.equals(Type.REACTANT)) {
+//            CMLReactantList reactantList = (CMLReactantList) reaction
+//                    .getFirstCMLChild(CMLReactantList.TAG);
+//            if (reactantList != null) {
+//                moleculeList = ReactionTool.getMolecules(reactantList);
+//            }
+//        } else if (reactantProduct.equals(Type.PRODUCT)) {
+//            CMLProductList productList = (CMLProductList) reaction
+//                    .getFirstCMLChild(CMLProductList.TAG);
+//            if (productList != null) {
+//                moleculeList = ReactionTool.getMolecules(productList);
+//            }
+//        }
+//        CMLSpectatorList spectatorList = (CMLSpectatorList) reaction
+//                .getFirstCMLChild(CMLSpectatorList.TAG);
+//        if (spectatorList != null) {
+//            List<CMLMolecule> moleculex = spectatorList
+//                    .getMolecules(reactantProduct);
+//            for (int i = 0; i < moleculex.size(); i++) {
+//                moleculeList.add(moleculex.get(i));
+//            }
+//        }
+//        return moleculeList;
+//    }
 
     /**
      * gets formula for product or reactant.
@@ -304,67 +299,36 @@ public class ReactionTool extends AbstractTool {
         return aggregateFormula;
     }
 
-    @SuppressWarnings("unused")
-     private static CMLFormula getFormulaXX(ReactionComponent element) {
-         CMLFormula formula = null;
-         if (element instanceof CMLProduct) {
-             formula = new CMLFormula(((CMLProduct)element).getMolecule());
-         } else if (element instanceof CMLReactant) {
-             formula = new CMLFormula(((CMLReactant)element).getMolecule());
-         }
-         return formula;
-     }
-
     /**
      * gets all descendant molecules.
      * 
-     * splits any giant molecules does NOT add hydrogens, etc.
-     * 
-     * @param element
-     *            productList or reactantList
+     * @param reactionComponent REACTANTLIST or PRODUCTLIST
      * @return the descendant molecules or empty list
      */
-    public static List<CMLMolecule> getMolecules(CMLElement element) {
-        List<CMLMolecule> moleculeList = null;
-        if (1 == 1) {
-            throw new CMLRuntimeException("NYI");
+    public List<CMLMolecule> getMolecules(Component reactionComponent) {
+    	Element reactantProductList = (reactionComponent.equals(Component.REACTANTLIST)) ? 
+    			reaction.getReactantList() :
+				reaction.getProductList();
+        List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+        if (reactantProductList != null) {
+	        Nodes moleculeNodes = reactantProductList.query(".//cml:molecule", X_CML);
+	        for (int i = 0; i < moleculeNodes.size(); i++) {
+	        	moleculeList.add((CMLMolecule) moleculeNodes.get(i));
+	        }
         }
-         String name = element.getLocalName();
-         if (name.endsWith("List")) {
-             name = name.substring(0, name.length() - 4);
-         }
-         CMLReaction reaction = (CMLReaction) element.getParent();
-         String reactionID = reaction.getId();
-         int count = 0;
-         moleculeList = new ArrayList<CMLMolecule>();
-         Elements prs = element.getChildCMLElements(name);
-         for (int j = 0; j < prs.size(); j++) {
-             CMLElement pr = (CMLElement) prs.get(j);
-             Elements childMolecules = pr.getChildCMLElements(CMLMolecule.TAG);
-             List<CMLMolecule> meVector = splitAndReorganizeMolecules(pr, childMolecules, count, reactionID);
-             for (CMLMolecule mol : meVector) {
-                 moleculeList.add(mol);
-                 String id = pr.getAttributeValue("id"); 
-                 if (id == null) {
-                     id = reactionID+".p";
-                 }
-                 mol.setId(id+".m"+(++count));
-             }
-         }
         return moleculeList;
     }
+
 
     /**
      * gets all descendant atoms.
      * 
-     * @param element
+     * @param type REACTANTLIST or PRODUCTLIST
      * @return the descendant atoms.
-     * @throws CMLException
      */
-    public static List<CMLAtom> getAtoms(CMLElement element)
-            throws CMLException {
+    public List<CMLAtom> getAtoms(Component type) {
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
-        List<CMLMolecule> molecules = getMolecules(element);
+        List<CMLMolecule> molecules = getMolecules(type);
         for (CMLMolecule molecule : molecules) {
             List<CMLAtom> atoms = molecule.getAtoms();
             for (CMLAtom atom : atoms) {
@@ -377,14 +341,12 @@ public class ReactionTool extends AbstractTool {
     /**
      * gets all descendant bonds.
      * 
-     * @param element
+     * @param type REACTANTLIST or PRODUCTLIST
      * @return the descendant bonds.
-     * @throws CMLException
      */
-    public static List<CMLBond> getBonds(CMLElement element)
-            throws CMLException {
+    public List<CMLBond> getBonds(Component type) {
         List<CMLBond> bondList = new ArrayList<CMLBond>();
-        List<CMLMolecule> molecules = getMolecules(element);
+        List<CMLMolecule> molecules = getMolecules(type);
         for (CMLMolecule molecule : molecules) {
             List<CMLBond> bonds = molecule.getBonds();
             for (CMLBond bond : bonds) {
@@ -394,159 +356,32 @@ public class ReactionTool extends AbstractTool {
         return bondList;
     }
 
-    /**
-     * recursively splits reactant and product molecules. NYI possibly obsolete
-     * as we should require prperly formed reactions
-     * 
-     * @throws CMLException
-     */
-    public void partitionIntoMolecules() throws CMLException {
 
-        reaction.mergeReactantLists();
-        CMLReactantList reactantList = (CMLReactantList) reaction
-                .getFirstCMLChild(CMLReactantList.TAG);
-        if (reactantList == null) {
-            // logger.info("no reactantListChild: " + this.getId());
-            return;
-        }
-        // split into reactant molecules
-        // List<CMLMolecule> reactantMolecules =
-        // ReactionTool.getMolecules(reactantList); // FIXME what is this for?
+//    /**
+//     * translate reactants and products geometrically to overlap centroids.
+//     * 
+//     * experimental
+//     * 
+//     * @param spectatorList
+//     */
+//    public void translateSpectatorProductsToReactants(
+//            CMLSpectatorList spectatorList) {
+//        List<CMLMolecule> reactantSpectator = spectatorList
+//                .getSpectatorMolecules(CMLReactant.TAG);
+//        List<CMLMolecule> productSpectator = spectatorList
+//                .getSpectatorMolecules(CMLProduct.TAG);
+//        if (reactantSpectator.size() != 0 || productSpectator.size() != 0) {
+//            CMLAtomSet reactantAtomSet = AtomSetTool
+//                    .createAtomSet(reactantSpectator);
+//            CMLAtomSet productAtomSet = AtomSetTool
+//                    .createAtomSet(productSpectator);
+//            Real2 reactantCentroid = reactantAtomSet.getCentroid2D();
+//            Real2 productCentroid = productAtomSet.getCentroid2D();
+//            Real2 delta = reactantCentroid.subtract(productCentroid);
+//            productAtomSet.translate2D(delta);
+//        }
+//    }
 
-        reaction.mergeProductLists();
-
-        CMLProductList productList = (CMLProductList) reaction
-                .getFirstCMLChild(CMLProductList.TAG);
-        if (productList == null) {
-            // logger.info("no productListChild: " + this.getId());
-            return;
-        }
-        // split into product molecules
-        // List<CMLMolecule> productMolecules =
-        // ProductReactantList.getMolecules(productList); // FIXME what is this
-        // for?
-
-    }
-
-    /**
-     * Calculates the mapping of reactant(s) to product(s) as a list CMLLink
-     * elements.
-     * 
-     * linking atoms to atoms and bonds to bonds. Still experimental.
-     * 
-     * @param reaction
-     * @param control
-     *            has no reactants and/or products
-     * @return list of mappings (null if no mapping found)
-     * @throws CMLException
-     */
-    public CMLList mapReactantsToProducts(CMLReaction reaction, String control)
-            throws CMLException {
-
-        if (control == null) {
-            control = S_EMPTY;
-        }
-
-        // CMLReactantList reactantList = (CMLReactantList)
-        // reaction.getFirstChild(CMLReactantList.TAG);
-        CMLReactantList reactantList = (CMLReactantList) reaction
-                .getFirstCMLChild(CMLReactantList.TAG);
-        Elements reactants = reactantList.getChildCMLElements(CMLReactant.TAG);
-        if (reactants.size() == 0) {
-            throw new CMLException("No reactants");
-        }
-        // Molecule[] cdkReactantMolecule = new Molecule[reactant.length];
-        CMLProductList productList = (CMLProductList) reaction
-                .getFirstCMLChild(CMLProductList.TAG);
-        Elements products = productList.getChildCMLElements(CMLProduct.TAG);
-        if (products.size() == 0) {
-            throw new CMLException("No products");
-        }
-
-        // logger.info("*** needs editing ***");
-        throw new CMLException("Reaction mapping needs editing"); // FIXME
-    }
-
-    /**
-     * translate reactants and products geometrically to overlap centroids.
-     * 
-     * experimental
-     * 
-     * @param spectatorList
-     */
-    public void translateSpectatorProductsToReactants(
-            CMLSpectatorList spectatorList) {
-        List<CMLMolecule> reactantSpectator = spectatorList
-                .getSpectatorMolecules(CMLReactant.TAG);
-        List<CMLMolecule> productSpectator = spectatorList
-                .getSpectatorMolecules(CMLProduct.TAG);
-        if (reactantSpectator.size() != 0 || productSpectator.size() != 0) {
-            CMLAtomSet reactantAtomSet = AtomSetTool
-                    .createAtomSet(reactantSpectator);
-            CMLAtomSet productAtomSet = AtomSetTool
-                    .createAtomSet(productSpectator);
-            Real2 reactantCentroid = reactantAtomSet.getCentroid2D();
-            Real2 productCentroid = productAtomSet.getCentroid2D();
-            Real2 delta = reactantCentroid.subtract(productCentroid);
-            productAtomSet.translate2D(delta);
-        }
-    }
-
-    /**
-     * split giant molecules into components.
-     * 
-     * @param parent
-     *            reactant or product
-     * @param childMolecules
-     *            of the parent
-     * @param count ??
-     * @param id
-     *            to add to each new molecule
-     * @return list of split molecules
-     */
-    public static List<CMLMolecule> splitAndReorganizeMolecules(
-            CMLElement parent, Elements childMolecules, int count, String id) {
-        Element grandParent = (Element) parent.getParent();
-        List<CMLMolecule> moleculeToolVector = new ArrayList<CMLMolecule>();
-        for (int j = childMolecules.size() - 1; j >= 0; j--) {
-            CMLMolecule molecule = (CMLMolecule) childMolecules.get(j);
-            new ConnectionTableTool(molecule).partitionIntoMolecules();
-            Elements molecules = molecule.getChildCMLElements(CMLMolecule.TAG);
-            if (molecules.size() == 0) {
-                moleculeToolVector.add(molecule);
-            } else {
-                // move new molecules to be children of reactant
-                for (int k = molecules.size() - 1; k >= 0; k--) {
-                    CMLMolecule childMolecule = (CMLMolecule) molecules.get(k);
-                    childMolecule.detach();
-                    CMLElement newParent = null;
-                    String type = null;
-                    if (parent.getLocalName().equals(CMLReactant.TAG)) {
-                        newParent = new CMLReactant();
-                        type = "r";
-                        ((CMLReactant) newParent).setId(id + S_PERIOD + type
-                                + (k + 1 + count));
-                    } else if (parent.getLocalName().equals(CMLProduct.TAG)) {
-                        newParent = new CMLProduct();
-                        type = "p";
-                        ((CMLProduct) newParent).setId(id + S_PERIOD + type
-                                + (k + 1 + count));
-                    } else {
-                        throw new CMLRuntimeException("BUG: " + parent.getLocalName());
-                    }
-                    newParent.appendChild(childMolecule);
-                    grandParent.appendChild(newParent);
-
-                    moleculeToolVector.add(molecule);
-                    childMolecule.setId(id + S_PERIOD + type + (k + 1 + count) + S_PERIOD
-                            + "m1");
-                }
-                molecule.detach();
-                parent.detach();
-            }
-        }
-        return moleculeToolVector;
-    }
     
     /** create from reaction scheme in literature.
      * 
@@ -559,6 +394,417 @@ public class ReactionTool extends AbstractTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * 
+     * @param iReaction
+     * @param atomPairList
+     * @param bondPairList
+     * @param atomMap
+     * @return electronPai list
+     */
+    public List<ElectronPair> /*List<List<ElectronPair>> */ getElectronPairList(int iReaction, List<MappedAtomPair> atomPairList, List<MappedBondPair> bondPairList, CMLMap atomMap) {
+        List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
+        ElectronPair.currentReaction = iReaction;
+        
+        electronIdList = new ArrayList<String>();
+        List<AtomBondPair> changedAtomPairList = new ArrayList<AtomBondPair>();
+        List<AtomBondPair> changedBondPairList = new ArrayList<AtomBondPair>();
+        for (int i = 0; i < atomPairList.size(); i++) {
+            MappedAtomPair atomPair = (MappedAtomPair) atomPairList.get(i);
+            try {
+                compareAtoms(atomPair, changedAtomPairList);
+            } catch (CMLException e) {
+                logger.severe("Atom comparison problem "+e);
+            }
+        }
+//        List bondPairList = getBondPairList(null, moleculeTool1, moleculeTool2, serial);
+        for (int i = 0; i < bondPairList.size(); i++) {
+            MappedBondPair bondPair = (MappedBondPair) bondPairList.get(i);
+            try {
+                compareBonds(bondPair, changedBondPairList);
+            } catch (CMLException e) {
+                logger.severe("Bond comparison problem "+e);
+            }
+        }
+
+        boolean change = true;
+// there may be several unconnected fragments so go on until no change
+        while (change) {
+            change = false;
+// get start atom
+            MappedAtomPair atomPair = getNextChangedAtomSource(changedAtomPairList);
+            if (atomPair != null) {
+                change = true;
+                MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, atomPair);
+                if (bondPair == null) {
+                	System.out.println("cannot find unique bond containing: "+atomPair);
+                    change = false;
+                    break;
+                }
+                addElectrons(atomPair, bondPair, electronPairList);
+                changedAtomPairList.remove(atomPair);
+                changedBondPairList.remove(bondPair);
+
+                MappedAtomPair nextAtomPair = getOtherAtomPair(bondPair, atomPair, atomMap, atomPairList);
+// FIXME                iterateChain(atomPairList, changedAtomPairList, changedBondPairList, nextAtomPair, atomMap, electronPairList);
+            }
+        }
+
+// cycles? take an arbitrary starting point and try. Only bonds should be left
+        if (changedAtomPairList.size() > 0) {
+        	System.out.print(""+changedAtomPairList.size()+" unmatched atoms");
+        	for (int i = 0; i < changedAtomPairList.size() && i < 3; i++) {
+        		System.out.print(": "+changedAtomPairList.get(i));
+        	}
+    		System.out.println();
+        }
+        
+        while (changedBondPairList.size() > 0) {
+            int size = changedBondPairList.size();
+            if (size == 0) {
+                break;
+            } else {
+                MappedBondPair bondPair = (MappedBondPair) changedBondPairList.get(0);
+                MappedAtomPair startingAtomPair = bondPair.getAtomPair(0, atomPairList);
+// FIXME                iterateCycle(atomPairList, changedBondPairList, startingAtomPair, atomMap, electronPairList);
+            }
+            if (size == changedBondPairList.size()) {
+                System.out.print("Cannot match "+size+" bonds");
+            	for (int i = 0; i < changedBondPairList.size() && i < 3; i++) {
+            		System.out.print(": "+changedBondPairList.get(i));
+            	}
+        		System.out.println();
+                break;
+            }
+        }
+        
+        return electronPairList;
+    }
+    
+    private void compareAtoms(MappedAtomPair atomPair, List<AtomBondPair> changedPairList) throws CMLException {
+        AtomTool atomTool1 = AtomTool.getOrCreateTool(atomPair.atom1);
+        AtomTool atomTool2 = AtomTool.getOrCreateTool(atomPair.atom2);
+        if (atomTool1 == null) {
+//            logger.severe("Null atom partner for (2): "+atomPair.atom2.getId());
+            return;
+        }
+        if (atomTool2 == null) {
+//            logger.severe("Null atom partner for (1): "+atomPair.atom1.getId());
+            return;
+        }
+        int loneElectronCount1 = atomTool1.getLoneElectronCount();
+        int loneElectronCount2 = atomTool2.getLoneElectronCount();
+        if (loneElectronCount1 != loneElectronCount2) {
+            changedPairList.add(atomPair);
+            atomPair.setElectronChange(loneElectronCount2 - loneElectronCount1);
+        }
+    }
+
+    private void compareBonds(MappedBondPair bondPair, List<AtomBondPair> changedPairList) throws CMLException {
+        int order1 = (bondPair.bond1 == null) ? 0 : CMLElectron.getElectronCount(bondPair.bond1.getOrder());
+        int order2 = (bondPair.bond2 == null) ? 0 : CMLElectron.getElectronCount(bondPair.bond2.getOrder());
+        if (order1 != order2) {
+            changedPairList.add(bondPair);
+            bondPair.setElectronChange(order2 - order1);
+        }
+    }
+
+    
+    private List<ElectronPair> getElectronPairList(
+    		Element parent, CMLMolecule mol1, CMLMolecule mol2, int iReaction) {
+//    	 electrons
+        List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
+        Nodes electronNodes1 = mol1.query(".//cml:electron", X_CML);
+        Nodes electronNodes2 = mol2.query(".//cml:electron", X_CML);
+//    	 find electrons in first molecule or both
+        MoleculeTool molTool1 = MoleculeTool.getOrCreateTool(mol1);
+        MoleculeTool molTool2 = MoleculeTool.getOrCreateTool(mol2);
+        for (int i = 0; i < electronNodes1.size(); i++) {
+            CMLElectron electron1 = (CMLElectron) electronNodes1.get(i);
+            String id = (electron1.getId());
+            CMLElectron electron2 = molTool2.getElectronById(id);
+            electronPairList.add(new ElectronPair(electron1, electron2, iReaction));
+        }
+//    	 find electrons in second molecule only
+        for (int i = 0; i < electronNodes2.size(); i++) {
+            CMLElectron electron2 = (CMLElectron) electronNodes2.get(i);
+            String id = (electron2.getId());
+            CMLElectron electron1 = molTool1.getElectronById(id);
+            if (electron1 == null) {
+                electronPairList.add(new ElectronPair(null, electron2, iReaction));
+            }
+        }
+        return electronPairList;
+    }
+    
+    
+    private boolean iterateChain(List<AtomBondPair> atomPairList, List<MappedAtomPair> changedAtomPairList,
+    		List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair,
+    		CMLMap atomMap, List<ElectronPair> electronPairList) {
+        // iterate down chain two bonds at a time until terminal atom
+        boolean change = true;
+        while (true) {
+            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
+            if (bondPair == null) {
+                change = false;
+                break;
+            }
+            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
+            changedBondPairList.remove(bondPair);
+            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
+            if (otherBondPair == null) {
+                if (!changedAtomPairList.contains(middleAtomPair)) {
+                	System.out.println("Cannot find terminal atom ("+middleAtomPair+") in electron chain");
+                } else {
+                    addElectrons(bondPair, middleAtomPair, electronPairList);
+                    changedAtomPairList.remove(middleAtomPair);
+                    changedBondPairList.remove(bondPair);
+               }
+               break;
+            }
+            addElectrons(bondPair, otherBondPair, electronPairList);
+            changedAtomPairList.remove(middleAtomPair);
+            changedBondPairList.remove(otherBondPair);
+            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
+        }
+        return change;
+    }
+    
+    private boolean iterateCycle(List<AtomPair> atomPairList, List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair, CMLMap atomMap, List<ElectronPair> electronPairList) {
+        // iterate down chain two bonds at a time until terminal atom
+        boolean change = true;
+        while (true) {
+            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
+            if (bondPair == null) {
+                change = false;
+                break;
+            }
+            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
+            changedBondPairList.remove(bondPair);
+            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
+            if (otherBondPair == null) {
+                changedBondPairList.remove(bondPair);
+                break;
+            }
+            addElectrons(bondPair, otherBondPair, electronPairList);
+            changedBondPairList.remove(otherBondPair);
+            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
+        }
+        return change;
+    }
+
+    /** gets next atom with a negative electron change.
+     * 
+     * @param changedPairList
+     * @return atompair
+     */
+    private MappedAtomPair getNextChangedAtomSource(List changedPairList) {
+        for (int i = 0; i < changedPairList.size(); i++) {
+            AtomBondPair abp = (AtomBondPair) changedPairList.get(i);
+            if (abp instanceof MappedAtomPair && abp.electronChange < 0) {
+                return (MappedAtomPair) abp;
+            }
+        }
+        return null;
+    }
+    
+    private MappedAtomPair getOtherAtomPair(MappedBondPair bondPair, MappedAtomPair atomPair, CMLMap atomMap, List atomPairList) {
+    	if (bondPair == null || atomPair == null || atomMap == null) {
+    		return null;
+    	}
+    	String fromId = null;
+    	String toId = null;
+    	if (atomMap == null) {
+    	} else if (bondPair.bond1 == null) {
+        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
+        	fromId = atomMap.getRef(fromId, CMLMap.Direction.FROM);
+        } else if (bondPair.bond2 == null) {
+        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
+        	toId = atomMap.getRef(toId, CMLMap.Direction.TO);
+        } else {
+        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
+        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
+        }
+    	MappedAtomPair otherAtomPair = MappedAtomPair.getAtomPair(toId, fromId, atomPairList);
+    	return otherAtomPair;
+    }
+
+    private MappedBondPair getUniqueBondPairContaining(List bondPairList, MappedAtomPair atomPair) {
+        for (int i = 0; i < bondPairList.size(); i++) {
+            MappedBondPair bondPair = (MappedBondPair) bondPairList.get(i);
+            if (bondPair.containsAtomPair(atomPair)) {
+                return bondPair;
+            }
+        }
+        return null;
+    }
+    
+    /** add electrons to appropriate to/from atom/bonds as result of transfer.
+     * 
+     * add electron id to electronIdList
+     * @param changedPairList
+     * @param abp1
+     * @param abp2
+     */
+    private void addElectrons(AtomBondPair abp1, AtomBondPair abp2, List<ElectronPair> electronPairList) {
+        String electronId = "e"+(electronIdList.size()+1);
+        electronIdList.add(electronId);
+        // create electrons and add to appropriate atom or bond
+        CMLElectron electron1 = abp1.createElectrons(abp1.electronChange, electronId);
+        CMLElectron electron2 = abp2.createElectrons(abp2.electronChange, electronId);
+        electronPairList.add(new ElectronPair(electron1, electron2));
+    }
+    
+    // must redo this to cope with mapping 
+    void processElectrons(CMLMolecule molecule1, CMLMolecule molecule2, int serial) {
+        List<MappedAtomPair> atomPairList = getAtomPairList(null, molecule1, molecule2, serial);
+        List<AtomBondPair> changedPairList = new ArrayList<AtomBondPair>();
+        for (MappedAtomPair atomPair : atomPairList) {
+            try {
+                compareAtoms(atomPair, changedPairList);
+            } catch (CMLException e) {
+                logger.severe("Atom comparison problem "+e);
+            }
+        }
+// FIXME
+        //        List<MappedBondPair> bondPairList = getBondPairList(null, molecule1, molecule2, serial);
+        List<MappedBondPair> bondPairList = null;
+        for (MappedBondPair bondPair : bondPairList) {
+            try {
+                compareBonds(bondPair, changedPairList);
+            } catch (CMLException e) {
+                logger.severe("Bond comparison problem "+e);
+            }
+        }
+        if (changedPairList.size() > 0) {
+            System.out.println("Changed atoms/bonds ("+serial+")");
+            for (int i = 0; i < changedPairList.size(); i++) {
+                System.out.println("BP "+changedPairList.get(i));
+            }
+        }
+        List electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
+
+// there may be several unconnected fragments so go on until no change
+        boolean change = true;
+        while (change == true) {
+            change = false;
+// get start atom
+            MappedAtomPair atomPair = getNextChangedAtomSource(changedPairList);
+            if (atomPair != null) {
+//                AtomBondPair abp1 = atomPair;
+                change = true;
+                MappedBondPair bondPair = getUniqueBondPairContaining(changedPairList, atomPair);
+                if (bondPair == null) {
+                    logger.severe("terminal atom cannot find unique ligand bond");
+                    change = false;
+                    break;
+                }
+                if (true) throw new RuntimeException("FIX ME");
+//                removeFromChangedListAddElectrons(changedMappedAtomPairList, atomPair, bondPair);
+//                System.out.println("started: "+atomPair.id1+" ==> "+bondPair);
+//
+////                String nextAtomId = getOtherAtomId(bondPair, atomPair);
+//                String nextAtomId = bondPair.bond1.getOtherAtomId(atomPair.id1);
+//                iterateChain(changedMappedAtomPairList, nextAtomId);
+            }
+        }
+
+// cycles? take an arbitrary starting point and try
+        while (true) {
+            int size = changedPairList.size();
+            if (size == 0) {
+                logger.info("Finished all electrons");
+                break;
+            } else {
+                System.out.println("Cycles atoms/bonds ("+serial+")");
+                AtomBondPair abp = (AtomBondPair) changedPairList.get(0);
+                if (abp instanceof MappedBondPair) {
+                    MappedBondPair bondPair = (MappedBondPair) abp;
+                    String atomId = (bondPair.bond1 != null) ?
+                        bondPair.bond1.getAtomId(0) :
+                        bondPair.bond2.getAtomId(0);
+// FIXME                    iterateChain(changedPairList, atomId);
+                }
+            }
+            if (size == changedPairList.size()) {
+                logger.severe("Cannot exhaust electron transfers");
+                break;
+            }
+        }
+    }
+    
+    /** add atoms from two molecules.
+     * the mapping is done through IDs
+     * @param parent
+     * @param molTool1
+     * @param molTool2
+     * @param serial
+     * @return atompair list
+     */
+    List<MappedAtomPair> getAtomPairList(Element parent, 
+    		CMLMolecule mol1, CMLMolecule mol2, int serial) {
+        List<MappedAtomPair> atomPairList = new ArrayList<MappedAtomPair>();
+        List<CMLAtom> atoms1 = mol1.getAtoms();
+        List<CMLAtom> atoms2 = mol2.getAtoms();
+//      find atoms in first molecule or both
+        for (CMLAtom atom1 : atoms1) {
+            String id = (atom1.getId());
+            CMLAtom atom2 = mol2.getAtomById(id);
+            atomPairList.add(new MappedAtomPair(atom1, atom2));
+        }
+// find atoms in second molecule only
+        for (CMLAtom atom2 : atoms2) {
+            String id = (atom2.getId());
+            if (mol1.getAtomById(id) == null) {
+                atomPairList.add(new MappedAtomPair(null, atom2));
+            }
+        }
+        return atomPairList;
+    }
+
+    /** add atoms aligned through map
+     * 
+     * @param parent the SVG element (maybe don't need at this stage?)
+     * @param atoms1 atoms with "from" references in map
+     * @param atoms2 atoms with "to" references in map
+     * @param atomPairList to add the mapped atoms to
+     * @param atomMapTool from atoms1 to atoms2
+     * @return list
+     */
+    List<MappedAtomPair> addToMappedAtomPairList(Element parent, CMLAtom[] atoms1, CMLAtom[] atoms2,
+    		List<MappedAtomPair> atomPairList, CMLMap atomMap, int serial) {
+    	Map atomMap1 = createLookupTableById(atoms1);
+    	Map atomMap2 = createLookupTableById(atoms2);
+// find atoms atomMap
+    	List<String> fromRefs = atomMap.getFromRefs();
+    	if (fromRefs.size() == 0) {
+    		System.out.println("NO FROM REFS+++++++++++++++++");
+    	}
+        for (String fromRef : fromRefs) {
+            CMLAtom atom1 = (CMLAtom) atomMap1.get(fromRef);
+            String id2 = atomMap.getToRef(fromRef);
+            CMLAtom atom2 = (CMLAtom) atomMap2.get(id2);
+            if (atom2 == null) {
+            	System.out.println("NO MATCHED ATOM"+id2);
+            }
+            atomPairList.add(new MappedAtomPair(atom1, atom2));
+        }
+        return atomPairList;
+    }
+    
+    /** create a table to lookup atoms by Id.
+     * 
+     * @param atoms array of atoms to index by ID
+     * @return Map indexed on ID
+     */
+    private static Map<String, CMLAtom> createLookupTableById(CMLAtom[] atoms) {
+    	Map<String, CMLAtom> map = new HashMap<String, CMLAtom>();
+    	for (CMLAtom atom : atoms) {
+    		map.put(atom.getId(), atom);
+    	}
+    	return map;
     }
 
 	public CMLReaction getReaction() {
@@ -605,7 +851,7 @@ public class ReactionTool extends AbstractTool {
 	Real2Range getBoundingBox(List<CMLMolecule> molecules) {
 		Real2Range range = new Real2Range();
 		for (CMLMolecule molecule : molecules) {
-			MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			Real2Range molRange = moleculeTool.getBoundingBox();
 			range.plus(molRange);
 		}
@@ -616,7 +862,7 @@ public class ReactionTool extends AbstractTool {
 	private void displayMolecules(CMLDrawable drawable, SVGElement g,
 			MoleculeDisplay moleculeDisplay, List<CMLMolecule> molecules) throws IOException {
 		for (CMLMolecule molecule : molecules) {
-    		MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
+    		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     		moleculeTool.setMoleculeDisplay(moleculeDisplay);
 // ??    		atomTool.setMoleculeTool(this);
     		GraphicsElement a = moleculeTool.createGraphicsElement(drawable);
@@ -633,7 +879,4 @@ public class ReactionTool extends AbstractTool {
     		reactionDisplay = ReactionDisplay.getDEFAULT();
     	}
     }
-
-
-
 }

@@ -43,8 +43,11 @@ import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLProperty;
+import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
+import org.xmlcml.cml.element.CMLUnit;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -85,6 +88,7 @@ public class MoleculeTool extends AbstractTool {
 	 * constructor
 	 *
 	 * @param molecule
+	 * @deprecated use getOrCreateTool
 	 */
 	public MoleculeTool(CMLMolecule molecule) {
 		this.molecule = molecule;
@@ -119,7 +123,7 @@ public class MoleculeTool extends AbstractTool {
 		enableAtomToolMap();
 		AtomTool atomTool = atomToolMap.get(atom);
 		if (atomTool== null) {
-			atomTool = AtomTool.getOrCreateAtomTool(atom);
+			atomTool = AtomTool.getOrCreateTool(atom);
 			atomToolMap.put(atom, atomTool);
 		}
 		return atomTool;
@@ -144,7 +148,8 @@ public class MoleculeTool extends AbstractTool {
 	 * @param molecule
 	 * @return tool
 	 */
-	public static MoleculeTool getOrCreateMoleculeTool(CMLMolecule molecule) {
+	@SuppressWarnings("all")
+	public static MoleculeTool getOrCreateTool(CMLMolecule molecule) {
 		MoleculeTool moleculeTool = (MoleculeTool) molecule.getTool();
 		if (moleculeTool == null) {
 			moleculeTool = new MoleculeTool(molecule);
@@ -1141,10 +1146,10 @@ public class MoleculeTool extends AbstractTool {
 	public CMLMolecule sprout(CMLAtomSet atomSet) {
 		CMLMolecule newMolecule = null;
 		if (atomSet.getAtoms().size() > 0) {
-			AtomSetTool atomSetTool = new AtomSetTool(atomSet);
+			AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
 			CMLAtomSet newAtomSet = atomSetTool.sprout();
 			CMLMolecule molecule = atomSet.getMolecule();
-			CMLBondSet newBondSet = new MoleculeTool(molecule)
+			CMLBondSet newBondSet = MoleculeTool.getOrCreateTool(molecule)
 			.getBondSet(newAtomSet);
 			newMolecule = new CMLMolecule(newAtomSet, newBondSet);
 		}
@@ -1162,7 +1167,7 @@ public class MoleculeTool extends AbstractTool {
 		List<CMLMolecule> clusterList = new ArrayList<CMLMolecule>();
 		if (molecule.getMoleculeCount() > 0) {
 			for (CMLMolecule subMolecule : molecule.getMoleculeElements()) {
-				MoleculeTool subMoleculeTool = new MoleculeTool(subMolecule);
+				MoleculeTool subMoleculeTool = MoleculeTool.getOrCreateTool(subMolecule);
 				List<CMLMolecule> subClusterList = subMoleculeTool
 				.createClusters(typeList);
 				for (CMLMolecule subCluster : subClusterList) {
@@ -1177,7 +1182,7 @@ public class MoleculeTool extends AbstractTool {
 						typeList);
 				if (clusterSet.size() > 1) {
 					CMLMolecule clusterMolecule = new CMLMolecule(clusterSet);
-					new MoleculeTool(clusterMolecule).calculateBondedAtoms();
+					MoleculeTool.getOrCreateTool(clusterMolecule).calculateBondedAtoms();
 					clusterList.add(clusterMolecule);
 					molecule.addToLog(Severity.INFO, "NEW CLUSTER SIZE "
 							+ clusterSet.size());
@@ -1257,7 +1262,7 @@ public class MoleculeTool extends AbstractTool {
 					continue;
 				} else {
 					new ConnectionTableTool(subMolecule).partitionIntoMolecules();
-					List<CMLMolecule> ligands = new MoleculeTool(subMolecule).getMoleculeList();
+					List<CMLMolecule> ligands = MoleculeTool.getOrCreateTool(subMolecule).getMoleculeList();
 					for (CMLMolecule ligand : ligands) {
 						ligandList.add(ligand);
 					}
@@ -1434,7 +1439,7 @@ public class MoleculeTool extends AbstractTool {
 		if (molecule.isMoleculeContainer()) {
 			CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
 			for (CMLMolecule mol : molecules) {
-				new MoleculeTool(mol).adjustHydrogenCountsToValency(control);
+				MoleculeTool.getOrCreateTool(mol).adjustHydrogenCountsToValency(control);
 			}
 		} else {
 			List<CMLAtom> atoms = molecule.getAtoms();
@@ -1455,7 +1460,7 @@ public class MoleculeTool extends AbstractTool {
 		if (molecule.isMoleculeContainer()) {
 			CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
 			for (CMLMolecule mol : molecules) {
-				new MoleculeTool(mol).contractExplicitHydrogens(control, contractStereoH);
+				MoleculeTool.getOrCreateTool(mol).contractExplicitHydrogens(control, contractStereoH);
 			}
 		} else {
 			List<CMLAtom> atoms = molecule.getAtoms();
@@ -1530,7 +1535,7 @@ public class MoleculeTool extends AbstractTool {
 	 *            of coordinate to use
 	 */
 	public void removeOverlapping3DAtoms(CMLMolecule mol, CoordinateType type) {
-		CMLAtomSet atomSet = new AtomSetTool(molecule.getAtomSet())
+		CMLAtomSet atomSet = AtomSetTool.getOrCreateTool(molecule.getAtomSet())
 		.getOverlapping3DAtoms(mol.getAtomSet(), type);
 		for (CMLAtom atom : atomSet.getAtoms()) {
 			molecule.deleteAtom(atom);
@@ -1902,7 +1907,7 @@ public class MoleculeTool extends AbstractTool {
 
 				CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(acyclicAtoms);
 				CMLMolecule newMol = new CMLMolecule(atomSet);
-				new MoleculeTool(newMol).calculateBondedAtoms();
+				MoleculeTool.getOrCreateTool(newMol).calculateBondedAtoms();
 				new ConnectionTableTool(newMol).partitionIntoMolecules();
 				List<CMLMolecule> linkerList = newMol.getDescendantsOrMolecule();
 				for (CMLMolecule mol : linkerList) {
@@ -2080,7 +2085,7 @@ public class MoleculeTool extends AbstractTool {
 					grandParent.insertChild(child, ++idx);
 				}
 				if (child instanceof CMLMolecule) {
-					MoleculeTool childTool = new MoleculeTool((CMLMolecule) child);
+					MoleculeTool childTool = MoleculeTool.getOrCreateTool((CMLMolecule) child);
 					childTool.flattenMoleculeDescendants(moleculeList);
 				}
 			}
@@ -2259,7 +2264,7 @@ public class MoleculeTool extends AbstractTool {
  				continue;
  			}
  			// get all atoms within 3 bonds
- 			CMLAtomSet atomSet13 = new AtomTool(atomi).getCoordinationSphereSet(3);
+ 			CMLAtomSet atomSet13 = AtomTool.getOrCreateTool(atomi).getCoordinationSphereSet(3);
  			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
  			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
  	 		for (CMLAtom atomj : nonBondedAtomList) {
@@ -2312,7 +2317,8 @@ public class MoleculeTool extends AbstractTool {
     	} else if (atoms.size() == 1) {
     	} else {
     		try {
-		    	Real2Range moleculeBoundingBox = getBoundingBox();
+		    	Real2Range moleculeBoundingBox = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule)).getExtent2();
+//		    	Real2Range moleculeBoundingBox = getBoundingBox();
 		    	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
 		    	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
 		    	scale = moleculeInterval.scaleTo(screenBoundingBox);
@@ -2515,5 +2521,37 @@ public class MoleculeTool extends AbstractTool {
 		}
 		return currentBond;
 	}
+
+	/** get single electron by id
+	 * @param id
+	 * @return electron
+	 */
+    public CMLElectron getElectronById(String id) {
+        Nodes electronNodes = molecule.query(".//cml:electron[@id='"+id+"']", X_CML);
+        if (electronNodes.size() > 1) {
+        	throw new CMLRuntimeException("Electrons with duplicate id:"+id);
+        }
+        return (electronNodes.size() == 0) ? null : (CMLElectron) electronNodes.get(0);
+    }
+
+    /** gets molar volume.
+     * if molecule has a child property, uses that.
+     * else if molecule has a child property for density uses that
+     * else fails
+     * new property has units of CMLCUBED
+     * @return property with molarVolume
+     */
+    public CMLProperty getMolarVolume() {
+    	CMLProperty volume = CMLProperty.getProperty(molecule, CMLProperty.Prop.MOLAR_VOLUME.value);
+    	if (volume == null) {
+        	CMLProperty density = CMLProperty.getProperty(molecule, CMLProperty.Prop.DENSITY.value);
+        	if (!CMLUnit.Units.GRAM_PER_CMCUBED.equals(density.getUnits())) {
+        		throw new CMLRuntimeException("Cannot use density without units=g.cm-3");
+        	}
+        	double mw = molecule.getCalculatedMolecularMass();
+    	}
+    	return volume;
+    }
+
 }
 
