@@ -11,7 +11,6 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
@@ -54,7 +53,7 @@ public class BondTool extends AbstractTool {
 	 * @param bond
 	 * @return tool
 	 */
-	public static BondTool getOrCreateBondTool(CMLBond bond) {
+	public static BondTool getOrCreateTool(CMLBond bond) {
 		BondTool bondTool = (BondTool) bond.getTool();
 		if (bondTool == null) {
 			bondTool = new BondTool(bond);

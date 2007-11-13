@@ -44,12 +44,12 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLProperty;
-import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLUnit;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
@@ -137,7 +137,7 @@ public class MoleculeTool extends AbstractTool {
 		enableBondToolMap();
 		BondTool bondTool = bondToolMap.get(bond);
 		if (bondTool== null) {
-			bondTool = new BondTool(bond);
+			bondTool = BondTool.getOrCreateTool(bond);
 			bondToolMap.put(bond, bondTool);
 		}
 		return bondTool;
@@ -2343,7 +2343,7 @@ public class MoleculeTool extends AbstractTool {
     }
 
 	Real2Range getBoundingBox() {
-		Real2Range moleculeBoundingBox = new AtomSetTool(new CMLAtomSet(molecule)).getExtent2();
+		Real2Range moleculeBoundingBox = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule)).getExtent2();
 		return moleculeBoundingBox;
 	}
 
@@ -2545,10 +2545,16 @@ public class MoleculeTool extends AbstractTool {
     	CMLProperty volume = CMLProperty.getProperty(molecule, CMLProperty.Prop.MOLAR_VOLUME.value);
     	if (volume == null) {
         	CMLProperty density = CMLProperty.getProperty(molecule, CMLProperty.Prop.DENSITY.value);
-        	if (!CMLUnit.Units.GRAM_PER_CMCUBED.equals(density.getUnits())) {
+        	if (density == null) {
+        		throw new CMLRuntimeException("Cannot calculate molar volume without density");
+        	}
+        	if (!CMLUnit.Units.GRAM_PER_CMCUBED.value.equals(density.getUnits())) {
         		throw new CMLRuntimeException("Cannot use density without units=g.cm-3");
         	}
-        	double mw = molecule.getCalculatedMolecularMass();
+        	double densityV = density.getDouble();
+        	double volumeV = molecule.getCalculatedMolecularMass() / densityV;
+        	volume = new CMLProperty(CMLProperty.Prop.MOLAR_VOLUME.value, 
+        			volumeV, Units.CMCUBED.value);
     	}
     	return volume;
     }

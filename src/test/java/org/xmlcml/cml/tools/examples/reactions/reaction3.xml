@@ -1,0 +1,121 @@
+<cml xmlns="http://www.xml-cml.org/schema">
+  <moleculeList>
+    <molecule id="m1" title="Monomethoxy poly(ethylene glycol), MW = 5000, ex Aldrich">
+      <property dictRef="cml:molarMass">
+        <scalar dataType="xsd:double" units="units:g.mol-1">5000</scalar>
+      </property>
+    </molecule>
+    <molecule id="m2" title="triethylamine">
+      <formula concise="C 6 H 15 N 1"/>
+      <property name="density">
+        <scalar dataType="xsd:float" dictRef="cml:density" units="units:g.cm-3">0.728</scalar>
+      </property>
+    </molecule>
+    <molecule id="m3" title="Polymer-bound 4-(dimethylamino)pyridine">
+      <formula concise="C 6 H 10 N 2"/>
+    </molecule>
+    <molecule id="m4" title="2-Bromoisobutyryl bromide">
+      <formula concise="C 4 H 6 Br 2 O 1"/>
+      <property name="density">
+        <scalar dataType="xsd:float" dictRef="cml:density" units="units:g.cm-3">1.40</scalar>
+      </property>
+    </molecule>
+    <molecule id="2a" title="poly(ethylene glycol) (PEG) macroinitiator">
+    </molecule>
+  </moleculeList>
+
+  <reactionScheme title="Preparation of poly(ethylene glycol) (PEG) macroinitiator " id="ex2">
+    <reaction title="Synthesis of 2a">
+      <reactantList>
+        <reactant id="r1">
+          <molecule ref="m1"/>
+          <amount id="a1" units="units:g" unitType="unitType:mass">50</amount>
+          <amount id="a1m" units="units:mmol">0.01</amount>
+        </reactant>
+        <reactant id="r2" count="1" title="ET3N">
+          <molecule ref="m2"/>
+          <amount id="a2" units="units:g">2.025</amount>
+          <amount id="a2m" units="units:mmol">0.02</amount>
+        </reactant>
+        <reactant id="r3" count="1">
+          <molecule ref="m3"/>
+          <amount id="a3" units="units:ml">2.0</amount>
+          <amount id="a3m" units="units:mmol/g">1.25</amount>
+        </reactant>
+      </reactantList>
+      
+      <substanceList>
+        <substance id="ss1" count="2" role="cml:Solvent">
+          <molecule id="s1" ref="toluene">
+          </molecule>
+          <amount id="a4" units="units:ml">250</amount>
+        </substance>
+      </substanceList>
+      
+      <productList>
+        <product id="p1" color="white" state="solid">
+          <molecule ref="2a"/>
+          <amount id="a5" units="units:g">0.52</amount>
+          <amount id="a6" units="units:percent">41</amount>
+        </product>
+      </productList>
+    </reaction>
+  </reactionScheme>
+    
+  <actionList title="Preparation of poly(ethylene glycol) (PEG) macroinitiator ">
+    <action role="reaction">
+      <object id="o1" type="apparatus">2-necked round bottom flask + suba seal + CaCl2 guard tube</object>
+      <object id="o1" type="apparatus">magnetic stirrer</object>
+      <reaction ref="r1"/>
+      <conditionList>
+      <scalar id="sc5" dictRef="cml:temp" units="units:celsius">21</scalar>
+      <scalar id="sc6" dictRef="cml:time">overnight</scalar>
+      </conditionList>
+    </action>
+    
+    <action role="reactionContinuation">
+      <conditionList>
+        <scalar id="sc5" dictRef="cml:temp" units="units:celsius">21</scalar>
+        <scalar id="sc6" dictRef="cml:time">overnight</scalar>
+      </conditionList>
+    </action>
+  
+    <actionList role="workup">
+      <action role="filtration"/>
+      <action role="solventEvaporation"/>
+      <action role="redissolve">
+        <substance id="ss2" role="cml:solvent">
+          <molecule id="m5" ref="CH2CL2"/>
+        </substance>
+      </action>
+      
+      <action role="neutralize">
+        <substance id="ss3" role="cml:base">
+          <molecule id="m6" ref="NA2CO3"/>
+        </substance>
+      </action>
+      
+      <action role="dry">
+        <substance id="ss4" role="cml:drier">
+          <molecule id="m7" ref="NA2SO4"/>
+        </substance>
+      </action>
+      
+      <action role="purification">
+        <substanceList role="cml:solvent">
+          <substance id="ss5">
+            <molecule id="m8" ref="hexane"/>
+            <amount id="a5" unitType="unitType:vol">8</amount>
+          </substance>
+          <substance id="ss6">
+            <molecule id="m9" ref="ethyl"/>
+            <amount id="a6" unitType="unitType:vol">2</amount>
+          </substance>
+        </substanceList>
+      </action>
+      
+    </actionList>
+    
+  </actionList>
+  
+</cml>

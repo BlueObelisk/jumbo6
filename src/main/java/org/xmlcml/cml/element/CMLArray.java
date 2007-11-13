@@ -568,7 +568,7 @@ public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, H
 			dataType = XSD_STRING;
 			super.setDataType(dataType);
 		}
-		return dataType;
+		return CMLType.getNormalizedValue(dataType);
 	}
 
 	/**

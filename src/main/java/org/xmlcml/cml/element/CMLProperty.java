@@ -76,6 +76,20 @@ public class CMLProperty extends AbstractProperty {
     }
 
     /**
+     * construct as property with child scalar
+     * @param dictRef
+     * @param value
+     * @param units
+     */
+    public CMLProperty(String dictRef, double value, String units) { 
+    	this();
+    	CMLScalar scalar = new CMLScalar(value);
+    	scalar.setUnits(units);
+    	this.appendChild(scalar);
+    	this.setDictRef(dictRef);
+    }
+    
+    /**
      * copy node .
      *
      * @return Node
@@ -106,13 +120,13 @@ public class CMLProperty extends AbstractProperty {
      */ 
     public static CMLPropertyList getPropertyList(CMLElement parent, String dictRef) {
     	CMLPropertyList propertyList = new CMLPropertyList();
-    	Nodes nodes = parent.query(
-			".//cml:property[@dictRef='"+dictRef+"'] |" +
-			".//cml:property[not (@dictRef='"+dictRef+"')]/*[@dictRef='"+dictRef+"']", X_CML);
-    	for (int i = 0; i < nodes.size(); i++) {
+    	Nodes nodes = parent.query("./cml:property", X_CML);
+    	for (int i = 0; i < nodes.size(); i++ ) {
     		CMLProperty property = (CMLProperty) nodes.get(i);
     		property.canonicalize();
-    		propertyList.addProperty(property);
+    		if (dictRef.equals(property.getAttributeValue("dictRef"))) {
+	    		propertyList.addProperty(property);
+    		}
     	}
     	return propertyList;
     }
@@ -182,9 +196,10 @@ public class CMLProperty extends AbstractProperty {
 	 * @return the value (NaN if not set)
 	 */
 	public double getDouble() {
+		getChild();
 		double result = Double.NaN;
-		if (XSD_DOUBLE.equals(child.getDataType()) && 
-				child instanceof HasScalar) {
+		String dataType = CMLType.getNormalizedValue(child.getDataType());
+		if (XSD_DOUBLE.equals(dataType) && child instanceof HasScalar) {
 			result = ((HasScalar) child).getDouble();
 		}
 		return result;
@@ -196,6 +211,7 @@ public class CMLProperty extends AbstractProperty {
 	 * @return the value (null if not set)
 	 */
 	public String getString() {
+		getChild();
 		String result = null;
 		if (XSD_STRING.equals(child.getDataType()) &&
 				(child instanceof HasScalar)
@@ -213,8 +229,10 @@ public class CMLProperty extends AbstractProperty {
 	 *             if different type
 	 */
 	public int getInt() {
+		getChild();
 		int result = Integer.MIN_VALUE;
-		if (XSD_INTEGER.equals(child.getDataType()) && 
+		String dataType = CMLType.getNormalizedValue(child.getDataType());
+		if (XSD_INTEGER.equals(dataType) && 
 				(child instanceof HasScalar)) {
 			result = ((HasScalar) child).getInt();
 		}
@@ -226,8 +244,10 @@ public class CMLProperty extends AbstractProperty {
      * @return elements as String
      */
     public List<String> getStringValues() {
+		getChild();
 		List<String> result = null;
-		if (XSD_STRING.equals(child.getDataType()) && 
+		String dataType = CMLType.getNormalizedValue(child.getDataType());
+		if (XSD_STRING.equals(dataType) && 
 			child instanceof HasArraySize) {
 			result = ((HasArraySize) child).getStringValues();
 		}
@@ -240,8 +260,10 @@ public class CMLProperty extends AbstractProperty {
      * @return integer values
      */
     public int[] getInts() {
+		getChild();
 		int[] result = null;
-		if (XSD_INTEGER.equals(child.getDataType()) && 
+		String dataType = CMLType.getNormalizedValue(child.getDataType());
+		if (XSD_INTEGER.equals(dataType) && 
 			child instanceof HasArraySize) {
 			result = ((HasArraySize) child).getInts();
 		}
@@ -254,8 +276,10 @@ public class CMLProperty extends AbstractProperty {
      * @return double values
      */
     double[] getDoubles() {
+		getChild();
 		double[] result = null;
-		if (XSD_DOUBLE.equals(child.getDataType()) && 
+		String dataType = CMLType.getNormalizedValue(child.getDataType());
+		if (XSD_DOUBLE.equals(dataType) && 
 			child instanceof HasArraySize) {
 			result = ((HasArraySize) child).getDoubles();
 		}
@@ -291,7 +315,7 @@ public class CMLProperty extends AbstractProperty {
 	public String getDataType() {
 		getChild();
 		String dataType = (child == null) ? null : ((HasDataType) child).getDataType();
-		return dataType;
+		return CMLType.getNormalizedValue(dataType);
 	}
 	
 }

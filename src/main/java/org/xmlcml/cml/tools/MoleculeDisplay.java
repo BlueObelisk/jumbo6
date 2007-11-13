@@ -36,12 +36,16 @@ public class MoleculeDisplay extends AbstractDisplay {
 	
 	private double bondLength = 2.0;
 	private boolean omitHydrogens = true;
-	
+
+	/**
+	 */
 	public MoleculeDisplay() {
 		super();
 	}
 
-
+	/** copy
+	 * @param a
+	 */
 	public MoleculeDisplay(MoleculeDisplay a) {
 		super(a.fontSize, a.color, a.fill, a.stroke, a.opacity, a.fontStyle, a.fontWeight,
 				a.fontFamily, a.omitHydrogens);

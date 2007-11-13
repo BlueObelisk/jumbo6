@@ -237,7 +237,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits, HasScalar {
 			dataType = XSD_STRING;
 			super.setDataType(dataType);
 		}
-		return dataType;
+		return CMLType.getNormalizedValue(dataType);
 	}
 
 	/**

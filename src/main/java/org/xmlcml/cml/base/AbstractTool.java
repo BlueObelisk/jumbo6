@@ -6,8 +6,6 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Transform2;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 
 /**
  * is this used?

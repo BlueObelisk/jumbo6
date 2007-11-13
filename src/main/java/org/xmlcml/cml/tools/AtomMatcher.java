@@ -1645,7 +1645,7 @@ public class AtomMatcher extends AbstractTool {
             // + " atoms from reactant (" + reactant.getAtomCount()
             // + ") to product (" + reactant.getAtomCount() + S_RBRAK);
         } else {
-        	ReactionTool reactionTool = new ReactionTool(reaction);
+        	ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
             // general translate to centroids
             List<CMLAtom> reactantAtoms = reactionTool.getAtoms(Component.REACTANTLIST);
             List<CMLAtom> productAtoms = reactionTool.getAtoms(Component.PRODUCTLIST);
