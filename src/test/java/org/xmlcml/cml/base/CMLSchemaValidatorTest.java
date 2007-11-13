@@ -7,9 +7,16 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
+/**
+ * @author pm286
+ *
+ */
 public class CMLSchemaValidatorTest {
 
+	/**
+	 * 
+	 * @throws IOException
+	 */
     @Test
     @Ignore // this is a mess anyway
     public void testCMLSchemaValidatorSuccess() throws IOException {
@@ -21,6 +28,9 @@ public class CMLSchemaValidatorTest {
         }
     }
 
+    /** 
+     * @exception IOException
+     */
     @Test
     public void testCMLSchemaValidatorFailure() throws IOException {
         String cml = "<molecule id='m1' xmlns='" + CMLConstants.CML_NS + "' foo='bar' />";

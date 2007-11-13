@@ -35,7 +35,7 @@ public class CMLSchemaValidator {
 
     /**
      * Fetches instance of schema validator.
-     * @return
+     * @return validator
      * @throws IOException - if schema file is not found.
      * @throws CMLException - if schema cannot be parsed.
      */
@@ -92,7 +92,7 @@ public class CMLSchemaValidator {
     /**
      * Validates XML from java.io.InputStream against CML schema.
      * Throws exception if validation fails.
-     * @param source
+     * @param in
      * @throws IOException
      * @throws CMLException
      */

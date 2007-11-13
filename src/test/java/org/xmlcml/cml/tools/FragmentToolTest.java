@@ -287,7 +287,7 @@ public class FragmentToolTest extends AbstractTest {
 	@Test
 	public void testSubstituteParameters() {
 		CMLElement fragment = readElement0("substitute0");
-		FragmentTool fragmentTool = new FragmentTool((CMLFragment) fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		CMLMolecule molecule = fragmentTool.getMolecule();
 		// MoleculeTool moleculeTool = new MoleculeTool(molecule);
 		fragmentTool.substituteParameters();
@@ -306,7 +306,7 @@ public class FragmentToolTest extends AbstractTest {
 	public void testSubstituteParameters1() {
 		// intermediate format for testing
 		CMLElement fragment = readElement0("substitute");
-		FragmentTool fragmentTool = new FragmentTool((CMLFragment) fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.substituteParameters();
 		CMLElement fragmentE = readElement0("substitute1");
 		assertEqualsCanonically("fragment", fragmentE, fragment, true);
@@ -318,7 +318,7 @@ public class FragmentToolTest extends AbstractTest {
 	public void testProperty() {
 
 		CMLElement fragment = readElement0("property");
-		FragmentTool fragmentTool = new FragmentTool((CMLFragment) fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.processExplicit();
 		fragment = fragmentTool.getFragment();
 		// <propertyList>
@@ -434,7 +434,7 @@ public class FragmentToolTest extends AbstractTest {
 		if (!(fragment instanceof CMLFragment)) {
 			throw new CMLRuntimeException("NOT A FRAG");
 		}
-		FragmentTool fragmentTool = new FragmentTool((CMLFragment) fragment);
+		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.setSeed(seed);
 		CMLElement generatedElement = fragmentTool.processBasic(moleculeCatalog);
 		if (generatedElement == null) {
@@ -550,7 +550,7 @@ public class FragmentToolTest extends AbstractTest {
 	public void testGeneratedMarkush() {
 
 		CMLElement generatedFragment = readElement0("markush");
-		FragmentTool generatedFragmentTool = new FragmentTool((CMLFragment) generatedFragment);
+		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateTool((CMLFragment) generatedFragment);
 		generatedFragmentTool.processAll(moleculeCatalog);
 		CMLElement generatedE = readElement0("markushE");
 		assertEqualsCanonically("generated", generatedE, generatedFragment, true);
@@ -579,7 +579,7 @@ public class FragmentToolTest extends AbstractTest {
 				continue;
 			}
 			// get all atoms within 3 bonds
-			CMLAtomSet atomSet13 = new AtomTool(atomi).getCoordinationSphereSet(3);
+			CMLAtomSet atomSet13 = AtomTool.getOrCreateTool(atomi).getCoordinationSphereSet(3);
 			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
 			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
 			for (CMLAtom atomj : nonBondedAtomList) {

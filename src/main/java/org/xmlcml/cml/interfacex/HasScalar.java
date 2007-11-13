@@ -1,6 +1,5 @@
 package org.xmlcml.cml.interfacex;
 
-import java.util.List;
 
 
 /**

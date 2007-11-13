@@ -9,6 +9,7 @@ import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.interfacex.HasDataType;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
@@ -511,7 +512,7 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits, HasDataType {
             dataType = XSD_STRING;
             super.setDataType(dataType);
         }
-        return dataType;
+		return CMLType.getNormalizedValue(dataType);
     }
 
     /**

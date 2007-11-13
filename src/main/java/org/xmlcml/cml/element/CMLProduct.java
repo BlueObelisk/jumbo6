@@ -146,16 +146,14 @@ public class CMLProduct extends AbstractProduct implements ReactionComponent {
      * @return all formula objects
      */
 	public List<CMLFormula> getFormulas() {
-		// TODO Auto-generated method stub
-		return null;
+        return CMLReaction.getFormulas(this);
 	}
 
 	/**
 	 * @return all molecules
 	 */
 	public List<CMLMolecule> getMolecules() {
-		// TODO Auto-generated method stub
-		return null;
+        return CMLReaction.getMolecules(this);
 	}
 
 }

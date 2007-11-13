@@ -1,9 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import java.awt.Color;
-
-import org.xmlcml.euclid.Real2Interval;
-import org.xmlcml.euclid.RealInterval;
 
 /** display properties for bond.
  * 
@@ -18,10 +14,15 @@ public class ReactionDisplay extends AbstractDisplay {
 	};
 	
 	private MoleculeDisplay moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.DEFAULT);
-	
+
+	/** constructor.
+	 */
 	public ReactionDisplay() {
 		super();
 	}
+	/** copy.
+	 * @param a
+	 */
 	public ReactionDisplay(ReactionDisplay a) {
 		super(a);
 		this.moleculeDisplay = new MoleculeDisplay(a.moleculeDisplay);
@@ -38,6 +39,10 @@ public class ReactionDisplay extends AbstractDisplay {
 	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
 		this.moleculeDisplay = moleculeDisplay;
 	}
+	/**
+	 * 
+	 * @return default
+	 */
 	public static ReactionDisplay getDEFAULT() {
 		return DEFAULT;
 	}

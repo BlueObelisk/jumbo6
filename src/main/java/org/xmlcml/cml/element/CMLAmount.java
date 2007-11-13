@@ -3,13 +3,11 @@ package org.xmlcml.cml.element;
 import nu.xom.Element;
 import nu.xom.Node;
 
-import org.xmlcml.cml.attribute.UnitTypeAttribute;
 import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLUnit.Units;
-import org.xmlcml.cml.element.CMLUnitType.UnitType;
 import org.xmlcml.cml.tools.MoleculeTool;
 
 /**
@@ -77,20 +75,14 @@ public class CMLAmount extends AbstractAmount {
     		throw new CMLRuntimeException("No units given on amount");
     	}
     	String unitValue = (String) units.getCMLValue();
-    	UnitTypeAttribute unitType = units.getUnitTypeAttribute();
-    	if (unitType == null) {
-    		if (unitValue.equals(Units.GRAM.value)) {
-    			unitType = new UnitTypeAttribute(UnitType.MASS.value);
-    		}
-    	} else if (unitValue == null) {
-    		unitValue = Units.GRAM.value;
-    	}
     	if (Units.GRAM.value.equals(unitValue)) {
     		double d = molecule.getCalculatedMolecularMass(HydrogenControl.NO_EXPLICIT_HYDROGENS);
     		double amountx = this.getXMLContent();
     		molarAmount = new CMLAmount();
     		molarAmount.setUnits(Units.MMOL.value);
     		molarAmount.setXMLContent(amountx / d);
+    	} else {
+    		throw new CMLRuntimeException("Cannot handle units other than gram");
     	}
     	return molarAmount;
     }
@@ -111,7 +103,7 @@ public class CMLAmount extends AbstractAmount {
     		if (volume != null) {
 	    		double amountv = this.getXMLContent();
 	    		molarAmount = new CMLAmount();
-	    		molarAmount.setUnits(Units.MMOL.value);
+	    		molarAmount.setUnits(Units.MOL.value);
 	    		molarAmount.setXMLContent(amountv / volume.getDouble());
     		}
     	}

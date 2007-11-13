@@ -194,7 +194,7 @@ public class SelectionTool implements CMLConstants {
 	 */
 	public void highlightBond(CMLBond bond) {
 	 // highlight
-		 BondTool bondTool = BondTool.getOrCreateBondTool(bond);
+		 BondTool bondTool = BondTool.getOrCreateTool(bond);
 		 List<CMLAtom> atoms = bond.getAtoms();
    		 SVGLine line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
    		 line.setStrokeWidth(bondTool.getWidth() * 10.0);
@@ -216,7 +216,7 @@ public class SelectionTool implements CMLConstants {
 	 */
 	public void deHighlightBond(CMLBond bond) {
 	 // highlight
-		 BondTool bondTool = BondTool.getOrCreateBondTool(bond);
+		 BondTool bondTool = BondTool.getOrCreateTool(bond);
    		 SVGElement g = bondTool.getG();
    		 if (g != null) {
    			 Nodes nodes = g.query(".//*[@class='highlight']");

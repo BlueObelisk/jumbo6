@@ -36,6 +36,8 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
     	/** density*/
     	GRAM_PER_CMCUBED("units:g.cm-3"),
     	/** volume */
+    	CMCUBED			("units:cm3"),
+    	/** volume */
     	ML				("units:ml"),
     	/** volume */
     	L				("units:l"),
@@ -48,6 +50,12 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
     	public final String value;
     	private Units(String s) {
     		value = s;
+    	}
+    	/**
+    	 * @return string
+    	 */
+    	public String toString() {
+    		return value;
     	}
     };
 

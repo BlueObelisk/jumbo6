@@ -381,6 +381,9 @@ public class FragmentTool extends AbstractTool {
 		}
     }
 
+    /**
+     * @return random seed
+     */
 	public long getSeed() {
 		return seed;
 	}
@@ -490,9 +493,14 @@ class BasicProcessor implements CMLConstants {
 		this.fragment = fragment;
 		this.fragmentTool = FragmentTool.getOrCreateTool(fragment);
 	}
+	/**
+	 * start processor with known seed
+	 * @param fragment
+	 * @param seed
+	 */
 	public BasicProcessor(CMLFragment fragment, long seed) {
 		this.fragment = fragment;
-		this.fragmentTool = new FragmentTool(fragment);
+		this.fragmentTool = FragmentTool.getOrCreateTool(fragment);
 		this.fragmentTool.setSeed(seed);
 	}
 	
@@ -815,6 +823,10 @@ class BasicProcessor implements CMLConstants {
     	join.processMoleculeRefs2AndAtomRefs2(previousMolecule, nextMolecule);
     }
 
+    /**
+     * 
+     * @return random
+     */
 	public Random getRandomGenerator() {
 		if(randomGenerator==null){
 			randomGenerator=(fragmentTool.getSeed()==0)?new Random():new Random(fragmentTool.getSeed());

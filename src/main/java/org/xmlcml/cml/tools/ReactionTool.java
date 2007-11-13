@@ -56,11 +56,26 @@ public class ReactionTool extends AbstractTool {
      * constructor.
      * 
      * @param reaction
+     * @deprecated use getOrCreateTool()
      */
     public ReactionTool(CMLReaction reaction) {
         this.reaction = reaction;
 		this.reaction.setTool(this);
     }
+
+	/** gets ReactionTool associated with reaction.
+	 * if null creates one and sets it in reaction
+	 * @param reaction
+	 * @return tool
+	 */
+	public static ReactionTool getOrCreateTool(CMLReaction reaction) {
+		ReactionTool reactionTool = (ReactionTool) reaction.getTool();
+		if (reactionTool == null) {
+			reactionTool = new ReactionTool(reaction);
+			reaction.setTool(reactionTool);
+		}
+		return reactionTool;
+	}
 
     /**
      * output and analyse aggregate formula for products and reactants.
@@ -807,6 +822,9 @@ public class ReactionTool extends AbstractTool {
     	return map;
     }
 
+    /**
+     * @return reaction
+     */
 	public CMLReaction getReaction() {
 		return reaction;
 	}

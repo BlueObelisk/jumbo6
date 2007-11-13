@@ -1802,6 +1802,12 @@ public class CMLFormula extends AbstractFormula {
 		boolean ee = Arrays.equals(thisElem, formElem);
 		double[] thisCount = this.getCounts();
 		double[] formCount = form.getCounts();
+		if (thisCount == null) {
+			thisCount = new double[0];
+		}
+		if (formCount == null) {
+			formCount = new double[0];
+		}
 		boolean cc = DoubleTool.equals(thisCount, formCount, eps);
 		if (ee && cc) {
 			equals = true;

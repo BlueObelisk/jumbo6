@@ -24,7 +24,7 @@ public class CMLAmountTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.element.CMLAmount#getMolarAmount(org.xmlcml.cml.element.CMLMolecule, org.xmlcml.cml.element.CMLAmount)}.
+	 * Test method for {@link org.xmlcml.cml.element.CMLAmount#getMolarAmount(org.xmlcml.cml.element.CMLMolecule)}.
 	 */
 	@Test
 	public final void testGetMolarAmount() {
@@ -36,8 +36,7 @@ public class CMLAmountTest {
 		double d = molecule.getCalculatedMolecularMass(HydrogenControl.NO_EXPLICIT_HYDROGENS);
 		Assert.assertEquals("MW ", 58.44277, d);
 		CMLAmount massAmount = new CMLAmount();
-		massAmount.setUnits("units:g");
-//		massAmount.setUnitType("unitType:mass");
+		massAmount.setUnits(CMLUnit.Units.GRAM.value);
 		massAmount.addAttribute(new UnitTypeAttribute("unitType:mass"));
 		massAmount.setXMLContent(100.0);
 		CMLAmount molarAmount = massAmount.getMolarAmount(molecule);
