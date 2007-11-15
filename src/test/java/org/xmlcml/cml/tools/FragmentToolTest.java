@@ -643,11 +643,11 @@ public class FragmentToolTest extends AbstractTest {
 		boolean check = true;
 		test(debug, check, 20, false);
 		test(debug, check, 21, false);
-		// stochastic so cannot test
+		// stochastic so cannot test without setting seed
 		long seed = 100;
 		test(debug, check, 22, false, seed);
-		// testAllS(debug, false, 23);
-		// testAllS(debug, check, 24);
+		test(debug, check, 23,false,seed);
+		test(debug, check, 24,false,seed);
 	}
 
 	/**
@@ -666,17 +666,6 @@ public class FragmentToolTest extends AbstractTest {
 		test(debug, check, 56, true);
 		test(debug, check, 57, true);
 
-	}
-
-	/**
-	 * Tests the random number generator with a fixed seed
-	 */
-	@Test
-	// @Ignore
-	public void testrandom() {
-		boolean check = true;
-		boolean debug = false;
-		test(debug, check, 21, false);
 	}
 
 	/**
