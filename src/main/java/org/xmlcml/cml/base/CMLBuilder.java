@@ -1,5 +1,6 @@
 package org.xmlcml.cml.base;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -79,4 +80,37 @@ public class CMLBuilder extends Builder implements CMLConstants {
         return (doc == null) ? null : doc.getRootElement();
     }
 
+    /** make sure a document has CMLNamespace if possible.
+     * if document has CML namespace, returns it.
+     * if document does not, converts to String and reparses it.
+     * horrid hack, but that's because some people don't use namespaces.
+     * @param doc
+     * @return document
+     */
+    public static Document ensureCML(Document doc) {
+    	Element root = doc.getRootElement();
+		String nameURI = root.getNamespaceURI();
+    	if (!CML_NS.equals(nameURI)) {
+    		
+    		try {
+	    		System.err.println("No CML namespace; munging one in");
+	    		ByteArrayOutputStream ss = new ByteArrayOutputStream();
+	    		CMLUtil.debug(root, ss, 0);
+	    		ss.close(); 
+	    		String s = ss.toString();
+	    		// find first line after any declaration
+	    		int idx = s.indexOf(">\n");
+	    		if (s.startsWith("<?")) {
+	    			idx = s.indexOf(">\n", idx);
+	    		}
+	    		// add namespace
+	    		String sss = s.substring(0, idx) + S_SPACE+CML_XMLNS +s.substring(idx);
+	    		Element newRoot = new CMLBuilder().parseString(sss);
+	    		doc = newRoot.getDocument();
+    		} catch (Exception e) {
+    			throw new RuntimeException("BUG "+e);
+    		}
+    	}
+    	return doc;
+    }
 }

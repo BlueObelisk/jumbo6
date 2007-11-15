@@ -1,11 +1,11 @@
 package org.xmlcml.cml.element;
 
-import static org.junit.Assert.fail;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.interfacex.HasDataType;
 /** tests property
  * 
  * @author pm286
@@ -28,7 +28,6 @@ public class CMLPropertyTest extends AbstractTest {
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetPropertyList() {
 		String cmlS = 
 			"<cml " +CML_XMLNS+">"+
@@ -44,14 +43,29 @@ public class CMLPropertyTest extends AbstractTest {
 			"</cml>";
 		CMLCml cml = (CMLCml) parseValidString(cmlS);
 		CMLPropertyList propertyList = CMLProperty.getPropertyList(cml, "foo:bar");
-		Assert.assertEquals("propertyList", 3, propertyList.getPropertyElements().size());
+		Assert.assertEquals("propertyList", 1, propertyList.getPropertyElements().size());
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetPropertyCMLElementString() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property>" +
+			"  <scalar dictRef='foo:bar' units='units:g' dataType='xsd:double'>12.3</scalar>" +
+			"</property>"+
+			"<property "+CML_XMLNS+">" +
+			"  <scalar dictRef='foo:plugh' units='units:g' dataType='xsd:double'>45.6</scalar>" +
+			"</property>" +
+			"<property "+CML_XMLNS+">" +
+			"  <scalar dictRef='foo:plugh' units='units:g' dataType='xsd:double'>49.6</scalar>" +
+			"</property>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:bar");
+		Assert.assertEquals("property", 12.3, property.getDouble(), EPS);
+		property = CMLProperty.getProperty(cml, "foo:plugh");
+		Assert.assertNull("property", property);
 	}
 
 	/** */
@@ -59,7 +73,6 @@ public class CMLPropertyTest extends AbstractTest {
 	public final void testCanonicalize() {
 		CMLProperty prop2 = new CMLProperty(prop1);
 		prop2.canonicalize();
-		prop2.debug();
 	}
 
 	/** */
@@ -71,65 +84,154 @@ public class CMLPropertyTest extends AbstractTest {
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetDouble() {
-		fail("Not yet implemented"); // TODO
+		double val = prop1.getDouble();
+		Assert.assertEquals("double", 12.3, val, EPS);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetString() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property>" +
+			"  <scalar dictRef='foo:bar' units='units:g' dataType='xsd:double'>12.3</scalar>" +
+			"</property>"+
+			"<property "+CML_XMLNS+">" +
+			"  <scalar dictRef='foo:plugh'>penguin</scalar>" +
+			"</property>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:bar");
+		String val = property.getString();
+		Assert.assertNull("string", val);
+		property = CMLProperty.getProperty(cml, "foo:plugh");
+		val = property.getString();
+		Assert.assertEquals("string", "penguin", val);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetInt() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property>" +
+			"  <scalar dictRef='foo:bar' units='units:g' dataType='xsd:double'>12.3</scalar>" +
+			"</property>"+
+			"<property>" +
+			"  <scalar dictRef='foo:plugh' dataType='xsd:integer'>12</scalar>" +
+			"</property>"+
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:bar");
+		int val = property.getInt();
+		Assert.assertEquals("int", Integer.MIN_VALUE, val);
+		property = CMLProperty.getProperty(cml, "foo:plugh");
+		val = property.getInt();
+		Assert.assertEquals("int", 12, val);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetStringValues() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property  dictRef='foo:plugh'>" +
+			"  <array>penguin bear wombat</array>" +
+			"</property>" +
+			"<property  dictRef='foo:bar'>" +
+			"  <scalar>penguin bear wombat</scalar>" +
+			"</property>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:plugh");
+		List<String> val = property.getStringValues();
+		Assert.assertNotNull("strings", val);
+		Assert.assertEquals("strings", 3, val.size());
+		Assert.assertEquals("strings", "bear", val.get(1));
+		property = CMLProperty.getProperty(cml, "foo:bar");
+		Assert.assertNotNull("property not null", property);
+		val = property.getStringValues();
+		Assert.assertNull("strings", val);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetInts() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property  dictRef='foo:plugh'>" +
+			"  <array dataType='xsd:integer'>1 2 3</array>" +
+			"</property>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:plugh");
+		int[] val = property.getInts();
+		Assert.assertNotNull("ints", val);
+		Assert.assertEquals("ints", 3, val.length);
+		Assert.assertEquals("ints", 2, val[1]);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetDoubles() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property  dictRef='foo:plugh'>" +
+			"  <array dataType='xsd:double' units='units:g'>1.1 2.1 3.1</array>" +
+			"</property>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:plugh");
+		double[] val = property.getDoubles();
+		Assert.assertNotNull("doubles", val);
+		Assert.assertEquals("doubles", 3, val.length);
+		Assert.assertEquals("doubles", 2.1, val[1]);
 	}
 
 	/** */
 	@Test
-	@Ignore
 	public final void testGetChild() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property  dictRef='foo:plugh'>" +
+			"  <array dataType='xsd:double' units='units:g'>1.1 2.1 3.1</array>" +
+			"</property>" +
+			"<property  dictRef='foo:bar'>" +
+			"  <molecule/>" +
+			"</property>" +
+			"<property  dictRef='foo:xyzzy'/>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:plugh");
+		HasDataType child = property.getChild();
+		Assert.assertNotNull("child", child);
+		property = CMLProperty.getProperty(cml, "foo:bar");
+		child = property.getChild();
+		Assert.assertNull("child", child);
 	}
+
 
 	/** */
 	@Test
-	@Ignore
-	public final void testSetChild() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
 	public final void testGetDataType() {
-		fail("Not yet implemented"); // TODO
+		String cmlS = 
+			"<cml " +CML_XMLNS+">"+
+			"<property  dictRef='foo:plugh'>" +
+			"  <array dataType='xsd:double' units='units:g'>1.1 2.1 3.1</array>" +
+			"</property>" +
+			"<property  dictRef='foo:bar'>" +
+			"  <scalar/>" +
+			"</property>" +
+			"<property  dictRef='foo:xyzzy'/>" +
+			"</cml>";
+		CMLCml cml = (CMLCml) parseValidString(cmlS);
+		CMLProperty property = CMLProperty.getProperty(cml, "foo:plugh");
+		String dataType = property.getDataType();
+		Assert.assertEquals("datatype", XSD_DOUBLE, dataType);
+		property = CMLProperty.getProperty(cml, "foo:bar");
+		dataType = property.getDataType();
+		Assert.assertEquals("datatype", XSD_STRING, dataType);
 	}
 
 }

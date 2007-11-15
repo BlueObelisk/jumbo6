@@ -27,4 +27,10 @@ public interface HasDictRef {
      */
     CMLAttribute getDictRefAttribute();
 
+    /** get dictRef value.
+     * 
+     * @return value
+     */
+    String getDictRef();
+
 }

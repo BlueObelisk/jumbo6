@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -2293,13 +2294,21 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      */
     public static void testSVG(String[] args) throws Exception {
     	if (args.length < 3 ) {
-    		System.out.println("SVG infile outfile");
+    		System.out.println("SVG infile/input_resource outfile");
     	} else {
     		String infile = args[1];
     		String outfile = args[2];
-	    	InputStream is = Util.getInputStreamFromResource(infile);
+    		InputStream is = null;
+    		try {
+    			is = Util.getInputStreamFromResource(infile);
+    		} catch (Exception e) {
+    			is = new FileInputStream(infile);
+    		}
+	    	
 	    	MoleculeDisplayList graphicsManager = new MoleculeDisplayList(outfile);
-	    	CMLMolecule molecule = (CMLMolecule) new CMLBuilder().build(is).getRootElement();
+	    	Document doc = new CMLBuilder().build(is);
+	    	doc = CMLBuilder.ensureCML(doc);
+	    	CMLMolecule molecule = (CMLMolecule) doc.getRootElement();
 	    	graphicsManager.setAndProcess(MoleculeTool.getOrCreateTool(molecule));
 	    	graphicsManager.createOrDisplayGraphics();
     	}
