@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,6 +126,10 @@ public class ReactionTool extends AbstractTool {
         for (CMLProduct product : products) {
             CMLFormula formula = product.getOrCreateFormula();
             if (formula != null) {
+            	double thisCount = product.getCount();
+            	if (!Double.isNaN(thisCount)) {
+            		formula.setCount(thisCount);
+            	}
                 if (aggregateProductFormula == null) {
                     aggregateProductFormula = new CMLFormula();
                 }
@@ -146,6 +149,10 @@ public class ReactionTool extends AbstractTool {
         for (CMLReactant reactant : reactants) {
             CMLFormula formula = reactant.getOrCreateFormula();
             if (formula != null) {
+            	double thisCount = reactant.getCount();
+            	if (!Double.isNaN(thisCount)) {
+            		formula.setCount(thisCount);
+            	}
                 if (aggregateReactantFormula == null) {
                     aggregateReactantFormula = new CMLFormula();
                 }
@@ -203,25 +210,6 @@ public class ReactionTool extends AbstractTool {
 
     }
 
-    /**
-     * output the reaction analysis to a string.
-     * 
-     * @return the string
-     * @throws CMLException
-     */
-    public String analyzeReaction() throws CMLException {
-        StringWriter w = new StringWriter();
-        try {
-            this.outputReaction(w);
-            w.write(S_NL);
-            this.outputBalance(w);
-            w.write(S_NL);
-            w.close();
-        } catch (IOException ioe) {
-            logger.severe("BUG " + ioe);
-        }
-        return w.toString();
-    }
 
 //    /**
 //     * get all molecules on reactant or product side. includes cmlSpectator
@@ -896,5 +884,23 @@ public class ReactionTool extends AbstractTool {
     	if (reactionDisplay == null) {
     		reactionDisplay = ReactionDisplay.getDEFAULT();
     	}
+    }
+
+    /** convenience method
+     * 
+     * @param i
+     * @return i'th reactant
+     */
+    public CMLReactant getReactant(int i) {
+    	return reaction.getReactantList().getReactantElements().get(i);
+    }
+    
+    /** convenience method
+     * 
+     * @param i
+     * @return i'th product
+     */
+    public CMLProduct getProduct(int i) {
+    	return reaction.getProductList().getProductElements().get(i);
     }
 }

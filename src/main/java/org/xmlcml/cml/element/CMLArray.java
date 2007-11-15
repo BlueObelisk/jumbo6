@@ -367,8 +367,8 @@ public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, H
 	 */
 	public double[] getDoubles() throws CMLRuntimeException {
 		double[] dd = null;
-
-		if (XSD_DOUBLE.equals(CMLType.getNormalizedValue(this.getDataType()))) {
+		String dataType = this.getDataType();
+		if (dataType != null && XSD_DOUBLE.equals(CMLType.getNormalizedValue(dataType))) {
 			String[] ss = getSplitContent();
 			dd = new double[ss.length];
 			NumberFormat nf = NumberFormat.getNumberInstance();
@@ -397,7 +397,8 @@ public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, H
 	 */
 	public int[] getInts() throws CMLRuntimeException {
 		int[] ii = null;
-		if (this.getDataType().equals(XSD_INTEGER)) {
+		String dataType = this.getDataType();
+		if (XSD_INTEGER.equals(dataType)) {
 			String[] ss = getSplitContent();
 			ii = new int[ss.length];
 			for (int i = 0; i < ii.length; i++) {
@@ -420,21 +421,23 @@ public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, H
 	 */
 	public List<String> getStringValues() {
 		List<String> values = new ArrayList<String>();
-		if (this.getDataType().equals(XSD_INTEGER)) {
+		String dataType = this.getDataType();
+		if (false) {
+		} else if (dataType == null || dataType.equals(XSD_STRING)) {
+			String[] strings = this.getStrings();
+			for (String s : strings) {
+				values.add(s);
+			}
+		} else if (XSD_INTEGER.equals(dataType)) {
 			int[] ints = this.getInts();
 			for (int i : ints) {
 				values.add(S_EMPTY + i);
 			}
-		} else if (this.getDataType().equals(XSD_DOUBLE)) {
+		} else if (XSD_DOUBLE.equals(dataType)) {
 
 			double[] doubles = this.getDoubles();
 			for (double d : doubles) {
 				values.add(S_EMPTY + d);
-			}
-		} else if (this.getDataType().equals(XSD_STRING)) {
-			String[] strings = this.getStrings();
-			for (String s : strings) {
-				values.add(s);
 			}
 		}
 		return values;

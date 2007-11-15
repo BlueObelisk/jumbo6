@@ -203,6 +203,7 @@ public class MoleculeLayout extends AbstractTool {
 			Document doc;
 			try {
 				doc = new CMLBuilder().build(new FileReader(cmlfile));
+				doc = CMLBuilder.ensureCML(doc);
 				Nodes nodes = doc.query("//*[local-name()='molecule']");
 				mol = (nodes.size() > 0) ? (CMLMolecule) nodes.get(0) : null;
 			} catch (Exception e) {

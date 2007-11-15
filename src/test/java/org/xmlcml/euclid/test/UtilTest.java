@@ -3,8 +3,6 @@
  */
 package org.xmlcml.euclid.test;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +15,6 @@ import nu.xom.Builder;
 import nu.xom.Document;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.euclid.EuclidConstants;
@@ -509,18 +506,18 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      * Test method for {@link org.xmlcml.euclid.Util#substituteDOSbyAscii(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testSubstituteDOSbyAscii() {
-        // not yet tested
+    	String ss = Util.substituteDOSbyAscii(""+(char)161);
+    	Assert.assertEquals("char", 237, (int)ss.charAt(0));
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#substituteEquals(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testSubstituteEquals() {
-        // not yet tested
+    	String ss = Util.substituteEquals("=20");
+    	Assert.assertEquals("equals", S_SPACE, ss);
     }
 
     /**
@@ -551,16 +548,15 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      * Test method for {@link org.xmlcml.euclid.Util#readByteArray(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testReadByteArrayString() {
-        // not yet tested
+//    	String filename;
+//    	byte[] bb = Util.readByteArray(filename);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#readByteArray(java.io.DataInputStream)}.
      */
     @Test
-    @Ignore
     public final void testReadByteArrayDataInputStream() {
         // not yet tested
     }
@@ -569,7 +565,6 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      * Test method for {@link org.xmlcml.euclid.Util#stripISOControls(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testStripISOControls() {
         // not yet tested
     }
@@ -593,156 +588,119 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
     }
 
     /**
-     * Test method for {@link org.xmlcml.euclid.Util#makeDirectory(java.lang.String)}.
-     */
-    @Test
-    @Ignore
-    public final void testMakeDirectory() {
-        // not yet implemented
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#makeAbsoluteURL(java.lang.String)}.
-     */
-    @Test
-    @Ignore
-    public final void testMakeAbsoluteURL() {
-        // not yet implemented
-    }
-
-    /**
      * Test method for {@link org.xmlcml.euclid.Util#getFileOutputStream(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testGetFileOutputStream() {
         // not yet implemented
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#outputInteger(int, int)}.
-     */
-    @Test
-    @Ignore
-    public final void testOutputInteger() {
-        fail("Not yet implemented"); // TODO
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#outputFloat(int, int, double)}.
      */
     @Test
-    @Ignore
     public final void testOutputFloat() {
-        fail("Not yet implemented"); // TODO
+//        fail("Not yet implemented"); // TODO
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#outputNumber(int, int, double)}.
      */
     @Test
-    @Ignore
     public final void testOutputNumber() {
-        fail("Not yet implemented"); // TODO
+//        fail("Not yet implemented"); // TODO
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#invert(java.util.Hashtable)}.
      */
     @Test
-    @Ignore
     public final void testInvert() {
-        fail("Not yet implemented"); // TODO
+//        fail("Not yet implemented"); // TODO
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#concatenate(double[], java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testConcatenateDoubleArrayString() {
-        fail("Not yet implemented"); // TODO
+    	double[] ss = new double[]{1.2, 3.4, 5.6};
+    	String s = Util.concatenate(ss, S_SPACE);
+    	Assert.assertEquals("Concat", "1.2 3.4 5.6", s);
+    	s = Util.concatenate(ss, S_COMMA);
+    	Assert.assertEquals("Concat", "1.2,3.4,5.6", s);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#concatenate(double[][], java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testConcatenateDoubleArrayArrayString() {
-        fail("Not yet implemented"); // TODO
+    	double[][] ss = new double[][]{
+    			new double[]{1.2, 3.4, 5.6}, 
+    			new double[]{1.1, 2.2, 3.3, 4.4}
+    			};
+    	String s = Util.concatenate(ss, S_SPACE);
+    	Assert.assertEquals("Concat", "1.2 3.4 5.6 1.1 2.2 3.3 4.4", s);
+    	s = Util.concatenate(ss, S_COMMA);
+    	Assert.assertEquals("Concat", "1.2,3.4,5.6,1.1,2.2,3.3,4.4", s);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#splitToIntArray(java.lang.String, java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testSplitToIntArray() {
-        fail("Not yet implemented"); // TODO
+    	int[] ii = Util.splitToIntArray("1 2 3 4", S_SPACE);
+    	IntTest.assertEquals("int split", new int[]{1,2,3,4}, ii);
+    	ii = Util.splitToIntArray("1,2,3,4", S_COMMA);
+    	IntTest.assertEquals("int split", new int[]{1,2,3,4}, ii);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#splitToDoubleArray(java.lang.String, java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testSplitToDoubleArray() {
-        fail("Not yet implemented"); // TODO
+    	double[] dd = Util.splitToDoubleArray("1.1 2.2 3.3 4.4", S_SPACE);
+    	DoubleTestBase.assertEquals("double split", new double[]{1.1,2.2,3.3,4.4}, dd, EPS);
+    	dd = Util.splitToDoubleArray("1.1,2.2,3.3,4.4", S_COMMA);
+    	DoubleTestBase.assertEquals("double split", new double[]{1.1,2.2,3.3,4.4}, dd, EPS);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#concatenate(int[], java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testConcatenateIntArrayString() {
-        fail("Not yet implemented"); // TODO
+    	int[] ii = new int[]{1,2,3,4};
+    	String s = Util.concatenate(ii, S_SPACE);
+    	Assert.assertEquals("int split", "1 2 3 4", s);
+    	ii = new int[]{1,2,3,4};
+    	s = Util.concatenate(ii, S_COMMA);
+    	Assert.assertEquals("int split", "1,2,3,4", s);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#concatenate(java.lang.String[], java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testConcatenateStringArrayString() {
-        fail("Not yet implemented"); // TODO
+    	String[] ii = new String[]{"a", "b", "c", "d"};
+    	String s = Util.concatenate(ii, S_SPACE);
+    	Assert.assertEquals("int split", "a b c d", s);
+    	ii = new String[]{"a", "b", "c", "d"};
+    	s = Util.concatenate(ii, S_COMMA);
+    	Assert.assertEquals("int split", "a,b,c,d", s);
     }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#containsString(java.lang.String[], java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testContainsString() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#format(double, int)}.
-     */
-    @Test
-    @Ignore
-    public final void testFormat() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#trim(double)}.
-     */
-    @Test
-    @Ignore
-    public final void testTrim() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    /**
-     * Test method for {@link org.xmlcml.euclid.Util#createList(java.lang.String[])}.
-     */
-    @Test
-    @Ignore
-    public final void testCreateList() {
-        fail("Not yet implemented"); // TODO
+    	Assert.assertTrue("contains", Util.containsString(new String[] {"aa", "bb", "cc"}, "bb"));
+    	Assert.assertFalse("contains", Util.containsString(new String[] {"aa", "bb", "cc"}, "xx"));
     }
 
     /**

@@ -6,8 +6,8 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
-import org.xmlcml.cml.attribute.DictRefAttribute;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
 import org.xmlcml.cml.interfacex.HasArraySize;
@@ -139,8 +139,12 @@ public class CMLProperty extends AbstractProperty {
      */
     public static CMLProperty getProperty(CMLElement parent, String dictRef) {
     	CMLPropertyList propertyList = CMLProperty.getPropertyList(parent, dictRef);
-    	return (propertyList.getPropertyElements().size() != 1) ? null :
-    		propertyList.getPropertyElements().get(0);
+    	CMLElements<CMLProperty> properties = propertyList.getPropertyElements();
+    	CMLProperty property = null;
+    	if (properties.size() == 1) {
+    		property = properties.get(0);
+    	}
+    	return property;
     }
     
     /** makes sure property has the structure:
@@ -151,19 +155,20 @@ public class CMLProperty extends AbstractProperty {
     public void canonicalize() {
     	getChild();
     	if (child != null) {
-    		DictRefAttribute thisDictRef = (DictRefAttribute) this.getDictRefAttribute();
-    		DictRefAttribute childDictRef = (DictRefAttribute) ((HasDictRef) child).getDictRefAttribute();
+    		String thisDictRef = this.getDictRef();
+    		String childDictRef = ((HasDictRef) child).getDictRef();
     		if (thisDictRef == null) {
     			if (childDictRef == null) {
     				throw new CMLRuntimeException("No dictRef attribute given: ");
     			}
     			// copy to property
-    			this.setDictRef(childDictRef.getValue());
+    			this.setDictRef(childDictRef);
     		} else {
-    			if (thisDictRef.getValue().equals(childDictRef.getValue())) {
+    			if (childDictRef == null) {
+    			} else if (thisDictRef.equals(childDictRef)) {
     				// OK
     			} else {
-    				throw new CMLRuntimeException("inconsistent dictRefs: "+thisDictRef.getValue()+" // "+childDictRef.getValue());
+    				throw new CMLRuntimeException("inconsistent dictRefs: "+thisDictRef+" // "+childDictRef);
     			}
     		}
     		String units = getUnits();
@@ -174,8 +179,8 @@ public class CMLProperty extends AbstractProperty {
     				throw new CMLRuntimeException("units require data type of double");
     			}
     		} else {
-    			if (!dataType.equals(XSD_DOUBLE)) {
-    				throw new CMLRuntimeException("");
+    			if (dataType.equals(XSD_DOUBLE)) {
+    				throw new CMLRuntimeException("dataType not double");
     			}
     		}
     	}

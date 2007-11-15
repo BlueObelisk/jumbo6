@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -1543,79 +1542,6 @@ public class Util implements EuclidConstants {
 	}
 
 	/**
-	 * truncate filename suffix to make a directory name (without
-	 * file.separator)
-	 * 
-	 * @param urlString
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-	public static String makeDirectory(String urlString) {
-		if (urlString == null) {
-			return null;
-		}
-		int idx = urlString.lastIndexOf(System.getProperty("file.separator"));
-		if (idx != -1) {
-			urlString = urlString.substring(0, idx);
-		}
-		return urlString;
-	}
-
-	/**
-	 * If a URL is relative, make it absolute against the current directory. If
-	 * url already has a protocol, return unchanged
-	 * 
-	 * @param url
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 * @exception java.net.MalformedURLException
-	 *                Description of the Exception
-	 */
-	public static String makeAbsoluteURL(String url)
-			throws java.net.MalformedURLException {
-		if (url == null) {
-			throw new MalformedURLException("Null url");
-		}
-		URL baseURL;
-		String fileSep = System.getProperty("file.separator");
-		// why the final slash?
-		// url = url.replace(fileSep.charAt(0), '/') + '/';
-		url = url.replace(fileSep.charAt(0), '/');
-		// is url alreday a valid URL?
-		boolean ok = true;
-		try {
-			/* URL unitVector = */new URL(url);
-		} catch (MalformedURLException mue) {
-			ok = false;
-			// DOS filenames (for example C:\foo) gives problems
-			String mueString = mue.toString().trim();
-			int idx = mueString.indexOf("unknown protocol:");
-			if (idx != -1) {
-				mueString = mueString.substring(
-						idx + "unknown protocol:".length()).trim();
-				// starts with X: assume DOS filename
-				if (mueString.length() == 1) {
-					url = "file:/" + url;
-					// throws MalformedURL if wrong
-					/* URL unitVector = */new URL(url);
-					ok = true;
-				}
-			}
-		}
-		if (ok) {
-			return url;
-		}
-		String currentDirectory = System.getProperty("user.dir");
-		String file = currentDirectory.replace(fileSep.charAt(0), '/') + '/';
-		if (file.charAt(0) != '/') {
-			file = S_SLASH + file;
-		}
-		baseURL = new URL("file", null, file);
-		String newUrl = new URL(baseURL, url).toString();
-		return newUrl;
-	}
-
-	/**
 	 * get an OutputStream from a file or URL. Required (I think) because
 	 * strings of the sort "file:/C:\foo\bat.txt" crash FileOutputStream, so
 	 * this strips off the file:/ stuff for Windows-like stuff
@@ -1646,44 +1572,6 @@ public class Util implements EuclidConstants {
 	// cache the formats
 	static Hashtable<String, DecimalFormat> formTable = new Hashtable<String, DecimalFormat>();
 
-	/**
-	 * this is a mess
-	 * 
-	 * @param nPlaces
-	 *            Description of the Parameter
-	 * @param value
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 * @exception EuclidRuntimeException
-	 *                Description of the Exception
-	 */
-	public static String outputInteger(int nPlaces, int value)
-			throws EuclidRuntimeException {
-		// cache formatter
-		String f = "i" + nPlaces;
-		DecimalFormat form = formTable.get(f);
-		if (form == null) {
-			String pattern = S_EMPTY;
-			for (int i = 0; i < nPlaces - 1; i++) {
-				pattern += "#";
-			}
-			pattern += "0";
-			form = (DecimalFormat) NumberFormat.getInstance();
-			form.setMaximumIntegerDigits(nPlaces);
-			form.applyLocalizedPattern(pattern);
-			formTable.put(f, form);
-		}
-		String result = form.format(value).trim();
-		int l = result.length();
-		if (l > nPlaces) {
-			throw new EuclidRuntimeException("Integer too big");
-		}
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < nPlaces - l; i++) {
-			sb.append(S_SPACE);
-		}
-		return sb.append(result).toString();
-	}
 
 	/**
 	 * format for example f8.3 this is a mess; if cannot fit, then either
@@ -2052,10 +1940,12 @@ public class Util implements EuclidConstants {
 	 */
 	public final static boolean containsString(String[] strings, String s) {
 		boolean b = false;
-		for (int i = 0; i < strings.length; i++) {
-			if (strings[i].equals(s)) {
-				b = true;
-				break;
+		if (s != null) {
+			for (int i = 0; i < strings.length; i++) {
+				if (s.equals(strings[i])) {
+					b = true;
+					break;
+				}
 			}
 		}
 		return b;
