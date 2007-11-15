@@ -1,8 +1,8 @@
-<fragment  xmlns='http://www.xml-cml.org/schema'
+<fragment xmlns='http://www.xml-cml.org/schema'
   xmlns:g='http://www.xml-cml.org/mols/geom1'>
-<!--// EtO(C=O)-{{OCH(Me)CH2)4 (CH(Ph)CH2)4)2-Ac -->
+  <!--// EtO(C=O)-{{OCH(Me)CH2)4 (CH(Ph)CH2)4)2-Ac -->
   <fragment>
-    <molecule ref='g:coxy'/>
+    <molecule ref='g:coxy' />
   </fragment>
   <join atomRefs2='a36 r2' moleculeRefs2='PREVIOUS NEXT'>
     <torsion>180</torsion>
@@ -13,21 +13,21 @@
     </join>
     <fragment>
       <fragment countExpression='*(3)'>
-	<join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
-	  <torsion>180</torsion>
-	</join>
-	<fragment>
-	  <molecule ref='g:po'/>
-	</fragment>
+        <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
+          <torsion>180</torsion>
+        </join>
+        <fragment>
+          <molecule ref='g:po' />
+        </fragment>
       </fragment>
-      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>
+      <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT' />
       <fragment countExpression='*(4)'>
-	<join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
-	  <torsion>180</torsion>
-	</join>
-	<fragment>
-	  <molecule ref='g:phenylethane'/>
-	</fragment>
+        <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'>
+          <torsion>180</torsion>
+        </join>
+        <fragment>
+          <molecule ref='g:phenylethane' />
+        </fragment>
       </fragment>
     </fragment>
   </fragment>
@@ -35,7 +35,7 @@
     <torsion>180</torsion>
   </join>
   <fragment>
-    <molecule ref='g:acetyl'/>
+    <molecule ref='g:acetyl' />
   </fragment>
 </fragment>
 

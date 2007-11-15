@@ -9,4 +9,6 @@
   role="cml:fragmentList" to="./fragments"/>
   <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/geom1" 
   role="cml:moleculeList" to="./geom1"/>
+  <link convention="cml:relativeUrl" from="http://www.xml-cml.org/mols/polyinfo" 
+  role="cml:moleculeList" to= "./polyinfo"/>
 </map>
