@@ -262,6 +262,19 @@ public class Vector3 implements EuclidConstants {
     }
 
     /**
+     * vector addition. sets equal to this + v3 alters this
+     *
+     * @param v3
+     *            vector to subtract
+     * @return resultant vector
+     */
+     public void plusEquals(Vector3 v3) {
+         for (int i = 2; i >= 0; --i) {
+             flarray[i] += v3.flarray[i];
+         }
+     }
+
+    /**
      * vector subtraction. create new vector result = this - v3 does not alter
      * this
      *
@@ -276,6 +289,19 @@ public class Vector3 implements EuclidConstants {
             v1.flarray[i] -= v3.flarray[i];
         }
         return v1;
+    }
+
+   /**
+    * vector subtraction. sets equal to this - v3 alters this
+    *
+    * @param v3
+    *            vector to subtract
+    * @return resultant vector
+    */
+    public void subtractEquals(Vector3 v3) {
+        for (int i = 2; i >= 0; --i) {
+            flarray[i] -= v3.flarray[i];
+        }
     }
 
     /**
