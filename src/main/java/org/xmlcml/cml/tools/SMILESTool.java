@@ -67,6 +67,10 @@ public class SMILESTool extends AbstractTool {
     public final static char C_o 		= 'o';
     /** */
     public final static char C_p 		= 'p';
+    
+    public final static char C__ ='_';
+    
+    public final static char C_$ ='$';
 
     private static String AROMATIC 	= "aromatic";
     private static String CHIRAL 	= "chiral";
@@ -82,6 +86,7 @@ public class SMILESTool extends AbstractTool {
     private CMLBond currentBond;
     private char bondChar;
     private int natoms;
+    private int nrs;
     private HydrogenControl hydrogenControl;
     private List<String> atomIdList;
     private List<String> atomChunkList;
@@ -112,6 +117,7 @@ public class SMILESTool extends AbstractTool {
         final int l = rawSmiles.length();
         atomIdList    = new ArrayList<String>();
         atomChunkList = new ArrayList<String>();
+        
 //        bondIdList    = new ArrayList<String>();
 //        bondChunkList = new ArrayList<String>();
 //        ringIdList    = new ArrayList<String>();
@@ -195,9 +201,27 @@ public class SMILESTool extends AbstractTool {
                 i += atomString.length();
                 /*CMLAtom atom = */ addAtom(atomString, slashChar, rawSmiles, atomStartChar, atomString);
                 bondChar = C_NONE;
-            } else {
+                
+            } else if(c == C__ | c== C_$){
+            	
+            	final CMLAtom atom = new CMLAtom("r"+(++nrs));
+            	 molecule.addAtom(atom);
+                 setElementType(atom, "R");
+                 if (slashChar != C_NONE) {
+                     atom.setAttribute(SLASH, ""+slashChar);
+                 }
+             	atomIdList.add(0, atom.getId());
+             	atomChunkList.add(0, "R");
+                 if (currentAtom != null) {
+                     addBond(currentAtom, atom, bondChar, rawSmiles);
+                 }
+                 currentAtom = atom;
+            	i++;
+            }
+            else {
                 throw new CMLRuntimeException("Cannot interpret SMILES: "+rawSmiles.substring(i));
             }
+            
         }
         if (hasDot) {
         	new ConnectionTableTool(molecule).partitionIntoMolecules();

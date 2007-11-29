@@ -57,7 +57,7 @@ public class SMILESToolTest {
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public final void testParseSMILES() {
 		SMILESTool smilesTool = new SMILESTool();
 		// furan - atoms, rings bonds
@@ -82,5 +82,18 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(ss);
 		mol = smilesTool.getMolecule();
 	}
-
+	
+	/**
+	 * 
+	 */
+	@Test
+	@Ignore
+	public final void testUnileverSMILES(){
+		SMILESTool smilesTool = new SMILESTool();
+		CMLMolecule mol;
+		String ss = "_NC(CC(O)=O)C($)=O";
+		smilesTool.parseSMILES(ss);
+		mol = smilesTool.getMolecule();
+		mol.debug(4);
+	}
 }
