@@ -718,7 +718,15 @@ public class MDLConverter implements CMLConstants {
             }
 
             // atom-atom mapping
-            int atomMap = parseInteger(line, 61, 63);
+            int atomMap;
+            try
+            {
+            	atomMap = parseInteger(line, 61, 63);
+            }
+            catch (Exception xx)
+            {
+            	atomMap = 0;
+            }
             if (atomMap != 0) {
                 CMLScalar scalar = new CMLScalar();
                 scalar.setDictRef("mol:atomMap");
@@ -834,7 +842,8 @@ public class MDLConverter implements CMLConstants {
                 for (int i = 0; i < nAtoms; i++) {
                     line = line.substring(1);
                     sgroup.addAtom(atomByNumber
-                            .get(parseInteger(line, 0, 3) - 1));
+                            .get(parseInteger(line, 0, 3)));
+//                    .get(parseInteger(line, 0, 3) - 1));
                     line = line.substring(3);
                 }
             } else if (line.startsWith(MDLTag.M_SBL.tag)) {
@@ -852,7 +861,8 @@ public class MDLConverter implements CMLConstants {
                 for (int i = 0; i < nbonds; i++) {
                     line = line.substring(1);
                     sgroup.addBond(bondByNumber
-                            .get(parseInteger(line, 0, 3) - 1));
+                            .get(parseInteger(line, 0, 3)));
+//                    .get(parseInteger(line, 0, 3) - 1));
                     line = line.substring(3);
                 }
             } else if (line.startsWith(MDLTag.M_SBV.tag)) {
