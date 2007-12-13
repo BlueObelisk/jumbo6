@@ -71,10 +71,34 @@ public class ValencyToolTest extends MoleculeAtomBondTest {
     @Ignore //(problems finding resource)
     public void testRegression1() throws ValidityException, ParsingException, IOException {
         Document doc = new CMLBuilder().build(getClass().getClassLoader()
-                .getResourceAsStream("./valencytoolpathology1.cml.xml"));
+                .getResourceAsStream("valencytoolpathology1.cml.xml"));
         CMLMolecule mol = (CMLMolecule) doc.getRootElement();
         ValencyTool vt = new ValencyTool(mol);
         //This originally threw an NPE
         vt.adjustBondOrdersAndChargesToValency();
     }
+    
+    /**
+	 * Problem discovered 2007-12-12 by ojd20 - in some cases ValencyTool
+	 * creates invalid molecules. This was caused by ValencyTool extracting
+	 * metals from a top level molecule, then trying to merge the metal bonds
+	 * into a child molecule, which always fails if you have sibling molecules
+	 * with metal atoms.
+	 * 
+	 * @throws ValidityExceptionß
+	 * @throws ParsingException
+	 * @throws IOException
+	 */
+	@Test
+	public void testRegression2() throws ValidityException, ParsingException,
+			IOException {
+		Document doc = new CMLBuilder().build(getClass().getClassLoader()
+				.getResourceAsStream("valencytoolpathology2.cml.xml"));
+		CMLMolecule mol = (CMLMolecule) doc.getRootElement();
+		ValencyTool vt = new ValencyTool(mol);
+		vt.adjustBondOrdersAndChargesToValency();
+		// In the original problem, this threw an error as the copy method tries
+		// to rebuild the molecule.
+		mol.copy();
+	}
 }

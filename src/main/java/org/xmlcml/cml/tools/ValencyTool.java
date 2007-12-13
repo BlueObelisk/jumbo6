@@ -965,7 +965,7 @@ public class ValencyTool extends AbstractTool {
 			vTool.markEarthMetals(molAtoms);
 			// remove metal atoms so we can calculate bond orders on organic species, 
 			// then we will reattach the metal atoms later in the method
-			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = MoleculeTool.removeMetalAtomsAndBonds(molecule, true);
+			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = MoleculeTool.removeMetalAtomsAndBonds(mol, true);
 			for (Iterator it=metalAtomAndBondMap.keySet().iterator(); it.hasNext(); ) {
 				List<CMLAtom> atomList = (List<CMLAtom>)it.next();
 				if (atomList.size() > 0) {
