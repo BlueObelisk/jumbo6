@@ -284,7 +284,7 @@ public class SDFConverter implements CMLConstants {
      * @throws CMLException
      * @throws IOException
      */
-    private CMLList readData(LineNumberReader br) throws CMLException,
+    public CMLList readData(LineNumberReader br) throws CMLException,
             IOException {
         CMLList mainList = null;
         while (true) {
