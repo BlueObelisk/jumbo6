@@ -11,10 +11,12 @@ package org.xmlcml.cml.interfacex;
  */
 public interface Indexable {
 //	public enum Type {
-//		/** fragment */
-//		FRAGMENT(ICMLFragment.TAGX),
-//		/** molecule */
-//		MOLECULE(ICMLMolecule.TAGX);
+//	/** fragment */
+//	FRAGMENT(ICMLFragment.TAGX),
+//	/** molecule */
+//	MOLECULE(ICMLMolecule.TAGX);
+//	/** peak */
+//	PEAK(ICMLPeak.TAGX);
 //		public String value;
 //		private Type(String s) {
 //			this.value = s;

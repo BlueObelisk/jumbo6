@@ -292,6 +292,37 @@ public class CMLAtom extends AbstractAtom {
         }
     }
 
+    /** gets all explict hydrogen ligand atoms.
+     * ignore hydrogen count
+     * @return list of atoms
+     */
+    public List<CMLAtom> getLigandHydrogenAtoms() {
+    	List<CMLAtom> hydrogenAtoms = new ArrayList<CMLAtom>();
+    	List<CMLAtom> ligandAtoms = this.getLigandAtoms();
+    	for (CMLAtom ligand : ligandAtoms) {
+    		if ("H".equals(ligand.getElementType())) {
+    			hydrogenAtoms.add(ligand);
+    		}
+    	}
+    	return hydrogenAtoms;
+    }
+
+    /** if atom has one or more hydrogen atoms deletes one.
+     * mainly for managing count for aromatics.
+     * @return atom deleted or null
+     */
+    public CMLAtom deleteAnyLigandHydrogenAtom() {
+    	CMLAtom ligand = null;
+        List<CMLAtom> hydrogens = getLigandHydrogenAtoms();
+        if (hydrogens.size() > 0) {
+        	CMLMolecule molecule = this.getMolecule();
+        	ligand = hydrogens.get(0);
+        	CMLBond bond = molecule.getBond(this, ligand);
+        	molecule.deleteBond(bond);
+        	molecule.deleteAtom(ligand);
+        }
+        return ligand;
+    }
 
     /**
      * Returns the number of valence electrons this atom has based on its

@@ -96,26 +96,26 @@ public abstract class Molutils implements CMLConstants {
         }
         List<Point3> points = new ArrayList<Point3>(geometry);
         if (geometry == ANY) {
-            points.set(0, new Point3(aPoint)
+            points.add(new Point3(aPoint)
                     .plus(new Vector3(length, 0.0, 0.0)));
         } else if (geometry == LINEAR) {
-            points.set(0, new Point3(aPoint)
+            points.add(new Point3(aPoint)
                     .plus(new Vector3(length, 0.0, 0.0)));
-            points.set(1, new Point3(aPoint)
+            points.add(new Point3(aPoint)
                     .plus(new Vector3(-length, 0.0, 0.0)));
         } else if (geometry == TRIGONAL) {
-            points.set(0, new Point3(aPoint)
+            points.add(new Point3(aPoint)
                     .plus(new Vector3(length, 0.0, 0.0)));
-            points.set(1, new Point3(aPoint).plus(new Vector3(-length * 0.5,
+            points.add(new Point3(aPoint).plus(new Vector3(-length * 0.5,
                     -length * 0.5 * Math.sqrt(3.0), 0.0f)));
-            points.set(2, new Point3(aPoint).plus(new Vector3(-length * 0.5,
+            points.add(new Point3(aPoint).plus(new Vector3(-length * 0.5,
                     length * 0.5 * Math.sqrt(3.0), 0.0f)));
         } else if (geometry == TETRAHEDRAL) {
             double dx = length / Math.sqrt(3.0);
-            points.set(0, new Point3(aPoint).plus(new Vector3(dx, dx, dx)));
-            points.set(1, new Point3(aPoint).plus(new Vector3(dx, -dx, -dx)));
-            points.set(2, new Point3(aPoint).plus(new Vector3(-dx, -dx, dx)));
-            points.set(3, new Point3(aPoint).plus(new Vector3(-dx, dx, -dx)));
+            points.add(new Point3(aPoint).plus(new Vector3(dx, dx, dx)));
+            points.add(new Point3(aPoint).plus(new Vector3(dx, -dx, -dx)));
+            points.add(new Point3(aPoint).plus(new Vector3(-dx, -dx, dx)));
+            points.add(new Point3(aPoint).plus(new Vector3(-dx, dx, -dx)));
         }
         return points;
     }

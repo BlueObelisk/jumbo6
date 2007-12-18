@@ -19,10 +19,11 @@ import nu.xom.ValidityException;
 
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
 
 /**
  * A container for one or more indexables.
@@ -33,12 +34,12 @@ import org.xmlcml.cml.interfacex.IndexableList;
  * used. A indexableList can contain nested indexableLists.
  * 
  */
-public class IndexableListManager implements CMLConstants {
+public class IndexableByIdListManager implements CMLConstants {
 
     /** duplicate id exception */
     public final static String DUPLICATE_ID = "duplicate id in indexableList: ";
 
-    private IndexableList indexableList;
+    private IndexableByIdList indexableList;
 
     private Map<String, Indexable> map;
 
@@ -51,7 +52,7 @@ public class IndexableListManager implements CMLConstants {
      * 
      * @param indexableList
      */
-    public IndexableListManager(IndexableList indexableList) {
+    public IndexableByIdListManager(IndexableByIdList indexableList) {
         this.indexableList = indexableList;
         ensureMap();
         // indexList();
@@ -92,8 +93,8 @@ public class IndexableListManager implements CMLConstants {
      * @param indexableListClass
      * @return list of indexables
      */
-    public static IndexableList createFrom(URL url, Class indexableListClass) {
-        IndexableList indexableList = null;
+    public static IndexableByIdList createFrom(URL url, Class indexableListClass) {
+        IndexableByIdList indexableList = null;
         if ("file".equals(url.getProtocol())) {
             File file;
             try {
@@ -103,7 +104,7 @@ public class IndexableListManager implements CMLConstants {
                             indexableListClass);
                 } else if (file.toString().endsWith(XML_SUFF)) {
                     try {
-                        indexableList = (IndexableList) new CMLBuilder().build(
+                        indexableList = (IndexableByIdList) new CMLBuilder().build(
                                 file).getRootElement();
                     } catch (Exception e) {
                         throw new CMLRuntimeException("Cannot parse " + file, e);
@@ -121,7 +122,7 @@ public class IndexableListManager implements CMLConstants {
                 InputStream in = null;
                 try {
                     in = url.openStream();
-                    indexableList = (IndexableList) new CMLBuilder().build(in)
+                    indexableList = (IndexableByIdList) new CMLBuilder().build(in)
                             .getRootElement();
                 } catch (ValidityException e) {
                     throw new CMLRuntimeException("Problem parsing " + url
@@ -151,11 +152,11 @@ public class IndexableListManager implements CMLConstants {
         return indexableList;
     }
 
-    private static IndexableList createFromDirectory(File dir,
+    private static IndexableByIdList createFromDirectory(File dir,
             Class indexableListClass) {
-        IndexableList indexableList = null;
+        IndexableByIdList indexableList = null;
         try {
-            indexableList = (IndexableList) indexableListClass.newInstance();
+            indexableList = (IndexableByIdList) indexableListClass.newInstance();
         } catch (Exception e1) {
             CMLUtil.BUG("" + e1);
         }
@@ -253,7 +254,7 @@ public class IndexableListManager implements CMLConstants {
      * @throws CMLRuntimeException
      *             if id already in map
      */
-    public void insertInOrder(Indexable indexable) throws CMLRuntimeException {
+    public void insertInOrderOfId(Indexable indexable) throws CMLRuntimeException {
         String id = indexable.getId();
         if (id == null) {
             throw new CMLRuntimeException("indexable has no id: "
@@ -323,6 +324,28 @@ public class IndexableListManager implements CMLConstants {
     public Indexable getById(String id) {
         ensureMap();
         return map.get(id);
+    }
+
+    /**
+     */
+    public void debug() {
+    	System.out.println("IndexableByIdListManager DEBUG");
+        for (Indexable indexable : indexableList.getIndexables()) {
+        	((CMLElement) indexable).debug();
+        }
+        System.out.println("MAP "+map.size());
+        for (String key : map.keySet()) {
+        	System.out.println(key);
+        	((CMLElement)map.get(key)).debug();
+        }
+        
+        System.out.println("LOWERCASE MAP "+map.size());
+        for (String key : lowerCaseMap.keySet()) {
+        	System.out.println(key);
+        	((CMLElement)map.get(key)).debug();
+        }
+        System.out.println("indexableLocalName: "+indexableLocalName);
+
     }
 
 }

@@ -37,7 +37,7 @@ import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.element.CMLProperty.Type;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
@@ -871,7 +871,7 @@ class IntermediateProcessor implements CMLConstants {
 		for (Node node : mols) {
 		    CMLMolecule subMolecule = (CMLMolecule) node;
 		    CMLMolecule dereferencedMol = (CMLMolecule) 
-		        dereference(catalog, subMolecule, IndexableList.Type.MOLECULE_LIST);
+		        dereference(catalog, subMolecule, IndexableByIdList.Type.MOLECULE_LIST);
 		    if (dereferencedMol == null) {
 		    	throw new CMLRuntimeException("Cannot dereference: "+subMolecule.getRef());
 		    }
@@ -906,7 +906,7 @@ class IntermediateProcessor implements CMLConstants {
 		for (Node node : mols) {
 		    CMLFragment subFragment = (CMLFragment) node;
 		    CMLFragment newFragment = (CMLFragment) 
-		        dereference(catalog, subFragment, IndexableList.Type.FRAGMENT_LIST);
+		        dereference(catalog, subFragment, IndexableByIdList.Type.FRAGMENT_LIST);
 		    subFragment.removeAttribute("ref");
 		    // copy
 		    FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment); 
@@ -950,7 +950,7 @@ class IntermediateProcessor implements CMLConstants {
 	* @param type
 	* @return derefernced ellemnt or null
 	*/
-	private Indexable dereference(Catalog catalog, Indexable indexable, IndexableList.Type type) {
+	private Indexable dereference(Catalog catalog, Indexable indexable, IndexableByIdList.Type type) {
 		Indexable deref = null;
 		String ref = indexable.getRef();
 		
@@ -963,7 +963,7 @@ class IntermediateProcessor implements CMLConstants {
 			}
 			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, (CMLElement)indexable);
 			if (namespace != null) {
-				IndexableList indexableList = catalog.getIndexableList(namespace, type);
+				IndexableByIdList indexableList = catalog.getIndexableList(namespace, type);
 				String localRef = S_EMPTY;
 				if (indexableList != null) {
 //					indexableList.updateIndex();

@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import static org.junit.Assert.fail;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +39,7 @@ import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
@@ -1780,7 +1782,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Map<String, Indexable> map = null;
         try {
         	// FIXME
-//            map = catalog.getIndexableList(namespace, IndexableList.Type.MOLECULE_LIST);
+//            map = catalog.getIndexableList(namespace, IndexableByIdList.Type.MOLECULE_LIST);
         } catch (CMLRuntimeException e) {
             Assert.fail("expected "+e);
         }
@@ -1816,7 +1818,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 //        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
         CMLNamespace namespace = CMLNamespace.createNamespace("p", mol);
         CMLMolecule refMol = (CMLMolecule) catalog.getIndexable(
-        		"p:oh", namespace, IndexableList.Type.MOLECULE_LIST);
+        		"p:oh", namespace, IndexableByIdList.Type.MOLECULE_LIST);
         Assert.assertNotNull("refenced mol not null", refMol);
         Assert.assertEquals("refenced mol", "oh", refMol.getId());
     }
@@ -2227,6 +2229,406 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     public void testGetSymmetryContacts() {
 
     }
+    
+    /** */
+	@Test
+	@Ignore
+	public final void testCreateGraphicsElement() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetOrCreateAtomTool() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetOrCreateBondTool() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	public final void testGetOrCreateTool() {
+		// ignore
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetFormalCharge() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetChargedAtoms() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAdjustBondOrdersToValencyPiSystemControls() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetCalculatedMolecularMass() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	public final void testGetTotalHydrogenCount() {
+		Assert.assertEquals("benzene", 6, MoleculeTool.getOrCreateTool(benzene).getTotalHydrogenCount());
+		String moleculeS = "" +
+				"<molecule "+CML_XMLNS+">" +
+				"  <atomArray>" +
+				"    <atom id='a1' elementType='C'/>" +
+				"    <atom id='a2' elementType='O'/>" +
+				"  </atomArray>" +
+				"  <bondArray>" +
+				"    <bond atomRefs2='a1 a2' order='1'/>" +
+				"  </bondArray>" +
+				"</molecule>";
+		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
+		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule).getTotalHydrogenCount();
+		Assert.assertEquals("h count", 4, hydrogenCount);
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetSumNonHydrogenBondOrderCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetSumNonHydrogenBondOrderCMLMoleculeCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetDownstreamAtomsCMLAtomCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testSproutCMLAtomSet() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCreateClusters() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCreateLigands() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCreateAtomRefs4() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetAtomRefs4() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testContractExplicitHydrogensHydrogenControlBoolean() {
+		fail("Not yet implemented"); // TODO
+	}
+
+
+    /** */
+	@Test
+	@Ignore
+	public final void testRemoveOverlapping3DAtoms() {
+		fail("Not yet implemented"); // TODO
+	}
+
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCalculateBondsToAndJoin() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMappedBondViaAtoms() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMoleculeList() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCreateCartesiansFromFractionals() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetChainMolecules() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetRingNucleiMolecules() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAddMoleculeTo() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAdjustTorsions() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAdjustAngles() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAdjustLengths() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAdjustTorsionsCMLAtomCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testFlattenMoleculeDescendants() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCopyAtomAttributesById() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testCopyBondAttributesById() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testRemoveMetalAtomsAndBonds() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testAddMetalAtomsAndBonds() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetBumps() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetBoundingBox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetAtomToolMap() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetBondToolMap() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetOrCreateSelectionTool() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetSelectionTool() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testSetSelectionTool() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMoleculeDisplay() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testSetMoleculeDisplay() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetCurrentAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testSetCurrentAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetCurrentBond() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testSetCurrentBond() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testResetCurrentBond() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testEnsureCurrentAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testEnsureCurrentBond() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testIncrementCurrentBond() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetElectronById() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMolarVolume() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMolarMass() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    // ===============================
     
 	/** copies attributes on bonds and atoms to another molecule.
 	 * for each atom/bond in this.molecule finds Id and hence corresponding 

@@ -35,6 +35,8 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
     	GRAM			("units:g"),
     	/** density*/
     	GRAM_PER_CMCUBED("units:g.cm-3"),
+    	/** molarMass*/
+    	GRAM_PER_MOLE("units:g.mol-1"),
     	/** volume */
     	CMCUBED			("units:cm3"),
     	/** volume */

@@ -33,6 +33,23 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLElement extends Element implements CMLConstants, Comparable {
 
+	/** semi-controlled vocabulary for convention attribute.
+	 * must use value for comparison
+	 */
+	public enum Convention {
+		/** ATOMARRAY used with formula*/
+		ATOMARRAY,
+		/** CAS*/
+		CAS,
+		/** InChI*/
+		INCHI,
+		/** IUPAC*/
+		IUPAC,
+		/** SMILES used with formula*/
+		SMILES,
+		;
+	}
+	
     /** hybridisation - from whatever source */
     public enum Hybridization {
         /** constant */
@@ -160,7 +177,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     
     protected void addRemove(CMLAttribute att, String value) {
     	if (value == null || value.equals(S_EMPTY)) {
-//    		this.removeAttribute(att.getLocalName());
+    		this.removeAttribute(att.getLocalName());
     	} else if (att == null) {
     	} else {
     		att.setCMLValue(value);
@@ -533,6 +550,14 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
             }
         }
         return element;
+    }
+
+    /** ensures queries which may have cml namespace prefix have XPath context
+     * @param query
+     * @return nodes
+     */
+    public Nodes cmlQuery(String query) {
+    	return super.query(query, X_CML);
     }
 
     /**

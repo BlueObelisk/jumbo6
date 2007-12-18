@@ -46,7 +46,9 @@ public class CMLProperty extends AbstractProperty {
 	public enum Prop {
 		/** density*/
 		DENSITY("cml:density"),
-		/** molar volume*/
+		/** molar mass*/
+		MOLAR_MASS("cml:molarMass"),
+		/** molar mass*/
 		MOLAR_VOLUME("cml:molarVolume"),
 		;
 		/** value of dictRef */

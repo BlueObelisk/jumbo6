@@ -307,8 +307,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /**
      * add a link to table.
      *
-     * @param link
-     *            to add
+     * @param link to add
      */
     void addLinkToTable(CMLLink link) {
         makeTables();
@@ -502,10 +501,8 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /**
      * gets link from to and from attributes. does not work with sets
      *
-     * @param from
-     *            value of the from attribute
-     * @param to
-     *            value of the to attribute
+     * @param from value of the from attribute
+     * @param to  value of the to attribute
      * @return the link corresponding to these or null if not exists
      */
     public CMLLink getFromToLink(String from, String to) {

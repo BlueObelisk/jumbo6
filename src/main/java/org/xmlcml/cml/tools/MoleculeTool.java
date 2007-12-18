@@ -25,6 +25,7 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.base.CMLElement.Convention;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
@@ -39,6 +40,7 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -75,6 +77,9 @@ public class MoleculeTool extends AbstractTool {
 	/** */
 	public static String metalLigandDictRef = "jumbo:metalLigand";
 
+	/** */
+	public static String HYDROGEN_COUNT = "hydrogenCount";
+	
 	private CMLMolecule molecule;
 	private Map<CMLAtom, AtomTool> atomToolMap;
 	private Map<CMLBond, BondTool> bondToolMap;
@@ -449,6 +454,49 @@ public class MoleculeTool extends AbstractTool {
 			atom.setHydrogenCount(nh);
 			this.expandImplicitHydrogens(atom, control);
 		}
+	}
+
+	/**
+	 * get calculated molecular mass. 
+     * uses hydrogenCount attribute to check hydrogens
+	 * @return calculated molecular mass.
+	 * @throws CMLRuntimeException unknown/unsupported element type (Dummy counts as zero mass)
+	 */
+	public double getCalculatedMolecularMass() throws CMLRuntimeException {
+		getTotalHydrogenCount();
+		return molecule.getCalculatedMolecularMass(HydrogenControl.USE_HYDROGEN_COUNT);
+	}
+	
+	/** gets total hydrogen count on molecule.
+	 * if molecule@hydrogenCount uses that
+	 * else ensures all atoms have hydrogenCount
+	 * if not uses adjustHydrogenCountsToValency()
+	 * then summs over all atoms
+	 * then adds hydrogenCountAttribute
+	 * @return total hydrogen count
+	 */
+	public int getTotalHydrogenCount() {
+		String hydrogenCount = molecule.getAttributeValue(HYDROGEN_COUNT);
+		int sum = -1;
+		if (hydrogenCount == null || S_EMPTY.equals(hydrogenCount.trim())) {
+			this.adjustHydrogenCountsToValency(HydrogenControl.NO_EXPLICIT_HYDROGENS);
+			sum = sumHydrogenCountOnAtoms();
+			molecule.addAttribute(new Attribute(HYDROGEN_COUNT, ""+sum));
+		} else {
+			sum = Integer.parseInt(hydrogenCount);
+		}
+		return sum;
+	}
+
+	private int sumHydrogenCountOnAtoms() {
+		int sum = 0;
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (CMLAtom atom : atoms) {
+			if (!"H".equals(atom.getElementType())) {
+				sum += atom.getHydrogenCount();
+			}
+		}
+		return sum;
 	}
 
 
@@ -2521,7 +2569,35 @@ public class MoleculeTool extends AbstractTool {
 		}
 		return currentBond;
 	}
-
+	
+	/**
+	 * normalize all molecules which are descendant of node
+	 * @param node
+	 */
+	public static void normalizeDescendantMolecules(Node node) {
+		Nodes molecules = node.query(".//*[local-name()='molecule']");
+    	for (int i = 0; i < molecules.size(); i++) {
+    		MoleculeTool.getOrCreateTool((CMLMolecule)molecules.get(i)).normalize();
+    	}
+	}
+	
+	/** normalize.
+	 * may be obsolete
+	 * currently adjusts Hydrogen counts to valency
+	 * also adds formula representing atomArray contents
+	 */
+    public void normalize() {
+    	this.adjustHydrogenCountsToValency(
+    			HydrogenControl.ADD_TO_HYDROGEN_COUNT);
+    	Nodes nodes = molecule.query("./*[local-name()='formula' and @convention='"+Convention.ATOMARRAY+"']");
+    	for (int i = 0; i < nodes.size(); i++) {
+    		nodes.get(i).detach();
+    	}
+    	CMLFormula formula = new CMLFormula(molecule);
+    	formula.setConvention(Convention.ATOMARRAY.toString());
+    	molecule.appendChild(formula);
+    }
+    
 	/** get single electron by id
 	 * @param id
 	 * @return electron
@@ -2558,6 +2634,26 @@ public class MoleculeTool extends AbstractTool {
     	}
     	return volume;
     }
-
+    
+    /** gets molar mass.
+     * if molecule has a child property, uses that.
+     * else if molecule has atomArray uses that to count atoms
+     * else if molecule has a child formula uses that 
+     * else fails
+     * new property has units of Units.GRAM_PER_MOLE
+     * @return property with molarMass
+     */
+    public CMLProperty getMolarMass() {
+    	CMLProperty mass = CMLProperty.getProperty(molecule, CMLProperty.Prop.MOLAR_MASS.value);
+    	if (mass == null) {
+        	double massV = this.getCalculatedMolecularMass();
+        	if (!Double.isNaN(massV)) {
+        		mass = new CMLProperty(CMLProperty.Prop.MOLAR_MASS.value, 
+        			massV, Units.GRAM_PER_MOLE.value);
+        	}
+    	}
+    	return mass;
+    }
+    
 }
 

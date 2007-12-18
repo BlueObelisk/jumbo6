@@ -264,9 +264,7 @@ public class Vector3 implements EuclidConstants {
     /**
      * vector addition. sets equal to this + v3 alters this
      *
-     * @param v3
-     *            vector to subtract
-     * @return resultant vector
+     * @param v3 vector to subtract
      */
      public void plusEquals(Vector3 v3) {
          for (int i = 2; i >= 0; --i) {
@@ -294,9 +292,7 @@ public class Vector3 implements EuclidConstants {
    /**
     * vector subtraction. sets equal to this - v3 alters this
     *
-    * @param v3
-    *            vector to subtract
-    * @return resultant vector
+    * @param v3  vector to subtract
     */
     public void subtractEquals(Vector3 v3) {
         for (int i = 2; i >= 0; --i) {

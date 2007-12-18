@@ -9,7 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 
 /**
@@ -47,12 +47,12 @@ public class IndexableListManagerTest extends AbstractTest {
 			Assert.fail("should throw CMLRuntimeException");
 		} catch (CMLRuntimeException e) {
 			Assert.assertEquals("duplicate id", 
-					IndexableListManager.DUPLICATE_ID + molecule.getId(), e.getMessage());
+					IndexableByIdListManager.DUPLICATE_ID + molecule.getId(), e.getMessage());
 		}
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#createFrom(java.net.URL, java.lang.Class)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableByIdListManager#createFrom(java.net.URL, java.lang.Class)}.
 	 */
 	@Test
 	@Ignore
@@ -61,7 +61,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#getIndex()}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableByIdListManager#getIndex()}.
 	 */
 	@Test
 	public void testGetIndex() {
@@ -69,7 +69,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#add(org.xmlcml.cml.interfacex.Indexable)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableByIdListManager#add(org.xmlcml.cml.interfacex.Indexable)}.
 	 */
 	@Test
 	public void testAdd() {
@@ -93,7 +93,7 @@ public class IndexableListManagerTest extends AbstractTest {
 		CMLMoleculeList moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
 		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 		
-		IndexableListManager indexableListManager = moleculeList.getIndexableListManager();
+		IndexableByIdListManager indexableListManager = moleculeList.getIndexableListManager();
 		Assert.assertNotNull("index", indexableListManager);
 		CMLMolecule molecule3 = new CMLMolecule();
 		molecule3.setId("m3");
@@ -109,7 +109,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#remove(org.xmlcml.cml.interfacex.Indexable)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableByIdListManager#remove(org.xmlcml.cml.interfacex.Indexable)}.
 	 */
 	@Test
 	public void testRemoveIndexable() {
@@ -147,7 +147,7 @@ public class IndexableListManagerTest extends AbstractTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.map.IndexableListManager#getById(java.lang.String)}.
+	 * Test method for {@link org.xmlcml.cml.map.IndexableByIdListManager#getById(java.lang.String)}.
 	 */
 	@Test
 	public void testGetById() {
@@ -159,7 +159,7 @@ public class IndexableListManagerTest extends AbstractTest {
 		molecule2.setId("m2");
 		moleculeList.addIndexable(molecule2);
 		
-		IndexableListManager indexableListManager = moleculeList.getIndexableListManager();
+		IndexableByIdListManager indexableListManager = moleculeList.getIndexableListManager();
 		Assert.assertNotNull("index", indexableListManager);
 		CMLMolecule molecule = (CMLMolecule) indexableListManager.getById("m2");
 		Assert.assertNotNull("molecule", molecule);

@@ -20,7 +20,7 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 /**
  * @author pm286
@@ -120,7 +120,7 @@ public class CatalogTest extends AbstractTest {
 		Assert.assertTrue("Geom url", moleculeCatalogUrl.toString().endsWith(expectedEnd));
 		// this is where we would now get the moleculeList
 
-		CMLMoleculeList moleculeList = (CMLMoleculeList) IndexableListManager.createFrom(moleculeCatalogUrl, CMLMoleculeList.class);
+		CMLMoleculeList moleculeList = (CMLMoleculeList) IndexableByIdListManager.createFrom(moleculeCatalogUrl, CMLMoleculeList.class);
 		Assert.assertNotNull("moleculeList", moleculeList);
 		Assert.assertTrue("moleculeList", 30 <= moleculeList.getChildCount());
 		CMLMolecule molecule = (CMLMolecule) moleculeList.getIndexableById("oh");

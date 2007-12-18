@@ -20,12 +20,15 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.Text;
 
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.tools.SMILESTool;
 import org.xmlcml.euclid.DoubleTool;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealArray;
@@ -49,6 +52,15 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class CMLFormula extends AbstractFormula {
 
+	/** type of hydrogen counting
+	 * @author pm286
+	 */
+	public enum HydrogenStrategy {
+		/** use hydorgen count attribute*/
+		HYDROGEN_COUNT,
+		/** use explicit hydrogens*/
+		EXPLICIT_HYDROGENS;
+	}
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
@@ -221,6 +233,8 @@ public class CMLFormula extends AbstractFormula {
 		init();
 		int formalCharge = 0;
 		// iterate through atoms adding elements, occupancies and charges
+
+		HydrogenStrategy strategy = null;
 		for (CMLAtom atom : molecule.getAtoms()) {
 			double occupancy = 1.0;
 			if (atom.getOccupancyAttribute() != null) {
@@ -235,14 +249,26 @@ public class CMLFormula extends AbstractFormula {
 				throw new CMLRuntimeException("Missing or invalid elementType: "
 						+ elementType);
 			}
-			this.add(atom.getElementType(), occupancy);
+			if ("H".equals(elementType) && strategy == null) {
+				strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
+			}
+			if (!"H".equals(elementType) || 
+				HydrogenStrategy.EXPLICIT_HYDROGENS == strategy) {
+				this.add(elementType, 1.0);
+			}
+			
 			if (atom.getFormalChargeAttribute() != null) {
 				formalCharge += atom.getFormalCharge();
 			}
 			if (atom.getHydrogenCountAttribute() != null) {
-				int hydrogenCount = atom.getHydrogenCount();
-				if (hydrogenCount != 0) {
-					this.add("H", hydrogenCount);
+				if (strategy == null) {
+					strategy = HydrogenStrategy.HYDROGEN_COUNT;
+				}
+				if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
+					int hydrogenCount = atom.getHydrogenCount();
+					if (hydrogenCount != 0) {
+						this.add("H", hydrogenCount);
+					}
 				}
 			}
 		}
@@ -252,6 +278,7 @@ public class CMLFormula extends AbstractFormula {
 		} else if (molecule.getFormalChargeAttribute() != null) {
 			this.setFormalCharge(molecule.getFormalCharge());
 		}
+		
 	}
 
 	/**
@@ -310,7 +337,27 @@ public class CMLFormula extends AbstractFormula {
 
 	/**
 	 * normalizes the formula.
+	 * formula can be very polymorphic. Information can be in:
 	 * <ul>
+	 * <li>concise</li>
+	 * <li>inline</li>
+	 * <li>text content (not recommended)</li>
+	 * <li>atomArray</li>
+	 * </ul>
+	 * normalize() will test, but NOT resolve inconsistencies
+	 * if fields are empty, will fill them, but will not overwrite them.
+	 * if content is non-empty and inline is empty, will transfer one to the other
+	 * 
+	 * convention is honoured. There is a special case for SMILES which will be 
+	 * expanded to a molecule contained within the formula. Others may inform
+	 * the creation of concise from inline
+	 * 
+	 * Current precedence:
+	 * Concise and atomArray take precedence over inline (which can be difficult
+	 * to parse).
+	 * 
+	 * <ul>
+	 * <li>
 	 * <li> if two or more atomArrays are present throws CMLRuntime</li>
 	 * <li> if no concise or atomArray is present does nothing.</li>
 	 * <li> if atomArray is present checks for array format; throws CMLRuntime
@@ -328,77 +375,168 @@ public class CMLFormula extends AbstractFormula {
 	 *             see above
 	 */
 	public void normalize() {
+		// create all possible renderings of formula
+		// any or all may be present
+		// concise
+		CMLAttribute conciseAtt = this.getConciseAttribute();
+		// formal charge
+		int formalCharge = 0;
+		if (this.getFormalChargeAttribute() != null) {
+			formalCharge = this.getFormalCharge();
+		}
+		String conciseS = (conciseAtt == null) ? null : conciseAtt.getValue();
+		// convention
+    	String convention = this.getConvention();
+    	// inline formula (might be SMILES)
+    	String inline = this.getInline();
+    	if (inline != null) {
+    		inline = inline.trim();
+    	}
+    	// text content (deprecated - use inline)
+    	Nodes texts = this.query("text()");
+    	String content = null;
+    	for (int i = 0; i < texts.size(); i++) {
+    		Text text = (Text) texts.get(i);
+    		String s = text.getValue();
+    		s = s.trim();
+    		if (s.length() != 0) {
+    			if (content == null) {
+    				content = s;
+    			} else {
+    				throw new CMLRuntimeException("Cannot have 2 non-empty text children");
+    			}
+    		}
+    	}
+
+    	// atomArray
+    	String atomArray2Concise = null;
+    	CMLAtomArray atomArray = null;
 		CMLElements<CMLAtomArray> atomArrays = this.getAtomArrayElements();
 		if (atomArrays.size() > 1) {
 			throw new CMLRuntimeException(
 					"Only one atomArray child allowed for formula; found: "
 					+ atomArrays.size());
+		} else if (atomArrays.size() == 1) {
+			atomArray = atomArrays.get(0);
+			atomArray.sort(Sort.CHFIRST);
+			atomArray2Concise = atomArray.generateConcise(formalCharge);
 		}
-		CMLAttribute concise = this.getConciseAttribute();
-		if (concise == null && atomArrays.size() == 0) {
-			; // return
+		// transfer any content to inline
+		if (content != null) {
+			if (inline == null || inline.equals(S_EMPTY)) {
+				this.setInline(content);
+				for (int i = 0; i < texts.size(); i++) {
+					texts.get(i).detach();
+				}
+			} else if (!inline.equals(content)) {
+				throw new CMLRuntimeException(
+						"inline ("+inline+") differs from content ("+content+")");
+			}
+		}
+		// concise from inline
+		String inline2Concise = null;
+    	if (inline != null) {
+    		if ("SMILES".equals(convention)) {
+    			inline2Concise = getConciseFromSMILES(inline);
+    		} else {
+    			inline2Concise = createConcise(inline);
+    		}
+    	}
+    	if (conciseS == null) {
+    		if (atomArray2Concise != null) {
+    			conciseS = atomArray2Concise;
+    		} else if (inline2Concise != null) {
+    			conciseS = inline2Concise;
+    		}
+    	}
+    	if (conciseS != null) {
+    		conciseS = normalizeConciseAndFormalCharge(conciseS, formalCharge);
+    	}
+		// if no atomArray, create
+		if (atomArray == null) {
+			if (conciseS != null) {
+				atomArray = createAndAddAtomArrayAndFormalChargeFromConcise(conciseS);
+			}
 		} else {
-			CMLAtomArray atomArray = (atomArrays.size() == 0) ? null
-					: atomArrays.get(0);
-			int formalCharge = 0;
-			if (this.getFormalChargeAttribute() != null) {
-				formalCharge = this.getFormalCharge();
-			}
-
-			// if no atomArray, create
-			if (atomArray == null) {
-				atomArray = createAndAddAtomArrayAndFormalChargeFromConcise(concise);
-			} else {
-				checkAtomArrayFormat(atomArray);
-			}
-			sortAtomArray(atomArray, Sort.CHFIRST);
-			String conciseS = generateConcise(atomArray, formalCharge);
+			checkAtomArrayFormat(atomArray);
+		}
+		if (atomArray != null) {
+			atomArray.sort(Sort.CHFIRST);
+		}
+		// check consistency
+		if (inline2Concise != null && !conciseS.equals(inline2Concise)) {
+			throw new CMLRuntimeException("concise ("+conciseS+") and inline ("+inline+") differ");
+		}
+		if (atomArray2Concise != null && 
+				!atomArray2Concise.equals(conciseS)) {
+			throw new CMLRuntimeException("concise ("+conciseS+") and atomArray ("+atomArray2Concise+") differ");
+		}
+		if (conciseS != null) {
 			super.setConcise(conciseS);
-
 		}
 	}
 
+	
+	/** utility to convert SMILES to string.
+	 * @param smiles
+	 * @return string representing concise version
+	 */
+    public static String getConciseFromSMILES(String smiles) {
+    	String concise = null;
+    	if (smiles != null) {
+    		SMILESTool smilesTool = new SMILESTool();
+    		smilesTool.parseSMILES(smiles);
+    		CMLMolecule molecule = smilesTool.getMolecule();
+    		CMLFormula temp = new CMLFormula(molecule);
+    		if (temp != null) {
+    			concise = temp.getConcise();
+    		}
+    	}
+    	return concise;
+    }
+	
+
 	CMLAtomArray createAndAddAtomArrayAndFormalChargeFromConcise(
-			CMLAttribute concise) {
+			String concise) {
 		CMLAtomArray atomArray = new CMLAtomArray();
-		List<String> elements = new ArrayList<String>();
-		List<Double> counts = new ArrayList<Double>();
-		String[] tokens = concise.getValue().split(S_WHITEREGEX);
-		int nelement = tokens.length / 2;
-		for (int i = 0; i < nelement; i++) {
-			String elem = tokens[2 * i];
-			ChemicalElement chemicalElement = ChemicalElement
-			.getChemicalElement(elem);
-			if (chemicalElement == null) {
-				throw new CMLRuntimeException("Unknown chemical element: " + elem);
+		if (concise != null) {
+			List<String> elements = new ArrayList<String>();
+			List<Double> counts = new ArrayList<Double>();
+			String[] tokens = concise.split(S_WHITEREGEX);
+			int nelement = tokens.length / 2;
+			for (int i = 0; i < nelement; i++) {
+				String elem = tokens[2 * i];
+				ChemicalElement chemicalElement = ChemicalElement
+				.getChemicalElement(elem);
+				if (chemicalElement == null) {
+					throw new CMLRuntimeException("Unknown chemical element: " + elem);
+				}
+				if (elements.contains(elem)) {
+					throw new CMLRuntimeException("Duplicate element in concise: " + elem);
+				}
+				elements.add(elem);
+				String countS = tokens[2 * i + 1];
+				try {
+					counts.add(new Double(countS));
+				} catch (NumberFormatException nfe) {
+					throw new CMLRuntimeException("Bad element count in concise: " + countS);
+				}
 			}
-			if (elements.contains(elem)) {
-				throw new CMLRuntimeException("Duplicate element in concise: " + elem);
+			if (tokens.length > nelement * 2) {
+				String chargeS = tokens[nelement * 2];
+				try {
+					int formalCharge = Integer.parseInt(chargeS);
+					super.setFormalCharge(formalCharge);
+				} catch (NumberFormatException nfe) {
+					throw new CMLRuntimeException("Bad formal charge in concise: " + chargeS);
+				}
 			}
-			elements.add(elem);
-			String countS = tokens[2 * i + 1];
-			try {
-				counts.add(new Double(countS));
-			} catch (NumberFormatException nfe) {
-				throw new CMLRuntimeException("Bad element count in concise: " + countS);
+			double[] countD = new double[nelement];
+			for (int i = 0; i < nelement; i++) {
+				countD[i] = counts.get(i).doubleValue();
 			}
+			atomArray.setElementTypeAndCount((String[]) elements.toArray(new String[0]), countD);
 		}
-		if (tokens.length > nelement * 2) {
-			String chargeS = tokens[nelement * 2];
-			try {
-				int formalCharge = Integer.parseInt(chargeS);
-				super.setFormalCharge(formalCharge);
-			} catch (NumberFormatException nfe) {
-				throw new CMLRuntimeException("Bad formal charge in concise: " + chargeS);
-			}
-		}
-//		atomArray.setElementType((String[]) elements.toArray(new String[0]));
-		double[] countD = new double[nelement];
-		for (int i = 0; i < nelement; i++) {
-			countD[i] = counts.get(i).doubleValue();
-		}
-		atomArray.setElementTypeAndCount((String[]) elements.toArray(new String[0]), countD);
-//		atomArray.setCount(countD);
 		setAtomArray(atomArray);
 		return atomArray;
 	}
@@ -449,94 +587,6 @@ public class CMLFormula extends AbstractFormula {
 				}
 			}
 		}
-	}
-
-	private void sortAtomArray(CMLAtomArray atomArray, Sort sort) {
-		if (atomArray != null) {
-			String[] elems = atomArray.getElementType();
-			double[] counts = atomArray.getCount();
-			int nelem = elems.length;
-			String[] sortS = new String[elems.length];
-			for (int i = 0; i < nelem; i++) {
-				sortS[i] = elems[i] + S_SPACE + counts[i];
-			}
-			Arrays.sort(sortS);
-			if (sort.equals(Sort.ALPHABETIC_ELEMENTS)) {
-				; // already done
-			} else if (sort.equals(Sort.CHFIRST)) {
-				String[] temp = new String[nelem];
-				int c = 0;
-				for (int i = 0; i < nelem; i++) {
-					if (sortS[i].startsWith("C ")) {
-						temp[c++] = sortS[i];
-					}
-				}
-				for (int i = 0; i < nelem; i++) {
-					if (sortS[i].startsWith("H ")) {
-						temp[c++] = sortS[i];
-					}
-				}
-				for (int i = 0; i < nelem; i++) {
-					if (sortS[i].startsWith("C ") || sortS[i].startsWith("H ")) {
-						; //
-					} else {
-						temp[c++] = sortS[i];
-					}
-				}
-				System.arraycopy(temp, 0, sortS, 0, nelem);
-			}
-			for (int i = 0; i < nelem; i++) {
-				String[] ss = sortS[i].split(S_SPACE);
-				elems[i] = ss[0];
-				counts[i] = new Double(ss[1]).doubleValue();
-			}
-//			atomArray.setElementType(elems);
-//			atomArray.setCount(counts);
-			atomArray.setElementTypeAndCount(elems, counts);
-		}
-	}
-
-	/**
-	 * generates concise representation. correponds to concise attribute in
-	 * schema. only works if atomArray has elementType and count in array format
-	 *
-	 * @param atomArray
-	 * @param formalCharge
-	 *            (maybe omit this)
-	 * @throws CMLRuntimeException
-	 *             if atomArray of wrong sort
-	 * @return concise string
-	 */
-	public static String generateConcise(CMLAtomArray atomArray, int formalCharge) {
-		String concise = null;
-		if (atomArray != null) {
-			String[] elems = atomArray.getElementType();
-			double[] counts = atomArray.getCount();
-			if (elems == null && counts == null) {
-				elems = new String[0];
-				counts = new double[0];
-			} else if (elems == null || counts == null) {
-				throw new CMLRuntimeException(
-						"atomArray has elements/counts "+elems+S_SLASH+counts);
-			} else if (counts.length != elems.length) {
-				throw new CMLRuntimeException(
-						"atomArray has inconsistent counts/elems "+counts.length+S_SLASH+elems.length);
-			}
-			int nelem = elems.length;
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < nelem; i++) {
-				sb.append(S_SPACE);
-				sb.append(elems[i]);
-				sb.append(S_SPACE);
-				sb.append(Util.trim(Util.format(counts[i], 4)));
-			}
-			if (formalCharge != 0) {
-				sb.append(S_SPACE);
-				sb.append(formalCharge);
-			}
-			concise = (sb.length() == 0) ? S_EMPTY : sb.substring(1);
-		}
-		return concise;
 	}
 
 	// trap special combinations
@@ -595,6 +645,10 @@ public class CMLFormula extends AbstractFormula {
 		if (getAtomArrayElements().size() > 0) {
 			throw new CMLRuntimeException("Cannot reset concise if atomArray is present");
 		}
+		forceConcise(value);
+	}
+	
+	private void forceConcise(String value) {
 		super.setConcise(value);
 		normalize();
 		// if building, then XOM attributes are processed before children
@@ -602,6 +656,17 @@ public class CMLFormula extends AbstractFormula {
 		processedConcise = true;
 	}
 
+	private String normalizeConciseAndFormalCharge(String conciseS, int formalCharge) {
+		if (conciseS != null) {
+			CMLAtomArray atomArray = createAndAddAtomArrayAndFormalChargeFromConcise(conciseS);
+			if (atomArray != null) {
+				atomArray.sort(Sort.CHFIRST);
+				conciseS = atomArray.generateConcise(formalCharge);
+			}
+		}
+		return conciseS;
+	}
+	
 	/**
 	 * set formal charge. this will re-compute concise if possible.
 	 *
@@ -609,6 +674,11 @@ public class CMLFormula extends AbstractFormula {
 	 */
 	public void setFormalCharge(int ch) {
 		super.setFormalCharge(ch);
+		if (this.getConciseAttribute() != null) {
+			String concise = this.getConcise();
+			concise = CMLFormula.removeChargeFromConcise(concise);
+			this.forceConcise(concise);
+		}
 		normalize();
 	}
 
@@ -1045,7 +1115,7 @@ public class CMLFormula extends AbstractFormula {
 			if (ii == i) {
 				ii = grabCharge(ss, i, l);
 				if (ii != i) {
-					charge = Integer.parseInt(ss.substring(i, ii));
+					charge = parseCharge(ss.substring(i, ii));
 				}
 				break;
 			}
@@ -1067,6 +1137,23 @@ public class CMLFormula extends AbstractFormula {
 		if (charge != 0) {
 			this.setFormalCharge(charge);
 		}
+	}
+	
+	private static int parseCharge(String ss) {
+		int i = 0;
+		ss = ss.trim();
+		if (ss.equals(S_PLUS)) {
+			i = 1;
+		} else if (ss.startsWith(S_PLUS)) {
+			i = Integer.parseInt(ss.substring(1));
+		} else if (ss.equals(S_MINUS)) {
+			i = -1;
+		} else if (ss.endsWith(S_MINUS)) {
+			i = -Integer.parseInt(ss.substring(0, ss.length()-1));
+		} else {
+			i = Integer.parseInt(ss);
+		}
+		return i;
 	}
 	
 	private int grabCharge(String ss, int i, int l) {
@@ -1282,7 +1369,7 @@ public class CMLFormula extends AbstractFormula {
 			atomArray.setElementTypeAndCount(elements, counts);
 		}
 		int formalCharge = (this.getFormalChargeAttribute() == null) ? 0 : this.getFormalCharge();
-		String conciseS = generateConcise(atomArray, formalCharge);
+		String conciseS = atomArray.generateConcise(formalCharge);
 		super.setConcise(conciseS);
 	}
 
@@ -1362,8 +1449,8 @@ public class CMLFormula extends AbstractFormula {
 			fAtomArray.detach();
 			this.addAtomArray(fAtomArray);
 		}
-		String concise = CMLFormula.generateConcise(this.getAtomArrayElements()
-				.get(0), (int) (this.getFormalCharge() * d));
+		String concise = this.getAtomArrayElements()
+		.get(0).generateConcise((int) (this.getFormalCharge() * d));
 		super.setConcise(concise);
 	}
 
@@ -1580,6 +1667,17 @@ public class CMLFormula extends AbstractFormula {
 		return mass;
 	}
 
+	/** convenience to get concise from a string.
+	 * uses type ANY
+	 * typically used for inline
+	 * @param s
+	 * @return concise of null
+	 */
+	public static String createConcise(String s) {
+		CMLFormula temp = CMLFormula.createFormula(s, Type.ANY);
+		return (temp == null) ? null : temp.getConcise();
+	}
+
 	/**
 	 * Get formatted formula.
 	 *
@@ -1625,7 +1723,9 @@ public class CMLFormula extends AbstractFormula {
 		normalize();
 		CMLAtomArray atomArray = (getAtomArrayElements().size() == 0) ? null
 				: getAtomArrayElements().get(0);
-		sortAtomArray(atomArray, sort);
+		if (atomArray != null) {
+			atomArray.sort(sort);
+		}
 		StringBuffer sb = new StringBuffer();
 		Elements formulas = this.getChildElements("formula", CML_NS);
 		if (convention.equals(Type.NESTEDBRACKETS)) {
@@ -1636,15 +1736,16 @@ public class CMLFormula extends AbstractFormula {
 					sb.append(c);
 				}
 				sb.append(S_LBRAK);
-				sb
-				.append(this.getFormattedString(convention, sort,
+				sb.append(this.getFormattedString(convention, sort,
 						omitCount1));
 				sb.append(S_RBRAK);
 			}
 			return sb.toString();
 		} else {
 			combineSubFormulaElementVectors();
-			sortAtomArray(atomArray, sort);
+			if (atomArray != null) {
+				atomArray.sort(sort);
+			}
 		}
 		String[] elementTypes = this.getElementTypes();
 		double[] counts = this.getCounts();

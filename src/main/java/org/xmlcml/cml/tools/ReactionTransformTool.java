@@ -36,7 +36,7 @@ public class ReactionTransformTool extends ReactionTool {
      * will interpret the reaction as a transform
      * @param transform
      */
-//    @SuppressWarnings("deprecated")
+    @SuppressWarnings("all")
     public ReactionTransformTool(CMLReaction transform) {
     	super(transform);
     	setup();
