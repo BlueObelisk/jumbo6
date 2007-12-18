@@ -638,6 +638,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         try {
             fTop = CMLFormula.createFormula("NC2H6");
         } catch (CMLRuntimeException e) {
+        	e.printStackTrace();
             Assert.fail("should not throw " + e);
         }
         fTop.setFormalCharge(1);
@@ -973,7 +974,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 //        atomArray.setCount(new double[]{1, 4, 2});
         atomArray.setElementTypeAndCount(
                 new String[]{"C", "H", "O"}, new double[]{1, 4, 2});
-        String concise = CMLFormula.generateConcise(atomArray, -2);
+        String concise = atomArray.generateConcise(-2);
         Assert.assertEquals("concise", "C 1 H 4 O 2 -2", concise);
     }
 

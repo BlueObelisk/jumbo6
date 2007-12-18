@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.xmlcml.cml.element.CMLFragmentList;
 import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 
 /**
@@ -16,12 +16,15 @@ import org.xmlcml.cml.map.IndexableListManager;
  * @version 5.0
  * 
  */
-public interface IndexableList {
+public interface IndexableByIdList {
 	/** possible indexables.
 	 * this list may not be essential
 	 * @author pm286
 	 *
 	 */
+	
+// TODO must override appendChild, removeChild, etc since these
+// will not cause indexing	
 	public enum Type {
 		/** fragmentList */
 		FRAGMENT_LIST(CMLFragmentList.TAG, new CMLFragmentList().getClass()),
@@ -103,11 +106,11 @@ public interface IndexableList {
 	 */
 	String getIndexableLocalName();
 
-	/** every IndexableList has an IndexableListManager to manage and 
+	/** every IndexableByIdList has an IndexableByIdListManager to manage and 
 	 * coordinate functionality.
 	 * @return listManager
 	 */
-	IndexableListManager getIndexableListManager();
+	IndexableByIdListManager getIndexableListManager();
 
 	/** update index.
 	 */

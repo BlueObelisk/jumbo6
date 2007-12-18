@@ -24,6 +24,9 @@ public interface EuclidConstants {
     char C_NL = '\n';
 
     /** constant */
+    char C_NBSP = (char) 160;
+
+    /** constant */
     char C_QUOT = '\'';
 
     /** constant */
@@ -109,6 +112,9 @@ public interface EuclidConstants {
 
     /** constant */
     char C_COMMA = ',';
+
+    /** constant */
+//    char C_CUBED = (char);
 
     /** constant */
     char C_PERIOD = '.';

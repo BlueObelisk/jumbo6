@@ -67,9 +67,9 @@ public class SMILESTool extends AbstractTool {
     public final static char C_o 		= 'o';
     /** */
     public final static char C_p 		= 'p';
-    
+    /** */
     public final static char C__ ='_';
-    
+    /** */
     public final static char C_$ ='$';
 
     private static String AROMATIC 	= "aromatic";
@@ -323,6 +323,7 @@ public class SMILESTool extends AbstractTool {
     	for (CMLAtom atom : molecule.getAtoms()) {
     		if (TRUE.equals(atom.getAttributeValue(AROMATIC))) {
     			atom.setHydrogenCount(atom.getHydrogenCount() - 1);
+    			atom.deleteAnyLigandHydrogenAtom();
     		}
     	}
     }
@@ -381,7 +382,8 @@ public class SMILESTool extends AbstractTool {
             atom.setIsotopeNumber(Integer.parseInt(s.substring(0, i)));
         }
 // elementType
-        final String elementType = grabAtom(s.substring(i));
+        String ss = s.substring(i, Math.min(s.length(), i+2));
+        final String elementType = grabAtom(ss);
         setElementType(atom, elementType);
         i += elementType.length();
 
@@ -411,14 +413,14 @@ public class SMILESTool extends AbstractTool {
         if (i < l) {
             final char sign = s.charAt(i);
         	if (sign != C_PLUS && sign != C_MINUS) {
-        		throw new CMLRuntimeException("Sign must be of form -[n] or +[n]");
+        		throw new CMLRuntimeException("Sign must be of form -[n] or +[n] (found "+sign+")" );
         	}
             i++;
             int charge = 1;
             if (i >= l) {
             	charge = (sign == C_MINUS) ? -1 : 1;
             } else if (!Character.isDigit(s.charAt(i))) {
-                throw new CMLRuntimeException("Sign must be of form -n or +n");
+                throw new CMLRuntimeException("Sign must be of form -n or +n  (found "+s.charAt(i)+")");
             } else {
 	            charge = s.charAt(i) - C_ZERO;
 	            if (sign == C_MINUS) {

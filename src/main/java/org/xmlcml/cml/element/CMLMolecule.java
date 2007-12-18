@@ -38,7 +38,8 @@ import org.xmlcml.euclid.Vector3;
  * @author Peter Murray-Rust, Ramin Ghorashi (2005)
  *
  */
-public class CMLMolecule extends AbstractMolecule implements Indexable {
+public class CMLMolecule 
+    extends AbstractMolecule implements Indexable, Comparable {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
@@ -1239,11 +1240,12 @@ public class CMLMolecule extends AbstractMolecule implements Indexable {
 	 * get calculated molecular mass. Assumes correct hydrogen count
 	 * @return calculated molecular mass.
 	 * @throws CMLRuntimeException unknown/unsupported element type (Dummy counts as zero mass)
+	 * @deprecated use MoleculeTool.getCalculatedMolecularMass()
 	 */
 	public double getCalculatedMolecularMass() throws CMLRuntimeException {
 		return this.getCalculatedMolecularMass(HydrogenControl.NO_EXPLICIT_HYDROGENS);
 	}
-
+	
 	/**
 	 * calculate 2D centroid.
 	 *

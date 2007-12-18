@@ -18,8 +18,8 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 /**
  * simple catalog for CML. 
@@ -59,7 +59,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 
 	// this is the direct content of the catalog.xml file
 	private CMLMap cmlMap;
-	private Map<String, IndexableList> indexableListMap;
+	private Map<String, IndexableByIdList> indexableListMap;
 	
 	private URL url;
 
@@ -119,8 +119,8 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	 * @param type
 	 * @return map indexed by id
 	 */
-	public IndexableList getIndexableList(
-		CMLNamespace namespace, IndexableList.Type type) {
+	public IndexableByIdList getIndexableList(
+		CMLNamespace namespace, IndexableByIdList.Type type) {
 		if (cmlMap == null) {
 			throw new CMLRuntimeException("cannot get cmlMap");
 		}
@@ -130,16 +130,16 @@ public class Catalog implements CatalogListChild, CMLConstants {
 			throw new CMLRuntimeException("Cannot find catalog entry for: "
 					+ namespace.getNamespaceURI());
 		}
-		IndexableList indexableList = getIndexableList(to, type.classx);
+		IndexableByIdList indexableList = getIndexableList(to, type.classx);
 		indexableList.updateIndex();
 		return indexableList;
 	}
 	
-	private IndexableList getIndexableList(String to, Class indexableListClass) {
+	private IndexableByIdList getIndexableList(String to, Class indexableListClass) {
 		if (indexableListMap == null) {
-			indexableListMap = new HashMap<String, IndexableList>();
+			indexableListMap = new HashMap<String, IndexableByIdList>();
 		}
-		IndexableList indexableList = indexableListMap.get(to);
+		IndexableByIdList indexableList = indexableListMap.get(to);
 		if (to != null) {
 			URL toUrl = null;
 			try {
@@ -148,7 +148,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 			} catch (MalformedURLException e1) {
 				throw new CMLRuntimeException("Bad catalogue reference: " + to, e1);
 			}
-			indexableList = IndexableListManager.createFrom(toUrl, indexableListClass);
+			indexableList = IndexableByIdListManager.createFrom(toUrl, indexableListClass);
 		}
 		return indexableList;
 	}
@@ -160,8 +160,8 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	 * @return the indexableor null
 	 */
 	public Indexable getIndexable (
-			String ref, CMLNamespace namespace, IndexableList.Type type) {
-		IndexableList indexableList = this.getIndexableList(namespace, type);
+			String ref, CMLNamespace namespace, IndexableByIdList.Type type) {
+		IndexableByIdList indexableList = this.getIndexableList(namespace, type);
 		if (indexableList == null) {
 			throw new CMLRuntimeException("Cannot find indexableList "+type+" for: "+namespace);
 		}

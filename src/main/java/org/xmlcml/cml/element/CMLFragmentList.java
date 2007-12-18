@@ -9,8 +9,8 @@ import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 /** A container for one or more fragments and joins.
 *
@@ -22,12 +22,12 @@ import org.xmlcml.cml.map.IndexableListManager;
 * the autogeneration software will not overwrite an existing class file
 
 */
-public class CMLFragmentList extends AbstractFragmentList implements IndexableList {
+public class CMLFragmentList extends AbstractFragmentList implements IndexableByIdList {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
-    private IndexableListManager indexableListManager;
+    private IndexableByIdListManager indexableListManager;
 
     /** constructor
     *
@@ -38,7 +38,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
 
     void ensureManager() {
     	if (this.indexableListManager == null) {
-    		this.indexableListManager = new IndexableListManager(this);
+    		this.indexableListManager = new IndexableByIdListManager(this);
     	}
     }
     /** copy constructor.
@@ -68,7 +68,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
     /** get listManager
      * @return list manager
      */
-    public IndexableListManager getIndexableListManager() {
+    public IndexableByIdListManager getIndexableListManager() {
     	ensureManager();
     	return indexableListManager;
     }
@@ -103,7 +103,7 @@ public class CMLFragmentList extends AbstractFragmentList implements IndexableLi
      */
     public void insertIndexableInOrder(Indexable indexable) {
     	ensureManager();
-    	indexableListManager.insertInOrder(indexable);
+    	indexableListManager.insertInOrderOfId(indexable);
     }
 
     /** remove fragment.

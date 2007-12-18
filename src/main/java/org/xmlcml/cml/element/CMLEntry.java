@@ -12,18 +12,18 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.GenericEntry;
 import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableList;
-import org.xmlcml.cml.map.IndexableListManager;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
+import org.xmlcml.cml.map.IndexableByIdListManager;
 
 /**
- * The enumerations are managed by the IndexableList mechanism
+ * The enumerations are managed by the IndexableByIdList mechanism
  */
-public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableList {
+public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableByIdList {
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
-    private IndexableListManager indexableListManager;
+    private IndexableByIdListManager indexableListManager;
     /**
      * constructor.
      */
@@ -33,14 +33,14 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
 
     private void ensureManager() {
     	if (this.indexableListManager == null) {
-    		this.indexableListManager = new IndexableListManager(this);
+    		this.indexableListManager = new IndexableByIdListManager(this);
     	}
     }
 
     /** get listManager
      * @return list manager
      */
-    public IndexableListManager getIndexableListManager() {
+    public IndexableByIdListManager getIndexableListManager() {
     	ensureManager();
     	return indexableListManager;
     }
@@ -116,7 +116,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableLi
      */
     public void insertIndexableInOrder(Indexable indexable) {
     	ensureManager();
-    	indexableListManager.insertInOrder(indexable);
+    	indexableListManager.insertInOrderOfId(indexable);
     }
 
     /** remove enumeration.

@@ -35,12 +35,12 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLProduct;
 import org.xmlcml.cml.element.CMLProductList;
+import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLReactant;
 import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionAllTestBase;
 import org.xmlcml.cml.element.ReactionComponent;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.euclid.Util;
@@ -563,9 +563,10 @@ public class ReactionToolTest extends ReactionAllTestBase {
 	        //  now check their MWts
 	        for (int i = 0; i < molecules.size(); i++) {
 	        	CMLMolecule molecule = molecules.get(i);
-	        	CMLFormula formula = molecule.getCalculatedFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
-	        	double d = formula.getCalculatedMolecularMass();
-	        	System.out.println("MWT: "+i+": "+molecule.getTitle()+" "+d);
+	        	CMLProperty prop = MoleculeTool.getOrCreateTool(molecule).getMolarMass();
+	        	
+	        	System.out.println("Mol("+(i+1)+"): "+molecule.getTitle()+
+	        			" molarMass: "+((prop == null) ? "?" : prop.getDouble()));
 	        }
 	        
 	        // check the reactants each of which contains molecule@ref

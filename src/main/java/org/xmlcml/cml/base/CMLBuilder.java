@@ -2,6 +2,8 @@ package org.xmlcml.cml.base;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import nu.xom.Builder;
@@ -31,6 +33,7 @@ public class CMLBuilder extends Builder implements CMLConstants {
     public CMLBuilder() {
         this(CMLNodeFactory.nodeFactory);
     }
+    
 
     /**
      * Constructs a XOM builder using the (subclassed) CML node factory
@@ -113,4 +116,37 @@ public class CMLBuilder extends Builder implements CMLConstants {
     	}
     	return doc;
     }
+    
+    /**
+     * messy hack to parse document which omit CML namespace
+     * @param is
+     * @return doc
+     * @throws IOException
+     * @throws ParsingException
+     */
+    public Document buildEnsureCML(InputStream is) 
+        throws IOException, ParsingException {
+    	Document doc = super.build(is);
+    	return ensureCML(doc);
+    }
+    
+    /**
+     * messy hack to parse document which omits CML namespace
+     * @param reader
+     * @return doc
+     * @throws IOException
+     * @throws ParsingException
+     */
+    public Document buildEnsureCML(Reader reader) 
+        throws IOException, ParsingException {
+    	Document doc = super.build(reader);
+    	return ensureCML(doc);
+    }
+    
+    // this would trap the problem silently. Is it a good idea?
+    
+//    public Document build(Reader reader) throws ParsingException, IOException{
+//    	Document doc = super.build(reader);
+//    	return ensureCML(doc);
+//    }
 }

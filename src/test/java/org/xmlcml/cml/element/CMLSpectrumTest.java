@@ -481,14 +481,14 @@ public class CMLSpectrumTest extends PeakSpectrumTest {
 		Nodes cmlNodes = document.query("//"+CMLCml.NS, X_CML);
 		Assert.assertEquals("spectra count", cmlNodes.size(), 1);
 		CMLCml cml = (CMLCml) cmlNodes.get(0);
-		Nodes spectrumNodes = cml.query("//"+CMLSpectrum.NS, X_CML);
+		Nodes spectrumNodes = cml.cmlQuery("//"+CMLSpectrum.NS);
 		Assert.assertEquals("spectra count", spectrumNodes.size(), 1);
 		CMLSpectrum spectrum = (CMLSpectrum) spectrumNodes.get(0);
-		Nodes spectrumDataNodes = spectrum.query(CMLSpectrumData.NS, X_CML);
+		Nodes spectrumDataNodes = spectrum.cmlQuery(CMLSpectrumData.NS);
 		Assert.assertEquals("spectrumData count", spectrumDataNodes.size(), 1);
 		// CMLSpectrumData spectrumData = (CMLSpectrumData)
 		// spectrumDataNodes.get(0);
-		Nodes parameterListNodes = spectrum.query(CMLParameterList.NS, X_CML);
+		Nodes parameterListNodes = spectrum.cmlQuery(CMLParameterList.NS);
 		Assert
 				.assertEquals("parameterList count", parameterListNodes.size(),
 						1);

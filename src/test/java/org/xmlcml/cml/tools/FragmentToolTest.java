@@ -35,7 +35,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.interfacex.IndexableList;
+import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -128,7 +128,7 @@ public class FragmentToolTest extends AbstractTest {
 		 * cmlMap, true);
 		 */// Duplicate Test from Test Catalog. Removes ability to update
 		// catalog without changing hardcoded tests so commenting out. nwe23
-		IndexableList moleculeList = moleculeCatalog.getIndexableList(namespace, IndexableList.Type.MOLECULE_LIST);
+		IndexableByIdList moleculeList = moleculeCatalog.getIndexableList(namespace, IndexableByIdList.Type.MOLECULE_LIST);
 		Assert.assertNotNull("moleculeList", moleculeList);
 		Assert.assertTrue("moleculeList", 30 <= moleculeList.getIndex().size());
 
