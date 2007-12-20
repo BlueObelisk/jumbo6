@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cml</groupId>
 	<artifactId>jumbo</artifactId>
-	<name>Jumbo</name>   
+	<name>Jumbo</name>
 	<version>5.5-SNAPSHOT</version>
 	<description>A Java library for processing CML</description>
 	<url>http://sourceforge.net/projects/cml/</url>
@@ -233,13 +233,11 @@
 		</repository>
 	</repositories>
 	<dependencies>
-  <!--  
 		<dependency>
 			<groupId>cml</groupId>
 			<artifactId>cifxml</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>
--->
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
