@@ -85,7 +85,7 @@ public class ValencyToolTest extends MoleculeAtomBondTest {
 	 * into a child molecule, which always fails if you have sibling molecules
 	 * with metal atoms.
 	 * 
-	 * @throws ValidityExceptionß
+	 * @throws ValidityException
 	 * @throws ParsingException
 	 * @throws IOException
 	 */

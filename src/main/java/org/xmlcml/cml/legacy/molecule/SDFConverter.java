@@ -279,8 +279,8 @@ public class SDFConverter implements CMLConstants {
      * Reads data fields from the SDF file Note: currently only extracts the
      * title of the field, any other registry numbers are lost.
      * 
-     * @param br
-     *            LineNumberReader pointing to the SDF file
+     * @param br LineNumberReader pointing to the SDF file
+     * @return list
      * @throws CMLException
      * @throws IOException
      */
