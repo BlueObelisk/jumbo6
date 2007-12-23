@@ -446,11 +446,11 @@ public class FragmentToolTest extends AbstractTest {
 
 	// As Java has no default arguments calls through adding a seed of 0 where
 	// the behaviour is random if no seed given.
-	private void generateElement(CMLElement fragment, boolean debug, int serial, CMLElement intermediate,
-			CMLElement explicit, CMLElement complete, boolean check) {
-		long seed = 0;
-		generateElement(fragment, debug, serial, intermediate, explicit, complete, check, seed);
-	}
+//	private void generateElement(CMLElement fragment, boolean debug, int serial, CMLElement intermediate,
+//			CMLElement explicit, CMLElement complete, boolean check) {
+//		long seed = 0;
+//		generateElement(fragment, debug, serial, intermediate, explicit, complete, check, seed);
+//	}
 
 	private void runSimple(CMLFragment fragment, FragmentTool fragmentTool, boolean debug, int serial,
 			CMLElement intermediate, CMLElement explicit, CMLElement complete, boolean check) {
