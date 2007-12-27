@@ -20,7 +20,7 @@ import nu.xom.Node;
  */
 public class CMLType implements CMLConstants {
 
-	/** */
+    /** dewisott */
 	public final static String NO_BASE = "Cannot find base: ";
 
 	protected String summary = "";

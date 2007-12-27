@@ -20,6 +20,7 @@ import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tool to support a ring. not fully developed
@@ -436,7 +437,7 @@ public class Chain extends AbstractTool {
 	 * @param bond  terminalBond
 	 */
 	public void addTerminalBond(CMLAtom atom, CMLBond bond) {
-		if (moleculeDraw.getDrawParameters().isOmitHydrogens() && "H".equals(atom.getElementType())) {
+		if (moleculeDraw.getDrawParameters().isOmitHydrogens() && AS.H.equals(atom.getElementType())) {
 			// omit hydrogens
 		} else {
 			if (terminalBondList == null) {

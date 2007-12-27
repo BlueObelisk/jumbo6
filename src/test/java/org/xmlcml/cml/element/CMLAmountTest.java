@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.xmlcml.cml.attribute.UnitTypeAttribute;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * @author pm286
@@ -31,7 +32,7 @@ public class CMLAmountTest {
 		CMLMolecule molecule = new CMLMolecule();
 		CMLAtom atom = new CMLAtom("a1", ChemicalElement.getChemicalElement("Na"));
 		molecule.addAtom(atom);
-		atom = new CMLAtom("a2", ChemicalElement.getChemicalElement("Cl"));
+		atom = new CMLAtom("a2", ChemicalElement.getChemicalElement(AS.Cl.value));
 		molecule.addAtom(atom);
 		double d = molecule.getCalculatedMolecularMass(HydrogenControl.NO_EXPLICIT_HYDROGENS);
 		Assert.assertEquals("MW ", 58.44277, d);

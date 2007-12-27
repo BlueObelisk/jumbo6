@@ -41,6 +41,7 @@ import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * additional tools for fragment. not fully developed
@@ -357,7 +358,7 @@ public class FragmentTool extends AbstractTool {
 		for (Node node : ratoms) {
 			if("R".equals(node.getValue())){
 				Attribute a=(Attribute)node;
-				a.setValue("H");
+				a.setValue(AS.H.value);
 			}
 		}
     }

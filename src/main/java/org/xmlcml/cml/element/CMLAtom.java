@@ -22,6 +22,7 @@ import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
@@ -300,7 +301,7 @@ public class CMLAtom extends AbstractAtom {
     	List<CMLAtom> hydrogenAtoms = new ArrayList<CMLAtom>();
     	List<CMLAtom> ligandAtoms = this.getLigandAtoms();
     	for (CMLAtom ligand : ligandAtoms) {
-    		if ("H".equals(ligand.getElementType())) {
+    		if (AS.H.equals(ligand.getElementType())) {
     			hydrogenAtoms.add(ligand);
     		}
     	}
@@ -619,8 +620,8 @@ public class CMLAtom extends AbstractAtom {
      * @return number
      */
     public static int getCommonElementSerialNumber(String elemType) {
-        final String[] elems = { "H", "C", "N", "O", "F", "Si", "P", "S", "Cl",
-                "Br", "I" };
+        final String[] elems = { AS.H.value, AS.C.value, AS.N.value, AS.O.value, AS.F.value, AS.Si.value, AS.P.value, AS.S.value, AS.Cl.value,
+                AS.Br.value, AS.I.value };
         for (int i = 0; i < elems.length; i++) {
             if (elems[i].equals(elemType)) {
                 return i;
@@ -969,7 +970,7 @@ public class CMLAtom extends AbstractAtom {
     /**
      * gets count of hydrogens. combines value of hydrogenCount attribute with
      * the actual ligands of type hydrogen.
-     *
+     * DANGEROUS since result may not be normalized
      * @return hydrogenCount();
      */
     public int getHydrogenCount() {
@@ -977,7 +978,7 @@ public class CMLAtom extends AbstractAtom {
         if (super.getHydrogenCountAttribute() == null) {
             List<CMLAtom> ligands = this.getLigandAtoms();
             for (CMLAtom ligand : ligands) {
-                if ("H".equals(ligand.getElementType())) {
+                if (AS.H.equals(ligand.getElementType())) {
                     hc++;
                 }
             }

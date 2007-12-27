@@ -52,9 +52,9 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	public final static String CATALOG_XML = "catalog.xml";
 	/** molecule */
 	public final static String DICTIONARY_CATALOG = C_A+"dictionaryCatalog";
-	/** */
+    /** dewisott */
 	public final static String FRAGMENT_CATALOG = C_A+"fragmentCatalog";
-	/** */
+    /** dewisott */
 	public final static String MOLECULE_CATALOG = C_A+"moleculeCatalog";
 
 	// this is the direct content of the catalog.xml file

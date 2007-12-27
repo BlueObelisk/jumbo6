@@ -67,13 +67,13 @@ public class ChemicalElement {
     /** types of radius.
      */
     public enum RadiusType {
-    	/** */
+        /** dewisott */
     	ATOMIC,
-    	/** */
+        /** dewisott */
     	COVALENT,
-    	/** */
+        /** dewisott */
     	IONIC,
-    	/** */
+        /** dewisott */
     	VDW;
     	private RadiusType() {
     	}
@@ -84,17 +84,58 @@ public class ChemicalElement {
      * @author pm286
      *
      */
-    public enum Symbol {
-        // pleaes fill these in!
-        /** hydrogen*/
-        H("H"),
-        /** helium */
-        He("He");
-        /** standard element symbol.
-         */
-        public String s;
-        private Symbol(String symbol) {
-            this.s = symbol;
+    public enum AS {
+        /** element symbol*/
+        H ("H",   1),
+        /** element symbol*/
+        He("He",  2),
+        /** element symbol*/
+        Li("Li",  3),
+        /** element symbol*/
+        Be("Be",  4),
+        /** element symbol*/
+        B ("B",   5),
+        /** element symbol*/
+        C ("C",   6),
+        /** element symbol*/
+        N ("N",   7),
+        /** element symbol*/
+        O ("O",   8),
+        /** element symbol*/
+        F ("F",   9),
+        /** element symbol*/
+        Ne("Ne", 10),
+        /** element symbol*/
+        Na("Na", 11),
+        /** element symbol*/
+        Mg("Mg", 12),
+        /** element symbol*/
+        Al("Al", 13),
+        /** element symbol*/
+        Si("Si", 14),
+        /** element symbol*/
+        P ("P",  15),
+        /** element symbol*/
+        S ("S",  16),
+        /** element symbol*/
+        Cl("Cl", 17),
+        /** element symbol*/
+        Ar("Ar", 18),
+        
+        
+        /** element symbol*/
+        Br("Br", 35),
+        /** element symbol*/
+        I("I", 53),
+        
+        ;
+        /** element symbol*/
+        public String value;
+        /** atomic number */
+        public int n;
+        private AS(String symbol, int n) {
+            this.value = symbol;
+            this.n = n;
         }
         /** compare element symbols.
          * 
@@ -102,7 +143,7 @@ public class ChemicalElement {
          * @return true if not null and equal
          */
         public boolean equals(String elSym) {
-            return (elSym != null && elSym.equals(s));
+            return (elSym != null && elSym.equals(value));
         }
     };
     final static Logger logger = Logger.getLogger(ChemicalElement.class
@@ -851,7 +892,7 @@ public class ChemicalElement {
     public static void debug(ChemicalElement el) {
 
         logger.info("ChemicalElement:");
-        logger.info(" > Symbol: " + el.getSymbol());
+        logger.info(" > AS: " + el.getSymbol());
         logger.info(" > Atomic number: " + el.getAtomicNumber());
         logger.info(" > Group: " + el.getGroup());
         logger.info(" > Period: " + el.getPeriod());

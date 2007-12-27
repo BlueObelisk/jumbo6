@@ -241,6 +241,15 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
         this.insertChild(newNode, pos);
     }
 
+    /** override insertChild.
+     * if newNode has parent detach()es first
+     * @param newNode
+     */
+    public void insertChild(Node newNode, int pos) {
+        newNode.detach();
+        super.insertChild(newNode, pos);
+    }
+
     /** re-route detach().
      * to parent.removeChild(this);
      */

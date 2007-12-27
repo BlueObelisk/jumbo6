@@ -48,7 +48,7 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
     	/** amount */
     	MMOL			("units:mmol"),
     	;
-    	/** */
+        /** dewisott */
     	public final String value;
     	private Units(String s) {
     		value = s;

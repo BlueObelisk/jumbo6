@@ -101,31 +101,31 @@ public class CMLBond extends AbstractBond {
 
 	/** bond type */
 	public final static String[] bondType = {
-		/** */
+	    /** dewisott */
 		SINGLE,
-		/** */
+	    /** dewisott */
 		DOUBLE,
-		/** */
+	    /** dewisott */
 		TRIPLE,
-		/** */
+	    /** dewisott */
 		AROMATIC,
-		/** */
+	    /** dewisott */
 		ZERO,
-		/** */
+	    /** dewisott */
 		WEDGE,
-		/** */
+	    /** dewisott */
 		HATCH,
-		/** */
+	    /** dewisott */
 		NOSTEREO, };
 
-	/** */
+    /** dewisott */
 	public static final double[] bondOrders = { 1.0, 2.0, 3.0, 1.5, 0.0, 1.0,
 		1.0, 1.0, };
 
-	/** */
+    /** dewisott */
 	public final static String HASH_SYMB = S_UNDER+S_UNDER;
 
-	/** */
+    /** dewisott */
 	public final static String BOND_LINK = S_MINUS;
 
 	List<CMLAtom> atomList;

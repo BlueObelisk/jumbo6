@@ -22,7 +22,7 @@ public class DelimiterAttributeTest extends AbstractTest {
 	public void setUp() throws Exception {
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testSetCMLValue() {
 		DelimiterAttribute delimiterAttribute = new DelimiterAttribute();
@@ -30,7 +30,7 @@ public class DelimiterAttributeTest extends AbstractTest {
 		Assert.assertEquals("simple delim ", S_SLASH, delimiterAttribute.getConcat());
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testDelimiterAttribute() {
 		DelimiterAttribute delimiterAttribute = new DelimiterAttribute();
@@ -40,7 +40,7 @@ public class DelimiterAttributeTest extends AbstractTest {
 		Assert.assertNull("simple splitter ", delimiterAttribute.getSplitter());
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testDelimiterAttributeString() {
 		DelimiterAttribute delimiterAttribute = new DelimiterAttribute(S_SLASH);

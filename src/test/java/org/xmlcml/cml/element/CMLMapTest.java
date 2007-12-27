@@ -22,14 +22,18 @@ public class CMLMapTest extends AbstractTest {
     CMLMap xomMap1;
     CMLMap xmlMap1;
     String xmlMap1S = "<map id='m1' fromType='cml:atom' toType='cml:atom'"
-            + " " + CML_XMLNS + ">" + "  <link from='a1' to='a11'/>"
-            + "  <link from='a2' to='a12'/>" + "  <link from='a3' to='a13'/>"
-            + "</map>" + "";
+            + " " + CML_XMLNS + ">" +
+            "  <link from='a1' to='a11'/>"+
+            "  <link from='a2' to='a12'/>"+
+            "  <link from='a3' to='a13'/>"+
+            "</map>" + "";
     CMLMap xmlMap2;
     String xmlMap2S = "<map id='m1' fromType='cml:atom' toType='cml:atom'"
-            + " " + CML_XMLNS + ">" + "  <link from='a4' to='a14'/>"
-            + "  <link from='a5' to='a15'/>" + "  <link from='a6' to='a16'/>"
-            + "</map>" + S_EMPTY;
+            + " " + CML_XMLNS + ">" +
+            "  <link from='a4' to='a14'/>"+
+            "  <link from='a5' to='a15'/>"+
+            "  <link from='a6' to='a16'/>"+
+            "</map>" + S_EMPTY;
     /**
      * setup.
      *
@@ -593,10 +597,9 @@ public class CMLMapTest extends AbstractTest {
      * Test method for 'org.xmlcml.cml.element.CMLMap.getElementLinks(String)'
      */
     @Test
-    @Ignore
     public void testGetElementLinks() {
         List<CMLLink> links = xmlMap1.getElementLinks("foo");
-        Assert.assertEquals("links", -1, links.size());
+        Assert.assertEquals("links", 0, links.size());
     }
     /**
      * Test method for 'org.xmlcml.cml.element.CMLMap.getType(CMLLink,

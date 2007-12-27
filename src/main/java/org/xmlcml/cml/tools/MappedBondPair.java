@@ -266,7 +266,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
             if (bs != null) {
                 stereo = bs.getStringContent();
                 // only take wedge/hatch stereo
-                if (!(stereo.equals("H") || stereo.equals("W"))) {
+                if (!(stereo.equals(CMLBond.HATCH) || stereo.equals(CMLBond.WEDGE))) {
                     stereo = "";
                 }
             }
@@ -276,7 +276,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
 
     void drawStereo(String stereo) {
 //        path = snap.createElement(snap.svgDoc, "path", snap.animate);
-//        String fillColor = (stereo.equals("W")) ? drawBondColor : snap.backgroundColor;
+//        String fillColor = (stereo.equals(CMLBond.WEDGE)) ? drawBondColor : snap.backgroundColor;
 //        snap.setAttribute(path, "style", "stroke-width: "+bondWidth+"; fill: "+fillColor+"; stroke : "+snap.bondColor+";");
 //
 //        snap.appendChild(g, path);
@@ -295,19 +295,19 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
     }
 
     void draw(String order) {
-//    	if (false) {
+//    	if (order == null) {
 //        } else if (order.equals("0")) {
 ////			System.out.println("ORDER ZERO");
 ////            draw(bondWidth, "pink");
-//        } else if (order.equals("1") || order.equals("S")) {
+//        } else if (order.equals(CMLBond.SINGLE) || order.equals(CMLBond.SINGLE_S)) {
 //            draw(bondWidth, drawBondColor);
-//        } else if (order.equals("2") || order.equals("D")) {
+//        } else if (order.equals(CMLBond.DOUBLE) || order.equals(CMLBond.DOUBLE_D)) {
 //            draw(3 * bondWidth, drawBondColor);
 //            draw(bondWidth, snap.backgroundColor);
-//        } else if (order.equals("A")) {
+//        } else if (order.equals(CMLBond.AROMATIC)) {
 //            draw(3 * bondWidth, drawAromBondColor);
 //            draw(bondWidth, snap.backgroundColor);
-//        } else if (order.equals("3") || order.equals("T")) {
+//        } else if (order.equals(CMLBond.TRIPLE_T) || order.equals(CMLBond.TRIPLE)) {
 //            draw(5 * bondWidth, drawBondColor);
 //            draw(3 * bondWidth, snap.backgroundColor);
 //            draw(bondWidth, drawBondColor);

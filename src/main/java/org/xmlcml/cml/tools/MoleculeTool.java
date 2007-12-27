@@ -63,6 +63,7 @@ import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
+import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
 /**
@@ -74,10 +75,10 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 public class MoleculeTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
-	/** */
+    /** dewisott */
 	public static String metalLigandDictRef = "jumbo:metalLigand";
 
-	/** */
+    /** dewisott */
 	public static String HYDROGEN_COUNT = "hydrogenCount";
 	
 	private CMLMolecule molecule;
@@ -286,7 +287,7 @@ public class MoleculeTool extends AbstractTool {
 			// the method.
 			boolean hasH = false;
 			for (CMLAtom bondAt : ligandBond.getAtoms()) {
-				if ("H".equals(bondAt.getElementType()) && bondAt != atom) {
+				if (AS.H.equals(bondAt.getElementType()) && bondAt != atom) {
 					hasH = true;
 				}
 			}
@@ -492,7 +493,7 @@ public class MoleculeTool extends AbstractTool {
 		int sum = 0;
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
-			if (!"H".equals(atom.getElementType())) {
+			if (!AS.H.equals(atom.getElementType())) {
 				sum += atom.getHydrogenCount();
 			}
 		}
@@ -535,7 +536,7 @@ public class MoleculeTool extends AbstractTool {
 		float sumBo = 0.0f;
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligand : ligandList) {
-			if (ligand.getElementType().equals("H")) {
+			if (AS.H.equals(ligand.getElementType())) {
 				continue;
 			}
 			CMLBond bond = molecule.getBond(atom, ligand);
@@ -545,16 +546,16 @@ public class MoleculeTool extends AbstractTool {
 			}
 			String bo = bond.getOrder();
 			if (bo != null) {
-				if (bo.equals("1") || bo.equals("S")) {
+				if (bo.equals(CMLBond.SINGLE) || bo.equals(CMLBond.SINGLE_S)) {
 					sumBo += 1.0;
 				}
-				if (bo.equals("2") || bo.equals("D")) {
+				if (bo.equals(CMLBond.DOUBLE) || bo.equals(CMLBond.DOUBLE_D)) {
 					sumBo += 2.0;
 				}
-				if (bo.equals("3") || bo.equals("T")) {
+				if (bo.equals(CMLBond.TRIPLE) || bo.equals(CMLBond.TRIPLE_T)) {
 					sumBo += 3.0;
 				}
-				if (bo.equals("A")) {
+				if (bo.equals(CMLBond.AROMATIC)) {
 					sumBo += 1.4;
 				}
 			} else {
@@ -585,7 +586,7 @@ public class MoleculeTool extends AbstractTool {
 			}
 		} else {
 			Set<ChemicalElement> hSet = ChemicalElement
-			.getElementSet(new String[] { "H" });
+			.getElementSet(new String[] { AS.H.value });
 			List<CMLAtom> hLigandVector = CMLAtom.filter(atom.getLigandAtoms(),
 					hSet);
 			if (hLigandVector.size() > 0) {
@@ -606,7 +607,7 @@ public class MoleculeTool extends AbstractTool {
 		List<CMLAtom> newLigandList = new ArrayList<CMLAtom>();
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligand : ligandList) {
-			if (!ligand.getElementType().equals("H")) {
+			if (!AS.H.equals(ligand.getElementType())) {
 				newLigandList.add(ligand);
 			}
 		}
@@ -956,7 +957,7 @@ public class MoleculeTool extends AbstractTool {
 		int currentHCount = 0;
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligand : ligandList) {
-			if (ligand.getElementType().equals("H")) {
+			if (ligand.getElementType().equals(AS.H.value)) {
 				currentHCount++;
 			}
 		}
@@ -969,7 +970,7 @@ public class MoleculeTool extends AbstractTool {
 		for (int i = 0; i < hydrogenCount - currentHCount; i++) {
 			CMLAtom hatom = new CMLAtom(id + "_h" + (i + 1));
 			molecule.addAtom(hatom);
-			hatom.setElementType("H");
+			hatom.setElementType(AS.H.value);
 			CMLBond bond = new CMLBond(atom, hatom);
 			molecule.addBond(bond);
 			bond.setOrder("1");
@@ -1023,14 +1024,14 @@ public class MoleculeTool extends AbstractTool {
 				logger.severe("BUG " + e);
 			}
 			valence[i] = -1;
-			if ("H".equals(elType) || "F".equals(elType) || "Cl".equals(elType)
-					|| "Br".equals(elType) || "I".equals(elType)) {
+			if (AS.H.equals(elType) || AS.F.equals(elType) || AS.Cl.equals(elType)
+					|| AS.Br.equals(elType) || AS.I.equals(elType)) {
 				valence[i] = 1;
-			} else if ("O".equals(elType) || "S".equals(elType)) {
+			} else if (AS.O.equals(elType) || AS.S.equals(elType)) {
 				valence[i] = 2;
-			} else if ("N".equals(elType)) {
+			} else if (AS.N.equals(elType)) {
 				valence[i] = 3;
-			} else if ("C".equals(elType)) {
+			} else if (AS.C.equals(elType)) {
 				valence[i] = 4;
 			}
 			int valLig = valence[i] - ligandCount;
@@ -1392,7 +1393,7 @@ public class MoleculeTool extends AbstractTool {
 					+ atomList.get(1).getId());
 		} else {
 			CMLAtom ligand0 = ligands0.get(0);
-			if (ligand0.getElementType().equals("H") && ligands0.size() > 1
+			if (AS.H.equals(ligand0.getElementType()) && ligands0.size() > 1
 					&& ligands0.get(1) != null) {
 				ligand0 = ligands0.get(1);
 			} else if (ligands0.size() > 1
@@ -1400,7 +1401,7 @@ public class MoleculeTool extends AbstractTool {
 				ligand0 = ligands0.get(1);
 			}
 			CMLAtom ligand1 = ligands1.get(0);
-			if (ligand1.getElementType().equals("H") && ligands1.size() > 1
+			if (AS.H.equals(ligand1.getElementType()) && ligands1.size() > 1
 					&& ligands1.get(1) != null) {
 				ligand1 = ligands1.get(1);
 			} else if (ligands1.size() > 1
@@ -1513,7 +1514,7 @@ public class MoleculeTool extends AbstractTool {
 		} else {
 			List<CMLAtom> atoms = molecule.getAtoms();
 			for (CMLAtom atom : atoms) {
-				if (!atom.getElementType().equals("H")) {
+				if (!AS.H.equals(atom.getElementType())) {
 					if (contractStereoH) {
 						this.contractExplicitHydrogens(atom, control);
 					} else {
@@ -1551,7 +1552,7 @@ public class MoleculeTool extends AbstractTool {
 		int hCount = (atom.getHydrogenCountAttribute() == null) ? 0 : atom
 				.getHydrogenCount();
 		Set<ChemicalElement> hSet = ChemicalElement
-		.getElementSet(new String[] { "H" });
+		.getElementSet(new String[] { AS.H.value });
 		List<CMLAtom> ligands = CMLAtom.filter(atom.getLigandAtoms(), hSet);
 		for (CMLAtom ligand : ligands) {
 			molecule.deleteAtom(ligand);
@@ -1567,7 +1568,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public void expandImplicitHydrogens(HydrogenControl control) {
 		for (CMLAtom atom : molecule.getAtoms()) {
-			if (!atom.getElementType().equals("H")) {
+			if (!AS.H.equals(atom.getElementType())) {
 				this.expandImplicitHydrogens(atom, control);
 			}
 		}
@@ -2308,7 +2309,7 @@ public class MoleculeTool extends AbstractTool {
  		int natoms = atomList.size();
  		for (int i = 0; i < natoms; i++) {
  			CMLAtom atomi = atomList.get(i);
- 			if ("H".equals(atomi.getElementType())) {
+ 			if (AS.H.equals(atomi.getElementType())) {
  				continue;
  			}
  			// get all atoms within 3 bonds
@@ -2316,7 +2317,7 @@ public class MoleculeTool extends AbstractTool {
  			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
  			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
  	 		for (CMLAtom atomj : nonBondedAtomList) {
- 	 			if ("H".equals(atomj.getElementType())) {
+ 	 			if (AS.H.equals(atomj.getElementType())) {
  	 				continue;
  	 			}
  	 			if (atomi.getId().compareTo(atomj.getId()) <= 0) {

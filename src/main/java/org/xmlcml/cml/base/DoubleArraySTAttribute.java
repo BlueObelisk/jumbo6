@@ -14,11 +14,11 @@ import org.xmlcml.euclid.Util;
 
 public class DoubleArraySTAttribute extends CMLAttribute {
 
-	/** */
+    /** dewisott */
 	public final static String JAVA_TYPE = "double[]";
-	/** */
+    /** dewisott */
 	public final static String JAVA_GET_METHOD = "getDoubleArray";
-	/** */
+    /** dewisott */
 	public final static String JAVA_SHORT_CLASS = "DoubleArraySTAttribute";
 
 	protected double[] dd = null;

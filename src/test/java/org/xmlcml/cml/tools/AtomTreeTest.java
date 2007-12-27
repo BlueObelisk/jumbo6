@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** tests atomTree.
  * 
@@ -74,7 +75,7 @@ public class AtomTreeTest extends AbstractToolTest {
     public void testAtomTreeCMLAtomCMLAtom() {
         AtomTree atomTree = new AtomTree(dmf.getAtom(0), dmf.getAtom(1));
         atomTree.expandTo(2);
-        Assert.assertEquals("new AtomTree", "C", atomTree.toString());
+        Assert.assertEquals("new AtomTree", AS.C.value, atomTree.toString());
         atomTree = new AtomTree(dmf.getAtom(1), dmf.getAtom(0));
         atomTree.expandTo(3);
         Assert.assertEquals("new AtomTree", "N(C)(C(O))", atomTree.toString());

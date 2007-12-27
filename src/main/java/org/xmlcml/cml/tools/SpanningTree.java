@@ -13,6 +13,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tool to support a spanningtree
@@ -310,7 +311,7 @@ public class SpanningTree extends AbstractTool {
 		if (include && usedAtomSet != null && usedAtomSet.contains(atom)) {
 			include = false;
 		}
-		if (include && omitHydrogens && "H".equals(atom.getElementType())) {
+		if (include && omitHydrogens && AS.H.equals(atom.getElementType())) {
 			include = false;
 		}
 		return include;

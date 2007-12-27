@@ -20,6 +20,7 @@ import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector2;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tool to support a ring. not fully developed
@@ -489,7 +490,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 			for (CMLBond ligandBond : ligandBondList) {
 				if (!bondSet.contains(ligandBond)) {
 					CMLAtom otherAtom = ligandBond.getOtherAtom(atom);
-					if (!(omitHydrogens && "H".equals(otherAtom.getElementType()))) {
+					if (!(omitHydrogens && AS.H.equals(otherAtom.getElementType()))) {
 						Sprout sprout = new Sprout(atom, ligandBond, this);
 						sproutList.add(sprout);
 					}

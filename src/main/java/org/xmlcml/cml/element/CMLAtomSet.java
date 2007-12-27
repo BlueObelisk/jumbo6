@@ -25,6 +25,7 @@ import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * user-modifiable class supporting atomSet. 
@@ -816,7 +817,7 @@ public class CMLAtomSet extends AbstractAtomSet {
                     : atom.getOccupancy();
             int multiplicity = (atom.getSpaceGroupMultiplicityAttribute() == null) ? 1
                     : atom.getSpaceGroupMultiplicity();
-            if ("H".equals(elementType)) {
+            if (AS.H.equals(elementType)) {
                 if (CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS
                         .equals(control)) {
                     hCount += occupancy / (double) multiplicity;
@@ -830,7 +831,7 @@ public class CMLAtomSet extends AbstractAtomSet {
             }
         }
         if (hCount > 0.000001) {
-            formula.add("H", hCount);
+            formula.add(AS.H.value, hCount);
         }
         int charge = getCalculatedFormalCharge();
         formula.setFormalCharge(charge);

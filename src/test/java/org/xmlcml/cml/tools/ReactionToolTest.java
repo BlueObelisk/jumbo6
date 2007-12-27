@@ -44,6 +44,7 @@ import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test reactionTool
@@ -226,8 +227,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
 		CMLFormulaTest.assertEqualsConcise("empty", expected, formula, EPS);
 		formula = ReactionTool.getOrCreateTool(unbalancedR).calculateDifferenceFormula();
 		expected = new CMLFormula();
-		expected.add("O", 1.);
-		expected.add("H", 2.);
+		expected.add(AS.O.value, 1.);
+		expected.add(AS.H.value, 2.);
 		CMLFormulaTest.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
 
@@ -237,7 +238,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 		CMLFormula formula = ReactionTool.getOrCreateTool(unbalancedR).createAggregateProductFormula();
 		// order matters
 		CMLFormula expected = new CMLFormula();
-		expected.add("Cl", 2.);
+		expected.add(AS.Cl.value, 2.);
 		expected.add("Mg", 1.);
 		CMLFormulaTest.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
@@ -248,10 +249,10 @@ public class ReactionToolTest extends ReactionAllTestBase {
 		CMLFormula formula = ReactionTool.getOrCreateTool(unbalancedR).createAggregateReactantFormula();
 		// order matters
 		CMLFormula expected = new CMLFormula();
-		expected.add("H", 2.);
-		expected.add("Cl", 2.);
+		expected.add(AS.H.value, 2.);
+		expected.add(AS.Cl.value, 2.);
 		expected.add("Mg", 1.);
-		expected.add("O", 1.);
+		expected.add(AS.O.value, 1.);
 		CMLFormulaTest.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
 
@@ -262,7 +263,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 		CMLFormula formula = ReactionTool.getFormula(reactant);
 		CMLFormula expected = new CMLFormula();
 		expected.add("Mg", 1.0);
-		expected.add("O", 1.0);
+		expected.add(AS.O.value, 1.0);
 		CMLFormulaTest.assertEqualsConcise("formula", expected, formula, EPS);
 	}
 

@@ -42,7 +42,7 @@ public class Line2Test extends EuclidTestBase {
 		l1221 = new Line2(p12, p21);
 		l1112 = new Line2(p11, v12);
 	}
-	/** */
+    /** dewisott */
 	@Test
 	public final void testLine2Real2Real2() {
 		Assert.assertNotNull("l0002", l0002);
@@ -62,7 +62,7 @@ public class Line2Test extends EuclidTestBase {
 		Real2Test.assertEquals("to", new Real2(2., 1.), p, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testLine2Real2Vector2() {
 		Assert.assertNotNull("l1112", l1112);
@@ -74,7 +74,7 @@ public class Line2Test extends EuclidTestBase {
 		Real2Test.assertEquals("to", new Real2(2., 3.), p, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetSlope() {
 		double slope = l0002.getSlope();
@@ -89,7 +89,7 @@ public class Line2Test extends EuclidTestBase {
 		Assert.assertEquals("slope", 2.0, slope, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetYIntercept() {
 		double yint = l1221.getYIntercept();
@@ -104,7 +104,7 @@ public class Line2Test extends EuclidTestBase {
 		Assert.assertEquals("yint", 1.0, yint, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetXIntercept() {
 		double xint = l1221.getXIntercept();
@@ -119,7 +119,7 @@ public class Line2Test extends EuclidTestBase {
 		Assert.assertEquals("xint", Double.NaN, xint, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetIntersection() {
 		Real2 p = l0002.getIntersection(l0020);
@@ -130,28 +130,28 @@ public class Line2Test extends EuclidTestBase {
 		Real2Test.assertEquals("intersect", new Real2(4./3., 5./3.), p, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetUnitVector() {
 		Vector2 v = l1112.getUnitVector();
 		Real2Test.assertEquals("unitv", new Real2(1./sqrt5, 2./sqrt5), v, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetDistanceFromPoint() {
 		double d = l1112.getDistanceFromPoint(new Real2(0., 0.));
 		Assert.assertEquals("distance", 1./sqrt5, d, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetNearestPointOnLine() {
 		Real2 p = l1112.getNearestPointOnLine(new Real2(0., 0.));
 		Real2Test.assertEquals("point", new Real2(0.4, -0.2), p, 0.0000001);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetLambda() {
 		Real2 p = new Real2(0.4, -0.2);
@@ -166,13 +166,13 @@ public class Line2Test extends EuclidTestBase {
 		Assert.assertEquals("lambda", 1.0, lambda, Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetLength() {
 		Assert.assertEquals("length", sqrt2, l1221.getLength(), Real.EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetMidPoint() {
 		Real2Test.assertEquals("mid point", new Real2(1.5, 2), l1112.getMidPoint(), Real.EPS);

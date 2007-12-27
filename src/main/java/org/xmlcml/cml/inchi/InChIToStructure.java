@@ -18,6 +18,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * <p>This class generates a CMLMolecule from an InChI string.  It places 
@@ -167,7 +168,7 @@ public class InChIToStructure implements CMLConstants {
 	        	List<CMLAtom> ligandList = at.getLigandAtoms();
 	        	int hLigands = 0;
 	        	for (int j = 0; j < ligandList.size(); j ++) {
-	        		if (ligandList.get(j).getElementType().equals("H")) {
+	        		if (AS.H.equals(ligandList.get(j).getElementType())) {
 	        			hLigands ++;
 	        		}
 	        	}

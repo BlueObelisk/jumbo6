@@ -13,6 +13,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tool to support a ring. not fully developed
@@ -140,7 +141,7 @@ public class ChainSet extends AbstractTool {
 		for (CMLBond ligandBond : bondList) {
 			CMLAtom otherAtom = ligandBond.getOtherAtom(nextAtom);
 			// skip hydrogens if required
-			if (moleculeDraw.getDrawParameters().isOmitHydrogens() && "H".equals(otherAtom.getElementType())) {
+			if (moleculeDraw.getDrawParameters().isOmitHydrogens() && AS.H.equals(otherAtom.getElementType())) {
 				continue;
 			}
 			// bond already used

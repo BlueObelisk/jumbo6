@@ -18,6 +18,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * Tool to manage stereochemistry.
  * 
@@ -145,7 +146,7 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public List<CMLAtom> getLigandsInCahnIngoldPrelogOrder(CMLAtom centralAtom) {
 		List<CMLAtom> ligandList = centralAtom.getLigandAtoms();
-		if (!"C".equals(centralAtom.getElementType()) || ligandList.size() != 4) {
+		if (!AS.C.equals(centralAtom.getElementType()) || ligandList.size() != 4) {
 			return null;
 		}
 		List<CMLAtom> orderedLigandList = new ArrayList<CMLAtom>();
@@ -212,7 +213,7 @@ public class StereochemistryTool extends AbstractTool {
 	public static boolean isChiralCentre(CMLAtom atom) {
 		boolean mayBeChiral = false;
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		if (atom.getElementType().equals("C")) {
+		if (AS.C.equals(atom.getElementType())) {
 			// skip atoms with too few ligands
 			boolean c3h = ligandList.size() == 3 && 
 			atom.getHydrogenCountAttribute() != null &&
@@ -220,7 +221,7 @@ public class StereochemistryTool extends AbstractTool {
 			if (ligandList.size() == 4 || c3h) {
 				mayBeChiral = true;
 				for (CMLAtom firstLigand : ligandList) {
-					if (c3h && firstLigand.getElementType().equals("H")) {
+					if (c3h && AS.H.equals(firstLigand.getElementType())) {
 						// also have one implicit hydrogen, so not chiral
 						mayBeChiral = false;
 						return mayBeChiral;
@@ -319,7 +320,7 @@ public class StereochemistryTool extends AbstractTool {
 		bondStereo2 = this.get2DBondStereo(bond);
 		bondStereo3 = this.create3DBondStereo(bond);
 		if (bondStereo2 != null && bondStereo3 != null) {
-			int match = bondStereo3.matchParity(bondStereo2, molecule);
+			int match = bondStereo3.matchParity(bondStereo2);
 			if (match == -1) {
 				// System.out.println("FLIP ");
 				this.flip2D(bond);
@@ -575,7 +576,7 @@ public class StereochemistryTool extends AbstractTool {
 				continue;
 			}
 			// select any H
-			if (atomx.getElementType().equals("H")
+			if (AS.H.equals(atomx.getElementType())
 					&& bondx.getAtom(0).equals(atom)) {
 				bond = bondx;
 				break;

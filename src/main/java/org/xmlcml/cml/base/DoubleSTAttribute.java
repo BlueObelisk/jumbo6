@@ -15,13 +15,13 @@ public class DoubleSTAttribute extends CMLAttribute {
 
 	private static final String S_PLUS = "+";
 
-	/** */
+    /** dewisott */
 	public final static String JAVA_TYPE = "double";
 
-	/** */
+    /** dewisott */
 	public final static String JAVA_GET_METHOD = "getDouble";
 
-	/** */
+    /** dewisott */
 	public final static String JAVA_SHORT_CLASS = "DoubleSTAttribute";
 
 	protected Double d;

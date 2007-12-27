@@ -25,9 +25,9 @@ public class CMLPeakList extends AbstractPeakList {
 
 	/** type of comparsion */
 	public enum Type {
-		/** */
+	    /** dewisott */
 		XVALUE,
-		/** */
+	    /** dewisott */
 		YVALUE;
 	}
 	

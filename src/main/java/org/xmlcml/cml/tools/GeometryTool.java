@@ -71,7 +71,7 @@ public class GeometryTool extends AbstractTool {
                  double bondLength = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
                  if (!Double.isNaN(bondLength)) {
                      for (CMLAtom atom : molecule.getAtoms()) {
-                         if (!ChemicalElement.Symbol.H.equals(atom.getElementType())) {
+                         if (!ChemicalElement.AS.H.equals(atom.getElementType())) {
                              AtomTool atomTool = AtomTool.getOrCreateTool(atom);
                              atomTool.addCalculatedCoordinatesForHydrogens(control);
                          }

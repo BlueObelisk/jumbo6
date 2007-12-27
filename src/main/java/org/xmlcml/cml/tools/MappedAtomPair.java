@@ -10,6 +10,7 @@ import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tool to support reactions. not fully developed
@@ -154,9 +155,9 @@ public class MappedAtomPair extends AtomBondPair {
         String elementType =
             (atom2 == null) ? atom1.getElementType() : atom2.getElementType();
         if (elementType.equals("")) {
-            elementType = "C";
+            elementType = AS.C.value;
         }
-        if (elementType.equals("C")) {
+        if (AS.C.equals(elementType)) {
 //            elementType = snap.carbon;
         }
         if (!elementType.equals("")) {

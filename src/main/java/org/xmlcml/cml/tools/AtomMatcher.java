@@ -34,6 +34,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * manages information for matching atoms.
@@ -1874,8 +1875,7 @@ public class AtomMatcher extends AbstractTool {
                         AtomTree atomTree = new AtomTree(atom);
                         atomTree.setUseCharge(this.isUseCharge());
                         atomTree.setUseLabel(this.isUseLabel());
-                        atomTree.setUseExplicitHydrogens(elementType
-                                .equals("H"));
+                        atomTree.setUseExplicitHydrogens(AS.H.equals(elementType));
                         atomTree.expandTo(level);
                         String atval = atomTree.toString();
                         if (variableLevel) {

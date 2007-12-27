@@ -24,6 +24,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 
 /**
@@ -316,7 +317,7 @@ public class AtomTool extends AbstractTool {
          return loneElectronCount;
      }
 
-     static String[] elems  = {"H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"};
+     static String[] elems  = {AS.H.value, AS.C.value, AS.N.value, AS.O.value, AS.F.value, AS.Si.value, AS.P.value, AS.S.value, AS.Cl.value, AS.Br.value, AS.I.value};
      static int[]    group  = { 1,   4,   5,   6,   7,   4,    5,   6,   7,    7,    7};
      static int[]    eneg0  = { 0,   0,   1,   0,   1,   0,    0,   1,   1,    1,    1};
      static int[]    eneg1  = { 0,   0,   0,   1,   1,   0,    0,   0,   1,    1,    1};
@@ -464,31 +465,31 @@ public class AtomTool extends AbstractTool {
 	    	 SVGCircle circle;
 	    	 SVGText text;
     		 circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
-    		 String circleFill = elementType.equals("C") ? "none" : "white";
+    		 String circleFill = AS.C.equals(elementType) ? "none" : "white";
     		 g.appendChild(circle);
     		 circle.setFill(circleFill);
     		 text = new SVGText(
 				 new Real2(xOffsetFactor*fontSize, yOffsetFactor*fontSize), atom.getElementType());
-    		 if (elementType.equals("C")) {
+    		 if (AS.C.equals(elementType)) {
     			 fill = "black";
-    		 } else if (elementType.equals("N")) {
+    		 } else if (AS.N.equals(elementType)) {
     			 fill = "blue";
-    		 } else if (elementType.equals("O")) {
+    		 } else if (AS.O.equals(elementType)) {
     			 fill = "red";
-    		 } else if (elementType.equals("S")) {
+    		 } else if (AS.S.equals(elementType)) {
     			 fill = "orange";
-    		 } else if (elementType.equals("Cl")) {
+    		 } else if (AS.Cl.equals(elementType)) {
     			 fill = "green";
-    		 } else if (elementType.equals("F")) {
+    		 } else if (AS.F.equals(elementType)) {
     			 fill = "#77ff00";
-    		 } else if (elementType.equals("Br")) {
+    		 } else if (AS.Br.equals(elementType)) {
     			 fill = "#ff7700";
-    		 } else if (elementType.equals("I")) {
+    		 } else if (AS.I.equals(elementType)) {
     			 fill = "#ff00ff";
-    		 } else if (elementType.equals("H")) {
+    		 } else if (AS.H.equals(elementType)) {
     			 fill = "gray";
     		 }
-    		 if (!elementType.equals("C")) {
+    		 if (!AS.C.equals(elementType)) {
         		 text.setFill(fill);
         		 text.setFontSize(fontSize);
     			 g.appendChild(text);

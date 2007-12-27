@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractToolTest;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed
@@ -29,7 +30,7 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
     // build xom
     protected final int NATOM = 5;
     protected final int NBOND = 5;
-    protected String[] elementTypes = { "C", "N", "O", "S", "B" };
+    protected String[] elementTypes = { AS.C.value, AS.N.value, AS.O.value, AS.S.value, AS.B.value };
     protected int[] hCounts = { 2, 1, 0, 0, 1 };
     protected CMLMolecule xomMolecule;
     protected CMLAtom[] xomAtom;
@@ -186,7 +187,7 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
         CMLAtom atom = (CMLAtom) molecule.getAtom(0);
         Assert.assertNotNull("atom should not be null", atom);
         Assert.assertEquals("atom id", atom.getId(), "a1");
-        Assert.assertEquals("atom elementType", atom.getElementType(), "N");
+        Assert.assertEquals("atom elementType", atom.getElementType(), AS.N.value);
         CMLBond bond = (CMLBond) molecule.getBonds().get(0);
         Assert.assertNotNull("bond should not be null", bond);
         Assert.assertEquals("bond atomrefs", bond.getAtomRefs2()[0], "a1");

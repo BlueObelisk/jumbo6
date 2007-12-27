@@ -38,9 +38,9 @@ import org.xmlcml.euclid.Util;
  */
 public class EntryTool extends AbstractTool {
 
-	/** */
+    /** general whitespace regex */
 	public final static String ESCAPED_WHITESPACE = S_BACKSLASH+S_BACKSLASH+"s";
-	/** */
+    /** whitespace comma slash */
 	public final static String DELIMITERS = 
 		ESCAPED_WHITESPACE+S_PIPE+S_COMMA+S_PIPE+S_SLASH;
     Logger logger = Logger.getLogger(EntryTool.class.getName());

@@ -22,41 +22,41 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class SMILESTool extends AbstractTool {
 
-	/** */
+    /** dewisott */
     public final static char C_SINGLE   = '-';
-	/** */
+    /** dewisott */
     public final static char C_DOUBLE   = '=';
-	/** */
+    /** dewisott */
     public final static char C_TRIPLE   = '#';
-	/** */
+    /** dewisott */
     public final static char C_AROMATIC = '-';
-	/** */
+    /** dewisott */
     public final static char C_NONE       = 0;
-	/** */
+    /** dewisott */
     public final static char C_FORBIDDEN  = 1;
-	/** */
+    /** dewisott */
     public final static char C_ZERO       = '0';
-	/** */
+    /** dewisott */
     public final static char C_DOT        = '.';
-	/** */
+    /** dewisott */
     public final static char C_LBRAK      = '(';
-	/** */
+    /** dewisott */
     public final static char C_RBRAK      = ')';
-	/** */
+    /** dewisott */
     public final static char C_LSQUARE    = '[';
-	/** */
+    /** dewisott */
     public final static char C_MINUS      = '-';
-	/** */
+    /** dewisott */
     public final static char C_PLUS       = '+';
-	/** */
+    /** dewisott */
     public final static char C_RSQUARE    = ']';
-	/** */
+    /** dewisott */
     public final static char C_SLASH      = '/';
-	/** */
+    /** dewisott */
     public final static char C_BACKSLASH  = '\\';
-	/** */
+    /** dewisott */
     public final static String S_AT     = "@";
-	/** */
+    /** dewisott */
     public final static String S_ATAT   = "@@";
 
     /** */

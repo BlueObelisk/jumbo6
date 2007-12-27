@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 
 /** display parameters
@@ -206,8 +207,7 @@ public class AtomDisplay extends AbstractDisplay {
 	public boolean omitAtom(CMLAtom atom) {
 		boolean omit = false;
 		if (this.isOmitHydrogens()) {
-			String elementType = atom.getElementType();
-			if (elementType != null && elementType.equals("H")) {
+			if (AS.H.equals(atom.getElementType())) {
 				omit = true;
 			}
 		}

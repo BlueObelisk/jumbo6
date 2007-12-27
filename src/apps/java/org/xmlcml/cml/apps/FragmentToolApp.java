@@ -3820,7 +3820,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll20() {
 		CMLFragment fragment = makeMol20();
 		boolean debug = false;
@@ -3912,7 +3911,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll21() {
 		CMLFragment fragment = makeMol21();
 		boolean debug = false;
@@ -4018,7 +4016,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll22() {
 		CMLFragment fragment = makeMol22();
 		boolean debug = false;
@@ -4117,7 +4114,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll23() {
 		CMLFragment fragment = makeMol23();
 		boolean debug = false;
@@ -4215,7 +4211,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll24() {
 		CMLFragment fragment = makeMol24();
 		boolean debug = false;
@@ -4303,7 +4298,6 @@ public class FragmentToolApp extends AbstractTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testAll10() {
 		CMLFragment fragment = makeMol10();
 		boolean debug = false;
@@ -5073,20 +5067,20 @@ public class FragmentToolApp extends AbstractTest {
 		Assert.assertEquals("torsion "+id0+" "+id1+" "+id2+" "+id3, angleE, angle.getDegrees(), eps);
 	}
 
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#expandCountExpressions()}.
-	 */
-	@Test
-	@Ignore
-	public void testExpandCountExpressions() {
-		Assert.fail("Not yet implemented");
-	}
+//	/**
+//	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#expandCountExpressions()}.
+//	 */
+//	@Test
+//	@ Ignore
+//	public void testExpandCountExpressions() {
+//		Assert.fail("Not yet implemented");
+//	}
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.FragmentTool#recursivelyCreateAtomsRefs2OnJoins(org.xmlcml.cml.element.CMLMolecule)}.
 	 */
 	@Test
-	@Ignore
+//	@ Ignore
 	public void testRecursivelyCreateAtomsRefs2OnJoins() {
 		Assert.fail("Not yet implemented");
 	}

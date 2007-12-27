@@ -49,11 +49,4 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
         Assert.assertTrue("range", sum < 5.0 & sum > 2.0 );
     }
 
-    /**
-     */
-    @Test
-    @Ignore
-    public final void testExpandCountExpression() {
-    }
-
 }
