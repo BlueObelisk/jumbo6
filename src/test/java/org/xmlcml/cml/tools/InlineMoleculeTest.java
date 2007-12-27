@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test InlineMolecule.
  * 
@@ -20,7 +21,7 @@ public class InlineMoleculeTest extends AbstractToolTest {
      @Ignore
     public void testInlineMolecule() {
          // good atom
-    	String formulaS = "C";
+    	String formulaS = AS.C.value;
         InlineMolecule inlineMolecule = new InlineMolecule(formulaS);
         CMLMolecule molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);

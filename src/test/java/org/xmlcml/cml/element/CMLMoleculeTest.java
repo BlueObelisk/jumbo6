@@ -35,6 +35,7 @@ import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Real3RangeTest;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test CMLMolecule.
@@ -553,7 +554,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
                 .getXYZ3(), EPS);
         Point3Test.assertEquals("transform", new double[] { 0.1, 0.3, -0.05 },
                 atom0.getXYZFract(), EPS);
-        Assert.assertEquals("transform", "N", atom0.getElementType());
+        Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
         Assert.assertEquals("transform", "a1", atom0.getId());
         CMLAtom atom1 = mol.getAtom(1);
         Point3Test.assertEquals("transform",
@@ -588,7 +589,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         // not transformed
         Point3Test.assertEquals("transform", new double[] { 0.1, 0.2, 0.3 },
                 atom0.getXYZFract(), EPS);
-        Assert.assertEquals("transform", "N", atom0.getElementType());
+        Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
         Assert.assertEquals("transform", "a1", atom0.getId());
         CMLAtom atom1 = mol.getAtom(1);
         Point3Test.assertEquals("transform", new double[] { 1.8, -2.8, -3.8 },
@@ -770,7 +771,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula.getConcise());
         CMLAtomArray atomArray = (CMLAtomArray) 
             formula.getChildCMLElements(CMLAtomArray.TAG).get(0);
-        StringTestBase.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
+        StringTestBase.assertEquals("formula", new String[]{AS.C.value, AS.H.value, AS.N.value, AS.O.value}, 
                 atomArray.getElementType());
         DoubleTestBase.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
                 atomArray.getCount(), 0.000001);
@@ -919,7 +920,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula.getConcise());
         CMLAtomArray atomArray = (CMLAtomArray) 
             formula.getChildCMLElements(CMLAtomArray.TAG).get(0);
-        StringTestBase.assertEquals("formula", new String[]{"C", "H", "N", "O"}, 
+        StringTestBase.assertEquals("formula", new String[]{AS.C.value, AS.H.value, AS.N.value, AS.O.value}, 
                 atomArray.getElementType());
         DoubleTestBase.assertEquals("formula", new double[]{1.0, 2.0, 1.0, 1.0}, 
                 atomArray.getCount(), 0.000001);

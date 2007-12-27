@@ -14,6 +14,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test for inchi generation.
  *
@@ -26,25 +27,25 @@ public class InChIGeneratorTest {
     	CMLMolecule molecule = new CMLMolecule();
 
         CMLAtom a1 = new CMLAtom("a1");
-        a1.setElementType("C");
+        a1.setElementType(AS.C.value);
         a1.setXYZ3(new Point3(-0.358, 0.819, 20.655));
         a1.setHydrogenCount(1);
         CMLAtom a2 = new CMLAtom("a2");
-        a2.setElementType("C");
+        a2.setElementType(AS.C.value);
         a2.setXYZ3(new Point3(-1.598, -0.032, 20.905));
         CMLAtom a3 = new CMLAtom("a3");
-        a3.setElementType("N");
+        a3.setElementType(AS.N.value);
         a3.setXYZ3(new Point3(-0.275, 2.014, 21.574));
         a3.setHydrogenCount(2);
         CMLAtom a4 = new CMLAtom("a4");
-        a4.setElementType("C");
+        a4.setElementType(AS.C.value);
         a4.setXYZ3(new Point3(0.952, 0.043, 20.838));
         a4.setHydrogenCount(3);
         CMLAtom a5 = new CMLAtom("a5");
-        a5.setElementType("O");
+        a5.setElementType(AS.O.value);
         a5.setXYZ3(new Point3(-2.678, 0.479, 21.093));
         CMLAtom a6 = new CMLAtom("a6");
-        a6.setElementType("O");
+        a6.setElementType(AS.O.value);
         a6.setXYZ3(new Point3(-1.596, -1.239, 20.958));
         a6.setHydrogenCount(1);
 
@@ -79,25 +80,25 @@ public class InChIGeneratorTest {
     	CMLMolecule molecule = new CMLMolecule();
 
         CMLAtom a1 = new CMLAtom("a1");
-        a1.setElementType("C");
+        a1.setElementType(AS.C.value);
         a1.setXYZ3(new Point3(0.358, 0.819, 20.655));
         a1.setHydrogenCount(1);
         CMLAtom a2 = new CMLAtom("a2");
-        a2.setElementType("C");
+        a2.setElementType(AS.C.value);
         a2.setXYZ3(new Point3(1.598, -0.032, 20.905));
         CMLAtom a3 = new CMLAtom("a3");
-        a3.setElementType("N");
+        a3.setElementType(AS.N.value);
         a3.setXYZ3(new Point3(0.275, 2.014, 21.574));
         a3.setHydrogenCount(2);
         CMLAtom a4 = new CMLAtom("a4");
-        a4.setElementType("C");
+        a4.setElementType(AS.C.value);
         a4.setXYZ3(new Point3(-0.952, 0.043, 20.838));
         a4.setHydrogenCount(3);
         CMLAtom a5 = new CMLAtom("a5");
-        a5.setElementType("O");
+        a5.setElementType(AS.O.value);
         a5.setXYZ3(new Point3(2.678, 0.479, 21.093));
         CMLAtom a6 = new CMLAtom("a6");
-        a6.setElementType("O");
+        a6.setElementType(AS.O.value);
         a6.setXYZ3(new Point3(1.596, -1.239, 20.958));
         a6.setHydrogenCount(1);
 
@@ -203,7 +204,7 @@ public class InChIGeneratorTest {
         InChIGeneratorFactory factory = new InChIGeneratorFactory();
         CMLMolecule mol = new CMLMolecule();
         CMLAtom atom = new CMLAtom("a1");
-        atom.setElementType("C");
+        atom.setElementType(AS.C.value);
         mol.addAtom(atom);
 
         InChIGenerator gen = factory.getInChIGenerator(mol);
@@ -221,7 +222,7 @@ public class InChIGeneratorTest {
         InChIGeneratorFactory factory = new InChIGeneratorFactory();
         CMLMolecule mol = new CMLMolecule();
         CMLAtom atom = new CMLAtom("a1");
-        atom.setElementType("C");
+        atom.setElementType(AS.C.value);
         atom.setHydrogenCount("3");
         atom.setSpinMultiplicity(2);
         mol.addAtom(atom);

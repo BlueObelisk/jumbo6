@@ -21,6 +21,7 @@ import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test CMLFormula.
@@ -60,11 +61,11 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         // build from scratch
         xomForm1 = new CMLFormula();
 //        System.out.println("?????????????");
-        xomForm1.add("H", 1.0);
+        xomForm1.add(AS.H.value, 1.0);
 //        System.out.println("#############");
-        xomForm1.add("O", 3.0);
+        xomForm1.add(AS.O.value, 3.0);
 //        System.out.println("@@@@@@@@@@@@@");
-        xomForm1.add("N", 1.0);
+        xomForm1.add(AS.N.value, 1.0);
         xomForm1.setCount(2.0);
         xomForm1.setId("xomForm1");
         // build from concise
@@ -204,7 +205,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
          "<atomArray elementType='H O N' count='1.0 3.0 1.0'/>" +
          "</formula>";
          Assert.assertEquals("xom1 serializer2", expect, s);
-         xomForm1.add("H", 7.0);
+         xomForm1.add(AS.H.value, 7.0);
 
          serializer = new CMLSerializer();
          s = serializer.getXML(xomForm1).trim();
@@ -453,21 +454,21 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         // FIXME - sorting
         String[] elements = xomForm1.getElementTypes();
         StringTestBase.assertEquals("start xomForm1",
-                new String[] { "H", "O", "N" }, elements);
+                new String[] { AS.H.value, AS.O.value, AS.N.value }, elements);
         double[] counts = xomForm1.getCounts();
         DoubleTestBase.assertEquals("start xomForm1",
                 new double[] { 1.0, 3.0, 1.0 }, counts, 0.000001);
-        xomForm1.add("S", 2.0);
+        xomForm1.add(AS.S.value, 2.0);
         elements = xomForm1.getElementTypes();
-        StringTestBase.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
-                "S" }, elements);
+        StringTestBase.assertEquals("add1 xomForm1", new String[] { AS.H.value, AS.O.value, AS.N.value,
+                AS.S.value }, elements);
         counts = xomForm1.getCounts();
         DoubleTestBase.assertEquals("add1 xomForm1", new double[] { 1.0, 3.0, 1.0,
                 2.0 }, counts, 0.000001);
-        xomForm1.add("H", 2.0);
+        xomForm1.add(AS.H.value, 2.0);
         elements = xomForm1.getElementTypes();
-        StringTestBase.assertEquals("add1 xomForm1", new String[] { "H", "O", "N",
-                "S" }, elements);
+        StringTestBase.assertEquals("add1 xomForm1", new String[] { AS.H.value, AS.O.value, AS.N.value,
+                AS.S.value }, elements);
         counts = xomForm1.getCounts();
         DoubleTestBase.assertEquals("add1 xomForm1", new double[] { 3.0, 3.0, 1.0,
                 2.0 }, counts, 0.000001);
@@ -489,11 +490,11 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     public void testGetElementTypes() {
         String[] el = xomForm1.getElementTypes();
         StringTestBase.assertEquals("element types",
-                new String[] { "H", "O", "N" }, el);
+                new String[] { AS.H.value, AS.O.value, AS.N.value }, el);
 
         el = xmlForm1.getElementTypes();
-        StringTestBase.assertEquals("element types", new String[] { "C", "H", "Br",
-                "O" }, el);
+        StringTestBase.assertEquals("element types", new String[] { AS.C.value, AS.H.value, AS.Br.value,
+                AS.O.value }, el);
 
     }
 
@@ -970,10 +971,10 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     @Test
     public void testGenerateConcise() throws Exception {
         CMLAtomArray atomArray = new CMLAtomArray();
-//        atomArray.setElementType(new String[]{"C", "H", "O"});
+//        atomArray.setElementType(new String[]{AS.C.value, AS.H.value, AS.O.value});
 //        atomArray.setCount(new double[]{1, 4, 2});
         atomArray.setElementTypeAndCount(
-                new String[]{"C", "H", "O"}, new double[]{1, 4, 2});
+                new String[]{AS.C.value, AS.H.value, AS.O.value}, new double[]{1, 4, 2});
         String concise = atomArray.generateConcise(-2);
         Assert.assertEquals("concise", "C 1 H 4 O 2 -2", concise);
     }

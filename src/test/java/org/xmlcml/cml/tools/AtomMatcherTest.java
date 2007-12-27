@@ -12,6 +12,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test AtomMatcher
  *
@@ -95,12 +96,12 @@ public class AtomMatcherTest extends AbstractToolTest {
     @Test
     public void testGetSetIncludeExcludeElementTypes() {
         AtomMatcher atomMatcher = new AtomMatcher();
-        atomMatcher.setIncludeElementTypes(new String[]{"C", "N"});
-        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeElementTypes());
+        atomMatcher.setIncludeElementTypes(new String[]{AS.C.value, AS.N.value});
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{AS.C.value, AS.N.value}, atomMatcher.getIncludeElementTypes());
         StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
-        atomMatcher.setExcludeElementTypes(new String[]{"N", "O"});
+        atomMatcher.setExcludeElementTypes(new String[]{AS.N.value, AS.O.value});
         StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
-        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{AS.N.value, AS.O.value}, atomMatcher.getExcludeElementTypes());
         atomMatcher.setIncludeElementTypes(new String[]{});
         StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeElementTypes());
         StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeElementTypes());
@@ -111,12 +112,12 @@ public class AtomMatcherTest extends AbstractToolTest {
     @Test
     public void testGetSetIncludeExcludeLigandElementTypes() {
         AtomMatcher atomMatcher = new AtomMatcher();
-        atomMatcher.setIncludeLigandElementTypes(new String[]{"C", "N"});
-        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"}, atomMatcher.getIncludeLigandElementTypes());
+        atomMatcher.setIncludeLigandElementTypes(new String[]{AS.C.value, AS.N.value});
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{AS.C.value, AS.N.value}, atomMatcher.getIncludeLigandElementTypes());
         StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
-        atomMatcher.setExcludeLigandElementTypes(new String[]{"N", "O"});
+        atomMatcher.setExcludeLigandElementTypes(new String[]{AS.N.value, AS.O.value});
         StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
-        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{"N", "O"}, atomMatcher.getExcludeLigandElementTypes());
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{AS.N.value, AS.O.value}, atomMatcher.getExcludeLigandElementTypes());
         atomMatcher.setIncludeLigandElementTypes(new String[]{});
         StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{}, atomMatcher.getIncludeLigandElementTypes());
         StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[]{}, atomMatcher.getExcludeLigandElementTypes());
@@ -128,20 +129,20 @@ public class AtomMatcherTest extends AbstractToolTest {
     public void testSkipAtom() {
         makeMol1();
         AtomMatcher atomMatcher = new AtomMatcher();
-        atomMatcher.setIncludeElementTypes(new String[]{"C", "N"});
-        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "N"},
+        atomMatcher.setIncludeElementTypes(new String[]{AS.C.value, AS.N.value});
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{AS.C.value, AS.N.value},
                 atomMatcher.getIncludeElementTypes());
         CMLAtom atomO = mol1.getAtom(3);
-        Assert.assertEquals("O", "O", atomO.getElementType());
+        Assert.assertEquals(AS.O.value, AS.O.value, atomO.getElementType());
         Assert.assertTrue("skip O", atomMatcher.skipAtom(atomO));
 
-        atomMatcher.setIncludeElementTypes(new String[]{"C", "O"});
-        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
+        atomMatcher.setIncludeElementTypes(new String[]{AS.C.value, AS.O.value});
+        StringTestBase.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[]{AS.C.value, AS.O.value},
                 atomMatcher.getIncludeElementTypes());
         Assert.assertFalse("include O", atomMatcher.skipAtom(atomO));
 
-        atomMatcher.setExcludeElementTypes(new String[]{"C", "O"});
-        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[]{"C", "O"},
+        atomMatcher.setExcludeElementTypes(new String[]{AS.C.value, AS.O.value});
+        StringTestBase.assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[]{AS.C.value, AS.O.value},
                 atomMatcher.getExcludeElementTypes());
         Assert.assertTrue("exclude O", atomMatcher.skipAtom(atomO));
     }

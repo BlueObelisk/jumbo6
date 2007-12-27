@@ -26,7 +26,7 @@ public class DelimiterAttribute extends StringSTAttribute {
 		private Action() {
 		}
 	}
-	/** */
+    /** dewisott */
     public final static String NAME = "delimiter";
     
     private String splitter = null;

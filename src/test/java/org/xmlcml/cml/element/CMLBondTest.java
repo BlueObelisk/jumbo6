@@ -16,6 +16,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.StringSTAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test CMLBond.
@@ -250,10 +251,10 @@ public class CMLBondTest extends MoleculeAtomBondTest {
 
         CMLAtom atom1 = new CMLAtom();
         atom1.setPoint3(new Point3(0.0, 0.0, 0.0), CoordinateType.CARTESIAN);
-        atom1.setElementType("C");
+        atom1.setElementType(AS.C.value);
         CMLAtom atom2 = new CMLAtom();
         atom2.setPoint3(new Point3(0.85, 0.85, 0.85), CoordinateType.CARTESIAN);
-        atom2.setElementType("C");
+        atom2.setElementType(AS.C.value);
         Assert.assertTrue("bonded", CMLBond.areWithinBondingDistance(atom1,
                 atom2));
         // FIXME the latest change in bonding tolerance breaks this
@@ -432,7 +433,6 @@ public class CMLBondTest extends MoleculeAtomBondTest {
      * Test method for {@link org.xmlcml.cml.element.CMLBond#setCyclic(java.lang.String)}.
      */
     @Test
-    @Ignore
     public final void testSetCyclic() {
         CMLBond bond = getBond5a(0);
         Assert.assertNull("cyclic", bond.getCyclic());
@@ -446,20 +446,83 @@ public class CMLBondTest extends MoleculeAtomBondTest {
      * Test method for {@link org.xmlcml.cml.element.CMLBond#getBondStereo()}.
      */
     @Test
-    @Ignore
     public final void testGetBondStereo() {
         CMLBond bond = getBond5a(0);
-        Assert.assertNull("bondStereo", bond.getBondStereo());
-        fail("Not yet implemented"); // TODO
+        CMLBondStereo bs = bond.getBondStereo();
+        Assert.assertNull(bs);
+        
+    	String s = 
+		"<molecule id='m1' " + CML_XMLNS+">" +
+		"  <atomArray>" +
+		"    <atom id='a1' elementType='F'/>" +
+		"    <atom id='a2' elementType='C' hydrogenCount='1'/>" +
+		"    <atom id='a3' elementType='C' hydrogenCount='1'/>" +
+		"    <atom id='a4' elementType='Cl'/>" +
+		"  </atomArray>" +
+		"  <bondArray>" +
+		"    <bond atomRefs2='a1 a2' order='1'/>" +
+		"    <bond atomRefs2='a2 a3' order='2'>" +
+		"      <bondStereo atomRefs4='a1 a2 a3 a4'>C</bondStereo>" +
+		"    </bond>" +
+		"    <bond atomRefs2='a3 a4' order='1'/>" +
+		"  </bondArray>" +
+		"</molecule>";
+		CMLMolecule mol = (CMLMolecule) parseValidString(s);
+		CMLBond b2 = mol.getBondByAtomIds("a2","a3");
+		bs = b2.getBondStereo();
+		assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
+				"<bondStereo atomRefs4='a1 a2 a3 a4' "+CML_XMLNS+">C</bondStereo>"), bs, true);
+		bs = new CMLBondStereo();
+		bs.setAtomRefs4("a1 a2 a3 a4");
+		bs.setXMLContent(CMLBond.TRANS);
+		try {
+			b2.addBondStereo(bs);
+		} catch (CMLRuntimeException e) {
+			Assert.fail("nothing wrong");
+		}
     }
 
     /**
      * Test method for {@link org.xmlcml.cml.element.CMLBond#setBondStereo(org.xmlcml.cml.element.CMLBondStereo)}.
      */
     @Test
-    @Ignore
     public final void testSetBondStereo() {
-        fail("Not yet implemented"); // TODO
+    	String s = 
+    		"<molecule id='m1' " + CML_XMLNS+">" +
+    		"  <atomArray>" +
+    		"    <atom id='a1' elementType='F'/>" +
+    		"    <atom id='a2' elementType='C' hydrogenCount='1'/>" +
+    		"    <atom id='a3' elementType='C' hydrogenCount='1'/>" +
+    		"    <atom id='a4' elementType='Cl'/>" +
+    		"  </atomArray>" +
+    		"  <bondArray>" +
+    		"    <bond atomRefs2='a1 a2' order='1'/>" +
+    		"    <bond atomRefs2='a2 a3' order='2'>" +
+    		"    </bond>" +
+    		"    <bond atomRefs2='a3 a4' order='1'/>" +
+    		"  </bondArray>" +
+    		"</molecule>";
+    		CMLMolecule mol = (CMLMolecule) parseValidString(s);
+    		CMLBond b2 = mol.getBondByAtomIds("a2","a3");
+    		CMLBondStereo bs = new CMLBondStereo();
+    		bs.setAtomRefs4("a1 a2 a3 a4");
+    		bs.setXMLContent(CMLBond.CIS);
+    		assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
+    				"<bondStereo atomRefs4='a1 a2 a3 a4' "+CML_XMLNS+">C</bondStereo>"), bs, true);
+    		try {
+    			b2.setBondStereo(bs);
+    		} catch (CMLRuntimeException e) {
+    			Assert.fail("nothing wrong");
+    		}
+    		
+    		bs = new CMLBondStereo();
+    		bs.setAtomRefs4("a1 a2 a3 a4");
+    		bs.setXMLContent(CMLBond.TRANS);
+    		try {
+    			b2.setBondStereo(bs);
+    		} catch (CMLRuntimeException e) {
+    			Assert.fail("nothing wrong");
+    		}
     }
 
     /**

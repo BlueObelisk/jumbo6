@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLBasisSet.Basis;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test CMLAtomicBasisFunction */
 public class CMLAtomicBasisFunctionTest extends AbstractTest {
@@ -52,14 +53,14 @@ public class CMLAtomicBasisFunctionTest extends AbstractTest {
     public void testGetABFList() {
         CMLAtom atom = new CMLAtom();
         atom.setId("a1");
-        atom.setElementType("H");
+        atom.setElementType(AS.H.value);
         List<CMLAtomicBasisFunction> abfList = CMLAtomicBasisFunction
                 .getABFList(atom, Basis.MINIMAL);
-        Assert.assertEquals("H", 1, abfList.size());
+        Assert.assertEquals(AS.H.value, 1, abfList.size());
         Assert.assertEquals("H1", "1s(s)(null)", abfList.get(0).getString());
-        atom.setElementType("C");
+        atom.setElementType(AS.C.value);
         abfList = CMLAtomicBasisFunction.getABFList(atom, Basis.MINIMAL);
-        Assert.assertEquals("C", 4, abfList.size());
+        Assert.assertEquals(AS.C.value, 4, abfList.size());
         Assert.assertEquals("C1", "2s(s)(null)", abfList.get(0).getString());
         Assert.assertEquals("C2", "2px(px)(null)", abfList.get(1).getString());
         Assert.assertEquals("C3", "2py(py)(null)", abfList.get(2).getString());

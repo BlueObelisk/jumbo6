@@ -26,7 +26,7 @@ public class CMLPropertyTest extends AbstractTest {
 		prop1 = (CMLProperty) parseValidString(prop1S);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetPropertyList() {
 		String cmlS = 
@@ -46,7 +46,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertEquals("propertyList", 1, propertyList.getPropertyElements().size());
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetPropertyCMLElementString() {
 		String cmlS = 
@@ -68,28 +68,28 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertNull("property", property);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testCanonicalize() {
 		CMLProperty prop2 = new CMLProperty(prop1);
 		prop2.canonicalize();
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetUnits() {
 		String units = prop1.getUnits();
 		Assert.assertEquals("units", CMLUnit.Units.GRAM.value, units);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetDouble() {
 		double val = prop1.getDouble();
 		Assert.assertEquals("double", 12.3, val, EPS);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetString() {
 		String cmlS = 
@@ -110,7 +110,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertEquals("string", "penguin", val);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetInt() {
 		String cmlS = 
@@ -131,7 +131,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertEquals("int", 12, val);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetStringValues() {
 		String cmlS = 
@@ -155,7 +155,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertNull("strings", val);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetInts() {
 		String cmlS = 
@@ -172,7 +172,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertEquals("ints", 2, val[1]);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetDoubles() {
 		String cmlS = 
@@ -189,7 +189,7 @@ public class CMLPropertyTest extends AbstractTest {
 		Assert.assertEquals("doubles", 2.1, val[1]);
 	}
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetChild() {
 		String cmlS = 
@@ -212,7 +212,7 @@ public class CMLPropertyTest extends AbstractTest {
 	}
 
 
-	/** */
+    /** dewisott */
 	@Test
 	public final void testGetDataType() {
 		String cmlS = 

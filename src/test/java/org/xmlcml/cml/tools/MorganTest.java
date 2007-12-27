@@ -16,6 +16,7 @@ import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * @author pm286
@@ -403,8 +404,8 @@ public class MorganTest extends MoleculeAtomBondTest {
         
         benzene = (CMLMolecule) parseValidString(benzeneS);
         morgan = new Morgan(benzene.getAtomSet());
-        benzene.getAtom(1).setElementType("Br");
-        benzene.getAtom(5).setElementType("Cl");
+        benzene.getAtom(1).setElementType(AS.Br.value);
+        benzene.getAtom(5).setElementType(AS.Cl.value);
         morganList = morgan.getMorganList();
         assertEquals("marked benzene", new long[]{
                1671552003L, 1671552004L, 1671552008L, 1671552012L, 1671552021L,

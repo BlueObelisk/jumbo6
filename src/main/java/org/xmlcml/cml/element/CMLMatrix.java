@@ -30,49 +30,49 @@ public class CMLMatrix extends AbstractMatrix implements HasUnits, HasDataType {
 	/** types of matrix.
 	 */
 	public enum Type {
-		/** */
+	    /** dewisott */
         RECTANGULAR("rectangular"),
-		/** */
+	    /** dewisott */
         SQUARE("square"),
-		/** */
+	    /** dewisott */
         SQUARE_SYMMETRIC("squareSymmetric"),
-		/** */
+	    /** dewisott */
         SQUARE_SYMMETRIC_LT("squareSymmetricLT"),
-		/** */
+	    /** dewisott */
         SQUARE_SYMMETRIC_UT("squareSymmetricUT"),
-		/** */
+	    /** dewisott */
         SQUARE_ANTISYMMETRIC("squareAntisymmetric"),
-		/** */
+	    /** dewisott */
         SQUARE_ANTISYMMETRIC_LT("squareAntisymmetricLT"),
-		/** */
+	    /** dewisott */
         SQUARE_ANTISYMMETRIC_UT("squareAntisymmetricUT"),
-		/** */
+	    /** dewisott */
         DIAGONAL("diagonal"),
-		/** */
+	    /** dewisott */
         UPPER_TRIANGULAR("upperTriangular"),
-		/** */
+	    /** dewisott */
         UPPER_TRIANGULAR_UT("upperTriangularUT"),
-		/** */
+	    /** dewisott */
         LOWER_TRIANGULAR("lowerTriangular"),
-		/** */
+	    /** dewisott */
         LOWER_TRIANGULAR_LT("lowerTriangularLT"),
-		/** */
+	    /** dewisott */
         UNIT("unit"),
-		/** */
+	    /** dewisott */
         UNITARY("unitary"),
-		/** */
+	    /** dewisott */
         ROW_EIGENVECTORS("rowEigenvectors"),
-		/** */
+	    /** dewisott */
         ROTATION22("rotation22"),
-		/** */
+	    /** dewisott */
         ROTATION_TRANSLATION32("rotationTranslation32"),
-		/** */
+	    /** dewisott */
         HOMOGENEOUS33("homogeneous33"),
-		/** */
+	    /** dewisott */
         ROTATION33("rotation33"),
-		/** */
+	    /** dewisott */
 		ROTATION_TRANSLATION43("rotationTranslation43"),
-		/** */
+	    /** dewisott */
 		HOMOGENEOUS44("homogeneous44")
 		;
 		/** value */

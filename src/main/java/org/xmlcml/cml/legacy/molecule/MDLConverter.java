@@ -314,7 +314,7 @@ public class MDLConverter implements CMLConstants {
      * within the ChemicalElement class
      * 
      * @param element
-     *            Symbol of the element to find
+     *            AS of the element to find
      * @return true if element exists, false otherwise
      */
     private static boolean elementExists(String element) {

@@ -12,6 +12,7 @@ import org.xmlcml.cml.element.CMLPeakList.Type;
 import org.xmlcml.cml.interfacex.PeakOrGroup;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * @author pm286
@@ -270,13 +271,13 @@ public class CMLPeakListTest extends AbstractTest {
 	@Test
 	public void testMorganRoutines() {
 		CMLMolecule molecule = new CMLMolecule();
-		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement.getChemicalElement("O"));
+		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement.getChemicalElement(AS.O.value));
 		molecule.addAtom(atom1);
-		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement.getChemicalElement("C"));
+		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement.getChemicalElement(AS.C.value));
 		molecule.addAtom(atom2);
-		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.getChemicalElement("Cl"));
+		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.getChemicalElement(AS.Cl.value));
 		molecule.addAtom(atom3);
-		CMLAtom atom4 = new CMLAtom("a4", ChemicalElement.getChemicalElement("Cl"));
+		CMLAtom atom4 = new CMLAtom("a4", ChemicalElement.getChemicalElement(AS.Cl.value));
 		molecule.addAtom(atom4);
 		molecule.addBond(new CMLBond(atom1, atom2));
 		molecule.addBond(new CMLBond(atom3, atom2));
@@ -375,8 +376,8 @@ public class CMLPeakListTest extends AbstractTest {
 	public void testRemoveAtomsByElementType() {
 		makeToluene();
 		CMLAtomSet tolueneAtomSet = toluene.getAtomSet();
-		CMLAtomSet tolueneCarbonSet = tolueneAtomSet.getAtomSetByElementType("C");
-		CMLAtomSet tolueneHydrogenSet = tolueneAtomSet.getAtomSetByElementType("H");
+		CMLAtomSet tolueneCarbonSet = tolueneAtomSet.getAtomSetByElementType(AS.C.value);
+		CMLAtomSet tolueneHydrogenSet = tolueneAtomSet.getAtomSetByElementType(AS.H.value);
 		toluenePeakList.addAtomRefs(tolueneMap, true);
     	
         toluene = null;

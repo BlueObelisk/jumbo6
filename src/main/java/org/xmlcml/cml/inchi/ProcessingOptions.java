@@ -7,6 +7,6 @@ package org.xmlcml.cml.inchi;
  * @since 5.4
  */
 public enum ProcessingOptions {
-	/** */
+    /** dewisott */
     USE_BONDS
 }

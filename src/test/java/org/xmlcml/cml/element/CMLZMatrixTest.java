@@ -44,7 +44,6 @@ public class CMLZMatrixTest extends AbstractTest {
 	 * @exception Exception
 	 */
 	@Test
-	@Ignore
 	public void testCMLZMatrixCMLElement() throws Exception {
 
 		String zmatS = S_EMPTY

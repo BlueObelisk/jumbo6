@@ -63,13 +63,14 @@ public class CMLElectron extends AbstractElectron {
      */
     public static int getElectronCount(String order) {
         int ec = 0;
-        if (order.equals("S") || order.equals("1")) {
+        if (order == null) {
+        } else if (order.equals(CMLBond.SINGLE_S) || order.equals(CMLBond.SINGLE)) {
             ec = 2;
-        } else if (order.equals("A")) {
+        } else if (order.equals(CMLBond.AROMATIC)) {
             ec = 3;
-        } else if (order.equals("D") || order.equals("2")) {
+        } else if (order.equals(CMLBond.DOUBLE_D) || order.equals(CMLBond.DOUBLE)) {
             ec = 4;
-        } else if (order.equals("T") || order.equals("3")) {
+        } else if (order.equals(CMLBond.TRIPLE_T) || order.equals(CMLBond.TRIPLE)) {
             ec = 6;
         }
         return ec;

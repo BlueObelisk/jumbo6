@@ -63,7 +63,7 @@ public class DisorderToolControls {
 		 * from the CIF specification
 		 */
 		STRICT,
-		/** */
+	    /** dewisott */
 		LOOSE;
 		private ProcessControl() {
 		}

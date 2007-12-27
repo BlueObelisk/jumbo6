@@ -116,7 +116,7 @@ public interface CMLConstants extends EuclidConstants {
 	String XSD_SIMPLE_CONTENT = "xsd:simpleContent";
     /** */
 	String XSD_UNION = "xsd:union";
-	/** */
+    /** dewisott */
 	String FPX_REAL = "fpx:real";
     /** */
 	String PATTERN_ANYURI = "http://.*";    //crude!
@@ -241,6 +241,10 @@ public interface CMLConstants extends EuclidConstants {
      */
     String DICT_NS = "http://www.xml-cml.org/dict";
 
+    /**
+     * cml URI namespace reserved
+     */
+    String CML_URI_NS = "http://www.xml-cml.org/uri";
     /**
      * cml dictionary reserved
      */

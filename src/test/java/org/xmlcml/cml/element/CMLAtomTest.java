@@ -4,7 +4,6 @@ import nu.xom.Node;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLAttribute;
@@ -20,6 +19,7 @@ import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Vector3Test;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test CMLAtom.
@@ -141,15 +141,15 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     @Test
     public void testGetValenceElectrons() {
         String el = xmlAtom[0].getElementType();
-        Assert.assertEquals("element type", "N", el);
+        Assert.assertEquals("element type", AS.N.value, el);
         int ve = xmlAtom[0].getValenceElectrons();
         Assert.assertEquals("valence electrons", 5, ve);
         el = xmlAtom[1].getElementType();
-        Assert.assertEquals("element type", "C", el);
+        Assert.assertEquals("element type", AS.C.value, el);
         ve = xmlAtom[1].getValenceElectrons();
         Assert.assertEquals("valence electrons", 4, ve);
         el = xmlAtom[2].getElementType();
-        Assert.assertEquals("element type", "S", el);
+        Assert.assertEquals("element type", AS.S.value, el);
         ve = xmlAtom[2].getValenceElectrons();
         Assert.assertEquals("valence electrons", 6, ve);
 
@@ -284,10 +284,10 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     public void testGetChemicalElement() {
         ChemicalElement el = xmlAtom[0].getChemicalElement();
         Assert.assertEquals("element", el, ChemicalElement
-                .getChemicalElement("N"));
+                .getChemicalElement(AS.N.value));
         el = xmlAtom[1].getChemicalElement();
         Assert.assertEquals("element", el, ChemicalElement
-                .getChemicalElement("C"));
+                .getChemicalElement(AS.C.value));
     }
 
     /**
@@ -466,10 +466,26 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      * Test method for 'org.xmlcml.cml.element.CMLAtom.getHydrogenCount()'
      */
     @Test
-    @Ignore("method not yet implemented")
     public final void testGetHydrogenCount() {
-        // TODO
-        // int hc = xomAtom[0].getHydrogenCount();
+    	CMLAtom atom = new CMLAtom();
+    	int nh = atom.getHydrogenCount();
+    	Assert.assertEquals("empty atom", 0, nh);
+    	atom.setHydrogenCount(3);
+    	nh = atom.getHydrogenCount();
+    	Assert.assertEquals("atom with H", 3, nh);
+    	
+    	CMLMolecule molecule = new CMLMolecule();
+    	CMLAtom atom1 = new CMLAtom("a1", ChemicalElement.getChemicalElement(AS.O.value));
+    	molecule.addAtom(atom1);
+    	CMLAtom atom2 = new CMLAtom("a1_h1", ChemicalElement.getChemicalElement(AS.H.value));
+    	molecule.addAtom(atom2);
+    	molecule.addBond(new CMLBond(atom1, atom2));
+    	CMLAtom atom3 = new CMLAtom("a1_h2", ChemicalElement.getChemicalElement(AS.H.value));
+    	molecule.addAtom(atom3);
+    	molecule.addBond(new CMLBond(atom1, atom3));
+    	
+    	nh = atom1.getHydrogenCount();
+    	Assert.assertEquals("h2o", 2, nh);
     }
 
     /**
@@ -618,7 +634,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
      */
     @Test
     public final void testCommonElementSerialNumber() {
-        int en = CMLAtom.getCommonElementSerialNumber("Si");
+        int en = CMLAtom.getCommonElementSerialNumber(AS.Si.value);
         Assert.assertEquals("common serial", 5, en);
         en = CMLAtom.getCommonElementSerialNumber("Pt");
         Assert.assertEquals("common serial", -1, en);
@@ -641,9 +657,9 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     @Test
     public final void testIsWithinRadiusSum() {
     	CMLAtom atom0 = new CMLAtom("a0");
-    	atom0.setElementType("C");
+    	atom0.setElementType(AS.C.value);
     	CMLAtom atom1 = new CMLAtom("a1");
-    	atom1.setElementType("O");
+    	atom1.setElementType(AS.O.value);
         boolean b = atom0.isWithinRadiusSum(atom1, ChemicalElement.RadiusType.VDW);
         Assert.assertFalse("sum", b);
         atom0.setPoint3(new Point3(0.,0.,0.), CoordinateType.CARTESIAN);
@@ -734,9 +750,9 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
     @Test
     public final void testCompareByAtomicNumber() {
         CMLAtom atom1 = new CMLAtom();
-        atom1.setElementType("C");
+        atom1.setElementType(AS.C.value);
         CMLAtom atom2 = new CMLAtom();
-        atom2.setElementType("N");
+        atom2.setElementType(AS.N.value);
         Assert.assertEquals("compare", -1, atom1.compareByAtomicNumber(atom2));
         Assert.assertEquals("compare", 1, atom2.compareByAtomicNumber(atom1));
         Assert.assertEquals("compare", 0, atom2.compareByAtomicNumber(atom2));
@@ -752,7 +768,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
                 "-x, 1/2+y, 1/2+z" };
         CMLSymmetry symmetry = new CMLSymmetry(ss);
         CMLAtom atom1 = new CMLAtom();
-        atom1.setElementType("C");
+        atom1.setElementType(AS.C.value);
         atom1.setPoint3(new Point3(0.0, 0.0, 0.0), CoordinateType.CARTESIAN);
         int mult = atom1.calculateSpaceGroupMultiplicity(symmetry);
         Assert.assertEquals("multiplicity", 0, mult);
@@ -779,7 +795,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
 
         symmetry = new CMLSymmetry(ss);
         atom1 = new CMLAtom();
-        atom1.setElementType("C");
+        atom1.setElementType(AS.C.value);
         atom1.setPoint3(new Point3(0.0, 0.0, 0.0), CoordinateType.CARTESIAN);
         mult = atom1.calculateSpaceGroupMultiplicity(symmetry);
         Assert.assertEquals("multiplicity", 0, mult);

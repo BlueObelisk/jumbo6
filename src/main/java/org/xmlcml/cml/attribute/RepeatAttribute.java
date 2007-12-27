@@ -14,7 +14,7 @@ import org.xmlcml.cml.element.CMLArg;
  */
 public class RepeatAttribute extends StringSTAttribute {
 
-	/** */
+    /** dewisott */
     public final static String NAME = "repeat";
     String argName = "null";
     int start = 0;

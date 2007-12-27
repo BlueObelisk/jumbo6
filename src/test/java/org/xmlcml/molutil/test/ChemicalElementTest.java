@@ -11,6 +11,7 @@ import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * tests Chemical Element.
@@ -59,8 +60,8 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertEquals("new", "Yz", el.getSymbol());
-        el = ChemicalElement.getChemicalElement("C");
-        Assert.assertEquals("get", "C", el.getSymbol());
+        el = ChemicalElement.getChemicalElement(AS.C.value);
+        Assert.assertEquals("get", AS.C.value, el.getSymbol());
     }
 
     /**
@@ -71,7 +72,7 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertEquals("new", 123, el.getAtomicNumber());
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", 6, el.getAtomicNumber());
     }
 
@@ -83,7 +84,7 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertEquals("new", 299.99, el.getAtomicWeight(), EPS);
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         // FIXME
         Assert.assertEquals("get", 12.0107, el.getAtomicWeight());
     }
@@ -96,7 +97,7 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertEquals("new", 0, el.getGroup());
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", 14, el.getGroup());
     }
 
@@ -108,9 +109,9 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertEquals("new", 0, el.getPeriod());
-        el = ChemicalElement.getChemicalElement("H");
+        el = ChemicalElement.getChemicalElement(AS.H.value);
         Assert.assertEquals("get", 1, el.getPeriod());
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", 2, el.getPeriod());
 
     }
@@ -124,7 +125,7 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("new", el);
         Assert.assertNull("new", el.getElectronicGroundState());
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", "[He].2s2.2p2", el
                 .getElectronicGroundState());
 
@@ -174,7 +175,7 @@ public class ChemicalElementTest extends BaseTest {
         Assert.assertNotNull("iso", el);
         int[] iso = el.getIsotopeMasses();
         Assert.assertNull("iso", iso);
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         iso = el.getIsotopeMasses();
         Assert.assertNotNull("iso", iso);
         Assert.assertEquals("iso", 2, iso.length);
@@ -191,7 +192,7 @@ public class ChemicalElementTest extends BaseTest {
         Assert.assertNotNull("iso", el);
         double[] iso = el.getIsotopeAbundances();
         Assert.assertNull("iso", iso);
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         iso = el.getIsotopeAbundances();
         Assert.assertNotNull("iso", iso);
         Assert.assertEquals("iso", 2, iso.length);
@@ -203,7 +204,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetMainIsotope() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         int iso = el.getMainIsotope();
         Assert.assertEquals("iso", 12, iso);
     }
@@ -230,7 +231,7 @@ public class ChemicalElementTest extends BaseTest {
         ChemicalElement el = new ChemicalElement("Yz", 123, 299.99);
         Assert.assertNotNull("covrad", el);
         Assert.assertEquals("covrad", 1.4, el.getCovalentRadius(), EPS);
-        el = ChemicalElement.getChemicalElement("C");
+        el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("covrad", 0.77, el.getCovalentRadius());
 
     }
@@ -253,7 +254,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetAtomicRadius() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         double en = el.getVDWRadius();
         Assert.assertEquals("get", 1.7, en, EPS);
     }
@@ -275,7 +276,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetVDWRadius() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         double en = el.getVDWRadius();
         Assert.assertEquals("get", 1.7, en, EPS);
     }
@@ -299,7 +300,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetElectronegativity() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         double en = el.getElectronegativity();
         Assert.assertEquals("get", 2.55, en, EPS);
     }
@@ -323,7 +324,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetColor() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         Color col = el.getColor();
         Assert.assertEquals("get", true, col.equals(new Color(128, 128, 128)));
     }
@@ -333,7 +334,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetColorString() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", "#808080", el.getColorString());
     }
 
@@ -343,7 +344,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetValenceElectrons() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", 4, el.getValenceElectrons());
     }
 
@@ -352,7 +353,7 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testToString() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
         Assert.assertEquals("get", "C: 12.0107", el.toString());
     }
 
@@ -362,8 +363,8 @@ public class ChemicalElementTest extends BaseTest {
      */
     @Test
     public void testGetChemicalElement() {
-        ChemicalElement el = ChemicalElement.getChemicalElement("C");
-        Assert.assertEquals("get", "C", el.getSymbol());
+        ChemicalElement el = ChemicalElement.getChemicalElement(AS.C.value);
+        Assert.assertEquals("get", AS.C.value, el.getSymbol());
         el = ChemicalElement.getChemicalElement("CA");
         Assert.assertNull("get", el);
         el = ChemicalElement.getChemicalElement("Dummy");
@@ -377,7 +378,7 @@ public class ChemicalElementTest extends BaseTest {
     @Test
     public void testGetElement() {
         ChemicalElement el = ChemicalElement.getElement(6);
-        Assert.assertEquals("get", "C", el.getSymbol());
+        Assert.assertEquals("get", AS.C.value, el.getSymbol());
         el = ChemicalElement.getElement(0);
         Assert.assertNull("elem", el);
         el = ChemicalElement.getElement(1000);
@@ -411,9 +412,9 @@ public class ChemicalElementTest extends BaseTest {
         elem = ChemicalElement.grabChemicalElement("Qxz");
         Assert.assertNull("qxz", elem);
 
-        elem = ChemicalElement.grabChemicalElement("H");
+        elem = ChemicalElement.grabChemicalElement(AS.H.value);
         Assert.assertNotNull("hydrogen", elem);
-        Assert.assertEquals("H", 1, elem.getAtomicNumber());
+        Assert.assertEquals(AS.H.value, 1, elem.getAtomicNumber());
 
         elem = ChemicalElement.grabChemicalElement("Hx");
         Assert.assertNotNull("hydrogen", elem);

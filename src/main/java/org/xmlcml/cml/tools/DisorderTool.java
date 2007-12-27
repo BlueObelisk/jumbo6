@@ -19,6 +19,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
 import org.xmlcml.cml.tools.DisorderToolControls.RemoveControl;
+import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.util.CombinationGenerator;
 import org.xmlcml.util.Partition;
 
@@ -34,9 +35,9 @@ public class DisorderTool extends AbstractTool {
 	private boolean containsDisorder;
 
 	private DisorderToolControls disorderOptions;
-	/** */
+    /** dewisott */
 	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
-	/** */
+    /** dewisott */
 	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
 
 	/**
@@ -478,11 +479,11 @@ public class DisorderTool extends AbstractTool {
 			int hCount = 0;
 			int fCount = 0;
 			int clCount = 0;
-			if ("C".equals(atom.getElementType())) {
+			if (AS.C.equals(atom.getElementType())) {
 				for (CMLAtom ligand : atom.getLigandAtoms()) {
-					if ("H".equals(ligand.getElementType())) hCount++;
-					if ("F".equals(ligand.getElementType())) fCount++;
-					if ("Cl".equals(ligand.getElementType())) clCount++;
+					if (AS.H.equals(ligand.getElementType())) hCount++;
+					if (AS.F.equals(ligand.getElementType())) fCount++;
+					if (AS.Cl.equals(ligand.getElementType())) clCount++;
 				}
 			}
 			if (hCount == 6 || fCount == 6 || clCount == 6) {

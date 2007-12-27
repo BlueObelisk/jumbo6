@@ -10,6 +10,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * tests atomTool.
  *
@@ -28,14 +29,14 @@ public class AtomToolTest extends MoleculeAtomBondTest {
     public final void testAddCalculatedCoordinatesForHydrogens() {
         CMLMolecule molecule = new CMLMolecule();
         CMLAtom atom = new CMLAtom();
-        atom.setElementType("C");
+        atom.setElementType(AS.C.value);
         atom.setId("a1");
         atom.setHydrogenCount(4);
         atom.setPoint3(new Point3(0, 0, 0), CoordinateType.CARTESIAN);
         molecule.addAtom(atom);
         for (int i = 0; i < 4; i++) {
             atom = new CMLAtom();
-            atom.setElementType("H");
+            atom.setElementType(AS.H.value);
             atom.setId("h" + (i + 1));
             molecule.addAtom(atom);
             CMLBond bond = new CMLBond();

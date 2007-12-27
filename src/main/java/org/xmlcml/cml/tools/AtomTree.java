@@ -8,6 +8,7 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * An atom-centered tree.
@@ -157,8 +158,7 @@ public class AtomTree extends AbstractTool implements Comparable {
             List<CMLAtom> ligandList = atom.getLigandAtoms();
             for (CMLAtom ligand : ligandList) {
                 if (ligand != this.parent
-                        && (explicitHydrogens || !ligand.getElementType()
-                                .equals("H"))) {
+                        && (explicitHydrogens || !AS.H.equals(ligand.getElementType()))) {
                     AtomTree ligandTree = new AtomTree(this.atom, ligand);
                     ligandTree.setUseCharge(charge);
                     ligandTree.setUseLabel(label);
@@ -196,7 +196,7 @@ public class AtomTree extends AbstractTool implements Comparable {
     public String toString() {
         StringBuffer s = new StringBuffer(S_EMPTY);
         String elType = atom.getElementType();
-        if (explicitHydrogens || !elType.equals("H")) {
+        if (explicitHydrogens || !AS.H.equals(elType)) {
             s.append(elType);
             if (label) {
                 CMLLabel childLabel = (CMLLabel) atom.getFirstChildElement(
@@ -210,7 +210,7 @@ public class AtomTree extends AbstractTool implements Comparable {
             if (atom.getHydrogenCountAttribute() != null) {
                 int hCount = atom.getHydrogenCount();
                 if (implicitHydrogens && hCount > 0) {
-                    s.append("H");
+                    s.append(AS.H.value);
                     s.append(((hCount == 1) ? S_EMPTY : S_EMPTY + hCount));
                 }
             }

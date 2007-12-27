@@ -38,6 +38,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 // updated
 /**
@@ -575,7 +576,7 @@ public class FragmentToolTest extends AbstractTest {
 		int natoms = atomList.size();
 		for (int i = 0; i < natoms; i++) {
 			CMLAtom atomi = atomList.get(i);
-			if ("H".equals(atomi.getElementType())) {
+			if (AS.H.equals(atomi.getElementType())) {
 				continue;
 			}
 			// get all atoms within 3 bonds
@@ -583,7 +584,7 @@ public class FragmentToolTest extends AbstractTest {
 			CMLAtomSet nonBonded = allAtomSet.complement(atomSet13);
 			List<CMLAtom> nonBondedAtomList = nonBonded.getAtoms();
 			for (CMLAtom atomj : nonBondedAtomList) {
-				if ("H".equals(atomj.getElementType())) {
+				if (AS.H.equals(atomj.getElementType())) {
 					continue;
 				}
 				if (atomi.getId().compareTo(atomj.getId()) <= 0) {

@@ -44,6 +44,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.Molutils;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 
 /**
@@ -1084,10 +1085,10 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     public void testGetBondOrderSum() {
         // makeMoleculeToolXml0();
         String el = xmlAtom[0].getElementType();
-        Assert.assertEquals("element type", "N", el);
+        Assert.assertEquals("element type", AS.N.value, el);
         int bes = moleculeToolXml0.getBondOrderSum(xmlAtom[0]);
         el = xmlAtom[1].getElementType();
-        Assert.assertEquals("element type", "C", el);
+        Assert.assertEquals("element type", AS.C.value, el);
         bes = moleculeToolXml0.getBondOrderSum(xmlAtom[1]);
         Assert.assertEquals("bond order sum", 4, bes);
         benzene.setBondOrders(CMLBond.SINGLE);
@@ -1117,21 +1118,21 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         nlig = xmlAtom[1].getLigandAtoms().size();
         Assert.assertEquals("ligand count", 1, nlig);
         String el = xmlAtom[0].getElementType();
-        Assert.assertEquals("elem", "N", el);
+        Assert.assertEquals("elem", AS.N.value, el);
         int bos = moleculeTool.getBondOrderSum(xmlAtom[0]);
         Assert.assertEquals("bondsum", 4, bos);
         int dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[0],
                 FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
         el = xmlAtom[1].getElementType();
-        Assert.assertEquals("elem", "C", el);
+        Assert.assertEquals("elem", AS.C.value, el);
         bos = moleculeTool.getBondOrderSum(xmlAtom[1]);
         Assert.assertEquals("bondsum", 4, bos);
         dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[1],
                 FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
         el = xmlAtom[2].getElementType();
-        Assert.assertEquals("elem", "S", el);
+        Assert.assertEquals("elem", AS.S.value, el);
         dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[2],
                 FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
@@ -1164,19 +1165,19 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     @Test
     public void testGetHydrogenValencyGroup() {
         int hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[0]);
-        Assert.assertEquals("elementType", "N", xmlAtom[0].getElementType());
+        Assert.assertEquals("elementType", AS.N.value, xmlAtom[0].getElementType());
         // atom attached to electronegative ligands
         Assert.assertTrue("hydrogen valency", hvg < 0);
         hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[1]);
-        Assert.assertEquals("elementType", "C", xmlAtom[1].getElementType());
+        Assert.assertEquals("elementType", AS.C.value, xmlAtom[1].getElementType());
         Assert.assertEquals("hydrogen valency", 4, hvg);
         hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[2]);
-        Assert.assertEquals("elementType", "S", xmlAtom[2].getElementType());
+        Assert.assertEquals("elementType", AS.S.value, xmlAtom[2].getElementType());
         Assert.assertEquals("hydrogen valency", 6, hvg);
-        Assert.assertEquals("elementType", "O", xmlAtom[3].getElementType());
+        Assert.assertEquals("elementType", AS.O.value, xmlAtom[3].getElementType());
         hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[3]);
         Assert.assertEquals("hydrogen valency", 6, hvg);
-        Assert.assertEquals("elementType", "F", xmlAtom[4].getElementType());
+        Assert.assertEquals("elementType", AS.F.value, xmlAtom[4].getElementType());
         hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[4]);
         Assert.assertEquals("hydrogen valency", 7, hvg);
     }
@@ -2643,11 +2644,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		CMLMolecule from = new CMLMolecule();
 		from.setId("from");
 		CMLAtom atom0 = new CMLAtom();
-		atom0.setElementType("C");
+		atom0.setElementType(AS.C.value);
 		atom0.setId("a0");
 		from.addAtom(atom0);
 		CMLAtom atom1 = new CMLAtom();
-		atom1.setElementType("O");
+		atom1.setElementType(AS.O.value);
 		atom1.setId("a1");
 		from.addAtom(atom1);
 		CMLBond bond01 = new CMLBond(atom0, atom1);

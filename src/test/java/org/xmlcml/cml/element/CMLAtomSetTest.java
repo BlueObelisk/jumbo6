@@ -25,6 +25,7 @@ import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Real2Test;
 import org.xmlcml.euclid.test.Real2VectorTest;
 import org.xmlcml.euclid.test.RealMatrixTest;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * test CMLAtomSet
@@ -270,11 +271,11 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     @Test
     public void testGetAtomSetByElementType() {
         CMLAtomSet atomSet1 = new CMLAtomSet(xomAtom);
-        CMLAtomSet atomSet2 = atomSet1.getAtomSetByElementType("N");
+        CMLAtomSet atomSet2 = atomSet1.getAtomSetByElementType(AS.N.value);
         Assert.assertEquals("atom set by element", 1, atomSet2.size());
         Assert.assertEquals("atom set by element", "a2", ((CMLAtom) atomSet2
                 .getAtom(0)).getId());
-        CMLAtomSet atomSet3 = atomSet1.getAtomSetByElementType("B");
+        CMLAtomSet atomSet3 = atomSet1.getAtomSetByElementType(AS.B.value);
         Assert.assertEquals("atom set by element", 1, atomSet3.size());
         Assert.assertEquals("atom set by element", "a5", ((CMLAtom) atomSet3
                 .getAtom(0)).getId());
@@ -475,8 +476,8 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     public void testExcludeElementTypes() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
         Assert.assertEquals("exclude", xomMolecule, atomSet.getMolecule());
-        CMLAtomSet atomSet1 = atomSet.excludeElementTypes(new String[] { "N",
-                "S" });
+        CMLAtomSet atomSet1 = atomSet.excludeElementTypes(new String[] { AS.N.value,
+                AS.S.value });
         Assert.assertEquals("exclude", xomMolecule, atomSet1.getMolecule());
         Assert.assertEquals("excludeElementTypes", 3, atomSet1.size());
         Assert.assertEquals("excludeElementTypes", new String[] { "a1", "a3",
@@ -501,8 +502,8 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     public void testIncludeElementTypes() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
         Assert.assertEquals("exclude", xomMolecule, atomSet.getMolecule());
-        CMLAtomSet atomSet1 = atomSet.includeElementTypes(new String[] { "N",
-                "S" });
+        CMLAtomSet atomSet1 = atomSet.includeElementTypes(new String[] { AS.N.value,
+                AS.S.value });
         Assert.assertEquals("exclude", xomMolecule, atomSet1.getMolecule());
         Assert.assertEquals("excludeElementTypes", 2, atomSet1.size());
         Assert.assertEquals("excludeElementTypes", new String[] { "a2", "a4" },
@@ -881,7 +882,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testSetChemicalElements() {
-        atomSet1.setChemicalElements("P");
+        atomSet1.setChemicalElements(AS.P.value);
     }
 
     /**
@@ -930,9 +931,9 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     public void testSplitByElements() {
         Map<String, CMLAtomSet> map = atomSet2.splitByElements();
         Assert.assertEquals("map", 4, map.size());
-        Assert.assertEquals("map", "a3", map.get("S").getStringContent());
-        Assert.assertEquals("map", "a4", map.get("O").getStringContent());
-        Assert.assertEquals("map", "a5", map.get("F").getStringContent());
+        Assert.assertEquals("map", "a3", map.get(AS.S.value).getStringContent());
+        Assert.assertEquals("map", "a4", map.get(AS.O.value).getStringContent());
+        Assert.assertEquals("map", "a5", map.get(AS.F.value).getStringContent());
     }
 
     /**

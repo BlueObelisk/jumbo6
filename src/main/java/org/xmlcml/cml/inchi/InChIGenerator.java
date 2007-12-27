@@ -27,6 +27,7 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLIdentifier;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.EuclidConstants;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * <p>
@@ -318,7 +319,7 @@ public class InChIGenerator implements EuclidConstants {
                 List<CMLAtom> neighbours = atomNeighbours.get(atom);
                 for (int j = 0; j < neighbours.size(); j++) {
                     CMLAtom neigh = neighbours.get(j);
-                    if ("H".equals(neigh.getElementType())) {
+                    if (AS.H.equals(neigh.getElementType())) {
                         hcount--;
                     }
                 }

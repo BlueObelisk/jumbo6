@@ -15,6 +15,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * manage counting and management of double bonding. A piSystem is a set of
@@ -377,7 +378,7 @@ public class PiSystem implements CMLConstants {
                     formalCharge = adjustChargeAndElectron(atom, electron,
                             formalCharge, 1);
                 } else if (formalCharge != 0
-                        && atom.getElementType().equals("C")) {
+                        && atom.getElementType().equals(AS.C.value)) {
                     int delta = (formalCharge < 0) ? -1 : 1;
                     formalCharge = adjustChargeAndElectron(atom, electron,
                             formalCharge, delta);

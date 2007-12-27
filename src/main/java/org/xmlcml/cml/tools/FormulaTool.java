@@ -18,7 +18,7 @@ public class FormulaTool extends AbstractTool {
 
 	Logger logger = Logger.getLogger(FormulaTool.class.getName());
 
-	/** */
+    /** dewisott */
 	public static String HYDROGEN_COUNT = "hydrogenCount";
 	
 	private CMLFormula formula;

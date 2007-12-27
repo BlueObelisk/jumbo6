@@ -34,6 +34,7 @@ import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
  * user-modifiable class supporting formula. * The semantics of formula have
@@ -64,10 +65,10 @@ public class CMLFormula extends AbstractFormula {
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
-	/** */
+    /** dewisott */
 	public final static int NPLACES = 10;
 
-	/** */
+    /** dewisott */
 	public final static int NDEC = 4;
 
 	/** type */
@@ -249,10 +250,10 @@ public class CMLFormula extends AbstractFormula {
 				throw new CMLRuntimeException("Missing or invalid elementType: "
 						+ elementType);
 			}
-			if ("H".equals(elementType) && strategy == null) {
+			if (AS.H.equals(elementType) && strategy == null) {
 				strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
 			}
-			if (!"H".equals(elementType) || 
+			if (!AS.H.equals(elementType) || 
 				HydrogenStrategy.EXPLICIT_HYDROGENS == strategy) {
 				this.add(elementType, 1.0);
 			}
@@ -267,7 +268,7 @@ public class CMLFormula extends AbstractFormula {
 				if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
 					int hydrogenCount = atom.getHydrogenCount();
 					if (hydrogenCount != 0) {
-						this.add("H", hydrogenCount);
+						this.add(AS.H.value, hydrogenCount);
 					}
 				}
 			}
