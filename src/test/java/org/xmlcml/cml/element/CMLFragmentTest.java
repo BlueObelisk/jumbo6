@@ -4,7 +4,6 @@
 package org.xmlcml.cml.element;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;

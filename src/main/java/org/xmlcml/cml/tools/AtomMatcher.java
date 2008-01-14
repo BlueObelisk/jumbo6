@@ -655,7 +655,7 @@ public class AtomMatcher extends AbstractTool {
                             .setTitle(AtomMatcher.Strategy.FROM_UNIQUE_MATCHED_ATOMS
                                     .toString());
                     splitAndProcessAtomSets(mapij, mol0, mol1);
-                    // PMRDOMUtil.debug(mapij);
+                    // CMLElement.debug(mapij);
                     if (mapij.getChildElements(CMLLink.TAG, CML_NS).size() != mol0
                             .getCMLChildCount(CMLAtom.TAG)) {
                         // incomplete match; currently no action
@@ -1571,7 +1571,7 @@ public class AtomMatcher extends AbstractTool {
         logger.info("LINKS-2 " + linkMatrix);
 
         logger.info("**********************PROD2REACT");
-        // PMRDOMUtil.debug(mapTool.getMap());
+        // CMLElement.debug(mapTool.getMap());
         // map.setDictRef(CMLReaction.MAP_REACTION_ATOM_MAP_COMPLETE);
         // FIXME this may not be true
 
@@ -1761,8 +1761,8 @@ public class AtomMatcher extends AbstractTool {
                 // }
                 // CMLMap spectatorMap = matchMoleculePair(reactantTool,
                 // productTool, MATCH_MORGAN);
-                // PMRDOMUtil.debug(reactantMolecule);
-                // PMRDOMUtil.debug(productMolecule);
+                // CMLElement.debug(reactantMolecule);
+                // CMLElement.debug(productMolecule);
                 CMLMap spectatorMap = null;
                 try {
                     spectatorMap = this.mapMolecules(productMolecule,
@@ -1798,8 +1798,8 @@ public class AtomMatcher extends AbstractTool {
                     logger.severe("Unequal cmlSpectator map and molecule");
                     logger
                             .severe("**ERROR**(move reactant to spectator) Unequal cmlSpectator map and molecule***");
-                    // PMRDOMUtil.debug(spectatorMap);
-                    // PMRDOMUtil.debug(reactant.getMolecule());
+                    // CMLElement.debug(spectatorMap);
+                    // CMLElement.debug(reactant.getMolecule());
                     CMLAtomSet fromAtomSet = productMolecule.getAtomSet();
                     CMLAtomSet toAtomSet = reactantMolecule.getAtomSet();
                     fromAtomSet.removeAtoms(spectatorMap, toAtomSet);

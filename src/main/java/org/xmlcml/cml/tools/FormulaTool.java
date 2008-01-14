@@ -64,7 +64,7 @@ public class FormulaTool extends AbstractTool {
 //	 */
 //	public int getFormalCharge() {
 //		int formalCharge = 0;
-//		Nodes chargedAtoms = formula.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", X_CML);
+//		Nodes chargedAtoms = formula.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", CML_XPATH);
 //		for (int i = 0; i < chargedAtoms.size(); i++) {
 //			formalCharge += Integer.parseInt(((Element)chargedAtoms.get(i)).getAttributeValue("formalCharge"));
 //		}

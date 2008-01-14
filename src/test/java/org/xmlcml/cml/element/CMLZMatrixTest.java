@@ -13,7 +13,6 @@ import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLRuntimeException;

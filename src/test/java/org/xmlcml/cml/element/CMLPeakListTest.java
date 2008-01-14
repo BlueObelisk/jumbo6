@@ -377,7 +377,7 @@ public class CMLPeakListTest extends AbstractTest {
 		makeToluene();
 		CMLAtomSet tolueneAtomSet = toluene.getAtomSet();
 		CMLAtomSet tolueneCarbonSet = tolueneAtomSet.getAtomSetByElementType(AS.C.value);
-		CMLAtomSet tolueneHydrogenSet = tolueneAtomSet.getAtomSetByElementType(AS.H.value);
+//		CMLAtomSet tolueneHydrogenSet = tolueneAtomSet.getAtomSetByElementType(AS.H.value);
 		toluenePeakList.addAtomRefs(tolueneMap, true);
     	
         toluene = null;

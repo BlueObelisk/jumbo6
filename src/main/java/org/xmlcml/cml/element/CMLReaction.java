@@ -495,10 +495,10 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
     	Nodes nodes = null;
     	if (typeS == null) {
     	} else if(typeS.equals(CMLReaction.Component.ANY)) {
-    		nodes = this.query(".//cml:molecule", X_CML);
+    		nodes = this.query(".//cml:molecule", CML_XPATH);
     	} else {
     		String qs = ".//"+typeS+"/cml:molecule";
-    		nodes = this.query(qs, X_CML);
+    		nodes = this.query(qs, CML_XPATH);
     	}
     	if (nodes != null) {
 			for (int i = 0; i < nodes.size(); i++) {

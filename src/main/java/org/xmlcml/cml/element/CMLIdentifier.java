@@ -3,6 +3,7 @@ package org.xmlcml.cml.element;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 
 /**
@@ -26,7 +27,7 @@ public class CMLIdentifier extends AbstractIdentifier {
      *
      * @param old
      */
-    public CMLIdentifier(CMLIdentifier old) {
+    public CMLIdentifier(CMLConstants old) {
         super((AbstractIdentifier) old);
 
     }

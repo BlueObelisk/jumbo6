@@ -224,7 +224,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 		if (this.catalogList == null) {
 			throw new CMLRuntimeException("catalogManager must be of form list");
 		}
-		List<Node> mapNodes = CMLUtil.getQueryNodes(catalogList, CMLScalar.NS, X_CML);
+		List<Node> mapNodes = CMLUtil.getQueryNodes(catalogList, CMLScalar.NS, CML_XPATH);
 		CMLScalar theScalar = null;
 		for (Node node : mapNodes) {
 			CMLScalar scalar = (CMLScalar) node;

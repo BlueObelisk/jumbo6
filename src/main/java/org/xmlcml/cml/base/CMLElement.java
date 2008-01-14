@@ -33,22 +33,6 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLElement extends Element implements CMLConstants, Comparable {
 
-	/** semi-controlled vocabulary for convention attribute.
-	 * must use value for comparison
-	 */
-	public enum Convention {
-		/** ATOMARRAY used with formula*/
-		ATOMARRAY,
-		/** CAS*/
-		CAS,
-		/** InChI*/
-		INCHI,
-		/** IUPAC*/
-		IUPAC,
-		/** SMILES used with formula*/
-		SMILES,
-		;
-	}
 	
     /** hybridisation - from whatever source */
     public enum Hybridization {
@@ -244,6 +228,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     /** override insertChild.
      * if newNode has parent detach()es first
      * @param newNode
+     * @param pos
      */
     public void insertChild(Node newNode, int pos) {
         newNode.detach();
@@ -566,7 +551,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      * @return nodes
      */
     public Nodes cmlQuery(String query) {
-    	return super.query(query, X_CML);
+    	return super.query(query, CML_XPATH);
     }
 
     /**
@@ -839,7 +824,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      * @return list of CMLelements
      */
     public List<CMLElement> getElements(String cmlQueryString) {
-        Nodes nodes = this.query(cmlQueryString, X_CML);
+        Nodes nodes = this.query(cmlQueryString, CML_XPATH);
         List<CMLElement> cmlElements = new ArrayList<CMLElement>();
         for (int i = 0; i < nodes.size(); i++) {
             if (nodes.get(i) instanceof CMLElement) {
@@ -880,7 +865,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
         boolean found = false;
         if (elementName == null || this.getLocalName().equals(elementName)) {
             if (attributeName == null
-                    || this.getAttribute(attributeName) != null) {
+                    || this.getAttributeValue(attributeName) != null) {
                 elementList.add(this);
                 found = true;
             }

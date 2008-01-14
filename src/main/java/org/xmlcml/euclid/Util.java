@@ -418,18 +418,28 @@ public class Util implements EuclidConstants {
 	/**
 	 * return the first n characters of a string and add ellipses if truncated
 	 * 
-	 * @param s
-	 *            Description of the Parameter
-	 * @param maxlength
-	 *            Description of the Parameter
+	 * @param s  
+	 * @param maxlength 
 	 * @return String the (possibly) truncated string
 	 */
 	public static String truncateAndAddEllipsis(String s, int maxlength) {
-		if (s == null) {
-			return null;
+		if (s != null) {
+			int l = s.length();
+			s = (l <= maxlength) ? s : s.substring(0, maxlength) + " ... ";
 		}
-		int l = s.length();
-		return (l <= maxlength) ? s : s.substring(0, maxlength) + " ... ";
+		return s;
+	}
+
+	/**
+	 * return the first n characters of a string and add ellipses if truncated
+	 * 
+	 * @param s  
+	 * @param maxlength 
+	 * @return String the (possibly) truncated string
+	 */
+	public static String truncateAndAddNewlinesAndEllipsis(String s, int maxlength) {
+		return (s == null) ? null :
+			truncateAndAddEllipsis(s.replace(S_NEWLINE, "\\n"), maxlength); 
 	}
 
 	/**
@@ -1263,6 +1273,287 @@ public class Util implements EuclidConstants {
 			S_EMPTY + (char) 252,
 	// uuml
 	};
+	
+	/** isolatin entities
+	 */
+	public final static String[] ISOLATIN_ENTITIES = new String[256];
+	/** */
+	public final static int ISOLATIN_LO = 160;
+	/** */
+	public final static int ISOLATIN_HI = 255;
+	static {
+		// ones before 160 are null
+		ISOLATIN_ENTITIES[160]="_nbsp_";
+		ISOLATIN_ENTITIES[161]="_iexcl_";
+		ISOLATIN_ENTITIES[162]="_cent_";
+		ISOLATIN_ENTITIES[163]="_pound_";
+		ISOLATIN_ENTITIES[164]="_curren_";
+		ISOLATIN_ENTITIES[165]="_yen_";
+		ISOLATIN_ENTITIES[166]="_brvbar_";
+		ISOLATIN_ENTITIES[167]="_sect_";
+		ISOLATIN_ENTITIES[168]="_uml_";
+		ISOLATIN_ENTITIES[169]="_copy_";
+		ISOLATIN_ENTITIES[170]="_ordf_";
+		ISOLATIN_ENTITIES[171]="_laquo_";
+		ISOLATIN_ENTITIES[172]="_not_";
+		ISOLATIN_ENTITIES[173]="_shy_";
+		ISOLATIN_ENTITIES[174]="_reg_";
+		ISOLATIN_ENTITIES[175]="_macr_";
+		ISOLATIN_ENTITIES[176]="_deg_";
+		ISOLATIN_ENTITIES[177]="_plusmn_";
+		ISOLATIN_ENTITIES[178]="_sup2_";
+		ISOLATIN_ENTITIES[179]="_sup3_";
+		ISOLATIN_ENTITIES[180]="_acute_";
+		ISOLATIN_ENTITIES[181]="_micro_";
+		ISOLATIN_ENTITIES[182]="_para_";
+		ISOLATIN_ENTITIES[183]="_middot_";
+		ISOLATIN_ENTITIES[184]="_cedil_";
+		ISOLATIN_ENTITIES[185]="_sup1_";
+		ISOLATIN_ENTITIES[186]="_ordm_";
+		ISOLATIN_ENTITIES[187]="_raquo_";
+		ISOLATIN_ENTITIES[188]="_frac14_";
+		ISOLATIN_ENTITIES[189]="_frac12_";
+		ISOLATIN_ENTITIES[190]="_frac34_";
+		ISOLATIN_ENTITIES[191]="_iquest_";
+		ISOLATIN_ENTITIES[192]="_Agrave_";
+		ISOLATIN_ENTITIES[193]="_Aacute_";
+		ISOLATIN_ENTITIES[194]="_Acirc_";
+		ISOLATIN_ENTITIES[195]="_Atilde_";
+		ISOLATIN_ENTITIES[196]="_Auml_";
+		ISOLATIN_ENTITIES[197]="_Aring_";
+		ISOLATIN_ENTITIES[198]="_AElig_";
+		ISOLATIN_ENTITIES[199]="_Ccedil_";
+		ISOLATIN_ENTITIES[200]="_Egrave_";
+		ISOLATIN_ENTITIES[201]="_Eacute_";
+		ISOLATIN_ENTITIES[202]="_Ecirc_";
+		ISOLATIN_ENTITIES[203]="_Euml_";
+		ISOLATIN_ENTITIES[204]="_Igrave_";
+		ISOLATIN_ENTITIES[205]="_Iacute_";
+		ISOLATIN_ENTITIES[206]="_Icirc_";
+		ISOLATIN_ENTITIES[207]="_Iuml_";
+		ISOLATIN_ENTITIES[208]="_ETH_";
+		ISOLATIN_ENTITIES[209]="_Ntilde_";
+		ISOLATIN_ENTITIES[210]="_Ograve_";
+		ISOLATIN_ENTITIES[211]="_Oacute_";
+		ISOLATIN_ENTITIES[212]="_Ocirc_";
+		ISOLATIN_ENTITIES[213]="_Otilde_";
+		ISOLATIN_ENTITIES[214]="_Ouml_";
+		ISOLATIN_ENTITIES[215]="_times_";
+		ISOLATIN_ENTITIES[216]="_Oslash_";
+		ISOLATIN_ENTITIES[217]="_Ugrave_";
+		ISOLATIN_ENTITIES[218]="_Uacute_";
+		ISOLATIN_ENTITIES[219]="_Ucirc_";
+		ISOLATIN_ENTITIES[220]="_Uuml_";
+		ISOLATIN_ENTITIES[221]="_Yacute_";
+		ISOLATIN_ENTITIES[222]="_THORN_";
+		ISOLATIN_ENTITIES[223]="_szlig_";
+		ISOLATIN_ENTITIES[224]="_agrave_";
+		ISOLATIN_ENTITIES[225]="_aacute_";
+		ISOLATIN_ENTITIES[226]="_acirc_";
+		ISOLATIN_ENTITIES[227]="_atilde_";
+		ISOLATIN_ENTITIES[228]="_auml_";
+		ISOLATIN_ENTITIES[229]="_aring_";
+		ISOLATIN_ENTITIES[230]="_aelig_";
+		ISOLATIN_ENTITIES[231]="_ccedil_";
+		ISOLATIN_ENTITIES[232]="_egrave_";
+		ISOLATIN_ENTITIES[233]="_eacute_";
+		ISOLATIN_ENTITIES[234]="_ecirc_";
+		ISOLATIN_ENTITIES[235]="_euml_";
+		ISOLATIN_ENTITIES[236]="_igrave_";
+		ISOLATIN_ENTITIES[237]="_iacute_";
+		ISOLATIN_ENTITIES[238]="_icirc_";
+		ISOLATIN_ENTITIES[239]="_iuml_";
+		ISOLATIN_ENTITIES[240]="_eth_";
+		ISOLATIN_ENTITIES[241]="_ntilde_";
+		ISOLATIN_ENTITIES[242]="_ograve_";
+		ISOLATIN_ENTITIES[243]="_oacute_";
+		ISOLATIN_ENTITIES[244]="_ocirc_";
+		ISOLATIN_ENTITIES[245]="_otilde_";
+		ISOLATIN_ENTITIES[246]="_ouml_";
+		ISOLATIN_ENTITIES[247]="_divide_";
+		ISOLATIN_ENTITIES[248]="_oslash_";
+		ISOLATIN_ENTITIES[249]="_ugrave_";
+		ISOLATIN_ENTITIES[250]="_uacute_";
+		ISOLATIN_ENTITIES[251]="_ucirc_";
+		ISOLATIN_ENTITIES[252]="_uuml_";
+		ISOLATIN_ENTITIES[253]="_yacute_";
+		ISOLATIN_ENTITIES[254]="_thorn_";
+		ISOLATIN_ENTITIES[255]="_yuml_";
+	}
+	
+	/**
+	 * replaces entities in string by ISOLatin mnemonics
+	 * e.g. replaces &#177; by _plusmn_
+	 * sometimes find strings of form &#194;&#177; which actually mean &#177;
+	 * the leading string ent should be of form &#194;&#, etc.
+	 * &# will do simple entities
+	 * @param s to be edited
+	 * @param ent leading string before numeric
+	 * @param lo lowest index allowed
+	 * @param hi highest index allowed
+	 * @param chars list of characters
+	 * @return edited string
+	 * @throws RuntimeException
+	 */
+	private static String replaceNumericEntityByMnemonic(
+			String s, String ent, int lo, int hi, String[] chars) throws RuntimeException {
+		if (ent == null || !ent.endsWith(S_AMP+S_HASH)) {
+			throw new RuntimeException("bad entity: "+ent);
+		} 
+		int idx = s.indexOf(ent);
+		if (idx != -1) {
+			String sub = "";
+			while (true) {
+				idx = s.indexOf(ent);
+				if (idx == -1) {
+					break;
+				}
+				String ss = s.substring(idx+ent.length());
+				int ii = ss.indexOf(S_SEMICOLON);
+				if (ii == -1) {
+					throw new RuntimeException("Bad entity after ("+ent+"): "+s);
+				}
+				String alpha = "_unk_";
+				String sss = ss.substring(0, ii);
+				try {
+					int ia = Integer.parseInt(sss);
+					// ascii
+					if (ia >= 32 && ia <= 127) {
+						alpha = S_EMPTY+(char)ia;
+					} else if (ia < lo || ia > hi) {
+						alpha = S_UNDER+"ent"+ia+S_UNDER;
+					} else {
+						alpha = S_UNDER+chars[ia]+S_UNDER;
+					}
+				} catch (NumberFormatException e) {
+					throw new RuntimeException("Bad numeric entity: "+sss);
+				}
+				s = s.replace(ent+sss+S_SEMICOLON, alpha);
+			}
+		}
+		return s;
+	}
+
+	/**
+	 * @param s string to be edited
+	 * @param ent leading entity 
+	 * @return edited string
+	 */
+	public static String replaceNumericEntityByISOLatinString(String s, String ent) {
+		return replaceNumericEntityByMnemonic(s, ent, 160, 255, ISOLATIN_ENTITIES);
+	}
+
+	/** greek entities */
+	public final static String[] GREEK_ENTITIES = new String[200];
+	static {
+		GREEK_ENTITIES[145] = "Alpha";
+		GREEK_ENTITIES[146] = "Beta";
+		GREEK_ENTITIES[147] = "Gamma";
+		GREEK_ENTITIES[148] = "Delta";
+		GREEK_ENTITIES[149] = "Epsilon";
+		GREEK_ENTITIES[150] = "Zeta";
+		GREEK_ENTITIES[151] = "Eta";
+		GREEK_ENTITIES[152] = "Theta";
+		GREEK_ENTITIES[153] = "Iota";
+		GREEK_ENTITIES[154] = "Kappa";
+		GREEK_ENTITIES[155] = "Lambda";
+		GREEK_ENTITIES[156] = "Mu";
+		GREEK_ENTITIES[157] = "Nu";
+		GREEK_ENTITIES[158] = "Omicron";
+		GREEK_ENTITIES[159] = "Pi";
+		GREEK_ENTITIES[160] = "Rho";
+		GREEK_ENTITIES[161] = "Sigma";
+		GREEK_ENTITIES[162] = "Tau";
+		GREEK_ENTITIES[163] = "Upsilon";
+		GREEK_ENTITIES[164] = "Phi";
+		GREEK_ENTITIES[165] = "Phi";
+		GREEK_ENTITIES[166] = "Psi";
+		GREEK_ENTITIES[167] = "Omega";
+		
+		GREEK_ENTITIES[177] = "alpha";
+		GREEK_ENTITIES[178] = "beta";
+		GREEK_ENTITIES[179] = "gamma";
+		GREEK_ENTITIES[180] = "delta";
+		GREEK_ENTITIES[181] = "epsilon";
+		GREEK_ENTITIES[182] = "zeta";
+		GREEK_ENTITIES[183] = "eta";
+		GREEK_ENTITIES[184] = "theta";
+		GREEK_ENTITIES[185] = "iota";
+		GREEK_ENTITIES[186] = "kappa";
+		GREEK_ENTITIES[187] = "lambda";
+		GREEK_ENTITIES[188] = "mu";
+		GREEK_ENTITIES[189] = "nu";
+		GREEK_ENTITIES[190] = "omicron";
+		GREEK_ENTITIES[191] = "pi";
+		GREEK_ENTITIES[192] = "rho";
+		GREEK_ENTITIES[193] = "sigma";
+		GREEK_ENTITIES[194] = "tau";
+		GREEK_ENTITIES[195] = "upsilon";
+		GREEK_ENTITIES[196] = "phi";
+		GREEK_ENTITIES[197] = "chi";
+		GREEK_ENTITIES[198] = "psi";
+		GREEK_ENTITIES[199] = "omega";
+	};
+	
+	/** UPPER_GREEK entities */
+	public final static String[] UPPER_GREEK_ENTITIES = new String[968];
+	static {
+		UPPER_GREEK_ENTITIES[912] = "Alpha";
+		UPPER_GREEK_ENTITIES[914] = "Beta";
+		UPPER_GREEK_ENTITIES[915] = "Gamma";
+		UPPER_GREEK_ENTITIES[916] = "Delta";
+		UPPER_GREEK_ENTITIES[917] = "Epsilon";
+		UPPER_GREEK_ENTITIES[918] = "Zeta";
+		UPPER_GREEK_ENTITIES[919] = "Eta";
+		UPPER_GREEK_ENTITIES[920] = "Theta";
+		UPPER_GREEK_ENTITIES[921] = "Iota";
+		UPPER_GREEK_ENTITIES[922] = "Kappa";
+		UPPER_GREEK_ENTITIES[923] = "Lambda";
+		UPPER_GREEK_ENTITIES[924] = "Mu";
+		UPPER_GREEK_ENTITIES[925] = "Nu";
+		UPPER_GREEK_ENTITIES[926] = "Omicron";
+		UPPER_GREEK_ENTITIES[927] = "Pi";
+		UPPER_GREEK_ENTITIES[928] = "Rho";
+		UPPER_GREEK_ENTITIES[929] = "Sigma";
+		UPPER_GREEK_ENTITIES[930] = "Tau";
+		UPPER_GREEK_ENTITIES[931] = "Upsilon";
+		UPPER_GREEK_ENTITIES[932] = "Phi";
+		UPPER_GREEK_ENTITIES[933] = "Phi";
+		UPPER_GREEK_ENTITIES[934] = "Psi";
+		UPPER_GREEK_ENTITIES[935] = "Omega";
+		
+		UPPER_GREEK_ENTITIES[945] = "alpha";
+		UPPER_GREEK_ENTITIES[946] = "beta";
+		UPPER_GREEK_ENTITIES[947] = "gamma";
+		UPPER_GREEK_ENTITIES[948] = "delta";
+		UPPER_GREEK_ENTITIES[949] = "epsilon";
+		UPPER_GREEK_ENTITIES[950] = "zeta";
+		UPPER_GREEK_ENTITIES[951] = "eta";
+		UPPER_GREEK_ENTITIES[952] = "theta";
+		UPPER_GREEK_ENTITIES[953] = "iota";
+		UPPER_GREEK_ENTITIES[954] = "kappa";
+		UPPER_GREEK_ENTITIES[955] = "lambda";
+		UPPER_GREEK_ENTITIES[956] = "mu";
+		UPPER_GREEK_ENTITIES[957] = "nu";
+		UPPER_GREEK_ENTITIES[958] = "omicron";
+		UPPER_GREEK_ENTITIES[959] = "pi";
+		UPPER_GREEK_ENTITIES[960] = "rho";
+		UPPER_GREEK_ENTITIES[961] = "sigma";
+		UPPER_GREEK_ENTITIES[962] = "tau";
+		UPPER_GREEK_ENTITIES[963] = "upsilon";
+		UPPER_GREEK_ENTITIES[964] = "phi";
+		UPPER_GREEK_ENTITIES[965] = "chi";
+		UPPER_GREEK_ENTITIES[966] = "psi";
+		UPPER_GREEK_ENTITIES[967] = "omega";
+	};
+	/**
+	 * @param s string to be edited
+	 * @param ent leading entity 
+	 * @return edited string
+	 */
+	public static String replaceNumericEntityByGreekMnemonics(String s, String ent) {
+		return replaceNumericEntityByMnemonic(s, ent, 145, 199, GREEK_ENTITIES);
+	}
 
 	/**
 	 * substitute certain DOS-compatible diacriticals by the Unicode value. Not

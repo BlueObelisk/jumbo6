@@ -370,9 +370,9 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
                 + "  </molecule>"
                 + "</cml>");
         cmlCrystMol = (CMLMolecule) CMLUtil.getQueryNodes(
-                cmlCryst, ".//"+CMLMolecule.NS, X_CML).get(0);
+                cmlCryst, ".//"+CMLMolecule.NS, CML_XPATH).get(0);
         cmlCrystCryst = (CMLCrystal) CMLUtil.getQueryNodes(
-                cmlCryst, ".//"+CMLCrystal.NS, X_CML).get(0);
+                cmlCryst, ".//"+CMLCrystal.NS, CML_XPATH).get(0);
         
     }
 

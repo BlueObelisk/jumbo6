@@ -49,6 +49,8 @@ public class PolymerTool extends AbstractTool {
      * 
      */
     public enum Convention {
+    	/** signifies a branch */
+    	BRANCH("branch"),
         /** concise formula string - obsolete.*/
         PML_CONCISE(C_A+"PML-concise"),
         /** basic XML formula.*/
@@ -62,13 +64,13 @@ public class PolymerTool extends AbstractTool {
         /** inline atom obsolete.*/
         PML_INLINE_ATOM(C_A+"PML-inline-atom"),
         /** default endpoint.*/
-        PML_DEFAULT_FINAL(PML_COMPLETE.value),
+        PML_DEFAULT_FINAL(PML_COMPLETE.v),
         /** processed (nothing further to do) Normally Markush.*/
         PML_PROCESSED(C_A+"PML-processed"),
         ;
-        String value;
+        String v;
         private Convention(String v) {
-            this.value = v;
+            this.v = v;
         }
     }
     
@@ -190,7 +192,7 @@ public class PolymerTool extends AbstractTool {
         if (moleculeList != null) {
             System.out.println("==========MOLLIST=========");
             List<Node> nodes = CMLUtil.getQueryNodes(
-                    moleculeList, CMLMolecule.NS+"[@countExpression]", X_CML);
+                    moleculeList, CMLMolecule.NS+"[@countExpression]", CML_XPATH);
             if (nodes.size() == 1) {
                 CMLMolecule molecule0 = (CMLMolecule) nodes.get(0);
                 CountExpressionAttribute.generateAndInsertClones(molecule0);
@@ -215,17 +217,17 @@ public class PolymerTool extends AbstractTool {
             System.out.println("=========="+convention+"=========");
             if (false) {
                 //
-            } else if (convention.equals(Convention.PML_INLINE_ATOM.value)) {
+            } else if (convention.equals(Convention.PML_INLINE_ATOM.v)) {
                 processInlineAtom();
-            } else if (convention.equals(Convention.PML_CONCISE.value)) {
+            } else if (convention.equals(Convention.PML_CONCISE.v)) {
                 processConcise();
-            } else if (convention.equals(Convention.PML_BASIC.value)) {
+            } else if (convention.equals(Convention.PML_BASIC.v)) {
                 processBasic();
-            } else if (convention.equals(Convention.PML_INTERMEDIATE.value)) {
+            } else if (convention.equals(Convention.PML_INTERMEDIATE.v)) {
                 processIntermediate();
-            } else if (convention.equals(Convention.PML_EXPLICIT.value)) {
+            } else if (convention.equals(Convention.PML_EXPLICIT.v)) {
                 processExplicit();
-            } else if (convention.equals(Convention.PML_COMPLETE.value)) {
+            } else if (convention.equals(Convention.PML_COMPLETE.v)) {
                 System.out.println("**********COMPLETE cannot be futher processed now ********");
 //                processZMatrix();
             }
@@ -289,7 +291,7 @@ public class PolymerTool extends AbstractTool {
             formula = formula.replace(S_SPACE, S_EMPTY);
             InlineMolecule inlineMolecule = new InlineMolecule(formula);
             CMLMolecule cmlMolecule = inlineMolecule.getCmlMolecule();
-            molecule.setConvention(Convention.PML_COMPLETE.value);
+            molecule.setConvention(Convention.PML_COMPLETE.v);
             molecule.removeAttribute("formula");
         } else {
             throw new CMLRuntimeException("must have molecule");
@@ -346,7 +348,7 @@ formula='
                 FragmentSequence fragmentSequence = new FragmentSequence(formula);
                 CMLMoleculeList topMoleculeList = fragmentSequence.getCMLMoleculeList();
                 molecule.appendChild(topMoleculeList);
-                molecule.setConvention(Convention.PML_BASIC.value);
+                molecule.setConvention(Convention.PML_BASIC.v);
                 molecule.removeAttribute("formula");
             }
         } else {
@@ -425,12 +427,12 @@ formula='
 // probably obsolete        
         //should consist of molecule (join, molecule)*
         // give join default bond orders
-        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLJoin.NS+"[not(@order)]", X_CML);
+        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLJoin.NS+"[not(@order)]", CML_XPATH);
         for (Node node : nodes) {
             ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
         }
         // expand random torsions
-        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//"+CMLTorsion.NS+"[@min and @max]", X_CML);
+        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//"+CMLTorsion.NS+"[@min and @max]", CML_XPATH);
         for (Node node : torsions) {
             CMLTorsion torsion = (CMLTorsion) node;
             String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
@@ -448,7 +450,7 @@ formula='
         CMLElements<CMLMolecule> subMoleculeList = molecule.getMoleculeElements();
         for (int i = 0; i < subMoleculeList.size(); i++) {
         }
-        molecule.setConvention(Convention.PML_EXPLICIT.value);
+        molecule.setConvention(Convention.PML_EXPLICIT.v);
     }
     
     /** convenience method to generate detailed molecules.
@@ -481,8 +483,8 @@ formula='
                 String moleculeConvention = molecule.getConvention();
                 if (moleculeConvention == null || 
                     moleculeConvention.equals(S_EMPTY) || 
-                    moleculeConvention.equals(convention.value) ||
-                    moleculeConvention.equals(Convention.PML_COMPLETE.value)) {
+                    moleculeConvention.equals(convention.v) ||
+                    moleculeConvention.equals(Convention.PML_COMPLETE.v)) {
                     break;
                 }
                 try {
@@ -504,7 +506,7 @@ formula='
         CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
         Transform3 fullTransform = new Transform3();
         for (CMLMolecule molecule : molecules) {
-            List<Node> transforms = CMLUtil.getQueryNodes(molecule, CMLTransform3.NS, X_CML);
+            List<Node> transforms = CMLUtil.getQueryNodes(molecule, CMLTransform3.NS, CML_XPATH);
             if (transforms.size() == 1) {   
                 molecule.transformCartesians(fullTransform);
                 CMLTransform3 transform = (CMLTransform3) transforms.get(0);
@@ -534,7 +536,7 @@ formula='
             Convention targetLevel, boolean debug) throws Exception {
     
         Document doc = new CMLBuilder().build(new File(infile));
-        Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, X_CML);
+        Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, CML_XPATH);
         if (nodes.size() == 0) {
             throw new CMLException("No CML Molecule(List) in file: "+infile);
         }
@@ -545,7 +547,7 @@ formula='
         this.setElement(molecule);
         
         this.setMoleculeCatalog(new Catalog(new File(fragments)));
-        System.out.println("Processing to level: "+targetLevel.value);
+        System.out.println("Processing to level: "+targetLevel.v);
         this.processConventionExhaustively(targetLevel);
 
         write(outfileName);
@@ -576,7 +578,7 @@ formula='
                 outfile.createNewFile();
             }
             FileOutputStream fos = new FileOutputStream(outfileName);
-            System.out.println("Writing (level = "+targetLevel.value+"): "+outfileName);
+            System.out.println("Writing (level = "+targetLevel.v+"): "+outfileName);
             ((molecule != null) ? molecule : moleculeList).serialize(fos, 1);
         }
     }

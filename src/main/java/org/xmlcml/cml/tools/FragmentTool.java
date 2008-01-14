@@ -38,7 +38,6 @@ import org.xmlcml.cml.element.CMLJoin.MoleculePointer;
 import org.xmlcml.cml.element.CMLProperty.Type;
 import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.cml.interfacex.IndexableByIdList;
-import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -117,7 +116,7 @@ public class FragmentTool extends AbstractTool {
      * @param molecule
      */
     public void setMolecule(CMLMolecule molecule) {
-    	List<Node> molecules = CMLUtil.getQueryNodes(rootFragment, CMLMolecule.NS, X_CML);
+    	List<Node> molecules = CMLUtil.getQueryNodes(rootFragment, CMLMolecule.NS, CML_XPATH);
     	if (molecules.size() == 0) {
     		molecule.detach();
     		rootFragment.insertChild(molecule, 0);
@@ -134,7 +133,7 @@ public class FragmentTool extends AbstractTool {
     	CMLMolecule molecule = null;
     	if (rootFragment != null) {
         	List<Node> molecules = CMLUtil.getQueryNodes(
-        			rootFragment, CMLMolecule.NS, X_CML);
+        			rootFragment, CMLMolecule.NS, CML_XPATH);
         	molecule = (molecules.size() == 0) ? null : (CMLMolecule) molecules.get(0); 
     	}
     	return molecule;
@@ -187,7 +186,7 @@ public class FragmentTool extends AbstractTool {
      */
     public void substituteFragmentRefsRecursively(int limit) {
     	int count = 0;
-    	List<Node> fragmentLists = CMLUtil.getQueryNodes(rootFragment, CMLFragmentList.NS, X_CML);
+    	List<Node> fragmentLists = CMLUtil.getQueryNodes(rootFragment, CMLFragmentList.NS, CML_XPATH);
     	CMLFragmentList fragmentList = (fragmentLists.size() == 0) ? null : (CMLFragmentList) fragmentLists.get(0);
     	if (fragmentList != null) {
 	    	while (/*fragmentList != null && */
@@ -205,7 +204,7 @@ public class FragmentTool extends AbstractTool {
      */
     private void substituteHangingFragmentsByDummy() {
     	List<Node> unresolvedNodes = CMLUtil.getQueryNodes(
-			rootFragment, CMLFragment.NS+"[@ref]", X_CML);
+			rootFragment, CMLFragment.NS+"[@ref]", CML_XPATH);
     	for (Node unresolvedFragment : unresolvedNodes) {
     		CMLMolecule dummyMoleculeRef = FragmentTool.createMoleculeRef("g:dummy2");
     		rootFragment.replaceChild(unresolvedFragment, dummyMoleculeRef);
@@ -281,7 +280,7 @@ public class FragmentTool extends AbstractTool {
     	List<Node> fragmentsWithRefs = CMLUtil.getQueryNodes(rootFragment, 
 			"//"+
 			CMLFragment.NS+"[@ref and not(../*[@role='markushMixture'])" +
-					" and not(ancestor::"+CMLFragmentList.NS+")]", X_CML);
+					" and not(ancestor::"+CMLFragmentList.NS+")]", CML_XPATH);
     	for (Node node : fragmentsWithRefs) {
     		CMLFragment refFragment = (CMLFragment) node;
     		String ref = refFragment.getRef();
@@ -292,7 +291,7 @@ public class FragmentTool extends AbstractTool {
     		}
     		// does the referenced fragment describe a mixture?
     		List<Node> flNodes = CMLUtil.getQueryNodes(refFragment0, 
-    				CMLFragmentList.NS+"[@role='markushMixture']", X_CML);
+    				CMLFragmentList.NS+"[@role='markushMixture']", CML_XPATH);
     		// if so, get random fragment
     		if (flNodes.size() == 1) {
     			CMLFragmentList randomFragmentList = (CMLFragmentList) flNodes.get(0);
@@ -350,7 +349,7 @@ public class FragmentTool extends AbstractTool {
      */
     public void pruneRtoH(){
     	List<Node> ratoms= CMLUtil.getQueryNodes(
-				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", X_CML);
+				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", CML_XPATH);
 		if (ratoms.size() == 0) {
 			return;
 		}
@@ -369,7 +368,7 @@ public class FragmentTool extends AbstractTool {
      */
     public void ElementtoR(String element){
     	List<Node> ratoms= CMLUtil.getQueryNodes(
-				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", X_CML);
+				rootFragment, ".//"+CMLAtom.NS+"//@"+"elementType", CML_XPATH);
 		if (ratoms.size() == 0) {
 			return;
 		}
@@ -408,7 +407,7 @@ class CountExpander implements CMLConstants {
 	void process() {
 		while (true) {
 			List<Node> expandableFragments = CMLUtil.getQueryNodes(
-					topFragment, ".//"+CMLFragment.NS+"[@"+CountExpressionAttribute.NAME+"]", X_CML);
+					topFragment, ".//"+CMLFragment.NS+"[@"+CountExpressionAttribute.NAME+"]", CML_XPATH);
 			if (expandableFragments.size() == 0) {
 				break;
 			}
@@ -457,8 +456,8 @@ class CountExpander implements CMLConstants {
     void expandCountExpression(CMLFragment fragment) {
     	
     	int count = calculateCountExpression(fragment);
-		List<Node> joins = CMLUtil.getQueryNodes(fragment, CMLJoin.NS, X_CML);
-		List<Node> fragments = CMLUtil.getQueryNodes(fragment, CMLFragment.NS, X_CML);
+		List<Node> joins = CMLUtil.getQueryNodes(fragment, CMLJoin.NS, CML_XPATH);
+		List<Node> fragments = CMLUtil.getQueryNodes(fragment, CMLFragment.NS, CML_XPATH);
 		if (joins.size() != 1 || fragments.size() != 1) {
 			throw new CMLRuntimeException("wrong format; requires exactly 1 join and 1 fragment");
 		}
@@ -522,21 +521,21 @@ class BasicProcessor implements CMLConstants {
     	CMLElement generatedElement = null;
         CMLUtil.removeWhitespaceNodes(fragment);
         List<Node> markushs = CMLUtil.getQueryNodes(
-        		fragment, CMLFragmentList.NS+"[@role='markush']", X_CML);
+        		fragment, CMLFragmentList.NS+"[@role='markush']", CML_XPATH);
         if (markushs.size() != 0) {
         	if (markushs.size() > 1) {
         		throw new CMLRuntimeException("Can only process one Markush child");
         	}
         	CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
         	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
-	        fragment.setConvention(Convention.PML_PROCESSED.value);
+	        fragment.setConvention(PolymerTool.Convention.PML_PROCESSED.v);
         } else {
 	        fragmentTool.substituteFragmentRefsRecursively(100);
 	        new CountExpander(fragment).process();
 	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
 	        this.replaceFragmentsByChildMolecules();
 	        this.createAtomsRefs2OnJoins();
-	        fragment.setConvention(Convention.PML_INTERMEDIATE.value);
+	        fragment.setConvention(PolymerTool.Convention.PML_INTERMEDIATE.v);
         }
         return generatedElement;
     }
@@ -560,7 +559,7 @@ class BasicProcessor implements CMLConstants {
 
     	// referenceFragmentList
         List<Node> referenceFragmentLists = CMLUtil.getQueryNodes(
-        		fragment, CMLFragmentList.NS+"[not(@role='markush')]", X_CML);
+        		fragment, CMLFragmentList.NS+"[not(@role='markush')]", CML_XPATH);
         if (referenceFragmentLists.size() != 1) {
         	throw new CMLRuntimeException(
         		"Must have exactly one referenceFragmentList; was: "+referenceFragmentLists.size());
@@ -569,9 +568,9 @@ class BasicProcessor implements CMLConstants {
     	// should have 1 or more fragmentLists and one fragment
         List<Node> markushListsOrMixtures = CMLUtil.getQueryNodes(
         		expandableMarkush, CMLFragmentList.NS+
-        		    "[@role='markushList' or @role='markushMixture']", X_CML);
+        		    "[@role='markushList' or @role='markushMixture']", CML_XPATH);
         List<Node> markushTargets = CMLUtil.getQueryNodes(
-        		expandableMarkush, CMLFragment.NS+"[@role='markushTarget']", X_CML);
+        		expandableMarkush, CMLFragment.NS+"[@role='markushTarget']", CML_XPATH);
         // checks
         if (markushListsOrMixtures.size() == 0) {
         	throw new CMLRuntimeException("No markushLists or markushMixtures given");
@@ -697,12 +696,12 @@ class BasicProcessor implements CMLConstants {
     	// copy the fragment
     	CMLFragment newFragment = new CMLFragment(fragment);
         CMLFragmentList referenceFragmentList = (CMLFragmentList) CMLUtil.getQueryNodes(
-        		newFragment, CMLFragmentList.NS+"[not(@role='markush')]", X_CML).get(0);
+        		newFragment, CMLFragmentList.NS+"[not(@role='markush')]", CML_XPATH).get(0);
         CMLFragmentList markush = (CMLFragmentList) CMLUtil.getQueryNodes(
-        		newFragment, CMLFragmentList.NS+"[@role='markush']", X_CML).get(0);
+        		newFragment, CMLFragmentList.NS+"[@role='markush']", CML_XPATH).get(0);
         List<Node> markushGroupLists = CMLUtil.getQueryNodes(
         		markush, CMLFragmentList.NS+
-        		"[@role='markushList' or @role='markushMixture']", X_CML);
+        		"[@role='markushList' or @role='markushMixture']", CML_XPATH);
         for (Node node : markushGroupLists) {
         	node.detach();
         }
@@ -739,14 +738,14 @@ class BasicProcessor implements CMLConstants {
      */
     private void replaceFragmentsByChildMolecules() {
     	List<Node> childMols = CMLUtil.getQueryNodes(
-    			fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, X_CML);
+    			fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, CML_XPATH);
     	for (Node node : childMols) {
     		CMLFragment parent = (CMLFragment) node.getParent();
 			parent.replaceByChildren();
     	}
     	while (true) {
 	    	childMols = CMLUtil.getQueryNodes(
-    			fragment, ".//"+CMLJoin.NS+S_SLASH+CMLFragment.NS+S_SLASH+CMLMolecule.NS, X_CML);
+    			fragment, ".//"+CMLJoin.NS+S_SLASH+CMLFragment.NS+S_SLASH+CMLMolecule.NS, CML_XPATH);
 	    	if (childMols.size() == 0) {
 	    		break;
 	    	}
@@ -754,7 +753,7 @@ class BasicProcessor implements CMLConstants {
 			parent.replaceByChildren();
     	}
     	childMols = CMLUtil.getQueryNodes(
-			fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, X_CML);
+			fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, CML_XPATH);
     	for (Node node : childMols) {
     		CMLElement parent = (CMLElement) node.getParent();
     		if (parent instanceof CMLFragment) {
@@ -768,7 +767,7 @@ class BasicProcessor implements CMLConstants {
     
     private void createAtomsRefs2OnJoins() {
 
-    	List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS, X_CML);
+    	List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS, CML_XPATH);
     	for (Node node : joins) {
     		createAtomRefs2OnJoin((CMLJoin) node);
     	}
@@ -792,13 +791,13 @@ class BasicProcessor implements CMLConstants {
 
     private void joinParentAndChild(CMLJoin join) {
     	List<Node> nodes = CMLUtil.getQueryNodes(join, 
-    			"parent::"+CMLMolecule.NS+"[1]", X_CML);
+    			"parent::"+CMLMolecule.NS+"[1]", CML_XPATH);
     	if (nodes.size() == 0) {
     		throw new CMLRuntimeException("Cannot find parent for join");
     	}
     	CMLMolecule parentMolecule = (CMLMolecule) nodes.get(0);
     	
-    	nodes = CMLUtil.getQueryNodes(join, "descendant::"+CMLMolecule.NS+"[1]", X_CML);
+    	nodes = CMLUtil.getQueryNodes(join, "descendant::"+CMLMolecule.NS+"[1]", CML_XPATH);
     	if (nodes.size() == 0) {
     		throw new CMLRuntimeException("Cannot find child for join");
     	}
@@ -808,7 +807,7 @@ class BasicProcessor implements CMLConstants {
     
     private void joinPreviousAndNext(CMLJoin join) {
     	List<Node> nodes = CMLUtil.getQueryNodes(join, 
-			"preceding-sibling::"+CMLMolecule.NS+"[1]", X_CML);
+			"preceding-sibling::"+CMLMolecule.NS+"[1]", CML_XPATH);
     	if (nodes.size() == 0) {
     		((CMLElement) join.getParent()).debug("Cannot find join");
     		throw new CMLRuntimeException("Cannot find previous for join: "+join.getString());
@@ -816,7 +815,7 @@ class BasicProcessor implements CMLConstants {
     	CMLMolecule previousMolecule = (CMLMolecule) nodes.get(0);
     	
     	nodes = CMLUtil.getQueryNodes(join, 
-    			"following-sibling::*/descendant-or-self::"+CMLMolecule.NS+"[1]", X_CML);
+    			"following-sibling::*/descendant-or-self::"+CMLMolecule.NS+"[1]", CML_XPATH);
     	if (nodes.size() == 0) {
     		throw new CMLRuntimeException("Cannot find next for join");
     	}
@@ -855,7 +854,7 @@ class IntermediateProcessor implements CMLConstants {
 	}
 	
 	void process(Catalog catalog) {
-		List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS+"[not(@order)]", X_CML);
+		List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS+"[not(@order)]", CML_XPATH);
 		for (Node node : joins) {
 		    ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
 		}
@@ -864,11 +863,11 @@ class IntermediateProcessor implements CMLConstants {
 		dereferenceMolecules(catalog);
 		// this is not yet tested
 		dereferenceFragments(catalog);
-		fragment.setConvention(Convention.PML_EXPLICIT.value);
+		fragment.setConvention(PolymerTool.Convention.PML_EXPLICIT.v);
 	}
 
 	private void dereferenceMolecules(Catalog catalog) {
-		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLMolecule.NS+"[@ref]", X_CML);
+		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLMolecule.NS+"[@ref]", CML_XPATH);
 		for (Node node : mols) {
 		    CMLMolecule subMolecule = (CMLMolecule) node;
 		    CMLMolecule dereferencedMol = (CMLMolecule) 
@@ -903,7 +902,7 @@ class IntermediateProcessor implements CMLConstants {
 	* @param catalog
 	*/
 	private void dereferenceFragments(Catalog catalog) {
-		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLFragment.NS+"[@ref]", X_CML);
+		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLFragment.NS+"[@ref]", CML_XPATH);
 		for (Node node : mols) {
 		    CMLFragment subFragment = (CMLFragment) node;
 		    CMLFragment newFragment = (CMLFragment) 
@@ -930,7 +929,7 @@ class IntermediateProcessor implements CMLConstants {
 	*/
 	void substituteParameters() {
 		CMLMolecule molecule = FragmentTool.getOrCreateTool(fragment).getMolecule();
-		Nodes nodes = molecule.query(CMLArg.NS+"[@name]", X_CML);
+		Nodes nodes = molecule.query(CMLArg.NS+"[@name]", CML_XPATH);
 		for (int i = 0; i < nodes.size(); i++) {
 			CMLArg arg = (CMLArg) nodes.get(i);
 			String name = arg.getName();
@@ -987,7 +986,7 @@ class IntermediateProcessor implements CMLConstants {
 	}
 	
 	private void expandTorsionsWithMinMaxValues() {
-		List<Node> torsions = CMLUtil.getQueryNodes(fragment, ".//"+CMLTorsion.NS+"[@min and @max]", X_CML);
+		List<Node> torsions = CMLUtil.getQueryNodes(fragment, ".//"+CMLTorsion.NS+"[@min and @max]", CML_XPATH);
 		for (Node node : torsions) {
 		    CMLTorsion torsion = (CMLTorsion) node;
 		    String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
@@ -1019,7 +1018,7 @@ class ExplicitProcessor implements CMLConstants {
 //    	fragment.debug("RAW EXPLICIT");
         //should consist of molecule (join, molecule)*
         List<Node> moleculeAndJoinList = CMLUtil.getQueryNodes(
-            	fragment, CMLJoin.NS+X_OR+CMLMolecule.NS, X_CML);
+            	fragment, CMLJoin.NS+X_OR+CMLMolecule.NS, CML_XPATH);
         checkMoleculeAndJoinList(moleculeAndJoinList);
 //    	fragment.debug(" EXPLICIT 1");
         // immediate children
@@ -1030,7 +1029,7 @@ class ExplicitProcessor implements CMLConstants {
         processMoleculeAndJoin(moleculeAndJoinList);
  //   	fragment.debug("COMPLETE");
         processProperties();
-        fragment.setConvention(Convention.PML_COMPLETE.value);
+        fragment.setConvention(PolymerTool.Convention.PML_COMPLETE.v);
     }
     
     private void checkMoleculeAndJoinList(List<Node> moleculeAndJoinList) {
@@ -1063,7 +1062,7 @@ class ExplicitProcessor implements CMLConstants {
     private void processMolecule(CMLMolecule molecule, CMLJoin join) {
         adjustGeometry(molecule);
         CMLArg.removeArgs(molecule);
-        List<Node> joins = CMLUtil.getQueryNodes(molecule, CMLJoin.NS, X_CML);
+        List<Node> joins = CMLUtil.getQueryNodes(molecule, CMLJoin.NS, CML_XPATH);
         detachJoins(joins);
         if (join != null) {
 	        CMLAtomSet molAtomSet = molecule.getAtomSet();
@@ -1078,7 +1077,7 @@ class ExplicitProcessor implements CMLConstants {
 		for (Node node : joinList) {
 			CMLJoin join = (CMLJoin) node;
 	        List<Node> moleculeAndJoinList = CMLUtil.getQueryNodes(
-	        	join, CMLJoin.NS+X_OR+CMLMolecule.NS, X_CML);
+	        	join, CMLJoin.NS+X_OR+CMLMolecule.NS, CML_XPATH);
 	        moleculeAndJoinList.add(0, join);
 	        processMoleculeAndJoin(moleculeAndJoinList);
 		}
@@ -1112,11 +1111,11 @@ class ExplicitProcessor implements CMLConstants {
 //		<propertyList dictRef="pml:vanKrevelen">
     	CMLMolecule molecule = fragment.getMoleculeElements().get(0);
     	// group scalar into property
-    	List<Node> scalarNodes = CMLUtil.getQueryNodes(molecule, CMLScalar.NS, X_CML);
-    	List<Node> propertyListNodes = CMLUtil.getQueryNodes(molecule, CMLPropertyList.NS, X_CML);
+    	List<Node> scalarNodes = CMLUtil.getQueryNodes(molecule, CMLScalar.NS, CML_XPATH);
+    	List<Node> propertyListNodes = CMLUtil.getQueryNodes(molecule, CMLPropertyList.NS, CML_XPATH);
     	for (Node node : scalarNodes) {
     		CMLScalar scalar = (CMLScalar) node;
-    		List<Node> fsList = CMLUtil.getQueryNodes(scalar, "following-sibling::*", X_CML);
+    		List<Node> fsList = CMLUtil.getQueryNodes(scalar, "following-sibling::*", CML_XPATH);
     		if (fsList.size() == 0) {
     			throw new CMLRuntimeException("Expected following-sibling");
     		}
@@ -1129,7 +1128,7 @@ class ExplicitProcessor implements CMLConstants {
     	}
     	for (Node node : propertyListNodes) {
     		CMLPropertyList propertyList = (CMLPropertyList) node;
-    		List<Node> psList = CMLUtil.getQueryNodes(propertyList, "preceding-sibling::"+CMLProperty.NS, X_CML);
+    		List<Node> psList = CMLUtil.getQueryNodes(propertyList, "preceding-sibling::"+CMLProperty.NS, CML_XPATH);
     		if (psList.size() == 0) {
     			System.out.println("Expected preceding-sibling");
     		}
@@ -1159,7 +1158,7 @@ class ExplicitProcessor implements CMLConstants {
     	// VERY crude - go through all fragments and add all similar ones:
 //    	CMLElement parent = fragment;
     	CMLElement parent = molecule;
-    	List<Node> dictRefs = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS+S_SLASH+CMLProperty.NS+"/@dictRef", X_CML);
+    	List<Node> dictRefs = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS+S_SLASH+CMLProperty.NS+"/@dictRef", CML_XPATH);
     	Set<String> propertySet = new HashSet<String>();
     	for (Node node : dictRefs) {
     		propertySet.add(node.getValue());
@@ -1173,7 +1172,7 @@ class ExplicitProcessor implements CMLConstants {
         	String dictRef = S_EMPTY;
         	String title = S_EMPTY;
         	List<Node> nodes = CMLUtil.getQueryNodes(parent, 
-        			CMLPropertyList.NS+S_SLASH+CMLProperty.NS+"[@dictRef='"+propertyS+"']/"+CMLScalar.NS, X_CML);
+        			CMLPropertyList.NS+S_SLASH+CMLProperty.NS+"[@dictRef='"+propertyS+"']/"+CMLScalar.NS, CML_XPATH);
         	for (Node node : nodes) {
         		CMLScalar scalar = (CMLScalar) node;
         		units = scalar.getUnits();
@@ -1212,7 +1211,7 @@ class ExplicitProcessor implements CMLConstants {
         	scalar.setValue(sum);
         	newPropertyList.add(property);
     	}
-    	propertyListNodes = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS, X_CML);
+    	propertyListNodes = CMLUtil.getQueryNodes(parent, CMLPropertyList.NS, CML_XPATH);
     	for (Node node : propertyListNodes) {
     		node.detach();
     	}

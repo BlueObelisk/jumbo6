@@ -16,7 +16,6 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.tools.PolymerTool.Convention;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -180,7 +179,7 @@ public class PolymerToolTest extends AbstractToolTest {
         CMLElement root = (CMLElement) CMLUtil.readElementFromResource(file.toString());
         
         polymerTool.setElement(root);
-        polymerTool.setTargetLevel(Convention.PML_COMPLETE);
+        polymerTool.setTargetLevel(PolymerTool.Convention.PML_COMPLETE);
         polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
         polymerTool.setDebug(true);
         polymerTool.processConventionExhaustively();

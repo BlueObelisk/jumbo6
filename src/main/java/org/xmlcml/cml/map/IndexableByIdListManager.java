@@ -78,7 +78,7 @@ public class IndexableByIdListManager implements CMLConstants {
         lowerCaseMap.clear();
         indexableLocalName = indexableList.getIndexableLocalName();
         List<Node> indexables = CMLUtil.getQueryNodes((Node) indexableList, C_E
-                + indexableLocalName, X_CML);
+                + indexableLocalName, CML_XPATH);
         for (Node node : indexables) {
             indexableList.addIndexable((Indexable) node);
         }

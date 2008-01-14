@@ -98,7 +98,7 @@ public class CMLPeakList extends AbstractPeakList {
      * @return list of peak children (not peakGroups or descendants)
      */
     public List<CMLPeak> getPeakChildren() {
-    	Nodes nodes = this.query("./cml:peak", X_CML);
+    	Nodes nodes = this.query("./cml:peak", CML_XPATH);
     	List<CMLPeak> peaks = new ArrayList<CMLPeak>();
     	for (int i = 0; i < nodes.size(); i++) {
     		peaks.add((CMLPeak) nodes.get(i));
@@ -110,7 +110,7 @@ public class CMLPeakList extends AbstractPeakList {
      * @return list of peak descendants (not peakGroups)
      */
     public List<CMLPeak> getPeakDescendants() {
-    	Nodes nodes = this.query(".//cml:peak", X_CML);
+    	Nodes nodes = this.query(".//cml:peak", CML_XPATH);
     	List<CMLPeak> peaks = new ArrayList<CMLPeak>();
     	for (int i = 0; i < nodes.size(); i++) {
     		peaks.add((CMLPeak) nodes.get(i));
@@ -122,7 +122,7 @@ public class CMLPeakList extends AbstractPeakList {
      * @return list of peak or peakGroup children (not descendants)
      */
     public List<PeakOrGroup> getPeakOrGroupChildren() {
-    	Nodes nodes = this.query("./cml:peak | ./cml:peakGroup", X_CML);
+    	Nodes nodes = this.query("./cml:peak | ./cml:peakGroup", CML_XPATH);
     	List<PeakOrGroup> peaks = new ArrayList<PeakOrGroup>();
     	for (int i = 0; i < nodes.size(); i++) {
     		peaks.add((PeakOrGroup) nodes.get(i));
@@ -137,7 +137,7 @@ public class CMLPeakList extends AbstractPeakList {
     public CMLPeak getPeakChildById(String id) {
     	CMLPeak peak = null;
     	if (id != null) {
-	    	Nodes nodes = this.query("./cml:peak[@id='"+id+"']", X_CML);
+	    	Nodes nodes = this.query("./cml:peak[@id='"+id+"']", CML_XPATH);
 	    	if (nodes.size() > 1) {
 	    		throw new CMLRuntimeException("Duplicate peak: "+id);
 	    	} else if (nodes.size() == 1) {
@@ -154,7 +154,7 @@ public class CMLPeakList extends AbstractPeakList {
     public CMLPeak getPeakDescendantById(String id) {
     	CMLPeak peak = null;
     	if (id != null) {
-	    	Nodes nodes = this.query(".//cml:peak[@id='"+id+"']", X_CML);
+	    	Nodes nodes = this.query(".//cml:peak[@id='"+id+"']", CML_XPATH);
 	    	if (nodes.size() > 1) {
 	    		throw new CMLRuntimeException("Dupicate peak: "+id);
 	    	} else if (nodes.size() == 1) {

@@ -416,9 +416,9 @@ public class ReactionToolTest extends ReactionAllTestBase {
         // molecules are listed in a moleculeList and accessed by molecule@ref
         // first check the molecules are OK
         CMLMoleculeList moleculeList = (CMLMoleculeList) 
-            doc.query(".//cml:moleculeList", X_CML).get(0);
+            doc.query(".//cml:moleculeList", CML_XPATH).get(0);
         CMLReaction reaction1 = (CMLReaction) 
-            doc.query(".//cml:reaction", X_CML).get(0);
+            doc.query(".//cml:reaction", CML_XPATH).get(0);
         // get MWt for each molecule
         CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
         Assert.assertEquals("molecules", 6, molecules.size());
@@ -463,18 +463,18 @@ public class ReactionToolTest extends ReactionAllTestBase {
         	String idRef = moleculeRef.getRefAttribute().getValue();
         	// XPath location of molecule in list
         	Nodes moleculeNodes = doc.query(
-        			".//cml:moleculeList/cml:molecule[@id='"+idRef+"']", X_CML);
+        			".//cml:moleculeList/cml:molecule[@id='"+idRef+"']", CML_XPATH);
         	Assert.assertEquals("moleculeRefs ", 1, moleculeNodes.size());
         	// get referenced molecule
         	CMLMolecule molecule = (CMLMolecule) moleculeNodes.get(0);
         	// get mass in grams
-        	Nodes massAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.GRAM+"']", X_CML);
+        	Nodes massAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.GRAM+"']", CML_XPATH);
         	CMLAmount massAmount = (massAmounts.size() == 0) ? null : (CMLAmount) massAmounts.get(0);
         	// or volume in mL
-        	Nodes volAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.ML+"']", X_CML);
+        	Nodes volAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.ML+"']", CML_XPATH);
         	CMLAmount volAmount = (volAmounts.size() == 0) ? null : (CMLAmount) volAmounts.get(0);
         	// and get the molar amount (mmol)
-        	Nodes molarAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.MMOL+"']", X_CML);
+        	Nodes molarAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.MMOL+"']", CML_XPATH);
         	CMLAmount molarAmount = (molarAmounts.size() == 0) ? null : (CMLAmount) molarAmounts.get(0);
         	// calculate molarAmount from either mass or volume and check it agrees with molarAmount
         	CMLAmount calcMolarAmount = null;
@@ -509,20 +509,20 @@ public class ReactionToolTest extends ReactionAllTestBase {
         	String idRef = moleculeRef.getRefAttribute().getValue();
         	// XPath location of molecule in list
         	Nodes moleculeNodes = doc.query(
-        			".//cml:moleculeList/cml:molecule[@id='"+idRef+"']", X_CML);
+        			".//cml:moleculeList/cml:molecule[@id='"+idRef+"']", CML_XPATH);
         	if (moleculeNodes.size() == 0) {
         		throw new CMLRuntimeException("Cannot find molecule ref: "+idRef);
         	}
         	// get referenced molecule
         	CMLMolecule molecule = (CMLMolecule) moleculeNodes.get(0);
         	// get mass in grams
-        	Nodes massAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.GRAM+"']", X_CML);
+        	Nodes massAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.GRAM+"']", CML_XPATH);
         	CMLAmount massAmount = (massAmounts.size() == 0) ? null : (CMLAmount) massAmounts.get(0);
         	// or volume in mL
-        	Nodes volAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.ML+"']", X_CML);
+        	Nodes volAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.ML+"']", CML_XPATH);
         	CMLAmount volAmount = (volAmounts.size() == 0) ? null : (CMLAmount) volAmounts.get(0);
         	// and get the molar amount (mmol)
-        	Nodes molarAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.MMOL+"']", X_CML);
+        	Nodes molarAmounts = ((CMLElement)reactant).query(".//cml:amount[@units='"+Units.MMOL+"']", CML_XPATH);
         	CMLAmount molarAmount = (molarAmounts.size() == 0) ? null : (CMLAmount) molarAmounts.get(0);
         	// calculate molarAmount from either mass or volume and check it agrees with molarAmount
         	CMLAmount calcMolarAmount = null;
@@ -556,9 +556,9 @@ public class ReactionToolTest extends ReactionAllTestBase {
 	        // molecules are listed in a moleculeList and accessed by molecule@ref
 	        // first check the molecules are OK
 	        CMLMoleculeList moleculeList = (CMLMoleculeList) 
-	            doc.query(".//cml:moleculeList", X_CML).get(0);
+	            doc.query(".//cml:moleculeList", CML_XPATH).get(0);
 	        CMLReaction reaction1 = (CMLReaction) 
-	            doc.query(".//cml:reaction", X_CML).get(0);
+	            doc.query(".//cml:reaction", CML_XPATH).get(0);
 	        // get MWt for each molecule
 	        CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
 	        //  now check their MWts

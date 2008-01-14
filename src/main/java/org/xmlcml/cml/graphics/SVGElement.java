@@ -336,7 +336,7 @@ public abstract class SVGElement extends GraphicsElement {
 	 */
 	public double getFontSize() {
 		double fontSize = 40.0;
-		if (this.getAttribute("font-size") != null) {
+		if (this.getAttributeValue("font-size") != null) {
 			String fontSizeS = this.getAttributeValue("font-size");
 			try {
 				fontSize = new Double(fontSizeS).doubleValue();

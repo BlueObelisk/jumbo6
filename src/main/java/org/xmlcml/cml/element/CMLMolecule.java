@@ -149,11 +149,7 @@ public class CMLMolecule
 	 */
 	public CMLMolecule() {
 		super();
-//    	System.out.println("MOLECULE: ");
-//    	System.out.flush();
 		init();
-//    	System.out.println("MOLECULE1: ");
-//    	System.out.flush();
 	}
 
 	/** recommended creator.
@@ -400,6 +396,22 @@ public class CMLMolecule
 		}
 		return deletedBond;
 	}
+
+	/** delete bond.
+	 * convenience method. Finds bond and if not null uses deleteBond
+	 *
+	 * @param atom1
+	 * @param atom2
+	 * @return bond deleted of null
+	 */
+	public CMLBond deleteBond(CMLAtom atom1, CMLAtom atom2) {
+		CMLBond deletedBond = this.getBond(atom1, atom2);
+		if (deletedBond != null) {
+			deleteBond(deletedBond);
+		}
+		return deletedBond;
+	}
+
 
 	/**
 	 * append a molecule to this one if current molecule has no children,
@@ -1540,7 +1552,7 @@ public class CMLMolecule
 	}
 
 	void init() {
-
+//		logger.log(Level.INFO, ">>>>>>>>>>>NEW MOLECULE");
 	}
 
 	/**

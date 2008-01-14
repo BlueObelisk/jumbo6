@@ -1078,7 +1078,7 @@ public class ValencyTool extends AbstractTool {
 	 */
 	static void resetPiElectrons(CMLMolecule subMol) {
 		// reset all pi-electrons
-		Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+		Nodes piElectrons = subMol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
 		for (int e = 0; e < piElectrons.size(); e++) {
 			((CMLElectron)piElectrons.get(e)).detach();
 		}
@@ -1310,7 +1310,7 @@ class HeteroAtomManager implements CMLConstants {
 						sysCount++;
 						system.identifyDoubleBonds();
 						for (CMLAtom a : system.getAtomList()) {
-							Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+							Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
 							if (nodes.size() > 0) {
 								piRemaining = true;
 							}
@@ -1512,7 +1512,7 @@ class HeteroAtomManager implements CMLConstants {
 				sysCount++;
 				system.identifyDoubleBonds();
 				for (CMLAtom a : system.getAtomList()) {
-					Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+					Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
 					if (nodes.size() > 0) {
 						piRemaining = true;
 					}
@@ -1569,7 +1569,7 @@ class HeteroAtomManager implements CMLConstants {
 				sysCount++;
 				system.identifyDoubleBonds();
 				for (CMLAtom a : system.getAtomList()) {
-					Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", X_CML);
+					Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
 					if (nodes.size() > 0) {
 						piRemaining = true;
 					}

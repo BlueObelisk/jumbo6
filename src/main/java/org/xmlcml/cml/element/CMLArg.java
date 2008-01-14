@@ -131,7 +131,7 @@ public class CMLArg extends AbstractArg {
      */
     public static void removeArgs(CMLElement element) {
     	if (element != null) {
-	        List<Node> args = CMLUtil.getQueryNodes(element, CMLArg.NS, X_CML);
+	        List<Node> args = CMLUtil.getQueryNodes(element, CMLArg.NS, CML_XPATH);
 	        for (Node arg : args) {
 	        	arg.detach();
 	        }
@@ -479,7 +479,7 @@ public class CMLArg extends AbstractArg {
      */
     public static void processArgs(CMLElement element) {
         Nodes parameterNameArgs =
-            element.query(CMLArg.NS+"[@parameterName]", X_CML);
+            element.query(CMLArg.NS+"[@parameterName]", CML_XPATH);
         for (int i = 0; i < parameterNameArgs.size(); i++) {
             CMLArg arg = (CMLArg) parameterNameArgs.get(i);
             if (1 == 2) {
@@ -500,7 +500,7 @@ public class CMLArg extends AbstractArg {
         String id = element.getAttributeValue(IdAttribute.NAME);
         CMLArg parameterArg = null;
         Nodes nameArgs =
-            element.query(CMLArg.NS+"[@parameterName='"+name+"']", X_CML);
+            element.query(CMLArg.NS+"[@parameterName='"+name+"']", CML_XPATH);
         if (nameArgs.size() == 0) {
         	element.debug("ARG NOT FOUND");
             throw new CMLRuntimeException("arg not found: "+name+S_SLASH+id);
@@ -536,7 +536,7 @@ public class CMLArg extends AbstractArg {
      */
     public static void substituteParentAttributes(CMLElement element) {
         Nodes parentAttributeArgs =
-            element.query(".//"+CMLArg.NS+"[@parentAttribute]", X_CML);
+            element.query(".//"+CMLArg.NS+"[@parentAttribute]", CML_XPATH);
         for (int i = 0; i < parentAttributeArgs.size(); i++) {
             CMLArg parentAttributeArg = (CMLArg) parentAttributeArgs.get(i);
             String parentAttribute = parentAttributeArg.getParentAttribute();
@@ -554,7 +554,7 @@ public class CMLArg extends AbstractArg {
      */
     public static void substituteTextContent(CMLElement element) {
         Nodes textContentArgs =
-            element.query(".//"+CMLArg.NS+"[@substitute[.='.']]", X_CML);
+            element.query(".//"+CMLArg.NS+"[@substitute[.='.']]", CML_XPATH);
         for (int i = 0; i < textContentArgs.size(); i++) {
             CMLArg textContentArg = (CMLArg) textContentArgs.get(i);
             String value = textContentArg.getValue();
@@ -590,7 +590,7 @@ public class CMLArg extends AbstractArg {
      * @param localName of element to search for
      */
     public static void addIdxArgsWithSerialNumber(CMLElement current, String localName) {
-        Nodes nodes = current.query(".//"+C_E+localName+"[@ref]", X_CML);
+        Nodes nodes = current.query(".//"+C_E+localName+"[@ref]", CML_XPATH);
         Set<String> idSet = new HashSet<String>();
         for (int i = 0; i < nodes.size(); i++) {
             CMLElement element = (CMLElement) nodes.get(i);

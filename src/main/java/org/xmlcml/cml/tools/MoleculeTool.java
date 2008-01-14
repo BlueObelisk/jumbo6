@@ -25,7 +25,6 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.CMLElement.Convention;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
@@ -170,7 +169,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public int getFormalCharge() {
 		int formalCharge = 0;
-		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", X_CML);
+		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", CML_XPATH);
 		for (int i = 0; i < chargedAtoms.size(); i++) {
 			formalCharge += Integer.parseInt(((Element)chargedAtoms.get(i)).getAttributeValue("formalCharge"));
 		}
@@ -183,7 +182,7 @@ public class MoleculeTool extends AbstractTool {
 	 */
 	public List<CMLAtom> getChargedAtoms() {
 		List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", X_CML);
+		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", CML_XPATH);
 		for (int i = 0; i < atoms.size(); i++) {
 			chargedAtoms.add((CMLAtom)atoms.get(i));
 		}
@@ -231,7 +230,7 @@ public class MoleculeTool extends AbstractTool {
 			}
 		}
 		// remove temporary pi electrons
-		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", X_CML);
+		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", CML_XPATH);
 		for (Node electron : electrons) {
 			electron.detach();
 		}
@@ -1520,7 +1519,7 @@ public class MoleculeTool extends AbstractTool {
 					} else {
 						boolean contract = true;
 						for (CMLBond bond : atom.getLigandBonds()) {
-							List<Node> bondStereoNodes = CMLUtil.getQueryNodes(bond, ".//cml:"+CMLBondStereo.TAG, X_CML);
+							List<Node> bondStereoNodes = CMLUtil.getQueryNodes(bond, ".//cml:"+CMLBondStereo.TAG, CML_XPATH);
 							for (Node bondStereoNode : bondStereoNodes) {
 								String stereo = bondStereoNode.getValue();
 								if (CMLBond.WEDGE.equals(stereo) || CMLBond.HATCH.equals(stereo)) {
@@ -1985,7 +1984,7 @@ public class MoleculeTool extends AbstractTool {
 //	private void flattenJoinMoleculeChildren() {
 //		int idx = molecule.getParent().indexOf(molecule);
 //		Nodes moleculesAndJoin = molecule.query(CMLMolecule.NS+X_OR+CMLJoin.NS+"'",
-//				X_CML);
+//				CML_XPATH);
 //		for (int i = 0; i < moleculesAndJoin.size(); i++) {
 //			Node node = moleculesAndJoin.get(i);
 //			node.detach();
@@ -2017,7 +2016,7 @@ public class MoleculeTool extends AbstractTool {
 			molecule.addAtom(atom);
 		}
 		// copy any remaining nodes except atomArray and bondArray
-		Nodes nodes = addedMolecule.query(".//*", X_CML);
+		Nodes nodes = addedMolecule.query(".//*", CML_XPATH);
 		int nnodes = nodes.size();
 		for (int i = nnodes - 1; i >= 0; i--) {
 			Node node = nodes.get(i);
@@ -2069,7 +2068,7 @@ public class MoleculeTool extends AbstractTool {
 		if (molecule.hasCoordinates(CoordinateType.CARTESIAN)) {
 			// set torsions
 			CMLAtomSet moleculeAtomSet = molecule.getAtomSet();
-			Nodes torsions = molecule.query(".//"+CMLTorsion.NS, X_CML);
+			Nodes torsions = molecule.query(".//"+CMLTorsion.NS, CML_XPATH);
 			int nTors = torsions.size();
 			for (int i = 0; i < nTors; i++) {
 				CMLTorsion torsion = (CMLTorsion) torsions.get(i);
@@ -2290,7 +2289,7 @@ public class MoleculeTool extends AbstractTool {
 			mol.addBond(bond);
 		}
 		// remove scalars signifying atoms attached to metal
-		Nodes nodes = mol.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", X_CML);
+		Nodes nodes = mol.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", CML_XPATH);
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).detach();
 		}
@@ -2595,7 +2594,7 @@ public class MoleculeTool extends AbstractTool {
     		nodes.get(i).detach();
     	}
     	CMLFormula formula = new CMLFormula(molecule);
-    	formula.setConvention(Convention.ATOMARRAY.toString());
+    	formula.setConvention(Convention.ATOMARRAY.v);
     	molecule.appendChild(formula);
     }
     
@@ -2604,7 +2603,7 @@ public class MoleculeTool extends AbstractTool {
 	 * @return electron
 	 */
     public CMLElectron getElectronById(String id) {
-        Nodes electronNodes = molecule.query(".//cml:electron[@id='"+id+"']", X_CML);
+        Nodes electronNodes = molecule.query(".//cml:electron[@id='"+id+"']", CML_XPATH);
         if (electronNodes.size() > 1) {
         	throw new CMLRuntimeException("Electrons with duplicate id:"+id);
         }

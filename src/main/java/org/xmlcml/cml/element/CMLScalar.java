@@ -249,7 +249,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits, HasScalar {
 	 *             attempt to reset datatype
 	 */
 	public void setDataType(String dType) {
-		if (this.getAttribute("dataType") == null) {
+		if (this.getAttributeValue("dataType") == null) {
 			super.setDataType(dType);
 		} else {
 			throw new CMLRuntimeException(

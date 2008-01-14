@@ -469,7 +469,7 @@ public abstract class CMLUtil implements CMLConstants {
      */
     public static List<String> getPrefixes(Element element, String attName) {
     	List<String> prefixList = new ArrayList<String>();
-    	List<Node> refs = CMLUtil.getQueryNodes(element, ".//@"+attName, X_CML);
+    	List<Node> refs = CMLUtil.getQueryNodes(element, ".//@"+attName, CML_XPATH);
     	for (Node node : refs) {
     		Attribute attribute = (Attribute) node;
     		String value = attribute.getValue();

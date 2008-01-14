@@ -757,7 +757,7 @@ public class CMLCrystal extends AbstractCrystal {
      * @throws CMLRuntimeException if 0 or >1 nodes
      */
     public static CMLCrystal getContainedCrystal(CMLElement element) throws CMLRuntimeException {
-        Nodes crystalNodes = element.query(".//"+CMLCrystal.NS, X_CML);
+        Nodes crystalNodes = element.query(".//"+CMLCrystal.NS, CML_XPATH);
         if (crystalNodes.size() == 0) {
             throw new CMLRuntimeException("NO <crystal> FOUND");
         } else if (crystalNodes.size() > 1) {

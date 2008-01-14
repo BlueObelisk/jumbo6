@@ -44,8 +44,8 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 			e.printStackTrace();
 			throw new CMLRuntimeException("should not throw "+e.getMessage());
 		}
-		CMLMolecule molecule = (CMLMolecule) CMLUtil.getQueryNodes(document, "//"+CMLMolecule.NS, X_CML).get(0);
-		List<Node> scalars = CMLUtil.getQueryNodes(molecule, "//"+CMLScalar.NS, X_CML);
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.getQueryNodes(document, "//"+CMLMolecule.NS, CML_XPATH).get(0);
+		List<Node> scalars = CMLUtil.getQueryNodes(molecule, "//"+CMLScalar.NS, CML_XPATH);
 		for (Node node : scalars) {
 			node.detach();
 		}
@@ -92,7 +92,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
 		Assert.assertEquals("acyclic double", 1, bonds.size());
 		StereochemistryTool cisMolTool = new StereochemistryTool(cisMol);
 		cisMolTool.add2DStereo();
-		List<Node> bondStereos = CMLUtil.getQueryNodes(cisMol, CMLBondArray.NS+S_SLASH+CMLBond.NS+S_SLASH+CMLBondStereo.NS, X_CML);
+		List<Node> bondStereos = CMLUtil.getQueryNodes(cisMol, CMLBondArray.NS+S_SLASH+CMLBond.NS+S_SLASH+CMLBondStereo.NS, CML_XPATH);
 		Assert.assertEquals("bondStereo", 1, bondStereos.size());
 		CMLBondStereo bondStereo = (CMLBondStereo) bondStereos.get(0);
 		String[] atomRefs4 = bondStereo.getAtomRefs4();
