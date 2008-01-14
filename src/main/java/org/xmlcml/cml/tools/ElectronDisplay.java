@@ -202,10 +202,10 @@ public class ElectronDisplay {
 //        g = snap.createElement(snap.svgDoc, "g", snap.animate);
 //        snap.appendChild(parent, g);
 
-        double x1 = xy1[0];
-        double x2 = xy2[0];
-        double y1 = xy1[1];
-        double y2 = xy2[1];
+//        double x1 = xy1[0];
+//        double x2 = xy2[0];
+//        double y1 = xy1[1];
+//        double y2 = xy2[1];
 
         /** I can't work this...
         Element linearGradient = snap.new Element("linearGradient");

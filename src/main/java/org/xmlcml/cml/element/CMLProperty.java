@@ -1,6 +1,8 @@
 package org.xmlcml.cml.element;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -22,6 +24,66 @@ import org.xmlcml.cml.interfacex.HasScalar;
  */
 public class CMLProperty extends AbstractProperty {
 
+	/** basic properties (in dictionary) */
+	public enum DictRef {
+		/** */
+        APPEARANCE("appearance"),
+		/** */
+        AUTO_IGNITION("autoIgnition"),
+		/** */
+        BPT("bpt"),
+		/** */
+        DENSITY("density"),
+		/** */
+        DIPOLE("dipole"),
+		/** */
+        FLASH_POINT("flashPoint"),
+		/** */
+        KH("kh"),
+		/** */
+        LOGP("logP"),
+		/** */
+        LOGPOW("logPow"),
+		/** */
+        MOLARMASS("molarMass"),
+		/** */
+        MPT("mpt"),
+		/** */
+        MWT("mwt"),
+		/** */
+        PKA("pka"),
+		/** */
+        PKB("pkb"),
+		/** */
+        REFRACTIVE_INDEX("refractiveIndex"),
+		/** */
+        RELATIVE_DENSITY("relativeDensity"),
+		/** */
+        RELATIVE_VAPOUR_DENSITY("relativeVapourDensity"),
+		/** */
+        SOLUBILITY("solubility"),
+		/** */
+        VAPOR_PRESSURE("vaporPressure"),
+		/** */
+        VISCOSITY("viscosity"),
+		/** */
+        WATER_SOLUBILITY("waterSolubility"),
+        ;
+        public String v;
+        private Map<String, DictRef> map = new HashMap<String, DictRef>();
+        private DictRef(String v) {
+        	this.v = v;
+        	map.put(v, this);
+        }
+        /** get DictRef for string
+         * 
+         * @param v
+         * @return dictRef
+         */
+        public DictRef get(String v) {
+        	return map.get(v);
+        }
+	}
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
@@ -122,7 +184,7 @@ public class CMLProperty extends AbstractProperty {
      */ 
     public static CMLPropertyList getPropertyList(CMLElement parent, String dictRef) {
     	CMLPropertyList propertyList = new CMLPropertyList();
-    	Nodes nodes = parent.query("./cml:property", X_CML);
+    	Nodes nodes = parent.query("./cml:property", CML_XPATH);
     	for (int i = 0; i < nodes.size(); i++ ) {
     		CMLProperty property = (CMLProperty) nodes.get(i);
     		property.canonicalize();
@@ -300,7 +362,7 @@ public class CMLProperty extends AbstractProperty {
 	 */
 	public HasDataType getChild() {
 		if (child == null) {
-	    	Nodes nodes = this.query("cml:scalar | cml:array | cml:matrix", X_CML);
+	    	Nodes nodes = this.query("cml:scalar | cml:array | cml:matrix", CML_XPATH);
 	    	if (nodes.size() == 1) {
 	    		child = (HasDataType) nodes.get(0);
 	    	}

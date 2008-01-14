@@ -94,7 +94,7 @@ public class DisorderAssembly implements CMLConstants {
             ".//"+CMLAtom.NS+"["+CMLScalar.NS+"[" +
             "(@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"' and .!='.') or " +
             "(@dictRef='"+CrystalTool.DISORDER_GROUP+"' and .!='.')" +
-            "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", X_CML);
+            "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", CML_XPATH);
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         for (int i = 0; i < nodes.size(); i++) {
             atomList.add((CMLAtom) nodes.get(i));

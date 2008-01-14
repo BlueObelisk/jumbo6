@@ -331,7 +331,7 @@ public class FragmentToolTest extends AbstractTest {
 		// </property>
 		// </propertyList>
 		List<Node> scalars = CMLUtil.getQueryNodes(fragment, CMLPropertyList.NS + "/" + CMLProperty.NS + "/"
-				+ CMLScalar.NS, X_CML);
+				+ CMLScalar.NS, CML_XPATH);
 		Assert.assertEquals("scalars", 6, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
 		Assert.assertEquals("extensive", "intensive", ((CMLProperty) scalar.getParent()).getRole());

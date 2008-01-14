@@ -1087,7 +1087,7 @@ public class CMLAtom extends AbstractAtom {
 	 * @return is bonded
 	 */
 	public boolean isBondedToMetal() {
-		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.X_CML);
+		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.CML_XPATH);
 		if (nodes.size() > 0) {
 			return true;
 		} else {

@@ -165,7 +165,7 @@ public class DictionaryTool extends AbstractTool {
 			"(self::"+CMLProperty.NS+" or self::"+CMLParameter.NS+") " +
 			"and @"+DictRefAttribute.NAME+" and " +
 			"count(*[not(@"+DictRefAttribute.NAME+")]) > 0]";
-    	List<Node> dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, X_CML);
+    	List<Node> dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, CML_XPATH);
     	for (Node node : dictRefs) {
     		CMLElement element = (CMLElement) node;
     		String parentTerm = EntryTool.createTerm(element);
@@ -177,7 +177,7 @@ public class DictionaryTool extends AbstractTool {
 		"(self::"+CMLProperty.NS+" or self::"+CMLParameter.NS+") " +
 			"and not(@"+DictRefAttribute.NAME+")]/*" +
 			"[@"+DictRefAttribute.NAME+"]";
-    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, X_CML);
+    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, CML_XPATH);
     	for (Node node : dictRefs) {
     		CMLElement element = (CMLElement) node;
     		analyzeDictRefOnChild(element);
@@ -196,7 +196,7 @@ public class DictionaryTool extends AbstractTool {
 			" self::"+CMLParameter.NS+" or " +
 			" self::"+CMLModule.NS+") and " +
 			"@"+DictRefAttribute.NAME+"]) > 0]";
-    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, X_CML);
+    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, CML_XPATH);
     	for (Node node : dictRefs) {
     		CMLElement element = (CMLElement) node;
     		analyzeDictRefOnChild(element);
@@ -209,7 +209,7 @@ public class DictionaryTool extends AbstractTool {
 			"(self::"+CMLProperty.NS+" or" +
 			" self::"+CMLParameter.NS+") and " +
 			"@value]";
-    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, X_CML);
+    	dictRefs = CMLUtil.getQueryNodes(cmlElement, xpath, CML_XPATH);
     	for (Node node : dictRefs) {
     		CMLElement element = (CMLElement) node;
     		analyzeValue(element);
@@ -224,7 +224,7 @@ public class DictionaryTool extends AbstractTool {
     	String nonDictRefChildS = "*[not(@"+
 		DictRefAttribute.NAME+")]";
 		List<Node> nonDictRefChilds = CMLUtil.getQueryNodes(cmlElement, 
-			nonDictRefChildS, X_CML);
+			nonDictRefChildS, CML_XPATH);
 		for (Node node : nonDictRefChilds) {
 			addEntryFromDictRef((CMLElement) node, dictRef, parentTerm);
 		}
@@ -237,7 +237,7 @@ public class DictionaryTool extends AbstractTool {
 		DictRefAttribute.NAME+")]/*" +
 		"[@"+DictRefAttribute.NAME+"]";
 		List<Node> nonDictRefChilds = CMLUtil.getQueryNodes(cmlElement, 
-			nonDictRefChildS, X_CML);
+			nonDictRefChildS, CML_XPATH);
 		String parentTerm = EntryTool.createTerm(cmlElement);
 		for (Node node : nonDictRefChilds) {
 			Element child = (Element) node;

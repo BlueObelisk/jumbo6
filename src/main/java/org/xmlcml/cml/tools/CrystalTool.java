@@ -424,7 +424,7 @@ public class CrystalTool extends AbstractTool {
 						atom.setXYZFract(p3);
 						if (addTransformsToAtoms) {
 							//remove any previous Transform3 elements
-							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", X_CML);
+							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", CML_XPATH);
 							for (int t = 0; t < t3s.size(); t++) {
 								t3s.get(t).detach();
 							}
@@ -1065,7 +1065,7 @@ public class CrystalTool extends AbstractTool {
 
 	private CMLFormula getFormula(String dictRef, CMLCml cml) {
 		CMLFormula formula = null;
-		Nodes formulaElements = cml.query(".//"+CMLFormula.NS, X_CML);
+		Nodes formulaElements = cml.query(".//"+CMLFormula.NS, CML_XPATH);
 		for (int i = 0; i < formulaElements.size(); i++) {
 			CMLFormula formula0 = (CMLFormula) formulaElements.get(i);
 			if (dictRef.equalsIgnoreCase(formula0.getDictRef())) {
@@ -1153,7 +1153,7 @@ public class CrystalTool extends AbstractTool {
 	 * @return value of first node if isDeterminate else or null
 	 */
 	public static String getValue(CMLElement element, String xQuery) {
-		Nodes nodes = element.query(xQuery, X_CML);
+		Nodes nodes = element.query(xQuery, CML_XPATH);
 		String value = (nodes.size() == 0) ? null : nodes.get(0).getValue();
 		return (isIndeterminate(value)) ? null : value;
 	}

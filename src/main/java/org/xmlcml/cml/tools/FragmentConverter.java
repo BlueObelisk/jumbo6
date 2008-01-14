@@ -82,7 +82,7 @@ public class FragmentConverter extends AbstractTool {
 	
 		// deal with R
 		List<Node> rGroups = CMLUtil.getQueryNodes(molecule,
-				".//"+CMLAtom.NS+"[@elementType='R']", CMLConstants.X_CML);
+				".//"+CMLAtom.NS+"[@elementType='R']", CMLConstants.CML_XPATH);
 		for (Node node : rGroups) {
 			try {
 				AtomTool.getOrCreateTool((CMLAtom) node).translateToCovalentRadius();

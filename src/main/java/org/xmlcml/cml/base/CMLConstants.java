@@ -16,6 +16,70 @@ import org.xmlcml.euclid.EuclidConstants;
  */
 public interface CMLConstants extends EuclidConstants {
 
+	/** list of identifiers.
+	 * not exhaustive - string values can be used)
+	 * @author pm286
+	 *
+	 */
+	public enum Convention {
+		/** CML */
+		ATOMARRAY("atomArray"),
+		
+		/** authorities */
+		/** not sure*/
+		MET3D("3DMET"),
+		/** Anatomical Therapeutic Chemical Classification System for drugs */
+		ATC("ATC"),
+		/** */
+		BEILSTEIN("Beilstein"),
+		/** Chemical Abstracts*/
+		CAS("CAS"),
+		/** Pubchem compound Id*/
+		CID("CID"),
+		/** Harvard */
+		DRUGBANK("DrugBank"),
+		/** EBI chemistry*/
+		CHEBI("ChEBI"),
+		/** European chemicals*/
+		EINECS("EINECS"),
+		/** */
+		GMELIN("Gmelin"),
+		/** */
+		INCHI("InChI"),
+		/** Int Union of Pure and Applied Chemistry */
+		IUPAC("IUPAC"),
+		/** Japan database*/
+		KEGG("KEGG"),
+		/** PubMed terminology*/
+		MESH("MeSH"),
+		/** PubChem*/
+		PUBCHEM("PubChem"),
+		/** Chemical labelling*/
+		RTECS("RTECS"),
+		/** SMILES line notation*/
+		SMILES("SMILES"),
+		
+		/** other */
+		EXTERNAL("external"),
+		
+		;
+		
+		
+		/** */
+		public final String v;
+		private Convention(String s) {
+			v = s;
+		}
+		/**
+		 * equality to value
+		 * @param s
+		 * @return tru if match
+		 */
+		public boolean equals(String s) {
+			return v == s;
+		}
+	}
+
 	/** suffix for files */
 	String XML_SUFF = ".xml";
 	/** suffix for files */
@@ -230,34 +294,37 @@ public interface CMLConstants extends EuclidConstants {
     /** constant */
     String CMLXSD_XMLCONTENT = "_xmlContent";
 
-    /** constant */
-    String CML_NS = "http://www.xml-cml.org/schema";
+    /** root of all CML URIs */
+    String CML_NS_BASE = "http://www.xml-cml.org";
 
     /** constant */
-    String CML = CML_NS;
+    String CML_NS = CML_NS_BASE+U_S+"schema";
+
+    /** constant */
+//    String CML = CML_NS;
 
     /**
      * cml dictionary namespace reserved
      */
-    String DICT_NS = "http://www.xml-cml.org/dict";
+    String DICT_NS = CML_NS_BASE+U_S+"dict";
 
     /**
      * cml URI namespace reserved
      */
-    String CML_URI_NS = "http://www.xml-cml.org/uri";
+    String CML_REPOSITORY_BASE = CML_NS_BASE+U_S+"repository";
     /**
      * cml dictionary reserved
      */
     String CML_DICT_NS = DICT_NS+U_S+"cml";
 
     /** constant */
-    String CML1 = CML + S_SLASH + "cml1";
+    String CML1 = CML_NS + S_SLASH + "cml1";
 
     /** constant */
-    String CML2 = CML + S_SLASH + "cml2";
+    String CML2 = CML_NS + S_SLASH + "cml2";
 
     /** constant */
-    String CML3 = CML + S_SLASH + "cml3";
+    String CML3 = CML_NS + S_SLASH + "cml3";
 
     /** CML prefix (cml) reserved: for several uses
      */
@@ -297,7 +364,7 @@ public interface CMLConstants extends EuclidConstants {
     
     /** XPathContext for CML.
      */
-    XPathContext X_CML = new XPathContext("cml", CML_NS);
+    XPathContext CML_XPATH = new XPathContext("cml", CML_NS);
     
     /** XPath 'OR' concatenator*/
     String X_OR = S_PIPE;
@@ -387,7 +454,7 @@ public interface CMLConstants extends EuclidConstants {
     /**
      * units root namespace reserved
      */
-    String _UNIT_NS = "http://www.xml-cml.org/units";
+    String _UNIT_NS = CML_NS_BASE+U_S+"units";
 
     /**
      * units dictionary namespace reserved

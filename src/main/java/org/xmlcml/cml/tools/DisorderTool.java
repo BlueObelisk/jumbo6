@@ -142,7 +142,7 @@ public class DisorderTool extends AbstractTool {
 		List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLAtom.NS+"/@occupancy | "
 				+".//"+CMLAtom.NS+"/"+CMLScalar.NS+"[contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
 				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
-				"]", X_CML);
+				"]", CML_XPATH);
 		for (Node node : nodes) {
 			node.detach();
 		}
@@ -409,7 +409,7 @@ public class DisorderTool extends AbstractTool {
 
 	private void replaceAtomDisorderInformation(CMLAtom atom, String assemblyCode, String groupCode) {
 		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", X_CML);
+				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", CML_XPATH);
 		if (assemblyNodes.size() > 1) {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder assembly.");
@@ -426,7 +426,7 @@ public class DisorderTool extends AbstractTool {
 			scalar.setStringContent(assemblyCode.toString());
 		}
 		List<Node> groupNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", X_CML);
+				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", CML_XPATH);
 		if (groupNodes.size() > 1) {
 			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder group.");
@@ -493,7 +493,7 @@ public class DisorderTool extends AbstractTool {
 			List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//" + CMLScalar.NS
 					+ "[@dictRef='" + CrystalTool.DISORDER_ASSEMBLY + "'] | "
 					+ ".//" + CMLScalar.NS + "[@dictRef='"
-					+ CrystalTool.DISORDER_GROUP + "']", X_CML);
+					+ CrystalTool.DISORDER_GROUP + "']", CML_XPATH);
 			if (nodes.size() > 0) {
 				return true;
 			}

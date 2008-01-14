@@ -288,7 +288,7 @@ public class CMLLength extends AbstractLength {
                     w.write("<td>");
                     CMLAtom atom = atoms.get(i);
                     Nodes labelNodes = atom.query(
-                        CMLScalar.NS+"[@dictRef='iucr:_atom_site_label']", X_CML);
+                        CMLScalar.NS+"[@dictRef='iucr:_atom_site_label']", CML_XPATH);
                     String label = ((CMLScalar) labelNodes.get(0)).getXMLContent()+" ("+atom.getId()+S_RBRAK;
                     w.write( (label == null) ? atom.getId() : label);
                     w.write("</td>");

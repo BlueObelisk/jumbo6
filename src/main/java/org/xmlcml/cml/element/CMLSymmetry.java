@@ -399,7 +399,7 @@ public class CMLSymmetry extends AbstractSymmetry {
      * @throws CMLRuntimeException if 0 or >1 nodes
      */
     public static CMLSymmetry getContainedSymmetry(CMLElement element) throws CMLRuntimeException {
-        Nodes symmetryNodes = element.query("//"+CMLSymmetry.NS, X_CML);
+        Nodes symmetryNodes = element.query("//"+CMLSymmetry.NS, CML_XPATH);
         if (symmetryNodes.size() == 0) {
             throw new CMLRuntimeException("NO <symmetry> FOUND");
         } else if (symmetryNodes.size() > 1) {

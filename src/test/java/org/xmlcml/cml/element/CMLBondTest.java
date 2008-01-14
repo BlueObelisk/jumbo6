@@ -1,14 +1,11 @@
 package org.xmlcml.cml.element;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import nu.xom.Node;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLAttribute;

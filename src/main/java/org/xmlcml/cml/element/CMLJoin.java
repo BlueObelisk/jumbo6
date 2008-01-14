@@ -177,7 +177,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     }
 
     private void adjustLength(CMLAtom atom0, CMLAtom atom1, CMLAtomSet moveableAtomSet) {
-        List<Node> lengths = CMLUtil.getQueryNodes(this, CMLLength.NS, X_CML);
+        List<Node> lengths = CMLUtil.getQueryNodes(this, CMLLength.NS, CML_XPATH);
         if (lengths.size() == 1) {
             CMLLength length = (CMLLength) lengths.get(0);
             length.setAtomRefs2(atom0, atom1);
@@ -188,7 +188,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
     private void adjustTorsion(
             CMLAtom rGroup0, CMLAtom atom0, CMLAtom atom1, CMLAtom rGroup1,
             CMLAtomSet moleculeAtomSet, CMLAtomSet moveableAtomSet) {
-        List<Node> torsions = CMLUtil.getQueryNodes(this, CMLTorsion.NS, X_CML);
+        List<Node> torsions = CMLUtil.getQueryNodes(this, CMLTorsion.NS, CML_XPATH);
         if (torsions.size() == 1) {
             CMLTorsion torsion = (CMLTorsion) torsions.get(0);
             CMLAtom atom00 = this.getUniqueLigand(rGroup0, atom0, atom1);
@@ -223,7 +223,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
                 return ligand;
             } else {
                 List<Node> labels = CMLUtil.getQueryNodes(
-                        ligand, TORSION_END_QUERY, X_CML);
+                        ligand, TORSION_END_QUERY, CML_XPATH);
                 // there may be multiple labels
                 for (Node node : labels) {
                     CMLLabel label = (CMLLabel) node;

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import nu.xom.Element;
@@ -43,6 +44,7 @@ public class CMLAtomArray extends AbstractAtomArray {
 
     void init() {
         atomMap = new HashMap<String, CMLAtom>();
+//        new Exception().printStackTrace();
     }
 
     /** copy constructor.
@@ -63,7 +65,6 @@ public class CMLAtomArray extends AbstractAtomArray {
      */
     public Node copy() {
         return new CMLAtomArray(this);
-
     }
 
     /**

@@ -289,7 +289,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
 //    private CMLMolecule getMolecule(CMLElement cml) {
-//        Nodes moleculeNodes = cml.query(CMLMolecule.NS, X_CML);
+//        Nodes moleculeNodes = cml.query(CMLMolecule.NS, CML_XPATH);
 //        if (moleculeNodes.size() != 1) {
 //            throw new CMLRuntimeException("NO MOLECULE FOUND");
 //        }
@@ -412,7 +412,7 @@ public class CrystalToolTest extends AbstractToolTest {
 //						continue;
 //					}
 //					// at this point no bonds have been calculated
-//					Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+"[@dictRef='iucr:_chemical_formula_moiety']", X_CML);
+//					Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+"[@dictRef='iucr:_chemical_formula_moiety']", CML_XPATH);
 //					CMLFormula moietyFormula = null;
 //					if (moiFormNodes.size() > 0) {
 //						moietyFormula = (CMLFormula)moiFormNodes.get(0);
@@ -838,7 +838,7 @@ public class CrystalToolTest extends AbstractToolTest {
     */
     
 //    private void addSpaceGroup(CMLCml cml) {
-//		Nodes hmGroupNodes = cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']", X_CML);
+//		Nodes hmGroupNodes = cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']", CML_XPATH);
 //		if (hmGroupNodes.size() > 0) {
 //			String hmGroup = hmGroupNodes.get(0).getValue();
 //			Elements crystals = cml.getChildCMLElements(CMLCrystal.TAG);

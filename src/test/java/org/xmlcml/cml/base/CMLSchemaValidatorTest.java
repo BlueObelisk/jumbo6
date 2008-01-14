@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

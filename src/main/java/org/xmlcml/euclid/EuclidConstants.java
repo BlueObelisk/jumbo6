@@ -27,7 +27,7 @@ public interface EuclidConstants {
     char C_NBSP = (char) 160;
 
     /** constant */
-    char C_QUOT = '\'';
+    char C_QUOT = '"';
 
     /** constant */
     char C_SLASH = '/';

@@ -478,7 +478,7 @@ public class CMLSpectrumTest extends PeakSpectrumTest {
 				+ U_S + testCompoundFile1);
 		document = new CMLBuilder().build(in);
 		in.close();
-		Nodes cmlNodes = document.query("//"+CMLCml.NS, X_CML);
+		Nodes cmlNodes = document.query("//"+CMLCml.NS, CML_XPATH);
 		Assert.assertEquals("spectra count", cmlNodes.size(), 1);
 		CMLCml cml = (CMLCml) cmlNodes.get(0);
 		Nodes spectrumNodes = cml.cmlQuery("//"+CMLSpectrum.NS);

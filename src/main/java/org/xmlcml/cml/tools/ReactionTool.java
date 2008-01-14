@@ -314,7 +314,7 @@ public class ReactionTool extends AbstractTool {
 				reaction.getProductList();
         List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
         if (reactantProductList != null) {
-	        Nodes moleculeNodes = reactantProductList.query(".//cml:molecule", X_CML);
+	        Nodes moleculeNodes = reactantProductList.query(".//cml:molecule", CML_XPATH);
 	        for (int i = 0; i < moleculeNodes.size(); i++) {
 	        	moleculeList.add((CMLMolecule) moleculeNodes.get(i));
 	        }
@@ -519,8 +519,8 @@ public class ReactionTool extends AbstractTool {
     		Element parent, CMLMolecule mol1, CMLMolecule mol2, int iReaction) {
 //    	 electrons
         List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
-        Nodes electronNodes1 = mol1.query(".//cml:electron", X_CML);
-        Nodes electronNodes2 = mol2.query(".//cml:electron", X_CML);
+        Nodes electronNodes1 = mol1.query(".//cml:electron", CML_XPATH);
+        Nodes electronNodes2 = mol2.query(".//cml:electron", CML_XPATH);
 //    	 find electrons in first molecule or both
         MoleculeTool molTool1 = MoleculeTool.getOrCreateTool(mol1);
         MoleculeTool molTool2 = MoleculeTool.getOrCreateTool(mol2);

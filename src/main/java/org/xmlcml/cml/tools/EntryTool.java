@@ -537,7 +537,7 @@ public class EntryTool extends AbstractTool {
     	EntryTool.checkEmptyName(name);
     	CMLMatrix matrix = null;
     	List<Node> propertys = CMLUtil.getQueryNodes(entry, 
-    			CMLAppinfo.NS+"/*/"+CMLProperty.NS+"["+CMLMatrix.NS+"]", X_CML);
+    			CMLAppinfo.NS+"/*/"+CMLProperty.NS+"["+CMLMatrix.NS+"]", CML_XPATH);
     	if (propertys.size() != 1) {
     		throw new CMLRuntimeException(
     				"Cannot find property/matrix template in entry: "+entry.getId());

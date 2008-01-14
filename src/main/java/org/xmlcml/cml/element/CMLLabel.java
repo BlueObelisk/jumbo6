@@ -90,7 +90,7 @@ public class CMLLabel extends AbstractLabel {
     public static CMLLabel getLabel(CMLElement element, Position side) {
         String dictRef = C_E+side;
         List<Node> nodeList = CMLUtil.getQueryNodes(
-            element, CMLLabel.NS+"[@dictRef='"+dictRef+"']", X_CML);
+            element, CMLLabel.NS+"[@dictRef='"+dictRef+"']", CML_XPATH);
         return (nodeList.size() == 0) ? null : (CMLLabel) nodeList.get(0);
     }
 
