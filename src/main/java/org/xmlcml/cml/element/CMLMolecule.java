@@ -27,6 +27,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealSquareMatrix;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector3;
 
@@ -1832,6 +1833,36 @@ public class CMLMolecule
 			atomSet.transformFractionalsAndCartesians(transform, orthMat);
 		}
 	}
+	/**
+	 * transform molecule in 2D.
+	 *
+	 * @param 3*3 matrix apply to all 2D coordinates
+	 */
+	public void transform(CMLMatrix matrix) {
+		if (matrix == null ||
+				matrix.getRows() != 3 ||
+				matrix.getColumns() != 3) {
+			throw new CMLRuntimeException("bad transformation matrix");
+		}
+		double[] mm = matrix.getDoubleArray();
+		Transform2 t2 = new Transform2(mm);
+		transform(t2);
+	}
+
+	/**
+	 * transform
+	 * @param t2
+	 */
+	public void transform(Transform2 t2) {
+		for (CMLAtom atom : getAtoms()) {
+			if (atom.hasCoordinates(CoordinateType.TWOD)) {
+				Real2 dd = new Real2(atom.getX2(), atom.getY2());
+				dd.transformBy(t2);
+				atom.setXY2(dd);
+			}
+		}
+	}
+
 	/**
 	 * translate molecule in 2D.
 	 *
