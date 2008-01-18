@@ -366,6 +366,11 @@ public interface CMLConstants extends EuclidConstants {
      */
     XPathContext CML_XPATH = new XPathContext("cml", CML_NS);
     
+    /**
+     * @deprecated
+     */
+    XPathContext X_CML = CML_XPATH;
+    
     /** XPath 'OR' concatenator*/
     String X_OR = S_PIPE;
 
