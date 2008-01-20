@@ -128,6 +128,7 @@ public class RealRange implements EuclidConstants {
     public double getMin() {
         return minval;
     }
+    
     /**
      * get maximum value (NEGATIVE_INFINITY if inValid)
      * 
@@ -136,6 +137,16 @@ public class RealRange implements EuclidConstants {
     public double getMax() {
         return maxval;
     }
+    
+    /**
+     * get centroid value (NEGATIVE_INFINITY if inValid)
+     * 
+     * @return centroid
+     */
+    public double getMidPoint() {
+        return (minval + maxval) * 0.5;
+    }
+    
     /**
      * get range (NaN if invalid)
      * 
