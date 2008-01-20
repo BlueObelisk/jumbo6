@@ -8,7 +8,6 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.tools.AbstractToolTest;
-import org.xmlcml.cml.legacy.molecule.MDLConverter;
 
 /**
  * test MDLConverter

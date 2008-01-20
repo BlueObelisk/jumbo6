@@ -104,6 +104,7 @@ public class Real2Range implements EuclidConstants {
         RealRange yr = this.getYRange().intersectionWith(r2.getYRange());
         return new Real2Range(xr, yr);
     }
+    
     /**
      * get xrange
      * 
@@ -119,6 +120,15 @@ public class Real2Range implements EuclidConstants {
      */
     public RealRange getYRange() {
         return yrange;
+    }
+    
+    /**
+     * get yrange
+     * 
+     * @return range
+     */
+    public Real2 getCentroid() {
+        return new Real2(xrange.getMidPoint(), yrange.getMidPoint());
     }
     /**
      * is an Real2 within a Real2Range

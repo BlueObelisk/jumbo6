@@ -203,11 +203,23 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
      * 
      * @param element to copy from
      */
-    public void copyChildrenFrom(CMLElement element) {
+    public void copyChildrenFrom(Element element) {
         for (int i = 0; i < element.getChildCount(); i++) {
             Node childNode = element.getChild(i);
             Node newNode = childNode.copy();
             this.appendChild(newNode);
+        }
+    }
+    
+    /** copies children of element make subclasses when required
+     * 
+     * @param element to copy from
+     */
+    public static void copyChildrenFromTo(Element element, Element to) {
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node childNode = element.getChild(i);
+            Node newNode = childNode.copy();
+            to.appendChild(newNode);
         }
     }
     

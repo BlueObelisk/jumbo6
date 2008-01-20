@@ -55,20 +55,20 @@ public class AtomMatcher extends AbstractTool {
     public enum Strategy {
 
         /**
-         * atomicSymbol indicating that geometry is to be matched deprecated in
+         * geometry is to be matched deprecated in
          * favour of more precise methods
          * 
          */
         MATCH_GEOM("match geometry"),
 
         /**
-         * atomicSymbol indicating that distance matrix should be used
+         * distance matrix should be used
          * 
          */
         MATCH_DISTANCE_MATRIX("match via distance matrix"),
 
         /**
-         * atomicSymbol indicating that minimum total distance should be used
+         * minimum total distance should be used
          * 
          */
         MATCH_TOTAL_DISTANCE("match via minimum total distance"),
@@ -670,10 +670,8 @@ public class AtomMatcher extends AbstractTool {
     /**
      * creates a map by overlapping atoms between this and atomSet.
      * 
-     * @param atomSet1
-     *            to overlap
-     * @param atomSet2
-     *            target AtomSet to overlap
+     * @param atomSet1 to overlap
+     * @param atomSet2 target AtomSet to overlap
      * @return map from this to atomSet
      */
 
@@ -685,14 +683,14 @@ public class AtomMatcher extends AbstractTool {
         }
         // save coords, manipulate molecule and then retranslate
         List<Real2> coords1 = atomSet1.getVector2D();
-        List<Real2> coords2 = atomSet1.getVector2D();
+        List<Real2> coords2 = atomSet2.getVector2D();
 
         List atom2atomVector = this.overlap2D(atomSet1, atomSet2);
         if (this.getAtomMatchStrategy().equals(Strategy.MATCH_DISTANCE_MATRIX)) {
             try {
                 cmlMap = this.overlap2Dnew(atomSet1, atomSet2);
             } catch (CMLException e) {
-                System.err.print("BUG " + e);
+                throw new CMLRuntimeException("BUG... " + e);
             }
             // old approach
         } else if (this.getAtomMatchStrategy().equals(
@@ -712,9 +710,8 @@ public class AtomMatcher extends AbstractTool {
                 cmlMap.addUniqueLink(link, Direction.EITHER);
             }
         } else {
-            new Exception().printStackTrace();
-            logger.severe("MUST give geometrical atomMatchStrategy ("
-                    + this.getAtomMatchStrategy());
+            throw new CMLRuntimeException("MUST give geometrical atomMatchStrategy ("
+                    + this.getAtomMatchStrategy()+")");
         }
 
         try {
@@ -732,14 +729,12 @@ public class AtomMatcher extends AbstractTool {
      * link and deleting row and column. if distances are exactly equal the
      * result may be arbitary. fromRef is this, toRef is atomSet2
      * 
-     * @param atomSet
-     *            to overlap
-     * @param atomSet2
-     *            need not be of same size
+     * @param atomSet to overlap
+     * @param atomSet2 need not be of same size
      * @return map of as many links as the smallest atomSet
      * @throws CMLException
      */
-    CMLMap overlap2Dnew(CMLAtomSet atomSet, CMLAtomSet atomSet2)
+    private CMLMap overlap2Dnew(CMLAtomSet atomSet, CMLAtomSet atomSet2)
             throws CMLException {
         CMLMap cmlMap = new CMLMap();
         RealMatrix distMatrix = atomSet.getDistanceMatrix(atomSet2);
