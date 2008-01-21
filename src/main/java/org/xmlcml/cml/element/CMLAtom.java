@@ -1083,18 +1083,6 @@ public class CMLAtom extends AbstractAtom {
 		return isCompatible;
 	}
 
-	/** is bonded to metal.
-	 * @return is bonded
-	 */
-	public boolean isBondedToMetal() {
-		Nodes nodes = query(".//"+CMLScalar.NS+"[@dictRef='"+MoleculeTool.metalLigandDictRef+"']", CMLConstants.CML_XPATH);
-		if (nodes.size() > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	/**
 	 * gets list of ligands in 2D diagram in clockwise order.
 	 *
