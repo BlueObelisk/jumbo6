@@ -1906,10 +1906,6 @@ public class Util implements EuclidConstants {
 			result = result.substring(1);
 			negative = true;
 		}
-		// this removes leading zeroes :-(
-		while (result.charAt(0) == '0') {
-			result = result.substring(1);
-		}
 		if (negative) {
 			result = S_MINUS + result;
 		}
