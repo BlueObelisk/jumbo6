@@ -141,7 +141,7 @@ public class FragmentTool extends AbstractTool {
     
     /** process basic convention.
 	 * @param catalog to find molecules
-	 * "return fragmentList for Markush; null for simple fragment
+	 * @return fragmentList for Markush; null for simple fragment
      * @return element 
      */
     public CMLElement processBasic(Catalog catalog) {
