@@ -55,7 +55,7 @@ public class ValencyToolTest extends MoleculeAtomBondTest {
         Assert.assertEquals("nitro", CMLBond.SINGLE, bond.getOrder());
 
         // moleculeTool.markSpecial(); // hope this is right
-        new ValencyTool(nitroMethane).markupSpecial();
+        new ValencyTool(nitroMethane).markupCommonGroups();
         Assert.assertEquals("nitro", CMLBond.DOUBLE, bond.getOrder());
 
     }
