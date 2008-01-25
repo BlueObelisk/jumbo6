@@ -195,6 +195,14 @@ public class ValencyTool extends AbstractTool {
 			}
 		}
 	}
+	
+	/**
+	 * @deprecated Renamed to markupCommonGroups.
+	 */
+	public void markupSpecial() {
+		markupCommonGroups();
+	}
+	
 	/**
 	 * special routines. mark common groups with charges and 
 	 * bond orders
