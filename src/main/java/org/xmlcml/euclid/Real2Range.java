@@ -36,6 +36,7 @@ public class Real2Range implements EuclidConstants {
             yrange = yr;
         }
     }
+    
     /**
      * copy constructor
      * 
@@ -194,6 +195,7 @@ public class Real2Range implements EuclidConstants {
             yrange = yrange.plus(range);
         }
     }
+
     /**
      * to string.
      * 

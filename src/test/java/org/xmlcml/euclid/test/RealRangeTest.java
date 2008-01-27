@@ -138,7 +138,7 @@ public class RealRangeTest extends EuclidTestBase {
         Assert.assertEquals("ii", "(2.0,4.0)", ii.toString());
         iy = new RealRange();
         ii = ix.intersectionWith(iy);
-        Assert.assertEquals("ii", "NULL", ii.toString());
+        Assert.assertNull("ii", ii);
     }
 
     /**

@@ -2,6 +2,8 @@ package org.xmlcml.cml.element;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -61,6 +63,189 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
     	}
     };
 
+//  attribute:   id
+//  attribute:   title
+//  attribute:   abbreviation
+//  attribute:   symbol
+//  attribute:   name
+//  attribute:   parentSI
+//  attribute:   unitType
+//  attribute:   multiplierToSI
+//  attribute:   constantToSI
+
+    /** */
+    public static void ensure() {
+    };
+    
+//  ========================== time =========================
+    /** */
+    public final static CMLUnit SECOND = new CMLUnit(
+    		"sec",
+    		"second",
+    		"s",
+    		"s",
+    		"second",
+    		"units:s",
+    		"unitType:time",
+    		1.0,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit MINUTE = new CMLUnit(
+    		"min",
+    		"minute",
+    		"m",
+    		"m",
+    		"minute",
+    		"units:s",
+    		"unitType:time",
+    		60.0,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit HOUR = new CMLUnit(
+    		"hour",
+    		"hour",
+    		"h",
+    		"h",
+    		"hour",
+    		"units:s",
+    		"unitType:time",
+    		3600.0,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit DAY = new CMLUnit(
+    		"day",
+    		"day",
+    		"d",
+    		"d",
+    		"day",
+    		"units:s",
+    		"unitType:time",
+    		86400.0,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit WEEK = new CMLUnit(
+    		"week",
+    		"week",
+    		"wk",
+    		"wk",
+    		"week",
+    		"units:s",
+    		"unitType:time",
+    		604800.0,
+    		0.0
+    		);
+    	
+    /** */
+	public final static Map<String, CMLUnit> timeMap;
+	static {
+		timeMap = new HashMap<String, CMLUnit>();
+		timeMap.put("s", SECOND);
+		timeMap.put("sec", SECOND);
+		timeMap.put("second", SECOND);
+		timeMap.put("m", MINUTE);
+		timeMap.put("min", MINUTE);
+		timeMap.put("minute", MINUTE);
+		timeMap.put("h", HOUR);
+		timeMap.put("hr", HOUR);
+		timeMap.put("hour", HOUR);
+		timeMap.put("d", DAY);
+		timeMap.put("day", DAY);
+		timeMap.put("w", WEEK);
+		timeMap.put("wk", WEEK);
+		timeMap.put("week", WEEK);
+	}
+    		
+// ========================== temperature =========================
+    /** */
+    public final static CMLUnit KELVIN = new CMLUnit(
+    		"k",
+    		"Kelvin",
+    		"K",
+    		"K",
+    		"Kelvin",
+    		"units:k",
+    		"unitType:temp",
+    		1.0,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit CELSIUS = new CMLUnit(
+    		"c",
+    		"Celsius",
+    		"C",
+    		"C",
+    		"Celsius",
+    		"units:k",
+    		"unitType:temp",
+    		1.0,
+    		273.15
+    		);
+    
+    	
+    /** */
+	public final static Map<String, CMLUnit> temperatureMap;
+	static {
+		temperatureMap = new HashMap<String, CMLUnit>();
+		temperatureMap.put("k", KELVIN);
+		temperatureMap.put("kelvin", KELVIN);
+		temperatureMap.put("c", CELSIUS);
+		temperatureMap.put("celsius", CELSIUS);
+	}
+    		
+//  ========================== pressure =========================
+    /** */
+    public final static CMLUnit ATMOSPHERE = new CMLUnit(
+    		"atm",
+    		"atmosphere",
+    		"atm",
+    		"atm",
+    		"atmosphere",
+    		"units:atm",
+    		"unitType:pressure",
+    		101325. ,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit BAR = new CMLUnit(
+    		"bar",
+    		"bar",
+    		"bar",
+    		"bar",
+    		"bar",
+    		"units:bar",
+    		"unitType:pressure",
+    		100000.,
+    		0.0
+    		);
+    /** */
+    public final static CMLUnit PASCAL = new CMLUnit(
+    		"Pa",
+    		"pascal",
+    		"Pa",
+    		"Pa",
+    		"pascal",
+    		"units:pa",
+    		"unitType:pressure",
+    		1.0,
+    		0.0
+    		);
+    /** */
+    	
+    /** */
+	public final static Map<String, CMLUnit> pressureMap;
+	static {
+		pressureMap = new HashMap<String, CMLUnit>();
+		pressureMap.put("Pa", PASCAL);
+		pressureMap.put("pascal", PASCAL);
+		pressureMap.put("atm", ATMOSPHERE);
+		pressureMap.put("atmosphere", ATMOSPHERE);
+		pressureMap.put("bar", BAR);
+	}
+    		
     /**
      * can be cached within the unit.
      */
@@ -72,6 +257,39 @@ public class CMLUnit extends AbstractUnit implements GenericEntry {
         this.setParentSI("si:unknown");
         this.setUnitType("unitType:unknown");
     }
+    
+    /** constructor
+     * @param id
+     * @param title
+     * @param abbreviation
+     * @param symbol
+     * @param name
+     * @param parentSI
+     * @param unitType
+     * @param multiplierToSI
+     * @param constantToSI
+     */
+    CMLUnit(
+    	String id,
+    	String title,
+    	String abbreviation,
+    	String symbol,
+    	String name,
+    	String parentSI,
+    	String unitType,
+    	double multiplierToSI,
+    	double constantToSI
+    	) {
+        this.setId(id);
+        this.setTitle(title);
+        this.setAbbreviation(abbreviation);
+        this.setSymbol(symbol);
+        this.setName(name);
+        this.setParentSI(parentSI);
+        this.setUnitType(unitType);
+        this.setMultiplierToSI(multiplierToSI);
+        this.setConstantToSI(constantToSI);
+        }
 
     /** contructor.
      * use with great care as units should have their unitList parent

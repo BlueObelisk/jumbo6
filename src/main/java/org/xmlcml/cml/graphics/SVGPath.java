@@ -29,6 +29,8 @@ public class SVGPath extends SVGElement {
 	 * 
 	 * @param x1
 	 * @param x2
+	 * @param y1
+	 * @param y2
 	 */
 	public SVGPath(Real2 x1, Real2 x2, Real2 y1, Real2 y2) {
 		this();

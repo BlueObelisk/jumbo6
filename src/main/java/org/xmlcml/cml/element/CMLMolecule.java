@@ -1836,7 +1836,7 @@ public class CMLMolecule
 	/**
 	 * transform molecule in 2D.
 	 *
-	 * @param 3*3 matrix apply to all 2D coordinates
+	 * @param matrix 3*3 matrix apply to all 2D coordinates
 	 */
 	public void transform(CMLMatrix matrix) {
 		if (matrix == null ||

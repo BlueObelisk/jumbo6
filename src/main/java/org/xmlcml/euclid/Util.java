@@ -2148,13 +2148,21 @@ public class Util implements EuclidConstants {
 
 	/**
 	 * splits string into doubles.
+	 * assumes single space delimiters
+	 * @param s the string
+	 * @return array
+	 * @throws EuclidRuntimeException cannot parse as ints
+	 */
+	public final static double[] splitToDoubleArray(String s) {
+		return splitToDoubleArray(s, S_SPACE);
+	}
+	/**
+	 * splits string into doubles.
 	 * 
-	 * @param s
-	 *            the string
+	 * @param s the string
 	 * @param delim
 	 * @return array
-	 * @throws EuclidRuntimeException
-	 *             cannot parse as ints
+	 * @throws EuclidRuntimeException cannot parse as ints
 	 */
 	public final static double[] splitToDoubleArray(String s, String delim)
 			throws EuclidRuntimeException {

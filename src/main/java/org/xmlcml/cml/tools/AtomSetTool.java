@@ -74,6 +74,16 @@ public class AtomSetTool extends AbstractTool {
 		return atomSetTool;
 	}
 
+	/** gets AtomSetTool associated with molecule.
+	 * if null creates one and sets it in atomSet
+	 * (currently always creates it as molecule does not remember atomSet)
+	 * @param molecule
+	 * @return tool
+	 */
+	public static AtomSetTool getOrCreateTool(CMLMolecule molecule) {
+		return getOrCreateTool(molecule.getAtomSet());
+	}
+
     // =============== ATOMSET =========================
 
     /**
@@ -339,6 +349,54 @@ public class AtomSetTool extends AbstractTool {
         CMLAtom parentAtom = parentTable.get(atom);
         return parentAtom;
     }
+    
+    /** find atom closest to point.
+     * uses 2D coordinates
+     * skips atoms without 2D coords
+     * @param point
+     * @return atom or null
+     */
+    public CMLAtom getNearestAtom(Real2 point) {
+        CMLAtom closestAtom = null;
+        double maxDist = 999999.;
+		List<CMLAtom> thisAtoms = atomSet.getAtoms();
+		for (int i = 0; i < thisAtoms.size(); i++) {
+		    CMLAtom thisAtom = thisAtoms.get(i);
+	        Real2 thisXY2 = thisAtom.getXY2();
+	        if (thisXY2 != null) {
+		        double dist = thisXY2.getDistance(point);
+		        if (dist < maxDist) {
+		            maxDist = dist;
+		            closestAtom = thisAtom;
+		        }
+	        }
+		}
+		return closestAtom;
+	}
+    
+    /** find atom closest to point.
+     * uses 3D coordinates
+     * skips atoms without 3D coords
+     * @param point
+     * @return atom or null
+     */
+    public CMLAtom getNearestAtom(Point3 point) {
+        CMLAtom closestAtom = null;
+        double maxDist = 999999.;
+		List<CMLAtom> thisAtoms = atomSet.getAtoms();
+		for (int i = 0; i < thisAtoms.size(); i++) {
+		    CMLAtom thisAtom = thisAtoms.get(i);
+	        Point3 thisXYZ3 = thisAtom.getXYZ3();
+	        if (thisXYZ3 != null) {
+		        double dist = thisXYZ3.getDistanceFromPoint(point);
+		        if (dist < maxDist) {
+		            maxDist = dist;
+		            closestAtom = thisAtom;
+		        }
+	        }
+		}
+		return closestAtom;
+	}
 
     /**
      * get nearest atom.
@@ -351,27 +409,38 @@ public class AtomSetTool extends AbstractTool {
      */
     public CMLAtom getNearestAtom2OfSameElementType(CMLAtom atom) {
         CMLAtom closestAtom = null;
-        double maxDist = 999999.;
         if (atom != null) {
             String elementType = atom.getElementType();
             Real2 xy2 = atom.getXY2();
             if (xy2 != null) {
-                List<CMLAtom> thisAtoms = atomSet.getAtoms();
-                for (int i = 0; i < thisAtoms.size(); i++) {
-                    CMLAtom thisAtom = thisAtoms.get(i);
-                    if (elementType.equals(thisAtom.getElementType())) {
-                        Real2 thisXY2 = thisAtom.getXY2();
-                        double dist = thisXY2.getDistance(xy2);
-                        if (dist < maxDist) {
-                            maxDist = dist;
-                            closestAtom = thisAtom;
-                        }
-                    }
-                }
+                closestAtom = getNearestAtomOfSameElementType(elementType, xy2);
             }
         }
         return closestAtom;
     }
+
+	/**
+	 * @param elementType
+	 * @param xy2
+	 * @return atom or null
+	 */
+	public CMLAtom getNearestAtomOfSameElementType(String elementType, Real2 xy2) {
+        CMLAtom closestAtom = null;
+        double maxDist = 999999.;
+		List<CMLAtom> thisAtoms = atomSet.getAtoms();
+		for (int i = 0; i < thisAtoms.size(); i++) {
+		    CMLAtom thisAtom = thisAtoms.get(i);
+		    if (elementType.equals(thisAtom.getElementType())) {
+		        Real2 thisXY2 = thisAtom.getXY2();
+		        double dist = thisXY2.getDistance(xy2);
+		        if (dist < maxDist) {
+		            maxDist = dist;
+		            closestAtom = thisAtom;
+		        }
+		    }
+		}
+		return closestAtom;
+	}
 
     /**
      * remove any links pointing to atoms which differ in generic ways. this

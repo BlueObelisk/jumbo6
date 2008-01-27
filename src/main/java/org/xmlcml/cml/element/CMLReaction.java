@@ -347,6 +347,26 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
 //    public List<ReactionComponent> getReactionComponentChildren() {
 //        return CMLReaction.getReactionComponentDescendants(this, false);
 //    }
+    /**
+     * @param reactant
+     */
+    public void addReactant(CMLReactant reactant) {
+    	CMLReactantList reactantList = getOrCreateReactantList();
+    	reactantList.addReactant(reactant);
+    }
+    
+    /**
+     * create if necessary
+     * @return reactantList
+     */
+    public CMLReactantList getOrCreateReactantList() {
+    	CMLReactantList reactantList = this.getReactantList();
+    	if (reactantList == null) {
+    		reactantList = new CMLReactantList();
+    		this.addReactantList(reactantList);
+    	}
+    	return reactantList;
+    }
 
     /**
      * utility for any ReactionComponent classes.

@@ -214,6 +214,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     /** copies children of element make subclasses when required
      * 
      * @param element to copy from
+     * @param to
      */
     public static void copyChildrenFromTo(Element element, Element to) {
         for (int i = 0; i < element.getChildCount(); i++) {
