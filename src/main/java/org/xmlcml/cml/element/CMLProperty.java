@@ -69,6 +69,7 @@ public class CMLProperty extends AbstractProperty {
 		/** */
         WATER_SOLUBILITY("waterSolubility"),
         ;
+        /** value */
         public String v;
         private Map<String, DictRef> map = new HashMap<String, DictRef>();
         private DictRef(String v) {

@@ -185,7 +185,7 @@ public class CMLBond extends AbstractBond {
 			throw new CMLRuntimeException("Atoms in bond muct not be null");
 		}
 		if (atom1 == atom2) {
-			throw new CMLRuntimeException("Atoms in bond must be distinct");
+			throw new CMLRuntimeException("Atoms in bond must be distinct: "+atom1.getId()+", "+atom2.getId());
 		}
 		if (atom1.getMolecule() == null || atom2.getMolecule() == null) {
 			throw new CMLRuntimeException(

@@ -254,7 +254,7 @@ public class CMLBondArray extends AbstractBondArray {
      */
     public CMLBond removeBond(CMLBond bond) {
         CMLBond deletedBond = null;
-        if (bond.getParent().equals(this)) {
+        if (bond != null && this.equals(bond.getParent())) {
             List<CMLAtom> atoms = bond.getAtoms();
             if (atoms != null) {
                 int err = 0;

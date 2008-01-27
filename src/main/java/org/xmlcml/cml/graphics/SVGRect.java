@@ -29,6 +29,8 @@ public class SVGRect extends SVGElement {
 	 * 
 	 * @param x1
 	 * @param x2
+	 * @param y1
+	 * @param y2
 	 */
 	public SVGRect(Real2 x1, Real2 x2, Real2 y1, Real2 y2) {
 		this();

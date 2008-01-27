@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import nu.xom.Element;
 
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLLabel;
@@ -66,6 +67,17 @@ public class MappedAtomPair extends AtomBondPair {
     	
     }
 
+    /** purely to make it compile
+     * @param atom1
+     * @param atom2
+     * @param elements
+     * @param iii
+     * @deprecated
+     */
+    public MappedAtomPair(CMLAtom atom1, CMLAtom atom2, Element[] elements, int iii) {
+    	throw new CMLRuntimeException("NYI");
+    }
+    
     /** iterate through list till atomIds match.
      * if one id is null, match the other
      * @param toId

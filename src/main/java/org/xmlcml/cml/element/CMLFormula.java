@@ -247,7 +247,8 @@ public class CMLFormula extends AbstractFormula {
 			String elementType = atom.getElementType();
 			if (elementType == null
 					|| ChemicalElement.getChemicalElement(elementType) == null) {
-				throw new CMLRuntimeException("Missing or invalid elementType: "
+				throw new CMLRuntimeException(
+						"Missing or invalid elementType for atom : "+atom.getId()+" .. "
 						+ elementType);
 			}
 			if (AS.H.equals(elementType) && strategy == null) {
@@ -494,6 +495,56 @@ public class CMLFormula extends AbstractFormula {
     		}
     	}
     	return concise;
+    }
+    
+    /**
+     * strips spaces and redundant 1's from concise
+     * @param concise
+     * @return stripped concise or empty if null
+     */
+    public static String getCompactedConcise(String concise) {
+    	String s = S_EMPTY;
+    	if (concise != null) {
+	    	String[] split = concise.split(S_SPACE);
+	    	int n = split.length/2;
+	    	for (int j = 0; j < 2*n; j+=2) {
+	    		s += split[j];
+	    		if (!split[j+1].equals("1")) {
+	    			s += split[j+1];
+	    		}
+	    		if (n % 2 != 0) {
+	    			s += split[split.length-1];
+	    		}
+	    	}
+    	}
+    	return s;
+    }
+	
+    /**
+     * strips spaces and redundant 1's from concise
+     * adds subscripts. Returns a span element without namespace
+     * @param concise
+     * @return subscripted concise or empty
+     */
+    public static Element getSubscriptedConcise(String concise) {
+    	Element element = new Element("span");
+    	if (concise != null) {
+	    	String[] split = concise.split(S_SPACE);
+	    	int len = split.length;
+	    	int n = len/2;
+	    	for (int j = 0; j < 2*n; j+=2) {
+	    		element.appendChild(split[j]);
+	    		if (!split[j+1].equals("1")) {
+	    			Element sub = new Element("sub");
+	    			sub.appendChild(split[j+1]);
+	    			element.appendChild(sub);
+	    		}
+	    	}
+    		if (len % 2 != 0) {
+    			element.appendChild(split[len-1]);
+    		}
+    	}
+    	return element;
     }
 	
 

@@ -1,4 +1,6 @@
 package org.xmlcml.euclid;
+
+
 /**
  * maximum and minimum values
  * 
@@ -34,6 +36,23 @@ public class RealRange implements EuclidConstants {
      * @param maxv
      */
     public RealRange(double minv, double maxv) {
+        setRange(minv, maxv);
+    }
+    
+    /**
+     * initialise with min and max values; if minv > maxv create inValid
+     * RealRange
+     * 
+     * @param minv
+     * @param maxv
+     * @param normalize swap params if min > max
+     */
+    public RealRange(double minv, double maxv, boolean normalize) {
+    	if (minv > maxv) {
+    		double temp = minv;
+    		minv = maxv;
+    		maxv = temp;
+    	}
         setRange(minv, maxv);
     }
     /** sets range.
@@ -106,19 +125,24 @@ public class RealRange implements EuclidConstants {
         return temp;
     }
     /**
-     * intersect two ranges and take the range common to both; return invalid
-     * range if no overlap
+     * intersect two ranges and take the range common to both;
+     * return null if no overlap
      * 
      * @param r2
      * @return range
      */
     public RealRange intersectionWith(RealRange r2) {
-        if (!isValid() || r2 == null || !r2.isValid()) {
-            return new RealRange();
+    	RealRange inter = null;
+//    	System.out.println(this+" ... "+r2);
+        if (isValid() && r2 != null && r2.isValid()) {
+	        double minv = Math.max(minval, r2.minval);
+	        double maxv = Math.min(maxval, r2.maxval);
+	        if (minv <= maxv) {
+//		        System.out.println("MMM "+minv+"/"+maxv);
+	        	inter = new RealRange(minv, maxv);
+	        }
         }
-        double minv = Math.max(minval, r2.minval);
-        double maxv = Math.min(maxval, r2.maxval);
-        return new RealRange(minv, maxv);
+        return inter;
     }
     /**
      * get minimum value (POSITIVE_INFINITY if inValid)
@@ -214,6 +238,17 @@ public class RealRange implements EuclidConstants {
     	double scale = Double.NaN;
     	
     	return scale;
+    }
+    
+    /**
+     * if min > max swap them
+     */
+    public void normalize() {
+		if (minval > maxval) {
+			double temp = minval;
+			minval = maxval;
+			maxval = temp;
+		}
     }
     /**
      * to string. format: "NULL" or S_LBRAK+minval+S_COMMA+maxval+S_RBRAK;
