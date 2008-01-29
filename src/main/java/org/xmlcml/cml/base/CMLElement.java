@@ -31,7 +31,7 @@ import org.xmlcml.euclid.Util;
  * @version 5.0
  * 
  */
-public class CMLElement extends Element implements CMLConstants, Comparable {
+public class CMLElement extends Element implements CMLConstants, Comparable, HasId {
 
 	
     /** hybridisation - from whatever source */
@@ -125,6 +125,22 @@ public class CMLElement extends Element implements CMLConstants, Comparable {
     }
     
     private void init() {
+    }
+
+    /**
+     * normally overridden
+     * @param id
+     */
+    public void setId(String id) {
+    	this.addAttribute(new Attribute(CMLXSD_ID, id));
+    }
+
+    /**
+     * normally overridden
+     * @return id
+     */
+    public String getId() {
+    	return this.getAttributeValue(CMLXSD_ID);
     }
 
     /**
