@@ -612,7 +612,12 @@ public class MDLConverter implements CMLConstants {
         }
 
         if (!date.trim().equals(S_EMPTY)) {
-            int y = parseInteger(date, 4, 6);
+        	int y = 0;
+        	try {
+        		y = parseInteger(date, 4, 6);
+        	} catch (Exception xx2) {
+        		y = 0;
+        	}
             String year = (y > 50) ? S_EMPTY + (y + 1900) : S_EMPTY
                     + (y + 2000);
             String month = date.substring(0, 2).trim();

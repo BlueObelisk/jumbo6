@@ -26,6 +26,18 @@
     <rgb red="0.07" green="0.50" blue="0.70"/>
   </element>
   
+ <element atomicnumber="1" id="T" name="tritium" group="1" period="1">
+    <maxbondorder source="openbabel">1</maxbondorder>
+    <mass source="webelements" unit="amu">3.016049</mass>
+    <electronicconfiguration source="webelements" type="groundstate">1s1</electronicconfiguration>
+  </element>
+
+ <element atomicnumber="1" id="D" name="deuterium" group="1" period="1">
+    <maxbondorder source="openbabel">1</maxbondorder>
+    <mass source="webelements" unit="amu">2.01355</mass>
+    <electronicconfiguration source="webelements" type="groundstate">1s1</electronicconfiguration>
+  </element>
+
   <element atomicnumber="1" id="H" name="hydrogen" group="1" period="1">
     <radii source="openbabel">
       <radius type="covalent" unit="angstrom">0.230</radius>
@@ -50,6 +62,8 @@
     </radii>
     <electronegativity source="webelements" type="pauling" unit="pauling">2.20</electronegativity>
   </element>
+
+
   <element atomicnumber="2" id="He" name="helium" group="18" period="1">
     <radii source="openbabel">
       <radius type="covalent" unit="angstrom">0.930</radius>

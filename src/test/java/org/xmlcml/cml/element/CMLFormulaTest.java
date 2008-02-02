@@ -258,6 +258,100 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         count = xmlForm1.getCount();
         Assert.assertEquals("xmlForm1 count", 1.0, count, 0.00001);
     }
+    
+    /**
+     * 
+     */
+    @Test
+    public void testAddHydrogensIfExplicitAndPresent() {
+    	CMLMolecule molecule;
+    	CMLAtom atom;
+    	CMLBond bond;
+    	CMLAtom hatom;
+    	CMLFormula formula;
+    	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setHydrogenCount(4);
+    	atom.setElementType("C");
+    	for (int i = 0; i < 4; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+1));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    		bond = new CMLBond(atom, hatom);
+    		molecule.addBond(bond);
+    	}
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	
+// test with only hydrogen count    	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setHydrogenCount(4);
+    	atom.setElementType("C");
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+
+// some explicit H    	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setHydrogenCount(4);
+    	atom.setElementType("C");
+    	for (int i = 0; i < 2; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+1));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    		bond = new CMLBond(atom, hatom);
+    		molecule.addBond(bond);
+    	}
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	
+// no hydrogen count    	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("C");
+    	for (int i = 0; i < 4; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+1));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    		bond = new CMLBond(atom, hatom);
+    		molecule.addBond(bond);
+    	}
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	
+    	
+    	// inconsistent    	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("C");
+    	atom.setHydrogenCount(2);
+    	for (int i = 0; i < 4; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+1));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    		bond = new CMLBond(atom, hatom);
+    		molecule.addBond(bond);
+    	}
+    	formula = new CMLFormula(molecule);
+    	formula.debug("BAD");
+    	Assert.assertEquals("formul", "C 1 H 2", formula.getConcise());
+    }
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLFormula.setCount(double)'
