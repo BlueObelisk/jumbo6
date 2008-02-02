@@ -262,6 +262,14 @@ public class CMLFormula extends AbstractFormula {
 			if (atom.getFormalChargeAttribute() != null) {
 				formalCharge += atom.getFormalCharge();
 			}
+//<<<<<<< .mine
+//			if (atom.getHydrogenCountAttribute() != null) {
+//				int hydrogenCount = atom.getHydrogenCount();
+//				if (hydrogenCount != 0) {
+//					this.add("H", hydrogenCount);
+//				}
+//			}
+//=======
 			if (atom.getHydrogenCountAttribute() != null) {
 				if (strategy == null) {
 					strategy = HydrogenStrategy.HYDROGEN_COUNT;
@@ -273,6 +281,7 @@ public class CMLFormula extends AbstractFormula {
 					}
 				}
 			}
+//>>>>>>> .r590
 		}
 		// has the molecule a net computed charge?
 		if (formalCharge != Integer.MIN_VALUE) {
