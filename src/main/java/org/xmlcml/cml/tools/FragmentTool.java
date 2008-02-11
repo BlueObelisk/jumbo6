@@ -686,6 +686,9 @@ class BasicProcessor implements CMLConstants {
     			j = i;
     			break;
     		}
+    		else {
+    			rand -= ratios[i];
+    		}
     	}
     	CMLFragment newFragment = new CMLFragment(fragments.get(j));
     	newFragment.removeChildren();
