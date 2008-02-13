@@ -987,8 +987,8 @@ public class ValencyTool extends AbstractTool {
 			// remove metal atoms so we can calculate bond orders on organic species, 
 			// then we will reattach the metal atoms later in the method
 			Map<List<CMLAtom>, List<CMLBond>> metalAtomAndBondMap = ValencyTool.removeMetalAtomsAndBonds(mol);
-			for (Iterator it=metalAtomAndBondMap.keySet().iterator(); it.hasNext(); ) {
-				List<CMLAtom> atomList = (List<CMLAtom>)it.next();
+			for (Iterator<List<CMLAtom>> it=metalAtomAndBondMap.keySet().iterator(); it.hasNext(); ) {
+				List<CMLAtom> atomList = it.next();
 				if (atomList.size() > 0) {
 					isMetalComplex = true;
 					// as we can't take metals into account when calculating bonds and charges, then

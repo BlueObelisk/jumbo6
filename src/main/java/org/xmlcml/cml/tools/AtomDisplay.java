@@ -17,7 +17,7 @@ public class AtomDisplay extends AbstractDisplay {
 		DEFAULT.fontWeight = FONT_WEIGHT_NORMAL;
 		DEFAULT.fontFamily = FONT_SANS_SERIF;
 		
-		DEFAULT.fontSize = 1.0;
+		DEFAULT.fontSize = 0.35;
 		DEFAULT.color = "black";
 		DEFAULT.fill = DEFAULT.color;
 		DEFAULT.stroke = null;
@@ -51,6 +51,8 @@ public class AtomDisplay extends AbstractDisplay {
 	private double xIdOffsetFactor = -0.1;
 	private double yIdOffsetFactor = -0.0;
 	private double backgroundIdRadiusFactor = 0.4;
+	
+	private double scale = 1.0;
 	/**
 	 * @return the displayLabels
 	 */
@@ -284,4 +286,22 @@ public class AtomDisplay extends AbstractDisplay {
 		this.displayCarbons = displayCarbons;
 	}
 	
+	/**
+	 */
+	public double getScaledFontSize() {
+		return scale * fontSize;
+	}
+	
+	/**
+	 * @return the scale
+	 */
+	public double getScale() {
+		return scale;
+	}
+	/**
+	 * @param width the width to set
+	 */
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
 }

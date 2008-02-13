@@ -26,7 +26,7 @@ public interface Indexable {
 	/** ensure integrity of list and children.
 	 * @return class of parent
 	 */
-	Class getIndexableListClass();
+	Class<?> getIndexableListClass();
 
 	/** get id.
 	 * @return id

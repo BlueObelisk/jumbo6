@@ -58,7 +58,7 @@ public class CMLEnumeration extends AbstractEnumeration implements Indexable {
     /** containing class is CMLEntry.
      * @return CMLEntry.class
      */
-    public Class getIndexableListClass() {
+    public Class<?> getIndexableListClass() {
     	return CMLEntry.class;
     }
 

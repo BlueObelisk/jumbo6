@@ -119,7 +119,7 @@ public class AttributeFactory implements CMLConstants {
 		try {
 			String attClassName = ATTRIBUTE_CLASS_BASE+S_PERIOD+
 					CMLUtil.capitalize(name)+ATTRIBUTE;
-			Class attClass = Class.forName(attClassName);
+			Class<?> attClass = Class.forName(attClassName);
 			if (attClass != null) {
 				attribute = (CMLAttribute) attClass.newInstance();
 			}

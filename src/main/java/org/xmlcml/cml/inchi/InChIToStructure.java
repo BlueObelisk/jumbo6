@@ -92,7 +92,7 @@ public class InChIToStructure implements CMLConstants {
 	 * @param options
 	 * @throws CMLException
 	 */
-	public InChIToStructure(String inchi, List options) throws CMLException {
+	public InChIToStructure(String inchi, List<String> options) throws CMLException {
 		try {
 			input = new JniInchiInputInchi(inchi, options);
 		} catch (JniInchiException jie) {

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -35,7 +36,7 @@ public class RTSI implements EuclidConstants {
      */
     public static void find(String tosubclassname) {
         try {
-            Class tosubclass = Class.forName(tosubclassname);
+            Class<?> tosubclass = Class.forName(tosubclassname);
             Package[] pcks = Package.getPackages();
             for (int i = 0; i < pcks.length; i++) {
                 find(pcks[i].getName(), tosubclass);
@@ -56,7 +57,7 @@ public class RTSI implements EuclidConstants {
      */
     public static void find(String pckname, String tosubclassname) {
         try {
-            Class tosubclass = Class.forName(tosubclassname);
+            Class<?> tosubclass = Class.forName(tosubclassname);
             find(pckname, tosubclass);
         } catch (ClassNotFoundException ex) {
             System.err.println("Class " + tosubclassname + " not found!");
@@ -72,7 +73,7 @@ public class RTSI implements EuclidConstants {
      * @param tosubclass
      *            the Class object to inherit from
      */
-    public static void find(String pckgname, Class tosubclass) {
+    public static void find(String pckgname, Class<?> tosubclass) {
         // Code from JWhich
         // ======
         // Translate the package name into an absolute path
@@ -144,9 +145,9 @@ public class RTSI implements EuclidConstants {
                 JarURLConnection conn = (JarURLConnection) url.openConnection();
                 String starts = conn.getEntryName();
                 JarFile jfile = conn.getJarFile();
-                Enumeration e = jfile.entries();
+                Enumeration<JarEntry> e = jfile.entries();
                 while (e.hasMoreElements()) {
-                    ZipEntry entry = (ZipEntry) e.nextElement();
+                    ZipEntry entry = e.nextElement();
                     String entryname = entry.getName();
                     if (entryname.startsWith(starts)
                             && (entryname.lastIndexOf('/') <= starts.length())

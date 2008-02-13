@@ -348,7 +348,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
      * @param atomPairList to choose 
      * @return new atomPair
      */
-    public MappedAtomPair getAtomPair(int ii, List atomPairList) {
+    public MappedAtomPair getAtomPair(int ii, List<MappedAtomPair> atomPairList) {
     	String atomId1 = (bond1 == null) ? null : bond1.getAtomId(ii);
     	String atomId2 = (bond2 == null) ? null : bond2.getAtomId(ii);
     	MappedAtomPair atomPair = MappedAtomPair.getAtomPair(atomId1, atomId2, atomPairList);

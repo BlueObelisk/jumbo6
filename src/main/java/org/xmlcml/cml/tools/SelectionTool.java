@@ -179,7 +179,7 @@ public class SelectionTool implements CMLConstants {
 		enableBondMap();
 		if (bond != null) {
 			bondMap.put(bond, new Boolean(selected));
-			System.out.println("SET SEL BOND "+bond.getId());
+//			System.out.println("SET SEL BOND "+bond.getId());
 			if (selected) {
 				highlightBond(bond);
 			} else {

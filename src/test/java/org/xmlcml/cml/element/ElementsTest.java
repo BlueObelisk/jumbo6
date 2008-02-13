@@ -19,7 +19,7 @@ import org.xmlcml.cml.base.CMLElements;
 public class ElementsTest extends AbstractTest {
     CMLElement cml1;
     Elements elems;
-    CMLElements cmlElems;
+    CMLElements<CMLElement> cmlElems;
     CMLElements<CMLAtom> atoms;
     /**
      * setup.
@@ -37,7 +37,7 @@ public class ElementsTest extends AbstractTest {
         cml2.addAttribute(new Attribute("id", "id2"));
         cml1.appendChild(cml2);
         elems = cml1.getChildElements();
-        cmlElems = new CMLElements(elems);
+        cmlElems = new CMLElements<CMLElement>(elems);
         CMLAtomArray atomArray = new CMLAtomArray();
         CMLAtom atom = new CMLAtom();
         atom.setId("a1");
@@ -52,7 +52,7 @@ public class ElementsTest extends AbstractTest {
      */
     @Test
     public void testCMLElements() {
-        CMLElements cc = new CMLElements(elems);
+        CMLElements<CMLElement> cc = new CMLElements<CMLElement>(elems);
         Assert.assertEquals("constructor", 2, cc.size());
     }
     /**
@@ -60,10 +60,10 @@ public class ElementsTest extends AbstractTest {
      */
     @Test
     public void testIterator() {
-        Iterator it = cmlElems.iterator();
+        Iterator<CMLElement> it = cmlElems.iterator();
         int i = 0;
         while (it.hasNext()) {
-            CMLElement elem = (CMLElement) it.next();
+            CMLElement elem = it.next();
             Assert.assertEquals("class", CMLElement.class, elem.getClass());
             Assert.assertEquals("id", "id" + (++i), elem
                     .getAttributeValue("id"));
@@ -100,7 +100,7 @@ public class ElementsTest extends AbstractTest {
      */
     @Test
     public void testGetType() {
-        Class classx = cmlElems.getType();
+        Class<?> classx = cmlElems.getType();
         Assert.assertEquals("type", org.xmlcml.cml.base.CMLElement.class,
                 classx);
         Assert.assertEquals("class", org.xmlcml.cml.element.CMLAtom.class,

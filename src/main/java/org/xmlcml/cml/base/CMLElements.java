@@ -20,7 +20,7 @@ public class CMLElements<E extends Element> implements Iterable<E>, CMLConstants
 
     private ArrayList<E> elementsArray;
 
-    private Class type;
+    private Class<?> type;
 
     /**
      * create from XOM elements.
@@ -85,11 +85,11 @@ public class CMLElements<E extends Element> implements Iterable<E>, CMLConstants
      * 
      * @return the class
      */
-    public Class getType() {
+    public Class<?> getType() {
         if (type.equals(java.lang.Class.class)) {
             int i = 0;
             for (Element element : elementsArray) {
-                Class classx = element.getClass();
+                Class<?> classx = element.getClass();
                 if (i == 0) {
                     type = classx;
                 } else if (!(type.equals(classx))) {

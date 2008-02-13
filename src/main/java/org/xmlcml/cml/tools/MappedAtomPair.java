@@ -85,11 +85,11 @@ public class MappedAtomPair extends AtomBondPair {
      * @param atomPairList
      * @return atom pair
      */
-	static MappedAtomPair getAtomPair(String toId, String fromId, List atomPairList) {
+	static MappedAtomPair getAtomPair(String toId, String fromId, List<MappedAtomPair> atomPairList) {
 		MappedAtomPair atomPair = null;
 		if (toId != null || fromId != null) {
 			for (int i = 0; i < atomPairList.size(); i++) {
-				MappedAtomPair listAtomPair = (MappedAtomPair) atomPairList.get(i);
+				MappedAtomPair listAtomPair = atomPairList.get(i);
 				if ((toId == null || toId.equals(listAtomPair.id2)) &&
 					(fromId == null || fromId.equals(listAtomPair.id1))) {
 					atomPair = listAtomPair;

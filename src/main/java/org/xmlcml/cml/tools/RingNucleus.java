@@ -41,10 +41,10 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	private List<Sprout> remoteSproutList;
 	private List<Real2> coordinateList;
 
-	private RingNucleus() {
-		init();
-		// 
-	}
+//	private RingNucleus() {
+//		init();
+//		// 
+//	}
 	/**
 	 * @return the ringList
 	 */

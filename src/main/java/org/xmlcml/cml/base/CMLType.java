@@ -166,7 +166,7 @@ public class CMLType implements CMLConstants {
 			restriction = (Element) restrictions.get(0);
 		} else if (restrictions.size() > 1) {
 			System.err.println("More than one restriction");
-			CMLUtil.debug(simpleType);
+			CMLUtil.debug(simpleType, "CMLTYPE");
 		}
 		return restriction;
 	}
@@ -209,13 +209,13 @@ public class CMLType implements CMLConstants {
 			isList = true;
 			String baseS = list.getAttributeValue("itemType");
 			if (baseS == null) {
-				CMLUtil.debug(simpleType);
+				CMLUtil.debug(simpleType, "SIMPLE1");
 				throw new CMLRuntimeException("no base for " + name);
 			}
 			base = baseS;
 		} else if (lists.size() > 1) {
 			System.err.println("More than one list");
-			CMLUtil.debug(simpleType);
+			CMLUtil.debug(simpleType, "SIMPLE2");
 		}
 		return list;
 	}
@@ -297,7 +297,7 @@ public class CMLType implements CMLConstants {
 				listLength = Integer.parseInt(((Element) lengths.get(0))
 						.getAttributeValue("value"));
 			} catch (NumberFormatException e) {
-				CMLUtil.debug(simpleType);
+				CMLUtil.debug(simpleType, "SIMPLE3");
 				throw new CMLRuntimeException("Bad length " + e);
 			}
 		}

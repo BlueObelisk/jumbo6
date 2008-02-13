@@ -78,16 +78,16 @@ public class CMLPeakTest extends PeakSpectrumTest {
 		CMLPeak peak = getPeaks().get(1);
 		List<List<CMLAtom>> couplingsfrom = peak
 				.getCouplingsFrom(getMolecule());
-		for (List l : couplingsfrom) {
+		for (List<CMLAtom> l : couplingsfrom) {
 			if (l.size() == 1) {
 				Assert.assertEquals("coupling 1 from p2", "a1", ((CMLAtom) l
 						.get(0)).getId());
 			}
 			if (l.size() == 2) {
 				Assert.assertEquals("coupling 2 atom 1 from p2", "a3",
-						((CMLAtom) l.get(0)).getId());
+						l.get(0).getId());
 				Assert.assertEquals("coupling 2 atom 2 from p2", "a4",
-						((CMLAtom) l.get(1)).getId());
+						l.get(1).getId());
 			}
 		}
 	}

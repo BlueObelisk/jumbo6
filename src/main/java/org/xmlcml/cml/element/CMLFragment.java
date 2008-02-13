@@ -115,7 +115,7 @@ public class CMLFragment extends AbstractFragment implements Indexable {
     /** ensure integrity between list and children.
      * @return CMLFragmentList.class
      */
-    public Class getIndexableListClass() {
+    public Class<?> getIndexableListClass() {
     	return CMLFragmentList.class;
     }
 }

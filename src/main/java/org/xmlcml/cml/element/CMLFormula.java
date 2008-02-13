@@ -1918,7 +1918,7 @@ public class CMLFormula extends AbstractFormula {
 	 * @param elementTypeVector
 	 * @return mass
 	 */
-	public static double getCalculatedMass(List elementTypeVector,
+	public static double getCalculatedMass(List<String> elementTypeVector,
 			RealArray countArray)  {
 		if (elementTypeVector == null || countArray == null
 				|| elementTypeVector.size() != countArray.size()) {
@@ -1926,7 +1926,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		double mwt = 0.0;
 		for (int i = 0; i < elementTypeVector.size(); i++) {
-			String elType = (String) elementTypeVector.get(i);
+			String elType = elementTypeVector.get(i);
 			ChemicalElement el = ChemicalElement.getChemicalElement(elType);
 			if (el == null) {
 				throw new CMLRuntimeException("Unsupported element: " + elType);

@@ -135,6 +135,7 @@ public abstract class CMLUtil implements CMLConstants {
      * debug an element. outputs XML to sysout
      * indent = 2
      * @param el the element
+     * @deprecated use debug(el, message) instead
      */
     public static void debug(Element el) {
         try {
@@ -157,6 +158,21 @@ public abstract class CMLUtil implements CMLConstants {
             throw new CMLRuntimeException("BUG " + e);
         }
     }
+    
+
+	/**
+	 * debug an element.
+	 * 
+	 * @param el the element
+	 * @param os output stream
+	 * @param indent indentation
+	 * @throws IOException
+	 */
+	public static void debug(Element el, String message) {
+		System.out.println(">>>>"+message+">>>>");
+		CMLUtil.debug(el);
+		System.out.println("<<<<"+message+"<<<<");
+	}
 
 	/**
 	 * debug an element.

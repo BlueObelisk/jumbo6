@@ -93,7 +93,7 @@ public class IndexableByIdListManager implements CMLConstants {
      * @param indexableListClass
      * @return list of indexables
      */
-    public static IndexableByIdList createFrom(URL url, Class indexableListClass) {
+    public static IndexableByIdList createFrom(URL url, Class<?> indexableListClass) {
         IndexableByIdList indexableList = null;
         if ("file".equals(url.getProtocol())) {
             File file;
@@ -153,7 +153,7 @@ public class IndexableByIdListManager implements CMLConstants {
     }
 
     private static IndexableByIdList createFromDirectory(File dir,
-            Class indexableListClass) {
+            Class<?> indexableListClass) {
         IndexableByIdList indexableList = null;
         try {
             indexableList = (IndexableByIdList) indexableListClass.newInstance();

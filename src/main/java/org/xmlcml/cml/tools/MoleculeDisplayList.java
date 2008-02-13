@@ -25,8 +25,6 @@ import org.xmlcml.cml.graphics.SVGSVG;
 public class MoleculeDisplayList implements CMLDrawable {
 	
 	private String outfile;
-//	private MoleculeTool moleculeTool;
-//	private ReactionTool reactionTool;
 	private AbstractTool abstractTool;
 	private MoleculeDisplay moleculeDisplay;
 	private SVGElement g;
@@ -88,6 +86,14 @@ public class MoleculeDisplayList implements CMLDrawable {
 			}
 		}
 	}
+	
+	public void debugSVG() {
+		if (svg != null) {
+			CMLUtil.debug(svg, "SVG");
+		} else {
+			System.out.println("NULL SVG in debug");
+		}
+	}
 
 	void setAndProcess(ReactionTool reactionTool) {
 		if (reactionTool != null) {
@@ -113,15 +119,21 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 */
 	public void createOrDisplayGraphics() throws IOException {
 	    g = abstractTool.createGraphicsElement(this);
+//	    CMLUtil.debug(g, "CREATEORDISPLAYGRAPHICS");
 	}
 	
 	/**
 	 * @param g graphics element (?is this the best way??)
+	 * NO - it doesn't cater for multiple objects
 	 * @throws IOException
 	 */
 	public void output(GraphicsElement g) throws IOException {
-		svg = new SVGSVG();
-		svg.appendChild(g);
+		if (svg == null) {
+			svg = new SVGSVG();
+			svg.appendChild(g);
+		} else {
+			// another object written - needs developing
+		}
 		if (outfile != null) {
 			write();
 		}

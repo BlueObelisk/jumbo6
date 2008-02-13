@@ -413,7 +413,7 @@ public class ReactionTool extends AbstractTool {
         
         electronIdList = new ArrayList<String>();
         List<AtomBondPair> changedAtomPairList = new ArrayList<AtomBondPair>();
-        List<AtomBondPair> changedBondPairList = new ArrayList<AtomBondPair>();
+        List changedBondPairList = new ArrayList();
         for (int i = 0; i < atomPairList.size(); i++) {
             MappedAtomPair atomPair = (MappedAtomPair) atomPairList.get(i);
             try {
@@ -603,9 +603,8 @@ public class ReactionTool extends AbstractTool {
      * @param changedPairList
      * @return atompair
      */
-    private MappedAtomPair getNextChangedAtomSource(List changedPairList) {
-        for (int i = 0; i < changedPairList.size(); i++) {
-            AtomBondPair abp = (AtomBondPair) changedPairList.get(i);
+    private MappedAtomPair getNextChangedAtomSource(List<AtomBondPair> changedPairList) {
+        for (AtomBondPair abp : changedPairList) {
             if (abp instanceof MappedAtomPair && abp.electronChange < 0) {
                 return (MappedAtomPair) abp;
             }
@@ -634,9 +633,9 @@ public class ReactionTool extends AbstractTool {
     	return otherAtomPair;
     }
 
-    private MappedBondPair getUniqueBondPairContaining(List bondPairList, MappedAtomPair atomPair) {
+    private MappedBondPair getUniqueBondPairContaining(List<MappedBondPair> bondPairList, MappedAtomPair atomPair) {
         for (int i = 0; i < bondPairList.size(); i++) {
-            MappedBondPair bondPair = (MappedBondPair) bondPairList.get(i);
+            MappedBondPair bondPair = bondPairList.get(i);
             if (bondPair.containsAtomPair(atomPair)) {
                 return bondPair;
             }
@@ -663,7 +662,8 @@ public class ReactionTool extends AbstractTool {
     // must redo this to cope with mapping 
     void processElectrons(CMLMolecule molecule1, CMLMolecule molecule2, int serial) {
         List<MappedAtomPair> atomPairList = getAtomPairList(null, molecule1, molecule2, serial);
-        List<AtomBondPair> changedPairList = new ArrayList<AtomBondPair>();
+        // the generics are inconsistent here - FIXME
+        List changedPairList = new ArrayList();
         for (MappedAtomPair atomPair : atomPairList) {
             try {
                 compareAtoms(atomPair, changedPairList);
@@ -687,7 +687,7 @@ public class ReactionTool extends AbstractTool {
                 System.out.println("BP "+changedPairList.get(i));
             }
         }
-        List electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
+        List<ElectronPair> electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
 
 // there may be several unconnected fragments so go on until no change
         boolean change = true;

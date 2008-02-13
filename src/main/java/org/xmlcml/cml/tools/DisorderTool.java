@@ -45,9 +45,9 @@ public class DisorderTool extends AbstractTool {
 	 *
 	 * @param molecule
 	 */
-	private DisorderTool() {
-		;
-	}
+//	private DisorderTool() {
+//		;
+//	}
 
 	/** constructor.
 	 *

@@ -436,7 +436,7 @@ public class CMLTable extends AbstractTable {
         if (check(TableType.COLUMN_BASED)) {
             int columnCount = stringListList.size();
             int rowCount = stringListList.get(0).size();
-            CMLElements arrays = this.getArrayListElements();
+            CMLElements<CMLArrayList> arrays = this.getArrayListElements();
             // titles
             w.write("\n<tr>");
             for (Object object : arrays) {

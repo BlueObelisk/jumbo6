@@ -16,6 +16,7 @@ public class SVGSVG extends SVGElement {
 	 */
 	public SVGSVG() {
 		super(TAG);
+//		new Exception().printStackTrace();
 	}
 	/**
 	 * @return tag

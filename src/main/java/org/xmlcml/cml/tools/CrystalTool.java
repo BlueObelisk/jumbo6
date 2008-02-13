@@ -405,8 +405,8 @@ public class CrystalTool extends AbstractTool {
 
 				boolean inNMap = false;
 				boolean inOMap = false;
-				for (Iterator it = newAtomMap.keySet().iterator(); it.hasNext(); ) {
-					Point3 key = (Point3)it.next();
+				for (Iterator<Point3> it = newAtomMap.keySet().iterator(); it.hasNext(); ) {
+					Point3 key = it.next();
 					if (key.equalsCrystallographically(p3)) {
 						inNMap = true;
 						break;

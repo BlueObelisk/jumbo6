@@ -78,7 +78,7 @@ public class Util implements EuclidConstants {
 	 * @param classx
 	 * @return temporary directory.
 	 */
-	public static File getTestOutputDirectory(Class classx) {
+	public static File getTestOutputDirectory(Class<?> classx) {
 		File tempDir = getTEMP_DIRECTORY();
 		String dirs = classx.getName().replace(S_PERIOD, File.separator);
 		File testDir = new File(tempDir, dirs);
@@ -1402,7 +1402,7 @@ public class Util implements EuclidConstants {
 		} 
 		int idx = s.indexOf(ent);
 		if (idx != -1) {
-			String sub = "";
+//			String sub = "";
 			while (true) {
 				idx = s.indexOf(ent);
 				if (idx == -1) {
@@ -1960,12 +1960,12 @@ public class Util implements EuclidConstants {
 	 *            Description of the Parameter
 	 * @return Description of the Return Value
 	 */
-	public static Hashtable<Object, Object> invert(Hashtable table) {
+	public static Hashtable<Object, Object> invert(Hashtable<Object, Object> table) {
 		if (table == null) {
 			return null;
 		}
 		Hashtable<Object, Object> newTable = new Hashtable<Object, Object>();
-		for (Enumeration e = table.keys(); e.hasMoreElements();) {
+		for (Enumeration<Object> e = table.keys(); e.hasMoreElements();) {
 			Object key = e.nextElement();
 			Object value = table.get(key);
 			newTable.put(value, key);
