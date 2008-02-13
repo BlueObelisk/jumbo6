@@ -73,7 +73,7 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
         } else {
             CMLElement factoryElement = factoryElementMap.get(name);
             if (factoryElement == null) {
-	            Class newClass = null;
+	            Class<?> newClass = null;
 	        	try {
 		        	newClass = Class.forName(ELEMENT_CLASS_BASE+S_PERIOD+
 		        		CMLUtil.makeCMLName(name));

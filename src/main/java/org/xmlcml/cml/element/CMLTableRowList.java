@@ -130,7 +130,7 @@ public class CMLTableRowList extends AbstractTableRowList {
             int rowCount, int columnCount, CMLTableHeader tableHeader) {
         CMLArrayList arrayList = new CMLArrayList();
         if (rowCount > 0) {
-            List<Class> classList = new ArrayList<Class>();
+            List<Class<?>> classList = new ArrayList<Class<?>>();
             CMLElements<CMLTableHeaderCell> tableHeaderCells = tableHeader.getTableHeaderCellElements();
             CMLElements<CMLTableRow> tableRows = this.getTableRowElements();
             CMLTableRow firstTableRow = tableRows.get(0);
@@ -149,7 +149,7 @@ public class CMLTableRowList extends AbstractTableRowList {
                 } else {
                     CMLTableCell tableCell = firstTableRow.getTableCellElements().get(jCol);
                     List<Node> nodeList = CMLUtil.getQueryNodes(tableCell, S_STAR);
-                    Class classx = (nodeList.size() == 0) ? null : nodeList.get(0).getClass();
+                    Class<?> classx = (nodeList.size() == 0) ? null : nodeList.get(0).getClass();
                     classList.add(classx);
                     CMLList cmlList = new CMLList();
                     for (Node node : nodeList) {

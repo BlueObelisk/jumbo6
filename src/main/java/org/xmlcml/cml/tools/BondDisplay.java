@@ -10,11 +10,12 @@ public class BondDisplay extends AbstractDisplay {
 
 	private String multipleColor = "white";
 	private double width = 1.0;
+	private double scale = 1.0;
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
 		
-		DEFAULT.width = 0.12;
+		DEFAULT.width = 0.08;
 		DEFAULT.color = "black";
 		DEFAULT.fill = DEFAULT.color;
 		DEFAULT.stroke = null;
@@ -85,11 +86,33 @@ public class BondDisplay extends AbstractDisplay {
 	public double getWidth() {
 		return width;
 	}
+	
+	/**
+	 * @return the scaled width
+	 */
+	public double getScaledWidth() {
+		System.out.println("WID "+width+" SCA "+scale);
+		return width * scale;
+	}
+
 	/**
 	 * @param width the width to set
 	 */
 	public void setWidth(double width) {
 		this.width = width;
+	}
+	
+	/**
+	 * @return the scale
+	 */
+	public double getScale() {
+		return scale;
+	}
+	/**
+	 * @param width the width to set
+	 */
+	public void setScale(double scale) {
+		this.scale = scale;
 	}
 	
 }

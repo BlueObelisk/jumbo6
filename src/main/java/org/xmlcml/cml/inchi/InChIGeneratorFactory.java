@@ -2,6 +2,7 @@ package org.xmlcml.cml.inchi;
 
 import java.util.List;
 
+import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.JniInchiWrapper;
 import net.sf.jniinchi.LoadNativeLibraryException;
 
@@ -79,7 +80,7 @@ public class InChIGeneratorFactory {
      * @return Inchi generator
      * @throws CMLException
      */
-    public InChIGenerator getInChIGenerator(CMLMolecule molecule, List options) throws CMLException {
+    public InChIGenerator getInChIGenerator(CMLMolecule molecule, List<INCHI_OPTION> options) throws CMLException {
         return(new InChIGenerator(molecule, options));
     }
     
@@ -114,7 +115,7 @@ public class InChIGeneratorFactory {
      * @return InChIToStructure
      * @throws CMLException
      */
-    public InChIToStructure getInChIToStructure(String inchi, List options) throws CMLException {
+    public InChIToStructure getInChIToStructure(String inchi, List<String> options) throws CMLException {
         return(new InChIToStructure(inchi, options));
     }
 }

@@ -135,7 +135,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
 		return indexableList;
 	}
 	
-	private IndexableByIdList getIndexableList(String to, Class indexableListClass) {
+	private IndexableByIdList getIndexableList(String to, Class<?> indexableListClass) {
 		if (indexableListMap == null) {
 			indexableListMap = new HashMap<String, IndexableByIdList>();
 		}

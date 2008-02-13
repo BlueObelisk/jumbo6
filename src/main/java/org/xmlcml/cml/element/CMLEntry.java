@@ -147,7 +147,7 @@ public class CMLEntry extends AbstractEntry implements GenericEntry, IndexableBy
     /** class of children.
      * @return CMLEnumeration.class
      */
-    public Class getIndexableClass() {
+    public Class<?> getIndexableClass() {
     	return CMLEnumeration.class;
     }
 

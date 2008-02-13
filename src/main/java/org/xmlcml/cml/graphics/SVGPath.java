@@ -43,7 +43,7 @@ public class SVGPath extends SVGElement {
 	 */
 	private void setX12(Real2 x12, int serial) {
 		if (x12 == null) {
-			System.err.println("null x2: ");
+			System.err.println("null x2/y2 in path: ");
 		} else {
 			this.addAttribute(new Attribute("x"+serial, ""+x12.getX()));
 			this.addAttribute(new Attribute("y"+serial, ""+x12.getY()));

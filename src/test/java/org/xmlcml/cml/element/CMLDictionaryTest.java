@@ -263,7 +263,7 @@ public class CMLDictionaryTest extends AbstractTest {
 	@Test
 	public void testCreateDictionary() throws Exception {
 		CMLDictionary dictionary = createDictionary();
-		CMLElements entries = dictionary.getEntryElements();
+		CMLElements<CMLEntry> entries = dictionary.getEntryElements();
 		// this will depend on the dictionary
 		Assert.assertEquals("entries ", 40, entries.size());
 	}
@@ -296,7 +296,7 @@ public class CMLDictionaryTest extends AbstractTest {
 	@Test
 	public void testRemoveEntryById() throws Exception {
 		CMLDictionary dictionary = createDictionary();
-		CMLElements entries = dictionary.getEntryElements();
+		CMLElements<CMLEntry> entries = dictionary.getEntryElements();
 		// this will depend on the dictionary
 		Assert.assertEquals("entries ", 40, entries.size());
 		dictionary.removeEntryById("wave");

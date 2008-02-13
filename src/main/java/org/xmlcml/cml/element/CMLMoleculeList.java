@@ -142,7 +142,7 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableBy
     /** class of children.
      * @return CMLMolecule.class
      */
-    public Class getIndexableClass() {
+    public Class<?> getIndexableClass() {
     	return CMLMolecule.class;
     }
 

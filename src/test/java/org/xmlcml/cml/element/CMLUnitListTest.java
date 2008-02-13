@@ -41,7 +41,7 @@ public class CMLUnitListTest extends AbstractUnitTest {
 		CMLUnitList unitList = new CMLUnitList();
 		CMLUnit unit = unitList.getUnit("foo");
 		Assert.assertNull("no units yet", unit);
-		CMLElements units = unitList.getUnitElements();
+		CMLElements<CMLUnit> units = unitList.getUnitElements();
 		Assert.assertEquals("no units yet", 0, units.size());
 		NamespaceToUnitListMap unitListMap = unitList.getUnitListMap();
 		Assert.assertNull("no unit map yet", unitListMap);

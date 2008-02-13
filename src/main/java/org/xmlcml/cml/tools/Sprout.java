@@ -27,9 +27,9 @@ public class Sprout extends AbstractTool {
 	private RingNucleus ringNucleus;
 	private MoleculeLayout moleculeDraw;
 	
-	private Sprout() {
-		// 
-	}
+//	private Sprout() {
+//		// 
+//	}
 	/** constructor.
 	 * @param ringAtom
 	 * @param bond

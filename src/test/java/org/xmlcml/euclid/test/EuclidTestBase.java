@@ -20,14 +20,14 @@ import org.xmlcml.euclid.EuclidRuntimeException;
  */
 public class EuclidTestBase implements EuclidConstants {
 
-    private static Set<Class> classSet = new HashSet<Class>();
+    private static Set<Class<?>> classSet = new HashSet<Class<?>>();
     /** setup.
      * prints names of class being tested.
      * @exception Exception
      */
     @Before
     public void setUp() throws Exception {
-        Class classx = this.getClass();
+        Class<?> classx = this.getClass();
         if (!classSet.contains(classx)) {
             System.out.println("======="+classx.getName()+"======");
             classSet.add(classx);

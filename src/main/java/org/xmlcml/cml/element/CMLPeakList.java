@@ -468,7 +468,7 @@ public class CMLPeakList extends AbstractPeakList {
     
 }
 
-class PeakComparator implements Comparator {
+class PeakComparator implements Comparator<PeakOrGroup> {
 
 	private CMLPeakList.Type type;
 	/**
@@ -483,21 +483,18 @@ class PeakComparator implements Comparator {
 	 * @param peak2
 	 * @return -1, 0, 1 (0 if objects are null, no xvalues, etc.)
 	 */
-	public int compare(Object peak1, Object peak2) {
+	public int compare(PeakOrGroup peak1, PeakOrGroup peak2) {
 		int result = 0;
-		if (peak1 != null && peak2 != null &&
-			peak1 instanceof PeakOrGroup && peak2 instanceof PeakOrGroup) {
-			PeakOrGroup p1 = (PeakOrGroup) peak1;
-			PeakOrGroup p2 = (PeakOrGroup) peak2;
+		if (peak1 != null && peak2 != null) {
 			if (type.equals(CMLPeakList.Type.XVALUE)) {
-				double x1 = p1.getXValue(); 
-				double x2 = p2.getXValue(); 
+				double x1 = peak1.getXValue(); 
+				double x2 = peak2.getXValue(); 
 				if (!Double.isNaN(x1) && !Double.isNaN(x2)) {
 					result = (x1 < x2) ? -1 : 1;
 				}
 			} else if (type.equals(CMLPeakList.Type.YVALUE)) {
-				double y1 = p1.getYValue(); 
-				double y2 = p2.getYValue(); 
+				double y1 = peak1.getYValue(); 
+				double y2 = peak2.getYValue(); 
 				if (!Double.isNaN(y1) && !Double.isNaN(y2)) {
 					result = (y1 < y2) ? -1 : 1;
 				}

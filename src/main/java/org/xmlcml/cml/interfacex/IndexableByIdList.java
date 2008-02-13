@@ -33,8 +33,8 @@ public interface IndexableByIdList {
 		/** value */
 		public String value;
 		/** class .*/
-		public Class classx;
-		private Type(String s, Class classx) {
+		public Class<?> classx;
+		private Type(String s, Class<?> classx) {
 			this.value = s;
 			this.classx = classx;
 		}
@@ -99,7 +99,7 @@ public interface IndexableByIdList {
 	/** ensure integrity of list and children.
 	 * @return class of child
 	 */
-	Class getIndexableClass();
+	Class<?> getIndexableClass();
 
 	/** ensure integrity of list and children.
 	 * @return localName of child

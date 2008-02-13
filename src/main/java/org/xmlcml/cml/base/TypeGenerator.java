@@ -175,7 +175,7 @@ public class TypeGenerator extends AbstractGenerator {
 			String name = simpleTypeElement.getAttributeValue("name");
 			if (name == null) {
 				System.err.println("No name attribute on simpleType");
-				CMLUtil.debug(simpleTypeElement);
+				CMLUtil.debug(simpleTypeElement, "TYPEGEN");
 			} else {
 				try {
 					CMLType type = new CMLType(simpleTypeElement);

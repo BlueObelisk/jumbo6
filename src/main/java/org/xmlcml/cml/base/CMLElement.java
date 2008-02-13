@@ -31,7 +31,7 @@ import org.xmlcml.euclid.Util;
  * @version 5.0
  * 
  */
-public class CMLElement extends Element implements CMLConstants, Comparable, HasId {
+public class CMLElement extends Element implements CMLConstants, Comparable<CMLElement>, HasId {
 
 	
     /** hybridisation - from whatever source */
@@ -185,22 +185,22 @@ public class CMLElement extends Element implements CMLConstants, Comparable, Has
     	}
     }
 
-    /** compare elements on id value.
-     * if id is missing returns 0
-     * @param element
-     * @return -1, 0, 1
-     */
-	public int compareTo(Object element) {
-		int i = 0;
-		if (element.getClass().equals(this.getClass())) {
-			String thisId = this.getAttributeValue("id");
-			String elementId = ((CMLElement)element).getAttributeValue("id");
-			if (thisId != null && elementId != null) {
-				i = thisId.compareTo(elementId);
-			}
-		}
-		return i;
-	}
+//    /** compare elements on id value.
+//     * if id is missing returns 0
+//     * @param element
+//     * @return -1, 0, 1
+//     */
+//	public int compareTo(Object element) {
+//		int i = 0;
+//		if (element.getClass().equals(this.getClass())) {
+//			String thisId = this.getAttributeValue("id");
+//			String elementId = ((CMLElement)element).getAttributeValue("id");
+//			if (thisId != null && elementId != null) {
+//				i = thisId.compareTo(elementId);
+//			}
+//		}
+//		return i;
+//	}
 
     /**
      * copies attributes. makes subclass if necessary.

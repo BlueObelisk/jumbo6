@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import nu.xom.Attribute;
@@ -45,7 +44,6 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLProperty;
-import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLUnit;
 import org.xmlcml.cml.element.CMLMap.Direction;
@@ -1819,9 +1817,13 @@ public class MoleculeTool extends AbstractTool {
 		double bondSum = 0.0;
 		int nBonds = 0;
 		for (CMLBond bond : molecule.getBonds()) {
-			double length = bond.calculateBondLength(type);
-			bondSum += length;
-			nBonds++;
+			try {
+				double length = bond.calculateBondLength(type);
+				bondSum += length;
+				nBonds++;
+			} catch (CMLRuntimeException e) {
+				// no coordinates
+			}
 		}
 		return (nBonds == 0) ? -1.0 : bondSum / ((double) nBonds);
 	}
@@ -2278,13 +2280,16 @@ public class MoleculeTool extends AbstractTool {
     public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
     	AtomDisplay atomDisplayx = (moleculeDisplay == null) ? null :
     		moleculeDisplay.getAtomDisplay();
-    	System.out.println("MOLD "+((atomDisplayx == null) ? "NULL" :
+    	System.out.println("MOLDISPLAY "+((atomDisplayx == null) ? "NULL" :
     		atomDisplayx.isDisplayLabels()));
+    	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
+    	System.out.println("AVLENGTH "+avlength);
     	enableMoleculeDisplay();
-    	double scale = 1.0;
+    	double scale = avlength;
     	double[] offsets = new double[] {100., 200.};
     
     	List<CMLAtom> atoms = molecule.getAtoms();
+    	System.out.println("ATOMS... "+atoms.size());
     	if (atoms.size() == 0) {
     		System.out.println("No atoms to display");
     	} else if (atoms.size() == 1) {
@@ -2301,10 +2306,19 @@ public class MoleculeTool extends AbstractTool {
     		}
     	}
     	
-    	SVGElement g = createSVGElement(drawable, scale, offsets);
-    	g.setProperties(moleculeDisplay);
+    	SVGElement g = null;
+    	if(drawable instanceof MoleculeDisplayList) {
+    		g = ((MoleculeDisplayList) drawable).getSvg();
+    	}
+		if (g == null) {
+	    	g = createSVGElement(drawable, scale, offsets);
+	    	g.setProperties(moleculeDisplay);
+    	}
+//		CMLUtil.debug(g);
     	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
+    	bondDisplay.setScale(avlength);
     	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+    	atomDisplay.setScale(avlength);
     	atomDisplay.setOmitHydrogens(true);
     	displayBonds(drawable, g, bondDisplay, atomDisplay);
     	if (molecule.getAtomCount() == 1) {
@@ -2348,7 +2362,7 @@ public class MoleculeTool extends AbstractTool {
     		GraphicsElement b = bondTool.createGraphicsElement(drawable);
     		if (b != null) {
     			g.appendChild(b);
-        		b.setStrokeWidth(0.2);
+//        		b.setStrokeWidth(0.2);
     		}
 		}
 	}

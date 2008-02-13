@@ -276,7 +276,7 @@ public class OscarTool implements CMLConstants {
         List<Node> units = CMLUtil.getQueryNodes(cml, ".//unit");
         for (Node node : units) {
             Element unit = (Element) node;
-            CMLUtil.debug(unit);
+            CMLUtil.debug(unit, "OSCAR");
         }
     }
     
@@ -1220,7 +1220,7 @@ public class OscarTool implements CMLConstants {
                 String u = text.getValue();
                 String standardUnit = unitsMap.get(u);
                 if (standardUnit == null) {
-                    CMLUtil.debug(unit);
+                    CMLUtil.debug(unit, "OSCAR1");
                     System.out.println("\nCannot find unit for ["+u+S_RSQUARE);
                 } else {
                     text.setValue(standardUnit);
@@ -2144,7 +2144,7 @@ public class OscarTool implements CMLConstants {
         } else if (elem.getParent() == null) {
             System.out.println("null parent");
         } else {
-            CMLUtil.debug((Element)elem.getParent());
+            CMLUtil.debug((Element)elem.getParent(), "OSCARTOOL2");
             error("Bad value/point for "+ss+S_SLASH+elem.getParent().getValue());
         }
         if (Double.isNaN(d)) {
@@ -2336,7 +2336,7 @@ public class OscarTool implements CMLConstants {
         Node node = CMLUtil.getFirstTextDescendant(quant);
         if (node == null) {
             System.out.println("no text in quantity:");
-            CMLUtil.debug(quant);
+            CMLUtil.debug(quant, "OSCAR4");
         } else {
             String s = node.getValue();
             for (Pattern temperaturePattern : temperatureMap.keySet()) {
@@ -2396,7 +2396,7 @@ public class OscarTool implements CMLConstants {
                 }
             }
         } else {
-            CMLUtil.debug((Element) node);
+            CMLUtil.debug((Element) node, "OSCAR5");
         }
         return unit;
     }

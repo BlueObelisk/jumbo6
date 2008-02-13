@@ -85,7 +85,7 @@ public class CMLAtomArray extends AbstractAtomArray {
             }
         } else if (parent.getLocalName().equals(CMLFormula.TAG)) {
             CMLFormula formula = (CMLFormula) parent;
-            CMLElements atomArrays = formula.getAtomArrayElements();
+            CMLElements<CMLAtomArray> atomArrays = formula.getAtomArrayElements();
             if (atomArrays.size() > 0) {
                 if (formula.isProcessedConcise() && atomArrays.size() == 1) {
                     formula.removeChild(atomArrays.get(0));

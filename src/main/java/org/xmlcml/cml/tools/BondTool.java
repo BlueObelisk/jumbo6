@@ -98,13 +98,13 @@ public class BondTool extends AbstractTool {
     		System.err.println("No bond coordinates for: "+atoms.get(1).getId());
     	} else {
         	g = drawable.createGraphicsElement();
-	    	double bondWidth = bondDisplay.getWidth();
+	    	double bondWidth = bondDisplay.getScaledWidth();
 			String order = bond.getOrder();
 	    	 // highlight
 	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
 //	    	 System.out.println("SELBONDS: "+selectionTool.getSelectedBonds().get(0).getId());
 	    	 if (selectionTool != null) {
-	    		 System.out.println("SEL BOND? : "+bond.getId());
+//	    		 System.out.println("SEL BOND? : "+bond.getId());
 	    		 if (selectionTool.isSelected(bond)) {
 		    		 double factor = 3.0;
 		    	 	 if (order.equals(CMLBond.DOUBLE)) {
@@ -113,7 +113,7 @@ public class BondTool extends AbstractTool {
 		    	 		 factor = 7.0;
 		    	 	 }
 		    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
-		    		 System.out.println("BBBBBBBBBBBBBBBB");
+//		    		 System.out.println("BBBBBBBBBBBBBBBB");
 		    		 g.appendChild(line);
 		    		 line.setFill("yellow");
 		    		 line.setOpacity(0.40);
@@ -122,12 +122,12 @@ public class BondTool extends AbstractTool {
 			if (order == null || order.equals(CMLBond.SINGLE)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.DOUBLE)) {
-				g.appendChild(createBond("black", 3*bondWidth, xy0, xy1));
-				g.appendChild(createBond("white", 1*bondWidth, xy0, xy1));
+				g.appendChild(createBond("black", 2.55*bondWidth, xy0, xy1));
+				g.appendChild(createBond("white", 0.85*bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.TRIPLE)) {
-				g.appendChild(createBond("black", 5*bondWidth, xy0, xy1));
-				g.appendChild(createBond("white", 3*bondWidth, xy0, xy1));
-				g.appendChild(createBond("black", bondWidth, xy0, xy1));
+				g.appendChild(createBond("black", 3.75*bondWidth, xy0, xy1));
+				g.appendChild(createBond("white", 2.25*bondWidth, xy0, xy1));
+				g.appendChild(createBond("black", 0.75*bondWidth, xy0, xy1));
 			}
     	}
 		return g;

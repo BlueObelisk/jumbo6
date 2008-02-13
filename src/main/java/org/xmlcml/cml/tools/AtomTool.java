@@ -447,7 +447,7 @@ public class AtomTool extends AbstractTool {
 	    	 }));
 	    	 String elementType = atom.getElementType();
 	    	 String fill = atomDisplay.getFill();
-	    	 fontSize = atomDisplay.getFontSize();
+	    	 fontSize = atomDisplay.getScaledFontSize();
  			 double xOffsetFactor = atomDisplay.getXOffsetFactor();
 	    	 double yOffsetFactor = atomDisplay.getYOffsetFactor();
 	    	 radiusFactor = atomDisplay.getBackgroundRadiusFactor();

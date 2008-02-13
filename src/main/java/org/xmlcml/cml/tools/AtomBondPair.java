@@ -1,8 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLElectron;
 
@@ -12,17 +9,17 @@ import org.xmlcml.cml.element.CMLElectron;
  * 
  */
 public abstract class AtomBondPair {
-    int electronChange = 0;
-    Map atomIdMap = new HashMap();
+    protected int electronChange = 0;
+//    private Map atomIdMap = new HashMap();
     
-    double fullOpacity = 1;
-    double zeroOpacity = 0;
+    protected double fullOpacity = 1;
+    protected double zeroOpacity = 0;
 
-    CMLElement spectator1 = null;
+    protected CMLElement spectator1 = null;
     	
-	boolean containsAtomId(String id) {
-        return atomIdMap.containsKey(id);
-    }
+//	private boolean containsAtomId(String id) {
+//        return atomIdMap.containsKey(id);
+//    }
 
     abstract CMLElectron createElectrons(int electronCount, String electronId);
 

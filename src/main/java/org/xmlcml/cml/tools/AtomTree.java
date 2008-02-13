@@ -48,7 +48,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * <br/>
  * 
  */
-public class AtomTree extends AbstractTool implements Comparable {
+public class AtomTree extends AbstractTool implements Comparable<AtomTree> {
 
     // the parent of each atomTree. null for top atom. prevents backrecursion
     CMLAtom parent;
@@ -182,8 +182,7 @@ public class AtomTree extends AbstractTool implements Comparable {
      * @throws ClassCastException
      *             o is not an AtomTree
      */
-    public int compareTo(final Object o) throws ClassCastException {
-        // AtomTree atomTree = (AtomTree) o;
+    public int compareTo(AtomTree o) {
         return this.toString().compareTo(o.toString());
     }
 

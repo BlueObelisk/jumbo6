@@ -547,12 +547,12 @@ public class AtomMatcher extends AbstractTool {
 
             // match by unique extended atom label
 
-            Map uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet0);
-            Map uniqueAtomMap1 = this.getAtomTreeLabelling(atomSet1);
+            Map<String, Object> uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet0);
+            Map<String, Object> uniqueAtomMap1 = this.getAtomTreeLabelling(atomSet1);
             if (uniqueAtomMap0.size() != 0 || uniqueAtomMap0.size() != 0) {
-                Set keySet0 = uniqueAtomMap0.keySet();
-                for (Iterator it = keySet0.iterator(); it.hasNext();) {
-                    String atomTreeString = (String) it.next();
+                Set<String> keySet0 = uniqueAtomMap0.keySet();
+                for (Iterator<String> it = keySet0.iterator(); it.hasNext();) {
+                    String atomTreeString = it.next();
                     Object object0 = uniqueAtomMap0.get(atomTreeString);
                     Object object1 = uniqueAtomMap1.get(atomTreeString);
                     cmlLink = null;
@@ -685,7 +685,7 @@ public class AtomMatcher extends AbstractTool {
         List<Real2> coords1 = atomSet1.getVector2D();
         List<Real2> coords2 = atomSet2.getVector2D();
 
-        List atom2atomVector = this.overlap2D(atomSet1, atomSet2);
+        List<AtomPair> atom2atomVector = this.overlap2D(atomSet1, atomSet2);
         if (this.getAtomMatchStrategy().equals(Strategy.MATCH_DISTANCE_MATRIX)) {
             try {
                 cmlMap = this.overlap2Dnew(atomSet1, atomSet2);
@@ -699,7 +699,7 @@ public class AtomMatcher extends AbstractTool {
                         .equals(Strategy.MATCH_GEOM)) {
             logger.info("A2A vector " + atom2atomVector.size());
             for (int i = 0; i < atom2atomVector.size(); i++) {
-                AtomPair atomPair = (AtomPair) atom2atomVector.get(i);
+                AtomPair atomPair = atom2atomVector.get(i);
                 CMLAtom prodAtom = atomPair.getAtom1();
                 CMLAtom reactAtom = atomPair.getAtom2();
                 CMLLink link = new CMLLink();
@@ -792,15 +792,15 @@ public class AtomMatcher extends AbstractTool {
      */
      public CMLMap getUniqueMatchedAtoms(CMLAtomSet atomSet, CMLAtomSet targetAtomSet) throws CMLException {
         // note unique atoms
-        Map uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet);
-        Map uniqueAtomMap1 = this.getAtomTreeLabelling(targetAtomSet);
+        Map<String, Object> uniqueAtomMap0 = this.getAtomTreeLabelling(atomSet);
+        Map<String, Object> uniqueAtomMap1 = this.getAtomTreeLabelling(targetAtomSet);
         CMLMap cmlMap = new CMLMap();
         cmlMap.setToType(CMLAtom.TAG);
         cmlMap.setFromType(CMLAtom.TAG);
         // reverse mapping - key on atoms
-        Set keySet0 = uniqueAtomMap0.keySet();
-        for (Iterator it = keySet0.iterator(); it.hasNext();) {
-            String atomTreeString = (String) it.next();
+        Set<String> keySet0 = uniqueAtomMap0.keySet();
+        for (Iterator<String> it = keySet0.iterator(); it.hasNext();) {
+            String atomTreeString = it.next();
             CMLAtomSet atomSet0 = (CMLAtomSet) uniqueAtomMap0
                     .get(atomTreeString);
             CMLAtomSet atomSet1 = (CMLAtomSet) uniqueAtomMap1
@@ -857,37 +857,38 @@ public class AtomMatcher extends AbstractTool {
      * finds unique pair but does not remove them from atomSets. uses AtomTree
      * to distinguish elements at present uses charge and labels but not
      * hydrogens can be called iteratively until returns null
+     * might be useful later
      * @param reverseAtomMap1
      * @param uniqueAtomMap2
      * @param excludeElements
      * @return atompair
      */
-     AtomPair getUniqueMatchedAtoms(Map reverseAtomMap1, Map uniqueAtomMap2, String[] excludeElements) {
-     AtomPair pair = null;
-
-        // iterate through labelling and try to find first unique equivalence
-        Set keySet1 = reverseAtomMap1.keySet();
-        Iterator it = keySet1.iterator();
-        while (it.hasNext()) {
-            CMLAtom atom1 = (CMLAtom) it.next();
-            String elementType = atom1.getElementType();
-            boolean omit = false;
-            for (String e : excludeElements) {
-                if (e.equals(elementType)) {
-                    omit = true;
-                }
-            }
-            if (!omit) {
-                String atomTreeString = (String) reverseAtomMap1.get(atom1);
-                CMLAtom atom2 = (CMLAtom) uniqueAtomMap2.get(atomTreeString);
-                if (atom2 != null) {
-                    pair = new AtomPair(atom1, atom2);
-                    break;
-                }
-            }
-        }
-        return pair;
-     }
+//     private AtomPair getUniqueMatchedAtoms(Map reverseAtomMap1, Map uniqueAtomMap2, String[] excludeElements) {
+//     AtomPair pair = null;
+//
+//        // iterate through labelling and try to find first unique equivalence
+//        Set keySet1 = reverseAtomMap1.keySet();
+//        Iterator it = keySet1.iterator();
+//        while (it.hasNext()) {
+//            CMLAtom atom1 = (CMLAtom) it.next();
+//            String elementType = atom1.getElementType();
+//            boolean omit = false;
+//            for (String e : excludeElements) {
+//                if (e.equals(elementType)) {
+//                    omit = true;
+//                }
+//            }
+//            if (!omit) {
+//                String atomTreeString = (String) reverseAtomMap1.get(atom1);
+//                CMLAtom atom2 = (CMLAtom) uniqueAtomMap2.get(atomTreeString);
+//                if (atom2 != null) {
+//                    pair = new AtomPair(atom1, atom2);
+//                    break;
+//                }
+//            }
+//        }
+//        return pair;
+//     }
 
     /**
      * get map of atoms with same neightbours. can be used recursively
@@ -1310,7 +1311,7 @@ public class AtomMatcher extends AbstractTool {
         // atomSetTable1
         List<CMLAtom> atoms = mol1.getAtoms();
         for (int i = 0; i < atoms.size(); i++) {
-            CMLAtom thisAtom = (CMLAtom) atoms.get(i);
+            CMLAtom thisAtom = atoms.get(i);
             Real2 thisCoords2 = (Real2) p2Vector.get(i);
             int nearestIndex = mol2Vector.getSerialOfNearestPoint(thisCoords2);
             if (nearestIndex < 0) {
@@ -1372,7 +1373,7 @@ public class AtomMatcher extends AbstractTool {
                         .info("warning: AtomSets are not the same size in overlap2d");
             }
             for (int i = 0; i < atomsx.size(); i++) {
-                CMLAtom thisAtom = (CMLAtom) atomsx.get(i);
+                CMLAtom thisAtom = atomsx.get(i);
                 Real2 thisCoords2 = (Real2) p2Vector.get(i);
                 int nearestIndex = mol2Vector
                         .getSerialOfNearestPoint(thisCoords2);

@@ -8,13 +8,10 @@ import java.util.logging.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
-import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;

@@ -12,8 +12,10 @@ import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
 
 /**
  * tool to support a ring. not fully developed
@@ -162,6 +164,7 @@ public class MoleculeLayout extends AbstractTool {
 	}
 	private static void usage() {
 		System.out.println("java "+new MoleculeLayout().getClass().getName()+" [options]" );
+		System.out.println("... -CML cml    // read cml");
 		System.out.println("... -SMILES smiles    // read smiles");
 		System.out.println("... -SVG    svgFile   // write to file");
 		System.out.println("... -JAVA             // display in Swing Panel");
@@ -180,6 +183,7 @@ public class MoleculeLayout extends AbstractTool {
 		int i = 0;
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		CMLMolecule mol = null;
+		CMLMoleculeList moleculeList = null;
 		MoleculeFrame moleculeFrame = null;
 		String smiles = null;
 		String cmlfile = null;
@@ -204,13 +208,20 @@ public class MoleculeLayout extends AbstractTool {
 			try {
 				doc = new CMLBuilder().build(new FileReader(cmlfile));
 				doc = CMLBuilder.ensureCML(doc);
-				Nodes nodes = doc.query("//*[local-name()='molecule']");
-				mol = (nodes.size() > 0) ? (CMLMolecule) nodes.get(0) : null;
+				Nodes nodes = null;
+				nodes = doc.query("//*[local-name()='moleculeList']");
+				if (nodes.size() == 1) {
+					moleculeList = (CMLMoleculeList) nodes.get(0);
+				} else {
+					nodes = doc.query("//*[local-name()='molecule']");
+					if (nodes.size() > 0) {
+						mol = (CMLMolecule) nodes.get(0);
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else if (inline != null) {
-//			System.out.println(inline);
 			InlineTool inlineTool = new InlineTool();
 			mol = inlineTool.getMolecule();
 		} else if (smiles != null) {
@@ -219,18 +230,26 @@ public class MoleculeLayout extends AbstractTool {
 			mol = smilesTool.getMolecule();
 		}
 		MoleculeTool moleculeTool = null;
-		if (mol != null) {
-			moleculeTool = MoleculeTool.getOrCreateTool(mol);
-			MoleculeLayout moleculeLayout = new MoleculeLayout(moleculeTool);
-			moleculeLayout.create2DCoordinates();
-			try {
-				displayList.setAndProcess(moleculeTool);
-				displayList.createOrDisplayGraphics();
-			} catch (IOException e) {
-				e.printStackTrace();
+		if (moleculeList != null) {
+			for (CMLMolecule molecule : moleculeList.getMoleculeElements()) {
+				moleculeTool = drawMoleculesToDisplayList(displayList, molecule);
+				writeDisplayList(displayList, moleculeTool);
 			}
+//			System.out.println("WARNING: only first molecule in list drawn");
+//			moleculeTool = drawMoleculesToDisplayList(displayList, moleculeList.getMoleculeElements().get(0));
+//			writeDisplayList(displayList, moleculeTool);
+		} else if (mol != null) {
+			moleculeTool = drawMoleculesToDisplayList(displayList, mol);
+			writeDisplayList(displayList, moleculeTool);
 		}
+		if (moleculeFrame != null) {
+			moleculeFrame.getMoleculePanel().setDisplayList(displayList);
+			moleculeFrame.displayInFrame();
+		}
+	}
 
+	private static void writeDisplayList(MoleculeDisplayList displayList,
+			MoleculeTool moleculeTool) {
 		if (displayList.getOutfile() != null && moleculeTool != null) {
 			try {
 				displayList.write();
@@ -240,11 +259,30 @@ public class MoleculeLayout extends AbstractTool {
 				e.printStackTrace();
 			}
 		}
-		if (moleculeFrame != null) {
-			moleculeFrame.getMoleculePanel().setDisplayList(displayList);
-			moleculeFrame.displayInFrame();
+	}
+
+	private static MoleculeTool drawMoleculesToDisplayList(
+			MoleculeDisplayList displayList, CMLMolecule mol) {
+		MoleculeTool moleculeTool = null;
+//		displayList.debugSVG();
+		boolean omitHydrogen = true;
+		if (mol != null) {
+			moleculeTool = MoleculeTool.getOrCreateTool(mol);
+			if (!mol.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {
+				MoleculeLayout moleculeLayout = new MoleculeLayout(moleculeTool);
+				moleculeLayout.create2DCoordinates();
+			}
+			try {
+				displayList.setAndProcess(moleculeTool);
+//				displayList.debugSVG();
+				displayList.createOrDisplayGraphics();
+//				displayList.debugSVG();
+				System.out.println("=====================================");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
+		return moleculeTool;
 	}
 
 	/**

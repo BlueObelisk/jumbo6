@@ -69,7 +69,7 @@ public class CMLList extends org.xmlcml.cml.element.AbstractList {
                     nodes.size()+" expected "+tableRows.size());
         }
         int j = 0;
-        Class classx = null;
+        Class<?> classx = null;
         for (Node node : nodes) {
             if (classx == null) {
                 classx = node.getClass();

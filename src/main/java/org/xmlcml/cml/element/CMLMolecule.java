@@ -40,14 +40,15 @@ import org.xmlcml.euclid.Vector3;
  *
  */
 public class CMLMolecule 
-    extends AbstractMolecule implements Indexable, Comparable {
+    extends AbstractMolecule implements Indexable {
+	
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
 	/** control of hydrogen */
 	public enum HydrogenControl {
-		// this probablly needs more looking at
+		// this probably needs more looking at
 		/** expand hydrogens always and add to existing H. */
 		ADD_TO_EXPLICIT_HYDROGENS,
 		/** add number of explicit H to current hydrogenCount. */
@@ -93,7 +94,7 @@ public class CMLMolecule
 	/** ensure integrity between list and children.
 	 * @return CMLMoleculeList.class
 	 */
-	public Class getIndexableListClass() {
+	public Class<?> getIndexableListClass() {
 		return CMLMoleculeList.class;
 	}
 
@@ -1538,8 +1539,28 @@ public class CMLMolecule
 	 * Convenience method for determing if molecule has coordinates of a given
 	 * type. if hasSubMolecules returns true if any submolecules fit
 	 *
-	 * @param type
-	 *            of coordinates
+	 * @param type of coordinates
+	 * @param omitHydrogen akip hydrogens without coordinates
+	 * @return has coords
+	 */
+	public boolean hasCoordinates(CoordinateType type, boolean omitHydrogen) {
+		boolean has = true;
+		for (CMLAtom atom : getAtoms()) {
+			if (omitHydrogen && "H".equals(atom.getElementType())) {
+				continue;
+			}
+			has = atom.hasCoordinates(type);
+			if (!has)
+				break;
+		}
+		return has;
+	}
+
+	/**
+	 * Convenience method for determing if molecule has coordinates of a given
+	 * type. if hasSubMolecules returns true if any submolecules fit
+	 *
+	 * @param type of coordinates
 	 * @return has coords
 	 */
 	public boolean hasCoordinates(CoordinateType type) {
