@@ -3,6 +3,7 @@ package org.xmlcml.cml.element;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
 import junit.framework.Assert;
 import nu.xom.Document;
@@ -22,6 +23,7 @@ import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement.AS;
+
 
 /**
  * test CMLFormula.
@@ -285,7 +287,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     		molecule.addBond(bond);
     	}
     	formula = new CMLFormula(molecule);
-    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	Assert.assertEquals("methane - explicit and count", "C 1 H 4", formula.getConcise());
     	
 // test with only hydrogen count    	
     	molecule = new CMLMolecule();
@@ -295,15 +297,15 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     	atom.setHydrogenCount(4);
     	atom.setElementType("C");
     	formula = new CMLFormula(molecule);
-    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	Assert.assertEquals("methane - count", "C 1 H 4", formula.getConcise());
 
 // some explicit H    	
     	molecule = new CMLMolecule();
     	atom = new CMLAtom();
     	atom.setId("a1");
     	molecule.addAtom(atom);
-    	atom.setHydrogenCount(4);
     	atom.setElementType("C");
+    	atom.setHydrogenCount(4);
     	for (int i = 0; i < 2; i++) {
     		hatom = new CMLAtom();
     		hatom.setId("h"+(i+1));
@@ -313,7 +315,50 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     		molecule.addBond(bond);
     	}
     	formula = new CMLFormula(molecule);
-    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	Assert.assertEquals("methane - 2 explicit + count - carbon first", "C 1 H 4", formula.getConcise());
+ 
+    	// methanol   	
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("O");
+    	CMLAtom atom2 = new CMLAtom();
+    	atom2.setId("h1");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("H");
+    	bond = new CMLBond(atom,atom2);
+    	molecule.addBond(bond);
+    	atom2 = new CMLAtom();
+    	atom2.setId("a2");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("C");
+    	atom2.setHydrogenCount(3);
+    	bond =new CMLBond(atom, atom2);
+    	molecule.addBond(bond);
+    	
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("methanol - oxygen first - ", "C 1 H 4 O 1", formula.getConcise());
+
+    	molecule = new CMLMolecule();
+    	for (int i = 0; i < 2; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+1));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    	}
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("C");
+    	atom.setHydrogenCount(4);
+    	for (int i = 0; i < 2; i++) {
+    		hatom = molecule.getAtomById("h"+(i+1));
+    		bond = new CMLBond(atom, hatom);
+    		molecule.addBond(bond);
+    	}
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("methane - 2 explicit + count - hydrogens first - ", "C 1 H 4", formula.getConcise());
     	
 // no hydrogen count    	
     	molecule = new CMLMolecule();
@@ -330,7 +375,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     		molecule.addBond(bond);
     	}
     	formula = new CMLFormula(molecule);
-    	Assert.assertEquals("formul", "C 1 H 4", formula.getConcise());
+    	Assert.assertEquals("methane - explicit", "C 1 H 4", formula.getConcise());
     	
     	
     	// inconsistent    	
@@ -350,8 +395,70 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     	}
     	formula = new CMLFormula(molecule);
     	formula.debug("BAD");
-    	Assert.assertEquals("formul", "C 1 H 2", formula.getConcise());
-    }
+    	Assert.assertEquals("methane - all H explicit but count = 2", "C 1 H 2", formula.getConcise());
+
+    	// methanol   	
+    	molecule = new CMLMolecule();
+    	atom2 = new CMLAtom();
+    	atom2.setId("a2");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("C");
+    	for (int i = 0; i < 3; i++) {
+    		hatom = new CMLAtom();
+    		hatom.setId("h"+(i+2));
+    		hatom.setElementType("H");
+    		molecule.addAtom(hatom);
+    		bond = new CMLBond(atom2, hatom);
+    		molecule.addBond(bond);
+    	}
+    	atom = new CMLAtom();
+    	atom.setId("a1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("O");
+       	bond =new CMLBond(atom, atom2);
+    	molecule.addBond(bond);
+    	atom2 = new CMLAtom();
+    	atom2.setId("h1");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("H");
+    	bond = new CMLBond(atom,atom2);
+    	molecule.addBond(bond);
+    	
+    	formula = new CMLFormula(molecule);
+    	Assert.assertEquals("methanol - carbon first, explicit Hs- ", "C 1 H 4 O 1", formula.getConcise());
+    	
+    	// hydrogen molecule
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("h1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("H");
+    	atom2 = new CMLAtom();
+    	atom2.setId("h2");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("H");
+    	bond = new CMLBond(atom, atom2);
+    	molecule.addBond(bond);
+    	
+    	formula = new CMLFormula(molecule);
+       	Assert.assertEquals("hydrogen molecule - ", "H 2", formula.getConcise());
+   	
+       	// hydrogen chloride
+    	molecule = new CMLMolecule();
+    	atom = new CMLAtom();
+    	atom.setId("h1");
+    	molecule.addAtom(atom);
+    	atom.setElementType("H");
+    	atom.setFormalCharge(1);
+    	atom2 = new CMLAtom();
+    	atom2.setId("h2");
+    	molecule.addAtom(atom2);
+    	atom2.setElementType("Cl");
+    	atom2.setFormalCharge(-1);
+    	formula = new CMLFormula(molecule);
+       	Assert.assertEquals("hydrogen chloride - ", "H 1 Cl 1", formula.getConcise());
+   	
+    }	
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLFormula.setCount(double)'
