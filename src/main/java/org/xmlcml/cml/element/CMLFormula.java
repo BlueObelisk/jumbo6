@@ -251,37 +251,53 @@ public class CMLFormula extends AbstractFormula {
 						"Missing or invalid elementType for atom : "+atom.getId()+" .. "
 						+ elementType);
 			}
-			if (AS.H.equals(elementType) && strategy == null) {
-				strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
-			}
-			if (!AS.H.equals(elementType) || 
-				HydrogenStrategy.EXPLICIT_HYDROGENS == strategy) {
-				this.add(elementType, 1.0);
-			}
-			
-			if (atom.getFormalChargeAttribute() != null) {
-				formalCharge += atom.getFormalCharge();
-			}
-//<<<<<<< .mine
-//			if (atom.getHydrogenCountAttribute() != null) {
-//				int hydrogenCount = atom.getHydrogenCount();
-//				if (hydrogenCount != 0) {
-//					this.add("H", hydrogenCount);
-//				}
+//			if (AS.H.equals(elementType) && strategy == null) {
+//				strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
 //			}
-//=======
-			if (atom.getHydrogenCountAttribute() != null) {
-				if (strategy == null) {
-					strategy = HydrogenStrategy.HYDROGEN_COUNT;
+			if (!AS.H.equals(elementType) ) {
+//				HydrogenStrategy.EXPLICIT_HYDROGENS == strategy) {
+				this.add(elementType, 1.0);
+//			}
+			
+				if (atom.getFormalChargeAttribute() != null) {
+					formalCharge += atom.getFormalCharge();
 				}
-				if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
+				if (atom.getHydrogenCountAttribute() != null) {
+//					if (strategy == null) {
+//						strategy = HydrogenStrategy.HYDROGEN_COUNT;
+//					}
+//				if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
 					int hydrogenCount = atom.getHydrogenCount();
 					if (hydrogenCount != 0) {
 						this.add(AS.H.value, hydrogenCount);
 					}
+				} else {
+					// count H's
+					List<CMLAtom> batoms = atom.getLigandHydrogenAtoms();
+					for (CMLAtom bonded : batoms) {
+						String btype = bonded.getElementType();
+						if (AS.H.equals(btype)) {
+							this.add(AS.H.value, 1.0);
+						}
+					}
+				}
+			} else {
+				// only count a H if it is not bonded to non-hydrogens
+				List<CMLAtom> oatoms = atom.getLigandAtoms();
+				boolean countit = true;
+				for (CMLAtom chk : oatoms) {
+					String ctype = chk.getElementType();
+					if ( !AS.H.equals(ctype)) {
+						countit = false;
+					}
+				}
+				if ( countit ) {
+					this.add(AS.H.value, 1.0);
+					if (atom.getFormalChargeAttribute() != null) {
+						formalCharge += atom.getFormalCharge();
+					}
 				}
 			}
-//>>>>>>> .r590
 		}
 		// has the molecule a net computed charge?
 		if (formalCharge != Integer.MIN_VALUE) {
@@ -644,7 +660,7 @@ public class CMLFormula extends AbstractFormula {
 				if (counts[i] <= 0 && !allowNegativeCounts) {
 					throw new CMLRuntimeException(
 							"formula/atomArray@count has nonPositive value: "
-							+ counts[i]);
+							+ counts[i] + "  " + elements[i]);
 				}
 			}
 		}
@@ -668,7 +684,7 @@ public class CMLFormula extends AbstractFormula {
 	 * does not affect CMLormula object.
 	 *
 	 * @param s
-	 *            concise string (sssumed to be valid)
+	 *            concise string (assumed to be valid)
 	 * @return string without trailing charge (does NOT check validity)
 	 */
 	public static String removeChargeFromConcise(String s) {
@@ -682,7 +698,7 @@ public class CMLFormula extends AbstractFormula {
 	}
 
 	/**
-	 * return concise formaul without trailing charge.
+	 * return concise formula without trailing charge.
 	 *
 	 * @return truncated concise (or null)
 	 */
