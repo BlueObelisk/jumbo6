@@ -300,14 +300,24 @@ public class Transform3 extends RealSquareMatrix {
      */
     public Transform3(Vector3 v1, Vector3 v2) {
         super(4);
-        Vector3 v12 = v1.cross(v2);
+    	Vector3 v12 = v1.cross(v2);
         // if parallel return unit matrix
+    	
+    	/*
+    	 * 06/03/08 
+    	 * I've changed the code so there is a difference between parallel and 
+    	 * anti-parallel vectors. This is important for the polymer builder, but
+    	 * may break other applications. Contact me if this is a problem - dmj30@cam
+    	 */
+    	
         if (v12.isZero()) {
+        	double unit = 1.0;
+        	if(v1.dot(v2) < 0) unit = -1.0;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     flmat[i][j] = 0.0;
                 }
-                flmat[i][i] = 1.0;
+                flmat[i][i] = unit;
             }
         } else {
             Angle a = v1.getAngleMadeWith(v2);

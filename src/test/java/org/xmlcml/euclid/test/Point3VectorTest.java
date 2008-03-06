@@ -663,8 +663,8 @@ public class Point3VectorTest extends EuclidTestBase {
         Point3Vector pb = new Point3Vector(new double[] { 0., 1., 0., 1., 0., 0., 0.,
                     0., 1. });
         t = pa.align3PointVectors(pb);
-        Transform3Test.assertEquals("align", new double[] { 0.0, 0.0, 1.0, 0.0,
-                1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 },
+        Transform3Test.assertEquals("align", new double[] { 0.0, 0.0, -1.0, 0.0,
+                -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0 },
                 t, EPS);
     }
 
