@@ -319,8 +319,7 @@ public class CMLType implements CMLConstants {
 			} else if (Double.isNaN(dMinExclusive)
 					&& XSD_DOUBLE.equals(javaType)) {
 				try {
-					dMinExclusive = NumberFormat.getNumberInstance().parse(
-							value).doubleValue();
+					dMinExclusive = CMLUtil.parseFlexibleDouble(value);
 				} catch (NumberFormatException e) {
 					throw new CMLRuntimeException("Bad length " + e);
 				} catch (ParseException e) {
@@ -345,8 +344,7 @@ public class CMLType implements CMLConstants {
 			} else if (Double.isNaN(dMaxExclusive)
 					&& XSD_DOUBLE.equals(javaType)) {
 				try {
-					dMaxExclusive = NumberFormat.getNumberInstance().parse(
-							value).doubleValue();
+					dMaxExclusive = CMLUtil.parseFlexibleDouble(value);
 				} catch (NumberFormatException e) {
 					throw new CMLRuntimeException("Bad length " + e);
 				} catch (ParseException e) {
@@ -371,8 +369,7 @@ public class CMLType implements CMLConstants {
 			} else if (Double.isNaN(dMinInclusive)
 					&& XSD_DOUBLE.equals(javaType)) {
 				try {
-					dMinInclusive = NumberFormat.getNumberInstance().parse(
-							value).doubleValue();
+					dMinInclusive = CMLUtil.parseFlexibleDouble(value);
 				} catch (NumberFormatException e) {
 					throw new CMLRuntimeException("Bad length " + e);
 				} catch (ParseException e) {
@@ -397,8 +394,7 @@ public class CMLType implements CMLConstants {
 			} else if (Double.isNaN(dMaxInclusive)
 					&& XSD_DOUBLE.equals(javaType)) {
 				try {
-					dMaxInclusive = NumberFormat.getNumberInstance().parse(
-							value).doubleValue();
+					dMaxInclusive = CMLUtil.parseFlexibleDouble(value);
 				} catch (NumberFormatException e) {
 					throw new CMLRuntimeException("Bad length " + e);
 				} catch (ParseException e) {

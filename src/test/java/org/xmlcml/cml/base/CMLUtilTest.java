@@ -1,5 +1,6 @@
 package org.xmlcml.cml.base;
 
+import java.text.ParseException;
 import java.util.List;
 
 import nu.xom.Attribute;
@@ -319,4 +320,12 @@ public class CMLUtilTest extends BaseTest {
     	Assert.assertTrue("set", prefixList.contains("k"));
     	Assert.assertTrue("set", prefixList.contains("q"));
     }
+	
+	@Test 
+	public void checkDoubleParsing() throws ParseException {
+		Assert.assertEquals(1.0, CMLUtil.parseFlexibleDouble("1.0"));
+		Assert.assertEquals(Double.NaN, CMLUtil.parseFlexibleDouble("NaN"));
+		Assert.assertEquals(Double.POSITIVE_INFINITY, CMLUtil.parseFlexibleDouble("INF"));
+		Assert.assertEquals(Double.NEGATIVE_INFINITY, CMLUtil.parseFlexibleDouble("-INF"));
+	}
 }
