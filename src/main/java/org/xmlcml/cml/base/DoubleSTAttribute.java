@@ -104,7 +104,7 @@ public class DoubleSTAttribute extends CMLAttribute {
 				if (ss.startsWith(S_PLUS)) {
 					ss = ss.substring(1);
 				}
-				d = NumberFormat.getNumberInstance().parse(ss).doubleValue();
+				d = CMLUtil.parseFlexibleDouble(ss);
 			} catch (NumberFormatException nfe) {
 				throw new CMLRuntimeException("" + nfe, nfe);
 			} catch (ParseException e) {

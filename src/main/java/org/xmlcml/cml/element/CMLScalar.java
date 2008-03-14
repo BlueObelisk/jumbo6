@@ -14,6 +14,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.interfacex.HasScalar;
 import org.xmlcml.cml.interfacex.HasUnits;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
@@ -142,8 +143,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits, HasScalar {
 			String content = getXMLContent();
 			if (content != null) {
 				try {
-					result = NumberFormat.getNumberInstance().parse(content)
-							.doubleValue();
+					result = CMLUtil.parseFlexibleDouble(content);
 				} catch (ParseException e) {
 					throw new CMLRuntimeException("Bad double :" + content, e);
 				}

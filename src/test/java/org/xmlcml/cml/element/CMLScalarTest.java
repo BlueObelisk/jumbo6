@@ -23,9 +23,9 @@ import org.xmlcml.euclid.Util;
 
 /**
  * tests CMLScalar.
- *
+ * 
  * @author pmr
- *
+ * 
  */
 public class CMLScalarTest extends NumericTest {
 
@@ -62,6 +62,9 @@ public class CMLScalarTest extends NumericTest {
 	String xmlD0S = "<scalar dataType='xsd:double' " + CML_XMLNS
 			+ ">2.1</scalar>";
 
+	String xmlDNaNOK = "<scalar dataType='xsd:double' " + CML_XMLNS
+			+ ">NaN</scalar>";
+
 	String xmlI0S = "<scalar dataType='xsd:integer' " + CML_XMLNS
 			+ ">2</scalar>";
 
@@ -83,9 +86,9 @@ public class CMLScalarTest extends NumericTest {
 	String xmlBad2 = "<scalar dataType='xsd:integer' " + CML_XMLNS
 			+ ">2.1</scalar>";
 
-	String unitsS = S_EMPTY + "<c:cml " + " id='a234234' " + "  xmlns:c='" + CML_NS
-			+ "' " + "  xmlns:siUnits='" + SIUNIT_NS + "' " + "  xmlns:units='"
-			+ UNIT_NS + "' " + ">"
+	String unitsS = S_EMPTY + "<c:cml " + " id='a234234' " + "  xmlns:c='"
+			+ CML_NS + "' " + "  xmlns:siUnits='" + SIUNIT_NS + "' "
+			+ "  xmlns:units='" + UNIT_NS + "' " + ">"
 			+ "<c:scalar id='s1' dictRef='cmlDict:angle' units='" + U_DEGREE
 			+ "' " + "  dataType='xsd:double'>180</c:scalar>"
 			+ "<c:scalar id='s2' dictRef='foo:bar' units='" + U_KCAL + "' "
@@ -95,7 +98,7 @@ public class CMLScalarTest extends NumericTest {
 
 	/**
 	 * setup.
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	@Before
@@ -121,7 +124,8 @@ public class CMLScalarTest extends NumericTest {
 		if (unitsUnitListMap == null) {
 			try {
 				unitsUnitListMap = new NamespaceToUnitListMap(Util
-						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
+						.getResource(UNIT_RESOURCE + U_S + CATALOG_XML),
+						new CMLUnitList());
 			} catch (IOException e) {
 				Assert.fail("should not throw " + e);
 			}
@@ -155,6 +159,13 @@ public class CMLScalarTest extends NumericTest {
 			Assert.fail("should not throw IO");
 		}
 
+	}
+
+	@Test
+	public void testNaNParse() throws ValidityException, ParsingException, IOException {
+		CMLScalar cs = (CMLScalar) builder.build(new StringReader(xmlDNaNOK))
+				.getRootElement();
+		Assert.assertEquals(Double.NaN, cs.getDouble());
 	}
 
 	/**
@@ -786,14 +797,14 @@ public class CMLScalarTest extends NumericTest {
 
 	/**
 	 * test units.
-	 *
+	 * 
 	 */
 	@Test
 	public void testGetUnits() {
 		CMLCml cml = (CMLCml) parseValidString(unitsS);
 
 		// scalars
-		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
+		List<CMLElement> scalars = cml.getElements(".//" + CMLScalar.NS);
 		Assert.assertEquals("scalar count", 3, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
 		UnitsAttribute unitsAttribute = (UnitsAttribute) scalar
@@ -806,7 +817,7 @@ public class CMLScalarTest extends NumericTest {
 
 	/**
 	 * test conversion to SI.
-	 *
+	 * 
 	 */
 	@Test
 	public void testConvertToSI() {
@@ -820,7 +831,7 @@ public class CMLScalarTest extends NumericTest {
 		}
 
 		// scalars
-		List<CMLElement> scalars = cml.getElements(".//"+CMLScalar.NS);
+		List<CMLElement> scalars = cml.getElements(".//" + CMLScalar.NS);
 		Assert.assertEquals("scalar count", 3, scalars.size());
 		CMLScalar scalar0 = (CMLScalar) scalars.get(0);
 		Assert.assertEquals("scalar0", 180., scalar0.getDouble(), EPS);
@@ -904,4 +915,4 @@ public class CMLScalarTest extends NumericTest {
 				.getNamespaceURIForPrefix("units"));
 	}
 
- }
+}

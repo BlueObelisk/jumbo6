@@ -20,6 +20,7 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLType;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.interfacex.HasArraySize;
 import org.xmlcml.cml.interfacex.HasDataType;
 import org.xmlcml.cml.interfacex.HasUnits;
@@ -33,7 +34,8 @@ import org.xmlcml.euclid.RealArray;
  * shell which can be edited
  * 
  */
-public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, HasDataType {
+public class CMLArray extends AbstractArray implements HasUnits, HasArraySize,
+		HasDataType {
 
 	static Logger logger = Logger.getLogger(CMLArray.class.getName());
 	/** namespaced element name. */
@@ -368,15 +370,13 @@ public class CMLArray extends AbstractArray implements HasUnits, HasArraySize, H
 	public double[] getDoubles() throws CMLRuntimeException {
 		double[] dd = null;
 		String dataType = this.getDataType();
-		if (dataType != null && XSD_DOUBLE.equals(CMLType.getNormalizedValue(dataType))) {
+		if (dataType != null
+				&& XSD_DOUBLE.equals(CMLType.getNormalizedValue(dataType))) {
 			String[] ss = getSplitContent();
 			dd = new double[ss.length];
-			NumberFormat nf = NumberFormat.getNumberInstance();
 			for (int i = 0; i < dd.length; i++) {
 				try {
-					dd[i] = nf.parse(ss[i])
-							.doubleValue();
-					dd[i] = new Double(ss[i]).doubleValue();
+					dd[i] = CMLUtil.parseFlexibleDouble(ss[i]);
 				} catch (NumberFormatException nfe) {
 					throw new CMLRuntimeException("Bad double :" + ss[i]
 							+ " at position: " + i, nfe);

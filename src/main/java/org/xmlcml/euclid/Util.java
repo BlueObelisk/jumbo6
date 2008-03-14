@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.xmlcml.cml.base.CMLUtil;
+
 /**
  * A number of miscellaneous tools. Originally devised for jumbo.sgml, now
  * rewritten for jumbo.xml. Use these at your peril - some will be phased out
@@ -2170,8 +2172,7 @@ public class Util implements EuclidConstants {
 		double[] dd = new double[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			try {
-				dd[i] = NumberFormat.getNumberInstance().parse(ss[i])
-						.doubleValue();
+				dd[i] = CMLUtil.parseFlexibleDouble(ss[i]);
 			} catch (NumberFormatException nfe) {
 				throw new EuclidRuntimeException(S_EMPTY + nfe.getMessage(),
 						nfe);

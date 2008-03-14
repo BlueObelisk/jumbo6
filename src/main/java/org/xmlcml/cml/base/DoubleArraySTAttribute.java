@@ -14,11 +14,11 @@ import org.xmlcml.euclid.Util;
 
 public class DoubleArraySTAttribute extends CMLAttribute {
 
-    /** dewisott */
+	/** dewisott */
 	public final static String JAVA_TYPE = "double[]";
-    /** dewisott */
+	/** dewisott */
 	public final static String JAVA_GET_METHOD = "getDoubleArray";
-    /** dewisott */
+	/** dewisott */
 	public final static String JAVA_SHORT_CLASS = "DoubleArraySTAttribute";
 
 	protected double[] dd = null;
@@ -147,8 +147,7 @@ public class DoubleArraySTAttribute extends CMLAttribute {
 		double[] dd = new double[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			try {
-				dd[i] = NumberFormat.getNumberInstance().parse(ss[i])
-						.doubleValue();
+				dd[i] = CMLUtil.parseFlexibleDouble(ss[i]);
 			} catch (NumberFormatException nfe) {
 				throw new CMLRuntimeException(S_EMPTY + nfe);
 			} catch (ParseException e) {
