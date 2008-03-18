@@ -42,13 +42,9 @@ public class CMLAtomSet extends AbstractAtomSet {
     // arbitrary large distance to unmap atoms of different types
     /** */
     public final static int MAX_DIST = 999999;
-
     protected CMLMolecule molecule;
-
     protected LinkedHashSet<CMLAtom> set = new LinkedHashSet<CMLAtom>();
-
     protected Map<String, CMLAtom> idTable;
-
     protected boolean checkDuplicates = false;
     /**
      * constructor.
@@ -491,9 +487,7 @@ public class CMLAtomSet extends AbstractAtomSet {
         }
     }
 
-    /**
-     * gets vector of 3D coordinates.
-     *
+    /** gets vector of 3D coordinates.
      * all atoms must have coordinates
      *
      * @param type

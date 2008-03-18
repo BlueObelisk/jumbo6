@@ -23,6 +23,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.AbstractTest;
@@ -38,11 +39,14 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.cml.interfacex.IndexableByIdList;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -2716,6 +2720,31 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 	    	graphicsManager.createOrDisplayGraphics();
     	}
     }
+	@Test
+	public void testCreateGraphicsElement1() throws Exception {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement.getChemicalElement("C"));
+		atom1.setX2(10.0);
+		atom1.setY2(10.0);
+		molecule.addAtom(atom1);
+		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement.getChemicalElement("O"));
+		atom2.setX2(20.0);
+		atom2.setY2(20.0);
+		molecule.addAtom(atom2);
+		CMLBond bond = new CMLBond(atom1, atom2);
+		molecule.addBond(bond);
+		bond.setOrder(CMLBond.DOUBLE);
+		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.getChemicalElement("N"));
+		atom3.setX2(1.0);
+		atom3.setY2(10.0);
+		molecule.addAtom(atom3);
+		bond = new CMLBond(atom3, atom1);
+		molecule.addBond(bond);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		SVGElement g = moleculeTool.createGraphicsElement();
+		SVGSVG svg = new SVGSVG();
+		svg.appendChild(g);
+	}
     
     static void usage() {
     	System.out.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");

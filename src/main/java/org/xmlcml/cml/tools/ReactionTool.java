@@ -778,17 +778,17 @@ public class ReactionTool extends AbstractTool {
      */
     List<MappedAtomPair> addToMappedAtomPairList(Element parent, CMLAtom[] atoms1, CMLAtom[] atoms2,
     		List<MappedAtomPair> atomPairList, CMLMap atomMap, int serial) {
-    	Map atomMap1 = createLookupTableById(atoms1);
-    	Map atomMap2 = createLookupTableById(atoms2);
+    	Map<String, CMLAtom> atomMap1 = createLookupTableById(atoms1);
+    	Map<String, CMLAtom> atomMap2 = createLookupTableById(atoms2);
 // find atoms atomMap
     	List<String> fromRefs = atomMap.getFromRefs();
     	if (fromRefs.size() == 0) {
     		System.out.println("NO FROM REFS+++++++++++++++++");
     	}
         for (String fromRef : fromRefs) {
-            CMLAtom atom1 = (CMLAtom) atomMap1.get(fromRef);
+            CMLAtom atom1 = atomMap1.get(fromRef);
             String id2 = atomMap.getToRef(fromRef);
-            CMLAtom atom2 = (CMLAtom) atomMap2.get(id2);
+            CMLAtom atom2 = atomMap2.get(id2);
             if (atom2 == null) {
             	System.out.println("NO MATCHED ATOM"+id2);
             }

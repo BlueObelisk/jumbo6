@@ -209,6 +209,7 @@ public class CMLCrystal extends AbstractCrystal {
         try {
             t = new Transform3(this.getOrthogonalizationMatrix());
         } catch (Exception e) {
+        	e.printStackTrace();
             throw new CMLRuntimeException("BUG "+e);
         }
         return t;
@@ -351,25 +352,25 @@ public class CMLCrystal extends AbstractCrystal {
      */
     public List<CMLScalar> getCellScalars() throws CMLRuntimeException {
         List<CMLScalar> cellScalars = new ArrayList<CMLScalar>();
-        Elements cellScalarElements = this.getChildCMLElements("scalar");
-        CMLElements<CMLCellParameter> cellParameterElements = null;
-        // try {
-        cellParameterElements = this.getCellParameterElements();
-        // } catch (CMLException e) {
-        // throw new CMLRuntime("Bad cell parameters: "+e);
-        // }
+//        Nodes cellScalarNodes = this.query("cml:scalar[starts-with(@dictRef, 'iucr:_cell')]", CML_XPATH);
+        Nodes cellScalarNodes = this.query("cml:scalar[@dictRef]", CML_XPATH);
+        int cellScalarCount = cellScalarNodes.size();
+        if (cellScalarCount != 6) {
+        	this.debug("CELL");
+        	throw new CMLRuntimeException("Bad number of cell scalars: "+cellScalarCount);
+        }
+        CMLElements<CMLCellParameter> cellParameterElements = this.getCellParameterElements();
         if (cellParameterElements != null && cellParameterElements.size() == 2) {
-            cellScalars = CMLCellParameter
-                    .createCMLScalars(cellParameterElements);
-        } else if (cellScalarElements != null && cellScalarElements.size() == 6) {
+            cellScalars = CMLCellParameter.createCMLScalars(cellParameterElements);
+        } else if (cellScalarNodes != null && cellScalarNodes.size() == 6) {
             for (int i = 0; i < 6; i++) {
-                cellScalars.add(new CMLScalar((CMLScalar) cellScalarElements
-                        .get(i)));
+                cellScalars.add(new CMLScalar((CMLScalar) cellScalarNodes.get(i)));
             }
-        } else if (cellScalarElements != null && cellParameterElements == null) {
+        } else if (cellScalarNodes != null && cellParameterElements == null) {
         } else {
+        	this.debug("CELLPAR");
             throw new CMLRuntimeException("Bad number of cell parameter children: "
-                    + cellScalarElements.size());
+                    + cellScalarNodes.size());
         }
         return cellScalars;
     }

@@ -29,25 +29,21 @@ public class SVGRect extends SVGElement {
 	 * 
 	 * @param x1
 	 * @param x2
-	 * @param y1
-	 * @param y2
 	 */
-	public SVGRect(Real2 x1, Real2 x2, Real2 y1, Real2 y2) {
+	public SVGRect(double x, double y, double w, double h) {
 		this();
-		setX12(x1, 1);
-		setX12(x2, 2);
+		this.addAttribute(new Attribute("x", ""+x));
+		this.addAttribute(new Attribute("y", ""+y));
+		this.addAttribute(new Attribute("w", ""+w));
+		this.addAttribute(new Attribute("h", ""+h));
 	}
-	/**
-	 * @param x12 coordinates of the atom
-	 * @param serial 1 or 2
+	/** constructor.
+	 * 
+	 * @param x1
+	 * @param x2
 	 */
-	private void setX12(Real2 x12, int serial) {
-		if (x12 == null) {
-			System.err.println("null x2: ");
-		} else {
-			this.addAttribute(new Attribute("x"+serial, ""+x12.getX()));
-			this.addAttribute(new Attribute("y"+serial, ""+x12.getY()));
-		}
+	public SVGRect(Real2 x1, Real2 x2) {
+		this(x1.getX(), x1.getY(), x2.getX() - x1.getX(), x2.getY() - x1.getY());
 	}
 //  <g style="stroke-width:0.2;">
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="black" style="stroke-width:0.36;"/>
@@ -55,13 +51,13 @@ public class SVGRect extends SVGElement {
 //</g>
 	
 	protected void drawElement(Graphics2D g2d) {
-		double x1 = this.getDouble("x1");
-		double y1 = this.getDouble("y1");
+		double x1 = this.getDouble("x");
+		double y1 = this.getDouble("y");
 		Real2 xy1 = new Real2(x1, y1);
 		xy1 = transform(xy1, cumulativeTransform);
-		double x2 = this.getDouble("x2");
-		double y2 = this.getDouble("y2");
-		Real2 xy2 = new Real2(x2, y2);
+		double w = this.getDouble("w");
+		double h = this.getDouble("h");
+		Real2 xy2 = new Real2(x1+w, y1+h);
 		xy2 = transform(xy2, cumulativeTransform);
 		float width = 1.0f;
 		String style = this.getAttributeValue("style");

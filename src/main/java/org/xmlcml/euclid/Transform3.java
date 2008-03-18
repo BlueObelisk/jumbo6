@@ -69,8 +69,7 @@ public class Transform3 extends RealSquareMatrix {
     /**
      * This gives a default unit matrix of type t.
      * 
-     * @param t
-     *            type
+     * @param t type
      */
     public Transform3(Type t) {
         this();
@@ -79,8 +78,7 @@ public class Transform3 extends RealSquareMatrix {
     /**
      * identity matrix with translation component. T = I|vector
      * 
-     * @param v
-     *            translation vector
+     * @param v translation vector
      */
     public Transform3(Vector3 v) {
         this();
@@ -92,10 +90,8 @@ public class Transform3 extends RealSquareMatrix {
     /**
      * from rotation about an axis. (use (Choice3.X), etc
      * 
-     * @param axis
-     *            Choice.X, etc
-     * @param rot
-     *            angle to rotate by
+     * @param axis Choice.X, etc
+     * @param rot angle to rotate by
      */
     public Transform3(Axis3 axis, Angle rot) {
         this();

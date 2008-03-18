@@ -717,6 +717,28 @@ public class CMLAtom extends AbstractAtom {
     }
 
     /**
+     * gets vector from this atom to another.
+     *
+     * gets vector this->at1 (i.e. at1 minus this)
+     *
+     * @param atom1
+     *            other atom
+     *
+     * @return the vector (null if atoms are null or have no coordinates)
+     */
+    public Real2 getVector2(CMLAtom atom1) {
+        Real2 v = null;
+        if (atom1 != null) {
+            Real2 p0 = this.getXY2();
+            Real2 p1 = atom1.getXY2();
+            if (p1 != null && p0 != null) {
+                v = p1.subtract(p0);
+            }
+        }
+        return v;
+    }
+
+    /**
      * increase x2 and y2 coordinates.
      *
      * if x2 or y2 is unset, no action (to avoid a default of zero)
@@ -793,29 +815,28 @@ public class CMLAtom extends AbstractAtom {
     /**
      * get distance between atoms.
      *
-     * @param atom2
-     *            the other atom
+     * @param atom2 the other atom
      *
-     * @return distance (< 0.0 if atom(s) lack coordinates)
+     * @return distance (throws Exception if atom(s) lack coordinates)
      */
     public double getDistanceTo(CMLAtom atom2) {
         Vector3 vector = getVector3(atom2);
         if (vector != null) {
             return getVector3(atom2).getLength();
         } else {
-            return -1;
+        	throw new CMLRuntimeException("cannot calculate distance");
         }
     }
 
     /**
      * get 2D distance between atoms.
      * @param atom2 the other atom
-     * @return distance (< 0.0 if atom(s) lack coordinates)
+     * @return distance (Double.NaN if atom(s) lack coordinates)
      */
     public double getDistance2(CMLAtom atom2) {
     	Real2 xy0 = this.getXY2();
     	Real2 xy1 = atom2.getXY2();
-    	double distance2 = -1;
+    	double distance2 = Double.NaN;
     	if (xy0 != null && xy1 != null) {
     		distance2 = xy0.getDistance(xy1);
     	}

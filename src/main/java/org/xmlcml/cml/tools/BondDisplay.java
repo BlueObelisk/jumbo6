@@ -91,7 +91,7 @@ public class BondDisplay extends AbstractDisplay {
 	 * @return the scaled width
 	 */
 	public double getScaledWidth() {
-		System.out.println("WID "+width+" SCA "+scale);
+//		System.out.println("WID "+width+" SCA "+scale);
 		return width * scale;
 	}
 

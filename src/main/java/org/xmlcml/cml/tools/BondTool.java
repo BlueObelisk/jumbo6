@@ -97,7 +97,7 @@ public class BondTool extends AbstractTool {
     	} else if (xy1 == null) {
     		System.err.println("No bond coordinates for: "+atoms.get(1).getId());
     	} else {
-        	g = drawable.createGraphicsElement();
+        	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
 	    	double bondWidth = bondDisplay.getScaledWidth();
 			String order = bond.getOrder();
 	    	 // highlight

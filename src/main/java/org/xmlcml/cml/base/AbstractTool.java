@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Transform2;
 
 
@@ -27,7 +28,7 @@ public abstract class AbstractTool implements CMLConstants {
     }
 
 	protected SVGElement createSVGElement(CMLDrawable drawable, double scale, double[] offsets) {
-		SVGElement g = drawable.createGraphicsElement();
+		SVGElement g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
 		g.setTransform(new Transform2 (
 			new double[]{
 			scale, 0., offsets[0],

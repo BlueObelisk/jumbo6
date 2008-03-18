@@ -1234,6 +1234,17 @@ public class RealArray extends ArrayBase {
         }
         return temp;
     }
+
+    /** normalize to given number of places
+     * replaces each element by (nint(elem*10^ndec))/10^ndec
+     * @param dd array 
+     * @param ndec number of places
+     */
+    public static void round(double[] dd, int ndec) {
+    	for (int i = 0; i < dd.length; i++) {
+    		dd[i] = Real.normalize(dd[i], ndec);
+    	}
+    }
     /**
      * get elements within a range.
      * 

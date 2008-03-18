@@ -1,9 +1,11 @@
 package org.xmlcml.cml.tools;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
@@ -31,8 +33,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 public class ConnectionTableTool extends AbstractTool {
 	final static Logger logger = Logger.getLogger(ConnectionTableTool.class
 			.getName());
-	CMLMolecule molecule;
-	AbstractTool moleculeTool;
+	private CMLMolecule molecule;
 
 	// Used by ring detection methods
 	private List<Set<CMLAtom>> ringNucleusAtoms = null;
@@ -47,9 +48,10 @@ public class ConnectionTableTool extends AbstractTool {
 			throw new CMLRuntimeException("null molecule");
 		}
 		this.molecule = molecule;
-		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+//		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 	}
 
+	
 	/** splits given connection table into separate fragment molecules.
 	 * requires bonds to be assigned.
 	 * @throws CMLRuntimeException
@@ -253,6 +255,27 @@ public class ConnectionTableTool extends AbstractTool {
 				this.transferToMolecule(fromAtom, molecule);
 			}
 		}
+	}
+
+	/** collect equivalent molecules.
+	 * checks to see which molecules have equivalent connectivity
+	 * @param moleculeList
+	 * @return hashmap indexed by unique strings
+	 * 
+	 */
+	public static Map<String, List<CMLMolecule>> createEquivalentSets(List<CMLMolecule> moleculeList) {
+		Map<String, List<CMLMolecule>> moleculeMap = new HashMap<String, List<CMLMolecule>>();
+		for (CMLMolecule molecule : moleculeList) {
+			Morgan morgan = new Morgan(molecule);
+			String uniqueString = morgan.getEquivalenceString();
+			List<CMLMolecule> list = moleculeMap.get(uniqueString);
+			if (list == null) {
+				list = new ArrayList<CMLMolecule>();
+				moleculeMap.put(uniqueString, list);
+			}
+			list.add(molecule);
+		}
+		return moleculeMap;
 	}
 
 	/** create new sub molecule.
@@ -861,5 +884,10 @@ public class ConnectionTableTool extends AbstractTool {
 				throw new CMLRuntimeException("path sync error");
 			}
 		}
+	}
+
+
+	public void setMolecule(CMLMolecule molecule) {
+		this.molecule = molecule;
 	}
 }

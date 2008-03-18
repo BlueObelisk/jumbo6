@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import nu.xom.Attribute;
+
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;
@@ -14,6 +16,7 @@ import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondStereo;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
@@ -71,6 +74,25 @@ public class StereochemistryTool extends AbstractTool {
 			this.addWedgeHatchBond(chiralAtom);
 		}
 	}
+	
+	/**
+	 * Calculates R or S.
+	 * uses calculateAtomParity(CMLAtom atom)
+	 * 
+	 * @param atom
+	 * @return R or S or null if this atom isnt a chiral centre or
+	 *         there isnt enough stereo information to calculate parity
+	 */
+	public String calculateCIPRS(CMLAtom atom) {
+		CMLAtomParity atomParity = this.calculateAtomParity(atom);
+		String rs = null;
+		if (atomParity != null) {
+			rs = (atomParity.getXMLContent() > 0) ? "R" : "S";
+		}
+		return rs;
+	}
+
+	
 	/**
 	 * Calculates the atom parity of this atom using the coords of either 4
 	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
@@ -845,5 +867,17 @@ public class StereochemistryTool extends AbstractTool {
 			}
 		}
 		return heaviest;
+	}
+
+	public void addCIPLabels() {
+		List<CMLAtom> atomList = getChiralAtoms();
+		atomList = getChiralAtoms();
+		for (CMLAtom atom : atomList) {
+			String rs = calculateCIPRS(atom);
+			CMLLabel label = new CMLLabel();
+			label.setCMLValue(rs);
+			label.addAttribute(new Attribute("role", "cml:cip"));
+			atom.addLabel(label);
+		}
 	}
 }

@@ -306,7 +306,7 @@ public class CrystalToolTest extends AbstractToolTest {
         analyzeCIFs(S_EMPTY);
     }
     
-    private void analyzeCIFs(String user) {
+    private static void analyzeCIFs(String user) {
         if (user == null || user.trim().equals(S_EMPTY)) {
             // set these as required
 
@@ -500,7 +500,7 @@ public class CrystalToolTest extends AbstractToolTest {
 //        }
 //    }
     
-    private void writeXML(String filename, CMLMolecule molecule, String message) {
+    private static void writeXML(String filename, CMLMolecule molecule, String message) {
         try {
             File file = new File(filename);
             molecule.serialize(new FileOutputStream(file), 1);
@@ -511,7 +511,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
     
-    private void generateInChI(CMLMolecule molecule, CMLLog log) {
+    private static void generateInChI(CMLMolecule molecule, CMLLog log) {
     	try {
 	    	// Generate factory - throws CMLException if native code does not load
 	    	InChIGeneratorFactory factory = new InChIGeneratorFactory();
@@ -532,7 +532,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
     @SuppressWarnings("all") // generics    
-    void writeGeometry(List list, String filename, CMLMolecule molecule) {
+    static void writeGeometry(List list, String filename, CMLMolecule molecule) {
         try {
             FileWriter fw = new FileWriter(filename);
             if (list.size() == 0) {
@@ -551,7 +551,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
 	@SuppressWarnings("unused")
-    private void outputRingNuclei(String user, String cifname, int mol, 
+    private static void outputRingNuclei(String user, String cifname, int mol, 
             CMLMolecule mergedMolecule, CMLLog log) {
         List<CMLMolecule> subMoleculeList =
             MoleculeTool.getOrCreateTool(mergedMolecule).getMoleculeList();
@@ -594,8 +594,8 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
 
-	@SuppressWarnings("unused")
-    private void outputAtomCenteredSpecies(
+//	@SuppressWarnings("unused")
+    private static void outputAtomCenteredSpecies(
             String outfile, MoleculeTool moleculeTool) {
         CMLMolecule molecule = moleculeTool.getMolecule();
         List<CMLAtom> atoms = molecule.getAtoms();
@@ -627,7 +627,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
 	@SuppressWarnings("unused")
-    private void outputClusters(
+    private static void outputClusters(
         String user, String cifname, CMLMolecule molecule, CMLLog log) {
         List<Type> typeList = new ArrayList<Type>();
         typeList.add(ChemicalElement.Type.TRANSITION_METAL);
@@ -659,7 +659,7 @@ public class CrystalToolTest extends AbstractToolTest {
     }
 
 	@SuppressWarnings("unused")
-    private void outputLigands(
+    private static void outputLigands(
         String user, String cifname, CMLMolecule molecule, CMLLog log) {
         List<Type> typeList = new ArrayList<Type>();
         typeList.add(ChemicalElement.Type.TRANSITION_METAL);
@@ -677,7 +677,7 @@ public class CrystalToolTest extends AbstractToolTest {
         }
     }
     
-    private String getDir(String user) {
+    private static String getDir(String user) {
         String s = null;
         if (user.equals("NED")) {
             s = "E:\\cif-wrongformula";
@@ -768,7 +768,7 @@ public class CrystalToolTest extends AbstractToolTest {
 //        return s;
 //    }
 
-    private String getOutfile(String user, String fragType, 
+    private static String getOutfile(String user, String fragType, 
         String cifname, int mol, int subMol, int serial) {
         String s = getDir(user);
         File dir = new File(s + File.separator + fragType);

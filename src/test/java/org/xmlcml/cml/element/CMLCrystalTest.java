@@ -28,61 +28,61 @@ public class CMLCrystalTest extends AbstractTest {
     CMLCrystal crystal3;
 
     String crystal1S = "" + "<crystal z='4' " + CML_XMLNS + ">"
-            + "<scalar id='sc1' title='a' errorValue='0.001' units='"
+            + "<scalar id='sc1' dictRef='cml:a' errorValue='0.001' units='"
             + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
-            + "<scalar id='sc2' title='b' errorValue='0.001' units='"
+            + "<scalar id='sc2' dictRef='cml:b' errorValue='0.001' units='"
             + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
-            + "<scalar id='sc3' title='c' errorValue='0.001' units='"
+            + "<scalar id='sc3' dictRef='cml:c' errorValue='0.001' units='"
             + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">4.500</scalar>"
-            + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
+            + "<scalar id='sc4' dictRef='cml:alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
-            + "<scalar id='sc5' title='beta' units='" + U_DEGREE + "' "
+            + "<scalar id='sc5' dictRef='cml:beta' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
-            + "<scalar id='sc6' title='gamma' units='" + U_DEGREE + "' "
+            + "<scalar id='sc6' dictRef='cml:gamma' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
             + "<symmetry id='s1' spaceGroup='Fm3m' " + CML_XMLNS + "/>"
             + "</crystal>" + "";
 
     String crystal2S = "" + "<crystal " + CML_XMLNS + ">"
-            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + S_SPACE
-            + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' title='b' units='"
+            + "<scalar id='sc1' dictRef='cml:a' units='" + U_ANGSTROM + "'" + S_SPACE
+            + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' dictRef='cml:b' units='"
             + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">9</scalar>"
-            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + S_SPACE
+            + "<scalar id='sc3' dictRef='cml:c' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">10</scalar>"
-            + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
+            + "<scalar id='sc4' dictRef='cml:alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">80</scalar>"
-            + "<scalar id='sc5' title='beta' units='" + U_DEGREE + "' "
+            + "<scalar id='sc5' dictRef='cml:beta' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
-            + "<scalar id='sc6' title='gamma' units='" + U_DEGREE + "' "
+            + "<scalar id='sc6' dictRef='cml:gamma' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">100</scalar>" + "</crystal>" + "";
 
     String crystal3S = "" + "<crystal " + CML_XMLNS + ">"
-            + "<scalar id='sc1' title='a' units='" + U_ANGSTROM + "'" + S_SPACE
-            + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' title='b' units='"
+            + "<scalar id='sc1' dictRef='cml:a' units='" + U_ANGSTROM + "'" + S_SPACE
+            + CML_XMLNS + ">8</scalar>" + "<scalar id='sc2' dictRef='cml:b' units='"
             + U_ANGSTROM + "'" + S_SPACE + CML_XMLNS + ">9</scalar>"
-            + "<scalar id='sc3' title='c' units='" + U_ANGSTROM + "'" + S_SPACE
+            + "<scalar id='sc3' dictRef='cml:c' units='" + U_ANGSTROM + "'" + S_SPACE
             + CML_XMLNS + ">10</scalar>"
-            + "<scalar id='sc4' title='alpha' units='" + U_DEGREE + "' "
+            + "<scalar id='sc4' dictRef='cml:alpha' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
-            + "<scalar id='sc5' title='beta' units='" + U_DEGREE + "' "
+            + "<scalar id='sc5' dictRef='cml:beta' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>"
-            + "<scalar id='sc6' title='gamma' units='" + U_DEGREE + "' "
+            + "<scalar id='sc6' dictRef='cml:gamma' units='" + U_DEGREE + "' "
             + CML_XMLNS + ">90</scalar>" + "</crystal>" + "";
 
     String lattice1S = "" + "<lattice " + CML_XMLNS + ">"
-            + "<latticeVector id='l1' title='a' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l1' dictRef='cml:a' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">8 0 0</latticeVector>"
-            + "<latticeVector id='l2' title='b' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l2' dictRef='cml:b' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">0 9 0</latticeVector>"
-            + "<latticeVector id='l3' title='c' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l3' dictRef='cml:c' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
 
     String lattice2S = "" + "<lattice " + CML_XMLNS + ">"
-            + "<latticeVector id='l1' title='a' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l1' dictRef='cml:a' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">8 4 0</latticeVector>"
-            + "<latticeVector id='l2' title='b' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l2' dictRef='cml:b' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">0 9 0</latticeVector>"
-            + "<latticeVector id='l3' title='c' units='" + U_ANGSTROM + "'"
+            + "<latticeVector id='l3' dictRef='cml:c' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
 
     CMLLattice lattice1;
@@ -125,11 +125,6 @@ public class CMLCrystalTest extends AbstractTest {
             // } catch (CMLException e) {
             // Assert.fail("should not throw "+e);
         } catch (CMLRuntimeException e) {
-            Assert
-                    .assertEquals(
-                            "should throw ",
-                            CMLRuntimeException.class.getName()+": Bad number of cell parameter children: 0",
-                            "" + e);
         }
     }
 

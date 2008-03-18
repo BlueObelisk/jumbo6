@@ -242,7 +242,11 @@ public class Chain extends AbstractTool {
 			for (int i = 0; i < pathList.size(); i++) {
 				AtomPath atomPath = pathList.get(i);
 				System.out.println(pathList.get(i));
-				calculate2DCoordinates(atomPath, i);
+				try {
+					calculate2DCoordinates(atomPath, i);
+				} catch (CMLRuntimeException e) {
+					System.err.println("ERROR-CHAIN: "+e);
+				}
 			}
 			for (CMLAtom atom : atomCoordinateMap.keySet()) {
 				Real2 xy2 = atomCoordinateMap.get(atom);

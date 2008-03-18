@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import nu.xom.Attribute;
+
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
@@ -74,18 +76,14 @@ public class Morgan extends AbstractTool {
     }
 
     final static Logger logger = Logger.getLogger(Morgan.class.getName());
-
     private Algorithm algorithm = null;
-
     private CMLAtomSet constantAtomSet;
-
+    private CMLMolecule molecule;
     private List<Long> morganList = null;
-
     private Map<Long, CMLAtomSet> equivalenceMap = null;
-
     private int nClasses = -1;
-    
     private List<CMLAtom> markedAtomsList = null;
+	private String equivalenceString;
     /**
      * constructor
      * 
@@ -95,13 +93,16 @@ public class Morgan extends AbstractTool {
         if (molecule == null) {
             throw new CMLRuntimeException("Null molecule");
         }
-        this.constantAtomSet = molecule.getAtomSet();
         init();
+        this.molecule = molecule;
+        this.constantAtomSet = molecule.getAtomSet();
     }
 
     void init() {
         this.algorithm = Algorithm.SIMPLE;
         clean();
+		equivalenceString = null;
+		molecule = null;
     }
     
     private void clean() {
@@ -127,12 +128,58 @@ public class Morgan extends AbstractTool {
         algorithm = alg;
     }
 
-    /** get map between morgan numbers and atomSets (equivalences).
+    /** get map between Morgan numbers and atomSets (equivalences).
      * 
-     * @return map
+     * @return map indexed by number
      */
     public Map<Long, CMLAtomSet> getEquivalenceMap() {
         return equivalenceMap;
+    }
+    
+    public String getEquivalenceString() {
+    	ensureMorganList();
+    	return calculateEquivalenceString(); 
+    }
+
+	private String calculateEquivalenceString() {
+		List<Long> longList = getSortedLongList();
+		equivalenceString = S_EMPTY;
+    	for (Long longx : longList) {
+    		CMLAtomSet atomSet = equivalenceMap.get(longx);
+    		equivalenceString += longx+atomSet.getAtoms().get(0).getElementType()+atomSet.size()+"/";
+    	}
+		return equivalenceString;
+	}
+
+	private List<Long> getSortedLongList() {
+    	ensureMorganList();
+		List<Long> longList = new ArrayList<Long>();
+    	for (Long longx : equivalenceMap.keySet()) {
+    		longList.add(longx);
+    	}
+    	Collections.sort(longList);
+		return longList;
+	}
+    
+    public void addAtomAndMoleculeLabels() {
+    	ensureMorganList();
+		List<Long> longList = getSortedLongList();
+    	for (Long longx : longList) {
+    		CMLAtomSet atomSet = equivalenceMap.get(longx);
+    		for (CMLAtom atom : atomSet.getAtoms()) {
+    			CMLLabel label = new CMLLabel();
+    			label.addAttribute(new Attribute("role", "cml:morgan"));
+    			label.setCMLValue(""+longx);
+    			atom.addLabel(label);
+    		}
+    	}
+		if (molecule != null) {
+	    	getEquivalenceString();
+			CMLLabel label = new CMLLabel();
+			label.addAttribute(new Attribute("role", "cml:morgan"));
+			label.setCMLValue(equivalenceString);
+			molecule.addLabel(label);
+		}
     }
 
     /** get list of atoms required to break equivalence classes.
@@ -148,11 +195,11 @@ public class Morgan extends AbstractTool {
      * @return list of integers
      */
     public List<Long> getMorganList() {
-        calculateMorganList();
+        ensureMorganList();
         return morganList;
     }
     
-    private void calculateMorganList() {
+    private void ensureMorganList() {
         if (morganList == null) {
             // iterate until number of equivalence classes is constant
             iterateTillConstantEquivalenceClassCount();
@@ -235,7 +282,7 @@ public class Morgan extends AbstractTool {
      * @return the list of ordered atomSets
      */
     public List<CMLAtomSet> getAtomSetList() {
-        calculateMorganList();
+        ensureMorganList();
         List<CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
         for (int i = 0; i < morganList.size(); i++) {
             Long morganNumber = morganList.get(i);

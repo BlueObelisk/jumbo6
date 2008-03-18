@@ -54,9 +54,11 @@ import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealRange;
+import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
@@ -924,6 +926,24 @@ public class MoleculeTool extends AbstractTool {
 			}
 		}
 		return pair;
+	}
+	
+	public List<CMLAtom> getAtomList(CMLMap map, Direction toFrom) {
+		List<String> idList = map.getRefs(toFrom);
+		List<CMLAtom> atomList = new ArrayList<CMLAtom>();
+		for (String id : idList) {
+			CMLAtom atom = molecule.getAtomById(id);
+			if (atom == null) {
+				// maybe a fromSet
+//				for (String ss : idList) {
+//					System.out.println(ss);
+//				}
+//				map.debug();
+//				throw new CMLRuntimeException("missing atom: "+id);
+			}
+			atomList.add(atom);
+		}
+		return atomList;
 	}
 
 	/**
@@ -2277,19 +2297,30 @@ public class MoleculeTool extends AbstractTool {
 	 * @throws IOException
      * @return null if problem
      */
+    public SVGElement createGraphicsElement() throws IOException {
+    	SVGElement svg = createGraphicsElement(null);
+    	return svg;
+    }
+	
+    /** returns a "g" element
+     * will require to be added to an svg element
+     * @param drawable
+	 * @throws IOException
+     * @return null if problem
+     */
     public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
     	AtomDisplay atomDisplayx = (moleculeDisplay == null) ? null :
     		moleculeDisplay.getAtomDisplay();
-    	System.out.println("MOLDISPLAY "+((atomDisplayx == null) ? "NULL" :
-    		atomDisplayx.isDisplayLabels()));
+//    	System.out.println("MOLDISPLAY "+((atomDisplayx == null) ? "NULL" :
+//    		atomDisplayx.isDisplayLabels()));
     	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
-    	System.out.println("AVLENGTH "+avlength);
+//    	System.out.println("AVLENGTH "+avlength);
     	enableMoleculeDisplay();
     	double scale = avlength;
     	double[] offsets = new double[] {100., 200.};
     
     	List<CMLAtom> atoms = molecule.getAtoms();
-    	System.out.println("ATOMS... "+atoms.size());
+//    	System.out.println("ATOMS... "+atoms.size());
     	if (atoms.size() == 0) {
     		System.out.println("No atoms to display");
     	} else if (atoms.size() == 1) {
@@ -2325,7 +2356,9 @@ public class MoleculeTool extends AbstractTool {
     		atomDisplay.setDisplayCarbons(true);
     	}
     	displayAtoms(drawable, g, atomDisplay);
-    	drawable.output(g);
+    	if (drawable != null) {
+    		drawable.output(g);
+    	}
     	return g;
     }
 
@@ -2593,6 +2626,58 @@ public class MoleculeTool extends AbstractTool {
     	}
     	return mass;
     }
+
+    /** fits two aligned molecules.
+     * normally connection tables will be identical
+     * ignores any atoms for which there are no 3D coordinates
+     * also ignores any multiple atom sets in map
+     * @param map atom-atom map
+     * @param molecule
+     *      * @return
+     */
+	public MoleculePair fitToMoleculeTool(CMLMap map, CMLMolecule moleculeRef) {
+		MoleculeTool moleculeRefTool = MoleculeTool.getOrCreateTool(moleculeRef);
+		List<CMLAtom> atomListi = this.getAtomList(map, Direction.FROM);
+		Point3Vector p3vi = AtomTool.getPoint3Vector(atomListi);
+		List<CMLAtom> atomListj = moleculeRefTool.getAtomList(map, Direction.TO);
+		Point3Vector p3vj = new Point3Vector(AtomTool.getPoint3Vector(atomListj));
+		Point3Vector.removeNullValues(p3vi, p3vj);
+		p3vj = new Point3Vector(p3vj);
+		Transform3 t3 = null;
+		if (p3vi.size() > 3) {
+			t3 = p3vj.fitTo(p3vi);
+			Point3Vector pvtemp = new Point3Vector(p3vj);
+			pvtemp.transform(t3);
+			System.out.println("RMS "+pvtemp.rms(p3vi)+" / \n");
+		}
+		
+		List<String[]> fromSets = map.getFromSetRefs();
+//		for (String[] from : fromSets) {
+//			for (String s : from) {
+//				System.out.print(s+" ");
+//			}
+//			System.out.println("...");
+//		}
+		List<String[]> toSets = map.getToSetRefs();
+//		for (String[] to : toSets) {
+//			for (String s : to) {
+//				System.out.print(s+" ");
+//			}
+//			System.out.println("...");
+//		}
+		AtomMatcher atomMatcher = new AtomMatcher();
+//		map.debug("MAP");
+		for (int i = 0; i < fromSets.size(); i++) {
+			CMLAtomSet atomSet1 = new CMLAtomSet(molecule, fromSets.get(i));
+			CMLAtomSet atomSet2 = new CMLAtomSet(moleculeRef, toSets.get(i));
+			CMLMap geomMap = atomMatcher.matchAtomsByCoordinates(atomSet1, atomSet2, t3);
+			geomMap.debug("GEOMMAP");
+		}
+		MoleculePair moleculePair = new MoleculePair(this.molecule, moleculeRef);
+		moleculePair.setTransform3(t3);
+		moleculePair.setMap(map);
+		return moleculePair;
+	}
     
 }
 

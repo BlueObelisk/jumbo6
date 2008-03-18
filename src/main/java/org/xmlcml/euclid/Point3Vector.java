@@ -114,7 +114,11 @@ public class Point3Vector implements EuclidConstants {
     public Point3Vector(Point3Vector pv) {
         this();
         for (int i = 0; i < pv.size(); i++) {
-            this.addElement(new Point3((Point3) pv.elementAt(i)));
+            Point3 point = (Point3) pv.elementAt(i);
+            if (point != null) {
+            	point = new Point3(point);
+            }
+            this.addElement(point);
         }
     }
     /**
@@ -236,21 +240,6 @@ public class Point3Vector implements EuclidConstants {
     public void setElementAt(Vector3 v, int i) throws EuclidRuntimeException {
         vector.set(i, new Point3(v));
     }
-    /*--
-     private void processXYZ() {
-     if (xyzDone) return;
-     xyzDone = true;
-     x = xyzarray[0] = new double[size()];
-     y = xyzarray[1] = new double[size()];
-     z = xyzarray[2] = new double[size()];
-     for (int i = 0; i < size(); i++) {
-     double[] xxx = this.getPoint3(i).getArray();
-     x[i] = xxx[0];
-     y[i] = xxx[1];
-     z[i] = xxx[2];
-     }
-     }
-     --*/
     /**
      * get range of one coordinate
      * 
@@ -423,8 +412,7 @@ public class Point3Vector implements EuclidConstants {
     /**
      * translate negatively. does NOT modify this
      * 
-     * @param v
-     *            vector to subtract
+     * @param v vector to subtract
      * @return the NEW translated p3v
      */
     public Point3Vector subtract(Vector3 v) {
@@ -432,6 +420,7 @@ public class Point3Vector implements EuclidConstants {
         Point3Vector temp = this.plus(v1);
         return temp;
     }
+    
     /**
      * centre molecule on origin. translate to centroid MODIFIES PV
      */
@@ -439,6 +428,29 @@ public class Point3Vector implements EuclidConstants {
         Point3 temp = this.getCentroid();
         temp = temp.multiplyBy(-1.);
         this.plusEquals(new Vector3(temp));
+    }
+    
+    /** removes null values if both vectors have them at same position.
+     * else throws exception
+     * @param a
+     * @param b
+     */
+    public static void removeNullValues(Point3Vector a, Point3Vector b) {
+    	int n = a.size();
+    	if (b.size() != n) {
+    		throw new EuclidRuntimeException("vectors of different sizes");
+    	}
+    	for (int i = n-1; i >= 0; i--) {
+    		Point3 pa = a.elementAt(i);
+    		Point3 pb = b.elementAt(i);
+    		if (pa != null && pb != null) {
+    		} else if (pa == null && pb == null) {
+    			a.vector.remove(i);
+    			b.vector.remove(i);
+    		} else {
+    			throw new EuclidRuntimeException("unmatched null values at: "+i);
+    		}
+    	}
     }
     /**
      * get inertial tensor. (second moments)
@@ -484,6 +496,7 @@ public class Point3Vector implements EuclidConstants {
             }
         }
     }
+
     /**
      * get distance between 2 points.
      * 
@@ -611,12 +624,13 @@ public class Point3Vector implements EuclidConstants {
      * get Inertial axes; do not throw exception for pathological cases, but
      * return it. Axes (lengths and unit vectors) are returned through the
      * arguments eigval and eigvect. OBSOLETE
-     * 
+     * NYI
      * @param eigval
      * @param eigvect
      * @param illCond
      * @exception EuclidRuntimeException
      *                must have at least 3 points
+     *                @deprecated (doesn't work)
      */
     public void inertialAxes(RealArray eigval, RealSquareMatrix eigvect,
     		EuclidRuntimeException illCond) throws EuclidRuntimeException {
@@ -633,6 +647,7 @@ public class Point3Vector implements EuclidConstants {
      * 
      * @exception EuclidRuntimeException
      *                must have at least 3 points
+     *                @deprecated doesn't work
      */
     public Plane3 bestPlane() throws EuclidRuntimeException {
         RealSquareMatrix eigvect = new RealSquareMatrix(3);
@@ -1009,14 +1024,21 @@ public class Point3Vector implements EuclidConstants {
     /**
      * fit two coordinates of same length and alignment.
      * 
-     * rough private method fit this to ref (that is 1 is moving molecule, 2 is
-     * fixed) pick three points in molecule 2 which are well separated (use best
-     * plane projection). Find the plane of these three and use the normal,
-     * together with one of the points, to define two coordinate axes. Do the
-     * same for the other molecule and fit the two sets of axes. This is rough,
-     * but will be a good starting point for most molecules.
-     * <P>
-     * CURRENTLY NOT WORKING FULLY
+     * rough method .
+     * fit 'this' to ref ('this' is moving molecule, ref is fixed)
+     * take copies and refer each to their centroid as origin.
+     * pick three points in ref which are well separated
+     * Find the plane of these three and use the normal,
+     * together with the vector to one of the points, to define two coordinate axes.
+     * Calculate the third axis as right-handed orthogonal (check).
+     * This gives a pure rotation matrix (Tref)
+     * using the corresponding points in 'this' repeat to give Tthis
+     * Tranformation matrix is then 
+     * Tthis(T). Tref.
+     * Defining the intercentroid vector as Tthis2ref = centRef - centThis
+     * we have 
+     * Tfinal = Tthis2Ref . Tthis(T) . Tref . (-Tthis2Ref)  
+     *  This is rough, but will be a good starting point for many systems.
      * 
      * @param ref
      * @return transformation
@@ -1025,75 +1047,75 @@ public class Point3Vector implements EuclidConstants {
      *                linear, has coincident points, etc.)
      */
     public Transform3 roughAlign(Point3Vector ref) throws EuclidRuntimeException {
+        int[] points;
         int nn = ref.size();
-        if (nn < 3 || nn != size()) {
-            return new Transform3();
+        if (nn != size()) {
+            throw new EuclidRuntimeException("arrays of different lengths: "+this.size()+"/"+nn);
         }
-        /**
-         * first centre each molecule on centroid
-         */
-        Point3Vector pv1 = new Point3Vector(this);
-        pv1.moveToCentroid();
-        Point3Vector pv2 = new Point3Vector(ref);
-        pv2.moveToCentroid();
-        // now refer to bext plane of ref
-        int i1, i2, i3;
-        RealSquareMatrix eigvec = new RealSquareMatrix(4);
+        if (nn < 3) {
+            throw new EuclidRuntimeException("must have 3 points to align: "+this.size()+"/"+nn);
+        }
+        Point3 centThis = this.getCentroid();
+        Point3 centRef = ref.getCentroid();
+        
+        Transform3 r = fit3Points(ref);
+
+        return translateRotateRetranslate(centThis,
+				centRef, r);
+    }
+	private Transform3 fit3Points(Point3Vector ref) {
+		int[] points;
+        Point3Vector pvThis = new Point3Vector(this);
+		pvThis.moveToCentroid();
+        Point3Vector pvRef = new Point3Vector(ref);
+        pvRef.moveToCentroid();
+        points = this.get3SeparatedPoints();
+        Transform3 tThis = getTransformOfPlane(points, pvThis);
+        Transform3 tRef = getTransformOfPlane(points, pvRef);
+        tRef.transpose();
+        Transform3 r = tRef.concatenate(tThis);
+		return r;
+	}
+	private Transform3 translateRotateRetranslate(Point3 centThis,
+			Point3 centRef, Transform3 rotate) {
+		Vector3 this2Origv = new Vector3(centThis.multiplyBy(-1.0));
+        Transform3 trans2Orig = new Transform3(this2Origv);
+        Transform3 trans1 = rotate.concatenate(trans2Orig);
+		Vector3 orig2Refv = new Vector3(centRef);
+		Transform3 orig2Ref = new Transform3(orig2Refv);
+		Transform3 finalT = orig2Ref.concatenate(trans1);
+		return finalT;
+	}
+    
+	private Transform3 getTransformOfPlane(int[] ii, Point3Vector pv) {
+		Plane3 p = new Plane3(pv.getPoint3(ii[0]), pv.getPoint3(ii[1]), pv
+                .getPoint3(ii[2]));
+        // get reference point in each plane
+        Vector3 v = new Vector3(pv.getPoint3(ii[0])).normalize();
+        // and form axes:
+        Vector3 w = p.getVector().cross(v).normalize();
+        // form the two sets of axes
+        Vector3 vv = v.cross(w);
+        Transform3 t = new Transform3(vv, v, w);
+		return t;
+	}
+	private void eigenvectorFit(Point3Vector pv2) {
+		RealSquareMatrix eigvec = new RealSquareMatrix(4);
         RealArray eigval = new RealArray(4);
         EuclidRuntimeException illCond = null;
         pv2.inertialAxes(eigval, eigvec, illCond);
+        System.out.println("EIG "+eigval+"/"+eigvec);
         if (illCond != null) {
             throw illCond;
         }
         Transform3 axes = new Transform3(eigvec);
+        System.out.println("AX "+axes);
         axes.transpose();
         Point3Vector pv22 = new Point3Vector(pv2);
+        System.out.println("PVV "+pv22);
         pv22.transform(axes);
-        // find points with max, min X and Y for reference triangle
-        // QUERY
-        RealArray fx = null;
-        RealArray fy = null;
-        fx = pv22.getXYZ(Axis3.X);
-        fy = pv22.getXYZ(Axis3.Y);
-        i1 = fx.indexOfLargestElement();
-        i2 = fx.indexOfSmallestElement();
-        i3 = fy.indexOfLargestElement();
-        // in case i3 corresponds to the other points, choose the next
-        // arbitraily
-        while (i1 == i3 || i2 == i3) {
-            i3++;
-            if (i3 > nn)
-                i3 = 1;
-        }
-        // now refer back to ref molecule
-        Plane3 p2 = new Plane3(pv2.getPoint3(i1), pv2.getPoint3(i2), pv2
-                .getPoint3(i3));
-        // and moving mol
-        Plane3 p1 = new Plane3(pv1.getPoint3(i1), pv1.getPoint3(i2), pv1
-                .getPoint3(i3));
-        // get reference point in each plane
-        Vector3 v1 = new Vector3(pv1.getPoint3(i1));
-        v1.normalize();
-        Vector3 v2 = new Vector3(pv2.getPoint3(i2));
-        v2.normalize();
-        // and form axes:
-        Vector3 w1 = p1.getVector().cross(v1);
-        w1.normalize();
-        Vector3 w2 = p2.getVector().cross(v2);
-        w2.normalize();
-        // form the two sets of axes
-        Vector3 p11 = v1.cross(w1);
-        Vector3 p22 = v2.cross(w2);
-        Transform3 t1 = new Transform3(p11, v1, w1);
-        Transform3 t2 = new Transform3(p22, v2, w2);
-        // and rotate the two axes onto each other
-        // Transform3 r = (RealSquareMatrix)
-        // (s2.transpose().concatenate(s1)).transpose();
-        RealSquareMatrix s2 = new RealSquareMatrix(t2);
-        s2.transpose();
-        Transform3 r = new Transform3(s2).concatenate(t1);
-        return r;
-    }
+        System.out.println("PVVZZ "+pv22);
+	}
     /**
      * fit two coordinates of same length and alignment
      * 
@@ -1109,18 +1131,21 @@ public class Point3Vector implements EuclidConstants {
         // these should be set as parameters?
         double damp = 1.0;
         double converge = 0.0002;
+        Point3 thisCent = this.getCentroid();
+        Point3 refCent = ref.getCentroid();
         /**
          * make copies of each molecule and translate to centroid
          */
-        Point3Vector movtmp = this;
-        movtmp.moveToCentroid();
-        Point3Vector reftmp = ref;
+        Point3Vector thistmp = new Point3Vector(this);
+        Point3Vector reftmp = new Point3Vector(ref);
+        thistmp.moveToCentroid();
         reftmp.moveToCentroid();
         /**
          * roughly rotate moving molecule onto reference one
          */
-        Transform3 t = movtmp.roughAlign(reftmp);
-        movtmp.transform(t);
+        Transform3 t = thistmp.roughAlign(reftmp);
+        thistmp.transform(t);
+        
         RealArray shift = new RealArray(3);
         int NCYC = 20;
         for (int icyc = 0; icyc < NCYC; icyc++) {
@@ -1128,48 +1153,56 @@ public class Point3Vector implements EuclidConstants {
             /**
              * loop through x,y,z
              */
-            for (int j = 0; j < 3; j++) {
-                int j1 = j;
-                int j2 = (j1 + 1) % 3;
+            for (int jax0 = 0; jax0 < 3; jax0++) {
+                int jax1 = (jax0 + 1) % 3;
+                int jax2 = (jax1 + 1) % 3;
                 double rh = 0.0;
                 double lh = 0.0;
                 for (int ipt = 0; ipt < size(); ipt++) {
-                    double refj1 = reftmp.getCoordinate(ipt, j1);
-                    double refj2 = reftmp.getCoordinate(ipt, j2);
-                    double movj1 = movtmp.getCoordinate(ipt, j1);
-                    double movj2 = movtmp.getCoordinate(ipt, j2);
+                    double refj1 = reftmp.getCoordinate(ipt, jax1);
+                    double refj2 = reftmp.getCoordinate(ipt, jax2);
+                    double movj1 = thistmp.getCoordinate(ipt, jax1);
+                    double movj2 = thistmp.getCoordinate(ipt, jax2);
                     lh += refj1 * refj1 + refj2 * refj2;
                     rh += refj1 * (refj2 - movj2) - refj2 * (refj1 - movj1);
                 }
                 /**
                  * get shifts
                  */
-                shift.setElementAt(j, -(damp * (rh / lh)));
-                maxshift = Math.max(maxshift, Math.abs(shift.elementAt(j)));
+                double sft = -(damp * (rh / lh));
+                maxshift = Math.max(maxshift, Math.abs(sft));
+                shift.setElementAt(jax0, sft);
             }
             /**
              * break out if converged
              */
             if (maxshift < converge) {
+//            	System.out.println("CONVERGED");
                 break;
             } else if (maxshift < 0.1) {
+                // not yet used
                 damp = 1.0;
             } else if (maxshift > 0.1) {
+                // not yet used
                 damp = 1.0;
             }
+//        	System.out.println("CYCLE");
             /**
              * make transformation matrix by rotations about 3 axes
              */
-            Transform3 t1 = new Transform3(new Angle(shift.elementAt(0)),
-                    new Angle(shift.elementAt(1)),
-                    new Angle(shift.elementAt(2)));
-            movtmp.transform(t1);
+            Transform3 t1 = new Transform3(
+        		new Angle(shift.elementAt(0)),
+                new Angle(shift.elementAt(1)),
+                new Angle(shift.elementAt(2)));
+            thistmp.transform(t1);
             /**
              * concatenate transformations
              */
             t = new Transform3(t1.concatenate(t));
         }
-        return t;
+        Transform3 tt = translateRotateRetranslate(thisCent,
+				refCent, t);
+        return tt;
     }
     /**
      * to string.
