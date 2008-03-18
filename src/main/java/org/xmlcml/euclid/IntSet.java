@@ -1,8 +1,13 @@
 package org.xmlcml.euclid;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 
 /**
  * public class IntSet
@@ -26,16 +31,19 @@ import java.util.logging.Logger;
 public class IntSet implements EuclidConstants {
 
     final static Logger logger = Logger.getLogger(IntSet.class.getName());
-
-    int array[];
-
-    int nelem = 0;
-
-    int min = Integer.MIN_VALUE;
-
-    int max = Integer.MAX_VALUE;
+    private int array[];
+    private int nelem = 0;
+    private int min = Integer.MIN_VALUE;
+    private int max = Integer.MAX_VALUE;
 
     Set<Integer> set;
+
+	/** gets all permutations of integers from 0 to n-1.
+	 * crude
+	 * @param number 
+	 * @return list of all permutations (no special order)
+	 */
+	public static Map<Integer, List<List<Integer>>> integerMap = new HashMap<Integer, List<List<Integer>>>();
 
     /**
      * constructor.
@@ -393,9 +401,9 @@ public class IntSet implements EuclidConstants {
      */
     public void debug() {
         for (int i = 0; i < nelem; i++) {
-            logger.info(S_SPACE + array[i]);
+            System.out.print(S_SPACE + array[i]);
         }
-        logger.info("");
+        System.out.println();
     }
 
     /**
@@ -415,5 +423,58 @@ public class IntSet implements EuclidConstants {
         s.append(S_RBRAK);
         return s.toString();
     }
+
+	private static List<Integer> copy(List<Integer> list) {
+		List<Integer> newList = new ArrayList<Integer>();
+		for (Integer ii : list) {
+			newList.add(ii);
+		}
+		return newList;
+	}
+
+	/** create all permutations of an integer.
+	 * runs from 0,1,... number-1
+	 * @param number
+	 * @return
+	 */
+	public static List<int[]> getPermutations(Integer number) {
+		List<int[]> intArrayList = new ArrayList<int[]>();
+		List<List<Integer>> intListList = IntSet.getPermutations0(number);
+		for (List<Integer> intList : intListList) {
+			int size = intList.size();
+			int[] ints = new int[size];
+			for (int i = 0; i < size; i++) {
+				ints[i] = intList.get(i).intValue();
+			}
+			intArrayList.add(ints);
+		}
+		return intArrayList;
+	}
+
+	/** create all permutations of an integer.
+	 * runs from 0,1,... number-1
+	 * @param number
+	 * @return
+	 */
+	private static List<List<Integer>> getPermutations0(Integer number) {
+		List<List<Integer>> listList = IntSet.integerMap.get(number);
+		if (listList == null) {
+			listList = new ArrayList<List<Integer>>();
+			if (number.equals(0)) {
+	    		listList.add(new ArrayList<Integer>());
+			} else {
+		    	List<List<Integer>> listListMinus = IntSet.getPermutations0(new Integer(number - 1));
+		    	for (List<Integer> listMinus : listListMinus) {
+	    			for (Integer ii = 0; ii < number; ii++) {
+	    				List<Integer> copyList = IntSet.copy(listMinus);
+	    				copyList.add(ii.intValue(), number);
+	    				listList.add(copyList);
+	    			}
+		    	}
+			}
+	    	IntSet.integerMap.put(number, listList);
+		}
+		return listList;
+	}
 
 }

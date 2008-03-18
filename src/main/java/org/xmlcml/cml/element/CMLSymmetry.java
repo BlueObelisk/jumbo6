@@ -24,13 +24,13 @@ public class CMLSymmetry extends AbstractSymmetry {
 	public final static String NS = C_E+TAG;
 	
     /**
-     * contructor.
+     * constructor.
      */
     public CMLSymmetry() {
     }
 
     /**
-     * contructor.
+     * constructor.
      * 
      * @param old
      */

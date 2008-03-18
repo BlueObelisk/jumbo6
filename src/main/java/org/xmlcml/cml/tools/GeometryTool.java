@@ -25,9 +25,11 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.IntSquareMatrix;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -45,6 +47,14 @@ public class GeometryTool extends AbstractTool {
     Logger logger = Logger.getLogger(GeometryTool.class.getName());
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
+    
+    /**
+     * constructor unrelated to individual molecules.
+     * 
+     * @param molecule
+     */
+    public GeometryTool() {
+    }
     /**
      * constructor with embedded molecule.
      * 
@@ -941,4 +951,62 @@ public class GeometryTool extends AbstractTool {
     	}
     	return torsion;
     }
+    
+    /** pairwise atom-atom alignment of molecules.
+     * 
+     * @param identicalMoleculeList list of identical molecules (e.g. by morgan)
+     * @return upper triangle of transformations from mol(j) onto mol(i)
+     */
+	public static List<List<MoleculePair>> matchAndAlignMolecules(
+			List<CMLMolecule> identicalMoleculeList) {
+		AtomMatcher atomMatcher = new AtomMatcher();
+		atomMatcher.setAtomMatchStrategy(Strategy.MATCH_MORGAN);
+		CMLMap[][] mapMatrix = atomMatcher.getMoleculeMatch(identicalMoleculeList, identicalMoleculeList);
+		List<List<MoleculePair>> moleculePairListList = new ArrayList<List<MoleculePair>>();
+		int i = 0;
+		for (CMLMap[] mapx : mapMatrix) {
+			List<MoleculePair> moleculePairList = new ArrayList<MoleculePair>();
+			moleculePairListList.add(moleculePairList);
+			int j = 0;
+			for (CMLMap map : mapx) {
+				if (j > i) {
+					MoleculeTool moleculeTooli = MoleculeTool.getOrCreateTool(identicalMoleculeList.get(i));
+					MoleculePair moleculePair = moleculeTooli.fitToMoleculeTool(map, identicalMoleculeList.get(j));
+					moleculePairList.add(moleculePair);
+				}
+				j++;
+			}
+			i++;
+		}
+		return moleculePairListList;
+	}
+
+	public void displayAlignments(List<List<MoleculePair>> moleculePairMatrix, List<CMLMolecule> identicalMoleculeList) {
+		
+		int size = identicalMoleculeList.size();
+		if (size > 1) {
+			for (int i = 0; i < size; i++) {
+				CMLMolecule moleculei = identicalMoleculeList.get(i);
+				Point3Vector coordsi = new Point3Vector(moleculei.getCoordinates3(CoordinateType.CARTESIAN));
+				List<MoleculePair> moleculePairList = moleculePairMatrix.get(i);
+				for (int j = i+1; j < size; j++) {
+					CMLMolecule moleculej = identicalMoleculeList.get(j);
+					Point3Vector coordsj = new Point3Vector(moleculej.getCoordinates3(CoordinateType.CARTESIAN));
+					MoleculePair moleculePair = moleculePairList.get(j - i - 1);
+					Transform3 transform3 = moleculePair.getTransform3();
+					// have to use map for this
+					//FIXME
+					System.err.println("COORDINATES NEED MAPPING");
+					coordsj.transform(transform3);
+					double rms = coordsj.rms(coordsi);
+//					System.out.print("| "+rms);
+				}
+				System.out.println();
+			}
+			System.out.println("-------------");
+		} else {
+			System.err.println("Cannot align only one molecule");
+		}
+	}
+
 }

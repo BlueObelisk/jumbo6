@@ -72,7 +72,7 @@ public class IndexableByIdListManager implements CMLConstants {
      * 
      * @return map
      */
-    public Map indexList() {
+    public Map<String, Indexable> indexList() {
         ensureMap();
         map.clear();
         lowerCaseMap.clear();

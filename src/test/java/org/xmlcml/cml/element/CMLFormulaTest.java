@@ -3,7 +3,6 @@ package org.xmlcml.cml.element;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.List;
 
 import junit.framework.Assert;
 import nu.xom.Document;

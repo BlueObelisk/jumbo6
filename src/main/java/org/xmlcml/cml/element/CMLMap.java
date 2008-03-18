@@ -25,32 +25,30 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     /** direction of link */
     public enum Direction {
 
-        /**
-         * atomicSymbol to inidcate Direction.TO attribute is to be used.
-         *
+        /** Direction.TO attribute is to be used.         *
          */
         TO("to"),
 
         /**
-         * atomicSymbol to inidcate Direction.FROM attribute is to be used.
+         * Direction.FROM attribute is to be used.
          *
          */
         FROM("from"),
 
         /**
-         * atomicSymbol indicating that both ends of link matter
+         * both ends of link matter
          *
          */
         BOTH("both"),
 
         /**
-         * atomicSymbol indicating that either end of link matters
+         * either end of link matters
          *
          */
         EITHER("either"),
 
         /**
-         * atomicSymbol indicating that neither end of link is involved. NEITHER
+         * neither end of link is involved. NEITHER
          * can be used when merging maps to ensure that links are only added
          * when neither the Direction.FROM or Direction.TO ref is represent in
          * *this* map.
@@ -215,13 +213,13 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     }
 
     private String getFromLink(CMLLink link) {
-        return (S_EMPTY.equals(link.getFrom())) ? Util.concatenate(link
-                .getFromSet(), S_SPACE) : link.getFrom();
+        return (S_EMPTY.equals(link.getFrom())) ? 
+        		Util.concatenate(link.getFromSet(), S_SPACE) : link.getFrom();
     }
 
     private String getToLink(CMLLink link) {
-        return (S_EMPTY.equals(link.getTo())) ? Util.concatenate(link
-                .getToSet(), S_SPACE) : link.getTo();
+        return (S_EMPTY.equals(link.getTo())) ? 
+    		Util.concatenate(link.getToSet(), S_SPACE) : link.getTo();
     }
 
     /**
@@ -230,8 +228,7 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
      * to overwrite. if neither to or from exists then link is added no warning
      * is given if link exists and is overwritten
      *
-     * @param link
-     *            to add
+     * @param link to add
      * @param control
      *            EITHER overwrites any links with same to or same from BOTH
      *            overwrites link with both to and from identical NEITHER adds
@@ -347,9 +344,26 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     public List<String> getToRefs() {
         List<String> toRefs = new ArrayList<String>();
         for (CMLLink link : getLinkElements()) {
-            toRefs.add(link.getTo());
+        	if (link.getTo() != null) {
+        		toRefs.add(link.getTo());
+        	}
         }
         return toRefs;
+    }
+
+    /**
+     * gets array of toSet attributes. does not do to
+     *
+     * @return the toSet attributes
+     */
+    public List<String[]> getToSetRefs() {
+        List<String[]> toSetRefs = new ArrayList<String[]>();
+        for (CMLLink link : getLinkElements()) {
+            if(link.getToSet() != null) {
+            	toSetRefs.add(link.getToSet());
+            }
+        }
+        return toSetRefs;
     }
 
     /**
@@ -360,10 +374,28 @@ public class CMLMap extends org.xmlcml.cml.element.AbstractMap {
     public List<String> getFromRefs() {
         List<String> fromRefs = new ArrayList<String>();
         for (CMLLink link : getLinkElements()) {
-            fromRefs.add(link.getFrom());
+        	if (link.getFrom() != null) {
+        		fromRefs.add(link.getFrom());
+        	}
         }
         return fromRefs;
     }
+    
+    /**
+     * gets array of fromSet attributes. does not do from
+     *
+     * @return the from attributes
+     */
+    public List<String[]> getFromSetRefs() {
+        List<String[]> fromSetRefs = new ArrayList<String[]>();
+        for (CMLLink link : getLinkElements()) {
+            if(link.getFromSet() != null) {
+            	fromSetRefs.add(link.getFromSet());
+            }
+        }
+        return fromSetRefs;
+    }
+
 
     /**
      * gets mapped fromTo atomId. works with sets

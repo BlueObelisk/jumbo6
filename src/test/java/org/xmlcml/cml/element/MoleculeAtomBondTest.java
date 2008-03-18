@@ -291,12 +291,12 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
 
     protected void makeCrystal() {
             crystal = (CMLCrystal)  parseValidString("  <crystal id='c1' " + CML_XMLNS + ">"
-                + "    <scalar>9.0</scalar>"
-                + "    <scalar>10.0</scalar>"
-                + "    <scalar>11.0</scalar>"
-                + "    <scalar>90.0</scalar>"
-                + "    <scalar>90.0</scalar>"
-                + "    <scalar>90.0</scalar>" + "  </crystal>"
+                + "    <scalar dictRef='iucr:_cell_length_a'>9.0</scalar>"
+                + "    <scalar dictRef='iucr:_cell_length_b'>10.0</scalar>"
+                + "    <scalar dictRef='iucr:_cell_length_c'>11.0</scalar>"
+                + "    <scalar dictRef='iucr:_cell_angle_alpha'>90.0</scalar>"
+                + "    <scalar dictRef='iucr:_cell_angle_beta'>90.0</scalar>"
+                + "    <scalar dictRef='iucr:_cell_angle_gamma'>90.0</scalar>" + "  </crystal>"
                 + "  ");
     }
 
@@ -346,12 +346,12 @@ public abstract class MoleculeAtomBondTest extends AbstractToolTest {
         cmlCryst = (CMLCml) parseValidString(
             "<cml id='cml1' " + CML_XMLNS + ">"
             + "  <crystal id='c1' >"
-                + "    <scalar>9.0</scalar>"
-                + "    <scalar>10.0</scalar>"
-                + "    <scalar>11.0</scalar>"
-                + "    <scalar>90.0</scalar>"
-                + "    <scalar>90.0</scalar>"
-                + "    <scalar>90.0</scalar>"
+                + "    <scalar dictRef='cml:a'>9.0</scalar>"
+                + "    <scalar dictRef='cml:b'>10.0</scalar>"
+                + "    <scalar dictRef='cml:c'>11.0</scalar>"
+                + "    <scalar dictRef='cml:alpha'>90.0</scalar>"
+                + "    <scalar dictRef='cml:beta'>90.0</scalar>"
+                + "    <scalar dictRef='cml:gamma'>90.0</scalar>"
                 + "  </crystal>"
                 + "  <molecule id='m5' >"
                 + "    <atomArray>"

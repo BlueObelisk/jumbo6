@@ -277,10 +277,15 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		if (sprout != null) {
 			oldRingXY2 = sprout.getRingAtom().getXY2();
 			oldFirstXY2 = sprout.getFirstAtom().getXY2();
-			oldSproutVector = oldRingXY2.subtract(oldFirstXY2);
+			if (oldFirstXY2 == null) {
+				System.err.println("null sprout vector");
+				return;
+			} else {
+				oldSproutVector = oldRingXY2.subtract(oldFirstXY2);
+			}
 		}
 		this.add2DCoordinates();
-		if (sprout != null) {
+		if (sprout != null && oldSproutVector != null) {
 			Real2 sproutVector = sprout.getSproutVector();
 			Angle a = new Vector2(sproutVector).getAngleMadeWith(new Vector2(oldSproutVector));
 			Transform2 transform2 = new Transform2(a.plus(new Angle(Math.PI)));

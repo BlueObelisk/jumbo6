@@ -20,6 +20,7 @@ import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector3;
@@ -180,6 +181,22 @@ public class AtomTool extends AbstractTool {
 		return coordinationSphereSet;
 	}
 
+	/** gets 3D coordinates in ordered list.
+	 * 
+	 * @param atomList
+	 * @return
+	 */
+	public static Point3Vector getPoint3Vector(List<CMLAtom> atomList) {
+		Point3Vector p3v = new Point3Vector();
+		for (CMLAtom atom : atomList) {
+			Point3 p3 = (atom == null) ? null : atom.getXYZ3();
+			if (p3 == null) {
+//				throw new CMLRuntimeException("Missing 3D coordinates");
+			}
+			p3v.add(p3);
+		}
+		return p3v;
+	}
 	/**
      * Computes a ligand list and sorts the ligands in it by atomic number if
      * two ligands have the same atomic number their order is unchanged.
@@ -436,7 +453,7 @@ public class AtomTool extends AbstractTool {
     	 } else {
 	    	 double x = atom.getX2();
 	    	 double y = atom.getY2();
-	    	 g = drawable.createGraphicsElement();
+	    	 g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
 	    	 g.addAttribute(new Attribute("class", "atom"));
 	    	 g.addAttribute(new Attribute("id", "g"+S_UNDER+atom.getId()));
 	    	 g.setTransform(new Transform2(

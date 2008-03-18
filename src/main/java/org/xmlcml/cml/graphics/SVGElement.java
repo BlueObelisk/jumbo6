@@ -2,6 +2,8 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +16,9 @@ import nu.xom.ParentNode;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.html.HtmlA;
+import org.xmlcml.cml.html.HtmlMenuSystem;
+import org.xmlcml.cml.html.HtmlElement.Target;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
 import org.xmlcml.euclid.Real2;

@@ -28,6 +28,20 @@ public abstract class Real implements EuclidConstants {
     public static void setEpsilon(double epsilon) {
         epsx = epsilon;
     }
+
+    /** truncate to given number of decimals.
+     * forms nint(d * 10^ndec)/10^ndec
+     * @param d to truncate
+     * @param ndec
+     * @return
+     */
+    public static double normalize(double d, int ndec) {
+    	int dd = 1;
+    	for (int i = 0; i < ndec; i++) {
+    		dd *= 10;
+    	}
+    	return ((double) Math.round(d * (double)dd)) / (double) dd;
+    }
     /**
      * are two numbers equal within epsx.
      * 

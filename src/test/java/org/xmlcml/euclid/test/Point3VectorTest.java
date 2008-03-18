@@ -2,6 +2,7 @@ package org.xmlcml.euclid.test;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -28,13 +29,9 @@ import org.xmlcml.euclid.Axis.Axis3;
 public class Point3VectorTest extends EuclidTestBase {
 
     Point3Vector p0;
-
     Point3Vector p1;
-
     Point3Vector p2;
-
     final static double s2 = Math.sqrt(2.);
-
     final static double s3 = Math.sqrt(3.);
 
     /**
@@ -515,8 +512,8 @@ public class Point3VectorTest extends EuclidTestBase {
      * RealSquareMatrix, EuclidException)'
      */
     @Test
+    @Ignore
     public void testInertialAxes() {
-        // FIXME - I think this fails
         RealArray eigval = new RealArray();
         RealSquareMatrix eigvec = new RealSquareMatrix();
         EuclidRuntimeException exc = new EuclidRuntimeException("dummy");
@@ -527,8 +524,8 @@ public class Point3VectorTest extends EuclidTestBase {
      * Test method for 'org.xmlcml.euclid.Point3Vector.bestPlane()'
      */
     @Test
+    @Ignore
     public void testBestPlane() {
-        // FIXME - I think this fails
     }
 
     /**
@@ -672,22 +669,31 @@ public class Point3VectorTest extends EuclidTestBase {
      * Test method for 'org.xmlcml.euclid.Point3Vector.roughAlign(Point3Vector)'
      */
     @Test
+//    @Ignore
     public void testRoughAlign() {
-        // FIXME - fails
-        /**
-         * -- Transform3 t = null; try { t = p1.roughAlign(p2); } catch
-         * (EuclidException e) { Assert.assertEquals("align", "zero length
-         * normal", e.getMessage()); } // Assert.assertNotNull(t); Point3Vector
-         * pa = null; try { pa = new Point3Vector(new double[]{ 1., 0., 0., 0.,
-         * 1., 0., 0., 0., 1. }); } catch (EuclidException e) { neve rThrow(e); }
-         * Point3Vector pb = null; try { pb = new Point3Vector(new double[]{ 0.,
-         * 1., 0., 1., 0., 0., 0., 0., 1. }); } catch (EuclidException e) {
-         * never Throw(e); } try { t = pa.roughAlign(pb); } catch
-         * (EuclidException e) { // FIXME this fails // never Throw(e); }
-         * Assert.assertEquals("align", new double[]{ 0.0,0.0,1.0,0.0,
-         * 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,0.0,1.0 },
-         * t.getMatrixAsArray(), EPS); --
-         */
+    	System.out.println("++++testRoughAlign+++++");
+         Transform3 t = null;
+    	 Point3Vector pthis = new Point3Vector(new double[]{
+    				 1., -1., 0., 
+    				 0., 1., -1., 
+    				 -1., 0., 1. });
+         Point3Vector pref = new Point3Vector(new double[]{ 
+        			 0., 1., -1., 
+        			 1., -1., 0., 
+        			 -1., 0., 1. }); 
+		 t = pthis.roughAlign(pref);
+         pthis.transform(t);
+         Point3VectorTest.assertEquals("transformed pthis", pref, pthis, 0.000001);
+         
+    	 pref = new Point3Vector(new double[]{
+				 12., 0., 1., 
+				 11., 2., 0., 
+				 10., 1., 2. });
+		 t = pthis.roughAlign(pref);
+         pthis.transform(t);
+//         System.out.println("PA "+pthis+"\n"+t);
+         RealArray.round(pthis.getArray(), 6);
+         Point3VectorTest.assertEquals("transformed pthis", pref, pthis, 0.000001);
     }
 
     /**
@@ -695,47 +701,37 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Test
     public void testFitTo() {
-        // FIXME thbis fails
-        /*--
          Transform3 t = null;
-         try {
-         t = p1.fitTo(p2);
-         } catch (EuclidException e) {
-         Assert.assertEquals("align", "zero length normal", e.getMessage());
-         }
-         Point3Vector pa = null;
-         try {
-         pa = new Point3Vector(new double[]{
-         1., 0., 0.,
-         0., 1., 0.,
-         0., 0., 1.
-         });
-         } catch (EuclidException e) {
-         never Throw(e);
-         }
-         Point3Vector pb = null;
-         try {
-         pb = new Point3Vector(new double[]{
-         0., 1., 0.,
-         1., 0., 0.,
-         0., 0., 1.
-         });
-         } catch (EuclidException e) {
-         neverThrow(e);
-         }
-         try {
-         t = pa.roughAlign(pb);
-         } catch (EuclidException e) {
-         // FIXME this fails
-         //			neverThrow(e);
-         }
-         Assert.assertEquals("align", new double[]{
+         Point3Vector pa = new Point3Vector(new double[]{
+	         1., 0., 0.,
+	         0., 1., 0.,
+	         0., 0., 1.
+	         });
+         Point3Vector pb = new Point3Vector(new double[]{
+	         0., 1., 0.,
+	         0., 0., 1.,
+	         1., 0., 0.
+	         });
+         t = pa.fitTo(pb);
+         pa.transform(t);
+         double rms = pa.rms(pb);
+         Assert.assertEquals("rms", 0.0, rms, 0.000000001);
+         DoubleTestBase.assertEquals("align", new double[]{
          0.0,0.0,1.0,0.0,
          1.0,0.0,0.0,0.0,
          0.0,1.0,0.0,0.0,
          0.0,0.0,0.0,1.0	},
          t.getMatrixAsArray(), EPS);
-         --*/
+         
+         pb = new Point3Vector(new double[]{
+    	         10., 1.1, 0.,
+    	         10., 0., 0.9,
+    	         11.1, 0., 0.
+    	         });
+         t = pa.fitTo(pb);
+         pa.transform(t);
+         rms = pa.rms(pb);
+         Assert.assertEquals("rms", 0.03470386605101721, rms, 0.00001);
     }
 
 

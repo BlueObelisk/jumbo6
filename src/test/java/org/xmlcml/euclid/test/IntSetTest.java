@@ -1,7 +1,12 @@
 package org.xmlcml.euclid.test;
 
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntRange;
@@ -335,5 +340,32 @@ public class IntSetTest extends EuclidTestBase {
         IntSetTest.assertEquals("inverse", new int[] { 1, 2, 4, 3, 0 }, is);
     }
 
+	@Test
+	public final void testGetSubscriptedIntSet() {
+        IntSet is1 = new IntSet(new int[] { 4, 0, 1, 3, 2 });
+        IntSet is2 = new IntSet(new int[] { 14, 10, 11, 13, 12 });
+        IntSet is3 = is2.getSubscriptedIntSet(is1);
+        IntSetTest.assertEquals("subscripts", 
+        		new IntSet(new int[]{12, 14, 10, 13, 11}), is3);
+        is1 = new IntSet(new int[] { 4, 0, 5, 3, 2 });
+        try {
+        	is3 = is2.getSubscriptedIntSet(is1);
+        	Assert.fail("Should throw exception");
+        } catch (EuclidRuntimeException e) {
+        	;// expected
+        }
+        is1 = new IntSet(new int[] { 4, 0, 1, 3});
+    	is3 = is2.getSubscriptedIntSet(is1);
+        IntSetTest.assertEquals("subscripts", 
+        		new IntSet(new int[]{12, 14, 10, 13}), is3);
+    }
+
+	@Test
+	public final void testGetPermutations() {
+		List<int[]> perm3 = IntSet.getPermutations(new Integer(3));
+		IntTest.assertEquals("permutation", new int[]{3, 2, 1}, perm3.get(0));
+		IntTest.assertEquals("permutation", new int[]{2, 3, 1}, perm3.get(1));
+		IntTest.assertEquals("permutation", new int[]{1, 2, 3}, perm3.get(5));
+	}
 
 }

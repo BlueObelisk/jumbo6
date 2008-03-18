@@ -14,6 +14,7 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLLink;
@@ -30,9 +31,12 @@ import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
+import org.xmlcml.euclid.IntSet;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.RealMatrix;
+import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -79,6 +83,13 @@ public class AtomMatcher extends AbstractTool {
          * 
          */
         MATCH_MORGAN("match Morgan"),
+
+        /**
+         * existing labels from Morgan algorithm are
+         * to be used for matching
+         * 
+         */
+        MATCH_MORGAN_LABEL("match Morgan label"),
 
         /**
          * atomicSymbol indicating that atomTreeLabelling is to be used for
@@ -134,7 +145,7 @@ public class AtomMatcher extends AbstractTool {
     }
 
     /**
-     * maximum level for recursion (to avoid infite regress).
+     * maximum level for recursion (to avoid infinite regress).
      */
     public final static int MAX_ATOM_TREE_LEVEL = 10;
 
@@ -173,15 +184,10 @@ public class AtomMatcher extends AbstractTool {
     public final static AtomMatcher.Strategy DEFAULT_ATOM_SET_EXPANSION = AtomMatcher.Strategy.MATCH_GEOM;
 
     protected String[] excludeElementTypes;
-
     protected String[] includeElementTypes;
-
     protected String[] excludeLigandElementTypes;
-
     protected String[] includeLigandElementTypes;
-
     protected boolean useCharge;
-
     protected boolean useLabel;
 
     /**
@@ -469,18 +475,17 @@ public class AtomMatcher extends AbstractTool {
      * 
      * @param atomSet0
      * @param atomSet1
-     * @throws CMLException
-     *             null owner document, null atomSets, atom sets different
-     *             sizes, bad Morgan
+     * @throws CMLRuntimeException
+     *             null atomSets, atom sets different sizes, bad Morgan
      * @return map or null if molecules of different length.
      */
     public CMLMap mapAtomSets(CMLAtomSet atomSet0, CMLAtomSet atomSet1)
-            throws CMLException {
+            throws CMLRuntimeException {
         if (atomSet0 == null) {
-            throw new CMLException("atomSet is null: " + atomSet0);
+            throw new CMLRuntimeException("atomSet is null: " + atomSet0);
         }
         if (atomSet1 == null) {
-            throw new CMLException("atomSet is null: " + atomSet1);
+            throw new CMLRuntimeException("atomSet is null: " + atomSet1);
         }
         CMLMap cmlMap = null;
         CMLLink cmlLink = null;
@@ -489,7 +494,7 @@ public class AtomMatcher extends AbstractTool {
         cmlMap.setFromType(CMLAtom.TAG);
         if (atomSet0.size() != atomSet1.size()) {
             // FIXME may manage this later
-            throw new CMLException("mapAtomSets wrong sizes:  "
+            throw new CMLRuntimeException("mapAtomSets wrong sizes:  "
                     + atomSet0.size() + S_SLASH + atomSet1.size());
         }
         String title = this.getAtomMatchStrategy().toString();
@@ -510,9 +515,9 @@ public class AtomMatcher extends AbstractTool {
                 for (int i = 0; i < morganList0.size(); i++) {
                     if (morganList0.get(i).intValue() != morganList1.get(i)
                             .intValue()) {
-                        throw new CMLException(
-                                "morgan numbers do not match; (Matching non-identical atomSets?) Failed.... "
-                                        + i);
+                        throw new CMLRuntimeException(
+                                "morgan numbers do not match; (Matching non-identical atomSets?)" +
+                                " Failed.... " + i);
                     }
                     CMLAtomSet atomSetx0 = atomSetList0.get(i);
                     CMLAtomSet atomSetx1 = atomSetList1.get(i);
@@ -536,7 +541,7 @@ public class AtomMatcher extends AbstractTool {
                         }
                         cmlMap.addUniqueLink(cmlLink, CMLMap.Direction.EITHER);
                     } else {
-                        throw new CMLException("atom sets wrong size in Morga");
+                        throw new CMLRuntimeException("atom sets wrong size in Morga");
                         // mismatched atom sets - match fails
                     }
                 }
@@ -575,7 +580,7 @@ public class AtomMatcher extends AbstractTool {
                             cmlLink.setFromSet(atomSetx0.getXMLContent());
                             cmlLink.setToSet(atomSetx1.getXMLContent());
                         } else {
-                            throw new CMLException(
+                            throw new CMLRuntimeException(
                                     "Unequal atomSets in AtomTreeMatching");
                         }
                         nMapped++;
@@ -593,18 +598,18 @@ public class AtomMatcher extends AbstractTool {
     }
 
     /**
-     * map two molecules. returns ordered list of equivalence classes. Map may
-     * not be as large as molecule if molecules have equivalence classes does
-     * not annotate links
+     * map two molecules. 
+     * returns ordered list of equivalence classes. 
+     * Map may not be as large as molecule if molecules have equivalence classes 
+     * does not annotate links
      * 
      * @param molecule0
      * @param molecule1
-     * @throws CMLException
-     *             molecule different sizes (maybe fix later?), bad Morgan
+     * @throws CMLRuntimeException molecule different sizes (maybe fix later?), bad Morgan
      * @return map or null if molecules of different length.
      */
     public CMLMap mapMolecules(CMLMolecule molecule0, CMLMolecule molecule1)
-            throws CMLException {
+            throws CMLRuntimeException {
         CMLMap cmlMap = null;
         if (molecule1 != null) {
             CMLAtomSet atomSet = molecule0.getAtomSet();
@@ -621,16 +626,14 @@ public class AtomMatcher extends AbstractTool {
      * array may have null elements (this is a way of deleting molecules from
      * the problem) any match with null element gives a null CMLMap
      * 
-     * @param molecule0
-     *            first array of molecules
-     * @param molecule1
-     *            other array (could be a different length)
-     * @throws CMLException
+     * @param molecule0 first array of molecules
+     * @param molecule1 other array (could be a different length)
+     * @throws CMLRuntimeException
      *             problems in molecule atom-atom matching
      * @return rectangular array of maps (row = molecule0, cols=molecule1)
      */
     public CMLMap[][] getMoleculeMatch(List<CMLMolecule> molecule0,
-            List<CMLMolecule> molecule1) throws CMLException {
+            List<CMLMolecule> molecule1) {
         CMLMap[][] mapMatrix = new CMLMap[molecule0.size()][molecule1.size()];
 
         for (int i = 0; i < molecule0.size(); i++) {
@@ -651,13 +654,13 @@ public class AtomMatcher extends AbstractTool {
                 if (mapij != null) {
                     mapij.setToType(CMLAtom.TAG); // needed for split
                     mapij.setFromType(CMLAtom.TAG);
-                    mapij
-                            .setTitle(AtomMatcher.Strategy.FROM_UNIQUE_MATCHED_ATOMS
-                                    .toString());
-                    splitAndProcessAtomSets(mapij, mol0, mol1);
-                    // CMLElement.debug(mapij);
-                    if (mapij.getChildElements(CMLLink.TAG, CML_NS).size() != mol0
-                            .getCMLChildCount(CMLAtom.TAG)) {
+                    mapij.setTitle(AtomMatcher.Strategy.FROM_UNIQUE_MATCHED_ATOMS.toString());
+                    if (false) {
+                    	splitAndProcessAtomSets(mapij, mol0, mol1);
+                    }
+//                    CMLUtil.debug(mapij, "MAP");
+                    if (mapij.getChildElements(CMLLink.TAG, CML_NS).size() != 
+                    	mol0.getCMLChildCount(CMLAtom.TAG)) {
                         // incomplete match; currently no action
                     }
                 }
@@ -1083,10 +1086,8 @@ public class AtomMatcher extends AbstractTool {
             String toSet = Util.concatenate(atomSetLink.getToSet(), S_SPACE);
             AtomMatcher.Strategy strategy = this.getAtomSetExpansionStrategy();
             if (strategy.equals(AtomMatcher.Strategy.MATCH_GEOM)
-                    || strategy
-                            .equals(AtomMatcher.Strategy.MATCH_DISTANCE_MATRIX)
-                    || strategy
-                            .equals(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE)) {
+                    || strategy.equals(AtomMatcher.Strategy.MATCH_DISTANCE_MATRIX)
+                    || strategy.equals(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE)) {
 
                 // match geometry - will always come up with a result, even if
                 // scientifically unlikely
@@ -1112,8 +1113,7 @@ public class AtomMatcher extends AbstractTool {
                 AtomMatcher matcher2d = new AtomMatcher();
                 // matcher2d.setAtomMatchStrategy(atomMatcher.getAtomSetExpansionStrategy());
                 // FIXME
-                matcher2d
-                        .setAtomMatchStrategy(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE);
+                matcher2d.setAtomMatchStrategy(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE);
                 // logger.severe("SAMS "+matcher2d.getAtomMatchStrategy());
                 CMLMap overlapMap = matcher2d.createMapFrom2DOverlap(
                         toSubAtomSet, fromSubAtomSet);
@@ -1256,6 +1256,95 @@ public class AtomMatcher extends AbstractTool {
         return atomPairVector;
     }
 
+    /** finds best mapping of atoms in equal-atom atomSets using geometrical criteria.
+     * for two atoms of equal size matches all permutations of atoms to find lowest RMS difference.
+     * Assumes some degree of pre-alignment by other means
+     * NO alterations of coordinates or optimisation of location or orientation.
+     * does NOT check atom/element types or other properties.
+     * 
+     * @param atomSet1
+     * @param atomSet2
+     * @return best map of matches (or null if not complete)
+     */
+    public CMLMap matchAtomsByCoordinates(
+    		CMLAtomSet atomSet1, CMLAtomSet atomSet2, Transform3 transform3) {
+    	CMLMap map = null;
+    	if (atomSet1 == null) {
+    		throw new CMLRuntimeException("atomSet1 is null");
+    	}
+    	if (atomSet1 == null) {
+    		throw new CMLRuntimeException("atomSet2 is null");
+    	}
+    	if (atomSet1.size() != atomSet2.size()) {
+    		throw new CMLRuntimeException("atomSet1 ("+atomSet1.size()+") and atomSet2 ("+atomSet2.size()+") are different sizes");
+    	}
+    	if (atomSet1.size() != 0) {
+			List<CMLAtom> atoms1 = atomSet1.getAtoms();
+			String[] atomIds2 = atomSet2.getAtomIDs();
+			Point3Vector p3v1 = atomSet1.getCoordinates3(CoordinateType.CARTESIAN);
+			if (p3v1 == null) {
+				throw new CMLRuntimeException("Cannot find Coordinates for all atoms in atomSet1");
+			}
+			Point3Vector p3v2 = atomSet2.getCoordinates3(CoordinateType.CARTESIAN);
+			if (p3v2 == null) {
+				throw new CMLRuntimeException("Cannot find Coordinates for all atoms in atomSet2");
+			}
+			if (transform3 != null) {
+				p3v1.transform(transform3);
+			}
+			int[] serials = findBestFit(atomSet2, atomIds2, p3v1, 
+				IntSet.getPermutations(atomSet1.size()));
+			map = createLinksInMap(atoms1, atomIds2, serials);
+    	}
+    	return map;
+    }
+
+	private int[] findBestFit(CMLAtomSet atomSet2, String[] atomIds2,
+			Point3Vector p3v1, List<int[]> permutations) {
+		int[] serials = null;
+		double rmsmin = Double.MAX_VALUE;
+		for (int[] permutation : permutations) {
+			double rms = rms(permutation, p3v1, atomSet2, atomIds2);
+			if (rms < rmsmin) {
+				rmsmin = rms;
+				serials = permutation;
+			}
+		}
+		return serials;
+	}
+
+	private CMLMap createLinksInMap(List<CMLAtom> atoms1, String[] atomIds2,
+			int[] serials) {
+		CMLMap map;
+		CMLMap map1 = new CMLMap();
+		for (int i = 0; i < serials.length; i++) {
+			CMLLink link = new CMLLink();
+			link.setFrom(atoms1.get(i).getId());
+			link.setTo(atomIds2[serials[i]-1]);
+			map1.addLink(link);
+		}
+		map = map1;
+		return map;
+	}
+    
+    private CMLMap matchAtomsByCoordinates2(CMLAtomSet atomSet1, CMLAtomSet atomSet2) {
+    	CMLMap map = null;
+    	return map;
+    }
+    
+    private double rms(
+		int[] permutation, 
+		Point3Vector p3v1, 
+		CMLAtomSet atomSet2, String[] atomIds2) {
+    	double rms = 0.0;
+    	for (int i = 0; i < p3v1.size(); i++) {
+    		CMLAtom atom2 = atomSet2.getAtomById(atomIds2[i]);
+    		double dist = p3v1.elementAt(i).getSquaredDistanceFromPoint(atom2.getXYZ3());
+    		rms += dist;
+    	}
+    	return rms;
+	}
+    
     /**
      * split links containing sets of atoms into individual links. iterates
      * through all links containing toSet and fromSet for each generates to and
@@ -1272,8 +1361,7 @@ public class AtomMatcher extends AbstractTool {
      */
     public void splitAndProcessAtomSets(CMLMap map, CMLMolecule fromMolecule,
             CMLMolecule toMolecule) {
-        this.splitAndProcessAtomSets(map, fromMolecule.getAtomSet(), toMolecule
-                .getAtomSet());
+        this.splitAndProcessAtomSets(map, fromMolecule.getAtomSet(), toMolecule.getAtomSet());
     }
 
     /**
@@ -1763,7 +1851,7 @@ public class AtomMatcher extends AbstractTool {
                 try {
                     spectatorMap = this.mapMolecules(productMolecule,
                             reactantMolecule);
-                } catch (CMLException cmle) {
+                } catch (CMLRuntimeException cmle) {
                     // molecules of different lengths, create a zero length map
                     logger.severe("Reactant (" + reactantMolecule.getId() + S_SLASH
                             + reactantMolecule.getAtomCount()
@@ -1801,8 +1889,7 @@ public class AtomMatcher extends AbstractTool {
                     fromAtomSet.removeAtoms(spectatorMap, toAtomSet);
                     // have to do an atomOverlap
                     AtomMatcher geomAtomMatcher = new AtomMatcher();
-                    geomAtomMatcher
-                            .setAtomMatchStrategy(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE);
+                    geomAtomMatcher.setAtomMatchStrategy(AtomMatcher.Strategy.MATCH_TOTAL_DISTANCE);
                     CMLMap overlapMap = geomAtomMatcher.createMapFrom2DOverlap(
                             fromAtomSet, toAtomSet);
                     spectatorMap.mergeMap(overlapMap, CMLMap.Direction.NEITHER);
