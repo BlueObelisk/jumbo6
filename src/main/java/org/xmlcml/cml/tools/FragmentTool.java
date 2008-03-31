@@ -670,7 +670,7 @@ class BasicProcessor implements CMLConstants {
     		}
     		ratios[i] = scalar.getDouble();
     		if (Double.isNaN(ratios[i])) {
-    			scalar.debug("DDDD");
+    			scalar.debug("RANDOM FRAGMENT");
     			throw new CMLRuntimeException("scalar must have double value");
     		}
     		sum += ratios[i];

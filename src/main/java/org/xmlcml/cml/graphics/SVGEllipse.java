@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
 
@@ -23,6 +25,27 @@ public class SVGEllipse extends SVGElement {
 		super(TAG);
 	}
 	
+	/** constructor
+	 */
+	public SVGEllipse(SVGEllipse element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGEllipse(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGEllipse(this);
+    }
+
 	/** constructor.
 	 * 
 	 * @param x1

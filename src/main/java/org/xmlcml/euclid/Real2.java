@@ -2,6 +2,7 @@ package org.xmlcml.euclid;
 import java.util.List;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 /**
  * A pair of FPt numbers with no other assumptions
  * 
@@ -37,11 +38,35 @@ public class Real2 implements EuclidConstants {
     /**
      * constructor.
      * 
+     * @param dd
+     * @throws CMLRuntimeException null or not length=2
+     */
+    
+    /**
+     * two integers separated by whitespace
+     * @param s
+     */
+    public Real2(String s) {
+    	this(Util.splitToDoubleArray(s, S_SPACE));
+    }
+    /**
+     * two integers separated by delimiter
+     * @param s
+     */
+    public Real2(String s, String delimiter) {
+    	this(Util.splitToDoubleArray(s, delimiter));
+    }
+    /**
+     * constructor.
+     * 
      * @param x the two components
      */
     public Real2(double[] x) {
-    	if (x == null || x.length != 2) {
-    		throw new EuclidRuntimeException("requires non-null array of length 2");
+    	if (x == null) {
+    		throw new EuclidRuntimeException("requires non-null array");
+    	}
+    	if (x.length != 2) {
+    		throw new EuclidRuntimeException("requires array of length 2; found: "+x.length);
     	}
         this.x = x[0];
         this.y = x[1];

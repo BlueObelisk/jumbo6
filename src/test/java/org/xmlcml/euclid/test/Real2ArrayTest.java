@@ -3,6 +3,7 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
@@ -89,6 +90,19 @@ public class Real2ArrayTest extends EuclidTestBase {
     @Test
     public void testSize() {
         Assert.assertEquals("size", 6, ra1.size());
+    }
+    
+    @Test
+    public void testCreateFromPairs() {
+    	String s = "1,2 3,4 5,6 7,8";
+    	Real2Array real2Array = Real2Array.createFromPairs(s, S_COMMA);
+    	Assert.assertEquals("size", 4, real2Array.size());
+        RealArray xarr = real2Array.getXArray();
+        Assert.assertTrue("getXArray", xarr.isEqualTo(new RealArray(
+                new double[] { 1., 3., 5., 7. })));
+        RealArray yarr = real2Array.getYArray();
+        Assert.assertTrue("getYArray", yarr.isEqualTo(new RealArray(
+                new double[] { 2., 4., 6., 8. })));
     }
 
     /**

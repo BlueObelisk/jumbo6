@@ -1,5 +1,11 @@
 package org.xmlcml.cml.graphics;
 
+import org.xmlcml.cml.element.CMLBasisSet;
+
+import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
+
 
 
 /** grouping element
@@ -16,6 +22,31 @@ public class SVGG extends SVGElement {
 	public SVGG() {
 		super(TAG);
 	}
+
+	public SVGG(SVGG element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGG(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGG(this);
+    }
+
+	protected void copyAttributes(SVGElement element) {
+		for (int i = 0; i < element.getAttributeCount(); i++) {
+			this.addAttribute(new Attribute(element.getAttribute(i)));
+		}
+	}
 	
 	/**
 	 * @return tag
@@ -24,6 +55,29 @@ public class SVGG extends SVGElement {
 	public String getTag() {
 		return TAG;
 	}
-	
+
+	/**
+	 * 
+	 * @param width
+	 */
+	public void setWidth(double width) {
+		this.addAttribute(new Attribute("width", ""+width+"px"));
+	}
+
+	/**
+	 * 
+	 * @param height
+	 */
+	public void setHeight(double height) {
+		this.addAttribute(new Attribute("height", ""+height+"px"));
+	}
+
+	/**
+	 * 
+	 * @param scale
+	 */
+	public void setScale(double scale) {
+		this.addAttribute(new Attribute("transform", "scale("+scale+","+scale+")"));
+	}
 
 }

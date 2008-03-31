@@ -1,4 +1,7 @@
 package org.xmlcml.euclid;
+
+import org.xmlcml.cml.base.CMLRuntimeException;
+
 /**
  * Real2Array is NOT a Vector of Real2s but a container for a 2 * n matrix
  * 
@@ -34,6 +37,7 @@ public class Real2Array implements EuclidConstants {
         }
         return range;
     }
+    
     /**
      * make an Real2_Array from 2 RealVec's; takes a copy
      * 
@@ -50,6 +54,58 @@ public class Real2Array implements EuclidConstants {
         xarr = (RealArray) x.clone();
         yarr = (RealArray) y.clone();
     }
+
+    /**
+     * @param r2
+     */
+    public void add(Real2 r2) {
+    	if (nelem == 0 || xarr == null || yarr == null) {
+    		xarr = new RealArray();
+    		yarr = new RealArray();
+    	}
+    	xarr.addElement(r2.getX());
+    	yarr.addElement(r2.getY());
+    	nelem++;
+    }
+    
+    /**
+     * @param real2Array
+     */
+    public void add(Real2Array real2Array) {
+    	if (nelem == 0 || xarr == null || yarr == null) {
+    		xarr = new RealArray();
+    		yarr = new RealArray();
+    	}
+    	xarr.addArray(real2Array.xarr);
+    	yarr.addArray(real2Array.yarr);
+    	nelem += real2Array.size();
+    }
+    
+    /**
+     * make an Real2_Array from pairs of numbers separated by delimiter
+     * 
+     * @param s
+     * @param delimiter
+     * @exception EuclidRuntimeException
+     *                x and x must have number of elements
+     */
+    public static Real2Array createFromPairs(String sss, String delimiter) {
+    	String[] ss = sss.split(S_SPACE);
+    	Real2Array real2Array = new Real2Array();
+    	real2Array.xarr = new RealArray();
+    	real2Array.yarr = new RealArray();
+    	for (String s : ss) {
+    		Real2 r2 = new Real2(s, delimiter);
+    		if (r2 == null) {
+    			throw new CMLRuntimeException("bad real2: "+s);
+    		}
+    		real2Array.xarr.addElement(r2.getX());
+    		real2Array.yarr.addElement(r2.getY());
+    		real2Array.nelem++;
+    	}
+    	return real2Array;
+    }
+    
     /**
      * extract X array.
      * 
@@ -83,7 +139,21 @@ public class Real2Array implements EuclidConstants {
     public Real2 elementAt(int elem) {
         return new Real2(xarr.elementAt(elem), yarr.elementAt(elem));
     }
-    /**
+    
+    /** delete element.
+     * 
+     * @param i
+     */
+    public void deleteElement(int i) {
+    	if (i >= 0 && i < nelem) {
+	    	xarr.deleteElement(i);
+	    	yarr.deleteElement(i);
+	    	nelem--;
+    	} else {
+    		throw new EuclidRuntimeException("Cannt delete element at: "+i);
+    	}
+    }
+	/**
      * to string.
      * 
      * @return string

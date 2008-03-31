@@ -2,6 +2,9 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
 
+import nu.xom.Element;
+import nu.xom.Node;
+
 /** container for SVG
  * "svg"
  * @author pm286
@@ -16,8 +19,29 @@ public class SVGSVG extends SVGElement {
 	 */
 	public SVGSVG() {
 		super(TAG);
-//		new Exception().printStackTrace();
 	}
+	
+	/** constructor
+	 */
+	public SVGSVG(SVGSVG element) {
+        super((SVGElement) element);
+	}
+	
+//	/** constructor
+//	 */
+//	public SVGSVG(Element element) {
+//        super(element);
+//	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGSVG(this);
+    }
+
 	/**
 	 * @return tag
 	 */

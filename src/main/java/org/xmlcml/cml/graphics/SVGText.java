@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Text;
 
 import org.xmlcml.euclid.Real2;
 
@@ -17,13 +20,44 @@ public class SVGText extends SVGElement {
 
 	final static String TAG ="text";
 	
-	/** contructor
+	/** constructor
 	 */
 	public SVGText() {
 		super(TAG);
 		this.setStroke("none");
 	}
 	
+	/** constructor
+	 */
+	public SVGText(SVGText element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGText(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGText(this);
+    }
+
+    public double getX() {
+    	String s = this.getAttributeValue("x");
+    	return (s != null) ? new Double(s).doubleValue() : Double.NaN;
+    }
+
+    public double getY() {
+    	String s = this.getAttributeValue("y");
+    	return (s != null) ? new Double(s).doubleValue() : Double.NaN;
+    }
+    
 	protected void drawElement(Graphics2D g2d) {
 		double fontSize = this.getFontSize();
 		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
@@ -90,6 +124,14 @@ public class SVGText extends SVGElement {
 	 * @param text the text to set
 	 */
 	public void setText(String text) {
+		if (this.getChildCount() > 0) {
+			Node node = this.getChild(0);
+			if (node instanceof Text) {
+				node.detach();
+			} else {
+				System.out.println(node.getClass());
+			}
+		}
 		this.appendChild(text);
 	}
 
