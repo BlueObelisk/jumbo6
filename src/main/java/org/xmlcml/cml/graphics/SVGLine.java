@@ -7,6 +7,8 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
 
@@ -25,6 +27,27 @@ public class SVGLine extends SVGElement {
 		super(TAG);
 	}
 	
+	/** constructor
+	 */
+	public SVGLine(SVGLine element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGLine(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGLine(this);
+    }
+
 	/** constructor.
 	 * 
 	 * @param x1
@@ -39,7 +62,7 @@ public class SVGLine extends SVGElement {
 	 * @param x12 coordinates of the atom
 	 * @param serial 1 or 2
 	 */
-	private void setX12(Real2 x12, int serial) {
+	public void setX12(Real2 x12, int serial) {
 		if (x12 == null) {
 			System.err.println("null x2/y2 in line: ");
 		} else {
@@ -47,6 +70,17 @@ public class SVGLine extends SVGElement {
 			this.addAttribute(new Attribute("y"+serial, ""+x12.getY()));
 		}
 	}
+	
+	public Real2 getX12(int serial) {
+		Real2 xy = null;
+		if (serial == 1) {
+			xy = new Real2(this.getDouble("x1"), this.getDouble("y1"));
+		} else if (serial == 2) {
+			xy = new Real2(this.getDouble("x2"), this.getDouble("y2"));
+		}
+		return xy;
+	}
+	
 //  <g style="stroke-width:0.2;">
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="black" style="stroke-width:0.36;"/>
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="white" style="stroke-width:0.12;"/>

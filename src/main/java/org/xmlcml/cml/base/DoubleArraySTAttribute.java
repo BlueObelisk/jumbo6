@@ -1,6 +1,5 @@
 package org.xmlcml.cml.base;
 
-import java.text.NumberFormat;
 import java.text.ParseException;
 
 import nu.xom.Attribute;

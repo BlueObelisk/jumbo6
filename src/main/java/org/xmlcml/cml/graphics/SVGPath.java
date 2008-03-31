@@ -7,6 +7,8 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
 
@@ -25,12 +27,38 @@ public class SVGPath extends SVGElement {
 		super(TAG);
 	}
 	
+	/** constructor
+	 */
+	public SVGPath(SVGPath element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGPath(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGPath(this);
+    }
+
+	public SVGPath(String d) {
+		this();
+		setD(d);
+	}
 	/** constructor.
 	 * 
 	 * @param x1
 	 * @param x2
 	 * @param y1
 	 * @param y2
+	 * @deprecated
 	 */
 	public SVGPath(Real2 x1, Real2 x2, Real2 y1, Real2 y2) {
 		this();
@@ -49,6 +77,11 @@ public class SVGPath extends SVGElement {
 			this.addAttribute(new Attribute("y"+serial, ""+x12.getY()));
 		}
 	}
+	
+	public void setD(String d) {
+		this.addAttribute(new Attribute("d", d));
+	}
+	
 //  <g style="stroke-width:0.2;">
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="black" style="stroke-width:0.36;"/>
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="white" style="stroke-width:0.12;"/>

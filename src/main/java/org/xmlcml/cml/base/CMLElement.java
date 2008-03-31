@@ -207,7 +207,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
      * 
      * @param element to copy from
      */
-    public void copyAttributesFrom(CMLElement element) {
+    public void copyAttributesFrom(Element element) {
         for (int i = 0; i < element.getAttributeCount(); i++) {
             Attribute att = element.getAttribute(i);
             Attribute newAtt = (Attribute) att.copy();

@@ -7,6 +7,8 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
 
@@ -25,6 +27,27 @@ public class SVGRect extends SVGElement {
 		super(TAG);
 	}
 	
+	/** constructor
+	 */
+	public SVGRect(SVGRect element) {
+        super((SVGElement) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGRect(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGRect(this);
+    }
+
 	/** constructor.
 	 * 
 	 * @param x1
@@ -32,10 +55,26 @@ public class SVGRect extends SVGElement {
 	 */
 	public SVGRect(double x, double y, double w, double h) {
 		this();
+		setX(x);
+		setY(y);
+		setWidth(w);
+		setHeight(h);
+	}
+	
+	public void setX(double x) {
 		this.addAttribute(new Attribute("x", ""+x));
+	}
+	
+	public void setY(double y) {
 		this.addAttribute(new Attribute("y", ""+y));
-		this.addAttribute(new Attribute("w", ""+w));
-		this.addAttribute(new Attribute("h", ""+h));
+	}
+	
+	public void setWidth(double w) {
+		this.addAttribute(new Attribute("width", ""+w));
+	}
+	
+	public void setHeight(double h) {
+		this.addAttribute(new Attribute("height", ""+h));
 	}
 	/** constructor.
 	 * 
@@ -55,8 +94,8 @@ public class SVGRect extends SVGElement {
 		double y1 = this.getDouble("y");
 		Real2 xy1 = new Real2(x1, y1);
 		xy1 = transform(xy1, cumulativeTransform);
-		double w = this.getDouble("w");
-		double h = this.getDouble("h");
+		double w = this.getDouble("width");
+		double h = this.getDouble("height");
 		Real2 xy2 = new Real2(x1+w, y1+h);
 		xy2 = transform(xy2, cumulativeTransform);
 		float width = 1.0f;

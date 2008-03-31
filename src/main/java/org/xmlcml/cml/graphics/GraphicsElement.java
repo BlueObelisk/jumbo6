@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -18,17 +21,10 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
-public abstract class GraphicsElement extends Element implements CMLConstants {
+public /*abstract*/ class GraphicsElement extends Element implements SVGConstants {
 
-//	private String stroke = "black";
-//	private double strokeWidth = 1.0;
-//	private String fill = "none";
-//	private double opacity = 1.0;
-//	private String dashed = "none";
-	
-	protected Map<String, String> styleMap;
-	protected String styleString;
 	protected Transform2 cumulativeTransform = new Transform2();
+	protected StyleBundle styleBundle;
 		
 	/** constructor.
 	 * 
@@ -37,167 +33,239 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 	 */
 	public GraphicsElement(String name, String namespace) {
 		super(name, namespace);
-		styleMap = new HashMap<String, String>();
-		styleString = "";
+		styleBundle = new StyleBundle(StyleBundle.DEFAULT_STYLE_BUNDLE);
 	}
+	
+    /**
+     * main constructor.
+     * 
+     * @param name tagname
+     */
+    public GraphicsElement(String name) {
+        this(name, SVG_NAMESPACE);
+        init();
+    }
+    
+    protected void init() {
+    	
+    }
+    
+    /**
+     * copy constructor. copies attributes, children and properties using the
+     * copyFoo() routines (q.v.)
+     * 
+     * @param element
+     */
+    public GraphicsElement(GraphicsElement element) {
+        this(element.getLocalName());
+        copyAttributesFrom(element);
+        copyChildrenFrom(element);
+        copyNamespaces(element);
+    }
 
+    /**
+     * copies namespaces.
+     * @param element to copy from
+     */
+    public void copyNamespaces(GraphicsElement element) {
+        int n = element.getNamespaceDeclarationCount();
+        for (int i = 0; i < n; i++) {
+            String namespacePrefix = element.getNamespacePrefix(i);
+            String namespaceURI = element.getNamespaceURIForPrefix(namespacePrefix);
+            this.addNamespaceDeclaration(namespacePrefix, namespaceURI);
+        }
+    }
+
+    /**
+     * copies attributes. makes subclass if necessary.
+     * 
+     * @param element to copy from
+     */
+    public void copyAttributesFrom(Element element) {
+        for (int i = 0; i < element.getAttributeCount(); i++) {
+            Attribute att = element.getAttribute(i);
+            Attribute newAtt = (Attribute) att.copy();
+            this.addAttribute(newAtt);
+        }
+    }
+
+    
+    /** copies children of element make subclasses when required
+     * 
+     * @param element to copy from
+     */
+    public void copyChildrenFrom(Element element) {
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node childNode = element.getChild(i);
+            Node newNode = childNode.copy();
+            this.appendChild(newNode);
+        }
+    }
+    
+    
+    /**
+     * copy node.
+     * 
+     * @return node
+     */
+    public Node copy() {
+        return new GraphicsElement(this);
+    }
+
+    /**
+     * get namespace.
+     * 
+     * @param prefix
+     * @return namespace
+     */
+    public String getNamespaceURIForPrefix(String prefix) {
+        String namespace = null;
+        Element current = this;
+        while (true) {
+            namespace = current.getNamespaceURI(prefix);
+            if (namespace != null) {
+                break;
+            }
+            Node parent = current.getParent();
+            if (parent == null || parent instanceof Document) {
+                break;
+            }
+            current = (Element) parent;
+        }
+        return namespace;
+    }
+
+    public void applyStyles() {
+    	this.addAttribute(new Attribute("style", getStyleBundle().toString()));
+    }
+    
+//    public void addStyle(String style, Object object) {
+//    	getStyleBundle();
+//    	this.styleBundle.setSubStyle(style, object);
+//    	applyStyles();
+//    }
+    
 	/**
 	 * @return the fill
 	 */
 	public String getFill() {
-		return this.getAttributeValue("fill");
+		return getSubStyle("fill").toString();
 	}
 
 	/**
 	 * @param fill the fill to set
 	 */
 	public void setFill(String fill) {
-		this.addAttribute(new Attribute("fill", fill));
+		setSubStyle("fill", fill);
+	}
+
+	/**
+	 * @return the fill
+	 */
+	public String getStroke() {
+		return getSubStyle("stroke").toString();
+	}
+
+	/**
+	 * @param fill the fill to set
+	 */
+	public void setStroke(String stroke) {
+		setSubStyle("stroke", stroke);
+	}
+
+	/**
+	 * @return the font
+	 */
+	public String getFontFamily() {
+		return getSubStyle("font-family").toString();
+	}
+
+	/**
+	 * @param fill the fill to set
+	 */
+	public void setFontFamily(String fontFamily) {
+		setSubStyle("font-family", fontFamily);
+	}
+
+//	/**
+//	 * @return the font
+//	 */
+//	public String getFontStyle() {
+//		return getSubStyle("font-style").toString();
+//	}
+//
+//	/**
+//	 * @param fill the fill to set
+//	 */
+//	public void setFontStyle(String fontStyle) {
+//		setSubStyle("font-style", fontStyle);
+//	}
+//
+	/**
+	 * @return the font
+	 */
+	public String getFontWeight() {
+		return getSubStyle("font-weight").toString();
+	}
+
+	/**
+	 * @param fill the fill to set
+	 */
+	public void setFontWeight(String fontWeight) {
+		setSubStyle("font-weight", fontWeight);
 	}
 
 	/**
 	 * @return the opacity (1.0 if not present or error
 	 */
 	public double getOpacity() {
-		double opacity = 1.0;
-		if (this.getAttribute("opacity") != null) {
-			String opacityS = this.getAttributeValue("opacity");
-			try {
-				opacity = new Double(opacityS).doubleValue();
-			} catch (NumberFormatException nfe) {
-				System.err.println("bad opacity: "+opacityS);
-			}
-		}
-		return opacity;
+		Double opacity = (Double) getSubStyle("opacity");
+		return (opacity == null) ? 1.0 : opacity.doubleValue();
 	}
 
 	/**
 	 * @param opacity the opacity to set
 	 */
 	public void setOpacity(double opacity) {
-		this.addAttribute(new Attribute("opacity", ""+opacity));
+		setSubStyle("opacity", new Double(opacity));
 	}
 
 	/**
-	 * @return the stroke
-	 */
-	public String getStroke() {
-		return this.getAttributeValue("stroke");
-	}
-
-	/**
-	 * @param stroke the stroke to set
-	 */
-	public void setStroke(String stroke) {
-		if (stroke == null) {
-		} else {
-			this.addAttribute(new Attribute("stroke", stroke));
-		}
-	}
-
-	/**
-	 * @return the strokeWidth
+	 * @return the stroke-width (default if not present or error)
 	 */
 	public double getStrokeWidth() {
-		String strokeWidth = styleMap.get("stroke-width");
-		return (strokeWidth == null) ? Double.NaN : new Double(strokeWidth).doubleValue();
+		Double strokeWidth = (Double) getSubStyle("stroke-width");
+		return strokeWidth.doubleValue();
 	}
 
 	/**
-	 * @param strokeWidth the strokeWidth to set
+	 * 
+	 * @param strokeWidth
 	 */
 	public void setStrokeWidth(double strokeWidth) {
-		addStyle("stroke-width", ""+strokeWidth);
-	}
-	
-	protected abstract String getTag();
-	
-	protected void addStyle(String style, String value) {
-		styleMap.put(style, value);
-		if (styleString.indexOf(style) != -1) {
-			addStyles();
-		} else {
-			styleString += style+":"+value+";";
-		}
-		this.addAttribute(new Attribute("style", styleString));
-	}
-	
-	protected void addStyles() {
-		styleString = "";
-		for (String style : styleMap.keySet()) {
-			styleString += style+":"+styleMap.get(style)+";";
-		}
+		setSubStyle("stroke-width", new Double(strokeWidth));
 	}
 
 	/**
-	 * @return the fontFamily
-	 */
-	public String getFontFamily() {
-		return this.getAttributeValue("font-family");
-	}
-
-	/**
-	 * @param fontFamily the fontFamily to set
-	 */
-	public void setFontFamily(String fontFamily) {
-		this.addAttribute(new Attribute("font-family", fontFamily));
-	}
-
-	/**
-	 * @return the fontSize
+	 * @return the font-size (default if not present or error)
 	 */
 	public double getFontSize() {
-		return new Double(this.getAttributeValue("font-size")).doubleValue();
+		Double fontSize = (Double) getSubStyle("font-size");
+		return fontSize.doubleValue();
 	}
 
 	/**
-	 * @param fontSize the fontSize to set
+	 * 
+	 * @param fontSize
 	 */
 	public void setFontSize(double fontSize) {
-	//		this.addAttribute(new Attribute("font-size", ""+fontSize));
-			this.addStyle("font-size", ""+fontSize);
-		}
-
-	/**
-	 * @return the fontStyle
-	 */
-	public String getFontStyle() {
-		return styleMap.get("font-style");
+		setSubStyle("font-size", new Double(fontSize));
 	}
 
-	/**
-	 * @param fontStyle the fontStyle to set
-	 */
-	public void setFontStyle(String fontStyle) {
-		this.addAttribute(new Attribute("font-style", fontStyle));
+	protected String getTag() {
+		return "DUMMY";
 	}
-
-	/**
-	 * @return the fontWeight
-	 */
-	public String getFontWeight() {
-		return this.getAttributeValue("font-weight");
-	}
-
-	/**
-	 * @param fontWeight the fontWeight to set
-	 */
-	public void setFontWeight(String fontWeight) {
-		this.addAttribute(new Attribute("font-weight", fontWeight));
-	}
-
-	/**
-	private void draw() {
-//		FileOutputStream fos = new FileOutputStream(outfile);
-//		SVGElement g = MoleculeTool.getOrCreateTool(molecule).
-//		    createSVG();
-//		int indent = 2;
-//		SVGSVG svg = new SVGSVG();
-//		svg.appendChild(g);
-//		CMLUtil.debug(svg, fos, indent);
-//		fos.close();
-//		System.out.println("wrote SVG "+outfile);
-	}
+	
 	/**
 	 * 
 	 * @param filename
@@ -225,7 +293,7 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 		text.setFill("red");
 		text.setStrokeWidth(1.5);
 		text.setFontSize(20);
-		text.setFontStyle("italic");
+//		text.setFontStyle("italic");
 		text.setFontWeight("bold");
 		g.appendChild(text);
 		CMLUtil.debug(svg, fos, 2);
@@ -255,24 +323,30 @@ public abstract class GraphicsElement extends Element implements CMLConstants {
 		this.cumulativeTransform = cumulativeTransform;
 	}
 
-	/**
-	 * @return the styleString
-	 */
-	public String getStyleString() {
-		return styleString;
+	private Object getSubStyle(String s) {
+		getStyleBundle();
+		return styleBundle.getSubStyle(s);
 	}
 
-	/**
-	 * @param styleString the styleString to set
-	 */
-	public void setStyleString(String styleString) {
-		this.styleString = styleString;
+	private StyleBundle getStyleBundle() {
+		if (styleBundle == null) {
+			styleBundle = new StyleBundle(this.getAttributeValue("style"));
+		}
+		return styleBundle;
+	}
+	
+	private void setSubStyle(String ss, Object object) {
+		getStyleBundle();
+		styleBundle.setSubStyle(ss, object);
+		applyStyles();
 	}
 
-	/**
-	 * @return the styleMap
-	 */
-	public Map<String, String> getStyleMap() {
-		return styleMap;
+	public void setStyleBundle(StyleBundle styleBundle) {
+		this.styleBundle = styleBundle;
+	}
+	
+	public void debug(String msg) {
+		CMLUtil.debug(this, msg);
 	}
 }
+

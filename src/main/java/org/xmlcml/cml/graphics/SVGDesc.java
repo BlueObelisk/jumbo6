@@ -1,5 +1,8 @@
 package org.xmlcml.cml.graphics;
 
+import nu.xom.Element;
+import nu.xom.Node;
+
 
 /** draws a straight line.
  * 
@@ -16,6 +19,27 @@ public class SVGDesc extends SVGElement {
 		super(TAG);
 	}
 	
+	/** constructor
+	 */
+	public SVGDesc(SVGDesc element) {
+        super((SVGDesc) element);
+	}
+	
+	/** constructor
+	 */
+	public SVGDesc(Element element) {
+        super((SVGElement) element);
+	}
+	
+    /**
+     * copy node .
+     *
+     * @return Node
+     */
+    public Node copy() {
+        return new SVGDesc(this);
+    }
+
 	/** get tag.
 	 * @return tag
 	 */

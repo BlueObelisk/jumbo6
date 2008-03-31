@@ -207,6 +207,38 @@ public class Line2 implements EuclidConstants {
 		return to;
 	}
 
+	/** get point at either end.
+	 * 
+	 * @param i (0/from or 1/to)
+	 * @return
+	 */
+	public Real2 getXY(int i) {
+		Real2 xy = null;
+		if (i == 0) {
+			xy = from;
+		} else if (i == 1) {
+			xy = to;
+		} else {
+			throw new EuclidRuntimeException("Bad point in Line2 "+i);
+		}
+		return xy;
+	}
+
+	/** set point at either end.
+	 * 
+	 * @param i (0/from or 1/to)
+	 * @return
+	 */
+	public void setXY(Real2 xy, int i) {
+		if (i == 0) {
+			from = new Real2(xy);
+		} else if (i == 1) {
+			to = new Real2(xy);
+		} else {
+			throw new EuclidRuntimeException("Bad point in Line2 "+i);
+		}
+	}
+
 	/**
 	 * @return the vector
 	 */

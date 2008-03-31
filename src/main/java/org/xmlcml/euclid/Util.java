@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 
 /**
@@ -52,6 +53,66 @@ public class Util implements EuclidConstants {
 
 	final static Logger logger = Logger.getLogger(Util.class.getName());
 
+	public final static String[] LOWER_ROMAN_NUMERAL = {
+		"i",
+		"ii",
+		"iii",
+		"iv",
+		"v",
+		"vi",
+		"vii",
+		"viii",
+		"ix",
+		"x",
+		"xi",
+		"xii",
+		"xiii",
+		"xiv",
+		"xv",
+		"xvi",
+		"xvii",
+		"xviii",
+		"xix",
+		"xx",
+		"xxi",
+		"xxii",
+		"xxiii",
+		"xxiv",
+		"xxv",
+		"xxvi",
+		"xxvii",
+		"xxviii",
+		"xxix",
+		"xxx",
+		"xxxi",
+		"xxxii",
+		"xxxiii",
+		"xxxiv",
+		"xxxv",
+		"xxxvi",
+		"xxxvii",
+		"xxxviii",
+		"xxxix",
+		"xl",
+		"xli",
+		"xlii",
+		"xliii",
+		"xliv",
+		"xlv",
+		"xlvi",
+		"xlvii",
+		"xlviii",
+		"xlix",
+		"l",
+	};
+	
+	/** regex matching roman numbers up to m ("[ivxlcdm]+").
+	 */
+	public final static String LOWER_ROMAN_REGEX = "[ivxlcdm]+";
+	/** regex matching roman numbers up to M ("[IVXLCDM]+").
+	 */
+	public final static String UPPER_ROMAN_REGEX = "[IVXLCDM]+";
+	
 	private final static File TEMP_DIRECTORY = new File("target"
 			+ File.separator + "test-outputs");
 
@@ -2168,7 +2229,10 @@ public class Util implements EuclidConstants {
 	 */
 	public final static double[] splitToDoubleArray(String s, String delim)
 			throws EuclidRuntimeException {
-		String[] ss = s.split(delim);
+		if (s == null) {
+			throw new CMLRuntimeException("null argument");
+		}
+		String[] ss = s.trim().split(delim);
 		double[] dd = new double[ss.length];
 		for (int i = 0; i < ss.length; i++) {
 			try {
@@ -2177,7 +2241,7 @@ public class Util implements EuclidConstants {
 				throw new EuclidRuntimeException(S_EMPTY + nfe.getMessage(),
 						nfe);
 			} catch (ParseException e) {
-				throw new EuclidRuntimeException("Bad double : " + ss[i]
+				throw new EuclidRuntimeException("Bad double in ("+s+") : " + ss[i]
 						+ "at position " + i, e);
 			}
 		}
@@ -2470,5 +2534,20 @@ public class Util implements EuclidConstants {
 			}
 		}
 		return dateS;
+	}
+
+	/** rounds to decimal place.
+	 * 
+	 * @param dd number to be rounded
+	 * @param ndec number of places
+	 * @return float
+	 */
+	public static double trimFloat(double dd, int ndec) {
+		int trim = 1;
+		ndec = Math.min(ndec, 10); // to avoid problems
+		for (int i = 0; i < ndec; i++) {
+			trim *= 10;
+		}
+		return ((int)(trim*dd))/(double)trim;
 	}
 }

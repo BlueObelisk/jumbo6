@@ -84,11 +84,8 @@ public class CMLCrystalTest extends AbstractTest {
             + S_SPACE + CML_XMLNS + ">0 9 0</latticeVector>"
             + "<latticeVector id='l3' dictRef='cml:c' units='" + U_ANGSTROM + "'"
             + S_SPACE + CML_XMLNS + ">0 0 10</latticeVector>" + "</lattice>" + "";
-
     CMLLattice lattice1;
-
     CMLLattice lattice2;
-
     CMLElements<CMLLatticeVector> latticeVectorList1 = null;
 
     /**

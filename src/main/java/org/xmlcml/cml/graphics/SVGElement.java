@@ -2,23 +2,20 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.ParentNode;
+import nu.xom.Text;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.html.HtmlA;
-import org.xmlcml.cml.html.HtmlMenuSystem;
-import org.xmlcml.cml.html.HtmlElement.Target;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
 import org.xmlcml.euclid.Real2;
@@ -30,12 +27,7 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
-public abstract class SVGElement extends GraphicsElement {
-
-	/** standard namespace for SVG
-	 * 
-	 */
-	public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+public class SVGElement extends GraphicsElement {
 
 	/** constructor.
 	 * 
@@ -43,14 +35,59 @@ public abstract class SVGElement extends GraphicsElement {
 	 */
 	public SVGElement(String name) {
 		super(name,SVG_NAMESPACE);
-		styleMap = new HashMap<String, String>();
-		styleString = "";
-//		setStroke("black");
-//		setFill("red");
-//		setStrokeWidth(1.0);
-//		setOpacity(1.0);
 	}
 
+	public SVGElement(SVGElement element) {
+        super((GraphicsElement) element);
+	}
+	
+	/** copy constructor from non-subclassed elements
+	 */
+	public static SVGElement createSVG(Element element) {
+		SVGElement newElement = null;
+		String tag = element.getLocalName();
+		if (tag == null || tag.equals(S_EMPTY)) {
+			throw new CMLRuntimeException("no tag");
+		} else if (tag.equals(SVGCircle.TAG)) {
+			newElement = new SVGCircle();
+		} else if (tag.equals(SVGDesc.TAG)) {
+			newElement = new SVGDesc();
+		} else if (tag.equals(SVGEllipse.TAG)) {
+			newElement = new SVGEllipse();
+		} else if (tag.equals(SVGG.TAG)) {
+			newElement = new SVGG();
+		} else if (tag.equals(SVGLine.TAG)) {
+			newElement = new SVGLine();
+		} else if (tag.equals(SVGPath.TAG)) {
+			newElement = new SVGPath();
+		} else if (tag.equals(SVGRect.TAG)) {
+			newElement = new SVGRect();
+		} else if (tag.equals(SVGSVG.TAG)) {
+			newElement = new SVGSVG();
+		} else if (tag.equals(SVGText.TAG)) {
+			newElement = new SVGText();
+		} else {
+			throw new CMLRuntimeException("unknown element "+tag);
+		}
+        newElement.copyAttributesFrom(element);
+        createSubclassedChildren(element, newElement);
+        return newElement;
+		
+	}
+	
+	private static void createSubclassedChildren(Element oldElement, SVGElement newElement) {
+		for (int i = 0; i < oldElement.getChildCount(); i++) {
+			Node node = oldElement.getChild(i);
+			Node newNode = null;
+			if (node instanceof Text) {
+				newNode = new Text(node.getValue());
+			} else {
+				newNode = createSVG((Element) node);
+			}
+			newElement.appendChild(newNode);
+		}
+	}
+	
 	/**
 	 * @return the sVG_NAMESPACE
 	 */
@@ -58,25 +95,6 @@ public abstract class SVGElement extends GraphicsElement {
 		return SVG_NAMESPACE;
 	}
 
-	protected abstract String getTag();
-	
-	protected void addStyle(String style, String value) {
-		styleMap.put(style, value);
-		if (styleString.indexOf(style) != -1) {
-			addStyles();
-		} else {
-			styleString += style+":"+value+";";
-		}
-		this.addAttribute(new Attribute("style", styleString));
-	}
-	
-	protected void addStyles() {
-		styleString = "";
-		for (String style : styleMap.keySet()) {
-			styleString += style+":"+styleMap.get(style)+";";
-		}
-	}
-	
 	/**
 	 * @param g2d
 	 */
@@ -149,8 +167,8 @@ public abstract class SVGElement extends GraphicsElement {
 	 * @param moleculeDisplay
 	 */
 	public void setProperties(MoleculeDisplay moleculeDisplay) {
-		this.setFontStyle(moleculeDisplay.getFontStyle());
-		this.setFontWeight(moleculeDisplay.getFontStyle());
+//		this.setFontStyle(moleculeDisplay.getFontStyle());
+		this.setFontWeight(moleculeDisplay.getFontWeight());
 		this.setFontFamily(moleculeDisplay.getFontFamily());
 		this.setFontSize(moleculeDisplay.getFontSize());
 		this.setFill(moleculeDisplay.getFill());
@@ -166,8 +184,8 @@ public abstract class SVGElement extends GraphicsElement {
 	 * @param abstractDisplay
 	 */
 	public void setProperties(AbstractDisplay abstractDisplay) {
-		this.setFontStyle(abstractDisplay.getFontStyle());
-		this.setFontWeight(abstractDisplay.getFontStyle());
+//		this.setFontStyle(abstractDisplay.getFontStyle());
+		this.setFontWeight(abstractDisplay.getFontWeight());
 		this.setFontFamily(abstractDisplay.getFontFamily());
 		this.setFontSize(abstractDisplay.getFontSize());
 		this.setFill(abstractDisplay.getFill());
@@ -321,73 +339,6 @@ public abstract class SVGElement extends GraphicsElement {
 		}
 	}
 	
-	
-	/**
-	 * @return the fontFamily
-	 */
-	public String getFontFamily() {
-		return this.getAttributeValue("font-family");
-	}
-
-	/**
-	 * @param fontFamily the fontFamily to set
-	 */
-	public void setFontFamily(String fontFamily) {
-		this.addAttribute(new Attribute("font-family", fontFamily));
-	}
-
-	/**
-	 * @return the fontSize
-	 */
-	public double getFontSize() {
-		double fontSize = 40.0;
-		if (this.getAttributeValue("font-size") != null) {
-			String fontSizeS = this.getAttributeValue("font-size");
-			try {
-				fontSize = new Double(fontSizeS).doubleValue();
-			} catch (NumberFormatException nfe) {
-				System.err.println(nfe);
-				// bad font
-			}
-		}
-		return fontSize;
-	}
-
-	/**
-	 * @param fontSize the fontSize to set
-	 */
-	public void setFontSize(double fontSize) {
-			this.addAttribute(new Attribute("font-size", ""+fontSize));
-			this.addStyle("font-size", ""+fontSize);
-		}
-
-	/**
-	 * @return the fontStyle
-	 */
-	public String getFontStyle() {
-		return styleMap.get("font-style");
-	}
-
-	/**
-	 * @param fontStyle the fontStyle to set
-	 */
-	public void setFontStyle(String fontStyle) {
-		this.addAttribute(new Attribute("font-style", fontStyle));
-	}
-
-	/**
-	 * @return the fontWeight
-	 */
-	public String getFontWeight() {
-		return this.getAttributeValue("font-weight");
-	}
-
-	/**
-	 * @param fontWeight the fontWeight to set
-	 */
-	public void setFontWeight(String fontWeight) {
-		this.addAttribute(new Attribute("font-weight", fontWeight));
-	}
 
 	/**
 	 */
@@ -446,7 +397,7 @@ public abstract class SVGElement extends GraphicsElement {
 		text.setFill("red");
 		text.setStrokeWidth(1.5);
 		text.setFontSize(20);
-		text.setFontStyle("italic");
+//		text.setFontStyle("italic");
 		text.setFontWeight("bold");
 		g.appendChild(text);
 		CMLUtil.debug(svg, fos, 2);
