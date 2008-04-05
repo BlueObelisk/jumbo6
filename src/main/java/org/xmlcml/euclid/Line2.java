@@ -128,6 +128,15 @@ public class Line2 implements EuclidConstants {
 		return inter;
 	}
 	
+	/** swaps to and from coordinates.
+	 * 
+	 */
+	public void flipCoordinates() {
+		Real2 temp = from;
+		from = to;
+		to = temp;
+	}
+	
 	/**
 	 * get unit vector convenience
 	 * @return vector
@@ -161,6 +170,20 @@ public class Line2 implements EuclidConstants {
 		double lambda = unitVector.dotProduct(lp);
 		Real2 vv = unitVector.multiplyBy(lambda);
 		return from.plus(vv);
+	}
+	
+	/** convenience method.
+	 * gets angle formed between lines using 
+	 * Vector2.getAngleMadeWith(Vector2)
+	 * @param line
+	 * @return angle or null
+	 */
+	public Angle getAngleMadeWith(Line2 line) {
+		Angle angle = null;
+		if (line != null) {
+			angle = this.getVector().getAngleMadeWith(line.getVector());
+		}
+		return angle;
 	}
 	
 	/** gets multiplier of point from "from"

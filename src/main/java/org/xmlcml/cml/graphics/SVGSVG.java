@@ -2,7 +2,6 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
 
-import nu.xom.Element;
 import nu.xom.Node;
 
 /** container for SVG

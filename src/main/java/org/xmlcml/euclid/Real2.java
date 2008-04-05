@@ -2,7 +2,6 @@ package org.xmlcml.euclid;
 import java.util.List;
 
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtil;
 /**
  * A pair of FPt numbers with no other assumptions
  * 
