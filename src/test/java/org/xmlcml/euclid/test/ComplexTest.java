@@ -166,7 +166,8 @@ public class ComplexTest extends EuclidTestBase {
      */
     @Test
     public void testGetR() {
-        Assert.assertEquals("R", Math.sqrt(5.), c2.getR(), 1.0E-08);
+    	double r = c2.getR();
+        Assert.assertEquals("R", Math.sqrt(5.), r, 1.0E-08);
     }
 
     /**

@@ -144,6 +144,7 @@ public class Complex extends Real2 {
      */
     public double getR() {
         double t = Math.sqrt(x * x + y * y);
+ //       double t = x * x + y * y;
         return t;
     }
 

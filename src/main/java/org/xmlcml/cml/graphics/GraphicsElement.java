@@ -139,17 +139,19 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
     	this.addAttribute(new Attribute("style", getStyleBundle().toString()));
     }
     
-//    public void addStyle(String style, Object object) {
-//    	getStyleBundle();
-//    	this.styleBundle.setSubStyle(style, object);
-//    	applyStyles();
-//    }
+    public void setSvgClass(String svgClass) {
+    	this.addAttribute(new Attribute("class", svgClass));
+    }
+    
+    public String getSvgClass() {
+    	return this.getAttributeValue("class");
+    }
     
 	/**
 	 * @return the fill
 	 */
 	public String getFill() {
-		return getSubStyle("fill").toString();
+		return (String) getSubStyle("fill");
 	}
 
 	/**
@@ -163,7 +165,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 * @return the fill
 	 */
 	public String getStroke() {
-		return getSubStyle("stroke").toString();
+		return (String) getSubStyle("stroke");
 	}
 
 	/**
@@ -177,7 +179,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 * @return the font
 	 */
 	public String getFontFamily() {
-		return getSubStyle("font-family").toString();
+		return (String) getSubStyle("font-family");
 	}
 
 	/**
@@ -191,7 +193,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 //	 * @return the font
 //	 */
 //	public String getFontStyle() {
-//		return getSubStyle("font-style").toString();
+//		return (String) getSubStyle("font-style");
 //	}
 //
 //	/**
@@ -205,11 +207,11 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 * @return the font
 	 */
 	public String getFontWeight() {
-		return getSubStyle("font-weight").toString();
+		return (String) getSubStyle("font-weight");
 	}
 
 	/**
-	 * @param fill the fill to set
+	 * @param fill the font weight to set
 	 */
 	public void setFontWeight(String fontWeight) {
 		setSubStyle("font-weight", fontWeight);

@@ -796,7 +796,7 @@ public class CrystalToolTest extends AbstractToolTest {
      */
     public static void main(String[] args) {
         String user = (args.length == 0) ? S_EMPTY : args[0];
-        new CrystalToolTest().analyzeCIFs(user);
+        CrystalToolTest.analyzeCIFs(user);
     }
     
     /*

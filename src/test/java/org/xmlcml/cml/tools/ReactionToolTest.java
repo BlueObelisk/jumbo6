@@ -455,7 +455,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 	 * @param doc
 	 * @param components
 	 */
-	private static void calculateMolarAmounts(Document doc, CMLElements components, double[] mol) {
+	private static void calculateMolarAmounts(Document doc, CMLElements<?> components, double[] mol) {
 		for (int i = 0; i < components.size(); i++) {
         	ReactionComponent reactant = (ReactionComponent) components.get(i);
         	// get reference to molecule
@@ -501,7 +501,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 	 * @param doc
 	 * @param components
 	 */
-	private static void exploreMolarAmounts(Document doc, CMLElements components) {
+	private static void exploreMolarAmounts(Document doc, CMLElements<?> components) {
 		for (int i = 0; i < components.size(); i++) {
         	ReactionComponent reactant = (ReactionComponent) components.get(i);
         	// get reference to molecule

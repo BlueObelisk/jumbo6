@@ -33,12 +33,16 @@ public class Vector2 extends Real2 {
      * rotates anticlockwise to vector.
      * 
      * @param v
-     * @return angle
+     * @return angle or null
      */
     public Angle getAngleMadeWith(Vector2 v) {
-        double theta0 = Math.atan2(v.x, v.y);
-        double theta1 = Math.atan2(this.x, this.y);
-        return new Angle(theta0 - theta1);
+    	Angle angle = null;
+    	if (v != null) {
+	        double theta0 = Math.atan2(v.x, v.y);
+	        double theta1 = Math.atan2(this.x, this.y);
+	        angle = new Angle(theta0 - theta1);
+    	}
+    	return angle;
     }
 
     /** is vector parallel to another
