@@ -209,7 +209,20 @@ public class CMLMolecule
 		}
 	}
 
-
+	/**
+	 * The checking included in previous versions of Jumbo has now been removed. This
+	 * method is retained for backward compatibility only, and the value of the boolean does
+	 * not affect the execution of the code. 
+	 * @author dmj30
+	 * @param atom
+	 * @throws CMLRuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	@Deprecated
+	public void addAtom(CMLAtom atom, boolean check) throws CMLRuntimeException {
+			addAtom(atom);
+	}
+		
 	/** add atom.
 	 *
 	 * only if in same molecule. If already added returns with no-op
@@ -343,6 +356,20 @@ public class CMLMolecule
 		}
 	}
 
+	/**
+	 * The checking included in previous versions of Jumbo has now been removed. This
+	 * method is retained for backward compatibility only, and the value of the boolean does
+	 * not affect the execution of the code. 
+	 * @author dmj30
+	 * @param bond
+	 * @throws CMLRuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	@Deprecated
+	public void addBond(CMLBond bond, boolean check) throws CMLRuntimeException {
+		addBond(bond);
+	}
+	
 	/**
 	 * add bond.
 	 * checks for duplicates ; should be changed to use atoms
