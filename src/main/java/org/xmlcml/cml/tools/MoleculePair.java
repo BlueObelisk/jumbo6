@@ -77,4 +77,5 @@ public class MoleculePair implements CMLConstants {
 	public void setTransform3(Transform3 transform3) {
 		this.transform3 = transform3;
 	}
+
 }

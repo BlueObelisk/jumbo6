@@ -1,7 +1,5 @@
 package org.xmlcml.cml.graphics;
 
-import org.xmlcml.cml.element.CMLBasisSet;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;

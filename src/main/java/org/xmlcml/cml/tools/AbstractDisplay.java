@@ -29,6 +29,7 @@ public class AbstractDisplay {
 	protected String fontFamily = FONT_SANS_SERIF;
 	
 	protected boolean omitHydrogens = false;
+	protected boolean showChildLabels = false;
 
 	/** do not use.
 	 */
@@ -49,6 +50,7 @@ public class AbstractDisplay {
 		this.fontWeight = a.fontWeight;
 		this.fontFamily = a.fontFamily;
 		this.omitHydrogens = a.omitHydrogens;
+		this.showChildLabels = a.showChildLabels;
 	}
 
 	/** field constructor
@@ -189,6 +191,12 @@ public class AbstractDisplay {
 	 */
 	public void setFill(String fill) {
 		this.fill = fill;
+	}
+	public boolean isShowChildLabels() {
+		return showChildLabels;
+	}
+	public void setShowChildLabels(boolean showChildLabels) {
+		this.showChildLabels = showChildLabels;
 	}
 
 }

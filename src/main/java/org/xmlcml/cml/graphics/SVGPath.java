@@ -25,6 +25,7 @@ public class SVGPath extends SVGElement {
 	 */
 	public SVGPath() {
 		super(TAG);
+		init();
 	}
 	
 	/** constructor
@@ -32,6 +33,7 @@ public class SVGPath extends SVGElement {
 	public SVGPath(SVGPath element) {
         super((SVGElement) element);
 	}
+	
 	
 	/** constructor
 	 */
@@ -51,6 +53,16 @@ public class SVGPath extends SVGElement {
 	public SVGPath(String d) {
 		this();
 		setD(d);
+	}
+	
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+	public static void setDefaultStyle(SVGPath path) {
+		path.setStroke("black");
+		path.setStrokeWidth(0.5);
+		path.setFill("none");
 	}
 	/** constructor.
 	 * 

@@ -2261,7 +2261,8 @@ public class OscarTool implements CMLConstants {
 //      </quantity>
 //      </property>
 
-    static void quantity(Element property) {
+
+	static void quantity(Element property) {
 //        System.out.println(">>>quantity>>>");
         CMLProperty cmlProperty = new CMLProperty();
         cmlProperty.setDictRef(OSCAR_NSP+S_COLON+"quantity");

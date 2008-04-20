@@ -148,4 +148,5 @@ public class DisorderGroup implements CMLConstants, Comparable<DisorderGroup> {
         }
         return s;
     }
+
 };

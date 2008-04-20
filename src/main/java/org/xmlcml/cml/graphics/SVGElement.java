@@ -370,6 +370,12 @@ public class SVGElement extends GraphicsElement {
 		processTransform();
 	}
 
+	public void addDashedStyle(double bondWidth) {
+		String style = this.getAttributeValue("style");
+		style += "stroke-dasharray : "+bondWidth*2+" "+bondWidth*2+";";
+		this.addAttribute(new Attribute("style", style));
+	}
+    
 	/**
 	 * 
 	 * @param filename

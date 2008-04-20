@@ -1,12 +1,10 @@
 package org.xmlcml.cml.graphics;
 
 
-import static org.junit.Assert.fail;
 import nu.xom.Element;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.AbstractTest;
 
 public class SVGElementTest extends AbstractTest {

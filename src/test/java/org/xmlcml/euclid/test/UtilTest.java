@@ -723,5 +723,26 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
         i = Util.getPrime(100);
         Assert.assertEquals("100", 547, i);
     }
+    
+    @Test
+    public final void testSortByEmbeddedInteger() {
+    	String[] ss = {
+    			"a123",
+    			"b213",
+    			"aa1",
+    			"ac9",
+    			"ax22",
+    	};
+    	List<String> ssList = new ArrayList<String>();
+    	for (String s : ss) {
+    		ssList.add(s);
+    	}
+    	Util.sortByEmbeddedInteger(ssList);
+    	Assert.assertEquals("0", "aa1", ssList.get(0));
+    	Assert.assertEquals("1", "ac9", ssList.get(1));
+    	Assert.assertEquals("2", "ax22", ssList.get(2));
+    	Assert.assertEquals("3", "a123", ssList.get(3));
+    	Assert.assertEquals("4", "b213", ssList.get(4));
+	}
 
 }

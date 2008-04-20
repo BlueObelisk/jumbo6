@@ -8,22 +8,28 @@ import java.util.logging.Logger;
 import nu.xom.Attribute;
 
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.euclid.Angle.Range;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -34,8 +40,13 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * @author pmr
  * 
  */
-public class AtomTool extends AbstractTool {
+public class AtomTool extends AbstractSVGTool {
 
+	public final static String RIGHT = "RIGHT__";
+	public final double fontWidthFontSizeFactor = 0.8;
+	
+	private static final Transform2 ROT90 = new Transform2(new Angle(Math.PI/2.));
+	
     private CMLAtom atom;
     private CMLMolecule molecule;
     private AbstractTool moleculeTool;
@@ -43,7 +54,6 @@ public class AtomTool extends AbstractTool {
     private AtomDisplay atomDisplay;
     private List<CMLAtomSet> coordinationSphereList;
     private CMLAtomSet coordinationSphereSet;
-	private SVGG g;
 	private double fontSize;
 	private double radiusFactor;
 
@@ -74,6 +84,15 @@ public class AtomTool extends AbstractTool {
 			atom.setTool(atomTool);
 		}
 		return atomTool;
+	}
+
+	/**
+	 * 
+	 * @param reaction
+	 * @return
+	 */
+	public static AbstractSVGTool getOrCreateSVGTool(CMLAtom atom) {
+		return (AbstractSVGTool) AtomTool.getOrCreateTool(atom);
 	}
 
     /** sort list of atoms by atomic number.
@@ -304,13 +323,158 @@ public class AtomTool extends AbstractTool {
     /**
      * add calculated coordinates for hydrogens.
      * 
-     * @deprecated NOT YET IMPLEMENTED
-     * @param control
-     *            2D or 3D
+     * @param control 2D or 3D
      */
-    public void addCalculatedCoordinatesForHydrogens(
-            CMLMolecule.HydrogenControl control) {
-        /** NYI */
+    public void addCalculatedCoordinatesForHydrogens(CoordinateType type, double bondLength) {
+    	if (CoordinateType.TWOD.equals(type)) {
+    		calculateAndAddHydrogenCoordinates(bondLength);
+    	} else {
+    		throw new CMLRuntimeException("THREED H coords nyi");
+    	}
+    }
+    
+    public void calculateAndAddHydrogenCoordinates(double bondLength) {
+    	List<CMLAtom> ligandHydrogenList = atom.getLigandHydrogenAtoms();
+    	List<CMLAtom> ligandList = atom.getLigandAtoms();
+    	List<CMLAtom> nonHydrogenLigandHydrogenList = new ArrayList<CMLAtom>();
+    	for (CMLAtom ligand : ligandList) {
+    		if (!AS.H.equals(ligand.getElementType())) {
+    			nonHydrogenLigandHydrogenList.add(ligand);
+    		}
+    	}
+    	int hydrogenCount = atom.getHydrogenCount();
+    	if (hydrogenCount != ligandHydrogenList.size()) {
+    		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
+    		throw new CMLRuntimeException("inconsistent hydrogen count in add coordinates");
+    	}
+    	List<Vector2> vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
+    	Real2 xy2 = atom.getXY2();
+    	for (int i = 0; i < ligandHydrogenList.size(); i++) {
+    		ligandHydrogenList.get(i).setXY2(xy2.plus(vectorList.get(i)));
+    	}
+	}
+    
+	private static Transform2 PI120 = new Transform2(new Angle(Math.PI * 2./3.));
+	private static Transform2 PI90 = new Transform2(new Angle(Math.PI * 0.5));
+	private static Transform2 PI270 = new Transform2(new Angle(Math.PI * 1.5));
+	
+    private List<Vector2> addCoords(List<CMLAtom> ligandList, List<CMLAtom> hydrogenList, double bondLength) {
+    	List<Vector2> vectorList = new ArrayList<Vector2>();
+    	if (hydrogenList.size() == 0) {
+    		// nothing to do
+    	} else if (ligandList.size() == 0) {
+    		if (hydrogenList.size() == 1) {
+    			vectorList.add(new Vector2(0, bondLength));
+    		} else if (hydrogenList.size() == 2) {
+    			vectorList.add(new Vector2(0, bondLength));
+    			vectorList.add(new Vector2(0, -bondLength));
+    		} else if (hydrogenList.size() == 3) {
+    			vectorList.add(new Vector2(0, bondLength));
+    			vectorList.add(new Vector2(bondLength * Math.sqrt(0.75), -bondLength *0.5));
+    			vectorList.add(new Vector2(-bondLength * Math.sqrt(0.75), -bondLength *0.5));
+    		} else if (hydrogenList.size() == 4) {
+    			vectorList.add(new Vector2(0, bondLength));
+    			vectorList.add(new Vector2(0, -bondLength));
+    			vectorList.add(new Vector2(bondLength, 0));
+    			vectorList.add(new Vector2(-bondLength, 0));
+    		}
+
+    	} else if (ligandList.size() == 1) {
+    		Vector2 ligandVector = new Vector2(ligandList.get(0).getXY2().subtract(atom.getXY2()));
+    		ligandVector = new Vector2(ligandVector.getUnitVector().multiplyBy(-bondLength));
+    		if (hydrogenList.size() == 1) {
+    			vectorList.add(new Vector2(ligandVector));
+    		} else if (hydrogenList.size() == 2) {
+    			Vector2 vector = new Vector2(ligandVector.multiplyBy(-1.0));
+    			vector.transformBy(PI120);
+    			vectorList.add(new Vector2(vector));
+    			vector.transformBy(PI120);
+    			vectorList.add(new Vector2(vector));
+    		} else if (hydrogenList.size() == 3) {
+    			Vector2 vector = new Vector2(ligandVector);
+    			vectorList.add(new Vector2(vector));
+    			vector.transformBy(PI90);
+    			vectorList.add(new Vector2(vector));
+    			vector = new Vector2(ligandVector);
+    			vector.transformBy(PI270);
+    			vectorList.add(new Vector2(vector));
+    		} else {
+    		}
+    	} else if (ligandList.size() == 2) {
+    		Vector2 ligandVector0 = new Vector2(ligandList.get(0).getXY2().subtract(atom.getXY2()));
+    		ligandVector0 = new Vector2(ligandVector0.getUnitVector());
+    		Vector2 ligandVector1 = new Vector2(ligandList.get(1).getXY2().subtract(atom.getXY2()));
+    		ligandVector1 = new Vector2(ligandVector1.getUnitVector());
+    		Angle angle = ligandVector0.getAngleMadeWith(ligandVector1);
+    		angle.setRange(Angle.Range.SIGNED);
+			Vector2 bisectVector = null;
+    		boolean nearlyLinear = Math.abs(angle.getRadian()) > 0.9 * Math.PI;
+        	if (nearlyLinear) {
+    			bisectVector = new Vector2(ligandVector0.getUnitVector());
+    			bisectVector.transformBy(ROT90);
+    			bisectVector.multiplyBy(bondLength);
+    		} else {
+    			bisectVector = new Vector2(ligandVector0.plus(ligandVector1));
+    			bisectVector = new Vector2(bisectVector.getUnitVector());
+    			bisectVector = new Vector2(bisectVector.multiplyBy(-bondLength));
+    		}
+			if (hydrogenList.size() == 1) {
+    			Vector2 vector = new Vector2(bisectVector);
+    			vector = new Vector2(vector.multiplyBy(1.0));
+    			vectorList.add(vector);
+    		} else if (hydrogenList.size() == 2) {
+        		if (nearlyLinear) {
+        			vectorList.add(new Vector2(bisectVector));
+        			vectorList.add(new Vector2(bisectVector.multiplyBy(-1.)));
+        		} else {
+        			Angle halfAngle = new Angle(Math.PI*0.5 - Math.abs(angle.getRadian()*0.5));
+        			Transform2 t2 = new Transform2(halfAngle);
+        			Vector2 vector = new Vector2(bisectVector);
+        			vector.transformBy(t2);
+	    			vectorList.add(vector);
+        			t2 = new Transform2(halfAngle.multiplyBy(-1.0));
+        			vector = new Vector2(bisectVector);
+        			vector.transformBy(t2);
+	    			vectorList.add(vector);
+        		}
+    		} else {
+    		}
+    	} else if (ligandList.size() == 3) {
+    		Vector2[] vectors = new Vector2[3];
+    		Vector2 bisectVector = null;
+    		for (int i = 0; i < 3; i++) {
+	    		vectors[i] = new Vector2(ligandList.get(i).getXY2().subtract(atom.getXY2()));
+	    		vectors[i] = new Vector2(vectors[i].getUnitVector());
+	    		bisectVector = (bisectVector == null) ? vectors[i] : new Vector2(bisectVector.plus(vectors[i]));
+    		}
+    		bisectVector = new Vector2(bisectVector.multiplyBy(-1.0));
+    		// short vector
+    		try {
+    			bisectVector = new Vector2(bisectVector.getUnitVector());
+    			// must not overlap too badly
+    			for (int i = 0; i < 3; i++) {
+    				Angle angle = bisectVector.getAngleMadeWith(vectors[i]);
+    				angle.setRange(Range.SIGNED);
+    				double angleR = Math.abs(angle.getRadian());;
+    				if (angleR < 0.2) {
+    					bisectVector = new Vector2(vectors[(i+1) % 3]);
+    					bisectVector = new Vector2(bisectVector.multiplyBy(-1.0));
+    					break;
+    				}
+    			}
+    		} catch (EuclidRuntimeException e) {
+				bisectVector = vectors[0];
+				bisectVector = new Vector2(bisectVector);
+    		}
+    		if (hydrogenList.size() == 1) {
+    			vectorList.add(new Vector2(bisectVector));
+    		} else {
+    		}
+    	} else {
+    		// skip
+    	}
+    	return vectorList;
+
     }
 
     /** gets lone electrons on atom.
@@ -427,7 +591,7 @@ public class AtomTool extends AbstractTool {
          double covRad = 0.3;
          if (rElement == null) {
              covRad = 0.3;
-         } else if (rElement.equals("R")) {
+         } else if (rElement.equals(AS.R)) {
              
          } else {
              ChemicalElement element = ChemicalElement.getChemicalElement(rElement);
@@ -462,7 +626,6 @@ public class AtomTool extends AbstractTool {
 	    			 0.,-1., y,
 	    			 0., 0., 1.
 	    	 }));
-	    	 String elementType = atom.getElementType();
 	    	 String fill = atomDisplay.getFill();
 	    	 fontSize = atomDisplay.getScaledFontSize();
  			 double xOffsetFactor = atomDisplay.getXOffsetFactor();
@@ -479,37 +642,9 @@ public class AtomTool extends AbstractTool {
 	    	 double idFontFactor = atomDisplay.getIdFontFactor();
 	    	 double backgroundIdRadiusFactor = atomDisplay.getBackgroundIdRadiusFactor();
 
-	    	 SVGCircle circle;
-	    	 SVGText text;
-    		 circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
-    		 String circleFill = AS.C.equals(elementType) ? "none" : "white";
-    		 g.appendChild(circle);
-    		 circle.setFill(circleFill);
-    		 text = new SVGText(
-				 new Real2(xOffsetFactor*fontSize, yOffsetFactor*fontSize), atom.getElementType());
-    		 if (AS.C.equals(elementType)) {
-    			 fill = "black";
-    		 } else if (AS.N.equals(elementType)) {
-    			 fill = "blue";
-    		 } else if (AS.O.equals(elementType)) {
-    			 fill = "red";
-    		 } else if (AS.S.equals(elementType)) {
-    			 fill = "orange";
-    		 } else if (AS.Cl.equals(elementType)) {
-    			 fill = "green";
-    		 } else if (AS.F.equals(elementType)) {
-    			 fill = "#77ff00";
-    		 } else if (AS.Br.equals(elementType)) {
-    			 fill = "#ff7700";
-    		 } else if (AS.I.equals(elementType)) {
-    			 fill = "#ff00ff";
-    		 } else if (AS.H.equals(elementType)) {
-    			 fill = "gray";
-    		 }
-    		 if (!AS.C.equals(elementType)) {
-        		 text.setFill(fill);
-        		 text.setFontSize(fontSize);
-    			 g.appendChild(text);
+	    	 String atomString = getAtomString();
+    		 if (!atomString.equals(S_EMPTY)) {
+        		 displayAtomText(fill, xOffsetFactor, yOffsetFactor, atomString);
 	    	 }
 	    	 if (atom.getFormalChargeAttribute() != null) {
 	    		 drawCharge(xChargeOffsetFactor, yChargeOffsetFactor, chargeFontFactor, backgroundChargeRadiusFactor);
@@ -519,6 +654,71 @@ public class AtomTool extends AbstractTool {
 	    	 }
     	 }
     	 return (g == null || g.getChildElements().size() == 0) ? null : g;
+     }
+
+	private void displayAtomText(String fill, double xOffsetFactor,
+			double yOffsetFactor, String atomString) {
+		double width = 0.0;
+		if (atomString.startsWith(RIGHT)) {
+			atomString = atomString.substring(RIGHT.length());
+			width = (atomString.length()-1)*fontSize*fontWidthFontSizeFactor;
+		}
+		SVGText text = new SVGText(
+				 new Real2(xOffsetFactor*fontSize - width, yOffsetFactor*fontSize), atomString);
+		 fill = getAtomFill(fill, atomString);
+		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
+		 circle.setStroke("none");
+		 // should be background
+		 String circleFill = /*AS.C.equals(elementType) ? "none" :*/ "white";
+		 g.appendChild(circle);
+		 circle.setFill(circleFill);
+		 text.setFill(fill);
+		 text.setFontSize(fontSize);
+		 g.appendChild(text);
+	}
+
+	private String getAtomFill(String fill, String atomString) {
+		if (false) {
+		 } else if(AS.C.equals(atomString)) {
+			 fill = "black";
+		 } else if (AS.N.equals(atomString)) {
+			 fill = "blue";
+		 } else if (AS.O.equals(atomString)) {
+			 fill = "red";
+		 } else if (AS.S.equals(atomString)) {
+			 fill = "orange";
+		 } else if (AS.Cl.equals(atomString)) {
+			 fill = "green";
+		 } else if (AS.F.equals(atomString)) {
+			 fill = "#77ff00";
+		 } else if (AS.Br.equals(atomString)) {
+			 fill = "#ff7700";
+		 } else if (AS.I.equals(atomString)) {
+			 fill = "#ff00ff";
+		 } else if (AS.H.equals(atomString)) {
+			 fill = "gray";
+		 } else if(AS.R.equals(atom.getElementType())) {
+			 fill = "brown";
+		 }
+		return fill;
+	}
+     
+     private String getAtomString() {
+    	 String s = atom.getElementType();
+    	 // omit carbons?
+    	 if (!atomDisplay.isDisplayCarbons() && AS.C.equals(s)) {
+    		 s = S_EMPTY;
+    	 } else if (atomDisplay.isShowChildLabels() && AS.R.equals(s)) {
+    		 CMLElements<CMLLabel> labels = atom.getLabelElements();
+    		 if (labels.size() == 1) {
+    			 CMLLabel label = labels.get(0);
+    			 s = label.getCMLValue();
+    			 if ("cml:abbrevRight".equals(label.getAttributeValue("convention"))) {
+    				 s = RIGHT+s;
+    			 }
+    		 }
+    	 }
+    	 return s;
      }
 
 	/**
@@ -658,13 +858,6 @@ public class AtomTool extends AbstractTool {
 	 */
 	public void setRadiusFactor(double radiusFactor) {
 		this.radiusFactor = radiusFactor;
-	}
-
-	/**
-	 * @return the g
-	 */
-	public SVGElement getG() {
-		return g;
 	}
 
 	

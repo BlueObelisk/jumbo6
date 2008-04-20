@@ -95,6 +95,7 @@ public class CMLLog implements CMLConstants {
         }
         w.write("</log>\n");
     }
+
 }
 class Message {
 

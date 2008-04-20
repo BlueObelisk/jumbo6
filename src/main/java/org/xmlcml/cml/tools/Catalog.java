@@ -180,4 +180,5 @@ public class Catalog implements CatalogListChild, CMLConstants {
 	public URL getURL() {
 		return url;
 	}
+
 }

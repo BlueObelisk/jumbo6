@@ -18,15 +18,17 @@ import org.xmlcml.euclid.Real2;
 public class SVGCircle extends SVGElement {
 
 	final static String TAG ="circle";
-//	double cx;
-//	double cy;
-//	double r;
-	
 
 	/** constructor
 	 */
 	public SVGCircle() {
 		super(TAG);
+		init();
+	}
+	
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
 	}
 	
 	/** constructor
@@ -41,6 +43,15 @@ public class SVGCircle extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	/**
+	 * 
+	 * @param circle
+	 */
+	public static void setDefaultStyle(SVGCircle circle) {
+		circle.setStroke("black");
+		circle.setStrokeWidth(0.5);
+		circle.setFill("#aaffff");
+	}
     /**
      * copy node .
      *
@@ -107,30 +118,6 @@ public class SVGCircle extends SVGElement {
 	public void setRad(double rad) {
 		this.addAttribute(new Attribute("r", ""+rad));
 	}
-
-//	public double getCx() {
-//		return cx;
-//	}
-//
-//	public void setCx(double cx) {
-//		this.cx = cx;
-//	}
-//
-//	public double getCy() {
-//		return cy;
-//	}
-//
-//	public void setCy(double cy) {
-//		this.cy = cy;
-//	}
-//
-//	public double getR() {
-//		return r;
-//	}
-//
-//	public void setR(double r) {
-//		this.r = r;
-//	}
 
 	
 }

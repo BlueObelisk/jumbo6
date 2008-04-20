@@ -725,5 +725,5 @@ public abstract class CMLUtil implements CMLConstants {
 			throw new IllegalArgumentException("Null double string not allowed");
 		}
 	}
-
 }
+

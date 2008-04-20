@@ -1194,4 +1194,12 @@ public class CMLAtom extends AbstractAtom {
 			return false;
 		}
 	}
+
+	public static void debugAtom(String msg, CMLAtom atom) {
+		if (atom == null) {
+			System.out.println(msg+"...");
+		} else {
+			System.out.println(msg+"..."+atom.getId());
+		}
+	}
 }

@@ -18,7 +18,6 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
-import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -71,7 +70,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  * @author pmr
  *
  */
-public class MoleculeTool extends AbstractTool {
+public class MoleculeTool extends AbstractSVGTool {
 
 	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
 
@@ -1831,12 +1830,19 @@ public class MoleculeTool extends AbstractTool {
 	 * seriously.
 	 *
 	 * @param type
+	 * @param omitHydrogens coordinates
 	 * @return average distance in origianl units. If no bonds returns negative.
 	 */
-	public double getAverageBondLength(CoordinateType type) {
+	public double getAverageBondLength(CoordinateType type, boolean omitHydrogens) {
 		double bondSum = 0.0;
 		int nBonds = 0;
 		for (CMLBond bond : molecule.getBonds()) {
+			if (omitHydrogens && (
+					"H".equals(molecule.getAtom(0).getElementType()) ||
+					"H".equals(molecule.getAtom(1).getElementType()))
+					) {
+				continue;
+			}
 			try {
 				double length = bond.calculateBondLength(type);
 				bondSum += length;
@@ -1845,7 +1851,20 @@ public class MoleculeTool extends AbstractTool {
 				// no coordinates
 			}
 		}
-		return (nBonds == 0) ? -1.0 : bondSum / ((double) nBonds);
+		return (nBonds == 0 || Double.isNaN(bondSum)) ? -1.0 : bondSum / ((double) nBonds);
+	}
+
+	/**
+	 * get the average atom-atom bond distance.
+	 *
+	 * This is primarily for scaling purposes and should not be taken too
+	 * seriously.
+	 *
+	 * @param type
+	 * @return average distance in origianl units. If no bonds returns negative.
+	 */
+	public double getAverageBondLength(CoordinateType type) {
+		return getAverageBondLength(type, false);
 	}
 
 	/**
@@ -1855,13 +1874,10 @@ public class MoleculeTool extends AbstractTool {
 	 * to="a2" from="b2" // atomId and toFrom = Direction.FROM then will return
 	 * bond atomRefs2="b1 b2" or atomRefs2="b2 b1" in molecule1
 	 *
-	 * @param bond0
-	 *            bond to search with. the values in must occur in a single
+	 * @param bond0 bond to search with. the values in must occur in a single
 	 *            toFrom attribute
-	 * @param map
-	 *            with links
-	 * @param toFrom
-	 *            specifies attribute for search atoms in atomRefs2
+	 * @param map with links
+	 * @param toFrom specifies attribute for search atoms in atomRefs2
 	 * @return mapped bond or null
 	 */
 	@SuppressWarnings("unused")
@@ -2290,44 +2306,36 @@ public class MoleculeTool extends AbstractTool {
  		return bumpList;
 	}
 
-	
+	/**
+	 * 
+	 * @param molecule
+	 * @return
+	 */
+	public static AbstractSVGTool getOrCreateSVGTool(CMLMolecule molecule) {
+		return (AbstractSVGTool) MoleculeTool.getOrCreateTool(molecule);
+	}
+
     /** returns a "g" element
      * will require to be added to an svg element
      * @param drawable
 	 * @throws IOException
      * @return null if problem
      */
-    public SVGElement createGraphicsElement() throws IOException {
-    	SVGElement svg = createGraphicsElement(null);
-    	return svg;
-    }
-	
-    /** returns a "g" element
-     * will require to be added to an svg element
-     * @param drawable
-	 * @throws IOException
-     * @return null if problem
-     */
-    public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
+    public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	AtomDisplay atomDisplayx = (moleculeDisplay == null) ? null :
     		moleculeDisplay.getAtomDisplay();
-//    	System.out.println("MOLDISPLAY "+((atomDisplayx == null) ? "NULL" :
-//    		atomDisplayx.isDisplayLabels()));
     	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
-//    	System.out.println("AVLENGTH "+avlength);
     	enableMoleculeDisplay();
     	double scale = avlength;
     	double[] offsets = new double[] {100., 200.};
     
     	List<CMLAtom> atoms = molecule.getAtoms();
-//    	System.out.println("ATOMS... "+atoms.size());
     	if (atoms.size() == 0) {
     		System.out.println("No atoms to display");
     	} else if (atoms.size() == 1) {
     	} else {
     		try {
 		    	Real2Range moleculeBoundingBox = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule)).getExtent2();
-//		    	Real2Range moleculeBoundingBox = getBoundingBox();
 		    	Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
 		    	Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
 		    	scale = moleculeInterval.scaleTo(screenBoundingBox);
@@ -2345,19 +2353,22 @@ public class MoleculeTool extends AbstractTool {
 	    	g = createSVGElement(drawable, scale, offsets);
 	    	g.setProperties(moleculeDisplay);
     	}
-//		CMLUtil.debug(g);
     	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
     	bondDisplay.setScale(avlength);
     	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
     	atomDisplay.setScale(avlength);
-    	atomDisplay.setOmitHydrogens(true);
+//    	atomDisplay.setOmitHydrogens(true);
     	displayBonds(drawable, g, bondDisplay, atomDisplay);
     	if (molecule.getAtomCount() == 1) {
     		atomDisplay.setDisplayCarbons(true);
-    	}
+    	} 
     	displayAtoms(drawable, g, atomDisplay);
     	if (drawable != null) {
-    		drawable.output(g);
+    		try {
+    			drawable.output(g);
+    		} catch (IOException e) {
+    			throw new CMLRuntimeException(e);
+    		}
     	}
     	return g;
     }

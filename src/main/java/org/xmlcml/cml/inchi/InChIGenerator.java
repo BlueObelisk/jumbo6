@@ -169,7 +169,7 @@ public class InChIGenerator implements EuclidConstants {
      *            List of INCHI_OPTION.
      * @throws CMLException
      */
-    protected InChIGenerator(CMLMolecule molecule, List options)
+    protected InChIGenerator(CMLMolecule molecule, List<?> options)
             throws CMLException {
         try {
             this.molecule = molecule;

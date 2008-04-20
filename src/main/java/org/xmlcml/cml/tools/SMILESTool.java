@@ -95,6 +95,7 @@ public class SMILESTool extends AbstractTool {
 //    private List<String> ringIdList;
 //    private List<String> ringChunkList;
     private String rawSmiles;
+	private String scopy;
     
     /** constructor
      */
@@ -108,7 +109,8 @@ public class SMILESTool extends AbstractTool {
      */
     public void parseSMILES(String sss) {
 
-    	rawSmiles = expandString(sss);
+    	scopy = sss;
+		rawSmiles = expandString(sss);
         rawSmiles = rawSmiles.trim();
         molecule = new CMLMolecule();
         currentAtom = null;
@@ -229,6 +231,8 @@ public class SMILESTool extends AbstractTool {
         	}
         }
         addHydrogens();
+    	makeAromaticBonds();
+//    	convertToKekule();
     }
     
     /**
@@ -328,6 +332,22 @@ public class SMILESTool extends AbstractTool {
     	}
     }
 
+	private void makeAromaticBonds() {
+		for (CMLBond bond : molecule.getBonds()) {
+    		CMLAtom atom0 = bond.getAtom(0);
+    		CMLAtom atom1 = bond.getAtom(1);
+    		if (TRUE.equals(atom0.getAttributeValue(AROMATIC)) &&
+        		TRUE.equals(atom1.getAttributeValue(AROMATIC))) {
+    			bond.setOrder(CMLBond.AROMATIC);
+    		}
+    	}
+	}
+	
+	private void convertToKekule() {
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.adjustBondOrdersToValency();
+	}
+
     private String grabAtom(final String s) {
     	if (s.length() == 0) {
     		throw new CMLRuntimeException("empty element symbol");
@@ -413,14 +433,14 @@ public class SMILESTool extends AbstractTool {
         if (i < l) {
             final char sign = s.charAt(i);
         	if (sign != C_PLUS && sign != C_MINUS) {
-        		throw new CMLRuntimeException("Sign must be of form -[n] or +[n] (found "+sign+")" );
+        		throw new CMLRuntimeException("Sign must be of form -[n] or +[n] (found "+sign+") in "+scopy );
         	}
             i++;
             int charge = 1;
             if (i >= l) {
             	charge = (sign == C_MINUS) ? -1 : 1;
             } else if (!Character.isDigit(s.charAt(i))) {
-                throw new CMLRuntimeException("Sign must be of form -n or +n  (found "+s.charAt(i)+")");
+                throw new CMLRuntimeException("Sign must be of form -n or +n  (found "+s.charAt(i)+") in "+scopy);
             } else {
 	            charge = s.charAt(i) - C_ZERO;
 	            if (sign == C_MINUS) {

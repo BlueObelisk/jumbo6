@@ -12,7 +12,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
-import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
@@ -39,7 +38,7 @@ import org.xmlcml.euclid.Real2Range;
  * @author pmr
  * 
  */
-public class ReactionTool extends AbstractTool {
+public class ReactionTool extends AbstractSVGTool {
 
     Logger logger = Logger.getLogger(ReactionTool.class.getName());
 
@@ -74,6 +73,15 @@ public class ReactionTool extends AbstractTool {
 			reaction.setTool(reactionTool);
 		}
 		return reactionTool;
+	}
+
+	/**
+	 * 
+	 * @param reaction
+	 * @return
+	 */
+	public static AbstractSVGTool getOrCreateSVGTool(CMLReaction reaction) {
+		return (AbstractSVGTool) ReactionTool.getOrCreateTool(reaction);
 	}
 
     /**
@@ -407,7 +415,8 @@ public class ReactionTool extends AbstractTool {
      * @param atomMap
      * @return electronPai list
      */
-    public List<ElectronPair> /*List<List<ElectronPair>> */ getElectronPairList(int iReaction, List<MappedAtomPair> atomPairList, List<MappedBondPair> bondPairList, CMLMap atomMap) {
+    @SuppressWarnings("unchecked")
+	public List<ElectronPair> /*List<List<ElectronPair>> */ getElectronPairList(int iReaction, List<MappedAtomPair> atomPairList, List<MappedBondPair> bondPairList, CMLMap atomMap) {
         List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
         ElectronPair.currentReaction = iReaction;
         
@@ -612,7 +621,8 @@ public class ReactionTool extends AbstractTool {
         return null;
     }
     
-    private MappedAtomPair getOtherAtomPair(MappedBondPair bondPair, MappedAtomPair atomPair, CMLMap atomMap, List atomPairList) {
+    @SuppressWarnings("unchecked")
+	private MappedAtomPair getOtherAtomPair(MappedBondPair bondPair, MappedAtomPair atomPair, CMLMap atomMap, List atomPairList) {
     	if (bondPair == null || atomPair == null || atomMap == null) {
     		return null;
     	}
@@ -660,7 +670,8 @@ public class ReactionTool extends AbstractTool {
     }
     
     // must redo this to cope with mapping 
-    void processElectrons(CMLMolecule molecule1, CMLMolecule molecule2, int serial) {
+    @SuppressWarnings("unchecked")
+	void processElectrons(CMLMolecule molecule1, CMLMolecule molecule2, int serial) {
         List<MappedAtomPair> atomPairList = getAtomPairList(null, molecule1, molecule2, serial);
         // the generics are inconsistent here - FIXME
         List changedPairList = new ArrayList();
@@ -823,7 +834,7 @@ public class ReactionTool extends AbstractTool {
 	 * @throws IOException
      * @return null if problem
      */
-    public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
+    public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	MoleculeDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
     		reactionDisplay.getMoleculeDisplay();
     	enableReactionDisplay();
@@ -850,7 +861,11 @@ public class ReactionTool extends AbstractTool {
     	g.setProperties(reactionDisplay);
     	MoleculeDisplay moleculeDisplay = reactionDisplay.getMoleculeDisplay();
     	displayMolecules(drawable, g, moleculeDisplay, molecules);
-    	drawable.output(g);
+    	try {
+    		drawable.output(g);
+    	} catch (IOException e) {
+    		throw new CMLRuntimeException(e);
+    	}
     	return g;
     }
     
@@ -866,7 +881,7 @@ public class ReactionTool extends AbstractTool {
 
     
 	private void displayMolecules(CMLDrawable drawable, SVGElement g,
-			MoleculeDisplay moleculeDisplay, List<CMLMolecule> molecules) throws IOException {
+			MoleculeDisplay moleculeDisplay, List<CMLMolecule> molecules) {
 		for (CMLMolecule molecule : molecules) {
     		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     		moleculeTool.setMoleculeDisplay(moleculeDisplay);

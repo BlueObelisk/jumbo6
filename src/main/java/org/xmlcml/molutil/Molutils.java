@@ -419,4 +419,5 @@ public abstract class Molutils implements CMLConstants {
         logger.info("Runs tests...");
         testCalculate3DCoordinates();
     }
+
 }

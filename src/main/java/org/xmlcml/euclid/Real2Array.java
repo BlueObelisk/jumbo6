@@ -140,6 +140,16 @@ public class Real2Array implements EuclidConstants {
         return new Real2(xarr.elementAt(elem), yarr.elementAt(elem));
     }
     
+    /**
+     * get element.
+     * 
+     * @param elem
+     * @return element
+     */
+    public Real2 get(int elem) {
+        return new Real2(xarr.elementAt(elem), yarr.elementAt(elem));
+    }
+    
     /** delete element.
      * 
      * @param i

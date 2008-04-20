@@ -36,7 +36,7 @@ public class CMLUnitTypeListTest extends AbstractUnitTest {
 	public void testCopy() {
 		CMLUnitTypeList unitTypeListX = (CMLUnitTypeList) unitTypeList.copy();
 		@SuppressWarnings("unused")
-		Map unitListMap = unitTypeListX.getUnitListMap();
+		Map<?, ?> unitListMap = unitTypeListX.getUnitListMap();
 		// Assert.assertNotNull("unitlistMap not null", unitListMap);
 		Assert.assertTrue("unitlistMap equals",
 				(unitTypeList.getUnitListMap() == null && unitTypeListX

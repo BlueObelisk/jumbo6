@@ -233,12 +233,12 @@ public class SMILESToolTest extends AbstractToolTest {
 		    "<atom id='a6_h2' elementType='H'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
-		    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
-		    "<bond atomRefs2='a2 a3' id='a2_a3' order='1'/>"+
-		    "<bond atomRefs2='a3 a4' id='a3_a4' order='1'/>"+
-		    "<bond atomRefs2='a4 a5' id='a4_a5' order='1'/>"+
-		    "<bond atomRefs2='a5 a6' id='a5_a6' order='1'/>"+
-		    "<bond atomRefs2='a1 a6' id='a1_a6' order='1'/>"+
+		    "<bond atomRefs2='a1 a2' id='a1_a2' order='A'/>"+
+		    "<bond atomRefs2='a2 a3' id='a2_a3' order='A'/>"+
+		    "<bond atomRefs2='a3 a4' id='a3_a4' order='A'/>"+
+		    "<bond atomRefs2='a4 a5' id='a4_a5' order='A'/>"+
+		    "<bond atomRefs2='a5 a6' id='a5_a6' order='A'/>"+
+		    "<bond atomRefs2='a1 a6' id='a1_a6' order='A'/>"+
 		    "<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
 		    "<bond atomRefs2='a3 a3_h2' id='a3_a3_h2' order='1'/>"+
 		    "<bond atomRefs2='a4 a4_h2' id='a4_a4_h2' order='1'/>"+
@@ -283,17 +283,17 @@ public class SMILESToolTest extends AbstractToolTest {
 		    "<atom id='a10_h2' elementType='H'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
-		    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
-		    "<bond atomRefs2='a2 a3' id='a2_a3' order='1'/>"+
-		    "<bond atomRefs2='a3 a4' id='a3_a4' order='1'/>"+
-		    "<bond atomRefs2='a4 a5' id='a4_a5' order='1'/>"+
-		    "<bond atomRefs2='a5 a6' id='a5_a6' order='1'/>"+
-		    "<bond atomRefs2='a1 a6' id='a1_a6' order='1'/>"+
-		    "<bond atomRefs2='a6 a7' id='a6_a7' order='1'/>"+
-		    "<bond atomRefs2='a7 a8' id='a7_a8' order='1'/>"+
-		    "<bond atomRefs2='a8 a9' id='a8_a9' order='1'/>"+
-		    "<bond atomRefs2='a9 a10' id='a9_a10' order='1'/>"+
-		    "<bond atomRefs2='a5 a10' id='a5_a10' order='1'/>"+
+		    "<bond atomRefs2='a1 a2' id='a1_a2' order='A'/>"+
+		    "<bond atomRefs2='a2 a3' id='a2_a3' order='A'/>"+
+		    "<bond atomRefs2='a3 a4' id='a3_a4' order='A'/>"+
+		    "<bond atomRefs2='a4 a5' id='a4_a5' order='A'/>"+
+		    "<bond atomRefs2='a5 a6' id='a5_a6' order='A'/>"+
+		    "<bond atomRefs2='a1 a6' id='a1_a6' order='A'/>"+
+		    "<bond atomRefs2='a6 a7' id='a6_a7' order='A'/>"+
+		    "<bond atomRefs2='a7 a8' id='a7_a8' order='A'/>"+
+		    "<bond atomRefs2='a8 a9' id='a8_a9' order='A'/>"+
+		    "<bond atomRefs2='a9 a10' id='a9_a10' order='A'/>"+
+		    "<bond atomRefs2='a5 a10' id='a5_a10' order='A'/>"+
 		    "<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
 		    "<bond atomRefs2='a3 a3_h2' id='a3_a3_h2' order='1'/>"+
 		    "<bond atomRefs2='a4 a4_h2' id='a4_a4_h2' order='1'/>"+

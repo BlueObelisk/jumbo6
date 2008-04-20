@@ -53,6 +53,9 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class CMLFormula extends AbstractFormula {
 
+	public final static String SMILES = "SMILES";
+	public final static String SMILES1 = "cml:smiles";
+	
 	/** type of hydrogen counting
 	 * @author pm286
 	 */
@@ -463,7 +466,7 @@ public class CMLFormula extends AbstractFormula {
 		// concise from inline
 		String inline2Concise = null;
     	if (inline != null) {
-    		if ("SMILES".equals(convention)) {
+    		if (SMILES.equals(convention) || SMILES1.equals(convention)) {
     			inline2Concise = getConciseFromSMILES(inline);
     		} else {
     			inline2Concise = createConcise(inline);
@@ -799,7 +802,11 @@ public class CMLFormula extends AbstractFormula {
 	// shouldn't this be a constructor instead?
 	public static CMLFormula createFormula(String s, Type convention) {
 		CMLFormula docFormula = new CMLFormula();
-		docFormula.createFromString(s, convention);
+		if (s != null && !s.equals(S_EMPTY)) {
+			docFormula.createFromString(s, convention);
+		} else {
+			docFormula = null;
+		}
 		return docFormula;
 	}
 
@@ -1597,6 +1604,9 @@ public class CMLFormula extends AbstractFormula {
 	 * @return formula
 	 */
 	public CMLFormula createAggregatedFormula(CMLFormula form) {
+		if (form == null) {
+			throw new CMLRuntimeException("Null formula in createAggregatedFormula");
+		}
 		CMLFormula newFormula = new CMLFormula();
 		newFormula.aggregate(this);
 		form = form.getAggregateFormula();

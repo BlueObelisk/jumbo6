@@ -45,7 +45,7 @@ public class AtomToolTest extends MoleculeAtomBondTest {
             molecule.addBond(bond);
         }
         AtomTool atomTool = AtomTool.getOrCreateTool(atom);
-        atomTool.addCalculatedCoordinatesForHydrogens(HydrogenControl.USE_HYDROGEN_COUNT);
+        atomTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, 10.0);
     }
 
 	/**

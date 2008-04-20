@@ -202,4 +202,5 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
         String s = sw.toString();
         Assert.assertEquals("HTML output ", expected, s);
     }
+
 }

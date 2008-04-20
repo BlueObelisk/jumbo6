@@ -2,16 +2,12 @@ package org.xmlcml.cml.graphics;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 
-import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -24,7 +20,7 @@ import org.xmlcml.euclid.Transform2;
 public /*abstract*/ class GraphicsElement extends Element implements SVGConstants {
 
 	protected Transform2 cumulativeTransform = new Transform2();
-	protected StyleBundle styleBundle;
+//	protected StyleBundle styleBundle;
 		
 	/** constructor.
 	 * 
@@ -33,7 +29,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 */
 	public GraphicsElement(String name, String namespace) {
 		super(name, namespace);
-		styleBundle = new StyleBundle(StyleBundle.DEFAULT_STYLE_BUNDLE);
+		init();
 	}
 	
     /**
@@ -47,7 +43,11 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
     }
     
     protected void init() {
-    	
+    	setDefaultStyle();
+    }
+    
+    public void setDefaultStyle() {
+		setOpacity(1.0);
     }
     
     /**
@@ -135,8 +135,8 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
         return namespace;
     }
 
-    public void applyStyles() {
-    	this.addAttribute(new Attribute("style", getStyleBundle().toString()));
+    public void applyStyles(StyleBundle styleBundle) {
+    	this.addAttribute(new Attribute("style", styleBundle.toString()));
     }
     
     public void setSvgClass(String svgClass) {
@@ -222,7 +222,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 */
 	public double getOpacity() {
 		Double opacity = (Double) getSubStyle("opacity");
-		return (opacity == null) ? 1.0 : opacity.doubleValue();
+		return (opacity == null) ? Double.NaN : opacity.doubleValue();
 	}
 
 	/**
@@ -237,7 +237,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	 */
 	public double getStrokeWidth() {
 		Double strokeWidth = (Double) getSubStyle("stroke-width");
-		return strokeWidth.doubleValue();
+		return (strokeWidth == null) ? Double.NaN : strokeWidth.doubleValue();
 	}
 
 	/**
@@ -249,11 +249,11 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	}
 
 	/**
-	 * @return the font-size (default if not present or error)
+	 * @return the font-size 
 	 */
 	public double getFontSize() {
 		Double fontSize = (Double) getSubStyle("font-size");
-		return fontSize.doubleValue();
+		return (fontSize == null) ? Double.NaN : fontSize.doubleValue();
 	}
 
 	/**
@@ -295,7 +295,6 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 		text.setFill("red");
 		text.setStrokeWidth(1.5);
 		text.setFontSize(20);
-//		text.setFontStyle("italic");
 		text.setFontWeight("bold");
 		g.appendChild(text);
 		CMLUtil.debug(svg, fos, 2);
@@ -326,27 +325,28 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 	}
 
 	private Object getSubStyle(String s) {
-		getStyleBundle();
-		return styleBundle.getSubStyle(s);
+		StyleBundle styleBundle = getStyleBundle();
+		return (styleBundle == null) ? null : styleBundle.getSubStyle(s);
 	}
 
-	private StyleBundle getStyleBundle() {
-		if (styleBundle == null) {
-			styleBundle = new StyleBundle(this.getAttributeValue("style"));
+	public StyleBundle getStyleBundle() {
+		StyleBundle styleBundle = null;
+		String style = this.getAttributeValue("style");
+		if (style != null) {
+			styleBundle = new StyleBundle(style);
 		}
 		return styleBundle;
 	}
 	
 	private void setSubStyle(String ss, Object object) {
-		getStyleBundle();
+		StyleBundle styleBundle = getStyleBundle();
+		if (styleBundle == null) {
+			styleBundle = new StyleBundle();
+		}
 		styleBundle.setSubStyle(ss, object);
-		applyStyles();
+		applyStyles(styleBundle);
 	}
 
-	public void setStyleBundle(StyleBundle styleBundle) {
-		this.styleBundle = styleBundle;
-	}
-	
 	public void debug(String msg) {
 		CMLUtil.debug(this, msg);
 	}

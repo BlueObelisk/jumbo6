@@ -161,6 +161,7 @@ public class InlineMolecule implements CMLConstants {
         cmlMolecule.debug("INLINE");
         rootAtom.debug();
     }
+
 }
 class InlineAtom implements CMLConstants {
     
@@ -340,6 +341,7 @@ class InlineAtom implements CMLConstants {
             }
         }
     }
+
 }
 
 class InlineBond implements CMLConstants {
@@ -484,6 +486,7 @@ class InlineBond implements CMLConstants {
     public String toString() {
         return s;
     }
+
 }
 
 class Qualifier {

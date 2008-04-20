@@ -530,5 +530,6 @@ public interface CMLConstants extends EuclidConstants {
      * dictionaries are added.
      */
     int NUNIT_TYPE_DICT = 1;
+//	public final String value;
 
 }

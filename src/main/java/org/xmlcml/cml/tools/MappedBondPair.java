@@ -381,4 +381,5 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
         }
         return s;
     }
+
 }

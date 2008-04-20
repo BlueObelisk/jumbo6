@@ -23,6 +23,7 @@ public class SVGEllipse extends SVGElement {
 	 */
 	public SVGEllipse() {
 		super(TAG);
+		init();
 	}
 	
 	/** constructor
@@ -37,6 +38,15 @@ public class SVGEllipse extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+	public static void setDefaultStyle(SVGEllipse ellipse) {
+		ellipse.setStroke("black");
+		ellipse.setStrokeWidth(0.5);
+		ellipse.setFill("#aaffff");
+	}
     /**
      * copy node .
      *
