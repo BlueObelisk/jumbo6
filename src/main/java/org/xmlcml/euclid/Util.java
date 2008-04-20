@@ -19,6 +19,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -2549,5 +2551,31 @@ public class Util implements EuclidConstants {
 			trim *= 10;
 		}
 		return ((int)(trim*dd))/(double)trim;
+	}
+	
+	public static void sortByEmbeddedInteger(List<?> list) {
+		StringIntegerComparator fic = new StringIntegerComparator();
+		Collections.sort(list, fic);
+	}
+}
+class StringIntegerComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		Integer i1 = strip(o1.toString());
+		Integer i2 = strip(o2.toString());
+		return i1.compareTo(i2);
+	}
+	private static Integer strip(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch >= '0' && ch <= '9') {
+				sb.append(ch);
+			}
+		}
+		String ss = sb.toString();
+		if (ss.length() == 0) {
+			ss = "0";
+		}
+		return new Integer(ss);
 	}
 }

@@ -554,13 +554,23 @@ public class RealArray extends ArrayBase {
     }
     /** get element by index.
      * 
-     * @param elem
-     *            the index
+     * @param elem the index
      * @exception ArrayIndexOutOfBoundsException
      *                elem >= size of <TT>this</TT>
      * @return element value
      */
     public double elementAt(int elem) throws ArrayIndexOutOfBoundsException {
+        return array[elem];
+    }
+    
+    /** get element by index.
+     * 
+     * @param elem the index
+     * @exception ArrayIndexOutOfBoundsException
+     *                elem >= size of <TT>this</TT>
+     * @return element value
+     */
+    public double get(int elem) throws ArrayIndexOutOfBoundsException {
         return array[elem];
     }
     /**
@@ -1333,6 +1343,49 @@ public class RealArray extends ArrayBase {
         System.arraycopy(f, 0, temp, 0, low);
         System.arraycopy(f, hi + 1, temp, low, f.length - hi - 1);
         return temp;
+    }
+    
+    /** if RA is an autocorrelation array find first maximum after origin.
+     * rather hairy so not generally recommended
+     * runs through array till value below cutoff
+     * then runs till value above cutoff
+     * then aggregates values until drops below cutoff
+     * @param cutoff
+     * @return the maximum element (may be non-integral)
+     */
+    public double findFirstLocalMaximumafter(int start, double cutoff) {
+    	double index = Double.NaN;
+    	boolean hitmin = false;
+    	boolean hitmax = false;
+    	double sigyx = 0.0;
+    	double sigy = 0.0;
+    	for (int i = start; i < nelem; i++) {
+    		double d = array[i];  
+    		if (!hitmin && !hitmax) {
+    			if (d < cutoff) {
+    				hitmin = true;
+    				System.out.println("startMIN "+i+"/"+d);
+    			}
+    		} else if (hitmin && !hitmax) {
+    			if (d > cutoff) {
+    				hitmax = true;
+    				hitmin = false;
+    				System.out.println("startMAX "+i+"/"+d);
+    			}
+    		} else if (hitmax) {
+    			if (d < cutoff) {
+    				System.out.println("endMAX "+i+"/"+d);
+    				hitmin = true;
+    				break;
+    			}
+    			sigyx += d*i;
+    			sigy += d;
+    		}
+    	}
+    	if (hitmin && hitmax) {
+    		index = sigyx / sigy;
+    	}
+    	return index;
     }
     /**
      * copy a double[] into a new one

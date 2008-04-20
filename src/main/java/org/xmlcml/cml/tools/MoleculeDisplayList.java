@@ -25,7 +25,7 @@ import org.xmlcml.cml.graphics.SVGSVG;
 public class MoleculeDisplayList implements CMLDrawable {
 	
 	private String outfile;
-	private AbstractTool abstractTool;
+	private AbstractSVGTool abstractSVGTool;
 	private MoleculeDisplay moleculeDisplay;
 	private SVGElement g;
 	private SVGSVG svg;
@@ -58,7 +58,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	
 	void setAndProcess(MoleculeTool moleculeTool) {
 		if (moleculeTool != null) {
-			this.abstractTool = moleculeTool;
+			this.abstractSVGTool = moleculeTool;
 			SelectionTool selectionTool = moleculeTool.getOrCreateSelectionTool();
 			CMLMolecule molecule = moleculeTool.getMolecule();
 			
@@ -72,15 +72,11 @@ public class MoleculeDisplayList implements CMLDrawable {
 			}
 			if (moleculeDisplay != null) {
 				g.detach();
-			    try {
-			    	System.out.println("REDRAW... MOL");
-					g = moleculeTool.createGraphicsElement(this);
-					g.detach();
-					svg.appendChild(g);
+		    	System.out.println("REDRAW... MOL");
+				g = moleculeTool.createGraphicsElement(this);
+				g.detach();
+				svg.appendChild(g);
 //					CMLUtil.debug(svg);
-				} catch (IOException e) {
-					System.err.println("Bad io: "+e);
-				}
 				svg.clearCumulativeTransformRecursively();
 				svg.setCumulativeTransformRecursively();
 			}
@@ -97,7 +93,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 
 	void setAndProcess(ReactionTool reactionTool) {
 		if (reactionTool != null) {
-			this.abstractTool = reactionTool;
+			this.abstractSVGTool = reactionTool;
 			CMLReaction reaction = reactionTool.getReaction();
 			List<CMLMolecule> molecules = reaction.getMolecules(Component.ANY);
 			for (CMLMolecule molecule : molecules) {
@@ -118,7 +114,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 * @throws IOException
 	 */
 	public void createOrDisplayGraphics() throws IOException {
-	    g = abstractTool.createGraphicsElement(this);
+	    g = abstractSVGTool.createGraphicsElement(this);
 //	    CMLUtil.debug(g, "CREATEORDISPLAYGRAPHICS");
 	}
 	
@@ -137,6 +133,11 @@ public class MoleculeDisplayList implements CMLDrawable {
 		if (outfile != null) {
 			write();
 		}
+	}
+	
+	public void clear() {
+		g = null;
+		svg = null;
 	}
 	
 	/** write to svgFile
@@ -181,14 +182,14 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 * @return the abstractTool (at present MoleculeTool or ReactionTool)
 	 */
 	public AbstractTool getAbstractTool() {
-		return abstractTool;
+		return abstractSVGTool;
 	}
 
 	/**
 	 * @param abstractTool the abstractTool to set
 	 */
-	public void setAbstractTool(AbstractTool abstractTool) {
-		this.abstractTool = abstractTool;
+	public void setAbstractTool(AbstractSVGTool abstractSVGTool) {
+		this.abstractSVGTool = abstractSVGTool;
 	}
 
 	/**

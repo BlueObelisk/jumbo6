@@ -229,4 +229,5 @@ public class InChIToStructure implements CMLConstants {
     public long[][] getWarningFlags() {
     	return(output.getWarningFlags());
     }
+
 }

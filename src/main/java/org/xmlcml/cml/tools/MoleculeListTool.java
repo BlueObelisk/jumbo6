@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import nu.xom.Attribute;
 
-import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -18,7 +17,7 @@ import org.xmlcml.cml.graphics.SVGG;
  * @author pmr
  *
  */
-public class MoleculeListTool extends AbstractTool {
+public class MoleculeListTool extends AbstractSVGTool {
 
 	Logger logger = Logger.getLogger(MoleculeListTool.class.getName());
 
@@ -46,7 +45,6 @@ public class MoleculeListTool extends AbstractTool {
 		return moleculeList;
 	}
 	
-	
 	/** gets MoleculeListTool associated with molecule.
 	 * if null creates one and sets it in molecule
 	 * @param molecule
@@ -62,7 +60,14 @@ public class MoleculeListTool extends AbstractTool {
 		return moleculeListTool;
 	}
 
-
+	/**
+	 * 
+	 * @param moleculeList
+	 * @return
+	 */
+	public static AbstractSVGTool getOrCreateSVGTool(CMLMoleculeList moleculeList) {
+		return (AbstractSVGTool) MoleculeListTool.getOrCreateTool(moleculeList);
+	}
 	
     /** returns a "g" element
      * will require to be added to an svg element
@@ -70,18 +75,7 @@ public class MoleculeListTool extends AbstractTool {
 	 * @throws IOException
      * @return null if problem
      */
-    public SVGElement createGraphicsElement() throws IOException {
-    	SVGElement svg = createGraphicsElement(null);
-    	return svg;
-    }
-	
-    /** returns a "g" element
-     * will require to be added to an svg element
-     * @param drawable
-	 * @throws IOException
-     * @return null if problem
-     */
-    public SVGElement createGraphicsElement(CMLDrawable drawable) throws IOException {
+    public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	SVGG g = new SVGG();
     	int i = 0;
     	for (CMLMolecule molecule : moleculeList.getMoleculeElements()) {

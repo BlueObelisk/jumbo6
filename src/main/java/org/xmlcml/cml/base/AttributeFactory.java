@@ -229,4 +229,8 @@ public class AttributeFactory implements CMLConstants {
 		this.schemaManager = schemaManager;
 	}
 
+	public String getValue() {
+		return null;
+	}
+
 }

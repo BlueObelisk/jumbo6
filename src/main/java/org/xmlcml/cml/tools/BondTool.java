@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import nu.xom.Attribute;
+
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
@@ -23,14 +25,13 @@ import org.xmlcml.euclid.Real2;
  * @author pmr
  * 
  */
-public class BondTool extends AbstractTool {
+public class BondTool extends AbstractSVGTool {
 
     private CMLBond bond;
     private CMLMolecule molecule;
     Logger logger = Logger.getLogger(BondTool.class.getName());
     private BondDisplay bondDisplay;
     private MoleculeTool moleculeTool;
-	private SVGG g;
 	private double width = 1.0;
 	private double widthFactor;
 
@@ -60,6 +61,15 @@ public class BondTool extends AbstractTool {
 			bond.setTool(bondTool);
 		}
 		return bondTool;
+	}
+
+	/**
+	 * 
+	 * @param reaction
+	 * @return
+	 */
+	public static AbstractSVGTool getOrCreateSVGTool(CMLBond bond) {
+		return (AbstractSVGTool) BondTool.getOrCreateTool(bond);
 	}
 
     /** create a table to lookup bonds by atom Ids.
@@ -121,6 +131,10 @@ public class BondTool extends AbstractTool {
 	    	 }
 			if (order == null || order.equals(CMLBond.SINGLE)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
+			} else if (order.equals(CMLBond.AROMATIC)) {
+				SVGLine line = createBond("black", bondWidth, xy0, xy1);
+				line.addDashedStyle(bondWidth);
+				g.appendChild(line);
 			} else if (order.equals(CMLBond.DOUBLE)) {
 				g.appendChild(createBond("black", 2.55*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 0.85*bondWidth, xy0, xy1));
@@ -132,7 +146,7 @@ public class BondTool extends AbstractTool {
     	}
 		return g;
     }
-    
+
     private SVGLine createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
     	SVGLine line = new SVGLine(xy0, xy1);
     	line.setStroke(stroke);
@@ -184,13 +198,6 @@ public class BondTool extends AbstractTool {
 		this.moleculeTool = moleculeTool;
 	}
 	
-	/**
-	 * @return the g
-	 */
-	public SVGElement getG() {
-		return g;
-	}
-
 	/**
 	 * @return the width
 	 */

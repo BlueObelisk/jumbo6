@@ -1568,6 +1568,7 @@ public class ValencyTool extends AbstractTool {
 			MoleculeTool theMolTool = MoleculeTool.getOrCreateTool(theMol);
 			theMolTool.copyAtomAndBondAttributesById(mol, true);
 		}
+
 	}
 
 }

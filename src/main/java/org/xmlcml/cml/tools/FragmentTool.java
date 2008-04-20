@@ -475,6 +475,7 @@ class CountExpander implements CMLConstants {
     	// countExpression might evaluate to zero
 		fragment.removeAttribute(CountExpressionAttribute.NAME);
     }
+
 }
 
 class BasicProcessor implements CMLConstants {
@@ -1000,6 +1001,7 @@ class IntermediateProcessor implements CMLConstants {
 //		    torsion.debug("MINMAX");
 		}
 	}
+
 }
 
 class ExplicitProcessor implements CMLConstants {

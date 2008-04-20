@@ -22,6 +22,9 @@ public class StyleBundle implements CMLConstants {
 	private Double strokeWidth;
 	private Double opacity;
 
+	StyleBundle() {
+	}
+	
 	public StyleBundle(String style) {
 		processStyle(style);
 	}
@@ -59,13 +62,18 @@ public class StyleBundle implements CMLConstants {
 	}
 	
 	public StyleBundle(StyleBundle style) {
-		this.fill = style.fill;
-		this.stroke = style.stroke;
-		this.strokeWidth = style.strokeWidth;
-		this.fontFamily = style.fontFamily;
-		this.fontSize = style.fontSize;
-		this.fontWeight = style.fontWeight;
-		this.opacity = style.opacity;
+		this.copy(style);
+	}
+	public void copy(StyleBundle style) {
+		if (style != null) {
+			this.fill = style.fill;
+			this.stroke = style.stroke;
+			this.strokeWidth = style.strokeWidth;
+			this.fontFamily = style.fontFamily;
+			this.fontSize = style.fontSize;
+			this.fontWeight = style.fontWeight;
+			this.opacity = style.opacity;
+		}
 	}
 	
 	private void processStyle(String style) {
@@ -94,7 +102,9 @@ public class StyleBundle implements CMLConstants {
 					throw new CMLRuntimeException("unsupported style: "+aa[0]);
 				}
 			}
-		}
+		} else {
+//			copy(DEFAULT_STYLE_BUNDLE);
+ 		}
 	}
 	
 	public void setSubStyle(String subStyle, Object object) {

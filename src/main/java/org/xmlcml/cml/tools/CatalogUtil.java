@@ -86,5 +86,4 @@ public class CatalogUtil implements CMLConstants {
 		}
 		return catalogUrl;
 	}
-
 }

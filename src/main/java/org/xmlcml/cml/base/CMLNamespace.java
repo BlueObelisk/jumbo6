@@ -54,7 +54,7 @@ public class CMLNamespace implements CMLConstants {
         return prefix;
     }
 
-    /**
+	/**
      * guess CML namespace. if correct namespace, returns it. if obsolete
      * returns correct namespace.
      * 

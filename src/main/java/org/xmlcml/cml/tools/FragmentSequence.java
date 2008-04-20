@@ -54,6 +54,8 @@ import org.xmlcml.euclid.Util;
  */
 class FragmentSequence implements CMLConstants {
     List<FragmentAndBond> fragmentAndBondList = null; 
+    
+    private String value;
 
     /** process concise string.
      * @param formula string
@@ -199,6 +201,7 @@ class FragmentSequence implements CMLConstants {
        }
        return sb.toString();
     }
+
 };
 
 class FragmentAndBond implements CMLConstants {
@@ -269,6 +272,7 @@ class FragmentAndBond implements CMLConstants {
         }
        return sb.toString();
     }
+
 };
 
 class Fragment implements CMLConstants {
@@ -790,7 +794,7 @@ class JoinBond implements CMLConstants {
         return sb.toString();
     }
 
-    /** translate CMLBond order into symbols.
+	/** translate CMLBond order into symbols.
      * 
      * @param orderS CMLBond.SINGLE, etc.
      * @return S_MINUS, S_EQUALS, etc.
@@ -928,7 +932,7 @@ class Branch implements CMLConstants {
         sb.append(RBRANCH);
         return sb.toString();
     }
-    
+
 };
 
 class CountExpression implements CMLConstants {
@@ -1002,7 +1006,7 @@ class CountExpression implements CMLConstants {
         sb.append(countExpressionS);
         return sb.toString();
     }
-    
+
 };
 
 class Param implements CMLConstants {
@@ -1021,4 +1025,5 @@ class Param implements CMLConstants {
         name = pp[0];
         value = pp[1];
     }
+
 }

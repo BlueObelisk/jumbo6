@@ -70,4 +70,5 @@ public class CMLRuntimeException extends RuntimeException implements CMLConstant
 	public CMLRuntimeException(String message, Exception e) {
 		super(message, e);
 	}
+
 }

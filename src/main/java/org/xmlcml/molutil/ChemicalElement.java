@@ -128,6 +128,9 @@ public class ChemicalElement {
         /** element symbol*/
         I("I", 53),
         
+        /** element symbol*/
+        R("R", 119),
+        
         ;
         /** element symbol*/
         public String value;

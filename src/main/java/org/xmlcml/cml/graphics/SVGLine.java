@@ -10,6 +10,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.euclid.Line2;
 import org.xmlcml.euclid.Real2;
 
 /** draws a straight line.
@@ -25,6 +26,7 @@ public class SVGLine extends SVGElement {
 	 */
 	public SVGLine() {
 		super(TAG);
+		init();
 	}
 	
 	/** constructor
@@ -39,6 +41,14 @@ public class SVGLine extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+	public static void setDefaultStyle(SVGLine line) {
+		line.setStroke("black");
+		line.setStrokeWidth(1.0);
+	}
     /**
      * copy node .
      *
@@ -57,6 +67,15 @@ public class SVGLine extends SVGElement {
 		this();
 		setX12(x1, 1);
 		setX12(x2, 2);
+	}
+	
+	/** constructor.
+	 * 
+	 * @param x1
+	 * @param x2
+	 */
+	public SVGLine(Line2 line) {
+		this(line.getXY(0), line.getXY(1));
 	}
 	/**
 	 * @param x12 coordinates of the atom

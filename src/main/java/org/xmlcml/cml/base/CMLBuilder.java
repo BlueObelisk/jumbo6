@@ -142,7 +142,8 @@ public class CMLBuilder extends Builder implements CMLConstants {
     	Document doc = super.build(reader);
     	return ensureCML(doc);
     }
-    
+
+
     // this would trap the problem silently. Is it a good idea?
     
 //    public Document build(Reader reader) throws ParsingException, IOException{

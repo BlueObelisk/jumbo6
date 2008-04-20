@@ -65,4 +65,9 @@ public abstract class AbstractGenerator implements CMLConstants {
 	public void setSchema(Element schema) {
 		this.schema = schema;
 	}
+
+	public String getValue() {
+		return null;
+	}
+
 }

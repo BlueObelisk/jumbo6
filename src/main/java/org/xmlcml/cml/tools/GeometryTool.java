@@ -67,23 +67,23 @@ public class GeometryTool extends AbstractTool {
     /**
      * Add calculated 2D coordinates for hydrogen atoms.
      * @param control
-     * @throws CMLException
      */
     @Deprecated
-    public void addCalculated2DCoordinatesForHydrogens(HydrogenControl control) throws CMLException {
+    public void addCalculated2DCoordinatesForHydrogens(HydrogenControl control) {
          CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
          if (molecules.size() > 0) {
              for (CMLMolecule molecule : molecules) {
                  new GeometryTool(molecule).addCalculated2DCoordinatesForHydrogens(control);
              }
          } else {
-             if (molecule.hasCoordinates(CoordinateType.TWOD)) {
-                 double bondLength = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
+        	 boolean omitHydrogens = true;
+             if (molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogens)) {
+                 double bondLength = moleculeTool.getAverageBondLength(CoordinateType.TWOD, omitHydrogens) * 0.75;
                  if (!Double.isNaN(bondLength)) {
                      for (CMLAtom atom : molecule.getAtoms()) {
                          if (!ChemicalElement.AS.H.equals(atom.getElementType())) {
                              AtomTool atomTool = AtomTool.getOrCreateTool(atom);
-                             atomTool.addCalculatedCoordinatesForHydrogens(control);
+                             atomTool.calculateAndAddHydrogenCoordinates(bondLength );
                          }
                      }
                  }
@@ -97,7 +97,7 @@ public class GeometryTool extends AbstractTool {
      * @param control
      * @throws CMLException
      */
-    public void addCalculated3DCoordinatesForHydrogens(HydrogenControl control) throws CMLException {
+    public void addCalculated3DCoordinatesForHydrogens(HydrogenControl control) {
         // TODO
      CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
      if (molecules.size() > 0) {
@@ -113,19 +113,16 @@ public class GeometryTool extends AbstractTool {
      * 
      * We shall add a better selection soon.
      * 
-     * @param type
-     *            2D or 3D
+     * @param type 2D or 3D
      * @param control
-     * @throws CMLException
      */
-    public void addCalculatedCoordinatesForHydrogens(CoordinateType type, HydrogenControl control)
-            throws CMLException {
+    public void addCalculatedCoordinatesForHydrogens(CoordinateType type, HydrogenControl control) {
         if (type.equals(CoordinateType.CARTESIAN)) {
             addCalculated3DCoordinatesForHydrogens(control);
         } else if (type.equals(CoordinateType.TWOD)) {
             addCalculated2DCoordinatesForHydrogens(control);
         } else {
-            throw new CMLException(
+            throw new CMLRuntimeException(
                     "Add calculated coordinates for hydrogens: control not recognised: " + type); //$NON-NLS-1$
         }
     }
@@ -195,7 +192,22 @@ public class GeometryTool extends AbstractTool {
             throw new CMLException(S_EMPTY + e);
         } //$NON-NLS-1$
     }
-    /**
+    void calculateStartTriangle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
+	        throws CMLException {
+	    if (calculateTriangle(at0, at1, at2)) {
+	        return;
+	    }
+	    if (calculateTriangle(at1, at2, at0)) {
+	        return;
+	    }
+	    if (calculateTriangle(at2, at0, at1)) {
+	        return;
+	    }
+	    throw new CMLException(
+	            "Cannot find triangle (2 bonds and 1 angle) for: " + //$NON-NLS-1$
+	                    at0.getId() + ", " + at1.getId() + ", " + at2.getId()); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	/**
      * calculate Cartesian coords from lengths angles and torsions.
      * 
      * assumes that molecule contains exactly the correct number and order of
@@ -243,21 +255,6 @@ public class GeometryTool extends AbstractTool {
         if (tVector.size() > 0) {
             throw new CMLException("Some torsions not resolved"); //$NON-NLS-1$
         }
-    }
-    void calculateStartTriangle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
-            throws CMLException {
-        if (calculateTriangle(at0, at1, at2)) {
-            return;
-        }
-        if (calculateTriangle(at1, at2, at0)) {
-            return;
-        }
-        if (calculateTriangle(at2, at0, at1)) {
-            return;
-        }
-        throw new CMLException(
-                "Cannot find triangle (2 bonds and 1 angle) for: " + //$NON-NLS-1$
-                        at0.getId() + ", " + at1.getId() + ", " + at2.getId()); //$NON-NLS-1$ //$NON-NLS-2$
     }
     boolean calculateTriangle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
             throws CMLException {

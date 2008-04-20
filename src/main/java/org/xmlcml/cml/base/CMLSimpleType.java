@@ -11,5 +11,4 @@ package org.xmlcml.cml.base;
  */
 public abstract class CMLSimpleType implements CMLConstants {
 
-
 }

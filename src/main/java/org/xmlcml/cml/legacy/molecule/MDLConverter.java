@@ -2038,4 +2038,5 @@ class FileFormat extends FileFilter implements CMLConstants {
 	public String getExtension() {
 		return extension;
 	}
+
 }

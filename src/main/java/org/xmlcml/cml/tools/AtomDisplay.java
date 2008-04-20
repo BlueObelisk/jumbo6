@@ -210,6 +210,7 @@ public class AtomDisplay extends AbstractDisplay {
 		boolean omit = false;
 		if (this.isOmitHydrogens()) {
 			if (AS.H.equals(atom.getElementType())) {
+				System.out.println("OMIT H");
 				omit = true;
 			}
 		}

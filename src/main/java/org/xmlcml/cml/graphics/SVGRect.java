@@ -25,6 +25,7 @@ public class SVGRect extends SVGElement {
 	 */
 	public SVGRect() {
 		super(TAG);
+		init();
 	}
 	
 	/** constructor
@@ -39,6 +40,15 @@ public class SVGRect extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+	public static void setDefaultStyle(SVGRect rect) {
+		rect.setStroke("black");
+		rect.setStrokeWidth(1.0);
+		rect.setFill("none");
+	}
     /**
      * copy node .
      *
@@ -78,8 +88,8 @@ public class SVGRect extends SVGElement {
 	}
 	/** constructor.
 	 * 
-	 * @param x1
-	 * @param x2
+	 * @param x1 "lower left"
+	 * @param x2 "upper right"
 	 */
 	public SVGRect(Real2 x1, Real2 x2) {
 		this(x1.getX(), x1.getY(), x2.getX() - x1.getX(), x2.getY() - x1.getY());
@@ -127,4 +137,8 @@ public class SVGRect extends SVGElement {
 	public String getTag() {
 		return TAG;
 	}
+	
+//	public String toString() {
+//		s 
+//	}
 }

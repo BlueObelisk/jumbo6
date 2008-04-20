@@ -190,4 +190,9 @@ public abstract class GenericDictionaryMap extends
 			gd.debug();
 		}
 	}
+
+	public String getValue() {
+		return null;
+	}
+
 }

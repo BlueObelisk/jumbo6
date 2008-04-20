@@ -24,7 +24,16 @@ public class SVGText extends SVGElement {
 	 */
 	public SVGText() {
 		super(TAG);
-		this.setStroke("none");
+		init();
+	}
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+
+	public static void setDefaultStyle(SVGText text) {
+		text.setStroke("none");
+		text.setFontSize(7.654321);
 	}
 	
 	/** constructor
@@ -62,6 +71,7 @@ public class SVGText extends SVGElement {
 		double fontSize = this.getFontSize();
 		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
 		fontSize = (fontSize < 8) ? 8 : fontSize;
+//		System.out.println("FONTSIZE "+fontSize);
 		
 		double x = this.getDouble("x");
 		double y = this.getDouble("y");

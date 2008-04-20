@@ -20,6 +20,7 @@ import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -47,10 +48,14 @@ public class Chain extends AbstractTool {
 
 	private double bondLength;
 
-	private static Transform2 rot60 = new Transform2(new Angle(Math.PI/3.));
+	private static Transform2 ROT60 = new Transform2(new Angle(Math.PI/3.));
+	private static Transform2 ROT300 = new Transform2(new Angle(-Math.PI/3.));
+	private static Transform2 ROT30 = new Transform2(new Angle(Math.PI/6.));
+	private static Transform2 ROT330 = new Transform2(new Angle(Math.PI/6.));
 
-	private static final Transform2 rot90 = new Transform2(new Angle(Math.PI/2.));
-	
+	private static final Transform2 ROT90 = new Transform2(new Angle(Math.PI/2.));
+	private static final Transform2 ROT270 = new Transform2(new Angle(-Math.PI/2.));
+
 	/**
 	 * @return the atomCoordinateMap
 	 */
@@ -226,136 +231,274 @@ public class Chain extends AbstractTool {
 			atomCoordinateMap.put(startAtom, startAtom.getXY2());
 		}
 		pathList = this.getPathsToTerminalAtoms(startAtom);
+		// sort on path lengths
 		Collections.sort(pathList);
+		// longest paths first
 		Collections.reverse(pathList);
+		// longest path
 		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
-		nextAtom = (path != null && path.size() > 1) ? path.get(1) : null;
-		if (nextAtom == null) {
-//			atom.setXY2(new Real2(0.0, 0.0));
-		} else {
-			if (sprout == null) {
-				atomCoordinateMap.put(nextAtom, new Real2(bondLength, 0.));
-			} else {
-				atomCoordinateMap.put(nextAtom, nextAtom.getXY2());
-			}
-			System.out.println("PATHS "+pathList.size());
-			for (int i = 0; i < pathList.size(); i++) {
-				AtomPath atomPath = pathList.get(i);
-				System.out.println(pathList.get(i));
-				try {
-					calculate2DCoordinates(atomPath, i);
-				} catch (CMLRuntimeException e) {
-					System.err.println("ERROR-CHAIN: "+e);
-				}
-			}
-			for (CMLAtom atom : atomCoordinateMap.keySet()) {
-				Real2 xy2 = atomCoordinateMap.get(atom);
-				if (xy2 == null) {
-					System.err.println("NULL coord: "+atom.getId());
-				}
-				atom.setXY2(xy2);
+		expandPaths(pathList);
+//		expandPathsOld(sprout, pathList, path);
+	}
+
+//	private void expandPathsOld(Sprout sprout, List<AtomPath> pathList, AtomPath path) {
+//		nextAtom = (path != null && path.size() > 1) ? path.get(1) : null;
+//		if (nextAtom == null) {
+////			atom.setXY2(new Real2(0.0, 0.0));
+//		} else {
+//			if (sprout == null) {
+//				atomCoordinateMap.put(nextAtom, new Real2(bondLength, 0.));
+//			} else {
+//				atomCoordinateMap.put(nextAtom, nextAtom.getXY2());
+//			}
+//			System.out.println("PATHS "+pathList.size());
+//			for (int i = 0; i < pathList.size(); i++) {
+//				AtomPath atomPath = pathList.get(i);
+//				System.out.println(">"+i+">"+pathList.get(i));
+//				try {
+//					calculate2DCoordinates(atomPath, i);
+//				} catch (CMLRuntimeException e) {
+//					System.err.println("ERROR-CHAIN: "+e);
+//				}
+//			}
+//			for (CMLAtom atom : atomCoordinateMap.keySet()) {
+//				Real2 xy2 = atomCoordinateMap.get(atom);
+//				if (xy2 == null) {
+//					System.err.println("NULL coord: "+atom.getId());
+//				}
+//				atom.setXY2(xy2);
+//			}
+//		}
+//	}
+	
+	private void expandPaths(List<AtomPath> pathList) {
+		AtomPath atomPath0 = pathList.get(0);
+		CMLAtom atom0 = atomPath0.get(0);
+		Real2 xy0 = new Real2(0., 0.);
+		atom0.setXY2(xy0);
+		for (AtomPath atomPath : pathList) {
+			expandPath(atomPath, 1);
+		}
+	}
+	
+	private void expandPath(AtomPath atomPath, int start) {
+		for (int i = start; i < atomPath.size(); i++) {
+			CMLAtom node = atomPath.get(i);
+			Real2 xy = node.getXY2();
+			if (xy == null) {
+				Real2 direction = getDirection(atomPath, i, node);
+				xy = atomPath.get(i-1).getXY2().plus(direction);
+				node.setXY2(xy);
 			}
 		}
 	}
 	
-	private void calculate2DCoordinates(AtomPath atomPath, int serial) {
-		ensureAtomCoordinateMap();
-		if (atomPath.size() < 2) {
-			throw new CMLRuntimeException("Path must be at least 2 atoms");
-		}
-		if (atomPath.get(0) != startAtom || atomPath.get(1) != nextAtom) {
-			throw new CMLRuntimeException("atomPath does not start with start/nextAtom");
-		}
-		Real2 xy0 = atomCoordinateMap.get(startAtom);
-		Real2 xy1 = atomCoordinateMap.get(nextAtom);
-//		System.out.println(">>>start "+startAtom.getId()+"/"+xy0);
-//		System.out.println(">>>next "+nextAtom.getId()+"/"+xy1);
-		if (xy0 == null || xy1 == null) {
-			throw new CMLRuntimeException("First 2 atoms must have coordinates");
-		}
-		Real2[] vv = new Real2[2];
-		vv[1] = xy1.subtract(xy0);
-		vv[0] = new Real2(vv[1]);
-		vv[0].transformBy(rot60);
-		System.out.println(vv[0]+"/"+vv[1]);
-		int start = -1;
-		CMLAtom previousAtom = nextAtom;
-		Real2 currentXY2 = atomCoordinateMap.get(previousAtom);
-		// go down path
-		for (int i = 2; i < atomPath.size(); i++) {
-			CMLAtom atom = atomPath.get(i);
-			Real2 newXY2 = atomCoordinateMap.get(atom);
-			if (newXY2 != null) {
-				if (start >= 0) {
-					throw new CMLRuntimeException("wrong way down path?");
-				}
-				System.out.println(">SKIP> "+atom.getId());
-				previousAtom = atom;
+	private Real2 getDirection(AtomPath atomPath, int position, CMLAtom node) {
+		Real2 direction = null;
+		CMLAtom parent = (position == 0) ? null : atomPath.get(position-1); 
+		CMLAtom grandParent = (position <= 1) ? null : atomPath.get(position-2); 
+		CMLAtom greatGrandParent = (position <= 2) ? null : atomPath.get(position-3); 
+		List<CMLAtom> ligandList = parent.getLigandAtoms();
+		int freeLigand = -1;
+		int nlig = ligandList.size();
+		for (int i = 0; i < nlig; i++) {
+			CMLAtom ligand = ligandList.get(i);
+			if (ligand.equals(grandParent)) {
 				continue;
 			}
-			// found first null atom
-			if (start < 0) {
-				start = i;
+			freeLigand++;
+			if (ligand.equals(node)) {
+				break;
 			}
-			// are we branching?
-			List<CMLAtom> ligandList = getLigandsInChain(previousAtom);
-			if (ligandList.size() == 0) {
-				throw new CMLRuntimeException("previous atom has no ligands");
-			} else if (ligandList.size() == 1) {
-				// no, flip vector with parity
-				Real2 vvv = vv[(i) % 2];
-				System.out.println("V1 "+vvv);
-				currentXY2 = currentXY2.plus(vvv);
-				atomCoordinateMap.put(atom, currentXY2);
-//				System.out.println(">>"+atom.getElementType()+">> "+atom.getId()+"/"+currentXY2);
-			} else if (ligandList.size() == 2) {
-//				System.out.println(">>BRANCH>> "+atom.getId());
-//				System.out.println("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
-				currentXY2 = atomCoordinateMap.get(previousAtom);
-				CMLAtom prevLig0 = ligandList.get(0);
-				CMLAtom prevLig1 = ligandList.get(1);
-//				System.out.println(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
-				Real2 prevLigXY0 = atomCoordinateMap.get(prevLig0);
-				Real2 prevLigXY1 = atomCoordinateMap.get(prevLig1);
-//				System.out.println("MID "+prevLigXY0+"/"+prevLigXY1);
-				Real2 centroid = prevLigXY0.getMidPoint(prevLigXY1);
-//				System.out.println(centroid);
-				Real2 vect = currentXY2.subtract(centroid);
-//				System.out.println("V2 "+vect);
-				if (vect.getLength() < 0.00001) {
-					vect = prevLigXY0.subtract(centroid);
-					vect.transformBy(rot90);
-				}
-				vect = vect.getUnitVector().multiplyBy(bondLength);
-				int i0 = (i) % 2;
-				int i1 = (i + 1) % 2;
-				vv[i0] = vect;
-				vv[i1] = new Real2(vv[i0]);
-				vv[i1].transformBy(rot60);
-//				System.out.println("V22 "+vect);
-				currentXY2 = currentXY2.plus(vv[i0]);
-				atomCoordinateMap.put(atom, currentXY2);
+		}
+		Real2 parentDirection = null;
+		if (grandParent != null) {
+			parentDirection = parent.getXY2().subtract(grandParent.getXY2());
+		} else {
+			parentDirection = new Real2(bondLength, 0.0);
+		}
+		direction = new Real2(parentDirection);
+		if (nlig == 2) {
+			// may also need to think about CH2 groups
+			Real2 grandDirection = null;
+			if (greatGrandParent != null) {
+				grandDirection = grandParent.getXY2().subtract(greatGrandParent.getXY2());
 			}
-			previousAtom = atom;
+			direction = parent.getXY2().subtract(grandParent.getXY2());
+			if (grandDirection == null) {
+				direction.transformBy(ROT330);
+			} else {
+				Real2 direction1 = new Real2(direction);
+				direction1.transformBy(ROT30);
+				double dot1 = Math.abs(direction1.dotProduct(grandDirection));
+				Real2 direction2 = new Real2(direction);
+				direction2.transformBy(ROT330);
+				double dot2 = Math.abs(direction2.dotProduct(grandDirection));
+				direction = (dot1 > dot2) ? direction1 : direction2;
+			}
+//			direction = parent.getXY2().subtract(grandParent.getXY2());
+			// linear at present - change later when we understand bond orders
+		} else if (nlig == 3) {
+			if (freeLigand == 0) {
+				direction.transformBy(ROT60);
+			} else if (freeLigand == 1) {
+				direction.transformBy(ROT300);
+			}
+		} else if (nlig == 4) {
+			if (freeLigand == 0) {
+				// straight on
+			} else if (freeLigand == 1){
+				direction.transformBy(ROT90);
+			} else if (freeLigand == 2){
+				direction.transformBy(ROT270);
+			}
 		}
-		if (start == -1 && atomPath.size() > 2) {
-			throw new CMLRuntimeException("path full of coordinates");
-		}
+		return direction;
 	}
 	
-	private List<CMLAtom> getLigandsInChain(CMLAtom atom) {
-		List<CMLAtom> chainLigandList = new ArrayList<CMLAtom>(); 
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligand : ligandList) {
-			if (!atomSet.contains(ligand)) {
-				// atom must be in set
-			} else if (atomCoordinateMap.get(ligand) != null) {
-				// ligand needs coordinates
-				chainLigandList.add(ligand);
-			}
-		}
-		return chainLigandList;
-	}
+//	private void calculate2DCoordinates(AtomPath atomPath, int serial) {
+//		ensureAtomCoordinateMap();
+//		if (atomPath.size() < 2) {
+//			throw new CMLRuntimeException("Path must be at least 2 atoms");
+//		}
+//		if (atomPath.get(0) != startAtom || atomPath.get(1) != nextAtom) {
+//			throw new CMLRuntimeException("atomPath does not start with start/nextAtom");
+//		}
+//		Real2 xy0 = atomCoordinateMap.get(startAtom);
+//		Real2 xy1 = atomCoordinateMap.get(nextAtom);
+////		System.out.println(">>>start "+startAtom.getId()+"/"+xy0);
+////		System.out.println(">>>next "+nextAtom.getId()+"/"+xy1);
+//		if (xy0 == null || xy1 == null) {
+//			throw new CMLRuntimeException("First 2 atoms must have coordinates");
+//		}
+//		Real2[] vv = new Real2[2];
+//		vv[1] = xy1.subtract(xy0);
+//		vv[0] = new Real2(vv[1]);
+//		vv[0].transformBy(ROT60);
+//		System.out.println(vv[0]+"/"+vv[1]);
+//		int start = -1;
+//		CMLAtom previousAtom = nextAtom;
+//		Real2 currentXY2 = atomCoordinateMap.get(previousAtom);
+//		// go down path
+//		for (int atomPathi = 2; atomPathi < atomPath.size(); atomPathi++) {
+//			CMLAtom atom = atomPath.get(atomPathi);
+//			Real2 newXY2 = atomCoordinateMap.get(atom);
+//			if (newXY2 != null) {
+//				if (start >= 0) {
+//					throw new CMLRuntimeException("wrong way down path?");
+//				}
+//				System.out.println(">SKIP> "+atom.getId());
+//				previousAtom = atom;
+//				continue;
+//			}
+//			// found first null atom
+//			if (start < 0) {
+//				start = atomPathi;
+//			}
+//			// are we branching?
+//			List<CMLAtom> ligandList = getLigandsInChain(previousAtom);
+//			if (ligandList.size() == 0) {
+//				throw new CMLRuntimeException("previous atom has no ligands");
+//			} else if (ligandList.size() == 1) {
+//				// no, flip vector with parity
+//				Real2 vvv = vv[(atomPathi) % 2];
+//				System.out.println("V1 "+vvv);
+//				currentXY2 = currentXY2.plus(vvv);
+//				atomCoordinateMap.put(atom, currentXY2);
+////				System.out.println(">>"+atom.getElementType()+">> "+atom.getId()+"/"+currentXY2);
+//			} else if (ligandList.size() == 2) {
+//				currentXY2 = process2LigandList(vv, previousAtom, atomPathi, atom, ligandList);
+//			} else if (ligandList.size() == 3) {
+//				System.out.println("BUG 3LigandList not processed");
+//				for (CMLAtom ligand : ligandList) {
+//					System.out.println("LIG "+ligand.getId()+" / "+ligand.getXY2());
+//				}
+//				currentXY2 = process3LigandList(vv, previousAtom, atomPathi, atom, ligandList);
+//			}
+//			previousAtom = atom;
+//		}
+//		if (start == -1 && atomPath.size() > 2) {
+//			throw new CMLRuntimeException("path full of coordinates");
+//		}
+//	}
+
+//	private Real2 process2LigandList(Real2[] vv, CMLAtom previousAtom, int i,
+//			CMLAtom atom, List<CMLAtom> ligandList) {
+//		Real2 currentXY2;
+//		System.out.println(">>BRANCH>> "+atom.getId());
+//		System.out.println("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
+//		currentXY2 = atomCoordinateMap.get(previousAtom);
+//		CMLAtom prevLig0 = ligandList.get(0);
+//		CMLAtom prevLig1 = ligandList.get(1);
+//		System.out.println(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
+//		Real2 prevLigXY0 = atomCoordinateMap.get(prevLig0);
+//		Real2 prevLigXY1 = atomCoordinateMap.get(prevLig1);
+//		System.out.println("MID "+prevLigXY0+"/"+prevLigXY1);
+//		Real2 centroid = prevLigXY0.getMidPoint(prevLigXY1);
+//		System.out.println(centroid);
+//		Real2 vect = currentXY2.subtract(centroid);
+//		System.out.println("V2 "+vect);
+//		if (vect.getLength() < 0.00001) {
+//			vect = prevLigXY0.subtract(centroid);
+//			vect.transformBy(ROT90);
+//		}
+//		vect = vect.getUnitVector().multiplyBy(bondLength);
+//		int i0 = (i) % 2;
+//		int i1 = (i + 1) % 2;
+//		vv[i0] = vect;
+//		vv[i1] = new Real2(vv[i0]);
+//		vv[i1].transformBy(ROT60);
+////				System.out.println("V22 "+vect);
+//		currentXY2 = currentXY2.plus(vv[i0]);
+//		atomCoordinateMap.put(atom, currentXY2);
+//		return currentXY2;
+//	}
+	
+//	private Real2 process3LigandList(Real2[] vv, CMLAtom previousAtom, int i,
+//			CMLAtom atom, List<CMLAtom> ligandList) {
+//		Real2 currentXY2;
+//		System.out.println(">>BRANCH>> "+atom.getId());
+//		System.out.println("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
+//		currentXY2 = atomCoordinateMap.get(previousAtom);
+//		CMLAtom prevLig0 = ligandList.get(0);
+//		CMLAtom prevLig1 = ligandList.get(1);
+//		System.out.println(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
+//		Real2 prevLigXY0 = atomCoordinateMap.get(prevLig0);
+//		Real2 prevLigXY1 = atomCoordinateMap.get(prevLig1);
+//		System.out.println("MID "+prevLigXY0+"/"+prevLigXY1);
+//		Real2 centroid = prevLigXY0.getMidPoint(prevLigXY1);
+//		System.out.println(centroid);
+//		Real2 vect = currentXY2.subtract(centroid);
+//		System.out.println("V2 "+vect);
+//		if (vect.getLength() < 0.00001) {
+//			vect = prevLigXY0.subtract(centroid);
+//			vect.transformBy(ROT90);
+//		}
+//		vect = vect.getUnitVector().multiplyBy(bondLength);
+//		int i0 = (i) % 2;
+//		int i1 = (i + 1) % 2;
+//		vv[i0] = vect;
+//		vv[i1] = new Real2(vv[i0]);
+//		vv[i1].transformBy(ROT30);
+////				System.out.println("V22 "+vect);
+//		currentXY2 = currentXY2.plus(vv[i0]);
+//		atomCoordinateMap.put(atom, currentXY2);
+//		return currentXY2;
+//	}
+	
+//	private List<CMLAtom> getLigandsInChain(CMLAtom atom) {
+//		List<CMLAtom> chainLigandList = new ArrayList<CMLAtom>(); 
+//		List<CMLAtom> ligandList = atom.getLigandAtoms();
+//		for (CMLAtom ligand : ligandList) {
+//			if (!atomSet.contains(ligand)) {
+//				// atom must be in set
+//			} else if (atomCoordinateMap.get(ligand) != null) {
+//				// ligand needs coordinates
+//				chainLigandList.add(ligand);
+//			}
+//		}
+//		return chainLigandList;
+//	}
 	
 	private void applyCoordinates() {
 		for (CMLAtom atom : atomCoordinateMap.keySet()) {
