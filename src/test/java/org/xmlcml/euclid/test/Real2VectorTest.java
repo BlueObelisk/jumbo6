@@ -1,5 +1,7 @@
 package org.xmlcml.euclid.test;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,7 @@ import org.xmlcml.euclid.Axis.Axis2;
 public class Real2VectorTest extends EuclidTestBase {
 
     Real2Vector r0;
-
     Real2Vector r1;
-
     Real2Vector r2;
 
     /**
@@ -689,6 +689,46 @@ public class Real2VectorTest extends EuclidTestBase {
 				5.0, 8.0})
 			), v, EPS);
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public final void testGetXArrayYArray() {
+		Real2Vector r2v = new Real2Vector();
+		r2v.add(new Real2(1., 11.));
+		r2v.add(new Real2(2., 12.));
+		r2v.add(new Real2(3., 13.));
+		r2v.add(new Real2(4., 14.));
+		r2v.add(new Real2(5., 15.));
+		RealArray xx = r2v.getXArray();
+		RealArrayTest.assertEquals("x", new double[]{1., 2., 3., 4., 5.}, xx, 0.00001);
+		RealArray yy = r2v.getYArray();
+		RealArrayTest.assertEquals("y", new double[]{11., 12., 13., 14., 15.}, yy, 0.00001);
+		
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public final void testIsInside() {
+		Real2Vector r2v = new Real2Vector();
+		r2v.add(new Real2(0., 0.));
+		r2v.add(new Real2(0., 10.));
+		r2v.add(new Real2(10., 10.));
+		r2v.add(new Real2(10., 0.));
+		Real2 point = new Real2(5., 3.);
+		// simple box
+		Assert.assertTrue("inside", r2v.encloses(point));
+		// make concave
+		r2v.add(new Real2(5., 5.));
+		Assert.assertFalse("inside", r2v.encloses(point));
+		// avoid point
+		r2v.add(new Real2(6., 0.));
+		Assert.assertTrue("inside", r2v.encloses(point));
+	}
+
 
 
 }

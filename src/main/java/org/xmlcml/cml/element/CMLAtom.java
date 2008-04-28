@@ -597,6 +597,15 @@ public class CMLAtom extends AbstractAtom {
         return ChemicalElement.getChemicalElement(this.getElementType());
     }
 
+    /** convenience method to determine whether atom is of given elementType;
+     * 
+     * @param element
+     * @return true if element of same type as getElementType()
+     */
+    public boolean hasElement(String elementType) {
+    	return elementType != null && elementType.equals(this.getElementType());
+    }
+
     /**
      * gets atomicNumber corresponding to elementType.
      *

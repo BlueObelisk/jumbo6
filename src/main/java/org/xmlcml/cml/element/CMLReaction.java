@@ -90,12 +90,12 @@ public class CMLReaction extends AbstractReaction implements ReactionComponent {
     /**
      * a complete atom map for the reaction. often used as the dictRef value
      */
-    public final static String MAP_REACTION_ATOM_MAP_COMPLETE = "REACTION ATOM MAP COMPLETE";
+    public final static String MAP_REACTION_ATOM_MAP_COMPLETE = "cml:REACTION_ATOM_MAP_COMPLETE";
 
     /**
      * an incomplete atom map for the reaction. often used as the dictRef value
      */
-    public final static String MAP_REACTION_ATOM_MAP_INCOMPLETE = "REACTION ATOM MAP INCOMPLETE";
+    public final static String MAP_REACTION_ATOM_MAP_INCOMPLETE = "cml:REACTION_ATOM_MAP_INCOMPLETE";
 
     /**
      * direction of mapping

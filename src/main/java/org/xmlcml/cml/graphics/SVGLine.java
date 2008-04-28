@@ -65,8 +65,8 @@ public class SVGLine extends SVGElement {
 	 */
 	public SVGLine(Real2 x1, Real2 x2) {
 		this();
-		setX12(x1, 1);
-		setX12(x2, 2);
+		setXY(x1, 0);
+		setXY(x2, 1);
 	}
 	
 	/** constructor.
@@ -78,9 +78,33 @@ public class SVGLine extends SVGElement {
 		this(line.getXY(0), line.getXY(1));
 	}
 	/**
+	 * @param xy coordinates of the atom
+	 * @param serial 0 or 1
+	 */
+	public void setXY(Real2 x12, int serial) {
+		if (x12 == null) {
+			System.err.println("null x2/y2 in line: ");
+		} else {
+			this.addAttribute(new Attribute("x"+(serial+1), ""+x12.getX()));
+			this.addAttribute(new Attribute("y"+(serial+1), ""+x12.getY()));
+		}
+	}
+	
+	public Real2 getXY(int serial) {
+		Real2 xy = null;
+		if (serial == 0) {
+			xy = new Real2(this.getDouble("x1"), this.getDouble("y1"));
+		} else if (serial == 1) {
+			xy = new Real2(this.getDouble("x2"), this.getDouble("y2"));
+		}
+		return xy;
+	}
+	
+	/**
 	 * @param x12 coordinates of the atom
 	 * @param serial 1 or 2
 	 */
+	@Deprecated
 	public void setX12(Real2 x12, int serial) {
 		if (x12 == null) {
 			System.err.println("null x2/y2 in line: ");
@@ -90,6 +114,7 @@ public class SVGLine extends SVGElement {
 		}
 	}
 	
+	@Deprecated //use getXY
 	public Real2 getX12(int serial) {
 		Real2 xy = null;
 		if (serial == 1) {

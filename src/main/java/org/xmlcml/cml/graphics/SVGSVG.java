@@ -2,6 +2,7 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
 
+import nu.xom.Attribute;
 import nu.xom.Node;
 
 /** container for SVG
@@ -25,12 +26,6 @@ public class SVGSVG extends SVGElement {
 	public SVGSVG(SVGSVG element) {
         super((SVGElement) element);
 	}
-	
-//	/** constructor
-//	 */
-//	public SVGSVG(Element element) {
-//        super(element);
-//	}
 	
     /**
      * copy node .
@@ -57,5 +52,13 @@ public class SVGSVG extends SVGElement {
 			SVGElement g = (SVGElement) this.getChildElements().get(0);
 			g.drawElement(g2d);
 		}
+	}
+	
+	public void setId(String id) {
+		this.addAttribute(new Attribute("id", id));
+	}
+	
+	public String getId() {
+		return this.getAttributeValue("id");
 	}
 }

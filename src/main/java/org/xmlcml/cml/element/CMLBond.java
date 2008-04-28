@@ -699,6 +699,17 @@ public class CMLBond extends AbstractBond {
 		return (d2 < covd2);
 	}
 
+	/** helper function to determinate whether bond contains atom of given elementType.
+	 * 
+	 * @param element
+	 * @return true if one or more atoms is of this type
+	 */
+	public boolean containsElement(String elementType) {
+		boolean contains = false;
+		getAtoms();
+		return atomList.size() == 2 && 
+				(atomList.get(0).hasElement(elementType) || atomList.get(1).hasElement(elementType));
+	}
 	/**
 	 * increments bond order by given amount. use with care. Only really useful
 	 * when generating bond orders
