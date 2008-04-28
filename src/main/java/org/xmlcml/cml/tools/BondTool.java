@@ -103,18 +103,16 @@ public class BondTool extends AbstractSVGTool {
     	Real2 xy0 = atoms.get(0).getXY2();
     	Real2 xy1 = atoms.get(1).getXY2();
     	if (xy0 == null) {
-    		System.err.println("No bond coordinates for: "+atoms.get(0).getId());
+//    		System.err.println("No bond coordinates for: "+atoms.get(0).getId());
     	} else if (xy1 == null) {
-    		System.err.println("No bond coordinates for: "+atoms.get(1).getId());
+//    		System.err.println("No bond coordinates for: "+atoms.get(1).getId());
     	} else {
         	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
 	    	double bondWidth = bondDisplay.getScaledWidth();
 			String order = bond.getOrder();
 	    	 // highlight
 	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
-//	    	 System.out.println("SELBONDS: "+selectionTool.getSelectedBonds().get(0).getId());
 	    	 if (selectionTool != null) {
-//	    		 System.out.println("SEL BOND? : "+bond.getId());
 	    		 if (selectionTool.isSelected(bond)) {
 		    		 double factor = 3.0;
 		    	 	 if (order.equals(CMLBond.DOUBLE)) {
@@ -123,7 +121,6 @@ public class BondTool extends AbstractSVGTool {
 		    	 		 factor = 7.0;
 		    	 	 }
 		    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
-//		    		 System.out.println("BBBBBBBBBBBBBBBB");
 		    		 g.appendChild(line);
 		    		 line.setFill("yellow");
 		    		 line.setOpacity(0.40);

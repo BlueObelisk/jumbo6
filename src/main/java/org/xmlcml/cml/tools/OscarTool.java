@@ -1613,7 +1613,6 @@ public class OscarTool implements CMLConstants {
                         mol.appendChild(scalar);
                     }
                 }
-    //            System.out.println(mol.getTitle());
             }
         }
     }

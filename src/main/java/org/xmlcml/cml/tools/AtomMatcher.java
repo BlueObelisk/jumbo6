@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -669,6 +671,106 @@ public class AtomMatcher extends AbstractTool {
         }
         return mapMatrix;
     }
+    
+    /** creates a list of interatomic vectors and sorts them by frequency.
+     * includes all atoms in set (should use excludeElements if required)
+     * 
+     * @param atomSet1
+     * @param atomSet2
+     * @param eps below which vectors are assumed identical
+     * @param minCount do not add map if fewer equivalences
+     * @return
+     */
+    public List<CMLMap> getSortedListOfAtomMaps(CMLAtomSet atomSet1, CMLAtomSet atomSet2, double eps, int minCount) {
+    	List<Vector2> vectorList = makeAllVectors(atomSet1, atomSet2);
+    	System.out.println(vectorList.size());
+    	for (Vector2 v : vectorList) {
+    		System.out.println(v);
+    	}
+    	
+    	List<CountReal2> cVectorList = getSortedListOfUniqueVectors(eps, vectorList);
+
+    	List<CMLMap> mapList = getSortedListOfAtomMaps(atomSet1, atomSet2, eps,
+				minCount, cVectorList);
+    	return mapList;
+    }
+
+	private List<CMLMap> getSortedListOfAtomMaps(CMLAtomSet atomSet1,
+			CMLAtomSet atomSet2, double eps, int minCount,
+			List<CountReal2> cVectorList) {
+		List<CMLMap> mapList = new ArrayList<CMLMap>();
+    	for (CountReal2 creal2 : cVectorList) {
+    		if (creal2.getCount() >= minCount) {
+		    	CMLMap map = new CMLMap();
+		    	atomSet2.translate2D(creal2);
+		    	// map without H
+		    	for (CMLAtom atom1 : atomSet1.getAtoms()) {
+		    		Real2 xy1 = atom1.getXY2();
+		    		if (xy1 != null) {
+			        	for (CMLAtom atom2 : atomSet2.getAtoms()) {
+			        		Real2 xy2 = atom2.getXY2();
+			        		if (xy2 != null) {
+			        			double dist = xy1.getDistance(xy2);
+			        			if (dist < eps) {
+			        				CMLLink link = new CMLLink();
+			        				link.setFrom(atom1.getId());
+			        				link.setTo(atom2.getId());
+			        				map.addLink(link);
+			        			}
+			        		}
+			        	}
+			        }
+		    	}
+		    	if (map.getLinkElements().size() >= minCount) {
+		    		mapList.add(map);
+		    	}
+	    	}
+    	}
+		return mapList;
+	}
+
+	private List<CountReal2> getSortedListOfUniqueVectors(double eps,
+			List<Vector2> vectorList) {
+		List<CountReal2> cVectorList = new ArrayList<CountReal2>();
+    	for (Real2 v1 : vectorList) {
+    		boolean found = false;
+			for (CountReal2 cv : cVectorList) {
+				Real2 delta = v1.subtract(cv);
+				double dd = delta.getLength();
+				if (dd < eps) {
+					cv.increment();
+					found = true;
+					break;
+				}
+	    	}
+			if (!found) {
+	    		CountReal2 cr = new CountReal2(v1);
+	    		cVectorList.add(cr);
+			}
+    	}
+    	Collections.sort(cVectorList);
+    	Collections.reverse(cVectorList);
+		return cVectorList;
+	}
+
+	private List<Vector2> makeAllVectors(CMLAtomSet atomSet1,
+			CMLAtomSet atomSet2) {
+		List<Vector2> vectorList = new ArrayList<Vector2>();
+    	for (CMLAtom atom1 : atomSet1.getAtoms()) {
+    		Real2 xy1 = atom1.getXY2();
+    		if (xy1 != null) {
+	    		for (CMLAtom atom2 : atomSet2.getAtoms()) {
+	        		Real2 xy2 = atom2.getXY2();
+	        		if (xy2 != null) {
+	        			Vector2 vector = new Vector2(xy1.subtract(xy2));
+//	        			System.out.println(atom1.getId()+"/"+atom2.getId()+vector);
+	        			vectorList.add(vector);
+	        		}
+	    		}
+    		}
+    	}
+		return vectorList;
+	}
 
     /**
      * creates a map by overlapping atoms between this and atomSet.
@@ -949,8 +1051,7 @@ public class AtomMatcher extends AbstractTool {
      * @param atomSet2
      * @return map
      */
-    public CMLMap mapGeometricalNeighbours(CMLAtomSet atomSet,
-            CMLAtomSet atomSet2) {
+    public CMLMap mapGeometricalNeighbours(CMLAtomSet atomSet, CMLAtomSet atomSet2) {
         CMLMap cmlMap = new CMLMap();
         if (atomSet.size() != atomSet2.size()) {
             logger.info(WARNING_S + S_NL + AtomMatcher.Strategy.DIFFERENT_SIZES
@@ -961,101 +1062,110 @@ public class AtomMatcher extends AbstractTool {
             logger.info(BANNER_S + S_NL
                     + CMLReaction.MAP_REACTION_ATOM_MAP_COMPLETE + S_NL
                     + BANNER_S);
-            int nAtoms1 = atomSet.size();
-            int nAtoms2 = atomSet2.size();
-            double[][] distanceMatrix = new double[nAtoms1][nAtoms2];
-            String atom1Id[] = new String[nAtoms1];
-            String atom2Id[] = new String[nAtoms2];
-            logger.info("     ");
+        }
+        int nAtoms1 = atomSet.size();
+        int nAtoms2 = atomSet2.size();
+        System.out.println("=========="+nAtoms1+"==="+nAtoms2+"=============");
+        double[][] distanceMatrix = new double[nAtoms1][nAtoms2];
+        String atom1Id[] = new String[nAtoms1];
+        String atom2Id[] = new String[nAtoms2];
+        for (int j = 0; j < nAtoms2; j++) {
+            CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
+            atom2Id[j] = atom2.getId();
+//            System.out.print(" "+atom2Id[j]+S_LBRAK+atom2.getElementType()+S_RBRAK);
+        }
+//        System.out.println();
+        for (int i = 0; i < nAtoms1; i++) {
+            CMLAtom atom1 = (CMLAtom) atomSet.getAtoms().get(i);
+            atom1Id[i] = atom1.getId();
+//                logger.info(S_SPACE + atom1Id[i] + S_LBRAK + atom1.getElementType()
+//                        + S_RBRAK);
+            Real2 atom1Coord = new Real2(atom1.getX2(), atom1.getY2());
             for (int j = 0; j < nAtoms2; j++) {
                 CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
-                atom2Id[j] = atom2.getId();
-                // System.out.print("
-                // "+atom2Id[j]+S_LBRAK+atom2.getElementType()+S_RBRAK);
+                Real2 atom2Coord = new Real2(atom2.getX2(), atom2.getY2());
+                distanceMatrix[i][j] = (!atom1.getElementType().equals(
+                        atom2.getElementType())) ? CMLAtomSet.MAX_DIST
+                        : atom1Coord.getDistance(atom2Coord);
+//                    logger.info(("      " + (int) (10 * distanceMatrix[i][j])));
             }
-            logger.info(S_EMPTY);
-            for (int i = 0; i < nAtoms1; i++) {
-                CMLAtom atom1 = (CMLAtom) atomSet.getAtoms().get(i);
-                atom1Id[i] = atom1.getId();
-                logger.info(S_SPACE + atom1Id[i] + S_LBRAK + atom1.getElementType()
-                        + S_RBRAK);
-                Real2 atom1Coord = new Real2(atom1.getX2(), atom1.getY2());
-                for (int j = 0; j < nAtoms2; j++) {
-                    CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
-                    Real2 atom2Coord = new Real2(atom2.getX2(), atom2.getY2());
-                    distanceMatrix[i][j] = (!atom1.getElementType().equals(
-                            atom2.getElementType())) ? CMLAtomSet.MAX_DIST
-                            : atom1Coord.getDistance(atom2Coord);
-                    logger.info(("      " + (int) (10 * distanceMatrix[i][j])));
-                }
-                logger.info(S_EMPTY);
-            }
-            // crude
-            if (nAtoms1 == 2) {
-                double[] dist = new double[2];
-                dist[0] = distanceMatrix[0][0] + distanceMatrix[1][1];
-                dist[1] = distanceMatrix[1][0] + distanceMatrix[0][1];
-                int ii = 0;
-                int jj = 1;
-                if (dist[0] > dist[1]) {
-                    ii = 1;
-                    jj = 0;
-                }
-                CMLLink link = new CMLLink();
-                link.setTitle("Geom neighbours 1");
-                link.setFrom(atom1Id[0]);
-                link.setTo(atom2Id[ii]);
-                link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
-                cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
-                link.setTitle("Geom neighbours 2");
-                link = new CMLLink();
-                link.setFrom(atom1Id[1]);
-                link.setTo(atom2Id[jj]);
-                link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
-                cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
-            } else if (nAtoms1 == 3) {
-                double mindist = 9999999.;
-                int ii = -1;
-                int jj = -1;
-                int kk = -1;
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; (j < 3); j++) {
-                        if (j != i) {
-                            int k = 3 - i - j;
-                            double dist = distanceMatrix[i][0]
-                                    + distanceMatrix[j][1]
-                                    + distanceMatrix[k][2];
-                            if (dist < mindist) {
-                                ii = i;
-                                jj = j;
-                                kk = k;
-                                mindist = dist;
-                            }
-                        }
-                    }
-                }
-                CMLLink link = new CMLLink();
-                link.setTitle("Geom neighbours 3");
-                link.setFrom(atom1Id[ii]);
-                link.setTo(atom2Id[0]);
-                link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
-                cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
-                link = new CMLLink();
-                link.setTitle("Geom neighbours 4");
-                link.setFrom(atom1Id[jj]);
-                link.setTo(atom2Id[1]);
-                link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
-                cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
-                link = new CMLLink();
-                link.setTitle("Geom neighbours 5");
-                link.setFrom(atom1Id[kk]);
-                link.setTo(atom2Id[2]);
-                link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
-                cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
-            }
+//                logger.info(S_EMPTY);
+        }
+        // crude
+        if (nAtoms1 == 2) {
+            map2(cmlMap, distanceMatrix, atom1Id, atom2Id);
+        } else if (nAtoms1 == 3) {
+            map3(cmlMap, distanceMatrix, atom1Id, atom2Id);
         }
         return cmlMap;
     }
+
+	private void map2(CMLMap cmlMap, double[][] distanceMatrix,
+			String[] atom1Id, String[] atom2Id) {
+		double[] dist = new double[2];
+		dist[0] = distanceMatrix[0][0] + distanceMatrix[1][1];
+		dist[1] = distanceMatrix[1][0] + distanceMatrix[0][1];
+		int ii = 0;
+		int jj = 1;
+		if (dist[0] > dist[1]) {
+		    ii = 1;
+		    jj = 0;
+		}
+		CMLLink link = new CMLLink();
+		link.setTitle("Geom neighbours 1");
+		link.setFrom(atom1Id[0]);
+		link.setTo(atom2Id[ii]);
+		link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
+		cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
+		link.setTitle("Geom neighbours 2");
+		link = new CMLLink();
+		link.setFrom(atom1Id[1]);
+		link.setTo(atom2Id[jj]);
+		link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
+		cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
+	}
+
+	private void map3(CMLMap cmlMap, double[][] distanceMatrix,
+			String[] atom1Id, String[] atom2Id) {
+		double mindist = 9999999.;
+		int ii = -1;
+		int jj = -1;
+		int kk = -1;
+		for (int i = 0; i < 3; i++) {
+		    for (int j = 0; (j < 3); j++) {
+		        if (j != i) {
+		            int k = 3 - i - j;
+		            double dist = distanceMatrix[i][0]
+		                    + distanceMatrix[j][1]
+		                    + distanceMatrix[k][2];
+		            if (dist < mindist) {
+		                ii = i;
+		                jj = j;
+		                kk = k;
+		                mindist = dist;
+		            }
+		        }
+		    }
+		}
+		CMLLink link = new CMLLink();
+		link.setTitle("Geom neighbours 3");
+		link.setFrom(atom1Id[ii]);
+		link.setTo(atom2Id[0]);
+		link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
+		cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
+		link = new CMLLink();
+		link.setTitle("Geom neighbours 4");
+		link.setFrom(atom1Id[jj]);
+		link.setTo(atom2Id[1]);
+		link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
+		cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
+		link = new CMLLink();
+		link.setTitle("Geom neighbours 5");
+		link.setFrom(atom1Id[kk]);
+		link.setTo(atom2Id[2]);
+		link.setRole(AtomMatcher.Strategy.REMAINING2DFIT.toString());
+		cmlMap.addUniqueLink(link, CMLMap.Direction.EITHER);
+	}
 
     /**
      * split links containing sets of atoms into individual links. iterates
@@ -1102,10 +1212,10 @@ public class AtomMatcher extends AbstractTool {
                 }
                 CMLAtomSet fromSubAtomSet = fromAtomSet.getAtomSetById(fromStrings);
                 if (fromSubAtomSet == null || fromSubAtomSet == null) {
-                    logger.severe("NULL Direction.FROM: " + fromSet);
+//                    logger.severe("NULL Direction.FROM: " + fromSet);
                 }
                 if (toSubAtomSet == null || toSubAtomSet == null) {
-                    logger.severe("NULL Direction.TO: " + toSet);
+//                    logger.severe("NULL Direction.TO: " + toSet);
                 }
                 // save coords, map atoms and restore coords
                 List<Real2> toCoords = toSubAtomSet.getVector2D();
@@ -1122,7 +1232,7 @@ public class AtomMatcher extends AbstractTool {
                     toSubAtomSet.setVector2D(toCoords);
                     fromSubAtomSet.setVector2D(fromCoords);
                 } catch (CMLException e) {
-                    logger.severe("BUG " + e);
+                    throw new CMLRuntimeException("BUG " + e);
                 }
 
                 map.removeLink(atomSetLink); // remove original link
@@ -1457,8 +1567,7 @@ public class AtomMatcher extends AbstractTool {
             List<CMLAtom> atomsx = atomSet.getAtoms();
             List<CMLAtom> otherAtoms = otherAtomSet.getAtoms();
             if (atomsx.size() != otherAtoms.size()) {
-                logger
-                        .info("warning: AtomSets are not the same size in overlap2d");
+                logger.info("warning: AtomSets are not the same size in overlap2d");
             }
             for (int i = 0; i < atomsx.size(); i++) {
                 CMLAtom thisAtom = atomsx.get(i);
@@ -2037,3 +2146,35 @@ public class AtomMatcher extends AbstractTool {
     }
 
 }
+class CountReal2 extends Real2 implements Comparable<CountReal2> {
+
+	private int count = 0;
+	
+	public CountReal2(Real2 r2) {
+		super(r2);
+		increment();
+	}
+	
+	public void increment() {
+		count++;
+	}
+	
+	public int compareTo(CountReal2 r) {
+		int compare = 0;
+		if (this.count > r.count) {
+			compare = 1;
+		} else if (this.count < r.count) {
+			compare = -1;
+		}
+		return compare;
+	}
+	
+	public String toString() {
+		return super.toString()+" / "+count;
+	}
+
+	public int getCount() {
+		return count;
+	}
+}
+

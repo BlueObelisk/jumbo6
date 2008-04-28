@@ -345,7 +345,7 @@ public class AtomTool extends AbstractSVGTool {
     	int hydrogenCount = atom.getHydrogenCount();
     	if (hydrogenCount != ligandHydrogenList.size()) {
     		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
-    		throw new CMLRuntimeException("inconsistent hydrogen count in add coordinates");
+    		throw new CMLRuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
     	}
     	List<Vector2> vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
     	Real2 xy2 = atom.getXY2();
@@ -444,13 +444,12 @@ public class AtomTool extends AbstractSVGTool {
     		Vector2 bisectVector = null;
     		for (int i = 0; i < 3; i++) {
 	    		vectors[i] = new Vector2(ligandList.get(i).getXY2().subtract(atom.getXY2()));
-	    		vectors[i] = new Vector2(vectors[i].getUnitVector());
 	    		bisectVector = (bisectVector == null) ? vectors[i] : new Vector2(bisectVector.plus(vectors[i]));
     		}
     		bisectVector = new Vector2(bisectVector.multiplyBy(-1.0));
     		// short vector
     		try {
-    			bisectVector = new Vector2(bisectVector.getUnitVector());
+    			bisectVector = new Vector2(bisectVector.getUnitVector().multiplyBy(vectors[0].getLength()*0.7));
     			// must not overlap too badly
     			for (int i = 0; i < 3; i++) {
     				Angle angle = bisectVector.getAngleMadeWith(vectors[i]);
@@ -611,10 +610,10 @@ public class AtomTool extends AbstractSVGTool {
       * @return null if no symbol or charge
       */
      public SVGElement createGraphicsElement(CMLDrawable drawable) {
-//    	g = null;
+    	g = null;
 		if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
-    		 System.err.println("No coordinates for "+atom.getId());
-    	 } else {
+		} else if (atomDisplay.isOmitHydrogens() && atom.hasElement("H")) {
+    	} else {
 	    	 double x = atom.getX2();
 	    	 double y = atom.getY2();
 	    	 g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();

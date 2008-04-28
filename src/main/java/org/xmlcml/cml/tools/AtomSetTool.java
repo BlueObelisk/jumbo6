@@ -38,10 +38,10 @@ public class AtomSetTool extends AbstractTool {
 
     Logger logger = Logger.getLogger(AtomSetTool.class.getName());
 
-    CMLAtomSet atomSet;
-    CMLMolecule molecule = null;
+    private CMLAtomSet atomSet;
+    private CMLMolecule molecule = null;
 
-    Map<CMLAtom, CMLAtom> parentTable = null;
+    private Map<CMLAtom, CMLAtom> parentTable = null;
 
     /**
      * constructor.
@@ -66,10 +66,14 @@ public class AtomSetTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static AtomSetTool getOrCreateTool(CMLAtomSet atomSet) {
-		AtomSetTool atomSetTool = (AtomSetTool) atomSet.getTool();
-		if (atomSetTool == null) {
-			atomSetTool = new AtomSetTool(atomSet);
-			atomSet.setTool(atomSetTool);
+		AtomSetTool atomSetTool = null;
+		if (atomSet != null) {
+			atomSetTool = (AtomSetTool) atomSet.getTool();
+			if (atomSetTool == null) {
+				atomSetTool = new AtomSetTool(atomSet);
+				atomSet.setTool(atomSetTool);
+				atomSetTool.molecule = atomSet.getMolecule();
+			}
 		}
 		return atomSetTool;
 	}
@@ -567,6 +571,7 @@ public class AtomSetTool extends AbstractTool {
     */
    public Real2Range getExtent2() {
 	   Real2Range r2r = new Real2Range();
+	   
 	   List<CMLAtom> atoms = molecule.getAtoms();
 	   for (CMLAtom atom : atoms) {
 		   Real2 xy = atom.getXY2();
@@ -592,5 +597,13 @@ public class AtomSetTool extends AbstractTool {
 	   }
 	   return r3r;
    }
+
+public CMLAtomSet getAtomSet() {
+	return atomSet;
+}
+
+public CMLMolecule getMolecule() {
+	return molecule;
+}
     
 }

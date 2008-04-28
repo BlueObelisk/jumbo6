@@ -5,8 +5,12 @@ import java.util.logging.Logger;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
-import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.euclid.Real2;
 
 /**
  * additional tools for formula. not fully developed
@@ -14,7 +18,7 @@ import org.xmlcml.cml.element.CMLFormula;
  * @author pmr
  *
  */
-public class FormulaTool extends AbstractTool {
+public class FormulaTool extends AbstractSVGTool {
 
 	Logger logger = Logger.getLogger(FormulaTool.class.getName());
 
@@ -71,6 +75,17 @@ public class FormulaTool extends AbstractTool {
 //		return formalCharge;
 //	}
 //	
+	
+    public SVGElement createGraphicsElement(CMLDrawable drawable) {
+    	String s = formula.getConcise();
+    	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
+    	SVGText text = new SVGText(new Real2(10., 10.), s);
+    	text.setFontSize(6.);
+    	text.setOpacity(0.5);
+    	text.setFill("yellow");
+    	g.appendChild(text);
+		return g;
+    }
 	
 	/**
 	 * normalize all formulas which are descendant of node

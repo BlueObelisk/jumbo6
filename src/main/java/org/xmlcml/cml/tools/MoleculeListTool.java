@@ -79,8 +79,9 @@ public class MoleculeListTool extends AbstractSVGTool {
     	SVGG g = new SVGG();
     	int i = 0;
     	for (CMLMolecule molecule : moleculeList.getMoleculeElements()) {
-    		SVGElement molG = MoleculeTool.getOrCreateTool(molecule).createGraphicsElement();
+    		SVGElement molG = MoleculeTool.getOrCreateTool(molecule).createGraphicsElement(drawable);
     		molG.addAttribute(new Attribute("transform", "matrix(10, 0, 0, 10, 10, "+(i*10)+")"));
+    		molG.detach();
     		g.appendChild(molG);
     		i++;
     	}

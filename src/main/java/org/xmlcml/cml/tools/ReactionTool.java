@@ -31,6 +31,7 @@ import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
 
 /**
  * too to support reactions. not fully developed
@@ -838,26 +839,22 @@ public class ReactionTool extends AbstractSVGTool {
     	MoleculeDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
     		reactionDisplay.getMoleculeDisplay();
     	enableReactionDisplay();
-    	double scale = 1.0;
-    	double[] offsets = new double[] {100., 200.};
+    	Transform2 transform2 = new Transform2(
+    			new double[] {
+    				1.,  0., 0.0,
+    				0., -1., 0.0,
+    				0.,  0., 1.}
+    			);
     
     	reaction.debug("REACT");
     	List<CMLMolecule> molecules = reaction.getMolecules(Component.REACTANT);
     	if (molecules.size() == 0) {
     		System.out.println("No molecules to display");
-    	} else {
-    		try {
-		    	Real2Range boundingBox = getBoundingBox(molecules);
-		    	Real2Interval screenBoundingBox = reactionDisplay.getMoleculeDisplay().getScreenExtent();
-		    	Real2Interval moleculeInterval = new Real2Interval(boundingBox);
-		    	scale = moleculeInterval.scaleTo(screenBoundingBox);
-		    	offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
-    		} catch (NullPointerException npe) {
-    			// happens with small number of atoms
-    		}
+    	} else if (applyScale) {
+    		transform2 = scaleToBoundingBoxesAndScreenLimits(molecules);
     	}
     	
-    	SVGElement g = createSVGElement(drawable, scale, offsets);
+    	SVGElement g = createSVGElement(drawable, transform2);
     	g.setProperties(reactionDisplay);
     	MoleculeDisplay moleculeDisplay = reactionDisplay.getMoleculeDisplay();
     	displayMolecules(drawable, g, moleculeDisplay, molecules);
@@ -868,12 +865,33 @@ public class ReactionTool extends AbstractSVGTool {
     	}
     	return g;
     }
+
+	private Transform2 scaleToBoundingBoxesAndScreenLimits(List<CMLMolecule> molecules) {
+		Transform2 transform2 = null;
+		try {
+			Real2Range boundingBox = getBoundingBox(molecules);
+			Real2Interval screenBoundingBox = reactionDisplay.getMoleculeDisplay().getScreenExtent();
+			Real2Interval moleculeInterval = new Real2Interval(boundingBox);
+			double scale = moleculeInterval.scaleTo(screenBoundingBox);
+			double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
+			transform2 = new Transform2 (
+					new double[] {
+						scale, 0., offsets[0],
+						0.,-scale, offsets[1],
+						0.,    0.,   1.}
+					);
+					
+		} catch (NullPointerException npe) {
+			// happens with small number of atoms
+		}
+		return transform2;
+	}
     
 	Real2Range getBoundingBox(List<CMLMolecule> molecules) {
 		Real2Range range = new Real2Range();
 		for (CMLMolecule molecule : molecules) {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-			Real2Range molRange = moleculeTool.getBoundingBox();
+			Real2Range molRange = moleculeTool.calculateBoundingBox();
 			range.plus(molRange);
 		}
 		return range;
