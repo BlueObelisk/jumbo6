@@ -1364,17 +1364,14 @@ public class RealArray extends ArrayBase {
     		if (!hitmin && !hitmax) {
     			if (d < cutoff) {
     				hitmin = true;
-    				System.out.println("startMIN "+i+"/"+d);
     			}
     		} else if (hitmin && !hitmax) {
     			if (d > cutoff) {
     				hitmax = true;
     				hitmin = false;
-    				System.out.println("startMAX "+i+"/"+d);
     			}
     		} else if (hitmax) {
     			if (d < cutoff) {
-    				System.out.println("endMAX "+i+"/"+d);
     				hitmin = true;
     				break;
     			}

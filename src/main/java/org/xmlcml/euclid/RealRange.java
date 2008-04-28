@@ -133,12 +133,10 @@ public class RealRange implements EuclidConstants {
      */
     public RealRange intersectionWith(RealRange r2) {
     	RealRange inter = null;
-//    	System.out.println(this+" ... "+r2);
         if (isValid() && r2 != null && r2.isValid()) {
 	        double minv = Math.max(minval, r2.minval);
 	        double maxv = Math.min(maxval, r2.maxval);
 	        if (minv <= maxv) {
-//		        System.out.println("MMM "+minv+"/"+maxv);
 	        	inter = new RealRange(minv, maxv);
 	        }
         }

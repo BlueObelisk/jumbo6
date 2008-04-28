@@ -65,6 +65,14 @@ public class Real2Vector implements EuclidConstants {
             vector.add(new Real2(x[i], y[i]));
         }
     }
+    
+    /** conversion routine.
+     * 
+     * @param r2a
+     */
+    public Real2Vector(Real2Array r2a) {
+    	this(r2a.size(), r2a.getXArray().getArray(), r2a.getYArray().getArray());
+    }
     /**
      * constructor from RealArray - by REFERENCE
      * 
@@ -385,6 +393,43 @@ public class Real2Vector implements EuclidConstants {
         }
         return new RealArray(f);
     }
+    
+    /**
+     * get the X coordinate array
+     * 
+     * @return array
+     */
+    public RealArray getXArray() {
+        double[] f = new double[size()];
+        int count = 0;
+        for (int i = 0; i < size(); i++) {
+            Real2 p = getReal2(i);
+            f[count++] = p.getX();
+        }
+        return new RealArray(f);
+    }
+    /**
+     * get the Y coordinate array
+     * 
+     * @return array
+     */
+    public RealArray getYArray() {
+        double[] f = new double[size()];
+        int count = 0;
+        for (int i = 0; i < size(); i++) {
+            Real2 p = getReal2(i);
+            f[count++] = p.getY();
+        }
+        return new RealArray(f);
+    }
+    
+    /** convenience
+     * 
+     * @return real2Array
+     */
+    public Real2Array getReal2Array() {
+    	return new Real2Array(getXArray(), getYArray());
+    }
     /**
      * get a single coordinate value
      * 
@@ -692,6 +737,36 @@ public class Real2Vector implements EuclidConstants {
         }
         return distMatrix;
     }
+
+    /**
+     * if real2Vector is treated as a polygon, determines whether point
+     * is inside it
+    //  The function will return true if the point x,y is inside the polygon, or
+    //  false if it is not.  If the point is exactly on the edge of the polygon,
+    //  then the function may return YES or NO.
+     */
+    public boolean encloses(Real2 point) {
+    	int nvect = vector.size();
+    	int j = nvect - 1;
+    	boolean  oddNodes = false;
+    	double x = point.getX();
+    	double y = point.getY();
+        for (int i=0; i < nvect; i++) {
+        	double xi = vector.get(i).getX();
+        	double yi = vector.get(i).getY();
+        	double xj = vector.get(j).getX();
+        	double yj = vector.get(j).getY();
+            if (yi < y && yj >= y ||  yj < y && yi >= y) {
+                if (xi + (y - yi) / (yj - yi) * (xj - xi) < x) {
+                    oddNodes = !oddNodes;
+                }
+            }
+            j = i;
+        }
+        return oddNodes; 
+    }
+
+
     /**
      * to string.
      * 

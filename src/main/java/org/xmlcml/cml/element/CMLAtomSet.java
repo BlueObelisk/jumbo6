@@ -1132,6 +1132,23 @@ public class CMLAtomSet extends AbstractAtomSet {
         }
     }
 
+    /** multiply all 2D coordinates by given factor.
+     * will usually alter centroid of molecule
+     *
+     * @param scale all 2D coordinates
+     */
+    public void scale2D(double scale) {
+        List<CMLAtom> atoms = this.getAtoms();
+        for (int i = 0; i < atoms.size(); i++) {
+            CMLAtom atom = atoms.get(i);
+            Real2 xy = atom.getXY2();
+            if (xy != null) {
+            	xy = new Real2(xy.multiplyBy(scale));
+                atom.setXY2(xy);
+            }
+        }
+    }
+
     /**
      * get 2D centroid.
      *

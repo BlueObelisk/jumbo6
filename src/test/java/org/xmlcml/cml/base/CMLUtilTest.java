@@ -3,6 +3,9 @@ package org.xmlcml.cml.base;
 import java.text.ParseException;
 import java.util.List;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.ComparisonFailure;
+
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -10,6 +13,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Text;
 import nu.xom.XPathContext;
+import nu.xom.tests.XOMTestCase;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -327,5 +331,38 @@ public class CMLUtilTest extends BaseTest {
 		Assert.assertEquals(Double.NaN, CMLUtil.parseFlexibleDouble("NaN"));
 		Assert.assertEquals(Double.POSITIVE_INFINITY, CMLUtil.parseFlexibleDouble("INF"));
 		Assert.assertEquals(Double.NEGATIVE_INFINITY, CMLUtil.parseFlexibleDouble("-INF"));
+	}
+
+	/**
+	 * tests 2 XML objects for equality using canonical XML.
+	 * 
+	 * @param refNode
+	 *            first node
+	 * @param testNode
+	 *            second node
+	 * @param stripWhite
+	 *            if tru remove w/s nodes
+	 * @return is equal
+	 */
+	public static boolean equalsCanonically(Element refNode, Element testNode,
+			boolean stripWhite) {
+		boolean equals = true;
+		// check if they are different objects
+		if (refNode != testNode) {
+			if (stripWhite) {
+				refNode = new Element(refNode);
+				CMLUtil.removeWhitespaceNodes(refNode);
+				testNode = new Element(testNode);
+				CMLUtil.removeWhitespaceNodes(testNode);
+			}
+			try {
+				XOMTestCase.assertEquals("foo", refNode, testNode);
+			} catch (ComparisonFailure e) {
+				equals = false;
+			} catch (AssertionFailedError e) {
+				equals = false;
+			}
+		}
+		return equals;
 	}
 }

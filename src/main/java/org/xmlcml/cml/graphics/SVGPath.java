@@ -94,6 +94,10 @@ public class SVGPath extends SVGElement {
 		this.addAttribute(new Attribute("d", d));
 	}
 	
+	public String getD() {
+		return this.getAttributeValue("d");
+	}
+	
 //  <g style="stroke-width:0.2;">
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="black" style="stroke-width:0.36;"/>
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="white" style="stroke-width:0.12;"/>

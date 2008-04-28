@@ -13,6 +13,8 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  * therefore obsolete the Real2Array at some time - it is not used in Jumbo
  * elsewhere although it might be useful for spectra.
  * 
+ * NOTE: I think it's used quite a lot in fact...
+ * 
  * @author P.Murray-Rust, Copyright 1997
  */
 public class Real2Array implements EuclidConstants {
