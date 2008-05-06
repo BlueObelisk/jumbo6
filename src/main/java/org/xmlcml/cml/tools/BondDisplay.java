@@ -21,7 +21,7 @@ public class BondDisplay extends AbstractDisplay {
 		DEFAULT.stroke = null;
 		DEFAULT.multipleColor = "white";
 		
-		DEFAULT.opacity = 1.;
+		DEFAULT.opacity = Double.NaN;
 	};
 
 	/** constructor.

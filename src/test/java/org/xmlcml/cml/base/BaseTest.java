@@ -1,20 +1,28 @@
 package org.xmlcml.cml.base;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.logging.Logger;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
+import nu.xom.Attribute;
 import nu.xom.Builder;
+import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.ProcessingInstruction;
+import nu.xom.Text;
 import nu.xom.tests.XOMTestCase;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.EuclidTestBase;
 
 /**
@@ -28,6 +36,8 @@ import org.xmlcml.euclid.test.EuclidTestBase;
  * 
  */
 public class BaseTest extends EuclidTestBase implements CMLConstants {
+
+	protected CMLBuilder builder = null;
 
     /** logger */
     public final static Logger logger = Logger.getLogger(BaseTest.class
@@ -65,7 +75,90 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
             reportXMLDiff(message, e.getMessage(), refNode, testNode);
         }
     }
-    
+
+    /** compares two XML nodes and checks float near-equivalence 
+     * (can also be used for documents without floats)
+     * uses assertEqualsCanonically and only uses PMR code if fails
+     * @param message
+     * @param refNode
+     * @param testNode
+     * @param eps
+     */
+    public static void assertEqualsIncludingFloat(
+    		String message, Node refNode, Node testNode, boolean stripWhite, double eps) {
+        if (stripWhite && refNode instanceof Element && testNode instanceof Element) {
+            refNode = stripWhite((Element)refNode);
+            testNode = stripWhite((Element) testNode);
+        }
+        try {
+        	assertEqualsIncludingFloat(message, refNode, testNode, eps);
+        } catch (CMLRuntimeException e) {
+        	reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
+        }
+    }
+
+	private static void assertEqualsIncludingFloat(String message, Node refNode,
+			Node testNode, double eps) {
+		try {
+			Assert.assertEquals(message+": classes", testNode.getClass(), refNode.getClass());
+	    	if (refNode instanceof Text) {
+	    		testStringDoubleEquality(message, refNode.getValue(), testNode.getValue(), eps);
+	    	} else if (refNode instanceof Comment) {
+	    		Assert.assertEquals(message+" pi", (Comment) refNode, (Comment) testNode);
+	    	} else if (refNode instanceof ProcessingInstruction) {
+	    		Assert.assertEquals(message+" pi", (ProcessingInstruction) refNode, (ProcessingInstruction) testNode);
+	    	} else if (refNode instanceof Element){
+		    	int refNodeChildCount = refNode.getChildCount();
+		    	int testNodeChildCount = testNode.getChildCount();
+	//	    	CMLUtil.debug((Element)refNode, "XXXXXXXXXXX");
+	//	    	CMLUtil.debug((Element)testNode, "TEST");
+		    	Assert.assertEquals("number of children", testNodeChildCount, refNodeChildCount);
+		    	for (int i = 0; i < refNodeChildCount; i++) {
+		    		assertEqualsIncludingFloat(message, refNode.getChild(i), testNode.getChild(i), eps);
+		    	}
+		    	Element refElem = (Element) refNode;
+		    	Element testElem = (Element) testNode;
+		    	Assert.assertEquals(message+" namespace", refElem.getNamespaceURI(), testElem.getNamespaceURI());
+		    	Assert.assertEquals(message+" attributes on "+refElem.getClass(), refElem.getAttributeCount(), testElem.getAttributeCount());
+		    	for (int i = 0; i < refElem.getAttributeCount(); i++) {
+		    		Attribute refAtt = refElem.getAttribute(i);
+		    		String attName = refAtt.getLocalName();
+		    		String attNamespace = refAtt.getNamespaceURI();
+		    		Attribute testAtt = testElem.getAttribute(attName, attNamespace);
+		    		if (testAtt == null) {
+//				    	CMLUtil.debug((Element)refNode, "XXXXXXXXXXX");
+//				    	CMLUtil.debug((Element)testNode, "TEST");
+		    			Assert.fail(message+" attribute on ref not on test: "+attName);
+		    		}
+		    		testStringDoubleEquality(message, refAtt.getValue(), testAtt.getValue(), eps);
+		    	}
+	    	} else {
+	    		Assert.fail(message + "cannot deal with XMLNode: "+refNode.getClass());
+	    	}
+		} catch (Throwable t) {
+			throw new CMLRuntimeException(""+t);
+		}
+	}
+	private static void testStringDoubleEquality(String message, String refValue, String testValue,
+			double eps) {
+		Error ee = null;
+		try {
+			try {
+				double testVal = new Double(testValue).doubleValue();
+				double refVal = new Double(refValue).doubleValue();
+				Assert.assertEquals(message+" doubles ", refVal, testVal, eps);
+			} catch (NumberFormatException e) {
+				Assert.assertEquals(message+" String ", refValue, testValue);
+			}
+		} catch (ComparisonFailure e) {
+			ee = e;
+		} catch (AssertionError e) {
+			ee = e;
+		}
+		if (ee != null) {
+			throw new CMLRuntimeException(""+ee);
+		}
+	}
     /**
      * tests 2 XML objects for equality using canonical XML.
      * 
@@ -76,20 +169,45 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
      */
     public static void assertEqualsCanonically(
             String message, Element refNode, Element testNode, boolean stripWhite) {
+    	assertEqualsCanonically(message, refNode, testNode, stripWhite, true);
+    }
+    
+    /**
+     * tests 2 XML objects for equality using canonical XML.
+     * 
+     * @param message
+     * @param refNode first node
+     * @param testNode second node
+     * @param stripWhite if true remove w/s nodes
+     */
+    private static void assertEqualsCanonically(
+            String message, Element refNode, Element testNode, boolean stripWhite, boolean reportError) throws Error {
         if (stripWhite) {
-            refNode = new Element(refNode);
-            CMLUtil.removeWhitespaceNodes(refNode);
-            testNode = new Element(testNode);
-            CMLUtil.removeWhitespaceNodes(testNode);
+            refNode = stripWhite(refNode);
+            testNode = stripWhite(testNode);
         }
+        Error ee = null;
         try {
             XOMTestCase.assertEquals(message, refNode, testNode);
         } catch (ComparisonFailure e) {
-            reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
+        	ee = e;
         } catch (AssertionFailedError e) {
-            reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
+        	ee = e;
+        }
+        if (ee != null) {
+        	if (reportError) {
+                reportXMLDiffInFull(message, ee.getMessage(), refNode, testNode);
+        	} else {
+        		throw (ee);
+        	}
         }
     }
+
+	private static Element stripWhite(Element refNode) {
+		refNode = new Element(refNode);
+		CMLUtil.removeWhitespaceNodes(refNode);
+		return refNode;
+	}
     
     static protected void reportXMLDiff(String message, String errorMessage,
             Node refNode, Node testNode) {
@@ -99,11 +217,11 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
     static protected void reportXMLDiffInFull(String message, String errorMessage,
             Node refNode, Node testNode) {
         try {
-	        System.err.println("==========XMLDIFF=========");
+	        System.err.println("==========XMLDIFF reference=========");
 	        CMLUtil.debug((Element) refNode, System.err, 2); 
-	        System.err.println("---------------------------------");
+	        System.err.println("------------test---------------------");
 	        CMLUtil.debug((Element) testNode, System.err, 2); 
-	        System.err.println("=================================");
+	        System.err.println("=============="+message+"===================");
         } catch (Exception e) {
         	throw new CMLRuntimeException(e);
         }
@@ -137,7 +255,8 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
      * equalsCanonically.
      * 
      */
-    public static void testAssertEqualsCanonically() {
+    @Test
+    public void testAssertEqualsCanonically() {
         String s1 = "<a b='c' d='e'><f g='h' i='j'>&amp;x</f><g/></a>";
         String s2 = "<a d='e' b='c'><f i='j' g='h'>&#38;x</f><g></g></a>";
         String s3 = "<a d='e' b='c'><f i='j' g='h'><![CDATA[&]]><![CDATA[x]]></f><g></g></a>";
@@ -202,5 +321,43 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
         String s = sw.toString();
         Assert.assertEquals("HTML output ", expected, s);
     }
+
+    /** convenience method to parse test string.
+	 * 
+	 * @param s xml string (assumed valid)
+	 * @return root element
+	 */
+	protected Element parseValidString(String s) {
+	    Element element = null;
+	    if (s == null) {
+	    	throw new CMLRuntimeException("NULL VALID JAVA_STRING");
+	    }
+	    try {
+	        element = new CMLBuilder().parseString(s);
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        System.err.println("ERROR "+e+e.getMessage()+"..."+s.substring(0, Math.min(100, s.length())));
+	        Util.BUG(e);
+	    }
+	    return element;
+	}
+
+	/** convenience method to parse test file.
+	 * uses resource
+	 * @param filename relative to classpath
+	 * @return root element
+	 */
+	protected Element parseValidFile(String filename) {
+	    Element root = null;
+	    try {
+	        URL url =  Util.getResource(filename);
+	        root =  builder.build(
+	                new File(url.toURI())).getRootElement();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return root;
+	}
+    
 
 }

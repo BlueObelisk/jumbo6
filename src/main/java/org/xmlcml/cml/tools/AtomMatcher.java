@@ -674,7 +674,9 @@ public class AtomMatcher extends AbstractTool {
     
     /** creates a list of interatomic vectors and sorts them by frequency.
      * includes all atoms in set (should use excludeElements if required)
-     * 
+     * WILL PROBABLY CORRUPT THE COORDINATES SO USE A COPY OF YOUR MOLECULES!
+     * (copies of AtomSets will not help this)
+     * we might later save and restore coordinates
      * @param atomSet1
      * @param atomSet2
      * @param eps below which vectors are assumed identical
@@ -683,10 +685,6 @@ public class AtomMatcher extends AbstractTool {
      */
     public List<CMLMap> getSortedListOfAtomMaps(CMLAtomSet atomSet1, CMLAtomSet atomSet2, double eps, int minCount) {
     	List<Vector2> vectorList = makeAllVectors(atomSet1, atomSet2);
-    	System.out.println(vectorList.size());
-    	for (Vector2 v : vectorList) {
-    		System.out.println(v);
-    	}
     	
     	List<CountReal2> cVectorList = getSortedListOfUniqueVectors(eps, vectorList);
 
@@ -763,7 +761,6 @@ public class AtomMatcher extends AbstractTool {
 	        		Real2 xy2 = atom2.getXY2();
 	        		if (xy2 != null) {
 	        			Vector2 vector = new Vector2(xy1.subtract(xy2));
-//	        			System.out.println(atom1.getId()+"/"+atom2.getId()+vector);
 	        			vectorList.add(vector);
 	        		}
 	    		}

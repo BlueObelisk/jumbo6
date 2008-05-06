@@ -10,7 +10,7 @@ import nu.xom.Nodes;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLUtilTest;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Point3;
 
 /**
@@ -137,7 +137,7 @@ public class CMLSymmetry extends AbstractSymmetry {
      */
     public boolean isEqualTo(CMLSymmetry sym, double eps) {
     	// first check in case they are lexically equivalent
-        boolean equals = CMLUtilTest.equalsCanonically(this, sym, true);
+        boolean equals = CMLUtil.equalsCanonically(this, sym, true);
         if (!equals) {
 	        CMLElements<CMLTransform3> thisTrs = this.getTransform3Elements();
 	        CMLElements<CMLTransform3> symTrs = sym.getTransform3Elements();

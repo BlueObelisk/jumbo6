@@ -1731,8 +1731,10 @@ public class CMLFormula extends AbstractFormula {
 		} else {
 			String[] elementTypes = this.getElementTypes();
 			double[] counts = this.getCounts();
-			for (int i = 0; i < counts.length; i++) {
-				mwt += getAtomicMass(elementTypes[i]) * counts[i];
+			if (counts != null) {
+				for (int i = 0; i < counts.length; i++) {
+					mwt += getAtomicMass(elementTypes[i]) * counts[i];
+				}
 			}
 		}
 		return getCount() * mwt;

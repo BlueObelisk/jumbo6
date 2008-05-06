@@ -22,7 +22,7 @@ public class AtomDisplay extends AbstractDisplay {
 		DEFAULT.fill = DEFAULT.color;
 		DEFAULT.stroke = null;
 		
-		DEFAULT.opacity = 1.;
+		DEFAULT.opacity = Double.NaN;
 		
 		DEFAULT.xOffsetFactor = -0.34;
 		DEFAULT.yOffsetFactor = 0.35;

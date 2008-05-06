@@ -3,16 +3,12 @@ package org.xmlcml.cml.element;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 
-import nu.xom.Element;
 
 import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.euclid.Util;
 
 /**
  * superclass of all CMLTests. creates CMLBuilder for subclasses. little other
@@ -76,52 +72,13 @@ public abstract class AbstractTest extends BaseTest implements CMLConstants {
 	/** cml comp dictionary */
 	public final static String CML_COMP_DICT = "cmlComp";
 
-	protected CMLBuilder builder = null;
-
 	/** construct.
 	 */
 	public AbstractTest() {
 		builder = new CMLBuilder();
 	}
 
-    /** convenience method to parse test string.
-     * 
-     * @param s xml string (assumed valid)
-     * @return root element
-     */
-    protected Element parseValidString(String s) {
-        Element element = null;
-        if (s == null) {
-        	throw new CMLRuntimeException("NULL VALID JAVA_STRING");
-        }
-        try {
-            element = new CMLBuilder().parseString(s);
-        } catch (Exception e) {
-        	e.printStackTrace();
-            System.err.println("ERROR "+e+e.getMessage()+"..."+s.substring(0, Math.min(100, s.length())));
-            Util.BUG(e);
-        }
-        return element;
-    }
-    
-    /** convenience method to parse test file.
-     * uses resource
-     * @param filename relative to classpath
-     * @return root element
-     */
-    protected Element parseValidFile(String filename) {
-        Element root = null;
-        try {
-            URL url =  Util.getResource(filename);
-            root =  builder.build(
-                    new File(url.toURI())).getRootElement();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return root;
-    }
-                
-	/**
+    /**
 	 * error.
 	 * 
 	 * @param s
