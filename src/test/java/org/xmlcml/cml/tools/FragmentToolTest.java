@@ -646,9 +646,7 @@ public class FragmentToolTest extends AbstractTest {
 		test(debug, check, 21, false);
 		// stochastic so cannot test without setting seed
 		long seed = 100;
-//		test(debug, check, 22, false, seed);
-//		TODO test 22 broke when the code for selecting a fragment from
-//		a markush list was fixed
+		test(debug, check, 22, false, seed);
 		test(debug, check, 23,false,seed);
 		test(debug, check, 24,false,seed);
 	}
