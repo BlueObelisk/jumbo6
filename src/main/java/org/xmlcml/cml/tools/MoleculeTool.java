@@ -1842,8 +1842,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		int nBonds = 0;
 		for (CMLBond bond : molecule.getBonds()) {
 			if (omitHydrogens && (
-					"H".equals(molecule.getAtom(0).getElementType()) ||
-					"H".equals(molecule.getAtom(1).getElementType()))
+					"H".equals(bond.getAtom(0).getElementType()) ||
+					"H".equals(bond.getAtom(1).getElementType()))
 					) {
 				continue;
 			}
@@ -2448,7 +2448,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	}
 	}
     
-    private void enableMoleculeDisplay() {
+    public void enableMoleculeDisplay() {
     	if (moleculeDisplay == null) {
     		moleculeDisplay = MoleculeDisplay.getDEFAULT();
     	}

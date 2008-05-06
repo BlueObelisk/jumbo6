@@ -23,7 +23,7 @@ public class AbstractDisplay {
 	protected String fill = color;
 	protected String stroke = color;
 	
-	protected double opacity = 1.0;
+	protected double opacity = Double.NaN;
 	protected String fontStyle = FONT_STYLE_NORMAL;
 	protected String fontWeight = FONT_WEIGHT_NORMAL;
 	protected String fontFamily = FONT_SANS_SERIF;

@@ -422,12 +422,34 @@ public class CMLBond extends AbstractBond {
 	/** get calculated bond length.
 	 * independent of any CMLLength element that might describe this bond.
 	 * @return length (or Double.NaN if impossible)
+	 * @deprecated use getBondLength(CoordinateType)
 	 */
 	public double getBondLength() {
 		double d = Double.NaN;
 		List<CMLAtom> atoms = this.getAtoms();
 		if (atoms.size() == 2) {
 			d = atoms.get(0).getDistanceTo(atoms.get(1));
+		}
+		return d;
+	}
+
+	/** get calculated bond length.
+	 * independent of any CMLLength element that might describe this bond.
+	 * @return length (or Double.NaN if impossible)
+	 */
+	public double getBondLength(CoordinateType type) {
+		double d = Double.NaN;
+		List<CMLAtom> atoms = this.getAtoms();
+		if (atoms.size() == 2) {
+			if (CoordinateType.TWOD.equals(type)) {
+				Real2 xy0 = atoms.get(0).getXY2();
+				Real2 xy1 = atoms.get(1).getXY2();
+				d = xy0.getDistance(xy1);
+			} else if (CoordinateType.CARTESIAN.equals(type)) {
+				d = atoms.get(0).getDistanceTo(atoms.get(1));
+			} else {
+				throw new CMLRuntimeException("Bad type: "+type);
+			}
 		}
 		return d;
 	}

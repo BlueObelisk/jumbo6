@@ -220,26 +220,25 @@ public class StyleBundle implements CMLConstants {
 	
 	public String toString() {
 		String s = "";
-		if (fill != null && !fill.trim().equals(S_EMPTY)) {
-			s += "fill : "+fill+S_SEMICOLON;
-		} 
-		if (stroke != null && !stroke.trim().equals(S_EMPTY)) {
-			s += " stroke : "+stroke+S_SEMICOLON;
+		s = addString(s, fill, "fill");
+		s = addString(s, stroke, "stroke");
+		s = addDouble(s, strokeWidth, "stroke-width");
+		s = addString(s, fontFamily, "font-family");
+		s = addDouble(s, fontSize, "font-size");
+		s = addString(s, fontWeight, "font-weight");
+		s = addDouble(s, opacity, "opacity");
+		return s;
+	}
+
+	private String addDouble(String s, Double value, String name) {
+		if (value != null && !Double.isNaN(value)) {
+			s += " "+name+" : "+value+S_SEMICOLON;
 		}
-		if (strokeWidth != null) {
-			s += " stroke-width : "+strokeWidth+S_SEMICOLON;
-		}
-		if (fontFamily != null && !fontFamily.trim().equals(S_EMPTY)) {
-			s += " font-family : "+fontFamily+S_SEMICOLON;
-		}
-		if (fontSize != null) {
-			s += " font-size : "+fontSize+S_SEMICOLON;
-		}
-		if (fontWeight != null && !fontWeight.trim().equals(S_EMPTY)) {
-			s += " font-weight : "+fontWeight+S_SEMICOLON;
-		}
-		if (opacity != null) {
-			s += " opacity : "+opacity+S_SEMICOLON;
+		return s;
+	}
+	private String addString(String s, String value, String name) {
+		if (value != null && !value.trim().equals(S_EMPTY)) {
+			s += " "+name+" : "+value+S_SEMICOLON;
 		}
 		return s;
 	}

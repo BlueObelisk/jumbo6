@@ -23,7 +23,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 		DEFAULT.fill = DEFAULT.color;
 		DEFAULT.stroke = null;
 		
-		DEFAULT.opacity = 1.;
+		DEFAULT.opacity = Double.NaN;
 	};
 	
 	private Color backgroundColor = Color.white;

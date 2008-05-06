@@ -47,7 +47,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
     }
     
     public void setDefaultStyle() {
-		setOpacity(1.0);
+//		setOpacity(1.0);
     }
     
     /**

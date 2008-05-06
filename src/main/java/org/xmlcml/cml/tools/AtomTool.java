@@ -49,7 +49,7 @@ public class AtomTool extends AbstractSVGTool {
 	
     private CMLAtom atom;
     private CMLMolecule molecule;
-    private AbstractTool moleculeTool;
+    private MoleculeTool moleculeTool;
     private Logger logger = Logger.getLogger(AtomTool.class.getName());
     private AtomDisplay atomDisplay;
     private List<CMLAtomSet> coordinationSphereList;
@@ -501,6 +501,7 @@ public class AtomTool extends AbstractSVGTool {
      static int[]    group  = { 1,   4,   5,   6,   7,   4,    5,   6,   7,    7,    7};
      static int[]    eneg0  = { 0,   0,   1,   0,   1,   0,    0,   1,   1,    1,    1};
      static int[]    eneg1  = { 0,   0,   0,   1,   1,   0,    0,   0,   1,    1,    1};
+	private MoleculeDisplay moleculeDisplay;
      /** a simple lookup for common atoms.
      *
      * examples are C, N, O, F, Si, P, S, Cl, Br, I
@@ -611,6 +612,7 @@ public class AtomTool extends AbstractSVGTool {
       */
      public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	g = null;
+    	moleculeDisplay = (moleculeTool == null) ? null : moleculeTool.getMoleculeDisplay();
 		if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
 		} else if (atomDisplay.isOmitHydrogens() && atom.hasElement("H")) {
     	} else {
@@ -707,7 +709,7 @@ public class AtomTool extends AbstractSVGTool {
     	 // omit carbons?
     	 if (!atomDisplay.isDisplayCarbons() && AS.C.equals(s)) {
     		 s = S_EMPTY;
-    	 } else if (atomDisplay.isShowChildLabels() && AS.R.equals(s)) {
+    	 } else if (moleculeDisplay.isShowChildLabels() && AS.R.equals(s)) {
     		 CMLElements<CMLLabel> labels = atom.getLabelElements();
     		 if (labels.size() == 1) {
     			 CMLLabel label = labels.get(0);
@@ -806,8 +808,8 @@ public class AtomTool extends AbstractSVGTool {
 	/**
 	 * @param moleculeTool the moleculeTool to set
 	 */
-	public void setMoleculeTool(AbstractTool moleculeTool) {
-		this.moleculeTool = moleculeTool;
+	public void setMoleculeTool(MoleculeTool moleculeTool) {
+		this.moleculeTool = (MoleculeTool) moleculeTool;
 	}
 
 	/**
