@@ -501,7 +501,7 @@ public class AtomTool extends AbstractSVGTool {
      static int[]    group  = { 1,   4,   5,   6,   7,   4,    5,   6,   7,    7,    7};
      static int[]    eneg0  = { 0,   0,   1,   0,   1,   0,    0,   1,   1,    1,    1};
      static int[]    eneg1  = { 0,   0,   0,   1,   1,   0,    0,   0,   1,    1,    1};
-	private MoleculeDisplay moleculeDisplay;
+	private AbstractDisplay moleculeDisplay;
      /** a simple lookup for common atoms.
      *
      * examples are C, N, O, F, Si, P, S, Cl, Br, I

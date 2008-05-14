@@ -219,7 +219,7 @@ public class IndexableByIdListManager implements CMLConstants {
             throw new CMLRuntimeException(DUPLICATE_ID + id);
         }
         ((Element) indexableList).appendChild((Element) indexable);
-        map.put(indexable.getId(), indexable);
+        map.put(id, indexable);
     }
 
     /**

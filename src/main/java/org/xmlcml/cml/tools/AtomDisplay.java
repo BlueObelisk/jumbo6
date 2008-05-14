@@ -13,46 +13,26 @@ public class AtomDisplay extends AbstractDisplay {
 
 	final static AtomDisplay DEFAULT = new AtomDisplay();
 	static {
-		DEFAULT.fontStyle = FONT_STYLE_NORMAL;
-		DEFAULT.fontWeight = FONT_WEIGHT_NORMAL;
-		DEFAULT.fontFamily = FONT_SANS_SERIF;
-		
-		DEFAULT.fontSize = 0.35;
-		DEFAULT.color = "black";
-		DEFAULT.fill = DEFAULT.color;
-		DEFAULT.stroke = null;
-		
-		DEFAULT.opacity = Double.NaN;
-		
-		DEFAULT.xOffsetFactor = -0.34;
-		DEFAULT.yOffsetFactor = 0.35;
-		DEFAULT.backgroundRadiusFactor = 0.4;
-		// charge
-		DEFAULT.chargeFontFactor = 0.8;
-		DEFAULT.xChargeOffsetFactor = 0.7;
-		DEFAULT.yChargeOffsetFactor = -0.5;
-		DEFAULT.backgroundChargeRadiusFactor = 0.4;
-
+		DEFAULT.setDefaults();
 	}
 
 	// atom
-	private double xOffsetFactor = -0.5;
-	private double yOffsetFactor = 0.7;
-	private double backgroundRadiusFactor = 0.4;
-	// charge
-	private double chargeFontFactor = 0.5;
-	private double xChargeOffsetFactor = -0.5;
-	private double yChargeOffsetFactor = -0.7;
-	private double backgroundChargeRadiusFactor = 0.4;
+	protected double backgroundChargeRadiusFactor;
+	protected double backgroundIdRadiusFactor;
+	protected double backgroundRadiusFactor;
+	protected double chargeFontFactor;
+	protected boolean displayCarbons;
+	protected boolean displayLabels;
+	protected double idFontFactor;
+	protected double scale;
+	protected double xChargeOffsetFactor;
+	protected double xIdOffsetFactor;
+	protected double xOffsetFactor;
+	protected double yChargeOffsetFactor;
+	protected double yIdOffsetFactor;
+	protected double yOffsetFactor;
 	
-	private boolean displayCarbons = false;
-	private boolean displayLabels = false;
-	private double idFontFactor = 0.5;
-	private double xIdOffsetFactor = -0.1;
-	private double yIdOffsetFactor = -0.0;
-	private double backgroundIdRadiusFactor = 0.4;
 	
-	private double scale = 1.0;
 	/**
 	 * @return the displayLabels
 	 */
@@ -70,30 +50,50 @@ public class AtomDisplay extends AbstractDisplay {
 	/** constructor.
 	 */
 	public AtomDisplay() {
-		
+		super();
 	}
 	
-	/** field constructor.
-	 * 
-	 * @param offsetFactor
-	 * @param offsetFactor2
-	 * @param backgroundRadiusFactor
-	 * @param chargeFontFactor
-	 * @param chargeOffsetFactor
-	 * @param chargeOffsetFactor2
-	 * @param backgroundChargeRadiusFactor
-	 */
-	public AtomDisplay(double offsetFactor, double offsetFactor2, double backgroundRadiusFactor, double chargeFontFactor, double chargeOffsetFactor, double chargeOffsetFactor2, double backgroundChargeRadiusFactor) {
-		super();
-		xOffsetFactor = offsetFactor;
-		yOffsetFactor = offsetFactor2;
-		this.backgroundRadiusFactor = backgroundRadiusFactor;
-		this.chargeFontFactor = chargeFontFactor;
-		xChargeOffsetFactor = chargeOffsetFactor;
-		yChargeOffsetFactor = chargeOffsetFactor2;
-		this.backgroundChargeRadiusFactor = backgroundChargeRadiusFactor;
+	protected void init() {
 	}
+	
+	protected void setDefaults() {
+		super.setDefaults();
+		backgroundChargeRadiusFactor = 0.4;
+		backgroundIdRadiusFactor = 0.4;
+		backgroundRadiusFactor = 0.4;
+		chargeFontFactor = 0.5;
+		chargeFontFactor = 0.8; // which?
+		displayCarbons = false;
+		displayLabels = false;
+		idFontFactor = 0.5;
+		scale = 1.0;
+		xChargeOffsetFactor = -0.5;
+		xChargeOffsetFactor = 0.7; // which?
+		xIdOffsetFactor = -0.1;
+		xOffsetFactor = -0.5;
+		yChargeOffsetFactor = -0.7;
+		yChargeOffsetFactor = -0.5; // which?
+		yIdOffsetFactor = -0.0;
+		yOffsetFactor = 0.7;
+		// charge
+		
+		
+		//
+		color = "black";
+		fill = color;
+		fontFamily = FONT_SANS_SERIF;
+		fontSize = 0.35;
+		fontStyle = FONT_STYLE_NORMAL;
+		fontWeight = FONT_WEIGHT_NORMAL;
+		stroke = null;
+				
+		xOffsetFactor = -0.34;
+		yOffsetFactor = 0.35;
+		// charge
 
+
+	}
+	
 	
 	/** copy constructor.
 	 * 
@@ -101,13 +101,20 @@ public class AtomDisplay extends AbstractDisplay {
 	 */
 	public AtomDisplay(AtomDisplay a) {
 		super(a);
-		xOffsetFactor = a.xOffsetFactor;
-		yOffsetFactor = a.yOffsetFactor;
-		this.backgroundRadiusFactor = a.backgroundRadiusFactor;
-		this.chargeFontFactor = a.chargeFontFactor;
-		xChargeOffsetFactor = a.xChargeOffsetFactor;
-		yChargeOffsetFactor = a.yChargeOffsetFactor;
-		this.backgroundChargeRadiusFactor = a.backgroundChargeRadiusFactor;
+		this.backgroundChargeRadiusFactor= a.backgroundChargeRadiusFactor ;
+		this.backgroundIdRadiusFactor= a.backgroundIdRadiusFactor ;
+		this.backgroundRadiusFactor= a.backgroundRadiusFactor ;
+		this.chargeFontFactor= a.chargeFontFactor ;
+		this.displayCarbons= a.displayCarbons ;
+		this.displayLabels= a.displayLabels ;
+		this.idFontFactor= a.idFontFactor ;
+		this.scale= a.scale ;
+		this.xChargeOffsetFactor= a.xChargeOffsetFactor ;
+		this.xIdOffsetFactor= a.xIdOffsetFactor ;
+		this.xOffsetFactor= a.xOffsetFactor ;
+		this.yChargeOffsetFactor= a.yChargeOffsetFactor ;
+		this.yIdOffsetFactor= a.yIdOffsetFactor ;
+		this.yOffsetFactor= a.yOffsetFactor ;
 	}
 	
 	/**
@@ -303,5 +310,93 @@ public class AtomDisplay extends AbstractDisplay {
 	 */
 	public void setScale(double scale) {
 		this.scale = scale;
+	}
+	
+	/** cascades through from calling program
+	 * @param args
+	 * @param i
+	 * @return increased i if args found
+	 */
+	public int processArgs(String[] args, int i) {
+		// charge
+		
+		if (false) {
+		} else if (args[i].equalsIgnoreCase("-ATOM_XOFFSETFACTOR")) {
+			this.setXOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_YOFFSETFACTOR")) {
+			this.setYOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDRADIUSFACTOR")) {
+			this.setBackgroundRadiusFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_CHARGEFONTFACTOR")) {
+			this.setChargeFontFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_XCHARGEOFFSETFACTOR")) {
+			this.setXChargeOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_YCHARGEOFFSETFACTOR")) {
+			this.setYChargeOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDCHARGERADIUSFACTOR")) {
+			this.setBackgroundChargeRadiusFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_XIDOFFSETFACTOR")) {
+			this.setXIdOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_YIDOFFSETFACTOR")) {
+			this.setYIdOffsetFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDIDOFFSETFACTOR")) {
+			this.setBackgroundIdRadiusFactor(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_DISPLAYCARBONS")) {
+			this.setDisplayCarbons(true); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_DISPLAYLABELS")) {
+			this.setDisplayLabels(true); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_FONTSIZE")) {
+			this.setFontSize(new Double(args[++i])); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_COLOR")) {
+			this.setColor(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_FILL")) {
+			this.setFill(args[++i]);
+		} else if (args[i].equalsIgnoreCase("-ATOM_STROKE")) {
+			this.setStroke(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_OPACITY")) {
+			this.setOpacity(new Double(args[++i])); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_FONTSTYLE")) {
+			this.setFontStyle(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_FONTWEIGHT")) {
+			this.setFontWeight(args[++i]);
+		} else if (args[i].equalsIgnoreCase("-ATOM_FONTFAMILY")) {
+			this.setFontFamily(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_SHOWHYDROGENS")) {
+			this.setOmitHydrogens(false); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_OMITHYDROGENS")) {
+			this.setOmitHydrogens(true); i++;
+		} else if (args[i].equalsIgnoreCase("-ATOM_SHOWCHILDLABELS")) {
+			this.setShowChildLabels(true); i++;
+		}
+		return i;
+	}
+
+	public static void usage() {
+		
+		System.out.println(" AtomDisplay options ");
+	    System.out.println("    -ATOM_XOFFSETFACTOR value");
+	    System.out.println("    -ATOM_YOFFSETFACTOR value");
+	    System.out.println("    -ATOM_BACKGROUNDRADIUSFACTOR value");
+	    System.out.println("    -ATOM_CHARGEFONTFACTOR value");
+	    System.out.println("    -ATOM_XCHARGEOFFSETFACTOR value");
+	    System.out.println("    -ATOM_YCHARGEOFFSETFACTOR value");
+	    System.out.println("    -ATOM_BACKGROUNDCHARGERADIUSFACTOR value");
+	    System.out.println("    -ATOM_XIDOFFSETFACTOR value");
+	    System.out.println("    -ATOM_YIDOFFSETFACTOR value");
+	    System.out.println("    -ATOM_BACKGROUNDIDOFFSETFACTOR value");
+	    System.out.println("    -ATOM_DISPLAYCARBONS");
+	    System.out.println("    -ATOM_DISPLAYLABELS");
+		System.out.println("    -ATOM_FONTSIZE size(D)");
+		System.out.println("    -ATOM_COLOR fontColor");
+		System.out.println("    -ATOM_FILL areaFill (includes text)");
+		System.out.println("    -ATOM_STROKE stroke (line but not text)");
+		System.out.println("    -ATOM_OPACITY opacity(D 0-ATOM_1)");
+		System.out.println("    -ATOM_FONTSTYLE fontStyle");
+		System.out.println("    -ATOM_FONTWEIGHT fontWeight");
+		System.out.println("    -ATOM_FONTFAMILY fontFamily");
+		System.out.println("    -ATOM_OMITHYDROGENS");
+		System.out.println("    -ATOM_SHOWHYDROGENS");
+		System.out.println("    -ATOM_SHOWCHILDLABELS");
+		System.out.println();
 	}
 }

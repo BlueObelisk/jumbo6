@@ -431,14 +431,42 @@ public class SMILESTool extends AbstractTool {
         }
 // formalCharge
         if (i < l) {
-            final char sign = s.charAt(i);
+        	int charge = 0;
+            char sign = s.charAt(i);
         	if (sign != C_PLUS && sign != C_MINUS) {
-        		throw new CMLRuntimeException("Sign must be of form -[n] or +[n] (found "+sign+") in "+scopy );
+        		throw new CMLRuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
         	}
             i++;
-            int charge = 1;
             if (i >= l) {
-            	charge = (sign == C_MINUS) ? -1 : 1;
+            	// run off end
+            } else if (sign == C_PLUS) {
+            	if (charge == 0) {
+            		charge = 1;
+            	} else {
+            		charge ++;
+            		while (i+1 < l) {
+            			sign = s.charAt(i+1);
+            			if (sign != C_PLUS) {
+            				break;
+            			}
+            			charge++;
+            			i++;
+            		}
+            	}
+            } else if (sign == C_MINUS) {
+            	if (charge == 0) {
+            		charge = -1;
+            	} else {
+            		charge --;
+            		while (i+1 < l) {
+            			sign = s.charAt(i+1);
+            			if (sign != C_MINUS) {
+            				break;
+            			}
+            			charge--;
+            			i++;
+            		}
+            	}
             } else if (!Character.isDigit(s.charAt(i))) {
                 throw new CMLRuntimeException("Sign must be of form -n or +n  (found "+s.charAt(i)+") in "+scopy);
             } else {

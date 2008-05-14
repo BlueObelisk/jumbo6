@@ -2553,6 +2553,12 @@ public class Util implements EuclidConstants {
 		return ((int)(trim*dd))/(double)trim;
 	}
 	
+	/** sorts a list of string on integers within them.
+	 * normal lexical sort will often produce file1, file10, file11, file2, etc.
+	 * this will order them by integers int   their 
+	 * 
+	 * @param list
+	 */
 	public static void sortByEmbeddedInteger(List<?> list) {
 		StringIntegerComparator fic = new StringIntegerComparator();
 		Collections.sort(list, fic);

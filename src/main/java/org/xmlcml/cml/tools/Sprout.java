@@ -59,7 +59,7 @@ public class Sprout extends AbstractTool {
 	 * @throws CMLRuntimeException
 	 */
 	Real2 getSproutVector() throws CMLRuntimeException {
-		double bondLength = ringNucleus.getMoleculeDraw().getDrawParameters().getBondLength();
+		double bondLength = ((MoleculeDisplay)ringNucleus.getMoleculeDraw().getDrawParameters()).getBondLength();
 		if (ringAtom.getX2Attribute() == null) {
 			throw new CMLRuntimeException("ringAtom has no coordinates; "+ringAtom.getId());
 		}

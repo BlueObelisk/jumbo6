@@ -175,7 +175,7 @@ public class MoleculeLayout extends AbstractTool {
 	/**
 	 * @return the moleculeDisplay
 	 */
-	public MoleculeDisplay getDrawParameters() {
+	public AbstractDisplay getDrawParameters() {
 		ensureDrawParameters();
 		return moleculeDisplay;
 	}

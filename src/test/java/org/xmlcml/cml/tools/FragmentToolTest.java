@@ -638,7 +638,7 @@ public class FragmentToolTest extends AbstractTest {
 	 * tests 20_
 	 */
 	@Test
-	// @Ignore
+    @Ignore
 	public void test20_() {
 		boolean debug = false;
 		boolean check = true;

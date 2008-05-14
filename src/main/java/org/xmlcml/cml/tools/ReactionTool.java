@@ -836,7 +836,7 @@ public class ReactionTool extends AbstractSVGTool {
      * @return null if problem
      */
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
-    	MoleculeDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
+    	AbstractDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
     		reactionDisplay.getMoleculeDisplay();
     	enableReactionDisplay();
     	Transform2 transform2 = new Transform2(

@@ -137,8 +137,9 @@ public class CMLSymmetry extends AbstractSymmetry {
      */
     public boolean isEqualTo(CMLSymmetry sym, double eps) {
     	// first check in case they are lexically equivalent
-        boolean equals = CMLUtil.equalsCanonically(this, sym, true);
-        if (!equals) {
+    	boolean equals = false;
+//        boolean equals = CMLUtil.equalsCanonically(this, sym, true);
+//        if (!equals) {
 	        CMLElements<CMLTransform3> thisTrs = this.getTransform3Elements();
 	        CMLElements<CMLTransform3> symTrs = sym.getTransform3Elements();
 	        if (thisTrs.size() == symTrs.size()) {
@@ -155,7 +156,7 @@ public class CMLSymmetry extends AbstractSymmetry {
 	                }
 	            }
 	        }
-        }
+//        }
         return equals;
     }
 

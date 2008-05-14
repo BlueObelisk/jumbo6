@@ -38,10 +38,12 @@ import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLName;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLUnit;
@@ -51,9 +53,11 @@ import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealRange;
@@ -2357,6 +2361,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	}
     	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
     	bondDisplay.setScale(avlength);
+    	
     	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
     	atomDisplay.setScale(avlength);
     	displayBonds(drawable, g, bondDisplay, atomDisplay);
@@ -2365,7 +2370,15 @@ public class MoleculeTool extends AbstractSVGTool {
     	} 
     	displayAtoms(drawable, g, atomDisplay);
     	
-    	displayFormula(drawable, g);
+    	if (moleculeDisplay.isDisplayFormula()) {
+    		displayFormula(drawable, g);
+    	}
+    	if (moleculeDisplay.isDisplayLabels()) {
+    		displayMoleculeLabels(drawable, g);
+    	}
+    	if (moleculeDisplay.isDisplayNames()) {
+    		displayMoleculeNames(drawable, g);
+    	}
     	
     	if (drawable != null) {
     		try {
@@ -2436,13 +2449,56 @@ public class MoleculeTool extends AbstractSVGTool {
     		}
 		}
 	}
+	
+	private void displayMoleculeNames(CMLDrawable drawable, SVGElement g) {
+		double x = 50.;
+		double y = 50.;
+		double deltay = 20.0;
+		int i = 0;
+    	Transform2 transform2 = new Transform2(
+			new double[] {
+				1.,  0., 0.0,
+				0., -1., 0.0,
+				0.,  0., 1.}
+			);
+		for (CMLName name : molecule.getNameElements()) {
+			SVGText text = new SVGText(new Real2(x, y+(i*deltay)), name.getValue());
+	    	text.setTransform(transform2);
+			g.appendChild(text);
+			i++;
+		}
+	}
+    
+	private void displayMoleculeLabels(CMLDrawable drawable, SVGElement g) {
+		double x = 50.;
+		double y = 30.;
+    	Transform2 transform2 = new Transform2(
+			new double[] {
+				1.,  0., 0.0,
+				0., -1., 0.0,
+				0.,  0., 1.}
+			);
+		if (molecule.getLabelElements().size() > 0) {
+			CMLLabel label = molecule.getLabelElements().get(0);
+			SVGText text = new SVGText(new Real2(x, y), label.getCMLValue());
+	    	text.setTransform(transform2);
+			g.appendChild(text);
+		}
+	}
     
 	private void displayFormula(CMLDrawable drawable, SVGElement g) {
     	if (molecule.getFormulaElements().size() > 0) {
     		CMLFormula formula = molecule.getFormulaElements().get(0);
     		FormulaTool formulaTool = FormulaTool.getOrCreateTool(formula);
-    		GraphicsElement f = formulaTool.createGraphicsElement(drawable);
+    		SVGElement f = formulaTool.createGraphicsElement(drawable);
     		if (f != null) {
+    	    	Transform2 transform2 = new Transform2(
+	    			new double[] {
+	    				1.,  0., 0.0,
+	    				0., -1., 0.0,
+	    				0.,  0., 1.}
+	    			);
+    	    	f.setTransform(transform2);
     			g.appendChild(f);
     		}
     	}

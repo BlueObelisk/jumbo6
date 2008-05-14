@@ -3,7 +3,6 @@ package org.xmlcml.cml.base;
 import java.text.ParseException;
 import java.util.List;
 
-
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;

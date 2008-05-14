@@ -23,7 +23,7 @@ public class MoleculeListTool extends AbstractSVGTool {
 
     /** dewisott */
 	private CMLMoleculeList moleculeList;	
-	private MoleculeDisplay moleculeDisplay;
+	private AbstractDisplay moleculeDisplay;
 
 	/**
 	 * constructor
@@ -98,7 +98,7 @@ public class MoleculeListTool extends AbstractSVGTool {
 	/**
 	 * @return the MoleculeDisplay
 	 */
-	public MoleculeDisplay getMoleculeDisplay() {
+	public AbstractDisplay getMoleculeDisplay() {
 		if (moleculeDisplay == null) {
 			moleculeDisplay = new MoleculeDisplay();
 		}
@@ -108,7 +108,7 @@ public class MoleculeListTool extends AbstractSVGTool {
 	/**
 	 * @param MoleculeDisplay the MoleculeDisplay to set
 	 */
-	public void setMoleculeDisplay(MoleculeDisplay MoleculeDisplay) {
+	public void setMoleculeDisplay(AbstractDisplay MoleculeDisplay) {
 		this.moleculeDisplay = MoleculeDisplay;
 	}
 	
