@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import sun.security.action.GetBooleanAction;
+
 
 /** display properties for bond.
  * 
@@ -14,21 +16,29 @@ public class BondDisplay extends AbstractDisplay {
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
+		DEFAULT.setDefaults();
 		
-		DEFAULT.width = 0.08;
-		DEFAULT.color = "black";
-		DEFAULT.fill = DEFAULT.color;
-		DEFAULT.stroke = null;
-		DEFAULT.multipleColor = "white";
-		
-		DEFAULT.opacity = Double.NaN;
 	};
 
 	/** constructor.
 	 */
 	public BondDisplay() {
 		super();
-		// TODO Auto-generated constructor stub
+	}
+	
+	protected void init() {
+	}
+	
+	protected void setDefaults() {
+		super.setDefaults();
+		//
+		multipleColor = backgroundColor;
+		scale = 1.0;
+		width = 1.0;
+		// 
+		width = 0.08; // which?
+		color = "black";
+		stroke = null; // because bonds are filled lines
 	}
 	
 	/** copy constructor.
@@ -38,34 +48,8 @@ public class BondDisplay extends AbstractDisplay {
 	public BondDisplay(BondDisplay a) {
 		super(a);
 		this.multipleColor = a.multipleColor;
+		this.scale = a.scale;
 		this.width = a.width;
-	}
-	/** super field constructor.
-	 * 
-	 * @param fontSize
-	 * @param color
-	 * @param fill
-	 * @param stroke
-	 * @param opacity
-	 * @param fontStyle
-	 * @param fontWeight
-	 * @param fontFamily
-	 * @param omitHydrogens
-	 */
-	public BondDisplay(double fontSize, String color, String fill, String stroke, double opacity, String fontStyle, String fontWeight, String fontFamily, boolean omitHydrogens) {
-		super(fontSize, color, fill, stroke, opacity, fontStyle, fontWeight,
-				fontFamily, omitHydrogens);
-	}
-
-	/** field constructor.
-	 * 
-	 * @param multipleColor
-	 * @param width
-	 */
-	public BondDisplay(String multipleColor, double width) {
-		super();
-		this.multipleColor = multipleColor;
-		this.width = width;
 	}
 	
 	/**
@@ -115,4 +99,40 @@ public class BondDisplay extends AbstractDisplay {
 		this.scale = scale;
 	}
 	
+	/** cascades through from calling program
+	 * @param args
+	 * @param i
+	 * @return increased i if args found
+	 */
+	public int processArgs(String[] args, int i) {
+		// charge
+		
+		if (false) {
+		} else if (args[i].equalsIgnoreCase("-BOND_MULTIPLECOLOR")) {
+			this.setMultipleColor(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-BOND_WIDTH")) {
+			this.setWidth(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-BOND_SCALE")) {
+			this.setScale(new Double(args[++i]).doubleValue()); i++;
+		} else if (args[i].equalsIgnoreCase("-BOND_STROKE")) {
+			this.setStroke(args[++i]); i++;
+		} else if (args[i].equalsIgnoreCase("-BOND_OPACITY")) {
+			this.setOpacity(new Double(args[++i])); i++;
+		} else if (args[i].equalsIgnoreCase("-BOND_SHOWCHILDLABELS")) {
+			this.setShowChildLabels(true); i++;
+		}
+		return i;
+	}
+
+	public static void usage() {
+		
+		System.out.println(" BondDisplay options ");
+		System.out.println("    -BOND_MULTIPLECOLOR color");
+		System.out.println("    -BOND_WIDTH width(D)");
+		System.out.println("    -BOND_SCALE scale(D)");
+		System.out.println("    -BOND_STROKE stroke");
+		System.out.println("    -BOND_OPACITY opacity(D 0-BOND_1)");
+		System.out.println("    -BOND_SHOWCHILDLABELS");
+		System.out.println();
+	}
 }

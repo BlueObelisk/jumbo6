@@ -20,7 +20,6 @@ import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Vector2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**

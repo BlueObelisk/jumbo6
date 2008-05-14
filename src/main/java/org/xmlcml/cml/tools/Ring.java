@@ -176,7 +176,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	public void calculate2DCoordinates(MoleculeLayout moleculeDraw) {
 		ensureAtomCoordMap();
 		this.setMoleculeDraw(moleculeDraw);
-		Real2Vector points = Real2Vector.regularPolygon(size(), moleculeDraw.getDrawParameters().getBondLength()*RINGSCALE);
+		Real2Vector points = Real2Vector.regularPolygon(size(), ((MoleculeDisplay)moleculeDraw.getDrawParameters()).getBondLength()*RINGSCALE);
 		List<CMLAtom> atoms = this.getCyclicAtomList();
 		for (int i = 0; i < atoms.size(); i++) {
 			atomCoordMap.put(atoms.get(i), points.get(i));

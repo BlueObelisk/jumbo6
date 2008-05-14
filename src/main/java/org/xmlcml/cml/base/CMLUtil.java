@@ -693,37 +693,37 @@ public abstract class CMLUtil implements CMLConstants {
 		}
 	}
 
-	/**
-	 * tests 2 XML objects for equality using canonical XML.
-	 * 
-	 * @param refNode
-	 *            first node
-	 * @param testNode
-	 *            second node
-	 * @param stripWhite
-	 *            if tru remove w/s nodes
-	 * @return is equal
-	 */
-	public static boolean equalsCanonically(Element refNode, Element testNode,
-			boolean stripWhite) {
-		boolean equals = true;
-		// check if they are different objects
-		if (refNode != testNode) {
-			if (stripWhite) {
-				refNode = new Element(refNode);
-				removeWhitespaceNodes(refNode);
-				testNode = new Element(testNode);
-				removeWhitespaceNodes(testNode);
-			}
-			try {
-				XOMTestCase.assertEquals("foo", refNode, testNode);
-			} catch (ComparisonFailure e) {
-				equals = false;
-			} catch (AssertionFailedError e) {
-				equals = false;
-			}
-		}
-		return equals;
-	}
+//	/**
+//	 * tests 2 XML objects for equality using canonical XML.
+//	 * 
+//	 * @param refNode
+//	 *            first node
+//	 * @param testNode
+//	 *            second node
+//	 * @param stripWhite
+//	 *            if tru remove w/s nodes
+//	 * @return is equal
+//	 */
+//	public static boolean equalsCanonically(Element refNode, Element testNode,
+//			boolean stripWhite) {
+//		boolean equals = true;
+//		// check if they are different objects
+//		if (refNode != testNode) {
+//			if (stripWhite) {
+//				refNode = new Element(refNode);
+//				removeWhitespaceNodes(refNode);
+//				testNode = new Element(testNode);
+//				removeWhitespaceNodes(testNode);
+//			}
+//			try {
+//				XOMTestCase.assertEquals("foo", refNode, testNode);
+//			} catch (ComparisonFailure e) {
+//				equals = false;
+//			} catch (AssertionFailedError e) {
+//				equals = false;
+//			}
+//		}
+//		return equals;
+//	}
 }
 

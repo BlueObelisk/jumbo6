@@ -1,7 +1,5 @@
 package org.xmlcml.euclid.test;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 

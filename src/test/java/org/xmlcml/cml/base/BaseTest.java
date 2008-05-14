@@ -251,59 +251,6 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
         }
     }
 
-    /**
-     * equalsCanonically.
-     * 
-     */
-    @Test
-    public void testAssertEqualsCanonically() {
-        String s1 = "<a b='c' d='e'><f g='h' i='j'>&amp;x</f><g/></a>";
-        String s2 = "<a d='e' b='c'><f i='j' g='h'>&#38;x</f><g></g></a>";
-        String s3 = "<a d='e' b='c'><f i='j' g='h'><![CDATA[&]]><![CDATA[x]]></f><g></g></a>";
-        String s4 = "<a b='c' d='e'>\n" + "<f g='h' i='j'>&amp;x</f><g/>\n"
-                + "</a>";
-        Document d1 = null;
-        Document d2 = null;
-        Document d3 = null;
-        Document d4 = null;
-        try {
-            d1 = new Builder().build(new StringReader(s1));
-        } catch (Exception e) {
-            Assert.fail("should not throw " + e);
-        }
-        try {
-            d2 = new Builder().build(new StringReader(s2));
-        } catch (Exception e) {
-            Assert.fail("should not throw " + e);
-        }
-        try {
-            d3 = new Builder().build(new StringReader(s3));
-        } catch (Exception e) {
-            Assert.fail("should not throw " + e);
-        }
-        try {
-            d4 = new Builder().build(new StringReader(s4));
-        } catch (Exception e) {
-            Assert.fail("should not throw " + e);
-        }
-        assertEqualsCanonically("should be canonically equal ", d1, d1);
-        assertEqualsCanonically("should be canonically equal ", d1, d2);
-        assertEqualsCanonically("should be canonically equal ", d1, d3);
-        assertNotEqualsCanonically("should not be canonically equal ", d1, d4);
-
-        String s5 = "<a b='c' xmlns:h='"+XHTML_NS+"'><b/></a>";
-        Document d5 = null;
-        try {
-            d5 = new Builder().build(new StringReader(s5));
-        } catch (Exception e) {
-            Assert.fail("should not throw " + e);
-        }
-        Element e5 = d5.getRootElement();
-        Element e5a = new Element(e5);
-        String s5S = CMLUtil.getCanonicalString(e5);
-        String s5Sa = CMLUtil.getCanonicalString(e5a);
-        Assert.assertEquals("copy should have equal canonical", s5S, s5Sa);
-    }
 
     /** test the writeHTML method of element.
      * 
