@@ -36,6 +36,10 @@
 			<name>Simon "Billy" Tyrrell</name>
 		</developer>
 		<developer>
+			<id>dmj30</id>
+			<name>David Jessop</name>
+		</developer>
+		<developer>
 			<id>drzz</id>
 			<name>Daniel Zaharevitz</name>
 		</developer>
@@ -212,6 +216,9 @@
 						</exclude>
 						<exclude>
 							org/xmlcml/cml/element/NumericTest.java
+						</exclude>
+						<exclude>
+							org/xmlcml/cml/tools/MoleculeListToolTest.java
 						</exclude>
 					</excludes>
 				</configuration>
