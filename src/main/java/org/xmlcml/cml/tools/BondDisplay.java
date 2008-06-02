@@ -1,6 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import sun.security.action.GetBooleanAction;
 
 
 /** display properties for bond.

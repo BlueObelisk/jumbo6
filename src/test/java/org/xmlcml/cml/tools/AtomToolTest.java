@@ -1,4 +1,8 @@
 package org.xmlcml.cml.tools;
+import java.util.List;
+
+import nu.xom.Element;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -205,5 +209,12 @@ public class AtomToolTest extends MoleculeAtomBondTest {
 		Assert.fail("Not yet implemented"); // TODO
 	}
 
-    
+	/**
+	 * 
+	 */
+	@Test
+    public final void testGetReferencedAtoms() {
+        Element cml = parseValidFile("org/xmlcml/cml/tools/testRGroup1.xml");
+//    	List<CMLAtom> atomList = atomTool.getReferencedAtoms(scopeElement);
+	}
  }

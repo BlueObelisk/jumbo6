@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.ComparisonFailure;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -24,7 +22,6 @@ import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
-import nu.xom.tests.XOMTestCase;
 
 import org.xmlcml.euclid.Util;
 
@@ -146,7 +143,11 @@ public abstract class CMLUtil implements CMLConstants {
 	 */
 	public static void debug(Element el) {
 		try {
-			debug(el, System.out, 2);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			debug(el, baos, 2);
+			baos.close();
+			System.out.println(baos.toString());
+			System.out.flush();
 		} catch (IOException e) {
 			throw new CMLRuntimeException("BUG " + e);
 		}
@@ -181,6 +182,7 @@ public abstract class CMLUtil implements CMLConstants {
 		System.out.println(">>>>" + message + ">>>>");
 		CMLUtil.debug(el);
 		System.out.println("<<<<" + message + "<<<<");
+		System.out.flush();
 	}
 
 	/**
@@ -328,8 +330,7 @@ public abstract class CMLUtil implements CMLConstants {
 	 * get next sibling.
 	 * 
 	 * @author Eliotte Rusty Harold
-	 * @param current
-	 *            may be null
+	 * @param current may be null
 	 * @return following sibling or null
 	 */
 	public static Node getFollowingSibling(Node current) {
@@ -344,6 +345,34 @@ public abstract class CMLUtil implements CMLConstants {
 			}
 		}
 		return node;
+	}
+
+	/**
+	 * remove empty text nodes or merge adjacent ones.
+	 * 
+	 */
+	public static void normalizeTexts(Element element) {
+		for (int j = element.getChildCount()-1; j >= 0; j--) {
+			Node child = element.getChild(j);
+			if (child instanceof Element) {
+				CMLUtil.normalizeTexts((Element) child);
+			} else if (child instanceof Text){
+				Text text = (Text) child;
+				if (text.getValue().length() == 0) {
+					text.detach();
+				} else {
+					if (j > 0) {
+						Node prevChild = element.getChild(j-1);
+						if (prevChild instanceof Text) {
+							Text prev = (Text) prevChild;
+							prev.setValue(prev.getValue()+text.getValue());
+							text.setValue("");
+							text.detach();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -392,13 +421,10 @@ public abstract class CMLUtil implements CMLConstants {
 		return (l.size() == 0) ? null : (Text) l.get(0);
 	}
 
-	/**
-	 * transfers children of 'from' to 'to'.
+	/** transfers children of 'from' to 'to'.
 	 * 
-	 * @param from
-	 *            (will be left with no children)
-	 * @param to
-	 *            (will gain 'from' children appended after any existing
+	 * @param from (will be left with no children)
+	 * @param to (will gain 'from' children appended after any existing
 	 *            children
 	 */
 	public static void transferChildren(Element from, Element to) {
@@ -415,17 +441,18 @@ public abstract class CMLUtil implements CMLConstants {
 	 * transfers children of element to its parent. element is left in place and
 	 * children come immediately before normally element will be deleted
 	 * 
-	 * @param element
-	 *            (will be left with no children)
+	 * @param element (will be left with no children)
 	 */
 	public static void transferChildrenToParent(Element element) {
 		int nc = element.getChildCount();
-		ParentNode parent = element.getParent();
+		Element parent = (Element) element.getParent();
 		int ii = parent.indexOf(element);
+		int j = 0;
 		for (int i = nc - 1; i >= 0; i--) {
 			Node child = element.getChild(i);
 			child.detach();
 			parent.insertChild(child, ii);
+			j++;
 		}
 	}
 
@@ -693,6 +720,31 @@ public abstract class CMLUtil implements CMLConstants {
 		}
 	}
 
+	/** detaches nodes from their parents.
+	 * almost trivial
+	 * @param nodes
+	 */
+	public static void detachNodes(Nodes nodes) {
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).detach();
+		}
+	}
+
+	/** removes element and moves children to parent.
+	 * does not normalize Texts
+	 * @param element
+	 * @param style
+	 */
+	public static void removeElementAndPullUpChildren(Element element, String style) {
+		Nodes nodes = element.query(".//"+style);
+		int nc = nodes.size();
+		for (int i = nc-1; i >= 0; i--) {
+			Element styleElem = (Element) nodes.get(i);
+			transferChildrenToParent(styleElem);
+			styleElem.detach();
+		}
+	}
+	
 //	/**
 //	 * tests 2 XML objects for equality using canonical XML.
 //	 * 

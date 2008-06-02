@@ -1842,6 +1842,49 @@ public class Util implements EuclidConstants {
 		return sb.toString();
 	}
 
+	/** convert 2 UTF8 characters to single IsoLatin1 character.
+	 * quick and dirty
+	 * UTF8 C2 80 => 80 (etc)
+	 * UTF8 C3 80 => C0 (i.e. add x40)
+	 * user has responsibility for selecting characters
+	 * @param a leading character (ignored if not C2 and not C3)
+	 * @param b  range 80-bf 
+	 * @return Isolatin equiv or 0 if a,b ignored or bad range
+	 */
+	public static char convertUTF8ToLatin1(char a, char b) {
+		char c = 0;
+		if (b >= 128 && b < 192) {
+			if (a == (char)194) {
+				c = b;
+			} else if (a == (char)195) {
+				c = (char)((int)b + 64);
+			}
+		}
+		return c;
+	}
+	
+	/** convert single IsoLatin1 character to 2 UTF8 characters .
+	 * quick and dirty
+	 * user has responsibility for selecting characters
+	 * a >= x80 && a <= xBF ==> xC2 a
+	 * a >= xC0 && a <= xFF ==> xC3 a - x40
+	 * @param a char to be converted (a >= x80 && a <xff)
+	 * @return 2 characters or null
+	 */
+	public static char[] convertLatin1ToUTF8(char a) {
+		char[] c = null;
+		if (a >= 128 && a < 192) {
+			c = new char[2];
+			c[0] = (char)194;
+			c[1] = a;
+		} else if (a >= 192 && a < 256) {
+			c = new char[2];
+			c[0] = (char)195;
+			c[1] = (char) (a - 64);
+		}
+		return c;
+	}
+	
 	/**
 	 * normalise whitespace in a String (all whitespace is transformed to single
 	 * spaces and the string is NOT trimmed
@@ -2562,6 +2605,55 @@ public class Util implements EuclidConstants {
 	public static void sortByEmbeddedInteger(List<?> list) {
 		StringIntegerComparator fic = new StringIntegerComparator();
 		Collections.sort(list, fic);
+	}
+
+	/** convert text node to Latin 1.
+	 * 
+	 * @param text
+	 */
+	public static String convertUTF8ToLatin1(String s) {
+		String result = null;
+		boolean found = false;
+		// do we need to do anything?
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == (char)194 || c == (char) 195) {
+				found = true;
+				break;
+			}
+		}
+	
+		// yes
+		if (found) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if ((c == 194 || c == 195) && i < s.length()-1) {
+					char cc = convertUTF8ToLatin1(c, s.charAt(i+1));
+					if (c == 0) {
+						// error?
+						sb.append(c);
+					} else {
+						sb.append(cc);
+						i++;
+					}
+				} else {
+					sb.append(c);
+				}
+			}
+			result = sb.toString();
+		}
+		return result;
+	}
+
+	public static double getDouble(String s) {
+		double d = Double.NaN;
+		try {
+			d = new Double(s).doubleValue();
+		} catch (NumberFormatException nfe) {
+			throw new CMLRuntimeException("Bad double: "+s);
+		}
+		return d;
 	}
 }
 class StringIntegerComparator implements Comparator<Object> {

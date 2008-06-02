@@ -73,7 +73,7 @@ public interface CMLConstants extends EuclidConstants {
 		/**
 		 * equality to value
 		 * @param s
-		 * @return tru if match
+		 * @return true if match
 		 */
 		public boolean equals(String s) {
 			return v == s;
@@ -299,6 +299,9 @@ public interface CMLConstants extends EuclidConstants {
 
     /** constant */
     String CML_NS = CML_NS_BASE+U_S+"schema";
+
+    /** suffix */
+    String CML_SUFFIX = ".cml";
 
     /** constant */
 //    String CML = CML_NS;

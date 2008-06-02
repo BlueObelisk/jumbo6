@@ -1,8 +1,0 @@
-package org.xmlcml.cml.element;
-
-
-import nu.xom.*;
-
-import org.xmlcml.cml.base.*;
-import org.xmlcml.cml.attribute.*;
-
