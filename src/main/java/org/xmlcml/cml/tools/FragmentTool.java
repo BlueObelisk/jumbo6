@@ -756,14 +756,23 @@ class BasicProcessor implements CMLConstants {
     		CMLFragment parent = (CMLFragment) childMols.get(0).getParent();
 			parent.replaceByChildren();
     	}
-    	childMols = CMLUtil.getQueryNodes(
-			fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, CML_XPATH);
-    	for (Node node : childMols) {
-    		CMLElement parent = (CMLElement) node.getParent();
-    		if (parent instanceof CMLFragment) {
-    			parent.replaceByChildren();
+    	
+    	int childMolCount = Integer.MAX_VALUE;
+    	while (true) {
+    		childMols = CMLUtil.getQueryNodes(
+    				fragment, ".//"+CMLFragment.NS+S_SLASH+CMLMolecule.NS, CML_XPATH);
+    		if (childMolCount > childMols.size()) {
+    			for (Node node : childMols) {
+            		CMLElement parent = (CMLElement) node.getParent();
+            		if (parent instanceof CMLFragment) {
+            			parent.replaceByChildren();
+            		}
+            	}
+    			childMolCount = childMols.size();
     		}
+    		else break;
     	}
+    	
     }
     
     /** recursive processing.
