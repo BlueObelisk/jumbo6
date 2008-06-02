@@ -55,7 +55,7 @@ import org.xmlcml.euclid.Util;
 class FragmentSequence implements CMLConstants {
     List<FragmentAndBond> fragmentAndBondList = null; 
     
-    private String value;
+//    private String value;
 
     /** process concise string.
      * @param formula string

@@ -17,8 +17,6 @@ import net.sf.jniinchi.JniInchiOutput;
 import net.sf.jniinchi.JniInchiWrapper;
 import nu.xom.Text;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -93,7 +91,7 @@ public class InChIGenerator implements EuclidConstants {
      */
     protected static final String CML_INCHI_CONVENTION = "iupac:inchi";
 
-    private static final Log LOG = LogFactory.getLog(InChIGenerator.class);
+//    private static final Log LOG = LogFactory.getLog(InChIGenerator.class);
 
     private static final ProcessingOptions[] DEFAULT_PROCESSING_OPTIONS = new ProcessingOptions[] { ProcessingOptions.USE_BONDS };
 
@@ -356,7 +354,7 @@ public class InChIGenerator implements EuclidConstants {
                 } else if (CMLBond.AROMATIC.equals(bo)) {
                     order = INCHI_BOND_TYPE.ALTERN;
                 } else {
-                    LOG.warn("Unsupported bond order: " + bo);
+                    System.out.println("Unsupported bond order: " + bo);
                     preInChiProblem = Problems.BOND_ORDER;
                     return;
                 }

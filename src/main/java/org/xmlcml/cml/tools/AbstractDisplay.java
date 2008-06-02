@@ -1,6 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import java.awt.Color;
 
 
 /** properties of a CML object.

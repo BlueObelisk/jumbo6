@@ -2,7 +2,6 @@ package org.xmlcml.cml.base;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -10,9 +9,7 @@ import java.util.logging.Logger;
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
 import nu.xom.Attribute;
-import nu.xom.Builder;
 import nu.xom.Comment;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ProcessingInstruction;
@@ -21,7 +18,6 @@ import nu.xom.tests.XOMTestCase;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.EuclidTestBase;
 

@@ -568,6 +568,86 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
     public final void testStripISOControls() {
         // not yet tested
     }
+    
+    /**
+     * 
+     */
+    @Test
+    public final void testConvertUTF8ToLatin1() {
+    	char c1;
+    	char c2;
+    	char c;
+    	c1 = 20;
+    	c2 = 20;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("no-op", (char)0, c);
+    	c1 = 194;
+    	c2 = 127;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("no-op", (char)0, c);
+    	c1 = 194;
+    	c2 = 128;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)128, c);
+    	c1 = 194;
+    	c2 = 191;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)191, c);
+    	c1 = 194;
+    	c2 = 192;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)0, c);
+    	c1 = 195;
+    	c2 = 127;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)0, c);
+    	c1 = 195;
+    	c2 = 128;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)192, c);
+    	c1 = 195;
+    	c2 = 191;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)255, c);
+    	c1 = 195;
+    	c2 = 192;
+    	c = Util.convertUTF8ToLatin1(c1, c2);
+    	Assert.assertEquals("nbs", (char)0, c);
+    	
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public final void testConvertLatin1ToUTF8() {
+    	char c;
+    	char [] cc;
+    	c = 127;
+    	cc = Util.convertLatin1ToUTF8(c);
+    	Assert.assertEquals("cc", null, cc);
+    	c = 128;
+    	cc = Util.convertLatin1ToUTF8(c);
+    	Assert.assertEquals("cc", 2, cc.length);
+    	Assert.assertEquals("cc", (char)194, cc[0]);
+    	Assert.assertEquals("cc", (char)128, cc[1]);
+    	c = 191;
+    	cc = Util.convertLatin1ToUTF8(c);
+    	Assert.assertEquals("cc", 2, cc.length);
+    	Assert.assertEquals("cc", (char)194, cc[0]);
+    	Assert.assertEquals("cc", (char)191, cc[1]);
+    	c = 192;
+    	cc = Util.convertLatin1ToUTF8(c);
+    	Assert.assertEquals("cc", 2, cc.length);
+    	Assert.assertEquals("cc", (char)195, cc[0]);
+    	Assert.assertEquals("cc", (char)128, cc[1]);
+    	c = 255;
+    	cc = Util.convertLatin1ToUTF8(c);
+    	Assert.assertEquals("cc", 2, cc.length);
+    	Assert.assertEquals("cc", (char)195, cc[0]);
+    	Assert.assertEquals("cc", (char)191, cc[1]);
+    	
+    }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#normaliseWhitespace(java.lang.String)}.

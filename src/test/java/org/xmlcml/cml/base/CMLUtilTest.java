@@ -328,4 +328,88 @@ public class CMLUtilTest extends BaseTest {
 		Assert.assertEquals(Double.POSITIVE_INFINITY, CMLUtil.parseFlexibleDouble("INF"));
 		Assert.assertEquals(Double.NEGATIVE_INFINITY, CMLUtil.parseFlexibleDouble("-INF"));
 	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testNormalizeTexts() {
+		Element test = new Element("foo");
+		test.appendChild(new Text("foo"));
+		test.appendChild(new Text("bar"));
+		Assert.assertEquals("text child", 2, test.getChildCount());
+		Assert.assertEquals("text child 1", "foo", test.getChild(0).getValue());
+		Assert.assertEquals("text child 2", "bar", test.getChild(1).getValue());
+		CMLUtil.normalizeTexts(test);
+		Assert.assertEquals("text child", 1, test.getChildCount());
+		Assert.assertEquals("text child 1", "foobar", test.getChild(0).getValue());
+		
+		test = new Element("foo");
+		test.appendChild(new Text("foo"));
+		test.appendChild(new Element("plugh"));
+		test.appendChild(new Text("bar"));
+		Assert.assertEquals("text child", 3, test.getChildCount());
+		Assert.assertEquals("text child 1", "foo", test.getChild(0).getValue());
+		Assert.assertEquals("text child 2", "plugh", ((Element)test.getChild(1)).getLocalName());
+		Assert.assertEquals("text child 3", "bar", test.getChild(2).getValue());
+		CMLUtil.normalizeTexts(test);
+		// no change
+		Assert.assertEquals("text child", 3, test.getChildCount());
+		Assert.assertEquals("text child 1", "foo", test.getChild(0).getValue());
+		Assert.assertEquals("text child 2", "plugh", ((Element)test.getChild(1)).getLocalName());
+		Assert.assertEquals("text child 3", "bar", test.getChild(2).getValue());
+		// delete element so texts touch
+		test.getChild(1).detach();
+		Assert.assertEquals("text child", 2, test.getChildCount());
+		Assert.assertEquals("text child 1", "foo", test.getChild(0).getValue());
+		Assert.assertEquals("text child 2", "bar", test.getChild(1).getValue());
+		CMLUtil.normalizeTexts(test);
+		Assert.assertEquals("text child", 1, test.getChildCount());
+		Assert.assertEquals("text child 1", "foobar", test.getChild(0).getValue());
+		
+		
+		String s = "<B id='/1/1/2/52/6'>(1 ONE <two/> THREE <four/><foura/> FIVE foo  </B>";
+		try {
+			Element el = new CMLBuilder().parseString(s);
+//			CMLUtil.debug(el, "start");
+			CMLUtil.normalizeTexts(el);
+//			CMLUtil.debug(el, "end");
+		} catch (Exception e) {
+			throw new CMLRuntimeException(e);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testRemoveElementAndPullUpChildren() {
+		String s = ""+
+		"<ne id='o288' surface='xxx'>" +
+		"<B id='/1/1/2/52/6'>(1" +
+		"<IT id='/1/1/2/52/6/1'>ONE <two/> THREE <four/><foura/> FIVE </IT>)-5-( " +
+		"<IT id='/1/1/2/52/6/2'>tert</IT>-Butyldimethylsilyloxy)-1-phenyl-pent-2-yn-1-ol 58" +
+		"</B>" +
+		" </ne>";
+		try {
+			Element element = new CMLBuilder().parseString(s);
+			CMLUtil.removeElementAndPullUpChildren(element, "IT");
+			String ss = 
+				"<ne id='o288' surface='xxx'>"+
+			  "<B id='/1/1/2/52/6'>(1ONE "+
+			    "<two/> THREE "+
+			    "<four/>"+
+			    "<foura/> FIVE )-5-( tert-Butyldimethylsilyloxy)-1-phenyl-pent-2-yn-1-ol 58"+
+			  "</B>"+
+			"</ne>";
+			Element element1 = new CMLBuilder().parseString(ss);
+			assertEqualsCanonically("after pull up", element1, element, true);
+			CMLUtil.normalizeTexts(element);
+			assertEqualsCanonically("after pull up", element1, element, true);
+		} catch (Exception e) {
+			throw new CMLRuntimeException(e);
+		}
+	}
+	
+	
 }

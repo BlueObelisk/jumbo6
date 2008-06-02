@@ -495,7 +495,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		// check consistency
 		if (inline2Concise != null && !conciseS.equals(inline2Concise)) {
-			throw new CMLRuntimeException("concise ("+conciseS+") and inline ("+inline+") differ");
+			throw new CMLRuntimeException("concise ("+conciseS+") and inline ("+inline+" / "+inline2Concise+") differ");
 		}
 		if (atomArray2Concise != null && 
 				!atomArray2Concise.equals(conciseS)) {

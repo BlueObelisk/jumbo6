@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import java.awt.Color;
-
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
 

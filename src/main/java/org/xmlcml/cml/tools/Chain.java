@@ -43,7 +43,7 @@ public class Chain extends AbstractTool {
 
 	private CMLAtom startAtom;
 
-	private CMLAtom nextAtom;
+//	private CMLAtom nextAtom;
 
 	private double bondLength;
 

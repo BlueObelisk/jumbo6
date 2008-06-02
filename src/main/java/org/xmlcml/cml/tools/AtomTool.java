@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
@@ -861,5 +863,24 @@ public class AtomTool extends AbstractSVGTool {
 		this.radiusFactor = radiusFactor;
 	}
 
-	
+	/** gets list of atoms referenced by R group.
+	 * scopeElement limits the search to its descendants
+	 * current atom must have elementType='R' and
+	 * CMLLabel child with a non-null value attribute. This value
+	 * is used to match R groups in atoms under scopeElement
+	 * 
+	 * @param scopeElement
+	 * @return
+	 */
+	public List<CMLAtom> getReferencedAtoms(Element scopeElement) {
+		Nodes refAtomNodes = scopeElement.query(".//cml:atom[@elementType='R']/label@value");
+		List<CMLAtom> refAtomList = new ArrayList<CMLAtom>();
+		for (int i = 0; i < refAtomNodes.size(); i++) {
+			CMLAtom refAtom = (CMLAtom) refAtomNodes.get(i);
+			if (!refAtom.equals(atom)) {
+				refAtomList.add(refAtom);
+			}
+		}
+		return refAtomList;
+	}
 }

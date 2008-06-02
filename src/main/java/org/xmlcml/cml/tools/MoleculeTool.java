@@ -2783,5 +2783,24 @@ public class MoleculeTool extends AbstractSVGTool {
 		return moleculePair;
 	}
     
+	/**
+	 * joins RGroups to molecule.
+	 * Looks for atoms with elementType="R" and a child label
+	 * cml:atom[@elementYype='R' and cml:label]
+	 * takes value of label ( labelS = cml:label/@value)
+	 * Looks for correspoding defintion of R as a descendant cml:molecule within
+	 * scopeElement,
+	 *   i.e. scopeElement.query(".//cml:atom[label/@value=$labelS", CML_XPATH)
+	 */
+	public void joinRGroupsExplicitly(Element scopeElement) {
+		List<CMLAtom> atomList = molecule.getAtoms();
+		for (CMLAtom atom : atomList) {
+			if ("R".equals(atom.getElementType())) {
+				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+				//FIXME
+//				CMLAtom refAtom = atomTool.getReferencedGroup(scopeElement);
+			}
+		}
+	}
 }
 

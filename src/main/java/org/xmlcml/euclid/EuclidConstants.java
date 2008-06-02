@@ -258,6 +258,8 @@ public interface EuclidConstants {
     /** constant */
     String S_PIPE = "|";
 
+    /** newline \n\r? */
+    String NEWLINE_REGEX = S_NEWLINE + S_RETURN + S_QUERY;
 
     /** constant */
     String NONWHITEPUNC = S_LBRAK + S_RBRAK + S_SHRIEK + S_QUOT + S_POUND

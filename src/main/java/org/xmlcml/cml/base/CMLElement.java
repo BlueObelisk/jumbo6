@@ -620,10 +620,8 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
      * copy attributes from one CMLElement to another. overwrites existing
      * atts
      * 
-     * @param from
-     *            element to copy from
-     * @param to
-     *            element to copy to
+     * @param from element to copy from
+     * @param to element to copy to
      */
 
     public static void copyAttributesFromTo(Element from, Element to) {
@@ -635,7 +633,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
             to.addAttribute(newAtt);
         }
     }
-
+    
     /** debug for element. makes copy if not document root writes to System.out
      * @param message
      */
