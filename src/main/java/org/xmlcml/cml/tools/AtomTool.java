@@ -870,10 +870,11 @@ public class AtomTool extends AbstractSVGTool {
 	 * is used to match R groups in atoms under scopeElement
 	 * 
 	 * @param scopeElement
+	 * @param label of atom in scope
 	 * @return
 	 */
-	public List<CMLAtom> getReferencedAtoms(Element scopeElement) {
-		Nodes refAtomNodes = scopeElement.query(".//cml:atom[@elementType='R']/label@value");
+	public List<CMLAtom> getReferencedAtoms(Element scopeElement, String label) {
+		Nodes refAtomNodes = scopeElement.query(".//cml:atom[@elementType='R' and cml:label[@value='"+label+"']]", CML_XPATH);
 		List<CMLAtom> refAtomList = new ArrayList<CMLAtom>();
 		for (int i = 0; i < refAtomNodes.size(); i++) {
 			CMLAtom refAtom = (CMLAtom) refAtomNodes.get(i);
