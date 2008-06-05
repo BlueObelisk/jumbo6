@@ -1,4 +1,6 @@
 package org.xmlcml.cml.element;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.euclid.Point3;
@@ -16,7 +17,7 @@ import org.xmlcml.euclid.Point3;
  * @author pmr
  *
  */
-public class CMLSymmetryTest extends BaseTest {
+public class CMLSymmetryTest {
     // space group (Pbca) but not finite group
     static String[] pbca = { "x, y, z", "-x+1/2, -y, z+1/2",
             "x+1/2, -y+1/2, -z", "-x, y+1/2, -z+1/2", "-x, -y, -z",
@@ -75,7 +76,6 @@ public class CMLSymmetryTest extends BaseTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         matrix1 = new CMLMatrix[] {
             new CMLMatrix(3, 4, new double[] { 1, 0, 0, 0.0, 0, 1, 0,
                     0.0, 0, 0, 1, 0.0 }),

@@ -1,5 +1,9 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.EXPERIMENTAL_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.InputStream;
 
 import org.junit.Assert;
@@ -15,16 +19,8 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
-public class CMLJoinTest extends AbstractTest {
+public class CMLJoinTest {
 
-    /** set up.
-     * @exception Exception
-     */
-    @Test
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-    
     /** Test method for 'org.xmlcml.cml.element.CMLJoin.joinAtomRefs2()'
      */
     @Test

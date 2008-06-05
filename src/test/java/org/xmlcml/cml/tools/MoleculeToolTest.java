@@ -1,6 +1,14 @@
 package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.fail;
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.element.AbstractTest.TOOL_MOLECULES_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,7 +33,6 @@ import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -48,7 +55,6 @@ import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-
 
 /**
  * tests moleculeTool.
@@ -2671,7 +2677,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
 		
 		to.setId("from"); // to allow comparison
-		AbstractTest.assertEqualsCanonically("compare mols", from, to);
+		assertEqualsCanonically("compare mols", from, to);
 		
 		permitOverwrite = false;
 		try {

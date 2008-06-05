@@ -1,13 +1,19 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.InputStream;
 
 import junit.framework.Assert;
 import nu.xom.NodeFactory;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLNodeFactory;
 import org.xmlcml.euclid.Util;
 
@@ -16,8 +22,16 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
-public class CMLBuilderTest extends AbstractTest implements CMLConstants {
+public class CMLBuilderTest {
 
+	
+	private CMLBuilder builder;
+
+	@Before
+	public void setUp() {
+		builder = new CMLBuilder();
+	}
+	
     /** Test method for 'org.xmlcml.cml.element.CMLBuilder.CMLBuilder(boolean, NodeFactory)'
      */
     @Test

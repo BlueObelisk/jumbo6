@@ -1,5 +1,13 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
+import static org.xmlcml.cml.element.AbstractTest.EXPERIMENTAL_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_COLON;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,14 +25,13 @@ import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.euclid.Util;
-
 /**
  * test polymerTool.
  *
  * @author pm286
  *
  */
-public class PolymerToolTest extends AbstractToolTest {
+public class PolymerToolTest {
 
 	/**
 	 * Test method for

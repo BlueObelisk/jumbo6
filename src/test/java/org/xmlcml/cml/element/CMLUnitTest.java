@@ -1,5 +1,20 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_SIUNITS;
+import static org.xmlcml.cml.base.CMLConstants.CML_UNITS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNITTYPES_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_COLON;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.StringWriter;
 
 import org.junit.Assert;

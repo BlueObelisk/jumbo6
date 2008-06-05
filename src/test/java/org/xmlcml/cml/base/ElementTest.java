@@ -1,5 +1,10 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.BASE_RESOURCE;
+import static org.xmlcml.util.TestUtils.neverFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,12 +17,12 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
 
 /**
  * fundamental parsing (not necessarily involved derived classses.
@@ -25,28 +30,10 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  * 
  */
-public class ElementTest extends BaseTest {
+public class ElementTest {
 	final static String noSchema = "noSchema.xml";
 
 	final static String cml0 = "cml0.xml";
-
-	/**
-	 * main
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-	}
-
-	/**
-	 * setup.
-	 * 
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * parse withoout validation.
@@ -64,7 +51,7 @@ public class ElementTest extends BaseTest {
 		Util.output("  === xom Parse, no validation: " + file + " ====");
 		InputStream in = null;
 
-		in = Util.getInputStreamFromResource(BASE_RESOURCE + U_S + file);
+		in = Util.getInputStreamFromResource(TestUtils.BASE_RESOURCE + U_S + file);
 		doc = new Builder().build(in);
 		Assert.assertNotNull("document ", doc);
 	}
@@ -214,10 +201,10 @@ public class ElementTest extends BaseTest {
 		} catch (Exception e) {
 			neverThrow(e);
 		}
-		BaseTest.assertNotEqualsCanonically("before whitespace", element0,
+		TestUtils.assertNotEqualsCanonically("before whitespace", element0,
 				element1);
 		CMLUtil.removeWhitespaceNodes(element0);
-		BaseTest.assertEqualsCanonically("before whitespace ", element0,
+		TestUtils.assertEqualsCanonically("before whitespace ", element0,
 				element1);
 	}
 

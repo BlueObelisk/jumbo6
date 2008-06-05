@@ -3,6 +3,15 @@
  */
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.F_S;
+import static org.xmlcml.euclid.EuclidConstants.S_COMMA;
+import static org.xmlcml.euclid.EuclidConstants.S_PERIOD;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,15 +25,14 @@ import nu.xom.Document;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.BaseTest;
-import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
  *
  */
-public class UtilTest extends EuclidTestBase implements EuclidConstants {
+public class UtilTest {
 
     /**
      * Test method for 'org.xmlcml.cml.base.Util.getTEMP_DIRECTORY()'
@@ -91,7 +99,7 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
     public final void testCreateFile() {
         File dir = null;
         try {
-            dir = Util.getResourceFile(BaseTest.BASE_RESOURCE);
+            dir = Util.getResourceFile(TestUtils.BASE_RESOURCE);
         } catch (Exception e1) {
             neverThrow(e1);
         }
@@ -178,7 +186,7 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      */
     @Test
     public final void testGetInputStreamFromResource() {
-        String filename = BaseTest.BASE_RESOURCE + U_S + "cml0.xml";
+        String filename = TestUtils.BASE_RESOURCE + U_S + "cml0.xml";
         InputStream is = null;
         try {
             is = Util.getInputStreamFromResource(filename);
@@ -199,7 +207,7 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      */
     @Test
     public final void testGetResource() {
-        String filename = BaseTest.BASE_RESOURCE + U_S + "cml0.xml";
+        String filename = TestUtils.BASE_RESOURCE + U_S + "cml0.xml";
         URL url = Util.getResource(filename);
         Assert.assertNotNull("url", url);
         Assert.assertTrue("target", url.toString().endsWith(
@@ -212,7 +220,7 @@ public class UtilTest extends EuclidTestBase implements EuclidConstants {
      */
     @Test
     public final void testGetResourceFile() {
-        String filename = BaseTest.BASE_RESOURCE + U_S + "cml0.xml";
+        String filename = TestUtils.BASE_RESOURCE + U_S + "cml0.xml";
         File file = null;
         try {
             file = Util.getResourceFile(filename);

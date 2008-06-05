@@ -1,5 +1,17 @@
 package org.xmlcml.cml.attribute;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.UNITTYPES_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
+import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -8,11 +20,9 @@ import java.util.List;
 import nu.xom.Element;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLUnit;
@@ -26,7 +36,7 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  *
  */
-public class UnitTypeAttributeTest extends AbstractTest {
+public class UnitTypeAttributeTest {
 
 	CMLUnitList unitList = null;
 
@@ -53,16 +63,6 @@ public class UnitTypeAttributeTest extends AbstractTest {
 			+ "  <unit id='g' name='gram' unitType='unitType:mass'>"
 			+ "    <description>omitted</description>" + "  </unit>"
 			+ "</unitList>";
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * get prefix and namespace. use namespace declaration in instance file.

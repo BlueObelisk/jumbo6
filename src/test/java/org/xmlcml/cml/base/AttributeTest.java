@@ -1,27 +1,21 @@
 package org.xmlcml.cml.base;
+import static org.xmlcml.cml.base.CMLConstants.XSD_INTEGER;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_PERIOD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 /**
  * test for attribute.
  * 
  * @author pmr
  * 
  */
-public class AttributeTest extends BaseTest {
+public class AttributeTest  {
     CMLAttribute att1;
-    /**
-     * main.
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-    }
-    /**
-     * setup.
-     * 
-     * @Exception Exception
-     */
+
     /**
      * setup.
      * 
@@ -29,7 +23,6 @@ public class AttributeTest extends BaseTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         att1 = new CMLAttribute("name", "value");
     }
     /**

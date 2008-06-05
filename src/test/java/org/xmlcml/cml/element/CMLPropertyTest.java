@@ -1,17 +1,24 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.cml.base.CMLConstants.XSD_STRING;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.interfacex.HasDataType;
+
 /** tests property
  * 
  * @author pm286
  *
  */
-public class CMLPropertyTest extends AbstractTest {
+public class CMLPropertyTest {
 
 	CMLProperty prop1;
 	/** 

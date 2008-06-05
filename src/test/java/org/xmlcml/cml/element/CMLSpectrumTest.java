@@ -1,5 +1,12 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.SIMPLE_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -12,7 +19,6 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
@@ -26,31 +32,6 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class CMLSpectrumTest extends PeakSpectrumTest {
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	/**
-	 * Test method for 'org.xmlcml.cml.element.CMLSpectrum.CMLSpectrum()'
-	 */
-	@Test
-	public void testCMLSpectrum() {
-	}
-
-	/**
-	 * Test method for
-	 * 'org.xmlcml.cml.element.CMLSpectrum.CMLSpectrum(CMLSpectrum)'
-	 */
-	@Test
-	public void testCMLSpectrumCMLSpectrum() {
-	}
 
 	/**
 	 * Test method for reading a CMLSpectrum from file. uses first example

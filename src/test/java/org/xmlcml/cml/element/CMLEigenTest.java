@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -15,7 +16,7 @@ import org.xmlcml.euclid.test.RealArrayTest;
  * @author pmr
  *
  */
-public class CMLEigenTest extends AbstractTest {
+public class CMLEigenTest {
 
     CMLEigen eigen1;
 
@@ -30,7 +31,6 @@ public class CMLEigenTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         eigenvalues1 = new CMLArray(new double[] { -37.90004, -20.34372,
                 -13.10423, -12.71709, -12.07969, -7.47084, -3.44820, -1.14406,
                 -.70572, .56580 });

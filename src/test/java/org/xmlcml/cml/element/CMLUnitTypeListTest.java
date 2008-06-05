@@ -1,11 +1,15 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.writeHTML;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -18,16 +22,6 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class CMLUnitTypeListTest extends AbstractUnitTest {
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * Test method for 'org.xmlcml.cml.element.CMLUnitTypeList.copy()'

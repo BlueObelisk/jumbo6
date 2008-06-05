@@ -1,5 +1,18 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.DICT_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.EXAMPLES_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.INDEX;
+import static org.xmlcml.cml.element.AbstractTest.SIMPLE_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_RSQUARE;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.logger;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -28,7 +41,6 @@ import org.xmlcml.cml.attribute.DictRefAttribute;
 import org.xmlcml.cml.attribute.MetadataNameAttribute;
 import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.map.DictionaryMap;
@@ -41,7 +53,7 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  * 
  */
-public class ExamplesTest extends AbstractTest implements CMLConstants {
+public class ExamplesTest {
 
 	/** parser type. */
 	public enum Type {
@@ -65,7 +77,6 @@ public class ExamplesTest extends AbstractTest implements CMLConstants {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		if (time0 == -1) {
 			time0 = System.currentTimeMillis();
 		}

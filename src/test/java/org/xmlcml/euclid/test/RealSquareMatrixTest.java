@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

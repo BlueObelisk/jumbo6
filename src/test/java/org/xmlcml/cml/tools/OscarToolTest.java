@@ -9,10 +9,10 @@ import nu.xom.Element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -109,7 +109,7 @@ public class OscarToolTest {
         } catch (Exception e) {
             Util.BUG(e);
         }
-        BaseTest.assertEqualsCanonically(
+        TestUtils.assertEqualsCanonically(
                 "quantity ", expectedQuantity, quantity);
         // property should be
         Element expectedProperty = null;
@@ -122,7 +122,7 @@ public class OscarToolTest {
         } catch (Exception e) {
             Util.BUG(e);
         }
-        BaseTest.assertEqualsCanonically(
+        TestUtils.assertEqualsCanonically(
                 "before whitespace ", expectedProperty, property);
     }
     

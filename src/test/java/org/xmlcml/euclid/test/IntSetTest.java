@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,7 +18,7 @@ import org.xmlcml.euclid.IntSet;
  * @author pmr
  *
  */
-public class IntSetTest extends EuclidTestBase {
+public class IntSetTest {
 
     IntSet i0;
 
@@ -32,7 +35,6 @@ public class IntSetTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         i0 = new IntSet();
         i1 = new IntSet(new int[] { 3, 4, 1, 2 });
         i2 = new IntSet(4);

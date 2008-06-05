@@ -14,7 +14,7 @@ import org.xmlcml.euclid.Real2;
  * @author pmr
  *
  */
-public class ComplexTest extends EuclidTestBase {
+public class ComplexTest {
 
     Complex c0;
 
@@ -29,7 +29,6 @@ public class ComplexTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         c0 = new Complex();
         c1 = new Complex(1, 0);
         c2 = new Complex(1, 2);

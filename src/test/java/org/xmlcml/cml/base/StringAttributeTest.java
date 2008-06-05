@@ -10,7 +10,7 @@ import org.junit.Test;
  * @author pmr
  * 
  */
-public class StringAttributeTest extends AttributeBaseTest {
+public class StringAttributeTest {
 
     StringSTAttribute daa1;
 
@@ -23,7 +23,6 @@ public class StringAttributeTest extends AttributeBaseTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         daa1 = new StringSTAttribute(new CMLAttribute("foo"), "abc");
     }
 

@@ -3,8 +3,13 @@
  */
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.S_COMMA;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -18,7 +23,7 @@ public class CMLTableRowTest extends AbstractTableTest {
     @Test
     public final void testWriteHTML() {
         String tableRowS = "\n<tr><td>2</td><td>b</td></tr>";
-        assertWriteHTML(tableRow, tableRowS);
+        TestUtils.assertWriteHTML(tableRow, tableRowS);
     }
 
     /**

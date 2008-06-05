@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +19,7 @@ import org.xmlcml.euclid.ArrayBase.Trim;
  * @author pmr
  *
  */
-public class IntArrayTest extends EuclidTestBase {
+public class IntArrayTest {
 
     IntArray a0;
 
@@ -28,7 +32,6 @@ public class IntArrayTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         a0 = new IntArray();
         a1 = new IntArray(new int[] { 1, 2, 4, 6 });
     }

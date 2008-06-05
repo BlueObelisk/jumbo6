@@ -1,17 +1,20 @@
 package org.xmlcml.cml.graphics;
 
 
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidFile;
 import nu.xom.Element;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.element.AbstractTest;
 
-public class SVGElementTest extends AbstractTest {
+public class SVGElementTest {
 
 	public final static String GRAPHICS_RESOURCE = "org/xmlcml/cml/graphics/examples";
 	@Test
 	public final void testSVGElementSVGElement() {
+		//TODO
 	}
 
 	@Test
@@ -24,10 +27,12 @@ public class SVGElementTest extends AbstractTest {
 
 	@Test
 	public final void testSVGElementElement() {
+		//TODO
 	}
 
 	@Test
 	public final void testSetScale() {
+		//TODO
 	}
 
 }

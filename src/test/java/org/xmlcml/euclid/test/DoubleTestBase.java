@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+
 import org.junit.Assert;
 import org.xmlcml.euclid.DoubleTool;
 
@@ -13,7 +16,7 @@ import org.xmlcml.euclid.DoubleTool;
  * @version 5.0
  * 
  */
-public class DoubleTestBase extends EuclidTestBase {
+public class DoubleTestBase {
 
 	/**
 	 * Assert.asserts equality of double arrays.

@@ -1,5 +1,8 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import nu.xom.Element;
@@ -17,7 +20,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * @author pm286
  */
-public class CMLPeakListTest extends AbstractTest {
+public class CMLPeakListTest {
 
 	CMLPeakList peakList;
 	CMLPeakList peakAndGroupList;
@@ -224,7 +227,7 @@ public class CMLPeakListTest extends AbstractTest {
     	"  <peak xValue='2.0' yValue='5.0' id='p1'/>"+
     	"</peakList>";
     	CMLPeakList expectedPeakList = (CMLPeakList) parseValidString(expectedS);
-    	AbstractTest.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+    	assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
     }
 
 	/**
@@ -286,7 +289,7 @@ public class CMLPeakListTest extends AbstractTest {
 		
 	    String expectedS = "" +
 			"<map xmlns='http://www.xml-cml.org/schema'>"+			"  <link to='p1' fromSet='p1'/>"+			"  <link to='p3p4' fromSet='p3 p4'/>"+			"  <link to='p2' fromSet='p2'/>"+			"</map>";
-	    AbstractTest.assertEqualsCanonically("map", parseValidString(expectedS), map, true);
+	    assertEqualsCanonically("map", parseValidString(expectedS), map, true);
 	    CMLPeakList newPeakList = peakList.createPeakListGroupedByMorgan(molecule);	
 	    CMLPeakGroup peakGroup = newPeakList.getPeakGroupElements().get(0);
 		Assert.assertEquals("pg1", "p1", peakGroup.getId());
@@ -318,7 +321,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"  </peakGroup>"+
 			"</peakList>";
 		Element expectedPeakList = parseValidString(expectedS);
-    	AbstractTest.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+    	assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 	}
 	/**
 	 */
@@ -356,7 +359,7 @@ public class CMLPeakListTest extends AbstractTest {
         "        </peakList>";
         
     	CMLElement expectedPeakList = (CMLPeakList) parseValidString(expectedPeakListS);
-    	AbstractTest.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+    	assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
     	
     	newPeakList = (CMLPeakList) parseValidString(peakListS);
         newPeakList.removeAtomRefsOnPeaksAndGroups(atomSet, true);
@@ -367,7 +370,7 @@ public class CMLPeakListTest extends AbstractTest {
         	"          </peakGroup>"+
         	"        </peakList>";
         expectedPeakList = (CMLPeakList) parseValidString(expectedPeakListS);
-    	AbstractTest.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+    	assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 	}
 
 	/**
@@ -473,7 +476,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"		  <peak xValue='3.0' yValue='10.0' id='p1'/>"+
 			"		</peakList>";
 		Element expected = parseValidString(expectedS);
-		AbstractTest.assertEqualsCanonically("group", expected, newPeakList, true);
+		assertEqualsCanonically("group", expected, newPeakList, true);
 	}
 
 	/** 
@@ -499,7 +502,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"		  <peak xValue='2.0' yValue='3.0' id='p3'/>"+
 			"		</peakList>";
 		Element expected = parseValidString(expectedS);
-		AbstractTest.assertEqualsCanonically("group", expected, peakList1, true);
+		assertEqualsCanonically("group", expected, peakList1, true);
 
 		// omit peaks through map
 		peaks2GroupS =
@@ -518,7 +521,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"		  <peak xValue='2.0' yValue='3.0' id='p3'/>"+
 			"		</peakList>";
 		expected = parseValidString(expectedS);
-		AbstractTest.assertEqualsCanonically("group", expected, peakList1, true);
+		assertEqualsCanonically("group", expected, peakList1, true);
 	}
 
 	/** 
@@ -537,7 +540,7 @@ public class CMLPeakListTest extends AbstractTest {
 		"  <link to='p3' from='a3'/>"+
 		"  <link to='p4' from='a4'/>"+
 		"</map>";
-		AbstractTest.assertEqualsCanonically("atommap", 
+		assertEqualsCanonically("atommap", 
 				parseValidString(expectedS), map, true);
 	}
 
@@ -557,7 +560,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"  <link to='p3' from='a3'/>"+
 			"  <link to='p4' from='a4'/>"+
 			"</map>";
-		AbstractTest.assertEqualsCanonically("atomRefs", 
+		assertEqualsCanonically("atomRefs", 
 				parseValidString(expectedS), map, true);
 		expectedS =
 			"<peakList xmlns='http://www.xml-cml.org/schema'>"+
@@ -566,7 +569,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"  <peak xValue='2.0' yValue='5.0' id='p3' atomRefs='a3'/>"+
 			"  <peak xValue='2.0' yValue='3.0' id='p4' atomRefs='a4'/>"+
 			"</peakList>";
-		AbstractTest.assertEqualsCanonically("atomRefs", 
+		assertEqualsCanonically("atomRefs", 
 				parseValidString(expectedS), peakList, true);
 		peakList = null;
 	}
@@ -582,7 +585,7 @@ public class CMLPeakListTest extends AbstractTest {
 		"		  <link to='p3p4' fromSet='p3 p4'/>"+
 		"		  <link to='p1' fromSet='p1'/>"+
 		"		</map>";
-		AbstractTest.assertEqualsCanonically("atomRefs", 
+		assertEqualsCanonically("atomRefs", 
 				parseValidString(expectedS), map, true);
 	}
 
@@ -604,7 +607,7 @@ public class CMLPeakListTest extends AbstractTest {
 		"    <peak xValue='3.0' yValue='10.0' id='p1'/>"+
 		"  </peakGroup>"+
 		"</peakList>";
-		AbstractTest.assertEqualsCanonically("atomRefs", 
+		assertEqualsCanonically("atomRefs", 
 				parseValidString(expectedS), newPeakList, true);
 	}
 	
@@ -626,7 +629,7 @@ public class CMLPeakListTest extends AbstractTest {
 			"  <peak xValue='1.0' yValue='7.0' id='p2' atomRefs='a2'/>"+
 			"  <peak xValue='2.0' yValue='3.0' id='p4' atomRefs='a4'/>"+
 			"</peakList>";
-		AbstractTest.assertEqualsCanonically("select", 
+		assertEqualsCanonically("select", 
 				parseValidString(expectedS), newPeakList, true);
 		}
 }

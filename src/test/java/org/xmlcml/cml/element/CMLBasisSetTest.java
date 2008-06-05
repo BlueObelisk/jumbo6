@@ -1,5 +1,11 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -13,7 +19,7 @@ import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.test.RealArrayTest;
 
 /** */
-public class CMLBasisSetTest extends AbstractTest {
+public class CMLBasisSetTest {
 
     String basisSetS = "";
 
@@ -87,7 +93,6 @@ public class CMLBasisSetTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         molecule = (CMLMolecule) parseValidString(moleculeS);
         basisSet = new CMLBasisSet();
         basisSet2 = (CMLBasisSet) parseValidString(basisSetS2);

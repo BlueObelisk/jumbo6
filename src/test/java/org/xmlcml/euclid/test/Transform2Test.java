@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +21,7 @@ import org.xmlcml.euclid.Transform2.Type;
  * @author pmr
  *
  */
-public class Transform2Test extends EuclidTestBase {
+public class Transform2Test  {
 
     Transform2 t0;
 
@@ -32,7 +36,6 @@ public class Transform2Test extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         t0 = new Transform2();
         t1 = new Transform2(
                 new double[] { 0., 1., 0., -1., 0., 0., 0., 0., 1. });

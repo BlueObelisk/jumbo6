@@ -1,5 +1,28 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_SIUNITS;
+import static org.xmlcml.cml.base.CMLConstants.CML_UNITS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.U_CELSIUS;
+import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
+import static org.xmlcml.cml.base.CMLConstants.U_KCAL;
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.cml.base.CMLConstants.XSD_INTEGER;
+import static org.xmlcml.cml.base.CMLConstants.XSD_STRING;
+import static org.xmlcml.euclid.EuclidConstants.S_COLON;
+import static org.xmlcml.euclid.EuclidConstants.S_COMMA;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.euclid.EuclidConstants.S_WHITEREGEX;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import nu.xom.ParsingException;

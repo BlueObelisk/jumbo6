@@ -1,5 +1,8 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +28,6 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLFragment;
@@ -40,12 +42,11 @@ import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
-// updated
 /**
  * @author pm286
  * 
  */
-public class FragmentToolTest extends AbstractTest {
+public class FragmentToolTest {
 
 	private CatalogManager catalogManager = null;
 
@@ -136,7 +137,7 @@ public class FragmentToolTest extends AbstractTest {
 		fragmentTool.processIntermediate(moleculeCatalog);
 
 		CMLElement explicit = readElement0("molE");
-		AbstractTest.assertEqualsCanonically("fragment", explicit, fragment, true);
+		assertEqualsCanonically("fragment", explicit, fragment, true);
 	}
 
 	/**
@@ -462,7 +463,7 @@ public class FragmentToolTest extends AbstractTest {
 		if (intermediate == null) {
 			dump(fragment, "mol" + serial + "I");
 		} else if (check) {
-			AbstractTest.assertEqualsCanonically(title, intermediate, fragment, true);
+			assertEqualsCanonically(title, intermediate, fragment, true);
 		}
 		if (debug) {
 			fragment.debug(title);
@@ -476,7 +477,7 @@ public class FragmentToolTest extends AbstractTest {
 		if (explicit == null) {
 			dump(fragment, "mol" + serial + "E");
 		} else if (check) {
-			AbstractTest.assertEqualsCanonically(title, explicit, fragment, true);
+			assertEqualsCanonically(title, explicit, fragment, true);
 		}
 		// explicit -> complete
 		fragmentTool.processExplicit();
@@ -487,7 +488,7 @@ public class FragmentToolTest extends AbstractTest {
 		if (complete == null) {
 			dump(fragment, "mol" + serial + "C");
 		} else if (check) {
-			AbstractTest.assertEqualsCanonically(title, complete, fragment, true);
+			assertEqualsCanonically(title, complete, fragment, true);
 		}
 	}
 
@@ -530,7 +531,7 @@ public class FragmentToolTest extends AbstractTest {
 			if (complete0 == null) {
 				dump(fragment, rootName);
 			} else if (check) {
-				AbstractTest.assertEqualsCanonically(rootName, complete0, fragment, true);
+				assertEqualsCanonically(rootName, complete0, fragment, true);
 			}
 		}
 		String title = "complete" + serial;
@@ -540,7 +541,7 @@ public class FragmentToolTest extends AbstractTest {
 		if (complete == null) {
 			dump(fragmentList, "mol" + serial + "C");
 		} else if (check) {
-			AbstractTest.assertEqualsCanonically(title, complete, fragmentList, true);
+			assertEqualsCanonically(title, complete, fragmentList, true);
 		}
 	}
 

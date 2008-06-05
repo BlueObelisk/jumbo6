@@ -1,5 +1,7 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +13,7 @@ import org.xmlcml.euclid.test.IntTest;
  * @author pmr
  * 
  */
-public class IntArrayAttributeTest extends AttributeBaseTest {
+public class IntArrayAttributeTest {
 
     IntArraySTAttribute daa1;
 
@@ -24,7 +26,6 @@ public class IntArrayAttributeTest extends AttributeBaseTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         daa1 = new IntArraySTAttribute(new CMLAttribute("foo"), " 1   3  ");
     }
 

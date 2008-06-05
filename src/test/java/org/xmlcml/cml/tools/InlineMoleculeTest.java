@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,7 +15,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * @author pm286
  *
  */ 
-public class InlineMoleculeTest extends AbstractToolTest {
+public class InlineMoleculeTest  {
 
     /** Test method for 'org.xmlcml.cml.tools.InlineMolecule.InlineMolecule(String)'
      */

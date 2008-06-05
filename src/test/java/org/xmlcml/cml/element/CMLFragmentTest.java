@@ -3,6 +3,10 @@
  */
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;

@@ -1,5 +1,10 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -10,6 +15,7 @@ import nu.xom.ValidityException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;
@@ -25,7 +31,7 @@ import org.xmlcml.euclid.test.Transform3Test;
  *
  */
 public class CMLTransform3Test extends GeomTestBase {
-
+CMLBuilder builder = new CMLBuilder();
     /**
      * equality test. true if both args not null and equal within epsilon
      *

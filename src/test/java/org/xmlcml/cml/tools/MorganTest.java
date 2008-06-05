@@ -3,10 +3,13 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLAtom;
@@ -23,14 +26,6 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  */
 public class MorganTest extends MoleculeAtomBondTest {
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
 
     /**
      * Test method for {@link org.xmlcml.cml.tools.Morgan#Morgan(org.xmlcml.cml.element.CMLMolecule)}.

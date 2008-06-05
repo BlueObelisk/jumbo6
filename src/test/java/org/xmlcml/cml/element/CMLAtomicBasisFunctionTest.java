@@ -3,23 +3,12 @@ package org.xmlcml.cml.element;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLBasisSet.Basis;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test CMLAtomicBasisFunction */
-public class CMLAtomicBasisFunctionTest extends AbstractTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class CMLAtomicBasisFunctionTest  {
 
     /**
      * Test method for

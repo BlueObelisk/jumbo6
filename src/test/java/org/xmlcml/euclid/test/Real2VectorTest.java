@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +27,7 @@ import org.xmlcml.euclid.Axis.Axis2;
  * @author pmr
  *
  */
-public class Real2VectorTest extends EuclidTestBase {
+public class Real2VectorTest  {
 
     Real2Vector r0;
     Real2Vector r1;
@@ -37,7 +40,6 @@ public class Real2VectorTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         r0 = new Real2Vector();
         r1 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., });
         r2 = new Real2Vector(new double[] { 1., 2., 3., 4., 5., 6., 7., 8.,

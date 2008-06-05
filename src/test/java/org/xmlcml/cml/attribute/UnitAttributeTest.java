@@ -1,5 +1,18 @@
 package org.xmlcml.cml.attribute;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
+import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.List;
@@ -7,11 +20,9 @@ import java.util.List;
 import nu.xom.Element;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLUnit;
@@ -25,7 +36,7 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  *
  */
-public class UnitAttributeTest extends AbstractTest {
+public class UnitAttributeTest {
 
 	CMLCml cml = null;
 
@@ -63,16 +74,6 @@ public class UnitAttributeTest extends AbstractTest {
 			+ "<scalar id='s2' dictRef='foo:bar' units='units:foo'>456</scalar>"
 			+ "<scalar id='s3' dictRef='cmlComp:ionPot' units='siUnits:volt'>123</scalar>"
 			+ "</cml>";
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * test.

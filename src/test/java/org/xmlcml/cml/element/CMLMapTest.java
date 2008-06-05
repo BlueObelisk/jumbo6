@@ -1,4 +1,9 @@
 package org.xmlcml.cml.element;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +16,14 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
+
 /**
  * test CMLMap.
  *
  * @author pmr
  *
  */
-public class CMLMapTest extends AbstractTest {
+public class CMLMapTest {
     CMLMap xomMap1;
     CMLMap xmlMap1;
     String xmlMap1S = "<map id='m1' fromType='cml:atom' toType='cml:atom'"
@@ -40,7 +46,6 @@ public class CMLMapTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         xmlMap1 = (CMLMap) parseValidString(xmlMap1S);
         xmlMap2 = (CMLMap) parseValidString(xmlMap2S);
     }

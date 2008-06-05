@@ -10,7 +10,6 @@ import nu.xom.Serializer;
 import nu.xom.Text;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 
@@ -20,17 +19,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
  * @author pmr
  *
  */
-public class MiscTest extends AbstractTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class MiscTest {
 
     /**
      * test XOM

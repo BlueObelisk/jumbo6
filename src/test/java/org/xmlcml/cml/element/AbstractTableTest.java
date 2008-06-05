@@ -1,13 +1,19 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import nu.xom.ParsingException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -16,7 +22,9 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  *
  */
-public abstract class AbstractTableTest extends AbstractTest {
+public abstract class AbstractTableTest {
+	
+	private static Logger LOG = Logger.getLogger(AbstractTableTest.class);
 
     String tableRowListS = S_EMPTY +
     "<tableRowList "+CML_XMLNS+">" +
@@ -83,7 +91,7 @@ public abstract class AbstractTableTest extends AbstractTest {
      */
 	@Before
     public void setUp() throws Exception {
-		super.setUp();
+		CMLBuilder builder = new CMLBuilder();
 		/*
 		 * <?xml version="1.0" standalone="yes"?>
 		 * <table rows="3" columns="2" title="people"
@@ -121,7 +129,7 @@ public abstract class AbstractTableTest extends AbstractTest {
 			Assert.fail("Should not throw IOException");
 		} catch (ParsingException e) {
 			e.printStackTrace();
-			logger.severe("Parse exception " + e.getMessage());
+			LOG.warn("Parse exception " + e.getMessage());
 			Assert.fail("Should not throw ParsingException" + e.getCause());
 		}
         tableContent = (CMLTableContent) parseValidString(tableContentS);

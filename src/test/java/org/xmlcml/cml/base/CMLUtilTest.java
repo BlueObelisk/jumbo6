@@ -1,5 +1,12 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.text.ParseException;
 import java.util.List;
 
@@ -13,6 +20,7 @@ import nu.xom.XPathContext;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test CMLUtil.
@@ -20,7 +28,7 @@ import org.junit.Test;
  * @author pm286
  * 
  */
-public class CMLUtilTest extends BaseTest {
+public class CMLUtilTest  {
 
     /**
      * Test method for 'org.xmlcml.cml.base.CMLUtil.checkPrefixedName(String)'
@@ -63,7 +71,7 @@ public class CMLUtilTest extends BaseTest {
      */
     @Test
     public final void testGetXMLResource() {
-        String filename = BaseTest.BASE_RESOURCE + U_S + "cml0.xml";
+        String filename = TestUtils.BASE_RESOURCE + U_S + "cml0.xml";
         Document doc = null;
         try {
             doc = CMLUtil.getXMLResource(filename);
@@ -126,7 +134,7 @@ public class CMLUtilTest extends BaseTest {
         bar1.appendChild(new Text("ghi"));
         root1.appendChild(bar1);
         root1.appendChild(new Text("jkl"));
-        BaseTest.assertEqualsCanonically("parseXML", root1, root);
+        TestUtils.assertEqualsCanonically("parseXML", root1, root);
 
     }
 
@@ -260,7 +268,7 @@ public class CMLUtilTest extends BaseTest {
         Element newRoot = CMLUtil.parseXML("<root>"
                 + "<foo>abc<bar/>def<bar1>ghi</bar1>jkl<qqq/>zzz</foo>"
                 + "and<plugh/></root>");
-        BaseTest.assertEqualsCanonically("new root", root, newRoot);
+        TestUtils.assertEqualsCanonically("new root", root, newRoot);
     }
 
     /**

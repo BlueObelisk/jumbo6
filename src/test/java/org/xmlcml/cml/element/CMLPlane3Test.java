@@ -1,7 +1,10 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -17,16 +20,6 @@ import org.xmlcml.euclid.test.Plane3Test;
  *
  */
 public class CMLPlane3Test extends GeomTestBase {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
 
     /**
      * equality test. true if both args not null and equal within epsilon
@@ -63,15 +56,6 @@ public class CMLPlane3Test extends GeomTestBase {
         Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
                 expected);
         DoubleTestBase.assertEquals(msg, test, expected.getArray(), epsilon);
-    }
-
-    /**
-     * Test method for 'org.xmlcml.cml.element.CMLPlane3.CMLPlane3()'
-     */
-    @Test
-    public void testCMLPlane3() {
-        // CMLPlane3 pl = new CMLPlane3(); // not visible
-
     }
 
     /**

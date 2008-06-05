@@ -1,5 +1,8 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +14,7 @@ import org.xmlcml.euclid.test.DoubleTestBase;
  * @author pmr
  * 
  */
-public class DoubleArrayAttributeTest extends AttributeBaseTest {
+public class DoubleArrayAttributeTest  {
 
 	DoubleArraySTAttribute daa1;
 
@@ -29,10 +32,8 @@ public class DoubleArrayAttributeTest extends AttributeBaseTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		daa1 = new DoubleArraySTAttribute(new CMLAttribute("foo"),
 				" 1.2   3.4  ");
-
 	}
 
 	/**

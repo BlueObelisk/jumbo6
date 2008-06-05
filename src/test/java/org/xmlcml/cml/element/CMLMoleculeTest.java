@@ -1,5 +1,11 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +16,8 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.IdAttribute;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
@@ -36,6 +40,7 @@ import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Real3RangeTest;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test CMLMolecule.
@@ -45,16 +50,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class CMLMoleculeTest extends MoleculeAtomBondTest {
 
-    /**
-     * setup.
-     * 
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-    
+  
     /** compare two molecules.
      * ignore whitespace nodes in either.
      * @param mol to compare
@@ -85,7 +81,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         String molS = mol.getCanonicalString();
         String mol1S = mol1.getCanonicalString();
         Assert.assertEquals("MOLECUL equality: ", molS, mol1S);
-        BaseTest.assertEqualsCanonically("molecule equality", mol, mol1);
+        TestUtils.assertEqualsCanonically("molecule equality", mol, mol1);
     }
 
     /**
@@ -1216,7 +1212,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
             );
         List<CMLMolecule> molList = cmlCrystMol.transformFractionalCoordinates(symmetry);
         Assert.assertEquals("after t", 2, molList.size());
-        CMLMoleculeTest.assertEqualsCanonically("mols equals", molList.get(0), cmlCrystMol);
+        TestUtils.assertEqualsCanonically("mols equals", molList.get(0), cmlCrystMol);
         Point3 xf = molList.get(1).getAtom(2).getPoint3(CoordinateType.FRACTIONAL);
         Point3Test.assertEquals("mols equal", new double[]{0.22, -0.12, 0.5}, 
                 xf, 0.0000001);
@@ -1351,8 +1347,8 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Assert.assertEquals("atomSet", 2, atomSet.size());
         CMLMolecule mol = new CMLMolecule(atomSet);
         Assert.assertEquals("atom count", 2, mol.getAtomCount());
-        CMLAtomTest.assertEqualsCanonically("atom", mol1.getAtom(0), mol.getAtom(0));
-        CMLAtomTest.assertEqualsCanonically("atom", mol1.getAtom(2), mol.getAtom(1));
+        TestUtils.assertEqualsCanonically("atom", mol1.getAtom(0), mol.getAtom(0));
+        TestUtils.assertEqualsCanonically("atom", mol1.getAtom(2), mol.getAtom(1));
     }
 
     /**
@@ -1367,18 +1363,18 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
 //        CMLMoleculeTest.assertEqualsCanonically("new mol", mol, mol5a);
         Assert.assertEquals("atoms", 5, mol.getAtomCount());
-        CMLAtomTest.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+        TestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
         Assert.assertEquals("bonds", 4, mol.getBondCount());
-        CMLAtomTest.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds().get(2));
+        TestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds().get(2));
 
         CMLBond bond = bondSet.getBonds().get(0);
         bondSet.removeBond(bond);
         mol = new CMLMolecule(atomSet, bondSet);
 //        CMLMoleculeTest.assertEqualsCanonically("new mol", mol, mol5a);
         Assert.assertEquals("atoms", 5, mol.getAtomCount());
-        CMLAtomTest.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+        TestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
         Assert.assertEquals("bonds", 3, mol.getBondCount());
-        CMLAtomTest.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds().get(1));
+        TestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds().get(1));
     }
 
     /**

@@ -1,5 +1,9 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +14,7 @@ import org.xmlcml.euclid.test.DoubleTestBase;
  *
  * @author pmr
  */
-public class CMLLatticeTest extends AbstractTest {
+public class CMLLatticeTest {
 
     static String lattice1S = "" + "<lattice " + CML_XMLNS + ">"
             + "  <latticeVector>10. 6. 4.</latticeVector>"
@@ -27,7 +31,6 @@ public class CMLLatticeTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         if (lattice1 == null) {
             lattice1 = (CMLLattice) parseValidString(lattice1S);
         }

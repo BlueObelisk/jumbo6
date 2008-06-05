@@ -3,7 +3,11 @@
  */
 package org.xmlcml.cml.element;
 
-import org.junit.Before;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import org.junit.Test;
 import org.xmlcml.euclid.test.StringTestBase;
 
@@ -13,11 +17,6 @@ import org.xmlcml.euclid.test.StringTestBase;
  */
 public class CMLTableContentTest extends AbstractTableTest {
 
-    /** set up.
-     */
-    @Before
-    public void makeContent() {
-    }
     /**
      * Test method for {@link org.xmlcml.cml.element.CMLTableContent#getStrings()}.
      */

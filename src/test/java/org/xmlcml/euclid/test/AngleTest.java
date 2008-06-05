@@ -1,5 +1,7 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +14,7 @@ import org.xmlcml.euclid.Angle.Units;
  * @author pmr
  *
  */
-public class AngleTest extends EuclidTestBase {
+public class AngleTest {
 
     Angle zero;
 
@@ -29,7 +31,6 @@ public class AngleTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         zero = new Angle(0.);
         pi4 = new Angle(Math.PI / 4.);
         pi2 = new Angle(Math.PI / 2.);

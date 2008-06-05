@@ -1,5 +1,8 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.element.AbstractTest.SIMPLE_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -9,13 +12,11 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.euclid.Util;
-
 /**
  * test CMLPeakStructure
  *
@@ -23,16 +24,6 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class CMLPeakStructureTest extends PeakSpectrumTest {
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * tests access to peaks and peakStructure.

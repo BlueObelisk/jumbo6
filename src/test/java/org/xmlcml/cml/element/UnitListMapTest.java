@@ -1,5 +1,15 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -16,7 +26,7 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
-public class UnitListMapTest extends AbstractTest {
+public class UnitListMapTest {
 
 	String scalar1S = "<scalar units='units:deg' " + "xmlns:units='" + UNIT_NS
 			+ "' " + CML_XMLNS + ">123.4</scalar>";
@@ -43,7 +53,6 @@ public class UnitListMapTest extends AbstractTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-        super.setUp();
 		makeUnitList();
 		makeScalar();
 		makeUnitTypeAttribute();

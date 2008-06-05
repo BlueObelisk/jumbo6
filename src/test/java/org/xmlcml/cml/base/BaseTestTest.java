@@ -1,11 +1,14 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.util.TestUtils.assertEqualsIncludingFloat;
+import static org.xmlcml.util.TestUtils.assertNotEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
 import nu.xom.Element;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BaseTestTest extends BaseTest {
+public class BaseTestTest {
 
 	@Test
 	public void testAssertEqualsIncludingFloat() {

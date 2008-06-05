@@ -1,5 +1,7 @@
 package org.xmlcml.cml.base;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +12,7 @@ import org.junit.Test;
  * @author pmr
  * 
  */
-public class IntAttributeTest extends AttributeBaseTest {
+public class IntAttributeTest {
 
     IntSTAttribute daa1;
 
@@ -23,7 +25,6 @@ public class IntAttributeTest extends AttributeBaseTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         daa1 = new IntSTAttribute(new CMLAttribute("foo"), " 1   ");
 
     }

@@ -1,5 +1,7 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import org.xmlcml.euclid.Axis.Axis3;
  * @author pmr
  *
  */
-public class Real3RangeTest extends EuclidTestBase {
+public class Real3RangeTest {
 
     Real3Range r0 = null;
 
@@ -28,7 +30,6 @@ public class Real3RangeTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         r0 = new Real3Range();
         r1 = new Real3Range(new RealRange(1., 2.), new RealRange(3., 4.),
                 new RealRange(5., 6.));

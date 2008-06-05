@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.logging.Level;
@@ -38,7 +42,6 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         logger.setLevel(Level.WARNING);
         m0 = new IntMatrix();
         m1 = new IntMatrix(3, 4);

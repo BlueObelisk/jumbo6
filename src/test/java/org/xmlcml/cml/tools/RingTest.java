@@ -3,6 +3,8 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import org.xmlcml.euclid.test.StringTestBase;
  * @author pm286
  *
  */
-public class RingTest extends AbstractToolTest {
+public class RingTest  {
 
 	static String MOLECULE = "org"+U_S+"xmlcml"+U_S+"cml"+U_S+"tools"+U_S+"examples"+U_S+"molecules";
 

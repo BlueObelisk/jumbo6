@@ -1,10 +1,13 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
+import static org.xmlcml.cml.element.AbstractTest.SIMPLE_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
@@ -16,7 +19,7 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  * 
  */
-public abstract class PeakSpectrumTest extends AbstractTest {
+public class PeakSpectrumTest {
 
 	protected String peakStructureFile1 = "peakStructure1" + XML_SUFF;
 
@@ -40,16 +43,6 @@ public abstract class PeakSpectrumTest extends AbstractTest {
 	protected String testfile5 = "spectrum5.xml";
 
 	protected String testCompoundFile1 = "spectrum_and_structure1.xml";
-
-	/**
-	 * setup.
-	 * 
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	private URL makeSpectrumInputStreamContainer(int num) throws IOException {
 		return Util.getResource(SIMPLE_RESOURCE + U_S + "spectrum" + num

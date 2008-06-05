@@ -4,6 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.util.List;
 
@@ -23,7 +28,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pm286
  *
  */
-public class ConnectionTableToolTest extends AbstractToolTest {
+public class ConnectionTableToolTest  {
 
 	static String MOLECULES = "org"+U_S+"xmlcml"+U_S+"cml"+U_S+"tools"+U_S+"examples"+U_S+"molecules";
     String ringMolS = S_EMPTY +
@@ -109,25 +114,12 @@ public class ConnectionTableToolTest extends AbstractToolTest {
     "    </bondArray>" +
     "  </molecule>" +
     S_EMPTY;
-    
-//    private CMLMolecule getMoleculeByFileRoot(String fileRoot) {
-//    	CMLMolecule molecule = (CMLMolecule) parseValidResource(fileRoot+".xml");
-//    	
-//    	CMLMolecule molecule = null;
-//		try {
-//			molecule = (CMLMolecule) CMLUtil.getXMLResource("org/xmlcml/cml/tools/examples/molecules/"+fileRoot+".xml").getRootElement();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    	return molecule;
-//    }
+ 
     /** setup
      * @exception Exception
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         ringMol = makeMol(ringMolS);
         ringMolTool = new ConnectionTableTool(ringMol);
     }

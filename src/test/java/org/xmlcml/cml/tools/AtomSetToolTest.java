@@ -1,5 +1,9 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.StringReader;
 import java.util.List;
 
@@ -18,7 +22,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pm286
  *
  */
-public class AtomSetToolTest extends AbstractToolTest {
+public class AtomSetToolTest {
 
     String sproutS = S_EMPTY +
     "<molecule " + CML_XMLNS + " title='sprout'>"
@@ -63,7 +67,6 @@ public class AtomSetToolTest extends AbstractToolTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         sprout = (CMLMolecule) parseValidString(sproutS);
     }
 

@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+
 import org.junit.Assert;
 
 /**
@@ -12,7 +15,7 @@ import org.junit.Assert;
  * @version 5.0
  * 
  */
-public class StringTestBase extends EuclidTestBase {
+public class StringTestBase {
 
     /**
      * Assert.asserts equality of String arrays.
