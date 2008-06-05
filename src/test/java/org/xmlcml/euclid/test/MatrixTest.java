@@ -1,5 +1,10 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.getAssertFormat;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +22,7 @@ import org.xmlcml.euclid.RealMatrix;
  * @author pmr
  *
  */
-public class MatrixTest extends EuclidTestBase {
+public class MatrixTest {
 
     static Logger logger = Logger.getLogger(MatrixTest.class.getName());
 
@@ -28,7 +33,6 @@ public class MatrixTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         logger.setLevel(Level.WARNING);
     }
 

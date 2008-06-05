@@ -1,12 +1,18 @@
 package org.xmlcml.cml.attribute;
 
+import static org.xmlcml.euclid.EuclidConstants.S_BACKSLASH;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_NL;
+import static org.xmlcml.euclid.EuclidConstants.S_PIPE;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.euclid.EuclidConstants.S_TAB;
+import static org.xmlcml.euclid.EuclidConstants.S_WHITEREGEX;
 import nu.xom.Attribute;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /** test
@@ -14,13 +20,7 @@ import org.xmlcml.euclid.test.StringTestBase;
  * @author pm286
  *
  */
-public class DelimiterAttributeTest extends AbstractTest {
-
-	/** set up 
-	 * @throws Exception */
-	@Before
-	public void setUp() throws Exception {
-	}
+public class DelimiterAttributeTest {
 
     /** dewisott */
 	@Test

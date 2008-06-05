@@ -1,6 +1,7 @@
 package org.xmlcml.euclid.test;
 
-import org.junit.Before;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import org.junit.Test;
 import org.xmlcml.euclid.Real;
 
@@ -10,17 +11,7 @@ import org.xmlcml.euclid.Real;
  * @author pmr
  *
  */
-public class RealTest extends EuclidTestBase {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class RealTest  {
 
     /**
      * Test method for 'org.xmlcml.euclid.Real.zeroArray(double, double[])'

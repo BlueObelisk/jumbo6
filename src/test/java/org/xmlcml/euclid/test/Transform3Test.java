@@ -1,7 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
@@ -19,16 +21,6 @@ import org.xmlcml.euclid.Transform3.Type;
  *
  */
 public class Transform3Test extends GeomTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
 
     /**
      * equality test. true if both args not null and equal within epsilon

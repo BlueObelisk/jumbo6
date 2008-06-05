@@ -1,13 +1,13 @@
 package org.xmlcml.cml.tools;
 
-import org.xmlcml.cml.element.AbstractTest;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 /** superclass to manage resources etc.
  * 
  * @author pm286
  *
  */
-public abstract class AbstractToolTest extends AbstractTest {
+public final class AbstractToolTest {
     /**
      * resource
      */

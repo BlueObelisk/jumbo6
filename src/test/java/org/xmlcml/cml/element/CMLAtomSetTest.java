@@ -1,5 +1,9 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

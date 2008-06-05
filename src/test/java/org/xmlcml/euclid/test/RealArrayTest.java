@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,19 +21,12 @@ import org.xmlcml.euclid.RealArray.Filter;
  * @author pmr
  *
  */
-public class RealArrayTest extends EuclidTestBase {
+public class RealArrayTest  {
 
     RealArray a0;
 
     RealArray a1;
 
-    /**
-     * main
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-    }
 
     /**
      * setup.
@@ -38,7 +35,6 @@ public class RealArrayTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         a0 = new RealArray();
         a1 = new RealArray(new double[] { 1.0, 2.0, 4.0, 6.0 });
     }

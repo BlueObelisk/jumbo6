@@ -1,9 +1,13 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML1;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
 import nu.xom.Element;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
@@ -15,17 +19,7 @@ import org.xmlcml.cml.base.CMLElement;
  * @author pmr
  *
  */
-public class CMLNodeFactoryTest extends AbstractTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class CMLNodeFactoryTest {
 
     /**
      * Test method for

@@ -2,7 +2,6 @@ package org.xmlcml.cml.element;
 
 import nu.xom.Attribute;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -12,17 +11,7 @@ import org.junit.Test;
  *
  */
 
-public class CMLMetadataTest extends AbstractTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class CMLMetadataTest {
 
     /**
      * Test method for

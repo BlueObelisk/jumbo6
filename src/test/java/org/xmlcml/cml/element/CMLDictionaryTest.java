@@ -1,15 +1,22 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.DICT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import nu.xom.Document;
 import nu.xom.Node;
 import nu.xom.ParsingException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +33,9 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  *
  */
-public class CMLDictionaryTest extends AbstractTest {
-	final static Logger logger = Logger
-			.getLogger(CMLDictionary.class.getName());
+public class CMLDictionaryTest {
+	final private static Logger LOG = Logger
+			.getLogger(CMLDictionary.class);
 
 	CMLDictionary xomDict1 = null;
 
@@ -53,6 +60,8 @@ public class CMLDictionaryTest extends AbstractTest {
 
 	CMLDictionary xmlDict1 = null;
 
+	private CMLBuilder builder;
+
 	/**
 	 * setup.
 	 *
@@ -60,16 +69,16 @@ public class CMLDictionaryTest extends AbstractTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		// build from scratch
 		xomDict1 = new CMLDictionary();
+		builder = new CMLBuilder();
 		try {
 			xmlDict1Doc = builder.build(new StringReader(xmlDict1S));
 		} catch (IOException e) {
 			Assert.fail("Should not throw IOException");
 		} catch (ParsingException e) {
 			e.printStackTrace();
-			logger.severe("Parse exception " + e.getMessage());
+			LOG.error("Parse exception " + e.getMessage());
 			Assert.fail("Should not throw ParsingException" + e.getCause());
 		}
 		xmlDict1 = (CMLDictionary) xmlDict1Doc.getRootElement();

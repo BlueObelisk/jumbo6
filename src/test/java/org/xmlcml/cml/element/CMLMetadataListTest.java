@@ -1,16 +1,21 @@
 package org.xmlcml.cml.element;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 /**
  * tests metadataList.
  *
  * @author pmr
  *
  */
-public class CMLMetadataListTest extends AbstractTest {
+public class CMLMetadataListTest {
     String moleculeS = "<molecule " + CML_XMLNS
             + "  xmlns:foo='http://www.foo.org'" + "  >"
             + "  <metadataList id='ml1'>" + "    <metadataList id='ml2'>"
@@ -34,7 +39,6 @@ public class CMLMetadataListTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         molecule = (CMLMolecule) parseValidString(moleculeS);
         metadataList0 = (CMLMetadataList) molecule
                 .getFirstCMLChild(CMLMetadataList.TAG);

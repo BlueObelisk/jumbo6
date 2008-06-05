@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.euclid.Int;
@@ -10,7 +13,7 @@ import org.xmlcml.euclid.Int;
  * @author pmr
  *
  */
-public class IntTest extends EuclidTestBase {
+public class IntTest {
 
     /**
      * tests equality of int arrays. arrays must be of same length

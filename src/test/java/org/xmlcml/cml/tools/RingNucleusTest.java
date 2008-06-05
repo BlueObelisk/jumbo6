@@ -3,6 +3,9 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.parseValidFile;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +21,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * @author pm286
  *
  */
-public class RingNucleusTest extends AbstractToolTest {
+public class RingNucleusTest  {
 
 	static String MOLECULE = "org"+U_S+"xmlcml"+U_S+"cml"+U_S+"tools"+U_S+"examples"+U_S+"molecules";
 	CMLMolecule molecule;

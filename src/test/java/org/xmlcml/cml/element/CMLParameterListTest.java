@@ -1,5 +1,9 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -11,7 +15,7 @@ import org.junit.Test;
  * @author pm286
  * 
  */
-public class CMLParameterListTest extends AbstractTest {
+public class CMLParameterListTest {
 
     String parameterS = S_EMPTY +
         "<parameterList id='a1' "+CML_XMLNS+">" +
@@ -33,7 +37,6 @@ public class CMLParameterListTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         parameterList = (CMLParameterList) parseValidString(parameterS);
     }
 

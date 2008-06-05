@@ -11,7 +11,7 @@ import org.xmlcml.euclid.IntRange;
  * @author pmr
  *
  */
-public class IntRangeTest extends EuclidTestBase {
+public class IntRangeTest {
 
     IntRange i0;
 
@@ -20,21 +20,12 @@ public class IntRangeTest extends EuclidTestBase {
     IntRange i2;
 
     /**
-     * main
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-    }
-
-    /**
      * setup.
      *
      * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         i0 = new IntRange();
         i1 = new IntRange(1, 1);
         i2 = new IntRange(1, 3);

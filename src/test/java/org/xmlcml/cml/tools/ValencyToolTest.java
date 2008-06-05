@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.fail;
+import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.IOException;
 

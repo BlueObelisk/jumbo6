@@ -3,9 +3,14 @@
  */
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -27,13 +32,13 @@ public class CMLTableCellTest extends AbstractTableTest {
     public final void testWriteHTML() {
         cell = new CMLTableCell("foo");
         String ss ="<td>foo</td>";
-        assertWriteHTML(cell, ss);
+        TestUtils.assertWriteHTML(cell, ss);
         cell = new CMLTableCell(1.2);
         ss ="<td>1.2</td>";
-        assertWriteHTML(cell, ss);
+        TestUtils.assertWriteHTML(cell, ss);
         cell = new CMLTableCell(3);
         ss ="<td>3</td>";
-        assertWriteHTML(cell, ss);
+        TestUtils.assertWriteHTML(cell, ss);
     }
 
     /**

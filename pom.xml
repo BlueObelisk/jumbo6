@@ -159,39 +159,6 @@
 		<url>http://wwmm.ch.cam.ac.uk/blogs/murrayrust/</url>
 	</organization>
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -210,9 +177,6 @@
 					<excludes>
 						<exclude>
 							org/xmlcml/cml/tools/FragmentListToolTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/base/BaseTest.java
 						</exclude>
 						<exclude>
 							org/xmlcml/cml/element/NumericTest.java
@@ -257,6 +221,13 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+		  <groupId>log4j</groupId>
+		  <artifactId>log4j</artifactId>
+		  <version>1.2.13</version>
+		  <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>xom</groupId>

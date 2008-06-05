@@ -1,7 +1,9 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
@@ -17,16 +19,6 @@ import org.xmlcml.euclid.test.Vector3Test;
  * 
  */
 public class CMLVector3Test extends GeomTestBase {
-
-    /**
-     * setup.
-     * 
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
 
     /**
      * equality test. true if both args not null and equal within epsilon

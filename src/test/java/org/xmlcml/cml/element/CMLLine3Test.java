@@ -1,10 +1,16 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+
 import java.io.StringReader;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
@@ -30,6 +36,8 @@ public class CMLLine3Test extends GeomTestBase {
 
     double s14 = Math.sqrt(14.);
 
+	private CMLBuilder builder;
+
     /**
      * setup.
      *
@@ -38,7 +46,8 @@ public class CMLLine3Test extends GeomTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        vv = new CMLVector3(1., 2., 3.);
+        builder = new CMLBuilder();
+		vv = new CMLVector3(1., 2., 3.);
         pp = new CMLPoint3(6., 5., 4.);
         ll = new CMLLine3(pp, vv);
     }

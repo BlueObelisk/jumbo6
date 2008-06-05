@@ -1,5 +1,10 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.logging.Level;

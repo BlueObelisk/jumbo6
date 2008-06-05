@@ -3,39 +3,24 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * @author pm286
  *
  */
-public class SMILESToolTest extends AbstractToolTest {
+public class SMILESToolTest {
 
 	private SMILESTool smilesTool;
 	private CMLMolecule mol;
 	private String molS;
 	private CMLMolecule molex;
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#SMILESTool()}.
-	 */
-	@Test
-	public final void testSMILESTool() {
-		// does nothing at present
-	}
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
@@ -92,7 +77,7 @@ public class SMILESToolTest extends AbstractToolTest {
 				"  </bondArray>"+
 				"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
-		AbstractTest.assertEqualsCanonically("furan", molex, mol, true);
+		assertEqualsCanonically("furan", molex, mol, true);
 	}
 		
 	/**
@@ -125,7 +110,7 @@ public class SMILESToolTest extends AbstractToolTest {
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
-		AbstractTest.assertEqualsCanonically("silly", molex, mol, true);
+		assertEqualsCanonically("silly", molex, mol, true);
 	}
 		
 	/**
@@ -247,7 +232,7 @@ public class SMILESToolTest extends AbstractToolTest {
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
-		AbstractTest.assertEqualsCanonically("pyridine", molex, mol, true);
+		assertEqualsCanonically("pyridine", molex, mol, true);
 	}
 		
 	/**
@@ -304,7 +289,7 @@ public class SMILESToolTest extends AbstractToolTest {
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
-		AbstractTest.assertEqualsCanonically("arom", molex, mol, true);
+		assertEqualsCanonically("arom", molex, mol, true);
 	}
 	
 	/**
@@ -379,7 +364,7 @@ public class SMILESToolTest extends AbstractToolTest {
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
-		AbstractTest.assertEqualsCanonically("zwitterion", molex, mol, true);
+		assertEqualsCanonically("zwitterion", molex, mol, true);
 	}
 	
 	/**

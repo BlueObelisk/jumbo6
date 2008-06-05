@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

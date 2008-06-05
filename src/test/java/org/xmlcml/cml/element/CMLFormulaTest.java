@@ -1,5 +1,16 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_QUOT;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.getAssertFormat;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -13,6 +24,7 @@ import nu.xom.ParsingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLSerializer;
@@ -47,6 +59,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
     CMLFormula xmlForm1 = null;
     static int count = 0;
+	private CMLBuilder builder;
 
     /**
      * setup.
@@ -76,7 +89,8 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
         // read reference moelcule
 
-        try {
+        builder = new CMLBuilder();
+		try {
             xmlForm1Doc = builder.build(new StringReader(xmlForm1S));
         } catch (IOException e) {
             Assert.fail("Should not throw IOException");

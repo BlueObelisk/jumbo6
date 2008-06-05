@@ -1,5 +1,10 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_COMMA;
+import static org.xmlcml.euclid.EuclidConstants.S_LBRAK;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +20,7 @@ import org.xmlcml.euclid.RealRange;
  * @author pmr
  *
  */
-public class Real2ArrayTest extends EuclidTestBase {
+public class Real2ArrayTest  {
 
     Real2Array ra0;
 
@@ -28,7 +33,6 @@ public class Real2ArrayTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         ra0 = new Real2Array();
         ra1 = new Real2Array(new RealArray(new double[] { 1, 2, 3, 4, 5, 6 }),
                 new RealArray(new double[] { 11, 12, 13, 14, 15, 16 }));

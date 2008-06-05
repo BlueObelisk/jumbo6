@@ -15,7 +15,7 @@ import org.xmlcml.euclid.Vector3;
  * @author pmr
  *
  */
-public class GeomTest extends EuclidTestBase {
+public class GeomTest {
 
     Line3 l0;
 
@@ -84,8 +84,6 @@ public class GeomTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         l0 = new Line3();
         l100000 = new Line3(new Point3(0., 0., 0.), new Vector3(1., 0., 0.));
         l123456 = new Line3(new Point3(4., 5., 6.), new Vector3(1., 2., 3.));

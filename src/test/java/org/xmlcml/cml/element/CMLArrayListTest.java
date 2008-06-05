@@ -3,6 +3,11 @@
  */
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;

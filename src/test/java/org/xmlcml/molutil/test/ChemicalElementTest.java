@@ -1,13 +1,14 @@
 package org.xmlcml.molutil.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.base.BaseTest;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.molutil.ChemicalElement;
@@ -19,17 +20,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * @author pmr
  *
  */
-public class ChemicalElementTest extends BaseTest {
-
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class ChemicalElementTest {
 
     /**
      * Test method for 'org.xmlcml.molutil.ChemicalElement initialisation'

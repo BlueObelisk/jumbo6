@@ -1,8 +1,12 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -11,7 +15,7 @@ import org.junit.Test;
  * @author pm286
  *
  */
-public class CMLAtomParityTest extends AbstractTest {
+public class CMLAtomParityTest {
 
     String s = "" + "<molecule " + CML_XMLNS + ">" + " <atomArray>"
             + "  <atom id='a1' elementType='C'>"
@@ -37,9 +41,8 @@ public class CMLAtomParityTest extends AbstractTest {
      *
      * @throws Exception
      */
-    @Test
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         molecule = (CMLMolecule) parseValidString(s);
         List<CMLAtom> atoms = molecule.getAtoms();
         atom = atoms.get(0);

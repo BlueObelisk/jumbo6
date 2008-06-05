@@ -1,5 +1,19 @@
 package org.xmlcml.cml.attribute;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_DICT_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.NDICT;
+import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
+import static org.xmlcml.cml.base.CMLConstants.XSD_NS;
+import static org.xmlcml.cml.element.AbstractTest.CML_COMP_DICT;
+import static org.xmlcml.cml.element.AbstractTest.CML_DICT_DICT;
+import static org.xmlcml.cml.element.AbstractTest.COMPLEX_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTest.DICT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -9,11 +23,9 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLDictionary;
 import org.xmlcml.cml.element.CMLEntry;
@@ -27,7 +39,7 @@ import org.xmlcml.euclid.Util;
  * @author pmr
  *
  */
-public class DictRefAttributeTest extends AbstractTest {
+public class DictRefAttributeTest {
 
 	CMLCml cml = null;
 
@@ -45,16 +57,6 @@ public class DictRefAttributeTest extends AbstractTest {
 			+ "<scalar id='s2' dictRef='foo:bar'>456</scalar>"
 			+ "<scalar id='s3' dictRef='cmlComp:ionPot'>123</scalar>"
 			+ "</cml>";
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/** test */
 	@Test

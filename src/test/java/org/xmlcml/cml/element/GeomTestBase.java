@@ -1,16 +1,20 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+
 import java.io.StringReader;
 import java.util.logging.Logger;
 
 import org.junit.Before;
+import org.xmlcml.cml.base.CMLBuilder;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed
  * by atom- molecule and bond-aware
  */
 
-public abstract class GeomTestBase extends AbstractTest {
+public abstract class GeomTestBase {
+	CMLBuilder builder = new CMLBuilder();
 
     // created from XOM
     // these have forbidden access
@@ -90,8 +94,7 @@ public abstract class GeomTestBase extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
+        
         // create from XOM
         // xomP = new CMLPoint3(); // deliberately disallowed
         // xomPl = new CMLPlane3(); // deliberately disallowed

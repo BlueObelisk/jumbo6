@@ -13,7 +13,7 @@ import org.xmlcml.euclid.Vector2;
  * @author pm286
  *
  */
-public class Line2Test extends EuclidTestBase {
+public class Line2Test {
 
 	static double sqrt2 = Math.sqrt(2.);
 	static double sqrt5 = Math.sqrt(5.);
@@ -35,7 +35,6 @@ public class Line2Test extends EuclidTestBase {
 	 * */
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		l0002 = new Line2(p00, p02);
 		l0200 = new Line2(p02, p00);
 		l0020 = new Line2(p00, p20);

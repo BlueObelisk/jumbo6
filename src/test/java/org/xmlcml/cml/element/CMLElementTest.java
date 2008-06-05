@@ -1,4 +1,10 @@
 package org.xmlcml.cml.element;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.C_E;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.assertNotEqualsCanonically;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -17,13 +23,15 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Util;
+
+
 /**
  * test CMLElement.
  *
  * @author pmr
  *
  */
-public class CMLElementTest extends AbstractTest {
+public class CMLElementTest {
 	
 	final static String ID = "id";
     CMLElement atom;
@@ -45,7 +53,6 @@ public class CMLElementTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         atom = new CMLElement(CMLAtom.TAG);
         atom.addAttribute(new Attribute("foo", "fooval"));
         CMLLabel label = new CMLLabel();

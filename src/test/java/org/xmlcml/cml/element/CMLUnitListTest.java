@@ -1,11 +1,19 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNITTYPES_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.NamespaceRefAttribute;
 import org.xmlcml.cml.base.CMLElements;
@@ -13,25 +21,13 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
-
 /**
  * test CMLUnitList.
  *
  * @author pmr
  *
  */
-
 public class CMLUnitListTest extends AbstractUnitTest {
-
-	/**
-	 * setup.
-	 *
-	 * @throws Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
 
 	/**
 	 * Test method for 'org.xmlcml.cml.element.CMLUnitList.CMLUnitList()'
@@ -155,9 +151,9 @@ public class CMLUnitListTest extends AbstractUnitTest {
 	@Test
 	public void testWriteHTML() throws IOException, CMLException {
 		// this just writes HTML to the same directory. Check by eye!
-		writeHTML(siUnitList, Util.getTEMP_DIRECTORY() + File.separator
+		AbstractTest.writeHTML(siUnitList, Util.getTEMP_DIRECTORY() + File.separator
 				+ "html" + File.separator + "siUnitsDict.html");
-		writeHTML(unitList, Util.getTEMP_DIRECTORY() + File.separator
+		AbstractTest.writeHTML(unitList, Util.getTEMP_DIRECTORY() + File.separator
 				+ "html" + File.separator + "unitsDict.html");
 		writeHTML("siestaUnits.xml");
 	}
@@ -169,7 +165,7 @@ public class CMLUnitListTest extends AbstractUnitTest {
 		NamespaceToUnitListMap unitListMap = new NamespaceToUnitListMap(Util
 				.getResource(UNIT_RESOURCE + U_S + CATALOG_XML), new CMLUnitList());
 		unitList.setUnitListMap(unitListMap);
-		writeHTML(unitList, outFile + ".html");
+		AbstractTest.writeHTML(unitList, outFile + ".html");
 	}
 
 	/**

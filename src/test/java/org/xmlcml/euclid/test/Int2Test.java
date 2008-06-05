@@ -11,7 +11,7 @@ import org.xmlcml.euclid.Int2;
  * @author pmr
  *
  */
-public class Int2Test extends EuclidTestBase {
+public class Int2Test {
 
     Int2 i0;
 
@@ -26,7 +26,6 @@ public class Int2Test extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         i0 = new Int2();
         i11 = new Int2(1, 1);
         i12 = new Int2(1, 2);

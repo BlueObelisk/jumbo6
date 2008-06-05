@@ -1,5 +1,18 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.NUNIT_DICT;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNITTYPES_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants._UNIT_NS;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+
 import java.io.File;
 
 import org.junit.Assert;
@@ -7,24 +20,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
-
 /**
  * tests CMLUnit.
- * 
+ *  // TODO Deprecate and rename as a "constants" or "util" class.
  * @author pmr
  * 
  */
-public class AbstractUnitTest extends AbstractTest {
+public class AbstractUnitTest {
 
-	String TEST_UNITS_DICT = "unitsDict.xml";
+	  String TEST_UNITS_DICT = "unitsDict.xml";
 
-	int TEST_NUNITS = 40;
+	  int TEST_NUNITS = 40;
 
-	String TEST_SI_UNITS_DICT = "siUnitsDict.xml";
+	 static String TEST_SI_UNITS_DICT = "siUnitsDict.xml";
 
-	String TEST_UNIT_TYPE_DICT = "unitTypeDict.xml";
+	 static String TEST_UNIT_TYPE_DICT = "unitTypeDict.xml";
 
-	static CMLUnitList siUnitList = null;
+	 static CMLUnitList siUnitList = null;
 
 	CMLUnit siUnit;
 
@@ -66,7 +78,6 @@ public class AbstractUnitTest extends AbstractTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 
 		if (siUnitList == null) {
 			siUnitList = CMLUnitList.createUnitList(Util

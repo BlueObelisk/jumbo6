@@ -1,6 +1,8 @@
 package org.xmlcml.cml.element;
 
 import static org.junit.Assert.fail;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.util.Map;
 
@@ -16,7 +18,7 @@ import org.xmlcml.cml.map.IndexableByIdListManager;
  * @author pm286
  * CMLMolecule and CMLMoleculeList are used as the test classes
  */
-public class IndexableListManagerTest extends AbstractTest {
+public class IndexableListManagerTest {
 
 	/**
 	 */

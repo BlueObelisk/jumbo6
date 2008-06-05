@@ -1,5 +1,11 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -7,13 +13,14 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.test.DoubleTestBase;
+
 
 /**
  * test CMLPoint3
@@ -23,16 +30,7 @@ import org.xmlcml.euclid.test.DoubleTestBase;
  */
 public class CMLPoint3Test extends GeomTestBase {
 
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
+CMLBuilder builder = new CMLBuilder();
     /**
      * equality test. true if both args not null and equal within epsilon
      *

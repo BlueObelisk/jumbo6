@@ -3,8 +3,11 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import org.junit.Test;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLMolecule;
 
@@ -13,7 +16,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  *
  */
 
-public class FragmentConverterTest extends AbstractTest {
+public class FragmentConverterTest {
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.FragmentConverter#convertToFragment()}.

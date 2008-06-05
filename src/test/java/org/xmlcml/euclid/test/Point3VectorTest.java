@@ -1,5 +1,9 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -26,7 +30,7 @@ import org.xmlcml.euclid.Axis.Axis3;
  * @author pmr
  *
  */
-public class Point3VectorTest extends EuclidTestBase {
+public class Point3VectorTest {
 
     Point3Vector p0;
     Point3Vector p1;
@@ -41,7 +45,6 @@ public class Point3VectorTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         p0 = new Point3Vector();
         p1 = new Point3Vector(new double[] { 11., 21., 31., 12., 22., 32., 13.,
                 23., 33., 14., 24., 34. });

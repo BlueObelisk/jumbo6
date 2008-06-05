@@ -1,5 +1,8 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +16,7 @@ import org.xmlcml.euclid.Vector2;
  * @author pmr
  *
  */
-public class Vector2Test extends EuclidTestBase {
+public class Vector2Test  {
 
     Vector2 v0;
 
@@ -26,7 +29,6 @@ public class Vector2Test extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         v0 = new Vector2(new Real2(3., 4.));
         v1 = new Vector2(1., 2.);
     }

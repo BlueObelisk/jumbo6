@@ -1,5 +1,10 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.element.AbstractTest.SIMPLE_RESOURCE;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -18,7 +23,7 @@ import org.xmlcml.euclid.test.StringTestBase;
  * @author pm286
  *
  */
-public class CMLArgTest extends AbstractTest {
+public class CMLArgTest {
 
 	/**
 	 * Test method for 'org.xmlcml.cml.element.CMLArg.CMLArg(String, int)'

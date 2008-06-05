@@ -1,5 +1,12 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.alwaysFail;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +27,7 @@ import org.xmlcml.euclid.test.StringTestBase;
  *
  */
 
-public class CMLAngleTest extends AbstractTest {
+public class CMLAngleTest {
 
     String s1 = S_EMPTY + "<cml " + CML_XMLNS + ">" +
             " <molecule id='m1'>" +
@@ -50,7 +57,6 @@ public class CMLAngleTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         Element element = null;
         try {
         	element = parseValidString(s1);

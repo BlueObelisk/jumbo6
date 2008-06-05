@@ -3,8 +3,11 @@
  */
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -19,7 +22,7 @@ public class CMLTableHeaderTest extends AbstractTableTest {
     public final void testWriteHTML() {
         String expected = S_EMPTY +
                 "\n<tr><th class='c:foo'>foo</th><th class='c:bar'>bar</th></tr>";
-        assertWriteHTML(tableHeader, expected);
+        TestUtils.assertWriteHTML(tableHeader, expected);
     }
 
     /**

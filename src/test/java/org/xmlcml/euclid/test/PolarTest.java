@@ -1,5 +1,7 @@
 package org.xmlcml.euclid.test;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +16,7 @@ import org.xmlcml.euclid.Real2;
  * @author pmr
  *
  */
-public class PolarTest extends EuclidTestBase {
+public class PolarTest  {
 
     Polar p0;
 
@@ -37,7 +39,6 @@ public class PolarTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         p0 = new Polar();
         p1 = new Polar(1, 2);
         p2 = new Polar(10, new Angle(Math.PI / 3));

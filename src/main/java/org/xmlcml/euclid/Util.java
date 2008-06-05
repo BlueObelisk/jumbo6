@@ -34,7 +34,9 @@ import org.xmlcml.cml.base.CMLUtil;
 
 /**
  * A number of miscellaneous tools. Originally devised for jumbo.sgml, now
- * rewritten for jumbo.xml. Use these at your peril - some will be phased out
+ * rewritten for jumbo.xml. Use these at your peril - some will be phased out. 
+ * 
+ * TODO: Many of these methods should be moved to a new Utils class in org.xmlcml.util
  * 
  * @author (C) P. Murray-Rust, 1998
  * @author 20 August 2003

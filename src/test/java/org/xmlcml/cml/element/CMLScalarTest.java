@@ -1,5 +1,22 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
+import static org.xmlcml.cml.base.CMLConstants.CML_SIUNITS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.SIUNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.UNIT_NS;
+import static org.xmlcml.cml.base.CMLConstants.U_CELSIUS;
+import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
+import static org.xmlcml.cml.base.CMLConstants.U_KCAL;
+import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_COLON;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -20,7 +37,6 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.Util;
-
 /**
  * tests CMLScalar.
  * 

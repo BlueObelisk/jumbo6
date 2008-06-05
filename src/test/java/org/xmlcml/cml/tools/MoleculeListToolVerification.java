@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,13 +27,13 @@ import org.xmlcml.cml.html.HtmlMenuSystem;
  * tests moleculeTool.
  * THIS IS NOT A JUNIT TEST.
  * It can be omitted from automatic Junit testing.
- * It should be run by na human and the output should appear on a screen or in a file
+ * It should be run by an human and the output should appear on a screen or in a file
  * which the tester should look at
  * 
  * @author pmr
  *
  */
-public class MoleculeListToolTest extends AbstractToolTest {
+public class MoleculeListToolVerification {
 
     /** test display.
      * 

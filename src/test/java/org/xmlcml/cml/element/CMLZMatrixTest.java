@@ -1,5 +1,12 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.element.AbstractTest.EXPERIMENTAL_RESOURCE;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,7 +19,6 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -24,17 +30,7 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
-public class CMLZMatrixTest extends AbstractTest {
-
-	/**
-	 * setUp.
-	 *
-	 * @exception Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-	}
+public class CMLZMatrixTest {
 
 	/**
 	 * Test method for

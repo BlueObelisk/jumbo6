@@ -1,5 +1,13 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.tools.AbstractToolTest.TOOLS_EXAMPLES;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
+import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -33,14 +41,13 @@ import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
-
 /**
  * test CrystalTool.
  *
  * @author pmr
  *
  */
-public class CrystalToolTest extends AbstractToolTest {
+public class CrystalToolTest  {
 
     /** */
     public final static String CIF_EXAMPLES = TOOLS_EXAMPLES+U_S+"cif";
@@ -73,7 +80,6 @@ public class CrystalToolTest extends AbstractToolTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         mol1 = (CMLMolecule) parseValidString(mol1S);
         crystal1 = (CMLCrystal) parseValidString(crystal1S);
         tool1 = new CrystalTool(mol1, crystal1);

@@ -13,7 +13,7 @@ import org.xmlcml.euclid.IntRange;
  * @author pmr
  *
  */
-public class Int2RangeTest extends EuclidTestBase {
+public class Int2RangeTest {
 
     Int2Range i2r0;
 
@@ -22,21 +22,12 @@ public class Int2RangeTest extends EuclidTestBase {
     Int2Range i2r2;
 
     /**
-     * main
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-    }
-
-    /**
      * setup.
      *
      * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         i2r0 = new Int2Range();
         i2r1 = new Int2Range(new IntRange(1, 2), new IntRange(1, 2));
         i2r2 = new Int2Range(new IntRange(1, 2), new IntRange(3, 4));

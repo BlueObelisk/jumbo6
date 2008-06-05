@@ -1,4 +1,8 @@
 package org.xmlcml.cml.element;
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -9,13 +13,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
+
 /**
  * test for reaction elements.
  * 
  * @author pmr
  * 
  */
-public abstract class ReactionAllTestBase extends AbstractTest {
+public class ReactionAllTestBase {
     protected CMLReaction xomReact1;
     protected CMLReaction xomReact2;
     protected String xmlReact1S = "<reaction id='r1' " + CML_XMLNS + ">"
@@ -91,12 +96,11 @@ public abstract class ReactionAllTestBase extends AbstractTest {
     protected CMLReaction xmlReact2;
     /**
      * setup.
-     * 
+     *  TODO There shouldn't be any assertions in a setup method...
      * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         xmlReact1 = (CMLReaction) parseValidString(xmlReact1S);
         xmlReactantLists1 = xmlReact1.getReactantListElements();
         xmlProductLists1 = xmlReact1.getProductListElements();

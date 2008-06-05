@@ -13,7 +13,7 @@ import org.xmlcml.euclid.RealRange;
  * @author pmr
  *
  */
-public class Real2RangeTest extends EuclidTestBase {
+public class Real2RangeTest {
 
     Real2Range i2r0;
 
@@ -28,7 +28,6 @@ public class Real2RangeTest extends EuclidTestBase {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         i2r0 = new Real2Range();
         i2r1 = new Real2Range(new RealRange(1.0, 2.0), new RealRange(1.0, 2.0));
         i2r2 = new Real2Range(new RealRange(1.0, 2.0), new RealRange(3.0, 4.0));

@@ -1,8 +1,8 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -11,17 +11,7 @@ import org.junit.Test;
  * @author pm286
  *
  */
-public class CMLDimensionTest extends AbstractTest {
-
-    /**
-     * setup.
-     *
-     * @exception Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class CMLDimensionTest {
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLDimension.copy()'

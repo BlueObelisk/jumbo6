@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
-import java.util.List;
-
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.parseValidFile;
+import static org.xmlcml.util.TestUtils.parseValidString;
 import nu.xom.Element;
 
 import org.junit.Assert;
@@ -14,6 +15,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.molutil.ChemicalElement.AS;
+
 /**
  * tests atomTool.
  *

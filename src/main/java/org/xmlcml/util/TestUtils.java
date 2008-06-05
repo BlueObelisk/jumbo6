@@ -1,4 +1,4 @@
-package org.xmlcml.cml.base;
+package org.xmlcml.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +17,13 @@ import nu.xom.Text;
 import nu.xom.tests.XOMTestCase;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.EuclidTestBase;
 
 /**
  * 
@@ -31,27 +35,15 @@ import org.xmlcml.euclid.test.EuclidTestBase;
  * @version 5.0
  * 
  */
-public class BaseTest extends EuclidTestBase implements CMLConstants {
-
-	protected CMLBuilder builder = null;
+public final class TestUtils implements CMLConstants {
 
     /** logger */
-    public final static Logger logger = Logger.getLogger(BaseTest.class
+    public final static Logger logger = Logger.getLogger(TestUtils.class
             .getName());
 
     /** root of tests.*/
     public final static String BASE_RESOURCE = "org/xmlcml/cml/base";
     
-    /**
-     * setup.
-     * 
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-       super.setUp(); 
-    }
-
     /**
      * tests 2 XML objects for equality using canonical XML.
      * 
@@ -205,12 +197,12 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
 		return refNode;
 	}
     
-    static protected void reportXMLDiff(String message, String errorMessage,
+    public static void reportXMLDiff(String message, String errorMessage,
             Node refNode, Node testNode) {
         Assert.fail(message+" ~ "+errorMessage);
     }
 
-    static protected void reportXMLDiffInFull(String message, String errorMessage,
+    public static void reportXMLDiffInFull(String message, String errorMessage,
             Node refNode, Node testNode) {
         try {
 	        System.err.println("==========XMLDIFF reference=========");
@@ -253,7 +245,7 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
      * @param element to test
      * @param expected HTML string
      */ 
-    public void assertWriteHTML(CMLElement element, String expected) {
+    public static void assertWriteHTML(CMLElement element, String expected) {
         StringWriter sw = new StringWriter();
         try {
             element.writeHTML(sw);
@@ -270,7 +262,7 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
 	 * @param s xml string (assumed valid)
 	 * @return root element
 	 */
-	protected Element parseValidString(String s) {
+	public static Element parseValidString(String s) {
 	    Element element = null;
 	    if (s == null) {
 	    	throw new CMLRuntimeException("NULL VALID JAVA_STRING");
@@ -290,16 +282,48 @@ public class BaseTest extends EuclidTestBase implements CMLConstants {
 	 * @param filename relative to classpath
 	 * @return root element
 	 */
-	protected Element parseValidFile(String filename) {
+	public static Element parseValidFile(String filename) {
 	    Element root = null;
 	    try {
 	        URL url =  Util.getResource(filename);
+	        CMLBuilder builder = new CMLBuilder();
 	        root =  builder.build(
 	                new File(url.toURI())).getRootElement();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	    return root;
+	}
+
+	/**
+	 * used by Assert.assert routines. copied from Assert
+	 * 
+	 * @param message
+	 *            prepends if not null
+	 * @param expected
+	 * @param actual
+	 * @return message
+	 */
+	public static String getAssertFormat(String message, Object expected,
+	        Object actual) {
+	    String formatted = "";
+	    if (message != null) {
+	        formatted = message + S_SPACE;
+	    }
+	    return formatted + "expected:<" + expected + "> but was:<" + actual
+	            + ">";
+	}
+
+	public static void neverFail(Exception e) {
+	    Assert.fail("should never throw " + e);
+	}
+
+	public static void alwaysFail(String message) {
+	    Assert.fail("should always throw " + message);
+	}
+
+	public static void neverThrow(Exception e) {
+	    throw new EuclidRuntimeException("should never throw " + e);
 	}
     
 

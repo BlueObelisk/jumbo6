@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.euclid.EuclidConstants.EPS;
 import nu.xom.Node;
 
 import org.junit.Assert;

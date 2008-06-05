@@ -10,13 +10,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
+
 /**
  * test CMLElements
  *
  * @author pmr
  *
  */
-public class ElementsTest extends AbstractTest {
+public class ElementsTest {
     CMLElement cml1;
     Elements elems;
     CMLElements<CMLElement> cmlElems;
@@ -28,7 +29,6 @@ public class ElementsTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         cml1 = new CMLElement("cml1");
         CMLElement cml2 = new CMLElement("cml2");
         cml2.addAttribute(new Attribute("id", "id1"));

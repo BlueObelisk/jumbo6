@@ -1,5 +1,14 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.U_ANGSTROM;
+import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
+import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TestUtils.neverThrow;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -19,7 +28,7 @@ import org.xmlcml.euclid.test.RealSquareMatrixTest;
  * @author pmr
  *
  */
-public class CMLCrystalTest extends AbstractTest {
+public class CMLCrystalTest {
 
     CMLCrystal crystal1;
 
@@ -95,8 +104,6 @@ public class CMLCrystalTest extends AbstractTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         crystal1 = (CMLCrystal) parseValidString(crystal1S);
         crystal2 = (CMLCrystal) parseValidString(crystal2S);
         crystal3 = (CMLCrystal) parseValidString(crystal3S);

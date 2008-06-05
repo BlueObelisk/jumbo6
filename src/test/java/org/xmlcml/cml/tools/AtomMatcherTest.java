@@ -1,5 +1,9 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
+import static org.xmlcml.util.TestUtils.parseValidString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +27,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * @author pm286
  *
  */
-public class AtomMatcherTest extends AbstractToolTest {
+public class AtomMatcherTest {
 
     String mol1S = S_EMPTY +
         "<molecule id='m1' "+CML_XMLNS+">" +
@@ -67,7 +71,6 @@ public class AtomMatcherTest extends AbstractToolTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         att.setUp();
         dmf = att.dmf;
     }
