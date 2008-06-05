@@ -1,7 +1,11 @@
 package org.xmlcml.cml.tools;
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidFile;
 import static org.xmlcml.util.TestUtils.parseValidString;
+
+import java.util.List;
+
 import nu.xom.Element;
 
 import org.junit.Assert;
@@ -213,10 +217,37 @@ public class AtomToolTest extends MoleculeAtomBondTest {
 
 	/**
 	 * 
+	 * pointer...
+     <atomArray>
+       <atom elementType="R" id="a1" moleculeRef="otbs" x2="31.218704021442583" y2="-12.577617621516218">
+         <label value="OTBS"/>
+       </atom>
+       
+     * ... target ...
+     * 
+     * <moleculeList>
+         <molecule id="otbs">
+           <atomArray>
+             <atom id="a1" elementType="R">
+               <label value="OTBS"/>
+             </atom>
 	 */
 	@Test
     public final void testGetReferencedAtoms() {
-        Element cml = parseValidFile("org/xmlcml/cml/tools/testRGroup1.xml");
-//    	List<CMLAtom> atomList = atomTool.getReferencedAtoms(scopeElement);
+        Element cml = parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
+        String otbs = "OTBS";
+        CMLAtom atom = (CMLAtom) cml.query("./cml:molecule/cml:atomArray/cml:atom[@elementType='R' and cml:label[@value='"+otbs+"']]", CML_XPATH).get(0);
+        AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+        // this uses the explicit pointer
+        String molId =atom.getAttributeValue("moleculeRef");
+        Element refMol = (CMLMolecule) cml.query(".//cml:molecule[@id='"+molId+"']", CML_XPATH).get(0);
+    	List<CMLAtom> atomList = atomTool.getReferencedAtoms(refMol, otbs);
+    	Assert.assertEquals("atom count", 1, atomList.size());
+    	Assert.assertEquals("atom id", "a1", atomList.get(0).getId());
+    	// this just scans the whole scope
+    	atomList = atomTool.getReferencedAtoms(cml, otbs);
+    	Assert.assertEquals("atom count", 1, atomList.size());
+    	Assert.assertEquals("atom id", "a1", atomList.get(0).getId());
+
 	}
  }
