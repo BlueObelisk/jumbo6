@@ -555,19 +555,15 @@ public class SMILESTool extends AbstractTool {
     	for (CMLAtom atom : atomList) {
     		atomSet.add(atom);
     	}
-    	System.out.println("TTTTTTTT "+atomSet.size());
     	while (atomSet.size() > 0) {
     		CMLAtom rootAtom = atomSet.iterator().next();
     		Element tree = getIsland(rootAtom, atomSet);
-    		CMLUtil.debug(tree, "XXXXXXXXXXX");
     		String ss = serialize(tree);
-    		CMLUtil.debug(tree, "===========");
     		if (s != null) {
     			s += S_PERIOD+ss;
     		} else {
     			s = ss;
     		}
-    		System.out.println("SS "+s);
     	}
     	return s;
     }
@@ -648,7 +644,6 @@ public class SMILESTool extends AbstractTool {
     	List<CMLAtom> ligandAtoms = atom.getLigandAtoms();
     	List<CMLBond> ligandBonds = atom.getLigandBonds();
     	int i = 0;
-    	System.out.println("AAA "+atomSet.size());
     	for (CMLAtom ligand : ligandAtoms) {
     		if (ligand.equals(parent)) {
     			continue;
@@ -668,7 +663,6 @@ public class SMILESTool extends AbstractTool {
     		}
     		i++;
     	}
-    	System.out.println("AAAAAAAA "+atomSet.size());
     	return element;
 	}
 	
