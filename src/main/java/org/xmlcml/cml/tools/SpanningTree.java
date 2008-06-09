@@ -147,7 +147,6 @@ public class SpanningTree extends AbstractTool {
 		ensureAtomAncestorMap();
 		List<CMLAtom> ancestorAtoms = atomAncestorMap.get(atom);
 		if (ancestorAtoms == null) {
-//			System.out.println("AAA "+atom.getId());
 			SpanningTreeElement startElement = atomSpanningTreeElementMap.get(atom);
 			List<SpanningTreeElement> ancestorElements = getAncestors(startElement);
 			ancestorAtoms = new ArrayList<CMLAtom>();
