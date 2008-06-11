@@ -10,6 +10,7 @@ import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -379,5 +380,32 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(ss);
 		mol = smilesTool.getMolecule();
 		mol.debug(4);
+	}
+	
+	@Test
+	public void testWriteSMILES() {
+		CMLMolecule molecule = (CMLMolecule) TestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/molecule5a.xml");
+		SMILESTool smilesTool = new SMILESTool(molecule);
+		String smiles = smilesTool.write();
+		Assert.assertEquals("smiles", "C([NH1][CH3])(=O)[CH3]", smiles);
+
+		molecule = (CMLMolecule) TestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/molecule5.xml");
+		smilesTool = new SMILESTool(molecule);
+		smiles = smilesTool.write();
+		Assert.assertEquals("smiles", "C1([NH1][CH2][CH2]1)=O", smiles);
+		
+		molecule = (CMLMolecule) TestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/molecule5b.xml");
+		smilesTool = new SMILESTool(molecule);
+		smiles = smilesTool.write();
+		Assert.assertEquals("smiles", "C1([NH1][CH1]2[CH1]1S2)=O", smiles);
+		
+		molecule = (CMLMolecule) TestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/molecule5c.xml");
+		smilesTool = new SMILESTool(molecule);
+		smiles = smilesTool.write();
+		Assert.assertEquals("smiles", "C1([NH1][CH2][CH2]1)=O.C1([NH1][CH2][CH2]1)=O", smiles);
 	}
 }

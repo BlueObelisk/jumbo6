@@ -1,7 +1,6 @@
 package org.xmlcml.cml.element;
 
 import static org.junit.Assert.fail;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.util.Map;
@@ -12,6 +11,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.Indexable;
 import org.xmlcml.cml.map.IndexableByIdListManager;
+import org.xmlcml.util.TestUtils;
 
 
 /**
@@ -42,7 +42,7 @@ public class IndexableListManagerTest {
 		"  <molecule id='m2'/>"+
 		"</moleculeList>";
 		CMLMoleculeList moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
-		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		TestUtils.assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 		
 		try {
 			moleculeList.addIndexable(molecule);
@@ -92,8 +92,8 @@ public class IndexableListManagerTest {
 		"  <molecule id='m1'/>"+
 		"  <molecule id='m2'/>"+
 		"</moleculeList>";
-		CMLMoleculeList moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
-		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		CMLMoleculeList moleculeListE = (CMLMoleculeList) TestUtils.parseValidString(moleculeListS);
+		TestUtils.assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 		
 		IndexableByIdListManager indexableListManager = moleculeList.getIndexableListManager();
 		Assert.assertNotNull("index", indexableListManager);
@@ -106,8 +106,8 @@ public class IndexableListManagerTest {
 		"  <molecule id='m2'/>"+
 		"  <molecule id='m3'/>"+
 		"</moleculeList>";
-		moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
-		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		moleculeListE = (CMLMoleculeList) TestUtils.parseValidString(moleculeListS);
+		TestUtils.assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 	}
 
 	/**
@@ -133,8 +133,8 @@ public class IndexableListManagerTest {
 		"<moleculeList xmlns='http://www.xml-cml.org/schema'>"+
 		"  <molecule id='m2'/>"+
 		"</moleculeList>";
-		CMLMoleculeList moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
-		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		CMLMoleculeList moleculeListE = (CMLMoleculeList) TestUtils.parseValidString(moleculeListS);
+		TestUtils.assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 		moleculeList.addIndexable(molecule1);
 		molecule = (CMLMolecule) map.get("m1");
 		Assert.assertNotNull("index", molecule);
@@ -144,8 +144,8 @@ public class IndexableListManagerTest {
 		"  <molecule id='m2'/>"+
 		"  <molecule id='m1'/>"+
 		"</moleculeList>";
-		moleculeListE = (CMLMoleculeList) parseValidString(moleculeListS);
-		assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
+		moleculeListE = (CMLMoleculeList) TestUtils.parseValidString(moleculeListS);
+		TestUtils.assertEqualsCanonically("moleculeList", moleculeListE, moleculeList, true);
 	}
 
 	/**

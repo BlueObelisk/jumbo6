@@ -5,7 +5,6 @@ import static org.xmlcml.cml.base.CMLConstants.U_ANGSTROM;
 import static org.xmlcml.cml.base.CMLConstants.U_DEGREE;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.neverThrow;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
@@ -21,6 +20,7 @@ import org.xmlcml.cml.element.CMLCrystal.Centering;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.RealSquareMatrixTest;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test for CMLCrystal.
@@ -139,7 +139,7 @@ public class CMLCrystalTest {
     @Test
     public void testCMLCrystalCMLCrystal() {
         CMLCrystal crystal = new CMLCrystal(crystal1);
-        assertEqualsCanonically("copy crystal", crystal, crystal1);
+        TestUtils.assertEqualsCanonically("copy crystal", crystal, crystal1);
     }
 
     /**

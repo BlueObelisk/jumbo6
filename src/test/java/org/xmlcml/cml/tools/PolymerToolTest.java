@@ -245,7 +245,7 @@ public class PolymerToolTest {
 //        try {
 //            CMLMolecule molRef = (CMLMolecule) CMLUtil.readElementFromResource(f);
 //            try {
-//                BaseTest.assertEqualsCanonically("comparing with previous result",
+//                TestUtils.assertEqualsCanonically("comparing with previous result",
 //                        molRef, molTest, true);
 //            } catch (AssertionError e) {
 //                try {
@@ -282,7 +282,7 @@ public class PolymerToolTest {
 //        CMLMoleculeList molListRef = readMoleculeList(f);
 //        Assert.assertNotNull("molListRef", molListRef);
 //        try {
-//            BaseTest.assertEqualsCanonically("comparing with previous result",
+//            TestUtils.assertEqualsCanonically("comparing with previous result",
 //                    molListRef, molListTest, true);
 //        } catch (AssertionError e) {
 //            Assert.fail(e + " for " + fileroot + S_SLASH + s);

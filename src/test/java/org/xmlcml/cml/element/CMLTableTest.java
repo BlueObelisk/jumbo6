@@ -1,7 +1,6 @@
 package org.xmlcml.cml.element;
 
 import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidFile;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLTable.TableType;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test CMLTable.
@@ -189,7 +189,7 @@ public class CMLTableTest extends AbstractTableTest {
         	// Exception expected.
             Assert.assertTrue(true);
         }
-        CMLTable expected = (CMLTable) parseValidFile(file);
-        assertEqualsCanonically(start+" model", expected, tableTest, stripWhite);
+        CMLTable expected = (CMLTable) TestUtils.parseValidFile(file);
+        TestUtils.assertEqualsCanonically(start+" model", expected, tableTest, stripWhite);
     }
  }

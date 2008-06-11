@@ -8,7 +8,6 @@ import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.cml.tools.AbstractToolTest.CRYSTAL_EXAMPLES;
 import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.net.URL;
@@ -35,6 +34,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -386,7 +386,7 @@ public class StereochemistryToolTest extends MoleculeAtomBondTest {
   "</bondArray>"+
 "</molecule>";
 		CMLMolecule molecule = (CMLMolecule) parseValidString(molS);
-		assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
+		TestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
 	/**

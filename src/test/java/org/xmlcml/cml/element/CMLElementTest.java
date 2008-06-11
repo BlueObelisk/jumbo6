@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
 
 
 /**
@@ -437,7 +438,7 @@ public class CMLElementTest {
     public void testGetNamespacePrefixInt() {
     }
     /**
-     * Test method for 'BaseTest1.assertEqualsCanonically(String, Element,
+     * Test method for 'TestUtils1.TestUtils.assertEqualsCanonically(String, Element,
      * Element)'
      */
     @Test
@@ -448,7 +449,7 @@ public class CMLElementTest {
         elem2 = new Element("foo");
         elem2.addAttribute(new Attribute("y2", "xyzzy"));
         elem2.addAttribute(new Attribute("bar", "plugh"));
-        assertEqualsCanonically("test canonicalization", elem1, elem2);
+        TestUtils.assertEqualsCanonically("test canonicalization", elem1, elem2);
         String s1 = "<foo bar='plugh' y2='xyzzy'/>";
         String s2 = "<foo y2='xyzzy'   bar='plugh'  ></foo>";
         try {

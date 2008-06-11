@@ -5,12 +5,12 @@ package org.xmlcml.cml.element;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.util.TestUtils.parseValidString;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -25,12 +25,12 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
         String s = S_EMPTY +
                 "<fragment "+CML_XMLNS+
                 "  countExpression='*(5)'/>";
-        CMLFragment frag = (CMLFragment) parseValidString(s);
+        CMLFragment frag = (CMLFragment) TestUtils.parseValidString(s);
         CountExpressionAttribute cea = (CountExpressionAttribute) frag.getCountExpressionAttribute();
         int count = cea.calculateCountExpression();
         Assert.assertEquals("countE", 5, count);
         s = "<fragment "+CML_XMLNS+"/>";
-        frag = (CMLFragment) parseValidString(s);
+        frag = (CMLFragment) TestUtils.parseValidString(s);
         // FIXME - must work out how to get 1 from null value
         cea = (CountExpressionAttribute) frag.getCountExpressionAttribute();
 //        count = cea.calculateCountExpression();
@@ -40,7 +40,7 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
         int N = 10;
         for (int i = 0; i < N; i++) {
             s = "<fragment "+CML_XMLNS+" countExpression='range(2,5)'/>";
-            frag = (CMLFragment) parseValidString(s);
+            frag = (CMLFragment) TestUtils.parseValidString(s);
             cea = (CountExpressionAttribute) frag.getCountExpressionAttribute();
             count = cea.calculateCountExpression();
             if (count <= 2 || count >= 5) {

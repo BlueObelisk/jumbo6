@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<molecule xmlns="http://www.xmlcml.org/schema">
+  <atomArray>
+    <atom id="a1" elementType="C" hydrogenCount="3"/>
+    <atom id="a2" elementType="N" hydrogenCount="1"/>
+    <atom id="a3" elementType="C" hydrogenCount="0"/>
+    <atom id="a4" elementType="O" hydrogenCount="0"/>
+    <atom id="a5" elementType="C" hydrogenCount="3"/>
+  </atomArray>
+  <bondArray>
+    <bond atomRefs2="a1 a2" order="1"/>
+    <bond atomRefs2="a2 a3" order="1"/>
+    <bond atomRefs2="a3 a4" order="2"/>
+    <bond atomRefs2="a3 a5" order="1"/>
+  </bondArray>
+</molecule>

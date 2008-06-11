@@ -1,0 +1,105 @@
+<cml xmlns="http://www.xml-cml.org/schema">
+    <reaction title="Synthesis of 2a" id="rc1">
+     <reactantList>
+        <reactant id="r1" count="1" title="ethanol">
+          <molecule>
+            <atomArray>
+              <atom id="a1" elementType="C"/>
+              <atom id="a1_h1" elementType="H"/>
+              <atom id="a1_h2" elementType="H"/>
+              <atom id="a1_h3" elementType="H"/>
+              <atom id="a2" elementType="C"/>
+              <atom id="a2_h1" elementType="H"/>
+              <atom id="a2_h2" elementType="H"/>
+              <atom id="a3" elementType="O"/>
+              <atom id="a3_h1" elementType="H"/>
+            </atomArray>
+            <bondArray>
+              <bond atomRefs2="a1 a1_h1" order="S"/>
+              <bond atomRefs2="a1 a1_h2" order="S"/>
+              <bond atomRefs2="a1 a1_h3" order="S"/>
+              <bond atomRefs2="a1 a2" order="S"/>
+              <bond atomRefs2="a2 a2_h1" order="S"/>
+              <bond atomRefs2="a2 a2_h2" order="S"/>
+              <bond atomRefs2="a2 a3" order="S"/>
+              <bond atomRefs2="a3 a3_h1" order="S"/>
+            </bondArray>
+          </molecule>
+        </reactant>
+        <reactant id="r2" count="1" title="acetic acid">
+          <molecule>
+            <atomArray>
+              <atom id="a1" elementType="C"/>
+              <atom id="a1_h1" elementType="H"/>
+              <atom id="a1_h2" elementType="H"/>
+              <atom id="a1_h3" elementType="H"/>
+              <atom id="a2" elementType="C"/>
+              <atom id="a3" elementType="O"/>
+              <atom id="a3_h1" elementType="H"/>
+              <atom id="a4" elementType="O"/>
+            </atomArray>
+            <bondArray>
+              <bond atomRefs2="a1 a1_h1" order="S"/>
+              <bond atomRefs2="a1 a1_h2" order="S"/>
+              <bond atomRefs2="a1 a1_h3" order="S"/>
+              <bond atomRefs2="a1 a2" order="S"/>
+              <bond atomRefs2="a2 a3" order="S"/>
+              <bond atomRefs2="a3 a3_h1" order="S"/>
+              <bond atomRefs2="a2 a4" order="D"/>
+            </bondArray>
+          </molecule>
+        </reactant>
+      </reactantList>
+      
+      <productList>
+        <product id="p1" count="1" title="ethyl acetate">
+          <molecule>
+            <atomArray>
+              <atom id="a1" elementType="C"/>
+              <atom id="a1_h1" elementType="H"/>
+              <atom id="a1_h2" elementType="H"/>
+              <atom id="a1_h3" elementType="H"/>
+              <atom id="a2" elementType="C"/>
+              <atom id="a2_h1" elementType="H"/>
+              <atom id="a2_h2" elementType="H"/>
+              <atom id="a3" elementType="O"/>
+              <atom id="a11" elementType="C"/>
+              <atom id="a11_h1" elementType="H"/>
+              <atom id="a11_h2" elementType="H"/>
+              <atom id="a11_h3" elementType="H"/>
+              <atom id="a12" elementType="C"/>
+              <atom id="a14" elementType="O"/>
+            </atomArray>
+            <bondArray>
+              <bond atomRefs2="a1 a1_h1" order="S"/>
+              <bond atomRefs2="a1 a1_h2" order="S"/>
+              <bond atomRefs2="a1 a1_h3" order="S"/>
+              <bond atomRefs2="a1 a2" order="S"/>
+              <bond atomRefs2="a2 a2_h1" order="S"/>
+              <bond atomRefs2="a2 a2_h2" order="S"/>
+              <bond atomRefs2="a2 a3" order="S"/>
+              <bond atomRefs2="a11 a11_h1" order="S"/>
+              <bond atomRefs2="a11 a11_h2" order="S"/>
+              <bond atomRefs2="a11 a11_h3" order="S"/>
+              <bond atomRefs2="a11 a12" order="S"/>
+              <bond atomRefs2="a12 a14" order="D"/>
+              <bond atomRefs2="a3 a12" order="D"/>
+            </bondArray>
+          </molecule>
+        </product>
+        <product id="p1" count="1" title="ethyl acetate">
+          <molecule>
+            <atomArray>
+              <atom id="a1" elementType="O"/>
+              <atom id="a1_h1" elementType="H"/>
+              <atom id="a1_h2" elementType="H"/>
+            </atomArray>
+            <bondArray>
+              <bond atomRefs2="a1 a1_h1" order="S"/>
+              <bond atomRefs2="a1 a1_h2" order="S"/>
+            </bondArray>
+          </molecule>
+        </product>
+      </productList>
+    </reaction>
+</cml>

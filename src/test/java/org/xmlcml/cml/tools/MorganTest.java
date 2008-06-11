@@ -20,6 +20,7 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -281,7 +282,7 @@ public class MorganTest extends MoleculeAtomBondTest {
                 "    <bond atomRefs2='a6 h6'/>" +
                 "  </bondArray>" +
                 "</molecule>";
-        CMLMolecule benzene = (CMLMolecule) parseValidString(benzeneS);
+        CMLMolecule benzene = (CMLMolecule) TestUtils.parseValidString(benzeneS);
         Morgan morgan = new Morgan(benzene.getAtomSet());
         List<Long> morganList = morgan.getMorganList();
         assertEquals("benzene", new long[]{
@@ -296,7 +297,7 @@ public class MorganTest extends MoleculeAtomBondTest {
 
         //==================================
         
-        benzene = (CMLMolecule) parseValidString(benzeneS);
+        benzene = (CMLMolecule) TestUtils.parseValidString(benzeneS);
         morgan = new Morgan(benzene.getAtomSet());
         List<CMLAtom> markedAtoms = morgan.getMarkedAtomList();
         Assert.assertNull("marked atoms null", markedAtoms);
@@ -335,7 +336,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         
         //==================================
         
-        benzene = (CMLMolecule) parseValidString(benzeneS);
+        benzene = (CMLMolecule) TestUtils.parseValidString(benzeneS);
         morgan = new Morgan(benzene.getAtomSet());
         benzene.getAtom(1).setProperty(Morgan.Annotation.MARKED.toString(), new Long(1));
         morganList = morgan.getMorganList();

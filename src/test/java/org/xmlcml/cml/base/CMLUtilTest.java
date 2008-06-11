@@ -411,9 +411,9 @@ public class CMLUtilTest  {
 			  "</B>"+
 			"</ne>";
 			Element element1 = new CMLBuilder().parseString(ss);
-			assertEqualsCanonically("after pull up", element1, element, true);
+			TestUtils.assertEqualsCanonically("after pull up", element1, element, true);
 			CMLUtil.normalizeTexts(element);
-			assertEqualsCanonically("after pull up", element1, element, true);
+			TestUtils.assertEqualsCanonically("after pull up", element1, element, true);
 		} catch (Exception e) {
 			throw new CMLRuntimeException(e);
 		}
