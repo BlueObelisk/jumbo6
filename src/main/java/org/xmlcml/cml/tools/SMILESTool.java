@@ -112,6 +112,11 @@ public class SMILESTool extends AbstractTool {
     	hydrogenControl = HydrogenControl.NO_EXPLICIT_HYDROGENS;
     }
     
+    public SMILESTool(CMLMolecule molecule) {
+    	this();
+    	this.setMolecule(molecule);
+    }
+    
 	/** parse SMILES.
      * 
      * @param sss
@@ -549,132 +554,13 @@ public class SMILESTool extends AbstractTool {
      * @return string
      */
     public String write() {
-    	String s = null;
-    	List<CMLAtom> atomList = molecule.getAtoms();
-    	Set<CMLAtom> atomSet = new TreeSet<CMLAtom>();
-    	for (CMLAtom atom : atomList) {
-    		atomSet.add(atom);
-    	}
-    	while (atomSet.size() > 0) {
-    		CMLAtom rootAtom = atomSet.iterator().next();
-    		Element tree = getIsland(rootAtom, atomSet);
-    		String ss = serialize(tree);
-    		if (s != null) {
-    			s += S_PERIOD+ss;
-    		} else {
-    			s = ss;
-    		}
-    	}
-    	return s;
-    }
-    
-    private String serialize(Element element) {
-    	StringBuilder sb = new StringBuilder();
-    	expand(element, sb);
-    	return sb.toString();
-    }
-    
-    private void expand(Element element, StringBuilder sb) {
-    	String s = S_LSQUARE+element.getAttributeValue("elementType");
-    	s += getCharge(element)+S_RSQUARE;
-    	String rings = element.getAttributeValue("rings");
-    	if (rings != null) {
-    		String[] rr = rings.split(S_SPACE);
-    		for (String r : rr) {
-    			s += S_PERCENT+r;
-    		}
-    	}
-    	sb.append(s);
-    	Elements elements = element.getChildElements();
-    	for (int i = 0; i < elements.size(); i++) {
-    		Element child = (Element) elements.get(i);
-    		sb.append(S_LBRAK);
-    		sb.append(getOrder(child.getAttributeValue("order")));
-    		expand(child, sb);
-    		sb.append(S_RBRAK);
-    	}
-    }
-    
-    private String getOrder(String order) {
-    	String s = null;
-    	if (order == null) {
-    		s = S_MINUS;
-    	} else if (order.equals(CMLBond.SINGLE)) {
-    		s = S_MINUS;
-    	} else if (order.equals(CMLBond.DOUBLE)) {
-    		s = S_EQUALS;
-    	} else if (order.equals(CMLBond.TRIPLE)) {
-    		s = S_HASH;
-    	}
-    	return s;
-    }
-    
-    private String getCharge(Element element) {
-    	String ff = element.getAttributeValue("formalCharge");
-    	int formalCharge = (ff == null) ? 0 : Integer.parseInt(ff);
-    	String s = "";
-    	if (formalCharge != 0) {
-    		String ss = (formalCharge < 0) ? S_MINUS : S_PLUS;
-    		formalCharge = (formalCharge < 0) ? -formalCharge : formalCharge;
-    		for (int i = 0; i < formalCharge; i++) {
-    			s += ss;
-    		}
-    	}
-    	return s;
-    }
-    
-    private Element getIsland(CMLAtom atom, Set<CMLAtom> atomSet) {
-    	Set<CMLAtom> usedAtoms = new TreeSet<CMLAtom>();
-    	Map<CMLAtom, Element> atomMap = new HashMap<CMLAtom, Element>();
-    	List<String> orderList = new ArrayList<String>();
-    	return addAtom(atom, null, atomMap, usedAtoms, 0, orderList, atomSet);
+    	SMILESWriter sWriter = new SMILESWriter(molecule);
+    	return sWriter.getString();
     }
 
-	private Element addAtom(CMLAtom atom, CMLAtom parent, 
-			Map <CMLAtom, Element> atomMap, Set<CMLAtom> usedAtoms, 
-			int nring, List<String> orderList, Set<CMLAtom> atomSet) {
-		Element element = new Element("atom");
-		int formalCharge = atom.getFormalCharge();
-		if (formalCharge != 0) {
-			element.addAttribute(new Attribute("formalCharge", ""+formalCharge));
-		}
-		element.addAttribute(new Attribute("elementType", atom.getElementType()));
-		atomSet.remove(atom);
-		usedAtoms.add(atom);
-    	List<CMLAtom> ligandAtoms = atom.getLigandAtoms();
-    	List<CMLBond> ligandBonds = atom.getLigandBonds();
-    	int i = 0;
-    	for (CMLAtom ligand : ligandAtoms) {
-    		if (ligand.equals(parent)) {
-    			continue;
-    		}
-    		String order = ligandBonds.get(i).getOrder();
-    		// ring
-    		if (usedAtoms.contains(ligand)) {
-    			nring++;
-    			addRing(atomMap.get(atom), nring);
-    			addRing(atomMap.get(ligand), nring);
-    			orderList.add(order);
-    		} else {
-    			Element elementx = addAtom(ligand, atom, atomMap, usedAtoms, 
-    					nring, orderList, atomSet);
-    			elementx.addAttribute(new Attribute("order", order));
-    			element.appendChild(elementx);
-    		}
-    		i++;
-    	}
-    	return element;
-	}
 	
-	private void addRing(Element element, int nring) {
-		String attVal = element.getAttributeValue("rings");
-		if (attVal == null) {
-			attVal = "";
-		}
-		attVal += " "+nring;
-		element.addAttribute(new Attribute("rings", attVal));
-	}
     
+ 
     /**
      * normalizes ring numbers in SMILES to be as low as possible
      * crude. assumes less than 9 rings open at any time

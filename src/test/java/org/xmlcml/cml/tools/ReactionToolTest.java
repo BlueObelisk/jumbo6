@@ -34,9 +34,11 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLFormulaTest;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -145,6 +147,7 @@ public class ReactionToolTest extends ReactionAllTestBase {
 
     CMLReaction unbalancedR = null;
 
+	private CMLReaction reaction0;
 	private CMLReaction reaction1;
 
     /**
@@ -160,8 +163,12 @@ public class ReactionToolTest extends ReactionAllTestBase {
         balancedR = (CMLReaction) parseValidString(balancedS);
         unbalancedR = (CMLReaction) parseValidString(unbalancedS);
         
-        InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/examples/reactions/reaction1.xml");
-        reaction1 = (CMLReaction) new CMLBuilder().build(is).getRootElement();
+        InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/examples/reactions/reaction0.xml");
+        CMLCml cml = (CMLCml) new CMLBuilder().build(is).getRootElement();
+        reaction0 = (CMLReaction) cml.query(".//cml:reaction", CML_XPATH).get(0);
+        is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/examples/reactions/reaction1.xml");
+        cml = (CMLCml) new CMLBuilder().build(is).getRootElement();
+        reaction1 = (CMLReaction) cml.query(".//cml:reaction", CML_XPATH).get(0);
 
     }
 
@@ -278,22 +285,22 @@ public class ReactionToolTest extends ReactionAllTestBase {
     /** */
 	@Test
 	public void testGetMolecules() {
-		List<CMLMolecule> molecules = reaction1.getMolecules(Component.REACTANT);
+		List<CMLMolecule> molecules = reaction0.getMolecules(Component.REACTANT);
 		Assert.assertEquals("descendant reactant molecules", 2, molecules.size());
 	}
 
     /** */
 	@Test
 	public void testGetAtoms() {
-		List<CMLAtom> atoms = reaction1.getAtoms(Component.REACTANT);
-		Assert.assertEquals("descendant reactant atoms", 12, atoms.size());
+		List<CMLAtom> atoms = reaction0.getAtoms(Component.REACTANT);
+		Assert.assertEquals("descendant reactant atoms", 17, atoms.size());
 	}
 
     /** */
 	@Test
 	public void testGetBonds() {
-		List<CMLBond> bonds = reaction1.getBonds(Component.REACTANT);
-		Assert.assertEquals("descendant reactant bonds", 10, bonds.size());
+		List<CMLBond> bonds = reaction0.getBonds(Component.REACTANT);
+		Assert.assertEquals("descendant reactant bonds", 15, bonds.size());
 	}
 
     

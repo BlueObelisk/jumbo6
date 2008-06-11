@@ -1,7 +1,6 @@
 package org.xmlcml.cml.element;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.neverThrow;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
@@ -19,6 +18,7 @@ import org.xmlcml.cml.base.StringSTAttribute;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test CMLBond.
@@ -472,7 +472,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
 		CMLMolecule mol = (CMLMolecule) parseValidString(s);
 		CMLBond b2 = mol.getBondByAtomIds("a2","a3");
 		bs = b2.getBondStereo();
-		assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
+		TestUtils.assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
 				"<bondStereo atomRefs4='a1 a2 a3 a4' "+CML_XMLNS+">C</bondStereo>"), bs, true);
 		bs = new CMLBondStereo();
 		bs.setAtomRefs4("a1 a2 a3 a4");
@@ -509,7 +509,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     		CMLBondStereo bs = new CMLBondStereo();
     		bs.setAtomRefs4("a1 a2 a3 a4");
     		bs.setXMLContent(CMLBond.CIS);
-    		assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
+    		TestUtils.assertEqualsCanonically("bs", (CMLBondStereo) parseValidString(
     				"<bondStereo atomRefs4='a1 a2 a3 a4' "+CML_XMLNS+">C</bondStereo>"), bs, true);
     		try {
     			b2.setBondStereo(bs);

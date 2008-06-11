@@ -21,7 +21,6 @@ import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
 import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
 import static org.xmlcml.euclid.EuclidConstants.S_WHITEREGEX;
 import static org.xmlcml.util.TestUtils.neverThrow;
-import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.util.List;
 
@@ -41,6 +40,7 @@ import org.xmlcml.cml.map.NamespaceToUnitListMap;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.IntTest;
 import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test Array
@@ -118,7 +118,7 @@ public class CMLArrayTest extends NumericTest {
         try {
         
 	        xomS = new CMLArray();
-	        xmlS = (CMLArray) parseValidString(xmlSS);
+	        xmlS = (CMLArray) TestUtils.parseValidString(xmlSS);
 	        xomD0 = new CMLArray(d0);
 	        xomI0 = new CMLArray(i0);
 	        xomS0 = new CMLArray(s0);
@@ -146,12 +146,12 @@ public class CMLArrayTest extends NumericTest {
 	        String xmlD1S = "<array dataType='xsd:double' delimiter='/' " + CML_XMLNS
 	                + ">/10./20./30./40./50./</array>";
 	
-	        xmlS0 = (CMLArray) parseValidString(xmlS0S);
-	        xmlS1 = (CMLArray) parseValidString(xmlS1S);
-	        	xmlI0 = (CMLArray) parseValidString(xmlI0S);
-	        xmlI1 = (CMLArray) parseValidString(xmlI1S);
-	        xmlD0 = (CMLArray) parseValidString(xmlD0S);
-	        xmlD1 = (CMLArray) parseValidString(xmlD1S);
+	        xmlS0 = (CMLArray) TestUtils.parseValidString(xmlS0S);
+	        xmlS1 = (CMLArray) TestUtils.parseValidString(xmlS1S);
+	        	xmlI0 = (CMLArray) TestUtils.parseValidString(xmlI0S);
+	        xmlI1 = (CMLArray) TestUtils.parseValidString(xmlI1S);
+	        xmlD0 = (CMLArray) TestUtils.parseValidString(xmlD0S);
+	        xmlD1 = (CMLArray) TestUtils.parseValidString(xmlD1S);
 
         } catch (Exception e) {
         	e.printStackTrace();
@@ -1110,7 +1110,7 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testGetUnits() {
-        CMLCml cml = (CMLCml) parseValidString(unitsS);
+        CMLCml cml = (CMLCml) TestUtils.parseValidString(unitsS);
 
         // arrays
         List<CMLElement> arrays = cml.getElements(".//"+CMLArray.NS);
@@ -1136,7 +1136,7 @@ public class CMLArrayTest extends NumericTest {
      */
     @Test
     public void testConvertToSI() {
-        CMLCml cml = (CMLCml) parseValidString(unitsS);
+        CMLCml cml = (CMLCml) TestUtils.parseValidString(unitsS);
 
         // arrays
         List<CMLElement> arrays = cml.getElements(".//"+CMLArray.NS);

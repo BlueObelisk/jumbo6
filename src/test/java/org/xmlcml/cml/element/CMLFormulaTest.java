@@ -34,6 +34,7 @@ import org.xmlcml.cml.element.CMLFormula.Type;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.StringTestBase;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 
 /**
@@ -108,7 +109,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                 + (char) 13 + (char) 10 + "<formula id='xomForm3a'  "
                 + CML_XMLNS + "/>";
         Element expectElem = parseValidString(expectS);
-        assertEqualsCanonically("formula setup", expectElem, xomForm3a);
+        TestUtils.assertEqualsCanonically("formula setup", expectElem, xomForm3a);
 
         xomForm3a.setConcise("H 2 S 1 O 4");
         expectS = "<?xml version='1.0' encoding='UTF-8'?>" + (char) 13
@@ -118,7 +119,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
                 + "<atomArray elementType='H O S' count='2.0 4.0 1.0'/>"
                 + "</formula>";
         expectElem = parseValidString(expectS);
-        assertEqualsCanonically("formula setup", expectElem, xomForm3a);
+        TestUtils.assertEqualsCanonically("formula setup", expectElem, xomForm3a);
         Assert.assertEquals("xom3a child", 1, xomForm3a.getChildCount());
         CMLFormula xomForm3aCopy = new CMLFormula(xomForm3a);
         Assert.assertEquals("xom3a children", 1, xomForm3aCopy
@@ -140,7 +141,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 
         expectElem = parseValidString(expectS);
 
-        assertEqualsCanonically("formula setup", expectElem, xomForm3aCopy);
+        TestUtils.assertEqualsCanonically("formula setup", expectElem, xomForm3aCopy);
 
         xomForm3.appendChild(xomForm3a);
         xomForm3b = new CMLFormula();
@@ -546,7 +547,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertEquals("count value", formula.getCount(), xformula
                 .getCount());
         // FIXME?
-//        assertEqualsCanonically("compare Formula", formula, xformula);
+//        TestUtils.assertEqualsCanonically("compare Formula", formula, xformula);
 
         CMLFormula copyForm = new CMLFormula(xmlForm1);
         assertEqualsCanonically("compare Formula", copyForm, xmlForm1);
