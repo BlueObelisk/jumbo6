@@ -2202,13 +2202,20 @@ public class Util implements EuclidConstants {
 	 */
 	public final static String concatenate(double[] ss, String separator) {
 		StringBuffer sb = new StringBuffer();
-		NumberFormat nf = NumberFormat.getInstance();
 		for (int i = 0; i < ss.length; i++) {
 			if (i > 0) {
 				sb.append(separator);
 			}
-			sb.append((Double.isInfinite(ss[i]) || Double.isNaN(ss[i])) ? nf
-					.format(ss[i]) : ss[i]);
+			if (Double.isInfinite(ss[i])) {
+				if (ss[i] < 0) {
+					sb.append("-");
+				}
+				sb.append("INF");
+			} else if (Double.isNaN(ss[i])) {
+				sb.append("NaN");
+			} else {
+				sb.append(ss[i]);
+			}
 		}
 		return sb.toString();
 	}

@@ -1,5 +1,8 @@
 package org.xmlcml.cml.base;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
@@ -328,15 +331,33 @@ public class CMLUtilTest  {
     	Assert.assertTrue("set", prefixList.contains("k"));
     	Assert.assertTrue("set", prefixList.contains("q"));
     }
-	
-	@Test 
-	public void checkDoubleParsing() throws ParseException {
-		Assert.assertEquals(1.0, CMLUtil.parseFlexibleDouble("1.0"));
-		Assert.assertEquals(Double.NaN, CMLUtil.parseFlexibleDouble("NaN"));
-		Assert.assertEquals(Double.POSITIVE_INFINITY, CMLUtil.parseFlexibleDouble("INF"));
-		Assert.assertEquals(Double.NEGATIVE_INFINITY, CMLUtil.parseFlexibleDouble("-INF"));
-	}
 
+	@Test
+	public void checkDoubleParsing() throws ParseException {
+		assertEquals(1.0, CMLUtil.parseFlexibleDouble("1.0"));
+		assertEquals(Double.NaN, CMLUtil.parseFlexibleDouble("NaN"));
+		assertEquals(Double.POSITIVE_INFINITY, CMLUtil
+				.parseFlexibleDouble("INF"));
+		assertEquals(Double.NEGATIVE_INFINITY, CMLUtil
+				.parseFlexibleDouble("-INF"));
+		assertEquals(-0.001, CMLUtil.parseFlexibleDouble("-0.001"));
+		assertEquals(-0.1, CMLUtil.parseFlexibleDouble("-000.1"));
+		assertEquals(1000.0, CMLUtil.parseFlexibleDouble("1.0E3"));
+		assertEquals(1000.0, CMLUtil.parseFlexibleDouble("1.0e3"));
+		assertEquals(10000.0, CMLUtil.parseFlexibleDouble("10.0E3"));
+		assertEquals(1000.0, CMLUtil.parseFlexibleDouble("1.0E+3"));
+		assertEquals(0.001, CMLUtil.parseFlexibleDouble("1.0E-3"));
+		assertEquals(1000.0, CMLUtil.parseFlexibleDouble("1.0E+03"));
+		try {
+			CMLUtil.parseFlexibleDouble("1.0e3foobar");
+			fail("Parsing 1.0e3foobar should have resulted in a ParseException being raised");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			assertTrue(true);
+		}
+	}
+	
+	
 	/**
 	 * 
 	 */
