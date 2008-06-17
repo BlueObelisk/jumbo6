@@ -712,12 +712,16 @@ public abstract class CMLUtil implements CMLConstants {
 			} else if ("NaN".equals(value)) {
 				return Double.NaN;
 			} else {
-				return NumberFormat.getNumberInstance().parse(value)
-						.doubleValue();
+				try {
+					return Double.valueOf(value);
+				} catch (NumberFormatException e) {
+					throw new ParseException(e.toString(), 0);
+				}
 			}
 		} else {
 			throw new IllegalArgumentException("Null double string not allowed");
 		}
+
 	}
 
 	/** detaches nodes from their parents.

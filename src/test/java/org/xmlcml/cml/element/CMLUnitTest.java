@@ -237,7 +237,7 @@ public class CMLUnitTest extends AbstractUnitTest {
          </unitType>
          </unit>
          --*/
-        Assert.assertEquals("multiplierToSI", 1.0/ 3600, newUnit1
+        Assert.assertEquals("multiplierToSI", 1.0E6/ 3600, newUnit1
                 .getMultiplierToSI(), EPS);
 
         CMLElements<CMLUnit> childUnits1 = newUnit.getUnitElements();

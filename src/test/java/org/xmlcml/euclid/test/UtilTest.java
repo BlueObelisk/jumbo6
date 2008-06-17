@@ -718,6 +718,14 @@ public class UtilTest {
     	s = Util.concatenate(ss, S_COMMA);
     	Assert.assertEquals("Concat", "1.2,3.4,5.6", s);
     }
+    
+	@Test
+	public void testConcatenateInfinityAndBeyond() {
+		double[] ss = new double[] { Double.POSITIVE_INFINITY,
+				Double.NEGATIVE_INFINITY, Double.NaN };
+		Assert.assertEquals("Concat infinities according to XSD",
+				"INF -INF NaN", Util.concatenate(ss, S_SPACE));
+	}
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#concatenate(double[][], java.lang.String)}.
