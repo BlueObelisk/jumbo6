@@ -364,6 +364,48 @@ public class CMLFormula extends AbstractFormula {
 		super.finishMakingElement(parent);
 		normalize();
 	}
+	
+	/** devides by highest common factor.
+	 * 
+	 */
+	public CMLFormula calculateEmpiricalFormula(double eps) {
+		CMLFormula formula1 = this;
+		double[] counts = getCounts();
+		String[] elementTypes = getElementTypes();
+		int [] icount = new int[counts.length];
+		for (int i = 0; i < counts.length; i++) {
+			icount[i] = (int) Math.round(counts[i]);
+			if (Math.abs(counts[i] - icount[i]) > eps) {
+				icount = null;
+				break;
+			}
+		}
+		if (icount != null) {
+			int gcdMin = Integer.MAX_VALUE;
+			for (int i = 0; i < icount.length; i++) {
+				for (int j = i+1; j < icount.length; j++) {
+					int gcd = Util.gcd(icount[i], icount[j]);
+					if (gcd < gcdMin) {
+						gcdMin = gcd;
+					}
+				}
+			}
+			for (int i = 0; i < icount.length; i++) {
+				icount[i] /= gcdMin;
+				counts[i] = icount[i];
+			}
+			formula1 = new CMLFormula();
+			formula1.setElementTypesAndCounts(elementTypes, counts);
+			formula1.normalize();
+		}
+		return formula1;
+	}
+	
+	public void setElementTypesAndCounts(String[] elementTypes, double[] counts) {
+		CMLAtomArray atomArray = new CMLAtomArray();
+		atomArray.setElementTypeAndCount(elementTypes, counts);
+		setAtomArray(atomArray);
+	}
 
 	/**
 	 * normalizes the formula.
@@ -531,7 +573,7 @@ public class CMLFormula extends AbstractFormula {
      * @return stripped concise or empty if null
      */
     public static String getCompactedConcise(String concise) {
-    	String s = S_EMPTY;
+     String s = S_EMPTY;
     	if (concise != null) {
 	    	String[] split = concise.split(S_SPACE);
 	    	int n = split.length/2;
