@@ -55,7 +55,7 @@ public class CMLFormula extends AbstractFormula {
 
 	public final static String SMILES = "SMILES";
 	public final static String SMILES1 = "cml:smiles";
-	
+
 	/** type of hydrogen counting
 	 * @author pm286
 	 */
@@ -68,10 +68,10 @@ public class CMLFormula extends AbstractFormula {
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
 
-    /** dewisott */
+	/** dewisott */
 	public final static int NPLACES = 10;
 
-    /** dewisott */
+	/** dewisott */
 	public final static int NDEC = 4;
 
 	/** type */
@@ -255,21 +255,21 @@ public class CMLFormula extends AbstractFormula {
 						+ elementType);
 			}
 //			if (AS.H.equals(elementType) && strategy == null) {
-//				strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
+//			strategy = HydrogenStrategy.EXPLICIT_HYDROGENS;
 //			}
 			if (!AS.H.equals(elementType) ) {
 //				HydrogenStrategy.EXPLICIT_HYDROGENS == strategy) {
 				this.add(elementType, 1.0);
-//			}
-			
+//				}
+
 				if (atom.getFormalChargeAttribute() != null) {
 					formalCharge += atom.getFormalCharge();
 				}
 				if (atom.getHydrogenCountAttribute() != null) {
 //					if (strategy == null) {
-//						strategy = HydrogenStrategy.HYDROGEN_COUNT;
+//					strategy = HydrogenStrategy.HYDROGEN_COUNT;
 //					}
-//				if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
+//					if (strategy.equals(HydrogenStrategy.HYDROGEN_COUNT)) {
 					int hydrogenCount = atom.getHydrogenCount();
 					if (hydrogenCount != 0) {
 						this.add(AS.H.value, hydrogenCount);
@@ -308,7 +308,7 @@ public class CMLFormula extends AbstractFormula {
 		} else if (molecule.getFormalChargeAttribute() != null) {
 			this.setFormalCharge(molecule.getFormalCharge());
 		}
-		
+
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class CMLFormula extends AbstractFormula {
 		super.finishMakingElement(parent);
 		normalize();
 	}
-	
+
 	/** devides by highest common factor.
 	 * 
 	 */
@@ -381,18 +381,22 @@ public class CMLFormula extends AbstractFormula {
 			}
 		}
 		if (icount != null) {
-			int gcdMin = Integer.MAX_VALUE;
-			for (int i = 0; i < icount.length; i++) {
-				for (int j = i+1; j < icount.length; j++) {
-					int gcd = Util.gcd(icount[i], icount[j]);
-					if (gcd < gcdMin) {
-						gcdMin = gcd;
+			if (counts.length == 1) {
+				counts[0] = 1;
+			} else {
+				int gcdMin = Integer.MAX_VALUE;
+				for (int i = 0; i < icount.length; i++) {
+					for (int j = i+1; j < icount.length; j++) {
+						int gcd = Util.gcd(icount[i], icount[j]);
+						if (gcd < gcdMin) {
+							gcdMin = gcd;
+						}
 					}
 				}
-			}
-			for (int i = 0; i < icount.length; i++) {
-				icount[i] /= gcdMin;
-				counts[i] = icount[i];
+				for (int i = 0; i < icount.length; i++) {
+					icount[i] /= gcdMin;
+					counts[i] = icount[i];
+				}
 			}
 			formula1 = new CMLFormula();
 			formula1.setElementTypesAndCounts(elementTypes, counts);
@@ -400,7 +404,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		return formula1;
 	}
-	
+
 	public void setElementTypesAndCounts(String[] elementTypes, double[] counts) {
 		CMLAtomArray atomArray = new CMLAtomArray();
 		atomArray.setElementTypeAndCount(elementTypes, counts);
@@ -458,31 +462,31 @@ public class CMLFormula extends AbstractFormula {
 		}
 		String conciseS = (conciseAtt == null) ? null : conciseAtt.getValue();
 		// convention
-    	String convention = this.getConvention();
-    	// inline formula (might be SMILES)
-    	String inline = this.getInline();
-    	if (inline != null) {
-    		inline = inline.trim();
-    	}
-    	// text content (deprecated - use inline)
-    	Nodes texts = this.query("text()");
-    	String content = null;
-    	for (int i = 0; i < texts.size(); i++) {
-    		Text text = (Text) texts.get(i);
-    		String s = text.getValue();
-    		s = s.trim();
-    		if (s.length() != 0) {
-    			if (content == null) {
-    				content = s;
-    			} else {
-    				throw new CMLRuntimeException("Cannot have 2 non-empty text children");
-    			}
-    		}
-    	}
+		String convention = this.getConvention();
+		// inline formula (might be SMILES)
+		String inline = this.getInline();
+		if (inline != null) {
+			inline = inline.trim();
+		}
+		// text content (deprecated - use inline)
+		Nodes texts = this.query("text()");
+		String content = null;
+		for (int i = 0; i < texts.size(); i++) {
+			Text text = (Text) texts.get(i);
+			String s = text.getValue();
+			s = s.trim();
+			if (s.length() != 0) {
+				if (content == null) {
+					content = s;
+				} else {
+					throw new CMLRuntimeException("Cannot have 2 non-empty text children");
+				}
+			}
+		}
 
-    	// atomArray
-    	String atomArray2Concise = null;
-    	CMLAtomArray atomArray = null;
+		// atomArray
+		String atomArray2Concise = null;
+		CMLAtomArray atomArray = null;
 		CMLElements<CMLAtomArray> atomArrays = this.getAtomArrayElements();
 		if (atomArrays.size() > 1) {
 			throw new CMLRuntimeException(
@@ -507,23 +511,23 @@ public class CMLFormula extends AbstractFormula {
 		}
 		// concise from inline
 		String inline2Concise = null;
-    	if (inline != null) {
-    		if (SMILES.equals(convention) || SMILES1.equals(convention)) {
-    			inline2Concise = getConciseFromSMILES(inline);
-    		} else {
-    			inline2Concise = createConcise(inline);
-    		}
-    	}
-    	if (conciseS == null) {
-    		if (atomArray2Concise != null) {
-    			conciseS = atomArray2Concise;
-    		} else if (inline2Concise != null) {
-    			conciseS = inline2Concise;
-    		}
-    	}
-    	if (conciseS != null) {
-    		conciseS = normalizeConciseAndFormalCharge(conciseS, formalCharge);
-    	}
+		if (inline != null) {
+			if (SMILES.equals(convention) || SMILES1.equals(convention)) {
+				inline2Concise = getConciseFromSMILES(inline);
+			} else {
+				inline2Concise = createConcise(inline);
+			}
+		}
+		if (conciseS == null) {
+			if (atomArray2Concise != null) {
+				conciseS = atomArray2Concise;
+			} else if (inline2Concise != null) {
+				conciseS = inline2Concise;
+			}
+		}
+		if (conciseS != null) {
+			conciseS = normalizeConciseAndFormalCharge(conciseS, formalCharge);
+		}
 		// if no atomArray, create
 		if (atomArray == null) {
 			if (conciseS != null) {
@@ -548,75 +552,75 @@ public class CMLFormula extends AbstractFormula {
 		}
 	}
 
-	
+
 	/** utility to convert SMILES to string.
 	 * @param smiles
 	 * @return string representing concise version
 	 */
-    public static String getConciseFromSMILES(String smiles) {
-    	String concise = null;
-    	if (smiles != null) {
-    		SMILESTool smilesTool = new SMILESTool();
-    		smilesTool.parseSMILES(smiles);
-    		CMLMolecule molecule = smilesTool.getMolecule();
-    		CMLFormula temp = new CMLFormula(molecule);
-    		if (temp != null) {
-    			concise = temp.getConcise();
-    		}
-    	}
-    	return concise;
-    }
-    
-    /**
-     * strips spaces and redundant 1's from concise
-     * @param concise
-     * @return stripped concise or empty if null
-     */
-    public static String getCompactedConcise(String concise) {
-     String s = S_EMPTY;
-    	if (concise != null) {
-	    	String[] split = concise.split(S_SPACE);
-	    	int n = split.length/2;
-	    	for (int j = 0; j < 2*n; j+=2) {
-	    		s += split[j];
-	    		if (!split[j+1].equals("1")) {
-	    			s += split[j+1];
-	    		}
-	    		if (n % 2 != 0) {
-	    			s += split[split.length-1];
-	    		}
-	    	}
-    	}
-    	return s;
-    }
-	
-    /**
-     * strips spaces and redundant 1's from concise
-     * adds subscripts. Returns a span element without namespace
-     * @param concise
-     * @return subscripted concise or empty
-     */
-    public static Element getSubscriptedConcise(String concise) {
-    	Element element = new Element("span");
-    	if (concise != null) {
-	    	String[] split = concise.split(S_SPACE);
-	    	int len = split.length;
-	    	int n = len/2;
-	    	for (int j = 0; j < 2*n; j+=2) {
-	    		element.appendChild(split[j]);
-	    		if (!split[j+1].equals("1")) {
-	    			Element sub = new Element("sub");
-	    			sub.appendChild(split[j+1]);
-	    			element.appendChild(sub);
-	    		}
-	    	}
-    		if (len % 2 != 0) {
-    			element.appendChild(split[len-1]);
-    		}
-    	}
-    	return element;
-    }
-	
+	public static String getConciseFromSMILES(String smiles) {
+		String concise = null;
+		if (smiles != null) {
+			SMILESTool smilesTool = new SMILESTool();
+			smilesTool.parseSMILES(smiles);
+			CMLMolecule molecule = smilesTool.getMolecule();
+			CMLFormula temp = new CMLFormula(molecule);
+			if (temp != null) {
+				concise = temp.getConcise();
+			}
+		}
+		return concise;
+	}
+
+	/**
+	 * strips spaces and redundant 1's from concise
+	 * @param concise
+	 * @return stripped concise or empty if null
+	 */
+	public static String getCompactedConcise(String concise) {
+		String s = S_EMPTY;
+		if (concise != null) {
+			String[] split = concise.split(S_SPACE);
+			int n = split.length/2;
+			for (int j = 0; j < 2*n; j+=2) {
+				s += split[j];
+				if (!split[j+1].equals("1")) {
+					s += split[j+1];
+				}
+				if (n % 2 != 0) {
+					s += split[split.length-1];
+				}
+			}
+		}
+		return s;
+	}
+
+	/**
+	 * strips spaces and redundant 1's from concise
+	 * adds subscripts. Returns a span element without namespace
+	 * @param concise
+	 * @return subscripted concise or empty
+	 */
+	public static Element getSubscriptedConcise(String concise) {
+		Element element = new Element("span");
+		if (concise != null) {
+			String[] split = concise.split(S_SPACE);
+			int len = split.length;
+			int n = len/2;
+			for (int j = 0; j < 2*n; j+=2) {
+				element.appendChild(split[j]);
+				if (!split[j+1].equals("1")) {
+					Element sub = new Element("sub");
+					sub.appendChild(split[j+1]);
+					element.appendChild(sub);
+				}
+			}
+			if (len % 2 != 0) {
+				element.appendChild(split[len-1]);
+			}
+		}
+		return element;
+	}
+
 
 	CMLAtomArray createAndAddAtomArrayAndFormalChargeFromConcise(
 			String concise) {
@@ -769,7 +773,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		forceConcise(value);
 	}
-	
+
 	private void forceConcise(String value) {
 		super.setConcise(value);
 		normalize();
@@ -788,7 +792,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		return conciseS;
 	}
-	
+
 	/**
 	 * set formal charge. this will re-compute concise if possible.
 	 *
@@ -1264,7 +1268,7 @@ public class CMLFormula extends AbstractFormula {
 			this.setFormalCharge(charge);
 		}
 	}
-	
+
 	private static int parseCharge(String ss) {
 		int i = 0;
 		ss = ss.trim();
@@ -1281,7 +1285,7 @@ public class CMLFormula extends AbstractFormula {
 		}
 		return i;
 	}
-	
+
 	private int grabCharge(String ss, int i, int l) {
 		char c = ss.charAt(i);
 		if (i < l && (c == C_MINUS || c == C_PLUS)) {
@@ -1332,116 +1336,116 @@ public class CMLFormula extends AbstractFormula {
 	}
 
 //	private void parseAnyOld(String formulaString) {
-//		// FIXME
-//		// ANY - make whitespace separated string and then recurse
-//		String result = S_EMPTY;
-//		formulaString += S_SPACE;
-//		int l = formulaString.length();
-//		int i = 0;
-//		char c;
-//		int charge = 0;
-//		String count = S_EMPTY;
-//		while (i < l) {
-//			// skip white
-//			while (formulaString.charAt(i) == C_SPACE) {
-//				if (++i >= l)
-//					break;
-//			}
-//			if (i >= l)
-//				break;
-//			c = formulaString.charAt(i);
-//			// start element or charge
-//			String el = S_EMPTY;
-//			// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
-//			if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
-//				if (true) throw new RuntimeException("FIX ME");
-//				charge = getFinalCharge(formulaString.substring(i).trim());
-//				break;
-//			}
-//			// upper case required
-//			if (!Character.isUpperCase(c)) {
-//				throw new CMLRuntimeException("Formula: Cannot interpret element ("
-//						+ c + ") at char (" + (i + 1) + ") in: "
-//						+ formulaString);
-//			}
-//			el += c;
-//			if (++i >= l) {
-//				result += el + " 1";
-//				break;
-//			}
-//			c = formulaString.charAt(i);
-//			// lower case optional
-//			if (Character.isLowerCase(c)) {
-//				el += c;
-//				i++;
-//			}
-//			// skip white
-//			while (formulaString.charAt(i) == C_SPACE) {
-//				if (++i >= l)
-//					break;
-//			}
-//			if (i >= l) {
-//				result += el + " 1";
-//				break;
-//			}
-//			// multiplier?
-//			c = formulaString.charAt(i);
-//			// implied count of 1?
-//			count = S_EMPTY;
-//			if (!Character.isDigit(c)) {
-//				count = "1";
-//			} else {
-//				while (true) {
-//					c = formulaString.charAt(i);
-//					if (!Character.isDigit(c) && c != C_PERIOD) {
-//						break;
-//					}
-//					count += c;
-//					if (++i == l)
-//						break;
-//				}
-//			}
-//			result += el + S_SPACE + count + S_SPACE;
-//		}
-//		createFromString(result, Type.ELEMENT_WHITESPACE_COUNT);
-//		if (charge != 0) {
-//			this.setFormalCharge(charge);
-//		}
+//	// FIXME
+//	// ANY - make whitespace separated string and then recurse
+//	String result = S_EMPTY;
+//	formulaString += S_SPACE;
+//	int l = formulaString.length();
+//	int i = 0;
+//	char c;
+//	int charge = 0;
+//	String count = S_EMPTY;
+//	while (i < l) {
+//	// skip white
+//	while (formulaString.charAt(i) == C_SPACE) {
+//	if (++i >= l)
+//	break;
+//	}
+//	if (i >= l)
+//	break;
+//	c = formulaString.charAt(i);
+//	// start element or charge
+//	String el = S_EMPTY;
+//	// finish with -, -1, 1-, 2-, -2, +1, 1+, +2, 2+ ... etc
+//	if (Character.isDigit(c) || c == C_PLUS || c == C_MINUS || c == C_PERIOD) {
+//	if (true) throw new RuntimeException("FIX ME");
+//	charge = getFinalCharge(formulaString.substring(i).trim());
+//	break;
+//	}
+//	// upper case required
+//	if (!Character.isUpperCase(c)) {
+//	throw new CMLRuntimeException("Formula: Cannot interpret element ("
+//	+ c + ") at char (" + (i + 1) + ") in: "
+//	+ formulaString);
+//	}
+//	el += c;
+//	if (++i >= l) {
+//	result += el + " 1";
+//	break;
+//	}
+//	c = formulaString.charAt(i);
+//	// lower case optional
+//	if (Character.isLowerCase(c)) {
+//	el += c;
+//	i++;
+//	}
+//	// skip white
+//	while (formulaString.charAt(i) == C_SPACE) {
+//	if (++i >= l)
+//	break;
+//	}
+//	if (i >= l) {
+//	result += el + " 1";
+//	break;
+//	}
+//	// multiplier?
+//	c = formulaString.charAt(i);
+//	// implied count of 1?
+//	count = S_EMPTY;
+//	if (!Character.isDigit(c)) {
+//	count = "1";
+//	} else {
+//	while (true) {
+//	c = formulaString.charAt(i);
+//	if (!Character.isDigit(c) && c != C_PERIOD) {
+//	break;
+//	}
+//	count += c;
+//	if (++i == l)
+//	break;
+//	}
+//	}
+//	result += el + S_SPACE + count + S_SPACE;
+//	}
+//	createFromString(result, Type.ELEMENT_WHITESPACE_COUNT);
+//	if (charge != 0) {
+//	this.setFormalCharge(charge);
+//	}
 //	}
 
 //	private int getFinalCharge(String f) {
-//		if (!allowNegativeCounts && f.indexOf(' ') != -1) {
-//			throw new CMLRuntimeException("Charge must be final field: " + f);
-//		}
-//		int sign = 0;
-//		int charge = 0;
-//		String ch = S_EMPTY;
-//		int l = f.length();
-//		if (f.charAt(0) == C_PLUS) {
-//			sign = 1;
-//			ch = f.substring(1);
-//		} else if (f.charAt(0) == C_MINUS) {
-//			sign = -1;
-//			ch = f.substring(1);
-//		} else if (f.indexOf(C_PLUS) == l - 1) {
-//			sign = 1;
-//			ch = f.substring(0, l - 1);
-//		} else if (f.indexOf(C_MINUS) == l - 1) {
-//			sign = -1;
-//			ch = f.substring(0, l - 1);
-//		} else {
-//			throw new CMLRuntimeException("Cannot parse as charge field: " + f);
-//		}
-//		if (ch.equals(S_EMPTY)) {
-//			charge = 1;
-//		} else {
-//			try {
-//				charge = Integer.parseInt(ch);
-//			} catch (NumberFormatException nfe) {
-//				throw new CMLRuntimeException("Cannot parse as charge field: " + f + "("+ch+")");
-//			}
-//		}
-//		return sign * charge;
+//	if (!allowNegativeCounts && f.indexOf(' ') != -1) {
+//	throw new CMLRuntimeException("Charge must be final field: " + f);
+//	}
+//	int sign = 0;
+//	int charge = 0;
+//	String ch = S_EMPTY;
+//	int l = f.length();
+//	if (f.charAt(0) == C_PLUS) {
+//	sign = 1;
+//	ch = f.substring(1);
+//	} else if (f.charAt(0) == C_MINUS) {
+//	sign = -1;
+//	ch = f.substring(1);
+//	} else if (f.indexOf(C_PLUS) == l - 1) {
+//	sign = 1;
+//	ch = f.substring(0, l - 1);
+//	} else if (f.indexOf(C_MINUS) == l - 1) {
+//	sign = -1;
+//	ch = f.substring(0, l - 1);
+//	} else {
+//	throw new CMLRuntimeException("Cannot parse as charge field: " + f);
+//	}
+//	if (ch.equals(S_EMPTY)) {
+//	charge = 1;
+//	} else {
+//	try {
+//	charge = Integer.parseInt(ch);
+//	} catch (NumberFormatException nfe) {
+//	throw new CMLRuntimeException("Cannot parse as charge field: " + f + "("+ch+")");
+//	}
+//	}
+//	return sign * charge;
 //	}
 
 	/**
@@ -1511,9 +1515,9 @@ public class CMLFormula extends AbstractFormula {
 				: getAtomArrayElements().get(0);
 		return (atomArray == null) ? null : atomArray.getCount();
 	}
-	
+
 //	CMLAtomArray atomArray = (getAtomArrayElements().size() == 0) ? null
-//			: getAtomArrayElements().get(0);
+//	: getAtomArrayElements().get(0);
 //	return (atomArray == null) ? null : atomArray.getElementType();
 
 	/** get atom count
@@ -2130,7 +2134,7 @@ public class CMLFormula extends AbstractFormula {
 		CMLFormula differenceFormula = this.getDifference(form);
 		return differenceFormula.isEmpty();
 	}
-	
+
 	/** formula contains no element or elemnts with (near) zero counts
 	 * 
 	 * @return true if empty
