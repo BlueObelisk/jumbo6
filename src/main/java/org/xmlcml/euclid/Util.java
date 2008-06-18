@@ -2478,6 +2478,27 @@ public class Util implements EuclidConstants {
 		return prime;
 	}
 
+	/** Euclid's algorithm for greatest common divisor.
+	 * not recursive
+	 * @param a
+	 * @param b
+	 * @return gcd
+	 */
+	public static int gcd(int a, int b) {
+		if (a == 0) {
+			return b;
+		} else {
+		    while (b != 0) {
+		        if (a > b) {
+		            a = a - b;
+		        } else {
+		            b = b - a;
+		        }
+		    }
+		}
+	    return a;
+	}
+	
 	/**
 	 * parse string as integer.
 	 * 
