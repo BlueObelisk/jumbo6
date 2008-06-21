@@ -271,13 +271,13 @@ public class Transform3Test extends GeomTest {
                 new Angle(Math.PI / 3.));
         Vector3 v = new Vector3();
         Angle a = new Angle();
-        t.getAxisAndAngle(v, a);
+        t.getAxisAndAngle();
         // not sure if this is right
         Vector3Test.assertEquals("vector angle", new Vector3(1. / s3, 1. / s3,
                 1. / s3), v, EPS);
         Assert.assertEquals("vector angle", Math.PI / 3., a.getRadian(), EPS);
         t = new Transform3("y, -x, z");
-        t.getAxisAndAngle(v, a);
+        t.getAxisAndAngle();
         // not sure if this is right
         Vector3Test.assertEquals("vector angle", new double[] { 0., 0., -1. },
                 v, EPS);
