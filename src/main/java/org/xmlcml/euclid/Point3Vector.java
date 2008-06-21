@@ -1047,7 +1047,6 @@ public class Point3Vector implements EuclidConstants {
      *                linear, has coincident points, etc.)
      */
     public Transform3 roughAlign(Point3Vector ref) throws EuclidRuntimeException {
-        int[] points;
         int nn = ref.size();
         if (nn != size()) {
             throw new EuclidRuntimeException("arrays of different lengths: "+this.size()+"/"+nn);
@@ -1063,6 +1062,7 @@ public class Point3Vector implements EuclidConstants {
         return translateRotateRetranslate(centThis,
 				centRef, r);
     }
+    
 	private Transform3 fit3Points(Point3Vector ref) {
 		int[] points;
         Point3Vector pvThis = new Point3Vector(this);
@@ -1140,15 +1140,20 @@ public class Point3Vector implements EuclidConstants {
         Point3Vector reftmp = new Point3Vector(ref);
         thistmp.moveToCentroid();
         reftmp.moveToCentroid();
+        System.out.println("rms: "+thistmp.rms(reftmp));
         /**
          * roughly rotate moving molecule onto reference one
          */
         Transform3 t = thistmp.roughAlign(reftmp);
+        Transform3 tsave = new Transform3(t);
         thistmp.transform(t);
+        System.out.println("rms: "+thistmp.rms(reftmp));
+        System.out.println(t.getAxisAndAngle());
         
         RealArray shift = new RealArray(3);
         int NCYC = 20;
         for (int icyc = 0; icyc < NCYC; icyc++) {
+        	//System.out.println("CYCLE");
             double maxshift = 0.0;
             /**
              * loop through x,y,z
@@ -1177,7 +1182,7 @@ public class Point3Vector implements EuclidConstants {
              * break out if converged
              */
             if (maxshift < converge) {
-//            	System.out.println("CONVERGED");
+            	//System.out.println("CONVERGED");
                 break;
             } else if (maxshift < 0.1) {
                 // not yet used
@@ -1200,9 +1205,13 @@ public class Point3Vector implements EuclidConstants {
              */
             t = new Transform3(t1.concatenate(t));
         }
+
         Transform3 tt = translateRotateRetranslate(thisCent,
 				refCent, t);
-        return tt;
+        System.out.println(tt);
+        System.out.println(tsave);
+        return tsave;
+//        return tt;
     }
     /**
      * to string.

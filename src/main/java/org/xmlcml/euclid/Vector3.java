@@ -603,6 +603,35 @@ public class Vector3 implements EuclidConstants {
     }
 
     /**
+     * Rotate 3 (non-colinear) vectors  onto 3 other vectors 
+     * 
+     * @param vector1
+     * @param vector2
+     * @return transform 
+     */
+    public static Transform3 rotateLatticeVectors(Vector3[] vector1, Vector3[] vector2) {
+    	if (vector1 == null || vector1.length != 3) {
+    		throw new RuntimeException("vector must be length 3");
+    	}
+    	if (vector2== null || vector2.length != 3) {
+    		throw new RuntimeException("vector must be length 3");
+    	}
+    	// calculate median vectors
+    	Vector3 v1 = vector1[0].plus(vector1[1].plus(vector1[2]));
+    	Vector3 v2 = vector2[0].plus(vector2[1].plus(vector2[2]));
+    	Vector3 v1x = new Vector3(0.0, v1.flarray[1], v1.flarray[2]);
+    	Vector3 v1y = new Vector3(v1.flarray[0], 0.0, v1.flarray[2]);
+    	Vector3 v1z = new Vector3(v1.flarray[0], v1.flarray[1], 0.0);
+    	Vector3 v2x = new Vector3(0.0, v2.flarray[1], v2.flarray[2]);
+    	Vector3 v2y = new Vector3(v2.flarray[0], 0.0, v2.flarray[2]);
+    	Vector3 v2z = new Vector3(v2.flarray[0], v2.flarray[1], 0.0);
+    	Angle dThetaX = v1x.getAngleMadeWith(v2x);
+    	Angle dThetaY = v1y.getAngleMadeWith(v2y);
+    	Angle dThetaZ = v1z.getAngleMadeWith(v2z);
+    	Transform3 t3 = new Transform3(dThetaX, dThetaY, dThetaZ);
+    	return t3;
+    }
+    /**
      * get string representation.
      *
      * @return string representation

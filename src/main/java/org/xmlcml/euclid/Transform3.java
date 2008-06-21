@@ -629,13 +629,9 @@ public class Transform3 extends RealSquareMatrix {
      * an empty axis and an empty angle, which will be filled by the routine.
      * will do better to create AxisAndAngle class
      * 
-     * @param axis
-     *            (holds return values)
-     * @param ang
-     *            angle (holds return value)
-     * @return flag
+     * @return axis and angle
      */
-    public int getAxisAndAngle(Vector3 axis, Angle ang) {
+    public AxisAngleChirality getAxisAndAngle() {
         RealSquareMatrix s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 2, 0, 2));
         s3.orthonormalize();
         int chirality = 1;
@@ -667,12 +663,8 @@ public class Transform3 extends RealSquareMatrix {
             lmn[1] = (mat[0][2] - mat[2][0]) * c;
             lmn[2] = (mat[1][0] - mat[0][1]) * c;
         }
-        /**
-         * stuff into angle and axis
-         */
-        ang.shallowCopy(new Angle(theta));
-        System.arraycopy(lmn, 0, axis.getArray(), 0, 3);
-        return chirality;
+        AxisAngleChirality axisAngleChirality = new AxisAngleChirality(new Vector3(lmn), theta, chirality);
+        return axisAngleChirality;
     }
     /**
      * get translation component.
