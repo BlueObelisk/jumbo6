@@ -386,7 +386,7 @@ public class CMLTransform3 extends AbstractTransform3 {
         Transform3 teucl3 = this.getEuclidTransform3();
         Vector3 v = new Vector3();
         Angle ang = new Angle();
-        teucl3.getAxisAndAngle(v, ang);
+        teucl3.getAxisAndAngle();
         double[] d = new double[4];
         System.arraycopy(v.getArray(), 0, d, 0, 3);
         d[3] = ang.getRadian();
