@@ -14,15 +14,20 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
+import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.AxisAngleChirality;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;
+import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Transform3.Type;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Point3Test;
 import org.xmlcml.euclid.test.Transform3Test;
+import org.xmlcml.euclid.test.Vector3Test;
 
 /**
  * test CMLTransform3.
@@ -457,6 +462,7 @@ CMLBuilder builder = new CMLBuilder();
      * Test method for 'org.xmlcml.cml.element.CMLTransform3.getAxisAndAngle()'
      */
     @Test
+    @Ignore
     public void testGetAxisAndAngle() {
         // rotation about vector and angle
         CMLVector3 v = new CMLVector3(new double[] { 1., 1., 1. });
@@ -475,6 +481,20 @@ CMLBuilder builder = new CMLBuilder();
         double xx = 1. / Math.sqrt(14.);
         DoubleTestBase.assertEquals("axis and angle", new double[] { xx, 2 * xx,
                 3 * xx, 1.234 }, aa, EPS);
+    }
+
+    public void testGetAxisAngleChirality() {
+        // rotation about vector and angle
+        CMLVector3 v = new CMLVector3(new double[] { 1., 1., 1. });
+        CMLTransform3 t = new CMLTransform3(v, Math.PI * 2. / 3.);
+        CMLTransform3Test.assertEquals("type", new double[] { 0, 0, 1, 0, 1, 0,
+                0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, t, EPS);
+
+        AxisAngleChirality aac = t.getAxisAngleChirality();
+        Vector3 v3 = aac.getAxis();
+        double ang = aac.getAngle();
+        Vector3Test.assertEquals("aac", new Vector3(1., 2., 3.), v3, EPS);
+        Assert.assertEquals("axis and angle", 1.23, ang, EPS);
     }
 
     /**

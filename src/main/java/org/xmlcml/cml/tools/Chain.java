@@ -583,7 +583,7 @@ public class Chain extends AbstractTool {
 	 * @param bond  terminalBond
 	 */
 	public void addTerminalBond(CMLAtom atom, CMLBond bond) {
-		if (moleculeDraw.getDrawParameters().isOmitHydrogens() && AS.H.equals(atom.getElementType())) {
+		if (((MoleculeDisplay)moleculeDraw.getDrawParameters()).isOmitHydrogens() && AS.H.equals(atom.getElementType())) {
 			// omit hydrogens
 		} else {
 			if (terminalBondList == null) {

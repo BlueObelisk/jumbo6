@@ -20,6 +20,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.interfacex.Indexable;
+import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -597,10 +598,8 @@ public class CMLMolecule
 		}
 
 		for (CMLAtom atom : getAtoms()) {
-			id = atom.getId();
-			if ((id != null) && (id.length() > 0)) {
-				atom.resetId(id + s);
-			}
+			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+			atomTool.appendToId(s);
 		}
 
 		for (CMLBond bond : getBonds()) {

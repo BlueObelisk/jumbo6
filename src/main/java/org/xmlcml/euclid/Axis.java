@@ -41,6 +41,12 @@ public class Axis {
         }
     }
 
+    public final static Axis3[] AXES = new Axis3[] {
+    	Axis3.X,
+    	Axis3.Y,
+    	Axis3.Z
+    };
+    
     /** 3d axes */
     public enum Axis3 {
 

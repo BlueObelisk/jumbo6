@@ -293,7 +293,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 			Real2 delta2 = oldRingXY2.subtract(sprout.getRingAtom().getXY2());
 			atomSet.translate2D(delta2);
 		}
-		getSproutList(moleculeDraw.getDrawParameters().isOmitHydrogens());
+		getSproutList(((MoleculeDisplay)moleculeDraw.getDrawParameters()).isOmitHydrogens());
 		for (Sprout otherSprout : sproutList) {
 			if (otherSprout != sprout) {
 				Chain chain = moleculeDraw.getSproutMap().get(otherSprout);

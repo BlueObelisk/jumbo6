@@ -25,15 +25,15 @@ public class DictRefAttribute extends NamespaceRefAttribute {
         super(NAME);
     }
 
-    /**
-     * constructor.
-     * 
-     * @param name
-     * @param value
-     */
-    public DictRefAttribute(String name, String value) {
-        super(NAME, value);
-    }
+//    /**
+//     * constructor.
+//     * 
+//     * @param name
+//     * @param value
+//     */
+//    public DictRefAttribute(String name, String value) {
+//        super(NAME, value);
+//    }
 
     /**
      * constructor.

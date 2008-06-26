@@ -11,6 +11,7 @@ import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
+import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
@@ -314,29 +315,7 @@ public class CMLAtomTest extends MoleculeAtomBondTest {
         Assert.assertFalse("different atom comparison", comp == 0);
 
     }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.get3DCrossProduct(CMLAtom, CMLAtom)'
-     */
-    @Test
-    public void testGet3DCrossProduct() {
-        Vector3 cross3d = xmlAtom[0].get3DCrossProduct(xmlAtom[1], xmlAtom[2]);
-        Vector3Test.assertEquals("cross3d", new double[] { 0., 2., -2. },
-                cross3d, EPS);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.get2DCrossProduct(CMLAtom, CMLAtom)'
-     */
-    @Test
-    public void testGet2DCrossProduct() {
-        Vector3 cross2d = xmlAtom[0].get2DCrossProduct(xmlAtom[1], xmlAtom[2]);
-        Vector3Test.assertEquals("cross2d", new double[] { 0., 0., -2. },
-                cross2d, EPS);
-    }
-
+    
     /**
      * Test method for 'org.xmlcml.cml.element.CMLAtom.get2DPoint3()'
      */

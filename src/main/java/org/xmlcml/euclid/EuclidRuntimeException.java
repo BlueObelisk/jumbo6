@@ -43,12 +43,4 @@ public class EuclidRuntimeException extends RuntimeException implements EuclidCo
         super(msg);
     }
 
-    /**
-     * creates EuclidRuntime from EuclidException.
-     * 
-     * @param exception
-     */
-    public EuclidRuntimeException(EuclidException exception) {
-        this(S_EMPTY + exception);
-    }
 }

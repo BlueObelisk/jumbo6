@@ -15,6 +15,7 @@ import nu.xom.Nodes;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
@@ -300,8 +301,7 @@ public class CMLTorsion extends AbstractTorsion {
         CMLAtomSet fixedAtomSet = new CMLAtomSet(molecule, atomRefs4);
         CMLAtom atom0 = fixedAtomSet.getAtom(1);
         CMLAtom atom1 = fixedAtomSet.getAtom(2);
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-        CMLAtomSet moveableSet = moleculeTool.getDownstreamAtoms(atom1, atom0);
+        CMLAtomSet moveableSet = AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
         adjustCoordinates(fixedAtomSet, moveableSet);
     }
 

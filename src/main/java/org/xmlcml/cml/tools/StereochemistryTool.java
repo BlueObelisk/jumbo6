@@ -311,14 +311,14 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		System.out.println();
 		CMLBondStereo bondStereo = null;
-		CMLAtom[] atom4 = MoleculeTool.createAtomRefs4(bond);
+		CMLAtom[] atom4 = BondTool.createAtomRefs4(bond);
 		if (atom4 != null) {
 			System.out.println(atom4[0].toXML());
 			System.out.println(atom4[1].toXML());
 			System.out.println(atom4[2].toXML());
 			System.out.println(atom4[3].toXML());
-			Vector3 v1 = atom4[1].get2DCrossProduct(atom4[2], atom4[0]);
-			Vector3 v2 = atom4[2].get2DCrossProduct(atom4[1], atom4[3]);
+			Vector3 v1 = AtomTool.getOrCreateTool(atom4[1]).get2DCrossProduct(atom4[2], atom4[0]);
+			Vector3 v2 = AtomTool.getOrCreateTool(atom4[2]).get2DCrossProduct(atom4[1], atom4[3]);
 			double d = v1.dot(v2);
 			if (Math.abs(d) > 0.000001) {
 				bondStereo = new CMLBondStereo();
@@ -467,10 +467,10 @@ public class StereochemistryTool extends AbstractTool {
 	public CMLBondStereo create3DBondStereo(CMLBond bond) {
 		CMLBondStereo bondStereo = null;
 		CMLAtom[] atomRefs4 = null;
-		atomRefs4 = MoleculeTool.createAtomRefs4(bond);
+		atomRefs4 = BondTool.createAtomRefs4(bond);
 		if (atomRefs4 != null) {
-			Vector3 v1 = atomRefs4[1].get3DCrossProduct(atomRefs4[2], atomRefs4[0]);
-			Vector3 v2 = atomRefs4[2].get3DCrossProduct(atomRefs4[1], atomRefs4[3]);
+			Vector3 v1 = AtomTool.getOrCreateTool(atomRefs4[1]).get3DCrossProduct(atomRefs4[2], atomRefs4[0]);
+			Vector3 v2 = AtomTool.getOrCreateTool(atomRefs4[2]).get3DCrossProduct(atomRefs4[1], atomRefs4[3]);
 			double d = v1.dot(v2);
 			if (Math.abs(d) > 0.000001) {
 				bondStereo = new CMLBondStereo();
@@ -544,8 +544,8 @@ public class StereochemistryTool extends AbstractTool {
 	public static double get2DLigandScalarProduct(CMLAtom atom0, CMLAtom atom1,
 			CMLAtom ligand01, CMLAtom ligand02) {
 		double d = Double.NaN;
-		Vector3 v0 = atom0.get2DCrossProduct(atom1, ligand01);
-		Vector3 v1 = atom0.get2DCrossProduct(atom1, ligand02);
+		Vector3 v0 = AtomTool.getOrCreateTool(atom0).get2DCrossProduct(atom1, ligand01);
+		Vector3 v1 = AtomTool.getOrCreateTool(atom0).get2DCrossProduct(atom1, ligand02);
 		if (v0 != null && v1 != null) {
 			d = v0.dot(v1);
 		}
@@ -570,8 +570,8 @@ public class StereochemistryTool extends AbstractTool {
 	public double get3DLigandScalarProduct(CMLAtom atom0, CMLAtom atom1,
 			CMLAtom ligand01, CMLAtom ligand02) {
 		double d = Double.NaN;
-		Vector3 v0 = atom0.get3DCrossProduct(atom1, ligand01);
-		Vector3 v1 = atom0.get3DCrossProduct(atom1, ligand02);
+		Vector3 v0 = AtomTool.getOrCreateTool(atom0).get3DCrossProduct(atom1, ligand01);
+		Vector3 v1 = AtomTool.getOrCreateTool(atom0).get3DCrossProduct(atom1, ligand02);
 		if (v0 != null && v1 != null) {
 			d = v0.dot(v1);
 		}
@@ -641,6 +641,7 @@ public class StereochemistryTool extends AbstractTool {
 	 *             inconsistentencies in diagram, etc.
 	 */
 	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
+		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
 		CMLBond bond = getFirstWedgeableBond(atom);
 		int totalParity = 0;
 		int sense = 0;
@@ -670,14 +671,14 @@ public class StereochemistryTool extends AbstractTool {
 							break;
 						}
 					}
-					CMLAtom[] cyclicAtom4 = atom.getClockwiseLigands(atomRefs4x);
+					CMLAtom[] cyclicAtom4 = atomTool.getClockwiseLigands(atomRefs4x);
 					List<CMLAtom> list = new LinkedList<CMLAtom>();
 					for (CMLAtom cyclicAtom : cyclicAtom4) {
 						list.add(cyclicAtom);
 					}
 					
 					if (otherAtom == atomRefs4x[0]) {
-						highestPriorityAtom = -1;
+					    highestPriorityAtom = -1;
 					}
 					
 					String intStr = "";

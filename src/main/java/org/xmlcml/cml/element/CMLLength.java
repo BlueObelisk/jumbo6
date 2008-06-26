@@ -14,6 +14,7 @@ import nu.xom.Nodes;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
@@ -204,8 +205,7 @@ public class CMLLength extends AbstractLength {
         CMLAtomSet fixedAtomSet = new CMLAtomSet(molecule, atomRefs2);
         CMLAtom atom0 = fixedAtomSet.getAtom(0);
         CMLAtom atom1 = fixedAtomSet.getAtom(1);
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-        CMLAtomSet moveableSet = moleculeTool.getDownstreamAtoms(atom1, atom0);
+        CMLAtomSet moveableSet = AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
         this.adjustCoordinates(atom0, atom1, moveableSet);
     }
 

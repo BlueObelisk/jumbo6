@@ -1095,23 +1095,27 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // makeMoleculeToolXml0();
         String el = xmlAtom[0].getElementType();
         Assert.assertEquals("element type", AS.N.value, el);
-        int bes = moleculeToolXml0.getBondOrderSum(xmlAtom[0]);
+		AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        int bes = atomTool.getBondOrderSum();
         el = xmlAtom[1].getElementType();
         Assert.assertEquals("element type", AS.C.value, el);
-        bes = moleculeToolXml0.getBondOrderSum(xmlAtom[1]);
+		atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
+        bes = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 4, bes);
         benzene.setBondOrders(CMLBond.SINGLE);
-        int bes1 = MoleculeTool.getOrCreateTool(benzene)
-                .getBondOrderSum(benzene.getAtom(0));
+        atomTool = AtomTool.getOrCreateTool(benzene.getAtom(0));
+        int bes1 = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 3, bes1);
         methyleneCyclohexene.setBondOrders(CMLBond.SINGLE);
         MoleculeTool methyleneCyclohexeneTool = MoleculeTool.getOrCreateTool(
                 methyleneCyclohexene);
-        bes1 = methyleneCyclohexeneTool.getBondOrderSum(methyleneCyclohexene
+        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
                 .getAtom(0));
+        bes1 = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 3, bes1);
-        bes1 = methyleneCyclohexeneTool.getBondOrderSum(methyleneCyclohexene
+        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
                 .getAtom(0));
+        bes1 = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 3, bes1);
     }
 
@@ -1128,22 +1132,21 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Assert.assertEquals("ligand count", 1, nlig);
         String el = xmlAtom[0].getElementType();
         Assert.assertEquals("elem", AS.N.value, el);
-        int bos = moleculeTool.getBondOrderSum(xmlAtom[0]);
+        AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        int bos = atomTool.getBondOrderSum();
         Assert.assertEquals("bondsum", 4, bos);
-        int dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[0],
-                FormalChargeControl.DEFAULT);
+        int dbe = AtomTool.getOrCreateTool(xmlAtom[0]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
         el = xmlAtom[1].getElementType();
         Assert.assertEquals("elem", AS.C.value, el);
-        bos = moleculeTool.getBondOrderSum(xmlAtom[1]);
+        atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
+        bos = atomTool.getBondOrderSum();
         Assert.assertEquals("bondsum", 4, bos);
-        dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[1],
-                FormalChargeControl.DEFAULT);
+        dbe = AtomTool.getOrCreateTool(xmlAtom[1]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
         el = xmlAtom[2].getElementType();
         Assert.assertEquals("elem", AS.S.value, el);
-        dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[2],
-                FormalChargeControl.DEFAULT);
+        dbe = AtomTool.getOrCreateTool(xmlAtom[2]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
         Assert.assertEquals("doubleBond equivalents", 0, dbe);
     }
 
@@ -1153,8 +1156,9 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testGetGeometricHybridization() {
-        CMLAtom.Hybridization hyb = moleculeToolXml0
-                .getGeometricHybridization(xmlAtom[0]);
+    	AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        CMLAtom.Hybridization hyb = atomTool
+                .getGeometricHybridization();
         Assert.assertEquals("hybrid", CMLAtom.Hybridization.SP3, hyb);
     }
 
@@ -1173,21 +1177,21 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testGetHydrogenValencyGroup() {
-        int hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[0]);
+        int hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[0]);
         Assert.assertEquals("elementType", AS.N.value, xmlAtom[0].getElementType());
         // atom attached to electronegative ligands
         Assert.assertTrue("hydrogen valency", hvg < 0);
-        hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[1]);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[1]);
         Assert.assertEquals("elementType", AS.C.value, xmlAtom[1].getElementType());
         Assert.assertEquals("hydrogen valency", 4, hvg);
-        hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[2]);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[2]);
         Assert.assertEquals("elementType", AS.S.value, xmlAtom[2].getElementType());
         Assert.assertEquals("hydrogen valency", 6, hvg);
         Assert.assertEquals("elementType", AS.O.value, xmlAtom[3].getElementType());
-        hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[3]);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[3]);
         Assert.assertEquals("hydrogen valency", 6, hvg);
         Assert.assertEquals("elementType", AS.F.value, xmlAtom[4].getElementType());
-        hvg = moleculeToolXml0.getHydrogenValencyGroup(xmlAtom[4]);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[4]);
         Assert.assertEquals("hydrogen valency", 7, hvg);
     }
 
@@ -1197,7 +1201,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
      */
     @Test
     public void testGetSumNonHydrogenBondOrder() {
-        int sum = moleculeToolXml0.getSumNonHydrogenBondOrder(xmlAtom[0]);
+    	AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        int sum = atomTool.getSumNonHydrogenBondOrder();
         Assert.assertEquals("nonh bond order sum", 4, sum);
     }
 
@@ -1237,8 +1242,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+            		Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1254,8 +1259,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+            		Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1270,8 +1275,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1286,8 +1291,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1303,8 +1308,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.LINEAR, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.LINEAR, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1319,8 +1324,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.TETRAHEDRAL, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.TETRAHEDRAL, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1335,8 +1340,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.TRIGONAL, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.TRIGONAL, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1351,8 +1356,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1370,8 +1375,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.TRIGONAL, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.TRIGONAL, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1388,8 +1393,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.TETRAHEDRAL, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.TETRAHEDRAL, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1406,8 +1411,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1427,8 +1432,8 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
             List<CMLAtom> atoms = mol.getAtoms();
-            CMLAtomSet as1 = moleculeTool.calculate3DCoordinatesForLigands(
-                    atoms.get(0), Molutils.DEFAULT, 1.1, 1.9);
+            CMLAtomSet as1 = AtomTool.getOrCreateTool(atoms.get(0)).calculate3DCoordinatesForLigands(
+                    Molutils.DEFAULT, 1.1, 1.9);
             Assert.assertNotNull("atomset should not be null", as1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1487,8 +1492,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     public void testExpandImplicitHydrogens() {
         makeMoleculeTool10();
         CMLAtom atom0 = mol10.getAtom(0);
-        moleculeTool10.expandImplicitHydrogens(atom0,
-                HydrogenControl.NO_EXPLICIT_HYDROGENS);
+        AtomTool.getOrCreateTool(atom0).expandImplicitHydrogens(HydrogenControl.NO_EXPLICIT_HYDROGENS);
         Assert.assertEquals("after addition", 7, mol10.getAtomCount());
         CMLAtom atom5 = mol10.getAtom(5);
         Assert.assertEquals("added H", "a1_h1", atom5.getId());
@@ -1888,15 +1892,15 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         CMLAtom atom0 = mol9.getAtom(0);
         CMLAtom atom1 = mol9.getAtom(1);
         CMLAtom atom2 = mol9.getAtom(2);
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        moleculeTool.adjustHydrogenCountsToValency(atom0, HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        //MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+        AtomTool.getOrCreateTool(atom0).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
         Assert.assertEquals("new", 6, mol9.getAtomCount());
         Assert.assertEquals("new", 5, mol9.getBondCount());
         Assert.assertEquals("new", "a1_h2", mol9.getAtom(4).getId());
         Assert.assertEquals("new", new String[]{"a1", "a1_h2"},
                 mol9.getBonds().get(3).getAtomRefs2());
-        moleculeTool.adjustHydrogenCountsToValency(atom1, HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        moleculeTool.adjustHydrogenCountsToValency(atom2, HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        AtomTool.getOrCreateTool(atom1).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        AtomTool.getOrCreateTool(atom2).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
         Assert.assertEquals("new", 10, mol9.getAtomCount());
         Assert.assertEquals("new", 9, mol9.getBondCount());
         Assert.assertEquals("new", "a3_h3", mol9.getAtom(9).getId());
@@ -1913,9 +1917,9 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         MoleculeTool moleculeTool = makeCompleteMol9();
         CMLAtom atom0 = mol9.getAtom(0);
         CMLAtom atom1 = mol9.getAtom(1);
-        List<CMLAtom> atomList = moleculeTool.getNonHydrogenLigandList(atom0);
+        List<CMLAtom> atomList = AtomTool.getOrCreateTool(atom0).getNonHydrogenLigandList();
         Assert.assertEquals("nonH", 1, atomList.size());
-        atomList = moleculeTool.getNonHydrogenLigandList(atom1);
+        atomList = AtomTool.getOrCreateTool(atom1).getNonHydrogenLigandList();
         Assert.assertEquals("nonH", 2, atomList.size());
     }
     
@@ -1925,9 +1929,9 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         CMLAtom atom1 = mol9.getAtom(1);
         CMLAtom atom2 = mol9.getAtom(2);
         MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        moleculeTool.adjustHydrogenCountsToValency(atom0, HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        moleculeTool.adjustHydrogenCountsToValency(atom1, HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        moleculeTool.adjustHydrogenCountsToValency(atom2, HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        AtomTool.getOrCreateTool(atom0).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        AtomTool.getOrCreateTool(atom1).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
+        AtomTool.getOrCreateTool(atom2).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
         return moleculeTool;
     }
 
@@ -1941,11 +1945,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         CMLAtom atom0 = mol9.getAtom(0);
         CMLAtom atom1 = mol9.getAtom(1);
         Assert.assertEquals("before", 10, mol9.getAtoms().size());
-        CMLAtomSet downstreamAtoms = moleculeTool.getDownstreamAtoms(atom0, atom1);
+        CMLAtomSet downstreamAtoms = AtomTool.getOrCreateTool(atom0).getDownstreamAtoms(atom1);
         Assert.assertEquals("down", 4, downstreamAtoms.size());
         Assert.assertEquals("down", new String[]{"a1", "a1_h1", "a1_h2", "a1_h3"},
                 downstreamAtoms.getXMLContent());
-        downstreamAtoms = moleculeTool.getDownstreamAtoms(atom1, atom0);
+        downstreamAtoms = AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
         Assert.assertEquals("down", 6, downstreamAtoms.size());
         Assert.assertEquals("down", new String[]{"a2", "a3", "a3_h1", "a3_h2", "a3_h3", "a2_h1"},
                 downstreamAtoms.getXMLContent());
@@ -1960,8 +1964,9 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         makeMol9();
         MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
         CMLAtom atom = mol9.getAtom(1);
+        AtomTool atomTool = AtomTool.getOrCreateTool(atom);
         Assert.assertEquals("id", "a2", atom.getId());
-        moleculeTool.appendToId(atom, "XXX");
+        atomTool.appendToId("XXX");
         Assert.assertEquals("id", "a2XXX", atom.getId());
 
     }
@@ -2013,13 +2018,13 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         // FIXME
         CMLMolecule nitroMethane = (CMLMolecule) parseValidString(nitroMethaneS);
         MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(nitroMethane);
-        int n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(0));
+        int n = AtomTool.getOrCreateTool(nitroMethane.getAtom(0)).getLoneElectronCount();
         Assert.assertEquals("lone pair", -6, n);
-        n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(1));
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(1)).getLoneElectronCount();
         Assert.assertEquals("lone pair", 0, n);
-        n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(2));
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(2)).getLoneElectronCount();
         Assert.assertEquals("lone pair", 6, n);
-        n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(3));
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(3)).getLoneElectronCount();
         Assert.assertEquals("lone pair", 5, n);
     }
 
@@ -2080,11 +2085,11 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         CMLAtom atom0 = mol9.getAtom(0);
         CMLAtom atom1 = mol9.getAtom(1);
         CMLBond bond = mol9.getBond(atom0, atom1);
-        CMLAtomSet downstreamAtoms = moleculeTool.getDownstreamAtoms(bond, atom1);
+        CMLAtomSet downstreamAtoms = BondTool.getOrCreateTool(bond).getDownstreamAtoms(atom1);
         Assert.assertEquals("down", 4, downstreamAtoms.size());
         Assert.assertEquals("down", new String[]{"a1", "a1_h1", "a1_h2", "a1_h3"},
                 downstreamAtoms.getXMLContent());
-        downstreamAtoms = moleculeTool.getDownstreamAtoms(bond, atom0);
+        downstreamAtoms = BondTool.getOrCreateTool(bond).getDownstreamAtoms(atom0);
         Assert.assertEquals("down", 6, downstreamAtoms.size());
         Assert.assertEquals("down", new String[]{"a2", "a3", "a3_h1", "a3_h2", "a3_h3", "a2_h1"},
                 downstreamAtoms.getXMLContent());
@@ -2155,8 +2160,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
         Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
         
-        moleculeTool.contractExplicitHydrogens(atom0,
-            HydrogenControl.USE_EXPLICIT_HYDROGENS);
+        AtomTool.getOrCreateTool(atom0).contractExplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         Assert.assertEquals("before", 7, mol9.getAtomCount());
         Assert.assertEquals("before", 6, mol9.getBondCount());
         Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());

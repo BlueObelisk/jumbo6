@@ -624,6 +624,58 @@ public class Transform3 extends RealSquareMatrix {
         }
         return Type.ANY;
     }
+    
+    /**
+     * interpret current matrix as rotation about general axis. user must supply
+     * an empty axis and an empty angle, which will be filled by the routine.
+     * will do better to create AxisAndAngle class
+     * 
+     * @param axis
+     *            (holds return values)
+     * @param ang
+     *            angle (holds return value)
+     * @return flag
+     * @deprecated 
+     */
+    public int getAxisAndAngle(Vector3 axis, Angle ang) {
+        RealSquareMatrix s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 2, 0, 2));
+        s3.orthonormalize();
+        int chirality = 1;
+        /**
+         * invert improper rotations
+         */
+        if ((double) s3.determinant() < 0.0) {
+            s3.negative();
+            chirality = -1;
+        }
+        double theta = Math.acos(((double) s3.trace() - 1.0) * 0.5);
+        double[][] mat = s3.getMatrix();
+        double[] lmn = new double[3];
+        /**
+         * theta might be exactly pi or zero
+         */
+        if (Real.isEqual(theta, Math.PI) || Real.isEqual(theta, 0.0)) {
+            lmn[0] = Math.sqrt((1.0 + mat[0][0]) * 0.5);
+            if (Real.isZero(lmn[0])) {
+                lmn[1] = mat[0][1] * 0.5 / lmn[0];
+                lmn[2] = mat[0][2] * 0.5 / lmn[0];
+            } else {
+                lmn[1] = Math.sqrt((1.0 + mat[1][1]) * 0.5);
+                lmn[2] = mat[1][2] / (2.0 * lmn[1]);
+            }
+        } else {
+            double c = 1.0 / (2.0 * Math.sin(theta));
+            lmn[0] = (mat[2][1] - mat[1][2]) * c;
+            lmn[1] = (mat[0][2] - mat[2][0]) * c;
+            lmn[2] = (mat[1][0] - mat[0][1]) * c;
+        }
+        /**
+         * stuff into angle and axis
+         */
+        ang.shallowCopy(new Angle(theta));
+        System.arraycopy(lmn, 0, axis.getArray(), 0, 3);
+        return chirality;
+    }
     /**
      * interpret current matrix as rotation about general axis. user must supply
      * an empty axis and an empty angle, which will be filled by the routine.
@@ -631,7 +683,7 @@ public class Transform3 extends RealSquareMatrix {
      * 
      * @return axis and angle
      */
-    public AxisAngleChirality getAxisAndAngle() {
+    public AxisAngleChirality getAxisAngleChirality() {
         RealSquareMatrix s3 = new RealSquareMatrix(this.extractSubMatrixData(0, 2, 0, 2));
         s3.orthonormalize();
         int chirality = 1;

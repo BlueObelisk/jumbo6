@@ -261,7 +261,7 @@ public class ValencyTool extends AbstractTool {
 		int count = 0;
 		for (CMLAtom atom : atoms) {
 			if (ligandS.equals(atom.getElementType())) {
-				int bos = moleculeTool.getBondOrderSum(atom);
+				int bos = AtomTool.getOrCreateTool(atom).getBondOrderSum();
 				if (bos == 1) {
 					if (count++ < nChargeLigand) {
 						this.setAtomCharge(atom, -1);
@@ -675,8 +675,9 @@ public class ValencyTool extends AbstractTool {
 				if (ligands.size() == 3) {
 					List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
 					for (CMLAtom ligand : ligands) {
+						AtomTool ligandTool = AtomTool.getOrCreateTool(ligand);
 						if ("O".equals(ligand.getElementType())
-								&& moleculeTool.getBondOrderSum(ligand) == 1) {
+								&& ligandTool.getBondOrderSum() == 1) {
 							oxyList.add(ligand);
 						}
 					}
@@ -822,8 +823,9 @@ public class ValencyTool extends AbstractTool {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
 				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
 				for (CMLAtom ligand : ligands) {
+					AtomTool ligandTool = AtomTool.getOrCreateTool(ligand);
 					if ("O".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							&& ligandTool.getBondOrderSum() == 1) {
 						oxyList.add(ligand);
 					}
 				}
@@ -858,8 +860,9 @@ public class ValencyTool extends AbstractTool {
 				int ligandCount = ligands.size();
 				List<CMLAtom> oxyList = new ArrayList<CMLAtom>();
 				for (CMLAtom ligand : ligands) {
+					AtomTool ligandTool = AtomTool.getOrCreateTool(ligand);
 					if ("O".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							&& ligandTool.getBondOrderSum() == 1) {
 						oxyList.add(ligand);
 					}
 				}
@@ -895,8 +898,9 @@ public class ValencyTool extends AbstractTool {
 				List<CMLAtom> ligands = atom.getLigandAtoms();
 				List<CMLAtom> sulfoList = new ArrayList<CMLAtom>();
 				for (CMLAtom ligand : ligands) {
+					AtomTool ligandTool = AtomTool.getOrCreateTool(ligand);
 					if ("S".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							&& ligandTool.getBondOrderSum() == 1) {
 						sulfoList.add(ligand);
 					}
 				}
@@ -916,12 +920,13 @@ public class ValencyTool extends AbstractTool {
 				CMLAtom s = null;
 				List<CMLAtom> ligands = atom.getLigandAtoms();
 				for (CMLAtom ligand : ligands) {
+					AtomTool ligandTool = AtomTool.getOrCreateTool(ligand);
 					if ("S".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							&& ligandTool.getBondOrderSum() == 1) {
 						s = ligand;
 					}
 					if ("O".equals(ligand.getElementType())
-							&& moleculeTool.getBondOrderSum(ligand) == 1) {
+							&& ligandTool.getBondOrderSum() == 1) {
 						o = ligand;
 					}
 				}

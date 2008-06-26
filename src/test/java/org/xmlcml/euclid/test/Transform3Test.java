@@ -4,8 +4,10 @@ import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.AxisAngleChirality;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealSquareMatrix;
@@ -266,24 +268,39 @@ public class Transform3Test extends GeomTest {
      * Angle)'
      */
     @Test
+    @Ignore
     public void testGetAxisAndAngle() {
         Transform3 t = new Transform3(new Vector3(1. / s3, 1. / s3, 1. / s3),
                 new Angle(Math.PI / 3.));
         Vector3 v = new Vector3();
         Angle a = new Angle();
-        t.getAxisAndAngle();
+        t.getAxisAngleChirality();
         // not sure if this is right
         Vector3Test.assertEquals("vector angle", new Vector3(1. / s3, 1. / s3,
                 1. / s3), v, EPS);
         Assert.assertEquals("vector angle", Math.PI / 3., a.getRadian(), EPS);
         t = new Transform3("y, -x, z");
-        t.getAxisAndAngle();
+        t.getAxisAngleChirality();
         // not sure if this is right
         Vector3Test.assertEquals("vector angle", new double[] { 0., 0., -1. },
                 v, EPS);
         Assert.assertEquals("vector angle", Math.PI / 2., a.getRadian(), EPS);
     }
 
+    public void testGetAxisAngleChirality() {
+	    // rotation about vector and angle
+	    Vector3 v = new Vector3(new double[] { 1., 1., 1. });
+	    Transform3 t = new Transform3(v, new Angle(Math.PI * 2. / 3.));
+	    Transform3Test.assertEquals("type", new double[] { 0, 0, 1, 0, 1, 0,
+	            0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, t, EPS);
+	
+	    AxisAngleChirality aac = t.getAxisAngleChirality();
+	    Vector3 v3 = aac.getAxis();
+	    double ang = aac.getAngle();
+	    Vector3Test.assertEquals("aac", new Vector3(1., 2., 3.), v3, EPS);
+	    Assert.assertEquals("axis and angle", 1.23, ang, EPS);
+    }
+    
     /**
      * Test method for 'org.xmlcml.euclid.Transform3.getTranslation()'
      */

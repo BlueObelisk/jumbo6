@@ -1148,7 +1148,7 @@ public class Point3Vector implements EuclidConstants {
         Transform3 tsave = new Transform3(t);
         thistmp.transform(t);
         System.out.println("rms: "+thistmp.rms(reftmp));
-        System.out.println(t.getAxisAndAngle());
+        System.out.println(t.getAxisAngleChirality());
         
         RealArray shift = new RealArray(3);
         int NCYC = 20;
@@ -1213,6 +1213,94 @@ public class Point3Vector implements EuclidConstants {
         return tsave;
 //        return tt;
     }
+    
+    /**
+     * fit two coordinates of same length and alignment
+     * works out angular displacements around each axis and
+     * applies them. If any displacements result in higher RMS they are skipped
+     * 
+     * CURRENTLY NOT VALIDATED
+     * 
+     * @param ref
+     * @param damp damping factor (normally 1.0)
+     * @param converge limit for convergence in radians
+     * @return transformation
+     */
+    public Transform3 fitTo1(Point3Vector ref, double damp, double converge) {
+        // these should be set as parameters?
+
+    	damp = 1.0;
+    	double dampfact = 0.9;
+        Transform3 t = new Transform3();
+        Point3 thisCent = this.getCentroid();
+        Point3 refCent = ref.getCentroid();
+        /** 
+         * make copies of each molecule and translate to centroid
+         */
+        Point3Vector thistmp = new Point3Vector(this);
+        Point3Vector reftmp = new Point3Vector(ref);
+        thistmp.moveToCentroid();
+        reftmp.moveToCentroid();
+        /**
+         * roughly rotate moving molecule onto reference one
+         */
+//        t = thistmp.roughAlign(reftmp);
+//        thistmp.transform(t);
+        
+        int NCYC = 20;
+        double[] delta = new double[3];
+        for (int icyc = 0; icyc < NCYC; icyc++) {
+            // do each axis in turn
+        	for (int j = 0; j < 3; j++) {
+                Angle aa = calculateAxialRotation(damp, thistmp, reftmp, j);
+	            Transform3 t2 = new Transform3(Axis.AXES[j], aa);
+	            double rmssave = thistmp.rms(reftmp);
+	            Point3Vector thissave = new Point3Vector(thistmp);
+	            thissave.transform(t2);
+	            double rms = thissave.rms(reftmp);
+	            // only accept if rms decreases
+	            if (rms < rmssave) {
+	            	thistmp = thissave;
+		            t = new Transform3(t2.concatenate(t));
+	            }
+            }
+        }
+        Transform3 tt = translateRotateRetranslate(thisCent,
+				refCent, t);
+        return tt;
+    }
+	private Angle calculateAxialRotation(double damp, Point3Vector thistmp,
+			Point3Vector reftmp, int j) {
+		double sumanglen = 0.;
+		double sumlen = 0.;
+		Angle aa = null;
+		for (int i = 0; i < size(); i++) {
+			Vector3 thisV = new Vector3(thistmp.vector.get(i));
+			thisV.setElementAt(j, 0.0);
+			Vector3 refV = new Vector3(reftmp.vector.get(i));
+			refV.setElementAt(j, 0.0);
+			// this is an unsigned angle
+			Angle ang = thisV.getAngleMadeWith(refV);
+			Vector3 axis = new Vector3(Axis.AXES[j]);
+			double stp = thisV.getScalarTripleProduct(refV, axis);
+			if (stp > 0) {
+				ang = ang.multiplyBy(-1.0);
+			}
+			// weight angle by distance
+			if (ang != null) {
+				double len = thisV.getLength();
+				len = 1;
+				sumanglen += ang.getRadian() * len;
+				sumlen += len;
+			}
+		}
+	    if (Math.abs(sumlen) > 1.0/Double.MAX_VALUE) {
+	    	double angle = sumanglen / sumlen;
+	        aa = new Angle(angle*damp);
+	    }
+		return aa;
+	}
+    
     /**
      * to string.
      * 

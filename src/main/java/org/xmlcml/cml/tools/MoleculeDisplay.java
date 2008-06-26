@@ -1,5 +1,8 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
+
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
 
@@ -15,19 +18,31 @@ public class MoleculeDisplay extends AbstractDisplay {
 		DEFAULT.setDefaults();
 	};
 	
-	private AtomDisplay atomDisplay = new AtomDisplay(AtomDisplay.DEFAULT);
-	private BondDisplay bondDisplay = new BondDisplay(BondDisplay.DEFAULT);
+	private AtomDisplay defaultAtomDisplay = new AtomDisplay(AtomDisplay.DEFAULT);
+	private BondDisplay defaultBondDisplay = new BondDisplay(BondDisplay.DEFAULT);
 	
 	private double bondLength;
+	private double hydrogenLengthFactor;
+	private Boolean contractGroups;
+	
 	private boolean displayFormula;
 	private boolean displayLabels;
 	private boolean displayNames;
 	private Real2Interval screenExtent;
+	private MoleculeTool moleculeTool;
+	protected boolean omitHydrogens;
 	
 	/**
 	 */
 	public MoleculeDisplay() {
 		super();
+	}
+	
+	/**
+	 */
+	public MoleculeDisplay(MoleculeTool moleculeTool) {
+		this();
+		this.setMoleculeTool(moleculeTool);
 	}
 	
 	protected void init() {
@@ -36,7 +51,10 @@ public class MoleculeDisplay extends AbstractDisplay {
 	protected void setDefaults() {
 		super.setDefaults();
 
-		bondLength = 2.0;
+		bondLength = 20.0;
+		hydrogenLengthFactor = 0.7;
+		contractGroups = false;
+		
 		displayFormula = false;
 		displayLabels = false;
 		displayNames = false;
@@ -63,13 +81,17 @@ public class MoleculeDisplay extends AbstractDisplay {
 	public MoleculeDisplay(MoleculeDisplay a) {
 		super(a);
 		this.bondLength = a.bondLength;
+		this.hydrogenLengthFactor = a.hydrogenLengthFactor;
+		this.contractGroups = a.contractGroups;
+		
 		this.displayFormula = a.displayFormula;
 		this.displayLabels = a.displayLabels;
 		this.displayNames = a.displayNames;
 		this.screenExtent = a.screenExtent;
+		this.omitHydrogens = a.omitHydrogens;
 		
-		this.atomDisplay = new AtomDisplay(a.atomDisplay);
-		this.bondDisplay = new BondDisplay(a.bondDisplay);
+	    this.defaultAtomDisplay = new AtomDisplay(a.defaultAtomDisplay);
+		this.defaultBondDisplay = new BondDisplay(a.defaultBondDisplay);
 	}
 	
 	/**
@@ -78,11 +100,20 @@ public class MoleculeDisplay extends AbstractDisplay {
 	public double getBondLength() {
 		return bondLength;
 	}
-	/**
+	/** apply scale to current molecule.
+	 * may need to fix this later
 	 * @param bondLength the bondLength to set
+	 * 
 	 */
 	public void setBondLength(double bondLength) {
 		this.bondLength = bondLength;
+	}
+	
+	public void scaleBonds(MoleculeTool moleculeTool) {
+		if (moleculeTool != null) {
+			double avlength = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
+			moleculeTool.getMolecule().multiply2DCoordsBy(bondLength / avlength);
+		}
 	}
 
 	/**
@@ -129,107 +160,13 @@ public class MoleculeDisplay extends AbstractDisplay {
 	public static MoleculeDisplay getDEFAULT() {
 		return DEFAULT;
 	}
-	/**
-	 * @return the bondDisplay
-	 */
-	public BondDisplay getBondDisplay() {
-		return bondDisplay;
-	}
-	/**
-	 * @param bondDisplay the bondDisplay to set
-	 */
-	public void setBondDisplay(BondDisplay bondDisplay) {
-		this.bondDisplay = bondDisplay;
-	}
-	/**
-	 * @return the atomDisplay
-	 */
-	public AtomDisplay getAtomDisplay() {
-		return atomDisplay;
-	}
-	/**
-	 * @param atomDisplay the atomDisplay to set
-	 */
-	public void setAtomDisplay(AtomDisplay atomDisplay) {
-		this.atomDisplay = atomDisplay;
-	}
 	
-	/** cascades through from calling program
-	 * @param args
-	 * @param i
-	 * @return increased i if args found
-	 */
-	public int processArgs(String[] args, int i) {
-		
-		if (false) {
-			
-			
-		} else if (args[i].equalsIgnoreCase("-MOL_BONDLENGTH")) {
-			this.setBondLength(new Double(args[++i])); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_DISPLAYFORMULA")) {
-			this.setDisplayFormula(true); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_DISPLAYLABELS")) {
-			this.setDisplayLabels(true); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_DISPLAYNAMES")) {
-			this.setDisplayNames(true); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_SCREENEXTENT")) {
-			System.err.println("SCREEN EXTENT NYI"); i++;
-//			
-		} else if (args[i].equalsIgnoreCase("-MOL_FONTSIZE")) {
-			this.setFontSize(new Double(args[++i])); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_COLOR")) {
-			this.setColor(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_FILL")) {
-			this.setFill(args[++i]);
-		} else if (args[i].equalsIgnoreCase("-MOL_STROKE")) {
-			this.setStroke(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_OPACITY")) {
-			this.setOpacity(new Double(args[++i])); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_FONTSTYLE")) {
-			this.setFontStyle(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_FONTWEIGHT")) {
-			this.setFontWeight(args[++i]);
-		} else if (args[i].equalsIgnoreCase("-MOL_FONTFAMILY")) {
-			this.setFontFamily(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_OMITHYDROGENS")) {
-			this.setOmitHydrogens(true); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_SHOWHYDROGENS")) {
-			this.setOmitHydrogens(false); i++;
-		} else if (args[i].equalsIgnoreCase("-MOL_SHOWCHILDLABELS")) {
-			this.setShowChildLabels(true); i++;
-		}
-		return i;
-	}
-
-	public static void usage() {
-		
-		System.out.println(" MoleculeDisplay options ");
-		
-		System.out.println("    -MOL_BONDLENGTH length(D)");
-		System.out.println("    -MOL_DISPLAYFORMULA");
-		System.out.println("    -MOL_DISPLAYLABELS");
-		System.out.println("    -MOL_DISPLAYNAMES");
-		System.out.println("    -MOL_SCREENEXTENT NYI");
-		System.out.println("              ...");
-		System.out.println("    -MOL_FONTSIZE size(D)");
-		System.out.println("    -MOL_COLOR fontColor");
-		System.out.println("    -MOL_FILL areaFill (includes text)");
-		System.out.println("    -MOL_STROKE stroke (line but not text)");
-		System.out.println("    -MOL_OPACITY opacity(D 0-MOL_1)");
-		System.out.println("    -MOL_FONTSTYLE fontStyle");
-		System.out.println("    -MOL_FONTWEIGHT fontWeight");
-		System.out.println("    -MOL_FONTFAMILY fontFamily");
-		System.out.println("    -MOL_OMITHYDROGENS");
-		System.out.println("    -MOL_SHOWHYDROGENS");
-		System.out.println("    -MOL_SHOWCHILDLABELS");
-		System.out.println();
-	}
-
 	public boolean isDisplayFormula() {
 		return displayFormula;
 	}
 
 	public void setDisplayFormula(boolean displayFormula) {
+		System.out.println("FORMULA "+this);
 		this.displayFormula = displayFormula;
 	}
 
@@ -249,5 +186,75 @@ public class MoleculeDisplay extends AbstractDisplay {
 		this.displayNames = displayNames;
 	}
 
+	public MoleculeTool getMoleculeTool() {
+		return moleculeTool;
+	}
+
+	public void setMoleculeTool(MoleculeTool moleculeTool) {
+		this.moleculeTool = moleculeTool;
+	}
+
+	public double getHydrogenLengthFactor() {
+		return hydrogenLengthFactor;
+	}
+
+	public void setHydrogenLengthFactor(double hydrogenLengthFactor) {
+		this.hydrogenLengthFactor = hydrogenLengthFactor;
+	}
+
+	public Boolean getContractGroups() {
+		return contractGroups;
+	}
+
+	public void setContractGroups(Boolean contractGroups) {
+		this.contractGroups = contractGroups;
+	}
+
+	public AtomDisplay getDefaultAtomDisplay() {
+		return defaultAtomDisplay;
+	}
+
+	public void setDefaultAtomDisplay(AtomDisplay defaultAtomDisplay) {
+		this.defaultAtomDisplay = defaultAtomDisplay;
+	}
+
+	public BondDisplay getDefaultBondDisplay() {
+		return defaultBondDisplay;
+	}
+
+	public void setDefaultBondDisplay(BondDisplay defaultBondDisplay) {
+		this.defaultBondDisplay = defaultBondDisplay;
+	}
+
+	public String getDebugString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("MoleculeDisplay:");
+		sb.append("..."+super.getDebugString());
+		sb.append(S_NEWLINE);
+		sb.append("  bondLength:           "+bondLength);
+		sb.append(S_NEWLINE);
+		sb.append("  hydrogenLengthFactor: "+hydrogenLengthFactor);
+		sb.append(S_NEWLINE);
+		sb.append("  omitHydrogens:        "+omitHydrogens);
+		sb.append(S_NEWLINE);
+		sb.append("  contractGroups:       "+contractGroups);
+		sb.append(S_NEWLINE);
+		sb.append("  displayFormula:       "+displayFormula);
+		sb.append(S_NEWLINE);
+		sb.append("  displayLabels:        "+displayLabels);
+		sb.append(S_NEWLINE);
+		sb.append(  "displayNames:         "+displayNames);
+		sb.append(S_NEWLINE);
+		sb.append(  "screenExtent:         "+screenExtent);
+		sb.append(S_NEWLINE);
+		sb.append(S_NEWLINE);
+		sb.append("..."+defaultAtomDisplay.getDebugString());
+		sb.append(S_NEWLINE);
+		sb.append(S_NEWLINE);
+		sb.append("..."+defaultBondDisplay.getDebugString());
+		sb.append(S_NEWLINE);
+
+		return sb.toString();
+	}
 	
 }

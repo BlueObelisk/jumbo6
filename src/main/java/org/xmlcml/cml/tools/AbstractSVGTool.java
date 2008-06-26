@@ -42,8 +42,9 @@ public abstract class AbstractSVGTool extends AbstractTool {
 		} else if (element instanceof CMLBond) {
 			abstractSVGTool = BondTool.getOrCreateTool((CMLBond)element); 
 		} else if (element instanceof CMLCml) {
-			abstractSVGTool = CMLTool.getOrCreateTool((CMLCml)element); 
+			abstractSVGTool = CmlTool.getOrCreateTool((CMLCml)element); 
 		} else if (element instanceof CMLMolecule) {
+			System.out.println("MOLECULE...");
 			abstractSVGTool = MoleculeTool.getOrCreateTool((CMLMolecule)element); 
 		} else if (element instanceof CMLMoleculeList) {
 			abstractSVGTool = MoleculeListTool.getOrCreateTool((CMLMoleculeList)element); 

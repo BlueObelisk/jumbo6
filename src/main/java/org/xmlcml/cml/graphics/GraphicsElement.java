@@ -189,20 +189,20 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 		setSubStyle("font-family", fontFamily);
 	}
 
-//	/**
-//	 * @return the font
-//	 */
-//	public String getFontStyle() {
-//		return (String) getSubStyle("font-style");
-//	}
-//
-//	/**
-//	 * @param fill the fill to set
-//	 */
-//	public void setFontStyle(String fontStyle) {
-//		setSubStyle("font-style", fontStyle);
-//	}
-//
+	/**
+	 * @return the font
+	 */
+	public String getFontStyle() {
+		return (String) getSubStyle("font-style");
+	}
+
+	/**
+	 * @param fill the fill to set
+	 */
+	public void setFontStyle(String fontStyle) {
+		setSubStyle("font-style", fontStyle);
+	}
+
 	/**
 	 * @return the font
 	 */

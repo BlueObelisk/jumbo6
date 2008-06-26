@@ -18,6 +18,7 @@ public class StyleBundle implements CMLConstants {
 	private String stroke;
 	private String fontFamily;
 	private Double fontSize;
+	private String fontStyle;
 	private String fontWeight;
 	private Double strokeWidth;
 	private Double opacity;
@@ -78,28 +79,34 @@ public class StyleBundle implements CMLConstants {
 	
 	private void processStyle(String style) {
 		if (style != null) {
-			String[] ss = style.split(S_SEMICOLON);
-			for (String s : ss) {
-				s = s.trim();
-				String[] aa = s.split(S_COLON);
-				aa[0] = aa[0].trim();
-				aa[1] = aa[1].trim();
-				if (aa[0].equals("fill")) {
-					fill = aa[1];
-				} else if (aa[0].equals("stroke")) {
-					stroke = aa[1];
-				} else if (aa[0].equals("stroke-width")) {
-					strokeWidth = getDouble(aa[1]); 
-				} else if (aa[0].equals("font-family")) {
-					fontFamily = aa[1]; 
-				} else if (aa[0].equals("font-size")) {
-					fontSize = getDouble(aa[1]); 
-				} else if (aa[0].equals("font-weight")) {
-					fontWeight = aa[1]; 
-				} else if (aa[0].equals("opacity")) {
-					opacity = getDouble(aa[1]); 
-				} else {
-					throw new CMLRuntimeException("unsupported style: "+aa[0]);
+			style = style.trim();
+			if (!style.equals(S_EMPTY)) {
+				String[] ss = style.split(S_SEMICOLON);
+				for (String s : ss) {
+					s = s.trim();
+					if (s.equals(S_EMPTY)) {
+						continue;
+					}
+					String[] aa = s.split(S_COLON);
+					aa[0] = aa[0].trim();
+					aa[1] = aa[1].trim();
+					if (aa[0].equals("fill")) {
+						fill = aa[1];
+					} else if (aa[0].equals("stroke")) {
+						stroke = aa[1];
+					} else if (aa[0].equals("stroke-width")) {
+						strokeWidth = getDouble(aa[1]); 
+					} else if (aa[0].equals("font-family")) {
+						fontFamily = aa[1]; 
+					} else if (aa[0].equals("font-size")) {
+						fontSize = getDouble(aa[1]); 
+					} else if (aa[0].equals("font-weight")) {
+						fontWeight = aa[1]; 
+					} else if (aa[0].equals("opacity")) {
+						opacity = getDouble(aa[1]); 
+					} else {
+						throw new CMLRuntimeException("unsupported style: "+aa[0]);
+					}
 				}
 			}
 		} else {
@@ -120,6 +127,8 @@ public class StyleBundle implements CMLConstants {
 			fontFamily = (String) object; 
 		} else if (subStyle.equals("font-size")) {
 			fontSize = (Double) object; 
+		} else if (subStyle.equals("font-style")) {
+			fontStyle = (String) object; 
 		} else if (subStyle.equals("font-weight")) {
 			fontWeight = (String) object; 
 		} else if (subStyle.equals("opacity")) {

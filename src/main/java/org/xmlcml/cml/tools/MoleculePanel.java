@@ -215,14 +215,14 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			y = 0;
 		} else if (c == '1') {
 			// atom labels
-			AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+			AtomDisplay atomDisplay = moleculeDisplay.getDefaultAtomDisplay();
 			atomDisplay.setDisplayLabels(!atomDisplay.isDisplayLabels());
 			System.out.println("LABEL: "+!atomDisplay.isDisplayLabels());
 			displayList.setAndProcess(moleculeFrame.getMoleculeTool());
 			this.repaint();
 		} else if (c == '2') {
 			// omit hydrogens
-			AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
+			AtomDisplay atomDisplay = moleculeDisplay.getDefaultAtomDisplay();
 			atomDisplay.setOmitHydrogens(!atomDisplay.isOmitHydrogens());
 			displayList.setAndProcess(moleculeFrame.getMoleculeTool());
 			this.repaint();

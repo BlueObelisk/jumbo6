@@ -209,8 +209,8 @@ public class PiSystem implements CMLConstants {
     private Map<CMLAtom, Integer> createPiMap() {
         piMap = new HashMap<CMLAtom, Integer>();
         for (CMLAtom atom : allAtoms) {
-            int nPi = moleculeTool.getDoubleBondEquivalents(atom,
-                    piSystemOptions.getFormalChargeControl());
+        	AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+            int nPi = atomTool.getDoubleBondEquivalents(piSystemOptions.getFormalChargeControl());
             if (nPi > 0) {
                 piMap.put(atom, new Integer(nPi));
             }

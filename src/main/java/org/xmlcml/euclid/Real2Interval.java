@@ -119,17 +119,5 @@ public class Real2Interval implements EuclidConstants {
 		return new Real2(xInterval.midPoint(), yInterval.midPoint());
 	}
 	
-//	/** offsets to overlap given points in each
-//	 * scales these by scales and then calculates offsets to overlap midpoints
-//	 * @param interval2
-//	 * @param scales (some might be NaN)
-//	 * @return offsets (components might be NaN.
-//	 */
-//	public double[] offsetsTo(Real2Interval interval2, double scale, Real2 xyThis, Real2 xy2) {
-//		double[] offsets = new double[2];
-//		offsets[0] = xInterval.offsetTo(interval2.xInterval, scales[0]);
-//		offsets[1] = yInterval.offsetTo(interval2.yInterval, scales[1]);
-//		return offsets;
-//	}
 	
 }
