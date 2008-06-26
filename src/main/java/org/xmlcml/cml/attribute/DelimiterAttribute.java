@@ -259,12 +259,4 @@ public class DelimiterAttribute extends StringSTAttribute {
         return s;
     }
     
-    /** debug.
-     * 
-     * @param s name of debug output
-     */
-    public void debug(String s) {
-    	System.out.println("-------- "+s+" -------");
-    	System.out.println(this+" .. "+this.getValue()+" .. "+this.splitter+" .. "+concat);
-    }
 }

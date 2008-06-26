@@ -169,7 +169,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         removeOldElements(staticMolecule, staticAtom, movableAtom, atom0, atom1);
 
         CMLAtomSet moleculeAtomSet = molecule.getAtomSet();
-        CMLAtomSet moveableAtomSet = MoleculeTool.getOrCreateTool(molecule).getDownstreamAtoms(atom1, atom0);
+        CMLAtomSet moveableAtomSet = AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
 
         adjustTorsion(staticAtom, atom0, atom1, movableAtom, moleculeAtomSet, moveableAtomSet);
         adjustLength(atom0, atom1, moveableAtomSet);

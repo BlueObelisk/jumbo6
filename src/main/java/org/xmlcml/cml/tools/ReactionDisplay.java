@@ -14,6 +14,7 @@ public class ReactionDisplay extends AbstractDisplay {
 	};
 	
 	private MoleculeDisplay moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.DEFAULT);
+	protected boolean omitHydrogens;
 
 	/** constructor.
 	 */

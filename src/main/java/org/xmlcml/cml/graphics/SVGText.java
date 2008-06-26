@@ -59,7 +59,7 @@ public class SVGText extends SVGElement {
 
     public double getX() {
     	String s = this.getAttributeValue("x");
-    	return (s != null) ? new Double(s).doubleValue() : Double.NaN;
+    	return (s != null) ? new Double(s).doubleValue()  : Double.NaN;
     }
 
     public double getY() {

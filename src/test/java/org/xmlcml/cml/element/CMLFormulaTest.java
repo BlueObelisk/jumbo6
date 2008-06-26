@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import static org.junit.Assert.fail;
 import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
@@ -1343,4 +1344,45 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
         Assert.assertTrue("equals", form1.equals(form1));
         Assert.assertFalse("equals", form1.equals(form2));
     }
+    
+	@Test
+	public void testCalculateEmpiricalFormula() {
+		CMLFormula formula = new CMLFormula();
+		double[] d = new double[] {
+				16., 24., 44.,
+			};
+		String[] s = new String[] {
+				"C", "H", "O"
+			};
+		formula.setElementTypesAndCounts(s, d);
+		formula.normalize();
+		CMLFormula formula1 = formula.calculateEmpiricalFormula(0.0001);
+		String f = 
+			"<formula concise='C 4 H 6 O 11' xmlns='http://www.xml-cml.org/schema'>" +
+			"<atomArray elementType='C H O' count='4.0 6.0 11.0'/>"+
+			"</formula>";
+		Element fxml = parseValidString(f);
+		assertEqualsCanonically("formula", fxml, formula1, true);
+		
+	}
+
+	@Test
+	public void testSetElementTypesAndCounts() {
+		CMLFormula formula = new CMLFormula();
+		double[] d = new double[] {
+				16., 24., 44.,
+			};
+		String[] s = new String[] {
+				"C", "H", "O"
+			};
+		formula.setElementTypesAndCounts(s, d);
+		formula.normalize();
+		String f = 
+		"<formula xmlns='http://www.xml-cml.org/schema'>" +
+		" <atomArray elementType='C H O' count='16.0 24.0 44.0'/>" +
+		"</formula>";
+		Element fxml = parseValidString(f);
+		assertEqualsCanonically("formula", fxml, formula, true);
+	}
+
  }

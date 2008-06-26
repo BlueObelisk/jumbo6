@@ -648,6 +648,7 @@ public class CMLAtom extends AbstractAtom {
      *
      * @return the cross product (null if parameters are null; zero if atoms are
      *         coincident or colinear)
+     * @deprecated        
      */
     // should this really be a public function?
     public Vector3 get3DCrossProduct(CMLAtom atom1, CMLAtom atom2) {
@@ -671,6 +672,7 @@ public class CMLAtom extends AbstractAtom {
      *
      * @return the cross product (null if parameters are null; zero if atoms are
      *         coincident or colinear)
+    @deprecated
      */
     // should this really be a public function?
     public Vector3 get2DCrossProduct(CMLAtom atom1, CMLAtom atom2) {

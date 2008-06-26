@@ -1,8 +1,9 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
+
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.molutil.ChemicalElement.AS;
-
 
 /** display parameters
  * 
@@ -16,23 +17,68 @@ public class AtomDisplay extends AbstractDisplay {
 		DEFAULT.setDefaults();
 	}
 
+	private TextDisplay elementDisplay;
+	private TextDisplay chargeDisplay;
+	private TextDisplay groupDisplay;
+	private TextDisplay idDisplay;
+	private TextDisplay isotopeDisplay;
+	private TextDisplay labelDisplay;
+	
 	// atom
-	protected double backgroundChargeRadiusFactor;
-	protected double backgroundIdRadiusFactor;
 	protected double backgroundRadiusFactor;
-	protected double chargeFontFactor;
+	protected boolean display;
 	protected boolean displayCarbons;
+	protected boolean displayIds;
+	protected boolean displayGroups;
 	protected boolean displayLabels;
-	protected double idFontFactor;
 	protected double scale;
-	protected double xChargeOffsetFactor;
-	protected double xIdOffsetFactor;
-	protected double xOffsetFactor;
-	protected double yChargeOffsetFactor;
-	protected double yIdOffsetFactor;
-	protected double yOffsetFactor;
+	protected boolean omitHydrogens;
 	
+	public boolean isOmitHydrogens() {
+		return omitHydrogens;
+	}
+	public void setOmitHydrogens(boolean omitHydrogens) {
+		this.omitHydrogens = omitHydrogens;
+	}
+	public static void setChargeDefaults() {
+		
+	}
+	public static void setGroupDefaults() {
+		
+	}
+	public static void setIdDefaults() {
+		
+	}
+	public static void setIsotopeDefaults() {
+		
+	}
+	public static void setLabelDefaults() {
+		
+	}
+
+	public double getBackgroundRadiusFactor() {
+		return backgroundRadiusFactor;
+	}
+
+	public void setBackgroundRadiusFactor(double backgroundRadiusFactor) {
+		this.backgroundRadiusFactor = backgroundRadiusFactor;
+	}
+
+	public AtomDisplay(AtomDisplay atomDisplay) {
+		super(atomDisplay);
+		this.elementDisplay = atomDisplay.elementDisplay;
+		this.chargeDisplay = atomDisplay.chargeDisplay;
+		this.groupDisplay = atomDisplay.groupDisplay;
+		this.idDisplay = atomDisplay.idDisplay;
+		this.isotopeDisplay = atomDisplay.isotopeDisplay;
+		this.labelDisplay = atomDisplay.labelDisplay;
+	}
 	
+ 	private void ensureElementDisplay() {
+		elementDisplay = (elementDisplay == null) ? new TextDisplay() : elementDisplay;
+	}
+
+
 	/**
 	 * @return the displayLabels
 	 */
@@ -58,27 +104,12 @@ public class AtomDisplay extends AbstractDisplay {
 	
 	protected void setDefaults() {
 		super.setDefaults();
-		backgroundChargeRadiusFactor = 0.4;
-		backgroundIdRadiusFactor = 0.4;
-		backgroundRadiusFactor = 0.4;
-		chargeFontFactor = 0.5;
-		chargeFontFactor = 0.8; // which?
-		displayCarbons = false;
-		displayLabels = false;
-		idFontFactor = 0.5;
-		scale = 1.0;
-		xChargeOffsetFactor = -0.5;
-		xChargeOffsetFactor = 0.7; // which?
-		xIdOffsetFactor = -0.1;
-		xOffsetFactor = -0.5;
-		yChargeOffsetFactor = -0.7;
-		yChargeOffsetFactor = -0.5; // which?
-		yIdOffsetFactor = -0.0;
-		yOffsetFactor = 0.7;
-		// charge
-		
-		
-		//
+		setLocalDefaults();
+		overrideSuperDefaults();
+	}
+
+	private void overrideSuperDefaults() {
+		display = true;
 		color = "black";
 		fill = color;
 		fontFamily = FONT_SANS_SERIF;
@@ -87,125 +118,31 @@ public class AtomDisplay extends AbstractDisplay {
 		fontWeight = FONT_WEIGHT_NORMAL;
 		stroke = null;
 				
-		xOffsetFactor = -0.34;
-		yOffsetFactor = 0.35;
-		// charge
+		elementDisplay = new TextDisplay();
+		chargeDisplay = null;
+		groupDisplay = null;
+		idDisplay = null;
+		isotopeDisplay = null;
+		labelDisplay = null;
+	}
 
-
+	private void setLocalDefaults() {
+		display = true;
+		displayCarbons = false;
+		displayLabels = false;
+		scale = 1.0;
 	}
 	
-	
-	/** copy constructor.
-	 * 
-	 * @param a
-	 */
-	public AtomDisplay(AtomDisplay a) {
+	public AtomDisplay(AbstractDisplay a) {
 		super(a);
-		this.backgroundChargeRadiusFactor= a.backgroundChargeRadiusFactor ;
-		this.backgroundIdRadiusFactor= a.backgroundIdRadiusFactor ;
-		this.backgroundRadiusFactor= a.backgroundRadiusFactor ;
-		this.chargeFontFactor= a.chargeFontFactor ;
-		this.displayCarbons= a.displayCarbons ;
-		this.displayLabels= a.displayLabels ;
-		this.idFontFactor= a.idFontFactor ;
-		this.scale= a.scale ;
-		this.xChargeOffsetFactor= a.xChargeOffsetFactor ;
-		this.xIdOffsetFactor= a.xIdOffsetFactor ;
-		this.xOffsetFactor= a.xOffsetFactor ;
-		this.yChargeOffsetFactor= a.yChargeOffsetFactor ;
-		this.yIdOffsetFactor= a.yIdOffsetFactor ;
-		this.yOffsetFactor= a.yOffsetFactor ;
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
 	 * @return the dEFAULT
 	 */
 	public static AtomDisplay getDEFAULT() {
 		return DEFAULT;
-	}
-	/**
-	 * @return the backgroundChargeRadiusFactor
-	 */
-	public double getBackgroundChargeRadiusFactor() {
-		return backgroundChargeRadiusFactor;
-	}
-	/**
-	 * @param backgroundChargeRadiusFactor the backgroundChargeRadiusFactor to set
-	 */
-	public void setBackgroundChargeRadiusFactor(double backgroundChargeRadiusFactor) {
-		this.backgroundChargeRadiusFactor = backgroundChargeRadiusFactor;
-	}
-	/**
-	 * @return the backgroundRadiusFactor
-	 */
-	public double getBackgroundRadiusFactor() {
-		return backgroundRadiusFactor;
-	}
-	/**
-	 * @param backgroundRadiusFactor the backgroundRadiusFactor to set
-	 */
-	public void setBackgroundRadiusFactor(double backgroundRadiusFactor) {
-		this.backgroundRadiusFactor = backgroundRadiusFactor;
-	}
-	/**
-	 * @return the chargeFontFactor
-	 */
-	public double getChargeFontFactor() {
-		return chargeFontFactor;
-	}
-	/**
-	 * @param chargeFontFactor the chargeFontFactor to set
-	 */
-	public void setChargeFontFactor(double chargeFontFactor) {
-		this.chargeFontFactor = chargeFontFactor;
-	}
-	/**
-	 * @return the xChargeOffsetFactor
-	 */
-	public double getXChargeOffsetFactor() {
-		return xChargeOffsetFactor;
-	}
-	/**
-	 * @param chargeOffsetFactor the xChargeOffsetFactor to set
-	 */
-	public void setXChargeOffsetFactor(double chargeOffsetFactor) {
-		xChargeOffsetFactor = chargeOffsetFactor;
-	}
-	/**
-	 * @return the xOffsetFactor
-	 */
-	public double getXOffsetFactor() {
-		return xOffsetFactor;
-	}
-	/**
-	 * @param offsetFactor the xOffsetFactor to set
-	 */
-	public void setXOffsetFactor(double offsetFactor) {
-		xOffsetFactor = offsetFactor;
-	}
-	/**
-	 * @return the yChargeOffsetFactor
-	 */
-	public double getYChargeOffsetFactor() {
-		return yChargeOffsetFactor;
-	}
-	/**
-	 * @param chargeOffsetFactor the yChargeOffsetFactor to set
-	 */
-	public void setYChargeOffsetFactor(double chargeOffsetFactor) {
-		yChargeOffsetFactor = chargeOffsetFactor;
-	}
-	/**
-	 * @return the yOffsetFactor
-	 */
-	public double getYOffsetFactor() {
-		return yOffsetFactor;
-	}
-	/**
-	 * @param offsetFactor the yOffsetFactor to set
-	 */
-	public void setYOffsetFactor(double offsetFactor) {
-		yOffsetFactor = offsetFactor;
 	}
 
 	/** can atom be omitted?
@@ -223,61 +160,6 @@ public class AtomDisplay extends AbstractDisplay {
 		return omit;
 	}
 
-	/**
-	 * @return the backgroundIdRadiusFactor
-	 */
-	public double getBackgroundIdRadiusFactor() {
-		return backgroundIdRadiusFactor;
-	}
-
-	/**
-	 * @param backgroundIdRadiusFactor the backgroundIdRadiusFactor to set
-	 */
-	public void setBackgroundIdRadiusFactor(double backgroundIdRadiusFactor) {
-		this.backgroundIdRadiusFactor = backgroundIdRadiusFactor;
-	}
-
-	/**
-	 * @return the idFontFactor
-	 */
-	public double getIdFontFactor() {
-		return idFontFactor;
-	}
-
-	/**
-	 * @param idFontFactor the idFontFactor to set
-	 */
-	public void setIdFontFactor(double idFontFactor) {
-		this.idFontFactor = idFontFactor;
-	}
-
-	/**
-	 * @return the xIdOffsetFactor
-	 */
-	public double getXIdOffsetFactor() {
-		return xIdOffsetFactor;
-	}
-
-	/**
-	 * @param idOffsetFactor the xIdOffsetFactor to set
-	 */
-	public void setXIdOffsetFactor(double idOffsetFactor) {
-		xIdOffsetFactor = idOffsetFactor;
-	}
-
-	/**
-	 * @return the yIdOffsetFactor
-	 */
-	public double getYIdOffsetFactor() {
-		return yIdOffsetFactor;
-	}
-
-	/**
-	 * @param idOffsetFactor the yIdOffsetFactor to set
-	 */
-	public void setYIdOffsetFactor(double idOffsetFactor) {
-		yIdOffsetFactor = idOffsetFactor;
-	}
 
 	/**
 	 * @return the displayCarbons
@@ -321,52 +203,6 @@ public class AtomDisplay extends AbstractDisplay {
 		// charge
 		
 		if (false) {
-		} else if (args[i].equalsIgnoreCase("-ATOM_XOFFSETFACTOR")) {
-			this.setXOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_YOFFSETFACTOR")) {
-			this.setYOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDRADIUSFACTOR")) {
-			this.setBackgroundRadiusFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_CHARGEFONTFACTOR")) {
-			this.setChargeFontFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_XCHARGEOFFSETFACTOR")) {
-			this.setXChargeOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_YCHARGEOFFSETFACTOR")) {
-			this.setYChargeOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDCHARGERADIUSFACTOR")) {
-			this.setBackgroundChargeRadiusFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_XIDOFFSETFACTOR")) {
-			this.setXIdOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_YIDOFFSETFACTOR")) {
-			this.setYIdOffsetFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_BACKGROUNDIDOFFSETFACTOR")) {
-			this.setBackgroundIdRadiusFactor(new Double(args[++i]).doubleValue()); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_DISPLAYCARBONS")) {
-			this.setDisplayCarbons(true); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_DISPLAYLABELS")) {
-			this.setDisplayLabels(true); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_FONTSIZE")) {
-			this.setFontSize(new Double(args[++i])); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_COLOR")) {
-			this.setColor(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_FILL")) {
-			this.setFill(args[++i]);
-		} else if (args[i].equalsIgnoreCase("-ATOM_STROKE")) {
-			this.setStroke(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_OPACITY")) {
-			this.setOpacity(new Double(args[++i])); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_FONTSTYLE")) {
-			this.setFontStyle(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_FONTWEIGHT")) {
-			this.setFontWeight(args[++i]);
-		} else if (args[i].equalsIgnoreCase("-ATOM_FONTFAMILY")) {
-			this.setFontFamily(args[++i]); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_SHOWHYDROGENS")) {
-			this.setOmitHydrogens(false); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_OMITHYDROGENS")) {
-			this.setOmitHydrogens(true); i++;
-		} else if (args[i].equalsIgnoreCase("-ATOM_SHOWCHILDLABELS")) {
-			this.setShowChildLabels(true); i++;
 		}
 		return i;
 	}
@@ -374,29 +210,162 @@ public class AtomDisplay extends AbstractDisplay {
 	public static void usage() {
 		
 		System.out.println(" AtomDisplay options ");
-	    System.out.println("    -ATOM_XOFFSETFACTOR value");
-	    System.out.println("    -ATOM_YOFFSETFACTOR value");
-	    System.out.println("    -ATOM_BACKGROUNDRADIUSFACTOR value");
-	    System.out.println("    -ATOM_CHARGEFONTFACTOR value");
-	    System.out.println("    -ATOM_XCHARGEOFFSETFACTOR value");
-	    System.out.println("    -ATOM_YCHARGEOFFSETFACTOR value");
-	    System.out.println("    -ATOM_BACKGROUNDCHARGERADIUSFACTOR value");
-	    System.out.println("    -ATOM_XIDOFFSETFACTOR value");
-	    System.out.println("    -ATOM_YIDOFFSETFACTOR value");
-	    System.out.println("    -ATOM_BACKGROUNDIDOFFSETFACTOR value");
-	    System.out.println("    -ATOM_DISPLAYCARBONS");
-	    System.out.println("    -ATOM_DISPLAYLABELS");
-		System.out.println("    -ATOM_FONTSIZE size(D)");
-		System.out.println("    -ATOM_COLOR fontColor");
-		System.out.println("    -ATOM_FILL areaFill (includes text)");
-		System.out.println("    -ATOM_STROKE stroke (line but not text)");
-		System.out.println("    -ATOM_OPACITY opacity(D 0-ATOM_1)");
-		System.out.println("    -ATOM_FONTSTYLE fontStyle");
-		System.out.println("    -ATOM_FONTWEIGHT fontWeight");
-		System.out.println("    -ATOM_FONTFAMILY fontFamily");
-		System.out.println("    -ATOM_OMITHYDROGENS");
-		System.out.println("    -ATOM_SHOWHYDROGENS");
-		System.out.println("    -ATOM_SHOWCHILDLABELS");
 		System.out.println();
+	}
+
+	public boolean isDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Boolean display) {
+		this.display = display;
+	}
+
+	public TextDisplay getElementDisplay() {
+		return elementDisplay;
+	}
+
+	public void setElementDisplay(TextDisplay elementDisplay) {
+		this.elementDisplay = elementDisplay;
+	}
+
+	private void enableChargeDisplay() {
+		if (this.chargeDisplay == null) {
+			this.chargeDisplay = new TextDisplay();
+			chargeDisplay.setDefaults();
+			setChargeDefaults();
+		}
+	}
+	public TextDisplay getChargeDisplay() {
+		enableChargeDisplay();
+		return chargeDisplay;
+	}
+
+	public void setChargeDisplay(TextDisplay chargeDisplay) {
+		this.chargeDisplay = chargeDisplay;
+	}
+
+	private void enableGroupDisplay() {
+		if (this.groupDisplay == null) {
+			this.groupDisplay = new TextDisplay();
+			groupDisplay.setDefaults();
+			setGroupDefaults();
+		}
+	}
+	
+	public TextDisplay getGroupDisplay() {
+		enableGroupDisplay();
+		return groupDisplay;
+	}
+
+	public void setGroupDisplay(TextDisplay groupDisplay) {
+		this.groupDisplay = groupDisplay;
+	}
+
+	private void enableIdDisplay() {
+		if (this.idDisplay == null) {
+			this.idDisplay = new TextDisplay();
+			idDisplay.setDefaults();
+			setIdDefaults();
+		}
+	}
+	
+	public TextDisplay getIdDisplay() {
+		enableIdDisplay();
+		return idDisplay;
+	}
+
+	public void setIdDisplay(TextDisplay idDisplay) {
+		this.idDisplay = idDisplay;
+	}
+
+	private void enableIsotopeDisplay() {
+		if (this.isotopeDisplay == null) {
+			this.isotopeDisplay = new TextDisplay();
+			isotopeDisplay.setDefaults();
+			setIsotopeDefaults();
+		}
+	}
+	
+	public TextDisplay getIsotopeDisplay() {
+		enableIsotopeDisplay();
+		return isotopeDisplay;
+	}
+
+	public void setIsotopeDisplay(TextDisplay isotopeDisplay) {
+		this.isotopeDisplay = isotopeDisplay;
+	}
+
+	private void enableLabelDisplay() {
+		if (this.labelDisplay == null) {
+			this.labelDisplay = new TextDisplay();
+			labelDisplay.setDefaults();
+			setLabelDefaults();
+		}
+	}
+	
+	public TextDisplay getLabelDisplay() {
+		enableLabelDisplay();
+		return labelDisplay;
+	}
+
+	public void setLabelDisplay(TextDisplay labelDisplay) {
+		this.labelDisplay = labelDisplay;
+	}
+
+	public void setDisplay(boolean display) {
+		this.display = display;
+	}
+
+	public boolean isDisplayIds() {
+		return displayIds;
+	}
+
+	public void setDisplayIds(boolean displayIds) {
+		this.displayIds = displayIds;
+	}
+
+	public boolean isDisplayGroups() {
+		return displayGroups;
+	}
+
+	public void setDisplayGroups(boolean displayGroups) {
+		this.displayGroups = displayGroups;
+	}
+
+	public String getDebugString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("AtomDisplay:");
+		sb.append(S_NEWLINE);
+		
+		sb.append((elementDisplay == null) ? "null elementDisplay" :
+			elementDisplay.getDebugString());
+		sb.append((chargeDisplay == null)  ? "null chargeDisplay" :
+			chargeDisplay.getDebugString());
+		sb.append((groupDisplay == null)   ? "null groupDisplay" :
+			groupDisplay.getDebugString());
+		sb.append((idDisplay == null)      ? "null idDisplay" :
+			idDisplay.getDebugString());
+		sb.append((isotopeDisplay == null) ? "null isotopeDisplay" :
+			isotopeDisplay.getDebugString());
+		sb.append((labelDisplay == null)   ? "null labelDisplay" :
+			labelDisplay.getDebugString());
+		
+		sb.append("  background Radius Factor: "+backgroundRadiusFactor);
+		sb.append(S_NEWLINE);
+		sb.append("  display:                  "+display);
+		sb.append(S_NEWLINE);
+		sb.append("  displayCarbons:           "+displayCarbons);
+		sb.append(S_NEWLINE);
+		sb.append("  displayIds:               "+displayIds);
+		sb.append(S_NEWLINE);
+		sb.append("  displayGroups:            "+displayGroups);
+		sb.append(S_NEWLINE);
+		sb.append("  displayLabels:            "+displayLabels);
+		sb.append(S_NEWLINE);
+		sb.append("  scale:                    "+scale);
+		sb.append(S_NEWLINE);
+		sb.append(S_NEWLINE);
+		return sb.toString();
 	}
 }

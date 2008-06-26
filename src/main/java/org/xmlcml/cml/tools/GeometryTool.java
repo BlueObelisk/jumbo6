@@ -753,7 +753,7 @@ public class GeometryTool extends AbstractTool {
     public void flip2D(CMLBond bond, CMLAtom atom) throws CMLException {
         try {
             CMLAtom otherAtom = bond.getOtherAtom(atom);
-            CMLAtomSet atomSet = moleculeTool.getDownstreamAtoms(atom, otherAtom);
+            CMLAtomSet atomSet = AtomTool.getOrCreateTool(atom).getDownstreamAtoms(otherAtom);
             Real2 this2 = atom.getXY2();
             Real2 other2 = otherAtom.getXY2();
             Vector2 this2v = new Vector2(this2);

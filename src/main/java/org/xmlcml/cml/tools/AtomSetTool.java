@@ -9,8 +9,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import nu.xom.Elements;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
@@ -607,6 +609,15 @@ public class AtomSetTool extends AbstractTool {
 		return molecule;
 	}
 
+	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
+		Nodes nodes = element.query("./cml:atomSet", CML_XPATH);
+		 List <CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
+		 for (int i = 0; i < nodes.size(); i++) {
+			 atomSetList.add((CMLAtomSet) nodes.get(i));
+		 }
+		return atomSetList;
+	}
+	    
 	/**
 	 * Calculate RMS between two CMLAtomSets of equal length and atoms in the same order.
 	 * @param atomSet2
@@ -624,5 +635,4 @@ public class AtomSetTool extends AbstractTool {
 		double sds = p3v1.getSigmaDeltaSquared(p3v2);
 		return Math.sqrt(sds/p3v1.size());
 	}
-
 }

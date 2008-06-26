@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
+
 
 
 /** display properties for bond.
@@ -12,10 +14,11 @@ public class BondDisplay extends AbstractDisplay {
 	private String multipleColor = "white";
 	private double width = 1.0;
 	private double scale = 1.0;
+	protected boolean omitHydrogens;
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
-		DEFAULT.setDefaults();
+ 	    DEFAULT.setDefaults();
 		
 	};
 
@@ -133,5 +136,22 @@ public class BondDisplay extends AbstractDisplay {
 		System.out.println("    -BOND_OPACITY opacity(D 0-BOND_1)");
 		System.out.println("    -BOND_SHOWCHILDLABELS");
 		System.out.println();
+	}
+	
+	public String getDebugString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("BondDisplay:");
+		sb.append(S_NEWLINE);
+		sb.append(super.getDebugString());
+		sb.append(S_NEWLINE);
+		
+		sb.append("  multipleColor: "+multipleColor);
+		sb.append(S_NEWLINE);
+		sb.append("  width:         "+width);
+		sb.append(S_NEWLINE);
+		sb.append("  scale:         "+scale);
+		sb.append(S_NEWLINE);
+		sb.append(S_NEWLINE);
+		return sb.toString();
 	}
 }

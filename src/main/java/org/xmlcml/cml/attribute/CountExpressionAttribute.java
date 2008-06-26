@@ -88,7 +88,7 @@ public class CountExpressionAttribute extends StringSTAttribute {
      * @param element to process
      * @throws CMLRuntimeException null element or bad attribute
      */
-    public static void cloneContentAndAppend(CMLElement element) throws CMLRuntimeException {
+    private static void cloneContentAndAppend(CMLElement element) throws CMLRuntimeException {
         if (element == null) {
             throw new CMLRuntimeException("Cannot process null element");
         }

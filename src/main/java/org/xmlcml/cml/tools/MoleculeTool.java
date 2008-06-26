@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -18,14 +17,13 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
-import org.xmlcml.cml.base.CMLElement.Hybridization;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -55,7 +53,6 @@ import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
@@ -65,7 +62,6 @@ import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
-import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
@@ -77,7 +73,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  */
 public class MoleculeTool extends AbstractSVGTool {
 
-	Logger logger = Logger.getLogger(MoleculeTool.class.getName());
+	static final Logger LOG = Logger.getLogger(MoleculeTool.class.getName());
 
     /** dewisott */
 	public static String HYDROGEN_COUNT = "hydrogenCount";
@@ -242,226 +238,6 @@ public class MoleculeTool extends AbstractSVGTool {
 	}
 
 	/**
-	 * get the double bond equivalents.
-	 *
-	 * this is the number of double bonds the atom can make an sp2 atom has 1 an
-	 * sp atom has 2
-	 *
-	 * @param atom
-	 * @param fcd
-	 * @return the bond sum (0, 1, 2)
-	 * @throws CMLRuntimeException
-	 *             if cannot get formal charges
-	 */
-	public int getDoubleBondEquivalents(CMLAtom atom, FormalChargeControl fcd) {
-		if (atom.getMolecule() == null) {
-			throw new CMLRuntimeException("WARNING skipping DBE");
-		}
-		int valenceElectrons = atom.getValenceElectrons();
-		int formalCharge = 0;
-		try {
-			formalCharge = atom.getFormalCharge(fcd);
-		} catch (CMLRuntimeException e) {
-			e.printStackTrace();
-		}
-		valenceElectrons -= formalCharge;
-		int maxBonds = (valenceElectrons < 4) ? valenceElectrons
-				: 8 - valenceElectrons;
-		// hydrogens are include in bondSum
-		int doubleBondEquivalents = maxBonds - this.getBondOrderSum(atom);
-		return doubleBondEquivalents;
-	}
-
-	/**
-	 * get sum of formal bondOrders. uses the actual ligands (i.e. implicit
-	 * hydrogens are not used) aromatic bonds are counted as 1.5, 1,2,3 aromatic
-	 * bonds add 1 double bond
-	 *
-	 * @param atom
-	 * @return sum (-1 means cannot be certain)
-	 */
-	public int getBondOrderSum(CMLAtom atom) {
-		int multipleBondSum = 0;
-		int aromaticBondSum = 0;
-		boolean ok = true;
-		List<CMLBond> ligandBonds = atom.getLigandBonds();
-		for (CMLBond ligandBond : ligandBonds) {
-			// if the bond is to a H atom then don't increment
-			// multipleBondSum as H's are dealt with further down
-			// the method.
-			boolean hasH = false;
-			for (CMLAtom bondAt : ligandBond.getAtoms()) {
-				if (AS.H.equals(bondAt.getElementType()) && bondAt != atom) {
-					hasH = true;
-				}
-			}
-			if (hasH) {
-				continue;
-			}
-			String order = ligandBond.getOrder();
-			if (order == null) {
-				multipleBondSum += 0;
-			} else if (order.equals(CMLBond.DOUBLE)) {
-				multipleBondSum += 2;
-			} else if (order.equals(CMLBond.TRIPLE)) {
-				multipleBondSum += 3;
-			} else if (order.equals(CMLBond.SINGLE)) {
-				multipleBondSum += 1;
-			} else if (order.equals(CMLBond.AROMATIC)) {
-				aromaticBondSum += 1;
-			} else {
-				logger.info("Unknown bond order:" + order + S_COLON);
-				ok = false;
-			}
-		}
-		// any aromatic bonds dictate SP2, so...
-		if (aromaticBondSum > 0) {
-			multipleBondSum = atom.getLigandBonds().size() + 1;
-		}
-		int hydrogenCount = 0;
-		try {
-			hydrogenCount = atom.getHydrogenCount();
-		} catch (CMLRuntimeException e) {
-		}
-		multipleBondSum += hydrogenCount;
-
-		return ((ok) ? multipleBondSum : -1);
-	}
-
-	/**
-	 * calculates the geometrical hybridization.
-	 *
-	 * calculates the geometrical hybridisation from 3D coords tetrahedron or
-	 * pyramid gives SP3 trigonal gives SP2 bent gives BENT linear gives SP
-	 * square planar gives SQ
-	 *
-	 * pyramidal and planar are distinguished by improper dihedral of 18 degrees
-	 *
-	 * @param atom
-	 * @return hybridisation (SP3, SP2, BENT, SP, SQUARE_PLANAR)
-	 */
-	public Hybridization getGeometricHybridization(CMLAtom atom) {
-		List<CMLAtom> ligands = atom.getLigandAtoms();
-		Hybridization geomHybridization = null;
-		if (ligands.size() <= 1 || ligands.size() > 4) {
-			return null;
-		}
-		Point3 thisXyz = atom.getXYZ3();
-		Angle angle = null;
-		if (thisXyz == null) {
-
-		} else if (ligands.size() == 2) {
-			Point3 thisXyz1 = ligands.get(0).getXYZ3();
-			Point3 thisXyz2 = ligands.get(1).getXYZ3();
-			try {
-				angle = Point3.getAngle(thisXyz1, thisXyz, thisXyz2);
-				if (angle.getDegrees() > 150) {
-					geomHybridization = Hybridization.SP;
-				} else {
-					geomHybridization = Hybridization.BENT;
-					// if (angle.getDegrees() > 115) return CMLAtom.SP2;
-					// return CMLAtom.SP3;
-				}
-			} catch (Exception e) {
-				logger.severe("BUG " + e);
-			}
-		} else if (ligands.size() == 3) {
-			Point3 thisXyz1 = ligands.get(0).getXYZ3();
-			Point3 thisXyz2 = ligands.get(1).getXYZ3();
-			Point3 thisXyz3 = ligands.get(2).getXYZ3();
-			// improper dihedral
-			try {
-				angle = Point3
-				.getTorsion(thisXyz1, thisXyz2, thisXyz3, thisXyz);
-				geomHybridization = Hybridization.SP2;
-				if (Math.abs(angle.getDegrees()) > 18) {
-					geomHybridization = Hybridization.SP3;
-				}
-			} catch (Exception e) {
-				logger.severe("BUG " + e);
-			}
-		} else {
-			geomHybridization = Hybridization.SP3;
-		}
-		return geomHybridization;
-	}
-
-	/**
-	 * a simple lookup for common atoms.
-	 *
-	 * examples are C, N, O, F, Si, P, S, Cl, Br, I if atom has electronegative
-	 * ligands, (O, F, Cl...) returns -1
-	 *
-	 * @param atom
-	 * @return group
-	 */
-	public int getHydrogenValencyGroup(CMLAtom atom) {
-		final int[] group = { 1, 4, 5, 6, 7, 4, 5, 6, 7, 7, 7 };
-		final int[] eneg0 = { 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1 };
-		final int[] eneg1 = { 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1 };
-		int elNum = -1;
-		try {
-			String elType = atom.getElementType();
-			elNum = CMLAtom.getCommonElementSerialNumber(elType);
-			if (elNum == -1) {
-				return -1;
-			}
-			if (eneg0[elNum] == 0) {
-				return group[elNum];
-			}
-			// if atom is susceptible to enegative ligands, exit if they are
-			// present
-			List<CMLAtom> ligandList = atom.getLigandAtoms();
-			for (CMLAtom lig : ligandList) {
-				int ligElNum = CMLAtom.getCommonElementSerialNumber(lig
-						.getElementType());
-				if (ligElNum == -1 || eneg1[ligElNum] == 1) {
-					return -2;
-				}
-			}
-		} catch (Exception e) {
-			logger.severe("BUG " + e);
-		}
-		int g = (elNum == -1) ? -1 : group[elNum];
-		return g;
-	}
-
-	/**
-	 * Add or delete hydrogen atoms to satisy valence.
-	 * ignore if hydrogenCount attribute is set
-	 * Uses algorithm: nH = 8 - group - sumbondorder + formalCharge, where group
-	 * is 0-8 in first two rows
-	 *
-	 * @param atom
-	 * @param control specifies whether H are explicit or in hydrogenCount
-	 */
-	public void adjustHydrogenCountsToValency(CMLAtom atom,
-			CMLMolecule.HydrogenControl control) {
-		if (atom.getHydrogenCountAttribute() == null) {
-			int group = this.getHydrogenValencyGroup(atom);
-			if (group == -1) {
-				return;
-			} else if (group == -2) {
-				return;
-			}
-			// hydrogen and metals
-			if (group < 4) {
-				return;
-			}
-			int sumBo = getSumNonHydrogenBondOrder(molecule, atom);
-			int fc = (atom.getFormalChargeAttribute() == null) ? 0 : atom
-					.getFormalCharge();
-			int nh = 8 - group - sumBo + fc;
-			// non-octet species
-			if (group == 4 && fc == 1) {
-				nh -= 2;
-			}
-			atom.setHydrogenCount(nh);
-			this.expandImplicitHydrogens(atom, control);
-		}
-	}
-
-	/**
 	 * get calculated molecular mass. 
      * uses hydrogenCount attribute to check hydrogens
 	 * @return calculated molecular mass.
@@ -504,72 +280,6 @@ public class MoleculeTool extends AbstractSVGTool {
 		return sum;
 	}
 
-
-	/**
-	 * Sums the formal orders of all bonds from atom to non-hydrogen ligands.
-	 *
-	 * Uses 1,2,3,A orders and creates the nearest integer. Thus 2 aromatic
-	 * bonds sum to 3 and 3 sum to 4. Bonds without order are assumed to be
-	 * single
-	 *
-	 * @param atom
-	 * @exception CMLRuntimeException
-	 *                null atom in argument
-	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
-	 *         H ligands
-	 */
-	public int getSumNonHydrogenBondOrder(CMLAtom atom) {
-		return MoleculeTool.getSumNonHydrogenBondOrder(this.molecule, atom);
-	}
-	/**
-	 * Sums the formal orders of all bonds from atom to non-hydrogen ligands.
-	 *
-	 * Uses 1,2,3,A orders and creates the nearest integer. Thus 2 aromatic
-	 * bonds sum to 3 and 3 sum to 4. Bonds without order are assumed to be
-	 * single
-	 * @param molecule 
-	 *
-	 * @param atom
-	 * @exception CMLRuntimeException
-	 *                null atom in argument
-	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
-	 *         H ligands
-	 */
-	public static int getSumNonHydrogenBondOrder(CMLMolecule molecule, CMLAtom atom)
-	throws CMLRuntimeException {
-		float sumBo = 0.0f;
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligand : ligandList) {
-			if (AS.H.equals(ligand.getElementType())) {
-				continue;
-			}
-			CMLBond bond = molecule.getBond(atom, ligand);
-			if (bond == null) {
-				throw new CMLRuntimeException(
-						"Serious bug in getSumNonHydrogenBondOrder");
-			}
-			String bo = bond.getOrder();
-			if (bo != null) {
-				if (bo.equals(CMLBond.SINGLE) || bo.equals(CMLBond.SINGLE_S)) {
-					sumBo += 1.0;
-				}
-				if (bo.equals(CMLBond.DOUBLE) || bo.equals(CMLBond.DOUBLE_D)) {
-					sumBo += 2.0;
-				}
-				if (bo.equals(CMLBond.TRIPLE) || bo.equals(CMLBond.TRIPLE_T)) {
-					sumBo += 3.0;
-				}
-				if (bo.equals(CMLBond.AROMATIC)) {
-					sumBo += 1.4;
-				}
-			} else {
-				// if no bond order, assume single
-				sumBo += 1.0;
-			}
-		}
-		return Math.round(sumBo);
-	}
-
 	/**
 	 * deletes a hydrogen from an atom.
 	 *
@@ -599,241 +309,6 @@ public class MoleculeTool extends AbstractSVGTool {
 				throw new CMLRuntimeException("No hydrogens to delete");
 			}
 		}
-	}
-
-	/**
-	 * Gets the nonHydrogenLigandList attribute of the AtomImpl object
-	 *
-	 * @param atom
-	 * @return The nonHydrogenLigandList value
-	 */
-	public List<CMLAtom> getNonHydrogenLigandList(CMLAtom atom) {
-		List<CMLAtom> newLigandList = new ArrayList<CMLAtom>();
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligand : ligandList) {
-			if (!AS.H.equals(ligand.getElementType())) {
-				newLigandList.add(ligand);
-			}
-		}
-		return newLigandList;
-	}
-
-	/**
-	 * gets all atoms downstream of a bond.
-	 *
-	 * recursively visits all atoms in branch until all leaves have been
-	 * visited. if branch is cyclic, halts when it rejoins atom or otherAtom
-	 * Example:
-	 *
-	 * <pre>
-	 *
-	 *  MoleculeTool moleculeTool ... contains relevant molecule
-	 *  CMLBond b ... (contains atom)
-	 *  CMLAtom otherAtom = b.getOtherAtom(atom);
-	 *  AtomSet ast = moleculeTool.getDownstreamAtoms(atom, otherAtom);
-	 *
-	 *  @param atom
-	 *  @param otherAtom not to be visited
-	 *  @return the atomSet (empty if none)
-	 *
-	 */
-	public CMLAtomSet getDownstreamAtoms(CMLAtom atom, CMLAtom otherAtom) {
-		CMLAtomSet atomSet = new CMLAtomSet();
-		boolean forceUpdate = false;
-		getDownstreamAtoms(atom, atomSet, otherAtom, forceUpdate);
-		atomSet.updateContent();
-		return atomSet;
-	}
-
-	/**
-	 * gets all atoms downstream of a bond.
-	 * VERY SLOW I THINK
-	 * recursively visits all atoms in branch until all leaves have been
-	 * visited. if branch is cyclic, halts when it rejoins atom or otherAtom the
-	 * routine is passed a new AtomSetImpl to be populated
-	 * <pre>
-	 *   Example: CMLBond b ... (contains atom)
-	 *     CMLAtom otherAtom = b.getOtherAtom(atom);
-	 *     AtomSet ast = new AtomSetImpl();
-	 *     atom.getDownstreamAtoms(ast, otherAtom);
-	 * </pre>
-	 * @param atom
-	 * @param atomSet
-	 *            to accumulate ligand atoms
-	 * @param otherAtom
-	 *            not to be visited
-	 *
-	 */
-	private void getDownstreamAtoms(CMLAtom atom, CMLAtomSet atomSet,
-			CMLAtom otherAtom, boolean forceUpdate) {
-
-		atomSet.addAtom(atom, forceUpdate);
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligandAtom : ligandList) {
-			// do not revisit atoms
-			if (atomSet.contains(ligandAtom)) {
-				;
-				// do not backtrack
-			} else if (ligandAtom.equals(otherAtom)) {
-				;
-			} else {
-				this.getDownstreamAtoms(ligandAtom, atomSet, atom, forceUpdate);
-			}
-		}
-	}
-
-	/**
-	 * append to id creates new id, perhaps to disambiguate
-	 *
-	 * @param atom
-	 * @param s
-	 */
-	public void appendToId(CMLAtom atom, final String s) {
-		String id = atom.getId();
-		if ((id != null) && (id.length() > 0)) {
-			atom.renameId(id + s);
-		} else {
-			atom.renameId(s);
-		}
-	}
-
-	/**
-	 * Adds 3D coordinates for singly-bonded ligands of this.
-	 *
-	 * <pre>
-	 *       this is labelled A.
-	 *       Initially designed for hydrogens. The ligands of A are identified
-	 *       and those with 3D coordinates used to generate the new points. (This
-	 *       allows structures with partially known 3D coordinates to be used, as when
-	 *       groups are added.)
-	 *       &quot;Bent&quot; and &quot;non-planar&quot; groups can be formed by taking a subset of the
-	 *       calculated points. Thus R-NH2 could use 2 of the 3 points calculated
-	 *       from (1,iii)
-	 *       nomenclature: &quot;this&quot; is point to which new ones are &quot;attached&quot;.
-	 *           this may have ligands B, C...
-	 *           B may have ligands J, K..
-	 *           points X1, X2... are returned
-	 *       The cases (see individual routines, which use idealised geometry by default):
-	 *       (0) zero ligands of A. The resultant points are randomly oriented:
-	 *          (i) 1 points  required; +x,0,0
-	 *          (ii) 2 points: use +x,0,0 and -x,0,0
-	 *          (iii) 3 points: equilateral triangle in xy plane
-	 *          (iv) 4 points x,x,x, x,-x,-x, -x,x,-x, -x,-x,x
-	 *       (1a) 1 ligand(B) of A which itself has a ligand (J)
-	 *          (i) 1 points  required; vector along AB vector
-	 *          (ii) 2 points: 2 vectors in ABJ plane, staggered and eclipsed wrt J
-	 *          (iii) 3 points: 1 staggered wrt J, the others +- gauche wrt J
-	 *       (1b) 1 ligand(B) of A which has no other ligands. A random J is
-	 *       generated and (1a) applied
-	 *       (2) 2 ligands(B, C) of this
-	 *          (i) 1 points  required; vector in ABC plane bisecting AB, AC. If ABC is
-	 *              linear, no points
-	 *          (ii) 2 points: 2 vectors at angle ang, whose resultant is 2i
-	 *       (3) 3 ligands(B, C, D) of this
-	 *          (i) 1 points  required; if A, B, C, D coplanar, no points.
-	 *             else vector is resultant of BA, CA, DA
-	 *
-	 *       The method identifies the ligands without coordinates, calculates them
-	 *       and adds them. It assumes that the total number of ligands determines the
-	 *       geometry. This can be overridden by the geometry parameter. Thus if there
-	 *       are three ligands and TETRAHEDRAL is given a pyramidal geometry is created
-	 *
-	 *       Inappropriate cases throw exceptions.
-	 *
-	 *       fails if atom itself has no coordinates or &gt;4 ligands
-	 *       see org.xmlcml.molutils.Molutils for more details
-	 *
-	 * </pre>
-	 *
-	 * @param atom
-	 * @param geometry
-	 *            from: Molutils.DEFAULT, Molutils.ANY, Molutils.LINEAR,
-	 *            Molutils.TRIGONAL, Molutils.TETRAHEDRAL
-	 * @param length
-	 *            A-X length
-	 * @param angle
-	 *            B-A-X angle (used for some cases)
-	 * @return atomSet with atoms which were calculated. If request could not be
-	 *         fulfilled (e.g. too many atoms, or strange geometry) returns
-	 *         empty atomSet (not null)
-	 * @throws CMLException
-	 */
-	public CMLAtomSet calculate3DCoordinatesForLigands(CMLAtom atom,
-			int geometry, double length, double angle) throws CMLException {
-		Point3 thisPoint;
-		// create sets of atoms with and without ligands
-		CMLAtomSet noCoordsLigandsAS = new CMLAtomSet();
-		if (atom.getX3Attribute() == null) {
-			return noCoordsLigandsAS;
-		} else {
-			thisPoint = atom.getXYZ3();
-		}
-		CMLAtomSet coordsLigandsAS = new CMLAtomSet();
-
-		// atomSet containing atoms without coordinates
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligandAtom : ligandList) {
-			if (ligandAtom.getX3Attribute() == null) {
-				noCoordsLigandsAS.addAtom(ligandAtom);
-			} else {
-				coordsLigandsAS.addAtom(ligandAtom);
-			}
-		}
-		int nWithoutCoords = noCoordsLigandsAS.size();
-		int nWithCoords = coordsLigandsAS.size();
-		if (geometry == Molutils.DEFAULT) {
-			geometry = atom.getLigandAtoms().size();
-		}
-
-		// too many ligands at present
-		if (nWithCoords > 3) {
-			CMLAtomSet emptyAS = new CMLAtomSet();
-			// FIXME??
-			return emptyAS;
-			// nothing needs doing
-		} else if (nWithoutCoords == 0) {
-			return noCoordsLigandsAS;
-		}
-
-		List<Point3> newPoints = null;
-		List<CMLAtom> coordAtoms = coordsLigandsAS.getAtoms();
-		List<CMLAtom> noCoordAtoms = noCoordsLigandsAS.getAtoms();
-		if (nWithCoords == 0) {
-			newPoints = Molutils.calculate3DCoordinates0(thisPoint,
-				geometry, length);
-		} else if (nWithCoords == 1) {
-			// ligand on A
-			CMLAtom bAtom = (CMLAtom) coordAtoms.get(0);
-			// does B have a ligand (other than A)
-			CMLAtom jAtom = null;
-			List<CMLAtom> bLigandList = bAtom.getLigandAtoms();
-			for (CMLAtom bLigand : bLigandList) {
-				if (!bLigand.equals(this)) {
-					jAtom = bLigand;
-					break;
-				}
-			}
-			newPoints = Molutils.calculate3DCoordinates1(thisPoint, bAtom
-					.getXYZ3(), (jAtom != null) ? jAtom.getXYZ3() : null,
-							geometry, length, angle);
-		} else if (nWithCoords == 2) {
-			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
-			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
-			newPoints = Molutils.calculate3DCoordinates2(thisPoint, bPoint,
-					cPoint, geometry, length, angle);
-		} else if (nWithCoords == 3) {
-			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
-			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
-			Point3 dPoint = ((CMLAtom) coordAtoms.get(2)).getXYZ3();
-			newPoints = new ArrayList<Point3>(1);
-			newPoints.add(Molutils.calculate3DCoordinates3(thisPoint,
-					bPoint, cPoint, dPoint, length));
-		}
-		int np = Math.min(noCoordsLigandsAS.size(), newPoints.size());
-		for (int i = 0; i < np; i++) {
-			((CMLAtom) noCoordAtoms.get(i)).setXYZ3(newPoints.get(i));
-		}
-		return noCoordsLigandsAS;
 	}
 
 	// ============ atom matcher ==============
@@ -953,78 +428,6 @@ public class MoleculeTool extends AbstractSVGTool {
 		return atomList;
 	}
 
-	/**
-	 * Expand implicit hydrogen atoms.
-	 *
-	 * This needs looking at
-	 *
-	 * CMLMolecule.NO_EXPLICIT_HYDROGENS 
-	 * CMLMolecule.USE_HYDROGEN_COUNT // no
-	 * action
-	 *
-	 * @param atom
-	 * @param control
-	 * @throws CMLRuntimeException
-	 */
-	public void expandImplicitHydrogens(CMLAtom atom,
-			CMLMolecule.HydrogenControl control) throws CMLRuntimeException {
-		if (control.equals(CMLMolecule.HydrogenControl.USE_HYDROGEN_COUNT)) {
-			return;
-		}
-		if (atom.getHydrogenCountAttribute() == null
-				|| atom.getHydrogenCount() == 0) {
-			return;
-		}
-		int hydrogenCount = atom.getHydrogenCount();
-		int currentHCount = 0;
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligand : ligandList) {
-			if (ligand.getElementType().equals(AS.H.value)) {
-				currentHCount++;
-			}
-		}
-		// FIXME. This needs rethinking
-		if (control.equals(CMLMolecule.HydrogenControl.NO_EXPLICIT_HYDROGENS)
-				&& currentHCount != 0) {
-			return;
-		}
-		String id = atom.getId();
-		for (int i = 0; i < hydrogenCount - currentHCount; i++) {
-			CMLAtom hatom = new CMLAtom(id + "_h" + (i + 1));
-			molecule.addAtom(hatom);
-			hatom.setElementType(AS.H.value);
-			CMLBond bond = new CMLBond(atom, hatom);
-			molecule.addBond(bond);
-			bond.setOrder("1");
-		}
-	}
-
-	/**
-	 * gets lone electrons on atom. electrons not involved in bonding assumes
-	 * accurate hydrogen count only currently really works for first row (C, N,
-	 * O, F) calculated as getHydrogenValencyGroup() -
-	 * (getSumNonHydrogenBondOrder() + getHydrogenCount()) -
-	 * atom.getFormalCharge()
-	 *
-	 * @param atom
-	 * @return number of lone electrons (< 0 means cannot calculate)
-	 */
-	public int getLoneElectronCount(CMLAtom atom) {
-		int loneElectronCount = -1;
-		int group = this.getHydrogenValencyGroup(atom);
-		if (group == -1) {
-			return -1;
-		}
-		int sumNonHBo = MoleculeTool.getSumNonHydrogenBondOrder(molecule, atom);
-		int nHyd = atom.getHydrogenCount();
-		int formalCharge = 0;
-		if (atom.getFormalChargeAttribute() != null) {
-			formalCharge = atom.getFormalCharge();
-		}
-		loneElectronCount = group - (sumNonHBo + nHyd) - formalCharge;
-		return loneElectronCount;
-	}
-	
 	@SuppressWarnings("unused")
 	private void getHybridizationFromConnectivty() {
 		@SuppressWarnings("unused")
@@ -1043,7 +446,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			try {
 				elType = atom.getElementType();
 			} catch (Exception e) {
-				logger.severe("BUG " + e);
+				LOG.error("BUG " + e);
 			}
 			valence[i] = -1;
 			if (AS.H.equals(elType) || AS.F.equals(elType) || AS.Cl.equals(elType)
@@ -1115,7 +518,7 @@ public class MoleculeTool extends AbstractSVGTool {
 					try {
 						order = bond.getOrder();
 					} catch (Exception e) {
-						logger.severe("BUG " + e);
+						LOG.error("BUG " + e);
 					}
 					if (order.equals(CMLBond.UNKNOWN_ORDER)) {
 						missingBond[nMissing++] = bond;
@@ -1148,7 +551,7 @@ public class MoleculeTool extends AbstractSVGTool {
 						try {
 							missingBond[j].setOrder(CMLBond.SINGLE);
 						} catch (Exception e) {
-							logger.severe("BUG " + e);
+							LOG.error("BUG " + e);
 						}
 					}
 					change = true;
@@ -1164,7 +567,7 @@ public class MoleculeTool extends AbstractSVGTool {
 						try {
 							missingBond[0].setOrder(newOrder);
 						} catch (Exception e) {
-							logger.severe("BUG " + e);
+							LOG.error("BUG " + e);
 						}
 						change = true;
 					}
@@ -1342,6 +745,20 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		return ligandList;
 	}
+	
+	public void addGroupLabels() {
+		for (CMLAtom atom : molecule.getAtoms()) {
+			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+			atomTool.createGroupLabelAndAtomSet();
+		}
+	}
+
+	public void addFormula() {
+		if (molecule.getFormulaElements().size() == 0) {
+			CMLFormula formula = new CMLFormula(molecule);
+			molecule.appendChild(formula);
+		}
+	}
 
 	/**
 	 * Creates new Molecule one ligand shell larger than this one. uses
@@ -1355,133 +772,6 @@ public class MoleculeTool extends AbstractSVGTool {
 	}
 
 	// ====================== BOND ============
-
-	/**
-	 * get substituent ligands of one end of bond.
-	 *
-	 * gets all substituent atoms of atom (but not otherAtom in bond)
-	 *
-	 * @param bond
-	 * @param atom at one end of bond
-	 * @return the list of substituent atoms
-	 */
-	private static List<CMLAtom> getSubstituentLigandList(CMLBond bond, CMLAtom atom) {
-		CMLAtom otherAtom = bond.getOtherAtom(atom);
-		List<CMLAtom> substituentLigandList = new ArrayList<CMLAtom>();
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		for (CMLAtom ligand : ligandList) {
-			if (!ligand.equals(otherAtom)) {
-				substituentLigandList.add(ligand);
-			}
-		}
-		return substituentLigandList;
-	}
-
-	/**
-	 * gets four atoms defining cis/trans isomerism.
-	 *
-	 * selects 4 atoms lig0-atom0-atom1-lig1, where atom0 and atom1 are the
-	 * atoms in the bond and lig0 and lig1 are atoms bonded to each end
-	 * respectively Returns null unless atom0 and atom 1 each have 1 or 2
-	 * ligands (besides themselves) if atom0 and/or atom1 have 2 ligands the
-	 * selection is deterministic but arbitrary - hydrogens are not used if
-	 * possible - normally the first Id in lexical order (i.e. no implied
-	 * semantics). Exceptions are thrown if ligands are linear with atom0-atom1
-	 * or 2 ligands on same atom are on the same side these may be normal
-	 * exceptions (e.g. in a C=O bond) so should be caught and analysed rather
-	 * than dumping the program
-	 *
-	 * @param bond
-	 * @exception CMLRuntimeException
-	 *                2 ligand atoms on same atom on same side too few or too
-	 *                many ligands at either end (any) ligand is linear with
-	 *                bond
-	 * @return the four atoms
-	 */
-	static CMLAtom[] createAtomRefs4(CMLBond bond) throws CMLRuntimeException {
-		CMLAtom[] atom4 = null;
-		List<CMLAtom> atomList = bond.getAtoms();
-		List<CMLAtom> ligands0 = getSubstituentLigandList(bond, atomList.get(0));
-		List<CMLAtom> ligands1 = getSubstituentLigandList(bond, atomList.get(1));
-		if (ligands0.size() == 0) {
-			// no ligands on atom
-		} else if (ligands1.size() == 0) {
-			// no ligands on atom
-		} else if (ligands0.size() > 2) {
-			throw new CMLRuntimeException("Too many ligands on atom: "
-					+ atomList.get(0).getId());
-		} else if (ligands1.size() > 2) {
-			throw new CMLRuntimeException("Too many ligands on atom: "
-					+ atomList.get(1).getId());
-		} else {
-			CMLAtom ligand0 = ligands0.get(0);
-			if (AS.H.equals(ligand0.getElementType()) && ligands0.size() > 1
-					&& ligands0.get(1) != null) {
-				ligand0 = ligands0.get(1);
-			} else if (ligands0.size() > 1
-					&& ligands0.get(1).getId().compareTo(atomList.get(0).getId()) < 0) {
-				ligand0 = ligands0.get(1);
-			}
-			CMLAtom ligand1 = ligands1.get(0);
-			if (AS.H.equals(ligand1.getElementType()) && ligands1.size() > 1
-					&& ligands1.get(1) != null) {
-				ligand1 = ligands1.get(1);
-			} else if (ligands1.size() > 1
-					&& ligands1.get(1).getId().compareTo(atomList.get(1).getId()) < 0) {
-				ligand1 = ligands1.get(1);
-			}
-			atom4 = new CMLAtom[4];
-			atom4[0] = ligand0;
-			atom4[1] = atomList.get(0);
-			atom4[2] = atomList.get(1);
-			atom4[3] = ligand1;
-		}
-		return atom4;
-	}
-
-	/**
-	 * gets four atoms defining atomParity isomerism.
-	 * applies only to 4-coordinate atoms l1-X(l2)(l3)-l4
-	 * and possibly 3-coordinate atoms l1-X(l2)-l3
-	 * when central atom is added to list: l1-l2-l3-X
-	 *
-	 * @param atom
-	 * @return the four atoms or null
-	 */
-	static CMLAtom[] getAtomRefs4(CMLAtom atom) throws CMLRuntimeException {
-		CMLAtom[] atom4 = null;
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-		if (ligandList.size() < 3) {
-		} else {
-			atom4 = new CMLAtom[4];
-			atom4[0] = ligandList.get(0);
-			atom4[1] = ligandList.get(1);
-			atom4[2] = ligandList.get(2);
-			atom4[3] = (ligandList.size() == 3) ? atom : ligandList.get(3);
-		}
-		return atom4;
-	}
-
-	/**
-	 * gets atoms on one side of bond. only applicable to acyclic bonds if bond
-	 * is cyclic, whole molecule will be returned! returns atom and all
-	 * descendant atoms.
-	 *
-	 * @param bond
-	 * @param atom defining side of bond
-	 * @throws CMLRuntimeException atom is not in bond
-	 * @return atomSet of downstream atoms
-	 */
-	public CMLAtomSet getDownstreamAtoms(CMLBond bond, CMLAtom atom) {
-		CMLAtomSet atomSet = new CMLAtomSet();
-		CMLAtom otherAtom = bond.getOtherAtom(atom);
-		if (otherAtom != null) {
-			atomSet = getDownstreamAtoms(otherAtom, atom);
-		}
-		return atomSet;
-	}
-
-	// ==================== MOLECULE ====================
 
 	/**
 	 * add suffix to atom IDs.
@@ -1515,7 +805,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		} else {
 			List<CMLAtom> atoms = molecule.getAtoms();
 			for (CMLAtom atom : atoms) {
-				this.adjustHydrogenCountsToValency(atom, control);
+				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+				atomTool.adjustHydrogenCountsToValency(control);
 			}
 		}
 	}
@@ -1538,7 +829,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			for (CMLAtom atom : atoms) {
 				if (!AS.H.equals(atom.getElementType())) {
 					if (contractStereoH) {
-						this.contractExplicitHydrogens(atom, control);
+						AtomTool.getOrCreateTool(atom).contractExplicitHydrogens(control);
 					} else {
 						boolean contract = true;
 						for (CMLBond bond : atom.getLigandBonds()) {
@@ -1555,31 +846,12 @@ public class MoleculeTool extends AbstractSVGTool {
 							contract = false;
 						}
 						if (contract) {
-							this.contractExplicitHydrogens(atom, control);
+							AtomTool.getOrCreateTool(atom).contractExplicitHydrogens(control);
 						}
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Contracts the hydrogens on an atom.
-	 *
-	 * @param atom
-	 *            to contract
-	 * @param control
-	 */
-	public void contractExplicitHydrogens(CMLAtom atom, HydrogenControl control) {
-		int hCount = (atom.getHydrogenCountAttribute() == null) ? 0 : atom
-				.getHydrogenCount();
-		Set<ChemicalElement> hSet = ChemicalElement
-		.getElementSet(new String[] { AS.H.value });
-		List<CMLAtom> ligands = CMLAtom.filter(atom.getLigandAtoms(), hSet);
-		for (CMLAtom ligand : ligands) {
-			molecule.deleteAtom(ligand);
-		}
-		atom.setHydrogenCount(Math.max(hCount, ligands.size()));
 	}
 
 	/**
@@ -1591,7 +863,8 @@ public class MoleculeTool extends AbstractSVGTool {
 	public void expandImplicitHydrogens(HydrogenControl control) {
 		for (CMLAtom atom : molecule.getAtoms()) {
 			if (!AS.H.equals(atom.getElementType())) {
-				this.expandImplicitHydrogens(atom, control);
+				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+				atomTool.expandImplicitHydrogens(control);
 			}
 		}
 	}
@@ -1646,7 +919,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			try {
 				order = bond.getOrder();
 			} catch (Exception e) {
-				logger.severe("BUG " + e);
+				LOG.error("BUG " + e);
 			}
 			// order not available?
 			if (order == null || order.equals(CMLBond.UNKNOWN_ORDER)) {
@@ -2025,18 +1298,6 @@ public class MoleculeTool extends AbstractSVGTool {
 		return connectionTableTool.getRingNucleiMolecules();
 	}
 
-//	private void flattenJoinMoleculeChildren() {
-//		int idx = molecule.getParent().indexOf(molecule);
-//		Nodes moleculesAndJoin = molecule.query(CMLMolecule.NS+X_OR+CMLJoin.NS+"'",
-//				CML_XPATH);
-//		for (int i = 0; i < moleculesAndJoin.size(); i++) {
-//			Node node = moleculesAndJoin.get(i);
-//			node.detach();
-//			molecule.getParent().insertChild(node, idx + 1 + i);
-//		}
-//	}
-//
-
 	/**
 	 * join one molecule to another. 
 	 * manages the XML but not yet the geometry
@@ -2130,11 +1391,31 @@ public class MoleculeTool extends AbstractSVGTool {
 						// empty torsion;
 					}
 					CMLAtomSet moveableAtomSet =
-						this.getDownstreamAtoms(atom1, atom0);
+						AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
 					torsion.adjustCoordinates(new Angle(d, Angle.Units.DEGREES),
 							moleculeAtomSet, moveableAtomSet);
 					// this is to avoid the torsion being reused
 					torsion.removeAttribute("atomRefs4");
+				}
+			}
+		}
+	}
+	
+	public void adjustHydrogenLengths(double factor) {
+		LOG.debug("hlen factor "+factor);
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (CMLAtom atom : atoms) {
+			if ("H".equals(atom.getElementType())) {
+				Real2 xy = atom.getXY2();
+				if (xy != null) {
+					List<CMLAtom> ligands = atom.getLigandAtoms();
+					if (ligands.size() == 1) {
+						Real2 xyLig = ligands.get(0).getXY2();
+						Real2 vector = xy.subtract(xyLig);
+						vector = vector.multiplyBy(factor);
+						Real2 xy1 = xyLig.plus(vector);
+						atom.setXY2(xy1);
+					}
 				}
 			}
 		}
@@ -2332,8 +1613,10 @@ public class MoleculeTool extends AbstractSVGTool {
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	moleculeDisplay = (drawable instanceof MoleculeDisplayList) ? 
     			((MoleculeDisplayList)drawable).getMoleculeDisplay() : moleculeDisplay;
-    	AtomDisplay atomDisplayx = (moleculeDisplay == null) ? null :
-    		moleculeDisplay.getAtomDisplay();
+		enableMoleculeDisplay();
+    	System.out.println("MOLECULE "+moleculeDisplay.getDebugString());
+    	BondDisplay defaultBondDisplay = moleculeDisplay.getDefaultBondDisplay();
+    	AtomDisplay defaultAtomDisplay = moleculeDisplay.getDefaultAtomDisplay();
     	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
     	enableMoleculeDisplay();
     	Transform2 transform2 = new Transform2(
@@ -2359,18 +1642,19 @@ public class MoleculeTool extends AbstractSVGTool {
 	    	g = createSVGElement(drawable, transform2);
 	    	g.setProperties(moleculeDisplay);
     	}
-    	BondDisplay bondDisplay = moleculeDisplay.getBondDisplay();
-    	bondDisplay.setScale(avlength);
+    	defaultBondDisplay.setScale(avlength);
     	
-    	AtomDisplay atomDisplay = moleculeDisplay.getAtomDisplay();
-    	atomDisplay.setScale(avlength);
-    	displayBonds(drawable, g, bondDisplay, atomDisplay);
+    	defaultAtomDisplay.setScale(avlength);
     	if (molecule.getAtomCount() == 1) {
-    		atomDisplay.setDisplayCarbons(true);
+    		defaultAtomDisplay.setDisplayCarbons(true);
     	} 
-    	displayAtoms(drawable, g, atomDisplay);
+    	setGroupVisibility(atoms);
+    	
+    	displayBonds(drawable, g, defaultBondDisplay, defaultAtomDisplay);
+    	displayAtoms(drawable, g, defaultAtomDisplay);
     	
     	if (moleculeDisplay.isDisplayFormula()) {
+    		LOG.debug("FORMULA");
     		displayFormula(drawable, g);
     	}
     	if (moleculeDisplay.isDisplayLabels()) {
@@ -2388,6 +1672,19 @@ public class MoleculeTool extends AbstractSVGTool {
     		}
     	}
     	return g;
+    }
+    
+    private void setGroupVisibility(List<CMLAtom> atoms) {
+    	if (true || Level.DEBUG.equals(LOG.getLevel())) {
+    		molecule.debug("VIS");
+    	}
+    	LOG.debug("GROUPVIS");
+    	for (CMLAtom atom : atoms) {
+    		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+    		if (atomTool.isGroupRoot()) {
+    			atomTool.setDisplay(false);
+    		}
+    	}
     }
 
 	private Transform2 scaleToBoundingBoxesAndScreenLimits(Transform2 transform2) {
@@ -2417,14 +1714,14 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		return userBoundingBox;
 	}
-	
 
 	private void displayAtoms(CMLDrawable drawable, SVGElement g, AtomDisplay atomDisplay) {
 		for (CMLAtom atom : molecule.getAtoms()) {
     		AtomTool atomTool = getOrCreateAtomTool(atom);
-    		atomTool.setAtomDisplay(atomDisplay);
+    		atomTool.ensureAtomDisplay();
     		atomTool.setMoleculeTool(this);
     		if (atomDisplay.omitAtom(atom)) {
+    			LOG.debug("HIDDEN ATOM "+atom);
     			continue;
     		}
     		GraphicsElement a = atomTool.createGraphicsElement(drawable);
@@ -2434,8 +1731,9 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	private void displayBonds(CMLDrawable drawable, SVGElement g,
-			BondDisplay bondDisplay, AtomDisplay atomDisplay) {
+	private void displayBonds(
+		CMLDrawable drawable, SVGElement g,
+		BondDisplay bondDisplay, AtomDisplay atomDisplay) {
 		for (CMLBond bond : molecule.getBonds()) {
     		BondTool bondTool = getOrCreateBondTool(bond);
     		bondTool.setBondDisplay(bondDisplay);
@@ -2553,7 +1851,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public MoleculeDisplay getMoleculeDisplay() {
 		if (moleculeDisplay == null) {
-			moleculeDisplay = new MoleculeDisplay();
+			moleculeDisplay = new MoleculeDisplay(this);
 		}
 		return moleculeDisplay;
 	}

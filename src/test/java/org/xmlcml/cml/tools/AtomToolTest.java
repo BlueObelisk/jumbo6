@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidFile;
 import static org.xmlcml.util.TestUtils.parseValidString;
@@ -18,6 +19,8 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.MoleculeAtomBondTest;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Vector3;
+import org.xmlcml.euclid.test.Vector3Test;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -250,4 +253,28 @@ public class AtomToolTest extends MoleculeAtomBondTest {
     	Assert.assertEquals("atom id", "a1", atomList.get(0).getId());
 
 	}
+	
+
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLAtom.get3DCrossProduct(CMLAtom, CMLAtom)'
+     */
+    @Test
+    public void testGet3DCrossProduct() {
+        Vector3 cross3d = AtomTool.getOrCreateTool(xmlAtom[0]).get3DCrossProduct(xmlAtom[1], xmlAtom[2]);
+        Vector3Test.assertEquals("cross3d", new double[] { 0., 2., -2. },
+                cross3d, EPS);
+    }
+
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLAtom.get2DCrossProduct(CMLAtom, CMLAtom)'
+     */
+    @Test
+    public void testGet2DCrossProduct() {
+        Vector3 cross2d = AtomTool.getOrCreateTool(xmlAtom[0]).get2DCrossProduct(xmlAtom[1], xmlAtom[2]);
+        Vector3Test.assertEquals("cross2d", new double[] { 0., 0., -2. },
+                cross2d, EPS);
+    }
+
  }

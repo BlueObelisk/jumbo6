@@ -167,7 +167,7 @@ public class SVGElement extends GraphicsElement {
 	 * @param moleculeDisplay
 	 */
 	public void setProperties(MoleculeDisplay moleculeDisplay) {
-//		this.setFontStyle(moleculeDisplay.getFontStyle());
+		this.setFontStyle(moleculeDisplay.getFontStyle());
 		this.setFontWeight(moleculeDisplay.getFontWeight());
 		this.setFontFamily(moleculeDisplay.getFontFamily());
 		this.setFontSize(moleculeDisplay.getFontSize());
@@ -175,8 +175,8 @@ public class SVGElement extends GraphicsElement {
 		this.setStroke(moleculeDisplay.getStroke());
 		this.setOpacity(moleculeDisplay.getOpacity());
 		
-		this.setProperties(moleculeDisplay.getAtomDisplay());
-		this.setProperties(moleculeDisplay.getBondDisplay());
+		this.setProperties(moleculeDisplay.getDefaultAtomDisplay());
+		this.setProperties(moleculeDisplay.getDefaultBondDisplay());
 	}
 	
 	/** set properties.
@@ -184,7 +184,7 @@ public class SVGElement extends GraphicsElement {
 	 * @param abstractDisplay
 	 */
 	public void setProperties(AbstractDisplay abstractDisplay) {
-//		this.setFontStyle(abstractDisplay.getFontStyle());
+		this.setFontStyle(abstractDisplay.getFontStyle());
 		this.setFontWeight(abstractDisplay.getFontWeight());
 		this.setFontFamily(abstractDisplay.getFontFamily());
 		this.setFontSize(abstractDisplay.getFontSize());
@@ -403,7 +403,7 @@ public class SVGElement extends GraphicsElement {
 		text.setFill("red");
 		text.setStrokeWidth(1.5);
 		text.setFontSize(20);
-//		text.setFontStyle("italic");
+		text.setFontStyle("italic");
 		text.setFontWeight("bold");
 		g.appendChild(text);
 		CMLUtil.debug(svg, fos, 2);

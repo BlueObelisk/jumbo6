@@ -8,6 +8,7 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.AxisAngleChirality;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Transform3;
@@ -381,16 +382,30 @@ public class CMLTransform3 extends AbstractTransform3 {
      * interpret current matrix as rotation about general axis.
      * 
      * @return double[4] 3 vector components and one angle (radian)
+     * @deprecated
      */
     public double[] getAxisAndAngle() {
         Transform3 teucl3 = this.getEuclidTransform3();
         Vector3 v = new Vector3();
         Angle ang = new Angle();
-        teucl3.getAxisAndAngle();
+        teucl3.getAxisAngleChirality();
         double[] d = new double[4];
         System.arraycopy(v.getArray(), 0, d, 0, 3);
         d[3] = ang.getRadian();
         return d;
+    }
+
+    /**
+     * interpret current matrix as rotation about general axis.
+     * 
+     * @return double[4] 3 vector components and one angle (radian)
+     */
+    public AxisAngleChirality getAxisAngleChirality() {
+        Transform3 teucl3 = this.getEuclidTransform3();
+        Vector3 v = new Vector3();
+        Angle ang = new Angle();
+        AxisAngleChirality aac = teucl3.getAxisAngleChirality();
+        return aac;
     }
 
     /**
