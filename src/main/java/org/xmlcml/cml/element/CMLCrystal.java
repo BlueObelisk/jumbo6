@@ -353,7 +353,7 @@ public class CMLCrystal extends AbstractCrystal {
     public List<CMLScalar> getCellScalars() throws CMLRuntimeException {
         List<CMLScalar> cellScalars = new ArrayList<CMLScalar>();
 //        Nodes cellScalarNodes = this.query("cml:scalar[starts-with(@dictRef, 'iucr:_cell')]", CML_XPATH);
-        Nodes cellScalarNodes = this.query("cml:scalar[@dictRef]", CML_XPATH);
+        Nodes cellScalarNodes = this.query("./cml:scalar[@dictRef]", CML_XPATH);
         int cellScalarCount = cellScalarNodes.size();
         if (cellScalarCount != 6) {
         	this.debug("CELL");
