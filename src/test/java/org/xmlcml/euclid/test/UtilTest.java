@@ -568,13 +568,36 @@ public class UtilTest {
     public final void testReadByteArrayDataInputStream() {
         // not yet tested
     }
+    
+    @Test
+    public void testReplaceISOControlsByMnemonic() {
+    	StringBuffer sb = new StringBuffer();
+    	sb.append("zero is [");
+    	sb.append((char)0);
+    	sb.append("]");
+    	Assert.assertEquals("char 0", "zero is [NUL]", Util.replaceISOControlsByMnemonic(sb.toString()));
+    }
 
     /**
      * Test method for {@link org.xmlcml.euclid.Util#stripISOControls(java.lang.String)}.
      */
     @Test
     public final void testStripISOControls() {
-        // not yet tested
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("This is character: [");
+    	sb.append((char)1);
+    	sb.append("] one");
+    	String s = Util.stripISOControls(sb.toString());
+    	Assert.assertEquals("stripped char", "This is character: [] one", s);
+    }
+
+    @Test
+    public void testTranslateToMnemonic() {
+    	Assert.assertEquals("char 0", "NUL", Util.translateToMnemonic((char)0));
+    	Assert.assertEquals("char 1", "SOH", Util.translateToMnemonic((char)1));
+    	Assert.assertEquals("char 31", "US", Util.translateToMnemonic((char)31));
+    	Assert.assertEquals("char 32", "", Util.translateToMnemonic((char)32));
+    	Assert.assertEquals("char 127", "DEL", Util.translateToMnemonic((char)127));
     }
     
     /**

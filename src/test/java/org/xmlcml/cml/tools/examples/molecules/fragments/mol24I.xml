@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment convention="cml:PML-intermediate" xmlns="http://www.xml-cml.org/schema" xmlns:g="http://www.xml-cml.org/mols/geom1">
+  <molecule ref="g:cl" id="1">
+    <arg name="idx">
+      <scalar dataType="xsd:string">1</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:cl_1_r1 g:eo_2_r1" moleculeRefs2="g:cl_1 g:eo_2"/>
+  <molecule ref="g:eo" id="2">
+    <arg name="idx">
+      <scalar dataType="xsd:string">2</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_2_r2 g:eo_3_r1" moleculeRefs2="g:eo_2 g:eo_3"/>
+  <molecule ref="g:eo" id="3">
+    <arg name="idx">
+      <scalar dataType="xsd:string">3</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_3_r2 g:eo_4_r1" moleculeRefs2="g:eo_3 g:eo_4"/>
+  <molecule ref="g:eo" id="4">
+    <arg name="idx">
+      <scalar dataType="xsd:string">4</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_4_r2 g:eo_5_r1" moleculeRefs2="g:eo_4 g:eo_5"/>
+  <molecule ref="g:eo" id="5">
+    <arg name="idx">
+      <scalar dataType="xsd:string">5</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_5_r2 g:eo_6_r1" moleculeRefs2="g:eo_5 g:eo_6"/>
+  <molecule ref="g:eo" id="6">
+    <arg name="idx">
+      <scalar dataType="xsd:string">6</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_6_r2 g:eo_7_r1" moleculeRefs2="g:eo_6 g:eo_7"/>
+  <molecule ref="g:eo" id="7">
+    <arg name="idx">
+      <scalar dataType="xsd:string">7</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_7_r2 g:eo_8_r1" moleculeRefs2="g:eo_7 g:eo_8"/>
+  <molecule ref="g:eo" id="8">
+    <arg name="idx">
+      <scalar dataType="xsd:string">8</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_8_r2 g:eo_9_r1" moleculeRefs2="g:eo_8 g:eo_9"/>
+  <molecule ref="g:eo" id="9">
+    <arg name="idx">
+      <scalar dataType="xsd:string">9</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_9_r2 g:eo_10_r1" moleculeRefs2="g:eo_9 g:eo_10"/>
+  <molecule ref="g:eo" id="10">
+    <arg name="idx">
+      <scalar dataType="xsd:string">10</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_10_r2 g:eo_11_r1" moleculeRefs2="g:eo_10 g:eo_11"/>
+  <molecule ref="g:eo" id="11">
+    <arg name="idx">
+      <scalar dataType="xsd:string">11</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_11_r2 g:eo_12_r1" moleculeRefs2="g:eo_11 g:eo_12"/>
+  <molecule ref="g:eo" id="12">
+    <arg name="idx">
+      <scalar dataType="xsd:string">12</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_12_r2 g:eo_13_r1" moleculeRefs2="g:eo_12 g:eo_13"/>
+  <molecule ref="g:eo" id="13">
+    <arg name="idx">
+      <scalar dataType="xsd:string">13</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_13_r2 g:eo_14_r1" moleculeRefs2="g:eo_13 g:eo_14"/>
+  <molecule ref="g:eo" id="14">
+    <arg name="idx">
+      <scalar dataType="xsd:string">14</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_14_r2 g:eo_15_r1" moleculeRefs2="g:eo_14 g:eo_15"/>
+  <molecule ref="g:eo" id="15">
+    <arg name="idx">
+      <scalar dataType="xsd:string">15</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_15_r2 g:eo_16_r1" moleculeRefs2="g:eo_15 g:eo_16"/>
+  <molecule ref="g:eo" id="16">
+    <arg name="idx">
+      <scalar dataType="xsd:string">16</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_16_r2 g:eo_17_r1" moleculeRefs2="g:eo_16 g:eo_17"/>
+  <molecule ref="g:eo" id="17">
+    <arg name="idx">
+      <scalar dataType="xsd:string">17</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_17_r2 g:eo_18_r1" moleculeRefs2="g:eo_17 g:eo_18"/>
+  <molecule ref="g:eo" id="18">
+    <arg name="idx">
+      <scalar dataType="xsd:string">18</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_18_r2 g:eo_19_r1" moleculeRefs2="g:eo_18 g:eo_19"/>
+  <molecule ref="g:eo" id="19">
+    <arg name="idx">
+      <scalar dataType="xsd:string">19</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_19_r2 g:eo_20_r1" moleculeRefs2="g:eo_19 g:eo_20"/>
+  <molecule ref="g:eo" id="20">
+    <arg name="idx">
+      <scalar dataType="xsd:string">20</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_20_r2 g:eo_21_r1" moleculeRefs2="g:eo_20 g:eo_21"/>
+  <molecule ref="g:eo" id="21">
+    <arg name="idx">
+      <scalar dataType="xsd:string">21</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_21_r2 g:eo_22_r1" moleculeRefs2="g:eo_21 g:eo_22"/>
+  <molecule ref="g:eo" id="22">
+    <arg name="idx">
+      <scalar dataType="xsd:string">22</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_22_r2 g:eo_23_r1" moleculeRefs2="g:eo_22 g:eo_23"/>
+  <molecule ref="g:eo" id="23">
+    <arg name="idx">
+      <scalar dataType="xsd:string">23</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_23_r2 g:eo_24_r1" moleculeRefs2="g:eo_23 g:eo_24"/>
+  <molecule ref="g:eo" id="24">
+    <arg name="idx">
+      <scalar dataType="xsd:string">24</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_24_r2 g:eo_25_r1" moleculeRefs2="g:eo_24 g:eo_25"/>
+  <molecule ref="g:eo" id="25">
+    <arg name="idx">
+      <scalar dataType="xsd:string">25</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_25_r2 g:eo_26_r1" moleculeRefs2="g:eo_25 g:eo_26"/>
+  <molecule ref="g:eo" id="26">
+    <arg name="idx">
+      <scalar dataType="xsd:string">26</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_26_r2 g:eo_27_r1" moleculeRefs2="g:eo_26 g:eo_27"/>
+  <molecule ref="g:eo" id="27">
+    <arg name="idx">
+      <scalar dataType="xsd:string">27</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_27_r2 g:eo_28_r1" moleculeRefs2="g:eo_27 g:eo_28"/>
+  <molecule ref="g:eo" id="28">
+    <arg name="idx">
+      <scalar dataType="xsd:string">28</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_28_r2 g:eo_29_r1" moleculeRefs2="g:eo_28 g:eo_29"/>
+  <molecule ref="g:eo" id="29">
+    <arg name="idx">
+      <scalar dataType="xsd:string">29</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_29_r2 g:eo_30_r1" moleculeRefs2="g:eo_29 g:eo_30"/>
+  <molecule ref="g:eo" id="30">
+    <arg name="idx">
+      <scalar dataType="xsd:string">30</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_30_r2 g:eo_31_r1" moleculeRefs2="g:eo_30 g:eo_31"/>
+  <molecule ref="g:eo" id="31">
+    <arg name="idx">
+      <scalar dataType="xsd:string">31</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_31_r2 g:eo_32_r1" moleculeRefs2="g:eo_31 g:eo_32"/>
+  <molecule ref="g:eo" id="32">
+    <arg name="idx">
+      <scalar dataType="xsd:string">32</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_32_r2 g:eo_33_r1" moleculeRefs2="g:eo_32 g:eo_33"/>
+  <molecule ref="g:eo" id="33">
+    <arg name="idx">
+      <scalar dataType="xsd:string">33</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_33_r2 g:eo_34_r1" moleculeRefs2="g:eo_33 g:eo_34"/>
+  <molecule ref="g:eo" id="34">
+    <arg name="idx">
+      <scalar dataType="xsd:string">34</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_34_r2 g:eo_35_r1" moleculeRefs2="g:eo_34 g:eo_35"/>
+  <molecule ref="g:eo" id="35">
+    <arg name="idx">
+      <scalar dataType="xsd:string">35</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_35_r2 g:eo_36_r1" moleculeRefs2="g:eo_35 g:eo_36"/>
+  <molecule ref="g:eo" id="36">
+    <arg name="idx">
+      <scalar dataType="xsd:string">36</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_36_r2 g:eo_37_r1" moleculeRefs2="g:eo_36 g:eo_37"/>
+  <molecule ref="g:eo" id="37">
+    <arg name="idx">
+      <scalar dataType="xsd:string">37</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_37_r2 g:eo_38_r1" moleculeRefs2="g:eo_37 g:eo_38"/>
+  <molecule ref="g:eo" id="38">
+    <arg name="idx">
+      <scalar dataType="xsd:string">38</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_38_r2 g:eo_39_r1" moleculeRefs2="g:eo_38 g:eo_39"/>
+  <molecule ref="g:eo" id="39">
+    <arg name="idx">
+      <scalar dataType="xsd:string">39</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_39_r2 g:eo_40_r1" moleculeRefs2="g:eo_39 g:eo_40"/>
+  <molecule ref="g:eo" id="40">
+    <arg name="idx">
+      <scalar dataType="xsd:string">40</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_40_r2 g:eo_41_r1" moleculeRefs2="g:eo_40 g:eo_41"/>
+  <molecule ref="g:eo" id="41">
+    <arg name="idx">
+      <scalar dataType="xsd:string">41</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_41_r2 g:eo_42_r1" moleculeRefs2="g:eo_41 g:eo_42"/>
+  <molecule ref="g:eo" id="42">
+    <arg name="idx">
+      <scalar dataType="xsd:string">42</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_42_r2 g:eo_43_r1" moleculeRefs2="g:eo_42 g:eo_43"/>
+  <molecule ref="g:eo" id="43">
+    <arg name="idx">
+      <scalar dataType="xsd:string">43</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_43_r2 g:eo_44_r1" moleculeRefs2="g:eo_43 g:eo_44"/>
+  <molecule ref="g:eo" id="44">
+    <arg name="idx">
+      <scalar dataType="xsd:string">44</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_44_r2 g:eo_45_r1" moleculeRefs2="g:eo_44 g:eo_45"/>
+  <molecule ref="g:eo" id="45">
+    <arg name="idx">
+      <scalar dataType="xsd:string">45</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_45_r2 g:eo_46_r1" moleculeRefs2="g:eo_45 g:eo_46"/>
+  <molecule ref="g:eo" id="46">
+    <arg name="idx">
+      <scalar dataType="xsd:string">46</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_46_r2 g:eo_47_r1" moleculeRefs2="g:eo_46 g:eo_47"/>
+  <molecule ref="g:eo" id="47">
+    <arg name="idx">
+      <scalar dataType="xsd:string">47</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_47_r2 g:eo_48_r1" moleculeRefs2="g:eo_47 g:eo_48"/>
+  <molecule ref="g:eo" id="48">
+    <arg name="idx">
+      <scalar dataType="xsd:string">48</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_48_r2 g:eo_49_r1" moleculeRefs2="g:eo_48 g:eo_49"/>
+  <molecule ref="g:eo" id="49">
+    <arg name="idx">
+      <scalar dataType="xsd:string">49</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_49_r2 g:eo_50_r1" moleculeRefs2="g:eo_49 g:eo_50"/>
+  <molecule ref="g:eo" id="50">
+    <arg name="idx">
+      <scalar dataType="xsd:string">50</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_50_r2 g:eo_51_r1" moleculeRefs2="g:eo_50 g:eo_51"/>
+  <molecule ref="g:eo" id="51">
+    <arg name="idx">
+      <scalar dataType="xsd:string">51</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:eo_51_r2 g:dummy2_52_r1" moleculeRefs2="g:eo_51 g:dummy2_52"/>
+  <molecule ref="g:dummy2" id="52">
+    <arg name="idx">
+      <scalar dataType="xsd:string">52</scalar>
+    </arg>
+  </molecule>
+  <join atomRefs2="g:dummy2_52_r2 g:acetyl_53_r1" moleculeRefs2="g:dummy2_52 g:acetyl_53"/>
+  <molecule ref="g:acetyl" id="53">
+    <arg name="idx">
+      <scalar dataType="xsd:string">53</scalar>
+    </arg>
+  </molecule>
+</fragment>
