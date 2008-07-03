@@ -1857,8 +1857,10 @@ public class Util implements EuclidConstants {
 		int l = s.length();
 		for (int i = 0; i < l; i++) {
 			char ch = s.charAt(i);
-			if (!Character.isISOControl(ch)) {
+			if (Character.isISOControl(ch)) {
 				sb.append(translateToMnemonic(ch));
+			} else {
+				sb.append(ch);
 			}
 		}
 		return sb.toString();
