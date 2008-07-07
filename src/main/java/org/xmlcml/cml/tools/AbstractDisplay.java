@@ -2,6 +2,8 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import org.apache.log4j.Logger;
+
 
 
 /** properties of a CML object.
@@ -11,6 +13,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
  */
 public class AbstractDisplay {
 
+	private static final Logger LOG = Logger.getLogger(AbstractDisplay.class);
 	protected final static String FONT_STYLE_NORMAL = "normal";
 	protected final static String FONT_STYLE_ITALIC = "italic";
 
@@ -27,32 +30,32 @@ public class AbstractDisplay {
 	};
 	
 	protected String color;
-	protected String fill;
-	protected double fontSize;
+	protected String fill = "red";
+	protected double fontSize = 15;
 	protected String fontStyle;
 	protected String fontWeight;
-	protected String fontFamily;
+	protected String fontFamily = "helvetica";
 	protected double opacity;
 	protected boolean showChildLabels;
-	protected String stroke;
+	protected String stroke = "blue";
 	protected String backgroundColor;
 
-	public AbstractDisplay(String color, String fill, double fontSize,
-			String fontStyle, String fontWeight, String fontFamily, 
-			double opacity, boolean showChildLabels,
-			String stroke, String backgroundColor) {
-		super();
-		this.color = color;
-		this.fill = fill;
-		this.fontSize = fontSize;
-		this.fontStyle = fontStyle;
-		this.fontWeight = fontWeight;
-		this.fontFamily = fontFamily;
-		this.opacity = opacity;
-		this.showChildLabels = showChildLabels;
-		this.stroke = stroke;
-		this.backgroundColor = backgroundColor;
-	}
+//	public AbstractDisplay(String color, String fill, double fontSize,
+//			String fontStyle, String fontWeight, String fontFamily, 
+//			double opacity, boolean showChildLabels,
+//			String stroke, String backgroundColor) {
+//		super();
+//		this.color = color;
+//		this.fill = fill;
+//		this.fontSize = fontSize;
+//		this.fontStyle = fontStyle;
+//		this.fontWeight = fontWeight;
+//		this.fontFamily = fontFamily;
+//		this.opacity = opacity;
+//		this.showChildLabels = showChildLabels;
+//		this.stroke = stroke;
+//		this.backgroundColor = backgroundColor;
+//	}
 
 	/** do not use.
 	 */
@@ -65,10 +68,11 @@ public class AbstractDisplay {
 	}
 	
 	protected void setDefaults() {
+		LOG.debug("SET DEFAULTS");
 		color = "black";
 		fill = color;
 		fontFamily = FONT_SANS_SERIF;
-		fontSize = 1;
+		fontSize = 17;
 		fontStyle = FONT_STYLE_NORMAL;
 		fontWeight = FONT_WEIGHT_NORMAL;
 		opacity = Double.NaN;

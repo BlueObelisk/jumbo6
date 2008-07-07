@@ -75,7 +75,7 @@ public class AtomSetTool extends AbstractTool {
 			if (atomSetTool == null) {
 				atomSetTool = new AtomSetTool(atomSet);
 				atomSet.setTool(atomSetTool);
-				atomSetTool.molecule = atomSet.getMolecule();
+				atomSetTool.molecule = atomSet.getMoleculeOrAncestor();
 			}
 		}
 		return atomSetTool;

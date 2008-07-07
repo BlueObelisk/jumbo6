@@ -622,7 +622,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		if (atomSet != null && atomSet.getAtoms().size() > 0) {
 			AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
 			CMLAtomSet newAtomSet = atomSetTool.sprout();
-			CMLMolecule molecule = atomSet.getMolecule();
+			CMLMolecule molecule = atomSet.getMoleculeOrAncestor();
 			CMLBondSet newBondSet = MoleculeTool.getOrCreateTool(molecule)
 			.getBondSet(newAtomSet);
 			newMolecule = new CMLMolecule(newAtomSet, newBondSet);
@@ -1676,7 +1676,7 @@ public class MoleculeTool extends AbstractSVGTool {
     
     private void setGroupVisibility(List<CMLAtom> atoms) {
     	if (true || Level.DEBUG.equals(LOG.getLevel())) {
-    		molecule.debug("VIS");
+    		molecule.debug("GROUP VISIBILITY ON");
     	}
     	LOG.debug("GROUPVIS");
     	for (CMLAtom atom : atoms) {
@@ -2098,6 +2098,20 @@ public class MoleculeTool extends AbstractSVGTool {
 				//FIXME
 //				CMLAtom refAtom = atomTool.getReferencedGroup(scopeElement);
 			}
+		}
+	}
+	
+	/** removes all child nodes except atomArray and bondArray and molecule.
+	 * This is because many public programs only accept these nodes
+	 */
+	public void stripNonArray() {
+		Nodes nodes = molecule.query(
+				"*[not(self::cml:atomArray) and " +
+				"not(self::cml:bondArray) and "+
+				"not(self::cml:molecule)]",
+				CML_XPATH); 
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).detach();
 		}
 	}
 }

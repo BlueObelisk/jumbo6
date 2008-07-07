@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -12,6 +13,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class AtomDisplay extends AbstractDisplay {
 
+	private static final Logger LOG = Logger.getLogger(AtomDisplay.class);
 	final static AtomDisplay DEFAULT = new AtomDisplay();
 	static {
 		DEFAULT.setDefaults();
@@ -25,8 +27,8 @@ public class AtomDisplay extends AbstractDisplay {
 	private TextDisplay labelDisplay;
 	
 	// atom
-	protected double backgroundRadiusFactor;
-	protected boolean display;
+	protected double backgroundRadiusFactor = 0.5;
+	protected boolean display = true;;
 	protected boolean displayCarbons;
 	protected boolean displayIds;
 	protected boolean displayGroups;
@@ -100,9 +102,11 @@ public class AtomDisplay extends AbstractDisplay {
 	}
 	
 	protected void init() {
+		setDefaults();
 	}
 	
 	protected void setDefaults() {
+		LOG.debug("ATOM SET DEFAULTS");
 		super.setDefaults();
 		setLocalDefaults();
 		overrideSuperDefaults();
@@ -113,7 +117,7 @@ public class AtomDisplay extends AbstractDisplay {
 		color = "black";
 		fill = color;
 		fontFamily = FONT_SANS_SERIF;
-		fontSize = 0.35;
+		fontSize = 3;
 		fontStyle = FONT_STYLE_NORMAL;
 		fontWeight = FONT_WEIGHT_NORMAL;
 		stroke = null;

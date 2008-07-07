@@ -51,7 +51,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	protected void setDefaults() {
 		super.setDefaults();
 
-		bondLength = 20.0;
+		bondLength = 50.0;
 		hydrogenLengthFactor = 0.7;
 		contractGroups = false;
 		
