@@ -465,13 +465,14 @@ public class CMLAtom extends AbstractAtom {
     /**
      * transform 3D coordinates. does NOT alter fractional or 2D coordinates
      *
-     * @param transform
-     *            the transformation
+     * @param transform - if null no-op
      */
     public void transformCartesians(Transform3 transform) {
-        Point3 point = this.getXYZ3();
-        point = point.transform(transform);
-        this.setXYZ3(point);
+    	if (transform != null) {
+	        Point3 point = this.getXYZ3();
+	        point = point.transform(transform);
+	        this.setXYZ3(point);
+    	}
     }
 
     /**

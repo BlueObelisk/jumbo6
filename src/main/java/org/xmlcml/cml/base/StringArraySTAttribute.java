@@ -83,8 +83,13 @@ public class StringArraySTAttribute extends CMLAttribute {
      *            the value
      */
     public void setCMLValue(String s) {
-        String[] split = s.trim().split(S_WHITEREGEX);
-        this.setCMLValue(split);
+    	s = (s == null) ? null : s.trim();
+    	if (s.length() > 0) {
+	        String[] split = s.trim().split(S_WHITEREGEX);
+	        this.setCMLValue(split);
+    	} else {
+    		this.setCMLValue(new String[0]);
+    	}
     }
 
     /**

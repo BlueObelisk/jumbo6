@@ -317,8 +317,7 @@ public class Point3 implements EuclidConstants {
     /**
      * scale point. alters this
      * 
-     * @param f
-     *            factor to multiply by
+     * @param f factor to multiply by
      */
     public void multiplyEquals(final double f) {
         for (int i = 2; i >= 0; --i) {

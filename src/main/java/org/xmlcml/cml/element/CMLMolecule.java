@@ -11,6 +11,7 @@ import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLElement;
@@ -1953,6 +1954,22 @@ public class CMLMolecule
 		}
 	}
 
+	/** set this.molecule for all descendant atomSets.
+	 * this is messy but a consequence of the serialization
+	 * of atomSets in CML since molecules are not explicit.
+	 */
+	public void setThisInDescendantAtomSets() {
+		Nodes nodes = this.query(".//cml:atomSet", CML_XPATH);
+		for (int i = 0; i < nodes.size(); i++) {
+			CMLAtomSet atomSet = (CMLAtomSet) nodes.get(i);
+			atomSet.setMolecule(this);
+		}
+	}
 
-
+	/** moves centroid to origin.
+	 * 
+	 */
+	public void translateCentroidToOrigin3(CoordinateType type) {
+		this.getAtomSet().translateCentroidToOrigin3(type);
+	}
 }

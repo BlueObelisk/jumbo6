@@ -1015,7 +1015,9 @@ public class AtomTool extends AbstractSVGTool {
     			 0.,-1., y,
     			 0., 0., 1.
 	    	 }));
+	    	 String fill = getAtomFill(atom.getElementType());
 	    	 TextDisplay elementDisplay = atomDisplay.getElementDisplay();
+	    	 elementDisplay.setFill(fill);
 	    	 TextDisplay chargeDisplay = atomDisplay.getChargeDisplay();
 	    	 TextDisplay groupDisplay = atomDisplay.getGroupDisplay();
 	    	 TextDisplay idDisplay = atomDisplay.getIdDisplay();
@@ -1072,6 +1074,7 @@ public class AtomTool extends AbstractSVGTool {
 	public void setDisplay(boolean display) {
 		ensureAtomDisplay();
 		if (atomDisplay != null) {
+			new Exception().printStackTrace();
 			LOG.debug("ATOM DISPLAY "+display+" "+atom.getId());
 			atomDisplay.setDisplay(display);
 		}
@@ -1086,7 +1089,7 @@ public class AtomTool extends AbstractSVGTool {
 		}
 		SVGText text = new SVGText(
 				 new Real2(xOffsetFactor*fontSize - width, yOffsetFactor*fontSize), atomString);
-		 fill = getAtomFill(fill, atomString);
+		 fill = getAtomFill(atomString);
 		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
 		 circle.setStroke("none");
 		 // should be background
@@ -1102,7 +1105,8 @@ public class AtomTool extends AbstractSVGTool {
 		 g.appendChild(text);
 	}
 
-	private String getAtomFill(String fill, String atomString) {
+	private static String getAtomFill(String atomString) {
+		String fill = null;
 		if (false) {
 		 } else if(AS.C.equals(atomString)) {
 			 fill = "black";
@@ -1122,7 +1126,7 @@ public class AtomTool extends AbstractSVGTool {
 			 fill = "#ff00ff";
 		 } else if (AS.H.equals(atomString)) {
 			 fill = "gray";
-		 } else if(AS.R.equals(atom.getElementType())) {
+		 } else if(AS.R.equals(atomString)) {
 			 fill = "brown";
 		 }
 		return fill;

@@ -409,6 +409,7 @@ public class Point3Vector implements EuclidConstants {
             getPoint3(i).plusEquals(v);
         }
     }
+    
     /**
      * translate negatively. does NOT modify this
      * 
@@ -419,6 +420,30 @@ public class Point3Vector implements EuclidConstants {
         Vector3 v1 = v.negative();
         Point3Vector temp = this.plus(v1);
         return temp;
+    }
+    
+    /**
+     * multiply all coords - alters this.
+     * 
+     * @param scale
+     * @return the scaled vector
+     */
+    public void multiplyByEquals(double scale) {
+    	for (int i = 0; i < this.size(); i++) {
+    		this.getPoint3(i).multiplyEquals(scale);
+    	}
+    }
+    
+    /**
+     * multiply all coords. does not alter this.
+     * 
+     * @param scale
+     * @return the scaled vector
+     */
+    public Point3Vector multiplyBy(double scale) {
+    	Point3Vector p3v = new Point3Vector(this);
+    	p3v.multiplyByEquals(scale);
+        return p3v;
     }
     
     /**
@@ -1039,6 +1064,8 @@ public class Point3Vector implements EuclidConstants {
      * we have 
      * Tfinal = Tthis2Ref . Tthis(T) . Tref . (-Tthis2Ref)  
      *  This is rough, but will be a good starting point for many systems.
+     *  
+     *  if an exception is thrown does nothing and returns null
      * 
      * @param ref
      * @return transformation
@@ -1059,21 +1086,30 @@ public class Point3Vector implements EuclidConstants {
         
         Transform3 r = fit3Points(ref);
 
-        return translateRotateRetranslate(centThis,
+        return (r == null) ? null : translateRotateRetranslate(centThis,
 				centRef, r);
     }
     
 	private Transform3 fit3Points(Point3Vector ref) {
-		int[] points;
-        Point3Vector pvThis = new Point3Vector(this);
-		pvThis.moveToCentroid();
-        Point3Vector pvRef = new Point3Vector(ref);
-        pvRef.moveToCentroid();
-        points = this.get3SeparatedPoints();
-        Transform3 tThis = getTransformOfPlane(points, pvThis);
-        Transform3 tRef = getTransformOfPlane(points, pvRef);
-        tRef.transpose();
-        Transform3 r = tRef.concatenate(tThis);
+		Transform3 r = null;
+		try {
+			int[] points;
+	        Point3Vector pvThis = new Point3Vector(this);
+			pvThis.moveToCentroid();
+	        Point3Vector pvRef = new Point3Vector(ref);
+	        pvRef.moveToCentroid();
+	        try {
+	        	points = this.get3SeparatedPoints();
+	        } catch (EuclidRuntimeException e) {
+	        	return null;
+	        }
+	        Transform3 tThis = getTransformOfPlane(points, pvThis);
+	        Transform3 tRef = getTransformOfPlane(points, pvRef);
+	        tRef.transpose();
+	        r = tRef.concatenate(tThis);
+		} catch (Exception e) {
+			// return null;
+		}
 		return r;
 	}
 	private Transform3 translateRotateRetranslate(Point3 centThis,
@@ -1088,15 +1124,20 @@ public class Point3Vector implements EuclidConstants {
 	}
     
 	private Transform3 getTransformOfPlane(int[] ii, Point3Vector pv) {
-		Plane3 p = new Plane3(pv.getPoint3(ii[0]), pv.getPoint3(ii[1]), pv
-                .getPoint3(ii[2]));
-        // get reference point in each plane
-        Vector3 v = new Vector3(pv.getPoint3(ii[0])).normalize();
-        // and form axes:
-        Vector3 w = p.getVector().cross(v).normalize();
-        // form the two sets of axes
-        Vector3 vv = v.cross(w);
-        Transform3 t = new Transform3(vv, v, w);
+		Transform3 t = null;
+		try {
+			Plane3 p = new Plane3(pv.getPoint3(ii[0]), pv.getPoint3(ii[1]), pv
+	                .getPoint3(ii[2]));
+	        // get reference point in each plane
+	        Vector3 v = new Vector3(pv.getPoint3(ii[0])).normalize();
+	        // and form axes:
+	        Vector3 w = p.getVector().cross(v).normalize();
+	        // form the two sets of axes
+	        Vector3 vv = v.cross(w);
+	        t = new Transform3(vv, v, w);
+		} catch (RuntimeException e) {
+			//
+		}
 		return t;
 	}
 	private void eigenvectorFit(Point3Vector pv2) {
@@ -1104,22 +1145,19 @@ public class Point3Vector implements EuclidConstants {
         RealArray eigval = new RealArray(4);
         EuclidRuntimeException illCond = null;
         pv2.inertialAxes(eigval, eigvec, illCond);
-        System.out.println("EIG "+eigval+"/"+eigvec);
         if (illCond != null) {
             throw illCond;
         }
         Transform3 axes = new Transform3(eigvec);
-        System.out.println("AX "+axes);
         axes.transpose();
         Point3Vector pv22 = new Point3Vector(pv2);
-        System.out.println("PVV "+pv22);
         pv22.transform(axes);
-        System.out.println("PVVZZ "+pv22);
 	}
     /**
      * fit two coordinates of same length and alignment
      * 
      * CURRENTLY NOT VALIDATED
+     * if cannot align coordinates does nothing and returns null
      * 
      * @param ref
      * @return transformation
@@ -1140,20 +1178,19 @@ public class Point3Vector implements EuclidConstants {
         Point3Vector reftmp = new Point3Vector(ref);
         thistmp.moveToCentroid();
         reftmp.moveToCentroid();
-        System.out.println("rms: "+thistmp.rms(reftmp));
         /**
          * roughly rotate moving molecule onto reference one
          */
         Transform3 t = thistmp.roughAlign(reftmp);
+        if (t == null) {
+        	return null;
+        }
         Transform3 tsave = new Transform3(t);
         thistmp.transform(t);
-        System.out.println("rms: "+thistmp.rms(reftmp));
-        System.out.println(t.getAxisAngleChirality());
         
         RealArray shift = new RealArray(3);
         int NCYC = 20;
         for (int icyc = 0; icyc < NCYC; icyc++) {
-        	//System.out.println("CYCLE");
             double maxshift = 0.0;
             /**
              * loop through x,y,z
@@ -1182,7 +1219,6 @@ public class Point3Vector implements EuclidConstants {
              * break out if converged
              */
             if (maxshift < converge) {
-            	//System.out.println("CONVERGED");
                 break;
             } else if (maxshift < 0.1) {
                 // not yet used
@@ -1191,7 +1227,6 @@ public class Point3Vector implements EuclidConstants {
                 // not yet used
                 damp = 1.0;
             }
-//        	System.out.println("CYCLE");
             /**
              * make transformation matrix by rotations about 3 axes
              */
@@ -1208,10 +1243,7 @@ public class Point3Vector implements EuclidConstants {
 
         Transform3 tt = translateRotateRetranslate(thisCent,
 				refCent, t);
-        System.out.println(tt);
-        System.out.println(tsave);
         return tsave;
-//        return tt;
     }
     
     /**

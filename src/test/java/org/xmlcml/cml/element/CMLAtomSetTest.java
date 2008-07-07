@@ -1,18 +1,25 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.util.TestUtils.neverThrow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
@@ -72,7 +79,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
         CMLAtomSet xomAtomSet = new CMLAtomSet();
         Assert.assertNotNull("atom set creation", xomAtomSet);
         Assert.assertEquals("atom set size", 0, xomAtomSet.size());
-        Assert.assertEquals("atom set ", new String[] { S_EMPTY }, xomAtomSet
+        Assert.assertEquals("atom set ", new String[0] , xomAtomSet
                 .getXMLContent());
 
     }
@@ -166,9 +173,9 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
         Assert.assertEquals("atom set value", new String[] { "a1", "a3" },
                 atomSet1.getXMLContent());
         atomSet1.addAtom(xomAtom[1]);
-        Assert.assertNotNull("atom set molecule", atomSet1.getMolecule());
+        Assert.assertNotNull("atom set molecule", atomSet1.getMoleculeOrAncestor());
         Assert.assertEquals("atom set molecule", xomAtom[0].getMolecule(),
-                atomSet1.getMolecule());
+                atomSet1.getMoleculeOrAncestor());
         Assert.assertEquals("atom set size", 3, atomSet1.size());
         Assert.assertEquals("atom set value",
                 new String[] { "a1", "a3", "a2" }, atomSet1.getXMLContent());
@@ -447,7 +454,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     @Test
     public void testGetMolecule() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
-        CMLMolecule molecule = atomSet.getMolecule();
+        CMLMolecule molecule = atomSet.getMoleculeOrAncestor();
         Assert.assertNotNull("get molecule", molecule);
         Assert.assertEquals("molecule ", xomMolecule, molecule);
 
@@ -479,10 +486,10 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     @Test
     public void testExcludeElementTypes() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
-        Assert.assertEquals("exclude", xomMolecule, atomSet.getMolecule());
+        Assert.assertEquals("exclude", xomMolecule, atomSet.getMoleculeOrAncestor());
         CMLAtomSet atomSet1 = atomSet.excludeElementTypes(new String[] { AS.N.value,
                 AS.S.value });
-        Assert.assertEquals("exclude", xomMolecule, atomSet1.getMolecule());
+        Assert.assertEquals("exclude", xomMolecule, atomSet1.getMoleculeOrAncestor());
         Assert.assertEquals("excludeElementTypes", 3, atomSet1.size());
         Assert.assertEquals("excludeElementTypes", new String[] { "a1", "a3",
                 "a5" }, atomSet1.getAtomIDs());
@@ -505,10 +512,10 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     @Test
     public void testIncludeElementTypes() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
-        Assert.assertEquals("exclude", xomMolecule, atomSet.getMolecule());
+        Assert.assertEquals("exclude", xomMolecule, atomSet.getMoleculeOrAncestor());
         CMLAtomSet atomSet1 = atomSet.includeElementTypes(new String[] { AS.N.value,
                 AS.S.value });
-        Assert.assertEquals("exclude", xomMolecule, atomSet1.getMolecule());
+        Assert.assertEquals("exclude", xomMolecule, atomSet1.getMoleculeOrAncestor());
         Assert.assertEquals("excludeElementTypes", 2, atomSet1.size());
         Assert.assertEquals("excludeElementTypes", new String[] { "a2", "a4" },
                 atomSet1.getAtomIDs());
@@ -1241,6 +1248,43 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
         }
         Assert.assertEquals("before remove", new String[] { "a3" }, atomSet1
                 .getXMLContent());
+    }
+    
+    @Test
+    public void testSetMolecule() {
+    	String s = ""+
+		"<cml "+ CML_XMLNS +">"+
+		"  <molecule>"+
+    	"    <atomArray>"+
+    	"      <atom id='a1' elementType='C'/>"+
+    	"      <atom id='a2' elementType='C'/>"+
+    	"      <atom id='a3' elementType='C'/>"+
+    	"    </atomArray>"+
+    	"  </molecule>"+
+    	"  <atomSet>a1 a3</atomSet>"+
+    	"</cml>";
+    	CMLElement cml = null;
+    	try {
+			cml = (CMLElement) new CMLBuilder().parseString(s);
+		} catch (Exception e) {
+			throw new RuntimeException("bad string");
+		}
+		CMLAtomSet atomSet = (CMLAtomSet) cml.getChildElements().get(1);
+		CMLMolecule molecule = (CMLMolecule) cml.getChildElements().get(0);
+		List<CMLAtom> atomList = null;
+		try {
+			atomList = atomSet.getAtoms();
+			Assert.fail("should trap exception for missing molecule");
+		} catch (RuntimeException e) {
+			// ok
+		}
+		atomSet.setMolecule(molecule);
+		try {
+			atomList = atomSet.getAtoms();
+			Assert.assertEquals("atom 0", "a1", atomList.get(0).getId());
+		} catch (RuntimeException e) {
+			Assert.fail("should not throw exception "+e);
+		}
     }
 
     /** tests equality against list of ids.
