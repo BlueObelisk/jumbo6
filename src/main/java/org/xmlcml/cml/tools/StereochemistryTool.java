@@ -24,7 +24,7 @@ import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * Tool to manage stereochemistry.
- * 
+ *  
  * @author pm286 & ned24
  * 
  */
