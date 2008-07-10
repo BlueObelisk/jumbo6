@@ -6,8 +6,8 @@ import java.util.List;
 
 import nu.xom.Node;
 
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
@@ -23,7 +23,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.IndexableList;
 import org.xmlcml.cml.tools.Catalog;
 import org.xmlcml.cml.tools.CatalogManager;
 import org.xmlcml.cml.tools.FragmentTool;

@@ -294,13 +294,11 @@ public class DisorderTool extends AbstractTool {
 			// exception as we cannot be confident of getting the proper structure if there
 			// are more than one assemblies with this occupancy
 			if (occupancy == 0.5) {
-				System.err.println("Cannot fix invalid disorder - found atom"
+				throw new RuntimeException("Cannot fix invalid disorder - found atom"
 						+" with occupancy of 0.5");
-				return false;
 			}
 			if (occupancy == Double.NaN) {
-				System.err.println("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
-				return false;
+				throw new RuntimeException("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
 			}
 			//System.out.println("occupancy is: "+occupancy);
 			// if atom has unit occupancy then we can ignore it for the rest of
@@ -323,8 +321,7 @@ public class DisorderTool extends AbstractTool {
 			}
 			// if atom added to more than one list then throw exception
 			if (addedCount > 1) {
-				System.err.println("Ambiguous atom occupancy.  Cannot resolve disorder");
-				return false;
+				throw new RuntimeException("Ambiguous atom occupancy.  Cannot resolve disorder");
 			}
 			if (added) continue;
 			List<CMLAtom> newList = new ArrayList<CMLAtom>();
@@ -357,8 +354,7 @@ public class DisorderTool extends AbstractTool {
 	private boolean reassignDisorderGroups(Map<Double, List<CMLAtom>> atomMap) {
 		// if only 1 or 0 occupancies left, then we cannot create a valid disorder assembly.
 		if (atomMap.size() < 2) {
-			System.err.println("Cannot resolve disorder. Only one non-unit occupancy value found in molecule.");
-			return false;
+			throw new RuntimeException("Cannot resolve disorder. Only one non-unit occupancy value found in molecule.");
 		}
 		List<Double> occupancyList = new LinkedList<Double>(atomMap.keySet());
 		List<List<Integer>> partitionList = Partition.partition(atomMap.size());
