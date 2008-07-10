@@ -2232,9 +2232,9 @@ public class CMLFormula extends AbstractFormula {
 						w.write("<sup>"+fc+sign+"</sup>");
 					}
 				}
-				w.write("</span>");
 			}
 		}
+		w.write("</span>");
 	}
 
 	/**
