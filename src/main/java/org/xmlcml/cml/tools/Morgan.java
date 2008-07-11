@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import nu.xom.Attribute;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLLabel;

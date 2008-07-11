@@ -5,7 +5,7 @@ import nu.xom.Attribute;
 
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.cml.base.StringSTAttribute;
 
 // end of part 1
@@ -48,14 +48,14 @@ public abstract class AbstractAppinfo extends CMLElement {
     /** Role of the object.
     * How the object functions or its position in the architecture. No controlled vocabulary.
     * @param value title value
-    * @throws CMLRuntimeException attribute wrong value/type
+    * @throws RuntimeException attribute wrong value/type
     */
-    public void setRole(String value) throws CMLRuntimeException {
+    public void setRole(String value) throws RuntimeException {
         StringSTAttribute att = null;
         if (_att_role == null) {
             _att_role = (StringSTAttribute) attributeFactory.getAttribute("role", "appinfo");
             if (_att_role == null) {
-                throw new CMLRuntimeException("BUG: cannot process attributeGroupName : role probably incompatible attributeGroupName and attributeName");
+                throw new RuntimeException("BUG: cannot process attributeGroupName : role probably incompatible attributeGroupName and attributeName");
             }
         }
         att = new StringSTAttribute(_att_role);

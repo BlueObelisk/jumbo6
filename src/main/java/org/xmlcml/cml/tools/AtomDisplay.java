@@ -4,6 +4,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** display parameters
@@ -18,6 +19,9 @@ public class AtomDisplay extends AbstractDisplay {
 	static {
 		DEFAULT.setDefaults();
 	}
+	
+	static double XOFFSETFACTOR = -0.4;
+	static double YOFFSETFACTOR = 0.35;
 
 	private TextDisplay elementDisplay;
 	private TextDisplay chargeDisplay;
@@ -25,6 +29,8 @@ public class AtomDisplay extends AbstractDisplay {
 	private TextDisplay idDisplay;
 	private TextDisplay isotopeDisplay;
 	private TextDisplay labelDisplay;
+	
+	private MoleculeDisplay moleculeDisplay; // reference
 	
 	// atom
 	protected double backgroundRadiusFactor = 0.5;
@@ -68,16 +74,23 @@ public class AtomDisplay extends AbstractDisplay {
 
 	public AtomDisplay(AtomDisplay atomDisplay) {
 		super(atomDisplay);
-		this.elementDisplay = atomDisplay.elementDisplay;
-		this.chargeDisplay = atomDisplay.chargeDisplay;
-		this.groupDisplay = atomDisplay.groupDisplay;
-		this.idDisplay = atomDisplay.idDisplay;
-		this.isotopeDisplay = atomDisplay.isotopeDisplay;
-		this.labelDisplay = atomDisplay.labelDisplay;
+		this.elementDisplay = (elementDisplay == null) ? null : new TextDisplay(atomDisplay.elementDisplay);
+		this.chargeDisplay = (chargeDisplay == null) ? null : new TextDisplay(atomDisplay.chargeDisplay);
+		this.groupDisplay = (groupDisplay == null) ? null : new TextDisplay(atomDisplay.groupDisplay);
+		this.idDisplay = (idDisplay == null) ? null : new TextDisplay(atomDisplay.idDisplay);
+		this.isotopeDisplay = (isotopeDisplay == null) ? null : new TextDisplay(atomDisplay.isotopeDisplay);
+		this.labelDisplay = (labelDisplay == null) ? null : new TextDisplay(atomDisplay.labelDisplay);
 	}
 	
- 	private void ensureElementDisplay() {
-		elementDisplay = (elementDisplay == null) ? new TextDisplay() : elementDisplay;
+	void ensureMoleculeDisplay(MoleculeDisplay  moleculeDisplay) {
+		if (this.moleculeDisplay == null) {
+			this.moleculeDisplay = moleculeDisplay;
+		}
+	}
+ 	void ensureElementDisplay() {
+		if (elementDisplay == null) {
+			elementDisplay = createElementDisplay();
+		}
 	}
 
 
@@ -122,7 +135,7 @@ public class AtomDisplay extends AbstractDisplay {
 		fontWeight = FONT_WEIGHT_NORMAL;
 		stroke = null;
 				
-		elementDisplay = new TextDisplay();
+		elementDisplay = createElementDisplay();
 		chargeDisplay = null;
 		groupDisplay = null;
 		idDisplay = null;
@@ -130,6 +143,13 @@ public class AtomDisplay extends AbstractDisplay {
 		labelDisplay = null;
 	}
 
+	private static TextDisplay createElementDisplay() {
+		TextDisplay textDisplay = new TextDisplay();
+		textDisplay.backgroundColor = "blue";
+		textDisplay.setXyOffset(new Real2(XOFFSETFACTOR, YOFFSETFACTOR));
+		return textDisplay;
+	}
+	
 	private void setLocalDefaults() {
 		display = true;
 		displayCarbons = false;

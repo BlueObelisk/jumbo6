@@ -68,7 +68,7 @@ public class AtomTool extends AbstractSVGTool {
 	private String fontFamily;
 	private String fontStyle;
 	private String fontWeight;
-	private double radiusFactor;
+	private double radiusFactor = 1.0; 
 
 	/**
      * constructor
@@ -990,7 +990,8 @@ public class AtomTool extends AbstractSVGTool {
      public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	g = null;
     	ensureMoleculeDisplay();
-//    	ensureElementDisplay();
+    	atomDisplay.ensureMoleculeDisplay(moleculeDisplay);
+    	atomDisplay.ensureElementDisplay();
 		if (false) {
 		} else if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
 			// no 2D coords
@@ -1017,7 +1018,12 @@ public class AtomTool extends AbstractSVGTool {
 	    	 }));
 	    	 String fill = getAtomFill(atom.getElementType());
 	    	 TextDisplay elementDisplay = atomDisplay.getElementDisplay();
-	    	 elementDisplay.setFill(fill);
+	    	 if (elementDisplay != null) {
+	    		 elementDisplay.setFill(fill);
+	    		 radiusFactor = atomDisplay.getBackgroundRadiusFactor();
+	    		 fontSize = atomDisplay.getFontSize();
+//	    		 System.out.println("XXXXXXXXXXX "+radiusFactor+ " / "+fontSize);
+	    	 }
 	    	 TextDisplay chargeDisplay = atomDisplay.getChargeDisplay();
 	    	 TextDisplay groupDisplay = atomDisplay.getGroupDisplay();
 	    	 TextDisplay idDisplay = atomDisplay.getIdDisplay();
@@ -1026,7 +1032,10 @@ public class AtomTool extends AbstractSVGTool {
 
 	    	 String atomString = getAtomString();
     		 if (!atomString.equals(S_EMPTY)) {
+    			 elementDisplay.setFontSize(fontSize);
+    			 drawBackgroundCircle();
     			 elementDisplay.display(g, atomString);
+    			 
 	    	 }
 	    	 if (atom.getFormalChargeAttribute() != null) {
     			 chargeDisplay.displaySignedInteger(atom.getFormalCharge());
@@ -1090,12 +1099,7 @@ public class AtomTool extends AbstractSVGTool {
 		SVGText text = new SVGText(
 				 new Real2(xOffsetFactor*fontSize - width, yOffsetFactor*fontSize), atomString);
 		 fill = getAtomFill(atomString);
-		 SVGCircle circle = new SVGCircle(new Real2(0., 0.), radiusFactor*fontSize);
-		 circle.setStroke("none");
-		 // should be background
-		 String circleFill = /*AS.C.equals(elementType) ? "none" :*/ "white";
-		 g.appendChild(circle);
-		 circle.setFill(circleFill);
+		 drawBackgroundCircle();
 		 text.setFill(fill);
 		 text.setFontSize(fontSize);
 		 text.setFontFamily(fontFamily);
@@ -1103,6 +1107,17 @@ public class AtomTool extends AbstractSVGTool {
 		 text.setFontWeight(fontWeight);
 		 
 		 g.appendChild(text);
+	}
+
+	private void drawBackgroundCircle() {
+		double rad = radiusFactor*fontSize;
+		LOG.debug("RAD "+rad);
+		SVGCircle circle = new SVGCircle(new Real2(0., 0.), rad);
+		circle.setStroke("none");
+		 // should be background
+		String circleFill = /*AS.C.equals(elementType) ? "none" :*/ "white";
+		g.appendChild(circle);
+		circle.setFill(circleFill);
 	}
 
 	private static String getAtomFill(String atomString) {

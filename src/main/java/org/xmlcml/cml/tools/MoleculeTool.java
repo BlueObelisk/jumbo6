@@ -1614,7 +1614,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	moleculeDisplay = (drawable instanceof MoleculeDisplayList) ? 
     			((MoleculeDisplayList)drawable).getMoleculeDisplay() : moleculeDisplay;
 		enableMoleculeDisplay();
-    	System.out.println("MOLECULE "+moleculeDisplay.getDebugString());
+//    	System.out.println("MOLECULE "+moleculeDisplay.getDebugString());
     	BondDisplay defaultBondDisplay = moleculeDisplay.getDefaultBondDisplay();
     	AtomDisplay defaultAtomDisplay = moleculeDisplay.getDefaultAtomDisplay();
     	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
