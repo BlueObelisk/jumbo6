@@ -19,15 +19,14 @@ import org.xmlcml.euclid.Real2;
  */
 public class TextDisplay extends AbstractDisplay {
 
+	final static TextDisplay DEFAULT = new TextDisplay();
+	
+	private SVGG g;
+	private SVGText text;
 	
 	private double backgroundRadiusFactor = 1.0;
 	private String textS;
-	private SVGG g;
 	private Real2 xyOffset = new Real2(0., 0.);
-	
-	final static TextDisplay DEFAULT = new TextDisplay();
-	private SVGText text;
-	protected boolean omitHydrogens;
 	
 	static {
 		DEFAULT.setDefaults();
@@ -37,18 +36,10 @@ public class TextDisplay extends AbstractDisplay {
 		super(a);
 	}
 
-//	public TextDisplay(String color, String fill, double fontSize,
-//			String fontStyle, String fontWeight, String fontFamily,
-//			boolean omitHydrogens, double opacity, boolean showChildLabels,
-//			String stroke, String backgroundColor, Real2 xyOffset) {
-//		super(color, fill, fontSize, fontStyle, fontWeight, fontFamily,
-//				opacity, showChildLabels, stroke, backgroundColor);
-//		this.xyOffset = new Real2(xyOffset);
-//	}
-
 	public TextDisplay(TextDisplay a) {
 		super(a);
 		this.xyOffset = new Real2(a.xyOffset);
+		this.backgroundRadiusFactor = a.backgroundRadiusFactor;
 	}
 
 	/** constructor.
@@ -77,7 +68,8 @@ public class TextDisplay extends AbstractDisplay {
 	
 	private void display() {
 		if (g != null) {
-			text = new SVGText(xyOffset, textS);
+			Real2 xyOffsetPix = xyOffset.multiplyBy(fontSize);
+			text = new SVGText(xyOffsetPix, textS);
 			text.setFontSize(fontSize);
 			text.setFill(fill);
 //			text.debug("TTT");
@@ -150,5 +142,21 @@ public class TextDisplay extends AbstractDisplay {
 		sb.append(S_NEWLINE);
 		sb.append(S_NEWLINE);
 		return sb.toString();
+	}
+
+	public double getBackgroundRadiusFactor() {
+		return backgroundRadiusFactor;
+	}
+
+	public void setBackgroundRadiusFactor(double backgroundRadiusFactor) {
+		this.backgroundRadiusFactor = backgroundRadiusFactor;
+	}
+
+	public Real2 getXyOffset() {
+		return xyOffset;
+	}
+
+	public void setXyOffset(Real2 xyOffset) {
+		this.xyOffset = xyOffset;
 	}
 }

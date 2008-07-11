@@ -12,7 +12,7 @@ import nu.xom.Attribute;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /** test
@@ -149,7 +149,7 @@ public class DelimiterAttributeTest {
 		String s = "123";
 		try {
 			delimiterAttribute.checkDelimiter(s);
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.fail("Should not throw "+e);
 		}
 		
@@ -157,7 +157,7 @@ public class DelimiterAttributeTest {
 		try {
 			delimiterAttribute.checkDelimiter(s);
 			Assert.fail("Should throw exception");
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.assertEquals("Should throw ", "cannot delimit {1/23} with {/}", e.getMessage());
 		}
 		
@@ -169,14 +169,14 @@ public class DelimiterAttributeTest {
 		s = "123";
 		try {
 			delimiterAttribute.checkDelimiter(s);
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.fail("Should not throw "+e);
 		}
 		
 		s = "";
 		try {
 			delimiterAttribute.checkDelimiter(s);
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.fail("Should not throw "+e);
 		}
 				
@@ -184,7 +184,7 @@ public class DelimiterAttributeTest {
 		try {
 			delimiterAttribute.checkDelimiter(s);
 			Assert.fail("Should throw exception");
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.assertEquals("Should throw ", "cannot delimit { 123 } with { }", e.getMessage());
 		}
 		
@@ -192,7 +192,7 @@ public class DelimiterAttributeTest {
 		try {
 			delimiterAttribute.checkDelimiter(s);
 			Assert.fail("Should throw exception");
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			Assert.assertEquals("Should throw ", "cannot delimit {1 23} with { }", e.getMessage());
 		}
 		

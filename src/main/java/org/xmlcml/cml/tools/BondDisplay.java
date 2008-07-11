@@ -14,12 +14,11 @@ public class BondDisplay extends AbstractDisplay {
 	private String multipleColor = "white";
 	private double width = 1.0;
 	private double scale = 1.0;
-	protected boolean omitHydrogens;
+	private double doubleMiddleFactor = 1.3;
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
  	    DEFAULT.setDefaults();
-		
 	};
 
 	/** constructor.
@@ -126,17 +125,17 @@ public class BondDisplay extends AbstractDisplay {
 		return i;
 	}
 
-	public static void usage() {
-		
-		System.out.println(" BondDisplay options ");
-		System.out.println("    -BOND_MULTIPLECOLOR color");
-		System.out.println("    -BOND_WIDTH width(D)");
-		System.out.println("    -BOND_SCALE scale(D)");
-		System.out.println("    -BOND_STROKE stroke");
-		System.out.println("    -BOND_OPACITY opacity(D 0-BOND_1)");
-		System.out.println("    -BOND_SHOWCHILDLABELS");
-		System.out.println();
-	}
+//	public static void usage() {
+//		
+//		System.out.println(" BondDisplay options ");
+//		System.out.println("    -BOND_MULTIPLECOLOR color");
+//		System.out.println("    -BOND_WIDTH width(D)");
+//		System.out.println("    -BOND_SCALE scale(D)");
+//		System.out.println("    -BOND_STROKE stroke");
+//		System.out.println("    -BOND_OPACITY opacity(D 0-BOND_1)");
+//		System.out.println("    -BOND_SHOWCHILDLABELS");
+//		System.out.println();
+//	}
 	
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
@@ -153,5 +152,13 @@ public class BondDisplay extends AbstractDisplay {
 		sb.append(S_NEWLINE);
 		sb.append(S_NEWLINE);
 		return sb.toString();
+	}
+
+	public double getDoubleMiddleFactor() {
+		return doubleMiddleFactor;
+	}
+
+	public void setDoubleMiddleFactor(double doubleMiddleFactor) {
+		this.doubleMiddleFactor = doubleMiddleFactor;
 	}
 }

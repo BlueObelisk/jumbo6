@@ -133,7 +133,8 @@ public class BondTool extends AbstractSVGTool {
 				g.appendChild(line);
 			} else if (order.equals(CMLBond.DOUBLE)) {
 				g.appendChild(createBond("black", 2.55*bondWidth, xy0, xy1));
-				g.appendChild(createBond("white", 0.85*bondWidth, xy0, xy1));
+				g.appendChild(createBond("white", 
+						bondDisplay.getDoubleMiddleFactor()*0.85*bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.TRIPLE)) {
 				g.appendChild(createBond("black", 3.75*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 2.25*bondWidth, xy0, xy1));

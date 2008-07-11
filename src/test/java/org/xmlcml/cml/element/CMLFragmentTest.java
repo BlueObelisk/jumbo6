@@ -9,7 +9,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.util.TestUtils;
 
 /**
@@ -44,7 +44,7 @@ public class CMLFragmentTest extends MoleculeAtomBondTest {
             cea = (CountExpressionAttribute) frag.getCountExpressionAttribute();
             count = cea.calculateCountExpression();
             if (count <= 2 || count >= 5) {
-                throw new CMLRuntimeException("bad value of count: "+count);
+                throw new RuntimeException("bad value of count: "+count);
             }
             sum += count;
         }
