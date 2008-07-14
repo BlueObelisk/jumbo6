@@ -9,7 +9,6 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
-import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.util.TestUtils;
 
 /**

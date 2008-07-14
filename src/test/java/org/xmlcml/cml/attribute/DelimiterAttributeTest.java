@@ -12,7 +12,6 @@ import nu.xom.Attribute;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.euclid.test.StringTestBase;
 
 /** test
