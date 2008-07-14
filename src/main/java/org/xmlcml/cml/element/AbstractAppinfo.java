@@ -5,7 +5,6 @@ import nu.xom.Attribute;
 
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.cml.base.StringSTAttribute;
 
 // end of part 1
