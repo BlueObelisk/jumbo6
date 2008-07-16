@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Document;
 import nu.xom.Element;
@@ -149,8 +149,7 @@ public class ChemicalElement {
             return (elSym != null && elSym.equals(value));
         }
     };
-    final static Logger logger = Logger.getLogger(ChemicalElement.class
-            .getName());
+    final static Logger LOG = Logger.getLogger(ChemicalElement.class);
 
     /**
      * maximum number of elements.
@@ -736,7 +735,7 @@ public class ChemicalElement {
             Element element = (Element) elements.get(i);
 
             String symbol = element.getAttributeValue("id");
-            // logger.info("Adding element: " + atomicSymbol);
+            // LOG.info("Adding element: " + atomicSymbol);
             int atNum = Integer.parseInt(element
                     .getAttributeValue("atomicnumber"));
             double atWeight = getWeight(element, "webelements");
@@ -894,27 +893,27 @@ public class ChemicalElement {
      */
     public static void debug(ChemicalElement el) {
 
-        logger.info("ChemicalElement:");
-        logger.info(" > AS: " + el.getSymbol());
-        logger.info(" > Atomic number: " + el.getAtomicNumber());
-        logger.info(" > Group: " + el.getGroup());
-        logger.info(" > Period: " + el.getPeriod());
-        logger.info(" > Atomic weight: " + el.getAtomicWeight());
-        logger.info(" > Main isotope: " + el.getMainIsotope());
-        logger.info(" > Valence electrons: " + el.getValenceElectrons());
-        logger.info(" > Ground state config: " + el.getElectronicGroundState());
-        logger.info(" > Electronegativity: " + el.getElectronegativity());
-        logger.info(" > Atomic radius: " + el.getAtomicRadius());
-        logger.info(" > Covalent radius: " + el.getCovalentRadius());
-        logger.info(" > Van-der-Waal's radius: " + el.getVDWRadius());
-        logger.info(" > Isotopes:");
+        LOG.info("ChemicalElement:");
+        LOG.info(" > AS: " + el.getSymbol());
+        LOG.info(" > Atomic number: " + el.getAtomicNumber());
+        LOG.info(" > Group: " + el.getGroup());
+        LOG.info(" > Period: " + el.getPeriod());
+        LOG.info(" > Atomic weight: " + el.getAtomicWeight());
+        LOG.info(" > Main isotope: " + el.getMainIsotope());
+        LOG.info(" > Valence electrons: " + el.getValenceElectrons());
+        LOG.info(" > Ground state config: " + el.getElectronicGroundState());
+        LOG.info(" > Electronegativity: " + el.getElectronegativity());
+        LOG.info(" > Atomic radius: " + el.getAtomicRadius());
+        LOG.info(" > Covalent radius: " + el.getCovalentRadius());
+        LOG.info(" > Van-der-Waal's radius: " + el.getVDWRadius());
+        LOG.info(" > Isotopes:");
         int[] isoMass = el.getIsotopeMasses();
         double[] isoAbun = el.getIsotopeAbundances();
         for (int i = 0; i < isoMass.length; i++) {
-            logger.info(" >     " + isoMass[i] + " (" + isoAbun[i] + "%)");
+            LOG.info(" >     " + isoMass[i] + " (" + isoAbun[i] + "%)");
         }
-        logger.info(" > Color: " + el.getColor().toString());
-        logger.info("----------------------------------------");
+        LOG.info(" > Color: " + el.getColor().toString());
+        LOG.info("----------------------------------------");
     }
 
     /**

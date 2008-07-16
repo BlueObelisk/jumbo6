@@ -1,7 +1,6 @@
 package org.xmlcml.cml.element;
 
 import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.parseValidFile;
 
 import java.io.IOException;
 import java.io.StringWriter;

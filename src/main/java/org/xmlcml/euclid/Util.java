@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +55,7 @@ public class Util implements EuclidConstants {
 		}
 	}
 
-	final static Logger logger = Logger.getLogger(Util.class.getName());
+	final static Logger LOG = Logger.getLogger(Util.class);
 
 	public final static String[] LOWER_ROMAN_NUMERAL = {
 		"i",
@@ -825,7 +825,7 @@ public class Util implements EuclidConstants {
 	 * 
 	 */
 	public static void warning(String s) {
-		logger.info("WARNING: " + s);
+		LOG.info("WARNING: " + s);
 	}
 
 	/**
@@ -839,7 +839,7 @@ public class Util implements EuclidConstants {
 	 * 
 	 */
 	public static void message(String s) {
-		logger.info(s);
+		LOG.info(s);
 	}
 
 	// static jumbo.xml.gui.XText errorText;
@@ -858,7 +858,7 @@ public class Util implements EuclidConstants {
 		// errorText = new jumbo.xml.gui.XText();
 		// errorText.displayInFrame();
 		// }
-		logger.info("ERROR: " + s);
+		LOG.info("ERROR: " + s);
 		// errorText.addText(s);
 	}
 
@@ -937,7 +937,7 @@ public class Util implements EuclidConstants {
 	// f = new File(fileName);
 	// }
 	// // } catch (IOException e) {
-	// // logger.info("Failed to create: "+fileName+S_LBRAK+e+S_RBRAK);
+	// // LOG.info("Failed to create: "+fileName+S_LBRAK+e+S_RBRAK);
 	// // }
 	// return f;
 	// }
@@ -1643,7 +1643,7 @@ public class Util implements EuclidConstants {
 					}
 				}
 				if (!ok) {
-					logger.severe("==Unknown DOS character==" + jj + "//" + s);
+					LOG.error("==Unknown DOS character==" + jj + "//" + s);
 				}
 			}
 		}

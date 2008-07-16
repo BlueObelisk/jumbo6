@@ -1,6 +1,6 @@
 package org.xmlcml.cml.tools;
 
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 
@@ -129,11 +129,11 @@ public class ElectronDisplay {
 
     void drawElectron(CMLElement ab1, CMLElement ab2) {
         if (ab1 == null) {
-//            logger.info("Null electron1");
+//            LOG.info("Null electron1");
             return;
         }
         if (ab2 == null) {
-//            logger.info("Null electron2");
+//            LOG.info("Null electron2");
             return;
         }
         double[] xy1 = null;

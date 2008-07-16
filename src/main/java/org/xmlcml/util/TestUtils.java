@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;

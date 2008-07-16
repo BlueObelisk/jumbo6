@@ -5,8 +5,8 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 import static org.xmlcml.util.TestUtils.getAssertFormat;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import junit.framework.Assert;
 
@@ -33,7 +33,6 @@ public class MatrixTest {
      */
     @Before
     public void setUp() throws Exception {
-        logger.setLevel(Level.WARNING);
     }
 
     /**

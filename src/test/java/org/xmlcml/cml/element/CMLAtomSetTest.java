@@ -2,18 +2,13 @@ package org.xmlcml.cml.element;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.util.TestUtils.neverThrow;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 
 import org.junit.Assert;
 import org.junit.Before;

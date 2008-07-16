@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import nu.xom.Elements;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
@@ -44,7 +44,8 @@ import org.xmlcml.molutil.ChemicalElement;
  * 
  */
 public class GeometryTool extends AbstractTool {
-    Logger logger = Logger.getLogger(GeometryTool.class.getName());
+    Logger LOG = Logger.getLogger(GeometryTool.class);
+
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
     
@@ -730,14 +731,14 @@ public class GeometryTool extends AbstractTool {
         for (int i = 0; i < atoms.size(); i++) {
             for (int j = 0; j < atoms.size(); j++) {
                 String s = S_EMPTY + nbm[i][j];
-                logger.info(S_SPACE + s);
+                LOG.info(S_SPACE + s);
             }
-            logger.info(S_NL);
+            LOG.info(S_NL);
         }
         try {
             ism = new IntSquareMatrix(nbm);
         } catch (Exception e) {
-            logger.severe("BUG " + e);
+            LOG.error("BUG " + e);
         }
         return ism;
     }

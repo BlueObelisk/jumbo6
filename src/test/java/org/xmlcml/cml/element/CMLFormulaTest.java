@@ -1,6 +1,5 @@
 package org.xmlcml.cml.element;
 
-import static org.junit.Assert.fail;
 import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
@@ -22,6 +21,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParsingException;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLAttribute;
@@ -46,6 +46,7 @@ import org.xmlcml.util.TestUtils;
  */
 public class CMLFormulaTest extends MoleculeAtomBondTest {
 
+	final static Logger LOG = Logger.getLogger(CMLFormulaTest.class);
     // built in xom;
     CMLFormula xomForm1 = null;
     CMLFormula xomForm2 = null;
@@ -98,7 +99,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
             Assert.fail("Should not throw IOException");
         } catch (ParsingException e) {
             e.printStackTrace();
-            logger.severe("Parse exception " + e.getMessage());
+            LOG.error("Parse exception " + e.getMessage());
             Assert.fail("Should not throw ParsingException" + e.getCause());
         }
         xmlForm1 = (CMLFormula) xmlForm1Doc.getRootElement();

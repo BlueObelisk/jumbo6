@@ -6,10 +6,11 @@ package org.xmlcml.cml.base;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author pm286
@@ -17,7 +18,7 @@ import nu.xom.Node;
  */
 public class AttributeFactory implements CMLConstants {
 
-    final static Logger logger = Logger.getLogger(AttributeFactory.class.getName());
+    final static Logger LOG = Logger.getLogger(AttributeFactory.class);
     // singleton
     /** singleton attribute factory */
 	public final static AttributeFactory attributeFactory = new AttributeFactory();
@@ -208,7 +209,7 @@ public class AttributeFactory implements CMLConstants {
         } else if (XSD_STRING.equals(typeS) && type.getIsList()) {
             newAtt = new StringArraySTAttribute(name);
         } else {
-            logger.severe("unknown attribute type " + type);
+            LOG.error("unknown attribute type " + type);
         }
         return newAtt;
     }

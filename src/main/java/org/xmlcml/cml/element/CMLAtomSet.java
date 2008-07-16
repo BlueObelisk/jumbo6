@@ -7,7 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -672,8 +672,8 @@ public class CMLAtomSet extends AbstractAtomSet {
      try {
      newCoord = transMat.multiply (oldCoord);
      } catch (EuclidRuntimeException ume) {
-     logger.info("AtomSetToolImpl :: applySymmetry: UnequalMatricesException");
-     logger.info("matrix " + transMat.getRows () + "x" + transMat.getCols ());
+     LOG.info("AtomSetToolImpl :: applySymmetry: UnequalMatricesException");
+     LOG.info("matrix " + transMat.getRows () + "x" + transMat.getCols ());
      logger.info ("coord " + oldCoord.size ());
 
      return false;

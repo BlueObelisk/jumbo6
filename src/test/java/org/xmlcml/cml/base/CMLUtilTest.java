@@ -7,7 +7,6 @@ import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
 import static org.xmlcml.util.TestUtils.alwaysFail;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.neverThrow;
 
 import java.text.ParseException;

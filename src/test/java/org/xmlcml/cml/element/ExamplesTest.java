@@ -10,7 +10,6 @@ import static org.xmlcml.cml.element.AbstractTest.UNIT_RESOURCE;
 import static org.xmlcml.euclid.EuclidConstants.S_RSQUARE;
 import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.logger;
 import static org.xmlcml.util.TestUtils.neverThrow;
 
 import java.io.InputStream;
@@ -31,6 +30,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.ErrorHandler;
@@ -55,6 +55,7 @@ import org.xmlcml.euclid.Util;
  */
 public class ExamplesTest {
 
+	final static Logger LOG = Logger.getLogger(ExamplesTest.class);
 	/** parser type. */
 	public enum Type {
 		/** use XOM parser with OldNodeFactory */
@@ -223,8 +224,7 @@ public class ExamplesTest {
 			ee = e;
 		}
 		if (ee != null) {
-			logger
-					.severe("failed to cmlParse: " + url + "\n..... because: ["
+			LOG.error("failed to cmlParse: " + url + "\n..... because: ["
 							+ ee + "] [" + ee.getMessage() + "] in [" + url
 							+ S_RSQUARE);
 			ok = false;

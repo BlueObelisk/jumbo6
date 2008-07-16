@@ -1,5 +1,7 @@
 package org.xmlcml.euclid;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
+
 /**
  * Int supports various utilities for integers Use Integer where you want a
  * first-class Java object
@@ -7,7 +9,7 @@ import java.util.logging.Logger;
  * @author (C) P. Murray-Rust, 1996
  */
 public abstract class Int implements EuclidConstants {
-    final static Logger logger = Logger.getLogger(Int.class.getName());
+    final static Logger LOG = Logger.getLogger(Int.class);
     /**
      * set an array to zero
      * 
@@ -39,8 +41,8 @@ public abstract class Int implements EuclidConstants {
      */
     public static void printArray(int[] a) {
         for (int i = 0; i < a.length; i++) {
-            logger.info(a[i] + S_SPACE);
+            LOG.info(a[i] + S_SPACE);
         }
-        logger.info("");
+        LOG.info("");
     }
 }

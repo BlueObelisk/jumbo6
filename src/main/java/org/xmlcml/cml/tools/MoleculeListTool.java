@@ -1,7 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 

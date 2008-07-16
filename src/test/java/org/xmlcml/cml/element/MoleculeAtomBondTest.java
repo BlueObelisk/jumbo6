@@ -8,11 +8,11 @@ import static org.xmlcml.util.TestUtils.parseValidString;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
-import java.util.logging.Logger;
 
 import nu.xom.Document;
 import nu.xom.ParsingException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +27,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 
 public abstract class MoleculeAtomBondTest {
 	CMLBuilder builder = new CMLBuilder();
-	final static Logger logger = Logger.getLogger(MoleculeAtomBondTest.class
-			.getName());
+	final static Logger LOG = Logger.getLogger(MoleculeAtomBondTest.class);
 
 	Document xmlDocument = null;
 
@@ -137,7 +136,7 @@ public abstract class MoleculeAtomBondTest {
 			Assert.fail("Should not throw IOException");
 		} catch (ParsingException e) {
 			e.printStackTrace();
-			logger.severe("Parse exception " + e);
+			LOG.error("Parse exception " + e);
 			Assert.fail("Should not throw ParsingException " + e.getMessage());
 		}
 		xmlMolecule = (CMLMolecule) xmlDocument.getRootElement();

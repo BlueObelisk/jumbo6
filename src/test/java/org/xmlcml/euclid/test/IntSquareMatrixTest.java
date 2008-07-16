@@ -1,7 +1,7 @@
 package org.xmlcml.euclid.test;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,7 +35,6 @@ public class IntSquareMatrixTest extends MatrixTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        logger.setLevel(Level.WARNING);
         m0 = new IntSquareMatrix();
         m1 = new IntSquareMatrix(3);
         m2 = new IntSquareMatrix(3, new int[] { 11, 12, 13, 21, 22, 23, 31, 32,

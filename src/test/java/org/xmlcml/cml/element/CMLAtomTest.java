@@ -11,7 +11,6 @@ import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
-import org.xmlcml.cml.tools.AtomTool;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
