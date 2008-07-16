@@ -1,6 +1,6 @@
 package org.xmlcml.euclid;
 import java.text.DecimalFormat;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 /**
  * array of doubles
  * 

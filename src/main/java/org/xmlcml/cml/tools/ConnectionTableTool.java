@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -31,8 +31,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  * 
  */
 public class ConnectionTableTool extends AbstractTool {
-	final static Logger logger = Logger.getLogger(ConnectionTableTool.class
-			.getName());
+	final static Logger LOG = Logger.getLogger(ConnectionTableTool.class);
 	private CMLMolecule molecule;
 
 	// Used by ring detection methods
@@ -65,7 +64,7 @@ public class ConnectionTableTool extends AbstractTool {
 			}
 		} else {
 			if (molecule.getAtomCount() == 0) {
-				logger.warning("no atoms to split");
+				LOG.warn("no atoms to split");
 				return;
 			}
 			List<Set<CMLAtom>> atomSetList = new ArrayList<Set<CMLAtom>>();

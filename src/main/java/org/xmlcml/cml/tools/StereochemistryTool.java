@@ -2,7 +2,7 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 
@@ -29,7 +29,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class StereochemistryTool extends AbstractTool {
-	Logger logger = Logger.getLogger(StereochemistryTool.class.getName());
+	Logger LOG = Logger.getLogger(StereochemistryTool.class);
 
 	AbstractTool moleculeTool;
 	CMLMolecule molecule;
@@ -646,7 +646,7 @@ public class StereochemistryTool extends AbstractTool {
 		int totalParity = 0;
 		int sense = 0;
 		if (bond == null) {
-			logger.info("Cannot find ANY free wedgeable bonds! "
+			LOG.info("Cannot find ANY free wedgeable bonds! "
 					+ atom.getId());
 		} else {
 			final CMLAtomParity atomParity = (CMLAtomParity) atom

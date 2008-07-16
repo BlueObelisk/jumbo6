@@ -15,7 +15,6 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.tools.AtomTool;
-import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;

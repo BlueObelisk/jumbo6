@@ -2,7 +2,7 @@ package org.xmlcml.euclid;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 /**
  * rectangular real number matrix class RealMatrix represents a rectangular
  * m-x-n matrix. The basic matrix algebra for non-square matrices is represented

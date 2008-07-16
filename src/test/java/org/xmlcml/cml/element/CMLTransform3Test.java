@@ -18,7 +18,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.AxisAngleChirality;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;

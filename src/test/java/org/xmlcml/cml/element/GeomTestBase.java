@@ -3,7 +3,7 @@ package org.xmlcml.cml.element;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 
 import java.io.StringReader;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.junit.Before;
 import org.xmlcml.cml.base.CMLBuilder;

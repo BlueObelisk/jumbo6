@@ -39,6 +39,7 @@ public class DisorderTool extends AbstractTool {
 	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
     /** dewisott */
 	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
+	private String disorderString;
 
 	/**
 	 * constructor
@@ -105,7 +106,7 @@ public class DisorderTool extends AbstractTool {
 	 *
 	 * @exception CMLRuntimeException
 	 */
-	public void resolveDisorder() {
+	public void resolveDisorder() throws RuntimeException {
 		if (molecule == null) {
 			throw new IllegalStateException(
 			"Molecule property is null, no operations possible");
@@ -234,7 +235,12 @@ public class DisorderTool extends AbstractTool {
 			// attempt to reconcile errors in disorder assemblies
 			boolean fixed = false;
 			if (failedAssemblyList.size() > 0) {
-				fixed = fixFailedAssemblies(failedAssemblyList);
+				try {
+					fixed = fixFailedAssemblies(failedAssemblyList);
+				} catch (RuntimeException e) {
+					disorderString = e.getMessage();
+					fixed = false;
+				}
 				if (fixed) {
 					// if process reaches this point then failed assemblies have been
 					// fixed - add them to finished list
@@ -251,7 +257,7 @@ public class DisorderTool extends AbstractTool {
 						addDisorderMetadata(false);
 						isMetadataSet = true;
 					}
-					System.err.println("Could not resolve invalid disorder.");
+					throw new RuntimeException ("Could not resolve invalid disorder: "+disorderString);
 				}
 			} else {
 				if (containsDisorder) {

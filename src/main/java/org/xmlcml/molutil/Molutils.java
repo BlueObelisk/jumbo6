@@ -2,7 +2,7 @@ package org.xmlcml.molutil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -17,7 +17,7 @@ import org.xmlcml.euclid.Vector3;
  */
 public abstract class Molutils implements CMLConstants {
 
-    final static Logger logger = Logger.getLogger(Molutils.class.getName());
+    final static Logger LOG = Logger.getLogger(Molutils.class);
 
     /**
      * trigonal angle in radians
@@ -294,7 +294,7 @@ public abstract class Molutils implements CMLConstants {
      */
     public static void testCalculate3DCoordinates() {
 
-        logger.info("\nadd ligand coordinates...\n");
+        LOG.info("\nadd ligand coordinates...\n");
         final Point3 pZero = new Point3(10., 10., 10.);
         final Point3 pOne = new Point3(8., 10., 10.);
         final Point3 pStaggered = new Point3(8., 8., 10.);
@@ -308,40 +308,40 @@ public abstract class Molutils implements CMLConstants {
         double angles[] = { TETRAHEDRAL_ANGLE, TRIGONAL_ANGLE,
                 TETRAHEDRAL_ANGLE, };
 
-        logger.info("\n\nadd ligands to atom with no ligands");
-        logger.info("add ligands to: " + pZero + "; length: " + length
+        LOG.info("\n\nadd ligands to atom with no ligands");
+        LOG.info("add ligands to: " + pZero + "; length: " + length
                 + "; angle: " + angle);
         for (int geometry = ANY; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + S_COLON);
+            LOG.info("\nType of geometry: " + geometry + S_COLON);
             try {
                 List<Point3> ligands = calculate3DCoordinates0(pZero, geometry,
                         length);
                 for (int i = 0; i < ligands.size(); i++) {
-                    logger.info("...ligand:" + ligands.get(i));
+                    LOG.info("...ligand:" + ligands.get(i));
                 }
             } catch (EuclidRuntimeException e) {
-                logger.info("Exception: " + e);
+                LOG.info("Exception: " + e);
             }
         }
 
-        logger.info("\n\nadd ligands to atom with one ligand");
-        logger.info("add ligands to: " + pZero + "; length: " + length
+        LOG.info("\n\nadd ligands to atom with one ligand");
+        LOG.info("add ligands to: " + pZero + "; length: " + length
                 + "; angle: " + angle);
-        logger.info("reference atom: " + pOne);
+        LOG.info("reference atom: " + pOne);
         for (int geometry = LINEAR; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + S_COLON);
+            LOG.info("\nType of geometry: " + geometry + S_COLON);
             List<Point3> ligands = calculate3DCoordinates1(pZero, pOne,
                     pStaggered, geometry, length, angles[geometry - 2]);
             for (int i = 0; i < ligands.size(); i++) {
-                logger.info("...ligand:" + ligands.get(i));
+                LOG.info("...ligand:" + ligands.get(i));
             }
             for (int i = 0; i < ligands.size(); i++) {
-                logger.info("distance: ref-" + i + " = "
+                LOG.info("distance: ref-" + i + " = "
                         + ligands.get(i).getDistanceFromPoint(pZero));
             }
             for (int i = 0; i < ligands.size(); i++) {
                 for (int j = i + 1; j < ligands.size(); j++) {
-                    logger.info("angle: "
+                    LOG.info("angle: "
                             + i
                             + "-ref-"
                             + j
@@ -349,11 +349,11 @@ public abstract class Molutils implements CMLConstants {
                             + Point3.getAngle(ligands.get(i), pZero,
                                     ligands.get(j)));
                 }
-                logger.info("angle: lig-ref-refa = "
+                LOG.info("angle: lig-ref-refa = "
                         + Point3.getAngle(ligands.get(i), pZero, pOne));
             }
             for (int i = 0; i < ligands.size(); i++) {
-                logger.info("torsion: "
+                LOG.info("torsion: "
                         + i
                         + "-ref-ref1-ref2 = "
                         + Point3.getTorsion(ligands.get(i), pZero, pOne,
@@ -361,24 +361,24 @@ public abstract class Molutils implements CMLConstants {
             }
         }
 
-        logger.info("\n\nadd ligands to atom with two ligands");
-        logger.info("add ligands to: " + pZero + "; length: " + length
+        LOG.info("\n\nadd ligands to atom with two ligands");
+        LOG.info("add ligands to: " + pZero + "; length: " + length
                 + "; angle: " + angle);
-        logger.info("reference atoms: " + pTwoa + S_SLASH + pTwob);
+        LOG.info("reference atoms: " + pTwoa + S_SLASH + pTwob);
         for (int geometry = TRIGONAL; geometry <= TETRAHEDRAL; geometry++) {
-            logger.info("\nType of geometry: " + geometry + S_COLON);
+            LOG.info("\nType of geometry: " + geometry + S_COLON);
             List<Point3> ligands = calculate3DCoordinates2(pZero, pTwoa,
                     pTwob, geometry, length, angles[geometry - 2]);
             for (int i = 0; i < ligands.size(); i++) {
-                logger.info("...ligand:" + ligands.get(i));
+                LOG.info("...ligand:" + ligands.get(i));
             }
             for (int i = 0; i < ligands.size(); i++) {
-                logger.info("distance: ref-" + i + " = "
+                LOG.info("distance: ref-" + i + " = "
                         + ligands.get(i).getDistanceFromPoint(pZero));
             }
             for (int i = 0; i < ligands.size(); i++) {
                 for (int j = i + 1; j < ligands.size(); j++) {
-                    logger.info("angle: "
+                    LOG.info("angle: "
                             + i
                             + "-ref-"
                             + j
@@ -386,27 +386,26 @@ public abstract class Molutils implements CMLConstants {
                             + Point3.getAngle(ligands.get(i), pZero,
                                     ligands.get(j)));
                 }
-                logger.info("angle: lig-ref-refa = "
+                LOG.info("angle: lig-ref-refa = "
                         + Point3.getAngle(ligands.get(i), pZero, pTwoa));
-                logger.info("angle: lig-ref-refb = "
+                LOG.info("angle: lig-ref-refb = "
                         + Point3.getAngle(ligands.get(i), pZero, pTwob));
             }
         }
 
-        logger.info("\n\nadd ligand to atom with three ligands");
-        logger.info("reference atoms: " + pThreea + S_SLASH + pThreeb + S_SLASH
+        LOG.info("\n\nadd ligand to atom with three ligands");
+        LOG.info("reference atoms: " + pThreea + S_SLASH + pThreeb + S_SLASH
                 + pThreec);
         Point3 ligand = calculate3DCoordinates3(pZero, pThreea, pThreeb,
                 pThreec, length);
-        logger.info("Ligand: " + ligand);
-        logger
-                .info("distance: ref-lig = "
+        LOG.info("Ligand: " + ligand);
+        LOG.info("distance: ref-lig = "
                         + ligand.getDistanceFromPoint(pZero));
-        logger.info("angle: lig-ref-refa = "
+        LOG.info("angle: lig-ref-refa = "
                 + Point3.getAngle(ligand, pZero, pThreea));
-        logger.info("angle: lig-ref-refb = "
+        LOG.info("angle: lig-ref-refb = "
                 + Point3.getAngle(ligand, pZero, pThreeb));
-        logger.info("angle: lig-ref-refc = "
+        LOG.info("angle: lig-ref-refc = "
                 + Point3.getAngle(ligand, pZero, pThreec));
     }
 
@@ -416,7 +415,7 @@ public abstract class Molutils implements CMLConstants {
      * @param args
      */
     public static void main(String[] args) {
-        logger.info("Runs tests...");
+        LOG.info("Runs tests...");
         testCalculate3DCoordinates();
     }
 

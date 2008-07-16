@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
@@ -41,7 +41,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class ReactionTool extends AbstractSVGTool {
 
-    Logger logger = Logger.getLogger(ReactionTool.class.getName());
+    Logger LOG = Logger.getLogger(ReactionTool.class);
 
     private CMLReaction reaction = null;
 	private ReactionDisplay reactionDisplay;
@@ -429,7 +429,7 @@ public class ReactionTool extends AbstractSVGTool {
             try {
                 compareAtoms(atomPair, changedAtomPairList);
             } catch (CMLException e) {
-                logger.severe("Atom comparison problem "+e);
+                LOG.error("Atom comparison problem "+e);
             }
         }
 //        List bondPairList = getBondPairList(null, moleculeTool1, moleculeTool2, serial);
@@ -438,7 +438,7 @@ public class ReactionTool extends AbstractSVGTool {
             try {
                 compareBonds(bondPair, changedBondPairList);
             } catch (CMLException e) {
-                logger.severe("Bond comparison problem "+e);
+                LOG.error("Bond comparison problem "+e);
             }
         }
 
@@ -500,11 +500,11 @@ public class ReactionTool extends AbstractSVGTool {
         AtomTool atomTool1 = AtomTool.getOrCreateTool(atomPair.atom1);
         AtomTool atomTool2 = AtomTool.getOrCreateTool(atomPair.atom2);
         if (atomTool1 == null) {
-//            logger.severe("Null atom partner for (2): "+atomPair.atom2.getId());
+//            LOG.error("Null atom partner for (2): "+atomPair.atom2.getId());
             return;
         }
         if (atomTool2 == null) {
-//            logger.severe("Null atom partner for (1): "+atomPair.atom1.getId());
+//            LOG.error("Null atom partner for (1): "+atomPair.atom1.getId());
             return;
         }
         int loneElectronCount1 = atomTool1.getLoneElectronCount();
@@ -680,7 +680,7 @@ public class ReactionTool extends AbstractSVGTool {
             try {
                 compareAtoms(atomPair, changedPairList);
             } catch (CMLException e) {
-                logger.severe("Atom comparison problem "+e);
+                LOG.error("Atom comparison problem "+e);
             }
         }
 // FIXME
@@ -690,7 +690,7 @@ public class ReactionTool extends AbstractSVGTool {
             try {
                 compareBonds(bondPair, changedPairList);
             } catch (CMLException e) {
-                logger.severe("Bond comparison problem "+e);
+                LOG.error("Bond comparison problem "+e);
             }
         }
         if (changedPairList.size() > 0) {
@@ -712,7 +712,7 @@ public class ReactionTool extends AbstractSVGTool {
                 change = true;
                 MappedBondPair bondPair = getUniqueBondPairContaining(changedPairList, atomPair);
                 if (bondPair == null) {
-                    logger.severe("terminal atom cannot find unique ligand bond");
+                    LOG.error("terminal atom cannot find unique ligand bond");
                     change = false;
                     break;
                 }
@@ -730,7 +730,7 @@ public class ReactionTool extends AbstractSVGTool {
         while (true) {
             int size = changedPairList.size();
             if (size == 0) {
-                logger.info("Finished all electrons");
+                LOG.info("Finished all electrons");
                 break;
             } else {
                 System.out.println("Cycles atoms/bonds ("+serial+")");
@@ -744,7 +744,7 @@ public class ReactionTool extends AbstractSVGTool {
                 }
             }
             if (size == changedPairList.size()) {
-                logger.severe("Cannot exhaust electron transfers");
+                LOG.error("Cannot exhaust electron transfers");
                 break;
             }
         }

@@ -1,7 +1,7 @@
 package org.xmlcml.euclid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.xmlcml.euclid.Axis.Axis3;
 /**

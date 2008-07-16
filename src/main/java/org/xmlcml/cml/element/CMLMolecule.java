@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -13,6 +11,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
@@ -85,13 +84,7 @@ public class CMLMolecule
 //	*/
 //	public final static String R2 = "defr2";
 
-	final static Logger logger;
-
-	// / @cond DOXYGEN_STATIC_BLOCK_WORKAROUND
-	static {
-		logger = Logger.getLogger(CMLMolecule.class.getName());
-		logger.setLevel(Level.INFO);
-	}
+	final static Logger LOG = Logger.getLogger(CMLMolecule.class);
 
 	/** ensure integrity between list and children.
 	 * @return CMLMoleculeList.class

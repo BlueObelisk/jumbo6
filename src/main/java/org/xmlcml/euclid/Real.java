@@ -1,5 +1,5 @@
 package org.xmlcml.euclid;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 /**
  * Real supports various utilities for real numbers Use Double where you want a
  * first-class Java object
@@ -7,7 +7,9 @@ import java.util.logging.Logger;
  * @author (C) P. Murray-Rust, 1996
  */
 public abstract class Real implements EuclidConstants {
-    final static Logger logger = Logger.getLogger(Real.class.getName());
+
+	final static Logger LOG = Logger.getLogger(Real.class);
+	
     /** standard for equality of numbers */
     static double epsx = 0.0000000001;
     /**
@@ -207,9 +209,9 @@ public abstract class Real implements EuclidConstants {
      */
     public static void printArray(double[] a) {
         for (int i = 0; i < a.length; i++) {
-            logger.info(a[i] + S_SPACE);
+            LOG.info(a[i] + S_SPACE);
         }
-        logger.info("");
+        LOG.info("");
     }
     
 }

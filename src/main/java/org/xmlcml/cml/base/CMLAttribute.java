@@ -1,6 +1,6 @@
 package org.xmlcml.cml.base;
 
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.NamespaceConflictException;

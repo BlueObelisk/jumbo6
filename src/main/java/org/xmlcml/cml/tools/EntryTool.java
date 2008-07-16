@@ -3,7 +3,7 @@ package org.xmlcml.cml.tools;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

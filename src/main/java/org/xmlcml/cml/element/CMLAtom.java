@@ -3,8 +3,8 @@ package org.xmlcml.cml.element;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -30,12 +30,10 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  */
 public class CMLAtom extends AbstractAtom {
 
-    final static Logger logger = Logger.getLogger(CMLAtom.class.getName());
-	/** namespaced element name.*/
+    final static Logger LOG = Logger.getLogger(CMLAtom.class);
+
+    /** namespaced element name.*/
 	public final static String NS = C_E+TAG;
-    static {
-        logger.setLevel(Level.WARNING);
-    };
 
     List<CMLAtom> ligandAtoms = null;
     List<CMLBond> ligandBonds = null;

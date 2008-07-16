@@ -1,5 +1,5 @@
 package org.xmlcml.euclid;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 /**
  * square matrix class
  * 

@@ -1,7 +1,7 @@
 package org.xmlcml.cml.element;
 
 import java.text.ParseException;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;

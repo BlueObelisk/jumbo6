@@ -398,7 +398,7 @@ public class Real2 implements EuclidConstants {
                     .getLength();
             // System.out.println(""+dista+S_SLASH+distb+"/"+repelPoint+"/"+newPoints[1]+"/"+newPoints[nPoints-2]);
             if (dista > distb) {
-                // logger.info("SWAP");
+                // LOG.info("SWAP");
                 center = center0;
                 dTheta = -dTheta;
                 theta = theta0;

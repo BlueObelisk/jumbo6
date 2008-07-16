@@ -2,7 +2,7 @@ package org.xmlcml.cml.map;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.xmlcml.cml.attribute.UnitTypeAttribute;
 import org.xmlcml.cml.element.CMLUnitList;

@@ -3,7 +3,7 @@ package org.xmlcml.cml.base;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Document;

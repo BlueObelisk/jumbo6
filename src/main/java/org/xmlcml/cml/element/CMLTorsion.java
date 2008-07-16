@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.tools.AtomTool;
-import org.xmlcml.cml.tools.MoleculeTool;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Transform3;

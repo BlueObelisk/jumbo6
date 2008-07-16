@@ -1,7 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 
@@ -21,7 +21,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class MappedAtomPair extends AtomBondPair {
 
-    static Logger logger = Logger.getLogger(MappedAtomPair.class.getName());
+    static Logger LOG = Logger.getLogger(MappedAtomPair.class);
 
     CMLAtom atom1;
     CMLAtom atom2;
@@ -190,7 +190,7 @@ public class MappedAtomPair extends AtomBondPair {
         }
         ChemicalElement cElement = ChemicalElement.getChemicalElement(elementType);
         if (cElement == null && !elementType.equals("") && !elementType.equals("R")) {
-            logger.severe("Unknown element "+elementType);
+            LOG.error("Unknown element "+elementType);
         }
         // kludge to display carbon
 //        elementType = (elementType.equals("")) ? snap.atomDot : elementType;

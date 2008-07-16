@@ -6,9 +6,8 @@ import static org.xmlcml.util.TestUtils.neverThrow;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,7 @@ import org.xmlcml.euclid.IntSet;
  */
 public class IntMatrixTest extends MatrixTest {
 
-    static Logger logger = Logger.getLogger(IntMatrixTest.class.getName());
+    static Logger LOG = Logger.getLogger(IntMatrixTest.class);
 
     IntMatrix m0;
 
@@ -42,7 +41,6 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Before
     public void setUp() throws Exception {
-        logger.setLevel(Level.WARNING);
         m0 = new IntMatrix();
         m1 = new IntMatrix(3, 4);
         m2 = new IntMatrix(3, 4, new int[] { 11, 12, 13, 14, 21, 22, 23, 24,
@@ -669,7 +667,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testInsertColumnDataIntIntMatrix() {
-        logger.info("+++insertColumnData>>>");
+        LOG.info("+++insertColumnData>>>");
         IntMatrix insert = new IntMatrix(3, 2, new int[] { 72, 73, 82, 83, 92, 93, });
         m2.insertColumnData(1, insert);
         IntMatrix expect = new IntMatrix(3, 6, new int[] { 11, 12, 72, 73, 13, 14,
@@ -717,7 +715,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testReplaceRowDataIntIntMatrix() {
-        logger.info("+++replaceRowData>>>");
+        LOG.info("+++replaceRowData>>>");
         // FIXME
         IntMatrix insert = new IntMatrix(new IntMatrix(2, 4, new int[] { 71, 72, 73,
                     74, 81, 82, 83, 84, }));
@@ -772,7 +770,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testAppendColumnDataIntMatrix() {
-        // logger.info("+++appendColumnData>>>");
+        // LOG.info("+++appendColumnData>>>");
         IntMatrix rm = new IntMatrix(3, 2, new int[] { 17, 18, 27, 28, 37, 38 });
         m2.appendColumnData(rm);
         IntMatrix expect = new IntMatrix(3, 6, new int[] { 11, 12, 13, 14, 17, 18,
@@ -797,7 +795,7 @@ public class IntMatrixTest extends MatrixTest {
      */
     @Test
     public void testAppendRowDataIntMatrix() {
-        logger.info("+++appendRowData>>>");
+        LOG.info("+++appendRowData>>>");
         // FIXME
         IntMatrix rm = new IntMatrix(2, 4,
                     new int[] { 41, 42, 43, 44, 51, 52, 53, 54 });
