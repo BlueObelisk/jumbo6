@@ -53,6 +53,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class CMLFormula extends AbstractFormula {
 
+	private static Logger LOG = Logger.getLogger(CMLFormula.class);
 	public final static String SMILES = "SMILES";
 	public final static String SMILES1 = "cml:smiles";
 
@@ -505,8 +506,9 @@ public class CMLFormula extends AbstractFormula {
 					texts.get(i).detach();
 				}
 			} else if (!inline.equals(content)) {
-				throw new CMLRuntimeException(
-						"inline ("+inline+") differs from content ("+content+")");
+				String warn = 
+						"inline ("+inline+") differs from content ("+content+")";
+				LOG.warn(warn);
 			}
 		}
 		// concise from inline
@@ -541,11 +543,13 @@ public class CMLFormula extends AbstractFormula {
 		}
 		// check consistency
 		if (inline2Concise != null && !conciseS.equals(inline2Concise)) {
-			throw new CMLRuntimeException("concise ("+conciseS+") and inline ("+inline+" / "+inline2Concise+") differ");
+			String warn = "concise ("+conciseS+") and inline ("+inline+" / "+inline2Concise+") differ";
+			LOG.warn(warn);
 		}
 		if (atomArray2Concise != null && 
 				!atomArray2Concise.equals(conciseS)) {
-			throw new CMLRuntimeException("concise ("+conciseS+") and atomArray ("+atomArray2Concise+") differ");
+			String warn = "concise ("+conciseS+") and atomArray ("+atomArray2Concise+") differ";
+			LOG.warn(warn);
 		}
 		if (conciseS != null) {
 			super.setConcise(conciseS);
@@ -723,7 +727,7 @@ public class CMLFormula extends AbstractFormula {
 	 */
 	public void appendChild(Element child) {
 		if (child instanceof CMLAtomArray) {
-			throw new CMLRuntimeException("atomArray child of formula is deprecated");
+			LOG.warn("atomArray child of formula is deprecated");
 		}
 		super.appendChild(child);
 	}
