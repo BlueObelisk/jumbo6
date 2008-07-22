@@ -206,6 +206,12 @@
 						<exclude>
 							org/xmlcml/cml/tools/MoleculeListToolTest.java
 						</exclude>
+						<exclude>
+							org/xmlcml/cml/tools/AbstractToolTest.java
+						</exclude>
+						<exclude>
+							org/xmlcml/cml/element/AbstractTest.java
+						</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
