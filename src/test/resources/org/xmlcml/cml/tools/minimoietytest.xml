@@ -1,0 +1,16 @@
+<list xmlns="www.xml-cml.org/schema">
+<formula id="cprod" inline="C79 H42 Ag3 As2 Cl3 O28 Ru10"/>
+<formula id="NAFSES" inline="C16 H12 Cl3 N3 Ru S, 0.0625(H2 O)"/>
+<formula id="aa0501" inline="C12 H8 Br2 N2 S6"/>
+<formula id="ab0002" inline="C15 H12 Co N3 O3 S3, C3 H6 O1"/>
+<formula id="ab0101" inline="C60, 4(C6H6)"/>
+<formula id="ab0102" inline="C60,(C6 H6)4"/>
+<formula id="ab0103" inline="C10 H4 N2 O4, 2(C2 H6 S O)"/>
+<formula id="ab0104" inline="C60, (C4 H4 S)2"/>
+<formula id="ab0105" inline="C8 H17 N, H2 O"/>
+<formula id="ab0107" inline="C6 H8 N2"/>
+<formula id="ab0109" inline="C44 H30 N4 O Zn"/>
+<formula id="ab0204" inline="(C6 H12 O2)2, C4 H4 N2"/>
+<formula id="ab0204b" inline="C4 H4 N2, 2(C6 H12 O2)"/>
+</list>
+

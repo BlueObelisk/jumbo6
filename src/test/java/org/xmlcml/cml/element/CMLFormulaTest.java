@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
@@ -19,6 +20,7 @@ import junit.framework.Assert;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 
 import org.apache.log4j.Logger;
@@ -410,7 +412,6 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     		molecule.addBond(bond);
     	}
     	formula = new CMLFormula(molecule);
-    	formula.debug("BAD");
     	Assert.assertEquals("methane - all H explicit but count = 2", "C 1 H 2", formula.getConcise());
 
     	// methanol   	
@@ -661,6 +662,43 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
             CMLFormula mf = (CMLFormula) fMoiety.getChild(i);
             Assert.assertTrue("moiety " + i, f[i].equals(mf, 0.0001));
         }
+        String fs = "" +
+          "<formula xmlns='http://www.xml-cml.org/schema'>"+
+          "  <formula formalCharge='1' concise='C 2 H 6 N 1 1'>"+
+          "    <atomArray elementType='C H N' count='2.0 6.0 1.0'/>"+
+          "  </formula>"+
+          "  <formula formalCharge='-1' concise='H 1 O 4 S 2 -1'>"+
+          "    <atomArray elementType='H O S' count='1.0 4.0 2.0'/>"+
+          "  </formula>"+
+          "</formula>";
+        Element expected = parseValidString(fs);
+        assertEqualsCanonically("full formula", expected, fMoiety, true);
+    }
+    /**
+     * 
+     */
+    @Test
+    public void testComplexMoiety() {
+    	String moiety = "C4 H4 N2, 2(C6 H12 O2)";
+        CMLFormula fMoiety = null;
+        try {
+            fMoiety = CMLFormula.createFormula(moiety, Type.MOIETY);
+        } catch (CMLRuntimeException e) {
+            e.printStackTrace();
+            Assert.fail("should not throw " + e);
+        }
+        String fs = "" +
+    		"<formula concise='C 16 H 28 N 2 O 4' formalCharge='0' xmlns='http://www.xml-cml.org/schema'>" +
+    		"  <formula concise='C 4 H 4 N 2'>" +
+    		"    <atomArray elementType='C H N' count='4.0 4.0 2.0'/>" +
+    		"  </formula>" +
+    		"  <formula concise='C 6 H 12 O 2' count='2.0'>" +
+    		"    <atomArray elementType='C H O' count='6.0 12.0 2.0'/>" +
+    		"  </formula>" +
+    		"</formula>";
+        Element expected = parseValidString(fs);
+        assertEqualsCanonically("full formula", expected, fMoiety, true);
+        String concise = fMoiety.getConcise();
     }
 
     /**
@@ -1386,4 +1424,38 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
 		assertEqualsCanonically("formula", fxml, formula, true);
 	}
 
+	@Test
+	public void testMoiety2Concise() throws Exception {
+		Element cml = new CMLBuilder().build("src/test/resources/org/xmlcml/cml/element/examples/moietysum.xml").getRootElement();
+		for (int i = 0; i < cml.getChildElements().size(); i++) {
+			CMLMolecule molecule = (CMLMolecule) cml.getChildElements().get(i);
+			testFormulae(molecule);
+		}
+	}
+	
+	private void testFormulae(CMLMolecule molecule) {
+		Nodes sumNodes = molecule.query("cml:formula[contains(@dictRef, 'sum')]", CML_XPATH);
+		CMLFormula sumFormula = (sumNodes.size() == 0) ? null : (CMLFormula) sumNodes.get(0);
+		sumFormula.normalize();
+		String sumConcise = sumFormula.getConcise();
+		String sumTitle = sumFormula.getTitle(); 
+		Nodes moietyNodes = molecule.query("cml:formula[contains(@dictRef, 'moiety')]", CML_XPATH);
+		CMLFormula mFormula = (moietyNodes.size() == 0) ? null : (CMLFormula) moietyNodes.get(0);
+		String moietyTitle = mFormula.getTitle();
+		String mInline = mFormula.getInline();
+		try {
+			CMLFormula moietyFormula = CMLFormula.createFormula(mInline, Type.MOIETY);
+			moietyFormula.normalize();
+			String moietyConcise = moietyFormula.getConcise();
+			Assert.assertEquals("ids", sumTitle, moietyTitle);
+//			System.out.println(sumConcise+" / "+sumFormula.getInline()+" / "+mInline);
+			if (sumConcise.equals(moietyConcise)) {
+//				System.out.println("...");
+			} else {
+				System.out.println(sumTitle+": "+sumConcise+" != "+moietyConcise+" in: "+mInline);
+			}
+		} catch (RuntimeException e) {
+			System.out.println(sumTitle+" PARSE ERROR "+e.getMessage()+".."+mInline);
+		}
+	}
  }

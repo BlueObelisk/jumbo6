@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -23,6 +22,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
@@ -455,6 +455,30 @@ public class CMLFormula extends AbstractFormula {
 		// create all possible renderings of formula
 		// any or all may be present
 		// concise
+		CMLElements<CMLFormula> formulaChildren = this.getFormulaElements();
+		if (formulaChildren.size() > 0) {
+			String conciseString = "";
+			for (CMLFormula formula : formulaChildren) {
+				formula.normalize();
+			}
+			CMLFormula aggregateFormula = getAggregateFormula();
+			String aggregateConcise = aggregateFormula.getConcise();
+			super.setConcise(aggregateConcise);
+			super.setFormalCharge(aggregateFormula.getFormalCharge());
+			removeAtomArrayChildren();
+		} else {
+			normalizeSingle();
+		}
+	}
+	
+	private void removeAtomArrayChildren() {
+		CMLElements atomArrayElements = this.getAtomArrayElements();
+		for (int i = 0; i < atomArrayElements.size(); i++) {
+			atomArrayElements.get(i).detach();
+		}
+	}
+
+	private void normalizeSingle() {
 		CMLAttribute conciseAtt = this.getConciseAttribute();
 		// formal charge
 		int formalCharge = 0;
@@ -556,6 +580,9 @@ public class CMLFormula extends AbstractFormula {
 		}
 	}
 
+//	private String aggregateConcise(String conciseS, double count, int formalCharge) {
+//		
+//	}
 
 	/** utility to convert SMILES to string.
 	 * @param smiles
@@ -857,6 +884,7 @@ public class CMLFormula extends AbstractFormula {
 		} else {
 			docFormula = null;
 		}
+		docFormula.normalize();
 		return docFormula;
 	}
 
@@ -1205,7 +1233,7 @@ public class CMLFormula extends AbstractFormula {
 						try {
 							count = new Double(s).doubleValue();
 						} catch (NumberFormatException nfe) {
-							throw new CMLRuntimeException(
+							throw new RuntimeException(
 									"Moiety cannot parse element count: " + s);
 						}
 					}

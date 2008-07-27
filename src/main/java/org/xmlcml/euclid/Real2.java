@@ -124,6 +124,19 @@ public class Real2 implements EuclidConstants {
     public void setY(double yy) {
         y = yy;
     }
+    
+    /**
+     * equality.
+     * 
+     * @param r
+     *            to test
+     * @return equals
+     * @deprecated "use isEqualTo(Real2, double)"
+     */
+    public boolean isEqualTo(Real2 r) {
+        return (Real.isEqual(x, r.x) && Real.isEqual(y, r.y));
+    }
+    
     /**
      * equality.
      * 
@@ -131,8 +144,8 @@ public class Real2 implements EuclidConstants {
      *            to test
      * @return equals
      */
-    public boolean isEqualTo(Real2 r) {
-        return (Real.isEqual(x, r.x) && Real.isEqual(y, r.y));
+    public boolean isEqualTo(Real2 r, double eps) {
+        return (Real.isEqual(x, r.x, eps) && Real.isEqual(y, r.y, eps));
     }
     
     /**
