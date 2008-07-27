@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 import nu.xom.Elements;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
@@ -45,6 +45,10 @@ public class AtomSetTool extends AbstractTool {
 	private CMLMolecule molecule = null;
 
 	private Map<CMLAtom, CMLAtom> parentTable = null;
+
+	private CMLAtomSet searchAtomSet;
+
+	private AtomMatcher atomMatcher;
 
 	/**
 	 * constructor.
@@ -634,5 +638,43 @@ public class AtomSetTool extends AbstractTool {
 		}
 		double sds = p3v1.getSigmaDeltaSquared(p3v2);
 		return Math.sqrt(sds/p3v1.size());
+	}
+	
+	public CMLMap match(CMLAtomSet search, AtomMatcher atomMatcher) {
+		CMLMap map = null;
+		this.searchAtomSet = search;
+		this.atomMatcher = atomMatcher;
+		findPossibleMatchesForEachAtomInSearch();
+		matchAtomSet();
+		return map;
+	}
+	
+	private void findPossibleMatchesForEachAtomInSearch() {
+		List<SearchAtom> searchAtomList = new ArrayList<SearchAtom>();
+		for (int i = 0; i < searchAtomSet.size(); i++) {
+			CMLAtom atom = searchAtomSet.getAtom(i);
+			SearchAtom searchAtom = new SearchAtom(atom);
+			searchAtom.addMatchableAtoms(atomSet, atomMatcher);
+			searchAtomList.add(searchAtom);
+		}
+	}
+	
+	private void matchAtomSet() {
+		
+	}
+}
+class SearchAtom {
+	CMLAtom atom;
+	List<CMLAtom> matchesInTarget = new ArrayList<CMLAtom>();
+	public SearchAtom(CMLAtom atom) {
+		this.atom = atom;
+	}
+	
+	public void addMatchableAtoms(CMLAtomSet targetAtomSet, AtomMatcher atomMatcher) {
+		for (CMLAtom targetAtom : targetAtomSet.getAtoms()) {
+			if (atomMatcher.matches(atom, targetAtom)) {
+				matchesInTarget.add(targetAtom);
+			}
+		}
 	}
 }

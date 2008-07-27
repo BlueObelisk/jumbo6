@@ -171,7 +171,6 @@ public class CMLTableTest extends AbstractTableTest {
     private void testResetType(String start, CMLTable table0,
             String file1, String file2, String file3
             ) {
-        System.out.println("++++"+start+"++++");
 
         testResetType(start, table0, file1, TableType.COLUMN_BASED);
         testResetType(start, table0, file2, TableType.CONTENT_BASED);

@@ -821,11 +821,8 @@ public class CMLAtomSet extends AbstractAtomSet {
         	if (this.size() == 0) {
         		result = true;
         	} else {
-	        	System.out.println("OTHER..........."+otherAtomSet.getMolecule());
-	        	System.out.println("THIS..........."+this.getMolecule());
 	            CMLAtomSet atomSet = this.complement(otherAtomSet);
-	        	System.out.println("ATOM..........."+atomSet.getMolecule());
-	            result = atomSet.size() == 0;
+	            result = (atomSet.size() == 0);
 	        }
         }
         return result;

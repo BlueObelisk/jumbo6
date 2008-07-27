@@ -254,11 +254,16 @@ public class AtomMatcherTest {
     	AtomMatcher atomMatcher = new AtomMatcher();
     	atomMatcher.setAtomMatchStrategy(Strategy.MATCH_DISTANCE_MATRIX);
         CMLMap map12 = atomMatcher.createMapFrom2DOverlap(atomSet1, atomSet2);
-        map12.debug();
+        Real2 ref = null;
     	for (CMLLink link : map12.getLinkElements()) {
     		Real2 xy1 = mol1.getAtomById(link.getFrom()).getXY2();
     		Real2 xy2 = mol2.getAtomById(link.getTo()).getXY2();
-    		System.out.println(xy1.subtract(xy2));
+    		Real2 delta = xy1.subtract(xy2);
+    		if (ref == null) {
+    			ref = delta;
+    		} else {
+    			Assert.assertTrue(ref.isEqualTo(delta, 0.001));
+    		}
     	}
     }
 
@@ -342,6 +347,23 @@ public class AtomMatcherTest {
 
     }
 
+    /**
+     * 
+     */
+    @Test
+    public void testMatchesCMLAtomCMLAtom() {
+    	AtomMatcher atomMatcher = new AtomMatcher();
+    	CMLAtom atom1 = null;
+    	CMLAtom atom2 = null;
+    	Assert.assertFalse("null does not match", atomMatcher.matches(atom1, atom2));
+    	atom1 = new CMLAtom();
+    	atom2 = new CMLAtom();
+    	atom1.setElementType("O");
+    	atom2.setElementType("C");
+    	Assert.assertFalse("does not match", atomMatcher.matches(atom1, atom2));
+    	atom2.setElementType("O");
+    	Assert.assertTrue("match", atomMatcher.matches(atom1, atom2));
+    }
 
     /** Test method for 'org.xmlcml.cml.tools.AtomMatcher.getUniqueMatchedAtoms(CMLAtomSet, CMLAtomSet, AtomMatcher)'
      */
@@ -349,6 +371,7 @@ public class AtomMatcherTest {
     public void testGetUniqueMatchedAtomsCMLAtomSetCMLAtomSetAtomMatcher() {
 //        CMLMap map = getUniqueMatchedAtoms(atomSet, targetAtomSet,
 //                atomMatcher) throws CMLException {
+    	
     }
 
     /** Test method for 'org.xmlcml.cml.tools.AtomTree.getAtomTreeLabelling(CMLAtomSet, AtomMatcher)'

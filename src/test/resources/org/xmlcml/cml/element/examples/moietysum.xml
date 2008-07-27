@@ -1,0 +1,932 @@
+<cml xmlns="http://www.xml-cml.org/schema">
+<molecule>
+<formula title="cprod.cif" dictRef="iucr:_chemical_formula_moiety" inline="C79 H42 Ag3 As2 Cl3 O28 Ru10"/> 
+<formula title="cprod.cif" dictRef="iucr:_chemical_formula_sum" inline="C79 H42 Ag3 As2 Cl3 O28 Ru10"/> 
+</molecule>
+<molecule>
+<formula title="ab0001.cif" dictRef="iucr:_chemical_formula_moiety" inline="C15 H12 Co N3 O3 S3"/> 
+<formula title="ab0001.cif" dictRef="iucr:_chemical_formula_sum" inline="C15 H12 Co N3 O3 S3"/> 
+</molecule>
+<molecule>
+<formula title="ab0002.cif" dictRef="iucr:_chemical_formula_moiety" inline="C15 H12 Co N3 O3 S3, C3 H6 O1"/> 
+<formula title="ab0002.cif" dictRef="iucr:_chemical_formula_sum" inline="C18 H18 Co N3 O4 S3"/> 
+</molecule>
+<molecule>
+<formula title="ab0101.cif" dictRef="iucr:_chemical_formula_moiety" inline="C60, 4(C6H6)"/> 
+<formula title="ab0101.cif" dictRef="iucr:_chemical_formula_sum" inline="C84 H24"/> 
+</molecule>
+<molecule>
+<formula title="ab0102.cif" dictRef="iucr:_chemical_formula_moiety" inline="C60,(C6 H6)4"/> 
+<formula title="ab0102.cif" dictRef="iucr:_chemical_formula_sum" inline="C84 H24"/> 
+</molecule>
+<molecule>
+<formula title="ab0103.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H4 N2 O4, 2(C2 H6 S O)"/> 
+<formula title="ab0103.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H16 N2 O6 S2"/> 
+</molecule>
+<molecule>
+<formula title="ab0104.cif" dictRef="iucr:_chemical_formula_moiety" inline="C60, (C4 H4 S)2"/> 
+<formula title="ab0104.cif" dictRef="iucr:_chemical_formula_sum" inline="C68 H8 S2"/> 
+</molecule>
+<molecule>
+<formula title="ab0105.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H17 N, H2 O"/> 
+<formula title="ab0105.cif" dictRef="iucr:_chemical_formula_sum" inline="C9 H19 N O2"/> 
+</molecule>
+<molecule>
+<formula title="ab0107.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H8 N2"/>
+<formula title="ab0107.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H8 N2"/> 
+</molecule>
+<molecule>
+<formula title="ab0108.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H8 N2"/>
+<formula title="ab0108.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H8 N2"/> 
+</molecule>
+<molecule>
+<formula title="ab0109.cif" dictRef="iucr:_chemical_formula_moiety" inline="C44 H30 N4 O Zn"/> 
+<formula title="ab0109.cif" dictRef="iucr:_chemical_formula_sum" inline="C44 H30 N4 O Zn"/> 
+</molecule>
+<molecule>
+<formula title="ab0110.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H18"/>
+<formula title="ab0110.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H18"/> 
+</molecule>
+<molecule>
+<formula title="ab0111.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H14"/> 
+<formula title="ab0111.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H14"/> 
+</molecule>
+<molecule>
+<formula title="ab0201.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H22"/> 
+<formula title="ab0201.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H22"/> 
+</molecule>
+<molecule>
+<formula title="ab0202.cif" dictRef="iucr:_chemical_formula_moiety" inline="C7 H9 N"/> 
+<formula title="ab0202.cif" dictRef="iucr:_chemical_formula_sum" inline="C7 H9 N"/> 
+</molecule>
+<molecule>
+<formula title="ab0203.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H20 N O2 P"/>
+<formula title="ab0203.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H20 N O2 P"/> 
+</molecule>
+<molecule>
+<formula title="ab0204.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C6 H12 O2)2, C4 H4 N2"/> 
+<formula title="ab0204.cif" dictRef="iucr:_chemical_formula_sum" inline="C16 H28 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0204b.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C6 H12 O2)"/> 
+<formula title="ab0204b.cif" dictRef="iucr:_chemical_formula_sum" inline="C16 H28 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0205.cif" dictRef="iucr:_chemical_formula_moiety" inline="C18 H32 N2 O4"/> 
+<formula title="ab0205.cif" dictRef="iucr:_chemical_formula_sum" inline="C18 H32 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0206.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C3 H6 O2)"/> 
+<formula title="ab0206.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H16 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0207.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C4 H8 O2)"/> 
+<formula title="ab0207.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H20 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0208.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C5 H10 O2)"/> 
+<formula title="ab0208.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H24 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0209.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C2 H4 O2)"/> 
+<formula title="ab0209.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H12 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0210.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C H2 O2)"/> 
+<formula title="ab0210.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H8 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0211.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C8 H16 O2)"/> 
+<formula title="ab0211.cif" dictRef="iucr:_chemical_formula_sum" inline="C20 H36 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0212.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C9 H18 O2)"/> 
+<formula title="ab0212.cif" dictRef="iucr:_chemical_formula_sum" inline="C22 H40 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0213.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H4 N2, 2(C10 H20 O2)"/> 
+<formula title="ab0213.cif" dictRef="iucr:_chemical_formula_sum" inline="C24 H44 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0214.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H24 O2"/>
+<formula title="ab0214.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H24 O2"/> 
+</molecule>
+<molecule>
+<formula title="ab0215.cif" dictRef="iucr:_chemical_formula_moiety" inline="C66 H56 Fe6, 0.5(C6 H4 Cl2), 1.5(C H4 O)"/> 
+<formula title="ab0215.cif" dictRef="iucr:_chemical_formula_sum" inline="C70.50 H62 Cl Fe6 O1.50"/> 
+</molecule>
+<molecule>
+<formula title="ab0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="C48 H33 Fe3 Mn O3"/> 
+<formula title="ab0216.cif" dictRef="iucr:_chemical_formula_sum" inline="C48 H33 Fe3 Mn O3"/> 
+</molecule>
+<molecule>
+<formula title="ab0217.cif" dictRef="iucr:_chemical_formula_moiety" inline="C15 H30 O2"/>
+<formula title="ab0217.cif" dictRef="iucr:_chemical_formula_sum" inline="C15 H30 O2"/> 
+</molecule>
+<molecule>
+<formula title="ab0218.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H18"/> 
+<formula title="ab0218.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H18"/> 
+</molecule>
+<molecule>
+<formula title="ab0302.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C11 H22 O2)2, C4 H4 N2"/> 
+<formula title="ab0302.cif" dictRef="iucr:_chemical_formula_sum" inline="C26 H48 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="ab0501.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H16"/> 
+<formula title="ab0501.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H16"/> 
+</molecule>
+<molecule>
+<formula title="ab0503.cif" dictRef="iucr:_chemical_formula_moiety" inline="C4 H9 N"/> 
+<formula title="ab0503.cif" dictRef="iucr:_chemical_formula_sum" inline="C4 H9 N"/> 
+</molecule>
+<molecule>
+<formula title="ab0504.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H13 N"/> 
+<formula title="ab0504.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H13 N"/> 
+</molecule>
+<molecule>
+<formula title="ah0101.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H10 Br2 O2 S"/>
+<formula title="ah0101.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H10 Br2 O2 S"/> 
+</molecule>
+<molecule>
+<formula title="ah0120.cif" dictRef="iucr:_chemical_formula_moiety" inline="C20 H26 O3 S"/> 
+<formula title="ah0120.cif" dictRef="iucr:_chemical_formula_sum" inline="C20 H26 O3 S"/> 
+</molecule>
+<molecule>
+<formula title="ah0121.cif" dictRef="iucr:_chemical_formula_moiety" inline="C13 H11 N O2"/>
+<formula title="ah0121.cif" dictRef="iucr:_chemical_formula_sum" inline="C13 H11 N O2"/> 
+</molecule>
+<molecule>
+<formula title="ah0125.cif" dictRef="iucr:_chemical_formula_moiety" inline="C11 H16 N2 O"/>
+<formula title="ah0125.cif" dictRef="iucr:_chemical_formula_sum" inline="C11 H16 N2 O"/> 
+</molecule>
+<molecule>
+<formula title="ah0128.cif" dictRef="iucr:_chemical_formula_moiety" inline="C45 H46 S6"/>
+<formula title="ah0128.cif" dictRef="iucr:_chemical_formula_sum" inline="C45 H46 S6"/> 
+</molecule>
+<molecule>
+<formula title="ah0129.cif" dictRef="iucr:_chemical_formula_moiety" inline="C86 H84 Eu F9 N2 O6 S3"/>
+<formula title="ah0129.cif" dictRef="iucr:_chemical_formula_sum" inline="C86 H84 Eu F9 N2 O6 S3"/> 
+</molecule>
+<molecule>
+<formula title="ah0131.cif" dictRef="iucr:_chemical_formula_moiety" inline="C28 H32 S5"/>
+<formula title="ah0131.cif" dictRef="iucr:_chemical_formula_sum" inline="C28 H32 S5"/> 
+</molecule>
+<molecule>
+<formula title="ah0132.cif" dictRef="iucr:_chemical_formula_moiety" inline="C107 H105 N2 O6 Tb, C H2 Cl2"/> 
+<formula title="ah0132.cif" dictRef="iucr:_chemical_formula_sum" inline="C108 H107 Cl2 N2 O6 Tb"/> 
+</molecule>
+<molecule>
+<formula title="ah0133.cif" dictRef="iucr:_chemical_formula_moiety" inline="C48 H20, (C H2 Cl2)0.5"/> 
+<formula title="ah0133.cif" dictRef="iucr:_chemical_formula_sum" inline="C48.50 H21 Cl"/> 
+</molecule>
+<molecule>
+<formula title="ah0134.cif" dictRef="iucr:_chemical_formula_moiety" inline="C33 H44 N O2 Si +, Cl -"/> 
+<formula title="ah0134.cif" dictRef="iucr:_chemical_formula_sum" inline="C33 H44 Cl N O2 Si"/> 
+</molecule>
+<molecule>
+<formula title="ah0201.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H20 S3 Si2"/>
+<formula title="ah0201.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H20 S3 Si2"/> 
+</molecule>
+<molecule>
+<formula title="ah0202.cif" dictRef="iucr:_chemical_formula_moiety" inline="C62 H74, C4 H8 O"/> 
+<formula title="ah0202.cif" dictRef="iucr:_chemical_formula_sum" inline="C66 H82 O"/> 
+</molecule>
+<molecule>
+<formula title="ah0203.cif" dictRef="iucr:_chemical_formula_moiety" inline="C64 H76 S, 0.5(C4 H8 O)"/> 
+<formula title="ah0203.cif" dictRef="iucr:_chemical_formula_sum" inline="C66 H80 O0.50 S"/> 
+</molecule>
+<molecule>
+<formula title="ah0204.cif" dictRef="iucr:_chemical_formula_moiety" inline="C64 H76 O, 0.5(C4 H8 O)"/> 
+<formula title="ah0204.cif" dictRef="iucr:_chemical_formula_sum" inline="C66 H80 O1.50"/> 
+</molecule>
+<molecule>
+<formula title="ah0205.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H10 Br2 O S"/> 
+<formula title="ah0205.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H10 Br2 O S"/> 
+</molecule>
+<molecule>
+<formula title="ah0206.cif" dictRef="iucr:_chemical_formula_moiety" inline="C16 H16 Br2 O2"/> 
+<formula title="ah0206.cif" dictRef="iucr:_chemical_formula_sum" inline="C16 H16 Br2 O2"/> 
+</molecule>
+<molecule>
+<formula title="ah0207.cif" dictRef="iucr:_chemical_formula_moiety" inline="C70 H90"/>
+<formula title="ah0207.cif" dictRef="iucr:_chemical_formula_sum" inline="C70 H90"/> 
+</molecule>
+<molecule>
+<formula title="ah0208.cif" dictRef="iucr:_chemical_formula_moiety" inline="C75 H98"/> 
+<formula title="ah0208.cif" dictRef="iucr:_chemical_formula_sum" inline="C75 H98"/> 
+</molecule>
+<molecule>
+<formula title="ah0209.cif" dictRef="iucr:_chemical_formula_moiety" inline="C33 H14 Br2 F34"/>
+<formula title="ah0209.cif" dictRef="iucr:_chemical_formula_sum" inline="C33 H14 Br2 F34"/> 
+</molecule>
+<molecule>
+<formula title="ah0211.cif" dictRef="iucr:_chemical_formula_moiety" inline="C29 H14 Br2 F26"/> 
+<formula title="ah0211.cif" dictRef="iucr:_chemical_formula_sum" inline="C29 H14 Br2 F26"/> 
+</molecule>
+<molecule>
+<formula title="ah0212.cif" dictRef="iucr:_chemical_formula_moiety" inline="C30 H14"/> 
+<formula title="ah0212.cif" dictRef="iucr:_chemical_formula_sum" inline="C30 H14"/> 
+</molecule>
+<molecule>
+<formula title="ah0214.cif" dictRef="iucr:_chemical_formula_moiety" inline="C27 H23 Br2 F13"/> 
+<formula title="ah0214.cif" dictRef="iucr:_chemical_formula_sum" inline="C27 H23 Br2 F13"/> 
+</molecule>
+<molecule>
+<formula title="ah0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="C11 H11 Br S3 Si"/> 
+<formula title="ah0216.cif" dictRef="iucr:_chemical_formula_sum" inline="C11 H11 Br S3 Si"/> 
+</molecule>
+<molecule>
+<formula title="ah0217.cif" dictRef="iucr:_chemical_formula_moiety" inline="C O3 2-, 2Na +, (H2 O)7"/> 
+<formula title="ah0217.cif" dictRef="iucr:_chemical_formula_sum" inline="C H14 Na2 O10"/> 
+</molecule>
+<molecule>
+<formula title="ah0219.cif" dictRef="iucr:_chemical_formula_moiety" inline="C42 H32 N2"/> 
+<formula title="ah0219.cif" dictRef="iucr:_chemical_formula_sum" inline="C42 H32 N2"/> 
+</molecule>
+<molecule>
+<formula title="ah0220.cif" dictRef="iucr:_chemical_formula_moiety" inline="C11 H18 O5, C H Cl3"/> 
+<formula title="ah0220.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H19 Cl3 O5"/> 
+</molecule>
+<molecule>
+<formula title="ah0221.cif" dictRef="iucr:_chemical_formula_moiety" inline="C44 H36 N2 O2"/> 
+<formula title="ah0221.cif" dictRef="iucr:_chemical_formula_sum" inline="C44 H36 N2 O2"/> 
+</molecule>
+<molecule>
+<formula title="ah0222.cif" dictRef="iucr:_chemical_formula_moiety" inline="C18 H17 Br S4"/> 
+<formula title="ah0222.cif" dictRef="iucr:_chemical_formula_sum" inline="C18 H17 Br S4"/> 
+</molecule>
+<molecule>
+<formula title="ah0224.cif" dictRef="iucr:_chemical_formula_moiety" inline="C20 H12 Br2 S2"/> 
+<formula title="ah0224.cif" dictRef="iucr:_chemical_formula_sum" inline="C20 H12 Br2 S2"/> 
+</molecule>
+<molecule>
+<formula title="ah0318.cif" dictRef="iucr:_chemical_formula_sum" inline=" C34 H54 N1 O2 P1"/>
+<formula title="ah0318.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C34 H54 N1 O2 P1"/>
+</molecule>
+<molecule>
+<formula title="ah0319.cif" dictRef="iucr:_chemical_formula_sum" inline=" C28 H32 S5"/>
+<formula title="ah0319.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C28 H32 S5"/>
+</molecule>
+<molecule>
+<formula title="ah0320.cif" dictRef="iucr:_chemical_formula_sum" inline=" C13 H17 N3 O1"/>
+<formula title="ah0320.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C13 H17 N3 O1"/>
+</molecule>
+<molecule>
+<formula title="ah0320.cif" dictRef="iucr:_chemical_formula_sum" inline=" C13 H17 N3 O1"/>
+<formula title="ah0320.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C13 H17 N3 O1"/>
+</molecule>
+<molecule>
+<formula title="ah0321.cif" dictRef="iucr:_chemical_formula_sum" inline=" C32 H16 Br2 Cl6 F7 Ir1 N6"/>
+<formula title="ah0321.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C32 H16 Br2 Cl6 F7 Ir1 N6"/>
+</molecule>
+<molecule>
+<formula title="ah0322.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H22 O5"/>
+<formula title="ah0322.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H22 O5"/>
+</molecule>
+<molecule>
+<formula title="ah0323.cif" dictRef="iucr:_chemical_formula_sum" inline=" C12 H20 O5"/>
+<formula title="ah0323.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C12 H20 O5"/>
+</molecule>
+<molecule>
+<formula title="ah0401.cif" dictRef="iucr:_chemical_formula_sum" inline=" C35 H33 Ir1 N2 O3 S2"/>
+<formula title="ah0401.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C31 H23 Ir N2 O2 S2, C4 H10 O"/>
+</molecule>
+<molecule>
+<formula title="ah0402.cif" dictRef="iucr:_chemical_formula_sum" inline=" C34 H24 Br2 F7 Ir1 N6 O1"/>
+<formula title="ah0402.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C30 H14 Br2 F7 Ir N6, C4 H10 O "/>
+</molecule>
+<molecule>
+<formula title="ah0403.cif" dictRef="iucr:_chemical_formula_sum" inline=" C57 H62 O2"/>
+<formula title="ah0403.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C57 H62 O2"/>
+</molecule>
+<molecule>
+<formula title="ah0404.cif" dictRef="iucr:_chemical_formula_sum" inline=" C20 H28 Si2"/>
+<formula title="ah0404.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C20 H28 Si2"/>
+</molecule>
+<molecule>
+<formula title="ah0405.cif" dictRef="iucr:_chemical_formula_sum" inline=" C61 H70 O5 S2 "/>
+<formula title="ah0405.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C57 H62 O4 S2, C4 H8 O "/>
+</molecule>
+<molecule>
+<formula title="ah0406.cif" dictRef="iucr:_chemical_formula_sum" inline=" C36 H48 Cl2 O11"/>
+<formula title="ah0406.cif" dictRef="iucr:_chemical_formula_moiety" inline=" 2(C18 H23 Cl O5), H2O"/>
+</molecule>
+<molecule>
+<formula title="ah0408.cif" dictRef="iucr:_chemical_formula_sum" inline=" C40 H25 Br2 Cl1 F4 Ir1 N7"/>
+<formula title="ah0408.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C40 H24 Br2 F4 Ir1 N7, (HCL)"/>
+</molecule>
+<molecule>
+<formula title="ah0409.cif" dictRef="iucr:_chemical_formula_sum" inline=" C40 H66 B2 O4 Si1"/>
+<formula title="ah0409.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C40 H66 B2 O4 Si1"/>
+</molecule>
+<molecule>
+<formula title="ah0410.cif" dictRef="iucr:_chemical_formula_sum" inline=" C65 H74 Cl6 O"/>
+<formula title="ah0410.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C63 H72 O, 2(C H Cl3)"/>
+</molecule>
+<molecule>
+<formula title="ah0412.cif" dictRef="iucr:_chemical_formula_sum" inline=" C20 H30 Si3"/>
+<formula title="ah0412.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C20 H30 Si3"/>
+</molecule>
+<molecule>
+<formula title="ah0413.cif" dictRef="iucr:_chemical_formula_sum" inline=" C26 H40 N2 O4 S1 Si1"/>
+<formula title="ah0413.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C26 H40 N2 O4 S1 Si1"/>
+</molecule>
+<molecule>
+<formula title="ah0414.cif" dictRef="iucr:_chemical_formula_sum" inline=" C57 H62 O1 S2"/>
+<formula title="ah0414.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C53 H54 S2, C4 H8 O"/>
+</molecule>
+<molecule>
+<formula title="ah0415.cif" dictRef="iucr:_chemical_formula_sum" inline=" C36 H56 B2 O4 Si1"/>
+<formula title="ah0415.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C36 H56 B2 O4 Si1"/>
+</molecule>
+<molecule>
+<formula title="ah9501.cif" dictRef="iucr:_chemical_formula_moiety" inline="C28 H12 N2 O4"/> 
+<formula title="ah9501.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H12 N O2"/> 
+</molecule>
+<molecule>
+<formula title="ak0102.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C11 H12 N1 O4 -), (C7 H9 N2 +)"/> 
+<formula title="ak0102.cif" dictRef="iucr:_chemical_formula_sum" inline="C18 H21 N3 O4"/> 
+</molecule>
+<molecule>
+<formula title="bj0210.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H21 N2 Pd, B F4"/> 
+<formula title="bj0210.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H21 B F4 N2 Pd"/> 
+</molecule>
+<molecule>
+<formula title="bj0211.cif" dictRef="iucr:_chemical_formula_moiety" inline="C15 H28 N2 Rh, B F4"/> 
+<formula title="bj0211.cif" dictRef="iucr:_chemical_formula_sum" inline="C15 H28 B F4 N2 Rh"/> 
+</molecule>
+<molecule>
+<formula title="bj0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="C15 H28 N2 Rh +, C F3 O3 S -"/> 
+<formula title="bj0216.cif" dictRef="iucr:_chemical_formula_sum" inline="C16 H28 F3 N2 O3 Rh S"/> 
+</molecule>
+<molecule>
+<formula title="bj9804.cif" dictRef="iucr:_chemical_formula_moiety" inline="C86 H66 N2 O24 P4 Ru10; C2 Cl6"/> 
+<formula title="bj9804.cif" dictRef="iucr:_chemical_formula_sum" inline="C88 H66 Cl6 N2 O24 P4 Ru10"/> 
+
+</molecule>
+<molecule>
+<formula title="cam155.cif" dictRef="iucr:_chemical_formula_sum" inline=" C62 H78 N4 S2 Zn1"/>
+<formula title="cam155.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C62 H78 N4 S2 Zn1"/>
+</molecule>
+<molecule>
+<formula title="cam156.cif" dictRef="iucr:_chemical_formula_sum" inline=" C20 H30 Si3"/>
+<formula title="cam156.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C20 H30 Si3"/>
+</molecule>
+<molecule>
+<formula title="cam158.cif" dictRef="iucr:_chemical_formula_sum" inline=" C34 H37 Cl3 D1 F6 Li2 N1 O13 S2"/>
+<formula title="cam158.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C33 H37 F6 Li2 N O13 S2, C D Cl3"/>
+</molecule>
+<molecule>
+<formula title="cam159.cif" dictRef="iucr:_chemical_formula_sum" inline=" C82 H99 N4 Ni1 P1"/>
+<formula title="cam159.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C82 H99 N4 Ni1 P1"/>
+</molecule>
+<molecule>
+<formula title="cam161.cif" dictRef="iucr:_chemical_formula_sum" inline=" C66 H84 N4 O2 S2 Zn1"/>
+<formula title="cam161.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C66 H84 N4 O2 S2 Zn1"/>
+</molecule>
+<molecule>
+<formula title="cam163.cif" dictRef="iucr:_chemical_formula_sum" inline=" C38 H56 I2 Li2 O14"/>
+<formula title="cam163.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C38 H56 I2 Li2 O14"/>
+</molecule>
+<molecule>
+<formula title="cam167.cif" dictRef="iucr:_chemical_formula_sum" inline=" C35 H41 Br1 Cl12 Li1 N1 O8"/>
+<formula title="cam167.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C35 H41 Br1 Cl12 Li1 N1 O8"/>
+</molecule>
+<molecule>
+<formula title="cam172.cif" dictRef="iucr:_chemical_formula_sum" inline=" C15 H20 O5 S1"/>
+<formula title="cam172.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C15 H20 O5 S1"/>
+</molecule>
+<molecule>
+<formula title="cam174.cif" dictRef="iucr:_chemical_formula_sum" inline=" C102 H113 N4 O5 Zn1"/>
+<formula title="cam174.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C93 H92 N4 O5 Zn, C3 H7, C6 H14"/>
+</molecule>
+<molecule>
+<formula title="cam175.cif" dictRef="iucr:_chemical_formula_sum" inline=" C38 H46 Cl6 O10"/>
+<formula title="cam175.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C38 H46 Cl6 O10"/>
+</molecule>
+<molecule>
+<formula title="cam180.cif" dictRef="iucr:_chemical_formula_sum" inline=" C54 H48 Br2 Ir1 N3 O2 S2"/>
+<formula title="cam180.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C52 H45 Br2 Ir N2 O2 S2, C2 H3 N"/>
+</molecule>
+<molecule>
+<formula title="cam183.cif" dictRef="iucr:_chemical_formula_sum" inline=" C30 H16 F7 Ir1 N6"/>
+<formula title="cam183.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C30 H16 F7 Ir1 N6"/>
+</molecule>
+<molecule>
+<formula title="cam185.cif" dictRef="iucr:_chemical_formula_sum" inline=" C41 H8 Cl2 F36 N10 S10 "/>
+<formula title="cam185.cif" dictRef="iucr:_chemical_formula_moiety" inline=" 4(C10 H2 F9 N2 S2), C Cl N2 S2, Cl"/>
+</molecule>
+<molecule>
+<formula title="cam190.cif" dictRef="iucr:_chemical_formula_sum" inline=" C34 H14 Co4 O12 S2"/>
+<formula title="cam190.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C34 H14 Co4 O12 S2"/>
+</molecule>
+<molecule>
+<formula title="cam191.cif" dictRef="iucr:_chemical_formula_sum" inline=" C34 H14 Co4 O12 S2"/>
+<formula title="cam191.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C34 H14 Co4 O12 S2"/>
+</molecule>
+<molecule>
+<formula title="cam197.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H20 N2 O3"/>
+<formula title="cam197.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H20 N2 O3"/>
+</molecule>
+<molecule>
+<formula title="cam201.cif" dictRef="iucr:_chemical_formula_sum" inline=" C40 H64 B2 O4 Si "/>
+<formula title="cam201.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C40 H64 B2 O4 Si"/>
+</molecule>
+<molecule>
+<formula title="cam204.cif" dictRef="iucr:_chemical_formula_sum" inline=" C33 H22 Cl2 F7 Ir1 N6"/>
+<formula title="cam204.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C33 H22 Cl2 F7 Ir1 N6"/>
+</molecule>
+<molecule>
+<formula title="dd0306.cif" dictRef="iucr:_chemical_formula_sum" inline=" C13 H26 O4"/>
+<formula title="dd0306.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C13 H26 O4"/>
+</molecule>
+<molecule>
+<formula title="dw0115.cif" dictRef="iucr:_chemical_formula_moiety" inline="C28 H58 As2 N4 Zn2"/>
+<formula title="dw0115.cif" dictRef="iucr:_chemical_formula_sum" inline="C28 H58 As2 N4 Zn2"/> 
+</molecule>
+<molecule>
+<formula title="dw0116.cif" dictRef="iucr:_chemical_formula_moiety" inline="C16 H32 N6 P2, 0.5(C5 H12)"/> 
+<formula title="dw0116.cif" dictRef="iucr:_chemical_formula_sum" inline="C18.50 H38 N6 P2"/> 
+</molecule>
+<molecule>
+<formula title="dw0117.cif" dictRef="iucr:_chemical_formula_moiety" inline="(Mn (C5 H5)3)2, Mg (C4 H8 O)6, (C4 H8 O)2"/> 
+<formula title="dw0117.cif" dictRef="iucr:_chemical_formula_sum" inline="C62 H94 Mg Mn2 O8"/> 
+</molecule>
+<molecule>
+<formula title="jd0107.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H12 O2"/>
+<formula title="jd0107.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H12 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0108.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H16 O2"/>
+<formula title="jd0108.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H16 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0109.cif" dictRef="iucr:_chemical_formula_moiety" inline="C9 H18 O2"/>
+<formula title="jd0109.cif" dictRef="iucr:_chemical_formula_sum" inline="C9 H18 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0110.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H20 O2"/>
+<formula title="jd0110.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H20 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0112.cif" dictRef="iucr:_chemical_formula_moiety" inline="C9 H10"/>
+<formula title="jd0112.cif" dictRef="iucr:_chemical_formula_sum" inline="C9 H10"/> 
+</molecule>
+<molecule>
+<formula title="jd0203.cif" dictRef="iucr:_chemical_formula_moiety" inline="C11 H22 O2"/> 
+<formula title="jd0203.cif" dictRef="iucr:_chemical_formula_sum" inline="C11 H22 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0204.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H28 O2"/> 
+<formula title="jd0204.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H28 O2"/> 
+</molecule>
+<molecule>
+<formula title="jd0205.cif" dictRef="iucr:_chemical_formula_moiety" inline="C13 H26 O2"/> 
+<formula title="jd0205.cif" dictRef="iucr:_chemical_formula_sum" inline="C13 H26 O2"/> 
+</molecule>
+<molecule>
+<formula title="jk0112.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C14 H8 O4)2-, (C12 H12 N2), Cd2+, (H2 O)"/> 
+<formula title="jk0112.cif" dictRef="iucr:_chemical_formula_sum" inline="C26 H22 Cd N2 O5"/> 
+</molecule>
+<molecule>
+<formula title="jk0123.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C12 H13 N2 +), (N O3 -), (H2 O)3"/> 
+<formula title="jk0123.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H19 N3 O6"/> 
+</molecule>
+<molecule>
+<formula title="jk0125.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C7 H6 O2)2, C10 H8 N2"/> 
+<formula title="jk0125.cif" dictRef="iucr:_chemical_formula_sum" inline="C24 H20 N2 O4"/> 
+</molecule>
+<molecule>
+<formula title="jk0126.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C13 H14 N2)3, (N O3 -)2, Cd 2+, (H2 O)3"/> 
+<formula title="jk0126.cif" dictRef="iucr:_chemical_formula_sum" inline="C39 H48 Cd N8 O9"/> 
+</molecule>
+<molecule>
+<formula title="jk0203.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H8 N2, 2(H2 O)"/> 
+<formula title="jk0203.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H16 N2 O2"/> 
+</molecule>
+<molecule>
+<formula title="jk0211.cif" dictRef="iucr:_chemical_formula_moiety" inline="Tb2, (C12 H6 O4)3, (H2 O)4"/> 
+<formula title="jk0211.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H26 O16 Tb2"/> 
+</molecule>
+<molecule>
+<formula title="jk0213.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C12 H6 O4 2-)3, (Yb 3+)2, (H2 O)3"/> 
+<formula title="jk0213.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H24 O15 Yb2"/> 
+</molecule>
+<molecule>
+<formula title="jk0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="Tb2, (C12 H6 O4)3, (H2 O)4"/> 
+<formula title="jk0216.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H26 O16 Tb2"/> 
+</molecule>
+<molecule>
+<formula title="jk0217.cif" dictRef="iucr:_chemical_formula_moiety" inline="Gd2, (C12 H6 O4)3, (H2 O)4"/>
+<formula title="jk0217.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H26 Gd2 O16"/>
+</molecule>
+<molecule>
+<formula title="jk0218.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C12 H6 O4 2-)3, (Er 2+)2, 6(H2 O)"/>
+<formula title="jk0218.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H30 Er2 O18"/> 
+</molecule>
+<molecule>
+<formula title="jk0219.cif" dictRef="iucr:_chemical_formula_moiety" inline="Dy2, (C12 H6 O4)3, (H2 O)4"/> 
+<formula title="jk0219.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H26 Dy2 O16"/> 
+</molecule>
+<molecule>
+<formula title="jk0220.cif" dictRef="iucr:_chemical_formula_moiety" inline="Ho2, (C12 H6 O4)3, (H2 O)4"/> 
+<formula title="jk0220.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H26 Ho2 O16"/> 
+</molecule>
+<molecule>
+<formula title="jk0221.cif" dictRef="iucr:_chemical_formula_moiety" inline="Ho2, (C12 H6 O4) 3, 6(H2 O)"/> 
+<formula title="jk0221.cif" dictRef="iucr:_chemical_formula_sum" inline="C36 H30 Ho2 O18"/> 
+</molecule>
+<molecule>
+<formula title="jr0120.cif" dictRef="iucr:_chemical_formula_moiety" inline="C76 H60 F6 N4 P4 Pd3 S4, 2(C H2 CL2)"/>
+<formula title="jr0120.cif" dictRef="iucr:_chemical_formula_sum" inline="C78 H64 Cl4 F6 N4 P4 Pd3 S4"/> 
+</molecule>
+<molecule>
+<formula title="jr0121.cif" dictRef="iucr:_chemical_formula_moiety" inline="C10 H2 F9 N2 Se2"/> 
+<formula title="jr0121.cif" dictRef="iucr:_chemical_formula_sum" inline="C10 H2 F9 N2 Se2"/> 
+</molecule>
+<molecule>
+<formula title="jr0124.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 F15 N2 S2"/> 
+<formula title="jr0124.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 F15 N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0132.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 F7 N2 S2"/>
+<formula title="jr0132.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 F7 N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0133.cif" dictRef="iucr:_chemical_formula_moiety" inline="C Cl N2 S2"/>
+<formula title="jr0133.cif" dictRef="iucr:_chemical_formula_sum" inline="C Cl N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0135.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 Cl F15 N2 S2"/> 
+<formula title="jr0135.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 Cl F15 N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0136.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 F8 N2 S"/>
+<formula title="jr0136.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 F8 N2 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0141.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H4 N S2 +, As F6 -"/> 
+<formula title="jr0141.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H4 As F6 N S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0142.cif" dictRef="iucr:_chemical_formula_moiety" inline="Co O6 H12 2+, 2(S O4 2-), 2(N H4 +)"/> 
+<formula title="jr0142.cif" dictRef="iucr:_chemical_formula_sum" inline="H20 Co N2 O14 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0202.cif" dictRef="iucr:_chemical_formula_moiety" inline="C64 H96 Br6 Mn12 O46, 0.5(C4 H8 O)"/> 
+<formula title="jr0202.cif" dictRef="iucr:_chemical_formula_sum" inline="C66 H100 Br6 Mn12 O46.50 S8"/> 
+</molecule>
+<molecule>
+<formula title="jr0204.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H4 N2 O3 S"/> 
+<formula title="jr0204.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 H4 N2 O3 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0205.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H12 Ni S4, C16 H36 N, C3 H6 O"/> 
+<formula title="jr0205.cif" dictRef="iucr:_chemical_formula_sum" inline="C33 H54 N Ni O S4"/> 
+</molecule>
+<molecule>
+<formula title="jr0206.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 F8 N3 S2"/> 
+<formula title="jr0206.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 F8 N3 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0207.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 H4 N2 O3 S, C6 H6 N2 O2"/> 
+<formula title="jr0207.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H10 N4 O5 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0209.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H4 F8 N4"/> 
+<formula title="jr0209.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H4 F8 N4"/> 
+</molecule>
+<molecule>
+<formula title="jr0214.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 F4 N S2 +, Cl -"/> 
+<formula title="jr0214.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 Cl F4 N S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H8 N4 O4 S"/> 
+<formula title="jr0216.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H8 N4 O4 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0219.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H3 F4 N2 S2"/> 
+<formula title="jr0219.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H3 F4 N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0224.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H8 Br2 N2 S"/> 
+<formula title="jr0224.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H8 Br2 N2 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0226.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H8 I2 N2 S"/> 
+<formula title="jr0226.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H8 I2 N2 S"/> 
+</molecule>
+<molecule>
+<formula title="jr0231.cif" dictRef="iucr:_chemical_formula_moiety" inline="C16 H15 N3"/> 
+<formula title="jr0231.cif" dictRef="iucr:_chemical_formula_sum" inline="C16 H15 N3"/> 
+</molecule>
+<molecule>
+<formula title="jr0234.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H9 Cl N2"/> 
+<formula title="jr0234.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H9 Cl N2"/> 
+</molecule>
+<molecule>
+<formula title="jr0235.cif" dictRef="iucr:_chemical_formula_moiety" inline="C7 H7 N O2"/> 
+<formula title="jr0235.cif" dictRef="iucr:_chemical_formula_sum" inline="C7 H7 N O2"/> 
+</molecule>
+<molecule>
+<formula title="jr0237.cif" dictRef="iucr:_chemical_formula_moiety" inline="C13 H5 Br2 F4 N"/> 
+<formula title="jr0237.cif" dictRef="iucr:_chemical_formula_sum" inline="C13 H5 Br2 F4 N"/> 
+</molecule>
+<molecule>
+<formula title="jr0238.cif" dictRef="iucr:_chemical_formula_moiety" inline="C6 Cl5 N O2"/> 
+<formula title="jr0238.cif" dictRef="iucr:_chemical_formula_sum" inline="C6 Cl5 N O2"/> 
+</molecule>
+<molecule>
+<formula title="jr0240.cif" dictRef="iucr:_chemical_formula_moiety" inline="C8 H6 F4 N2 O2"/> 
+<formula title="jr0240.cif" dictRef="iucr:_chemical_formula_sum" inline="C8 H6 F4 N2 O2"/> 
+</molecule>
+<molecule>
+<formula title="jr0241.cif" dictRef="iucr:_chemical_formula_moiety" inline="C14 H9 Br N2"/> 
+<formula title="jr0241.cif" dictRef="iucr:_chemical_formula_sum" inline="C14 H9 Br N2"/> 
+</molecule>
+<molecule>
+<formula title="jr0244.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H8 N2 O4 S4"/> 
+<formula title="jr0244.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H8 N2 O4 S4"/> 
+</molecule>
+<molecule>
+<formula title="jr0248.cif" dictRef="iucr:_chemical_formula_moiety" inline="C12 H8 N2 O4 S4"/> 
+<formula title="jr0248.cif" dictRef="iucr:_chemical_formula_sum" inline="C12 H8 N2 O4 S4"/> 
+</molecule>
+<molecule>
+<formula title="jr0313.cif" dictRef="iucr:_chemical_formula_sum" inline=" C6 H4 Cl1 F4 N1 O2 S2"/>
+<formula title="jr0313.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C6 F4 N1 S2, 2(H2 O), Cl"/>
+</molecule>
+<molecule>
+<formula title="jr0314.cif" dictRef="iucr:_chemical_formula_sum" inline=" C7 H2 F3 N2 S2"/>
+<formula title="jr0314.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C7 H2 F3 N2 S2"/>
+</molecule>
+<molecule>
+<formula title="jr0315.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H6 F4 N4 S4"/>
+<formula title="jr0315.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H6 F4 N4 S4"/>
+</molecule>
+<molecule>
+<formula title="jr0318.cif" dictRef="iucr:_chemical_formula_sum" inline=" C8 H3 F4 N2 S2"/>
+<formula title="jr0318.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C8 H3 F4 N2 S2"/>
+</molecule>
+<molecule>
+<formula title="jr0321.cif" dictRef="iucr:_chemical_formula_sum" inline=" C12 H8 N4 O4 S3"/>
+<formula title="jr0321.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C12 H8 N4 O4 S3"/>
+</molecule>
+<molecule>
+<formula title="jr0323.cif" dictRef="iucr:_chemical_formula_sum" inline=" C12 H7 I1 N4 O4 S2"/>
+<formula title="jr0323.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C12 H7 I1 N4 O4 S2"/>
+</molecule>
+<molecule>
+<formula title="jr0324.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 F8 N4 O4"/>
+<formula title="jr0324.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 F8 N4 O4"/>
+</molecule>
+<molecule>
+<formula title="jr0325.cif" dictRef="iucr:_chemical_formula_sum" inline=" C6 H4 Cl1 N1 O1 S1"/>
+<formula title="jr0325.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C6 H4 Cl1 N1 O1 S1"/>
+</molecule>
+<molecule>
+<formula title="jr0326.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H6 F4 N4 S4"/>
+<formula title="jr0326.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H6 F4 N4 S4"/>
+</molecule>
+<molecule>
+<formula title="jr0327.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H2 F8 N2 O2"/>
+<formula title="jr0327.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H2 F8 N2 O2"/>
+</molecule>
+<molecule>
+<formula title="jr0329.cif" dictRef="iucr:_chemical_formula_sum" inline=" C20 H20 F4 S1 Ti1"/>
+<formula title="jr0329.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C20 H20 F4 S1 Ti1"/>
+</molecule>
+<molecule>
+<formula title="jr0330.cif" dictRef="iucr:_chemical_formula_sum" inline=" C8 H3 F4 N2 S2"/>
+<formula title="jr0330.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C8 H3 F4 N2 S2"/>
+</molecule>
+<molecule>
+<formula title="jr0331.cif" dictRef="iucr:_chemical_formula_sum" inline=" C5.33 H4 N1.33 O5.33 S5.33"/>
+<formula title="jr0331.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C5.33 H4 N1.33 O5.33 S5.33"/>
+</molecule>
+<molecule>
+<formula title="jr0333.cif" dictRef="iucr:_chemical_formula_sum" inline=" B1 F4 N2 S3"/>
+<formula title="jr0333.cif" dictRef="iucr:_chemical_formula_moiety" inline=" N2 S3, B F4 "/>
+</molecule>
+<molecule>
+<formula title="jr0403.cif" dictRef="iucr:_chemical_formula_sum" inline=" C10 H12 N1 S2"/>
+<formula title="jr0403.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C10 H12 N1 S2"/>
+</molecule>
+<molecule>
+<formula title="jr0406.cif" dictRef="iucr:_chemical_formula_sum" inline=" C42 F42 N4 O6 "/>
+<formula title="jr0406.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 F14 N2 O2, 2(C14 F14 N O2)"/>
+</molecule>
+<molecule>
+<formula title="jr0407.cif" dictRef="iucr:_chemical_formula_sum" inline=" C12 H6 Cl4 N2 O5 S5 "/>
+<formula title="jr0407.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C6 H3 Cl2 N O S2, C6 H2 Cl2 N S2, H O4 S"/>
+</molecule>
+<molecule>
+<formula title="jr0412.cif" dictRef="iucr:_chemical_formula_sum" inline=" C32 H29 N1.00 Ni1 P2 S1.00"/>
+<formula title="jr0412.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C32 H29 N1.00 Ni1 P2 S1.00"/>
+</molecule>
+<molecule>
+<formula title="JR0813.cif" dictRef="iucr:_chemical_formula_moiety" inline="C20 H16 N3 O"/> 
+<formula title="JR0813.cif" dictRef="iucr:_chemical_formula_sum" inline="C20 H16 N3 O"/> 
+</molecule>
+<molecule>
+<formula title="jr0814.cif" dictRef="iucr:_chemical_formula_moiety" inline="C7 H4 Cl I3 N2 S2"/> 
+<formula title="jr0814.cif" dictRef="iucr:_chemical_formula_sum" inline="C7 H4 Cl I3 N2 S2"/> 
+</molecule>
+<molecule>
+<formula title="jr0815.cif" dictRef="iucr:_chemical_formula_moiety" inline="C24 H18 N3 Cl"/>
+<formula title="jr0815.cif" dictRef="iucr:_chemical_formula_sum" inline="C24 H18 Cl N3"/> 
+</molecule>
+<molecule>
+<formula title="jr0817.cif" dictRef="iucr:_chemical_formula_moiety" inline="C16H20BN2ClC4H8O"/> 
+<formula title="jr0817.cif" dictRef="iucr:_chemical_formula_sum" 	 inline="C20 H28 B Cl N2 O"/> 
+</molecule>
+<molecule>
+<formula title="js0110.cif" dictRef="iucr:_chemical_formula_moiety" inline="C82 H101 N4 P Zn"/>
+<formula title="js0110.cif" dictRef="iucr:_chemical_formula_sum" inline="C82 H101 N4 P Zn"/> 
+</molecule>
+<molecule>
+<formula title="js0111.cif" dictRef="iucr:_chemical_formula_moiety" inline="C84 H58 N4 P2 Rh+, (C H Cl3)2, I-"/> 
+<formula title="js0111.cif" dictRef="iucr:_chemical_formula_sum" inline="C86 H60 Cl6 I N4 P2 Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0114.cif" dictRef="iucr:_chemical_formula_moiety" inline="C68 H62 Br2 Li2 N4 O24, (C H Cl3)4"/> 
+<formula title="js0114.cif" dictRef="iucr:_chemical_formula_sum" inline="C72 H66 Br2 Cl12 Li2 N4 O24"/> 
+</molecule>
+<molecule>
+<formula title="js0115.cif" dictRef="iucr:_chemical_formula_moiety" inline="C45 H32 I N4 O Rh, C H Cl3"/> 
+<formula title="js0115.cif" dictRef="iucr:_chemical_formula_sum" inline="C46 H33 Cl3 I N4 O Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0117.cif" dictRef="iucr:_chemical_formula_moiety" inline="C18 H12 O4 S2, 0.5(C H Cl3)"/> 
+<formula title="js0117.cif" dictRef="iucr:_chemical_formula_sum" inline="C18.50 H12.50 Cl1.50 O4 S2"/> 
+</molecule>
+<molecule>
+<formula title="js0118.cif" dictRef="iucr:_chemical_formula_moiety" inline="C18 H16 N +, Br -"/> 
+<formula title="js0118.cif" dictRef="iucr:_chemical_formula_sum" inline="C18 H16 Br N"/> 
+</molecule>
+<molecule>
+<formula title="js0201.cif" dictRef="iucr:_chemical_formula_moiety" inline="C44 H32 N6, 2(C H Cl3)"/> 
+<formula title="js0201.cif" dictRef="iucr:_chemical_formula_sum" inline="C46 H34 Cl6 N6"/> 
+</molecule>
+<molecule>
+<formula title="js0202.cif" dictRef="iucr:_chemical_formula_moiety" inline="C44 H34 N8, C H Cl3"/> 
+<formula title="js0202.cif" dictRef="iucr:_chemical_formula_sum" inline="C45 H35 Cl3 N8"/> 
+</molecule>
+<molecule>
+<formula title="js0203.cif" dictRef="iucr:_chemical_formula_moiety" inline="C65 H46 N4 P Rh"/> 
+<formula title="js0203.cif" dictRef="iucr:_chemical_formula_sum" inline="C65 H46 N4 P Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0204.cif" dictRef="iucr:_chemical_formula_moiety" inline="C45 H31 N4 Rh"/> 
+<formula title="js0204.cif" dictRef="iucr:_chemical_formula_sum" inline="C45 H31 N4 Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0205.cif" dictRef="iucr:_chemical_formula_moiety" inline="(C40 H26 N8)0.67, (C40 H24 N8 Zn)0.33"/> 
+<formula title="js0205.cif" dictRef="iucr:_chemical_formula_sum" inline="C40 H25.33 N8 Zn0.33"/> 
+</molecule>
+<molecule>
+<formula title="js0206.cif" dictRef="iucr:_chemical_formula_moiety" inline="C82 H101 N4 Ni P"/> 
+<formula title="js0206.cif" dictRef="iucr:_chemical_formula_sum" inline="C82 H101 N4 Ni P"/> 
+</molecule>
+<molecule>
+<formula title="js0207.cif" dictRef="iucr:_chemical_formula_moiety" inline="C62 H80 N4 O2 Zn"/> 
+<formula title="js0207.cif" dictRef="iucr:_chemical_formula_sum" inline="C62 H80 N4 O2 Zn"/> 
+</molecule>
+<molecule>
+<formula title="js0208.cif" dictRef="iucr:_chemical_formula_moiety" inline="C116 H122 N4 P2 Ru1, C H Cl3"/> 
+<formula title="js0208.cif" dictRef="iucr:_chemical_formula_sum" inline="C117 H123 Cl3 N4 P2 Ru"/> 
+</molecule>
+<molecule>
+<formula title="js0209.cif" dictRef="iucr:_chemical_formula_moiety" inline="C76 H74 N4 P2 Ru"/> 
+<formula title="js0209.cif" dictRef="iucr:_chemical_formula_sum" inline="C76 H74 N4 P2 Ru"/> 
+</molecule>
+<molecule>
+<formula title="js0210.cif" dictRef="iucr:_chemical_formula_moiety" inline="C84 H74 N4 P2 Ru, C H CL3"/> 
+<formula title="js0210.cif" dictRef="iucr:_chemical_formula_sum" inline="C85 H75 Cl3 N4 P2 Ru"/> 
+</molecule>
+<molecule>
+<formula title="js0211.cif" dictRef="iucr:_chemical_formula_moiety" inline="C84 H58 N4 P2 Ru"/> 
+<formula title="js0211.cif" dictRef="iucr:_chemical_formula_sum" inline="C84 H58 N4 P2 Ru"/> 
+</molecule>
+<molecule>
+<formula title="js0212.cif" dictRef="iucr:_chemical_formula_moiety" inline="C116 H122 N4 P2 Rh +, I -, C5 H12"/> 
+<formula title="js0212.cif" dictRef="iucr:_chemical_formula_sum" inline="C121 H134 I N4 P2 Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0214.cif" dictRef="iucr:_chemical_formula_moiety" inline="C168 H192 N10 O2 Ru2, 2(C H Cl3)"/> 
+<formula title="js0214.cif" dictRef="iucr:_chemical_formula_sum" inline="C170 H194 Cl6 N10 O2 Ru2"/> 
+</molecule>
+<molecule>
+<formula title="js0215.cif" dictRef="iucr:_chemical_formula_moiety" inline="C130 H168 N10 S4 Zn2, 2(C H CL3)"/> 
+<formula title="js0215.cif" dictRef="iucr:_chemical_formula_sum" inline="C132 H170 Cl6 N10 S4 Zn2"/> 
+</molecule>
+<molecule>
+<formula title="js0216.cif" dictRef="iucr:_chemical_formula_moiety" inline="Na+, B F4 -"/> 
+<formula title="js0216.cif" dictRef="iucr:_chemical_formula_sum" inline="B4 F16 Na4"/> 
+</molecule>
+<molecule>
+<formula title="js0217.cif" dictRef="iucr:_chemical_formula_moiety" inline="C88 H96 N4 O P2, C7 H8"/>
+<formula title="js0217.cif" dictRef="iucr:_chemical_formula_sum" inline="C95 H104 N4 O P2"/> 
+</molecule>
+<molecule>
+<formula title="js0218.cif" dictRef="iucr:_chemical_formula_moiety" inline="C84 H74 N4 P2 Rh +, I-, C H2 Cl2"/> 
+<formula title="js0218.cif" dictRef="iucr:_chemical_formula_sum" inline="C85 H76 Cl2 I N4 P2 Rh"/> 
+</molecule>
+<molecule>
+<formula title="js0219.cif" dictRef="iucr:_chemical_formula_sum" inline="C44 H44 N4 Zn"/>
+<formula title="js0219.cif" dictRef="iucr:_chemical_formula_moiety" inline="C44 H44 N4 Zn"/>
+</molecule>
+<molecule>
+<formula title="js0220.cif" dictRef="iucr:_chemical_formula_moiety" inline="C60 H76 N4 Zn"/>
+<formula title="js0220.cif" dictRef="iucr:_chemical_formula_sum" inline="C60 H76 N4 Zn"/>
+
+</molecule>
+<molecule>
+<formula title="js0301.cif" dictRef="iucr:_chemical_formula_sum" inline=" C70 H80 Cl2.00 I1 N4 O1 Zn1"/>
+<formula title="js0301.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C68 H75 I1 N4 Zn1, (CH2 Cl2), (CH3O)"/>
+</molecule>
+<molecule>
+<formula title="js0302.cif" dictRef="iucr:_chemical_formula_sum" inline=" C66 H84 N4 O2 S2 Zn1"/>
+<formula title="js0302.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C66 H84 N4 O2 S2 Zn1"/>
+</molecule>
+<molecule>
+<formula title="js0309.cif" dictRef="iucr:_chemical_formula_sum" inline=" C108 H76 B2 Cl4 F40 Li2 N2 O16"/>
+<formula title="js0309.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C108 H76 B2 Cl4 F40 Li2 N2 O16"/>
+</molecule>
+<molecule>
+<formula title="js0310.cif" dictRef="iucr:_chemical_formula_sum" inline=" C67 H72 Cl2 N4 O2"/>
+<formula title="js0310.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C66 H70 N4 O2, 2 (C 0.50 H Cl)"/>
+</molecule>
+<molecule>
+<formula title="js0311.cif" dictRef="iucr:_chemical_formula_sum" inline=" C62.00 H66 I2 N4 O2 Zn1"/>
+<formula title="js0311.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C62.00 H66 I2 N4 O2 Zn1"/>
+</molecule>
+<molecule>
+<formula title="js0314.cif" dictRef="iucr:_chemical_formula_sum" inline=" C64 H76 Cl6 N2 O14"/>
+<formula title="js0314.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C64 H76 Cl6 N2 O14"/>
+</molecule>
+<molecule>
+<formula title="js0316.cif" dictRef="iucr:_chemical_formula_sum" inline=" C25 H21 N1 S1"/>
+<formula title="js0316.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C25 H21 N1 S1"/>
+</molecule>
+<molecule>
+<formula title="js0318.cif" dictRef="iucr:_chemical_formula_sum" inline=" C70 H82 Cl24 I2 N2 Na2 O14 "/>
+<formula title="js0318.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C62 H74 I2 N2 Na2 O14, 8(C H Cl3) "/>
+</molecule>
+<molecule>
+<formula title="js0319.cif" dictRef="iucr:_chemical_formula_sum" inline=" C72.75 H84 N4 O2.75 Zn "/>
+<formula title="js0319.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C71 H80 N4 O Zn, C H4 O, 0.746(CH3 OH) "/>
+</molecule>
+<molecule>
+<formula title="js0322.cif" dictRef="iucr:_chemical_formula_sum" inline=" C161 H201.50 N8.50 O9.50 S8 Zn2"/>
+<formula title="js0322.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C161 H201.50 N8.50 O9.50 S8 Zn2"/>
+</molecule>
+<molecule>
+<formula title="js0324.cif" dictRef="iucr:_chemical_formula_sum" inline=" C158 H199.50 N8 O8 S8"/>
+<formula title="js0324.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C158 H199.50 N8 O8 S8"/>
+</molecule>
+<molecule>
+<formula title="js0402.cif" dictRef="iucr:_chemical_formula_sum" inline=" C19 H26 Cl6 N12 O4 "/>
+<formula title="js0402.cif" dictRef="iucr:_chemical_formula_moiety" inline=" 2(C9 H12 Cl2 N6 O2), C H2 Cl2 "/>
+</molecule>
+<molecule>
+<formula title="js0403.cif" dictRef="iucr:_chemical_formula_sum" inline=" C11 H14 Cl1 N3 O2"/>
+<formula title="js0403.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C11 H14 N3 O2, Cl "/>
+</molecule>
+<molecule>
+<formula title="js0404.cif" dictRef="iucr:_chemical_formula_sum" inline=" C64 H78 Cl18 I2 N2 Na2 O14"/>
+<formula title="js0404.cif" dictRef="iucr:_chemical_formula_moiety" inline="C58 H72 I2 N2 Na2 O14, 6(C H Cl3)"/> 
+</molecule>
+<molecule>
+<formula title="js0407.cif" dictRef="iucr:_chemical_formula_sum" inline=" C15 H14 N2 O1"/>
+<formula title="js0407.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C15 H14 N2 O1"/>
+</molecule>
+<molecule>
+<formula title="js0408.cif" dictRef="iucr:_chemical_formula_sum" inline=" C14 H21 I1 N2 O2"/>
+<formula title="js0408.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C14 H21 I1 N2 O2"/>
+</molecule>
+<molecule>
+<formula title="js0410.cif" dictRef="iucr:_chemical_formula_sum" inline=" C24 H39 B3 O6"/>
+<formula title="js0410.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C24 H39 B3 O6"/>
+</molecule>
+<molecule>
+<formula title="js0502.cif" dictRef="iucr:_chemical_formula_sum" inline=" C18 H24 N2 O6 S2"/>
+<formula title="js0502.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C18 H24 N2 O6 S2"/>
+</molecule>
+<molecule>
+<formula title="js0507.cif" dictRef="iucr:_chemical_formula_sum" inline=" C78 H100 Al1 N4 O2"/>
+<formula title="js0507.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C78 H100 Al1 N4 O2"/>
+</molecule>
+<molecule>
+<formula title="js0508.cif" dictRef="iucr:_chemical_formula_sum" inline=" C124 H160 N8 O4 Zn2"/>
+<formula title="js0508.cif" dictRef="iucr:_chemical_formula_moiety" inline=" C124 H160 N8 O4 Zn2"/>
+</molecule>
+<molecule>
+<formula title="js0510.cif" dictRef="iucr:_chemical_formula_sum" inline="C64 H84 N4 O4 Zn1"/>
+<formula title="js0510.cif" dictRef="iucr:_chemical_formula_moiety" inline="C64 H84 N4 O4 Zn1"/>
+</molecule>
+<molecule>
+<formula title="js0511.cif" dictRef="iucr:_chemical_formula_sum" inline="C37 H44 N4 O10 S3"/>
+<formula title="js0511.cif" dictRef="iucr:_chemical_formula_moiety" inline="C37 H44 N4 O10 S3"/>
+</molecule>
+</cml>

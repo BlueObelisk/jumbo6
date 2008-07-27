@@ -1085,7 +1085,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 //                + " ======================");
 //        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 //        moleculeTool.markupCommonMolecules();
-//    }
+//    } x
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLAtom.getBondOrderSum()'

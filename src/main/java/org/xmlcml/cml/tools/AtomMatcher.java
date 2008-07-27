@@ -451,6 +451,12 @@ public class AtomMatcher extends AbstractTool {
         return matches;
     }
 
+    public boolean matches(CMLAtom atom1, CMLAtom atom2) {
+    	return (atom1 != null && atom1.getElementType() != null &&
+    			atom2 != null &&
+    			atom1.getElementType().equals(atom2.getElementType()));
+    }
+    
     /**
      * to string.
      * 
@@ -2171,6 +2177,19 @@ class CountReal2 extends Real2 implements Comparable<CountReal2> {
 
 	public int getCount() {
 		return count;
+	}
+	
+	public boolean matches(CMLAtom searchAtom, CMLAtom targetAtom) {
+		boolean matches = false;
+		if (searchAtom != null && targetAtom != null) {
+			matches = true;
+		}
+		if (matches) {
+			matches = searchAtom.getElementType() != null &&
+			searchAtom.getElementType().equals(targetAtom.getElementType());
+		}
+		// add more here later
+		return matches;
 	}
 }
 

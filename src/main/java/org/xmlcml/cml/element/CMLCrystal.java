@@ -356,7 +356,7 @@ public class CMLCrystal extends AbstractCrystal {
         Nodes cellScalarNodes = this.query("./cml:scalar[@dictRef]", CML_XPATH);
         int cellScalarCount = cellScalarNodes.size();
         if (cellScalarCount != 6) {
-        	this.debug("CELL");
+        	this.debug("ERROR IN CELL");
         	throw new CMLRuntimeException("Bad number of cell scalars: "+cellScalarCount);
         }
         CMLElements<CMLCellParameter> cellParameterElements = this.getCellParameterElements();

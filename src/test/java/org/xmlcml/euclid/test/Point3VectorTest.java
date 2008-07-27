@@ -674,7 +674,6 @@ public class Point3VectorTest {
     @Test
 //    @Ignore
     public void testRoughAlign() {
-    	System.out.println("++++testRoughAlign+++++");
          Transform3 t = null;
     	 Point3Vector pthis = new Point3Vector(new double[]{
     				 1., -1., 0., 

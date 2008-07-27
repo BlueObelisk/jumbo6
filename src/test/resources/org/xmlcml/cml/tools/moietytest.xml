@@ -1,0 +1,216 @@
+<list xmlns="www.xml-cml.org/schema">
+<formula id="cprod" inline="C79 H42 Ag3 As2 Cl3 O28 Ru10"/>
+<formula id="NAFSES" inline="C16 H12 Cl3 N3 Ru S, 0.0625(H2 O)"/>
+<formula id="aa0501" inline="C12 H8 Br2 N2 S6"/>
+<formula id="ab0002" inline="C15 H12 Co N3 O3 S3, C3 H6 O1"/>
+<formula id="ab0101" inline="C60, 4(C6H6)"/>
+<formula id="ab0102" inline="C60,(C6 H6)4"/>
+<formula id="ab0103" inline="C10 H4 N2 O4, 2(C2 H6 S O)"/>
+<formula id="ab0104" inline="C60, (C4 H4 S)2"/>
+<formula id="ab0105" inline="C8 H17 N, H2 O"/>
+<formula id="ab0107" inline="C6 H8 N2"/>
+<formula id="ab0109" inline="C44 H30 N4 O Zn"/>
+<formula id="ab0204" inline="(C6 H12 O2)2, C4 H4 N2"/>
+<formula id="ab0204b" inline="C4 H4 N2, 2(C6 H12 O2)"/>
+<formula id="ab0206" inline="C4 H4 N2, 2(C3 H6 O2)"/>
+<formula id="ab0207" inline="C4 H4 N2, 2(C4 H8 O2)"/>
+<formula id="ab0208" inline="C4 H4 N2, 2(C5 H10 O2)"/>
+<formula id="ab0209" inline="C4 H4 N2, 2(C2 H4 O2)"/>
+<formula id="ab0210" inline="C4 H4 N2, 2(C H2 O2)"/>
+<formula id="ab0211" inline="C4 H4 N2, 2(C8 H16 O2)"/>
+<formula id="ab0212" inline="C4 H4 N2, 2(C9 H18 O2)"/>
+<formula id="ab0213" inline="C4 H4 N2, 2(C10 H20 O2)"/>
+<formula id="ab0215" inline="C66 H56 Fe6, 0.5(C6 H4 Cl2), 1.5(C H4 O)"/>
+<formula id="ab0216" inline="C48 H33 Fe3 Mn O3"/>
+<formula id="ab0302" inline="(C11 H22 O2)2, C4 H4 N2"/>
+<formula id="ah0132" inline="C107 H105 N2 O6 Tb, C H2 Cl2"/>
+<formula id="ah0133" inline="C48 H20, (C H2 Cl2)0.5"/>
+<formula id="ah0134" inline="C33 H44 N O2 Si +, Cl -"/>
+<formula id="ah0202" inline="C62 H74, C4 H8 O"/>
+<formula id="ah0203" inline="C64 H76 S, 0.5(C4 H8 O)"/>
+<formula id="ah0204" inline="C64 H76 O, 0.5(C4 H8 O)"/>
+<formula id="ah0217" inline="C O3 2-, 2Na +, (H2 O)7"/>
+<formula id="ah0220" inline="C11 H18 O5, C H Cl3"/>
+<formula id="ah0317" inline="C26 H40 N2 O4 S Si, C10 H16 N O2 S"/>
+<formula id="ah0321" inline="C32 H16 Br2 Cl6 F7 Ir1 N6"/>
+<formula id="ah0401" inline="C31 H23 Ir N2 O2 S2, C4 H10 O"/>
+<formula id="ah0402" inline="C30 H14 Br2 F7 Ir N6, C4 H10 O"/>
+<formula id="ah0405" inline="C57 H62 O4 S2, C4 H8 O"/>
+<formula id="ah0406" inline="2(C18 H23 Cl O5), H2O"/>
+<formula id="ah0408" inline="C40 H24 Br2 F4 Ir1 N7, (HCL)"/>
+<formula id="ah0409" inline="C40 H66 B2 O4 Si1"/>
+<formula id="ah0410" inline="C63 H72 O, 2(C H Cl3)"/>
+<formula id="ak0102" inline="(C11 H12 N1 O4 -), (C7 H9 N2 +)"/>
+<formula id="aw0405" inline="C16.88 H16.15 N O Zn"/>
+<formula id="aw0412" inline="(C84 H146 Li16 N36) (B2 C20 H48)"/>
+<formula id="aw0414" inline="(C84 H146 Li16 N36) (B2 C20 H48)"/>
+<formula id="aw0416" inline="[BC6H16]- [Li(C4 H10 N2)2]+"/>
+<formula id="bj0142" inline="C17 O16 Ru6 2-, C52 H48 P4 Pt 2+"/>
+<formula id="bj0201" inline="C17 O16 Ru6, 2(C24 H20 P)"/>
+<formula id="bj0204" inline="C17 Cl Cu C17 O16, 2(C24 H20 P)"/>
+<formula id="bj0210" inline="C10 H21 N2 Pd, B F4"/>
+<formula id="bj0211" inline="C15 H28 N2 Rh, B F4"/>
+<formula id="bj0216" inline="C15 H28 N2 Rh +, C F3 O3 S -"/>
+<formula id="bj9804" inline="C86 H66 N2 O24 P4 Ru10; C2 Cl6"/>
+<formula id="cam158" inline="C33 H37 F6 Li2 N O13 S2, C D Cl3"/>
+<formula id="cam174" inline="C93 H92 N4 O5 Zn, C3 H7, C6 H14"/>
+<formula id="cam180" inline="C52 H45 Br2 Ir N2 O2 S2, C2 H3 N"/>
+<formula id="cam185" inline="4(C10 H2 F9 N2 S2), C Cl N2 S2, Cl"/>
+<formula id="cr0302" inline="C41 H22 Cl F6 N2 O3 Re, C7 H8"/>
+<formula id="dw0116" inline="C16 H32 N6 P2, 0.5(C5 H12)"/>
+<formula id="dw0117" inline="(Mn (C5 H5)3)2, Mg (C4 H8 O)6, (C4 H8 O)2"/>
+<formula id="dw0142" inline="C60 H60 Mn6 N16, C7 H8"/>
+<formula id="dw0212" inline="C72 H72 Br12 Mn8 N24 O2, 2(C4 H8 O)"/>
+<formula id="dw0226" inline="C36 H79 N6 Na2 P3 Sn3, 2(C7 H8)"/>
+<formula id="dw0311" inline="C36 H66 K N6 Sb3, 2(C7 H8)"/>
+<formula id="dw0312" inline="C16 H15 Br0.20 Cl0.80 Li N3 Si"/>
+<formula id="dw0812" inline="C36 H72 Li4 N8 P4 Sb2, C6 H16 N2"/>
+<formula id="jk0112" inline="(C14 H8 O4)2-, (C12 H12 N2), Cd2+, (H2 O)"/>
+<formula id="jk0123" inline="(C12 H13 N2 +), (N O3 -), (H2 O)3"/>
+<formula id="jk0125" inline="(C7 H6 O2)2, C10 H8 N2"/>
+<formula id="jk0126" inline="(C13 H14 N2)3, (N O3 -)2, Cd 2+, (H2 O)3"/>
+<formula id="jk0203" inline="C10 H8 N2, 2(H2 O)"/>
+<formula id="jk0211" inline="Tb2, (C12 H6 O4)3, (H2 O)4"/>
+<formula id="jk0216" inline="Tb2, (C12 H6 O4)3, (H2 O)4"/>
+<formula id="jk0217" inline="Gd2, (C12 H6 O4)3, (H2 O)4"/>
+<formula id="jk0218" inline="(C12 H6 O4 2-)3, (Er 2+)2, 6(H2 O)"/>
+<formula id="jk0219" inline="Dy2, (C12 H6 O4)3, (H2 O)4"/>
+<formula id="jk0220" inline="Ho2, (C12 H6 O4)3, (H2 O)4"/>
+<formula id="jk0221" inline="Ho2, (C12 H6 O4) 3, 6(H2 O)"/>
+<formula id="jr0116" inline="C8 H3 F4 N2 S2, 0.75Ar"/>
+<formula id="jr0120" inline="C76 H60 F6 N4 P4 Pd3 S4, 2(C H2 CL2)"/>
+<formula id="jr0141" inline="C6 H4 N S2 +, As F6 -"/>
+<formula id="jr0142" inline="Co O6 H12 2+, 2(S O4 2-), 2(N H4 +)"/>
+<formula id="jr0202" inline="C64 H96 Br6 Mn12 O46, 0.5(C4 H8 O)"/>
+<formula id="jr0205" inline="C14 H12 Ni S4, C16 H36 N, C3 H6 O"/>
+<formula id="jr0207" inline="C6 H4 N2 O3 S, C6 H6 N2 O2"/>
+<formula id="jr0214" inline="C6 F4 N S2 +, Cl -"/>
+<formula id="jr0313" inline="C6 F4 N1 S2, 2(H2 O), Cl"/>
+<formula id="jr0331" inline="C5.33 H4 N1.33 O5.33 S5.33"/>
+<formula id="jr0333" inline="N2 S3, B F4"/>
+<formula id="jr0406" inline="C14 F14 N2 O2, 2(C14 F14 N O2)"/>
+<formula id="jr0407" inline="C6 H3 Cl2 N O S2, C6 H2 Cl2 N S2, H O4 S"/>
+<formula id="jr0412" inline="C32 H29 N1.00 Ni1 P2 S1.00"/>
+<formula id="jr0422" inline="C10 H12 N1 S2, 2(C7 F5 N2 S2)"/>
+<formula id="jr0502" inline="6(C7 H2 F3 N2 S2)"/>
+<formula id="jr0507" inline="2(C7 H6 N S2), 2(As F6)"/>
+<formula id="jr0511" inline="C7 H6 N S2, Cl"/>
+<formula id="jr0515" inline="C11 H10 N O2 S2, Sb F6"/>
+<formula id="jr0520" inline="C48H36N12S4Cu2O3, 2(C1H4O)"/>
+<formula id="jr0817" inline="C16H20BN2ClC4H8O"/>
+<formula id="jr9703" inline="C12 H12 N S O, H S O4"/>
+<formula id="js0105" inline="C88 H116 N6 Ru, (C6 H6)8"/>
+<formula id="js0110" inline="C82 H101 N4 P Zn"/>
+<formula id="js0111" inline="C84 H58 N4 P2 Rh+, (C H Cl3)2, I-"/>
+<formula id="js0114" inline="C68 H62 Br2 Li2 N4 O24, (C H Cl3)4"/>
+<formula id="js0115" inline="C45 H32 I N4 O Rh, C H Cl3"/>
+<formula id="js0117" inline="C18 H12 O4 S2, 0.5(C H Cl3)"/>
+<formula id="js0118" inline="C18 H16 N +, Br -"/>
+<formula id="js0201" inline="C44 H32 N6, 2(C H Cl3)"/>
+<formula id="js0202" inline="C44 H34 N8, C H Cl3"/>
+<formula id="js0205" inline="(C40 H26 N8)0.67, (C40 H24 N8 Zn)0.33"/>
+<formula id="js0208" inline="C116 H122 N4 P2 Ru1, C H Cl3"/>
+<formula id="js0210" inline="C84 H74 N4 P2 Ru, C H CL3"/>
+<formula id="js0212" inline="C116 H122 N4 P2 Rh +, I -, C5 H12"/>
+<formula id="js0214" inline="C168 H192 N10 O2 Ru2, 2(C H Cl3)"/>
+<formula id="js0215" inline="C130 H168 N10 S4 Zn2, 2(C H CL3)"/>
+<formula id="js0216" inline="Na+, B F4 -"/>
+<formula id="js0217" inline="C88 H96 N4 O P2, C7 H8"/>
+<formula id="js0218" inline="C84 H74 N4 P2 Rh +, I-, C H2 Cl2"/>
+<formula id="js0301" inline="C68 H75 I1 N4 Zn1, (CH2 Cl2), (CH3O)"/>
+<formula id="js0310" inline="C66 H70 N4 O2, 2 (C 0.50 H Cl)"/>
+<formula id="js0313" inline="C70 H86 N4 O2 Zn1, 3(CH3OH), 0.35(H2O)"/>
+<formula id="js0318" inline="C62 H74 I2 N2 Na2 O14, 8(C H Cl3)"/>
+<formula id="js0319" inline="C71 H80 N4 O Zn, C H4 O, 0.746(CH3 OH)"/>
+<formula id="js0402" inline="2(C9 H12 Cl2 N6 O2), C H2 Cl2"/>
+<formula id="js0403" inline="C11 H14 N3 O2, Cl"/>
+<formula id="js0404" inline="C58 H72 I2 N2 Na2 O14, 6(C H Cl3)"/>
+<formula id="mm0127" inline="C68 H58 Co4 O10 P4, C1 H2 Cl2, C6 H14"/>
+<formula id="mzs01x" inline="C47 H46 Co2 O3 P4, 0.25(C6 H14)"/>
+<formula id="nb0101" inline="C94 H68 N10 Zn2, (C6 H14)2"/>
+<formula id="nb0102" inline="C98 H64 N10 Zn2, (C H Cl3)2"/>
+<formula id="pr0003" inline="C12H24N2O4 : C13H10O3"/>
+<formula id="pr0004" inline="C12H24N2O4 : C13H10O3"/>
+<formula id="pr9611" inline="C28 H15 O18 Os6 Rh 1.5(C1 H2 Cl2)"/>
+<formula id="pr9704" inline="C23 H22 N O11 Os4 Rh, 0.5(C6 H6)"/>
+<formula id="pr9707" inline="C34 H8 N2 O20, 2(C H2 Cl2)"/>
+<formula id="pw0206" inline="C9 H4 O6 2-, 2(Na +), 3(H2 O)"/>
+<formula id="pw0208" inline="(C7 H6 N O2 -)2, Co 2+"/>
+<formula id="pw0301" inline="C12 H16 Fe N2 O8"/>
+<formula id="pw0305" inline="C46 H38 N2 O5 P Re, C4 H10 O"/>
+<formula id="pw0307" inline="C8 H7 Co2 N O6, O"/>
+<formula id="pw0308" inline="C7 H5 Cu N O5, 2(H2 O)"/>
+<formula id="pw0318" inline="(C6 H7 N1 I1)2, (I3)2"/>
+<formula id="pw0322" inline="C7 H9 Co N O7, H2 O, H1.31 O0.66"/>
+<formula id="pw0336" inline="C12 H4 Co2 O14, 2Na, 4(H2 O)"/>
+<formula id="pw0339" inline="C12 H20 O22 Co2, 2K, 7(H2 O)"/>
+<formula id="pw0340" inline="C12 H16 Co2 O20, 2K, 3(H2 O)"/>
+<formula id="pw0341" inline="C6 H2 Co O7, Cs"/>
+<formula id="pw0348" inline="C14 H16 Cu Mn N2 O13, H2 O"/>
+<formula id="pw0405" inline="C14 H12 Co N2 O10, 2(H2 O)"/>
+<formula id="pw0406" inline="C48 H72 Co9 N12 O33, 3(H2 O)"/>
+<formula id="pw0502" inline="C9 H8 Ni2 O9, H2 O"/>
+<formula id="pw0508" inline="C12 H12 Co2 Cs2 O18"/>
+<formula id="pw0709" inline="C7 H4 K2 O6 S, 3(H2 O)"/>
+<formula id="ua0401" inline="C16 H25 O2 Zr, C36 H2 B2 F30 N, C4 H10 O"/>
+<formula id="ua0404" inline="C68 H108 Ca2 N4 O4, C4 H10 O"/>
+<formula id="ua0407" inline="C66 H100 Mg2 N4 O4, 4(C4 H8 O)"/>
+<formula id="ua0435" inline="C42 H70 Sm4, Mg C24 H48 O6, C7 H8"/>
+<formula id="ua0436" inline="2(C36 H30 B2 N8), 2(C4 H10 O)"/>
+<formula id="ua0440" inline="C36 H2 B2 F30 N, C4 H11 O, C4 H10 O"/>
+<formula id="ua0501" inline="C10 H30 N5 Sn, C24 B F20"/>
+<formula id="ua0502" inline="2(C13 H14 N), 2(C24 B F20), C H2 Cl2"/>
+<formula id="wj0106" inline="C12 H8 O4, C10 H8 N2"/>
+<formula id="wj0506" inline="C14 H19 N4 O3, C7 H5 O3, 2(C2 H6 S O)"/>
+<formula id="wj0510" inline="C7 H9 N, 0.5(C4 H6 O4)"/>
+<formula id="wj0511" inline="2 C7 H9 N, C4 H6 O4"/>
+<formula id="wj0513" inline="C14 H19 N4 O3, 0.5(C4 H2 O4)"/>
+<formula id="wj0514" inline="C14 H19 N4 O3, 0.5(C4 H4 O4)"/>
+<formula id="wj0515" inline="2(C7 H10 N), C23 H14 O6"/>
+<formula id="wj0516" inline="C23 H14 O6, 2(C7 H10 N)"/>
+<formula id="wj0518" inline="C7 H10 N, C4 H3 O4"/>
+<formula id="wj0524" inline="C7 H10 N, C4 H5 O6"/>
+<formula id="wj0525" inline="C7H10N, C4H3O4, 0.5(C4H4O4), 0.5(C7H8)"/>
+<formula id="wj0526" inline="2(C7 H9 N), C4 H6 O4"/>
+<formula id="wj0527" inline="C7 H9 N, 0.5(C4 H4 O4)"/>
+<formula id="wj0528" inline="C7H10N, C4H5O4"/>
+<formula id="wj0529" inline="2(C7H9N) , C4H6O4"/>
+<formula id="wj0530" inline="2(C7H9N) , C4H6O4"/>
+<formula id="wj0601" inline="C8 H10 N4 O2, C4 H6 O4, 0.67(C4 H8 O2)"/>
+<formula id="wj0604" inline="C8 H10 N4 O2, C4 H6 O4, 0.54(C4 H8 O1 S1)"/>
+<formula id="wj0610" inline="C8 H10 N4 O2, C6 H10 O4"/>
+<formula id="wj0613" inline="C8 H10 N4 O2, C4 H6 O6"/>
+<formula id="wj0614" inline="C8 H10 N4 O2, C4 H6 O4, C1 H3 N1 O2"/>
+<formula id="wj0615" inline="C2 H2 O4, 2(C7 H8 N4 O2)"/>
+<formula id="wj0701" inline="2(C4 H9 N1 S), (C6 F4 I2)"/>
+<formula id="wj0702" inline="(C4 H10 N1 S1), Cl1"/>
+<formula id="wj0704" inline="(C6 F4 I2), (C4 H9 N1 O1)"/>
+<formula id="wj0705" inline="(C6 F4 I2) (C4 H9 S1 O1)"/>
+<formula id="wj0706" inline="2(C5 H11 N1), C6 F4 I2"/>
+<formula id="wj0709" inline="(C6 F4 I2), (C4 H8 O2)"/>
+<formula id="wj0712" inline="(C6 F4 Br2), (C4 H10 N2)"/>
+<formula id="wj0713" inline="(C6 F4 I2), (C4 H8 O1 S1)"/>
+<formula id="wj0715" inline="(C6 Br2 F4), (C4 H9 N1 O1)"/>
+<formula id="wj0716" inline="(C6 F4 I2) (C6 H12 N2)"/>
+<formula id="wj0717" inline="(C6 F4 I2), (C4 H9 N1 S1)"/>
+<formula id="wj0718" inline="2(C6 F4 I2), (C4 H8 S2)"/>
+<formula id="wj0719" inline="(C6 F4 I2), (C4 H10 N2)"/>
+<formula id="wj0729" inline="(C6 H12 N2) (C6 Br2 F4)"/>
+<formula id="wj0730" inline="(C6 H12 N2) 2(C6 F5 I1)"/>
+<formula id="wj0731" inline="(C12 H12 N2) 2(C6 F5 I1)"/>
+<formula id="wj0735" inline="(C6 H12 N2) (C6 F4 I2)"/>
+<formula id="wj0736" inline="2(C12 H8 N2) (C6 F4 I2)"/>
+<formula id="wj0737" inline="(C6 H12 N2) (C6 H4 I2)"/>
+<formula id="wj0738" inline="(C12 H8 N2) (C6 F4 I2)"/>
+<formula id="wj0742" inline="2(C13 H9 N1) (C6 F4 I2)"/>
+<formula id="wj0743" inline="3.5(C13 H9 N1) 2(C6 F4 I2)"/>
+<formula id="wj0744" inline="2(C12 H8 N2) (C6 F4 Br2)"/>
+<formula id="wj0746" inline="2(C12 H8 N2) (C6 F4 Br2)"/>
+<formula id="wj0747" inline="(C13 H9 N1) (C6 F5 I1)"/>
+<formula id="wj0749" inline="(C12 H8 N2) (C6 F5 I)"/>
+<formula id="wj0752" inline="(C13 H9 N1) (C6 F5 I1)"/>
+<formula id="wj9812" inline="2 [C4 H4 N O S2]"/>
+<formula id="wj9815" inline="Co (C5 H4 N O S)3 (C H3)2 S O"/>
+<formula id="wj9816" inline="[(C5 H4 N O S)2] [(C4 H4 N O S2)2 S]"/>
+</list>
+
