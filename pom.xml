@@ -212,10 +212,20 @@
 						<exclude>
 							org/xmlcml/cml/element/AbstractTest.java
 						</exclude>
-					</excludes>
+						<exclude>
+							org/xmlcml/cml/element/AbstractTest.java
+						</exclude>
+						<exclude>
+						org/xmlcml/cml/tools/AbstractToolTest.java
+						</exclude>
+						</excludes>
 				</configuration>
 			</plugin>
-		</plugins>
+		  <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-2</version>
+      </plugin>
+    </plugins>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -232,13 +242,11 @@
 		</repository>
 	</repositories>
 	<dependencies>
-		<!--
 			<dependency>
 			<groupId>cml</groupId>
 			<artifactId>cifxml</artifactId>
-			<version>1.2-SNAPSHOT</version>
-			</dependency>
-		-->
+			<version>1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
