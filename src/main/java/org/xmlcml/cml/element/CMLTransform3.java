@@ -402,8 +402,6 @@ public class CMLTransform3 extends AbstractTransform3 {
      */
     public AxisAngleChirality getAxisAngleChirality() {
         Transform3 teucl3 = this.getEuclidTransform3();
-        Vector3 v = new Vector3();
-        Angle ang = new Angle();
         AxisAngleChirality aac = teucl3.getAxisAngleChirality();
         return aac;
     }

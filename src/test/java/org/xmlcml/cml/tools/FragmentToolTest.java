@@ -148,7 +148,6 @@ public class FragmentToolTest {
 		String[] ATOMREFS2 = new String[] { "r2", "r1" };
 		String[] MOLREFS2 = new String[] { CMLJoin.PREVIOUS_S, CMLJoin.NEXT_S };
 		CMLFragment fragment = new CMLFragment();
-		@SuppressWarnings("unused")
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool(fragment);
 		CMLFragment fragment1 = new CMLFragment();
 		fragment1.setId("f1");
