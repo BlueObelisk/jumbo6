@@ -430,7 +430,6 @@ public class MoleculeTool extends AbstractSVGTool {
 
 	@SuppressWarnings("unused")
 	private void getHybridizationFromConnectivty() {
-		@SuppressWarnings("unused")
 		// FIXME
 		List<CMLAtom> atoms = molecule.getAtoms();
 		// process atoms first. known terminal atoms or atoms with maximum
@@ -485,7 +484,6 @@ public class MoleculeTool extends AbstractSVGTool {
 				// CMLAtom ligand = (CMLAtom) it.next();
 				// FIXME
 				CMLAtom ligand = null;
-				@SuppressWarnings("unused")
 				CMLBond bond = molecule.getBond(atom, ligand);
 				// FIXME
 				// order = bond.getOrder();
@@ -1161,7 +1159,6 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @param toFrom specifies attribute for search atoms in atomRefs2
 	 * @return mapped bond or null
 	 */
-	@SuppressWarnings("unused")
 	public CMLBond getMappedBondViaAtoms(CMLMap map, CMLBond bond0,
 			Direction toFrom) {
 		CMLBond targetBond = null;

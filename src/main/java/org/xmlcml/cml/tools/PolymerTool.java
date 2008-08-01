@@ -187,7 +187,6 @@ public class PolymerTool extends AbstractTool {
      * several times in sequence.
      *
      */
-    @SuppressWarnings("unused")
     public void processConvention() {
         if (moleculeList != null) {
             System.out.println("==========MOLLIST=========");
