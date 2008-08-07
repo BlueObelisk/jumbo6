@@ -8,6 +8,8 @@ import static org.xmlcml.euclid.EuclidConstants.U_S;
 import static org.xmlcml.util.TestUtils.neverThrow;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
+import nu.xom.Element;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -26,6 +29,7 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLLog;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLLog.Severity;
+import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -857,4 +861,62 @@ public class CrystalToolTest  {
 //			}
 //		}
 //	}
+    
+    /**
+     * 
+     */
+    @Test
+    public void testAnnotateSpaceGroupMultiplicities() {
+    	String moleculeS = "" +
+    			"<molecule "+CML_XMLNS+">" +
+    					"<atomArray>" +
+    					"<atom id='a1' elementType='Cu' xFract='0' yFract='0' zFract='0'/>" +
+    					"<atom id='a2' elementType='O' xFract='0' yFract='0' zFract='0.3'/>" +
+    					"<atom id='a3' elementType='N' xFract='0' yFract='0.2' zFract='0.3'/>" +
+    					"<atom id='a4' elementType='H' xFract='0.1' yFract='0.2' zFract='0.3'/>" +
+    					"</atomArray>" +
+    					"<crystal/>" +  // because CrystalTool expects a crystal
+				"</molecule>";
+    	CMLMolecule molecule = null;
+    	String symmetryS = "" +
+		"<symmetry "+CML_XMLNS+">" +
+		"<transform3>1 0 0 0   0 1 0 0  0 0 1 0   0 0 0 1</transform3>" +
+		"<transform3>1 0 0 0   0 1 0 0  0 0 -1 0   0 0 0 1</transform3>" +
+		"<transform3>1 0 0 0   0 -1 0 0  0 0 1 0   0 0 0 1</transform3>" +
+		"<transform3>1 0 0 0   0 -1 0 0  0 0 -1 0   0 0 0 1</transform3>" +
+		"<transform3>-1 0 0 0   0 1 0 0  0 0 1 0   0 0 0 1</transform3>" +
+		"<transform3>-1 0 0 0   0 1 0 0  0 0 -1 0   0 0 0 1</transform3>" +
+		"<transform3>-1 0 0 0   0 -1 0 0  0 0 1 0   0 0 0 1</transform3>" +
+		"<transform3>-1 0 0 0   0 -1 0 0  0 0 -1 0   0 0 0 1</transform3>" +
+		"</symmetry>";
+    	CMLSymmetry symmetry = null;
+		String expectedS = "" +
+		"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+		  "<atomArray>"+
+		  " <atom id='a1' elementType='Cu' xFract='0.0' yFract='0.0' zFract='0.0'>"+
+		  "  <scalar dataType='xsd:integer' dictRef='cml:mult'>8</scalar>"+
+		  "</atom>"+
+		  "<atom id='a2' elementType='O' xFract='0.0' yFract='0.0' zFract='0.3'>"+
+		  "  <scalar dataType='xsd:integer' dictRef='cml:mult'>4</scalar>"+
+		  "</atom>"+
+		  "<atom id='a3' elementType='N' xFract='0.0' yFract='0.2' zFract='0.3'>"+
+		  "  <scalar dataType='xsd:integer' dictRef='cml:mult'>2</scalar>"+
+		  "</atom>"+
+		  "<atom id='a4' elementType='H' xFract='0.1' yFract='0.2' zFract='0.3'/>"+
+		  "</atomArray>"+
+		  "<crystal/>"+
+		"</molecule>";
+		Element expected = null;
+    	try {
+			molecule = (CMLMolecule) new CMLBuilder().parseString(moleculeS);
+			symmetry = (CMLSymmetry) new CMLBuilder().parseString(symmetryS);
+			expected = new CMLBuilder().parseString(expectedS);
+		} catch (Exception e) {
+			Assert.fail("BUG "+e);
+		}
+		CrystalTool crystalTool = new CrystalTool(molecule, symmetry);		
+		crystalTool.annotateSpaceGroupMultiplicities();
+		assertEqualsCanonically("symmetry", expected, molecule, true);
+	}
+
 }
