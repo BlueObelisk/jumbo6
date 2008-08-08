@@ -891,7 +891,7 @@ public class ReactionTool extends AbstractSVGTool {
 		Real2Range range = new Real2Range();
 		for (CMLMolecule molecule : molecules) {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-			Real2Range molRange = moleculeTool.calculateBoundingBox();
+			Real2Range molRange = moleculeTool.calculateBoundingBox2D();
 			range.plus(molRange);
 		}
 		return range;

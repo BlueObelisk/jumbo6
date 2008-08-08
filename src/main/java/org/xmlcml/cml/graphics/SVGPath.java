@@ -1,16 +1,15 @@
 package org.xmlcml.cml.graphics;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.geom.Line2D;
+import java.awt.geom.GeneralPath;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Array;
 
 /** draws a straight line.
  * 
@@ -19,7 +18,10 @@ import org.xmlcml.euclid.Real2;
  */
 public class SVGPath extends SVGElement {
 
+	private static Logger LOG = Logger.getLogger(SVGPath.class);
+	
 	final static String TAG ="path";
+	private GeneralPath path2;
 
 	/** constructor
 	 */
@@ -41,6 +43,15 @@ public class SVGPath extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	public SVGPath(Real2Array xy) {
+		this(getD(xy));
+	}
+	
+	public SVGPath(String d) {
+		this();
+		setD(d);
+	}
+	
     /**
      * copy node .
      *
@@ -50,45 +61,38 @@ public class SVGPath extends SVGElement {
         return new SVGPath(this);
     }
 
-	public SVGPath(String d) {
-		this();
-		setD(d);
-	}
-	
 	protected void init() {
 		super.setDefaultStyle();
 		setDefaultStyle(this);
 	}
+	
+	
 	public static void setDefaultStyle(SVGPath path) {
 		path.setStroke("black");
 		path.setStrokeWidth(0.5);
 		path.setFill("none");
 	}
-	/** constructor.
-	 * 
-	 * @param x1
-	 * @param x2
-	 * @param y1
-	 * @param y2
-	 * @deprecated
-	 */
-	public SVGPath(Real2 x1, Real2 x2, Real2 y1, Real2 y2) {
-		this();
-		setX12(x1, 1);
-		setX12(x2, 2);
-	}
-	/**
-	 * @param x12 coordinates of the atom
-	 * @param serial 1 or 2
-	 */
-	private void setX12(Real2 x12, int serial) {
-		if (x12 == null) {
-			System.err.println("null x2/y2 in path: ");
-		} else {
-			this.addAttribute(new Attribute("x"+serial, ""+x12.getX()));
-			this.addAttribute(new Attribute("y"+serial, ""+x12.getY()));
+	
+	public static String getD(Real2Array xy) {
+		String s = S_EMPTY;
+		StringBuilder sb = new StringBuilder();
+		if (xy.size() > 0) {
+			sb.append("M");
+			sb.append(xy.get(0).getX()+S_SPACE);
+			sb.append(xy.get(0).getY()+S_SPACE);
 		}
+		if (xy.size() > 1) {
+			for (int i = 1; i < xy.size(); i++ ) {
+				sb.append("L");
+				sb.append(xy.get(i).getX()+S_SPACE);
+				sb.append(xy.get(i).getY()+S_SPACE);
+			}
+			sb.append("Z");
+		}
+		s = sb.toString();
+		return s;
 	}
+	
 	
 	public void setD(String d) {
 		this.addAttribute(new Attribute("d", d));
@@ -104,35 +108,80 @@ public class SVGPath extends SVGElement {
 //</g>
 	
 	protected void drawElement(Graphics2D g2d) {
-		double x1 = this.getDouble("x1");
-		double y1 = this.getDouble("y1");
-		Real2 xy1 = new Real2(x1, y1);
-		xy1 = transform(xy1, cumulativeTransform);
-		double x2 = this.getDouble("x2");
-		double y2 = this.getDouble("y2");
-		Real2 xy2 = new Real2(x2, y2);
-		xy2 = transform(xy2, cumulativeTransform);
-		float width = 1.0f;
-		String style = this.getAttributeValue("style");
-		if (style.startsWith("stroke-width:")) {
-			style = style.substring("stroke-width:".length());
-			style = style.substring(0, (style+S_SEMICOLON).indexOf(S_SEMICOLON));
-			width = (float) new Double(style).doubleValue();
-			width *= 15.f;
+		GeneralPath path = createAndSetPath2D();
+		g2d.draw(path);
+	}
+
+	// FIXME
+	/** at present only does Mx,y Lx,y Lx,y ... z
+	 * 
+	 */
+	public Real2Array getReal2Array() {
+		String s = this.getD();
+//		StringBuilder sb = new StringBuilder(s);
+		if (s.endsWith("z") || s.endsWith("Z")) {
+			s = s.substring(0, s.length()-1);
 		}
-		
-		Stroke s = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-		g2d.setStroke(s);
-		
-		String colorS = "black";
-		String stroke = this.getAttributeValue("stroke");
-		if (stroke != null) {
-			colorS = stroke;
+		Real2Array real2Array = new Real2Array();
+		if (s.length() == 0 || !s.substring(0, 1).equals("M")) {
+			
+		} else {
+			int ii = s.indexOf("L");
+			if (ii != -1) {
+				Real2 move = getReal(s.substring(1, ii).trim());
+				s = s.substring(ii);
+				if (move != null) {
+					real2Array.add(move);
+					while (true) {
+						System.out.println("IDX "+ii);
+						ii = s.indexOf("L", 1); 
+						if (ii == -1) {
+							break;
+						}
+						//ii;
+						System.out.println(""+s+"/"+ii);
+						String ss = s.substring(1, ii).trim();
+						System.out.println("L"+ss);
+						Real2 draw = getReal(ss);
+						s = s.substring(ii).trim();
+						if (draw == null) {
+							LOG.error("Null path element: "+s);
+						} else {
+							real2Array.add(draw);
+						}
+					}
+				}
+			}
 		}
-		Color color = colorMap.get(colorS);
-		g2d.setColor(color);
-		Line2D line = new Line2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
-		g2d.draw(line);
+		return real2Array;
+	}
+	
+	/** parse string or two reals separated by a comma or spaces.
+	 * 
+	 * @param s
+	 * @return null if cannot parse
+	 */
+	private Real2 getReal(String s) {
+		Real2 real2 = null;
+		s = s.replace(S_COMMA, S_SPACE);
+		String[] ss = s.split(S_WHITEREGEX);
+		if (ss.length == 2) {
+			try {
+				double x = new Double(ss[0]).doubleValue();
+				double y = new Double(ss[1]).doubleValue();
+				real2 = new Real2(x, y);
+			} catch (Exception e) {
+				//
+			}
+		}
+		return real2;
+	}
+	
+	public GeneralPath createAndSetPath2D() {
+		path2 = new GeneralPath();
+		Real2Array dArray = this.getReal2Array();
+		System.out.println("REALARRAY "+dArray);
+		return path2;
 	}
 	
 	/** get tag.
@@ -140,5 +189,13 @@ public class SVGPath extends SVGElement {
 	 */
 	public String getTag() {
 		return TAG;
+	}
+
+	public GeneralPath getPath2() {
+		return path2;
+	}
+
+	public void setPath2(GeneralPath path2) {
+		this.path2 = path2;
 	}
 }

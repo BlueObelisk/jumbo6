@@ -12,9 +12,11 @@ import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 public class BondDisplay extends AbstractDisplay {
 
 	private String multipleColor = "white";
-	private double width = 1.0;
+	private double width = 0.7;
 	private double scale = 1.0;
-	private double doubleMiddleFactor = 1.3;
+	private double doubleMiddleFactor = 0.9;
+	private double wedgeFactor = 0.2;
+	private int hatchCount = 6;
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
@@ -160,5 +162,21 @@ public class BondDisplay extends AbstractDisplay {
 
 	public void setDoubleMiddleFactor(double doubleMiddleFactor) {
 		this.doubleMiddleFactor = doubleMiddleFactor;
+	}
+
+	public double getWedgeFactor() {
+		return wedgeFactor;
+	}
+
+	public void setWedgeFactor(double wedgeFactor) {
+		this.wedgeFactor = wedgeFactor;
+	}
+
+	public int getHatchCount() {
+		return hatchCount;
+	}
+
+	public void setHatchCount(int hatchCount) {
+		this.hatchCount = hatchCount;
 	}
 }

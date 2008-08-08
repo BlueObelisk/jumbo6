@@ -2,8 +2,10 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.tools.TextDisplay.Background;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -15,14 +17,10 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 public class AtomDisplay extends AbstractDisplay {
 
 	private static final Logger LOG = Logger.getLogger(AtomDisplay.class);
-	final static AtomDisplay DEFAULT = new AtomDisplay();
 	static {
-		DEFAULT.setDefaults();
+		LOG.setLevel(Level.INFO);
 	}
 	
-	static double XOFFSETFACTOR = -0.4;
-	static double YOFFSETFACTOR = 0.35;
-
 	private TextDisplay elementDisplay;
 	private TextDisplay chargeDisplay;
 	private TextDisplay groupDisplay;
@@ -30,11 +28,69 @@ public class AtomDisplay extends AbstractDisplay {
 	private TextDisplay isotopeDisplay;
 	private TextDisplay labelDisplay;
 	
+	private static TextDisplay defaultElementDisplay;
+	private static TextDisplay defaultChargeDisplay;
+	private static TextDisplay defaultGroupDisplay;
+	private static TextDisplay defaultIdDisplay;
+	private static TextDisplay defaultIsotopeDisplay;
+	private static TextDisplay defaultLabelDisplay;
+	
+	private static void ensureDefaults() {
+		if (defaultElementDisplay == null) {
+			defaultElementDisplay = new TextDisplay();
+			defaultElementDisplay.fill = "black";
+			defaultElementDisplay.backgroundColor = "#aaaaaa";
+			defaultElementDisplay.backgroundColor = "white";
+//			defaultElementDisplay.setXyOffset(new Real2(-0.4, 0.35));
+			defaultElementDisplay.setXyOffset(new Real2(0., 0.));
+			defaultElementDisplay.setFontSize(25.0);
+			defaultElementDisplay.setOpacity(1.0);
+		}
+		if (defaultChargeDisplay == null) {
+			defaultChargeDisplay = new TextDisplay();
+			defaultChargeDisplay.fill = "green";
+			defaultChargeDisplay.backgroundColor = "#eeeeee";
+			defaultChargeDisplay.backgroundColor = "white";
+			defaultChargeDisplay.setXyOffset(new Real2(1.2, -0.55));
+			defaultChargeDisplay.setFontSize(30.0);
+			defaultChargeDisplay.setOpacity(1.0);
+		}
+		if (defaultGroupDisplay == null) {
+			defaultGroupDisplay = new TextDisplay();
+			defaultGroupDisplay.fill = "magenta";
+			defaultGroupDisplay.backgroundColor = "#dddddd";
+			defaultGroupDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultGroupDisplay.setFontSize(10.0);
+		}
+		if (defaultIdDisplay == null) {
+			defaultIdDisplay = new TextDisplay();
+			defaultIdDisplay.fill = "cyan";
+			defaultIdDisplay.backgroundColor = "#dddddd";
+			defaultIdDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultIdDisplay.setFontSize(15.0);
+		}
+		if (defaultIsotopeDisplay == null) {
+			defaultIsotopeDisplay = new TextDisplay();
+			defaultIsotopeDisplay.fill = "black";
+			defaultIsotopeDisplay.backgroundColor = "#dddddd";
+			defaultIsotopeDisplay.setXyOffset(new Real2(-1.2, -0.55));
+			defaultIsotopeDisplay.setFontSize(25.0);
+			defaultIsotopeDisplay.setBackground(Background.CIRCLE);
+		}
+		if (defaultLabelDisplay == null) {
+			defaultLabelDisplay = new TextDisplay();
+			defaultLabelDisplay.fill = "pink";
+			defaultLabelDisplay.backgroundColor = "#dddddd";
+			defaultLabelDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultLabelDisplay.setFontSize(1.0);
+		}
+	};
+	
 	private MoleculeDisplay moleculeDisplay; // reference
 	
 	// atom
 	protected double backgroundRadiusFactor = 0.5;
-	protected boolean display = true;;
+	protected boolean display = true;
 	protected boolean displayCarbons;
 	protected boolean displayIds;
 	protected boolean displayGroups;
@@ -42,28 +98,158 @@ public class AtomDisplay extends AbstractDisplay {
 	protected double scale;
 	protected boolean omitHydrogens;
 	
+	public AtomDisplay(AtomDisplay atomDisplay) {
+		super(atomDisplay);
+		this.elementDisplay = (atomDisplay.elementDisplay == null) ?
+				null : new TextDisplay(atomDisplay.elementDisplay);
+		this.chargeDisplay = (atomDisplay.chargeDisplay == null) ?
+				null : new TextDisplay(atomDisplay.chargeDisplay);
+		this.groupDisplay = (atomDisplay.groupDisplay == null) ?
+				null : new TextDisplay(atomDisplay.groupDisplay);
+		this.idDisplay = (atomDisplay.idDisplay == null) ?
+				null : new TextDisplay(atomDisplay.idDisplay);
+		this.isotopeDisplay = (atomDisplay.isotopeDisplay == null) ?
+				null : new TextDisplay(atomDisplay.isotopeDisplay);
+		this.labelDisplay = (atomDisplay.labelDisplay == null) ?
+				null : new TextDisplay(atomDisplay.labelDisplay);
+	}
+	
+	void ensureMoleculeDisplay(MoleculeDisplay  moleculeDisplay) {
+		if (this.moleculeDisplay == null) {
+			this.moleculeDisplay = moleculeDisplay;
+		}
+	}
+
+	/** constructor.
+	 */
+	public AtomDisplay() {
+		super();
+		init();
+	}
+	
+	protected void init() {
+		setDefaults();
+	}
+	
+	protected void setDefaults() {
+		ensureDefaults();
+		LOG.debug("ATOM SET DEFAULTS");
+		super.setDefaults();
+		display = true;
+		displayCarbons = false;
+		displayLabels = false;
+		scale = 1.0;
+		overrideSuperDefaults();
+	}
+
+	private void overrideSuperDefaults() {
+
+// this should go in elementDisplay		
+		display = true;
+		color = "black";
+		fill = color;
+		fontFamily = FONT_SANS_SERIF;
+		fontSize = 3;
+		fontStyle = FONT_STYLE_NORMAL;
+		fontWeight = FONT_WEIGHT_NORMAL;
+		stroke = null;
+				
+		elementDisplay = new TextDisplay(defaultElementDisplay);
+		chargeDisplay = new TextDisplay(defaultChargeDisplay);
+		groupDisplay = new TextDisplay(defaultGroupDisplay);
+		idDisplay = new TextDisplay(defaultIdDisplay);
+		groupDisplay = new TextDisplay(defaultGroupDisplay);
+		isotopeDisplay = new TextDisplay(defaultIsotopeDisplay);
+		labelDisplay = new TextDisplay(defaultLabelDisplay);
+	}
+
+	public AtomDisplay(AbstractDisplay a) {
+		super(a);
+		// TODO Auto-generated constructor stub
+	}
+
+	public boolean isDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Boolean display) {
+		this.display = display;
+	}
+
+	public TextDisplay getElementDisplay() {
+		return elementDisplay;
+	}
+
+	public void setElementDisplay(TextDisplay elementDisplay) {
+		this.elementDisplay = elementDisplay;
+	}
+	
+	public TextDisplay getChargeDisplay() {
+		return chargeDisplay;
+	}
+
+	public void setChargeDisplay(TextDisplay chargeDisplay) {
+		this.chargeDisplay = chargeDisplay;
+	}
+
+	public TextDisplay getGroupDisplay() {
+		return groupDisplay;
+	}
+
+	public void setGroupDisplay(TextDisplay groupDisplay) {
+		this.groupDisplay = groupDisplay;
+	}
+
+	public TextDisplay getIdDisplay() {
+		return idDisplay;
+	}
+
+	public void setIdDisplay(TextDisplay idDisplay) {
+		this.idDisplay = idDisplay;
+	}
+
+	public TextDisplay getIsotopeDisplay() {
+		return isotopeDisplay;
+	}
+
+	public void setIsotopeDisplay(TextDisplay isotopeDisplay) {
+		this.isotopeDisplay = isotopeDisplay;
+	}
+
+	public TextDisplay getLabelDisplay() {
+		return labelDisplay;
+	}
+
+	public void setLabelDisplay(TextDisplay labelDisplay) {
+		this.labelDisplay = labelDisplay;
+	}
+
+	public void setDisplay(boolean display) {
+		this.display = display;
+	}
+
+	public boolean isDisplayIds() {
+		return displayIds;
+	}
+
+	public void setDisplayIds(boolean displayIds) {
+		this.displayIds = displayIds;
+	}
+
+	public boolean isDisplayGroups() {
+		return displayGroups;
+	}
+
+	public void setDisplayGroups(boolean displayGroups) {
+		this.displayGroups = displayGroups;
+	}
+
 	public boolean isOmitHydrogens() {
 		return omitHydrogens;
 	}
 	public void setOmitHydrogens(boolean omitHydrogens) {
 		this.omitHydrogens = omitHydrogens;
 	}
-	public static void setChargeDefaults() {
-		
-	}
-	public static void setGroupDefaults() {
-		
-	}
-	public static void setIdDefaults() {
-		
-	}
-	public static void setIsotopeDefaults() {
-		
-	}
-	public static void setLabelDefaults() {
-		
-	}
-
 	public double getBackgroundRadiusFactor() {
 		return backgroundRadiusFactor;
 	}
@@ -72,28 +258,42 @@ public class AtomDisplay extends AbstractDisplay {
 		this.backgroundRadiusFactor = backgroundRadiusFactor;
 	}
 
-	public AtomDisplay(AtomDisplay atomDisplay) {
-		super(atomDisplay);
-		this.elementDisplay = (elementDisplay == null) ? null : new TextDisplay(atomDisplay.elementDisplay);
-		this.chargeDisplay = (chargeDisplay == null) ? null : new TextDisplay(atomDisplay.chargeDisplay);
-		this.groupDisplay = (groupDisplay == null) ? null : new TextDisplay(atomDisplay.groupDisplay);
-		this.idDisplay = (idDisplay == null) ? null : new TextDisplay(atomDisplay.idDisplay);
-		this.isotopeDisplay = (isotopeDisplay == null) ? null : new TextDisplay(atomDisplay.isotopeDisplay);
-		this.labelDisplay = (labelDisplay == null) ? null : new TextDisplay(atomDisplay.labelDisplay);
+	public static AbstractDisplay getDefaultElementDisplay() {
+		return defaultElementDisplay;
 	}
-	
-	void ensureMoleculeDisplay(MoleculeDisplay  moleculeDisplay) {
-		if (this.moleculeDisplay == null) {
-			this.moleculeDisplay = moleculeDisplay;
-		}
+	public static void setDefaultElementDisplay(TextDisplay defaultElementDisplay) {
+		AtomDisplay.defaultElementDisplay = defaultElementDisplay;
 	}
- 	void ensureElementDisplay() {
-		if (elementDisplay == null) {
-			elementDisplay = createElementDisplay();
-		}
+	public static AbstractDisplay getDefaultChargeDisplay() {
+		return defaultChargeDisplay;
 	}
-
-
+	public static void setDefaultChargeDisplay(TextDisplay defaultChargeDisplay) {
+		AtomDisplay.defaultChargeDisplay = defaultChargeDisplay;
+	}
+	public static AbstractDisplay getDefaultGroupDisplay() {
+		return defaultGroupDisplay;
+	}
+	public static void setDefaultGroupDisplay(TextDisplay defaultGroupDisplay) {
+		AtomDisplay.defaultGroupDisplay = defaultGroupDisplay;
+	}
+	public static AbstractDisplay getDefaultIdDisplay() {
+		return defaultIdDisplay;
+	}
+	public static void setDefaultIdDisplay(TextDisplay defaultIdDisplay) {
+		AtomDisplay.defaultIdDisplay = defaultIdDisplay;
+	}
+	public static AbstractDisplay getDefaultIsotopeDisplay() {
+		return defaultIsotopeDisplay;
+	}
+	public static void setDefaultIsotopeDisplay(TextDisplay defaultIsotopeDisplay) {
+		AtomDisplay.defaultIsotopeDisplay = defaultIsotopeDisplay;
+	}
+	public static AbstractDisplay getDefaultLabelDisplay() {
+		return defaultLabelDisplay;
+	}
+	public static void setDefaultLabelDisplay(TextDisplay defaultLabelDisplay) {
+		AtomDisplay.defaultLabelDisplay = defaultLabelDisplay;
+	}
 	/**
 	 * @return the displayLabels
 	 */
@@ -108,67 +308,13 @@ public class AtomDisplay extends AbstractDisplay {
 		this.displayLabels = displayLabels;
 	}
 
-	/** constructor.
-	 */
-	public AtomDisplay() {
-		super();
-	}
-	
-	protected void init() {
-		setDefaults();
-	}
-	
-	protected void setDefaults() {
-		LOG.debug("ATOM SET DEFAULTS");
-		super.setDefaults();
-		setLocalDefaults();
-		overrideSuperDefaults();
-	}
-
-	private void overrideSuperDefaults() {
-		display = true;
-		color = "black";
-		fill = color;
-		fontFamily = FONT_SANS_SERIF;
-		fontSize = 3;
-		fontStyle = FONT_STYLE_NORMAL;
-		fontWeight = FONT_WEIGHT_NORMAL;
-		stroke = null;
-				
-		elementDisplay = createElementDisplay();
-		chargeDisplay = null;
-		groupDisplay = null;
-		idDisplay = null;
-		isotopeDisplay = null;
-		labelDisplay = null;
-	}
-
-	private static TextDisplay createElementDisplay() {
-		TextDisplay textDisplay = new TextDisplay();
-		textDisplay.backgroundColor = "blue";
-		textDisplay.setXyOffset(new Real2(XOFFSETFACTOR, YOFFSETFACTOR));
-		return textDisplay;
-	}
-	
-	private void setLocalDefaults() {
-		display = true;
-		displayCarbons = false;
-		displayLabels = false;
-		scale = 1.0;
-	}
-	
-	public AtomDisplay(AbstractDisplay a) {
-		super(a);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @return the dEFAULT
-	 */
-	public static AtomDisplay getDEFAULT() {
-		return DEFAULT;
-	}
-
+//	/**
+//	 * @return the dEFAULT
+//	 */
+//	public static AtomDisplay getDEFAULT() {
+//		return DEFAULT;
+//	}
+//
 	/** can atom be omitted?
 	 * 
 	 * @param atom
@@ -237,126 +383,6 @@ public class AtomDisplay extends AbstractDisplay {
 		System.out.println();
 	}
 
-	public boolean isDisplay() {
-		return display;
-	}
-
-	public void setDisplay(Boolean display) {
-		this.display = display;
-	}
-
-	public TextDisplay getElementDisplay() {
-		return elementDisplay;
-	}
-
-	public void setElementDisplay(TextDisplay elementDisplay) {
-		this.elementDisplay = elementDisplay;
-	}
-
-	private void enableChargeDisplay() {
-		if (this.chargeDisplay == null) {
-			this.chargeDisplay = new TextDisplay();
-			chargeDisplay.setDefaults();
-			setChargeDefaults();
-		}
-	}
-	public TextDisplay getChargeDisplay() {
-		enableChargeDisplay();
-		return chargeDisplay;
-	}
-
-	public void setChargeDisplay(TextDisplay chargeDisplay) {
-		this.chargeDisplay = chargeDisplay;
-	}
-
-	private void enableGroupDisplay() {
-		if (this.groupDisplay == null) {
-			this.groupDisplay = new TextDisplay();
-			groupDisplay.setDefaults();
-			setGroupDefaults();
-		}
-	}
-	
-	public TextDisplay getGroupDisplay() {
-		enableGroupDisplay();
-		return groupDisplay;
-	}
-
-	public void setGroupDisplay(TextDisplay groupDisplay) {
-		this.groupDisplay = groupDisplay;
-	}
-
-	private void enableIdDisplay() {
-		if (this.idDisplay == null) {
-			this.idDisplay = new TextDisplay();
-			idDisplay.setDefaults();
-			setIdDefaults();
-		}
-	}
-	
-	public TextDisplay getIdDisplay() {
-		enableIdDisplay();
-		return idDisplay;
-	}
-
-	public void setIdDisplay(TextDisplay idDisplay) {
-		this.idDisplay = idDisplay;
-	}
-
-	private void enableIsotopeDisplay() {
-		if (this.isotopeDisplay == null) {
-			this.isotopeDisplay = new TextDisplay();
-			isotopeDisplay.setDefaults();
-			setIsotopeDefaults();
-		}
-	}
-	
-	public TextDisplay getIsotopeDisplay() {
-		enableIsotopeDisplay();
-		return isotopeDisplay;
-	}
-
-	public void setIsotopeDisplay(TextDisplay isotopeDisplay) {
-		this.isotopeDisplay = isotopeDisplay;
-	}
-
-	private void enableLabelDisplay() {
-		if (this.labelDisplay == null) {
-			this.labelDisplay = new TextDisplay();
-			labelDisplay.setDefaults();
-			setLabelDefaults();
-		}
-	}
-	
-	public TextDisplay getLabelDisplay() {
-		enableLabelDisplay();
-		return labelDisplay;
-	}
-
-	public void setLabelDisplay(TextDisplay labelDisplay) {
-		this.labelDisplay = labelDisplay;
-	}
-
-	public void setDisplay(boolean display) {
-		this.display = display;
-	}
-
-	public boolean isDisplayIds() {
-		return displayIds;
-	}
-
-	public void setDisplayIds(boolean displayIds) {
-		this.displayIds = displayIds;
-	}
-
-	public boolean isDisplayGroups() {
-		return displayGroups;
-	}
-
-	public void setDisplayGroups(boolean displayGroups) {
-		this.displayGroups = displayGroups;
-	}
-
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("AtomDisplay:");
@@ -392,4 +418,5 @@ public class AtomDisplay extends AbstractDisplay {
 		sb.append(S_NEWLINE);
 		return sb.toString();
 	}
+	
 }

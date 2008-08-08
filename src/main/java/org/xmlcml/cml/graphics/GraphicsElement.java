@@ -17,10 +17,9 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
-public /*abstract*/ class GraphicsElement extends Element implements SVGConstants {
+public class GraphicsElement extends Element implements SVGConstants {
 
 	protected Transform2 cumulativeTransform = new Transform2();
-//	protected StyleBundle styleBundle;
 		
 	/** constructor.
 	 * 
@@ -279,7 +278,7 @@ public /*abstract*/ class GraphicsElement extends Element implements SVGConstant
 		SVGElement g = new SVGG();
 		g.setFill("yellow");
 		svg.appendChild(g);
-		SVGLine line = new SVGLine(new Real2(100, 200), new Real2(300, 50));
+		SVGElement line = new SVGLine(new Real2(100, 200), new Real2(300, 50));
 		line.setFill("red");
 		line.setStrokeWidth(3);
 		line.setStroke("blue");

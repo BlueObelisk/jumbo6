@@ -196,7 +196,7 @@ public class SelectionTool implements CMLConstants {
 	 // highlight
 		 BondTool bondTool = BondTool.getOrCreateTool(bond);
 		 List<CMLAtom> atoms = bond.getAtoms();
-   		 SVGLine line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
+   		 SVGElement line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
    		 line.setStrokeWidth(bondTool.getWidth() * 10.0);
    		 line.addAttribute(new Attribute("class", "highlight"));
    		 line.setFill("yellow");

@@ -96,13 +96,13 @@ public class CMLSVGTool extends AbstractSVGTool {
 	 * 
 	 * @return
 	 */
-	protected Real2Range calculateBoundingBox() {
+	protected Real2Range calculateBoundingBox2D() {
 		Real2Range range = new Real2Range();
 		List<CMLElement> childElements = cmlElement.getChildCMLElements();
 		for (CMLElement element : childElements) {
 			AbstractSVGTool svgTool = AbstractSVGTool.getOrCreateSVGTool(element);
 			try {
-				Real2Range childRange = svgTool.calculateBoundingBox();
+				Real2Range childRange = svgTool.calculateBoundingBox2D();
 				range = range.plus(childRange);
 			} catch (CMLRuntimeException e) {
 				System.out.println("NO atoms?");

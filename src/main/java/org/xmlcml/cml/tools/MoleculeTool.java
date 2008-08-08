@@ -19,6 +19,7 @@ import nu.xom.Text;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.omg.CORBA.UserException;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -51,6 +52,7 @@ import org.xmlcml.cml.element.CMLUnit.Units;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3Vector;
@@ -1611,7 +1613,6 @@ public class MoleculeTool extends AbstractSVGTool {
     	moleculeDisplay = (drawable instanceof MoleculeDisplayList) ? 
     			((MoleculeDisplayList)drawable).getMoleculeDisplay() : moleculeDisplay;
 		enableMoleculeDisplay();
-//    	System.out.println("MOLECULE "+moleculeDisplay.getDebugString());
     	BondDisplay defaultBondDisplay = moleculeDisplay.getDefaultBondDisplay();
     	AtomDisplay defaultAtomDisplay = moleculeDisplay.getDefaultAtomDisplay();
     	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
@@ -1660,6 +1661,9 @@ public class MoleculeTool extends AbstractSVGTool {
     	if (moleculeDisplay.isDisplayNames()) {
     		displayMoleculeNames(drawable, g);
     	}
+    	if (moleculeDisplay.isDrawBoundingBox()) {
+    		drawBoundingBox(drawable, g);
+    	}
     	
     	if (drawable != null) {
     		try {
@@ -1671,11 +1675,30 @@ public class MoleculeTool extends AbstractSVGTool {
     	return g;
     }
     
+    private void drawBoundingBox(CMLDrawable drawable, SVGElement g) {
+    	calculateBoundingBox2D();
+    	double bondLength = moleculeDisplay.getBondLength();
+    	Real2 xy0 = new Real2(
+    			userBoundingBox.getXRange().getMin() - bondLength, 
+    			userBoundingBox.getYRange().getMin() - bondLength
+    			);
+    	Real2 xy1 = new Real2(
+    			userBoundingBox.getXRange().getMax() + bondLength, 
+    			userBoundingBox.getYRange().getMax() + bondLength
+    			);
+    			
+    	SVGRect rect = new SVGRect(xy0, xy1);
+    	rect.setStroke("red");
+    	rect.setStrokeWidth(2.0);
+    	g.appendChild(rect);
+    }
+    
     private void setGroupVisibility(List<CMLAtom> atoms) {
-    	if (true || Level.DEBUG.equals(LOG.getLevel())) {
+    	if (/*true || */
+			Level.DEBUG.equals(LOG.getLevel())) {
     		molecule.debug("GROUP VISIBILITY ON");
     	}
-    	LOG.debug("GROUPVIS");
+//    	LOG.debug("GROUPVIS");
     	for (CMLAtom atom : atoms) {
     		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
     		if (atomTool.isGroupRoot()) {
@@ -1686,9 +1709,12 @@ public class MoleculeTool extends AbstractSVGTool {
 
 	private Transform2 scaleToBoundingBoxesAndScreenLimits(Transform2 transform2) {
 		try {
-			Real2Range moleculeBoundingBox = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule)).getExtent2();
+			calculateBoundingBox2D();
+//			Real2Range moleculeBoundingBox = AtomSetTool.getOrCreateTool(
+//					new CMLAtomSet(molecule)).getExtent2();
 			Real2Interval screenBoundingBox = moleculeDisplay.getScreenExtent();
-			Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
+//			Real2Interval moleculeInterval = new Real2Interval(moleculeBoundingBox);
+			Real2Interval moleculeInterval = new Real2Interval(userBoundingBox);
 			double scale = moleculeInterval.scaleTo(screenBoundingBox);
 			double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
 			transform2 = new Transform2 (
@@ -1703,7 +1729,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		return transform2;
 	}
 
-	protected Real2Range calculateBoundingBox() {
+	public Real2Range calculateBoundingBox2D() {
 		userBoundingBox = null;
 		if (molecule != null) {
 			AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule));
@@ -1738,7 +1764,7 @@ public class MoleculeTool extends AbstractSVGTool {
     		if (bondTool.omitFromDisplay(atomDisplay)) {
     			continue;
     		}
-    		GraphicsElement b = bondTool.createGraphicsElement(drawable);
+    		SVGElement b = bondTool.createGraphicsElement(drawable);
     		if (b != null) {
     			g.appendChild(b);
     		}
@@ -1765,8 +1791,11 @@ public class MoleculeTool extends AbstractSVGTool {
 	}
     
 	private void displayMoleculeLabels(CMLDrawable drawable, SVGElement g) {
-		double x = 50.;
-		double y = 30.;
+		calculateBoundingBox2D();
+		RealRange xRange = userBoundingBox.getXRange();
+		double xMid = xRange.getMidPoint();
+		double minY = userBoundingBox.getYRange().getMin();
+		double maxY = userBoundingBox.getYRange().getMax();
     	Transform2 transform2 = new Transform2(
 			new double[] {
 				1.,  0., 0.0,
@@ -1774,10 +1803,20 @@ public class MoleculeTool extends AbstractSVGTool {
 				0.,  0., 1.}
 			);
 		if (molecule.getLabelElements().size() > 0) {
-			CMLLabel label = molecule.getLabelElements().get(0);
-			SVGText text = new SVGText(new Real2(x, y), label.getCMLValue());
-	    	text.setTransform(transform2);
-			g.appendChild(text);
+			double labelFontSize = moleculeDisplay.getLabelFontSize();
+			double labelYSpacing = moleculeDisplay.getLabelYSpacing();
+//			double yLabel0 = maxY + labelYSpacing * labelFontSize;
+			double yLabel0 = maxY;
+			for (CMLLabel label : molecule.getLabelElements()) {
+				String labelS = label.getCMLValue();
+				double xLabel = xMid - labelFontSize * (labelS.length() / 2.); 
+				double yLabel = labelYSpacing * labelFontSize;
+				SVGText text = new SVGText(new Real2(xLabel, yLabel0 + yLabel), labelS);
+				text.setFontWeight("bold");
+				text.setFontSize(labelFontSize);
+		    	text.setTransform(transform2);
+				g.appendChild(text);
+			}
 		}
 	}
     

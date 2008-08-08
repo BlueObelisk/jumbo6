@@ -3,19 +3,25 @@ package org.xmlcml.cml.tools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
+import nu.xom.Attribute;
+
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
+import org.xmlcml.cml.graphics.SVGPath;
+import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 
@@ -98,18 +104,25 @@ public class BondTool extends AbstractSVGTool {
      * @return null if problem or atom has no coords
      */
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
+    	
     	g = null;
     	List<CMLAtom> atoms = bond.getAtoms();    	
     	Real2 xy0 = atoms.get(0).getXY2();
     	Real2 xy1 = atoms.get(1).getXY2();
     	
     	if (xy0 == null) {
+    		// no coordinates
     	} else if (xy1 == null) {
+    		// no coordinates
     	} else {
         	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
+        	g.setUserElement(bond);
 	    	double bondWidth = bondDisplay.getScaledWidth();
 			String order = bond.getOrder();
+			CMLBondStereo bondStereo = bond.getBondStereo();
+			String bondStereoS = (bondStereo == null) ? null : bondStereo.getXMLContent();
 	    	 // highlight
+			// FIXME obsolete?
 	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
 	    	 if (selectionTool != null) {
 	    		 if (selectionTool.isSelected(bond)) {
@@ -119,16 +132,22 @@ public class BondTool extends AbstractSVGTool {
 		    	 	 } else if (order.equals(CMLBond.TRIPLE)) {
 		    	 		 factor = 7.0;
 		    	 	 }
-		    		 SVGLine line = createBond("yellow", bondWidth*factor, xy0, xy1);
+		    		 SVGElement line = createBond("yellow", bondWidth*factor, xy0, xy1);
 		    		 g.appendChild(line);
 		    		 line.setFill("yellow");
 		    		 line.setOpacity(0.40);
 		    	 }
 	    	 }
-			if (order == null || order.equals(CMLBond.SINGLE)) {
+			if (false) {
+			} else if (CMLBond.WEDGE.equals(bondStereoS) ||
+					CMLBond.HATCH.equals(bondStereoS)) {
+				SVGPath path = createWedgeHatch("black", bondDisplay.getHatchCount(),
+						bondWidth, xy0, xy1, bondStereoS);
+				g.appendChild(path);
+			} else if (order == null || order.equals(CMLBond.SINGLE)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.AROMATIC)) {
-				SVGLine line = createBond("black", bondWidth, xy0, xy1);
+				SVGElement line = createBond("black", bondWidth, xy0, xy1);
 				line.addDashedStyle(bondWidth);
 				g.appendChild(line);
 			} else if (order.equals(CMLBond.DOUBLE)) {
@@ -144,13 +163,59 @@ public class BondTool extends AbstractSVGTool {
 		return g;
     }
 
-    private SVGLine createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
-    	SVGLine line = new SVGLine(xy0, xy1);
+    private SVGElement createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
+    	SVGElement line = new SVGLine(xy0, xy1);
     	line.setStroke(stroke);
     	line.setStrokeWidth(width);
+    	line.setUserElement(bond);
+    	line.addAttribute(new Attribute("id", bond.getId()));
     	return line;
     }
 
+	private SVGPath createWedgeHatch(String fill, int nhatch, double width, Real2 xy0, Real2 xy1, String bondStereoS) {
+		Real2Array array = new Real2Array();
+		array.add(xy0);
+		double wf = bondDisplay.getWedgeFactor() * 0.5;
+		Real2 v1 = xy1.subtract(xy0);
+		// rotate by PI/2
+		Real2 v2 = new Real2(
+				v1.getY() * wf,
+				v1.getX() * (-wf)
+		);
+		SVGPath path = null;
+		if (bondStereoS.equals(CMLBond.WEDGE)) {
+			Real2 xy1a = xy1.plus(v2);
+			array.add(xy1a);
+			Real2 xy1b = xy1.subtract(v2);
+			array.add(xy1b);
+			path = new SVGPath(array);
+			path.setFill(fill);
+		} else {
+			v1 = v1.multiplyBy(1./(double) nhatch);
+			v2 = v2.multiplyBy(1./(double) nhatch);
+			Real2 currentMid = xy0;
+			path = new SVGPath();
+			path.setStrokeWidth(width);
+			path.setStroke(fill);
+			path.setStrokeWidth(width);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 1; i < nhatch; i++) {
+				currentMid.plusEquals(v1);
+				Real2 v22 = v2.multiplyBy((double) i);
+				Real2 xyplus = currentMid.plus(v22);
+				sb.append("M");
+				sb.append(xyplus.getX()+" ");
+				sb.append(xyplus.getY()+" ");
+				Real2 xyminus = currentMid.subtract(v22);
+				sb.append("L");
+				sb.append(xyminus.getX()+" ");
+				sb.append(xyminus.getY()+" ");
+			}
+			path.setD(sb.toString());
+		}
+		return path;
+	}
+    
 	/**
 	 * @return the bondDisplay
 	 */
@@ -303,6 +368,30 @@ public class BondTool extends AbstractSVGTool {
 			atom4[3] = ligand1;
 		}
 		return atom4;
+	}
+	
+	/** get 2D mid point of bond.
+	 * 
+	 * @return null if either XY2 coordinate is missing
+	 */
+	public Real2 getMidPoint2D() {
+		List<CMLAtom> atoms = bond.getAtoms();
+		Real2 xy0 = atoms.get(0).getXY2();
+		Real2 xy1 = atoms.get(1).getXY2();
+		return (xy0 == null || xy1 == null) ? null :
+			xy0.getMidPoint(xy1);
+	}
+
+	/** get 3D mid point of bond.
+	 * 
+	 * @return null if either XYZ3 coordinate is missing
+	 */
+	public Point3 getMidPoint3D() {
+		List<CMLAtom> atoms = bond.getAtoms();
+		Point3 xyz0 = atoms.get(0).getXYZ3();
+		Point3 xyz1 = atoms.get(1).getXYZ3();
+		return (xyz0 == null || xyz1 == null) ? null :
+			xyz0.getMidPoint(xyz1);
 	}
 
 }

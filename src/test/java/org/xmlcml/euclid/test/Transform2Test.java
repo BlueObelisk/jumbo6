@@ -137,8 +137,8 @@ public class Transform2Test  {
         Angle aa = ta.getAngleOfRotation();
         Assert.assertEquals("transform angle", Math.PI / 3., aa.getRadian(),
                 EPS);
-        Assert.assertEquals("transform2", Type.ROT_TRANS.s, tb
-                .getTransformationType().s);
+        Assert.assertEquals("transform2", Type.ROT_TRANS.s, 
+        		tb.getTransformationType().s);
     }
 
     /**

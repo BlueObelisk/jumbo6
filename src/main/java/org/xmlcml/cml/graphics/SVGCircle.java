@@ -3,6 +3,7 @@ package org.xmlcml.cml.graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -18,6 +19,15 @@ import org.xmlcml.euclid.Real2;
 public class SVGCircle extends SVGElement {
 
 	final static String TAG ="circle";
+	private Ellipse2D.Double circle2;
+
+	public Ellipse2D.Double getCircle2() {
+		return circle2;
+	}
+
+	public void setCircle2(Ellipse2D.Double circle2) {
+		this.circle2 = circle2;
+	}
 
 	/** constructor
 	 */
@@ -71,6 +81,7 @@ public class SVGCircle extends SVGElement {
 		this();
 		setXY(x1);
 		setRad(rad);
+		circle2 = new Ellipse2D.Double(x1.getX(), x1.getY(), rad, rad);
 	}
 	
 	protected void drawElement(Graphics2D g2d) {
@@ -119,5 +130,22 @@ public class SVGCircle extends SVGElement {
 		this.addAttribute(new Attribute("r", ""+rad));
 	}
 
+	public Ellipse2D.Double createAndSetCircle2D() {
+		double rad = this.getDouble("r");
+		double x1 = this.getDouble("cx");
+		double y1 = this.getDouble("cx");
+		Real2 xy1 = new Real2(x1, y1);
+		xy1 = transform(xy1, cumulativeTransform);
+		float width = 5.0f;
+		String style = this.getAttributeValue("style");
+		if (style.startsWith("stroke-width:")) {
+			style = style.substring("stroke-width:".length());
+			style = style.substring(0, (style+S_SEMICOLON).indexOf(S_SEMICOLON));
+			width = (float) new Double(style).doubleValue();
+			width *= 15.f;
+		}
+		circle2 = new Ellipse2D.Double(xy1.x - rad, xy1.y - rad, rad+rad, rad+rad);
+		return circle2;
+	}
 	
 }
