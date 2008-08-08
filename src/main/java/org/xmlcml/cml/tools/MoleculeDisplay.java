@@ -18,19 +18,23 @@ public class MoleculeDisplay extends AbstractDisplay {
 		DEFAULT.setDefaults();
 	};
 	
-	private AtomDisplay defaultAtomDisplay = new AtomDisplay(AtomDisplay.DEFAULT);
+	// all atom displays are now defaults
+	private AtomDisplay defaultAtomDisplay = new AtomDisplay();
 	private BondDisplay defaultBondDisplay = new BondDisplay(BondDisplay.DEFAULT);
 	
 	private double bondLength;
 	private double hydrogenLengthFactor;
 	private Boolean contractGroups;
-	
 	private boolean displayFormula;
 	private boolean displayLabels;
 	private boolean displayNames;
+	private boolean omitHydrogens;
+	private double labelFontSize;
+	private double labelYSpacing;
+	private boolean drawBoundingBox;
+	
 	private Real2Interval screenExtent;
 	private MoleculeTool moleculeTool;
-	protected boolean omitHydrogens;
 	
 	/**
 	 */
@@ -46,6 +50,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	}
 	
 	protected void init() {
+		setDefaults();
 	}
 	
 	protected void setDefaults() {
@@ -56,8 +61,11 @@ public class MoleculeDisplay extends AbstractDisplay {
 		contractGroups = false;
 		
 		displayFormula = false;
-		displayLabels = false;
+		displayLabels = true;
 		displayNames = false;
+		labelYSpacing = 1.6;
+		labelFontSize = 50;
+		drawBoundingBox = true;
 		
 		// molecule-specific
 		backgroundColor = "white";
@@ -255,6 +263,30 @@ public class MoleculeDisplay extends AbstractDisplay {
 		sb.append(S_NEWLINE);
 
 		return sb.toString();
+	}
+
+	public double getLabelFontSize() {
+		return labelFontSize;
+	}
+
+	public void setLabelFontSize(double labelFontSize) {
+		this.labelFontSize = labelFontSize;
+	}
+
+	public double getLabelYSpacing() {
+		return labelYSpacing;
+	}
+
+	public void setLabelYSpacing(double labelYSpacing) {
+		this.labelYSpacing = labelYSpacing;
+	}
+
+	public boolean isDrawBoundingBox() {
+		return drawBoundingBox;
+	}
+
+	public void setDrawBoundingBox(boolean drawBoundingBox) {
+		this.drawBoundingBox = drawBoundingBox;
 	}
 	
 }

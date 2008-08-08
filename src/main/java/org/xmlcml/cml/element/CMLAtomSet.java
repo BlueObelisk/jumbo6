@@ -1144,17 +1144,33 @@ public class CMLAtomSet extends AbstractAtomSet {
      * @return the vector (null if missing 2D coordinates)
      */
     public List<Real2> getVector2D() {
+    	boolean requireAll = true;
+    	return getVector2D(requireAll);
+    }
+
+    /**
+     * gets vector of 2D coordinates.
+     *
+     * all atoms must have coordinates COPIES coordinates so operations on
+     * vector do not affect atomset
+     *
+     * @return the vector (null if missing 2D coordinates)
+     */
+    public List<Real2> getVector2D(boolean requireAll) {
         List<CMLAtom> atoms = this.getAtoms();
         List<Real2> p2Vector = new ArrayList<Real2>();
         boolean ok = true;
         for (int i = 0; i < atoms.size(); i++) {
             CMLAtom atom = atoms.get(i);
             if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
-                ok = false;
-                break;
+            	if (requireAll) {
+	                ok = false;
+	                break;
+	            }
+            } else {
+	            Real2 p2 = new Real2(atom.getX2(), atom.getY2());
+	            p2Vector.add(p2);
             }
-            Real2 p2 = new Real2(atom.getX2(), atom.getY2());
-            p2Vector.add(p2);
         }
         if (!ok) {
             p2Vector = null;
@@ -1223,16 +1239,26 @@ public class CMLAtomSet extends AbstractAtomSet {
 
     /**
      * get 2D centroid.
-     *
+     * @param requireAll if true require that all atoms have coordinates
      * @return centroid of 2D coords or null
      */
-    public Real2 getCentroid2D() {
+    public Real2 getCentroid2D(boolean requireAll) {
         Real2 centroid2D = null;
-        List<Real2> p2Vector = getVector2D();
+        List<Real2> p2Vector = getVector2D(requireAll);
         if (p2Vector != null) {
             centroid2D = Real2.getCentroid(p2Vector);
         }
         return centroid2D;
+    }
+    
+    /**
+     * get 2D centroid.
+     * requires all atoms to have coordinates
+     * @return centroid of 2D coords or null
+     */
+    public Real2 getCentroid2D() {
+    	boolean requireAll = true;
+        return getCentroid2D(requireAll);
     }
     
     public void translateCentroidToOrigin3(CoordinateType type) {

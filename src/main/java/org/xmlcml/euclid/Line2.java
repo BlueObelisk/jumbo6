@@ -262,6 +262,29 @@ public class Line2 implements EuclidConstants {
 		}
 	}
 
+	/** does a line contain a point.
+	 * line is of zero thickness
+	 * 
+	 * @param point
+	 * @param eps distance within which point muct approach line
+	 * @param allowExtension if true allow point to be "outside" line
+	 * segment
+	 * @return true if within eps of line
+	 */
+	public boolean contains(Real2 point, double eps, boolean allowExtension) {
+		boolean contains = false;
+		if (point != null) {
+			double dist = Math.abs(this.getDistanceFromPoint(point));
+			if (dist < eps) {
+				double length = this.getLength() + eps; 
+				contains = allowExtension ||
+					(point.getDistance(from) < length &&
+					point.getDistance(to) < length);
+				}
+			}
+		return contains;
+	}
+
 	/**
 	 * @return the vector
 	 */

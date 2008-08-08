@@ -90,7 +90,7 @@ public abstract class AbstractSVGTool extends AbstractTool {
 
 	public Real2Range getUserBoundingBox() {
 		if (userBoundingBox == null) {
-			calculateBoundingBox();
+			calculateBoundingBox2D();
 		}
 		return userBoundingBox;
 	}
@@ -99,7 +99,7 @@ public abstract class AbstractSVGTool extends AbstractTool {
 	 * normally overridden
 	 * @return null
 	 */
-	protected Real2Range calculateBoundingBox() {
+	protected Real2Range calculateBoundingBox2D() {
 		Real2Range range = null;
 		return range;
 	}

@@ -25,6 +25,7 @@ import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealSquareMatrix;
@@ -1918,6 +1919,7 @@ public class CMLMolecule
 			}
 		}
 	}
+	
 
 	/**
 	 * translate molecule in 3D.

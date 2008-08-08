@@ -572,8 +572,8 @@ public class AtomSetTool extends AbstractTool {
 		return map;
 	}
 
-	/** gets extend (bounding box).
-	 * 
+	/** gets extent (bounding box).
+	 * skips atoms without coordinates
 	 * @return real2range
 	 */
 	public Real2Range getExtent2() {

@@ -107,10 +107,8 @@ public class Transform2 extends RealSquareMatrix {
     /**
      * from rotation about a point, given a matrix NOT CHECKED
      * 
-     * @param t
-     *            Description of the Parameter
-     * @param p
-     *            Description of the Parameter
+     * @param t transform
+     * @param p point to rotate about
      */
     public Transform2(Transform2 t, Real2 p) {
         super(3);

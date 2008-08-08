@@ -7,7 +7,11 @@ import static org.xmlcml.euclid.EuclidConstants.S_PLUS;
 
 import java.util.List;
 
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Real2;
@@ -19,19 +23,24 @@ import org.xmlcml.euclid.Real2;
  */
 public class TextDisplay extends AbstractDisplay {
 
-	final static TextDisplay DEFAULT = new TextDisplay();
-	
-	private SVGG g;
-	private SVGText text;
-	
-	private double backgroundRadiusFactor = 1.0;
-	private String textS;
-	private Real2 xyOffset = new Real2(0., 0.);
-	
+	static Logger LOG = Logger.getLogger(TextDisplay.class);
 	static {
-		DEFAULT.setDefaults();
+		LOG.setLevel(Level.INFO);
+	}
+	public enum Background {
+		NONE,
+		CIRCLE,
+		RECTANGLE
 	};
 	
+	private SVGG g;
+	private Background background;
+	private Real2 xyOffset = new Real2(0., 0.);
+	private double backgroundRadiusFactor = 0.55; // empirical
+	private Real2 textXyOffset = new Real2(-0.35, 0.37); // empirical
+	
+	private SVGText text;
+	private String textS;
 	public TextDisplay(AbstractDisplay a) {
 		super(a);
 	}
@@ -40,12 +49,15 @@ public class TextDisplay extends AbstractDisplay {
 		super(a);
 		this.xyOffset = new Real2(a.xyOffset);
 		this.backgroundRadiusFactor = a.backgroundRadiusFactor;
+		this.textS = a.textS;
+		this.background = a.background;
 	}
 
 	/** constructor.
 	 */
 	public TextDisplay() {
 		super();
+		setDefaults();
 	}
 	
 	protected void init() {
@@ -53,11 +65,17 @@ public class TextDisplay extends AbstractDisplay {
 	
 	protected void setDefaults() {
 		super.setDefaults();
-		//
+		background = Background.NONE;
 		fill = "black";
 		stroke = null;
 		fontSize = 19;
 		xyOffset = new Real2(0., 0.);
+		backgroundColor = "yellow";
+	}
+	
+	public void displayElement(SVGG g, String s) {
+		background = Background.CIRCLE;
+		display(g, s);
 	}
 	
 	public void display(SVGG g, String s) {
@@ -68,42 +86,75 @@ public class TextDisplay extends AbstractDisplay {
 	
 	private void display() {
 		if (g != null) {
-			Real2 xyOffsetPix = xyOffset.multiplyBy(fontSize);
+			if (Background.CIRCLE == background) {
+				drawBackgroundCircle();
+			}
+			if (Background.RECTANGLE == background) {
+				drawBackgroundRectangle();
+			}
+			// display text even if empty
+			Real2 xyOffsetPix = (xyOffset.plus(textXyOffset)).multiplyBy(fontSize);
 			text = new SVGText(xyOffsetPix, textS);
 			text.setFontSize(fontSize);
 			text.setFill(fill);
-//			text.debug("TTT");
 			g.appendChild(text);
 		}
 	}
 	
-	public void displaySignedInteger(int i) {
+	private void drawBackgroundCircle() {
+		double rad = backgroundRadiusFactor*fontSize;
+		LOG.debug("RAD "+rad);
+		SVGCircle circle = new SVGCircle(xyOffset.multiplyBy(fontSize), rad);
+		circle.setStroke("none");
+		if (userElement != null) {
+			circle.setUserElement(userElement);
+		}
+		 // should be background
+		g.appendChild(circle);
+		circle.setOpacity(opacity);
+		circle.setFill(backgroundColor);
+	}
+
+	private void drawBackgroundRectangle() {
+		double rad = backgroundRadiusFactor*fontSize;
+		// not yet written
+		
+	}
+
+	public void displaySignedInteger(SVGG g, int i) {
 		textS = S_EMPTY;
-		if (i < -1) {
+		if (i < 0) {
 			textS += S_MINUS;
 		} else if (i > 1) {
 			textS += S_PLUS;
 		}
-		if (i < 0) {
+		if (i < -1) {
 			textS += -i;
-		} else if (i > 0) {
+		} else if (i > 1) {
 			textS += i;
 		}
-		display();
+		background = Background.CIRCLE;
+		display(g, textS);
 	}
 	
-	public void displayLabel(CMLLabel label) {
+	public void displayLabel(SVGG g, CMLLabel label) {
 		textS = label.getCMLValue();
-		display();
+		background = Background.RECTANGLE;
+		display(g, textS);
+	}
+	
+	public void displayId(SVGG g, String id) {
+		background = Background.RECTANGLE;
+		display(g, id);
 	}
 	
 	/** 
 	 * @param label
 	 */
-	// FIXME
-	public void displayGroup(CMLLabel label) {
+	public void displayGroup(SVGG g, CMLLabel label) {
 		textS = label.getCMLValue();
-		display();
+		background = Background.RECTANGLE;
+		display(g, textS);
 	}
 	
 	public void setValues(List<String> ss) {
@@ -158,5 +209,21 @@ public class TextDisplay extends AbstractDisplay {
 
 	public void setXyOffset(Real2 xyOffset) {
 		this.xyOffset = xyOffset;
+	}
+
+	public Background getBackground() {
+		return background;
+	}
+
+	public void setBackground(Background background) {
+		this.background = background;
+	}
+
+	public Real2 getTextXyOffset() {
+		return textXyOffset;
+	}
+
+	public void setTextXyOffset(Real2 textXyOffset) {
+		this.textXyOffset = textXyOffset;
 	}
 }

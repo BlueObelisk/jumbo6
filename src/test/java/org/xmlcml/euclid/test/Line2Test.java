@@ -177,4 +177,16 @@ public class Line2Test {
 		Real2Test.assertEquals("mid point", new Real2(1.5, 2), l1112.getMidPoint(), Real.EPS);
 	}
 
+	/** dewisott */
+	@Test
+	public void testContains() {
+		Line2 line2 = new Line2(new Real2(1., 2.), new Real2(3., 4.));
+		double eps = 0.000001;
+		boolean allowExtension = false;
+		Assert.assertTrue("on line", line2.contains(new Real2(2., 3.), eps, allowExtension));
+		Assert.assertFalse("off line", line2.contains(new Real2(2., 3.1), eps, allowExtension));
+		Assert.assertFalse("off line", line2.contains(new Real2(0., 1.), eps, allowExtension));
+		allowExtension = true;
+		Assert.assertTrue("on extension", line2.contains(new Real2(0., 1.), eps, allowExtension));
+	}
 }

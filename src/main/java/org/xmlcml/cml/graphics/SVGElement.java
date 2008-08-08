@@ -1,7 +1,9 @@
 package org.xmlcml.cml.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +16,6 @@ import nu.xom.Node;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
@@ -29,6 +30,10 @@ import org.xmlcml.euclid.Transform2;
  */
 public class SVGElement extends GraphicsElement {
 
+	private Element userElement;
+	private String strokeSave;
+	private String fillSave;
+	
 	/** constructor.
 	 * 
 	 * @param name
@@ -39,6 +44,7 @@ public class SVGElement extends GraphicsElement {
 
 	public SVGElement(SVGElement element) {
         super((GraphicsElement) element);
+        this.userElement = element.userElement;
 	}
 	
 	/** copy constructor from non-subclassed elements
@@ -47,7 +53,7 @@ public class SVGElement extends GraphicsElement {
 		SVGElement newElement = null;
 		String tag = element.getLocalName();
 		if (tag == null || tag.equals(S_EMPTY)) {
-			throw new CMLRuntimeException("no tag");
+			throw new RuntimeException("no tag");
 		} else if (tag.equals(SVGCircle.TAG)) {
 			newElement = new SVGCircle();
 		} else if (tag.equals(SVGDesc.TAG)) {
@@ -67,7 +73,7 @@ public class SVGElement extends GraphicsElement {
 		} else if (tag.equals(SVGText.TAG)) {
 			newElement = new SVGText();
 		} else {
-			throw new CMLRuntimeException("unknown element "+tag);
+			throw new RuntimeException("unknown element "+tag);
 		}
         newElement.copyAttributesFrom(element);
         createSubclassedChildren(element, newElement);
@@ -245,17 +251,49 @@ public class SVGElement extends GraphicsElement {
 	 * @return color
 	 */
 	public Color getColor(String attName) {
-		Color color = null;
 		String attVal = this.getAttributeValue(attName);
-		if ("none".equals(attVal)) {
-		} else if (attVal != null) {
-			color = colorMap.get(attVal);
+		return getJava2DColor(attVal, this.getOpacity());
+	}
+
+	/**
+	 * translate SVG string to Java2D
+	 * opacity defaults to 1.0
+	 * @param color
+	 * @param colorS
+	 * @return
+	 */
+	public static Color getJava2DColor(String colorS) {
+		return getJava2DColor(colorS, 1.0);
+	}
+
+	/**
+	 * 
+	 * @param colorS common colors ("yellow"), etc or hexString
+	 * @param opacity 0.0 to 1.0
+	 * @return java Color or null
+	 */
+	public static Color getJava2DColor(String colorS, double opacity) {
+		Color color = null;
+		if ("none".equals(colorS)) {
+		} else if (colorS != null) {
+			color = colorMap.get(colorS);
 			if (color == null) {
-				System.err.println("Unknown color: "+attVal);
+				if (colorS.length() == 7 && colorS.startsWith(S_HASH)) {
+					try {
+						int red = Integer.parseInt(colorS.substring(1, 3), 16);
+						int green = Integer.parseInt(colorS.substring(3, 5), 16);
+						int blue = Integer.parseInt(colorS.substring(5, 7), 16);
+						color = new Color(red, green, blue, 0);
+					} catch (Exception e) {
+						throw new RuntimeException("Cannot parse: "+colorS);
+					}
+					colorS = colorS.substring(1);
+				} else {
+//					System.err.println("Unknown color: "+colorS);
+				}
 			}
 		}
 		if (color != null) {
-			double opacity = this.getOpacity();
 			color = (Double.isNaN(opacity)) ? color : new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255.0 * opacity));
 		} else {
 			color = new Color(255, 255, 255, 0);
@@ -264,7 +302,7 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	/**
-	 * transforms xy to fit on page
+	 * transforms xy
 	 * messy
 	 * @param xy is transformed
 	 * @param transform
@@ -272,7 +310,7 @@ public class SVGElement extends GraphicsElement {
 	 */
 	public static Real2 transform(Real2 xy, Transform2 transform) {
 		xy.transformBy(transform);
-		xy = xy.plus(new Real2(250, 250));
+//		xy = xy.plus(new Real2(250, 250));
 		return xy;
 	}
 
@@ -298,7 +336,7 @@ public class SVGElement extends GraphicsElement {
 		String ts = this.getAttributeValue("transform");
 		if (ts != null) {
 			if (!ts.startsWith("matrix(")) {
-				throw new CMLRuntimeException("Bad transform: "+ts);
+				throw new RuntimeException("Bad transform: "+ts);
 			}
 			ts = ts.substring("matrix(".length());
 			ts = ts.substring(0, ts.length()-1);
@@ -375,7 +413,30 @@ public class SVGElement extends GraphicsElement {
 		style += "stroke-dasharray : "+bondWidth*2+" "+bondWidth*2+";";
 		this.addAttribute(new Attribute("style", style));
 	}
+	
+	public void toggleFill(String fill) {
+		this.fillSave = this.getFill();
+		this.setFill(fill);
+	}
     
+	public void toggleFill() {
+		this.setFill(fillSave);
+	}
+	
+	public void toggleStroke(String stroke) {
+		this.strokeSave = this.getStroke();
+		this.setStroke(stroke);
+	}
+    
+	public void toggleStroke() {
+		this.setStroke(strokeSave);
+	}
+    
+	public void applyAttributes(Graphics2D g2d) {
+		applyStrokeColor(g2d);
+//		applyFillColor(g2d);
+	}
+
 	/**
 	 * 
 	 * @param filename
@@ -387,7 +448,7 @@ public class SVGElement extends GraphicsElement {
 		SVGElement g = new SVGG();
 		g.setFill("yellow");
 		svg.appendChild(g);
-		SVGLine line = new SVGLine(new Real2(100, 200), new Real2(300, 50));
+		SVGElement line = new SVGLine(new Real2(100, 200), new Real2(300, 50));
 		line.setFill("red");
 		line.setStrokeWidth(3);
 		line.setStroke("blue");
@@ -409,6 +470,7 @@ public class SVGElement extends GraphicsElement {
 		CMLUtil.debug(svg, fos, 2);
 		fos.close();		
 	}
+	
 	/**
 	 * @param args
 	 * @throws IOException
@@ -418,4 +480,44 @@ public class SVGElement extends GraphicsElement {
 			test(args[0]);
 		}
 	}
+
+	public Element getUserElement() {
+		return userElement;
+	}
+
+	public void setUserElement(Element userElement) {
+		this.userElement = userElement;
+	}
+
+	protected void applyStrokeColor(Graphics2D g2d) {
+		String colorS = "black";
+		String stroke = this.getStroke();
+		if (stroke != null) {
+			colorS = stroke;
+		}
+		Color color = colorMap.get(colorS);
+		if (color != null) {
+			g2d.setColor(color);
+		}
+	}
+	
+	protected void applyFillColor(Graphics2D g2d) {
+		String colorS = "black";
+		String fill = this.getFill();
+		if (fill != null) {
+			colorS = fill;
+		}
+		Color color = colorMap.get(colorS);
+		if (color != null) {
+			g2d.setColor(color);
+		}
+	}
+	
+//	private void annotate(String s, Element element) {
+//		String id = element.getAttributeValue("id");
+//		if (id == null) {
+//			id = "PAR "+((Element)element.getParent()).getAttributeValue("id");
+//		}
+//		System.err.println(s+"---"+id);
+//	}
 }

@@ -1,7 +1,6 @@
 package org.xmlcml.cml.graphics;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
@@ -22,6 +21,9 @@ public class SVGLine extends SVGElement {
 
 	final static String TAG ="line";
 
+	private Line2D.Double line2;
+	private Line2 euclidLine;
+	
 	/** constructor
 	 */
 	public SVGLine() {
@@ -31,7 +33,7 @@ public class SVGLine extends SVGElement {
 	
 	/** constructor
 	 */
-	public SVGLine(SVGLine element) {
+	public SVGLine(SVGElement element) {
         super((SVGElement) element);
 	}
 	
@@ -41,11 +43,33 @@ public class SVGLine extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	/** constructor.
+	 * 
+	 * @param x1
+	 * @param x2
+	 */
+	public SVGLine(Real2 x1, Real2 x2) {
+		this();
+		setXY(x1, 0);
+		setXY(x2, 1);
+		euclidLine = new Line2(x1, x2);
+	}
+	
+	/** constructor.
+	 * 
+	 * @param x1
+	 * @param x2
+	 */
+	public SVGLine(Line2 line) {
+		this(line.getXY(0), line.getXY(1));
+		this.euclidLine = line;
+	}
+	
 	protected void init() {
 		super.setDefaultStyle();
 		setDefaultStyle(this);
 	}
-	public static void setDefaultStyle(SVGLine line) {
+	public static void setDefaultStyle(SVGElement line) {
 		line.setStroke("black");
 		line.setStrokeWidth(1.0);
 	}
@@ -58,25 +82,6 @@ public class SVGLine extends SVGElement {
         return new SVGLine(this);
     }
 
-	/** constructor.
-	 * 
-	 * @param x1
-	 * @param x2
-	 */
-	public SVGLine(Real2 x1, Real2 x2) {
-		this();
-		setXY(x1, 0);
-		setXY(x2, 1);
-	}
-	
-	/** constructor.
-	 * 
-	 * @param x1
-	 * @param x2
-	 */
-	public SVGLine(Line2 line) {
-		this(line.getXY(0), line.getXY(1));
-	}
 	/**
 	 * @param xy coordinates of the atom
 	 * @param serial 0 or 1
@@ -131,6 +136,19 @@ public class SVGLine extends SVGElement {
 //</g>
 	
 	protected void drawElement(Graphics2D g2d) {
+		Line2D line = createAndSetLine2D();
+		applyAttributes(g2d);
+		g2d.draw(line);
+	}
+
+	public void applyAttributes(Graphics2D g2d) {
+		int width = (int) this.getStrokeWidth();
+		Stroke s = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		g2d.setStroke(s);
+		super.applyAttributes(g2d);
+	}
+
+	public Line2D.Double createAndSetLine2D() {
 		double x1 = this.getDouble("x1");
 		double y1 = this.getDouble("y1");
 		Real2 xy1 = new Real2(x1, y1);
@@ -139,7 +157,7 @@ public class SVGLine extends SVGElement {
 		double y2 = this.getDouble("y2");
 		Real2 xy2 = new Real2(x2, y2);
 		xy2 = transform(xy2, cumulativeTransform);
-		float width = 1.0f;
+		float width = 5.0f;
 		String style = this.getAttributeValue("style");
 		if (style.startsWith("stroke-width:")) {
 			style = style.substring("stroke-width:".length());
@@ -147,19 +165,8 @@ public class SVGLine extends SVGElement {
 			width = (float) new Double(style).doubleValue();
 			width *= 15.f;
 		}
-		
-		Stroke s = new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-		g2d.setStroke(s);
-		
-		String colorS = "black";
-		String stroke = this.getAttributeValue("stroke");
-		if (stroke != null) {
-			colorS = stroke;
-		}
-		Color color = colorMap.get(colorS);
-		g2d.setColor(color);
-		Line2D line = new Line2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
-		g2d.draw(line);
+		line2 = new Line2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
+		return line2;
 	}
 	
 	/** get tag.
@@ -168,4 +175,21 @@ public class SVGLine extends SVGElement {
 	public String getTag() {
 		return TAG;
 	}
+
+	public Line2D.Double getLine2() {
+		return line2;
+	}
+
+	public void setLine2(Line2D.Double line2) {
+		this.line2 = line2;
+	}
+	
+	public Line2 getEuclidLine() {
+		return euclidLine;
+	}
+
+	public void setEuclidLine(Line2 euclidLine) {
+		this.euclidLine = euclidLine;
+	}
+
 }

@@ -2,6 +2,9 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import nu.xom.Element;
+
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
@@ -14,6 +17,9 @@ import org.apache.log4j.Logger;
 public class AbstractDisplay {
 
 	private static final Logger LOG = Logger.getLogger(AbstractDisplay.class);
+	static {
+		LOG.setLevel(Level.INFO);
+	}
 	protected final static String FONT_STYLE_NORMAL = "normal";
 	protected final static String FONT_STYLE_ITALIC = "italic";
 
@@ -39,23 +45,7 @@ public class AbstractDisplay {
 	protected boolean showChildLabels;
 	protected String stroke = "blue";
 	protected String backgroundColor;
-
-//	public AbstractDisplay(String color, String fill, double fontSize,
-//			String fontStyle, String fontWeight, String fontFamily, 
-//			double opacity, boolean showChildLabels,
-//			String stroke, String backgroundColor) {
-//		super();
-//		this.color = color;
-//		this.fill = fill;
-//		this.fontSize = fontSize;
-//		this.fontStyle = fontStyle;
-//		this.fontWeight = fontWeight;
-//		this.fontFamily = fontFamily;
-//		this.opacity = opacity;
-//		this.showChildLabels = showChildLabels;
-//		this.stroke = stroke;
-//		this.backgroundColor = backgroundColor;
-//	}
+	protected Element userElement;
 
 	/** do not use.
 	 */
@@ -94,6 +84,7 @@ public class AbstractDisplay {
 		this.fontWeight = a.fontWeight;
 		this.showChildLabels = a.showChildLabels;
 		this.stroke = a.stroke;
+		this.backgroundColor = a.backgroundColor;
 	}
 
 	
@@ -241,5 +232,13 @@ public class AbstractDisplay {
 		sb.append(S_NEWLINE);
 
 		return sb.toString();
+	}
+
+	public Element getUserElement() {
+		return userElement;
+	}
+
+	public void setUserElement(Element userElement) {
+		this.userElement = userElement;
 	}
 }
