@@ -3,6 +3,7 @@ package org.xmlcml.euclid.test;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealRange;
@@ -74,9 +75,9 @@ public class Real2RangeTest {
      */
     @Test
     public void testIsEqualTo() {
-        Assert.assertTrue("isEqual", i2r2.isEqualTo(i2r2));
-        Assert.assertFalse("isEqual", i2r2.isEqualTo(i2r1));
-        Assert.assertFalse("isEqual", i2r0.isEqualTo(i2r0));
+        Assert.assertTrue("isEqual", i2r2.isEqualTo(i2r2, Real.EPS, Real.EPS));
+        Assert.assertFalse("isEqual", i2r2.isEqualTo(i2r1, Real.EPS, Real.EPS));
+        Assert.assertFalse("isEqual", i2r0.isEqualTo(i2r0, Real.EPS, Real.EPS));
     }
 
     /**

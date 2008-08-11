@@ -2,10 +2,10 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLException;

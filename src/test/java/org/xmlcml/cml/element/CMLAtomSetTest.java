@@ -421,7 +421,7 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
     public void testTranslate3D() {
         CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
         Vector3 v3 = new Vector3(10., 20., 30.);
-        atomSet.translate3D(v3);
+        atomSet.translate3D(v3, CoordinateType.CARTESIAN);
         Point3 p = ((CMLAtom) atomSet.getAtom(1)).getXYZ3();
         Assert.assertNotNull("vector 3d", p);
         Assert.assertEquals("point 3d x", 11.0, p.getArray()[0]);

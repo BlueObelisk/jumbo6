@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.test.StringTestBase;
 
@@ -226,7 +227,7 @@ public class CMLTorsionTest {
         Assert.assertEquals("calculated torsion", 90., t0, EPS);
         double t1 = torsion1.getCalculatedTorsion(atomSet);
         Assert.assertEquals("calculated torsion", 90., t1, EPS);
-        double b45 = bonds.get(0).getBondLength();
+        double b45 = bonds.get(0).getBondLength(CoordinateType.CARTESIAN);
         Assert.assertEquals("calculated b45", 1., b45, EPS);
         Angle angle = new Angle(Math.PI/3);
         
@@ -236,7 +237,7 @@ public class CMLTorsionTest {
         // this should be the same...
         t1 = torsion1.getCalculatedTorsion(atomSet);
         Assert.assertEquals("unaffected torsion", 90., t1, EPS);
-        b45 = bonds.get(0).getBondLength();
+        b45 = bonds.get(0).getBondLength(CoordinateType.CARTESIAN);
         Assert.assertEquals("calculated b45", 1., b45, EPS);
         
 

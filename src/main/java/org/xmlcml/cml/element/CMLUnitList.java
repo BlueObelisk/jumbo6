@@ -113,7 +113,7 @@ public class CMLUnitList extends AbstractUnitList implements GenericDictionary, 
 	 */
 	public static CMLUnitList createUnitList(File file) throws IOException,
 			CMLException {
-		return createUnitList(file.toURL());
+		return createUnitList(file.toURI().toURL());
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class CMLUnitList extends AbstractUnitList implements GenericDictionary, 
 	 */
 
 	public GenericDictionary createDictionary(File file) throws IOException {
-		return createDictionary(file.toURL());
+		return createDictionary(file.toURI().toURL());
 	}
 
 	/**

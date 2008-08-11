@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.IntRange;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealRange;
 
 /**
@@ -96,9 +97,9 @@ public class RealRangeTest {
      */
     @Test
     public void testIsEqualTo() {
-        Assert.assertTrue("equal", r2.isEqualTo(r2));
-        Assert.assertFalse("equal", r2.isEqualTo(r0));
-        Assert.assertFalse("equal", r0.isEqualTo(r0));
+        Assert.assertTrue("equal", r2.isEqualTo(r2, Real.EPS));
+        Assert.assertFalse("equal", r2.isEqualTo(r0, Real.EPS));
+        Assert.assertFalse("equal", r0.isEqualTo(r0, Real.EPS));
     }
 
     /**

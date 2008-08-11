@@ -151,10 +151,20 @@ public class Real2 implements EuclidConstants {
     /**
      * is the point the origin.
      * 
+     * @deprecated use epsilon
      * @return true if origin
      */
     public boolean isOrigin() {
     	return Real.isZero(x) && Real.isZero(y);
+    }
+
+    /**
+     * is the point the origin.
+     * @param epsilon
+     * @return true if origin
+     */
+    public boolean isOrigin(double epsilon) {
+    	return Real.isZero(x, epsilon) && Real.isZero(y, epsilon);
     }
 
     /**
@@ -290,7 +300,7 @@ public class Real2 implements EuclidConstants {
      */
     public Real2 getUnitVector() {
         double length = this.getLength();
-        if (Real.isZero(length)) {
+        if (Real.isZero(length, Real.EPS)) {
             throw new EuclidRuntimeException("zero length vector");
         }
         Real2 temp = new Real2(this.x, this.y);

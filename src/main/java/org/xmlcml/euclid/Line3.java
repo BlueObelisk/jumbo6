@@ -53,7 +53,7 @@ public class Line3 implements EuclidConstants {
     public Line3(Point3 p, Vector3 v) {
         vect = new Vector3(v);
         point = new Point3(p);
-        if (!vect.isZero()) {
+        if (!vect.isZero(Real.EPS)) {
             // normalise vector
             vect.normalize();
         }
@@ -106,7 +106,22 @@ public class Line3 implements EuclidConstants {
      * @return equals
      */
     public boolean isEqualTo(Line3 l2) {
-        if (!vect.isEqualTo(l2.vect)) {
+        if (!vect.isEqualTo(l2.vect, Real.EPS)) {
+            return false;
+        } else {
+            return containsPoint(l2.point, Real.EPS);
+        }
+    }
+    
+    /**
+     * are two lines identical. must be coincident and parallel uses
+     * vect.equals() and containsPoint
+     * 
+     * @param l2 Line3 to compare
+     * @return equals
+     */
+    public boolean isEqualTo(Line3 l2, double epsilon) {
+        if (!vect.isEqualTo(l2.vect, epsilon)) {
             return false;
         } else {
             return containsPoint(l2.point);
@@ -170,29 +185,49 @@ public class Line3 implements EuclidConstants {
      * @return true if parallel
      */
     public boolean isParallelTo(Line3 l2) {
-        return vect.isIdenticalTo(l2.vect);
+        return vect.isIdenticalTo(l2.vect, Real.EPS);
     }
     /**
      * are two lines antiparallel. (not parallel) does not test coincidence
      * 
-     * @param l2
-     *            line to compare
+     * @param l2 line to compare
+     * @deprecated use epsilon
      * @return true if antiparallel
      */
     public boolean isAntiparallelTo(Line3 l2) {
         Vector3 v = new Vector3(l2.vect);
-        return vect.isIdenticalTo(v.negative());
+        return vect.isIdenticalTo(v.negative(), Real.EPS);
+    }
+    
+    /**
+     * are two lines antiparallel. (not parallel) does not test coincidence
+     * 
+     * @param l2 line to compare
+     * @return true if antiparallel
+     */
+    public boolean isAntiparallelTo(Line3 l2, double epsilon) {
+        Vector3 v = new Vector3(l2.vect);
+        return vect.isIdenticalTo(v.negative(), epsilon);
     }
     /**
      * is a point on a line. tests for Real.isZero() distance from line
      * 
-     * @param p
-     *            point
+     * @param p point
      * @return true if within Real.isZero()
+     * @deprecated use epsilon
      */
     public boolean containsPoint(Point3 p) {
-        // TODO add epsilon
         return Real.isZero(getDistanceFromPoint(p));
+    }
+    /**
+     * is a point on a line.
+     * 
+     * @param p point
+     * @param epsilon
+     * @return true if within epsilon
+     */
+    public boolean containsPoint(Point3 p, double epsilon) {
+        return Real.isZero(getDistanceFromPoint(p), epsilon);
     }
     /**
      * point on line closest to another point.

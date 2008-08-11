@@ -19,7 +19,6 @@ import nu.xom.Text;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.omg.CORBA.UserException;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -1646,7 +1645,8 @@ public class MoleculeTool extends AbstractSVGTool {
     	if (molecule.getAtomCount() == 1) {
     		defaultAtomDisplay.setDisplayCarbons(true);
     	} 
-    	setGroupVisibility(atoms);
+    	List<CMLBond> bonds = molecule.getBonds();
+    	setAtomBondAndGroupVisibility(atoms, bonds);
     	
     	displayBonds(drawable, g, defaultBondDisplay, defaultAtomDisplay);
     	displayAtoms(drawable, g, defaultAtomDisplay);
@@ -1693,17 +1693,27 @@ public class MoleculeTool extends AbstractSVGTool {
     	g.appendChild(rect);
     }
     
-    private void setGroupVisibility(List<CMLAtom> atoms) {
+    private void setAtomBondAndGroupVisibility(
+    		List<CMLAtom> atoms, List<CMLBond> bonds) {
     	if (/*true || */
 			Level.DEBUG.equals(LOG.getLevel())) {
     		molecule.debug("GROUP VISIBILITY ON");
     	}
-//    	LOG.debug("GROUPVIS");
+    	// add atomDisplay to each atomTool
     	for (CMLAtom atom : atoms) {
     		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+    		atomTool.ensureAtomDisplay();
+    		atomTool.getAtomDisplay().setMoleculeDisplay(moleculeDisplay);
+    		// group visibility (NYI)
     		if (atomTool.isGroupRoot()) {
     			atomTool.setDisplay(false);
     		}
+    	}
+    	// add bondDisplay to each bondTool
+    	for (CMLBond bond : bonds) {
+    		BondTool bondTool = BondTool.getOrCreateTool(bond);
+    		bondTool.ensureBondDisplay();
+    		bondTool.getBondDisplay().setMoleculeDisplay(moleculeDisplay);
     	}
     }
 
@@ -1742,9 +1752,9 @@ public class MoleculeTool extends AbstractSVGTool {
 		for (CMLAtom atom : molecule.getAtoms()) {
     		AtomTool atomTool = getOrCreateAtomTool(atom);
     		atomTool.ensureAtomDisplay();
+    		atomTool.getAtomDisplay().setMoleculeDisplay(moleculeDisplay);
     		atomTool.setMoleculeTool(this);
-    		if (atomDisplay.omitAtom(atom)) {
-    			LOG.debug("HIDDEN ATOM "+atom);
+    		if (atomTool.getAtomDisplay().omitAtom(atom)) {
     			continue;
     		}
     		GraphicsElement a = atomTool.createGraphicsElement(drawable);
@@ -1761,7 +1771,7 @@ public class MoleculeTool extends AbstractSVGTool {
     		BondTool bondTool = getOrCreateBondTool(bond);
     		bondTool.setBondDisplay(bondDisplay);
     		bondTool.setMoleculeTool(this);
-    		if (bondTool.omitFromDisplay(atomDisplay)) {
+    		if (bondTool.getBondDisplay().omitBond(bond)) {
     			continue;
     		}
     		SVGElement b = bondTool.createGraphicsElement(drawable);
@@ -1794,7 +1804,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		calculateBoundingBox2D();
 		RealRange xRange = userBoundingBox.getXRange();
 		double xMid = xRange.getMidPoint();
-		double minY = userBoundingBox.getYRange().getMin();
+//		double minY = userBoundingBox.getYRange().getMin();
 		double maxY = userBoundingBox.getYRange().getMax();
     	Transform2 transform2 = new Transform2(
 			new double[] {
@@ -2038,7 +2048,7 @@ public class MoleculeTool extends AbstractSVGTool {
         		throw new CMLRuntimeException("Cannot use density without units=g.cm-3");
         	}
         	double densityV = density.getDouble();
-        	double volumeV = molecule.getCalculatedMolecularMass() / densityV;
+        	double volumeV = this.getCalculatedMolecularMass() / densityV;
         	volume = new CMLProperty(CMLProperty.Prop.MOLAR_VOLUME.value, 
         			volumeV, Units.CMCUBED.value);
     	}
@@ -2130,7 +2140,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		List<CMLAtom> atomList = molecule.getAtoms();
 		for (CMLAtom atom : atomList) {
 			if ("R".equals(atom.getElementType())) {
-				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+//				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
 				//FIXME
 //				CMLAtom refAtom = atomTool.getReferencedGroup(scopeElement);
 			}

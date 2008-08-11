@@ -3,9 +3,7 @@ package org.xmlcml.euclid.test;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 
-
 import org.apache.log4j.Logger;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -456,11 +454,13 @@ public class RealSquareMatrixTest extends MatrixTest {
      */
     @Test
     public void testOrthogonalise() {
-        RealSquareMatrix m = new RealSquareMatrix(3, new double[] { 6., 7., 8., 7., 5., 4.,
+        RealSquareMatrix m = new RealSquareMatrix(
+        		3, new double[] { 6., 7., 8., 7., 5., 4.,
                     8., 4., 9. });
         m.orthogonalise();
         Assert.assertTrue("orthogonalise", m.isOrthogonal());
-        RealSquareMatrix mm = new RealSquareMatrix(3, new double[] { 6.0, 7.0, 8.0,
+        RealSquareMatrix mm = new RealSquareMatrix(
+        		3, new double[] { 6.0, 7.0, 8.0,
                     7.7316819236624434, -0.35776420212319654,
                     -5.485717765889034, 3.8939506336049337,
                     -10.383868356279821, 6.1654218365411415, });

@@ -136,7 +136,7 @@ public class CMLUnitTypeList extends AbstractUnitTypeList implements
      */
     public static CMLUnitTypeList createUnitTypeList(File file)
             throws IOException, CMLException {
-        return createUnitTypeList(file.toURL());
+        return createUnitTypeList(file.toURI().toURL());
     }
     /** creates unitTypeList from inoputStreamContainer;
      *
@@ -244,7 +244,7 @@ public class CMLUnitTypeList extends AbstractUnitTypeList implements
      */
 
     public GenericDictionary createDictionary(File file) throws IOException {
-        return createDictionary(file.toURL());
+        return createDictionary(file.toURI().toURL());
     }
 
     /** creates a unitList dictionary from a file. the file must contain a root

@@ -134,7 +134,7 @@ public class Polar implements EuclidConstants {
      */
     public Polar divideBy(Polar f) throws EuclidRuntimeException {
         Polar temp = new Polar(this);
-        if (Real.isZero(f.r)) {
+        if (Real.isZero(f.r, Real.EPS)) {
             throw new EuclidRuntimeException();
         }
         temp.r = r / f.r;
@@ -146,9 +146,21 @@ public class Polar implements EuclidConstants {
      * 
      * @param a
      * @return equals
+     * @deprecated use epsilon
      */
     public boolean isEqualTo(Polar a) {
         return Real.isEqual(r, a.r) && Real.isEqual(theta, a.theta);
+    }
+    /**
+     * are two polar equal
+     * 
+     * @param a
+     * @return equals
+     */
+    public boolean isEqualTo(Polar a, double epsilon) {
+        return a != null && 
+        Real.isEqual(r, a.r, epsilon) &&
+        Real.isEqual(theta, a.theta, epsilon);
     }
     /**
      * get X, Y and XY coords

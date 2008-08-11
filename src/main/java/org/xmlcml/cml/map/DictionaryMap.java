@@ -2,8 +2,8 @@ package org.xmlcml.cml.map;
 
 import java.io.IOException;
 import java.net.URL;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.interfacex.GenericDictionary;
 import org.xmlcml.cml.interfacex.IDictionary;

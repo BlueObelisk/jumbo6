@@ -366,8 +366,8 @@ public class RealSquareMatrix extends RealMatrix {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < rows; j++) {
                 double f = flmat[i][j];
-                if ((!Real.isZero(f) && (i != j))
-                        || (!Real.isEqual(f, 1.0) && (i == j))) {
+                if ((!Real.isZero(f, Real.EPS) && (i != j))
+                        || (!Real.isEqual(f, 1.0, Real.EPS) && (i == j))) {
                     return false;
                 }
             }
@@ -382,7 +382,7 @@ public class RealSquareMatrix extends RealMatrix {
     public boolean isSymmetric() {
         for (int i = 0; i < rows - 1; i++) {
             for (int j = i + 1; j < rows; j++) {
-                if (!Real.isEqual(flmat[i][j], flmat[j][i])) {
+                if (!Real.isEqual(flmat[i][j], flmat[j][i], Real.EPS)) {
                     return false;
                 }
             }
@@ -454,7 +454,7 @@ public class RealSquareMatrix extends RealMatrix {
     public boolean isUpperTriangular() {
         for (int i = 1; i < rows; i++) {
             for (int j = 0; j < i; j++) {
-                if (!Real.isZero(flmat[i][j]))
+                if (!Real.isZero(flmat[i][j], Real.EPS))
                     return false;
             }
         }
@@ -468,7 +468,7 @@ public class RealSquareMatrix extends RealMatrix {
     public boolean isLowerTriangular() {
         for (int i = 0; i < rows - 1; i++) {
             for (int j = i + 1; j < rows; j++) {
-                if (!Real.isZero(flmat[i][j]))
+                if (!Real.isZero(flmat[i][j], Real.EPS))
                     return false;
             }
         }
@@ -492,7 +492,7 @@ public class RealSquareMatrix extends RealMatrix {
         for (int i = 0; i < rows - 1; i++) {
             for (int j = i + 1; j < rows; j++) {
                 double dp = rowDotproduct(i, j);
-                if (!Real.isZero(dp)) {
+                if (!Real.isZero(dp, Real.EPS)) {
                     return false;
                 }
             }
@@ -507,7 +507,7 @@ public class RealSquareMatrix extends RealMatrix {
      */
     public boolean isImproperRotation() {
         double f = determinant();
-        return (Real.isEqual(f, -1.0) && isOrthogonal());
+        return (Real.isEqual(f, -1.0, Real.EPS) && isOrthogonal());
     }
     /**
      * is matrix unitary. i.e is it orthonormal?
@@ -519,7 +519,7 @@ public class RealSquareMatrix extends RealMatrix {
     public boolean isUnitary() {
         double f = determinant();
         double fa = Math.abs(f);
-        return (Real.isEqual(fa, 1.0) && isOrthogonal());
+        return (Real.isEqual(fa, 1.0, Real.EPS) && isOrthogonal());
     }
     /**
      * copy upper triangle into lower triangle. alters this to make it symmetric

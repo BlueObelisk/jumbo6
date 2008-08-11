@@ -1,11 +1,11 @@
 package org.xmlcml.cml.element;
 
 import java.text.ParseException;
-import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.DictRefAttribute;
 import org.xmlcml.cml.attribute.NamespaceRefAttribute;
 import org.xmlcml.cml.attribute.UnitsAttribute;

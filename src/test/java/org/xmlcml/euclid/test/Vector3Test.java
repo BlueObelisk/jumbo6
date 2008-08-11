@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Axis.Axis3;
 
@@ -138,7 +139,7 @@ public class Vector3Test extends GeomTest {
     @Test
     public void testIsEqualTo() {
         Vector3 v = new Vector3(v123);
-        Assert.assertTrue("isEqualTo", v.isEqualTo(v));
+        Assert.assertTrue("isEqualTo", v.isEqualTo(v, Real.EPS));
     }
 
     /**
@@ -258,8 +259,8 @@ public class Vector3Test extends GeomTest {
     @Test
     public void testIsIdenticalTo() {
         Vector3 v = new Vector3(v123);
-        Assert.assertTrue("identical to", v123.isIdenticalTo(v));
-        Assert.assertFalse("identical to", v123.isIdenticalTo(v100));
+        Assert.assertTrue("identical to", v123.isIdenticalTo(v, Real.EPS));
+        Assert.assertFalse("identical to", v123.isIdenticalTo(v100, Real.EPS));
     }
 
     /**
@@ -267,8 +268,8 @@ public class Vector3Test extends GeomTest {
      */
     @Test
     public void testIsZero() {
-        Assert.assertTrue("isZero", v000.isZero());
-        Assert.assertFalse("isZero", v123.isZero());
+        Assert.assertTrue("isZero", v000.isZero(Real.EPS));
+        Assert.assertFalse("isZero", v123.isZero(Real.EPS));
     }
 
     /**

@@ -7,6 +7,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
@@ -202,10 +203,8 @@ public class CMLVector3 extends AbstractVector3 {
     /**
      * are two vectors equal. vectors are NOT normalized
      *
-     * @param v
-     *            vector to test
-     * @param eps
-     *            maximum absolute distance between vector components
+     * @param v vector to test
+     * @param eps maximum absolute distance between vector components
      * @return true if equal within error
      */
     public boolean isEqualTo(CMLVector3 v, double eps) {
@@ -331,10 +330,21 @@ public class CMLVector3 extends AbstractVector3 {
      * is vector of zero length. uses Real.isEqual
      *
      * @return if zero within tolerance
+     * @deprecated use epsilon
      */
     public boolean isZero() {
         Vector3 veucl3 = this.getEuclidVector3();
-        return (veucl3 == null) ? false : veucl3.isZero();
+        return (veucl3 == null) ? false : veucl3.isZero(Real.EPS);
+    }
+
+    /**
+     * is vector of zero length.
+     * @param epsilon
+     * @return if zero within tolerance
+     */
+    public boolean isZero(double epsilon) {
+        Vector3 veucl3 = this.getEuclidVector3();
+        return (veucl3 == null) ? false : veucl3.isZero(epsilon);
     }
 
     /**
@@ -360,7 +370,7 @@ public class CMLVector3 extends AbstractVector3 {
      *             zero vector
      */
     public CMLVector3 normalize() throws CMLRuntimeException {
-        if (this.isZero()) {
+        if (this.isZero(Real.EPS)) {
             throw new CMLRuntimeException("Cannot normalize zero vector");
         }
         Vector3 veucl3 = this.getEuclidVector3();

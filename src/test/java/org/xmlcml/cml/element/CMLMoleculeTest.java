@@ -513,7 +513,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Point3 p = mol1.getAtom(2).getXYZ3();
         Point3Test.assertEquals("original point", new double[] { 2., 3., 1. },
                 p, EPS);
-        mol1.translate3D(new Vector3(0.000111, 0.999999, 0.012345));
+        mol1.translate3D(new Vector3(0.000111, 0.999999, 0.012345), CoordinateType.CARTESIAN);
         p = mol1.getAtom(2).getXYZ3();
         Point3Test.assertEquals("moved point", new double[] { 2.000111,
                 3.999999, 1.012345 }, p, EPS);
@@ -622,7 +622,7 @@ public class CMLMoleculeTest extends MoleculeAtomBondTest {
         Point3 p = mol1.getAtom(2).getXYZ3();
         Point3Test.assertEquals("original point", new double[] { 2., 3., 1. },
                 p, EPS);
-        mol1.translate3D(new Vector3(0.000111, 0.999999, 0.012345));
+        mol1.translate3D(new Vector3(0.000111, 0.999999, 0.012345), CoordinateType.CARTESIAN);
         p = mol1.getAtom(2).getXYZ3();
         Point3Test.assertEquals("moved point", new double[] { 2.000111,
                 3.999999, 1.012345 }, p, EPS);

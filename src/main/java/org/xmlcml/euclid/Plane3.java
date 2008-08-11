@@ -66,7 +66,7 @@ public class Plane3 implements EuclidConstants {
     public Plane3(double l, double m, double n, double d)
             throws EuclidRuntimeException {
         vect = new Vector3(l, m, n);
-        if (vect.isZero()) {
+        if (vect.isZero(Real.EPS)) {
             throw new EuclidRuntimeException("zero length normal");
         }
         dist = d;
@@ -116,7 +116,7 @@ public class Plane3 implements EuclidConstants {
      * @throws EuclidRuntimeException
      */
     public Plane3(Vector3 v, double d) throws EuclidRuntimeException {
-        if (v.isZero()) {
+        if (v.isZero(Real.EPS)) {
             throw new EuclidRuntimeException("zero length normal");
         }
         vect = new Vector3(v);
@@ -150,7 +150,7 @@ public class Plane3 implements EuclidConstants {
         vect = new Vector3();
         dist = 0.0;
         vect = (p2.subtract(p1)).cross(p3.subtract(p2));
-        if (vect.isZero()) {
+        if (vect.isZero(Real.EPS)) {
             throw new EuclidRuntimeException("zero length normal");
         }
         vect.normalize();
@@ -211,9 +211,21 @@ public class Plane3 implements EuclidConstants {
     /**
      * are two planes coincident and parallel.
      *
-     * @param pl2
-     *            plane to compare
+     * @param pl2 plane to compare
+     * @return true if equal within epsilon
+     */
+    public boolean isEqualTo(Plane3 pl2, double epsilon) {
+        if (!vect.isEqualTo(pl2.vect, epsilon))
+            return false;
+        return Real.isEqual(pl2.dist, dist, epsilon);
+    }
+
+    /**
+     * are two planes coincident and parallel.
+     *
+     * @param pl2 plane to compare
      * @return true if equal within Real.isEqual()
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(Plane3 pl2) {
         if (!vect.isEqualTo(pl2.vect))
@@ -252,7 +264,7 @@ public class Plane3 implements EuclidConstants {
      * @return true if parallel within Real.isEqual()
      */
     public boolean isParallelTo(Plane3 pl2) {
-        return vect.isIdenticalTo(pl2.vect);
+        return vect.isIdenticalTo(pl2.vect, Real.EPS);
     }
 
     /**
@@ -264,18 +276,29 @@ public class Plane3 implements EuclidConstants {
      */
     public boolean isAntiparallelTo(Plane3 pl2) {
         Vector3 v = new Vector3(pl2.vect);
-        return vect.isIdenticalTo(v.negative());
+        return vect.isIdenticalTo(v.negative(), Real.EPS);
     }
 
     /**
      * is a point on the plane.
      *
-     * @param p
-     *            the point
+     * @param p the point
+     * @deprecated use epsilon
      * @return true if within Real.isEqual()
      */
     public boolean containsPoint(Point3 p) {
         return Real.isZero(this.getDistanceFromPoint(p));
+    }
+
+    /**
+     * is a point on the plane.
+     *
+     * @param p the point
+     * @param epsilon
+     * @return true if within Real.isEqual()
+     */
+    public boolean containsPoint(Point3 p, double epsilon) {
+        return Real.isZero(this.getDistanceFromPoint(p), epsilon);
     }
 
     /**
@@ -310,7 +333,7 @@ public class Plane3 implements EuclidConstants {
         double numer = dist - vect.dot(v);
         double denom = vect.dot(lvect);
         // check for line and plane parallel
-        if (!Real.isZero(denom)) {
+        if (!Real.isZero(denom, Real.EPS)) {
             lambda = numer / denom;
             p = l.getPoint().plus(lvect.multiplyBy(lambda));
         }

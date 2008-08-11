@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -21,6 +20,7 @@ import nu.xom.ParentNode;
 import nu.xom.Serializer;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.euclid.Util;
 

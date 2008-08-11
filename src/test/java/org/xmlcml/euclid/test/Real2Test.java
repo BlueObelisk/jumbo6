@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -160,8 +161,8 @@ public class Real2Test  {
      */
     @Test
     public void testIsEqualTo() {
-        Assert.assertTrue("equals", r12.isEqualTo(r12));
-        Assert.assertFalse("equals", r11.isEqualTo(r12));
+        Assert.assertTrue("equals", r12.isEqualTo(r12, Real.EPS));
+        Assert.assertFalse("equals", r11.isEqualTo(r12, Real.EPS));
     }
 
     /**

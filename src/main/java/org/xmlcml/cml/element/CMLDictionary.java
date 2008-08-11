@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
-import org.apache.log4j.Logger;
 
 import nu.xom.Document;
 import nu.xom.Element;
@@ -16,6 +15,7 @@ import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.GenericDictionaryMap;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
@@ -102,7 +102,7 @@ public class CMLDictionary extends AbstractDictionary implements
 	 *             if file is not a well-formed dictionary
 	 */
 	public CMLDictionary createDictionary(File file) throws IOException {
-		return createDictionary(file.toURL());
+		return createDictionary(file.toURI().toURL());
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class CMLDictionary extends AbstractDictionary implements
 	}
 
 	static Document createDictionary0(File file) throws IOException {
-		return createDictionary0(file.toURL());
+		return createDictionary0(file.toURI().toURL());
 	}
 
 	static Document createDictionary0(URL url)

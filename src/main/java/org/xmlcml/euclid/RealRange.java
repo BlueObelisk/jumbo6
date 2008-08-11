@@ -93,7 +93,10 @@ public class RealRange implements EuclidConstants {
      * @return valid
      */
     public boolean isValid() {
-        return (minval <= maxval);
+        return (
+    		!Double.isNaN(minval) &&
+    		!Double.isNaN(maxval) && 
+    		minval <= maxval);
     }
     /**
      * invalid ranges return false
@@ -101,9 +104,24 @@ public class RealRange implements EuclidConstants {
      * @param r
      * @return equal
      */
+    public boolean isEqualTo(RealRange r, double eps) {
+        return (r != null && 
+        	r.isValid() && this.isValid() &&
+    		Real.isEqual(minval, r.minval, eps) &&
+    		Real.isEqual(maxval, r.maxval, eps));
+    }
+    /**
+     * invalid ranges return false
+     * 
+     * @param r
+     * @return equal
+     * @deprecated use epsilon
+     */
     public boolean isEqualTo(RealRange r) {
-        return (r != null && Real.isEqual(minval, r.minval)
-                && Real.isEqual(maxval, r.maxval) && minval <= maxval);
+        return (r != null && r.isValid() && this.isValid() &&
+    		Real.isEqual(minval, r.minval) &&
+    		Real.isEqual(maxval, r.maxval) &&
+    		minval <= maxval);
     }
     /**
      * combine two ranges if both valid; takes greatest limits of both, else

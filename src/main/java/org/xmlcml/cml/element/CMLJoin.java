@@ -349,7 +349,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         Point3 movableLigandPoint = movableLigand.getPoint3(CoordinateType.CARTESIAN);
         // translate movablePoint to origin
         Vector3 toOrigin = new Point3().subtract(movablePoint);
-        addedAtomSet.translate3D(toOrigin);
+        addedAtomSet.translate3D(toOrigin, CoordinateType.CARTESIAN);
         // movable R->molecule
         Vector3 movableVector = movablePoint.subtract(movableLigandPoint);
         // align vectors
@@ -357,7 +357,7 @@ public class CMLJoin extends org.xmlcml.cml.element.AbstractJoin {
         addedAtomSet.transformCartesians(transform);
 
         Vector3 translateVector = new Vector3(existingPoint);
-        addedAtomSet.translate3D(translateVector);
+        addedAtomSet.translate3D(translateVector, CoordinateType.CARTESIAN);
 
     }
 

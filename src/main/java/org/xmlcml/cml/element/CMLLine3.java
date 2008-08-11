@@ -115,7 +115,7 @@ public class CMLLine3 extends AbstractLine3 {
      *                zero length vector
      */
     public CMLLine3(CMLPoint3 p, CMLVector3 v) throws CMLRuntimeException {
-        if (v.isZero()) {
+        if (v.isZero(Real.EPS)) {
             throw new CMLRuntimeException("zero vector");
         }
         v.normalize();
@@ -136,7 +136,7 @@ public class CMLLine3 extends AbstractLine3 {
      */
     public CMLLine3(CMLPoint3 p1, CMLPoint3 p2) throws CMLRuntimeException {
         CMLVector3 v = p1.subtract(p2);
-        if (v.isZero()) {
+        if (v.isZero(Real.EPS)) {
             throw new CMLRuntimeException("coincident points");
         }
         this.setPoint3(p1.getXYZ3());
@@ -165,7 +165,7 @@ public class CMLLine3 extends AbstractLine3 {
      *            the vector
      */
     public void setVector3(CMLVector3 v) {
-        if (v.isZero()) {
+        if (v.isZero(Real.EPS)) {
             throw new CMLRuntimeException("Cannot make line with zero vector");
         }
         CMLVector3 vv = new CMLVector3(v);
@@ -179,13 +179,24 @@ public class CMLLine3 extends AbstractLine3 {
      * are two lines identical. must be coincident and parallel uses
      * vect.equals() and containsPoint
      *
-     * @param l2
-     *            CMLLine3 to compare
+     * @param l2 CMLLine3 to compare
+     * @param epsilon tolerance
+     * @return equals
+     */
+    public boolean isEqualTo(CMLLine3 l2, double epsilon) {
+        return Util.isEqual(this.getPoint3(), l2.getPoint3(), epsilon)
+                && Util.isEqual(this.getVector3(), l2.getVector3(), epsilon);
+    }
+
+    /**
+     * are two lines identical. must be coincident and parallel uses
+     * vect.equals() and containsPoint
+     *
+     * @param l2 CMLLine3 to compare
      * @return equals
      */
     public boolean isEqualTo(CMLLine3 l2) {
-        return Util.isEqual(this.getPoint3(), l2.getPoint3(), EPS)
-                && Util.isEqual(this.getVector3(), l2.getVector3(), EPS);
+        return this.isEqualTo(l2, EPS);
     }
 
     /**
@@ -218,8 +229,8 @@ public class CMLLine3 extends AbstractLine3 {
     /**
      * are two lines parallel. (not antiparallel) does not test coincidence
      *
-     * @param l2
-     *            line to compare
+     * @param l2 line to compare
+     * @deprecated use epsilon
      * @return true if parallel
      */
     public boolean isParallelTo(CMLLine3 l2) {
@@ -229,11 +240,23 @@ public class CMLLine3 extends AbstractLine3 {
     }
 
     /**
+     * are two lines parallel. (not antiparallel) does not test coincidence
+     *
+     * @param l2 line to compare
+     * @return true if parallel
+     */
+    public boolean isParallelTo(CMLLine3 l2, double epsilon) {
+        double[] v = this.getVector3();
+        double[] v2 = l2.getVector3();
+        return Util.isEqual(v, v2, epsilon);
+    }
+
+    /**
      * are two lines antiparallel. (not parallel) does not test coincidence
      *
-     * @param l2
-     *            line to compare
+     * @param l2 line to compare
      * @return true if antiparallel
+     * @deprecated use epsilon
      */
     public boolean isAntiparallelTo(CMLLine3 l2) {
         double[] v = this.getVector3();
@@ -243,15 +266,39 @@ public class CMLLine3 extends AbstractLine3 {
     }
 
     /**
+     * are two lines antiparallel. (not parallel) does not test coincidence
+     *
+     * @param l2 line to compare
+     * @return true if antiparallel
+     */
+    public boolean isAntiparallelTo(CMLLine3 l2, double epsilon) {
+        double[] v = this.getVector3();
+        Vector3 vv = new Vector3(v);
+        vv = vv.multiplyBy(-1);
+        return Util.isEqual(vv.getArray(), v, epsilon);
+    }
+
+    /**
      * is a point on a line. tests for Real.isZero() distance from line
      *
-     * @param p
-     *            point
+     * @param p point
      * @return true if within Real.isZero()
+     * @deprecated use epsilon
      */
     public boolean containsPoint(CMLPoint3 p) {
         double d = p.distanceFromLine(this);
         return (Real.isZero(d));
+    }
+
+    /**
+     * is a point on a line. tests for Real.isZero() distance from line
+     *
+     * @param p point
+     * @return true if within Real.isZero()
+     */
+    public boolean containsPoint(CMLPoint3 p, double epsilon) {
+        double d = p.distanceFromLine(this);
+        return (Real.isZero(d, epsilon));
     }
 
     /**

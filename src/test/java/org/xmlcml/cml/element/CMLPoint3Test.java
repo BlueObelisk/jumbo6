@@ -19,6 +19,7 @@ import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.test.DoubleTestBase;
 
 
@@ -211,7 +212,7 @@ CMLBuilder builder = new CMLBuilder();
     @Test
     public void testEqualsCMLPoint3() {
         CMLPoint3 pp = new CMLPoint3(xomP111);
-        Assert.assertTrue("equals", pp.isEqualTo(xomP111));
+        Assert.assertTrue("equals", pp.isEqualTo(xomP111, Real.EPS));
     }
 
     /**
@@ -647,7 +648,7 @@ CMLBuilder builder = new CMLBuilder();
     public void testIsEqualToCMLPoint3() {
         CMLPoint3 p = new CMLPoint3(1., 2., 3.);
         CMLPoint3 pp = (CMLPoint3) p.copy();
-        Assert.assertTrue("isEqual", p.isEqualTo(pp));
+        Assert.assertTrue("isEqual", p.isEqualTo(pp, Real.EPS));
     }
 
     /**

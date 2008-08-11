@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Complex;
 import org.xmlcml.euclid.Polar;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 
 /**
@@ -195,8 +196,8 @@ public class PolarTest  {
      */
     @Test
     public void testIsEqualTo() {
-        Assert.assertTrue("isEqualTo", p1.isEqualTo(p1));
-        Assert.assertFalse("isEqualTo", p1.isEqualTo(p2));
+        Assert.assertTrue("isEqualTo", p1.isEqualTo(p1, Real.EPS));
+        Assert.assertFalse("isEqualTo", p1.isEqualTo(p2, Real.EPS));
     }
 
     /**

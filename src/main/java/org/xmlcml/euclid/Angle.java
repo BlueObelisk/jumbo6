@@ -185,10 +185,21 @@ public class Angle {
      * 
      * @param a
      * @return boolean
-     * 
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(double a) {
         return Real.isEqual(Angle.normalise(angle), Angle.normalise(a));
+    }
+    /**
+     * are two normalised angles equal.
+     * 
+     * @param a
+     * @param epsilon
+     * @return boolean
+     * 
+     */
+    public boolean isEqualTo(double a, double epsilon) {
+        return Real.isEqual(Angle.normalise(angle), Angle.normalise(a), epsilon);
     }
     /**
      * is one angle greater than another (after normalisation)
@@ -230,10 +241,22 @@ public class Angle {
      * are two angles equal
      * 
      * @param a
-     * @return ==
+     * @return
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(Angle a) {
         return isEqualTo(a.angle);
+    }
+    
+    /**
+     * are two angles equal
+     * 
+     * @param a
+     * @param epsilon
+     * @return
+     */
+    public boolean isEqualTo(Angle a, double epsilon) {
+        return isEqualTo(a.angle, epsilon);
     }
     /**
      * is one angle greater than another (after normalisation)

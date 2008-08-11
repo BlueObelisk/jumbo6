@@ -7,8 +7,8 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 
 /** draws a straight line.
@@ -19,6 +19,9 @@ import org.xmlcml.euclid.Real2Array;
 public class SVGPath extends SVGElement {
 
 	private static Logger LOG = Logger.getLogger(SVGPath.class);
+	static {
+		LOG.setLevel(Level.INFO);
+	}
 	
 	final static String TAG ="path";
 	private GeneralPath path2;
@@ -111,76 +114,52 @@ public class SVGPath extends SVGElement {
 		GeneralPath path = createAndSetPath2D();
 		g2d.draw(path);
 	}
-
-	// FIXME
-	/** at present only does Mx,y Lx,y Lx,y ... z
-	 * 
-	 */
-	public Real2Array getReal2Array() {
-		String s = this.getD();
-//		StringBuilder sb = new StringBuilder(s);
-		if (s.endsWith("z") || s.endsWith("Z")) {
-			s = s.substring(0, s.length()-1);
-		}
-		Real2Array real2Array = new Real2Array();
-		if (s.length() == 0 || !s.substring(0, 1).equals("M")) {
-			
-		} else {
-			int ii = s.indexOf("L");
-			if (ii != -1) {
-				Real2 move = getReal(s.substring(1, ii).trim());
-				s = s.substring(ii);
-				if (move != null) {
-					real2Array.add(move);
-					while (true) {
-						System.out.println("IDX "+ii);
-						ii = s.indexOf("L", 1); 
-						if (ii == -1) {
-							break;
-						}
-						//ii;
-						System.out.println(""+s+"/"+ii);
-						String ss = s.substring(1, ii).trim();
-						System.out.println("L"+ss);
-						Real2 draw = getReal(ss);
-						s = s.substring(ii).trim();
-						if (draw == null) {
-							LOG.error("Null path element: "+s);
-						} else {
-							real2Array.add(draw);
-						}
-					}
-				}
-			}
-		}
-		return real2Array;
-	}
 	
-	/** parse string or two reals separated by a comma or spaces.
-	 * 
-	 * @param s
-	 * @return null if cannot parse
-	 */
-	private Real2 getReal(String s) {
-		Real2 real2 = null;
-		s = s.replace(S_COMMA, S_SPACE);
-		String[] ss = s.split(S_WHITEREGEX);
-		if (ss.length == 2) {
-			try {
-				double x = new Double(ss[0]).doubleValue();
-				double y = new Double(ss[1]).doubleValue();
-				real2 = new Real2(x, y);
-			} catch (Exception e) {
-				//
-			}
+	private class Real2String {
+		String s;
+		double x;
+		double y;
+		public Real2String(String s) {
+			this.s = s;
+			x = grabDouble();
+			y = grabDouble();
 		}
-		return real2;
+		private double grabDouble() {
+			String ss = s;
+			double x;
+			int idx = s.indexOf(S_SPACE);
+			if (idx != -1) {
+				ss = s.substring(0, idx);
+				s = s.substring(idx+1);
+			} else {
+				s = S_EMPTY;
+			}
+			try {
+				x = new Double(ss).doubleValue();
+			} catch (Exception e) {
+				throw new RuntimeException("bad double:"+ss+" ... "+s);
+			}
+			return x;
+		}
 	}
 	
 	public GeneralPath createAndSetPath2D() {
+		String s = this.getD().trim()+S_SPACE;
 		path2 = new GeneralPath();
-		Real2Array dArray = this.getReal2Array();
-		System.out.println("REALARRAY "+dArray);
+		while (s.length() > 0) {
+			if (s.startsWith("M")) {
+				Real2String r2s = new Real2String(s.substring(1));
+				path2.moveTo(r2s.x, r2s.y);
+				s = r2s.s.trim();
+			} else if (s.startsWith("L")) {
+				Real2String r2s = new Real2String(s.substring(1));
+				path2.lineTo(r2s.x, r2s.y);
+				s = r2s.s.trim();
+			} else if (s.startsWith("z") || s.startsWith("Z")) {
+				path2.closePath();
+				s = s.substring(1).trim();
+			}
+		}
 		return path2;
 	}
 	

@@ -1,8 +1,8 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;

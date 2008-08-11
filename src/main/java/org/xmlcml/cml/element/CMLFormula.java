@@ -56,6 +56,8 @@ public class CMLFormula extends AbstractFormula {
 	private static Logger LOG = Logger.getLogger(CMLFormula.class);
 	public final static String SMILES = "SMILES";
 	public final static String SMILES1 = "cml:smiles";
+	
+	private final static double EPSILON_COUNT = 0.0001;
 
 	/** type of hydrogen counting
 	 * @author pm286
@@ -239,7 +241,7 @@ public class CMLFormula extends AbstractFormula {
 		int formalCharge = 0;
 		// iterate through atoms adding elements, occupancies and charges
 
-		HydrogenStrategy strategy = null;
+//		HydrogenStrategy strategy = null;
 		for (CMLAtom atom : molecule.getAtoms()) {
 			double occupancy = 1.0;
 			if (atom.getOccupancyAttribute() != null) {
@@ -457,7 +459,7 @@ public class CMLFormula extends AbstractFormula {
 		// concise
 		CMLElements<CMLFormula> formulaChildren = this.getFormulaElements();
 		if (formulaChildren.size() > 0) {
-			String conciseString = "";
+//			String conciseString = "";
 			for (CMLFormula formula : formulaChildren) {
 				formula.normalize();
 			}
@@ -472,7 +474,7 @@ public class CMLFormula extends AbstractFormula {
 	}
 	
 	private void removeAtomArrayChildren() {
-		CMLElements atomArrayElements = this.getAtomArrayElements();
+		CMLElements<?> atomArrayElements = this.getAtomArrayElements();
 		for (int i = 0; i < atomArrayElements.size(); i++) {
 			atomArrayElements.get(i).detach();
 		}
@@ -2177,7 +2179,7 @@ public class CMLFormula extends AbstractFormula {
 		double[] counts = getCounts();
 		if (elementTypes != null && counts != null) {
 			for (int i = 0; i < elementTypes.length; i++) {
-				if (!Real.isZero(counts[i])) {
+				if (!Real.isZero(counts[i], EPSILON_COUNT)) {
 					zero = false;
 					break;
 				}

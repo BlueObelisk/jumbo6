@@ -191,7 +191,7 @@ public class CMLLength extends AbstractLength {
             v1.normalize();
             v1 = v1.multiplyBy(d);
             Vector3 delta = v1.subtract(v);
-            moveableAtomSet.translate3D(delta);
+            moveableAtomSet.translate3D(delta, CoordinateType.CARTESIAN);
         }
     }
 

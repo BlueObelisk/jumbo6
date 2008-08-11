@@ -1,7 +1,6 @@
 package org.xmlcml.euclid;
 
 import org.apache.log4j.Logger;
-
 import org.xmlcml.cml.tools.CrystalTool;
 
 /**
@@ -107,9 +106,9 @@ public class Point3 implements EuclidConstants {
     /**
      * are two points identical. compares content of points with Real.isEqual()
      * 
-     * @param p
-     *            point to compare
+     * @param p point to compare
      * @return equal if coordinates are equal within Real.epsilon
+     * @deprecated use epsilon
      */
     public boolean isEqualTo(Point3 p) {
         return Real.isEqual(3, flarray, p.flarray);
@@ -118,10 +117,8 @@ public class Point3 implements EuclidConstants {
     /**
      * are two points identical. compares x, y, z coordinates of points
      * 
-     * @param p
-     *            point to compare
-     * @param eps
-     *            the tolerance
+     * @param p point to compare
+     * @param eps the tolerance
      * @return equal if coordinates are equal within Real.epsilon
      */
     public boolean isEqualTo(Point3 p, double eps) {
@@ -485,24 +482,44 @@ public class Point3 implements EuclidConstants {
     /**
      * is point on line.
      * 
-     * @param l
-     *            the line
+     * @param l the line
+     * @deprecated use epsilon
      * @return true if within Real.isEqual() of line
      */
     public boolean isOnLine(Line3 l) {
-        // TODO add epsilon
-        return l.containsPoint(this);
+        return l.containsPoint(this, Real.EPS);
+    }
+
+    /**
+     * is point on line.
+     * 
+     * @param l the line
+     * @param epsilon
+     * @return true if within Real.isEqual() of line
+     */
+    public boolean isOnLine(Line3 l, double epsilon) {
+        return l.containsPoint(this, epsilon);
     }
 
     /**
      * is point on plane.
      * 
-     * @param pl
-     *            the plane
+     * @param pl the plane
+     * @deprecated use epsilon
      * @return true if within Real.isEqual() of plane
      */
     public boolean isOnPlane(Plane3 pl) {
         return pl.containsPoint(this);
+    }
+
+    /**
+     * is point on plane.
+     * 
+     * @param pl the plane
+     * @return true if within Real.isEqual() of plane
+     */
+    public boolean isOnPlane(Plane3 pl, double epsilon) {
+        return pl.containsPoint(this, epsilon);
     }
 
     /**
@@ -546,7 +563,7 @@ public class Point3 implements EuclidConstants {
      */
     public static Angle getAngle(Point3 p1, Point3 p2, Point3 p3) {
         Vector3 v1 = p1.subtract(p2);
-        return (v1.isZero()) ? null : v1.getAngleMadeWith(p3.subtract(p2));
+        return (v1.isZero(Real.EPS)) ? null : v1.getAngleMadeWith(p3.subtract(p2));
     }
 
     /**
@@ -619,11 +636,26 @@ public class Point3 implements EuclidConstants {
      * is a point at Origin
      * 
      * @return is this within Real.isEqual() of origin
+     * @deprecated
      */
     public boolean isOrigin() {
         for (int i = 0; i < 3; i++) {
             if (!Real.isZero(flarray[i]))
                 return false;
+        }
+        return true;
+    }
+
+    /**
+     * is a point at Origin
+     * 
+     * @return is this within Real.isEqual() of origin
+     */
+    public boolean isOrigin(double epsilon) {
+        for (int i = 0; i < 3; i++) {
+            if (!Real.isZero(flarray[i], epsilon)) {
+                return false;
+            }
         }
         return true;
     }

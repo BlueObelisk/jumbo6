@@ -1,10 +1,10 @@
 package org.xmlcml.cml.base;
 
-import org.apache.log4j.Logger;
-
 import nu.xom.Attribute;
 import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
+
+import org.apache.log4j.Logger;
 
 /**
  * generic subclassed Attribute for CML elements. often further subclassed into

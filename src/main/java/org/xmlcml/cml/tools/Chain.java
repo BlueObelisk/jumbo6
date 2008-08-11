@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
@@ -235,7 +235,7 @@ public class Chain extends AbstractTool {
 		// longest paths first
 		Collections.reverse(pathList);
 		// longest path
-		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
+//		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
 		expandPaths(pathList);
 //		expandPathsOld(sprout, pathList, path);
 	}

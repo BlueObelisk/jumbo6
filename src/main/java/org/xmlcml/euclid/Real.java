@@ -10,6 +10,7 @@ public abstract class Real implements EuclidConstants {
 
 	final static Logger LOG = Logger.getLogger(Real.class);
 	
+	// this is deprecated. use explicit epsilon
     /** standard for equality of numbers */
     static double epsx = 0.0000000001;
     /**
@@ -47,38 +48,33 @@ public abstract class Real implements EuclidConstants {
     /**
      * are two numbers equal within epsx.
      * 
-     * @param a
-     *            number
-     * @param b
-     *            number
+     * @param a number
+     * @param b number
      * @return true if a equals b within epsilon
-     * 
+     * @deprecated use explicit epsilon
      */
     public static boolean isEqual(double a, double b) {
         return Math.abs(a - b) < epsx;
     }
+    
     /**
      * is a number zero within epsx
      * 
-     * @param a
-     *            number
+     * @param a number
      * @return true if a is zero within epsilon
-     * 
+     * @deprecated use explicit epsilon
      */
     public static boolean isZero(double a) {
         return Math.abs(a) < epsx;
     }
+    
     /**
      * are all members of an array equal within epsilon.
      * 
-     * @param n
-     *            length of array
-     * @param a
-     *            first array
-     * @param b
-     *            first array
-     * @param epsilon
-     *            difference
+     * @param n length of array
+     * @param a first array
+     * @param b first array
+     * @param epsilon difference
      * @return true is all arrays are of equals lengths and members are equal
      *         within epsilon
      * 
@@ -96,14 +92,12 @@ public abstract class Real implements EuclidConstants {
     /**
      * are all members of an array equal within epsx
      * 
-     * @param n
-     *            length of array
-     * @param a
-     *            first array
-     * @param b
-     *            first array
+     * @param n length of array
+     * @param a first array
+     * @param b first array
      * @return true is all arrays are of equals lengths and members are equal
      *         within epsilon
+     * @deprecated use explicit epsilon
      */
     public static boolean isEqual(int n, double[] a, double b[]) {
         return isEqual(n, a, b, epsx);
@@ -111,12 +105,9 @@ public abstract class Real implements EuclidConstants {
     /**
      * are two numbers equal within epsilon
      * 
-     * @param a
-     *            number
-     * @param b
-     *            number
-     * @param epsilon
-     *            difference
+     * @param a number
+     * @param b number
+     * @param epsilon difference
      * @return true if a equals b within epsilon
      */
     public static boolean isEqual(double a, double b, double epsilon) {
@@ -125,12 +116,8 @@ public abstract class Real implements EuclidConstants {
     /**
      * is a number zero within epsilon
      * 
-     * @param a
-     *            number
-     * 
-     * @param epsilon
-     *            difference
-     * 
+     * @param a number
+     * @param epsilon difference
      * @return true if a is zero within epsilon
      * 
      */

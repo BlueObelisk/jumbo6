@@ -7,11 +7,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -538,7 +538,7 @@ public class CMLAtomSet extends AbstractAtomSet {
      * translate molecule in 3D.
      *
      * @param delta3 add to all 3D coordinates
-     * @deprecated
+     * @deprecated use CoordinateType
      */
     public void translate3D(Vector3 delta3) {
         List<CMLAtom> atoms = this.getAtoms();

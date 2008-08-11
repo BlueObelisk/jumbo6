@@ -14,16 +14,17 @@ public class Real2Range implements EuclidConstants {
     /**
      * X-range
      */
-    RealRange xrange;
+    RealRange xrange = null;
     /**
      * Y-range
      */
-    RealRange yrange;
+    RealRange yrange = null;
     /**
      * constructor.
      */
     public Real2Range() {
     }
+    
     /**
      * initialise with min and max values;
      * 
@@ -31,7 +32,8 @@ public class Real2Range implements EuclidConstants {
      * @param yr
      */
     public Real2Range(RealRange xr, RealRange yr) {
-        if (xr.isValid() && yr.isValid()) {
+        if (xr != null && yr != null &&
+    		xr.isValid() && yr.isValid()) {
             xrange = xr;
             yrange = yr;
         }
@@ -43,9 +45,9 @@ public class Real2Range implements EuclidConstants {
      * @param r
      */
     public Real2Range(Real2Range r) {
-        if (r.isValid()) {
-            xrange = new RealRange(r.xrange);
-            yrange = new RealRange(r.yrange);
+        if (r != null && r.isValid()) {
+            xrange = (r.xrange == null) ? null : new RealRange(r.xrange);
+            yrange = (r.yrange == null) ? null : new RealRange(r.yrange);
         }
     }
     /**
@@ -54,14 +56,30 @@ public class Real2Range implements EuclidConstants {
      * @return valid
      */
     public boolean isValid() {
-        return (xrange != null && yrange != null && xrange.isValid() && yrange
-                .isValid());
+        return (xrange != null && yrange != null &&
+        		xrange.isValid() && yrange.isValid());
     }
     /**
      * is equals to.
      * 
      * @param r2
-     * @return tru if equal
+     * @param epsx tolerance for xRange
+     * @param epsy tolerance for yRange
+     * @return true if equal within tolerances
+     */
+    public boolean isEqualTo(Real2Range r2, double epsx, double epsy) {
+        if (isValid() && r2 != null && r2.isValid()) {
+            return (xrange.isEqualTo(r2.xrange, epsx) && yrange.isEqualTo(r2.yrange, epsy));
+        } else {
+            return false;
+        }
+    }
+    /**
+     * is equals to.
+     * 
+     * @param r2
+     * @return true if equal
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(Real2Range r2) {
         if (isValid() && r2 != null && r2.isValid()) {

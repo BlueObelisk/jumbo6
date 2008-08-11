@@ -100,7 +100,7 @@ public class Catalog implements CatalogListChild, CMLConstants {
      * @throws IOException
      */
 	public Catalog(File file) throws IOException {
-		this(file.toURL());
+		this(file.toURI().toURL());
 		
 	}
 

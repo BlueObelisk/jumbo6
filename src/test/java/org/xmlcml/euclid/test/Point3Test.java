@@ -11,6 +11,7 @@ import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
@@ -142,7 +143,7 @@ public class Point3Test extends GeomTest {
     @Test
     public void testIsEqualToPoint3() {
         Point3 pp = new Point3(p123);
-        Assert.assertTrue("point isEqualTo", p123.isEqualTo(pp));
+        Assert.assertTrue("point isEqualTo", p123.isEqualTo(pp, Real.EPS));
     }
 
     /**
@@ -428,11 +429,11 @@ public class Point3Test extends GeomTest {
         Vector3 vv = new Vector3(1., 1., 1.);
         Point3 pp = new Point3(1., 2., 3.);
         Line3 ll = new Line3(pp, vv);
-        Assert.assertTrue("on line", pp.isOnLine(ll));
+        Assert.assertTrue("on line", pp.isOnLine(ll, Real.EPS));
         double d = pp.distanceFromLine(ll);
 
         Point3 p0 = new Point3(0., 0., 0.);
-        Assert.assertFalse("on line", p0.isOnLine(ll));
+        Assert.assertFalse("on line", p0.isOnLine(ll, Real.EPS));
         Point3 pClose = p0.getClosestPointOnLine(ll);
         Point3Test.assertEquals("nearest point", new double[] { -1, 0., 1. },
                 pClose, EPS);
@@ -452,7 +453,7 @@ public class Point3Test extends GeomTest {
         Vector3 vv = new Vector3(1., 1., 1.);
         Point3 p = new Point3(1., 2., 3.);
         Line3 l3 = new Line3(p, vv);
-        Assert.assertTrue("on line", p.isOnLine(l3));
+        Assert.assertTrue("on line", p.isOnLine(l3, Real.EPS));
     }
 
     /**
@@ -531,8 +532,8 @@ public class Point3Test extends GeomTest {
      */
     @Test
     public void testIsOrigin() {
-        Assert.assertTrue("origin", p000.isOrigin());
-        Assert.assertFalse("origin", p123.isOrigin());
+        Assert.assertTrue("origin", p000.isOrigin(Real.EPS));
+        Assert.assertFalse("origin", p123.isOrigin(Real.EPS));
     }
 
 

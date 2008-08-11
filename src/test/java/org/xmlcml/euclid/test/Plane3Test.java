@@ -12,6 +12,7 @@ import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Vector3;
 
 /**
@@ -194,7 +195,7 @@ public class Plane3Test extends GeomTest {
     @Test
     public void testIsEqualTo() {
         Plane3 pl = new Plane3(pl1234);
-        Assert.assertTrue("equals", pl.isEqualTo(pl1234));
+        Assert.assertTrue("equals", pl.isEqualTo(pl1234, Real.EPS));
     }
 
     /**
@@ -247,9 +248,9 @@ public class Plane3Test extends GeomTest {
      */
     @Test
     public void testContainsPoint() {
-        Assert.assertFalse("contains", pl1111.containsPoint(p111));
+        Assert.assertFalse("contains", pl1111.containsPoint(p111, Real.EPS));
         Assert.assertTrue("contains", pl1111.containsPoint(new Point3(1. / s3,
-                1. / s3, 1. / s3)));
+                1. / s3, 1. / s3), Real.EPS));
     }
 
     /**
