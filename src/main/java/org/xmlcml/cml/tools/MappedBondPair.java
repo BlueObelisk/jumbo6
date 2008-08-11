@@ -1,10 +1,10 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLAtom;
@@ -101,7 +101,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
         	atom21 = bond2.getAtom(1);
         	// if bond in wrong direction, flip it
         	if (reaction != null && bond1 != null) {
-    	    	String id10 = bond1.getAtom(0).getId();
+//    	    	String id10 = bond1.getAtom(0).getId();
 //    	    	String ref20 = snap.atomMap.getFromRef(id10);
 //	        	CMLAtom atom200 = (CMLAtom) snap.getAtom(reaction, ref20, snap.productAtomMapMap);
 	        	// bond might be pointing in wrong direction

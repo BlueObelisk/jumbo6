@@ -327,7 +327,7 @@ public class CMLBondTest extends MoleculeAtomBondTest {
     public void testGetBondLength() {
         Assert.assertEquals("calculated length", 
                 Math.sqrt(3.), 
-                ((CMLBond) xmlBonds.get(0)).getBondLength(),
+                ((CMLBond) xmlBonds.get(0)).getBondLength(CoordinateType.CARTESIAN),
                 0.00001);
     }
 

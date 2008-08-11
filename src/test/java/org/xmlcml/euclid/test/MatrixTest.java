@@ -4,12 +4,9 @@ import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 import static org.xmlcml.util.TestUtils.getAssertFormat;
-
-
-import org.apache.log4j.Logger;
-
 import junit.framework.Assert;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.DoubleTool;

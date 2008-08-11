@@ -3,12 +3,12 @@ package org.xmlcml.cml.element;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.DelimiterAttribute;
 import org.xmlcml.cml.attribute.NamespaceRefAttribute;
 import org.xmlcml.cml.attribute.UnitsAttribute;

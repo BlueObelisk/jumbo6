@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.attribute.RefAttribute;

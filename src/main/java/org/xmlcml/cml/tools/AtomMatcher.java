@@ -1440,10 +1440,10 @@ public class AtomMatcher extends AbstractTool {
 		return map;
 	}
     
-    private CMLMap matchAtomsByCoordinates2(CMLAtomSet atomSet1, CMLAtomSet atomSet2) {
-    	CMLMap map = null;
-    	return map;
-    }
+//    private CMLMap matchAtomsByCoordinates2(CMLAtomSet atomSet1, CMLAtomSet atomSet2) {
+//    	CMLMap map = null;
+//    	return map;
+//    }
     
     private double rms(
 		int[] permutation, 

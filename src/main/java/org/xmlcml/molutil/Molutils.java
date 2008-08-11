@@ -2,8 +2,8 @@ package org.xmlcml.molutil;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;

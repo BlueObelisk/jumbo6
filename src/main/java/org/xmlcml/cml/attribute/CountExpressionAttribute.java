@@ -2,7 +2,6 @@ package org.xmlcml.cml.attribute;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
-import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -83,30 +82,30 @@ public class CountExpressionAttribute extends StringSTAttribute {
         }
     }
 
-    /** clone content of element with CountExpression and append.
-     * clones the element content and appends to original element content
-     * @param element to process
-     * @throws CMLRuntimeException null element or bad attribute
-     */
-    private static void cloneContentAndAppend(CMLElement element) throws CMLRuntimeException {
-        if (element == null) {
-            throw new CMLRuntimeException("Cannot process null element");
-        }
-        Element parent = (Element) element.getParent();
-        if (parent == null) {
-            throw new CMLRuntimeException("Cannot process CountExpressionAttribute without parent");
-        }
-        CountExpressionAttribute cea = (CountExpressionAttribute) 
-            element.getAttribute(CountExpressionAttribute.NAME);
-        int count = cea.calculateCountExpression();
-        int nChild = element.getChildCount();
-        for (int i = 1; i < count; i++) {
-            for (int j = 0; j < nChild; j++) {
-                Node newChild = element.getChild(j).copy();
-                element.appendChild(newChild);
-            }
-        }
-    }
+//    /** clone content of element with CountExpression and append.
+//     * clones the element content and appends to original element content
+//     * @param element to process
+//     * @throws CMLRuntimeException null element or bad attribute
+//     */
+//    private static void cloneContentAndAppend(CMLElement element) throws CMLRuntimeException {
+//        if (element == null) {
+//            throw new CMLRuntimeException("Cannot process null element");
+//        }
+//        Element parent = (Element) element.getParent();
+//        if (parent == null) {
+//            throw new CMLRuntimeException("Cannot process CountExpressionAttribute without parent");
+//        }
+//        CountExpressionAttribute cea = (CountExpressionAttribute) 
+//            element.getAttribute(CountExpressionAttribute.NAME);
+//        int count = cea.calculateCountExpression();
+//        int nChild = element.getChildCount();
+//        for (int i = 1; i < count; i++) {
+//            for (int j = 0; j < nChild; j++) {
+//                Node newChild = element.getChild(j).copy();
+//                element.appendChild(newChild);
+//            }
+//        }
+//    }
 
     /** expands countExpression into an integer.
      * if simple integer *(5) return that

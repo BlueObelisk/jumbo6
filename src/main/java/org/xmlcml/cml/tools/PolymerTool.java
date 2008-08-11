@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -16,6 +15,7 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.xslt.XSLTransform;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.CountExpressionAttribute;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;

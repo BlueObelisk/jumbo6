@@ -147,6 +147,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
     CMLReaction unbalancedR = null;
 
 	private CMLReaction reaction0;
+	
+	@SuppressWarnings("unused")
 	private CMLReaction reaction1;
 
     /**
@@ -593,8 +595,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
 	        CMLProductList productList = reaction1.getProductList();
 	        CMLElements<CMLProduct> products = productList.getProductElements();
 	        exploreMolarAmounts(doc, products);
-	        CMLFormula difference = ReactionTool.getOrCreateTool(reaction1).calculateDifferenceFormula();
-	        CMLFormula expected = new CMLFormula();
+//	        CMLFormula difference = ReactionTool.getOrCreateTool(reaction1).calculateDifferenceFormula();
+//	        CMLFormula expected = new CMLFormula();
     	}
         
 	}

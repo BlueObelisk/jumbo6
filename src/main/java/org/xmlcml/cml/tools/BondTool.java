@@ -38,6 +38,7 @@ public class BondTool extends AbstractSVGTool {
     Logger logger = Logger.getLogger(BondTool.class.getName());
     private BondDisplay bondDisplay;
     private MoleculeTool moleculeTool;
+    private MoleculeDisplay moleculeDisplay;
 	private double width = 1.0;
 	private double widthFactor;
 
@@ -230,6 +231,25 @@ public class BondTool extends AbstractSVGTool {
 		this.bondDisplay = bondDisplay;
 	}
 	
+	public void ensureBondDisplay() {
+		if (bondDisplay == null) {
+			if (moleculeDisplay == null) {
+				CMLMolecule molecule = bond.getMolecule();
+				MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+				if (moleculeTool != null) {
+					moleculeDisplay = moleculeTool.getMoleculeDisplay();
+				}
+				if (moleculeDisplay != null) {
+					BondDisplay bondDisplayx = moleculeDisplay.getDefaultBondDisplay();
+					if (bondDisplayx != null) {
+						bondDisplay = new BondDisplay(bondDisplayx);
+					}
+				}
+			} else {
+			}
+		}
+	}
+	
 	/**
 	 * @param atomDisplay
 	 * @return true =>omit
@@ -392,6 +412,14 @@ public class BondTool extends AbstractSVGTool {
 		Point3 xyz1 = atoms.get(1).getXYZ3();
 		return (xyz0 == null || xyz1 == null) ? null :
 			xyz0.getMidPoint(xyz1);
+	}
+
+	public MoleculeDisplay getMoleculeDisplay() {
+		return moleculeDisplay;
+	}
+
+	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
+		this.moleculeDisplay = moleculeDisplay;
 	}
 
 }

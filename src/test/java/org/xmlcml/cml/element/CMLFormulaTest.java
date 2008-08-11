@@ -1,8 +1,8 @@
 package org.xmlcml.cml.element;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_QUOT;
@@ -698,7 +698,7 @@ public class CMLFormulaTest extends MoleculeAtomBondTest {
     		"</formula>";
         Element expected = parseValidString(fs);
         assertEqualsCanonically("full formula", expected, fMoiety, true);
-        String concise = fMoiety.getConcise();
+//        String concise = fMoiety.getConcise();
     }
 
     /**

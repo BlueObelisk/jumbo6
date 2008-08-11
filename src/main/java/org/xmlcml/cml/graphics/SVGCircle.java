@@ -3,7 +3,6 @@ package org.xmlcml.cml.graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
 import nu.xom.Element;

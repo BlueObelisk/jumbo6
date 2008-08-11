@@ -2,6 +2,9 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+
 
 
 /** display properties for bond.
@@ -17,6 +20,7 @@ public class BondDisplay extends AbstractDisplay {
 	private double doubleMiddleFactor = 0.9;
 	private double wedgeFactor = 0.2;
 	private int hatchCount = 6;
+	private MoleculeDisplay moleculeDisplay;
 	
 	final static BondDisplay DEFAULT = new BondDisplay();
 	static {
@@ -102,6 +106,24 @@ public class BondDisplay extends AbstractDisplay {
 		this.scale = scale;
 	}
 	
+	/** can bond be omitted?
+	 * 
+	 * @param atom
+	 * @return omit
+	 */
+	public boolean omitBond(CMLBond bond) {
+		boolean omit = false;
+		CMLAtom atom0 = bond.getAtom(0);
+		CMLAtom atom1 = bond.getAtom(1);
+		AtomTool atomTool0 = AtomTool.getOrCreateTool(atom0);
+		AtomTool atomTool1 = AtomTool.getOrCreateTool(atom1);
+		if (atomTool0.getAtomDisplay().omitAtom(atom0) ||
+			atomTool1.getAtomDisplay().omitAtom(atom1)) {
+			omit = true;
+		}
+		return omit;
+	}
+
 	/** cascades through from calling program
 	 * @param args
 	 * @param i
@@ -178,5 +200,13 @@ public class BondDisplay extends AbstractDisplay {
 
 	public void setHatchCount(int hatchCount) {
 		this.hatchCount = hatchCount;
+	}
+
+	public MoleculeDisplay getMoleculeDisplay() {
+		return moleculeDisplay;
+	}
+
+	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
+		this.moleculeDisplay = moleculeDisplay;
 	}
 }

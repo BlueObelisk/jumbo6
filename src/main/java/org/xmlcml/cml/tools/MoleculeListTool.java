@@ -1,10 +1,10 @@
 package org.xmlcml.cml.tools;
 
 import java.io.IOException;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -88,11 +88,11 @@ public class MoleculeListTool extends AbstractSVGTool {
     	return g;
     }
 
-    private void enableMoleculeDisplay() {
-    	if (moleculeDisplay == null) {
-    		moleculeDisplay = MoleculeDisplay.getDEFAULT();
-    	}
-    }
+//    private void enableMoleculeDisplay() {
+//    	if (moleculeDisplay == null) {
+//    		moleculeDisplay = MoleculeDisplay.getDEFAULT();
+//    	}
+//    }
 
 
 	/**

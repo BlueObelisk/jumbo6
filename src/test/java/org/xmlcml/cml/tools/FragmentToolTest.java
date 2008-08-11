@@ -592,7 +592,7 @@ public class FragmentToolTest {
 				}
 				boolean bump = atomi.isWithinRadiusSum(atomj, ChemicalElement.RadiusType.VDW);
 				if (bump) {
-					double dist = atomi.getDistanceTo(atomj);
+//					double dist = atomi.getDistanceTo(atomj);
 //					System.out.println("BUMP " + atomi.getId() + "-" + atomj.getId() + ": " + dist);
 					// FIXME use CMLLength
 				}

@@ -26,6 +26,7 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform3;
@@ -280,7 +281,7 @@ public class CrystalTool extends AbstractTool {
 					newAtom.setXYZ3(cart);
 					boolean add = true;
 					for (CMLAtom at : molecule.getAtoms()) {
-						if (point3.isEqualTo(at.getXYZFract())) {
+						if (point3.isEqualTo(at.getXYZFract(), Real.EPS)) {
 							add = false;
 							break;
 						}

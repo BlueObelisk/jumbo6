@@ -338,7 +338,7 @@ public class Transform2 extends RealSquareMatrix {
         RealSquareMatrix s3 = new RealSquareMatrix(extractSubMatrixData(0, 1, 0, 1));
         RealArray c3 = extractColumnData(2);
         if (c3 != null) {
-            if (Real.isZero(c3.elementAt(0)) && Real.isZero(c3.elementAt(1))) {
+            if (Real.isZero(c3.elementAt(0), Real.EPS) && Real.isZero(c3.elementAt(1), Real.EPS)) {
                 return Type.NULL;
             }
         }
@@ -358,7 +358,7 @@ public class Transform2 extends RealSquareMatrix {
         // rot + trans; no scale
         if (s3.isOrthogonal()) {
             double[] scale = s3.euclideanColumnLengths().getArray();
-            if (Real.isEqual(scale[0], scale[1])) {
+            if (Real.isEqual(scale[0], scale[1], Real.EPS)) {
                 return Type.ROT_TRANS_SCALE;
             }
             return Type.ROT_TRANS_AXIAL_SCALE;

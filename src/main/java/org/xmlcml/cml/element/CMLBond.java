@@ -2,13 +2,13 @@ package org.xmlcml.cml.element;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Point3;
@@ -733,7 +733,6 @@ public class CMLBond extends AbstractBond {
 	 * @return true if one or more atoms is of this type
 	 */
 	public boolean containsElement(String elementType) {
-		boolean contains = false;
 		getAtoms();
 		return atomList.size() == 2 && 
 				(atomList.get(0).hasElement(elementType) || atomList.get(1).hasElement(elementType));

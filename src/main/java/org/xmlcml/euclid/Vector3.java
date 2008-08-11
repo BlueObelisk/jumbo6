@@ -202,9 +202,20 @@ public class Vector3 implements EuclidConstants {
      *
      * @param v
      * @return equal if length difference is within tolerance
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(Vector3 v) {
         return Real.isEqual(getLength(), v.getLength());
+    }
+
+    /**
+     * are two vectors equal lengths
+     *
+     * @param v
+     * @return equal if length difference is within epsilon
+     */
+    public boolean isEqualTo(Vector3 v, double epsilon) {
+        return Real.isEqual(getLength(), v.getLength(), epsilon);
     }
 
     /**
@@ -356,19 +367,42 @@ public class Vector3 implements EuclidConstants {
      * are two vectors equal in all components. uses Real.isEqual
      *
      * @param v
+     * @deprecated use epsilon
      * @return equal if components equal within tolerance
      */
     public boolean isIdenticalTo(Vector3 v) {
-        return Real.isEqual(3, flarray, v.flarray);
+        return Real.isEqual(3, flarray, v.flarray, Real.EPS);
+    }
+
+    /**
+     * are two vectors equal in all components. uses Real.isEqual
+     *
+     * @param v
+     * @return equal if components equal within tolerance
+     */
+    public boolean isIdenticalTo(Vector3 v, double epsilon) {
+        return Real.isEqual(3, flarray, v.flarray, epsilon);
     }
 
     /**
      * is vector of zero length. uses Real.isEqual
      *
      * @return if zero within tolerance
+
+     *@deprecated use epsilon
      */
     public boolean isZero() {
         boolean b = Real.isZero(getLength());
+        return b;
+    }
+
+    /**
+     * is vector of zero length. uses Real.isEqual
+     * @param epsilon
+     * @return if zero within tolerance
+     */
+    public boolean isZero(double epsilon) {
+        boolean b = Real.isZero(getLength(), epsilon);
         return b;
     }
 
@@ -519,7 +553,7 @@ public class Vector3 implements EuclidConstants {
      */
     public Angle getAngleMadeWith(Vector3 v2) {
         Angle a = null;
-        if (!this.isZero() && !v2.isZero()) {
+        if (!this.isZero(Real.EPS) && !v2.isZero(Real.EPS)) {
             Vector3 v1a = getUnitVector();
             Vector3 v2a = v2.getUnitVector();
             double tmp = v1a.dot(v2a);
@@ -559,7 +593,7 @@ public class Vector3 implements EuclidConstants {
      * @return projected vector
      */
     public Vector3 projectOnto(Vector3 v) throws EuclidRuntimeException {
-        if (this.isZero() || v.isZero()) {
+        if (this.isZero(Real.EPS) || v.isZero(Real.EPS)) {
             throw new EuclidRuntimeException("zero length vector");
         }
         Vector3 projection = new Vector3();
@@ -579,7 +613,7 @@ public class Vector3 implements EuclidConstants {
      * @return true if cross product isZero()
      */
     public boolean isColinearVector(Vector3 v) {
-        return this.cross(v).isZero();
+        return this.cross(v).isZero(Real.EPS);
     }
 
     /**
@@ -599,7 +633,7 @@ public class Vector3 implements EuclidConstants {
      * @return vector perpendicular to this (zero if this is zero)
      */
     public Vector3 getPerpendicularVector() {
-        return this.isZero() ? ZEROV : this.getNonColinearVector().cross(this);
+        return this.isZero(Real.EPS) ? ZEROV : this.getNonColinearVector().cross(this);
     }
 
     /**

@@ -5,10 +5,9 @@ import static org.xmlcml.cml.tools.AbstractToolTest.TOOLS_EXAMPLES;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
+import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.neverThrow;
 import static org.xmlcml.util.TestUtils.parseValidString;
-
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,9 +28,7 @@ import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLLog;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLLog.Severity;
-import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLCrystal;
@@ -605,36 +602,36 @@ public class CrystalToolTest  {
     }
 
 //	@SuppressWarnings("unused")
-    private static void outputAtomCenteredSpecies(
-            String outfile, MoleculeTool moleculeTool) {
-        CMLMolecule molecule = moleculeTool.getMolecule();
-        List<CMLAtom> atoms = molecule.getAtoms();
-        int atomCount = 0;
-        for (CMLAtom atom : atoms) {
-            ChemicalElement element = atom.getChemicalElement();
-            if (element.isChemicalElementType(
-                Type.TRANSITION_METAL)) {
-                atomCount++;
-                List<CMLAtom> singleAtomList = new ArrayList<CMLAtom>();
-                singleAtomList.add(atom);
-                CMLAtomSet singleAtomSet = CMLAtomSet.createFromAtoms(singleAtomList);
-                CMLMolecule atomSprout = moleculeTool.sprout(singleAtomSet);
-                writeXML(outfile, atomSprout, "atom sprout");
-                
-                GeometryTool geometryTool = new GeometryTool(atomSprout);
-                // lengths 
-                boolean calculate = true;
-                boolean add = false;
-                List<CMLLength> lengthList = 
-                    geometryTool.createValenceLengths(calculate, add);
-                writeGeometry(lengthList, outfile+".len.html", atomSprout);
-                // angles
-                List<CMLAngle> angleList = 
-                    geometryTool.createValenceAngles(calculate, add);
-                writeGeometry(angleList, outfile+".ang.html", atomSprout);
-            }
-        }
-    }
+//    private static void outputAtomCenteredSpecies(
+//            String outfile, MoleculeTool moleculeTool) {
+//        CMLMolecule molecule = moleculeTool.getMolecule();
+//        List<CMLAtom> atoms = molecule.getAtoms();
+//        int atomCount = 0;
+//        for (CMLAtom atom : atoms) {
+//            ChemicalElement element = atom.getChemicalElement();
+//            if (element.isChemicalElementType(
+//                Type.TRANSITION_METAL)) {
+//                atomCount++;
+//                List<CMLAtom> singleAtomList = new ArrayList<CMLAtom>();
+//                singleAtomList.add(atom);
+//                CMLAtomSet singleAtomSet = CMLAtomSet.createFromAtoms(singleAtomList);
+//                CMLMolecule atomSprout = moleculeTool.sprout(singleAtomSet);
+//                writeXML(outfile, atomSprout, "atom sprout");
+//                
+//                GeometryTool geometryTool = new GeometryTool(atomSprout);
+//                // lengths 
+//                boolean calculate = true;
+//                boolean add = false;
+//                List<CMLLength> lengthList = 
+//                    geometryTool.createValenceLengths(calculate, add);
+//                writeGeometry(lengthList, outfile+".len.html", atomSprout);
+//                // angles
+//                List<CMLAngle> angleList = 
+//                    geometryTool.createValenceAngles(calculate, add);
+//                writeGeometry(angleList, outfile+".ang.html", atomSprout);
+//            }
+//        }
+//    }
 
 	@SuppressWarnings("unused")
     private static void outputClusters(

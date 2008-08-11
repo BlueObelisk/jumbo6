@@ -978,7 +978,7 @@ public class GeometryTool extends AbstractTool {
 		if (size > 1) {
 			for (int i = 0; i < size; i++) {
 				CMLMolecule moleculei = identicalMoleculeList.get(i);
-				Point3Vector coordsi = new Point3Vector(moleculei.getCoordinates3(CoordinateType.CARTESIAN));
+				/*Point3Vector coordsi = */new Point3Vector(moleculei.getCoordinates3(CoordinateType.CARTESIAN));
 				List<MoleculePair> moleculePairList = moleculePairMatrix.get(i);
 				for (int j = i+1; j < size; j++) {
 					CMLMolecule moleculej = identicalMoleculeList.get(j);
@@ -989,7 +989,7 @@ public class GeometryTool extends AbstractTool {
 					//FIXME
 					System.err.println("COORDINATES NEED MAPPING");
 					coordsj.transform(transform3);
-					double rms = coordsj.rms(coordsi);
+//					double rms = coordsj.rms(coordsi);
 //					System.out.print("| "+rms);
 				}
 				System.out.println();

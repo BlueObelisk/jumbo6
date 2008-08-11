@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Vector3Test;
@@ -269,8 +270,8 @@ public class CMLVector3Test extends GeomTestBase {
      */
     @Test
     public void testIsZero() {
-        Assert.assertEquals("zero", true, !xomV123.isZero());
-        Assert.assertEquals("zero", true, xomV000.isZero());
+        Assert.assertEquals("zero", true, !xomV123.isZero(Real.EPS));
+        Assert.assertEquals("zero", true, xomV000.isZero(Real.EPS));
     }
 
     /**
@@ -447,8 +448,8 @@ public class CMLVector3Test extends GeomTestBase {
         CMLVector3Test.assertEquals("noncolinear", new double[] { 1., 2., 3. },
                 xomV123, EPS);
         v = xomV000.getNonColinearVector();
-        Assert.assertFalse("noncolinear", v.isZero());
-        Assert.assertTrue("noncolinear", xomV000.isZero());
+        Assert.assertFalse("noncolinear", v.isZero(Real.EPS));
+        Assert.assertTrue("noncolinear", xomV000.isZero(Real.EPS));
 
     }
 
@@ -459,12 +460,12 @@ public class CMLVector3Test extends GeomTestBase {
     @Test
     public void testGetPerpendicularVector() {
         CMLVector3 v = xomV100.getPerpendicularVector();
-        Assert.assertEquals("perpendicular", true, !v.isZero());
+        Assert.assertEquals("perpendicular", true, !v.isZero(Real.EPS));
         Angle a = v.getAngleMadeWith(xomV100);
         Assert.assertNotNull("angle ", a);
         Assert.assertEquals("perpendicular", Math.PI / 2., a.getRadian(), EPS);
         v = xomV123.getPerpendicularVector();
-        Assert.assertEquals("perpendicular", true, !v.isZero());
+        Assert.assertEquals("perpendicular", true, !v.isZero(Real.EPS));
         a = v.getAngleMadeWith(xomV123);
         Assert.assertNotNull("angle ", a);
         Assert.assertEquals("perpendicular", Math.PI / 2., a.getRadian(), EPS);

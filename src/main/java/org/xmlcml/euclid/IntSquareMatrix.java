@@ -286,7 +286,7 @@ public class IntSquareMatrix extends IntMatrix {
     /**
      * is matrix UpperTriangular.
      * 
-     * @return true if all bottom triangle excluding diagona Int.isZero()
+     * @return true if all bottom triangle excluding diagona Int.isZero(Real.EPS)
      */
     public boolean isUpperTriangular() {
         for (int i = 1; i < rows; i++) {

@@ -7,7 +7,6 @@ import static org.xmlcml.euclid.EuclidConstants.S_PLUS;
 
 import java.util.List;
 
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLLabel;
@@ -116,7 +115,7 @@ public class TextDisplay extends AbstractDisplay {
 	}
 
 	private void drawBackgroundRectangle() {
-		double rad = backgroundRadiusFactor*fontSize;
+//		double rad = backgroundRadiusFactor*fontSize;
 		// not yet written
 		
 	}

@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Angle.Units;
 
 /**
@@ -151,8 +152,8 @@ public class AngleTest {
      */
     @Test
     public void testIsEqualToDouble() {
-        Assert.assertTrue("is equal", pi.isEqualTo(Math.PI));
-        Assert.assertFalse("is equal", pi.isEqualTo(Math.PI / 2));
+        Assert.assertTrue("is equal", pi.isEqualTo(Math.PI, Real.EPS));
+        Assert.assertFalse("is equal", pi.isEqualTo(Math.PI / 2, Real.EPS));
     }
 
     /**
@@ -205,8 +206,8 @@ public class AngleTest {
      */
     @Test
     public void testIsEqualToAngle() {
-        Assert.assertTrue("is equal", pi.isEqualTo(pi));
-        Assert.assertFalse("is equal", pi.isEqualTo(pi2));
+        Assert.assertTrue("is equal", pi.isEqualTo(pi, Real.EPS));
+        Assert.assertFalse("is equal", pi.isEqualTo(pi2, Real.EPS));
     }
 
     /**

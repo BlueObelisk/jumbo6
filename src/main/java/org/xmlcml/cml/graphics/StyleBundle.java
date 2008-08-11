@@ -18,6 +18,7 @@ public class StyleBundle implements CMLConstants {
 	private String stroke;
 	private String fontFamily;
 	private Double fontSize;
+	@SuppressWarnings("unused")
 	private String fontStyle;
 	private String fontWeight;
 	private Double strokeWidth;

@@ -8,6 +8,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
@@ -52,8 +53,10 @@ public class Real2ArrayTest  {
     @Test
     public void testGetRange2() {
         Real2Range real2Range = ra1.getRange2();
-        Assert.assertTrue("range2", real2Range.isEqualTo(new Real2Range(
-                new RealRange(1, 6), new RealRange(11, 16))));
+        Assert.assertTrue("range2", real2Range.isEqualTo(
+        		new Real2Range(
+        				new RealRange(1, 6), new RealRange(11, 16)),
+        				Real.EPS, Real.EPS));
     }
 
     /**

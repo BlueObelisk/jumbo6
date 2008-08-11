@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Plane3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Plane3Test;
@@ -227,8 +228,8 @@ public class CMLPlane3Test extends GeomTestBase {
      */
     @Test
     public void testEqualsCMLPlane3() {
-        Assert.assertTrue("equal", xomPl1115.isEqualTo(xomPl1115));
-        Assert.assertFalse("equal", xomPl1002.isEqualTo(xomPl1115));
+        Assert.assertTrue("equal", xomPl1115.isEqualTo(xomPl1115, Real.EPS));
+        Assert.assertFalse("equal", xomPl1002.isEqualTo(xomPl1115, Real.EPS));
     }
 
     /**
@@ -397,7 +398,7 @@ public class CMLPlane3Test extends GeomTestBase {
     public void testIsEqualTo() {
         CMLPlane3 p = new CMLPlane3(new CMLVector3(1., 2., 3.), 4.);
         CMLPlane3 pp = new CMLPlane3(p);
-        Assert.assertTrue("isEqual", p.isEqualTo(pp));
+        Assert.assertTrue("isEqual", p.isEqualTo(pp, Real.EPS));
     }
 
  }

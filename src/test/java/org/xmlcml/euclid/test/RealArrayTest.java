@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntSet;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.ArrayBase.Trim;
@@ -540,9 +541,9 @@ public class RealArrayTest  {
      */
     @Test
     public void testIsClear() {
-        Assert.assertFalse("isClear", a1.isClear());
+        Assert.assertFalse("isClear", a1.isClear(Real.EPS));
         a1.clearArray();
-        Assert.assertTrue("isClear", a1.isClear());
+        Assert.assertTrue("isClear", a1.isClear(Real.EPS));
     }
 
     /**

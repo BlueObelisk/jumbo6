@@ -68,9 +68,9 @@ public class Real3Range implements EuclidConstants {
      * @return tru if equals
      */
     public boolean isEqualTo(Real3Range r3) {
-        return (xyzrange[0].isEqualTo(r3.xyzrange[0])
-                && xyzrange[1].isEqualTo(r3.xyzrange[1]) && xyzrange[2]
-                .isEqualTo(r3.xyzrange[2]));
+        return (xyzrange[0].isEqualTo(r3.xyzrange[0], Real.EPS)
+                && xyzrange[1].isEqualTo(r3.xyzrange[1], Real.EPS) && xyzrange[2]
+                .isEqualTo(r3.xyzrange[2], Real.EPS));
     }
 
     /**

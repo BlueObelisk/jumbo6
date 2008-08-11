@@ -332,9 +332,9 @@ public class CMLTransform3 extends AbstractTransform3 {
     /**
      * equality of two transforms. based on equality of RealSquareMatrix
      * 
-     * @param m
-     *            transform to compare
+     * @param m transform to compare
      * @return true if equal within Real.isEqual()
+     * @deprecated use epsilon
      */
     public boolean isEqualTo(CMLTransform3 m) {
         Transform3 teucl3 = this.getEuclidTransform3();
@@ -382,7 +382,7 @@ public class CMLTransform3 extends AbstractTransform3 {
      * interpret current matrix as rotation about general axis.
      * 
      * @return double[4] 3 vector components and one angle (radian)
-     * @deprecated
+     * @deprecated use getAxisAngleChirality
      */
     public double[] getAxisAndAngle() {
         Transform3 teucl3 = this.getEuclidTransform3();

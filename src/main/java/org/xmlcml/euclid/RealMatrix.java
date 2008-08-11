@@ -2,6 +2,7 @@ package org.xmlcml.euclid;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
+
 import org.apache.log4j.Logger;
 /**
  * rectangular real number matrix class RealMatrix represents a rectangular
@@ -277,7 +278,7 @@ public class RealMatrix implements EuclidConstants {
             checkConformable(m);
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    if (!Real.isEqual(flmat[i][j], m.flmat[i][j])) {
+                    if (!Real.isEqual(flmat[i][j], m.flmat[i][j], Real.EPS)) {
                         ok = false;
                         break;
                     }
@@ -802,7 +803,7 @@ public class RealMatrix implements EuclidConstants {
             for (int j = i + 1; j < rows; j++) {
                 RealArray rowj = extractRowData(j);
                 dot = rowi.dotProduct(rowj);
-                if (!Real.isZero(dot))
+                if (!Real.isZero(dot, Real.EPS))
                     return false;
             }
         }
@@ -957,6 +958,25 @@ public class RealMatrix implements EuclidConstants {
     public boolean isSquare() {
         return (cols == rows && cols > 0);
     }
+
+    /** are all elements of matrix zero?
+     * 
+     * @param eps tolerance
+     * @return true if all elements zero
+     */
+    public boolean isZero(double eps) {
+    	boolean zero = true;
+    	for (int irow = 0; irow < rows; irow++) {
+    	   	for (int icol = 0; icol < cols; icol++) {
+    	   		if (!Real.isZero(flmat[irow][icol], eps)) {
+    	   			zero = false;
+    	   			break;
+    	   		}
+   	    	}
+    	}
+    	return zero;
+    }
+    
     /**
      * delete column from matrix and close up. no-op if impermissible value of
      * col

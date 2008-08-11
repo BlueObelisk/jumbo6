@@ -322,7 +322,8 @@ public class AtomDisplay extends AbstractDisplay {
 	 */
 	public boolean omitAtom(CMLAtom atom) {
 		boolean omit = false;
-		if (this.isOmitHydrogens()) {
+		if (this.isOmitHydrogens() ||
+				(moleculeDisplay != null && moleculeDisplay.isOmitHydrogens())) {
 			if (AS.H.equals(atom.getElementType())) {
 				omit = true;
 			}
@@ -417,6 +418,14 @@ public class AtomDisplay extends AbstractDisplay {
 		sb.append(S_NEWLINE);
 		sb.append(S_NEWLINE);
 		return sb.toString();
+	}
+
+	public MoleculeDisplay getMoleculeDisplay() {
+		return moleculeDisplay;
+	}
+
+	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
+		this.moleculeDisplay = moleculeDisplay;
 	}
 	
 }

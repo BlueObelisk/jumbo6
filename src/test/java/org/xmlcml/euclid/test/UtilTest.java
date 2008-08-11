@@ -296,7 +296,7 @@ public class UtilTest {
             fw.write("this is a line\n");
             fw.write("and another\n");
             fw.close();
-            URL url = file.toURL();
+            URL url = file.toURI().toURL();
             String s = Util.dump(url);
             String exp = "\n" +
             " 116 104 105 115  32 105 115  32  97  32   this is a \n"+

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -1051,5 +1050,23 @@ public class RealMatrixTest extends MatrixTest {
                         w.toString());
     }
 
+    @Test
+    public void testIsZero() {
+    	double[][] flmat = new double[][] {
+    			new double[] {0.0, 0.0},
+    			new double[] {0.0, 0.0},
+    			new double[] {0.0, 0.0}
+    	};
+    	RealMatrix rm = new RealMatrix(flmat);
+    	Assert.assertTrue("zero", rm.isZero(0.0001));
+    	flmat = new double[][] {
+    			new double[] {0.01, 0.01},
+    			new double[] {0.01, 0.01},
+    			new double[] {0.01, 0.01}
+    	};
+    	rm = new RealMatrix(flmat);
+    	Assert.assertFalse("zero", rm.isZero(0.0001));
+    	Assert.assertTrue("zero", rm.isZero(0.1));
+    }
 
 }

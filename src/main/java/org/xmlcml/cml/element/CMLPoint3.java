@@ -9,6 +9,7 @@ import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
@@ -160,9 +161,9 @@ public class CMLPoint3 extends AbstractPoint3 {
     /**
      * are two points identical. compares content of points with Real.isEqual()
      *
-     * @param p
-     *            point to compare
+     * @param p point to compare
      * @return equal if coordinates are equal within Real.epsilon
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(CMLPoint3 p) {
         Point3 peucl3 = getEuclidPoint3();
@@ -170,12 +171,10 @@ public class CMLPoint3 extends AbstractPoint3 {
     }
 
     /**
-     * are two points identical. compares content of points with Real.isEqual()
+     * are two points identical. compares content of points
      *
-     * @param p
-     *            point to compare
-     * @param eps
-     *            tolerance for comparison on each coordinate
+     * @param p point to compare
+     * @param eps tolerance for comparison on each coordinate
      * @return equal if coordinates are equal within Real.epsilon
      */
     public boolean isEqualTo(CMLPoint3 p, double eps) {
@@ -475,7 +474,7 @@ public class CMLPoint3 extends AbstractPoint3 {
      * @return true if within Real.isEqual() of line
      */
     public boolean isOnLine(CMLLine3 l) {
-        return getEuclidPoint3().isOnLine(l.getEuclidLine3());
+        return getEuclidPoint3().isOnLine(l.getEuclidLine3(), Real.EPS);
     }
 
     /**
@@ -486,7 +485,7 @@ public class CMLPoint3 extends AbstractPoint3 {
      * @return true if within Real.isEqual() of plane
      */
     public boolean isOnPlane(CMLPlane3 pl) {
-        return getEuclidPoint3().isOnPlane(pl.getEuclidPlane3());
+        return getEuclidPoint3().isOnPlane(pl.getEuclidPlane3(), Real.EPS);
     }
 
     /**

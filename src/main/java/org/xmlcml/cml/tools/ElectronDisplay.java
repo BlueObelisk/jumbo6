@@ -1,9 +1,8 @@
 package org.xmlcml.cml.tools;
 
-import org.apache.log4j.Logger;
-
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -136,18 +135,18 @@ public class ElectronDisplay {
 //            LOG.info("Null electron2");
             return;
         }
-        double[] xy1 = null;
-        double[] xy2 = null;
-        if (ab1 instanceof CMLBond) {
-            xy1 = getXYCoord((CMLBond) ab1);
-        } else if (ab1 instanceof CMLAtom) {
-            xy1 = getXYCoord((CMLAtom) ab1);
-        }
-        if (ab2 instanceof CMLBond) {
-            xy2 = getXYCoord((CMLBond) ab2);
-        } else if (ab2 instanceof CMLAtom) {
-            xy2 = getXYCoord((CMLAtom) ab2);
-        }
+//        double[] xy1 = null;
+//        double[] xy2 = null;
+//        if (ab1 instanceof CMLBond) {
+//            xy1 = getXYCoord((CMLBond) ab1);
+//        } else if (ab1 instanceof CMLAtom) {
+//            xy1 = getXYCoord((CMLAtom) ab1);
+//        }
+//        if (ab2 instanceof CMLBond) {
+//            xy2 = getXYCoord((CMLBond) ab2);
+//        } else if (ab2 instanceof CMLAtom) {
+//            xy2 = getXYCoord((CMLAtom) ab2);
+//        }
 //        xy2[0] += snap.xBoxSeparation;
 //        
 //        opacity1 = fullOpacity;
@@ -177,21 +176,21 @@ public class ElectronDisplay {
 //        snap.setAttribute(circle, "r", ""+snap.fontrad * snap.scale * snap.electronSize);
 //        snap.setAttribute(circle, "style", "fill: "+snap.electronColor+";");
 //      double vecscale = snap.electronSep * offset;
-      double vecscale = 1.0;
+//      double vecscale = 1.0;
 
-        double dx1 = 0;
-        double dx2 = 0;
-        double dy1 = 0;
-        double dy2 = 0;
+//        double dx1 = 0;
+//        double dx2 = 0;
+//        double dy1 = 0;
+//        double dy2 = 0;
 
-        if (xy1 != null) {
-            dx1 = -xy1[3]*vecscale;
-            dy1 = xy1[2]*vecscale;
-        }
-        if (xy2 != null) {
-            dx2 = -xy2[3]*vecscale;
-            dy2 = xy2[2]*vecscale;
-        }
+//        if (xy1 != null) {
+//            dx1 = -xy1[3]*vecscale;
+//            dy1 = xy1[2]*vecscale;
+//        }
+//        if (xy2 != null) {
+//            dx2 = -xy2[3]*vecscale;
+//            dy2 = xy2[2]*vecscale;
+//        }
 
 //        snap.makeAnimate(circle, snap.svgDoc, "cx", snap.format(xy1[0]+dx1), snap.format(xy2[0]+dx2), begin, dur);
 //        snap.makeAnimate(circle, snap.svgDoc, "cy", snap.format(xy1[1]+dy1), snap.format(xy2[1]+dy2), begin, dur);

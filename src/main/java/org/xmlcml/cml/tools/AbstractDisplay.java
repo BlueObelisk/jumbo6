@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
-
 import nu.xom.Element;
 
 import org.apache.log4j.Level;

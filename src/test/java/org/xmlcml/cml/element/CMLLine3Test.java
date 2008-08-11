@@ -14,6 +14,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.test.DoubleTestBase;
 import org.xmlcml.euclid.test.Line3Test;
@@ -199,9 +200,9 @@ public class CMLLine3Test extends GeomTestBase {
     @Test
     public void testIsParallelTo() {
         CMLLine3 l2 = new CMLLine3(ll);
-        Assert.assertTrue("parallel", ll.isParallelTo(l2));
+        Assert.assertTrue("parallel", ll.isParallelTo(l2, Real.EPS));
         CMLLine3 l3 = new CMLLine3(pp, new CMLVector3(1.1, 2.1, 3.1));
-        Assert.assertFalse("parallel", ll.isParallelTo(l3));
+        Assert.assertFalse("parallel", ll.isParallelTo(l3, Real.EPS));
     }
 
     /**
@@ -211,9 +212,9 @@ public class CMLLine3Test extends GeomTestBase {
     @Test
     public void testContainsPoint() {
         CMLPoint3 p = new CMLPoint3(new double[] { 6, 5, 4 });
-        Assert.assertTrue("contains", ll.containsPoint(p));
+        Assert.assertTrue("contains", ll.containsPoint(p, Real.EPS));
         p = new CMLPoint3(new double[] { 4, 5, 6 });
-        Assert.assertFalse("contains", ll.containsPoint(p));
+        Assert.assertFalse("contains", ll.containsPoint(p, Real.EPS));
     }
 
     /**

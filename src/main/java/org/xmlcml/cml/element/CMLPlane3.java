@@ -1,10 +1,9 @@
 package org.xmlcml.cml.element;
 
-import org.apache.log4j.Logger;
-
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -12,6 +11,7 @@ import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 
@@ -208,7 +208,7 @@ public class CMLPlane3 extends AbstractPlane3 {
 
     private void setArrayNoCheck(double[] array) throws CMLRuntimeException {
         Vector3 v = new Vector3(array[0], array[1], array[2]);
-        if (v.isZero()) {
+        if (v.isZero(Real.EPS)) {
             throw new CMLRuntimeException("Cannot make plane with zero vector");
         }
         v.normalize();
@@ -265,9 +265,21 @@ public class CMLPlane3 extends AbstractPlane3 {
     /**
      * are two planes coincident and parallel.
      *
-     * @param pl2
-     *            plane to compare
+     * @param pl2 plane to compare
+     * @param epsilon
+     * @return true if equal within epsilon
+     */
+    public boolean isEqualTo(CMLPlane3 pl2, double epsilon) {
+        Plane3 pleucl3 = this.getEuclidPlane3();
+        return pleucl3.isEqualTo(pl2.getEuclidPlane3(), epsilon);
+    }
+
+    /**
+     * are two planes coincident and parallel.
+     *
+     * @param pl2 plane to compare
      * @return true if equal within Real.isEqual()
+     * @deprecated use explicit epsilon
      */
     public boolean isEqualTo(CMLPlane3 pl2) {
         Plane3 pleucl3 = this.getEuclidPlane3();

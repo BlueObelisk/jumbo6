@@ -1,5 +1,6 @@
 package org.xmlcml.euclid;
 import java.text.DecimalFormat;
+
 import org.apache.log4j.Logger;
 /**
  * array of doubles
@@ -812,12 +813,24 @@ public class RealArray extends ArrayBase {
     }
     /**
      * is the array filled with zeros.
-     * 
+     * @deprecated use epsilon
      * @return true if this(i) = 0
      */
     public boolean isClear() {
         for (int i = 0; i < nelem; i++) {
             if (!Real.isZero(array[i]))
+                return false;
+        }
+        return true;
+    }
+    /**
+     * is the array filled with zeros.
+     * @param epsilon
+     * @return true if this(i) = 0
+     */
+    public boolean isClear(double epsilon) {
+        for (int i = 0; i < nelem; i++) {
+            if (!Real.isZero(array[i], epsilon))
                 return false;
         }
         return true;
@@ -910,7 +923,7 @@ public class RealArray extends ArrayBase {
      */
     public RealArray unitVector() throws EuclidRuntimeException {
         double l = euclideanLength();
-        if (Real.isZero(l)) {
+        if (Real.isZero(l, Real.EPS)) {
             throw new EuclidRuntimeException("zero length vector");
         }
         double scale = 1.0 / l;

@@ -24,10 +24,8 @@ import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
@@ -64,9 +62,9 @@ public class AtomTool extends AbstractSVGTool {
     private CMLAtomSet coordinationSphereSet;
 
     private double fontSize;
-	private String fontFamily;
-	private String fontStyle;
-	private String fontWeight;
+//	private String fontFamily;
+//	private String fontStyle;
+//	private String fontWeight;
 	private double radiusFactor = 1.0; 
 
 	/**
@@ -1087,37 +1085,37 @@ public class AtomTool extends AbstractSVGTool {
 		}
 	}
 
-	private void displayAtomText(String fill, double xOffsetFactor,
-			double yOffsetFactor, String atomString) {
-		double width = 0.0;
-		if (atomString.startsWith(RIGHT)) {
-			atomString = atomString.substring(RIGHT.length());
-			width = (atomString.length()-1)*fontSize*fontWidthFontSizeFactor;
-		}
-		SVGText text = new SVGText(
-				 new Real2(xOffsetFactor*fontSize - width, yOffsetFactor*fontSize), atomString);
-		 fill = getAtomFill(atomString);
-		 drawBackgroundCircle();
-		 text.setFill(fill);
-		 text.setFontSize(fontSize);
-		 text.setFontFamily(fontFamily);
-		 text.setFontStyle(fontStyle);
-		 text.setFontWeight(fontWeight);
-		 
-		 g.appendChild(text);
-	}
+//	private void displayAtomText(String fill, double xOffsetFactor,
+//			double yOffsetFactor, String atomString) {
+//		double width = 0.0;
+//		if (atomString.startsWith(RIGHT)) {
+//			atomString = atomString.substring(RIGHT.length());
+//			width = (atomString.length()-1)*fontSize*fontWidthFontSizeFactor;
+//		}
+//		SVGText text = new SVGText(
+//				 new Real2(xOffsetFactor*fontSize - width, yOffsetFactor*fontSize), atomString);
+//		 fill = getAtomFill(atomString);
+//		 drawBackgroundCircle();
+//		 text.setFill(fill);
+//		 text.setFontSize(fontSize);
+//		 text.setFontFamily(fontFamily);
+//		 text.setFontStyle(fontStyle);
+//		 text.setFontWeight(fontWeight);
+//		 
+//		 g.appendChild(text);
+//	}
 
-	// get rid of this some time
-	private void drawBackgroundCircle() {
-		double rad = radiusFactor*fontSize;
-		LOG.debug("RAD "+rad);
-		SVGCircle circle = new SVGCircle(new Real2(0., 0.), rad);
-		circle.setStroke("none");
-		 // should be background
-		String circleFill = /*AS.C.equals(elementType) ? "none" :*/ "white";
-		g.appendChild(circle);
-		circle.setFill(circleFill);
-	}
+//	// get rid of this some time
+//	private void drawBackgroundCircle() {
+//		double rad = radiusFactor*fontSize;
+//		LOG.debug("RAD "+rad);
+//		SVGCircle circle = new SVGCircle(new Real2(0., 0.), rad);
+//		circle.setStroke("none");
+//		 // should be background
+//		String circleFill = /*AS.C.equals(elementType) ? "none" :*/ "white";
+//		g.appendChild(circle);
+//		circle.setFill(circleFill);
+//	}
 
 	private static String getAtomFill(String atomString) {
 		String fill = null;
@@ -1165,7 +1163,7 @@ public class AtomTool extends AbstractSVGTool {
     		 // contractable group
     		 List<CMLAtomSet> atomSetList = AtomSetTool.getChildAtomSetList(atom);
     		 if (isGroupRoot(atomSetList)) {
-				 List<CMLAtom> atomList = atomSetList.get(0).getAtoms();
+//				 List<CMLAtom> atomList = atomSetList.get(0).getAtoms();
     		 }
         	 CMLLabel label = getLabel();
 			 s = label.getCMLValue();
@@ -1195,66 +1193,66 @@ public class AtomTool extends AbstractSVGTool {
 	}
 
 	/**
-	 * @param xIdOffsetFactor
-	 * @param yIdOffsetFactor
-	 * @param idFontFactor
-	 * @param backgroundIdRadiusFactor
-	 */
-	private void drawId(double xIdOffsetFactor, double yIdOffsetFactor, double idFontFactor, double backgroundIdRadiusFactor) {
-		SVGCircle circle;
-		SVGText text;
-		String idS = atom.getId();
-		 double idFontSize = idFontFactor*fontSize;
-		 Real2 chargeXY = new Real2(xIdOffsetFactor*fontSize, yIdOffsetFactor*fontSize);
-		 circle = new SVGCircle(chargeXY, backgroundIdRadiusFactor*idFontSize);
-		 circle.setFill("white");
-		 circle.setStroke("black");
-		 circle.setStrokeWidth(0.05);
-		 // circle isn't centered properly yet
-//		 g.appendChild(circle);
-		 Real2 idXYd = new Real2((xIdOffsetFactor-0.3)*(fontSize), (yIdOffsetFactor+0.3)*(fontSize));
-		 text = new SVGText(idXYd, idS);
-		 text.setFill("black");
-		 text.setStroke("black");
-		 text.setFontSize(idFontSize);
-		 g.appendChild(text);
-	}
+//	 * @param xIdOffsetFactor
+//	 * @param yIdOffsetFactor
+//	 * @param idFontFactor
+//	 * @param backgroundIdRadiusFactor
+//	 */
+//	private void drawId(double xIdOffsetFactor, double yIdOffsetFactor, double idFontFactor, double backgroundIdRadiusFactor) {
+//		SVGCircle circle;
+//		SVGText text;
+//		String idS = atom.getId();
+//		 double idFontSize = idFontFactor*fontSize;
+//		 Real2 chargeXY = new Real2(xIdOffsetFactor*fontSize, yIdOffsetFactor*fontSize);
+//		 circle = new SVGCircle(chargeXY, backgroundIdRadiusFactor*idFontSize);
+//		 circle.setFill("white");
+//		 circle.setStroke("black");
+//		 circle.setStrokeWidth(0.05);
+//		 // circle isn't centered properly yet
+////		 g.appendChild(circle);
+//		 Real2 idXYd = new Real2((xIdOffsetFactor-0.3)*(fontSize), (yIdOffsetFactor+0.3)*(fontSize));
+//		 text = new SVGText(idXYd, idS);
+//		 text.setFill("black");
+//		 text.setStroke("black");
+//		 text.setFontSize(idFontSize);
+//		 g.appendChild(text);
+//	}
 
-	/**
-	 * @param xChargeOffsetFactor
-	 * @param yChargeOffsetFactor
-	 * @param chargeFontFactor
-	 * @param backgroundChargeRadiusFactor
-	 */
-	private void drawCharge(double xChargeOffsetFactor, double yChargeOffsetFactor, double chargeFontFactor, double backgroundChargeRadiusFactor) {
-		SVGCircle circle;
-		SVGText text;
-		int formalCharge = atom.getFormalCharge();
-		 String chargeS = "";
-		 if (formalCharge == -1) {
-			 chargeS = "-";
-		 } else if (formalCharge == 1) {
-			 chargeS = "+";
-		 } else if (formalCharge > 1) {
-			 chargeS = "+"+formalCharge;
-		 } else if (formalCharge <  -1) {
-			 chargeS = ""+formalCharge;
-		 }
-		 // skip zero charge
-		 if (!chargeS.equals("")) {
-			 double chargeFontSize = chargeFontFactor*fontSize;
-			 Real2 chargeXY = new Real2(xChargeOffsetFactor*fontSize, yChargeOffsetFactor*fontSize);
-			 circle = new SVGCircle(chargeXY, backgroundChargeRadiusFactor*chargeFontSize);
-			 circle.setFill("white");
-			 circle.setStroke("black");
-			 circle.setStrokeWidth(0.05);
-			 g.appendChild(circle);
-			 Real2 chargeXYd = new Real2((xChargeOffsetFactor-0.3)*(fontSize), (yChargeOffsetFactor+0.3)*(fontSize));
-			 text = new SVGText(chargeXYd, chargeS);
-			 text.setFontSize(chargeFontSize);
-			 g.appendChild(text);
-		 }
-	}
+//	/**
+//	 * @param xChargeOffsetFactor
+//	 * @param yChargeOffsetFactor
+//	 * @param chargeFontFactor
+//	 * @param backgroundChargeRadiusFactor
+//	 */
+//	private void drawCharge(double xChargeOffsetFactor, double yChargeOffsetFactor, double chargeFontFactor, double backgroundChargeRadiusFactor) {
+//		SVGCircle circle;
+//		SVGText text;
+//		int formalCharge = atom.getFormalCharge();
+//		 String chargeS = "";
+//		 if (formalCharge == -1) {
+//			 chargeS = "-";
+//		 } else if (formalCharge == 1) {
+//			 chargeS = "+";
+//		 } else if (formalCharge > 1) {
+//			 chargeS = "+"+formalCharge;
+//		 } else if (formalCharge <  -1) {
+//			 chargeS = ""+formalCharge;
+//		 }
+//		 // skip zero charge
+//		 if (!chargeS.equals("")) {
+//			 double chargeFontSize = chargeFontFactor*fontSize;
+//			 Real2 chargeXY = new Real2(xChargeOffsetFactor*fontSize, yChargeOffsetFactor*fontSize);
+//			 circle = new SVGCircle(chargeXY, backgroundChargeRadiusFactor*chargeFontSize);
+//			 circle.setFill("white");
+//			 circle.setStroke("black");
+//			 circle.setStrokeWidth(0.05);
+//			 g.appendChild(circle);
+//			 Real2 chargeXYd = new Real2((xChargeOffsetFactor-0.3)*(fontSize), (yChargeOffsetFactor+0.3)*(fontSize));
+//			 text = new SVGText(chargeXYd, chargeS);
+//			 text.setFontSize(chargeFontSize);
+//			 g.appendChild(text);
+//		 }
+//	}
 
 	/**
 	 * @return the atomDisplay

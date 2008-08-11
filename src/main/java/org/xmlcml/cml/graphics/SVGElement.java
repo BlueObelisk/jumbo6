@@ -1,9 +1,7 @@
 package org.xmlcml.cml.graphics;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -496,7 +494,7 @@ public class SVGElement extends GraphicsElement {
 			colorS = stroke;
 		}
 		Color color = colorMap.get(colorS);
-		if (color != null) {
+		if (color != null && g2d != null) {
 			g2d.setColor(color);
 		}
 	}
@@ -508,16 +506,8 @@ public class SVGElement extends GraphicsElement {
 			colorS = fill;
 		}
 		Color color = colorMap.get(colorS);
-		if (color != null) {
+		if (color != null && g2d != null) {
 			g2d.setColor(color);
 		}
 	}
-	
-//	private void annotate(String s, Element element) {
-//		String id = element.getAttributeValue("id");
-//		if (id == null) {
-//			id = "PAR "+((Element)element.getParent()).getAttributeValue("id");
-//		}
-//		System.err.println(s+"---"+id);
-//	}
 }

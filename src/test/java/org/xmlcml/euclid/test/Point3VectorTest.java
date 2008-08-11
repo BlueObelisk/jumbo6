@@ -15,6 +15,7 @@ import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Plane3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
@@ -149,7 +150,7 @@ public class Point3VectorTest {
     @Test
     public void testPoint3VectorPoint3Vector() {
         Point3Vector p = new Point3Vector(p1);
-        Assert.assertTrue("copy", p.isEqualTo(p1));
+        Assert.assertTrue("copy", p.isEqualTo(p1, Real.EPS));
     }
 
     /**
@@ -517,10 +518,10 @@ public class Point3VectorTest {
     @Test
     @Ignore
     public void testInertialAxes() {
-        RealArray eigval = new RealArray();
-        RealSquareMatrix eigvec = new RealSquareMatrix();
-        EuclidRuntimeException exc = new EuclidRuntimeException("dummy");
-        p2.inertialAxes(eigval, eigvec, exc);
+//        RealArray eigval = new RealArray();
+//        RealSquareMatrix eigvec = new RealSquareMatrix();
+//        EuclidRuntimeException exc = new EuclidRuntimeException("dummy");
+//        p2.inertialAxes(eigval, eigvec, exc);
     }
 
     /**

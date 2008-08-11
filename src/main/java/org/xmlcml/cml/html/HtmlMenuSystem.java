@@ -30,6 +30,7 @@ public class HtmlMenuSystem {
 	private HtmlHtml bottom;
 	private String bottomName = null;
 	
+	@SuppressWarnings("unused")
 	private String outdir;
 	
 	/** constructor.

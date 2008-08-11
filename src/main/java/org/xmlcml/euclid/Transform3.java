@@ -1,7 +1,7 @@
 package org.xmlcml.euclid;
 import java.util.StringTokenizer;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Axis.Axis3;
 /**
  * 3-D transformation matrix class Transform3 represents a transformation matrix
@@ -143,7 +143,7 @@ public class Transform3 extends RealSquareMatrix {
         // X-axis
         int mat = 0;
         RealSquareMatrix t1 = new RealSquareMatrix(4);
-        if (!xrot.isEqualTo(0.0)) {
+        if (!xrot.isEqualTo(0.0, Real.EPS)) {
             double cosx = xrot.cos();
             double sinx = xrot.sin();
             t1.flmat[0][0] = 1.0;
@@ -155,7 +155,7 @@ public class Transform3 extends RealSquareMatrix {
             mat = 1;
         }
         // Y-axis
-        if (!yrot.isEqualTo(0.0)) {
+        if (!yrot.isEqualTo(0.0, Real.EPS)) {
             double cosx = yrot.cos();
             double sinx = yrot.sin();
             // unit matrix
@@ -174,7 +174,7 @@ public class Transform3 extends RealSquareMatrix {
             mat = 1;
         }
         // Z-axis
-        if (!zrot.isEqualTo(0.0)) {
+        if (!zrot.isEqualTo(0.0, Real.EPS)) {
             double cosx = yrot.cos();
             double sinx = yrot.sin();
             // unit matrix
@@ -190,6 +190,15 @@ public class Transform3 extends RealSquareMatrix {
             } else {
                 t1 = t2;
             }
+        } else {
+        	if (mat == 0) {
+                t1.flmat[0][0] = 1.0;
+                t1.flmat[0][1] = 0.0;
+                t1.flmat[1][0] = 0.0;
+                t1.flmat[1][1] = 1.0;
+                t1.flmat[2][2] = 1.0;
+                t1.flmat[3][3] = 1.0;
+        	}
         }
         this.flmat = t1.flmat;
         this.trnsfrm = Type.ROT_ORIG;
@@ -306,7 +315,7 @@ public class Transform3 extends RealSquareMatrix {
     	 * may break other applications. Contact me if this is a problem - dmj30@cam
     	 */
     	
-        if (v12.isZero()) {
+        if (v12.isZero(Real.EPS)) {
         	double unit = 1.0;
         	if(v1.dot(v2) < 0) unit = -1.0;
             for (int i = 0; i < 4; i++) {
@@ -595,8 +604,9 @@ public class Transform3 extends RealSquareMatrix {
          */
         RealArray c3 = extractColumnData(3);
         if (c3 != null) {
-            if (Real.isZero(c3.elementAt(0)) && Real.isZero(c3.elementAt(1))
-                    && Real.isZero(c3.elementAt(2)))
+            if (Real.isZero(c3.elementAt(0), Real.EPS) &&
+            		Real.isZero(c3.elementAt(1), Real.EPS)
+                    && Real.isZero(c3.elementAt(2), Real.EPS))
                 return Type.NULL;
         }
         /** no translation term */
@@ -616,8 +626,8 @@ public class Transform3 extends RealSquareMatrix {
          */
         if (s3.isOrthogonal()) {
             double[] scale = s3.euclideanColumnLengths().getArray();
-            if (Real.isEqual(scale[0], scale[1])
-                    && Real.isEqual(scale[1], scale[2])) {
+            if (Real.isEqual(scale[0], scale[1], Real.EPS)
+                    && Real.isEqual(scale[1], scale[2], Real.EPS)) {
                 return Type.ROT_TRANS_SCALE;
             }
             return Type.ROT_TRANS_AXIAL_SCALE;
@@ -700,9 +710,10 @@ public class Transform3 extends RealSquareMatrix {
         /**
          * theta might be exactly pi or zero
          */
-        if (Real.isEqual(theta, Math.PI) || Real.isEqual(theta, 0.0)) {
+        if (Real.isEqual(theta, Math.PI, Real.EPS) ||
+        		Real.isEqual(theta, 0.0, Real.EPS)) {
             lmn[0] = Math.sqrt((1.0 + mat[0][0]) * 0.5);
-            if (Real.isZero(lmn[0])) {
+            if (Real.isZero(lmn[0], Real.EPS)) {
                 lmn[1] = mat[0][1] * 0.5 / lmn[0];
                 lmn[2] = mat[0][2] * 0.5 / lmn[0];
             } else {
@@ -726,6 +737,7 @@ public class Transform3 extends RealSquareMatrix {
     public Vector3 getTranslation() {
         return new Vector3(flmat[0][3], flmat[1][3], flmat[2][3]);
     }
+    
     /** increment translation component.
      * add vector to current translation
      * @param dt translation increment

@@ -125,7 +125,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
      * @throws IOException
      */
 	public CatalogManager(File file) throws IOException {
-		this(file.toURL());
+		this(file.toURI().toURL());
 		
 	}
 
@@ -154,7 +154,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 		// try dotJumbo dir
 		if (dotJumbo.exists()) {
 			try {
-				catalogListUrl = new URL(dotJumbo.toURL(), CATALOGLIST_XML);
+				catalogListUrl = new URL(dotJumbo.toURI().toURL(), CATALOGLIST_XML);
 				if (new File(catalogListUrl.getFile()).exists()) {
 					System.out.println("DJ EXISTS");
 				} else {
@@ -170,7 +170,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 			File catalogListFile = new File(userDir + File.separator + CATALOGLIST_XML);
 			if (catalogListFile.exists()) {
 				try {
-					catalogListUrl = catalogListFile.toURL();
+					catalogListUrl = catalogListFile.toURI().toURL();
 				} catch (MalformedURLException e) {
 					CMLUtil.BUG("Cannot have malformed URL"+e);
 				}

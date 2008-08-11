@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Line3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Vector3;
 
 /**
@@ -160,9 +161,9 @@ public class Line3Test extends GeomTest {
     @Test
     public void testIsAntiparallelTo() {
         Line3 l = new Line3(l123456);
-        Assert.assertFalse("isAntiParallel", l.isAntiparallelTo(l123456));
+        Assert.assertFalse("isAntiParallel", l.isAntiparallelTo(l123456, Real.EPS));
         l = l.negative();
-        Assert.assertTrue("isAntiParallel", l.isAntiparallelTo(l123456));
+        Assert.assertTrue("isAntiParallel", l.isAntiparallelTo(l123456, Real.EPS));
     }
 
     /**
@@ -171,13 +172,13 @@ public class Line3Test extends GeomTest {
     @Test
     public void testContainsPoint() {
         Assert.assertTrue("contains", l123456.containsPoint(new Point3(4., 5.,
-                6.)));
+                6.), Real.EPS));
         Assert.assertTrue("contains", l123456.containsPoint(new Point3(3., 3.,
-                3.)));
+                3.), Real.EPS));
         Assert.assertTrue("contains", l123456.containsPoint(new Point3(2., 1.,
-                0.)));
+                0.), Real.EPS));
         Assert.assertFalse("contains", l123456.containsPoint(new Point3(3., 5.,
-                6.)));
+                6.), Real.EPS));
     }
 
     /**
@@ -186,8 +187,8 @@ public class Line3Test extends GeomTest {
     @Test
     public void testGetClosestPointTo() {
         Point3 p = l123456.getClosestPointTo(p100);
-        Assert.assertTrue("contains", l123456.containsPoint(p));
-        Assert.assertFalse("contains", l123456.containsPoint(p100));
+        Assert.assertTrue("contains", l123456.containsPoint(p, Real.EPS));
+        Assert.assertFalse("contains", l123456.containsPoint(p100, Real.EPS));
 
     }
 
@@ -216,8 +217,8 @@ public class Line3Test extends GeomTest {
         Point3Test.assertEquals("intersection", new double[] {
                 1.788675134594813, 0.5773502691896262, -0.6339745962155607 },
                 p, EPS);
-        Assert.assertTrue("contains", l123456.containsPoint(p));
-        Assert.assertTrue("contains", pl1111.containsPoint(p));
+        Assert.assertTrue("contains", l123456.containsPoint(p, Real.EPS));
+        Assert.assertTrue("contains", pl1111.containsPoint(p, Real.EPS));
     }
 
 

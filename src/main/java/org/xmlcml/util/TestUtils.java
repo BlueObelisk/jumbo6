@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
-import org.apache.log4j.Logger;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
@@ -16,6 +15,7 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.tests.XOMTestCase;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;

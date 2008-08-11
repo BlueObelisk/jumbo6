@@ -1,11 +1,11 @@
 package org.xmlcml.cml.tools;
 
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLCml;

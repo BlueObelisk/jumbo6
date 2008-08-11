@@ -378,8 +378,8 @@ public class CMLPeakListTest {
 	@Test
 	public void testRemoveAtomsByElementType() {
 		makeToluene();
-		CMLAtomSet tolueneAtomSet = toluene.getAtomSet();
-		CMLAtomSet tolueneCarbonSet = tolueneAtomSet.getAtomSetByElementType(AS.C.value);
+//		CMLAtomSet tolueneAtomSet = toluene.getAtomSet();
+//		CMLAtomSet tolueneCarbonSet = tolueneAtomSet.getAtomSetByElementType(AS.C.value);
 //		CMLAtomSet tolueneHydrogenSet = tolueneAtomSet.getAtomSetByElementType(AS.H.value);
 		toluenePeakList.addAtomRefs(tolueneMap, true);
     	

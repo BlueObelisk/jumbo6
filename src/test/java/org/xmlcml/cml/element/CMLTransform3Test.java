@@ -14,12 +14,12 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.euclid.AxisAngleChirality;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Transform3.Type;
@@ -461,25 +461,29 @@ CMLBuilder builder = new CMLBuilder();
      * Test method for 'org.xmlcml.cml.element.CMLTransform3.getAxisAndAngle()'
      */
     @Test
-    @Ignore
     public void testGetAxisAndAngle() {
         // rotation about vector and angle
         CMLVector3 v = new CMLVector3(new double[] { 1., 1., 1. });
-        CMLTransform3 t = new CMLTransform3(v, Math.PI * 2. / 3.);
+        double angle = Math.PI * 2. / 3.;
+        CMLTransform3 t = new CMLTransform3(v, angle);
         CMLTransform3Test.assertEquals("type", new double[] { 0, 0, 1, 0, 1, 0,
                 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, t, EPS);
 
-        double[] aa = t.getAxisAndAngle();
+//        double[] aa = t.getAxisAngleChirality();
+        AxisAngleChirality aac = t.getAxisAngleChirality();
+        Vector3 axis = aac.getAxis();
         double x = Math.sqrt(1. / 3.);
-        DoubleTestBase.assertEquals("axis and angle", new double[] { x, x, x,
-                Math.PI * 2. / 3. }, aa, EPS);
+        Vector3 vExpected = new Vector3(x, x, x);
+        Vector3Test.assertEquals("axis", vExpected, axis, EPS);
+        Assert.assertEquals("angle", angle, aac.getAngle());
 
         v = new CMLVector3(new double[] { 1., 2., 3. });
         t = new CMLTransform3(v, 1.234);
-        aa = t.getAxisAndAngle();
+        aac = t.getAxisAngleChirality();
         double xx = 1. / Math.sqrt(14.);
-        DoubleTestBase.assertEquals("axis and angle", new double[] { xx, 2 * xx,
-                3 * xx, 1.234 }, aa, EPS);
+        vExpected = new Vector3(xx, 2 * xx, 3 * xx); 
+        Vector3Test.assertEquals("axis", vExpected, aac.getAxis(), EPS);
+        Assert.assertEquals("angle", 1.234, aac.getAngle(), 0.000000001);
     }
 
     public void testGetAxisAngleChirality() {
@@ -673,21 +677,21 @@ CMLBuilder builder = new CMLBuilder();
         } catch (Exception e) {
             neverThrow(e);
         }
-        Assert.assertFalse("equals", t0.isEqualTo(t1));
+        Assert.assertFalse("equals", t0.isEqualTo(t1, Real.EPS));
         try {
             t1.setMatrix(new double[] { 1., 0., 0., 0., 0., -1., 0., 0., 0.,
                     0., 1., 0.5, 0., 0., 0., 1., });
         } catch (Exception e) {
             neverThrow(e);
         }
-        Assert.assertTrue("equals", t0.isEqualTo(t1));
+        Assert.assertTrue("equals", t0.isEqualTo(t1, Real.EPS));
         try {
             t1.setMatrix(new double[] { 1., 0., 0., 0.0001, 0., -1., 0., 0.,
                     0., 0., 1., 0.5, 0., 0., 0., 1., });
         } catch (Exception e) {
             neverThrow(e);
         }
-        Assert.assertFalse("equals", t0.isEqualTo(t1));
+        Assert.assertFalse("equals", t0.isEqualTo(t1, Real.EPS));
         Assert.assertTrue("equals", t0.isEqualTo(t1, 0.001));
     }
 

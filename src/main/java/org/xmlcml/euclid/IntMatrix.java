@@ -2,6 +2,7 @@ package org.xmlcml.euclid;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
+
 import org.apache.log4j.Logger;
 /**
  * rectangular real number matrix class IntMatrix represents a rectangular m-x-n

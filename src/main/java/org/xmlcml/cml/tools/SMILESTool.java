@@ -348,10 +348,10 @@ public class SMILESTool extends AbstractTool {
     	}
 	}
 	
-	private void convertToKekule() {
-		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-		moleculeTool.adjustBondOrdersToValency();
-	}
+//	private void convertToKekule() {
+//		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+//		moleculeTool.adjustBondOrdersToValency();
+//	}
 
     private String grabAtom(final String s) {
     	if (s.length() == 0) {

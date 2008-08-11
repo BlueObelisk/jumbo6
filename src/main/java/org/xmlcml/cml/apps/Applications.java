@@ -68,7 +68,7 @@ public class Applications {
                 System.out.println("root element is in CML namespace: "+
                         rootElement.getNamespaceURI());
                 System.out.println("Document parsed to:");
-                CMLElement cmlElement = (CMLElement) rootElement;
+//                CMLElement cmlElement = (CMLElement) rootElement;
             }
         }
     }

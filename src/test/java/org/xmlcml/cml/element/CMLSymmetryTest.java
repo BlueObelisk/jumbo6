@@ -432,11 +432,11 @@ public class CMLSymmetryTest {
         List<String> list = new ArrayList<String>();
         list.add("x, y, z");
         list.add("-x, 1/2+y, -z");
-        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
+//        CMLSymmetry symmetry1 = CMLSymmetry.createFromXYZStrings(list);
         list = new ArrayList<String>();
         list.add("-x, -y, -z");
-        CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
-        CMLSymmetry symmetry3 = symmetry1.convolute(symmetry2);
+//        CMLSymmetry symmetry2 = CMLSymmetry.createFromXYZStrings(list);
+//        CMLSymmetry symmetry3 = symmetry1.convolute(symmetry2);
     }
     /**
      * Test method for

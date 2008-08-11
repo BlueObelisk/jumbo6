@@ -1,8 +1,8 @@
 package org.xmlcml.euclid;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Axis.Axis3;
 /**
  * a (Java) Vector of Point3s (Note that 'Vector' is used by Java to describe an
@@ -137,11 +137,37 @@ public class Point3Vector implements EuclidConstants {
     public List<Point3> getPoint3List() {
         return vector;
     }
+    
+    /**
+     * is equal.
+     * 
+     * @param p
+     * @param epsilon
+     * @return true if equals
+     */
+    public boolean isEqualTo(Point3Vector p, double epsilon) {
+        boolean ok = true;
+        if (p == null || this.size() != p.size()) {
+            ok = false;
+        } else {
+            int i = 0;
+            for (Point3 pp : p.vector) {
+                Point3 thisP = this.vector.get(i++);
+                if (!thisP.isEqualTo(pp, epsilon)) {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+        return ok;
+    }
+    
     /**
      * is equal.
      * 
      * @param p
      * @return true if equals
+     * @deprecated use epsilon
      */
     public boolean isEqualTo(Point3Vector p) {
         boolean ok = true;
@@ -159,6 +185,7 @@ public class Point3Vector implements EuclidConstants {
         }
         return ok;
     }
+    
     /**
      * get array.
      * 
@@ -874,7 +901,7 @@ public class Point3Vector implements EuclidConstants {
         int serial = -1;
         for (int i = 0; i < this.size(); i++) {
             Point3 pp = vector.get(i);
-            if (pp.isEqualTo(p1) || pp.isEqualTo(p2)) {
+            if (pp.isEqualTo(p1, Real.EPS) || pp.isEqualTo(p2, Real.EPS)) {
                 continue;
             }
             try {
@@ -977,15 +1004,15 @@ public class Point3Vector implements EuclidConstants {
         Point3 p1 = this.getPoint3(serial[0]);
         serial[1] = this.getFurthestPointFrom(p1);
         Point3 p2 = this.getPoint3(serial[1]);
-        if (p1.isEqualTo(p2)) {
+        if (p1.isEqualTo(p2, Real.EPS)) {
             throw new EuclidRuntimeException("Cannot find 3 separated points");
         }
         serial[2] = this.getPointMakingSmallestAngle(p1, p2);
         Point3 p3 = this.getPoint3(serial[2]);
-        if (p1.isEqualTo(p3) || p2.isEqualTo(p3)) {
+        if (p1.isEqualTo(p3, Real.EPS) || p2.isEqualTo(p3, Real.EPS)) {
             throw new EuclidRuntimeException("Cannot find 3 separated points");
         }
-        if ((p3.subtract(p1)).cross(p3.subtract(p2)).isZero()) {
+        if ((p3.subtract(p1)).cross(p3.subtract(p2)).isZero(Real.EPS)) {
             throw new EuclidRuntimeException("Cannot find 3 non-colinear points");
         }
         return serial;
@@ -1140,19 +1167,19 @@ public class Point3Vector implements EuclidConstants {
 		}
 		return t;
 	}
-	private void eigenvectorFit(Point3Vector pv2) {
-		RealSquareMatrix eigvec = new RealSquareMatrix(4);
-        RealArray eigval = new RealArray(4);
-        EuclidRuntimeException illCond = null;
-        pv2.inertialAxes(eigval, eigvec, illCond);
-        if (illCond != null) {
-            throw illCond;
-        }
-        Transform3 axes = new Transform3(eigvec);
-        axes.transpose();
-        Point3Vector pv22 = new Point3Vector(pv2);
-        pv22.transform(axes);
-	}
+//	private void eigenvectorFit(Point3Vector pv2) {
+//		RealSquareMatrix eigvec = new RealSquareMatrix(4);
+//        RealArray eigval = new RealArray(4);
+//        EuclidRuntimeException illCond = null;
+//        pv2.inertialAxes(eigval, eigvec, illCond);
+//        if (illCond != null) {
+//            throw illCond;
+//        }
+//        Transform3 axes = new Transform3(eigvec);
+//        axes.transpose();
+//        Point3Vector pv22 = new Point3Vector(pv2);
+//        pv22.transform(axes);
+//	}
     /**
      * fit two coordinates of same length and alignment
      * 
@@ -1241,8 +1268,8 @@ public class Point3Vector implements EuclidConstants {
             t = new Transform3(t1.concatenate(t));
         }
 
-        Transform3 tt = translateRotateRetranslate(thisCent,
-				refCent, t);
+        /*Transform3 tt = */
+        translateRotateRetranslate(thisCent, refCent, t);
         return tsave;
     }
     
@@ -1262,7 +1289,7 @@ public class Point3Vector implements EuclidConstants {
         // these should be set as parameters?
 
     	damp = 1.0;
-    	double dampfact = 0.9;
+//    	double dampfact = 0.9;
         Transform3 t = new Transform3();
         Point3 thisCent = this.getCentroid();
         Point3 refCent = ref.getCentroid();
@@ -1280,7 +1307,7 @@ public class Point3Vector implements EuclidConstants {
 //        thistmp.transform(t);
         
         int NCYC = 20;
-        double[] delta = new double[3];
+//        double[] delta = new double[3];
         for (int icyc = 0; icyc < NCYC; icyc++) {
             // do each axis in turn
         	for (int j = 0; j < 3; j++) {

@@ -75,7 +75,7 @@ public class CatalogTest {
 		URL expectedUrl = null;
 		try {
 			expectedUrl = new File(System.getProperty("user.dir"), 
-					F_S+CatalogManager.CATALOGLIST_XML).toURL();
+					F_S+CatalogManager.CATALOGLIST_XML).toURI().toURL();
 		} catch (MalformedURLException e) {
 			throw new CMLRuntimeException("Malformed url "+e);
 		}
@@ -99,16 +99,16 @@ public class CatalogTest {
 		CMLMap moleculeCatalogMap = moleculeCatalog.getCmlMap();
 		Assert.assertNotNull("moleculeCatalogMap", moleculeCatalogMap);
 		// all possible namespaces to directory mappings
-		String expectedS = "" +
-		"<map xmlns='http://www.xml-cml.org/schema'>"+
-		"  <!-- DIRECTORY -->"+
-		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom' role='cml:moleculeList' to='./geom.xml'/>"+
-		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/frags' role='cml:fragmentList' to='./fragments/frags.xml'/>"+
-		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/fragments' role='cml:fragmentList' to='./fragments'/>"+
-		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' role='cml:moleculeList' to='./geom1'/>"+
-		"</map>"+
-				"";
-		CMLMap expected = (CMLMap) parseValidString(expectedS);
+//		String expectedS = "" +
+//		"<map xmlns='http://www.xml-cml.org/schema'>"+
+//		"  <!-- DIRECTORY -->"+
+//		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom' role='cml:moleculeList' to='./geom.xml'/>"+
+//		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/frags' role='cml:fragmentList' to='./fragments/frags.xml'/>"+
+//		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/fragments' role='cml:fragmentList' to='./fragments'/>"+
+//		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' role='cml:moleculeList' to='./geom1'/>"+
+//		"</map>"+
+//				"";
+//		CMLMap expected = (CMLMap) parseValidString(expectedS);
 		//AbstractTest.assertEqualsCanonically("list", expected, moleculeCatalogMap, true);
 		// find one specific namespace as string ...
 		String ref = moleculeCatalogMap.getToRef("http://www.xml-cml.org/mols/geom1");
