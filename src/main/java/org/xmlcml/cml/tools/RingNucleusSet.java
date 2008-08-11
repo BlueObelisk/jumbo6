@@ -19,7 +19,6 @@ import org.xmlcml.cml.element.CMLBondSet;
 
 /**
  * tool to support a ring. not fully developed
- * 
  * @author pmr
  * 
  */
