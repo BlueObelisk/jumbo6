@@ -863,28 +863,50 @@ public class AtomTool extends AbstractSVGTool {
 	 *     atom.getDownstreamAtoms(ast, otherAtom);
 	 * </pre>
 	 * @param atom
-	 * @param atomSet
-	 *            to accumulate ligand atoms
-	 * @param otherAtom
-	 *            not to be visited
+	 * @param atomSet to accumulate ligand atoms
+	 * @param otherAtom not to be visited
 	 *
 	 */
 	public void getDownstreamAtoms(CMLAtomSet atomSet,
-			CMLAtom otherAtom, boolean forceUpdate) {
+			CMLAtom otherAtom, boolean forceUpdate, CMLAtomSet stopSet) {
 		atomSet.addAtom(atom, forceUpdate);
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligandAtom : ligandList) {
 			// do not revisit atoms
-			if (atomSet.contains(ligandAtom)) {
-				;
-				// do not backtrack
+			if (false) {
+			} else if (stopSet != null && stopSet.contains(ligandAtom)) {
 			} else if (ligandAtom.equals(otherAtom)) {
 				;
+			} else if (atomSet.contains(ligandAtom)) {
+				;
+				// do not backtrack
 			} else {
 				AtomTool ligandTool = AtomTool.getOrCreateTool(ligandAtom);
-				ligandTool.getDownstreamAtoms(atomSet, atom, forceUpdate);
+				ligandTool.getDownstreamAtoms(atomSet, atom, forceUpdate, stopSet);
 			}
 		}
+	}
+
+	/**
+	 * gets all atoms downstream of a bond.
+	 * VERY SLOW I THINK
+	 * recursively visits all atoms in branch until all leaves have been
+	 * visited. if branch is cyclic, halts when it rejoins atom or otherAtom the
+	 * routine is passed a new AtomSetImpl to be populated
+	 * <pre>
+	 *   Example: CMLBond b ... (contains atom)
+	 *     CMLAtom otherAtom = b.getOtherAtom(atom);
+	 *     AtomSet ast = new AtomSetImpl();
+	 *     atom.getDownstreamAtoms(ast, otherAtom);
+	 * </pre>
+	 * @param atom
+	 * @param atomSet to accumulate ligand atoms
+	 * @param otherAtom not to be visited
+	 *
+	 */
+	public void getDownstreamAtoms(CMLAtomSet atomSet,
+			CMLAtom otherAtom, boolean forceUpdate) {
+		getDownstreamAtoms(atomSet, otherAtom, forceUpdate, null);
 	}
 
 
@@ -907,37 +929,60 @@ public class AtomTool extends AbstractSVGTool {
 	 * @return the atomSet (empty if none)
 	 *
 	 */
-	public CMLAtomSet getDownstreamAtoms(CMLAtom otherAtom) {
+	public CMLAtomSet getDownstreamAtoms(CMLAtom otherAtom, CMLAtomSet stopSet) {
 		CMLAtomSet atomSet = new CMLAtomSet();
 		boolean forceUpdate = false;
-		AtomTool.getOrCreateTool(atom).getDownstreamAtoms(atomSet, otherAtom, forceUpdate);
+		AtomTool.getOrCreateTool(atom).getDownstreamAtoms(atomSet, otherAtom, forceUpdate, stopSet);
 		atomSet.updateContent();
 		return atomSet;
 	}
 
+	/**
+	 * gets all atoms downstream of a bond.
+	 *
+	 * recursively visits all atoms in branch until all leaves have been
+	 * visited. if branch is cyclic, halts when it rejoins atom or otherAtom
+	 * Example:
+	 *
+	 * <pre>
+	 *
+	 *  MoleculeTool moleculeTool ... contains relevant molecule
+	 *  CMLBond b ... (contains atom)
+	 *  CMLAtom otherAtom = b.getOtherAtom(atom);
+	 *  AtomSet ast = moleculeTool.getDownstreamAtoms(atom, otherAtom);
+	 *  calls getDownstreamAtoms(otherAtom, allowSpiro=true)
+	 *
+	 * @param moleculeTool TODO
+	 * @param otherAtom not to be visited
+	 * @return the atomSet (empty if none)
+	 *
+	 */
+	public CMLAtomSet getDownstreamAtoms(CMLAtom otherAtom) {
+		return getDownstreamAtoms(otherAtom, null);
+	}
      
      /** finds atom with lowest lexical id.
       * 
       * @param atomList
       * @return atom
       */
-     public static CMLAtom getAtomWithLowestId(List<CMLAtom> atomList) {
-         String[] ids = new String[atomList.size()];
-         int i = 0;
-         for (CMLAtom atom : atomList) {
-             ids[i++] = atom.getId();
-         }
-         Arrays.sort(ids);
-         CMLAtom lowestAtom = null;
-         for (CMLAtom atom : atomList) {
-             if (atom.getId().equals(ids[0])) {
-                 lowestAtom = atom;
-                 break;
-             }
-         }
+    public static CMLAtom getAtomWithLowestId(List<CMLAtom> atomList) {
+        String[] ids = new String[atomList.size()];
+        int i = 0;
+        for (CMLAtom atom : atomList) {
+            ids[i++] = atom.getId();
+        }
+        Arrays.sort(ids);
+        CMLAtom lowestAtom = null;
+        for (CMLAtom atom : atomList) {
+            if (atom.getId().equals(ids[0])) {
+                lowestAtom = atom;
+                break;
+            }
+        }
 //         System.out.println("LOWEST ATOM "+lowestAtom.getId());
          return lowestAtom;
-     }
+    }
 
      /** translates an atom with single ligand to the covalent radius.
       * in a bond (say C-R) where R has only one ligand will translate
@@ -945,7 +990,7 @@ public class AtomTool extends AbstractSVGTool {
       * is covalent radious of the other atom (in this case C) 
       *
       */
-     public void translateToCovalentRadius() {
+    public void translateToCovalentRadius() {
          Point3 groupPoint = atom.getPoint3(CoordinateType.CARTESIAN);
          if (groupPoint == null) {
         	 throw new CMLRuntimeException("atom has no coordinates: "+atom.getId());

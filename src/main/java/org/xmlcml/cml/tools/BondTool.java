@@ -310,8 +310,12 @@ public class BondTool extends AbstractSVGTool {
 	}
 
 	/**
-	 * gets atoms on one side of bond. only applicable to acyclic bonds if bond
-	 * is cyclic, whole molecule will be returned! returns atom and all
+	 * gets atoms on one side of bond. only applicable to acyclic bonds
+	 * or spiro systems (if allowSpiro==true)
+	 * if bond is cyclic, whole molecule will be returned unless
+	 * bond is in spiro system and allowSpiro is set
+	 * 
+	 *  returns atom and all
 	 * descendant atoms.
 	 *
 	 * @param moleculeTool TODO
@@ -319,13 +323,27 @@ public class BondTool extends AbstractSVGTool {
 	 * @throws CMLRuntimeException atom is not in bond
 	 * @return atomSet of downstream atoms
 	 */
-	public CMLAtomSet getDownstreamAtoms(CMLAtom atom) {
+	public CMLAtomSet getDownstreamAtoms(CMLAtom atom, CMLAtomSet stopSet) {
 		CMLAtomSet atomSet = new CMLAtomSet();
 		CMLAtom otherAtom = bond.getOtherAtom(atom);
 		if (otherAtom != null) {
-			atomSet = AtomTool.getOrCreateTool(otherAtom).getDownstreamAtoms(atom);
+			atomSet = AtomTool.getOrCreateTool(otherAtom).getDownstreamAtoms(atom, stopSet);
 		}
 		return atomSet;
+	}
+
+	/**
+	 * gets atoms on one side of bond. only applicable to acyclic bonds if bond
+	 * is cyclic, whole molecule will be returned! returns atom and all
+	 * descendant atoms.
+	 * calls getDownstreamAtoms(atom, stopSet = null)
+	 * 
+	 * @param atom defining side of bond
+	 * @throws CMLRuntimeException atom is not in bond
+	 * @return atomSet of downstream atoms
+	 */
+	public CMLAtomSet getDownstreamAtoms(CMLAtom atom) {
+		return getDownstreamAtoms(atom, null);
 	}
 
 	/**
