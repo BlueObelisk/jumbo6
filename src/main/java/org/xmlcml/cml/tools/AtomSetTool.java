@@ -107,25 +107,19 @@ public class AtomSetTool extends AbstractTool {
 	 * @return the bondSet
 	 * @throws CMLException one or more bonds does not have an id
 	 */
-	@SuppressWarnings("unused")
-	// FIXME don't think this works
-	public CMLBondSet getBondSet() throws CMLException {
-		List<CMLAtom> atoms = molecule.getAtoms();
-		molecule.getBonds();
+	public CMLBondSet extractBondSet() {
+		List<CMLAtom> atoms = atomSet.getAtoms();
 		CMLBondSet bondSet = new CMLBondSet();
 		for (CMLAtom atom : atoms) {
 			List<CMLAtom> ligandList = atom.getLigandAtoms();
 			List<CMLBond> ligandBondList = atom.getLigandBonds();
-			// Iterator<CMLAtom> ita = atom.getLigandList().iterator();
-			// Iterator<CMLBond> itb = atom.getBondList().iterator();
-			// loop through ligands and examine each for membership of this set;
-			// if so add bond
-			int i = 0;
-			for (CMLAtom ligand : ligandList) {
-				CMLBond ligandBond = ligandBondList.get(i++);
-//				if (atomSet.contains(ligand)) {
-				bondSet.addBond(ligandBond);
-//				}
+			for (int i = 0; i < ligandList.size(); i++) {
+				CMLAtom ligandAtom = ligandList.get(i);
+				CMLBond ligandBond = ligandBondList.get(i);
+				if (atomSet.contains(ligandAtom) &&
+					!bondSet.contains(ligandBond)) {
+					bondSet.addBond(ligandBond);
+				}
 			}
 		}
 		return bondSet;

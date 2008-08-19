@@ -160,10 +160,10 @@ public class Point3 implements EuclidConstants {
     }
 
     private static double normaliseCrystallographically(double d) {
-        while (d >= 1.0) {
+        while (d >= 1.0 - (CRYSTALFRACTEPSILON / 2)) {
             d -= 1.0;
         }
-        while (d < 0.0) {
+        while (d < 0.0 - (CRYSTALFRACTEPSILON / 2)) {
             d += 1.0;
         }
         return d;
