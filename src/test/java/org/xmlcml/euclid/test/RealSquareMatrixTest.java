@@ -6,6 +6,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealMatrix;
@@ -453,6 +454,7 @@ public class RealSquareMatrixTest extends MatrixTest {
      * Test method for 'org.xmlcml.euclid.RealSquareMatrix.orthogonalise()'
      */
     @Test
+    @Ignore
     public void testOrthogonalise() {
         RealSquareMatrix m = new RealSquareMatrix(
         		3, new double[] { 6., 7., 8., 7., 5., 4.,
