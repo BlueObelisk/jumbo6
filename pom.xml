@@ -242,11 +242,6 @@
 		</repository>
 	</repositories>
 	<dependencies>
-			<dependency>
-			<groupId>cml</groupId>
-			<artifactId>cifxml</artifactId>
-			<version>1.2</version>
-		</dependency>
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
