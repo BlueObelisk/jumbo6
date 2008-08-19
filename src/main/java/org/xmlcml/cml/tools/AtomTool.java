@@ -9,6 +9,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
@@ -47,7 +48,9 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 public class AtomTool extends AbstractSVGTool {
 
     final static Logger LOG = Logger.getLogger(AtomTool.class.getName());
-    
+    static {
+    	LOG.setLevel(Level.INFO);
+    }
 	public final static String RIGHT = "RIGHT__";
 	public final double fontWidthFontSizeFactor = 0.8;
 	
@@ -852,7 +855,6 @@ public class AtomTool extends AbstractSVGTool {
 
 	/**
 	 * gets all atoms downstream of a bond.
-	 * VERY SLOW I THINK
 	 * recursively visits all atoms in branch until all leaves have been
 	 * visited. if branch is cyclic, halts when it rejoins atom or otherAtom the
 	 * routine is passed a new AtomSetImpl to be populated
@@ -870,17 +872,20 @@ public class AtomTool extends AbstractSVGTool {
 	public void getDownstreamAtoms(CMLAtomSet atomSet,
 			CMLAtom otherAtom, boolean forceUpdate, CMLAtomSet stopSet) {
 		atomSet.addAtom(atom, forceUpdate);
+		LOG.debug("============="+atom.getId()+"===="+otherAtom.getId());
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligandAtom : ligandList) {
 			// do not revisit atoms
 			if (false) {
 			} else if (stopSet != null && stopSet.contains(ligandAtom)) {
+				LOG.debug("STOP "+ligandAtom.getId());
 			} else if (ligandAtom.equals(otherAtom)) {
-				;
+				LOG.debug("PARENT "+ligandAtom.getId());
 			} else if (atomSet.contains(ligandAtom)) {
-				;
+				LOG.debug("ALREADY "+ligandAtom.getId());
 				// do not backtrack
 			} else {
+				LOG.debug("RECURSE "+ligandAtom.getId());
 				AtomTool ligandTool = AtomTool.getOrCreateTool(ligandAtom);
 				ligandTool.getDownstreamAtoms(atomSet, atom, forceUpdate, stopSet);
 			}

@@ -14,7 +14,9 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test AtomSetTool.
@@ -66,7 +68,7 @@ public class AtomSetToolTest {
      * @exception Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         sprout = (CMLMolecule) parseValidString(sproutS);
     }
 
@@ -132,10 +134,48 @@ public class AtomSetToolTest {
     /** Test method for 'org.xmlcml.cml.tools.AtomSetTool.getBondSet(CMLAtomSet)'
      */
     @Test
-    @Ignore
-    public void testGetBondSet() {
-        // TODO Auto-generated method stub
+    public void testExtractBondSet() throws Exception {
+    	CMLAtomSet atomSet = new CMLAtomSet(
+    			sprout, new String[]{"a1", "a2", "a3"});
+    	AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	CMLBondSet bondSet = atomSetTool.extractBondSet();
+    	String bondSetS = "<bondSet size='2' xmlns='http://www.xml-cml.org/schema'>" +
+    			"a1 a2 a2 a3" +
+    			"</bondSet>";
+    	CMLBondSet bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
+    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	
+    	atomSet = new CMLAtomSet(
+    			sprout, new String[]{"a1", "a2", "a3", "a7"});
+    	atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	bondSet = atomSetTool.extractBondSet();
+    	bondSetS = "<bondSet size='3' xmlns='http://www.xml-cml.org/schema'>" +
+    			"a1 a2 a1 a7 a2 a3" +
+    			"</bondSet>";
+    	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
+    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
 
+    	// isolated bond
+    	atomSet = new CMLAtomSet(
+    			sprout, new String[]{"a1", "a2", "a3", "a7", "a5", "a11"});
+    	atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	bondSet = atomSetTool.extractBondSet();
+    	bondSetS = "<bondSet size='4' xmlns='http://www.xml-cml.org/schema'>" +
+    			"a1 a2 a1 a7 a2 a3 a5 a11" +
+    			"</bondSet>";
+    	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
+    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+
+    	// isolated atom, no bond
+    	atomSet = new CMLAtomSet(
+    			sprout, new String[]{"a1", "a2", "a3", "a7", "a5", "a11", "a10"});
+    	atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	bondSet = atomSetTool.extractBondSet();
+    	bondSetS = "<bondSet size='4' xmlns='http://www.xml-cml.org/schema'>" +
+    			"a1 a2 a1 a7 a2 a3 a5 a11" +
+    			"</bondSet>";
+    	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
+    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     }
 
     /** Test method for 'org.xmlcml.cml.tools.AtomSetTool.createValenceAngles(CMLAtomSet, boolean, boolean)'

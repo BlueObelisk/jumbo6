@@ -45,7 +45,8 @@ import org.xmlcml.molutil.ChemicalElement;
  * 
  */
 public class Morgan extends AbstractTool {
-
+	public static String EQUIVALENCE_ATTRIBUTE = "equivalenceString";
+	
     /** decides on type of algorithm.
      * no choice at present
      * @author pm286

@@ -199,7 +199,7 @@ public class CMLBond extends AbstractBond {
 		}
 		if (!atom1.getMolecule().equals(atom2.getMolecule())) {
 			throw new CMLRuntimeException(
-					"Atoms in bond must have identical owner molecule");
+					"Atoms in bond must have identical owner molecule ("+atom1.getMolecule()+"/"+atom2.getMolecule()+")");
 		}
 
 		String atomId1 = atom1.getId();

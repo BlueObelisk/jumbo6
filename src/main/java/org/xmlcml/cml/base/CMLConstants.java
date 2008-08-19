@@ -304,14 +304,14 @@ public interface CMLConstants extends EuclidConstants {
     /** root of all CML URIs */
     String CML_NS_BASE = "http://www.xml-cml.org";
 
-    /** constant */
+    /** cml namespace */
     String CML_NS = CML_NS_BASE+U_S+"schema";
+
+    /** cmlx namespace */
+    String CMLX_NS = CML_NS_BASE+U_S+"schema"+S_SLASH+"cmlx";
 
     /** suffix */
     String CML_SUFFIX = ".cml";
-
-    /** constant */
-//    String CML = CML_NS;
 
     /**
      * cml dictionary namespace reserved
@@ -340,6 +340,10 @@ public interface CMLConstants extends EuclidConstants {
      */
     String CML_PREFIX = "cml";
 
+    /** CMLX prefix (cmlx) for experimentation and development
+     */
+    String CMLX_PREFIX = "cmlx";
+
     /** CML prefix + colon  (cml:)
      */
     String CML_COLON = CML_PREFIX+S_COLON;
@@ -362,6 +366,12 @@ public interface CMLConstants extends EuclidConstants {
      */
     String CML_XMLNS_PREFIX = XMLNS + S_COLON + CML_PREFIX + S_EQUALS + S_APOS
             + CML_NS + S_APOS;
+
+    /**
+     * namespace declaration for CMLx with prefix
+     */
+    String CMLX_XMLNS_PREFIX = XMLNS + S_COLON + CMLX_PREFIX + S_EQUALS + S_APOS
+            + CMLX_NS + S_APOS;
 
     /**
      * obsolete CML namespaces

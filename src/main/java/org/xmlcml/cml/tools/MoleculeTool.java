@@ -86,6 +86,8 @@ public class MoleculeTool extends AbstractSVGTool {
 	private MoleculeDisplay moleculeDisplay;
 	private CMLAtom currentAtom;
 	private CMLBond currentBond;
+
+	private Morgan morgan;
 	
 
 	/**
@@ -2159,6 +2161,44 @@ public class MoleculeTool extends AbstractSVGTool {
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).detach();
 		}
+	}
+
+	/**
+	 * calculates Morgan (caches result)
+	 * @return cached Morgan 
+	 */
+	public Morgan calculateMorgan() {
+		if (morgan == null) {
+			morgan = new Morgan(molecule);
+		}
+		return morgan;
+	}
+
+	/**
+	 * calculate list of atom equivalence classes
+	 * @return list of equivalent atoms as atomSets
+	 */
+	public List<CMLAtomSet> calculateListOfMorganAtomMatches() {
+		calculateMorgan();
+		List<CMLAtomSet> atomSetList = morgan.getAtomSetList();
+		return atomSetList;
+	}
+
+	/**
+	 * 
+	 * @return morgan string
+	 */
+	public String calculateMorganString() {
+		calculateMorgan();
+		String morganString = morgan.getEquivalenceString();
+		return morganString;
+	}
+
+	/** sets morgan to null
+	 * 
+	 */
+	public void clearMorgan() {
+		this.morgan = null;
 	}
 }
 
