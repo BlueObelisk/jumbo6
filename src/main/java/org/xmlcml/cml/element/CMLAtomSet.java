@@ -316,9 +316,6 @@ public class CMLAtomSet extends AbstractAtomSet {
      * @return the atoms
      */
     public List<CMLAtom> getAtoms() {
-    	if (molecule == null) {
-    		throw new RuntimeException("molecule not set");
-    	}
     	checkSetIsSet();
         List<CMLAtom> atoms = new ArrayList<CMLAtom>();
 
@@ -326,6 +323,25 @@ public class CMLAtomSet extends AbstractAtomSet {
             atoms.add(e.next());
         }
         return atoms;
+    }
+    
+    /** if no molecule is given, retrieve it from the set
+     * throws exception if set relates to more than one molecule
+     */
+    private void ensureMolecule() {
+    	if (molecule == null) {
+    		if (set.size() > 0) {
+    			for (CMLAtom atom : set) {
+    				if (molecule == null) {
+    					molecule = atom.getMolecule();
+    				} else {
+    					if (!molecule.equals(atom.getMolecule())) {
+    						throw new RuntimeException("Cannot have different molecules in atomSet");
+    					}
+    				}
+    			}
+    		}
+    	}
     }
 
     /**
@@ -419,10 +435,15 @@ public class CMLAtomSet extends AbstractAtomSet {
         return (CMLAtom) ((idTable == null) ? null : idTable.get(id));
     }
 
+    /**
+     * ensures we have a set and then ensureMolecule
+     * @throws RuntimeException if no set or consistent molecule
+     */
 	private void checkSetIsSet() {
 		if (set == null) {
     		throw new RuntimeException("set not set");
     	}
+		ensureMolecule();
 	}
 
     /**
