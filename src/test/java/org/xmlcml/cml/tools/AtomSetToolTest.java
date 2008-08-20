@@ -13,9 +13,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.util.TestUtils;
 
 /**
@@ -292,6 +295,48 @@ public class AtomSetToolTest {
 
     }
 
+    /**
+     * 
+     */
+    @Test
+    public void testClean2D() {
+    	CMLMolecule molecule = new CMLMolecule();
+    	CMLAtom atom1 = new CMLAtom("a1");
+    	atom1.setXY2(new Real2(0., 0.));
+    	molecule.addAtom(atom1);
+    	CMLAtom atom2 = new CMLAtom("a2");
+    	atom2.setXY2(new Real2(20., 30.));
+    	molecule.addAtom(atom2);
+    	CMLBond bond = new CMLBond(atom1, atom2);    	
+    	molecule.addBond(bond);
+    	molecule.debug();
+    	
+    	CMLAtomSet atomSet = molecule.getAtomSet();
+    	AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	atomSetTool.clean2D(20.);
+    	double d = atom1.getDistance2(atom2);
+    	Assert.assertEquals("length", 20., d, 0.001);
+
+//    	if (true) return;
+    	atom1.setXY2(new Real2(0., 0.));
+    	atom2.setXY2(new Real2(20., 30.));
+    	CMLAtom atom3 = new CMLAtom("a3");
+    	atom3.setXY2(new Real2(30., 20.));
+    	molecule.addAtom(atom3);
+    	bond = new CMLBond(atom1, atom3);    	
+    	molecule.addBond(bond);
+    	molecule.debug();
+    	
+    	atomSet = molecule.getAtomSet();
+    	atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	atomSetTool.clean2D(20.);
+    	d = atom1.getDistance2(atom2);
+    	Assert.assertEquals("length", 20., d, 0.1);
+    	d = atom1.getDistance2(atom3);
+    	Assert.assertEquals("length", 20., d, 0.1);
+    	d = atom2.getDistance2(atom3);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 0.2);
+    }
 
 
 }

@@ -42,8 +42,8 @@ public class CMLElements<E extends Element> implements Iterable<E>, CMLConstants
                     E elem = (E) elements.get(i);
                     elementsArray.add(elem);
                 } else {
-                    throw new CMLRuntimeException(
-                            "Elements list contains elements of different types");
+                    throw new RuntimeException(
+                            "CMLElements list contains elements of different types ("+type+", "+elements.get(i).getClass()+")");
                 }
             }
         }

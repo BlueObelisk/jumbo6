@@ -656,6 +656,88 @@ public class AtomSetTool extends AbstractTool {
 	private void matchAtomSet() {
 		
 	}
+
+	public void clean2D(double bondLength) {
+		int count = 0;
+		boolean converged = false;
+		while (!converged && count < 20) {
+	    	double modShift = 0.;
+	    	Map<CMLAtom, Real2> shiftMap = new HashMap<CMLAtom, Real2>();
+	    	for (CMLAtom atom : atomSet.getAtoms()) {
+	    		System.out.println(atom.getId());
+	    		buildShiftFromLigands(bondLength, atom, shiftMap);
+	    	}
+	    	for (CMLAtom atom : atomSet.getAtoms()) {
+				Real2 shift = shiftMap.get(atom);
+				modShift += shift.getLength();
+	    		System.out.println(modShift);
+	    	}
+    		if (modShift < 0.01 * bondLength) {
+    			converged = true;
+    			break;
+    		}
+	    	int i = 0;
+	    	for (CMLAtom atom : shiftMap.keySet()) {
+	    		Real2 shift = shiftMap.get(atom);
+	    		System.out.println("PPP "+shift);
+	    		atom.increaseXY2(shift.getX(), shift.getY());
+	    		System.out.println(">> "+atom.getXY2());
+	    		i++;
+	    	}
+	    	count++;
+		}
+		
+	}
+
+	private void buildShiftFromLigands(double bondLength, CMLAtom atom, Map<CMLAtom, Real2> shiftMap) {
+		List<CMLAtom> ligands = atom.getLigandAtoms();
+		for (int i = 0; i < ligands.size(); i++) {
+			CMLAtom ligand = ligands.get(i);
+			if (atomSet.contains(ligand)) {
+				// only count each pair once. crude but works
+	    		if (atom.hashCode() > ligand.hashCode()) {
+	    			getaddShiftsToMap(bondLength, atom, ligand, shiftMap);
+	    		}
+	    		// make sure interaction only counted once
+	    		//FIXME  fails for 4-rings...
+				for (int j = i+1; j < ligands.size(); j++) {
+					CMLAtom ligand2 = ligands.get(j);
+					if (atomSet.contains(ligand2)) {
+						getaddShiftsToMap(bondLength * Math.sqrt(3), ligand, ligand2, shiftMap);
+					}
+				}
+			}
+		}
+	}
+
+	private void getaddShiftsToMap(double bondLength, CMLAtom atom1,
+			CMLAtom atom2, Map<CMLAtom, Real2> shiftMap) {
+		Real2 x0 = atom1.getXY2();
+		Real2 xi = atom2.getXY2();
+		System.out.println(atom1.getId()+"/"+atom2.getId());
+		if (atom1.equals(atom2)) {
+			throw new RuntimeException("identical ligands");
+		}
+		Real2 vi = xi.subtract(x0);
+		Real2 x0i = xi.subtract(x0);
+		Real2 x0in = x0i.getUnitVector().multiplyBy(bondLength);
+		Real2 bondDelta = x0i.subtract(x0in).multiplyBy(0.5);
+		System.out.println("D+ "+bondDelta);
+		addShift(shiftMap, atom1, bondDelta);
+		bondDelta.multiplyEquals(-1.);
+		System.out.println("D- "+bondDelta);
+		addShift(shiftMap, atom2, bondDelta);
+	}
+	
+	private void addShift(Map<CMLAtom, Real2> map, CMLAtom atom, Real2 delta) {
+		Real2 shift = map.get(atom);
+		if (shift == null) {
+			shift = new Real2();
+			map.put(atom, shift);
+		}
+		shift.plusEquals(delta);
+	}
+	
 }
 class SearchAtom {
 	CMLAtom atom;
