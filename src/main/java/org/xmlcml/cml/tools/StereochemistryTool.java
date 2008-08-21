@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import nu.xom.Attribute;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
@@ -31,6 +32,12 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 public class StereochemistryTool extends AbstractTool {
 	Logger LOG = Logger.getLogger(StereochemistryTool.class);
 
+	/** for @role
+	 */
+	public final static String CML_CIP = "cml:cip";
+	public final static String CIP_R = "R";
+	public final static String CIP_S = "S";
+	
 	AbstractTool moleculeTool;
 	CMLMolecule molecule;
 	/**
@@ -87,7 +94,7 @@ public class StereochemistryTool extends AbstractTool {
 		CMLAtomParity atomParity = this.calculateAtomParity(atom);
 		String rs = null;
 		if (atomParity != null) {
-			rs = (atomParity.getXMLContent() > 0) ? "R" : "S";
+			rs = (atomParity.getXMLContent() > 0) ? CIP_R : CIP_S;
 		}
 		return rs;
 	}
@@ -874,11 +881,39 @@ public class StereochemistryTool extends AbstractTool {
 		List<CMLAtom> atomList = getChiralAtoms();
 		atomList = getChiralAtoms();
 		for (CMLAtom atom : atomList) {
-			String rs = calculateCIPRS(atom);
-			CMLLabel label = new CMLLabel();
-			label.setCMLValue(rs);
-			label.addAttribute(new Attribute("role", "cml:cip"));
-			atom.addLabel(label);
+			addCIPLabel(atom);
 		}
+	}
+
+	private void addCIPLabel(CMLAtom atom) {
+		String rs = calculateCIPRS(atom);
+		Nodes labels = atom.query("cml:label[@role='"+CML_CIP+"']", CML_XPATH);
+		CMLLabel label = null;
+		if (labels.size() == 0) {
+			label = new CMLLabel();
+			label.setCMLValue(rs);
+			label.addAttribute(new Attribute("role", CML_CIP));
+			atom.addLabel(label);
+		} else {
+			label = (CMLLabel) labels.get(0);
+		}
+		LOG.debug("CIP: "+label.getCMLValue());
+	}
+
+	/**
+	 * return label of form:
+	 * <atom>
+	 *   <label role='cml:cip' value='R'/>
+	 * </atom>
+	 * @param atom
+	 * @return label or null
+	 */
+	public static CMLLabel getCIPRSLabel(CMLAtom atom) {
+		CMLLabel label = null;
+		Nodes labels = atom.query("cml:label[@role='"+CML_CIP+"']", CML_XPATH);
+		if (labels.size() != 0) {
+			label = (CMLLabel) labels.get(0);
+		}
+		return label;
 	}
 }

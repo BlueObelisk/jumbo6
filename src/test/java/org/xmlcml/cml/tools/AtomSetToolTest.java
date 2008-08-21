@@ -313,7 +313,7 @@ public class AtomSetToolTest {
     	
     	CMLAtomSet atomSet = molecule.getAtomSet();
     	AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
-    	atomSetTool.clean2D(20.);
+    	atomSetTool.clean2D(20., 20);
     	double d = atom1.getDistance2(atom2);
     	Assert.assertEquals("length", 20., d, 0.001);
 
@@ -329,13 +329,96 @@ public class AtomSetToolTest {
     	
     	atomSet = molecule.getAtomSet();
     	atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
-    	atomSetTool.clean2D(20.);
+    	atomSetTool.clean2D(20., 20);
     	d = atom1.getDistance2(atom2);
     	Assert.assertEquals("length", 20., d, 0.1);
     	d = atom1.getDistance2(atom3);
     	Assert.assertEquals("length", 20., d, 0.1);
     	d = atom2.getDistance2(atom3);
     	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 0.2);
+    }
+    
+    /**
+     * 
+     */
+    @Test
+    public void testClean2Da() {
+
+    	CMLMolecule molecule = new CMLMolecule();
+    	CMLAtom atom1 = new CMLAtom("a1");
+    	CMLAtom atom2 = new CMLAtom("a2");
+    	CMLAtom atom3 = new CMLAtom("a3");
+    	CMLAtom atom4 = new CMLAtom("a4");
+    	CMLAtom atom5 = new CMLAtom("a5");
+    	CMLAtom atom6 = new CMLAtom("a6");
+    	molecule.addAtom(atom1);
+    	molecule.addAtom(atom2);
+    	molecule.addAtom(atom3);
+    	molecule.addAtom(atom4);
+    	molecule.addAtom(atom5);
+    	molecule.addAtom(atom6);
+    	atom1.setXY2(new Real2(0.0, 0.0));
+    	atom2.setXY2(new Real2(20.0, 0.0));
+    	atom3.setXY2(new Real2(30.0, 20.0));
+    	atom4.setXY2(new Real2(20.0, 40.0));
+    	atom5.setXY2(new Real2(0.0, 40.0));
+    	atom6.setXY2(new Real2(-10.0, 20.0));
+    	CMLBond bond12 = new CMLBond(atom1, atom2);    	
+    	CMLBond bond23 = new CMLBond(atom2, atom3);    	
+    	CMLBond bond34 = new CMLBond(atom3, atom4);    	
+    	CMLBond bond45 = new CMLBond(atom4, atom5);    	
+    	CMLBond bond56 = new CMLBond(atom5, atom6);    	
+    	CMLBond bond16 = new CMLBond(atom1, atom6);    	
+    	molecule.addBond(bond12);
+    	molecule.addBond(bond23);
+    	molecule.addBond(bond34);
+    	molecule.addBond(bond45);
+    	molecule.addBond(bond56);
+    	molecule.addBond(bond16);
+    	molecule.debug();
+    	
+    	CMLAtomSet atomSet = molecule.getAtomSet();
+    	AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(atomSet);
+    	atomSetTool.clean2D(20., 6);
+    	double d = atom1.getDistance2(atom2);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	d = atom2.getDistance2(atom3);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	d = atom3.getDistance2(atom4);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	d = atom4.getDistance2(atom5);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	d = atom5.getDistance2(atom6);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	d = atom1.getDistance2(atom6);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20., d, 2);
+    	
+    	d = atom1.getDistance2(atom3);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	d = atom2.getDistance2(atom4);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	d = atom3.getDistance2(atom5);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	d = atom4.getDistance2(atom6);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	d = atom5.getDistance2(atom1);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	d = atom6.getDistance2(atom2);
+    	System.out.println(d);
+    	Assert.assertEquals("length", 20. * Math.sqrt(3.), d, 3);
+    	
+    	
     }
 
 

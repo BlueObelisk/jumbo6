@@ -657,10 +657,10 @@ public class AtomSetTool extends AbstractTool {
 		
 	}
 
-	public void clean2D(double bondLength) {
+	public void clean2D(double bondLength, int ncyc) {
 		int count = 0;
 		boolean converged = false;
-		while (!converged && count < 20) {
+		while (!converged && count < ncyc) {
 	    	double modShift = 0.;
 	    	Map<CMLAtom, Real2> shiftMap = new HashMap<CMLAtom, Real2>();
 	    	for (CMLAtom atom : atomSet.getAtoms()) {
