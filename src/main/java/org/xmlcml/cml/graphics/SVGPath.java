@@ -117,16 +117,16 @@ public class SVGPath extends SVGElement {
 	
 	private class Real2String {
 		String s;
-		double x;
-		double y;
+		float x;
+		float y;
 		public Real2String(String s) {
 			this.s = s;
 			x = grabDouble();
 			y = grabDouble();
 		}
-		private double grabDouble() {
+		private float grabDouble() {
 			String ss = s;
-			double x;
+			float x;
 			int idx = s.indexOf(S_SPACE);
 			if (idx != -1) {
 				ss = s.substring(0, idx);
@@ -135,7 +135,7 @@ public class SVGPath extends SVGElement {
 				s = S_EMPTY;
 			}
 			try {
-				x = new Double(ss).doubleValue();
+				x = (float)new Double(ss).floatValue();
 			} catch (Exception e) {
 				throw new RuntimeException("bad double:"+ss+" ... "+s);
 			}
@@ -149,11 +149,11 @@ public class SVGPath extends SVGElement {
 		while (s.length() > 0) {
 			if (s.startsWith("M")) {
 				Real2String r2s = new Real2String(s.substring(1));
-				path2.moveTo(r2s.x, r2s.y);
+				path2.moveTo((float)r2s.x, (float)r2s.y);
 				s = r2s.s.trim();
 			} else if (s.startsWith("L")) {
 				Real2String r2s = new Real2String(s.substring(1));
-				path2.lineTo(r2s.x, r2s.y);
+				path2.lineTo((float)r2s.x, (float)r2s.y);
 				s = r2s.s.trim();
 			} else if (s.startsWith("z") || s.startsWith("Z")) {
 				path2.closePath();
