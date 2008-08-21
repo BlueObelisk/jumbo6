@@ -1269,9 +1269,8 @@ public class CMLAtomSetTest extends MoleculeAtomBondTest {
 		List<CMLAtom> atomList = null;
 		try {
 			atomList = atomSet.getAtoms();
-			Assert.fail("should trap exception for missing molecule");
 		} catch (RuntimeException e) {
-			// ok
+			Assert.fail("should no longer throw exception for missing molecule");
 		}
 		atomSet.setMolecule(molecule);
 		try {
