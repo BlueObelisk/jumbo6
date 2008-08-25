@@ -5,12 +5,19 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidString;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import junit.framework.Assert;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.util.TestUtils;
+
 
 /**
  * @author pm286
@@ -93,21 +100,17 @@ public class SMILESToolTest {
 		molS = 
 			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
 		  "<atomArray>"+
-		    "<atom id='a1' elementType='Si' hydrogenCount='3'/>"+
+		    "<atom id='a1' elementType='Si' formalCharge='0' hydrogenCount='0'/>"+
 		    "<atom id='a2' elementType='O' hydrogenCount='0'/>"+
-		    "<atom id='a3' elementType='Ge'/>"+
-		    "<atom id='a4' elementType='N'/>"+
-		    "<atom id='a1_h1' elementType='H'/>"+
-		    "<atom id='a1_h2' elementType='H'/>"+
-		    "<atom id='a1_h3' elementType='H'/>"+
+		    "<atom id='a3' elementType='Ge' formalCharge='0' hydrogenCount='0' />"+
+		    "<atom id='a4' elementType='N' hydrogenCount='1'/>"+
+		    "<atom id='a4_h1' elementType='H'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
 		    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
 		    "<bond atomRefs2='a3 a4' id='a3_a4' order='1'/>"+
 		    "<bond atomRefs2='a2 a4' id='a2_a4' order='1'/>"+
-		    "<bond atomRefs2='a1 a1_h1' id='a1_a1_h1' order='1'/>"+
-		    "<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
-		    "<bond atomRefs2='a1 a1_h3' id='a1_a1_h3' order='1'/>"+
+		    "<bond atomRefs2='a4 a4_h1' id='a4_a4_h1' order='1'/>"+
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
@@ -408,4 +411,492 @@ public class SMILESToolTest {
 		smiles = smilesTool.write();
 		Assert.assertEquals("smiles", "C1([NH1][CH2][CH2]1)=O.C1([NH1][CH2][CH2]1)=O", smiles);
 	}
+	
+	/**
+	 * @author dl387 2008
+	 */
+	@Test
+	public void unterminatedRingOpening1() {
+		String smiles = "C1CC";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace1() {
+		String smiles = "CCC-";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace2() {
+		String smiles = "CCC=";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace3() {
+		String smiles = "CCC#";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace4() {
+		String smiles = "-CCC";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace5() {
+		String smiles = "=CCC";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void bondPlacedInInvalidPlace6() {
+		String smiles = "#CCC";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 * Tests whether the  phosphorus will be assigned the correct hydrogen count
+	 *  of 0 instead of for example -2
+	 */
+	@Test
+	public void phosphorusPentaFluoride() {
+		String smiles = "P(F)(F)(F)(F)F";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/phosphorusPentaFluoride.xml");
+		
+		assertEqualsCanonically("PhosphorusPentaFluoride", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void realisticPositiveCharge1() {
+		String smiles = "[NH4+]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/realisticPositiveCharge1.xml");
+		
+		assertEqualsCanonically("Ammonium", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void realisticPositiveCharge2() {
+		String smiles = "C[N+](C)(C)C";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/realisticPositiveCharge2.xml");
+		
+		assertEqualsCanonically("Tetramethylammonium", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void negativeCharge() {
+		String smiles = "[O-]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/negativeCharge.xml");
+		
+		assertEqualsCanonically("Negative Oxygen", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void doublePositiveCharge1() {
+		String smiles = "[C++]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/doublePositiveCharge.xml");
+		
+		assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void doublePositiveCharge2() {
+		String smiles = "[C+2]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/doublePositiveCharge.xml");
+		
+		assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void doubleNegativeCharge1() {
+		String smiles = "[O--]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/doubleNegativeCharge.xml");
+		
+		assertEqualsCanonically("Double negative carbon", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void doubleNegativeCharge2() {
+		String smiles = "[O-2]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/doubleNegativeCharge.xml");
+		
+		assertEqualsCanonically("Double negative oxygen", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void badlyFormedSMILE1() {
+		String smiles = "H5";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void badlyFormedSMILE2() {
+		String smiles = "CH4";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 */
+	@Test
+	public void badlyFormedSMILE3() {
+		String smiles = "13C";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
+	
+	/**
+	 * @author dl387
+	 * Should have one explicit and one implicit hydrogen i.e. 2 hydrogens 
+	 * so it's just water!
+	 */
+	@Test
+	@Ignore
+	public void hydrogenHandling1() {//FIXME
+		String smiles = "O[H]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling1.xml");
+		
+		assertEqualsCanonically("Water", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Should have one hydrogen and a negative charge
+	 */
+	@Test
+	public void hydrogenHandling2() {
+		String smiles = "[OH-1]";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling2.xml");
+		
+		assertEqualsCanonically("Hydroxide", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * All three atoms should have one hydrogen each
+	 */
+	@Test
+	public void hydrogenHandling3() {
+		String smiles = "ONO";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling3.xml");
+		
+		assertEqualsCanonically("ONO", correctCML, smilesTool.getMolecule(), true);
+	}
+
+	// MISSING FEATURES
+	
+	/**
+	 * @author dl387
+	 * A test of the percentage sign syntax for describing ring openings
+	 */
+	@Test
+	public void ringSupportGreaterThan10() {
+		String smiles = "C%10CC%10";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("The following SMILES failed to parse but should have: "+smiles);
+		}
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/ringSupportGreaterThan10.xml");
+		
+		assertEqualsCanonically("CycloPropane", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Support for alternative ways of specifying tetrahedral chriality
+	 */
+	@Test
+	@Ignore
+	public void chiralityTetrahedral() {//FIXME
+		String smiles = "N[C@TH2H](C)C(=O)O";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("The following SMILES failed to parse but should have: "+smiles);
+		}
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/chiralityTetrahedral.xml");
+
+		assertEqualsCanonically("Alanine", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Support is missing for explicitly stating the type of chirality
+	 * This is only important for square planar where there is ambiguity
+	 * between this form and tetrahedral
+	 */
+	@Test
+	public void squarePlanarGeometry() {
+		String smiles = "F[Po@SP1](Cl)(Br)I";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("The following SMILES failed to parse but should have: "+smiles);
+		}
+		Assert.assertNotNull(smilesTool.getMolecule());
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks bondstereo tag is added correctly
+	 */
+	@Test
+	public void transTest() {	
+		String smiles = "F/C=C/F";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/transDiFluoroEthene.xml");
+		
+		assertEqualsCanonically("transDiFluoroEthene", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks the parser against a large collection of valid SMILES to check they atleast parse
+	 */
+	@Test
+	public void largeSmilesSelection() throws IOException {
+		File smilesFile = new File ("target/test-classes/org/xmlcml/cml/tools/examples/smilesFromJason.smi");
+		FileReader smilesFileHandle = new FileReader(smilesFile);
+		BufferedReader input =new BufferedReader(smilesFileHandle);
+		SMILESTool smilesTool = new SMILESTool();
+		
+		String smile;
+		int i=0;
+        while ((smile = input.readLine()) != null) {
+        	i++;
+        	if (smile.length()==0){continue;}
+        	try{
+        		smilesTool.parseSMILES(smile);
+        	}
+        	catch(Exception e){
+        		System.out.println("Failure on line " + i);
+        	}
+        }
+        input.close();
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks anticlockwise chirality
+	 */
+	@Test
+	public void chiralityTest() {
+		String smiles = "N[C@@H](F)C";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/chirality1.xml");
+		
+		assertEqualsCanonically("chirality1", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks clockwise chirality
+	 */
+	@Test
+	public void chiralityTest2() {
+		String smiles = "N[C@H](F)C";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/chirality2.xml");
+		
+		assertEqualsCanonically("chirality2", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks rings defined before chiral centre
+	 */
+	@Test
+	public void chiralityTest3() {
+		String smiles = "C2.N1.F3.[C@@H]231";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/chirality3.xml");
+		
+		assertEqualsCanonically("chirality3", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks rings defined after chiral centre
+	 */
+	@Test
+	public void chiralityTest4() {
+		String smiles = "[C@@H]231.C2.N1.F3";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/chirality4.xml");
+		
+		assertEqualsCanonically("chirality4", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Checks connected chiral centres
+	 */
+	@Test
+	public void chiralityTest5() {
+		String smiles = "[C@@H](Cl)1[C@H](C)(F).Br1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/chirality5.xml");
+		
+		assertEqualsCanonically("chirality5", correctCML, smilesTool.getMolecule(), true);
+	}
+
 }
