@@ -70,7 +70,7 @@ public class MorganTest extends MoleculeAtomBondTest {
         }, atomSets);
         
         SMILESTool smilesTool = new SMILESTool();
-        smilesTool.parseSMILES("RC1=[CH][NH][CH]=N1");
+        smilesTool.parseSMILES("[R]C1=[CH][NH][CH]=N1");
         CMLMolecule mol = smilesTool.getMolecule();
         MoleculeTool.getOrCreateTool(mol).expandImplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
         
