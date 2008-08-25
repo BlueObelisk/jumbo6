@@ -260,7 +260,7 @@ public class SMILESTool extends AbstractTool {
 	                		String[] atomRefs4 =atomParityTag.getAtomRefs4();
 	                		
 	                		for (int k = 0; k < atomRefs4 .length; k++) {
-	                			if (atomRefs4[k]==""){
+	                			if (atomRefs4[k].equals("")){
 	                				atomRefs4[k]="ring$#!"+ring;
 	                				break;
 	                			}
@@ -756,10 +756,10 @@ public class SMILESTool extends AbstractTool {
 	        }
         	
         	atomParity.setAtomRefs4(atomRefs4);
-	        if (chiral==S_ATAT){
+	        if (chiral.equals(S_ATAT)){
 	        	atomParity.setXMLContent("-4");
 	        }
-	        else if (chiral==S_AT) {
+	        else if (chiral.equals(S_AT)) {
 	        	atomParity.setXMLContent("4");
 	        }
         	atom.appendChild(atomParity);
