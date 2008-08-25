@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<molecule xmlns="http://www.xml-cml.org/schema">
+  <atomArray>
+    <atom id="a1" elementType="P" hydrogenCount="0"/>
+    <atom id="a2" elementType="F" hydrogenCount="0"/>
+    <atom id="a3" elementType="F" hydrogenCount="0"/>
+    <atom id="a4" elementType="F" hydrogenCount="0"/>
+    <atom id="a5" elementType="F" hydrogenCount="0"/>
+    <atom id="a6" elementType="F" hydrogenCount="0"/>
+  </atomArray>
+  <bondArray>
+    <bond atomRefs2="a1 a2" id="a1_a2" order="1"/>
+    <bond atomRefs2="a1 a3" id="a1_a3" order="1"/>
+    <bond atomRefs2="a1 a4" id="a1_a4" order="1"/>
+    <bond atomRefs2="a1 a5" id="a1_a5" order="1"/>
+    <bond atomRefs2="a1 a6" id="a1_a6" order="1"/>
+  </bondArray>
+</molecule>
