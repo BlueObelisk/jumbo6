@@ -1,18 +1,26 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomArray;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
-
 
 /**
  * additional tools for currentBond. not fully developed
@@ -22,6 +30,11 @@ import org.xmlcml.molutil.ChemicalElement;
  */
 public class SMILESTool extends AbstractTool {
 
+	private static Logger LOG = Logger.getLogger(SMILESTool.class);
+	static {
+		LOG.setLevel(Level.WARN);
+	}
+	
     /** dewisott */
     public final static char C_SINGLE   = '-';
     /** dewisott */
@@ -29,7 +42,7 @@ public class SMILESTool extends AbstractTool {
     /** dewisott */
     public final static char C_TRIPLE   = '#';
     /** dewisott */
-    public final static char C_AROMATIC = '-';
+    public final static char C_AROMATIC = ':';
     /** dewisott */
     public final static char C_NONE       = 0;
     /** dewisott */
@@ -55,6 +68,8 @@ public class SMILESTool extends AbstractTool {
     /** dewisott */
     public final static char C_BACKSLASH  = '\\';
     /** dewisott */
+    public final static char C_PERC       = '%';
+    /** dewisott */
     public final static String S_AT     = "@";
     /** dewisott */
     public final static String S_ATAT   = "@@";
@@ -68,6 +83,12 @@ public class SMILESTool extends AbstractTool {
     /** */
     public final static char C_p 		= 'p';
     /** */
+    public final static char C_s 		= 's';
+    /** */
+    public final static String S_as 	= "as";
+    /** */
+    public final static String S_se 	= "se";
+    /** */
     public final static char C__ ='_';
     /** */
     public final static char C_$ ='$';
@@ -75,15 +96,26 @@ public class SMILESTool extends AbstractTool {
     private static String AROMATIC 	= "aromatic";
     private static String CHIRAL 	= "chiral";
     private static String TRUE 		= "true";
-    private static String BR   		= "Br";
+
+    private static String B   		= "B";
+    private static String C   		= "C";
+    private static String N   		= "N";
+    private static String O   		= "O";
+    private static String P   		= "P";
+    private static String S   		= "S";
+    private static String F   		= "F";
     private static String CL   		= "Cl";
+    private static String BR   		= "Br";
+    private static String I   		= "I";
+
     private static String DU   		= "Du";
-    private static String SI   		= "Si";
+    //private static String SI   		= "Si";
     private static String SLASH   	= "slash";
     
     private CMLMolecule molecule;
     private CMLAtom currentAtom;
     private CMLBond currentBond;
+    private CMLAtom lastAtom;
     private char bondChar;
     private int natoms;
     private int nrs;
@@ -140,12 +172,13 @@ public class SMILESTool extends AbstractTool {
         }
 
         final Stack<CMLAtom> stack = new Stack<CMLAtom>();
-        final CMLAtom[] rings = new CMLAtom[10];
+        final CMLAtom[] rings = new CMLAtom[99];
         int i = 0;
         char c = 0;
         char slashChar = C_NONE;
         boolean hasDot = false;
         while (i < l) {
+        	lastAtom=currentAtom;
             c = rawSmiles.charAt(i);
             if (c == C_LBRAK) {
                 stack.push(currentAtom);
@@ -168,13 +201,14 @@ public class SMILESTool extends AbstractTool {
                 i = idx + 1;
                 currentAtom = addExtendedAtom(atomString, slashChar, atomStartChar, atomString);
                 bondChar = C_NONE;
+                slashChar = C_NONE;
             } else if(
                 c == C_SINGLE ||
                 c == C_AROMATIC ||
                 c == C_DOUBLE ||
                 c == C_TRIPLE
                 ) {
-                if (bondChar != C_NONE) {
+                if (bondChar != C_NONE || i==0 || i==l-1) {
                     throw new CMLRuntimeException("Bond not expected here: "+rawSmiles.substring(i));
                 }
                 bondChar = c;
@@ -190,24 +224,80 @@ public class SMILESTool extends AbstractTool {
             	hasDot = true;
                 currentAtom = null;
                 i++;
-            } else if(Character.isDigit(c)) {
-                final int ring = c - C_ZERO;
+            } else if(Character.isDigit(c) || c == C_PERC ) {
+            	if (currentAtom ==null){
+                    throw new CMLRuntimeException("Ring: "+ c + " does not have the starting or ending atom defined!");	
+            	}
+            	
+            	int ring;
+            	if (c == C_PERC){//support for using % syntax to define ring openings
+            		i++;
+            		if(i +1 < l){
+            			try{
+            				ring= Integer.parseInt(rawSmiles.substring(i, i+2));
+            				i++;
+            			}
+            			catch (NumberFormatException e){
+            				throw new CMLRuntimeException("Expected two digit number after % sign in string. Found: "
+            						+rawSmiles.substring(i, i+2));
+            			}
+            		}
+            		else{
+            			throw new CMLRuntimeException("Expected two digit number after % sign in SMILES. Found end of SMILES");	
+            		}
+            	}
+            	else{
+            		ring =c - C_ZERO;
+            	}
                 if (rings[ring] == null) {
                 	// start of ring
                     rings[ring] = currentAtom;
+                    
+                    //Notes the order rings connect to a chiral atom
+                    if (currentAtom.getAttributeValue(CHIRAL)!= null){
+                    	CMLElements<CMLAtomParity> atomParity = currentAtom.getAtomParityElements();
+	                	for (CMLAtomParity atomParityTag : atomParity) {
+	                		String[] atomRefs4 =atomParityTag.getAtomRefs4();
+	                		
+	                		for (int k = 0; k < atomRefs4 .length; k++) {
+	                			if (atomRefs4[k]==""){
+	                				atomRefs4[k]="ring$#!"+ring;
+	                				break;
+	                			}
+	        				}
+	                		atomParityTag.setAtomRefs4(atomRefs4);
+	                	}
+                    }                   
                 } else {
                 	// end of ring
-                    currentBond = addBond(rings[ring], currentAtom, bondChar, rawSmiles);
+                	
+                	//Updates chiral atom with id of atom that has joined to it
+                    if (rings[ring].getAttributeValue(CHIRAL)!= null){
+                    	CMLElements<CMLAtomParity> atomParity = rings[ring].getAtomParityElements();
+	                	for (CMLAtomParity atomParityTag : atomParity) {
+	                		String[] atomRefs4 =atomParityTag.getAtomRefs4();
+	                		
+	                		for (int k = 0; k < atomRefs4 .length; k++) {
+	                			if (atomRefs4[k].equals("ring$#!"+ring)){
+	                				atomRefs4[k]=currentAtom.getId();
+	                				break;
+	                			}
+	        				}
+	                		atomParityTag.setAtomRefs4(atomRefs4);
+	                	}
+                    } 
+                    currentBond = addBond(rings[ring], currentAtom,  bondChar, rawSmiles);
                     currentBond.setOrder(CMLBond.SINGLE);
                     rings[ring] = null;
                 }
                 i++;
             } else if(Character.isLetter(c)) {
             	int atomStartChar = i;
-                final String atomString = grabAtom(rawSmiles.substring(i));
+                final String atomString = grabOrganicAtom(rawSmiles.substring(i));
                 i += atomString.length();
                 /*CMLAtom atom = */ addAtom(atomString, slashChar, rawSmiles, atomStartChar, atomString);
                 bondChar = C_NONE;
+                slashChar = C_NONE;
                 
             } else if(c == C__ | c== C_$){
             	
@@ -230,6 +320,16 @@ public class SMILESTool extends AbstractTool {
             }
             
         }
+        
+        for (int r = 0; r < rings.length; r++) {
+			if (rings[r] != null){
+				throw new CMLRuntimeException("Ring: "+ r +" not closed!");
+			}
+		}
+        
+        markupDoubleBondCisTrans();
+    	//removeSmilesSpecificAttributes();
+        
         if (hasDot) {
         	new ConnectionTableTool(molecule).partitionIntoMolecules();
         	if (molecule.getMoleculeCount() > 0) {
@@ -238,9 +338,97 @@ public class SMILESTool extends AbstractTool {
         addHydrogens();
     	makeAromaticBonds();
 //    	convertToKekule();
+
+
     }
+
+    //removes Chiral and Slash attributes
+//    private void removeSmilesSpecificAttributes() {
+//        CMLAtomArray atomsInMoleculeArray = molecule.getAtomArray();
+//        List<CMLAtom> atomsInMolecule = atomsInMoleculeArray.getAtoms(); 
+//        for (CMLAtom atom : atomsInMolecule) {
+//        	if (atom.getAttributeValue(SLASH) != null){
+//        		atom.removeAttribute(SLASH);
+//        	}
+//        	if (atom.getAttributeValue(CHIRAL) != null){
+//        		atom.removeAttribute(CHIRAL);
+//        	}
+//        }
+//		
+//	}
+
+	//  C\C=C\C=C\C
+    private void markupDoubleBondCisTrans() {
+        CMLAtomArray atomsInMoleculeArray = molecule.getAtomArray();
+        List<CMLAtom> atomsInMolecule = atomsInMoleculeArray.getAtoms();  
+        for (CMLAtom atom : atomsInMolecule) {
+        	if (atom.getAttributeValue(SLASH) != null){
+        		Set<CMLAtom> atomsVisited = new HashSet<CMLAtom>();
+        		List<CMLAtom> atomRefs4sInDoubleBond = new ArrayList<CMLAtom>();
+        	    atomRefs4sInDoubleBond = recurseThroughAtoms(atomsVisited, atomRefs4sInDoubleBond, atom, 0);
+        	    if (atomRefs4sInDoubleBond.size() ==4){
+        	    	List<CMLBond> bondListWhichIncludesDoubleBond = atomRefs4sInDoubleBond.get(1).getLigandBonds();
+        	    	for (CMLBond bond : bondListWhichIncludesDoubleBond) {
+	        			if (CMLBond.DOUBLE == bond.getOrder() && 
+	        					bond.query("cml:bondStereo", CML_XPATH).size() == 0) {
+	        				CMLBondStereo bondstereo =new CMLBondStereo();
+	        				bondstereo.setAtomRefs4(
+	        						new String[]{
+	        						atomRefs4sInDoubleBond.get(0).getId(),
+	        						atomRefs4sInDoubleBond.get(1).getId(),
+	        						
+	        						atomRefs4sInDoubleBond.get(2).getId(),
+	        						atomRefs4sInDoubleBond.get(3).getId()
+	        						});
+	        				
+	        				char bond1Slashtype=atomRefs4sInDoubleBond.get(1).getAttributeValue(SLASH).charAt(0);
+	        				char bond2Slashtype=atomRefs4sInDoubleBond.get(2).getAttributeValue(SLASH).charAt(0);
+	        				
+	        				if ((bond1Slashtype == C_SLASH  && bond2Slashtype == C_SLASH) ||
+	        					(bond1Slashtype == C_BACKSLASH  && bond2Slashtype == C_BACKSLASH)){
+		        					bondstereo.setXMLContent("T");	
+	        				}
+	        				
+	        				if ((bond1Slashtype == C_BACKSLASH  && bond2Slashtype == C_SLASH) ||
+		        					(bond1Slashtype == C_SLASH  && bond2Slashtype == C_BACKSLASH)){
+			        					bondstereo.setXMLContent("C");	
+		        			}
+	        				bond.appendChild(bondstereo);
+	        			}
+        	    	}
+        	    }
+        	}
+        }
+	}
     
-    /**
+
+
+	private List<CMLAtom> recurseThroughAtoms(Set<CMLAtom> atomsVisited, 
+			List<CMLAtom> atomRefs4sInDoubleBond, CMLAtom atom, int i) {
+		atomsVisited.add(atom);
+		atomRefs4sInDoubleBond.add(i,atom);
+		if (i==3){
+			return atomRefs4sInDoubleBond;
+		}
+		List<CMLAtom> connectedAtoms = atom.getLigandAtoms();
+		List<CMLAtom> tempAtomRefs4sInDoubleBond=new ArrayList<CMLAtom>(atomRefs4sInDoubleBond);
+		for (CMLAtom atom2 : connectedAtoms ) {
+			if (atom2.getAttributeValue(SLASH)!=null && !atomsVisited.contains(atom2)){
+
+				atomRefs4sInDoubleBond= recurseThroughAtoms(atomsVisited, atomRefs4sInDoubleBond, atom2, i+1);
+				if (atomRefs4sInDoubleBond.size()==4){
+					return atomRefs4sInDoubleBond;
+				}
+				else{
+					atomRefs4sInDoubleBond=tempAtomRefs4sInDoubleBond;
+				}
+			}
+		}
+		return atomRefs4sInDoubleBond;
+	}
+
+
+	/**
      * @param i
      * @return id of atom starting at character i
      */
@@ -353,7 +541,11 @@ public class SMILESTool extends AbstractTool {
 //		moleculeTool.adjustBondOrdersToValency();
 //	}
 
-    private String grabAtom(final String s) {
+	/*
+	 * Retrieves the one or two letters corresponding to the symbol for the atom
+	 * Only organic elements can appear in SMILES strings outside square brackets
+	 */
+    private String grabOrganicAtom(final String s) {
     	if (s.length() == 0) {
     		throw new CMLRuntimeException("empty element symbol");
     	}
@@ -363,24 +555,71 @@ public class SMILESTool extends AbstractTool {
     		if (el == C_c ||
     			el == C_n ||
     			el == C_o ||
-    			el == C_p)
+    			el == C_p ||
+    			el == C_s)
     		{
     			;//
     		} else {
     			throw new CMLRuntimeException("element may not start with lowercase: "+s);
     		}
-    	} else 
-	// Cl and Br are hardcoded
-	        if (s.startsWith(BR) ||
-	            s.startsWith(SI) ||
-	            s.startsWith(CL)) {
+    	}
+        else if (s.startsWith(CL) || s.startsWith(BR)) {
 	            atomString = s.substring(0, 2);
-        } else {
+    	} else if(
+    			s.startsWith(B) ||
+    			s.startsWith(C) ||
+    			s.startsWith(N) ||
+    			s.startsWith(O) || 
+    			s.startsWith(P) ||
+    			s.startsWith(S) ||
+    			s.startsWith(F) ||
+    			s.startsWith(I) ){
+    		atomString = s.substring(0, 1);
+    	}
+    	else {
+        	throw new CMLRuntimeException("Unknown element encountered: "+atomString +
+        			" Only organic elements may appear outside square brackets!");
+        }
+        return atomString;
+    }
+    
+    
+	/*
+	 * Retrieves the one or two letters corresponding to the symbol for the atom
+	 * Presently a check is done to confirm that
+	 * this corresponds to an actual element (daylight doesn't do this)
+	 */
+    private String grabAtom(final String s) {
+    	if (s.length() == 0) {
+    		throw new CMLRuntimeException("empty element symbol");
+    	}
+        String atomString = s.substring(0, 1);
+        String elementSymbol = atomString;
+    	if (Character.isLowerCase(s.charAt(0))) {
+    		
+    		char el = s.charAt(0);
+    		if (s.startsWith(S_as) ||
+    			s.startsWith(S_se)){
+    			elementSymbol =atomString.toUpperCase() +s.charAt(1);
+    			atomString = s.substring(0, 2);
+    		}
+    		else if (el == C_c ||
+    			el == C_n ||
+    			el == C_o ||
+    			el == C_p ||
+    			el == C_s)
+    		{
+    			elementSymbol =atomString.toUpperCase();
+    		} else {
+    			throw new CMLRuntimeException("element may not start with lowercase: "+s);
+    		}
+    	}
+    	else {
         	if(s.length() == 2 && Character.isLowerCase(s.charAt(1))) {
         		atomString = s.substring(0, 2);
+        		elementSymbol = atomString;
         	}
         }
-    	String elementSymbol = (atomString.length() == 1) ? atomString.toUpperCase() : atomString;
         ChemicalElement chemicalElement = ChemicalElement.getChemicalElement(elementSymbol);
         if (chemicalElement == null) {
         	throw new CMLRuntimeException("Unknown element: "+atomString);
@@ -390,6 +629,7 @@ public class SMILESTool extends AbstractTool {
 
 
 //atom : '[' <mass> symbol <chiral> <hcount> <sign<charge>> ']'
+//Note that chiral, hcount and sign/charge can appear in any order technically
 
     private CMLAtom addExtendedAtom(final String s, final char slashChar, int atomStartChar, String atomString) {
 // create atom with dummy elementType
@@ -412,76 +652,119 @@ public class SMILESTool extends AbstractTool {
         setElementType(atom, elementType);
         i += elementType.length();
 
+        
+        int hydrogenCount =0;
+        int charge =0;
+        String chiral ="";
+        while (i < l){
 // chirality
-        if (i < l) {
             if (s.substring(i).startsWith(S_ATAT)) {
                 atom.setAttribute(CHIRAL, S_ATAT);
-                i++; i++;
+                chiral=S_ATAT;
+                i=i+2;
             } else if (s.substring(i).startsWith(S_AT)) {
-                atom.setAttribute(CHIRAL, S_AT);
-                i++;
+            	if(Pattern.matches(S_AT +"[A-Z][A-Z]\\d\\S*", s.substring(i))){
+            		i=i+4;
+            		LOG.warn("Currently unsupported chiral specification");
+            	}
+            	else{
+	                atom.setAttribute(CHIRAL, S_AT);
+	                chiral=S_AT;
+	                i++;
+            	}
             }
-        }
+            else if (s.charAt(i) == 'H') {
 // hydrogenCount
-        if (i < l) {
-            if (s.charAt(i) == 'H') {
                 i++;
                 if (i < l && Character.isDigit(s.charAt(i))) {
-                    atom.setHydrogenCount(Integer.parseInt(s.substring(i, i+1)));
-                    i++;
+                    int startOfCountInString=i;
+            		while (i < l) {
+            			if (!Character.isDigit(s.charAt(i))) {
+                			break;
+            			}
+            			i++;
+    	            }
+                	hydrogenCount= Integer.parseInt(s.substring(startOfCountInString, i));
                 } else {
-                    atom.setHydrogenCount(1);
+                	hydrogenCount =1;
                 }
             }
-        }
+            else if (s.charAt(i) == C_PLUS){ 
 // formalCharge
-        if (i < l) {
-        	int charge = 0;
-            char sign = s.charAt(i);
-        	if (sign != C_PLUS && sign != C_MINUS) {
-        		throw new CMLRuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
-        	}
-            i++;
-            if (i >= l) {
-            	// run off end
-            } else if (sign == C_PLUS) {
-            	if (charge == 0) {
-            		charge = 1;
-            	} else {
-            		charge ++;
-            		while (i+1 < l) {
-            			sign = s.charAt(i+1);
-            			if (sign != C_PLUS) {
-            				break;
-            			}
+        		charge++;
+        		i++;
+        		while (i < l) {
+        			char sign = s.charAt(i);
+        			if (sign == C_PLUS) {
             			charge++;
             			i++;
-            		}
-            	}
-            } else if (sign == C_MINUS) {
-            	if (charge == 0) {
-            		charge = -1;
-            	} else {
-            		charge --;
-            		while (i+1 < l) {
-            			sign = s.charAt(i+1);
-            			if (sign != C_MINUS) {
-            				break;
-            			}
+        			}
+        			else if (Character.isDigit(s.charAt(i))) {
+    		            charge = s.charAt(i) - C_ZERO;
+    		            i++;
+    		            break;
+        			}
+        			else{
+        				break;
+        			}
+        		}
+        	}
+        	else if (s.charAt(i) == C_MINUS) {
+        		charge--;
+        		i++;
+        		while (i < l) {
+        			char sign = s.charAt(i);
+        			if (sign == C_MINUS) {
             			charge--;
             			i++;
-            		}
-            	}
-            } else if (!Character.isDigit(s.charAt(i))) {
-                throw new CMLRuntimeException("Sign must be of form -n or +n  (found "+s.charAt(i)+") in "+scopy);
-            } else {
-	            charge = s.charAt(i) - C_ZERO;
-	            if (sign == C_MINUS) {
-	                charge *= -1;
+        			}
+        			else if (Character.isDigit(s.charAt(i))) {
+    		            charge = s.charAt(i) - C_ZERO;
+    		            charge *=-1;
+    		            i++;
+    		            break;
+        			}
+        			else{
+        				break;
+        			}
 	            }
             }
-            atom.setFormalCharge(charge);
+            else{
+            	throw new CMLRuntimeException("Invalid symbol found in atom description, found: "+s.charAt(i) );
+            }
         }
+        //throw new CMLRuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
+        
+        atom.setFormalCharge(charge);
+        atom.setHydrogenCount(hydrogenCount);
+        
+// CML parity tag added if applicable       
+        if (chiral !=""){
+	        CMLAtomParity atomParity =new CMLAtomParity();
+	        String[] atomRefs4 =new String[]{"","","",""};
+	        
+	        if (lastAtom !=null){
+	        	atomRefs4[0]=lastAtom.getId();
+	        	if (hydrogenCount >=1){
+	        		atomRefs4[1]=atom.getId() + "_h1";
+	        	}
+	        }
+	        else{
+	        	if (hydrogenCount >=1){
+	        		atomRefs4[0]=atom.getId() + "_h1";
+	        	}
+	        }
+        	
+        	atomParity.setAtomRefs4(atomRefs4);
+	        if (chiral==S_ATAT){
+	        	atomParity.setXMLContent("-4");
+	        }
+	        else if (chiral==S_AT) {
+	        	atomParity.setXMLContent("4");
+	        }
+        	atom.appendChild(atomParity);
+        }
+        
         return atom;
     }
 
@@ -493,7 +776,13 @@ public class SMILESTool extends AbstractTool {
                 atom.setAttribute(AROMATIC, TRUE);
                 elementType = elementType.toUpperCase();
             }
-        } else {
+	    } else if (elementType.length() == 2) {
+	        if (Character.isLowerCase(elementType.charAt(0))) {
+	            atom.setAttribute(AROMATIC, TRUE);
+	            elementType = elementType.substring(0,1).toUpperCase() + elementType.charAt(1) ;
+	        }
+	    } 
+        else {
             if (!Character.isUpperCase(elementType.charAt(0)) &&
                 Character.isLowerCase(elementType.charAt(1))) {
                 throw new CMLRuntimeException("Bad element :"+elementType);
@@ -523,6 +812,38 @@ public class SMILESTool extends AbstractTool {
     private CMLBond addBond(final CMLAtom currentAtom, 
     		final CMLAtom atom, char bondChar, String rawSmiles) {
         final CMLBond bond = new CMLBond(currentAtom, atom);
+
+        if (currentAtom.getAttributeValue(CHIRAL)!= null){
+        	CMLElements<CMLAtomParity> atomParity = currentAtom.getAtomParityElements();
+        	for (CMLAtomParity atomParityTag : atomParity) {
+        		String[] atomRefs4 =atomParityTag.getAtomRefs4();
+        		
+        		for (int i = 0; i < atomRefs4 .length; i++) {
+        			if (atomRefs4[i]==""){
+        				atomRefs4[i]=atom.getId();
+        				break;
+        			}
+				}
+
+        		atomParityTag.setAtomRefs4(atomRefs4);
+			} 
+        }
+        if (atom.getAttributeValue(CHIRAL)!= null){
+        	CMLElements<CMLAtomParity> atomParity =atom.getAtomParityElements();
+        	for (CMLAtomParity atomParityTag : atomParity) {
+        		String[] atomRefs4 =atomParityTag.getAtomRefs4();
+        		
+        		for (int i = 0; i < atomRefs4 .length; i++) {
+        			if (atomRefs4[i]==""){
+        				atomRefs4[i]=currentAtom.getId();
+        				break;
+        			}
+				}
+
+        		atomParityTag.setAtomRefs4(atomRefs4);
+			} 
+        }
+        
         molecule.addBond(bond);
         if (bondChar == C_NONE) {
             bondChar = C_SINGLE;
@@ -549,9 +870,8 @@ public class SMILESTool extends AbstractTool {
     	return sWriter.getString();
     }
 
-	
+
     
- 
     /**
      * normalizes ring numbers in SMILES to be as low as possible
      * crude. assumes less than 9 rings open at any time
