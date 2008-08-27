@@ -430,115 +430,6 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
         return (i == 0) ? 0 : ((i < 0) ? -1 : 1);
     }
 
-    /*--
-     static int xcompareTo(Element thisElem, Element elemElem) {
-     int order = 0;
-     if (elemElem == null) {
-     return -1;
-     }
-     // same element?
-     if (thisElem == elemElem) {
-     return 0;
-     }
-     order = thisElem.getLocalName().compareTo(elemElem.getLocalName());
-     // same number of attributes?
-     if (order == 0) {
-     int diff = thisElem.getAttributeCount() - elemElem.getAttributeCount(); 
-     if (diff > 0) {
-     order = 1;
-     } else if (diff < 0) {
-     order = -1;
-     }
-     }
-     // yes, iterate through and compare
-     if (order == 0) {
-     for (int i = 0; i < thisElem.getAttributeCount(); i++) {
-     Attribute att = thisElem.getAttribute(i);
-     Attribute eAtt = elemElem.getAttribute(att.getLocalName());
-     if (eAtt == null) {
-     order = -1;
-     break;
-     }
-     if (att instanceof CMLAttribute) {
-     order = ((CMLAttribute) att).compareTo(eAtt);
-     if (order != 0) {
-     break;
-     }
-     } else {
-     order = att.getLocalName().compareTo(eAtt.getLocalName());
-     if (order != 0) {
-     break;
-     }
-     order = att.getValue().compareTo(eAtt.getValue());
-     if (order != 0) {
-     break;
-     }
-     }
-     }
-     }
-     // same number of children?
-     // same number of attributes?
-     if (order == 0) {
-     int diff = thisElem.getChildCount() - elemElem.getChildCount(); 
-     if (diff > 0) {
-     order = 1;
-     } else if (diff < 0) {
-     order = -1;
-     }
-     
-     }
-     // yes, iterate through and compare
-     if (order == 0) {
-     for (int i = 0; i < thisElem.getChildCount(); i++) {
-     Node thisChild = thisElem.getChild(i);
-     Node elemChild = elemElem.getChild(i);
-     // compare classes
-     order = thisChild.getClass().getName().compareTo(elemChild.getClass().getName());
-     if (order != 0) {
-     break;
-     }
-     // compare CMLElements
-     if (thisChild instanceof CMLElement) {
-     order = ((CMLElement) thisChild).xcompareTo((CMLElement)elemChild);
-     if (order != 0) {
-     break;
-     }
-     } else if (thisChild instanceof Element) {
-     // non-CML elements
-     Element thisChildElem = (Element) thisChild;
-     Element elemChildElem = (Element) elemChild;
-     order = xcompareTo(thisChildElem, elemChildElem);
-     if (order != 0) {
-     break;
-     }
-     } else {
-     // nodes
-     order = thisChild.getValue().compareTo(elemChild.getValue());
-     if (order != 0) {
-     break;
-     }
-     }
-     }
-     }
-     return (order == 0) ? 0 : order/Math.abs(order);
-     }
-     --*/
-
-    /**
-     * detaches from current parent. if this is rootElement, replaces it with a
-     * dummy. else detaches as normal
-     */
-    /*
-    public void detach() {
-        ParentNode parent = this.getParent();
-        if (parent == null) {
-        } else if (parent instanceof Document) {
-            parent.replaceChild(this, new Element("dummy"));
-        } else {
-            super.detach();
-        }
-    }
-    */
 
     // ========================== utilities ====================== //
 
@@ -1115,7 +1006,34 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
             log.add(t, message);
         }
     }
+
+    /** convenience method to add cmlx:foo attributes.
+     * 
+     * @param attName WITHOUT prefix
+     * @param attValue if null removes any old attributes
+     */
+    public void setCMLXAttribute(String attName, String attValue) {
+    	if (attValue == null) {
+    		Attribute attribute = this.getAttribute(attName, CMLX_NS);
+    		if (attribute != null) {
+    			this.removeAttribute(attribute);
+    		}
+    	} else {
+    		Attribute attribute = makeCMLXAttribute(attName, attValue);
+    		this.addAttribute(attribute);
+    	}
+    }
     
+    /** convenience method to create new cmlx:foo attribute.
+     * 
+     * @param attName WITHOUT prefix and colon
+     * @param value if null undefined
+     * @return
+     */
+	public static Attribute makeCMLXAttribute(String attName, String value) {
+		return new Attribute(CMLX_PREFIX+S_COLON+attName, CMLX_NS, value);
+	}
+
     /**
      * <p>
      * Appends a node to the children of this node.
