@@ -109,8 +109,6 @@ public class RefAttribute extends StringSTAttribute {
         // transfer any args from referring element
 //        CMLArg.transferArgs(element, newElem);
 //        CMLArg.substituteNameByValue(newElem);
-//        System.out.println("%%%%%%%%%%%%%%%%%%%%");
-//        System.out.println("%%%%%%%%%%%%%%%%%%%%");
         CMLElement parent = (CMLElement) element.getParent();
         int idx = parent.indexOf(element);
         parent.insertChild(newElem, idx);

@@ -12,6 +12,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.IdAttribute;
 import org.xmlcml.cml.attribute.RefAttribute;
 import org.xmlcml.cml.base.CMLElement;
@@ -26,6 +27,7 @@ import org.xmlcml.cml.base.CMLUtil;
  * @author pm286
  */
 public class CMLArg extends AbstractArg {
+	private static Logger LOG = Logger.getLogger(CMLArg.class);
 
 	/** namespaced element name.*/
 	public final static String NS = C_E+TAG;
@@ -522,7 +524,7 @@ public class CMLArg extends AbstractArg {
                 } else if (node instanceof Text) {
                     ((Text)node).setValue(val);
                 } else {
-                    System.out.println("BUG "+node.getClass());
+                    LOG.error("BUG "+node.getClass());
                 }
             }
         }

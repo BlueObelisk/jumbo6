@@ -3,6 +3,7 @@
  */
 package org.xmlcml.cml.base;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +12,18 @@ import java.util.Map;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 /**
  * @author pm286
  *
  */
 public class AttributeGenerator extends AbstractGenerator {
-
+	private static Logger LOG = Logger.getLogger(AttributeGenerator.class);
+	static {
+		LOG.setLevel(Level.INFO);
+	}
 	private Map<String, CMLAttribute> attributeGroupMap;
 	
 	/**
@@ -90,8 +97,8 @@ public class AttributeGenerator extends AbstractGenerator {
 		Element attributeElement = (Element) attributes.get(0);
 		String attributeName = attributeElement.getAttributeValue("name");
 		if (!attributeName.equals(attributeGroupName)) {
-//			System.out.println("NOTE: attributeGroup name != attribute ("+attributeGroupName+
-//					" != "+attributeName+")");
+			LOG.debug("NOTE: attributeGroup name != attribute ("+attributeGroupName+
+					" != "+attributeName+")");
 		}
 		String typeS = attributeElement.getAttributeValue("type");
 		if (typeS == null) {
@@ -101,7 +108,7 @@ public class AttributeGenerator extends AbstractGenerator {
 		CMLType type = typeMap.get(typeS);
 		if (type == null) {
 			for (String sss : typeMap.keySet()) {
-				System.out.println(sss);
+				LOG.debug(sss);
 			}
 			throw new CMLRuntimeException("Cannot find CMLType for "+typeS);
 		}

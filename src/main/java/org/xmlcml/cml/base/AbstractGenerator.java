@@ -10,12 +10,14 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author pm286
  *
  */
 public abstract class AbstractGenerator implements CMLConstants {
-
+	private static Logger LOG = Logger.getLogger(AbstractGenerator.class);
 	protected List<String> nameList;
 	protected SchemaManager schemaManager;
 	protected Element schema;
@@ -47,7 +49,7 @@ public abstract class AbstractGenerator implements CMLConstants {
 			doc.replaceChild(elem, new Element("s_dummy"));
 			schema.appendChild(elem);
 		}
-//		System.out.println("CHILD "+schema.getChildCount());
+		LOG.debug("CHILD "+schema.getChildCount());
 		
 		return schema;
 	}

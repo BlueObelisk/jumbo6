@@ -164,6 +164,8 @@ public class ReactionToolTest extends ReactionAllTestBase {
         balancedR = (CMLReaction) parseValidString(balancedS);
         unbalancedR = (CMLReaction) parseValidString(unbalancedS);
         
+//        InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/examples/reactions/reaction1.xml");
+//        reaction1 = (CMLReaction) new CMLBuilder().build(is).getRootElement();
         InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/examples/reactions/reaction0.xml");
         CMLCml cml = (CMLCml) new CMLBuilder().build(is).getRootElement();
         reaction0 = (CMLReaction) cml.query(".//cml:reaction", CML_XPATH).get(0);

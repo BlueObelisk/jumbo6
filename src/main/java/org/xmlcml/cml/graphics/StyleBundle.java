@@ -106,7 +106,7 @@ public class StyleBundle implements CMLConstants {
 					} else if (aa[0].equals("opacity")) {
 						opacity = getDouble(aa[1]); 
 					} else {
-						throw new CMLRuntimeException("unsupported style: "+aa[0]);
+						throw new RuntimeException("unsupported style: "+aa[0]);
 					}
 				}
 			}

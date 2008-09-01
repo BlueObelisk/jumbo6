@@ -11,6 +11,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -27,6 +28,7 @@ import org.xmlcml.cml.element.CMLName;
  * 
  */
 public class Applications {
+	private static Logger LOG = Logger.getLogger(Applications.class);
 
     /** possible tests
      * 
@@ -46,28 +48,28 @@ public class Applications {
      */
     public static void readCML(String[] args) {
         if (args.length == 2 && args[1].equalsIgnoreCase("-HELP")) {
-            System.out.println("readCML filename");
+        	LOG.debug("readCML filename");
         } else {
             Document doc = null;
             try {
-                System.out.println("Reading: "+args[1]);
+            	LOG.debug("Reading: "+args[1]);
                 doc = new CMLBuilder().build(new File(args[1]));
             } catch (ValidityException e) {
-                System.out.println("Not a valid CML file: "+args[1]+e);
+            	LOG.warn("Not a valid CML file: "+args[1]+e);
                 e.printStackTrace();
             } catch (ParsingException e) {
-                System.out.println("Not a valid CML file: "+args[1]+e);
+                LOG.warn("Not a valid CML file: "+args[1]+e);
                 e.printStackTrace();
             } catch (IOException e) {
-                System.out.println("Cannot read CML file: "+args[1]);
+                LOG.warn("Cannot read CML file: "+args[1]);
                 e.printStackTrace();
             }
             Element rootElement = doc.getRootElement();
-            System.out.println("Parse file, root element is "+rootElement.getLocalName());
+            LOG.info("Parse file, root element is "+rootElement.getLocalName());
             if (rootElement instanceof CMLElement) {
-                System.out.println("root element is in CML namespace: "+
+            	LOG.info("root element is in CML namespace: "+
                         rootElement.getNamespaceURI());
-                System.out.println("Document parsed to:");
+            	LOG.info("Document parsed to:");
 //                CMLElement cmlElement = (CMLElement) rootElement;
             }
         }
@@ -81,22 +83,22 @@ public class Applications {
      */
     public static void makeCML(String[] args) {
         if (args.length == 2 && args[1].equalsIgnoreCase("-HELP")) {
-            System.out.println("readCML [filename]");
-            System.out.println("... if filename is present will write to this file");
+            LOG.info("readCML [filename]");
+            LOG.info("... if filename is present will write to this file");
         } else {
             CMLMolecule molecule = new CMLMolecule();
             molecule.setId("m1");
             CMLName name = new CMLName();
             name.setXMLContent("benzene");
             molecule.appendChild(name);
-            System.out.println("The following molecule has been craeted");
+            LOG.info("The following molecule has been craeted");
             molecule.debug("MOL");
             if (args[1] != null) {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(args[1]);
                 } catch (FileNotFoundException e) {
-                    System.out.println("File not found: "+args[1]);
+                	LOG.info("File not found: "+args[1]);
                     e.printStackTrace();
                 }
                 Document doc = new Document(molecule);
@@ -104,7 +106,7 @@ public class Applications {
                 try {
                     serializer.write(doc);
                 } catch (IOException e) {
-                    System.err.println("Cannout output file: "+e);
+                    LOG.error("Cannot output file: "+e);
                     e.printStackTrace();
                 }
             }

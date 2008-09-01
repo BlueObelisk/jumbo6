@@ -94,6 +94,11 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
             this.defalt = def;
         }
     }
+    
+    public enum AxisType {
+    	LEFTHANDED,
+    	RIGHTHANDED
+    }
 
     final static Logger logger = Logger.getLogger(CMLElement.class.getName());
     final static String ID = "id";
