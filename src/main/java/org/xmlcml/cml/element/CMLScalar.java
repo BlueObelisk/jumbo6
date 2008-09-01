@@ -144,7 +144,7 @@ public class CMLScalar extends AbstractScalar implements HasUnits, HasScalar {
 				try {
 					result = CMLUtil.parseFlexibleDouble(content);
 				} catch (ParseException e) {
-					throw new CMLRuntimeException("Bad double :" + content, e);
+					throw new CMLRuntimeException("Bad double :" + content+":", e);
 				}
 			}
 		}

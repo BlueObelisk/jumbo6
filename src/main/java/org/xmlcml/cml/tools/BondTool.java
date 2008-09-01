@@ -165,7 +165,7 @@ public class BondTool extends AbstractSVGTool {
     }
 
     private SVGElement createBond(String stroke, double width, Real2 xy0, Real2 xy1) {
-    	SVGElement line = new SVGLine(xy0, xy1);
+		SVGElement line = new SVGLine(xy0, xy1);
     	line.setStroke(stroke);
     	line.setStrokeWidth(width);
     	line.setUserElement(bond);

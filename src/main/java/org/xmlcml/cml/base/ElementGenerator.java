@@ -3,6 +3,7 @@
  */
 package org.xmlcml.cml.base;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +12,15 @@ import java.util.Map;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author pm286
  *
  */
 public class ElementGenerator extends AbstractGenerator {
+	private static Logger LOG = Logger.getLogger(ElementGenerator.class);
 
 	private Map<String, CMLElementType> elementTypeMap;
 	/**
@@ -73,10 +77,10 @@ public class ElementGenerator extends AbstractGenerator {
 	void printElements() {
 		for (String name : nameList) {
 			CMLElementType elementType = elementTypeMap.get(name);
-			System.out.println("========================================");
-			System.out.println(name);
-			System.out.println("========================================");
-			System.out.println(elementType.toString());
+			LOG.debug("========================================");
+			LOG.debug(name);
+			LOG.debug("========================================");
+			LOG.debug(elementType.toString());
 		}
 	}
 

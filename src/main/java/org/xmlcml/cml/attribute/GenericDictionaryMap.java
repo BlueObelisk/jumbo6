@@ -179,20 +179,5 @@ public abstract class GenericDictionaryMap extends
 				.getGenericEntry(entryId);
 	}
 
-//	/**
-//	 * some debugging output. probably to sysout
-//	 */
-//	private void debug() {
-//		System.out.println("Dictionary map: " + this.size());
-//		for (String s : this.keySet()) {
-//			GenericDictionary gd = this.get(s);
-//			System.out.println(s + S_COLON);
-//			gd.debug();
-//		}
-//	}
-//
-//	private String getValue() {
-//		return null;
-//	}
 
 }

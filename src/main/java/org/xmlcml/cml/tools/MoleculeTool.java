@@ -23,6 +23,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.cml.base.CMLElement.AxisType;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAngle;
@@ -1776,7 +1777,12 @@ public class MoleculeTool extends AbstractSVGTool {
     		if (bondTool.getBondDisplay().omitBond(bond)) {
     			continue;
     		}
-    		SVGElement b = bondTool.createGraphicsElement(drawable);
+    		SVGElement b = null;
+    		try {
+    			b = bondTool.createGraphicsElement(drawable);
+        	} catch (RuntimeException e) {
+    			LOG.warn("Cannot draw bond; skipped: "+e.getMessage());
+        	}
     		if (b != null) {
     			g.appendChild(b);
     		}
@@ -1910,6 +1916,15 @@ public class MoleculeTool extends AbstractSVGTool {
 	public void setMoleculeDisplay(MoleculeDisplay MoleculeDisplay) {
 		this.moleculeDisplay = MoleculeDisplay;
 	}
+
+//	
+//	public void setCoordinateAxes(CoordinateType type, AxisType axis) {
+//		if (CoordinateType.CARTESIAN.equals(type)) {
+////			String hand = molecule.get
+//		} else {
+//			throw new RuntimeException("May not change 3D axes handedness");
+//		}
+//	}
 
 	/**
 	 * @return the currentAtom
