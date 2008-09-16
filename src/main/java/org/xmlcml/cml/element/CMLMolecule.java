@@ -229,10 +229,6 @@ public class CMLMolecule
 	 */
 	public void addAtom(CMLAtom atom) throws CMLRuntimeException {
 		if (atom != null) {
-			//ParentNode parent = this.getParent();
-			//if (parent instanceof CMLMolecule) {
-			//    throw new CMLRuntimeException("Cannot add atom to child molecule");
-			//}
 			CMLAtomArray atomArray = getOrCreateAtomArray();
 			// should it be atom array that tests this?
 			String id = atom.getId();
@@ -1175,15 +1171,35 @@ public class CMLMolecule
 	 */
 	public CMLBond getBond(CMLAtom a1, CMLAtom a2) {
 		String atomHash = CMLBond.atomHash(a1, a2);
+		return getBondFromHash(atomHash);
+	}
+
+	/**
+	 * get bond connecting 2 atoms.
+	 *
+	 * @param a1
+	 *            first atom
+	 * @param a2
+	 *            second atom
+	 * @return bond or null if not found
+	 */
+	public CMLBond getBond(String id1, String id2) {
+		String atomHash = CMLBond.atomHash(id1, id2);
+		return getBondFromHash(atomHash);
+	}
+
+	private CMLBond getBondFromHash(String atomHash) {
+		CMLBond theBond = null;
 		if (atomHash != null) {
 			for (CMLBond bond : getBonds()) {
 				String bondHash = CMLBond.atomHash(bond);
 				if (bondHash.equals(atomHash)) {
-					return bond;
+					theBond = bond;
+					break;
 				}
 			}
 		}
-		return null;
+		return theBond;
 	}
 
 	/**

@@ -127,7 +127,7 @@ public class SMILESTool extends AbstractTool {
 //    private List<String> ringIdList;
 //    private List<String> ringChunkList;
     private String rawSmiles;
-	private String scopy;
+//	private String scopy;
     
     /** constructor
      */
@@ -146,7 +146,7 @@ public class SMILESTool extends AbstractTool {
      */
     public void parseSMILES(String sss) {
 
-    	scopy = sss;
+//    	scopy = sss;
 		rawSmiles = expandString(sss);
         rawSmiles = rawSmiles.trim();
         molecule = new CMLMolecule();

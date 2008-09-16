@@ -23,7 +23,6 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.CMLElement.AxisType;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAngle;
@@ -292,26 +291,23 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * ligand
 	 *
 	 * @param atom
+	 * @deprecated use AtomTool method
 	 * @exception CMLRuntimeException
 	 *                no hydrogen ligands on atom
+	 *                
 	 */
 	public void deleteHydrogen(CMLAtom atom) {
 		if (atom.getHydrogenCountAttribute() != null) {
 			if (atom.getHydrogenCount() > 0) {
 				atom.setHydrogenCount(atom.getHydrogenCount() - 1);
-			} else {
-				throw new CMLRuntimeException("No hydrogens to delete");
 			}
-		} else {
-			Set<ChemicalElement> hSet = ChemicalElement
-			.getElementSet(new String[] { AS.H.value });
-			List<CMLAtom> hLigandVector = CMLAtom.filter(atom.getLigandAtoms(),
-					hSet);
-			if (hLigandVector.size() > 0) {
-				molecule.deleteAtom(hLigandVector.get(0));
-			} else {
-				throw new CMLRuntimeException("No hydrogens to delete");
-			}
+		}
+		Set<ChemicalElement> hSet = ChemicalElement.getElementSet(
+				new String[] { AS.H.value });
+		List<CMLAtom> hLigandVector = CMLAtom.filter(atom.getLigandAtoms(),
+				hSet);
+		if (hLigandVector.size() > 0) {
+			molecule.deleteAtom(hLigandVector.get(0));
 		}
 	}
 
@@ -888,6 +884,20 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
+	/**
+	 * 
+	 */
+	public void create2DCoordinatesFrom3D(double bondLengthScale) {
+		List <CMLAtom> atomList = molecule.getAtoms();
+		for (CMLAtom atom : atomList) {
+			double x3 = atom.getX3();
+			atom.setX2(x3*bondLengthScale);
+			double y3 = atom.getY3();
+			atom.setY2(y3*bondLengthScale);
+		}
+		Real2 centroid2 = molecule.getAtomSet().getCentroid2D();
+		molecule.translate2D(centroid2.multiplyBy(-1.0));
+	}
 
 	/**
 	 * gets atomset corresponding to bondset.
@@ -1299,16 +1309,30 @@ public class MoleculeTool extends AbstractSVGTool {
 		return connectionTableTool.getRingNucleiMolecules();
 	}
 
+
 	/**
 	 * join one molecule to another. 
 	 * manages the XML but not yet the geometry
 	 * empties the added molecule of elements and copies them
 	 * to this.molecule and then detaches the addedMolecule
 	 * @param addedMolecule to be joined
-	 * @param takeAtomWithLowestId
+	 * @param takeAtomWithLowestId DUMMY AT PRESENT
 	 */
 	public void addMoleculeTo(CMLMolecule addedMolecule, boolean takeAtomWithLowestId) {
+		addMoleculeTo(addedMolecule);
+	}
+	
+	/**
+	 * join one molecule to another. 
+	 * manages the XML but not yet the geometry
+	 * empties the added molecule of elements and copies them
+	 * to this.molecule and then detaches the addedMolecule
+	 * @param addedMolecule to be joined
+	 */
+	public void addMoleculeTo(CMLMolecule addedMolecule) {
 
+		MoleculeTool addedMoleculeTool = MoleculeTool.getOrCreateTool(addedMolecule);
+		addedMoleculeTool.renumberToUniqueIds(this.getAtomIdList());
 		molecule.getOrCreateAtomArray();
 		// bonds must be done first as atom.detach() destroys bonds
 		List<CMLBond> bondList = addedMolecule.getBonds();
@@ -1336,6 +1360,50 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 		}
 		addedMolecule.detach();
+	}
+
+	/**
+	 * @return list of atomIds in order
+	 */
+	public List<String> getAtomIdList() {
+		List<String> idList = new ArrayList<String>();
+		for (CMLAtom atom : molecule.getAtoms()) {
+			idList.add(atom.getId());
+		}
+		return idList;
+	}
+
+	/**
+	 * renumbers atoms in molecule so they do not clash with other Ids
+	 * iterates through "a1", "a2" finding the free spaces.
+	 * hydrogens will not be prettily numbered
+	 * @param avoidList ids already alocated in other molecules
+	 */
+	public void renumberToUniqueIds(List<String> avoidList) {
+		Set<String> stringSet = checkUnique(avoidList);
+		int totalSize = molecule.getAtomCount() + avoidList.size();
+		List<String> fromIdList = new ArrayList<String>();
+		List<String> toIdList = new ArrayList<String>();
+		// TODO hydrogens will not be pretty - 
+		int ii = 1;
+		for (CMLAtom atom : molecule.getAtoms()) {
+			String id = atom.getId();
+			if (stringSet.contains(id)) {
+				fromIdList.add(id);
+				String newId = null;
+				while (ii < totalSize) {
+					newId = "a"+ii;
+					if (!stringSet.contains(newId) && molecule.getAtomById(newId) == null) {
+						// new unique
+						break;
+					}
+					ii++;
+				}
+				toIdList.add(newId);
+				LOG.debug(id+" => "+newId);
+			}
+		}
+		renumberAtomIds(fromIdList, toIdList);
 	}
 
 	/** adjust the cartesians to fit declared torsions.
@@ -2034,6 +2102,76 @@ public class MoleculeTool extends AbstractSVGTool {
     	formula.setConvention(Convention.ATOMARRAY.v);
     	molecule.appendChild(formula);
     }
+
+
+    /** renumbers atoms in molecule.
+     * uses renumberAtomId
+     * includes any attributes including atomRef/atomRefs2/atomRefs3/atomRefs4/atomRefs
+     * @param fromIdList
+     * @param toIdList
+     * @throws RuntimeException if toId is already in molecule or if lists contain duplicates
+     */
+    public void renumberAtomIds(List<String> fromIdList, List<String> toIdList) {
+    	if (fromIdList == null || toIdList == null) {
+    		throw new RuntimeException("lists must not be null");
+    	}
+    	if (fromIdList.size() != toIdList.size()) {
+    		throw new RuntimeException("Lists must be of equal size, "+fromIdList.size()+ " / "+toIdList.size());
+    	}
+    	checkUnique(fromIdList);
+    	checkUnique(toIdList);
+    	for (int i = 0; i < fromIdList.size(); i++) {
+    		renumberAtomId(fromIdList.get(i), toIdList.get(i));
+    	}
+    }
+    
+    private Set<String> checkUnique(List<String> stringList) {
+    	Set<String> stringSet = new HashSet<String>();
+    	for (String string : stringList) {
+    		if (stringSet.contains(string)) {
+    			throw new RuntimeException("duplicate id: "+string);
+    		}
+    		stringSet.add(string);
+    	}
+    	return stringSet;
+    }
+
+    /** renumbers atom in molecule.
+     * includes any attributes including atomRef/atomRefs2/atomRefs3/atomRefs4/atomRefs
+     * @param fromId
+     * @param toId
+     * @throws RuntimeException if toId is already in molecule
+     */
+    public void renumberAtomId(String fromId, String toId) {
+    	if (molecule.getAtomById(toId) != null) {
+    		throw new RuntimeException("Atom with id already in molecule: "+toId);
+    	}
+    	CMLAtom atom = molecule.getAtomById(fromId);
+    	if (atom != null) {
+    		Nodes nodes = molecule.query(
+    				".//*[@atomRef or @atomRefs2 or @atomRefs3 or @atomRefs4 or @atomRefs]", CML_XPATH);
+    		for (int i = 0; i < nodes.size(); i++) {
+    			renumberAtomRefs((CMLElement)nodes.get(i), fromId, toId);
+    		}
+    		atom.resetId(toId);
+    	}
+    }
+    
+    private void renumberAtomRefs(CMLElement element, String fromId, String toId) {
+    	for (int i = 0; i < element.getAttributeCount(); i++) {
+    		Attribute attribute = element.getAttribute(i);
+    		if (attribute.getLocalName().indexOf("atomRef") != -1) {
+    			String[] values = attribute.getValue().split(S_WHITEREGEX);
+    			for (int j = 0; j < values.length; j++) {
+    				if (values[j].equals(fromId)) {
+    					values[j] = toId;
+    				}
+    			}
+				attribute.setValue(Util.concatenate(values, S_SPACE));
+				element.addAttribute(attribute);
+    		}
+    	}
+    }
     
 	/** get single electron by id
 	 * @param id
@@ -2152,6 +2290,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * Looks for correspoding defintion of R as a descendant cml:molecule within
 	 * scopeElement,
 	 *   i.e. scopeElement.query(".//cml:atom[label/@value=$labelS", CML_XPATH)
+	 *   @deprecated doen't work at all
 	 */
 	public void joinRGroupsExplicitly(Element scopeElement) {
 		List<CMLAtom> atomList = molecule.getAtoms();

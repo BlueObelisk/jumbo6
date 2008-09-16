@@ -35,9 +35,11 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
@@ -64,6 +66,8 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class MoleculeToolTest extends MoleculeAtomBondTest {
 
+	private static Logger LOG = Logger.getLogger(MoleculeToolTest.class);
+	
     protected AbstractTool moleculeTool1;
     protected AbstractTool moleculeTool2;
     protected AbstractTool moleculeTool3;
@@ -2737,6 +2741,146 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		SVGSVG svg = new SVGSVG();
 		svg.appendChild(g);
 	}
+	
+	/**
+	 */
+	@Test
+    public void renumberAtomId() {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom1 = new CMLAtom("a1", AS.C);
+		molecule.addAtom(atom1);
+		CMLAtom atom2 = new CMLAtom("a2", AS.O);
+		molecule.addAtom(atom2);
+		CMLAtom atom3 = new CMLAtom("a3", AS.N);
+		molecule.addAtom(atom3);
+		CMLAtom atom4 = new CMLAtom("a4", AS.S);
+		molecule.addAtom(atom4);
+		CMLAtom atom5 = new CMLAtom("a5", AS.Cl);
+		molecule.addAtom(atom5);
+		CMLBond bond12 = new CMLBond(atom1, atom2);
+		molecule.addBond(bond12);
+		CMLBond bond23 = new CMLBond(atom2, atom3);
+		molecule.addBond(bond23);
+		CMLBond bond34 = new CMLBond(atom3, atom4);
+		molecule.addBond(bond34);
+		CMLBond bond25 = new CMLBond(atom2, atom5);
+		molecule.addBond(bond25);
+		
+		CMLBondStereo bondStereo1234 = new CMLBondStereo();
+		bondStereo1234.setAtomRefs4(
+				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom4.getId()});
+		bondStereo1234.setXMLContent(CMLBond.CIS);
+		bond23.addBondStereo(bondStereo1234);
+		
+		CMLAtomParity atomParity1235 = new CMLAtomParity();
+		atomParity1235.setAtomRefs4(
+				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom5.getId()});
+		atomParity1235.setXMLContent(-12.34);
+		atom2.addAtomParity(atomParity1235);
+		
+		CMLLength length12 = new CMLLength();
+		length12.setAtomRefs2(
+				new String[]{atom1.getId(),atom2.getId()});
+		length12.setXMLContent(1.234);
+		molecule.addLength(length12);
+		
+		CMLAngle angle123 = new CMLAngle();
+		angle123.setAtomRefs3(
+				new String[]{atom1.getId(),atom2.getId(),atom3.getId()});
+		angle123.setXMLContent(123.4);
+		molecule.addAngle(angle123);
+		
+		CMLTorsion torsion1234 = new CMLTorsion();
+		torsion1234.setAtomRefs4(
+				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom4.getId()});
+		torsion1234.setXMLContent(12.34);
+		molecule.addTorsion(torsion1234);
+		
+
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		try {
+			moleculeTool.renumberAtomId("a1", "a2");
+			Assert.fail("Should fail on renumbering");
+		} catch (Exception e) {
+			//
+		}
+		moleculeTool.renumberAtomId("a1", "a2_ZZ");
+		Assert.assertEquals("atom1", "a2_ZZ", atom1.getId());
+		Assert.assertEquals("atom2", "a2", atom2.getId());
+		Assert.assertEquals("bond12", new String[]{"a2_ZZ", "a2"}, bond12.getAtomRefs2());
+		Assert.assertEquals("bondStereo", new String[]{"a2_ZZ", "a2", "a3", "a4"}, bondStereo1234.getAtomRefs4());
+		Assert.assertEquals("atomParity", new String[]{"a2_ZZ", "a2", "a3", "a5"}, atomParity1235.getAtomRefs4());
+		Assert.assertEquals("length", new String[]{"a2_ZZ", "a2"}, length12.getAtomRefs2());
+		Assert.assertEquals("angle", new String[]{"a2_ZZ", "a2", "a3"}, angle123.getAtomRefs3());
+		Assert.assertEquals("torsion", new String[]{"a2_ZZ", "a2", "a3", "a4"}, torsion1234.getAtomRefs4());
+		
+		// swap a1 and a2;
+		moleculeTool.renumberAtomId("a2", "a1_ZZ");
+		moleculeTool.renumberAtomId("a1_ZZ", "a1");
+		moleculeTool.renumberAtomId("a2_ZZ", "a2");
+
+		Assert.assertEquals("atom1", "a2", atom1.getId());
+		Assert.assertEquals("atom2", "a1", atom2.getId());
+		Assert.assertEquals("bond12", new String[]{"a2", "a1"}, bond12.getAtomRefs2());
+		Assert.assertEquals("bondStereo", new String[]{"a2", "a1", "a3", "a4"}, bondStereo1234.getAtomRefs4());
+		Assert.assertEquals("atomParity", new String[]{"a2", "a1", "a3", "a5"}, atomParity1235.getAtomRefs4());
+		Assert.assertEquals("length", new String[]{"a2", "a1"}, length12.getAtomRefs2());
+		Assert.assertEquals("angle", new String[]{"a2", "a1", "a3"}, angle123.getAtomRefs3());
+		Assert.assertEquals("torsion", new String[]{"a2", "a1", "a3", "a4"}, torsion1234.getAtomRefs4());
+		
+		List<String> fromList = new ArrayList<String>();
+		List<String> toList = new ArrayList<String>();
+		
+		fromList.add("a1");
+		toList.add("a11");
+		fromList.add("a1");
+		toList.add("a12");
+		try {
+			moleculeTool.renumberAtomIds(fromList, toList);
+			Assert.fail("Should fail on renumbering");
+		} catch (Exception e) {
+//			LOG.debug("E "+e.getMessage());
+			//
+		}
+		
+		fromList = new ArrayList<String>();
+		toList = new ArrayList<String>();
+		
+		fromList.add("a2");
+		toList.add("a3");
+		fromList.add("a1");
+		toList.add("a11");
+		try {
+			moleculeTool.renumberAtomIds(fromList, toList);
+			Assert.fail("Should fail on renumbering");
+		} catch (Exception e) {
+			//
+		}
+		
+		fromList = new ArrayList<String>();
+		toList = new ArrayList<String>();
+		fromList.add("a1");
+		toList.add("a11");
+		fromList.add("a2");
+		toList.add("a12");
+		fromList.add("a3");
+		toList.add("a13");
+		fromList.add("a4");
+		toList.add("a14");
+		fromList.add("a5");
+		toList.add("a15");
+		moleculeTool.renumberAtomIds(fromList, toList);
+		
+		Assert.assertEquals("atom1", "a12", atom1.getId());
+		Assert.assertEquals("atom2", "a11", atom2.getId());
+		Assert.assertEquals("bond12", new String[]{"a12", "a11"}, bond12.getAtomRefs2());
+		Assert.assertEquals("bondStereo", new String[]{"a12", "a11", "a13", "a14"}, bondStereo1234.getAtomRefs4());
+		Assert.assertEquals("atomParity", new String[]{"a12", "a11", "a13", "a15"}, atomParity1235.getAtomRefs4());
+		Assert.assertEquals("length", new String[]{"a12", "a11"}, length12.getAtomRefs2());
+		Assert.assertEquals("a1ngle", new String[]{"a12", "a11", "a13"}, angle123.getAtomRefs3());
+		Assert.assertEquals("torsion", new String[]{"a12", "a11", "a13", "a14"}, torsion1234.getAtomRefs4());
+    }
+
     
     static void usage() {
     	System.out.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");

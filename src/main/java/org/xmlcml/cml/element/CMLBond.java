@@ -325,13 +325,13 @@ public class CMLBond extends AbstractBond {
 		if (order == null) {
 			order = null;
 		} else if (order.equals(CMLBond.SINGLE)
-				| order.equals(CMLBond.SINGLE_S)) {
+				|| order.equals(CMLBond.SINGLE_S)) {
 			order = CMLBond.SINGLE;
 		} else if (order.equals(CMLBond.DOUBLE)
-				| order.equals(CMLBond.DOUBLE_D)) {
+				|| order.equals(CMLBond.DOUBLE_D)) {
 			order = CMLBond.DOUBLE;
 		} else if (order.equals(CMLBond.TRIPLE)
-				| order.equals(CMLBond.TRIPLE_T)) {
+				|| order.equals(CMLBond.TRIPLE_T)) {
 			order = CMLBond.TRIPLE;
 		} else if (order.equals(CMLBond.AROMATIC)) {
 		} else {
