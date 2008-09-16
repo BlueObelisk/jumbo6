@@ -22,6 +22,7 @@ import org.xmlcml.cml.graphics.SVGPath;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 
@@ -68,6 +69,40 @@ public class BondTool extends AbstractSVGTool {
 			bond.setTool(bondTool);
 		}
 		return bondTool;
+	}
+
+	/** get conventional bond order.
+	 * if order is given as unknown returns 0.5
+	 * if order is absent null or otherwise unknown returns 0.0
+	 * @return 1.0, 2.0, 3.0 for S,D,T; 1.5 for A, else 0.0
+	 */
+	public static double getNumericOrder(String order) {
+		double orderD = 0.0;
+		if (order == null) {
+			//
+		} else if (order.equals(CMLBond.DOUBLE) || order.equals(CMLBond.DOUBLE_D)) {
+			orderD = 2.0;
+		} else if (order.equals(CMLBond.TRIPLE) || order.equals(CMLBond.TRIPLE_T)) {
+			orderD = 3.0;
+		} else if (order.equals(CMLBond.SINGLE) || order.equals(CMLBond.SINGLE_S)) {
+			orderD = 1.0;
+		} else if (order.equals(CMLBond.AROMATIC)) {
+			orderD = 1.5;
+		} else if (order.equals(CMLBond.UNKNOWN_ORDER)) {
+			orderD = 0.5;
+		} else {
+			
+		}
+		return orderD;
+	}
+
+	/** get conventional bond order.
+	 * if order is given as unknown returns 0.5
+	 * if order is absent null or otherwise unknown returns 0.0
+	 * @return 1.0, 2.0, 3.0 for S,D,T; 1.5 for A, else 0.0
+	 */
+	public double getNumericOrder() {
+		return getNumericOrder(bond.getOrder());
 	}
 
 	/**
@@ -345,6 +380,35 @@ public class BondTool extends AbstractSVGTool {
 	public CMLAtomSet getDownstreamAtoms(CMLAtom atom) {
 		return getDownstreamAtoms(atom, null);
 	}
+
+	/**
+	 * transform describing the rotation and stretching of a bond.
+	 * 
+		Transform2 t = this.getTranformToRotateAndStretchBond(movingAtom, targetPoint) {
+		
+	 * The movingAtom is translated;
+	 *  the fixedAtom is found by:
+		
+		CMLAtom pivotAtom = bond.getOtherAtom(movingAtom);
+		
+		A typical use is the dragging of an atom in an acyclic bond
+		this carries all the downstream atoms:
+
+		CMLAtomSet atomSet = this.getDownstreamAtoms(pivotAtom);
+		atomSet.transform(t);
+		
+	 * @param movingAtom
+	 * @param targetPoint point to translate mvingAtom to
+	 * @return
+	 */
+	public Transform2 getTransformToRotateAndStretchBond(CMLAtom movingAtom, Real2 targetPoint) {
+		CMLAtom pivotAtom = bond.getOtherAtom(movingAtom);
+		Real2 pivotPoint = pivotAtom.getXY2();
+		Real2 movingPoint = movingAtom.getXY2();
+		Transform2 t = Transform2.getTransformToRotateAndStretchLine(pivotPoint, movingPoint, targetPoint);
+		return t;
+	}
+	
 
 	/**
 	 * gets four atoms defining cis/trans isomerism.

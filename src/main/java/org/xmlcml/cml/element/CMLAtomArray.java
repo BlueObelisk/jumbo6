@@ -305,7 +305,7 @@ public class CMLAtomArray extends AbstractAtomArray {
 
     /**
      * removes a atom.
-     *
+     * removes any bonds to that atom
      * @param atom
      * @return deleted atom or null
      */

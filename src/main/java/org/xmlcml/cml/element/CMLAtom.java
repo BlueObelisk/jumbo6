@@ -77,7 +77,19 @@ public class CMLAtom extends AbstractAtom {
      */
     public CMLAtom(String id, ChemicalElement chem) {
         this(id);
+        if (chem == null) {
+        	throw new RuntimeException("Null chem for atom");
+        }
         this.setElementType(chem.getSymbol());
+    }
+
+    /**
+     * Create new CMLAtom with specified id and ChemicalElement.AS
+     * @param id
+     * @param chem
+     */
+    public CMLAtom(String id, AS as) {
+        this(id, ChemicalElement.getChemicalElement(as));
     }
 
     /**
@@ -465,10 +477,12 @@ public class CMLAtom extends AbstractAtom {
      * @param transform - if null no-op
      */
     public void transformCartesians(Transform3 transform) {
-    	if (transform != null) {
+    	if (hasCoordinates(CoordinateType.CARTESIAN) && transform != null) {
 	        Point3 point = this.getXYZ3();
-	        point = point.transform(transform);
-	        this.setXYZ3(point);
+	        if (point != null) {
+		        point = point.transform(transform);
+		        this.setXYZ3(point);
+	        }
     	}
     }
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,7 +31,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  */
 public class AtomToolTest extends MoleculeAtomBondTest {
-//    protected AtomTool atomTool1;
+	private static Logger LOG = Logger.getLogger(AtomToolTest.class);
 
     /**
      * Test method for
@@ -275,6 +276,55 @@ public class AtomToolTest extends MoleculeAtomBondTest {
         Vector3 cross2d = AtomTool.getOrCreateTool(xmlAtom[0]).get2DCrossProduct(xmlAtom[1], xmlAtom[2]);
         Vector3Test.assertEquals("cross2d", new double[] { 0., 0., -2. },
                 cross2d, EPS);
+    }
+    
+    /**
+     * 
+     */
+    @Test
+    public void testAddHydrogen() {
+    	CMLMolecule molecule = new CMLMolecule();
+    	CMLAtom atom = new CMLAtom("a1", AS.C);
+    	molecule.addAtom(atom);
+    	AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+    	CMLAtom hAtom1 = atomTool.addHydrogen();
+    	Assert.assertNotNull("h atom", hAtom1);
+    	hAtom1 = molecule.getAtomById("a1_h1");
+    	Assert.assertNotNull("h atom", hAtom1);
+    	Assert.assertEquals("h id", "a1_h1", hAtom1.getId());
+    	CMLBond hBond1 = molecule.getBond(atom.getId(), hAtom1.getId());
+    	Assert.assertNotNull("h bond", hBond1);
+    	Assert.assertEquals("h bond id", "a1_a1_h1", hBond1.getId());
+
+    	CMLAtom hAtom2 = atomTool.addHydrogen();
+    	Assert.assertNotNull("h atom", hAtom2);
+    	hAtom2 = molecule.getAtomById("a1_h2");
+    	Assert.assertNotNull("h atom", hAtom2);
+    	Assert.assertEquals("h id", "a1_h2", hAtom2.getId());
+    	CMLBond hBond2 = molecule.getBond(atom.getId(), hAtom2.getId());
+    	Assert.assertNotNull("h bond", hBond2);
+    	Assert.assertEquals("h bond id", "a1_a1_h2", hBond2.getId());
+//    	molecule.debug("MOLZZZ ");
+
+    	// delete bond but not atom (generally bad idea)
+    	molecule.deleteBond(hBond1);
+    	molecule.debug("MOL ");
+    	hBond1 = molecule.getBond(atom.getId(), hAtom1.getId());
+    	Assert.assertNull("h bond null", hBond1);
+    	Assert.assertNotNull("h atom 1", molecule.getAtomById("a1_h1"));
+    	Assert.assertNotNull("h atom 2", molecule.getAtomById("a1_h2"));
+    	
+    	atomTool.addHydrogen();
+    	CMLAtom hAtom3 = molecule.getAtomById("a1_h3");
+    	Assert.assertNotNull("h atom", hAtom3);
+    	molecule.debug("MMMMM");
+    	
+    	Assert.assertEquals("h ligands", 2, atomTool.getHydrogenLigandList().size());
+    	// deletes bond as well
+    	molecule.deleteAtom(hAtom2);
+    	hAtom2 = molecule.getAtomById("a1_h2");
+    	Assert.assertNull("h atom", hAtom2);
+    	molecule.debug("MOL ");
     }
 
  }

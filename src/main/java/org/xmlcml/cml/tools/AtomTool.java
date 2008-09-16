@@ -11,7 +11,6 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
@@ -81,7 +80,7 @@ public class AtomTool extends AbstractSVGTool {
         this.atom.setTool(this);
         molecule = atom.getMolecule();
         if (molecule == null) {
-            throw new CMLRuntimeException("Atom must be in molecule");
+            throw new CMLRuntimeException("Atom must be in molecule: "+atom.getId());
         }
     }
     
@@ -1321,7 +1320,7 @@ public class AtomTool extends AbstractSVGTool {
 	/**
 	 * @return the moleculeTool
 	 */
-	public AbstractTool getMoleculeTool() {
+	public MoleculeTool getMoleculeTool() {
 		return moleculeTool;
 	}
 
@@ -1432,6 +1431,69 @@ public class AtomTool extends AbstractSVGTool {
 			}
 		}
 		return hatoms;
+	}
+
+	/**
+	 * deletes a hydrogen from an atom.
+	 *
+	 * used for building up molecules. If there are implicit H atoms it reduces
+	 * the hydrogenCount by 1. If H's are explicit it removes the first hydrogen
+	 * ligand
+	 *
+	 * @param atom
+	 * @exception CMLRuntimeException
+	 *                no hydrogen ligands on atom
+	 */
+	public void deleteHydrogen() {
+		decrementHydrogenCountAttribute();
+		Set<ChemicalElement> hSet = ChemicalElement.getElementSet(
+				new String[] { AS.H.value });
+		List<CMLAtom> hLigandVector = CMLAtom.filter(atom.getLigandAtoms(),
+				hSet);
+		if (hLigandVector.size() > 0) {
+			molecule.deleteAtom(hLigandVector.get(0));
+		}
+	}
+
+	private void decrementHydrogenCountAttribute() {
+		if (atom.getHydrogenCountAttribute() != null) {
+			if (atom.getHydrogenCount() > 0) {
+				atom.setHydrogenCount(atom.getHydrogenCount() - 1);
+			}
+		}
+	}
+
+	private void incrementHydrogenCountAttribute() {
+		if (atom.getHydrogenCountAttribute() != null) {
+			if (atom.getHydrogenCount() > 0) {
+				atom.setHydrogenCount(atom.getHydrogenCount() + 1);
+			}
+		}
+	}
+
+	/** adds hydrogen atom.
+	 * if hydrogenCount is already present, increments it.
+	 * id is created as atomId_hn where n first free integer 
+	 * if n > 20 fails
+	 */
+	public CMLAtom addHydrogen() {
+		CMLAtom hAtom = null;
+		incrementHydrogenCountAttribute();
+		List<CMLAtom> hList = this.getHydrogenLigandList();
+		// iterate through all hydrogens with similar name (not always ligands)
+		for (int i = 1; i <= 20; i++) {
+			String hId = atom.getId()+S_UNDER+"h"+i;
+			hAtom = molecule.getAtomById(hId);
+			if (hAtom == null) {
+				hAtom = new CMLAtom(hId, AS.H);
+				molecule.addAtom(hAtom);
+				CMLBond bond = new CMLBond(atom, hAtom);
+				bond.setOrder(CMLBond.SINGLE_S);
+				molecule.addBond(bond);
+				break;
+			}
+		}
+		return hAtom;
 	}
 
 	/**
@@ -1634,6 +1696,23 @@ public class AtomTool extends AbstractSVGTool {
 		}
 	}
 	
+	public String createChargeString() {
+		String ss = S_EMPTY;
+		if (atom.getFormalChargeAttribute() != null) {
+			int ch = atom.getFormalCharge();
+			if (ch == 1) {
+				ss = S_PLUS;
+			} else if (ch == -1) {
+				ss = S_MINUS;
+			} else if (ch > 1) {
+				ss = S_PLUS + ch;
+			} else if (ch < -1) {
+				ss = S_EMPTY + ch;
+			}
+		}
+		return ss;
+	}
+	
 	private void addLabel(List<CMLAtom> atoms, String text) {
 		for (CMLAtom atom : atoms) {
 			AtomTool.getOrCreateTool(atom).setDisplay(false);
@@ -1790,16 +1869,13 @@ public class AtomTool extends AbstractSVGTool {
 				continue;
 			}
 			String order = ligandBond.getOrder();
+			BondTool ligandBondTool = BondTool.getOrCreateTool(ligandBond);
+			double numericOrder = ligandBondTool.getNumericOrder();
 			if (order == null) {
-				multipleBondSum += 0;
-			} else if (order.equals(CMLBond.DOUBLE)) {
-				multipleBondSum += 2;
-			} else if (order.equals(CMLBond.TRIPLE)) {
-				multipleBondSum += 3;
-			} else if (order.equals(CMLBond.SINGLE)) {
-				multipleBondSum += 1;
 			} else if (order.equals(CMLBond.AROMATIC)) {
 				aromaticBondSum += 1;
+			} else if (multipleBondSum >= 0.0){
+				multipleBondSum += (int) Math.round(numericOrder);
 			} else {
 				MoleculeTool.LOG.info("Unknown bond order:" + order + S_COLON);
 				ok = false;

@@ -721,7 +721,7 @@ public class AtomSetTool extends AbstractTool {
 		if (atom1.equals(atom2)) {
 			throw new RuntimeException("identical ligands");
 		}
-		Real2 vi = xi.subtract(x0);
+//		Real2 vi = xi.subtract(x0);
 		Real2 x0i = xi.subtract(x0);
 		Real2 x0in = x0i.getUnitVector().multiplyBy(bondLength);
 		Real2 bondDelta = x0i.subtract(x0in).multiplyBy(0.5);

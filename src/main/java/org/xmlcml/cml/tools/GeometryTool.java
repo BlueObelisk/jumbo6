@@ -569,6 +569,78 @@ public class GeometryTool extends AbstractTool {
     }
     
     /**
+     * create all non-bonded lengths for molecule. only include each length once
+     * 
+     * @param atomSet
+     * @param type of coordinate
+     * @return array of lengths (zero length if none)
+     */
+    public List<CMLLength> createNonBondedLengths(CoordinateType type) {
+    	return createNonBondedLengths(molecule.getAtomSet(), type);
+    }
+    
+    /**
+     * create all non-bonded lengths for molecule. only include each length once
+     * 
+     * @param atomSet
+     * @param type of coordinate
+     * @return array of lengths (zero length if none)
+     */
+    public List<CMLLength> createNonBondedLengths(
+    		CMLAtomSet atomSet, CoordinateType type) {
+        List<CMLLength> lengthVector = new ArrayList<CMLLength>();
+        List<CMLAtom> atomList = atomSet.getAtoms();
+        for (int i = 0; i < atomSet.size(); i++) {
+        	CMLAtom atomi = atomList.get(i);
+        	Object coordi = getCoordinate(atomi, type);
+        	if (coordi == null) {
+        		continue;
+        	}
+            List<CMLAtom> ligandListI = atomi.getLigandAtoms();
+            for (int j = i+1; j < atomSet.size(); j++) {
+            	CMLAtom atomj = atomList.get(j);
+            	// already bonded?
+            	if (ligandListI.contains(atomj)) {
+            		continue;
+            	}
+            	Object coordj = getCoordinate(atomj, type);
+            	if (coordi == null) {
+            		continue;
+            	}
+        		CMLLength length = new CMLLength();
+                length.setAtomRefs2(new String[] {
+                    atomi.getId(),
+                    atomj.getId() 
+                });
+                double lengthVal = calculateLength(coordi, coordj, type);
+                length.setXMLContent(lengthVal);
+                lengthVector.add(length);
+            }
+        }
+        return lengthVector;
+    }
+    
+    private Object getCoordinate(CMLAtom atom, CoordinateType type) {
+		if (CoordinateType.CARTESIAN.equals(type)) {
+			return atom.getXYZ3();
+		} else if (CoordinateType.TWOD.equals(type)) {
+			return atom.getXY2();
+		} else {
+			return null;
+		}
+    }
+    
+    private double calculateLength(Object coordi, Object coordj, CoordinateType type) {
+    	double length = Double.NaN;
+    	if (CoordinateType.TWOD.equals(type)) {
+    		length = ((Real2) coordi).getDistance((Real2)coordj);
+    	} else if (CoordinateType.CARTESIAN.equals(type)) {
+    		length = ((Point3) coordi).getDistanceFromPoint((Point3)coordj);
+    	}
+    	return length;
+    }
+    
+    /**
      * create all valence angles for molecule.
      * 
      * @param atomSet
@@ -677,7 +749,7 @@ public class GeometryTool extends AbstractTool {
     }
     /**
      * create nonBonded matrix
-     * 
+     * NOT SURE THIS WORKS
      * @return nonBonded matrix (1 = 1,2 or 1,3 interaction, 0 = non-bonded);
      */
     public IntSquareMatrix getNonBondedMatrix() {
