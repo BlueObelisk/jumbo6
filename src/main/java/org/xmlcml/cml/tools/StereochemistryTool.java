@@ -648,87 +648,95 @@ public class StereochemistryTool extends AbstractTool {
 	 *             inconsistentencies in diagram, etc.
 	 */
 	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
-		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
 		CMLBond bond = getFirstWedgeableBond(atom);
-		int totalParity = 0;
-		int sense = 0;
 		if (bond == null) {
 			LOG.info("Cannot find ANY free wedgeable bonds! "
 					+ atom.getId());
 		} else {
-			final CMLAtomParity atomParity = (CMLAtomParity) atom
-			.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
-			if (atomParity != null) {
-				CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
-				int atomParityValue = atomParity.getIntegerValue();
-				int highestPriorityAtom = 1;
-				// 3 explicit ligands
-				if (atomRefs4x[3].equals(atom)) {
-					double d = this.getSenseOf3Ligands(atom, atomRefs4x);
-					if (Math.abs(d) > 0.000001) {
-						sense = (d < 0) ? -1 : 1;
-						totalParity = sense * atomParityValue;
-					}
-					// 4 explicit ligands
-				} else {
-					CMLAtom otherAtom = null;
-					for (CMLAtom at : bond.getAtoms()) {
-						if (at != atom) {
-							otherAtom = at;
-							break;
-						}
-					}
-					CMLAtom[] cyclicAtom4 = atomTool.getClockwiseLigands(atomRefs4x);
-					List<CMLAtom> list = new LinkedList<CMLAtom>();
-					for (CMLAtom cyclicAtom : cyclicAtom4) {
-						list.add(cyclicAtom);
-					}
-					
-					if (otherAtom == atomRefs4x[0]) {
-					    highestPriorityAtom = -1;
-					}
-					
-					String intStr = "";
-					for (int l = 0; l < list.size(); l++) {
-						CMLAtom at = list.get(l);
-						if (at.getId().equals(otherAtom.getId())) continue;
-						for (int i = 0; i < atomRefs4x.length; i++) {
-							if (at.getId().equals(atomRefs4x[i].getId())) {
-								intStr += ""+i;
-							}
-						}
-					}
-					String[] clockwiseStrings = {"012", "201", "120", 
-							"023", "302", "230",
-							"013", "301", "130",
-							"123", "312", "231"};
-					String[] antiClockwiseStrings = {"210", "021", "102",
-							"310", "031", "103",
-							"320", "032", "203",
-							"321", "132", "213"};
-					for (String str : clockwiseStrings) {
-						if (intStr.equals(str)) {
-							sense = 1;
-							break;
-						}
-					}
-					if (sense == 0) {
-						for (String str : antiClockwiseStrings) {
-							if (intStr.equals(str)) {
-								sense = -1;
-								break;
-							}
-						}
-					}
-					totalParity = sense * atomParityValue * highestPriorityAtom;
-				}
-				String bondType = (totalParity > 0) ? CMLBond.WEDGE
-						: CMLBond.HATCH;
+			String bondType = getWegeHatchForBondAndParity(atom, bond);
+			if (bondType != null) {
 				CMLBondStereo bondStereo = new CMLBondStereo();
 				bondStereo.setXMLContent(bondType);
 				bond.addBondStereo(bondStereo);
 			}
 		}
+	}
+
+	public String getWegeHatchForBondAndParity(CMLAtom atom, CMLBond bond) {
+		String bondType = null;
+		CMLAtomParity atomParity = (CMLAtomParity) atom
+		.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
+		if (atomParity != null) {
+			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+			int totalParity = 0;
+			int sense = 0;
+			CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
+			int atomParityValue = atomParity.getIntegerValue();
+			int highestPriorityAtom = 1;
+			// 3 explicit ligands
+			if (atomRefs4x[3].equals(atom)) {
+				double d = this.getSenseOf3Ligands(atom, atomRefs4x);
+				if (Math.abs(d) > 0.000001) {
+					sense = (d < 0) ? -1 : 1;
+					totalParity = sense * atomParityValue;
+				}
+				// 4 explicit ligands
+			} else {
+				CMLAtom otherAtom = null;
+				for (CMLAtom at : bond.getAtoms()) {
+					if (at != atom) {
+						otherAtom = at;
+						break;
+					}
+				}
+				CMLAtom[] cyclicAtom4 = atomTool.getClockwiseLigands(atomRefs4x);
+				List<CMLAtom> list = new LinkedList<CMLAtom>();
+				for (CMLAtom cyclicAtom : cyclicAtom4) {
+					list.add(cyclicAtom);
+				}
+				
+				if (otherAtom == atomRefs4x[0]) {
+				    highestPriorityAtom = -1;
+				}
+				
+				String intStr = "";
+				for (int l = 0; l < list.size(); l++) {
+					CMLAtom at = list.get(l);
+					if (at.getId().equals(otherAtom.getId())) continue;
+					for (int i = 0; i < atomRefs4x.length; i++) {
+						if (at.getId().equals(atomRefs4x[i].getId())) {
+							intStr += ""+i;
+						}
+					}
+				}
+				String[] clockwiseStrings = {"012", "201", "120", 
+						"023", "302", "230",
+						"013", "301", "130",
+						"123", "312", "231"};
+				String[] antiClockwiseStrings = {"210", "021", "102",
+						"310", "031", "103",
+						"320", "032", "203",
+						"321", "132", "213"};
+				for (String str : clockwiseStrings) {
+					if (intStr.equals(str)) {
+						sense = 1;
+						break;
+					}
+				}
+				if (sense == 0) {
+					for (String str : antiClockwiseStrings) {
+						if (intStr.equals(str)) {
+							sense = -1;
+							break;
+						}
+					}
+				}
+				totalParity = sense * atomParityValue * highestPriorityAtom;
+			}
+			bondType = (totalParity > 0) ? CMLBond.WEDGE
+					: CMLBond.HATCH;
+		}
+		return bondType;
 	}
 
 	/**
