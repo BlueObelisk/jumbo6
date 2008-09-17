@@ -503,10 +503,9 @@ public class CMLBond extends AbstractBond {
 			atomList = getAtoms();
 			if (atomList != null) {
 				int idx = atomList.indexOf(atom);
-				if (idx == -1) {
-					throw new CMLRuntimeException("atom not in bond: "+atom.getId());
+				if (idx != -1) {
+					otherAtom = atomList.get(1 - idx);
 				}
-				otherAtom = atomList.get(1 - idx);
 			}
 		}
 		return otherAtom;
