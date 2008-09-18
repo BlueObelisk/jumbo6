@@ -822,36 +822,40 @@ public class GeometryTool extends AbstractTool {
      */
     public void flip2D(CMLBond bond, CMLAtom atom) {
         CMLAtom otherAtom = bond.getOtherAtom(atom);
-        CMLAtomSet atomSet = AtomTool.getOrCreateTool(atom).getDownstreamAtoms(otherAtom);
-        Real2 this2 = atom.getXY2();
-        Real2 other2 = otherAtom.getXY2();
-        Vector2 this2v = new Vector2(this2);
-        Vector2 bondVector = new Vector2(other2.subtract(this2));
-        Vector2 yVector = new Vector2(0.0, 1.0);
-        // translate to origin
-        this2v.negative();
-        Transform2 toOrigin = new Transform2(this2v);
-        // translate from origin
-        this2v.negative();
-        Transform2 fromOrigin = new Transform2(this2v);
-        // rotate to y axis
-        Transform2 rotatePlus = new Transform2(bondVector, yVector);
-        // rotate back from y axis
-        Transform2 rotateMinus = new Transform2(yVector, bondVector);
-        // flip about y
-        RealSquareMatrix flipM = new RealSquareMatrix(2, new double[] {
-                -1.0, 0.0, 0.0, 1.0 });
-        Transform2 flipY = new Transform2(flipM);
-        // unit matrix
-        Transform2 mat = new Transform2();
-        RealSquareMatrix temp = mat;
-        temp = toOrigin.multiply(temp);
-        temp = rotatePlus.multiply(temp);
-        temp = flipY.multiply(temp);
-        temp = rotateMinus.multiply(temp);
-        temp = fromOrigin.multiply(temp);
-        mat = new Transform2(temp);
-        atomSet.transform(mat);
+        if (otherAtom == null) {
+        	throw new RuntimeException("Must select an atom in bond");
+        } else {
+	        CMLAtomSet atomSet = AtomTool.getOrCreateTool(atom).getDownstreamAtoms(otherAtom);
+	        Real2 this2 = atom.getXY2();
+	        Real2 other2 = otherAtom.getXY2();
+	        Vector2 this2v = new Vector2(this2);
+	        Vector2 bondVector = new Vector2(other2.subtract(this2));
+	        Vector2 yVector = new Vector2(0.0, 1.0);
+	        // translate to origin
+	        this2v.negative();
+	        Transform2 toOrigin = new Transform2(this2v);
+	        // translate from origin
+	        this2v.negative();
+	        Transform2 fromOrigin = new Transform2(this2v);
+	        // rotate to y axis
+	        Transform2 rotatePlus = new Transform2(bondVector, yVector);
+	        // rotate back from y axis
+	        Transform2 rotateMinus = new Transform2(yVector, bondVector);
+	        // flip about y
+	        RealSquareMatrix flipM = new RealSquareMatrix(2, new double[] {
+	                -1.0, 0.0, 0.0, 1.0 });
+	        Transform2 flipY = new Transform2(flipM);
+	        // unit matrix
+	        Transform2 mat = new Transform2();
+	        RealSquareMatrix temp = mat;
+	        temp = toOrigin.multiply(temp);
+	        temp = rotatePlus.multiply(temp);
+	        temp = flipY.multiply(temp);
+	        temp = rotateMinus.multiply(temp);
+	        temp = fromOrigin.multiply(temp);
+	        mat = new Transform2(temp);
+	        atomSet.transform(mat);
+        }
     }
     /**
      * create all valence angles for molecule.
