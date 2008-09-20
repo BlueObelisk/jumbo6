@@ -208,6 +208,10 @@ public class AttributeFactory implements CMLConstants {
             newAtt = new StringSTAttribute(name);
         } else if (XSD_STRING.equals(typeS) && type.getIsList()) {
             newAtt = new StringArraySTAttribute(name);
+        } else if (FPX_COMPLEX.equals(typeS) && !type.getIsList()) {
+            newAtt = new ComplexSTAttribute(name);
+        } else if (FPX_COMPLEX.equals(typeS) && type.getIsList()) {
+            newAtt = new ComplexArraySTAttribute(name);
         } else {
             LOG.error("unknown attribute type " + type);
         }

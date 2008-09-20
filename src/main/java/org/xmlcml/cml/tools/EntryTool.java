@@ -736,6 +736,7 @@ public class EntryTool extends AbstractTool {
 		boolean couldBeInt = true;
 		boolean couldBeIntArray = false;
 		boolean couldBeDate = true;
+		boolean couldBeComplex = true;
 		boolean couldBeFloat = true;
 		boolean couldBeFloatArray = false;
 		for (String s : valueSet) {
@@ -763,6 +764,8 @@ public class EntryTool extends AbstractTool {
 			type = XSD_FLOAT;
 		} else if (couldBeDate) {
 			type = XSD_DATE;
+		} else if (couldBeComplex) {
+			type = FPX_COMPLEX;
 		} else if (couldBeEnum) {
 			// assume string and add dummy enumeration to flag type
 			type = XSD_STRING;

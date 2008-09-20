@@ -160,9 +160,12 @@ public class CMLEigen extends AbstractEigen {
     public CMLMatrix getEigenvectors() {
         CMLMatrix eigenvectors = (this.getMatrixElements().size() == 1) ? this
                 .getMatrixElements().get(0) : null;
-        if (eigenvectors != null
-                && !XSD_DOUBLE.equals(eigenvectors.getDataType())) {
-            throw new CMLRuntimeException("eigenvectors array must be of type double");
+        if (eigenvectors != null) {
+        	String dataType = eigenvectors.getDataType();
+        	if (!dataType.equals(XSD_DOUBLE) &&
+            	!dataType.equals(FPX_COMPLEX)) {
+        			throw new CMLRuntimeException("eigenvectors array must be of type double or complex: was "+dataType);
+        	}
         }
         return eigenvectors;
     }
