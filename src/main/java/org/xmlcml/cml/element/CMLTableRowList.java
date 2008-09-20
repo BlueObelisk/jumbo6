@@ -142,6 +142,7 @@ public class CMLTableRowList extends AbstractTableRowList {
             		XSD_DOUBLE.equals(dataType) ||
                     XSD_INTEGER.equals(dataType) ||
                     XSD_STRING.equals(dataType) ||
+                    FPX_COMPLEX.equals(dataType) ||
                     dataType == null) {
                         CMLArray array = tableHeaderCell.createCMLArray();
                         classList.add(CMLArray.class);

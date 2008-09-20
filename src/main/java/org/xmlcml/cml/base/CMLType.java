@@ -7,6 +7,8 @@ import java.util.List;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.xmlcml.euclid.Complex;
+
 /**
  * 
  * <p>
@@ -258,6 +260,8 @@ public class CMLType implements CMLConstants {
 				javaType = XSD_STRING;
 			} else if (XSD_BOOLEAN.equals(base)) {
 				javaType = XSD_BOOLEAN;
+			} else if (FPX_COMPLEX.equals(base)) {
+				javaType = FPX_COMPLEX;
 			} else {
 			}
 		}
@@ -594,6 +598,74 @@ public class CMLType implements CMLConstants {
 				}
 			} catch (CMLRuntimeException e) {
 				throw new CMLRuntimeException("int[] (" + i + ")(" + ii[i]
+						+ ") fails: " + e);
+			}
+		}
+	}
+
+	/**
+	 * checks value of simpleType. throws CMLRuntime if value does not check
+	 * against SimpleType or is a list currently uses min/max/In/Exclusive fails
+	 * if type is String or int
+	 * 
+	 * @param d
+	 *            the double
+	 * @throws CMLRuntimeException
+	 *             wrong type or value fails
+	 */
+	public void checkValue(Complex d) throws CMLRuntimeException {
+		if (subTypes.length > 0) {
+			for (int j = 0; j < subTypes.length; j++) {
+				(subTypes[j]).checkValue(d);
+			}
+		} else {
+			if (!base.equals(XSD_DOUBLE)) {
+				throw new CMLRuntimeException("Cannot accept double for type: "
+						+ base);
+			}
+			if (isList) {
+				throw new CMLRuntimeException(
+						"cannot accept single double for double[] list");
+			}
+			checkMinMax(d);
+			checkEnumeration(d);
+		}
+	}
+
+	/**
+	 * checks value of simpleType. throws CMLRuntime if value does not check
+	 * against SimpleType or is not a list currently uses min/max/In/Exclusive
+	 * fails if type is String or int
+	 * 
+	 * @param dd
+	 *            the double
+	 * @throws CMLRuntimeException
+	 *             wrong type or value fails
+	 */
+	public void checkValue(Complex dd[]) throws CMLRuntimeException {
+		if (subTypes.length > 0) {
+			for (int j = 0; j < subTypes.length; j++) {
+				(subTypes[j]).checkValue(dd);
+			}
+		} else {
+			if (!base.equals(XSD_DOUBLE)) {
+				throw new CMLRuntimeException("Cannot accept String for type: "
+						+ base);
+			}
+			if (!isList) {
+				throw new CMLRuntimeException(
+						"cannot accept a list double[] for single double");
+			}
+			checkListLength(dd.length);
+			int i = 0;
+			try {
+				while (i < dd.length) {
+					checkMinMax(dd[i]);
+					checkEnumeration(dd[i]);
+					i++;
+				}
+			} catch (CMLRuntimeException e) {
+				throw new CMLRuntimeException("double[] (" + i + ")(" + dd[i]
 						+ ") fails: " + e);
 			}
 		}
@@ -1080,6 +1152,26 @@ public class CMLType implements CMLConstants {
 		}
 	}
 
+	private void checkMinMax(Complex d) throws CMLRuntimeException {
+		// FIXME
+//		if (!Double.isNaN(dMinInclusive) && d < dMinInclusive) {
+//			throw new CMLRuntimeException("double (" + d + ") less than "
+//					+ dMinInclusive);
+//		}
+//		if (!Double.isNaN(dMaxInclusive) && d > dMaxInclusive) {
+//			throw new CMLRuntimeException("double (" + d + ") greater than "
+//					+ dMaxInclusive);
+//		}
+//		if (!Double.isNaN(dMinExclusive) && d <= dMinExclusive) {
+//			throw new CMLRuntimeException("double (" + d
+//					+ ") less than equals " + dMinExclusive);
+//		}
+//		if (!Double.isNaN(dMaxExclusive) && d >= dMaxExclusive) {
+//			throw new CMLRuntimeException("double (" + d
+//					+ ") greater than equals " + dMaxExclusive);
+//		}
+	}
+
 	private void checkEnumeration(int i) throws CMLRuntimeException {
 		if (iEnumerationValues.length != 0) {
 			boolean ok = false;
@@ -1091,6 +1183,25 @@ public class CMLType implements CMLConstants {
 			}
 			if (!ok) {
 				throw new CMLRuntimeException("int (" + i
+						+ ") not contained in enumeration");
+			}
+		}
+	}
+
+	private void checkEnumeration(Complex d) throws CMLRuntimeException {
+		if (dEnumerationValues.length != 0) {
+			
+			boolean ok = false;
+			for (int j = 0; j < dEnumerationValues.length; j++) {
+				// FIXME
+				throw new RuntimeException("FIXME COMPLEX");
+//				if (d == dEnumerationValues[j]) {
+//					ok = true;
+//					break;
+//				}
+			}
+			if (!ok) {
+				throw new CMLRuntimeException("complex (" + d
 						+ ") not contained in enumeration");
 			}
 		}
@@ -1579,6 +1690,10 @@ public class CMLType implements CMLConstants {
 				dataType = XSD_DOUBLE;
 			} else if (value.equals(XSD_DATE)) {
 				dataType = XSD_DATE;
+			} else if (value.equals(XSD_BOOLEAN)) {
+				dataType = XSD_BOOLEAN;
+			} else if (value.equals(FPX_COMPLEX)) {
+				dataType = FPX_COMPLEX;
 			} else {
 				throw new CMLRuntimeException("Unknown data type: " + value);
 			}

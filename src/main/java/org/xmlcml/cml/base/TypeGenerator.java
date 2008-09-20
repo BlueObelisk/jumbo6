@@ -89,6 +89,11 @@ public class TypeGenerator extends AbstractGenerator {
 		map.put(XSD_BOOLEAN, type);
 		
 		type = new CMLType();
+		type.setName(FPX_COMPLEX);
+		type.setJavaType(FPX_COMPLEX);
+		map.put(FPX_COMPLEX, type);
+		
+		type = new CMLType();
 		type.setName(XSD_POSITIVEINTEGER);
 		type.setJavaType(XSD_INTEGER);
 		type.setMinInclusive(1);

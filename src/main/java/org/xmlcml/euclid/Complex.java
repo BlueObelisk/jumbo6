@@ -79,6 +79,12 @@ public class Complex extends Real2 {
         this.y = a.y;
 
     }
+    
+    public Complex(String s) {
+    	Real2 r = new Real2(s);
+    	this.x = r.x;
+    	this.y = r.y;
+    }
 
     /**
      * gets real part.

@@ -2263,6 +2263,25 @@ public class Util implements EuclidConstants {
 	}
 
 	/**
+	 * concatenates array of booleans.
+	 * 
+	 * @param bb
+	 *            the values
+	 * @param separator
+	 * @return the String
+	 */
+	public final static String concatenate(Complex[] bb, String separator) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < bb.length; i++) {
+			if (i > 0) {
+				sb.append(separator);
+			}
+			sb.append(bb[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * concatenates array of doubles.
 	 * 
 	 * @param ss

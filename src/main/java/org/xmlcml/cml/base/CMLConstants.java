@@ -155,6 +155,10 @@ public interface CMLConstants extends EuclidConstants {
     /** constant */
     String XSD_QNAME = "xsd:QName";
     
+    /** constant */
+    String FPX_COMPLEX = "fpx:complex";
+
+    
     /** element types */
     
     /** */
