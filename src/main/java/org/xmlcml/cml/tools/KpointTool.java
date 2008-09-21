@@ -1,36 +1,9 @@
 package org.xmlcml.cml.tools;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import nu.xom.Elements;
-import nu.xom.Nodes;
-
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
 import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLKpoint;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLKpoint;
-import org.xmlcml.cml.element.CMLLink;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.euclid.Point3;
-import org.xmlcml.euclid.Point3Vector;
-import org.xmlcml.euclid.Real2;
-import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.euclid.Real3Range;
 
 /**
  * tool to support atom set. not sure if useful

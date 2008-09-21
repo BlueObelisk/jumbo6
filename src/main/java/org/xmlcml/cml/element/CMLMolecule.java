@@ -1188,6 +1188,17 @@ public class CMLMolecule
 		return getBondFromHash(atomHash);
 	}
 
+	/**
+	 * get bond by serial.
+	 * fragile
+	 * @param serial
+	 * @return bond or null if not found
+	 */
+	public CMLBond getBond(int serial) {
+		List<CMLBond> bonds = this.getBonds();
+		return (bonds.size() > 0) ? bonds.get(serial) : null;
+	}
+
 	private CMLBond getBondFromHash(String atomHash) {
 		CMLBond theBond = null;
 		if (atomHash != null) {

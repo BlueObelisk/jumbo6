@@ -1,7 +1,5 @@
 package org.xmlcml.cml.base;
 
-import java.text.ParseException;
-
 import nu.xom.Attribute;
 import nu.xom.Node;
 
