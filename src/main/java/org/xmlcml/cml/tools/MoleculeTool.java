@@ -1204,6 +1204,17 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		return newMolecule;
 	}
+	
+	public CMLAtomSet createAtomSet(int[] serials) {
+		CMLAtomSet atomSet = new CMLAtomSet();
+		for (int serial : serials) {
+			CMLAtom atom = molecule.getAtom(serial);
+			if (atom != null && !atomSet.contains(atom)) {
+				atomSet.addAtom(atom);
+			}
+		}
+		return atomSet;
+	}
 
 
 	/**
