@@ -58,6 +58,7 @@ import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
@@ -1828,6 +1829,15 @@ public class MoleculeTool extends AbstractSVGTool {
 			userBoundingBox = (atomSetTool == null) ? null : atomSetTool.getExtent2();
 		}
 		return userBoundingBox;
+	}
+
+	public Real3Range calculateBoundingBox3D() {
+		Real3Range userBoundingBox3 = null;
+		if (molecule != null) {
+			AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule));
+			userBoundingBox3 = (atomSetTool == null) ? null : atomSetTool.getExtent3();
+		}
+		return userBoundingBox3;
 	}
 
 	private void displayAtoms(CMLDrawable drawable, SVGElement g, AtomDisplay atomDisplay) {
