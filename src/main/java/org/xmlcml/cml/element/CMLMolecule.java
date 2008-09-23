@@ -244,6 +244,19 @@ public class CMLMolecule
 		}
 	}
 
+	
+	/** add atoms.
+	 * calls addAtom
+	 * @param atomSet
+	 * @throws CMLRuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	public void addAtoms(CMLAtomSet atomSet) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			this.addAtom(atom);
+		}
+	}
+	
 	/** delete atom.
 	 * recurse through descendants and remove first instance of
 	 * atom (there should only be one)
@@ -392,6 +405,18 @@ public class CMLMolecule
 		bondArray.addBond(bond);
 	}
 
+	/** add bonds.
+	 * calls addBond
+	 * @param bondSet
+	 * @throws RuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	public void addBonds(CMLBondSet bondSet) {
+		for (CMLBond bond : bondSet.getBonds()) {
+			this.addBond(bond);
+		}
+	}
+	
 	/** delete bond.
 	 * recurse through descendants and remove first instance of
 	 * bond (there should only be one)
