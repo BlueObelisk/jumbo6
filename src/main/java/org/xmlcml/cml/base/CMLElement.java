@@ -1,5 +1,6 @@
 package org.xmlcml.cml.base;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -33,6 +34,15 @@ import org.xmlcml.euclid.Util;
  */
 public class CMLElement extends Element implements CMLConstants, Comparable<CMLElement>, HasId {
 
+	/**
+	 * 
+	 */
+	public enum Merge {
+		OVERWRITE,
+		PRESERVE,
+		CONCATENATE,
+		;
+	}
 	
     /** hybridisation - from whatever source */
     public enum Hybridization {
@@ -102,6 +112,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
 
     final static Logger logger = Logger.getLogger(CMLElement.class.getName());
     final static String ID = "id";
+    public final static String ATT_CONCAT = S_UNDER+S_UNDER+S_UNDER;
 
     private Map<String, Object> propertyMap;
 
@@ -121,8 +132,7 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
     /**
      * main constructor.
      * 
-     * @param name
-     *            tagname
+     * @param name tagname
      */
     public CMLElement(String name) {
         super(name, CML_NS);
@@ -179,7 +189,27 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
      */
     public void finishMakingElement(Element parent) {
     }
-    
+
+    /** parses a non-subclassed element into CML.
+     * Topically used when other software such as 
+     * XOM or XSLT create elements through the normal
+     * builder.
+     * Serializes the element and re-parses with CMLBuilder()
+     * @param element
+     * @return CMLElement (null if root element is not CML)
+     */
+    public static CMLElement createCMLElement(Element element) {
+    	Element newElement = null;
+    	try {
+    		newElement = new CMLBuilder().parseString(CMLUtil.toXMLString(element));
+    	} catch (Exception e) {
+    		throw new RuntimeException("BUG", e);
+    	}
+    	if (!(newElement instanceof CMLElement)) {
+    		newElement = null;
+    	}
+    	return (CMLElement) newElement;
+    }
     protected void addRemove(CMLAttribute att, String value) {
     	if (value == null || value.equals(S_EMPTY)) {
     		this.removeAttribute(att.getLocalName());
@@ -977,6 +1007,21 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
         w.write(this.getLocalName());
         w.write("</span>");
     }
+    
+    /** writes element as XML string.
+     * 
+     * @param indent (0 forces single line)
+     * @return
+     */
+    public String writeXML(int indent) {
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    	try {
+			CMLUtil.debug(this, baos, indent);
+		} catch (Exception e) {
+			throw new RuntimeException("BUG ",e);
+		}
+		return new String(baos.toByteArray());
+    }
 
     /** convenience method to serialize the element.
      * 
@@ -1089,7 +1134,44 @@ public class CMLElement extends Element implements CMLConstants, Comparable<CMLE
     public CMLElement makeElementInContext(Element parent) {
     	return new CMLElement();
     }
+    
+    /** normally overridden.
+     * merges attributes and preserves this
+     * 
+     * @param element
+     * @param merge
+     */
+    public void merge(CMLElement element, Merge merge) {
+    	mergeAttributes(element, merge);
+    }
 
+    /** merges attributes into this.
+     * 
+     * @param element
+     * @param merge OVERWRITE, PRESERVE, CONCATENATE
+     */
+    public void mergeAttributes(CMLElement element, Merge merge) {
+    	for (int i = 0; i < element.getAttributeCount(); i++) {
+    		Attribute elAtt = element.getAttribute(i);
+			String qName = elAtt.getQualifiedName();
+			String value = elAtt.getValue();
+			String nameURI = elAtt.getNamespaceURI();
+    		if (merge == Merge.OVERWRITE) {
+    			element.addAttribute(new Attribute(qName, value, nameURI));
+    		} else {
+    			Attribute thisAtt = this.getAttribute(qName, nameURI);
+    			if (thisAtt == null) {
+    				this.addAttribute(new Attribute(elAtt));
+    			} else if (merge.equals(Merge.PRESERVE)) {
+    				// no-op
+    			} else if (merge.equals(Merge.CONCATENATE)) {
+    				thisAtt.setValue(thisAtt.getValue()+ATT_CONCAT+value);
+    			} else {
+    				throw new RuntimeException("BUG?");
+    			}
+    		}
+    	}
+    }
 	/**
 	 * @return the propertyMap
 	 */

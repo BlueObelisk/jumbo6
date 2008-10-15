@@ -7,9 +7,9 @@ import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
@@ -92,26 +92,24 @@ public class SMILESToolTest {
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public final void testParseSMILES1() {
 		// strange atom and silly ring and DOT
 		smilesTool = new SMILESTool();
-		smilesTool.parseSMILES("[Si]O1.[Ge]N1");
+		smilesTool.parseSMILES("[Si][O]1.[Ge][N]1");
 		mol = smilesTool.getMolecule();
 		molS = 
 			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
 		  "<atomArray>"+
 		    "<atom id='a1' elementType='Si' formalCharge='0' hydrogenCount='0'/>"+
-		    "<atom id='a2' elementType='O' hydrogenCount='0'/>"+
+		    "<atom id='a2' elementType='O' formalCharge='0' hydrogenCount='0'/>"+
 		    "<atom id='a3' elementType='Ge' formalCharge='0' hydrogenCount='0' />"+
-		    "<atom id='a4' elementType='N' hydrogenCount='1'/>"+
-		    "<atom id='a4_h1' elementType='H'/>"+
+		    "<atom id='a4' elementType='N' formalCharge='0' hydrogenCount='0'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
 		    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
 		    "<bond atomRefs2='a3 a4' id='a3_a4' order='1'/>"+
 		    "<bond atomRefs2='a2 a4' id='a2_a4' order='1'/>"+
-		    "<bond atomRefs2='a4 a4_h1' id='a4_a4_h1' order='1'/>"+
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule) parseValidString(molS);
@@ -373,7 +371,7 @@ public class SMILESToolTest {
 	}
 	
 	/**
-	 * 
+	 * Jerry Winter's pseudo SMILES
 	 */
 	@Test
 	@Ignore
@@ -383,7 +381,7 @@ public class SMILESToolTest {
 		String ss = "_NC(CC(O)=O)C($)=O";
 		smilesTool.parseSMILES(ss);
 		mol = smilesTool.getMolecule();
-		mol.debug(4);
+//		mol.debug(4);
 	}
 	
 	@Test
@@ -524,7 +522,7 @@ public class SMILESToolTest {
 	 *  of 0 instead of for example -2
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void phosphorusPentaFluoride() {
 		String smiles = "P(F)(F)(F)(F)F";
 		SMILESTool smilesTool = new SMILESTool();
@@ -540,7 +538,7 @@ public class SMILESToolTest {
 	 * @author dl387
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void realisticPositiveCharge1() {
 		String smiles = "[NH4+]";
 		SMILESTool smilesTool = new SMILESTool();
@@ -688,6 +686,7 @@ public class SMILESToolTest {
 	@Test
 	@Ignore
 	public void hydrogenHandling1() {//FIXME
+		// depict gives water - JUMBO does not implement this
 		String smiles = "O[H]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
@@ -702,7 +701,7 @@ public class SMILESToolTest {
 	 * Should have one hydrogen and a negative charge
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void hydrogenHandling2() {
 		String smiles = "[OH-1]";
 		SMILESTool smilesTool = new SMILESTool();
@@ -716,6 +715,7 @@ public class SMILESToolTest {
 	/**
 	 * @author dl387
 	 * All three atoms should have one hydrogen each
+	 * JUMBO fails on this and we shan't alter it
 	 */
 	@Test
 	@Ignore
@@ -753,6 +753,7 @@ public class SMILESToolTest {
 	/**
 	 * @author dl387
 	 * Support for alternative ways of specifying tetrahedral chriality
+	 * JUMBO ignores this
 	 */
 	@Test
 	@Ignore
@@ -808,25 +809,34 @@ public class SMILESToolTest {
 	 * Checks the parser against a large collection of valid SMILES to check they atleast parse
 	 */
 	@Test
-	public void largeSmilesSelection() throws IOException {
-		File smilesFile = new File ("target/test-classes/org/xmlcml/cml/tools/examples/smilesFromJason.smi");
-		FileReader smilesFileHandle = new FileReader(smilesFile);
-		BufferedReader input =new BufferedReader(smilesFileHandle);
+	public void largeSmilesSelection() {
+		InputStream is = getClass().getResourceAsStream("examples/smilesFromJason.smi");
+		Assert.assertNotNull("input stream exists", is);
+		BufferedReader input = new BufferedReader(new InputStreamReader(is));
 		SMILESTool smilesTool = new SMILESTool();
 		
 		String smile;
 		int i=0;
-        while ((smile = input.readLine()) != null) {
-        	i++;
-        	if (smile.length()==0){continue;}
-        	try{
-        		smilesTool.parseSMILES(smile);
-        	}
-        	catch(Exception e){
-        		System.out.println("Failure on line " + i);
-        	}
-        }
-        input.close();
+		try {
+	        while ((smile = input.readLine()) != null) {
+	        	i++;
+	        	if (smile.length()==0){continue;}
+	        	try{
+	        		smilesTool.parseSMILES(smile);
+	        	}
+	        	catch(Exception e){
+	        		Assert.fail("Failure on line " + i);
+	        	}
+	        }
+		} catch (IOException e) {
+			Assert.fail("failed parse "+e);
+		}
+		Assert.assertEquals("SMILES count", 926, i);
+		try {
+			input.close();
+		} catch (IOException e) {
+			Assert.fail("BUG");
+		}
 	}
 	
 	/**
@@ -834,7 +844,7 @@ public class SMILESToolTest {
 	 * Checks anticlockwise chirality
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void chiralityTest() {
 		String smiles = "N[C@@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
@@ -850,7 +860,7 @@ public class SMILESToolTest {
 	 * Checks clockwise chirality
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void chiralityTest2() {
 		String smiles = "N[C@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
@@ -866,7 +876,7 @@ public class SMILESToolTest {
 	 * Checks rings defined before chiral centre
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void chiralityTest3() {
 		String smiles = "C2.N1.F3.[C@@H]231";
 		SMILESTool smilesTool = new SMILESTool();
@@ -882,7 +892,7 @@ public class SMILESToolTest {
 	 * Checks rings defined after chiral centre
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void chiralityTest4() {
 		String smiles = "[C@@H]231.C2.N1.F3";
 		SMILESTool smilesTool = new SMILESTool();
@@ -898,7 +908,7 @@ public class SMILESToolTest {
 	 * Checks connected chiral centres
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void chiralityTest5() {
 		String smiles = "[C@@H](Cl)1[C@H](C)(F).Br1";
 		SMILESTool smilesTool = new SMILESTool();

@@ -516,6 +516,7 @@ public class AtomTool extends AbstractSVGTool {
 		if (atom.getHydrogenCountAttribute() == null) {
 			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
 			int group = atomTool.getHydrogenValencyGroup();
+			// these states cannot have hydrogen
 			if (group == -1) {
 				return;
 			} else if (group == -2) {
@@ -532,6 +533,10 @@ public class AtomTool extends AbstractSVGTool {
 			// non-octet species
 			if (group == 4 && fc == 1) {
 				nh -= 2;
+			}
+			// negative counts are meaningless
+			if (nh < 0) {
+				nh = 0;
 			}
 			atom.setHydrogenCount(nh);
 			this.expandImplicitHydrogens(control);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -17,10 +18,12 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.xmlcml.cml.base.CMLElement.Merge;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.util.TestUtils;
 
@@ -206,6 +209,25 @@ public class ElementTest {
 		CMLUtil.removeWhitespaceNodes(element0);
 		TestUtils.assertEqualsCanonically("before whitespace ", element0,
 				element1);
+	}
+
+	/**
+	 */
+	@Test
+	@Ignore
+	public void testMergeAttributes() {
+		CMLElement foo = new CMLElement("foo");
+		foo.addAttribute(new Attribute("a1", "v1"));
+		foo.addAttribute(new Attribute("a2", "v2"));
+		foo.addAttribute(new Attribute("c:a3", "http://foo/", "v3"));
+		CMLElement bar = new CMLElement("bar");
+		bar.addAttribute(new Attribute("a1", "v11"));
+		bar.addAttribute(new Attribute("a5", "v5"));
+		bar.addAttribute(new Attribute("c:a3", "http://bar/", "v33"));
+		bar.addAttribute(new Attribute("c:a6", "http://bar/", "v6"));
+		CMLElement foo1 = new CMLElement(foo);
+		foo1.mergeAttributes(bar, Merge.OVERWRITE); 
+		foo1.debug("XX");
 	}
 
 }

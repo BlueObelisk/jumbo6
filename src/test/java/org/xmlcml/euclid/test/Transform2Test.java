@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -337,5 +338,19 @@ public class Transform2Test  {
                 -1.0, 0.0, }, rsm.getMatrixAsArray(), EPS);
     }
 
+    /**
+     * 
+     */
+    @Test
+    public void testGetRotationAboutPoint() {
+    	double SQRT2 = Math.sqrt(0.5);
+    	Real2 point = new Real2(1.0, 0.0);
+    	Angle angle = new Angle(Math.PI/4.);
+    	Real2 coord = new Real2(2.0, 0.0);
+    	Transform2 t2 = Transform2.getRotationAboutPoint(angle, point);
+    	coord.transformBy(t2);
+    	Real2 ref = new Real2(1+SQRT2, -SQRT2);
+    	Assert.assertTrue("Coord ", coord.isEqualTo(ref, Real.EPS));
+    }
 
 }

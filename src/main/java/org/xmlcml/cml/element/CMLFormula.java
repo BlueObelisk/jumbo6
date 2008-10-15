@@ -365,7 +365,11 @@ public class CMLFormula extends AbstractFormula {
 	 */
 	public void finishMakingElement(Element parent) {
 		super.finishMakingElement(parent);
-		normalize();
+		try {
+			normalize();
+		} catch (RuntimeException e) {
+			LOG.warn("Cannout create concise: "+e);
+		}
 	}
 
 	/** devides by highest common factor.

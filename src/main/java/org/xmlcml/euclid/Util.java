@@ -637,8 +637,7 @@ public class Util implements EuclidConstants {
 	 * @exception RuntimeException
 	 *                missing quote
 	 */
-	public static List<String> getCommaSeparatedStrings(String s)
-			throws RuntimeException {
+	public static List<String> getCommaSeparatedStrings(String s) {
 		if (s == null) {
 			return null;
 		}
@@ -1463,7 +1462,7 @@ public class Util implements EuclidConstants {
 	 * @throws RuntimeException
 	 */
 	private static String replaceNumericEntityByMnemonic(
-			String s, String ent, int lo, int hi, String[] chars) throws RuntimeException {
+			String s, String ent, int lo, int hi, String[] chars) {
 		if (ent == null || !ent.endsWith(S_AMP+S_HASH)) {
 			throw new RuntimeException("bad entity: "+ent);
 		} 

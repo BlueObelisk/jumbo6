@@ -892,7 +892,7 @@ public class CMLBond extends AbstractBond {
 		if (atom0 == null || atom1 == null) {
 			throw new CMLRuntimeException("missing atoms");
 		}
-		double length = -1.0;
+		double length = Double.NaN;
 		if (type.equals(CoordinateType.CARTESIAN)) {
 			Point3 p0 = atom0.getXYZ3();
 			Point3 p1 = atom1.getXYZ3();

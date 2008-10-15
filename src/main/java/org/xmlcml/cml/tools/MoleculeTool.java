@@ -55,6 +55,7 @@ import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3Vector;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
@@ -1139,13 +1140,17 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 			try {
 				double length = bond.calculateBondLength(type);
-				bondSum += length;
-				nBonds++;
+				if (!Double.isNaN(length)) {
+					LOG.trace("len "+length);
+					bondSum += length;
+					nBonds++;
+				}
 			} catch (CMLRuntimeException e) {
 				// no coordinates
 			}
 		}
-		return (nBonds == 0 || Double.isNaN(bondSum)) ? -1.0 : bondSum / ((double) nBonds);
+		return (nBonds == 0 || Double.isNaN(bondSum) || Real.isZero(bondSum, Real.EPS)) 
+		    ? Double.NaN : bondSum / ((double) nBonds);
 	}
 
 	/**

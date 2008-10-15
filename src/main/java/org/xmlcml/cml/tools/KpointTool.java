@@ -29,6 +29,7 @@ public class KpointTool extends AbstractTool {
 			throw new CMLRuntimeException("Null kpoint");
 		}
 		this.kpoint = kpoint;
+		LOG.trace("constructor");
 	}
 
 	/** gets KpointTool associated with kpoint.
