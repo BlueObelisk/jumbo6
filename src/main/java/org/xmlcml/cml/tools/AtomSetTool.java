@@ -80,7 +80,9 @@ public class AtomSetTool extends AbstractTool {
 			if (atomSetTool == null) {
 				atomSetTool = new AtomSetTool(atomSet);
 				atomSet.setTool(atomSetTool);
-				atomSetTool.molecule = atomSet.getMoleculeOrAncestor();
+				if (atomSet.getAtoms().size() > 0) {
+					atomSetTool.molecule = atomSet.getMoleculeOrAncestor();
+				}
 			}
 		}
 		return atomSetTool;
@@ -590,11 +592,13 @@ public class AtomSetTool extends AbstractTool {
 	 */
 	public Real3Range getExtent3() {
 		Real3Range r3r = new Real3Range();
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			Point3 xyz = atom.getXYZ3();
-			if (xyz != null) {
-				r3r.add(xyz);
+		if (molecule != null) {
+			List<CMLAtom> atoms = molecule.getAtoms();
+			for (CMLAtom atom : atoms) {
+				Point3 xyz = atom.getXYZ3();
+				if (xyz != null) {
+					r3r.add(xyz);
+				}
 			}
 		}
 		return r3r;

@@ -556,4 +556,41 @@ public interface CMLConstants extends EuclidConstants {
     int NUNIT_TYPE_DICT = 1;
 //	public final String value;
 
+    // =============== other namespaces ===============
+    /** namespace for SVG.
+     * 
+     */
+    /** root of all SVG URIs */
+    String SVG_NS_BASE = "http://www.w3.org/2000/svg";
+
+    String SVG_NS = SVG_NS_BASE;
+    
+    /** XPathContext for SVG.
+     */
+    XPathContext SVG_XPATH = new XPathContext("svg", SVG_NS);
+    
+    /** namespace for RDF.
+     * 
+     */
+    /** root of all RDF URIs */
+    String RDF_NS_BASE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
+    String RDF_NS = RDF_NS_BASE;
+    
+    /** XPathContext for RDF.
+     */
+    XPathContext RDF_XPATH = new XPathContext("rdf", RDF_NS);
+    
+    /** namespace for RDFXSD.
+     * 
+     */
+    /** root of all RDFXSD URIs */
+    String RDFXSD_URI = "http://www.w3.org/2001/XMLSchema#";
+
+//    String RDFXSD_NS = RDFXSD_NS_BASE;
+//    
+//    /** XPathContext for RDFXSD.
+//     */
+//    XPathContext RDFXSD_XPATH = new XPathContext("rdf", RDF_NS);
+    	
 }

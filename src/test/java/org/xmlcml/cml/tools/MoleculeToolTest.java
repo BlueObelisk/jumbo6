@@ -67,7 +67,9 @@ import org.xmlcml.molutil.ChemicalElement.AS;
 public class MoleculeToolTest extends MoleculeAtomBondTest {
 
 	private static Logger LOG = Logger.getLogger(MoleculeToolTest.class);
-	
+	static {
+		LOG.trace("static");
+	}
     protected AbstractTool moleculeTool1;
     protected AbstractTool moleculeTool2;
     protected AbstractTool moleculeTool3;

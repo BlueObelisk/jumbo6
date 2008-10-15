@@ -118,6 +118,19 @@ public class CMLMolecule
 		}
 		return mol;
 	}
+	
+	/** convenience to convert CMLElements to List.
+	 * 
+	 * @param moleculeElements
+	 * @return
+	 */
+	public static List<CMLMolecule> getMoleculeList(CMLElements<CMLMolecule> moleculeElements) {
+		List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+		for (CMLMolecule molecule : moleculeElements) {
+			moleculeList.add(molecule);
+		}
+		return moleculeList;
+	}
 
 	/**
 	 * create new instance in context of parent, overridable by subclasses.

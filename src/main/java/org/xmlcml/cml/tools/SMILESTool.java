@@ -523,6 +523,7 @@ public class SMILESTool extends AbstractTool {
     			atom.deleteAnyLigandHydrogenAtom();
     		}
     	}
+    	moleculeTool.expandImplicitHydrogens(hydrogenControl);
     }
 
 	private void makeAromaticBonds() {

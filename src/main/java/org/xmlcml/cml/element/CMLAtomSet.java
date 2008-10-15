@@ -641,12 +641,11 @@ public class CMLAtomSet extends AbstractAtomSet {
      */
     public CMLMolecule getMoleculeOrAncestor() {
         if (molecule == null) {
-
             List<CMLAtom> atoms = this.getAtoms();
             if (atoms.size() > 0) {
                 molecule = CMLMolecule.getMoleculeAncestor(atoms.get(0));
             } else {
-                throw new CMLRuntimeException("NO atoms in set...");
+                throw new RuntimeException("NO atoms in set...");
             }
         }
         return molecule;
@@ -1284,8 +1283,10 @@ public class CMLAtomSet extends AbstractAtomSet {
     
     public void translateCentroidToOrigin3(CoordinateType type) {
     	Point3 centroid = this.getCentroid3(type);
-    	Vector3 v3 = new Vector3(centroid).multiplyBy(-1.0);
-    	this.translate3D(v3, type);
+    	if (centroid != null) {
+	    	Vector3 v3 = new Vector3(centroid).multiplyBy(-1.0);
+	    	this.translate3D(v3, type);
+    	}
     }
 
     /**

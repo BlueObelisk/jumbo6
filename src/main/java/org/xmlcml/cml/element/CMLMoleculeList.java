@@ -1,5 +1,6 @@
 package org.xmlcml.cml.element;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -158,5 +159,13 @@ public class CMLMoleculeList extends AbstractMoleculeList implements IndexableBy
     public void updateIndex() {
     	ensureManager();
     	this.indexableListManager.indexList();
+    }
+    
+    public List<CMLMolecule> getMoleculeList() {
+    	List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+    	for (CMLMolecule molecule : this.getMoleculeElements()) {
+    		moleculeList.add(molecule);
+    	}
+    	return moleculeList;
     }
 }

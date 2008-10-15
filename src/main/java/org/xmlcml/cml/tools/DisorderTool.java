@@ -106,7 +106,7 @@ public class DisorderTool extends AbstractTool {
 	 *
 	 * @exception CMLRuntimeException
 	 */
-	public void resolveDisorder() throws RuntimeException {
+	public void resolveDisorder() {
 		if (molecule == null) {
 			throw new IllegalStateException(
 			"Molecule property is null, no operations possible");

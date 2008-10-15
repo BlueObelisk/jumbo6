@@ -49,7 +49,7 @@ public abstract class AbstractAppinfo extends CMLElement {
     * @param value title value
     * @throws RuntimeException attribute wrong value/type
     */
-    public void setRole(String value) throws RuntimeException {
+    public void setRole(String value) {
         StringSTAttribute att = null;
         if (_att_role == null) {
             _att_role = (StringSTAttribute) attributeFactory.getAttribute("role", "appinfo");

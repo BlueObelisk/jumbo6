@@ -119,19 +119,18 @@ public class Transform2 extends RealSquareMatrix {
         this.flmat[0][1] = t.flmat[0][1];
         this.flmat[1][0] = t.flmat[1][0];
         this.flmat[1][1] = t.flmat[1][1];
+        this.flmat[2][2] = 1.0;
         trnsfrm = Type.ROT_TRANS;
     }
     /**
      * rotation of one vector onto another
      * 
-     * @param v1
-     *            Description of the Parameter
-     * @param v2
-     *            Description of the Parameter
-     * @exception EuclidRuntimeException
+     * @param v1 Description of the Parameter
+     * @param v2 Description of the Parameter
+     * @exception RuntimeException
      *                <TT>v1</TT> or <TT>v2</TT> is zero length
      */
-    public Transform2(Vector2 v1, Vector2 v2) throws EuclidRuntimeException {
+    public Transform2(Vector2 v1, Vector2 v2) {
         super(3);
         Angle a = v1.getAngleMadeWith(v2);
         Transform2 temp = new Transform2(a);
@@ -141,10 +140,8 @@ public class Transform2 extends RealSquareMatrix {
     /**
      * from 2 vector components - NOT checked for validity
      * 
-     * @param v1
-     *            Description of the Parameter
-     * @param v2
-     *            Description of the Parameter
+     * @param v1 Description of the Parameter
+     * @param v2 Description of the Parameter
      */
     public Transform2(Real2 v1, Real2 v2) {
         super(3);
@@ -228,6 +225,68 @@ public class Transform2 extends RealSquareMatrix {
             throw new EuclidRuntimeException("must have 2*2 rotation matrix");
         }
     }
+    
+    /**
+     * Carries out graphics transform
+     *
+     * transforms between rectangular coordinates.
+     *  Example:
+     * <pre>
+     * Real2 inputDim = new Real2(2.7, 20000);
+     * Real2 outputDim = new Real2(-300, 300);
+     * </pre>
+     *
+     *@param  in                       Description of the Parameter
+     *@param  out                      Description of the Parameter
+     *@param  keepAspectRatio          Description of the Parameter
+     *@exception  ArithmeticException  Description of the Exception
+     *@throws  zero-sized              dimensions
+     */
+    public Transform2(Window2 in, Window2 out, boolean keepAspectRatio)
+             throws ArithmeticException {
+        this(in.origin, in.dim, out.origin, out.dim, keepAspectRatio);
+    }
+
+
+    /**
+     *  graphics transform (transforms between rectangular coordinates
+     *  ("windows") originIn maps onto originOut and dimensionIn (width, height)
+     *  onto dimensionOut. If keepAspectRatio id true, scales will be isotropic.
+     *  Note that ranges can be inverted by using negative coordinates in
+     *  dimensions. Example:<pre>
+     *Real2 inputDim = new Real2(2.7, 20000);
+     *Real2 outputDim = new Real2(-300, 300);
+     *</pre>
+     *
+     *@param  originIn                 Description of the Parameter
+     *@param  dimensionIn              Description of the Parameter
+     *@param  originOut                Description of the Parameter
+     *@param  dimensionOut             Description of the Parameter
+     *@param  keepAspectRatio          Description of the Parameter
+     *@exception  ArithmeticException  Description of the Exception
+     *@throws  zero-sized              dimensions
+     */
+    public Transform2(Real2 originIn, Real2 dimensionIn,
+            Real2 originOut, Real2 dimensionOut, boolean keepAspectRatio) throws ArithmeticException {
+        this();
+        double scaleX;
+        double scaleY;
+        scaleX = dimensionOut.getX() / dimensionIn.getX();
+        scaleY = dimensionOut.getY() / dimensionIn.getY();
+        if (keepAspectRatio) {
+            if (Math.abs(scaleX) < Math.abs(scaleY)) {
+                scaleY = scaleX * (scaleY / Math.abs(scaleY));
+            }
+            if (Math.abs(scaleY) < Math.abs(scaleX)) {
+                scaleX = scaleY * (scaleX / Math.abs(scaleX));
+            }
+        }
+        flmat[0][0] = scaleX;
+        flmat[1][1] = scaleY;
+        flmat[0][2] = originOut.getX() - scaleX * originIn.getX();
+        flmat[1][2] = originOut.getY() - scaleY * originIn.getY();
+    }
+
     /**
      * clone
      * 
@@ -253,6 +312,20 @@ public class Transform2 extends RealSquareMatrix {
         temp.trnsfrm = calculateMatrixType();
         return temp;
     }
+    
+    /** rotate about a point.
+     * 
+     * @param angle
+     * @param point
+     * @return tramsformation
+     */
+    public static Transform2 getRotationAboutPoint(Angle angle, Real2 point) {
+    	Transform2 t3 = new Transform2(new Vector2(point));
+    	Transform2 t2 = new Transform2(angle);
+    	Transform2 t1 = new Transform2(new Vector2(point.multiplyBy(-1.0)));
+    	return t3.concatenate(t2).concatenate(t1);
+    }
+    
     /**
      * Description of the Method
      * 
@@ -424,6 +497,7 @@ public class Transform2 extends RealSquareMatrix {
         s = s3;
         return s;
     }
+    
     /**
      * Description of the Method
      * 
@@ -451,7 +525,7 @@ public class Transform2 extends RealSquareMatrix {
 		Transform2 t = this.getTranformToRotateAndStretchLine(movingAtom, targetPoint) {
 	 * @param pivotPoint
 	 * @param movingPoint
-	 * @param targetPoint point to translate mvingAtom to
+	 * @param targetPoint point to translate movingAtom to
 	 * @return
 	 */
 	public static Transform2 getTransformToRotateAndStretchLine(Real2 pivotPoint, Real2 movingPoint, Real2 targetPoint) {

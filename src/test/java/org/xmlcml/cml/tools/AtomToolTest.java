@@ -40,6 +40,7 @@ public class AtomToolTest extends MoleculeAtomBondTest {
     @Ignore("NOT YET IMPLEMENTED")
     @Deprecated
     public final void testAddCalculatedCoordinatesForHydrogens() {
+		LOG.trace("test");
         CMLMolecule molecule = new CMLMolecule();
         CMLAtom atom = new CMLAtom();
         atom.setElementType(AS.C.value);
