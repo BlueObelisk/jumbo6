@@ -97,6 +97,16 @@ public class CMLNodeFactory extends NodeFactory implements CMLConstants {
         current = newElement;
         return newElement;
     }
+    
+    public static Class<?> makeClass(String base, String name) {
+		Class<?> newClass = null;
+		try {
+			String className = base+S_PERIOD+CMLUtil.makeCMLName(name);
+			newClass = Class.forName(className);
+		} catch (Exception e) {
+		}
+		return newClass;
+	}
     /** callback from element end tag.
     *
     * @param element the context element

@@ -444,6 +444,10 @@ public interface CMLConstants extends EuclidConstants {
     /** */
 	String ELEMENT_CLASS_BASE = "org.xmlcml.cml.element";
     /** */
+	String LITE = "lite";
+    /** */
+	String MAIN = "main";
+    /** */
 	String ATTRIBUTE_CLASS_BASE = "org.xmlcml.cml.attribute";
     /** */
 	String ATTRIBUTE = "Attribute";
