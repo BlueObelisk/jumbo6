@@ -14,10 +14,9 @@ import java.util.Set;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLScalar;
 
 /** based on IUCr Core CIF dictionary 
  * 
@@ -109,7 +108,7 @@ public class DisorderAssembly implements CMLConstants {
      */
     public void addCommonAtom(CMLAtom atom) {
         if (commonAtoms.contains(atom)) {
-            throw new CMLRuntimeException("atom is already common to assembly "+
+            throw new RuntimeException("atom is already common to assembly "+
                     CrystalTool.getFullLabel(atom));
         }
         commonAtoms.add(atom);

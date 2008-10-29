@@ -4,9 +4,9 @@ import nu.xom.Element;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLElectron;
 
 /**
  * tool to support reactions. not fully developed
@@ -126,6 +126,7 @@ public class ElectronDisplay {
         return xy;
     }
 
+    @SuppressWarnings("unused")
     void drawElectron(CMLElement ab1, CMLElement ab2) {
         if (ab1 == null) {
 //            LOG.info("Null electron1");
@@ -178,10 +179,14 @@ public class ElectronDisplay {
 //      double vecscale = snap.electronSep * offset;
 //      double vecscale = 1.0;
 
-//        double dx1 = 0;
-//        double dx2 = 0;
-//        double dy1 = 0;
-//        double dy2 = 0;
+      @SuppressWarnings("unused")
+        double dx1 = 0;
+      @SuppressWarnings("unused")
+        double dx2 = 0;
+        @SuppressWarnings("unused")
+        double dy1 = 0;
+        @SuppressWarnings("unused")
+        double dy2 = 0;
 
 //        if (xy1 != null) {
 //            dx1 = -xy1[3]*vecscale;

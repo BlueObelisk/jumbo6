@@ -16,17 +16,17 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLLog.Severity;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtomArray;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondArray;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLScalar;
+import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.main.CMLElectron;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
@@ -473,7 +473,7 @@ public class ValencyTool extends AbstractTool {
 	private void markSandwichLigands(List<CMLAtom> atoms) {
 		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
-		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
+		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		ConnectionTableTool ctool = new ConnectionTableTool(mol);
 		List<CMLAtomSet> ringSetList = ctool.getRingNucleiAtomSets();
 		for (CMLAtomSet ringSet : ringSetList) {
@@ -499,7 +499,7 @@ public class ValencyTool extends AbstractTool {
 	private void markPyridineN(List<CMLAtom> atoms) {
 		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(atoms);
 		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
-		CMLMolecule mol = new CMLMolecule(atomSet, bondSet);
+		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		ConnectionTableTool ctool = new ConnectionTableTool(mol);
 		List<CMLAtomSet> ringSetList = ctool.getRingNucleiAtomSets();
 		for (CMLAtomSet ringSet : ringSetList) {
@@ -1518,7 +1518,7 @@ public class ValencyTool extends AbstractTool {
 			CMLMolecule theMol = null;
 			if (knownMolCharge != UNKNOWN_CHARGE && !isMetalComplex) {
 				for (CMLMolecule n : validMolList) {
-					if (knownMolCharge == n.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
+					if (knownMolCharge == MoleculeTool.getOrCreateTool(n).calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS).getFormalCharge()) {
 						theMol = n;
 					}
 				}

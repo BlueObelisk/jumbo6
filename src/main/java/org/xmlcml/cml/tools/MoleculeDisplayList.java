@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLReaction.Component;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLReaction;
+import org.xmlcml.cml.element.main.CMLReaction.Component;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;

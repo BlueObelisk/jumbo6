@@ -18,10 +18,9 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
@@ -303,7 +302,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 		MoleculeDisplay moleculeDisplay = displayList.getMoleculeDisplay();
 		if (moleculeDisplay == null) {
 			if (moleculeFrame.getMoleculeTool() == null) {
-				throw new CMLRuntimeException("null molecule Tool");
+				throw new RuntimeException("null molecule Tool");
 			}
 			moleculeDisplay = moleculeFrame.getMoleculeTool().getMoleculeDisplay();
 			displayList.setMoleculeDisplay(moleculeDisplay);
@@ -397,7 +396,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 	public void calculateAndDrawProperties(Graphics2D g2d) {
 		MoleculeTool moleculeTool = moleculeFrame.getMoleculeTool();
 		if (moleculeTool != null) {
-			CMLFormula formula = moleculeTool.getMolecule().getCalculatedFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
+			CMLFormula formula = moleculeTool.getCalculatedFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
 			String f = formula.getConcise();
 			if (f != null) {
 				g2d.setColor(Color.BLACK);
@@ -430,7 +429,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 	 */
 	public void createOrDisplayGraphics()throws IOException {
 		if (moleculeFrame.getMoleculeTool() == null) {
-			throw new CMLRuntimeException("null molecule Tool");
+			throw new RuntimeException("null molecule Tool");
 		}
 		// FIXME
 //	    /*g = */moleculeFrame.getMoleculeTool().createSVG(this);

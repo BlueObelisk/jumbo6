@@ -1,11 +1,11 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLMap.Direction;
 import org.xmlcml.euclid.Util;
 
 

@@ -2,15 +2,15 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
 
 
 
 /** display properties for bond.
  * 
  * @author pm286
- *
+ * 
  */
 public class BondDisplay extends AbstractDisplay {
 
@@ -82,7 +82,7 @@ public class BondDisplay extends AbstractDisplay {
 	 * @return the scaled width
 	 */
 	public double getScaledWidth() {
-//		System.out.println("WID "+width+" SCA "+scale);
+//		LOG.debug("WID "+width+" SCA "+scale);
 		return width * scale;
 	}
 

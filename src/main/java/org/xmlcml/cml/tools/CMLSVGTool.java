@@ -7,8 +7,7 @@ import nu.xom.Elements;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.lite.CMLCml;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -104,7 +103,7 @@ public class CMLSVGTool extends AbstractSVGTool {
 			try {
 				Real2Range childRange = svgTool.calculateBoundingBox2D();
 				range = range.plus(childRange);
-			} catch (CMLRuntimeException e) {
+			} catch (RuntimeException e) {
 				System.out.println("NO atoms?");
 			}
 		}

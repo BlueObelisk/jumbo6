@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.RuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.AbstractTest;
 import org.xmlcml.cml.element.CMLAtom;
@@ -333,7 +333,7 @@ public class FragmentToolApp extends AbstractTest {
 			OutputStream os = new FileOutputStream(Util.getTEMP_DIRECTORY()+F_S+name+XML_SUFF);
 			element.serialize(os, 0);
 		} catch (Exception e) {
-			throw new CMLRuntimeException("Cannot ouput file: "+e);
+			throw new RuntimeException("Cannot ouput file: "+e);
 		}
 	}
 

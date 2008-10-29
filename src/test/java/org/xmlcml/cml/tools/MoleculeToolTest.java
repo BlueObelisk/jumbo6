@@ -2,74 +2,152 @@ package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.fail;
 import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
+import static org.xmlcml.cml.base.CMLConstants.CML_NS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.element.AbstractTest.TOOL_MOLECULES_RESOURCE;
+import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
+import static org.xmlcml.cml.test.CMLAssert.assertEquals;
+import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
+import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.neverThrow;
-import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.ParsingException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.attribute.NamespaceRefAttribute;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
-import org.xmlcml.cml.base.CMLRuntimeException;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomParity;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLLength;
-import org.xmlcml.cml.element.CMLLink;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.MoleculeAtomBondTest;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtomArray;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondArray;
+import org.xmlcml.cml.element.lite.CMLCml;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.main.CMLAmount;
+import org.xmlcml.cml.element.main.CMLAngle;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.main.CMLCrystal;
+import org.xmlcml.cml.element.main.CMLLength;
+import org.xmlcml.cml.element.main.CMLLink;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLSymmetry;
+import org.xmlcml.cml.element.main.CMLTorsion;
+import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGSVG;
-import org.xmlcml.cml.interfacex.Indexable;
-import org.xmlcml.cml.interfacex.IndexableByIdList;
+import org.xmlcml.cml.map.Indexable;
+import org.xmlcml.cml.map.IndexableByIdList;
+import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real3Range;
+import org.xmlcml.euclid.RealRange;
+import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.StringTestBase;
+import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * tests moleculeTool.
- *
+ * 
  * @author pmr
- *
+ * 
  */
-public class MoleculeToolTest extends MoleculeAtomBondTest {
-
+public class MoleculeToolTest {
 	private static Logger LOG = Logger.getLogger(MoleculeToolTest.class);
-	static {
-		LOG.trace("static");
-	}
+
+	Document xmlDocument = null;
+
+	// build xom
+	protected final int NATOM = 5;
+	protected final int NBOND = 5;
+	protected String[] elementTypes = { AS.C.value, AS.N.value, AS.O.value,
+			AS.S.value, AS.B.value };
+	protected int[] hCounts = { 2, 1, 0, 0, 1 };
+	protected CMLMolecule xomMolecule;
+	protected CMLAtom[] xomAtom;
+	protected CMLBond[] xomBond;
+
+	//
+	// read into xom; not a stable molecule... (CH3)[N+](S-)(O)(F)
+	// 2 1 3 4 5
+	protected String xmlMolS = S_EMPTY + "  <molecule id='m1'  " + CML_XMLNS
+			+ ">" + "    <atomArray>" + "      <atom id='a1' "
+			+ "        elementType='N'" + "        hydrogenCount='0'"
+			+ "        formalCharge='1'" + "        spinMultiplicity='1'"
+			+ "        occupancy='1.0'" + "        x2='0.' y2='0.'"
+			+ "        x3='0.' y3='0.' z3='0.'"
+			+ "        xFract='0.1' yFract='0.2' zFract='0.3'" + "      />"
+			+ "      <atom id='a2' " + "        elementType='C'"
+			+ "        hydrogenCount='3'" + "        x2='1.' y2='1.'"
+			+ "        x3='1.' y3='1.' z3='1.'" + "      />"
+			+ "      <atom id='a3' " + "        elementType='S'"
+			+ "        hydrogenCount='0'" + "        formalCharge='-1'"
+			+ "        x2='1.' y2='-1.'" + "        x3='1.' y3='-1.' z3='-1.'"
+			+ "      />" + "      <atom id='a4' " + "        elementType='O'"
+			+ "        x2='-1.' y2='-1.'" + "        x3='-1.' y3='-1.' z3='1.'"
+			+ "      />" + "      <atom id='a5' " + "        elementType='F'"
+			+ "        x2='-1.' y2='1.'" + "        x3='-1.' y3='1.' z3='-1.'"
+			+ "      />" + "    </atomArray>" + "    <bondArray>"
+			+ "      <bond id='b1' atomRefs2='a1 a2' order='1'/>"
+			+ "      <bond id='b2' atomRefs2='a1 a3' order='S'/>"
+			+ "      <bond id='b3' atomRefs2='a1 a4' order='1'/>"
+			+ "      <bond id='b4' atomRefs2='a1 a5' order='1'/>"
+			+ "    </bondArray>" + "  </molecule>" + "  ";
+
+	protected CMLMolecule xmlMolecule;
+	protected List<CMLAtom> xmlAtoms;
+	protected CMLAtom[] xmlAtom;
+	protected List<CMLBond> xmlBonds;
+	protected int xmlNatoms;
+	protected int xmlNbonds;
+	
+	protected CMLMolecule mol1 = null;
+	protected CMLMolecule mol2 = null;
+	protected CMLMolecule mol3 = null;
+	protected CMLMolecule mol4 = null;
+	protected CMLMolecule mol5 = null;
+	protected CMLMolecule mol5a = null;
+	protected CMLMolecule mol6 = null;
+	protected CMLMolecule mol7 = null;
+	protected CMLMolecule mol8 = null;
+	protected CMLMolecule mol9 = null;
+	protected CMLMolecule mol10 = null;
+	protected CMLMolecule mol11 = null;
+
+	protected CMLCrystal crystal = null;
+	protected CMLCml cmlCryst = null;
+	protected CMLMolecule cmlCrystMol = null;
+	protected CMLCrystal cmlCrystCryst = null;
+	
     protected AbstractTool moleculeTool1;
     protected AbstractTool moleculeTool2;
     protected AbstractTool moleculeTool3;
@@ -85,230 +163,29 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     protected MoleculeTool moleculeToolXml0;
     protected AbstractTool moleculeToolBond0;
     protected AbstractTool moleculeToolXmlBonds;
+	protected static Logger logger = Logger.getLogger(MoleculeToolTest.class
+			.getName());
 
     String benzeneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='benzene'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='A'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='A'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='A'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='A'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='A'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+    + "  <atomArray>"
+    + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
+    + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
+    + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
+    + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
+    + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
+    + "    <atom id='a6' elementType='C' hydrogenCount='1'/>"
+    + "  </atomArray>" + "  <bondArray>"
+    + "    <bond id='b1' atomRefs2='a1 a2' order='A'/>"
+    + "    <bond id='b2' atomRefs2='a2 a3' order='A'/>"
+    + "    <bond id='b3' atomRefs2='a3 a4' order='A'/>"
+    + "    <bond id='b4' atomRefs2='a4 a5' order='A'/>"
+    + "    <bond id='b5' atomRefs2='a5 a6' order='A'/>"
+    + "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
+    + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule benzene = null;
 
     String[] benzeneOrder = new String[] { "2", "1", "2", "1", "2", "1" };
-
-    String nickS = S_EMPTY + "<molecule " + CML_XMLNS + ">" + " <atomArray> "
-            + "  <atom id='a1' elementType='O'/>"
-            + "  <atom id='a2' elementType='O'/>"
-            + "  <atom id='a3' elementType='O'/>"
-            + "  <atom id='a4' elementType='O'/>"
-            + "  <atom id='a5' elementType='O'/>"
-            + "  <atom id='a6' elementType='O'/>"
-            + "  <atom id='a7' elementType='O'/>"
-            + "  <atom id='a8' elementType='O'/>"
-            + "  <atom id='a9' elementType='N'/>"
-            + "  <atom id='a10' elementType='N'/>"
-            + "  <atom id='a11' elementType='N'/>"
-            + "  <atom id='a12' elementType='N'/>"
-            + "  <atom id='a13' elementType='N'/>"
-            + "  <atom id='a14' elementType='C'/>"
-            + "  <atom id='a15' elementType='H'/>"
-            + "  <atom id='a16' elementType='C'/>"
-            + "  <atom id='a17' elementType='C'/>"
-            + "  <atom id='a18' elementType='H'/>"
-            + "  <atom id='a19' elementType='C'/>"
-            + "  <atom id='a20' elementType='C'/>"
-            + "  <atom id='a21' elementType='C'/>"
-            + "  <atom id='a22' elementType='H'/>"
-            + "  <atom id='a23' elementType='C'/>"
-            + "  <atom id='a24' elementType='C'/>"
-            + "  <atom id='a25' elementType='H'/>"
-            + "  <atom id='a26' elementType='C'/>"
-            + "  <atom id='a27' elementType='C'/>"
-            + "  <atom id='a28' elementType='C'/>"
-            + "  <atom id='a29' elementType='C'/>"
-            + "  <atom id='a30' elementType='C'/>"
-            + "  <atom id='a31' elementType='C'/>"
-            + "  <atom id='a32' elementType='C'/>"
-            + "  <atom id='a33' elementType='C'/>"
-            + "  <atom id='a34' elementType='C'/>"
-            + "  <atom id='a35' elementType='C'/>"
-            + "  <atom id='a36' elementType='H'/>"
-            + "  <atom id='a37' elementType='H'/>"
-            + "  <atom id='a38' elementType='C'/>"
-            + "  <atom id='a39' elementType='H'/>"
-            + "  <atom id='a40' elementType='H'/>"
-            + "  <atom id='a41' elementType='H'/>" + " </atomArray>"
-            + " <bondArray> " + "  <bond atomRefs2='a1 a9' /> "
-            + "  <bond atomRefs2='a2 a9' /> "
-            + "  <bond atomRefs2='a3 a10' /> "
-            + "  <bond atomRefs2='a4 a10' />" + "  <bond atomRefs2='a5 a34' />"
-            + "  <bond atomRefs2='a6 a34' />" + "  <bond atomRefs2='a6 a35' />"
-            + "  <bond atomRefs2='a7 a11' />"
-            + "  <bond atomRefs2='a8 a11' /> "
-            + "  <bond atomRefs2='a9 a16' /> "
-            + "  <bond atomRefs2='a10 a19'/>"
-            + "  <bond atomRefs2='a11 a23' />"
-            + "  <bond atomRefs2='a12 a32' />"
-            + "  <bond atomRefs2='a13 a33' />"
-            + "  <bond atomRefs2='a14 a15' />"
-            + "  <bond atomRefs2='a14 a16' />"
-            + "  <bond atomRefs2='a14 a27' />"
-            + "  <bond atomRefs2='a16 a17' />"
-            + "  <bond atomRefs2='a17 a18' />"
-            + "  <bond atomRefs2='a17 a19' />"
-            + "  <bond atomRefs2='a19 a28' />"
-            + "  <bond atomRefs2='a20 a21' />"
-            + "  <bond atomRefs2='a20 a29' />"
-            + "  <bond atomRefs2='a20 a34' />"
-            + "  <bond atomRefs2='a21 a22' />"
-            + "  <bond atomRefs2='a21 a23' />"
-            + "  <bond atomRefs2='a23 a24' />"
-            + "  <bond atomRefs2='a24 a25' />"
-            + "  <bond atomRefs2='a24 a30' />"
-            + "  <bond atomRefs2='a26 a27' />"
-            + "  <bond atomRefs2='a26 a30' />"
-            + "  <bond atomRefs2='a26 a31' />"
-            + "  <bond atomRefs2='a27 a28' />"
-            + "  <bond atomRefs2='a28 a29' />"
-            + "  <bond atomRefs2='a29 a30' />"
-            + "  <bond atomRefs2='a31 a32' />"
-            + "  <bond atomRefs2='a31 a33' />"
-            + "  <bond atomRefs2='a35 a36' />"
-            + "  <bond atomRefs2='a35 a37' />"
-            + "  <bond atomRefs2='a35 a38' />"
-            + "  <bond atomRefs2='a38 a39' />"
-            + "  <bond atomRefs2='a38 a40' />"
-            + "  <bond atomRefs2='a38 a41' /> " + " </bondArray>"
-            + " <formula formalCharge='0' concise='C 19 H 9 N 5 O 8'> "
-            + "  <atomArray elementType='C H N O' count='19.0 9.0 5.0 8.0' />"
-            + " </formula> " + "</molecule> " + S_EMPTY;
-
-    CMLMolecule nick = null;
-
-    String[] nickOrder = new String[] { "1", "1", "1", "1", "2", "1", "1", "1",
-            "1", "1", "1", "1", "3", "3", "1", "1", "2", "2", "1", "1", "2",
-            "1", "2", "1", "1", "2", "1", "1", "2", "1", "1", "2", "1", "1",
-            "1", "1", "1", "1", "1", "1", "1", "1", "1" };
-
-    String styreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='styrene'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a7' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a8' elementType='C' hydrogenCount='2'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='A'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='A'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='A'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='A'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='A'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
-            + "    <bond id='b7' atomRefs2='a6 a7' order='1'/>"
-            + "    <bond id='b8' atomRefs2='a7 a8' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule styrene = null;
-
-    String[] styreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
-            "2", };
-
-    String pyreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyrene'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a11' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a12' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a13' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a14' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a15' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a16' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a21' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a22' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a61' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a62' elementType='C' hydrogenCount='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b11' atomRefs2='a11 a12' order='1'/>"
-            + "    <bond id='b12' atomRefs2='a12 a13' order='1'/>"
-            + "    <bond id='b13' atomRefs2='a13 a14' order='1'/>"
-            + "    <bond id='b14' atomRefs2='a14 a15' order='1'/>"
-            + "    <bond id='b15' atomRefs2='a15 a16' order='1'/>"
-            + "    <bond id='b16' atomRefs2='a16 a11' order='1'/>"
-            + "    <bond id='b17' atomRefs2='a1 a11' order='1'/>"
-            + "    <bond id='b21' atomRefs2='a2 a21' order='1'/>"
-            + "    <bond id='b22' atomRefs2='a21 a22' order='1'/>"
-            + "    <bond id='b23' atomRefs2='a22 a12' order='1'/>"
-            + "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
-            + "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
-            + "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule pyrene = null;
-
-    String[] pyreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
-            "1", "2", "1", "2", "1", "1", "1", "2", "1", "1", "2", "1" };
-
-    String tripheneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='triphene'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a11' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a12' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a16' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a21' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a22' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a61' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a62' elementType='C' hydrogenCount='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b11' atomRefs2='a11 a12' order='1'/>"
-            + "    <bond id='b16' atomRefs2='a16 a11' order='1'/>"
-            + "    <bond id='b17' atomRefs2='a1 a11' order='1'/>"
-            + "    <bond id='b21' atomRefs2='a2 a21' order='1'/>"
-            + "    <bond id='b22' atomRefs2='a21 a22' order='1'/>"
-            + "    <bond id='b23' atomRefs2='a22 a12' order='1'/>"
-            + "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
-            + "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
-            + "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule triphene = null;
-
-    String[] tripheneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
-            "2", "1", "1", "1", "2", "1", "2", "1" };
 
     String methyleneCyclohexeneS = S_EMPTY + "<molecule " + CML_XMLNS
             + " title='methyleneCyclohexene'>" + "  <atomArray>"
@@ -353,525 +230,345 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
             + "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
             + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
-    CMLMolecule methyleneCyclohexadiene = null;
-
-    String[] methyleneCyclohexadieneOrder = new String[] { "2", "1", "1", "2",
-            "1", "1", "2" };
-
-    String co2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='co2'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule co2 = null;
-
-    String[] co2Order = new String[] { "2", "2" };
-
-    String azuleneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='azulene'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a7' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a8' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a9' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a10' elementType='C' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a7' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a7 a8' order='1'/>"
-            + "    <bond id='b8' atomRefs2='a8 a9' order='1'/>"
-            + "    <bond id='b9' atomRefs2='a9 a10' order='1'/>"
-            + "    <bond id='b10' atomRefs2='a1 a10' order='1'/>"
-            + "    <bond id='b11' atomRefs2='a4 a10' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule azulene = null;
-
-    String[] azuleneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
-            "1", "2", "1", "1" };
-
-    String conjugatedS = S_EMPTY + "<molecule " + CML_XMLNS + " title='conjugated'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a7' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a8' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a9' elementType='C' hydrogenCount='2'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a7' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a7 a8' order='1'/>"
-            + "    <bond id='b8' atomRefs2='a8 a9' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule conjugated = null;
-
-    String formate1S = S_EMPTY
-            + "<molecule "
-            + CML_XMLNS
-            + " title='formate1'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule formate1 = null;
-
-    String formate2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='formate2'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule formate2 = null;
-
-    String formate3S = S_EMPTY + "<molecule " + CML_XMLNS + " title='formate3'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule formate3 = null;
-
-    String pyridineS = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyridine'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='N' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule pyridine = null;
-
-    String pyridiniumS = S_EMPTY
-            + "<molecule "
-            + CML_XMLNS
-            + " title='pyridinium'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='N' hydrogenCount='1' formalCharge='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule pyridinium = null;
-
-    String pyridone4S = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyridone4'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='N' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a7' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a4 a7' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule pyridone4 = null;
-
     static String nitroMethaneS = ""
-            + "<molecule "
-            + CML_XMLNS
-            + " title='MeN+(-O)O-'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='N' hydrogenCount='0' formalCharge='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='3'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+        + "<molecule "
+        + CML_XMLNS
+        + " title='MeN+(-O)O-'>"
+        + "  <atomArray>"
+        + "    <atom id='a1' elementType='N' hydrogenCount='0' formalCharge='1'/>"
+        + "    <atom id='a2' elementType='C' hydrogenCount='3'/>"
+        + "    <atom id='a3' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
+        + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
+        + "  </atomArray>" + "  <bondArray>"
+        + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
+        + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
+        + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
+        + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitroMethane = null;
 
-    String nitricS = S_EMPTY
-            + "<molecule "
-            + CML_XMLNS
-            + " title='nitric'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='N' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule nitric = null;
-
-    String oxalateS = S_EMPTY
-            + "<molecule "
-            + CML_XMLNS
-            + " title='oxalate'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a6' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule oxalate = null;
-
-    // =========== redistribute molecular charge ==============
-    String methylammoniumS = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='methylammonium' formalCharge='1'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
-            + "    <atom id='a2' elementType='N' hydrogenCount='3'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule methylammonium = null;
-
-    String pyridinium1S = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='pyridinium1' formalCharge='1'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='N' hydrogenCount='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='2'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='2'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='2'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule pyridinium1 = null;
-
-    String oxalate2S = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='oxalate2' formalCharge='-2'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a6' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule oxalate2 = null;
-
-    String diMethylIminiumS = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='diMethylIminium Me2N-CH2(+)'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
-            + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='3'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='3'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule diMethylIminium = null;
-
-    String munchnoneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='munchnone'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='N' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a1 a5' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a1 a6' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule munchnone = null;
-
-    // nitrogen molecules
-    String nitric2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='ON(O)O'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
-
-    CMLMolecule nitric2 = null;
-
+    
     String nitroMethane2S = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='CH3N(O)O'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
-            + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+    + " title='CH3N(O)O'>" + "  <atomArray>"
+    + "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
+    + "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
+    + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
+    + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
+    + "  </atomArray>" + "  <bondArray>"
+    + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
+    + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
+    + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
+    + "  </bondArray>" + "</molecule>" + S_EMPTY;
 
     CMLMolecule nitroMethane2 = null;
 
-    // oxy anion
-    String carbonate2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='OC(O)O'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+    protected void makeMol1() {
+		String s = "  <molecule id='m1' " + CML_XMLNS + ">" + "    <atomArray>"
+				+ "      <atom id='a1' x3='1.0' y3='2.0' z3='0.0'/>"
+				+ "      <atom id='a2' x3='3.0' y3='4.0' z3='0.0'/>"
+				+ "      <atom id='a3' x3='2.0' y3='3.0' z3='1.0'/>"
+				+ "    </atomArray>" + "  </molecule>";
+		mol1 = (CMLMolecule) TestUtils.parseValidString(s);
+	}
 
-    CMLMolecule carbonate2 = null;
+	protected void makeMol2() {
+		mol2 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m2' "
+				+ CML_XMLNS + ">" + "    <atomArray>"
+				+ "      <atom id='a11' x3='1.0' y3='2.0' z3='0.0'/>"
+				+ "      <atom id='a12' x3='3.0' y3='4.0' z3='0.0'/>"
+				+ "      <atom id='a13' x3='2.0' y3='3.0' z3='-1.0'/>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    // oxy anion
-    String hydrogenSulfateS = S_EMPTY + "<molecule " + CML_XMLNS + " title='HSO4'>"
-            + "  <atomArray>"
-            + "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+	protected void makeMol3() {
+		mol3 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m3' "
+				+ CML_XMLNS + ">" + "    <atomArray>"
+				+ "      <atom id='a21' x3='21.0' y3='2.0' z3='0.0'/>"
+				+ "      <atom id='a22' x3='23.0' y3='4.0' z3='0.0'/>"
+				+ "      <atom id='a23' x3='22.0' y3='3.0' z3='1.0'/>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    CMLMolecule hydrogenSulfate = null;
+	protected void makeMol4() {
+		mol4 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m4' "
+				+ CML_XMLNS
+				+ ">"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' xFract='0.1' yFract='0.2' zFract='0.0'/>"
+				+ "      <atom id='a2' xFract='0.3' yFract='0.4' zFract='0.0'/>"
+				+ "      <atom id='a3' xFract='0.5' yFract='0.6' zFract='0.7'/>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    // methaneSulfonate
-    String methaneSulfonateS = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='methaneSulfonate'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='3'/>"
-            + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a5' elementType='O' hydrogenCount='0'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+	protected void makeCrystal() {
+		crystal = (CMLCrystal) TestUtils.parseValidString("  <crystal id='c1' "
+				+ CML_XMLNS + ">"
+				+ "    <scalar dictRef='iucr:_cell_length_a'>9.0</scalar>"
+				+ "    <scalar dictRef='iucr:_cell_length_b'>10.0</scalar>"
+				+ "    <scalar dictRef='iucr:_cell_length_c'>11.0</scalar>"
+				+ "    <scalar dictRef='iucr:_cell_angle_alpha'>90.0</scalar>"
+				+ "    <scalar dictRef='iucr:_cell_angle_beta'>90.0</scalar>"
+				+ "    <scalar dictRef='iucr:_cell_angle_gamma'>90.0</scalar>"
+				+ "  </crystal>" + "  ");
+	}
 
-    CMLMolecule methaneSulfonate = null;
+	protected void makeMol5() {
+		mol5 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m5' "
+				+ CML_XMLNS
+				+ ">"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'>"
+				+ "        <label value='C1'/>"
+				+ "      </atom>"
+				+ "      <atom id='a2' elementType='N' x3='0.0' y3='1.3' z3='0.0'/>"
+				+ "      <atom id='a3' elementType='O' x3='1.0' y3='2.2' z3='0.0' formalCharge='-1'/>"
+				+ "      <atom id='a4' elementType='H' x3='0.85' y3='-0.54' z3='0.5'>"
+				+ "        <label value='H1a'/>"
+				+ "      </atom>"
+				+ "      <atom id='a5' elementType='H' x3='-0.85' y3='-0.54' z3='0.5'>"
+				+ "        <label value='H1b'/>" + "      </atom>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    String benzophenoneS = S_EMPTY + "<molecule " + CML_XMLNS
-            + " title='benzophenone'>" + "  <atomArray>"
-            + "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a4' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a5' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a6' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a7' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a8' elementType='O' hydrogenCount='0'/>"
-            + "    <atom id='a9' elementType='C' hydrogenCount='0'/>"
-            + "    <atom id='a10' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a11' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a12' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a13' elementType='C' hydrogenCount='1'/>"
-            + "    <atom id='a14' elementType='C' hydrogenCount='1'/>"
-            + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a6 a7' order='1'/>"
-            + "    <bond id='b8' atomRefs2='a7 a8' order='1'/>"
-            + "    <bond id='b9' atomRefs2='a7 a9' order='1'/>"
-            + "    <bond id='b10' atomRefs2='a9 a10' order='1'/>"
-            + "    <bond id='b11' atomRefs2='a10 a11' order='1'/>"
-            + "    <bond id='b12' atomRefs2='a11 a12' order='1'/>"
-            + "    <bond id='b13' atomRefs2='a12 a13' order='1'/>"
-            + "    <bond id='b14' atomRefs2='a13 a14' order='1'/>"
-            + "    <bond id='b15' atomRefs2='a9 a14' order='1'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+	protected void makeMol5a() {
+		mol5a = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m5' "
+				+ CML_XMLNS
+				+ ">"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'/>"
+				+ "      <atom id='a2' elementType='N' x3='0.0' y3='1.3' z3='0.0'/>"
+				+ "      <atom id='a3' elementType='C' x3='1.2' y3='2.2' z3='0.0'/>"
+				+ "      <atom id='a4' elementType='H' x3='0.95' y3='-0.54' z3='0.0'/>"
+				+ "      <atom id='a5' elementType='H' x3='-0.95' y3='-0.54' z3='0.0'/>"
+				+ "    </atomArray>" + "    <bondArray>"
+				+ "      <bond id='a1_a2' atomRefs2='a1 a2'/>"
+				+ "      <bond id='a1_a4' atomRefs2='a1 a4'/>"
+				+ "      <bond id='a1_a5' atomRefs2='a1 a5'/>"
+				+ "      <bond id='a2_a3' atomRefs2='a2 a3'/>"
+				+ "    </bondArray>" + "  </molecule>");
+	}
 
-    CMLMolecule benzophenone = null;
+	protected void makeMolCryst() {
+		cmlCryst = (CMLCml) TestUtils.parseValidString("<cml id='cml1' "
+				+ CML_XMLNS
+				+ ">"
+				+ "  <crystal id='c1' >"
+				+ "    <scalar dictRef='cml:a'>9.0</scalar>"
+				+ "    <scalar dictRef='cml:b'>10.0</scalar>"
+				+ "    <scalar dictRef='cml:c'>11.0</scalar>"
+				+ "    <scalar dictRef='cml:alpha'>90.0</scalar>"
+				+ "    <scalar dictRef='cml:beta'>90.0</scalar>"
+				+ "    <scalar dictRef='cml:gamma'>90.0</scalar>"
+				+ "  </crystal>"
+				+ "  <molecule id='m5' >"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' xFract='0.0' yFract='0.0' zFract='0.0'/>"
+				+ "      <atom id='a2' elementType='N' xFract='0.0' yFract='0.1' zFract='0.0'/>"
+				+ "      <atom id='a3' elementType='C' xFract='0.12' yFract='0.22' zFract='0.0'/>"
+				+ "      <atom id='a4' elementType='H' xFract='0.2' yFract='-0.33' zFract='0.1'/>"
+				+ "      <atom id='a5' elementType='H' xFract='0.25' yFract='-0.54' zFract='0.0'/>"
+				+ "    </atomArray>" + "    <bondArray>"
+				+ "      <bond id='a1_a2' atomRefs2='a1 a2'/>"
+				+ "      <bond id='a1_a4' atomRefs2='a1 a4'/>"
+				+ "      <bond id='a1_a5' atomRefs2='a1 a5'/>"
+				+ "      <bond id='a2_a3' atomRefs2='a2 a3'/>"
+				+ "    </bondArray>" + "  </molecule>" + "</cml>");
+		cmlCrystMol = (CMLMolecule) CMLUtil.getQueryNodes(cmlCryst,
+				".//" + CMLMolecule.NS, CML_XPATH).get(0);
+		cmlCrystCryst = (CMLCrystal) CMLUtil.getQueryNodes(cmlCryst,
+				".//" + CMLCrystal.NS, CML_XPATH).get(0);
 
-    String sproutS = S_EMPTY + "<molecule " + CML_XMLNS + " title='sprout'>"
-            + "  <atomArray>" + "    <atom id='a1' elementType='C'/>"
-            + "    <atom id='a2' elementType='C'/>"
-            + "    <atom id='a3' elementType='C'/>"
-            + "    <atom id='a4' elementType='C'/>"
-            + "    <atom id='a5' elementType='C'/>"
-            + "    <atom id='a6' elementType='C'/>"
-            + "    <atom id='a7' elementType='F'/>"
-            + "    <atom id='a8' elementType='Cl'/>"
-            + "    <atom id='a9' elementType='Br'/>"
-            + "    <atom id='a10' elementType='I'/>"
-            + "    <atom id='a11' elementType='H'/>"
-            + "    <atom id='a12' elementType='C'/>"
-            + "    <atom id='a13' elementType='O'/>" + "   </atomArray>"
-            + "   <bondArray>" + "     <bond id='a1 a2' atomRefs2='a1 a2'/>"
-            + "     <bond id='a2 a3' atomRefs2='a2 a3'/>"
-            + "     <bond id='a3 a4' atomRefs2='a3 a4'/>"
-            + "     <bond id='a4 a5' atomRefs2='a4 a5'/>"
-            + "     <bond id='a5 a6' atomRefs2='a5 a6'/>"
-            + "     <bond id='a1 a6' atomRefs2='a1 a6'/>"
-            + "     <bond id='a1 a7' atomRefs2='a1 a7'/>"
-            + "     <bond id='a2 a8' atomRefs2='a2 a8'/>"
-            + "     <bond id='a3 a9' atomRefs2='a3 a9'/>"
-            + "     <bond id='a4 a10' atomRefs2='a4 a10'/>"
-            + "     <bond id='a5 a11' atomRefs2='a5 a11'/>"
-            + "     <bond id='a6 a12' atomRefs2='a6 a12'/>"
-            + "     <bond id='a12 a13' atomRefs2='a12 a13'/>"
-            + "  </bondArray>" + "</molecule>" + S_EMPTY;
+	}
 
-    CMLMolecule sprout = null;
+	protected void makeMol6() {
+		mol6 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m6' "
+				+ CML_XMLNS
+				+ ">"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'/>"
+				+ "      <atom id='a2' elementType='N' x3='0.0' y3='1.3' z3='0.0'/>"
+				+ "      <atom id='a3' elementType='C' x3='1.2' y3='2.2' z3='0.0'/>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    protected static Logger logger = Logger.getLogger(MoleculeToolTest.class
-            .getName());
+	protected void makeMol7() {
+		mol7 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m7' "
+				+ CML_XMLNS + ">" + "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
+				+ "      <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
+				+ "      <atom id='a3' elementType='C' x2='1.2' y2='2.2'/>"
+				+ "    </atomArray>" + "  </molecule>");
+	}
 
-    // ************************************************************************
-    /**
-     * constructor.
-     *
-     */
-    public MoleculeToolTest() {
+	protected void makeMol8() {
+		mol8 = (CMLMolecule) TestUtils.parseValidString("<molecule id='m8' "
+				+ CML_XMLNS
+				+ ">"
+				+ "  <molecule id='m8a'>"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
+				+ "      <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
+				+ "      <atom id='a3' elementType='C' x2='1.2' y2='2.2'/>"
+				+ "    </atomArray>"
+				+ "  </molecule>"
+				+ "  <molecule id='m8b'>"
+				+ "    <atomArray>"
+				+ "      <atom id='a1' elementType='H' x3='10.0' y3='0.0' z3='0.0'/>"
+				+ "      <atom id='a2' elementType='Br' x3='10.0' y3='1.3' z3='0.0'/>"
+				+ "      <atom id='a33' elementType='Cl' x3='11.2' y3='2.2' z3='0.0'/>"
+				+ "    </atomArray>" + "  </molecule>" + "</molecule>");
+	}
 
-    }
+	protected void makeMol9() {
+		mol9 = (CMLMolecule) TestUtils.parseValidString("<molecule id='m9' " + CML_XMLNS
+				+ ">" + "  <atomArray>"
+				+ "    <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
+				+ "    <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
+				+ "    <atom id='a3' elementType='C' x2='1.2' y2='2.2'/>"
+				+ "  </atomArray>" + "  <bondArray>"
+				+ "    <bond atomRefs2='a1 a2'/>"
+				+ "    <bond atomRefs2='a2 a3'/>" + "  </bondArray>"
+				+ "</molecule>");
+	}
 
-    /**
-     * setup.
-     *
-     * @throws Exception
-     */
-    @Before
+	protected void makeMol10() {
+		mol10 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+				+ CML_XMLNS
+				+ ">"
+				+ "  <atomArray>"
+				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
+				+ "    <atom id='a2' elementType='C' hydrogenCount='2'/>"
+				+ "    <atom id='a3' elementType='C' hydrogenCount='0'/>"
+				+ "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
+				+ "    <atom id='a5' elementType='O' formalCharge='-1' hydrogenCount='0'/>"
+				+ "  </atomArray>" + "  <bondArray>"
+				+ "    <bond atomRefs2='a1 a2' order='S'/>"
+				+ "    <bond atomRefs2='a2 a3' order='S'/>"
+				+ "    <bond atomRefs2='a3 a4' order='D'/>"
+				+ "    <bond atomRefs2='a3 a5' order='S'/>" + "  </bondArray>"
+				+ "</molecule>" + S_EMPTY);
+	}
+
+	protected void makeMol11() {
+		mol11 = (CMLMolecule) TestUtils.parseValidString("<molecule " + CML_XMLNS + ">"
+				+ "  <atomArray>"
+				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
+				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
+				+ "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
+				+ "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
+				+ "    <atom id='a5' elementType='S' hydrogenCount='0'/>"
+				+ "    <atom id='a6' elementType='N' hydrogenCount='0'/>"
+				+ "    <atom id='a7' elementType='Cl' hydrogenCount='0'/>"
+				+ "    <atom id='a8' elementType='Br' hydrogenCount='0'/>"
+				+ "  </atomArray>" + "  <bondArray>"
+				+ "    <bond atomRefs2='a1 a2' order='S'/>"
+				+ "    <bond atomRefs2='a2 a3' order='S'/>"
+				+ "    <bond atomRefs2='a2 a4' order='S'/>"
+				+ "    <bond atomRefs2='a3 a4' order='S'/>"
+				+ "    <bond atomRefs2='a3 a5' order='S'/>"
+				+ "    <bond atomRefs2='a5 a6' order='S'/>"
+				+ "    <bond atomRefs2='a6 a7' order='S'/>"
+				+ "    <bond atomRefs2='a6 a8' order='S'/>" + "  </bondArray>"
+				+ "</molecule>" + S_EMPTY);
+	}
+
+	@Before
     public void setUp() throws Exception {
-        super.setUp();
+		
+		// build reference molecule
+		xomMolecule = new CMLMolecule();
+		xomMolecule.setId("xom1");
+		xomAtom = new CMLAtom[NATOM];
+		for (int i = 0; i < NATOM; i++) {
+			xomAtom[i] = new CMLAtom();
+			xomAtom[i].setId("a" + (i + 1));
+			xomMolecule.getOrCreateAtomArray().appendChild(xomAtom[i]);
+			xomAtom[i].setElementType(elementTypes[i]);
+			xomAtom[i].setX3((double) i);
+			xomAtom[i].setY3((double) (i + 1));
+			xomAtom[i].setZ3((double) (i + 2));
+			xomAtom[i].setX2((double) i * 10);
+			xomAtom[i].setY2((double) (i * 10 + 1));
+			xomAtom[i].setHydrogenCount(hCounts[i]);
+		}
+		xomBond = new CMLBond[NBOND];
+		for (int j = 0; j < NBOND; j++) {
+			// form a cycle...
+			// have to set id at this stage. Pehaps we should trap it
+			xomBond[j] = new CMLBond(xomAtom[j], xomAtom[(j + 1) % NATOM]);
+			xomBond[j].setId("b" + (j + 1));
+			CMLBondArray bondArray = xomMolecule.getOrCreateBondArray();
+			bondArray.appendChild(xomBond[j]);
+			xomBond[j].setOrder((j == 0) ? "2" : "1");
+		}
+
+		// read reference moelcule
+
+		try {
+			xmlDocument = new CMLBuilder().build(new StringReader(xmlMolS));
+		} catch (IOException e) {
+			Assert.fail("Should not throw IOException");
+		} catch (ParsingException e) {
+			e.printStackTrace();
+			LOG.error("Parse exception " + e);
+			Assert.fail("Should not throw ParsingException " + e.getMessage());
+		}
+		xmlMolecule = (CMLMolecule) xmlDocument.getRootElement();
+
+		xmlAtoms = xmlMolecule.getAtoms();
+		xmlAtom = new CMLAtom[xmlAtoms.size()];
+		for (int i = 0; i < xmlAtom.length; i++)
+			xmlAtom[i] = (CMLAtom) xmlAtoms.get(i);
+		xmlBonds = xmlMolecule.getBonds();
+
+		xmlNatoms = 5;
+		xmlNbonds = 4;
+
+		Assert.assertEquals("check atoms in setup", xmlNatoms, xmlAtoms.size());
+		Assert.assertEquals("check bonds in setup", xmlNbonds, xmlBonds.size());
         makeMol1();
         moleculeTool1 = MoleculeTool.getOrCreateTool(mol1);
         moleculeToolXom0 = MoleculeTool.getOrCreateTool(xomAtom[0].getMolecule());
         moleculeToolXml0 = MoleculeTool.getOrCreateTool(xmlAtom[0].getMolecule());
         moleculeToolBond0 = MoleculeTool.getOrCreateTool(xmlBonds.get(0).getMolecule());
         benzene = makeMol(benzene, benzeneS);
-        nick = makeMol(nick, nickS);
-        pyrene = makeMol(pyrene, pyreneS);
-        triphene = makeMol(triphene, tripheneS);
-        styrene = makeMol(styrene, styreneS);
+//        nick = makeMol(nick, nickS);
+//        pyrene = makeMol(pyrene, pyreneS);
+//        triphene = makeMol(triphene, tripheneS);
+//        styrene = makeMol(styrene, styreneS);
         methyleneCyclohexene = makeMol(methyleneCyclohexene,
                 methyleneCyclohexeneS);
-        methyleneCyclohexadiene = makeMol(methyleneCyclohexadiene,
-                methyleneCyclohexadieneS);
-        co2 = makeMol(co2, co2S);
-        azulene = makeMol(azulene, azuleneS);
-        conjugated = makeMol(conjugated, conjugatedS);
-        formate1 = makeMol(formate1, formate1S);
-        formate2 = makeMol(formate2, formate2S);
-        formate3 = makeMol(formate3, formate3S);
-        pyridine = makeMol(pyridine, pyridineS);
-        pyridinium = makeMol(pyridinium, pyridiniumS);
-        pyridone4 = makeMol(pyridone4, pyridone4S);
-        nitroMethane = makeMol(nitroMethane, nitroMethaneS);
-        nitric = makeMol(nitric, nitricS);
-        oxalate = makeMol(oxalate, oxalateS);
-        benzophenone = makeMol(benzophenone, benzophenoneS);
-        methylammonium = makeMol(methylammonium, methylammoniumS);
-        munchnone = makeMol(munchnone, munchnoneS);
-        pyridinium1 = makeMol(pyridinium1, pyridinium1S);
-        oxalate2 = makeMol(oxalate2, oxalate2S);
-        diMethylIminium = makeMol(diMethylIminium, diMethylIminiumS);
-        nitric2 = makeMol(nitric2, nitric2S);
+//        methyleneCyclohexadiene = makeMol(methyleneCyclohexadiene,
+//                methyleneCyclohexadieneS);
+//        co2 = makeMol(co2, co2S);
+//        azulene = makeMol(azulene, azuleneS);
+//        conjugated = makeMol(conjugated, conjugatedS);
+//        formate1 = makeMol(formate1, formate1S);
+//        formate2 = makeMol(formate2, formate2S);
+//        formate3 = makeMol(formate3, formate3S);
+//        pyridine = makeMol(pyridine, pyridineS);
+//        pyridinium = makeMol(pyridinium, pyridiniumS);
+//        pyridone4 = makeMol(pyridone4, pyridone4S);
+          nitroMethane = makeMol(nitroMethane, nitroMethaneS);
+//        nitric = makeMol(nitric, nitricS);
+//        oxalate = makeMol(oxalate, oxalateS);
+//        benzophenone = makeMol(benzophenone, benzophenoneS);
+//        methylammonium = makeMol(methylammonium, methylammoniumS);
+//        munchnone = makeMol(munchnone, munchnoneS);
+//        pyridinium1 = makeMol(pyridinium1, pyridinium1S);
+//        oxalate2 = makeMol(oxalate2, oxalate2S);
+//        diMethylIminium = makeMol(diMethylIminium, diMethylIminiumS);
+//        nitric2 = makeMol(nitric2, nitric2S);
         nitroMethane2 = makeMol(nitroMethane2, nitroMethane2S);
-        carbonate2 = makeMol(carbonate2, carbonate2S);
-        hydrogenSulfate = makeMol(hydrogenSulfate, hydrogenSulfateS);
-        methaneSulfonate = makeMol(methaneSulfonate, methaneSulfonateS);
-        sprout = makeMol(sprout, sproutS);
+//        carbonate2 = makeMol(carbonate2, carbonate2S);
+//        hydrogenSulfate = makeMol(hydrogenSulfate, hydrogenSulfateS);
+//        methaneSulfonate = makeMol(methaneSulfonate, methaneSulfonateS);
+//        sprout = makeMol(sprout, sproutS);
     }
 
     private CMLMolecule makeMol(CMLMolecule mol, String s) {
         if (mol == null) {
-            mol = (CMLMolecule) parseValidString(s);
+            mol = (CMLMolecule) TestUtils.parseValidString(s);
         }
         return mol;
     }
@@ -947,280 +644,86 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         moleculeToolXmlBonds = MoleculeTool.getOrCreateTool(xmlBonds.get(0).getMolecule());
     }
 
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.MoleculeTool.adjustBondOrdersToValency()'
-     */
-    @Test
-    public void testAdjustBondOrdersAndChargesToValency() {
-        // abocv(benzene);
-        /*--
-         abocv(pyrene);
-         abocv(styrene);
-         abocv(methyleneCyclohexene);
-         abocv(methyleneCyclohexadiene);
-         abocv(co2);
-         abocv(azulene);
-         abocv(conjugated);
-         abocv(formate1);
-         abocv(formate2);
-         abocv(formate3);
-         abocv(pyridine);
-         abocv(pyridinium);
-         abocv(pyridone4);
-         abocv(nitroMethane);
-         abocv(nitric);
-         abocv(oxalate);
-         --*/
-        // abocv(oxalate2);
-        /*--
-         abocv(benzophenone);
-         abocv(methylammonium);
-         abocv(pyridinium1);
-         abocv(oxalate2);
-         abocv(diMethylIminium);
-         --*/
-        // abocv(munchnone);
-        /*--
-         abocv(nitric2);
-         abocv(nitroMethane2);
-         abocv(nitric2);
-         abocv(carbonate2);
-         abocv(hydrogenSulfate);
-         abocv(nitroMethane2);
-         abocv(methaneSulfonate);
-         --*/
+	static Catalog getMoleculeCatalog() throws IOException {
+        Catalog catalogTool = null;
+        catalogTool = new Catalog(Util
+                .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML));
+        return catalogTool;
     }
 
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.MoleculeTool.adjustBondOrdersToValency() { '
-     */
-    @Test
-    public void testAdjustBondOrdersToValency() {
-        abov(benzene, 0, benzeneOrder); // OK
-        // abov(nick, 0, nickOrder);
-        abov(styrene, 0, styreneOrder); // OK
-        abov(pyrene, 0, pyreneOrder); // OK
-        abov(triphene, 1, tripheneOrder); //
-        // abov(methyleneCyclohexene, 0, methyleneCyclohexeneOrder); // OK
-        // abov(methyleneCyclohexadiene, 0, methyleneCyclohexadieneOrder); // OK
-        abov(co2, 0, co2Order); // OK
-        abov(azulene, 0, azuleneOrder);
-        /*--
-         abov(conjugated);
-         abov(formate1);
-         abov(formate2);
-         abov(formate3);
-         abov(pyridine);
-         abov(pyridinium);
-         abov(pyridone4);
-         abov(nitroMethane);
-         abov(nitric);
-         abov(oxalate);
-         --*/
-        // abov(munchnone, 0);
-        // abov(oxalate2, 2); // OK
-        // abov(benzophenone);
-    }
+	/**
+	 * main
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		if (args.length == 0) {
+			System.out.println("Args is 0");
+			usage();
+		} else {
+			if (args[0].equalsIgnoreCase("-SVG")) {
+				testSVG(args);
+			}
+		}
+	}
 
-    private void abov(CMLMolecule mol, int knownUnpaired, String[] expected) {
-        // System.out.println("====adjustBondOrders===== "+mol.getTitle()+"
-        // ======================");
-        mol.setBondOrders(CMLBond.SINGLE);
-        PiSystemControls piSystemManager = new PiSystemControls();
-        piSystemManager.setUpdateBonds(true);
-        piSystemManager.setKnownUnpaired(knownUnpaired);
-        piSystemManager.setDistributeCharge(true);
-        MoleculeTool.getOrCreateTool(mol).adjustBondOrdersToValency(piSystemManager);
-        List<CMLBond> bonds = mol.getBonds();
-        String[] found = new String[bonds.size()];
-        int i = 0;
-        for (CMLBond bond : bonds) {
-            found[i++] = bond.getOrder();
-        }
-        StringTestBase.assertEquals("expected orders", found, expected);
-    }
+	/**
+	 * test display.
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void testSVG(String[] args) throws Exception {
+		if (args.length < 3) {
+			System.out.println("SVG infile/input_resource outfile");
+		} else {
+			String infile = args[1];
+			String outfile = args[2];
+			InputStream is = null;
+			try {
+				is = Util.getInputStreamFromResource(infile);
+			} catch (Exception e) {
+				is = new FileInputStream(infile);
+			}
 
-    /**
-     * test distributeMolecularChargeToN4.
-     */
-    @Test
-    public void testDistributeMolecularChargeToN4() {
-        /*--
-         dmcn4(methylammonium);
-         dmcn4(pyridinium1);
-         --*/
-    }
+			MoleculeDisplayList graphicsManager = new MoleculeDisplayList(
+					outfile);
+			Document doc = new CMLBuilder().build(is);
+			doc = CMLBuilder.ensureCML(doc);
+			CMLMolecule molecule = (CMLMolecule) doc.getRootElement();
+			graphicsManager.setAndProcess(MoleculeTool
+					.getOrCreateTool(molecule));
+			graphicsManager.createOrDisplayGraphics();
+		}
+	}
 
-//    private void dmcn4(CMLMolecule mol) {
-//        System.out.println("====distributeCharge====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool.getOrCreateMoleculeTool(mol).distributeMolecularChargeToN4();
-//    }
-//
+	static void usage() {
+		System.out
+				.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");
+		System.out.println("... options ...");
+		System.out.println("-SVG inputfile outputfile <options>");
+	}
 
-//    private void tcfe(CMLMolecule mol, int knownUnpaired) {
-//        System.out.println("====transferUnpairedPi====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
-//        mol.setBondOrders(CMLBond.SINGLE);
-//        PiSystemManager piSystemManager = new PiSystemManager();
-//        piSystemManager.setUpdateBonds(true);
-//        piSystemManager.setKnownUnpaired(knownUnpaired);
-//        moleculeTool.adjustBondOrdersToValency(piSystemManager);
-////        moleculeTool.transferChargeToFreePiElectrons();
-//    }
+	MoleculeAtomBondFixture fixture = new MoleculeAtomBondFixture();
 
-//    /**
-//     * common molecules.
-//     */
-//    @Test
-//    public void testMarkupCommonMolecules() {
-//        /*--
-//         mcm(nitric2);
-//         mcm(carbonate2);
-//         mcm(hydrogenSulfate);
-//         mcm(nitroMethane2);
-//         mcm(methaneSulfonate);
-//         --*/
-//    }
+	private MoleculeTool makeCompleteMol9() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		CMLAtom atom0 = mol9.getAtom(0);
+		CMLAtom atom1 = mol9.getAtom(1);
+		CMLAtom atom2 = mol9.getAtom(2);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		moleculeTool.adjustHydrogenCountsToValency(atom0,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		moleculeTool.adjustHydrogenCountsToValency(atom1,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		moleculeTool.adjustHydrogenCountsToValency(atom2,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		return moleculeTool;
+	}
 
-//    private void mcm(CMLMolecule mol) {
-//        System.out.println("====MarkupCommonMolecules====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
-//        moleculeTool.markupCommonMolecules();
-//    } x
-
-    /**
-     * Test method for 'org.xmlcml.cml.element.CMLAtom.getBondOrderSum()'
-     */
-    @Test
-    public void testGetBondOrderSum() {
-        // makeMoleculeToolXml0();
-        String el = xmlAtom[0].getElementType();
-        Assert.assertEquals("element type", AS.N.value, el);
-		AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
-        int bes = atomTool.getBondOrderSum();
-        el = xmlAtom[1].getElementType();
-        Assert.assertEquals("element type", AS.C.value, el);
-		atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
-        bes = atomTool.getBondOrderSum();
-        Assert.assertEquals("bond order sum", 4, bes);
-        benzene.setBondOrders(CMLBond.SINGLE);
-        atomTool = AtomTool.getOrCreateTool(benzene.getAtom(0));
-        int bes1 = atomTool.getBondOrderSum();
-        Assert.assertEquals("bond order sum", 3, bes1);
-        methyleneCyclohexene.setBondOrders(CMLBond.SINGLE);
-        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
-                .getAtom(0));
-        bes1 = atomTool.getBondOrderSum();
-        Assert.assertEquals("bond order sum", 3, bes1);
-        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
-                .getAtom(0));
-        bes1 = atomTool.getBondOrderSum();
-        Assert.assertEquals("bond order sum", 3, bes1);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.getDoubleBondEquivalents()'
-     */
-    @Test
-    public void testGetDoubleBondEquivalents() {
-        int nlig = xmlAtom[0].getLigandAtoms().size();
-        Assert.assertEquals("ligand count", 4, nlig);
-        nlig = xmlAtom[1].getLigandAtoms().size();
-        Assert.assertEquals("ligand count", 1, nlig);
-        String el = xmlAtom[0].getElementType();
-        Assert.assertEquals("elem", AS.N.value, el);
-        AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
-        int bos = atomTool.getBondOrderSum();
-        Assert.assertEquals("bondsum", 4, bos);
-        int dbe = AtomTool.getOrCreateTool(xmlAtom[0]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
-        Assert.assertEquals("doubleBond equivalents", 0, dbe);
-        el = xmlAtom[1].getElementType();
-        Assert.assertEquals("elem", AS.C.value, el);
-        atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
-        bos = atomTool.getBondOrderSum();
-        Assert.assertEquals("bondsum", 4, bos);
-        dbe = AtomTool.getOrCreateTool(xmlAtom[1]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
-        Assert.assertEquals("doubleBond equivalents", 0, dbe);
-        el = xmlAtom[2].getElementType();
-        Assert.assertEquals("elem", AS.S.value, el);
-        dbe = AtomTool.getOrCreateTool(xmlAtom[2]).getDoubleBondEquivalents(FormalChargeControl.DEFAULT);
-        Assert.assertEquals("doubleBond equivalents", 0, dbe);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.getGeometricHybridization()'
-     */
-    @Test
-    public void testGetGeometricHybridization() {
-    	AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
-        CMLAtom.Hybridization hyb = atomTool
-                .getGeometricHybridization();
-        Assert.assertEquals("hybrid", CMLAtom.Hybridization.SP3, hyb);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.setGeometricHybridization(String)'
-     */
-    @Test
-    public void testSetGeometricHybridization() {
-        // TODO
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.getHydrogenValencyGroup()'
-     */
-    @Test
-    public void testGetHydrogenValencyGroup() {
-        int hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[0]);
-        Assert.assertEquals("elementType", AS.N.value, xmlAtom[0].getElementType());
-        // atom attached to electronegative ligands
-        Assert.assertTrue("hydrogen valency", hvg < 0);
-        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[1]);
-        Assert.assertEquals("elementType", AS.C.value, xmlAtom[1].getElementType());
-        Assert.assertEquals("hydrogen valency", 4, hvg);
-        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[2]);
-        Assert.assertEquals("elementType", AS.S.value, xmlAtom[2].getElementType());
-        Assert.assertEquals("hydrogen valency", 6, hvg);
-        Assert.assertEquals("elementType", AS.O.value, xmlAtom[3].getElementType());
-        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[3]);
-        Assert.assertEquals("hydrogen valency", 6, hvg);
-        Assert.assertEquals("elementType", AS.F.value, xmlAtom[4].getElementType());
-        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[4]);
-        Assert.assertEquals("hydrogen valency", 7, hvg);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtom.getSumNonHydrogenBondOrder()'
-     */
-    @Test
-    public void testGetSumNonHydrogenBondOrder() {
-    	AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
-        int sum = atomTool.getSumNonHydrogenBondOrder();
-        Assert.assertEquals("nonh bond order sum", 4, sum);
-    }
-
-    /**
-     * Test method for 'org.xmlcml.cml.element.CMLAtom.deleteHydrogen()'
-     */
-    @Test
-    public void testDeleteHydrogen() {
-        CMLAtom atom = benzene.getAtom(0);
-        Assert.assertEquals("before delete H", 1, atom.getHydrogenCount());
-        MoleculeTool.getOrCreateTool(benzene).deleteHydrogen(atom);
-        Assert.assertEquals("after delete H", 0, atom.getHydrogenCount());
-    }
-
-    /**
+	/**
      * test.
      *
      */
@@ -1431,51 +934,645 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         }
     }
 
-    /**
+	/** */
+	@Test
+	@Ignore
+	public final void testAddMoleculeTo() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.addSuffixToAtomIDs(String)'
+	 */
+	@Test
+	public void testAddSuffixToAtomIDs() {
+		fixture.makeMol1();
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(fixture.mol1);
+		moleculeTool.addSuffixToAtomIDs("FOO");
+		Assert.assertEquals("new", 3, fixture.mol1.getAtomCount());
+		Assert.assertEquals("new", "a3FOO", fixture.mol1.getAtom(2).getId());
+	}
+
+	/**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.adjustHydrogenCountsToValency(String)'
+     * 'org.xmlcml.cml.tools.MoleculeTool.addWedgeHatchBond(CMLAtom)'
      */
     @Test
-    public void testAdjustHydrogenCountsToValency() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        StringTestBase.assertEquals("calculated bonds",
-                new String[] { "a1", "a2" }, mol5.getBonds().get(0)
-                        .getAtomRefs2());
-        StringTestBase.assertEquals("calculated bonds",
-                new String[] { "a1", "a4" }, mol5.getBonds().get(1)
-                        .getAtomRefs2());
-        StringTestBase.assertEquals("calculated bonds",
-                new String[] { "a1", "a5" }, mol5.getBonds().get(2)
-                        .getAtomRefs2());
-        StringTestBase.assertEquals("calculated bonds",
-                new String[] { "a2", "a3" }, mol5.getBonds().get(3)
-                        .getAtomRefs2());
-        List<CMLBond> bonds = mol5.getBonds();
-        moleculeTool5.calculateBondOrdersFromXYZ3();
-        Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-        Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-        Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-        Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
-        moleculeTool5
-                .adjustHydrogenCountsToValency(HydrogenControl.ADD_TO_HYDROGEN_COUNT);
-        CMLAtom a1 = mol5.getAtomById("a1");
-        CMLAtom a2 = mol5.getAtomById("a2");
-        CMLAtom a3 = mol5.getAtomById("a3");
-        CMLAtom a4 = mol5.getAtomById("a4");
-        Assert.assertEquals("a1 ", 2, a1.getHydrogenCount());
-        Assert.assertNull("a2 ", a2.getHydrogenCountAttribute());
-        Assert.assertEquals("a3 ", 0, a3.getHydrogenCount());
-        Assert.assertNull("a4 ", a4.getHydrogenCountAttribute()); // this is a
-        // hydrogen
+    @Ignore
+    public void testAddWedgeHatchBond() {
+
     }
 
-    /**
+	/** */
+	@Test
+	@Ignore
+	public final void testAdjustAngles() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testAdjustBondOrdersToValencyPiSystemControls() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.adjustHydrogenCountsToValency(CMLAtom,
+	 * HydrogenControl)'
+	 */
+	@Test
+	public void testAdjustHydrogenCountsToValencyCMLAtomHydrogenControl() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		Assert.assertEquals("new", 3, mol9.getAtomCount());
+		Assert.assertEquals("new", 2, mol9.getBondCount());
+		Assert.assertEquals("new", "a3", mol9.getAtom(2).getId());
+		Assert.assertEquals("new", new String[] { "a2", "a3" }, mol9.getBonds()
+				.get(1).getAtomRefs2());
+		CMLAtom atom0 = mol9.getAtom(0);
+		CMLAtom atom1 = mol9.getAtom(1);
+		CMLAtom atom2 = mol9.getAtom(2);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		moleculeTool.adjustHydrogenCountsToValency(atom0,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		Assert.assertEquals("new", 6, mol9.getAtomCount());
+		Assert.assertEquals("new", 5, mol9.getBondCount());
+		Assert.assertEquals("new", "a1_h2", mol9.getAtom(4).getId());
+		Assert.assertEquals("new", new String[] { "a1", "a1_h2" }, mol9
+				.getBonds().get(3).getAtomRefs2());
+		moleculeTool.adjustHydrogenCountsToValency(atom1,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		moleculeTool.adjustHydrogenCountsToValency(atom2,
+				HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		Assert.assertEquals("new", 10, mol9.getAtomCount());
+		Assert.assertEquals("new", 9, mol9.getBondCount());
+		Assert.assertEquals("new", "a3_h3", mol9.getAtom(9).getId());
+		Assert.assertEquals("new", new String[] { "a3", "a3_h3" }, mol9
+				.getBonds().get(8).getAtomRefs2());
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.adjustHydrogenCountsToValency(Hydrogen
+	 * C o n t r o l ) '
+	 */
+	@Test
+	public void testAdjustHydrogenCountsToValencyHydrogenControl() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		Assert.assertEquals("new", 3, mol9.getAtomCount());
+		Assert.assertEquals("new", 2, mol9.getBondCount());
+		Assert.assertEquals("new", "a3", mol9.getAtom(2).getId());
+		Assert.assertEquals("new", new String[] { "a2", "a3" }, mol9.getBonds()
+				.get(1).getAtomRefs2());
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		moleculeTool
+				.adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
+		Assert.assertEquals("new", 10, mol9.getAtomCount());
+		Assert.assertEquals("new", 9, mol9.getBondCount());
+		Assert.assertEquals("new", "a3_h3", mol9.getAtom(9).getId());
+		Assert.assertEquals("new", new String[] { "a3", "a3_h3" }, mol9
+				.getBonds().get(8).getAtomRefs2());
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testAdjustLengths() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testAdjustTorsions() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testAdjustTorsionsCMLAtomCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for 'org.xmlcml.cml.tools.MoleculeTool.appendToId(CMLAtom,
+	 * String)'
+	 */
+	@Test
+	public void testAppendToId() {
+		fixture.makeMol9();
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(fixture.mol9);
+		CMLAtom atom = fixture.mol9.getAtom(1);
+		Assert.assertEquals("id", "a2", atom.getId());
+		moleculeTool.appendToId(atom, "XXX");
+		Assert.assertEquals("id", "a2XXX", atom.getId());
+
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.calculateAndAddFormula(HydrogenContro
+	 * l ) '
+	 */
+	@Test
+	public void testCalculateAndAddFormula() {
+		fixture.makeMol5();
+		MoleculeTool moleculeTool5 = MoleculeTool.getOrCreateTool(fixture.mol5);
+		moleculeTool5
+				.calculateAndAddFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		CMLElements<CMLFormula> formulaList = fixture.mol5.getFormulaElements();
+		Assert.assertEquals("formula", 1, formulaList.size());
+		CMLFormula formula = formulaList.get(0);
+		// <formula formalCharge="-1" concise="C 1 H 2 N 1 O 1 -1"
+		// xmlns="http://www.xml-cml.org/schema">
+		// <atomArray elementType="C H N O" count="1.0 2.0 1.0 1.0"/>
+		// </formula>
+		Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula
+				.getConcise());
+		CMLAtomArray atomArray = (CMLAtomArray) formula.getChildCMLElements(
+				CMLAtomArray.TAG).get(0);
+		assertEquals("formula", new String[] { AS.C.value, AS.H.value,
+				AS.N.value, AS.O.value }, atomArray.getElementType());
+		assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
+				.getCount(), 0.000001);
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCalculateBondsToAndJoin() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.calculateCentroid3(CoordinateType)'
+	 */
+	@Test
+	public void testCalculateCentroid3() {
+		fixture.makeMol5a();
+		MoleculeTool moleculeTool5a = MoleculeTool
+				.getOrCreateTool(fixture.mol5a);
+		Point3 p = moleculeTool5a.calculateCentroid3(CoordinateType.CARTESIAN);
+		assertEquals("p", new double[] { 0.24, 0.484, 0.0 }, p.getArray(),
+				0.00001);
+		fixture.makeMol7();
+		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
+		p = moleculeTool7.calculateCentroid3(CoordinateType.CARTESIAN);
+		Assert.assertNull("centroid null", p);
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.calculateFormula(HydrogenControl)'
+	 */
+	@Test
+	public void testCalculateFormula() {
+		fixture.makeMol5();
+		CMLFormula formula = MoleculeTool.getOrCreateTool(fixture.mol5)
+				.calculateFormula(HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		// <formula formalCharge="-1" concise="C 1 H 2 N 1 O 1 -1"
+		// xmlns="http://www.xml-cml.org/schema">
+		// <atomArray elementType="C H N O" count="1.0 2.0 1.0 1.0"/>
+		// </formula>
+		Assert.assertEquals("formula", "C 1 H 2 N 1 O 1 -1", formula
+				.getConcise());
+		CMLAtomArray atomArray = (CMLAtomArray) formula.getChildCMLElements(
+				CMLAtomArray.TAG).get(0);
+		assertEquals("formula", new String[] { AS.C.value, AS.H.value,
+				AS.N.value, AS.O.value }, atomArray.getElementType());
+		assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
+				.getCount(), 0.000001);
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#calculateRange3(org.xmlcml.cml.base.CMLElement.CoordinateType)}
+	 * .
+	 */
+	@Test
+	public final void testCalculateRange3() {
+		fixture.makeMol5a();
+		Real3Range r3 = MoleculeTool.getOrCreateTool(fixture.mol5a)
+				.calculateRange3(CoordinateType.CARTESIAN);
+		Assert.assertNotNull("range", r3);
+		assertEquals("r3", new Real3Range(new RealRange(-0.95, 1.2),
+				new RealRange(-0.54, 2.2), new RealRange(0.0, 0.0)), r3,
+				0.000001);
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#CMLMolecule(org.xmlcml.cml.element.CMLAtomSet)}
+	 * .
+	 */
+	@Test
+	public final void testCMLMoleculeCMLAtomSet() {
+		fixture.makeMol1();
+		CMLAtomSet atomSet = new CMLAtomSet(fixture.mol1, new String[] { "a1",
+				"a3" });
+		Assert.assertEquals("atomSet", 2, atomSet.size());
+		CMLMolecule mol = MoleculeTool.createMolecule(atomSet);
+		Assert.assertEquals("atom count", 2, mol.getAtomCount());
+		assertEqualsCanonically("atom", fixture.mol1.getAtom(0), mol.getAtom(0));
+		assertEqualsCanonically("atom", fixture.mol1.getAtom(2), mol.getAtom(1));
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#CMLMolecule(org.xmlcml.cml.element.CMLAtomSet, org.xmlcml.cml.element.CMLBondSet)}
+	 * .
+	 */
+	@Test
+	public final void testCMLMoleculeCMLAtomSetCMLBondSet() {
+		fixture.makeMol5a();
+		CMLMolecule mol5a = fixture.mol5a;
+		CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(mol5a).getAtomSet();
+		CMLBondSet bondSet = null;
+		bondSet = new CMLBondSet(mol5a.getBonds());
+		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
+		// CMLMoleculeTest.assertEqualsCanonically("new mol", mol, mol5a);
+		Assert.assertEquals("atoms", 5, mol.getAtomCount());
+		assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		Assert.assertEquals("bonds", 4, mol.getBondCount());
+		assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+				.get(2));
+
+		CMLBond bond = bondSet.getBonds().get(0);
+		bondSet.removeBond(bond);
+		mol = MoleculeTool.createMolecule(atomSet, bondSet);
+		// CMLMoleculeTest.assertEqualsCanonically("new mol", mol, mol5a);
+		Assert.assertEquals("atoms", 5, mol.getAtomCount());
+		assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		Assert.assertEquals("bonds", 3, mol.getBondCount());
+		assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+				.get(1));
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.contractExplicitHydrogens(CMLAtom,
+	 * HydrogenControl)'
+	 */
+	@Test
+	public void testContractExplicitHydrogensCMLAtomHydrogenControl() {
+		MoleculeTool moleculeTool = makeCompleteMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		CMLAtom atom0 = mol9.getAtom(0);
+		Assert.assertEquals("before", 10, mol9.getAtomCount());
+		Assert.assertEquals("before", 9, mol9.getBondCount());
+		Assert.assertNotNull("before", mol9.getAtom(0)
+				.getHydrogenCountAttribute());
+		Assert.assertNotNull("before", mol9.getAtom(1)
+				.getHydrogenCountAttribute());
+		Assert.assertNotNull("before", mol9.getAtom(2)
+				.getHydrogenCountAttribute());
+		Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
+		Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
+
+		AtomTool atomTool0 = AtomTool.getOrCreateTool(atom0);
+		atomTool0.contractExplicitHydrogens(
+				HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		Assert.assertEquals("before", 7, mol9.getAtomCount());
+		Assert.assertEquals("before", 6, mol9.getBondCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
+		Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.contractExplicitHydrogens(HydrogenCont
+	 * r o l ) '
+	 */
+	@Test
+	public void testContractExplicitHydrogensHydrogenControl() {
+		MoleculeTool moleculeTool = makeCompleteMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		Assert.assertEquals("before", 10, mol9.getAtomCount());
+		Assert.assertEquals("before", 9, mol9.getBondCount());
+		Assert.assertNotNull("before", mol9.getAtom(0)
+				.getHydrogenCountAttribute());
+		Assert.assertNotNull("before", mol9.getAtom(1)
+				.getHydrogenCountAttribute());
+		Assert.assertNotNull("before", mol9.getAtom(2)
+				.getHydrogenCountAttribute());
+		Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
+		Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
+
+		moleculeTool.contractExplicitHydrogens(
+				HydrogenControl.USE_EXPLICIT_HYDROGENS, true);
+		Assert.assertEquals("before", 3, mol9.getAtomCount());
+		Assert.assertEquals("before", 2, mol9.getBondCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
+		Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
+		Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
+
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testContractExplicitHydrogensHydrogenControlBoolean() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * copies attributes on bonds and atoms to another molecule. for each
+	 * atom/bond in this.molecule finds Id and hence corresponding atom/bond in
+	 * 'to'. Copies all attributes from that atom to to.atom/@* If corresponding
+	 * atom does not exist, throws exception. If target attribute exists throws
+	 * exception
+	 * 
+	 * @exception RuntimeException
+	 *                ids in molecules do not correspond or attributes are
+	 *                already present
+	 */
+	@Test
+	public void testCopyAtomAndBondAttributesById() {
+		CMLMolecule from = new CMLMolecule();
+		from.setId("from");
+		CMLAtom atom0 = new CMLAtom();
+		atom0.setElementType(AS.C.value);
+		atom0.setId("a0");
+		from.addAtom(atom0);
+		CMLAtom atom1 = new CMLAtom();
+		atom1.setElementType(AS.O.value);
+		atom1.setId("a1");
+		from.addAtom(atom1);
+		CMLBond bond01 = new CMLBond(atom0, atom1);
+		bond01.setId("b01");
+		from.addBond(bond01);
+
+		CMLMolecule to = (CMLMolecule) from.copy();
+		to.setId("to");
+
+		atom0.setXY2(new Real2(1., 2.));
+		atom1.setFormalCharge(1);
+		bond01.setOrder(CMLBond.DOUBLE);
+
+		MoleculeTool fromTool = MoleculeTool.getOrCreateTool(from);
+		boolean permitOverwrite = true;
+		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+
+		to.setId("from"); // to allow comparison
+		assertEqualsCanonically("compare mols", from, to);
+
+		permitOverwrite = false;
+		try {
+			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+			Assert.fail("Should fail on overwrite");
+		} catch (RuntimeException e) {
+			Assert.assertTrue("cannot overwrite", e.getMessage().startsWith(
+					"cannot overwrite attribute:"));
+		}
+
+		// mimic atomId mismatch
+		atom0.resetId("resetId");
+		try {
+			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
+			Assert.fail("Should fail on atom mismatch");
+		} catch (RuntimeException e) {
+			Assert.assertEquals("atom mismatch",
+					"Cannot find target atom: resetId", e.getMessage());
+		}
+
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCopyAtomAttributesById() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCopyBondAttributesById() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCreateAtomRefs4() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.createCartesiansFromFractionals(RealS
+	 * q u a r e M a t r i x ) '
+	 */
+	@Test
+	public void testCreateCartesiansFromFractionals() {
+		fixture.makeMol4();
+		fixture.makeCrystal();
+		MoleculeTool.getOrCreateTool(fixture.mol4)
+				.createCartesiansFromFractionals(fixture.crystal);
+		Assert.assertEquals("fractionals", 3, fixture.mol4.getAtomCount());
+		assertEquals("fractionals", new double[] { 0.5, 0.6, 0.7 },
+				fixture.mol4.getAtom(2).getXYZFract(), EPS);
+		assertEquals("cartesians", new double[] { 4.5, 6.0, 7.7 }, fixture.mol4
+				.getAtom(2).getXYZ3(), EPS);
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#createCartesiansFromFractionals(org.xmlcml.euclid.Transform3)}
+	 * .
+	 */
+	@Test
+	public final void testCreateCartesiansFromFractionalsTransform3() {
+		fixture.makeMolCryst();
+		Transform3 t3 = fixture.cmlCrystCryst.getOrthogonalizationTransform();
+		CMLMolecule cmlCrystMol = fixture.cmlCrystMol;
+		Assert.assertFalse("no 3d coords", cmlCrystMol
+				.hasCoordinates(CoordinateType.CARTESIAN));
+		Assert.assertTrue("fractional coords", cmlCrystMol
+				.hasCoordinates(CoordinateType.FRACTIONAL));
+		MoleculeTool.getOrCreateTool(cmlCrystMol)
+				.createCartesiansFromFractionals(t3);
+		Assert.assertTrue("3d coords", cmlCrystMol
+				.hasCoordinates(CoordinateType.CARTESIAN));
+		Assert.assertTrue("fractional coords", cmlCrystMol
+				.hasCoordinates(CoordinateType.FRACTIONAL));
+		Point3 xyz = cmlCrystMol.getAtom(2).getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("point", new double[] { 1.08, 2.2, 0.0 }, xyz,
+				0.0000000000001);
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCreateClusters() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCreateGraphicsElement() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCreateGraphicsElement1() throws Exception {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement
+				.getChemicalElement("C"));
+		atom1.setX2(10.0);
+		atom1.setY2(10.0);
+		molecule.addAtom(atom1);
+		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement
+				.getChemicalElement("O"));
+		atom2.setX2(20.0);
+		atom2.setY2(20.0);
+		molecule.addAtom(atom2);
+		CMLBond bond = new CMLBond(atom1, atom2);
+		molecule.addBond(bond);
+		bond.setOrder(CMLBond.DOUBLE);
+		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement
+				.getChemicalElement("N"));
+		atom3.setX2(1.0);
+		atom3.setY2(10.0);
+		molecule.addAtom(atom3);
+		bond = new CMLBond(atom3, atom1);
+		molecule.addBond(bond);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		SVGElement g = moleculeTool.createGraphicsElement();
+		SVGSVG svg = new SVGSVG();
+		svg.appendChild(g);
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testCreateLigands() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.createMolecule(CMLMolecule, String[])'
+	 */
+	@Test
+	public void testCreateMolecule() {
+		fixture.makeMol1();
+		CMLMolecule mol = MoleculeTool.createMolecule(fixture.mol1,
+				new String[] { "a1", "a3" });
+		Assert.assertEquals("new", 2, mol.getAtomCount());
+		Assert.assertEquals("new", "a3", mol.getAtom(1).getId());
+
+	}
+
+	/**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLMolecule.createValenceAngles(boolean,
+     * boolean)'
+     */
+    @Test
+    public void testCreateValenceAngles() {
+        makeMoleculeTool5();
+        moleculeTool5.calculateBondedAtoms();
+        List<CMLAtom> atoms = mol5.getAtoms();
+        CMLAtom atom0 = atoms.get(0);
+        List<CMLAtom> ligandList = atom0.getLigandAtoms();
+        Assert.assertEquals("ligand list", 3, ligandList.size());
+        new GeometryTool(mol5).createValenceAngles(true, true);
+        List<CMLAngle> angles = moleculeTool5.getAngleElements();
+        Assert.assertEquals("angles", 4, angles.size());
+        CMLAngle angle = angles.get(0);
+        Assert.assertEquals("angle 0 atoms", new String[] { "a2", "a1", "a4" },
+                angle.getAtomRefs3());
+        Assert.assertEquals("angle 0 value", 118.704, angle.getXMLContent(),
+                0.001);
+        angle = angles.get(3);
+        Assert.assertEquals("angle 3 atoms", new String[] { "a1", "a2", "a3" },
+                angle.getAtomRefs3());
+        Assert.assertEquals("angle 3 value", 131.987, angle.getXMLContent(),
+                0.001);
+    }
+
+	/**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLMolecule.createValenceLengths(boolean,
+     * boolean)'
+     */
+    @Test
+    public void testCreateValenceLengths() {
+        makeMoleculeTool5();
+        moleculeTool5.calculateBondedAtoms();
+        List<CMLAtom> ligandList = mol5.getAtoms().get(0).getLigandAtoms();
+        Assert.assertEquals("ligand list", 3, ligandList.size());
+        new GeometryTool(mol5).createValenceLengths(true, true);
+        List<CMLLength> lengths = moleculeTool5.getLengthElements();
+        Assert.assertEquals("lengths", 4, lengths.size());
+        CMLLength length = lengths.get(0);
+        Assert.assertEquals("length 0 atoms", new String[] { "a2", "a1" },
+                length.getAtomRefs2());
+        Assert.assertEquals("length 0 value", 1.3, length.getXMLContent(),
+                0.001);
+    }
+
+	/**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLMolecule.createValenceTorsions(boolean,
+     * boolean)'
+     */
+    @Test
+    public void testCreateValenceTorsions() {
+        makeMoleculeTool5();
+        moleculeTool5.calculateBondedAtoms();
+        List<CMLAtom> ligandList = mol5.getAtoms().get(0).getLigandAtoms();
+        Assert.assertEquals("ligand list", 3, ligandList.size());
+        new GeometryTool(mol5).createValenceTorsions(true, true);
+        List<CMLTorsion> torsions = moleculeTool5.getTorsionElements();
+        Assert.assertEquals("torsions", 2, torsions.size());
+        CMLTorsion torsion = torsions.get(0);
+        Assert.assertEquals("torsion 0 atoms", new String[] { "a4", "a1", "a2",
+                "a3" }, torsion.getAtomRefs4());
+        Assert.assertEquals("torsion 0 value", 30.465, torsion.getXMLContent(),
+                0.001);
+        torsion = torsions.get(1);
+        Assert.assertEquals("torsion 1 atoms", new String[] { "a5", "a1", "a2",
+                "a3" }, torsion.getAtomRefs4());
+        Assert.assertEquals("torsion 1 value", 149.534,
+                torsion.getXMLContent(), 0.001);
+    }
+
+	/**
+     * Test method for 'org.xmlcml.cml.element.CMLAtom.deleteHydrogen()'
+     */
+    @Test
+    public void testDeleteHydrogen() {
+        CMLAtom atom = benzene.getAtom(0);
+        Assert.assertEquals("before delete H", 1, atom.getHydrogenCount());
+        MoleculeTool.getOrCreateTool(benzene).deleteHydrogen(atom);
+        Assert.assertEquals("after delete H", 0, atom.getHydrogenCount());
+    }
+
+	/**
+     * test distributeMolecularChargeToN4.
+     */
+    @Test
+    public void testDistributeMolecularChargeToN4() {
+        /*--
+         dmcn4(methylammonium);
+         dmcn4(pyridinium1);
+         --*/
+    }
+
+	/**
      * Test method for
      * 'org.xmlcml.cml.element.CMLMolecule.expandImplicitHydrogens(String)'
      */
@@ -1523,24 +1620,341 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
                 bond7.getAtomRefs2());
     }
 
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.expandImplicitHydrogens(CMLAtom,
+	 * HydrogenControl)'
+	 */
+	@Test
+	public void testExpandImplicitHydrogensCMLAtomHydrogenControl() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		Assert.assertEquals("before", 3, mol9.getAtomCount());
+		Assert.assertEquals("before", 2, mol9.getBondCount());
+		moleculeTool
+				.adjustHydrogenCountsToValency(HydrogenControl.NO_EXPLICIT_HYDROGENS);
+		moleculeTool
+				.expandImplicitHydrogens(HydrogenControl.NO_EXPLICIT_HYDROGENS);
+		Assert.assertEquals("after", 10, mol9.getAtomCount());
+		Assert.assertEquals("after", 9, mol9.getBondCount());
+	}
+
+	/**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.expandImplicitHydrogens(HydrogenContro
+	 * l ) '
+	 */
+	@Test
+	public void testExpandImplicitHydrogensHydrogenControl() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		mol9.getAtom(0).setHydrogenCount(3);
+		mol9.getAtom(1).setHydrogenCount(1);
+		mol9.getAtom(2).setHydrogenCount(3);
+		Assert.assertEquals("before", 3, mol9.getAtomCount());
+		Assert.assertEquals("before", 2, mol9.getBondCount());
+		moleculeTool
+				.expandImplicitHydrogens(HydrogenControl.NO_EXPLICIT_HYDROGENS);
+		Assert.assertEquals("before", 10, mol9.getAtomCount());
+		Assert.assertEquals("before", 9, mol9.getBondCount());
+
+	}
+
+	/** */
+	@Test
+	@Ignore
+	public final void testFlattenMoleculeDescendants() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for 'org.xmlcml.cml.tools.MoleculeTool.generateBondIds()'
+	 */
+	@Test
+	public void testGenerateBondIds() {
+		fixture.makeMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
+		Assert.assertNull("no id", mol9.getBonds().get(0).getId());
+		moleculeTool.generateBondIds();
+		Assert.assertEquals("generated id", "a1_a2", mol9.getBonds().get(0)
+				.getId());
+	}
+
+	/**
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getAngle(CMLAtom,
+	 * CMLAtom, CMLAtom)'
+	 */
+	@Test
+	public void testGetAngle() {
+		String s = "" + "<molecule xmlns='" + CML_NS + "'>" + "  <atomArray>"
+				+ "    <atom id='a1'/>" + "    <atom id='a2'/>"
+				+ "    <atom id='a3'/>" + "    <atom id='a4'/>"
+				+ "  </atomArray>" + "  <bondArray>"
+				+ "    <bond id='b1' atomRefs2='a1 a2'/>"
+				+ "    <bond id='b2' atomRefs2='a2 a3'/>"
+				+ "    <bond id='b3' atomRefs2='a3 a4'/>" + "  </bondArray>"
+				+ "  <angle atomRefs3='a1 a2 a3'>123</angle>"
+				+ "  <angle atomRefs3='a3 a4 a5'>99</angle>" + "</molecule>"
+				+ "";
+		CMLMolecule mol = (CMLMolecule) TestUtils.parseValidString(s);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
+		CMLAtom a1 = mol.getAtom(0);
+		CMLAtom a2 = mol.getAtom(1);
+		CMLAtom a3 = mol.getAtom(2);
+		CMLAtom a4 = mol.getAtom(3);
+		CMLAngle angle = moleculeTool.getAngle(a1, a2, a3);
+		Assert.assertNotNull("angle not null", angle);
+		Assert.assertEquals("angle", 123., angle.getXMLContent(), 0.00001);
+		angle = moleculeTool.getAngle(a1, a2, a4);
+		Assert.assertNull("angle null", angle);
+	}
+	
+    /** */
+	@Test
+	@Ignore
+	public final void testGetAtomRefs4() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.getAtomSet(CMLBondSet)'
+	 */
+	@Test
+	public void testGetAtomSet() {
+		fixture.makeMol5a();
+		CMLMolecule mol5a = fixture.mol5a;
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol5a);
+		// CMLAtomSet atomSet = mol5a.getAtomSet();
+		CMLBondSet bondSet = new CMLBondSet(mol5a);
+		Assert.assertEquals("before", 5, mol5a.getAtomCount());
+		Assert.assertEquals("before", 4, mol5a.getBondCount());
+		bondSet.removeBond(mol5a.getBonds().get(1));
+		CMLAtomSet newAtomSet = moleculeTool.getAtomSet(bondSet);
+		Assert.assertEquals("before", new String[] { "a1", "a2", "a5", "a3" },
+				newAtomSet.getXMLContent());
+	}
+
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.setPreferredBondOrders()'
+     * 'org.xmlcml.cml.element.CMLMolecule.getAverageBondDistance(int)'
      */
     @Test
-    public void testSetPreferredBondOrders() {
+    public void testGetAverageBondDistance() {
         makeMoleculeTool5();
-        moleculeTool5.calculateBondedAtoms();
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-        mol5.setBondOrders(CMLBond.SINGLE_S);
-        // note that getOrder() will return the preferred order
-        Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
-                .get(0).getOrderAttribute().getValue());
-        mol5.setNormalizedBondOrders();
-        Assert.assertEquals("perferred order", CMLBond.SINGLE, mol5.getBonds()
-                .get(0).getOrderAttribute().getValue());
+        try {
+            moleculeTool5.calculateBondedAtoms();
+        } catch (RuntimeException e) {
+            Assert.fail("test bug " + e);
+        }
+        double length = moleculeTool5
+                .getAverageBondLength(CoordinateType.CARTESIAN);
+        Assert.assertEquals("average length", 1.2235, length, .0001);
     }
+
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.tools.MoleculeTool.getAverageBondLength(CoordinateType)'
+     */
+    @Test
+    public void testGetAverageBondLength() {
+        makeMoleculeTool5();
+        try {
+            moleculeTool5.calculateBondedAtoms();
+        } catch (RuntimeException e) {
+            Assert.fail("test bug " + e);
+        }
+        double length = moleculeTool5
+                .getAverageBondLength(CoordinateType.CARTESIAN);
+        Assert.assertEquals("average length", 1.2235, length, .0001);
+    }
+
+    /**
+     * Test method for 'org.xmlcml.cml.element.CMLAtom.getBondOrderSum()'
+     */
+    @Test
+    public void testGetBondOrderSum() {
+        // makeMoleculeToolXml0();
+        String el = xmlAtom[0].getElementType();
+        Assert.assertEquals("element type", AS.N.value, el);
+		AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        int bes = atomTool.getBondOrderSum();
+        el = xmlAtom[1].getElementType();
+        Assert.assertEquals("element type", AS.C.value, el);
+		atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
+        bes = atomTool.getBondOrderSum();
+        Assert.assertEquals("bond order sum", 4, bes);
+        benzene.setBondOrders(CMLBond.SINGLE);
+        atomTool = AtomTool.getOrCreateTool(benzene.getAtom(0));
+        int bes1 = atomTool.getBondOrderSum();
+        Assert.assertEquals("bond order sum", 3, bes1);
+        methyleneCyclohexene.setBondOrders(CMLBond.SINGLE);
+        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
+                .getAtom(0));
+        bes1 = atomTool.getBondOrderSum();
+        Assert.assertEquals("bond order sum", 3, bes1);
+        atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
+                .getAtom(0));
+        bes1 = atomTool.getBondOrderSum();
+        Assert.assertEquals("bond order sum", 3, bes1);
+    }
+
+//    private void dmcn4(CMLMolecule mol) {
+//        System.out.println("====distributeCharge====== " + mol.getTitle()
+//                + " ======================");
+//        MoleculeTool.getOrCreateMoleculeTool(mol).distributeMolecularChargeToN4();
+//    }
+//
+
+//    private void tcfe(CMLMolecule mol, int knownUnpaired) {
+//        System.out.println("====transferUnpairedPi====== " + mol.getTitle()
+//                + " ======================");
+//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
+//        mol.setBondOrders(CMLBond.SINGLE);
+//        PiSystemManager piSystemManager = new PiSystemManager();
+//        piSystemManager.setUpdateBonds(true);
+//        piSystemManager.setKnownUnpaired(knownUnpaired);
+//        moleculeTool.adjustBondOrdersToValency(piSystemManager);
+////        moleculeTool.transferChargeToFreePiElectrons();
+//    }
+
+//    /**
+//     * common molecules.
+//     */
+//    @Test
+//    public void testMarkupCommonMolecules() {
+//        /*--
+//         mcm(nitric2);
+//         mcm(carbonate2);
+//         mcm(hydrogenSulfate);
+//         mcm(nitroMethane2);
+//         mcm(methaneSulfonate);
+//         --*/
+//    }
+
+//    private void mcm(CMLMolecule mol) {
+//        System.out.println("====MarkupCommonMolecules====== " + mol.getTitle()
+//                + " ======================");
+//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
+//        moleculeTool.markupCommonMolecules();
+//    } x
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.getBondSet(CMLAtomSet)'
+	 */
+	@Test
+	public void testGetBondSet() {
+		fixture.makeMol9();
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(fixture.mol9);
+		moleculeTool.generateBondIds();
+		CMLAtomSet atomSet = new CMLAtomSet(fixture.mol9);
+		CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
+		Assert.assertEquals("bonds", new String[] { "a1_a2", "a2_a3" }, bondSet
+				.getXMLContent());
+		atomSet.removeAtomById("a3");
+		bondSet = moleculeTool.getBondSet(atomSet);
+		Assert.assertEquals("bonds", new String[] { "a1_a2" }, bondSet
+				.getXMLContent());
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetCalculatedMolecularMass() {
+		fail("Not yet implemented"); // TODO
+	}
+
+    /**
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getCentroid3D()'
+	 */
+	@Test
+	public void testGetCentroid3() {
+		fixture.makeMol1();
+		MoleculeTool moleculeTool1 = MoleculeTool.getOrCreateTool(fixture.mol1);
+		Point3 centroid = moleculeTool1
+				.calculateCentroid3(CoordinateType.CARTESIAN);
+		Assert.assertNotNull("centroid 1", centroid);
+		assertEquals("centroid 1", new double[] { 2., 3., 0.33333 }, centroid,
+				.0001);
+		fixture.makeMol7();
+		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
+		centroid = moleculeTool7.calculateCentroid3(CoordinateType.CARTESIAN);
+		Assert.assertNull("centroid 7", centroid);
+	}
+
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetChainMolecules() {
+		fail("Not yet implemented"); // TODO
+	}
+
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetChargedAtoms() {
+		fail("Not yet implemented"); // TODO
+	}
+    
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.getCoordinates3(CoordinateType)'
+	 */
+	@Test
+	public void testGetCoordinates3() {
+		fixture.makeMol5a();
+		MoleculeTool moleculeTool5a = MoleculeTool
+				.getOrCreateTool(fixture.mol5a);
+		Point3Vector p3v = moleculeTool5a
+				.getCoordinates3(CoordinateType.CARTESIAN);
+		assertEquals("p", new double[] { 0.0, 0.0, 0.0, 0.0, 1.3, 0.0, 1.2,
+				2.2, 0.0, 0.95, -0.54, 0.0, -0.95, -0.54, 0.0, }, p3v
+				.getArray(), 0.00001);
+		fixture.makeMol7();
+		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
+		p3v = moleculeTool7.getCoordinates3(CoordinateType.CARTESIAN);
+		Assert.assertNull("centroid null", p3v);
+	}
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLAtom.getDoubleBondEquivalents()'
+	 */
+	@Test
+	public void testGetDoubleBondEquivalents() {
+		CMLAtom[] xmlAtom = fixture.xmlAtom;
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(xmlAtom[0]
+				.getMolecule());
+		int nlig = xmlAtom[0].getLigandAtoms().size();
+		Assert.assertEquals("ligand count", 4, nlig);
+		nlig = xmlAtom[1].getLigandAtoms().size();
+		Assert.assertEquals("ligand count", 1, nlig);
+		String el = xmlAtom[0].getElementType();
+		Assert.assertEquals("elem", AS.N.value, el);
+		int bos = moleculeTool.getBondOrderSum(xmlAtom[0]);
+		Assert.assertEquals("bondsum", 4, bos);
+		int dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[0],
+				FormalChargeControl.DEFAULT);
+		Assert.assertEquals("doubleBond equivalents", 0, dbe);
+		el = xmlAtom[1].getElementType();
+		Assert.assertEquals("elem", AS.C.value, el);
+		bos = moleculeTool.getBondOrderSum(xmlAtom[1]);
+		Assert.assertEquals("bondsum", 4, bos);
+		dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[1],
+				FormalChargeControl.DEFAULT);
+		Assert.assertEquals("doubleBond equivalents", 0, dbe);
+		el = xmlAtom[2].getElementType();
+		Assert.assertEquals("elem", AS.S.value, el);
+		dbe = moleculeTool.getDoubleBondEquivalents(xmlAtom[2],
+				FormalChargeControl.DEFAULT);
+		Assert.assertEquals("doubleBond equivalents", 0, dbe);
+	}
 
     /**
      * Test method for 'org.xmlcml.cml.element.CMLMolecule.getDoubleBonds()'
@@ -1554,256 +1968,199 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
         Assert.assertEquals("double bonds", 1, bonds.size());
     }
 
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetDownstreamAtomsCMLAtomCMLAtom() {
+		fail("Not yet implemented"); // TODO
+	}
+
+
     /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.setBondOrders(String)'
-     */
-    @Test
-    public void testSetBondOrders() {
-        makeMoleculeTool5();
-        moleculeTool5.calculateBondedAtoms();
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-        mol5.setBondOrders(CMLBond.SINGLE);
-        Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
-                .get(0).getOrder());
-    }
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.getDownstreamAtoms(CMLAtom, CMLAtom)'
+	 */
+	@Test
+	public void testGetDownstreamAtomsCMLAtomCMLAtomSetCMLAtom() {
+		MoleculeTool moleculeTool = makeCompleteMol9();
+		CMLAtom atom0 = fixture.mol9.getAtom(0);
+		CMLAtom atom1 = fixture.mol9.getAtom(1);
+		Assert.assertEquals("before", 10, fixture.mol9.getAtoms().size());
+		CMLAtomSet downstreamAtoms = moleculeTool.getDownstreamAtoms(atom0,
+				atom1);
+		Assert.assertEquals("down", 4, downstreamAtoms.size());
+		Assert.assertEquals("down", new String[] { "a1", "a1_h1", "a1_h2",
+				"a1_h3" }, downstreamAtoms.getXMLContent());
+		downstreamAtoms = moleculeTool.getDownstreamAtoms(atom1, atom0);
+		Assert.assertEquals("down", 6, downstreamAtoms.size());
+		Assert.assertEquals("down", new String[] { "a2", "a3", "a3_h1",
+				"a3_h2", "a3_h3", "a2_h1" }, downstreamAtoms.getXMLContent());
+	}
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.getDownstreamAtoms(CMLBond, CMLAtom)'
+	 */
+	@Test
+	public void testGetDownstreamAtomsCMLBondCMLAtom() {
+		MoleculeTool moleculeTool = makeCompleteMol9();
+		CMLMolecule mol9 = fixture.mol9;
+		CMLAtom atom0 = mol9.getAtom(0);
+		CMLAtom atom1 = mol9.getAtom(1);
+		CMLBond bond = mol9.getBond(atom0, atom1);
+		CMLAtomSet downstreamAtoms = moleculeTool.getDownstreamAtoms(bond,
+				atom1);
+		Assert.assertEquals("down", 4, downstreamAtoms.size());
+		Assert.assertEquals("down", new String[] { "a1", "a1_h1", "a1_h2",
+				"a1_h3" }, downstreamAtoms.getXMLContent());
+		downstreamAtoms = moleculeTool.getDownstreamAtoms(bond, atom0);
+		Assert.assertEquals("down", 6, downstreamAtoms.size());
+		Assert.assertEquals("down", new String[] { "a2", "a3", "a3_h1",
+				"a3_h2", "a3_h3", "a2_h1" }, downstreamAtoms.getXMLContent());
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetFormalCharge() {
+		fail("Not yet implemented"); // TODO
+	}
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.createValenceAngles(boolean,
-     * boolean)'
+     * 'org.xmlcml.cml.element.CMLAtom.getGeometricHybridization()'
      */
     @Test
-    public void testCreateValenceAngles() {
-        makeMoleculeTool5();
-        moleculeTool5.calculateBondedAtoms();
-        List<CMLAtom> atoms = mol5.getAtoms();
-        CMLAtom atom0 = atoms.get(0);
-        List<CMLAtom> ligandList = atom0.getLigandAtoms();
-        Assert.assertEquals("ligand list", 3, ligandList.size());
-        new GeometryTool(mol5).createValenceAngles(true, true);
-        CMLElements<CMLAngle> angles = mol5.getAngleElements();
-        Assert.assertEquals("angles", 4, angles.size());
-        CMLAngle angle = angles.get(0);
-        Assert.assertEquals("angle 0 atoms", new String[] { "a2", "a1", "a4" },
-                angle.getAtomRefs3());
-        Assert.assertEquals("angle 0 value", 118.704, angle.getXMLContent(),
-                0.001);
-        angle = angles.get(3);
-        Assert.assertEquals("angle 3 atoms", new String[] { "a1", "a2", "a3" },
-                angle.getAtomRefs3());
-        Assert.assertEquals("angle 3 value", 131.987, angle.getXMLContent(),
-                0.001);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.createValenceLengths(boolean,
-     * boolean)'
-     */
-    @Test
-    public void testCreateValenceLengths() {
-        makeMoleculeTool5();
-        moleculeTool5.calculateBondedAtoms();
-        List<CMLAtom> ligandList = mol5.getAtoms().get(0).getLigandAtoms();
-        Assert.assertEquals("ligand list", 3, ligandList.size());
-        new GeometryTool(mol5).createValenceLengths(true, true);
-        CMLElements<CMLLength> lengths = mol5.getLengthElements();
-        Assert.assertEquals("lengths", 4, lengths.size());
-        CMLLength length = lengths.get(0);
-        Assert.assertEquals("length 0 atoms", new String[] { "a2", "a1" },
-                length.getAtomRefs2());
-        Assert.assertEquals("length 0 value", 1.3, length.getXMLContent(),
-                0.001);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.createValenceTorsions(boolean,
-     * boolean)'
-     */
-    @Test
-    public void testCreateValenceTorsions() {
-        makeMoleculeTool5();
-        moleculeTool5.calculateBondedAtoms();
-        List<CMLAtom> ligandList = mol5.getAtoms().get(0).getLigandAtoms();
-        Assert.assertEquals("ligand list", 3, ligandList.size());
-        new GeometryTool(mol5).createValenceTorsions(true, true);
-        CMLElements<CMLTorsion> torsions = mol5.getTorsionElements();
-        Assert.assertEquals("torsions", 2, torsions.size());
-        CMLTorsion torsion = torsions.get(0);
-        Assert.assertEquals("torsion 0 atoms", new String[] { "a4", "a1", "a2",
-                "a3" }, torsion.getAtomRefs4());
-        Assert.assertEquals("torsion 0 value", 30.465, torsion.getXMLContent(),
-                0.001);
-        torsion = torsions.get(1);
-        Assert.assertEquals("torsion 1 atoms", new String[] { "a5", "a1", "a2",
-                "a3" }, torsion.getAtomRefs4());
-        Assert.assertEquals("torsion 1 value", 149.534,
-                torsion.getXMLContent(), 0.001);
+    public void testGetGeometricHybridization() {
+    	AtomTool atomTool = AtomTool.getOrCreateTool(xmlAtom[0]);
+        CMLAtom.Hybridization hyb = atomTool
+                .getGeometricHybridization();
+        Assert.assertEquals("hybrid", CMLAtom.Hybridization.SP3, hyb);
     }
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.removeOverlapping3DAtoms(CMLAtomSet
-     * otherSet)'
+     * 'org.xmlcml.cml.element.CMLAtom.getHydrogenValencyGroup()'
      */
     @Test
-    public void testRemoveOverlapping3DAtomsCMLAtomSet() {
-        makeMol1();
-        Assert.assertEquals("before remove overlap", 3, mol1.getAtomCount());
-        makeMol2();
-        Assert.assertEquals("before remove overlap", 3, mol2.getAtomCount());
-        MoleculeTool.getOrCreateTool(mol1).removeOverlapping3DAtoms(mol2,
-                CoordinateType.CARTESIAN);
-        Assert.assertEquals("remove overlap", 1, mol1.getAtomCount());
-        Assert.assertEquals("remove overlap", "a3", mol1.getAtom(0)
-                .getId());
-        Assert.assertEquals("remove overlap", 3, mol2.getAtomCount());
-        Assert.assertEquals("remove overlap", "a13", mol2.getAtom(2)
-                .getId());
+    public void testGetHydrogenValencyGroup() {
+        int hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[0]);
+        Assert.assertEquals("elementType", AS.N.value, xmlAtom[0].getElementType());
+        // atom attached to electronegative ligands
+        Assert.assertTrue("hydrogen valency", hvg < 0);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[1]);
+        Assert.assertEquals("elementType", AS.C.value, xmlAtom[1].getElementType());
+        Assert.assertEquals("hydrogen valency", 4, hvg);
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[2]);
+        Assert.assertEquals("elementType", AS.S.value, xmlAtom[2].getElementType());
+        Assert.assertEquals("hydrogen valency", 6, hvg);
+        Assert.assertEquals("elementType", AS.O.value, xmlAtom[3].getElementType());
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[3]);
+        Assert.assertEquals("hydrogen valency", 6, hvg);
+        Assert.assertEquals("elementType", AS.F.value, xmlAtom[4].getElementType());
+        hvg = AtomTool.getHydrogenValencyGroup(xmlAtom[4]);
+        Assert.assertEquals("hydrogen valency", 7, hvg);
     }
 
     /**
      * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.calculateBondedAtoms()'
+     * 'org.xmlcml.cml.tools.MoleculeTool.getLoneElectronCount(CMLAtom)'
      */
     @Test
-    public void testCalculateBondedAtoms() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        List<CMLBond> bonds = mol5.getBonds();
-        Assert.assertEquals("bond 0", CMLBond.atomHash("a1", "a2"), bonds
-                .get(0).atomHash());
-        Assert.assertEquals("bond 0", CMLBond.atomHash("a1", "a4"), bonds
-                .get(1).atomHash());
-        Assert.assertEquals("bond 0", CMLBond.atomHash("a1", "a5"), bonds
-                .get(2).atomHash());
-        Assert.assertEquals("bond 0", CMLBond.atomHash("a2", "a3"), bonds
-                .get(3).atomHash());
+    public void testGetLoneElectronCount() {
+        // FIXME
+        CMLMolecule nitroMethane = (CMLMolecule) TestUtils.parseValidString(nitroMethaneS);
+        int n = AtomTool.getOrCreateTool(nitroMethane.getAtom(0)).getLoneElectronCount();
+        Assert.assertEquals("lone pair", -6, n);
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(1)).getLoneElectronCount();
+        Assert.assertEquals("lone pair", 0, n);
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(2)).getLoneElectronCount();
+        Assert.assertEquals("lone pair", 6, n);
+        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(3)).getLoneElectronCount();
+        Assert.assertEquals("lone pair", 5, n);
     }
 
     /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.calculateBondOrdersFromXYZ3()'
-     */
-    @Test
-    public void testCalculateBondOrdersFromXYZ3() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        List<CMLBond> bonds = mol5.getBonds();
-        moleculeTool5.calculateBondOrdersFromXYZ3();
-        Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-        Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-        Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-        Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
-    }
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getMap(CMLMolecule)'
+	 */
+	@Test
+	public void testGetMap() {
+		fixture.makeMol1();
+		MoleculeTool moleculeTool1 = MoleculeTool.getOrCreateTool(fixture.mol1);
+		CMLMolecule mol1a = fixture.makeMol1a();
+		CMLMap map = moleculeTool1.getMap(mol1a);
+		Assert.assertEquals("map", 3, map.getLinkElements().size());
+		CMLLink link = map.getLinkElements().get(0);
+		Assert.assertEquals("link", "a1", link.getFrom());
+		Assert.assertEquals("link", "a11", link.getTo());
+	}
+
 
     /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.calculateBondsFromXYZ3(double)'
-     */
-    @Test
-    public void testCalculateBondsFromXYZ3() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-        List<CMLBond> bonds = mol5.getBonds();
-        moleculeTool5.calculateBondOrdersFromXYZ3();
-        Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-        Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-        Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-        Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
-    }
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getMappedAtom(CMLMap,
+	 * CMLAtom, Direction)'
+	 */
+	@Test
+	public void testGetMappedAtom() {
+		fixture.makeMol1();
+		MoleculeTool moleculeTool1 = MoleculeTool.getOrCreateTool(fixture.mol1);
+		CMLMolecule mol1a = fixture.makeMol1a();
+		MoleculeTool moleculeTool1a = MoleculeTool.getOrCreateTool(mol1a);
+		CMLMap map = moleculeTool1.getMap(mol1a);
+		CMLAtom atom1 = fixture.mol1.getAtom(1);
+		CMLAtom atom1a = mol1a.getAtom(1);
+		CMLAtom atom1x = moleculeTool1.getMappedAtom(map, atom1a,
+				CMLMap.Direction.TO);
+		Assert.assertNotNull("mapped atom not null", atom1x);
+		Assert.assertEquals("to", "a2", atom1x.getId());
+		atom1a = moleculeTool1
+				.getMappedAtom(map, atom1a, CMLMap.Direction.FROM);
+		Assert.assertNull("mapped atom null", atom1a);
+		atom1x = moleculeTool1a
+				.getMappedAtom(map, atom1, CMLMap.Direction.FROM);
+		Assert.assertNotNull("mapped atom not null", atom1x);
+		Assert.assertEquals("to", "a12", atom1x.getId());
+		atom1a = moleculeTool1a.getMappedAtom(map, atom1, CMLMap.Direction.TO);
+		Assert.assertNull("mapped atom null", atom1a);
+	}
+
+    /** */
+	@Test
+	@Ignore
+	public final void testGetMappedBondViaAtoms() {
+		fail("Not yet implemented"); // TODO
+	}
 
     /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLMolecule.getAverageBondDistance(int)'
-     */
-    @Test
-    public void testGetAverageBondDistance() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        double length = moleculeTool5
-                .getAverageBondLength(CoordinateType.CARTESIAN);
-        Assert.assertEquals("average length", 1.2235, length, .0001);
-    }
-
-    /**
-     * test gets mapping of namespaces onto molecule files.
-     * @throws IOException
-     *
-     */
-    @Test
-    public void testGetMoleculeCatalog() throws IOException {
-        Catalog catalogTool = getMoleculeCatalog();
-        CMLMap map = catalogTool.getCmlMap();
-        Assert.assertNotNull("catalog", map);
-      //  Assert.assertEquals("map size", 4, map.getLinkElements().size()); This test causes errors whenever the catalog is updated so I have removed it nwe23
-        CMLLink link0 = map.getLinkElements().get(0);
-        Assert.assertEquals("link0", "http://www.xml-cml.org/mols/geom", link0
-                .getFrom());
-        Assert.assertEquals("link0", "./geom.xml", link0.getTo());
-        CMLLink link1 = map.getLinkElements().get(1);
-        Assert.assertEquals("link1", "http://www.xml-cml.org/mols/frags", link1
-                .getFrom());
-        Assert.assertEquals("link1", "./fragments/frags.xml", link1.getTo());
-    }
-
-    static Catalog getMoleculeCatalog() throws IOException {
-        Catalog catalogTool = null;
-        catalogTool = new Catalog(Util
-                .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML));
-        return catalogTool;
-    }
-
-    /**
-     * test get map of molecules under namespace.
-     * @throws IOException
-     *
-     */
-    @Test
-    @Ignore // FIXME
-    public void testGetMolecules() throws IOException {
-        Map<String, Indexable> map = null;
-        try {
-        	// FIXME
-//            map = catalog.getIndexableList(namespace, IndexableByIdList.Type.MOLECULE_LIST);
-        } catch (CMLRuntimeException e) {
-            Assert.fail("expected "+e);
-        }
-        Assert.assertNotNull("molecules", map);
-        // Assert.assertEquals("molecules size", 6, map.size());
-        CMLMolecule molecule = (CMLMolecule) map.get("oh");
-        Assert.assertNotNull("oh", molecule);
-        Assert.assertEquals("oh", "oh", molecule.getId());
-
-        /*--
-         namespace = "http://www.xml-cml.org/mols/frags";
-         map = MoleculeTool.getMolecules(namespace);
-         Assert.assertNotNull("molecules", map);
-         Assert.assertEquals("molecules size", 6, map.size());
-         --*/
-    }
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.CMLAmount#getMolarAmount(org.xmlcml.cml.element.lite.CMLMolecule)}
+	 * .
+	 */
+	@Test
+	public final void testGetMolarAmount() {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom = new CMLAtom("a1", ChemicalElement
+				.getChemicalElement("Na"));
+		molecule.addAtom(atom);
+		atom = new CMLAtom("a2", ChemicalElement
+				.getChemicalElement(AS.Cl.value));
+		molecule.addAtom(atom);
+		double d = MoleculeTool.getOrCreateTool(molecule)
+				.getCalculatedMolecularMass(
+						HydrogenControl.NO_EXPLICIT_HYDROGENS);
+		Assert.assertEquals("MW ", 58.44277, d);
+		CMLAmount massAmount = new CMLAmount();
+		massAmount.setUnits(CMLConstants.Units.GRAM.value);
+		massAmount.addAttribute(new NamespaceRefAttribute("unitType",
+				"unitType:mass"));
+		massAmount.setXMLContent(100.0);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		CMLAmount molarAmount = moleculeTool.getMolarAmount(massAmount);
+		Assert.assertNotNull("molarAmount not null", molarAmount);
+		Assert.assertEquals("molarAmount", 1.7110756386119275, molarAmount
+				.getXMLContent(), 0.00001);
+	}
 
     /** test get molecule from namespaceRef.
      * @throws IOException
@@ -1829,415 +2186,75 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     }
 
     /**
-     * Test method for 'org.xmlcml.cml.tools.MoleculeTool.generateBondIds()'
+     * test gets mapping of namespaces onto molecule files.
+     * @throws IOException
+     *
      */
     @Test
-    public void testGenerateBondIds() {
-        makeMol9();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        Assert.assertNull("no id", mol9.getBonds().get(0).getId());
-        moleculeTool.generateBondIds();
-        Assert.assertEquals("generated id", "a1_a2", mol9.getBonds().get(0).getId());
+    public void testGetMoleculeCatalog() throws IOException {
+        Catalog catalogTool = getMoleculeCatalog();
+        CMLMap map = catalogTool.getCmlMap();
+        Assert.assertNotNull("catalog", map);
+      //  Assert.assertEquals("map size", 4, map.getLinkElements().size()); This test causes errors whenever the catalog is updated so I have removed it nwe23
+        CMLLink link0 = map.getLinkElements().get(0);
+        Assert.assertEquals("link0", "http://www.xml-cml.org/mols/geom", link0
+                .getFrom());
+        Assert.assertEquals("link0", "./geom.xml", link0.getTo());
+        CMLLink link1 = map.getLinkElements().get(1);
+        Assert.assertEquals("link1", "http://www.xml-cml.org/mols/frags", link1
+                .getFrom());
+        Assert.assertEquals("link1", "./fragments/frags.xml", link1.getTo());
     }
 
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.createMolecule(CMLMolecule, String[])'
-     */
-    @Test
-    public void testCreateMolecule() {
-        makeMol1();
-        CMLMolecule mol = MoleculeTool.createMolecule(mol1, 
-                new String[]{"a1", "a3"});
-        Assert.assertEquals("new", 2, mol.getAtomCount());
-        Assert.assertEquals("new", "a3", mol.getAtom(1).getId());
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.addSuffixToAtomIDs(String)'
-     */
-    @Test
-    public void testAddSuffixToAtomIDs() {
-        makeMol1();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol1);
-        moleculeTool.addSuffixToAtomIDs("FOO");
-        Assert.assertEquals("new", 3, mol1.getAtomCount());
-        Assert.assertEquals("new", "a3FOO", mol1.getAtom(2).getId());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.adjustHydrogenCountsToValency(CMLAtom,
-     * HydrogenControl)'
-     */
-    @Test
-    public void testAdjustHydrogenCountsToValencyCMLAtomHydrogenControl() {
-        makeMol9();
-        Assert.assertEquals("new", 3, mol9.getAtomCount());
-        Assert.assertEquals("new", 2, mol9.getBondCount());
-        Assert.assertEquals("new", "a3", mol9.getAtom(2).getId());
-        Assert.assertEquals("new", new String[]{"a2", "a3"},
-                mol9.getBonds().get(1).getAtomRefs2());
-        CMLAtom atom0 = mol9.getAtom(0);
-        CMLAtom atom1 = mol9.getAtom(1);
-        CMLAtom atom2 = mol9.getAtom(2);
-        //MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        AtomTool.getOrCreateTool(atom0).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        Assert.assertEquals("new", 6, mol9.getAtomCount());
-        Assert.assertEquals("new", 5, mol9.getBondCount());
-        Assert.assertEquals("new", "a1_h2", mol9.getAtom(4).getId());
-        Assert.assertEquals("new", new String[]{"a1", "a1_h2"},
-                mol9.getBonds().get(3).getAtomRefs2());
-        AtomTool.getOrCreateTool(atom1).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        AtomTool.getOrCreateTool(atom2).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        Assert.assertEquals("new", 10, mol9.getAtomCount());
-        Assert.assertEquals("new", 9, mol9.getBondCount());
-        Assert.assertEquals("new", "a3_h3", mol9.getAtom(9).getId());
-        Assert.assertEquals("new", new String[]{"a3", "a3_h3"},
-                mol9.getBonds().get(8).getAtomRefs2());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getNonHydrogenLigandList(CMLAtom)'
-     */
-    @Test
-    public void testGetNonHydrogenLigandList() {
-        makeCompleteMol9();
-        CMLAtom atom0 = mol9.getAtom(0);
-        CMLAtom atom1 = mol9.getAtom(1);
-        List<CMLAtom> atomList = AtomTool.getOrCreateTool(atom0).getNonHydrogenLigandList();
-        Assert.assertEquals("nonH", 1, atomList.size());
-        atomList = AtomTool.getOrCreateTool(atom1).getNonHydrogenLigandList();
-        Assert.assertEquals("nonH", 2, atomList.size());
-    }
-    
-    private MoleculeTool makeCompleteMol9() {
-        makeMol9();
-        CMLAtom atom0 = mol9.getAtom(0);
-        CMLAtom atom1 = mol9.getAtom(1);
-        CMLAtom atom2 = mol9.getAtom(2);
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        AtomTool.getOrCreateTool(atom0).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        AtomTool.getOrCreateTool(atom1).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        AtomTool.getOrCreateTool(atom2).adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-        return moleculeTool;
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getDownstreamAtoms(CMLAtom, CMLAtom)'
-     */
-    @Test
-    public void testGetDownstreamAtomsCMLAtomCMLAtomSetCMLAtom() {
-        makeCompleteMol9();
-        CMLAtom atom0 = mol9.getAtom(0);
-        CMLAtom atom1 = mol9.getAtom(1);
-        Assert.assertEquals("before", 10, mol9.getAtoms().size());
-        CMLAtomSet downstreamAtoms = AtomTool.getOrCreateTool(atom0).getDownstreamAtoms(atom1);
-        Assert.assertEquals("down", 4, downstreamAtoms.size());
-        Assert.assertEquals("down", new String[]{"a1", "a1_h1", "a1_h2", "a1_h3"},
-                downstreamAtoms.getXMLContent());
-        downstreamAtoms = AtomTool.getOrCreateTool(atom1).getDownstreamAtoms(atom0);
-        Assert.assertEquals("down", 6, downstreamAtoms.size());
-        Assert.assertEquals("down", new String[]{"a2", "a3", "a3_h1", "a3_h2", "a3_h3", "a2_h1"},
-                downstreamAtoms.getXMLContent());
-    }
-
-    /**
-     * Test method for 'org.xmlcml.cml.tools.MoleculeTool.appendToId(CMLAtom,
-     * String)'
-     */
-    @Test
-    public void testAppendToId() {
-        makeMol9();
-        CMLAtom atom = mol9.getAtom(1);
-        AtomTool atomTool = AtomTool.getOrCreateTool(atom);
-        Assert.assertEquals("id", "a2", atom.getId());
-        atomTool.appendToId("XXX");
-        Assert.assertEquals("id", "a2XXX", atom.getId());
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.calculate3DCoordinatesForLigands(CMLAtom,
-     * int, double, double)'
-     */
-    @Test
-    @Ignore
-    public void testCalculate3DCoordinatesForLigands() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.expandImplicitHydrogens(CMLAtom,
-     * HydrogenControl)'
-     */
-    @Test
-    public void testExpandImplicitHydrogensCMLAtomHydrogenControl() {
-        makeMol9();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        Assert.assertEquals("before", 3, mol9.getAtomCount());
-        Assert.assertEquals("before", 2, mol9.getBondCount());
-        moleculeTool.adjustHydrogenCountsToValency(HydrogenControl.NO_EXPLICIT_HYDROGENS);
-        moleculeTool.expandImplicitHydrogens(HydrogenControl.NO_EXPLICIT_HYDROGENS);
-        Assert.assertEquals("after", 10, mol9.getAtomCount());
-        Assert.assertEquals("after", 9, mol9.getBondCount());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.addWedgeHatchBond(CMLAtom)'
-     */
-    @Test
-    @Ignore
-    public void testAddWedgeHatchBond() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getLoneElectronCount(CMLAtom)'
-     */
-    @Test
-    public void testGetLoneElectronCount() {
-        // FIXME
-        CMLMolecule nitroMethane = (CMLMolecule) parseValidString(nitroMethaneS);
-        int n = AtomTool.getOrCreateTool(nitroMethane.getAtom(0)).getLoneElectronCount();
-        Assert.assertEquals("lone pair", -6, n);
-        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(1)).getLoneElectronCount();
-        Assert.assertEquals("lone pair", 0, n);
-        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(2)).getLoneElectronCount();
-        Assert.assertEquals("lone pair", 6, n);
-        n = AtomTool.getOrCreateTool(nitroMethane.getAtom(3)).getLoneElectronCount();
-        Assert.assertEquals("lone pair", 5, n);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getBondSet(CMLAtomSet)'
-     */
-    @Test
-    public void testGetBondSet() {
-        makeMol9();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        moleculeTool.generateBondIds();
-        CMLAtomSet atomSet = new CMLAtomSet(mol9);
-        CMLBondSet bondSet = moleculeTool.getBondSet(atomSet);
-        Assert.assertEquals("bonds", new String[]{"a1_a2", "a2_a3"},
-                bondSet.getXMLContent());
-        atomSet.removeAtomById("a3");
-        bondSet = moleculeTool.getBondSet(atomSet);
-        Assert.assertEquals("bonds", new String[]{"a1_a2"},
-                bondSet.getXMLContent());
-    }
-
-    /**
-     * Test method for 'org.xmlcml.cml.tools.MoleculeTool.sprout()'
-     */
-    @Test
-    public void testSprout() {
-
-        // self sprout
-        MoleculeTool sproutTool = MoleculeTool.getOrCreateTool(sprout);
-        CMLMolecule sproutMolecule = sproutTool.sprout();
-        Assert
-                .assertEquals("sprout AS size", 13, sproutMolecule
-                        .getAtomCount());
-        Assert
-                .assertEquals("sprout BS size", 13, sproutMolecule
-                        .getBondCount());
-
-        // sub sprout
-        List<CMLAtom> atoms = sprout.getAtoms();
-        List<CMLAtom> atomList = new ArrayList<CMLAtom>();
-        atomList.add(atoms.get(0));
-        atomList.add(atoms.get(1));
-        CMLAtomSet subAtomSet = CMLAtomSet.createFromAtoms(atomList);
-        CMLMolecule subMolecule = sproutTool.sprout(subAtomSet);
-        Assert.assertEquals("sub AS size", 6, subMolecule.getAtomCount());
-        Assert.assertEquals("sub BS size", 5, subMolecule.getBondCount());
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getDownstreamAtoms(CMLBond, CMLAtom)'
-     */
-    @Test
-    public void testGetDownstreamAtomsCMLBondCMLAtom() {
-        makeCompleteMol9();
-        CMLAtom atom0 = mol9.getAtom(0);
-        CMLAtom atom1 = mol9.getAtom(1);
-        CMLBond bond = mol9.getBond(atom0, atom1);
-        CMLAtomSet downstreamAtoms = BondTool.getOrCreateTool(bond).getDownstreamAtoms(atom1);
-        Assert.assertEquals("down", 4, downstreamAtoms.size());
-        Assert.assertEquals("down", new String[]{"a1", "a1_h1", "a1_h2", "a1_h3"},
-                downstreamAtoms.getXMLContent());
-        downstreamAtoms = BondTool.getOrCreateTool(bond).getDownstreamAtoms(atom0);
-        Assert.assertEquals("down", 6, downstreamAtoms.size());
-        Assert.assertEquals("down", new String[]{"a2", "a3", "a3_h1", "a3_h2", "a3_h3", "a2_h1"},
-                downstreamAtoms.getXMLContent());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.adjustHydrogenCountsToValency(HydrogenControl)'
-     */
-    @Test
-    public void testAdjustHydrogenCountsToValencyHydrogenControl() {
-           makeMol9();
-            Assert.assertEquals("new", 3, mol9.getAtomCount());
-            Assert.assertEquals("new", 2, mol9.getBondCount());
-            Assert.assertEquals("new", "a3", mol9.getAtom(2).getId());
-            Assert.assertEquals("new", new String[]{"a2", "a3"},
-                    mol9.getBonds().get(1).getAtomRefs2());
-            MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-            moleculeTool.adjustHydrogenCountsToValency(HydrogenControl.REPLACE_HYDROGEN_COUNT);
-            Assert.assertEquals("new", 10, mol9.getAtomCount());
-            Assert.assertEquals("new", 9, mol9.getBondCount());
-            Assert.assertEquals("new", "a3_h3", mol9.getAtom(9).getId());
-            Assert.assertEquals("new", new String[]{"a3", "a3_h3"},
-                    mol9.getBonds().get(8).getAtomRefs2());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.contractExplicitHydrogens(HydrogenControl)'
-     */
-    @Test
-    public void testContractExplicitHydrogensHydrogenControl() {
-        MoleculeTool moleculeTool = makeCompleteMol9();
-        Assert.assertEquals("before", 10, mol9.getAtomCount());
-        Assert.assertEquals("before", 9, mol9.getBondCount());
-        Assert.assertNotNull("before", mol9.getAtom(0).getHydrogenCountAttribute());
-        Assert.assertNotNull("before", mol9.getAtom(1).getHydrogenCountAttribute());
-        Assert.assertNotNull("before", mol9.getAtom(2).getHydrogenCountAttribute());
-        Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
-        Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
-        
-        moleculeTool.contractExplicitHydrogens(
-            HydrogenControl.USE_EXPLICIT_HYDROGENS, true);
-        Assert.assertEquals("before", 3, mol9.getAtomCount());
-        Assert.assertEquals("before", 2, mol9.getBondCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
-        Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
-        
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.contractExplicitHydrogens(CMLAtom,
-     * HydrogenControl)'
-     */
-    @Test
-    public void testContractExplicitHydrogensCMLAtomHydrogenControl() {
-        makeCompleteMol9();
-        CMLAtom atom0 = mol9.getAtom(0);
-        Assert.assertEquals("before", 10, mol9.getAtomCount());
-        Assert.assertEquals("before", 9, mol9.getBondCount());
-        Assert.assertNotNull("before", mol9.getAtom(0).getHydrogenCountAttribute());
-        Assert.assertNotNull("before", mol9.getAtom(1).getHydrogenCountAttribute());
-        Assert.assertNotNull("before", mol9.getAtom(2).getHydrogenCountAttribute());
-        Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
-        Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
-        
-        AtomTool.getOrCreateTool(atom0).contractExplicitHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);
-        Assert.assertEquals("before", 7, mol9.getAtomCount());
-        Assert.assertEquals("before", 6, mol9.getBondCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(0).getHydrogenCount());
-        Assert.assertEquals("before", 1, mol9.getAtom(1).getHydrogenCount());
-        Assert.assertEquals("before", 3, mol9.getAtom(2).getHydrogenCount());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.expandImplicitHydrogens(HydrogenControl)'
-     */
-    @Test
-    public void testExpandImplicitHydrogensHydrogenControl() {
-        makeMol9();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol9);
-        mol9.getAtom(0).setHydrogenCount(3);
-        mol9.getAtom(1).setHydrogenCount(1);
-        mol9.getAtom(2).setHydrogenCount(3);
-        Assert.assertEquals("before", 3, mol9.getAtomCount());
-        Assert.assertEquals("before", 2, mol9.getBondCount());
-        moleculeTool.expandImplicitHydrogens(HydrogenControl.NO_EXPLICIT_HYDROGENS);
-        Assert.assertEquals("before", 10, mol9.getAtomCount());
-        Assert.assertEquals("before", 9, mol9.getBondCount());
-
-    }
-
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getAtomSet(CMLBondSet)'
-     */
-    @Test
-    public void testGetAtomSet() {
-        makeMol5a();
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol5a);
-//        CMLAtomSet atomSet = mol5a.getAtomSet();
-        CMLBondSet bondSet = new CMLBondSet(mol5a);
-        Assert.assertEquals("before", 5, mol5a.getAtomCount());
-        Assert.assertEquals("before", 4, mol5a.getBondCount());
-        bondSet.removeBond(mol5a.getBonds().get(1));
-        CMLAtomSet newAtomSet = moleculeTool.getAtomSet(bondSet);
-        Assert.assertEquals("before", new String[]{"a1", "a2", "a5", "a3"},
-                newAtomSet.getXMLContent());
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.calculateBondedAtoms(List<CMLAtom>)'
-     */
-    @Test
-    @Ignore
-    public void testCalculateBondedAtomsListOfCMLAtom() {
-
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getAverageBondLength(CoordinateType)'
-     */
-    @Test
-    public void testGetAverageBondLength() {
-        makeMoleculeTool5();
-        try {
-            moleculeTool5.calculateBondedAtoms();
-        } catch (CMLRuntimeException e) {
-            Assert.fail("test bug " + e);
-        }
-        double length = moleculeTool5
-                .getAverageBondLength(CoordinateType.CARTESIAN);
-        Assert.assertEquals("average length", 1.2235, length, .0001);
-    }
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getSymmetryContacts(RealRange,
-     * CrystalTool)'
-     */
-    @Test
-    @Ignore
-    public void testGetSymmetryContacts() {
-
-    }
-    
     /** */
 	@Test
 	@Ignore
-	public final void testCreateGraphicsElement() {
+	public final void testGetMoleculeList() {
 		fail("Not yet implemented"); // TODO
+	}
+
+    /**
+     * test get map of molecules under namespace.
+     * @throws IOException
+     *
+     */
+    @Test
+    @Ignore // FIXME
+    public void testGetMolecules() throws IOException {
+        Map<String, Indexable> map = null;
+        try {
+        	// FIXME
+//            map = catalog.getIndexableList(namespace, IndexableByIdList.Type.MOLECULE_LIST);
+        } catch (RuntimeException e) {
+            Assert.fail("expected "+e);
+        }
+        Assert.assertNotNull("molecules", map);
+        // Assert.assertEquals("molecules size", 6, map.size());
+        CMLMolecule molecule = (CMLMolecule) map.get("oh");
+        Assert.assertNotNull("oh", molecule);
+        Assert.assertEquals("oh", "oh", molecule.getId());
+
+        /*--
+         namespace = "http://www.xml-cml.org/mols/frags";
+         map = MoleculeTool.getMolecules(namespace);
+         Assert.assertNotNull("molecules", map);
+         Assert.assertEquals("molecules size", 6, map.size());
+         --*/
+    }
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.tools.MoleculeTool.getNonHydrogenLigandList(CMLAtom)'
+	 */
+	@Test
+	public void testGetNonHydrogenLigandList() {
+		MoleculeTool moleculeTool = makeCompleteMol9();
+		CMLAtom atom0 = fixture.mol9.getAtom(0);
+		CMLAtom atom1 = fixture.mol9.getAtom(1);
+		List<CMLAtom> atomList = AtomTool.getOrCreateTool(atom0).getNonHydrogenLigandList();
+		Assert.assertEquals("nonH", 1, atomList.size());
+		atomList = AtomTool.getOrCreateTool(atom1).getNonHydrogenLigandList();
+		Assert.assertEquals("nonH", 2, atomList.size());
 	}
 
     /** */
@@ -2247,6 +2264,7 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		fail("Not yet implemented"); // TODO
 	}
 
+
     /** */
 	@Test
 	@Ignore
@@ -2254,57 +2272,41 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		fail("Not yet implemented"); // TODO
 	}
 
+
     /** */
 	@Test
 	public final void testGetOrCreateTool() {
 		// ignore
 	}
 
-    /** */
+    /**
+	 * test molecule range3.
+	 */
 	@Test
-	@Ignore
-	public final void testGetFormalCharge() {
-		fail("Not yet implemented"); // TODO
+	public void testGetRange3() {
+		fixture.makeMol5();
+		MoleculeTool moleculeTool5 = MoleculeTool.getOrCreateTool(fixture.mol5);
+		Real3Range mol5Range3 = moleculeTool5
+				.calculateRange3(CoordinateType.CARTESIAN);
+		Assert.assertEquals("x range min", -0.85, mol5Range3.getXRange()
+				.getMin(), EPS);
+		Assert.assertEquals("x range max", 1.0,
+				mol5Range3.getXRange().getMax(), EPS);
+		Assert.assertEquals("y range min", -0.54, mol5Range3.getYRange()
+				.getMin(), EPS);
+		Assert.assertEquals("y range max", 2.2,
+				mol5Range3.getYRange().getMax(), EPS);
+		Assert.assertEquals("z range min", 0., mol5Range3.getZRange().getMin(),
+				EPS);
+		Assert.assertEquals("z range max", 0.5,
+				mol5Range3.getZRange().getMax(), EPS);
 	}
 
     /** */
 	@Test
 	@Ignore
-	public final void testGetChargedAtoms() {
+	public final void testGetRingNucleiMolecules() {
 		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAdjustBondOrdersToValencyPiSystemControls() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetCalculatedMolecularMass() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	public final void testGetTotalHydrogenCount() {
-		Assert.assertEquals("benzene", 6, MoleculeTool.getOrCreateTool(benzene).getTotalHydrogenCount());
-		String moleculeS = "" +
-				"<molecule "+CML_XMLNS+">" +
-				"  <atomArray>" +
-				"    <atom id='a1' elementType='C'/>" +
-				"    <atom id='a2' elementType='O'/>" +
-				"  </atomArray>" +
-				"  <bondArray>" +
-				"    <bond atomRefs2='a1 a2' order='1'/>" +
-				"  </bondArray>" +
-				"</molecule>";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
-		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule).getTotalHydrogenCount();
-		Assert.assertEquals("h count", 4, hydrogenCount);
 	}
 
     /** */
@@ -2321,160 +2323,53 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
 		fail("Not yet implemented"); // TODO
 	}
 
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.tools.MoleculeTool.getSymmetryContacts(RealRange,
+     * CrystalTool)'
+     */
+    @Test
+    @Ignore
+    public void testGetSymmetryContacts() {
+
+    }
+
     /** */
 	@Test
-	@Ignore
-	public final void testGetDownstreamAtomsCMLAtomCMLAtom() {
-		fail("Not yet implemented"); // TODO
+	public final void testGetTotalHydrogenCount() {
+		Assert.assertEquals("benzene", 6, MoleculeTool.getOrCreateTool(benzene).getTotalHydrogenCount());
+		String moleculeS = "" +
+				"<molecule "+CML_XMLNS+">" +
+				"  <atomArray>" +
+				"    <atom id='a1' elementType='C'/>" +
+				"    <atom id='a2' elementType='O'/>" +
+				"  </atomArray>" +
+				"  <bondArray>" +
+				"    <bond atomRefs2='a1 a2' order='1'/>" +
+				"  </bondArray>" +
+				"</molecule>";
+		CMLMolecule molecule = (CMLMolecule) TestUtils.parseValidString(moleculeS);
+		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule).getTotalHydrogenCount();
+		Assert.assertEquals("h count", 4, hydrogenCount);
 	}
 
-    /** */
+    /**
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getVector3D()'
+	 */
 	@Test
-	@Ignore
-	public final void testSproutCMLAtomSet() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCreateClusters() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCreateLigands() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCreateAtomRefs4() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetAtomRefs4() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testContractExplicitHydrogensHydrogenControlBoolean() {
-		fail("Not yet implemented"); // TODO
-	}
-
-
-    /** */
-	@Test
-	@Ignore
-	public final void testRemoveOverlapping3DAtoms() {
-		fail("Not yet implemented"); // TODO
-	}
-
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCalculateBondsToAndJoin() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMappedBondViaAtoms() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMoleculeList() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCreateCartesiansFromFractionals() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetChainMolecules() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetRingNucleiMolecules() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAddMoleculeTo() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAdjustTorsions() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAdjustAngles() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAdjustLengths() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testAdjustTorsionsCMLAtomCMLAtom() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testFlattenMoleculeDescendants() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCopyAtomAttributesById() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testCopyBondAttributesById() {
-		fail("Not yet implemented"); // TODO
+	public void testGetVector3D() {
+		fixture.makeMol1();
+		MoleculeTool moleculeTool1 = MoleculeTool.getOrCreateTool(fixture.mol1);
+		Point3Vector vector = moleculeTool1
+				.getCoordinates3(CoordinateType.CARTESIAN);
+		Assert.assertNotNull("get vector3d", vector);
+		Assert.assertEquals("get vector3d", 3, vector.size());
+		Point3 p = vector.getPoint3(2);
+		assertEquals("point", new double[] { 2., 3., 1. }, p, EPS);
+		fixture.makeMol7();
+		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
+		vector = moleculeTool7.getCoordinates3(CoordinateType.CARTESIAN);
+		Assert.assertNull("get vector3d should be null", vector);
 	}
 
     /** */
@@ -2487,423 +2382,278 @@ public class MoleculeToolTest extends MoleculeAtomBondTest {
     /** */
 	@Test
 	@Ignore
-	public final void testAddMetalAtomsAndBonds() {
+	public final void testRemoveOverlapping3DAtoms() {
 		fail("Not yet implemented"); // TODO
 	}
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetBumps() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetBoundingBox() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetAtomToolMap() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetBondToolMap() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetOrCreateSelectionTool() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetSelectionTool() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testSetSelectionTool() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMoleculeDisplay() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testSetMoleculeDisplay() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetCurrentAtom() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testSetCurrentAtom() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetCurrentBond() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testSetCurrentBond() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testResetCurrentBond() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testEnsureCurrentAtom() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testEnsureCurrentBond() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testIncrementCurrentBond() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetElectronById() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMolarVolume() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMolarMass() {
-		fail("Not yet implemented"); // TODO
-	}
-
-    // ===============================
-    
-	/** copies attributes on bonds and atoms to another molecule.
-	 * for each atom/bond in this.molecule finds Id and hence corresponding 
-	 * atom/bond in 'to'. Copies all attributes from that atom to to.atom/@*
-	 * If corresponding atom does not exist, throws exception.
-	 * If target attribute exists throws exception
-	 * @exception CMLRuntimeException ids in molecules do not correspond or
-	 * attributes are already present
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.removeOverlapping3DAtoms(CMLAtomSet
+	 * otherSet)'
 	 */
+	@Test
+	public void testRemoveOverlapping3DAtomsCMLAtomSet() {
+		fixture.makeMol1();
+		CMLMolecule mol1 = fixture.mol1;
+		Assert.assertEquals("before remove overlap", 3, mol1.getAtomCount());
+		fixture.makeMol2();
+		CMLMolecule mol2 = fixture.mol2;
+		Assert.assertEquals("before remove overlap", 3, mol2.getAtomCount());
+		MoleculeTool.getOrCreateTool(mol1).removeOverlapping3DAtoms(mol2,
+				CoordinateType.CARTESIAN);
+		Assert.assertEquals("remove overlap", 1, mol1.getAtomCount());
+		Assert.assertEquals("remove overlap", "a3", mol1.getAtom(0).getId());
+		Assert.assertEquals("remove overlap", 3, mol2.getAtomCount());
+		Assert.assertEquals("remove overlap", "a13", mol2.getAtom(2).getId());
+	}
+
+    /**
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.roundCoords(double)'
+	 */
+	@Test
+	public void testRoundCoords() {
+		fixture.makeMol1();
+		CMLMolecule mol1 = fixture.mol1;
+		Point3 p = mol1.getAtom(2).getXYZ3();
+		assertEquals("original point", new double[] { 2., 3., 1. }, p, EPS);
+		MoleculeTool.getOrCreateTool(mol1).translate3D(
+				new Vector3(0.000111, 0.999999, 0.012345));
+		p = mol1.getAtom(2).getXYZ3();
+		assertEquals("moved point",
+				new double[] { 2.000111, 3.999999, 1.012345 }, p, EPS);
+		mol1.roundCoords(.001, CoordinateType.CARTESIAN);
+		p = mol1.getAtom(2).getXYZ3();
+		assertEquals("moved point", new double[] { 2.000, 3.999, 1.012 }, p,
+				EPS);
+	}
+
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLMolecule.setBondOrders(String)'
+     */
     @Test
-	public void testCopyAtomAndBondAttributesById() {
-		CMLMolecule from = new CMLMolecule();
-		from.setId("from");
-		CMLAtom atom0 = new CMLAtom();
-		atom0.setElementType(AS.C.value);
-		atom0.setId("a0");
-		from.addAtom(atom0);
-		CMLAtom atom1 = new CMLAtom();
-		atom1.setElementType(AS.O.value);
-		atom1.setId("a1");
-		from.addAtom(atom1);
-		CMLBond bond01 = new CMLBond(atom0, atom1);
-		bond01.setId("b01");
-		from.addBond(bond01);
-		
-		CMLMolecule to = (CMLMolecule) from.copy();
-		to.setId("to");
+    public void testSetBondOrders() {
+        makeMoleculeTool5();
+        moleculeTool5.calculateBondedAtoms();
+        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
+        Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
+        mol5.setBondOrders(CMLBond.SINGLE);
+        Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
+                .get(0).getOrder());
+    }
 
-		
-		atom0.setXY2(new Real2(1.,2.));
-		atom1.setFormalCharge(1);
-		bond01.setOrder(CMLBond.DOUBLE);
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLAtom.setGeometricHybridization(String)'
+     */
+    @Test
+    public void testSetGeometricHybridization() {
+        // TODO
+    }
 
-		MoleculeTool fromTool = MoleculeTool.getOrCreateTool(from);
-		boolean permitOverwrite = true;
-		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
-		
-		to.setId("from"); // to allow comparison
-		assertEqualsCanonically("compare mols", from, to);
-		
-		permitOverwrite = false;
-		try {
-			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
-			Assert.fail("Should fail on overwrite");
-		} catch (CMLRuntimeException e) {
-			Assert.assertTrue("cannot overwrite", e.getMessage().startsWith(
-					"cannot overwrite attribute:"));
-		}
+    /**
+     * Test method for
+     * 'org.xmlcml.cml.element.CMLMolecule.setPreferredBondOrders()'
+     */
+    @Test
+    public void testSetPreferredBondOrders() {
+        makeMoleculeTool5();
+        moleculeTool5.calculateBondedAtoms();
+        Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
+        Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
+        mol5.setBondOrders(CMLBond.SINGLE_S);
+        // note that getOrder() will return the preferred order
+        Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
+                .get(0).getOrderAttribute().getValue());
+        mol5.setNormalizedBondOrders();
+        Assert.assertEquals("perferred order", CMLBond.SINGLE, mol5.getBonds()
+                .get(0).getOrderAttribute().getValue());
+    }
 
-		// mimic atomId mismatch
-		atom0.resetId("resetId");
-		try {
-			fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
-			Assert.fail("Should fail on atom mismatch");
-		} catch (CMLRuntimeException e) {
-			Assert.assertEquals("atom mismatch", "Cannot find target atom: resetId", e.getMessage());
-		}
-		
+    /** */
+	@Test
+	@Ignore
+	public final void testSproutCMLAtomSet() {
+		fail("Not yet implemented"); // TODO
 	}
     
-    /** test display.
-     * 
-     * @param args
-     * @throws Exception
-     */
-    public static void testSVG(String[] args) throws Exception {
-    	if (args.length < 3 ) {
-    		System.out.println("SVG infile/input_resource outfile");
-    	} else {
-    		String infile = args[1];
-    		String outfile = args[2];
-    		InputStream is = null;
-    		try {
-    			is = Util.getInputStreamFromResource(infile);
-    		} catch (Exception e) {
-    			is = new FileInputStream(infile);
-    		}
-	    	
-	    	MoleculeDisplayList graphicsManager = new MoleculeDisplayList(outfile);
-	    	Document doc = new CMLBuilder().build(is);
-	    	doc = CMLBuilder.ensureCML(doc);
-	    	CMLMolecule molecule = (CMLMolecule) doc.getRootElement();
-	    	graphicsManager.setAndProcess(MoleculeTool.getOrCreateTool(molecule));
-	    	graphicsManager.createOrDisplayGraphics();
-    	}
-    }
-	@Test
-	public void testCreateGraphicsElement1() throws Exception {
-		CMLMolecule molecule = new CMLMolecule();
-		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement.getChemicalElement("C"));
-		atom1.setX2(10.0);
-		atom1.setY2(10.0);
-		molecule.addAtom(atom1);
-		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement.getChemicalElement("O"));
-		atom2.setX2(20.0);
-		atom2.setY2(20.0);
-		molecule.addAtom(atom2);
-		CMLBond bond = new CMLBond(atom1, atom2);
-		molecule.addBond(bond);
-		bond.setOrder(CMLBond.DOUBLE);
-		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.getChemicalElement("N"));
-		atom3.setX2(1.0);
-		atom3.setY2(10.0);
-		molecule.addAtom(atom3);
-		bond = new CMLBond(atom3, atom1);
-		molecule.addBond(bond);
-		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-		SVGElement g = moleculeTool.createGraphicsElement();
-		SVGSVG svg = new SVGSVG();
-		svg.appendChild(g);
-	}
-	
-	/**
+    /**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#transformCartesians(org.xmlcml.cml.element.CMLTransform3)}
+	 * .
 	 */
 	@Test
-    public void renumberAtomId() {
-		CMLMolecule molecule = new CMLMolecule();
-		CMLAtom atom1 = new CMLAtom("a1", AS.C);
-		molecule.addAtom(atom1);
-		CMLAtom atom2 = new CMLAtom("a2", AS.O);
-		molecule.addAtom(atom2);
-		CMLAtom atom3 = new CMLAtom("a3", AS.N);
-		molecule.addAtom(atom3);
-		CMLAtom atom4 = new CMLAtom("a4", AS.S);
-		molecule.addAtom(atom4);
-		CMLAtom atom5 = new CMLAtom("a5", AS.Cl);
-		molecule.addAtom(atom5);
-		CMLBond bond12 = new CMLBond(atom1, atom2);
-		molecule.addBond(bond12);
-		CMLBond bond23 = new CMLBond(atom2, atom3);
-		molecule.addBond(bond23);
-		CMLBond bond34 = new CMLBond(atom3, atom4);
-		molecule.addBond(bond34);
-		CMLBond bond25 = new CMLBond(atom2, atom5);
-		molecule.addBond(bond25);
-		
-		CMLBondStereo bondStereo1234 = new CMLBondStereo();
-		bondStereo1234.setAtomRefs4(
-				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom4.getId()});
-		bondStereo1234.setXMLContent(CMLBond.CIS);
-		bond23.addBondStereo(bondStereo1234);
-		
-		CMLAtomParity atomParity1235 = new CMLAtomParity();
-		atomParity1235.setAtomRefs4(
-				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom5.getId()});
-		atomParity1235.setXMLContent(-12.34);
-		atom2.addAtomParity(atomParity1235);
-		
-		CMLLength length12 = new CMLLength();
-		length12.setAtomRefs2(
-				new String[]{atom1.getId(),atom2.getId()});
-		length12.setXMLContent(1.234);
-		molecule.addLength(length12);
-		
-		CMLAngle angle123 = new CMLAngle();
-		angle123.setAtomRefs3(
-				new String[]{atom1.getId(),atom2.getId(),atom3.getId()});
-		angle123.setXMLContent(123.4);
-		molecule.addAngle(angle123);
-		
-		CMLTorsion torsion1234 = new CMLTorsion();
-		torsion1234.setAtomRefs4(
-				new String[]{atom1.getId(),atom2.getId(),atom3.getId(),atom4.getId()});
-		torsion1234.setXMLContent(12.34);
-		molecule.addTorsion(torsion1234);
-		
+	public final void testTransformCartesiansCMLTransform3() {
+		fixture.makeMol5();
+		CMLTransform3 t3 = new CMLTransform3(new double[] { 0.0, 1.0, 0.0, 0.0,
+				0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, });
+		CMLAtom atom4 = fixture.mol5.getAtom(3);
+		Point3 p = atom4.getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
+		MoleculeTool.getOrCreateTool(fixture.mol5).transformCartesians(t3);
+		p = atom4.getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
+	}
 
-		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-		try {
-			moleculeTool.renumberAtomId("a1", "a2");
-			Assert.fail("Should fail on renumbering");
-		} catch (Exception e) {
-			//
-		}
-		moleculeTool.renumberAtomId("a1", "a2_ZZ");
-		Assert.assertEquals("atom1", "a2_ZZ", atom1.getId());
-		Assert.assertEquals("atom2", "a2", atom2.getId());
-		Assert.assertEquals("bond12", new String[]{"a2_ZZ", "a2"}, bond12.getAtomRefs2());
-		Assert.assertEquals("bondStereo", new String[]{"a2_ZZ", "a2", "a3", "a4"}, bondStereo1234.getAtomRefs4());
-		Assert.assertEquals("atomParity", new String[]{"a2_ZZ", "a2", "a3", "a5"}, atomParity1235.getAtomRefs4());
-		Assert.assertEquals("length", new String[]{"a2_ZZ", "a2"}, length12.getAtomRefs2());
-		Assert.assertEquals("angle", new String[]{"a2_ZZ", "a2", "a3"}, angle123.getAtomRefs3());
-		Assert.assertEquals("torsion", new String[]{"a2_ZZ", "a2", "a3", "a4"}, torsion1234.getAtomRefs4());
-		
-		// swap a1 and a2;
-		moleculeTool.renumberAtomId("a2", "a1_ZZ");
-		moleculeTool.renumberAtomId("a1_ZZ", "a1");
-		moleculeTool.renumberAtomId("a2_ZZ", "a2");
+    /**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#transformCartesians(org.xmlcml.euclid.Transform3)}
+	 * .
+	 */
+	@Test
+	public final void testTransformCartesiansTransform3() {
+		fixture.makeMol5();
+		Transform3 t3 = new Transform3(new double[] { 0.0, 1.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, });
+		CMLAtom atom4 = fixture.mol5.getAtom(3);
+		Point3 p = atom4.getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
+		MoleculeTool.getOrCreateTool(fixture.mol5).transformCartesians(t3);
+		p = atom4.getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
+	}
 
-		Assert.assertEquals("atom1", "a2", atom1.getId());
-		Assert.assertEquals("atom2", "a1", atom2.getId());
-		Assert.assertEquals("bond12", new String[]{"a2", "a1"}, bond12.getAtomRefs2());
-		Assert.assertEquals("bondStereo", new String[]{"a2", "a1", "a3", "a4"}, bondStereo1234.getAtomRefs4());
-		Assert.assertEquals("atomParity", new String[]{"a2", "a1", "a3", "a5"}, atomParity1235.getAtomRefs4());
-		Assert.assertEquals("length", new String[]{"a2", "a1"}, length12.getAtomRefs2());
-		Assert.assertEquals("angle", new String[]{"a2", "a1", "a3"}, angle123.getAtomRefs3());
-		Assert.assertEquals("torsion", new String[]{"a2", "a1", "a3", "a4"}, torsion1234.getAtomRefs4());
-		
-		List<String> fromList = new ArrayList<String>();
-		List<String> toList = new ArrayList<String>();
-		
-		fromList.add("a1");
-		toList.add("a11");
-		fromList.add("a1");
-		toList.add("a12");
-		try {
-			moleculeTool.renumberAtomIds(fromList, toList);
-			Assert.fail("Should fail on renumbering");
-		} catch (Exception e) {
-//			LOG.debug("E "+e.getMessage());
-			//
-		}
-		
-		fromList = new ArrayList<String>();
-		toList = new ArrayList<String>();
-		
-		fromList.add("a2");
-		toList.add("a3");
-		fromList.add("a1");
-		toList.add("a11");
-		try {
-			moleculeTool.renumberAtomIds(fromList, toList);
-			Assert.fail("Should fail on renumbering");
-		} catch (Exception e) {
-			//
-		}
-		
-		fromList = new ArrayList<String>();
-		toList = new ArrayList<String>();
-		fromList.add("a1");
-		toList.add("a11");
-		fromList.add("a2");
-		toList.add("a12");
-		fromList.add("a3");
-		toList.add("a13");
-		fromList.add("a4");
-		toList.add("a14");
-		fromList.add("a5");
-		toList.add("a15");
-		moleculeTool.renumberAtomIds(fromList, toList);
-		
-		Assert.assertEquals("atom1", "a12", atom1.getId());
-		Assert.assertEquals("atom2", "a11", atom2.getId());
-		Assert.assertEquals("bond12", new String[]{"a12", "a11"}, bond12.getAtomRefs2());
-		Assert.assertEquals("bondStereo", new String[]{"a12", "a11", "a13", "a14"}, bondStereo1234.getAtomRefs4());
-		Assert.assertEquals("atomParity", new String[]{"a12", "a11", "a13", "a15"}, atomParity1235.getAtomRefs4());
-		Assert.assertEquals("length", new String[]{"a12", "a11"}, length12.getAtomRefs2());
-		Assert.assertEquals("a1ngle", new String[]{"a12", "a11", "a13"}, angle123.getAtomRefs3());
-		Assert.assertEquals("torsion", new String[]{"a12", "a11", "a13", "a14"}, torsion1234.getAtomRefs4());
-    }
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.transformFractionalCoordinates(CMLSym
+	 * m e t r y ) '
+	 */
+	@Test
+	public void testTransformFractionalCoordinatesCMLSymmetry() {
+		fixture.makeMolCryst();
+		CMLSymmetry symmetry = new CMLSymmetry(new String[] { "x, y, z",
+				"y, -x, 1/2+z" });
+		List<CMLMolecule> molList = MoleculeTool.getOrCreateTool(
+				fixture.cmlCrystMol).transformFractionalCoordinates(symmetry);
+		Assert.assertEquals("after t", 2, molList.size());
+		assertEqualsCanonically("mols equals", molList.get(0),
+				fixture.cmlCrystMol);
+		Point3 xf = molList.get(1).getAtom(2).getPoint3(
+				CoordinateType.FRACTIONAL);
+		assertEquals("mols equal", new double[] { 0.22, -0.12, 0.5 }, xf,
+				0.0000001);
+	}
 
-    
-    static void usage() {
-    	System.out.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");
-    	System.out.println("... options ...");
-    	System.out.println("-SVG inputfile outputfile <options>");
-    }
-    
-    /** main
-     * 
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-    	if (args.length == 0) {
-    		System.out.println("Args is 0");
-    		usage();
-    	} else {
-    		if (args[0].equalsIgnoreCase("-SVG")) {
-    			testSVG(args);
-    		}
-    	}
-    }
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.transformFractionalCoordinates(CMLTra
+	 * n s f o r m 3 ) '
+	 */
+	@Test
+	public void testTransformFractionalCoordinatesCMLTransform3() {
+		fixture.makeMolCryst();
+		CMLTransform3 transform = new CMLTransform3(new double[] { 0.0, 1.0,
+				0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.25, 0.0, 0.0,
+				0.0, 1.0, });
 
- }
+		Point3 pf = fixture.cmlCrystMol.getAtom(2).getPoint3(
+				CoordinateType.FRACTIONAL);
+		assertEquals("before", new double[] { 0.12, 0.22, 0.0 }, pf, 0.000001);
+		MoleculeTool.getOrCreateTool(fixture.cmlCrystMol)
+				.transformFractionalCoordinates(transform);
+		pf = fixture.cmlCrystMol.getAtom(2)
+				.getPoint3(CoordinateType.FRACTIONAL);
+		assertEquals("before", new double[] { 0.22, 0.0, 0.37 }, pf, 0.000001);
+	}
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.transformFractionalCoordinates(Transf
+	 * o r m 3 ) '
+	 */
+	@Test
+	public void testTransformFractionalCoordinatesTransform3() {
+		CMLMolecule mol0 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+				+ CML_XMLNS
+				+ ">"
+				+ "  <atomArray>"
+				+ "    <atom id='a1' elementType='N' x3='1.0' y3='2.0' z3='3.0' xFract='0.1' yFract='0.2' zFract='0.3'/>"
+				+ "    <atom id='a2' elementType='O' x3='1.8' y3='2.8' z3='3.8' xFract='0.15' yFract='0.25' zFract='0.35'/>"
+				+ "  </atomArray>" + "</molecule>" + "");
+		CMLMolecule mol = new CMLMolecule(mol0);
+		CMLTransform3 tr = new CMLTransform3(new double[] { 1, 0, 0, 0, 0, -1,
+				0, 0.5, 0, 0, -1, 0.25, 0, 0, 0, 1 });
+		MoleculeTool.getOrCreateTool(mol).transformFractionalCoordinates(tr);
+		CMLAtom atom0 = mol.getAtom(0);
+		assertEquals("transform", new double[] { 1, 2, 3 }, atom0.getXYZ3(),
+				EPS);
+		assertEquals("transform", new double[] { 0.1, 0.3, -0.05 }, atom0
+				.getXYZFract(), EPS);
+		Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
+		Assert.assertEquals("transform", "a1", atom0.getId());
+		CMLAtom atom1 = mol.getAtom(1);
+		assertEquals("transform", new double[] { 0.15, 0.25, -0.10 }, atom1
+				.getXYZFract(), EPS);
+	}
+
+    /**
+	 * Test method for
+	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#transformFractionalsAndCartesians(org.xmlcml.cml.element.CMLTransform3, org.xmlcml.euclid.Transform3)}
+	 * .
+	 */
+	@Test
+	public final void testTransformFractionalsAndCartesians() {
+		fixture.makeMolCryst();
+		Transform3 orthMat = fixture.cmlCrystCryst
+				.getOrthogonalizationTransform();
+		CMLTransform3 transform = new CMLTransform3("-y, x, 1/2+z");
+		CMLAtom atom = fixture.cmlCrystMol.getAtom(2);
+		Point3 px = atom.getPoint3(CoordinateType.CARTESIAN);
+		Assert.assertNull("no 3dcart", px);
+		Point3 pf = atom.getPoint3(CoordinateType.FRACTIONAL);
+		assertEquals("fract", new double[] { 0.12, 0.22, 0.0 }, pf, 0.0000001);
+		MoleculeTool.getOrCreateTool(fixture.cmlCrystMol)
+				.transformFractionalsAndCartesians(transform, orthMat);
+		px = atom.getPoint3(CoordinateType.CARTESIAN);
+		assertEquals("3dcart", new double[] { -1.98, 1.2, 5.5 }, px, 0.0000001);
+		pf = atom.getPoint3(CoordinateType.FRACTIONAL);
+		assertEquals("fract", new double[] { -0.22, 0.12, 0.5 }, pf, 0.0000001);
+	}
+
+    /**
+	 * Test method for
+	 * 'org.xmlcml.cml.element.CMLMolecule.transform(Transform3)'
+	 */
+	@Test
+	public void testTransformTransform3() {
+		CMLMolecule mol0 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+				+ CML_XMLNS
+				+ ">"
+				+ "  <atomArray>"
+				+ "    <atom id='a1' elementType='N' x3='1.0' y3='2.0' z3='3.0' xFract='0.1' yFract='0.2' zFract='0.3'/>"
+				+ "    <atom id='a2' elementType='O' x3='1.8' y3='2.8' z3='3.8' xFract='0.15' yFract='0.25' zFract='0.35'/>"
+				+ "  </atomArray>" + "</molecule>" + "");
+		CMLMolecule mol = new CMLMolecule(mol0);
+		CMLTransform3 tr = new CMLTransform3(new double[] { 1, 0, 0, 0, 0, -1,
+				0, 0, 0, 0, -1, 0, 0, 0, 0, 1 });
+		MoleculeTool.getOrCreateTool(mol).transformCartesians(tr);
+		CMLAtom atom0 = mol.getAtom(0);
+		assertEquals("transform", new double[] { 1, -2, -3 }, atom0.getXYZ3(),
+				EPS);
+		// not transformed
+		assertEquals("transform", new double[] { 0.1, 0.2, 0.3 }, atom0
+				.getXYZFract(), EPS);
+		Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
+		Assert.assertEquals("transform", "a1", atom0.getId());
+		CMLAtom atom1 = mol.getAtom(1);
+		assertEquals("transform", new double[] { 1.8, -2.8, -3.8 }, atom1
+				.getXYZ3(), EPS);
+	}
+
+    /**
+	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.translate3D(Vector3)'
+	 */
+	@Test
+	public void testTranslate3D() {
+		fixture.makeMol1();
+		CMLMolecule mol1 = fixture.mol1;
+		Point3 p = mol1.getAtom(2).getXYZ3();
+		assertEquals("original point", new double[] { 2., 3., 1. }, p, EPS);
+		MoleculeTool.getOrCreateTool(mol1).translate3D(
+				new Vector3(0.000111, 0.999999, 0.012345));
+		p = mol1.getAtom(2).getXYZ3();
+		assertEquals("moved point",
+				new double[] { 2.000111, 3.999999, 1.012345 }, p, EPS);
+	}
+
+}

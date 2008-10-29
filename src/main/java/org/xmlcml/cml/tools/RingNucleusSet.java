@@ -11,11 +11,10 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 
 /**
  * tool to support a ring. not fully developed
@@ -58,14 +57,14 @@ public class RingNucleusSet extends AbstractTool {
 			CMLAtomSet atomSet = ringNucleus.getAtomSet();
 			for (CMLAtom atom : atomSet.getAtoms()) {
 				if (atomMap.get(atom) != null) {
-					throw new CMLRuntimeException("atom in two ringNuclei: "+atom.getId());
+					throw new RuntimeException("atom in two ringNuclei: "+atom.getId());
 				}
 				atomMap.put(atom, ringNucleus);
 			}
 			CMLBondSet bondSet = ringNucleus.getBondSet();
 			for (CMLBond bond : bondSet.getBonds()) {
 				if (bondMap.get(bond) != null) {
-					throw new CMLRuntimeException("bond in two ringNuclei: "+bond.getId());
+					throw new RuntimeException("bond in two ringNuclei: "+bond.getId());
 				}
 				bondMap.put(bond, ringNucleus);
 			}

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtom;
 /**
  * an atom belonging to 2 or more rings
  * 

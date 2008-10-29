@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
 
 /**
  * tool to support a ring. not fully developed
@@ -15,7 +15,7 @@ import org.xmlcml.cml.element.CMLBond;
  * 
  */
 public class SpanningTreeElement extends AbstractTool {
-	final static Logger logger = Logger.getLogger(SpanningTreeElement.class.getName());
+	final static Logger logger = Logger.getLogger(SpanningTreeElement.class);
 
 	private SpanningTreeElement parent;
 	private CMLAtom atom;

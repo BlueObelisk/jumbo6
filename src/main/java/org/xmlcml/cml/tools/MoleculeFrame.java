@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 
 /**
@@ -141,7 +140,7 @@ public class MoleculeFrame extends JPanel {
 			try {
 				moleculePanel.getDisplayList().createOrDisplayGraphics();
 			} catch (IOException ioe) {
-				throw new CMLRuntimeException("bug "+ioe, ioe);
+				throw new RuntimeException("bug "+ioe, ioe);
 			}
 		}
 	}

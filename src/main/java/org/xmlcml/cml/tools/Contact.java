@@ -1,9 +1,8 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealRange;
 
@@ -37,7 +36,7 @@ public class Contact implements Comparable<Contact>, CMLConstants {
         this.toAtom = toAtom;
         this.transformedToAtom = transformedToAtom;
         if (transformedToAtom != null && !toAtom.getId().equals(transformedToAtom.getId())) {
-            throw new CMLRuntimeException("transformed atom on contact has wrong id");
+            throw new RuntimeException("transformed atom on contact has wrong id");
         }
         this.transform3 = transform3;
         this.dist = dist;

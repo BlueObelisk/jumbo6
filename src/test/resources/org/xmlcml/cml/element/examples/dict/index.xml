@@ -1,3 +1,9 @@
+<<<<<<< .working
 <map>
   <link from="http://www.xml-cml.org/dict/cmlDict name="cmlDict.xml"/>
 </map>
+=======
+<map>
+  <link from="http://www.xml-cml.org/dict/cmlDict name="cmlDict.xml"/>
+</map>
+>>>>>>> .merge-right.r915

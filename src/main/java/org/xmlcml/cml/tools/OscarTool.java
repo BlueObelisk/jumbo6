@@ -20,27 +20,26 @@ import nu.xom.Text;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAction;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLConditionList;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLLink;
-import org.xmlcml.cml.element.CMLModule;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.element.CMLName;
-import org.xmlcml.cml.element.CMLObject;
-import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLProductList;
-import org.xmlcml.cml.element.CMLProperty;
-import org.xmlcml.cml.element.CMLPropertyList;
-import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLReactionScheme;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLSpectrum;
-import org.xmlcml.cml.element.CMLSubstance;
+import org.xmlcml.cml.element.lite.CMLCml;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLName;
+import org.xmlcml.cml.element.lite.CMLProperty;
+import org.xmlcml.cml.element.lite.CMLPropertyList;
+import org.xmlcml.cml.element.lite.CMLScalar;
+import org.xmlcml.cml.element.main.CMLAction;
+import org.xmlcml.cml.element.main.CMLConditionList;
+import org.xmlcml.cml.element.main.CMLLink;
+import org.xmlcml.cml.element.main.CMLModule;
+import org.xmlcml.cml.element.main.CMLMoleculeList;
+import org.xmlcml.cml.element.main.CMLObject;
+import org.xmlcml.cml.element.main.CMLProduct;
+import org.xmlcml.cml.element.main.CMLProductList;
+import org.xmlcml.cml.element.main.CMLReaction;
+import org.xmlcml.cml.element.main.CMLReactionScheme;
+import org.xmlcml.cml.element.main.CMLSpectrum;
+import org.xmlcml.cml.element.main.CMLSubstance;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -1136,7 +1135,7 @@ public class OscarTool implements CMLConstants {
                         Text t = CMLUtil.getLastTextDescendant(psib);
                         String vv = t.getValue();
                         if (!(v.endsWith(u))) {
-                            throw new CMLRuntimeException("Bad units");
+                            throw new RuntimeException("Bad units");
                         }
                         t.setValue(vv.substring(0, vv.length()-u.length()));
                         Element unit = new Element("units");
@@ -1880,7 +1879,7 @@ public class OscarTool implements CMLConstants {
                 String val = quantity.getValue();
                 try {
                     formula = CMLFormula.createFormula(val);
-                } catch (CMLRuntimeException e) {
+                } catch (RuntimeException e) {
                     error("Bad formula: "+e.getMessage());
                 }
                 if (formula == null) {
@@ -2147,7 +2146,7 @@ public class OscarTool implements CMLConstants {
             error("Bad value/point for "+ss+S_SLASH+elem.getParent().getValue());
         }
         if (Double.isNaN(d)) {
-            throw new CMLRuntimeException("Unexpected NaN");
+            throw new RuntimeException("Unexpected NaN");
         }
         return d;
     }
@@ -2303,7 +2302,7 @@ public class OscarTool implements CMLConstants {
                         false) {
                     try {
                         createScalarAndAppendAsChildOfQuantity(cmlProperty, oldQuantity, type, units);
-                    } catch (CMLRuntimeException e) {
+                    } catch (RuntimeException e) {
                         error("unpexcted NaN: "+oldValue);
                     }
                 } else if (type.equals("temperature")) {
@@ -2368,7 +2367,7 @@ public class OscarTool implements CMLConstants {
         CMLScalar scalar = new CMLScalar();
         double d = getValuePoint(quantity, name);
         if (Double.isNaN(d)) {
-            throw new CMLRuntimeException("Bad quantity: ");
+            throw new RuntimeException("Bad quantity: ");
         }
         scalar.setValue(d);
         scalar.setDictRef(OSCAR_NSP+S_COLON+name);

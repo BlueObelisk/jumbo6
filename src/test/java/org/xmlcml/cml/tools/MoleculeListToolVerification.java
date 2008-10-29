@@ -14,11 +14,11 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLMoleculeList;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.html.HtmlMenuSystem;
 
@@ -34,6 +34,7 @@ import org.xmlcml.cml.html.HtmlMenuSystem;
  *
  */
 public class MoleculeListToolVerification {
+	private static Logger LOG = Logger.getLogger(MoleculeListToolVerification.class);
 
     /** test display.
      * 
@@ -67,7 +68,7 @@ public class MoleculeListToolVerification {
 	private static void process1File(File infile, HtmlMenuSystem menu)
 			throws ParsingException, ValidityException,
 			IOException {
-		System.out.println("INFILE "+infile);
+		LOG.debug("INFILE "+infile);
 		InputStream is = new FileInputStream(infile);
 		CMLMoleculeList moleculeList = getMoleculeList(is);
 		String outputFile = infile.toString();
@@ -86,11 +87,11 @@ public class MoleculeListToolVerification {
 		} catch (ValidityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new CMLRuntimeException(e);
+			throw new RuntimeException(e);
 		} catch (ParsingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new CMLRuntimeException(e);
+			throw new RuntimeException(e);
 		}
 		Nodes nodes = doc.query("//cml:moleculeList", CML_XPATH);
 		if (nodes.size() > 0) {

@@ -3,16 +3,16 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLLength;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.CMLZMatrix;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAngle;
+import org.xmlcml.cml.element.main.CMLLength;
+import org.xmlcml.cml.element.main.CMLTorsion;
+import org.xmlcml.cml.element.main.CMLZMatrix;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -37,7 +37,8 @@ import org.xmlcml.molutil.ChemicalElement;
  *
  */
 public class InlineMolecule implements CMLConstants {
-
+	private static Logger LOG = Logger.getLogger(InlineMolecule.class);
+	
     /** error messages.*/
     public enum Error {
         /** bad bond*/
@@ -106,7 +107,7 @@ public class InlineMolecule implements CMLConstants {
                 inlineAtom.cmlAtom.setId("a"+(++serial));
                 cmlMolecule.addAtom(inlineAtom.cmlAtom);
                 if (inlineAtom == null) {
-                    throw new CMLRuntimeException("NULL atom");
+                    throw new RuntimeException("NULL atom");
                 }
                 if (state == State.START) {
                     rootAtom = inlineAtom;
@@ -127,13 +128,13 @@ public class InlineMolecule implements CMLConstants {
                 } else {
                     currentBond = InlineBond.grab(formula.substring(i));
                     if (currentBond == null) {
-                        throw new CMLRuntimeException("NULL bond");
+                        throw new RuntimeException("NULL bond");
                     }
                     i += currentBond.getLength();
                     state = State.BOND;
                 }
             } else {
-                throw new CMLRuntimeException(InlineMolecule.Error.BAD_STATE+S_COLON+state+S_COLON);
+                throw new RuntimeException(InlineMolecule.Error.BAD_STATE+S_COLON+state+S_COLON);
             }
         }
     }
@@ -142,7 +143,7 @@ public class InlineMolecule implements CMLConstants {
         try {
             CMLZMatrix zMatrix = new CMLZMatrix(cmlMolecule);
             zMatrix.addCartesiansTo(cmlMolecule);
-        } catch (CMLRuntimeException e) {
+        } catch (RuntimeException e) {
             System.out.println("WARN of ZMAT "+e);
         }
     }
@@ -164,6 +165,7 @@ public class InlineMolecule implements CMLConstants {
 
 }
 class InlineAtom implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(InlineAtom.class);
     
     private InlineAtom greatGrandParent = null;
     private InlineAtom grandParent = null;
@@ -248,7 +250,7 @@ class InlineAtom implements CMLConstants {
         InlineAtom inlineAtom = new InlineAtom(molecule);
         inlineAtom.chemicalElement = ChemicalElement.grabChemicalElement(s);
         if (inlineAtom.chemicalElement == null) {
-            throw new CMLRuntimeException(InlineMolecule.Error.BAD_SYMBOL+CMLUtil.S_COLON+
+            throw new RuntimeException(InlineMolecule.Error.BAD_SYMBOL+CMLUtil.S_COLON+
                     s+CMLUtil.S_COLON);
         }
         inlineAtom.cmlAtom.setElementType(inlineAtom.chemicalElement.getSymbol());
@@ -270,25 +272,25 @@ class InlineAtom implements CMLConstants {
                 int is = (Qual.CHIRALITY.value+CMLUtil.S_LBRAK).length();
                 int idx = qqq.indexOf(CMLUtil.S_RBRAK);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Bad arg for chirality:"+qqq);
+                    throw new RuntimeException("Bad arg for chirality:"+qqq);
                 }
                 try {
                     chirality = new Double(qqq.substring(is, idx)).doubleValue();
                 } catch (NumberFormatException nfe) {
-                    throw new CMLRuntimeException("Bad value for chirality: "+qqq);
+                    throw new RuntimeException("Bad value for chirality: "+qqq);
                 }
                 i += idx+1;
             } else if (qqq.startsWith(Qual.ID.value+CMLUtil.S_LBRAK)) {
                 int is = (Qual.ID.value+CMLUtil.S_LBRAK).length();
                 int idx = qqq.indexOf(CMLUtil.S_RBRAK);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Bad arg for id:"+qqq);
+                    throw new RuntimeException("Bad arg for id:"+qqq);
                 }
                 id = qqq.substring(is, idx);
                 i += idx+1;
 
             } else {
-                throw new CMLRuntimeException("bad qual: "+qqq+S_SLASH+i);
+                throw new RuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
         System.out.println("AQ:"+this.fullString());
@@ -329,15 +331,15 @@ class InlineAtom implements CMLConstants {
     }
     
     void debug() {
-        System.out.println("ATOM: "+chemicalElement.getSymbol());
+    	LOG.info("ATOM: "+chemicalElement.getSymbol());
         for (int i = 0; i < childAtoms.size(); i++) {
             if (i > 0) {
-                System.out.println(S_LBRAK);
+            	LOG.info(S_LBRAK);
             }
             childBonds.get(i).debug();
             childAtoms.get(i).debug();
             if (i > 0) {
-                System.out.println(S_RBRAK);
+            	LOG.info(S_RBRAK);
             }
         }
     }
@@ -345,6 +347,7 @@ class InlineAtom implements CMLConstants {
 }
 
 class InlineBond implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(InlineBond.class);
 
     /** components of qualifier.*/
     public enum Qual {
@@ -380,7 +383,7 @@ class InlineBond implements CMLConstants {
             bond = new InlineBond();
             bond.order = getOrder(s.charAt(0));
             if (bond.order == null) {
-                throw new CMLRuntimeException(InlineMolecule.Error.BAD_BOND+s+CMLUtil.S_COLON);
+                throw new RuntimeException(InlineMolecule.Error.BAD_BOND+s+CMLUtil.S_COLON);
             }
             // qualifier
             if (s.length() > 1 && Qualifier.START == s.charAt(1)) {
@@ -417,42 +420,42 @@ class InlineBond implements CMLConstants {
                 int is = (Qual.LENGTH.value+CMLUtil.S_LBRAK).length();
                 int idx = qqq.indexOf(CMLUtil.S_RBRAK);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Bad arg for length:"+qqq);
+                    throw new RuntimeException("Bad arg for length:"+qqq);
                 }
                 try {
                     length = new Double(qqq.substring(is, idx)).doubleValue();
                 } catch (NumberFormatException nfe) {
-                    throw new CMLRuntimeException("Bad value for length: "+qqq);
+                    throw new RuntimeException("Bad value for length: "+qqq);
                 }
                 i += idx+1;
             } else if (qqq.startsWith(Qual.ANGLE.value+CMLUtil.S_LBRAK)) {
                 int is = (Qual.ANGLE.value+CMLUtil.S_LBRAK).length();
                 int idx = qqq.indexOf(CMLUtil.S_RBRAK);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Bad arg for angle:"+qqq);
+                    throw new RuntimeException("Bad arg for angle:"+qqq);
                 }
                 try {
                 angle = new Double(qqq.substring(is, idx)).doubleValue();
                 } catch (NumberFormatException nfe) {
-                    throw new CMLRuntimeException("Bad value for angle: "+qqq);
+                    throw new RuntimeException("Bad value for angle: "+qqq);
                 }
                 i += idx+1;
             } else if (qqq.startsWith(Qual.TORSION.value+CMLUtil.S_LBRAK)) {
                 int is = (Qual.TORSION.value+CMLUtil.S_LBRAK).length();
                 int idx = qqq.indexOf(CMLUtil.S_RBRAK);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Bad arg for torsion:"+qqq);
+                    throw new RuntimeException("Bad arg for torsion:"+qqq);
                 }
                 try {
                 torsion = new Double(qqq.substring(is, idx)).doubleValue();
                 } catch (NumberFormatException nfe) {
-                    throw new CMLRuntimeException("Bad value for torsion: "+qqq);
+                    throw new RuntimeException("Bad value for torsion: "+qqq);
                 }
                 i += idx+1;
             } else if (qqq.startsWith(S_COMMA)) {
                 i += 1;
             } else {
-                throw new CMLRuntimeException("bad qual: "+qqq+S_SLASH+i);
+                throw new RuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
         System.out.println("BQ"+this.fullString());
@@ -460,7 +463,7 @@ class InlineBond implements CMLConstants {
     
     void createBond(String s) {
         if (s.length() != 1) {
-            throw new CMLRuntimeException("Bond must only be single character: "+s);
+            throw new RuntimeException("Bond must only be single character: "+s);
         }
         bond = new CMLBond();
         bond.setOrder(InlineBond.getOrder(s.charAt(0)));
@@ -478,7 +481,7 @@ class InlineBond implements CMLConstants {
     }
 
     void debug() {
-        System.out.println("BOND: "+order+S_SLASH+length+S_SLASH+angle+S_SLASH+torsion);
+    	LOG.info("BOND: "+order+S_SLASH+length+S_SLASH+angle+S_SLASH+torsion);
     }
     /** get string.
      * @return exact lexical
@@ -507,10 +510,10 @@ class Qualifier {
         if (s != null && s.length() > 0 && s.charAt(0) == START) {
             int idx = (s.indexOf(END));
             if (idx == -1) {
-                throw new CMLRuntimeException(InlineMolecule.Error.BAD_QUALIFIER+s+CMLUtil.S_COLON);
+                throw new RuntimeException(InlineMolecule.Error.BAD_QUALIFIER+s+CMLUtil.S_COLON);
             }
             if (idx == 1) {
-            	throw new CMLRuntimeException(InlineMolecule.Error.EMPTY_QUALIFIER+s+CMLUtil.S_COLON);
+            	throw new RuntimeException(InlineMolecule.Error.EMPTY_QUALIFIER+s+CMLUtil.S_COLON);
             }
             q = s.substring(1, idx);
         }
@@ -568,7 +571,7 @@ class InlineBranch {
                 } else {      		
                 	branchBond = InlineBond.grab(s.substring(j));
                 	if (branchBond == null){
-                		throw new CMLRuntimeException("NULL bond");
+                		throw new RuntimeException("NULL bond");
                 	}
                		j += branchBond.getLength();
             		branchState = InlineMolecule.State.BOND;
@@ -578,7 +581,7 @@ class InlineBranch {
                 inlineAtom.cmlAtom.setId("a"+(++serial)); 
                 molecule.cmlMolecule.addAtom(inlineAtom.cmlAtom);
                 if (inlineAtom == null) {
-                    throw new CMLRuntimeException("NULL atom");
+                    throw new RuntimeException("NULL atom");
                 }
                 if (branchBond != null) {
                     System.out.println("III..."+inlineAtom);

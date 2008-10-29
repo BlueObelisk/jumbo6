@@ -12,20 +12,18 @@ import nu.xom.Element;
 import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLReactant;
-import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionComponent;
-import org.xmlcml.cml.element.CMLFormula.Sort;
-import org.xmlcml.cml.element.CMLReaction.Component;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLFormula.Sort;
+import org.xmlcml.cml.element.main.CMLElectron;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLProduct;
+import org.xmlcml.cml.element.main.CMLReactant;
+import org.xmlcml.cml.element.main.CMLReaction;
+import org.xmlcml.cml.element.main.CMLReaction.Component;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
@@ -89,10 +87,10 @@ public class ReactionTool extends AbstractSVGTool {
      * output and analyse aggregate formula for products and reactants.
      * 
      * @param w the output writer
-     * @throws CMLException
+     * @throws RuntimeException
      * @throws IOException
      */
-    public void outputBalance(Writer w) throws CMLException, IOException {
+    public void outputBalance(Writer w) throws IOException {
         calculateDifferenceFormula();
         if (aggregateReactantFormula != null) {
             w.write(aggregateReactantFormula.getFormattedString());
@@ -179,10 +177,10 @@ public class ReactionTool extends AbstractSVGTool {
      * 
      * @param w
      *            the output writer
-     * @throws CMLException
+     * @throws RuntimeException
      * @throws IOException
      */
-    public void outputReaction(Writer w) throws CMLException, IOException {
+    public void outputReaction(Writer w) throws IOException {
         // get reactants (null if no formulae)
         List<CMLReactant> reactants = reaction.getDescendantReactants();
         int i = 0;
@@ -279,9 +277,10 @@ public class ReactionTool extends AbstractSVGTool {
                  molecule = (CMLMolecule) ((CMLProduct)element).getFirstCMLChild(CMLMolecule.TAG);
              }
              if (molecule != null) {
+            	 MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
                  formula = (CMLFormula) molecule.getFirstCMLChild(CMLFormula.TAG);
                  if (formula == null) {
-                     formula = molecule.calculateFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
+                     formula = moleculeTool.calculateFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
                  } else {
                      formula = new CMLFormula(molecule);
                  }
@@ -298,7 +297,7 @@ public class ReactionTool extends AbstractSVGTool {
      */
     public static CMLFormula getAggregateFormula(ReactionComponent prodReact) {
         if (prodReact == null) {
-            throw new CMLRuntimeException("null prodReact");
+            throw new RuntimeException("null prodReact");
         }
         List<CMLFormula> formulaList = prodReact.getFormulas();
         CMLFormula aggregateFormula = null;
@@ -426,20 +425,12 @@ public class ReactionTool extends AbstractSVGTool {
         List changedBondPairList = new ArrayList();
         for (int i = 0; i < atomPairList.size(); i++) {
             MappedAtomPair atomPair = (MappedAtomPair) atomPairList.get(i);
-            try {
-                compareAtoms(atomPair, changedAtomPairList);
-            } catch (CMLException e) {
-                LOG.error("Atom comparison problem "+e);
-            }
+            compareAtoms(atomPair, changedAtomPairList);
         }
 //        List bondPairList = getBondPairList(null, moleculeTool1, moleculeTool2, serial);
         for (int i = 0; i < bondPairList.size(); i++) {
             MappedBondPair bondPair = (MappedBondPair) bondPairList.get(i);
-            try {
-                compareBonds(bondPair, changedBondPairList);
-            } catch (CMLException e) {
-                LOG.error("Bond comparison problem "+e);
-            }
+            compareBonds(bondPair, changedBondPairList);
         }
 
         boolean change = true;
@@ -459,6 +450,7 @@ public class ReactionTool extends AbstractSVGTool {
                 addElectrons(atomPair, bondPair, electronPairList);
                 changedAtomPairList.remove(atomPair);
                 changedBondPairList.remove(bondPair);
+//                @SuppressWarnings("unused")
 
 //                MappedAtomPair nextAtomPair = getOtherAtomPair(bondPair, atomPair, atomMap, atomPairList);
 // FIXME                iterateChain(atomPairList, changedAtomPairList, changedBondPairList, nextAtomPair, atomMap, electronPairList);
@@ -479,8 +471,9 @@ public class ReactionTool extends AbstractSVGTool {
             if (size == 0) {
                 break;
             } else {
-//                MappedBondPair bondPair = (MappedBondPair) changedBondPairList.get(0);
-//                MappedAtomPair startingAtomPair = bondPair.getAtomPair(0, atomPairList);
+                MappedBondPair bondPair = (MappedBondPair) changedBondPairList.get(0);
+                @SuppressWarnings("unused")
+                MappedAtomPair startingAtomPair = bondPair.getAtomPair(0, atomPairList);
 // FIXME                iterateCycle(atomPairList, changedBondPairList, startingAtomPair, atomMap, electronPairList);
             }
             if (size == changedBondPairList.size()) {
@@ -496,15 +489,15 @@ public class ReactionTool extends AbstractSVGTool {
         return electronPairList;
     }
     
-    private void compareAtoms(MappedAtomPair atomPair, List<AtomBondPair> changedPairList) throws CMLException {
+    private void compareAtoms(MappedAtomPair atomPair, List<AtomBondPair> changedPairList) {
         AtomTool atomTool1 = AtomTool.getOrCreateTool(atomPair.atom1);
         AtomTool atomTool2 = AtomTool.getOrCreateTool(atomPair.atom2);
         if (atomTool1 == null) {
-//            LOG.error("Null atom partner for (2): "+atomPair.atom2.getId());
+//            logger.error("Null atom partner for (2): "+atomPair.atom2.getId());
             return;
         }
         if (atomTool2 == null) {
-//            LOG.error("Null atom partner for (1): "+atomPair.atom1.getId());
+//            logger.error("Null atom partner for (1): "+atomPair.atom1.getId());
             return;
         }
         int loneElectronCount1 = atomTool1.getLoneElectronCount();
@@ -515,7 +508,7 @@ public class ReactionTool extends AbstractSVGTool {
         }
     }
 
-    private void compareBonds(MappedBondPair bondPair, List<AtomBondPair> changedPairList) throws CMLException {
+    private void compareBonds(MappedBondPair bondPair, List<AtomBondPair> changedPairList) {
         int order1 = (bondPair.bond1 == null) ? 0 : CMLElectron.getElectronCount(bondPair.bond1.getOrder());
         int order2 = (bondPair.bond2 == null) ? 0 : CMLElectron.getElectronCount(bondPair.bond2.getOrder());
         if (order1 != order2) {
@@ -525,88 +518,90 @@ public class ReactionTool extends AbstractSVGTool {
     }
 
     
-//    private List<ElectronPair> getElectronPairList(
-//    		Element parent, CMLMolecule mol1, CMLMolecule mol2, int iReaction) {
-////    	 electrons
-//        List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
-//        Nodes electronNodes1 = mol1.query(".//cml:electron", CML_XPATH);
-//        Nodes electronNodes2 = mol2.query(".//cml:electron", CML_XPATH);
-////    	 find electrons in first molecule or both
-//        MoleculeTool molTool1 = MoleculeTool.getOrCreateTool(mol1);
-//        MoleculeTool molTool2 = MoleculeTool.getOrCreateTool(mol2);
-//        for (int i = 0; i < electronNodes1.size(); i++) {
-//            CMLElectron electron1 = (CMLElectron) electronNodes1.get(i);
-//            String id = (electron1.getId());
-//            CMLElectron electron2 = molTool2.getElectronById(id);
-//            electronPairList.add(new ElectronPair(electron1, electron2, iReaction));
-//        }
-////    	 find electrons in second molecule only
-//        for (int i = 0; i < electronNodes2.size(); i++) {
-//            CMLElectron electron2 = (CMLElectron) electronNodes2.get(i);
-//            String id = (electron2.getId());
-//            CMLElectron electron1 = molTool1.getElectronById(id);
-//            if (electron1 == null) {
-//                electronPairList.add(new ElectronPair(null, electron2, iReaction));
-//            }
-//        }
-//        return electronPairList;
-//    }
+    private List<ElectronPair> getElectronPairList(
+    		Element parent, CMLMolecule mol1, CMLMolecule mol2, int iReaction) {
+//    	 electrons
+        List<ElectronPair> electronPairList = new ArrayList<ElectronPair>();
+        Nodes electronNodes1 = mol1.query(".//cml:electron", CML_XPATH);
+        Nodes electronNodes2 = mol2.query(".//cml:electron", CML_XPATH);
+//    	 find electrons in first molecule or both
+        MoleculeTool molTool1 = MoleculeTool.getOrCreateTool(mol1);
+        MoleculeTool molTool2 = MoleculeTool.getOrCreateTool(mol2);
+        for (int i = 0; i < electronNodes1.size(); i++) {
+            CMLElectron electron1 = (CMLElectron) electronNodes1.get(i);
+            String id = (electron1.getId());
+            CMLElectron electron2 = molTool2.getElectronById(id);
+            electronPairList.add(new ElectronPair(electron1, electron2, iReaction));
+        }
+//    	 find electrons in second molecule only
+        for (int i = 0; i < electronNodes2.size(); i++) {
+            CMLElectron electron2 = (CMLElectron) electronNodes2.get(i);
+            String id = (electron2.getId());
+            CMLElectron electron1 = molTool1.getElectronById(id);
+            if (electron1 == null) {
+                electronPairList.add(new ElectronPair(null, electron2, iReaction));
+            }
+        }
+        return electronPairList;
+    }
     
     
-//    private boolean iterateChain(List<AtomBondPair> atomPairList, List<MappedAtomPair> changedAtomPairList,
-//    		List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair,
-//    		CMLMap atomMap, List<ElectronPair> electronPairList) {
-//        // iterate down chain two bonds at a time until terminal atom
-//        boolean change = true;
-//        while (true) {
-//            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
-//            if (bondPair == null) {
-//                change = false;
-//                break;
-//            }
-//            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
-//            changedBondPairList.remove(bondPair);
-//            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
-//            if (otherBondPair == null) {
-//                if (!changedAtomPairList.contains(middleAtomPair)) {
-//                	System.out.println("Cannot find terminal atom ("+middleAtomPair+") in electron chain");
-//                } else {
-//                    addElectrons(bondPair, middleAtomPair, electronPairList);
-//                    changedAtomPairList.remove(middleAtomPair);
-//                    changedBondPairList.remove(bondPair);
-//               }
-//               break;
-//            }
-//            addElectrons(bondPair, otherBondPair, electronPairList);
-//            changedAtomPairList.remove(middleAtomPair);
-//            changedBondPairList.remove(otherBondPair);
-//            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
-//        }
-//        return change;
-//    }
-//    
-//    private boolean iterateCycle(List<AtomPair> atomPairList, List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair, CMLMap atomMap, List<ElectronPair> electronPairList) {
-//        // iterate down chain two bonds at a time until terminal atom
-//        boolean change = true;
-//        while (true) {
-//            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
-//            if (bondPair == null) {
-//                change = false;
-//                break;
-//            }
-//            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
-//            changedBondPairList.remove(bondPair);
-//            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
-//            if (otherBondPair == null) {
-//                changedBondPairList.remove(bondPair);
-//                break;
-//            }
-//            addElectrons(bondPair, otherBondPair, electronPairList);
-//            changedBondPairList.remove(otherBondPair);
-//            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
-//        }
-//        return change;
-//    }
+    @SuppressWarnings("unused")
+    private boolean iterateChain(List<AtomBondPair> atomPairList, List<MappedAtomPair> changedAtomPairList,
+    		List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair,
+    		CMLMap atomMap, List<ElectronPair> electronPairList) {
+        // iterate down chain two bonds at a time until terminal atom
+        boolean change = true;
+        while (true) {
+            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
+            if (bondPair == null) {
+                change = false;
+                break;
+            }
+            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
+            changedBondPairList.remove(bondPair);
+            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
+            if (otherBondPair == null) {
+                if (!changedAtomPairList.contains(middleAtomPair)) {
+                	System.out.println("Cannot find terminal atom ("+middleAtomPair+") in electron chain");
+                } else {
+                    addElectrons(bondPair, middleAtomPair, electronPairList);
+                    changedAtomPairList.remove(middleAtomPair);
+                    changedBondPairList.remove(bondPair);
+               }
+               break;
+            }
+            addElectrons(bondPair, otherBondPair, electronPairList);
+            changedAtomPairList.remove(middleAtomPair);
+            changedBondPairList.remove(otherBondPair);
+            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
+        }
+        return change;
+    }
+    
+    @SuppressWarnings("unused")
+    private boolean iterateCycle(List<AtomPair> atomPairList, List<MappedBondPair> changedBondPairList, MappedAtomPair nextAtomPair, CMLMap atomMap, List<ElectronPair> electronPairList) {
+        // iterate down chain two bonds at a time until terminal atom
+        boolean change = true;
+        while (true) {
+            MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, nextAtomPair);
+            if (bondPair == null) {
+                change = false;
+                break;
+            }
+            MappedAtomPair middleAtomPair = getOtherAtomPair(bondPair, nextAtomPair, atomMap, atomPairList);
+            changedBondPairList.remove(bondPair);
+            MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
+            if (otherBondPair == null) {
+                changedBondPairList.remove(bondPair);
+                break;
+            }
+            addElectrons(bondPair, otherBondPair, electronPairList);
+            changedBondPairList.remove(otherBondPair);
+            nextAtomPair = getOtherAtomPair(otherBondPair, middleAtomPair, atomMap, atomPairList);
+        }
+        return change;
+    }
 
     /** gets next atom with a negative electron change.
      * 
@@ -623,26 +618,27 @@ public class ReactionTool extends AbstractSVGTool {
     }
     
     @SuppressWarnings("unchecked")
-//	private MappedAtomPair getOtherAtomPair(MappedBondPair bondPair, MappedAtomPair atomPair, CMLMap atomMap, List atomPairList) {
-//    	if (bondPair == null || atomPair == null || atomMap == null) {
-//    		return null;
-//    	}
-//    	String fromId = null;
-//    	String toId = null;
-//    	if (atomMap == null) {
-//    	} else if (bondPair.bond1 == null) {
-//        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
-//        	fromId = atomMap.getRef(fromId, CMLMap.Direction.FROM);
-//        } else if (bondPair.bond2 == null) {
-//        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
-//        	toId = atomMap.getRef(toId, CMLMap.Direction.TO);
-//        } else {
-//        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
-//        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
-//        }
-//    	MappedAtomPair otherAtomPair = MappedAtomPair.getAtomPair(toId, fromId, atomPairList);
-//    	return otherAtomPair;
-//    }
+	private MappedAtomPair getOtherAtomPair(MappedBondPair bondPair, MappedAtomPair atomPair, CMLMap atomMap, List atomPairList) {
+    	if (bondPair == null || atomPair == null || atomMap == null) {
+    		return null;
+    	}
+    	String fromId = null;
+    	String toId = null;
+    	if (atomMap == null) {
+    	} else if (bondPair.bond1 == null) {
+        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
+        	fromId = atomMap.getRef(fromId, CMLMap.Direction.FROM);
+        } else if (bondPair.bond2 == null) {
+        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
+        	toId = atomMap.getRef(toId, CMLMap.Direction.TO);
+        } else {
+        	fromId = bondPair.bond1.getOtherAtomId(atomPair.id1);
+        	toId = bondPair.bond2.getOtherAtomId(atomPair.id2);
+        }
+    	MappedAtomPair otherAtomPair = MappedAtomPair.getAtomPair(toId, fromId, atomPairList);
+    	return otherAtomPair;
+    }
+
 
     private MappedBondPair getUniqueBondPairContaining(List<MappedBondPair> bondPairList, MappedAtomPair atomPair) {
         for (int i = 0; i < bondPairList.size(); i++) {
@@ -677,21 +673,13 @@ public class ReactionTool extends AbstractSVGTool {
         // the generics are inconsistent here - FIXME
         List changedPairList = new ArrayList();
         for (MappedAtomPair atomPair : atomPairList) {
-            try {
-                compareAtoms(atomPair, changedPairList);
-            } catch (CMLException e) {
-                LOG.error("Atom comparison problem "+e);
-            }
+            compareAtoms(atomPair, changedPairList);
         }
 // FIXME
         //        List<MappedBondPair> bondPairList = getBondPairList(null, molecule1, molecule2, serial);
         List<MappedBondPair> bondPairList = null;
         for (MappedBondPair bondPair : bondPairList) {
-            try {
-                compareBonds(bondPair, changedPairList);
-            } catch (CMLException e) {
-                LOG.error("Bond comparison problem "+e);
-            }
+            compareBonds(bondPair, changedPairList);
         }
         if (changedPairList.size() > 0) {
             System.out.println("Changed atoms/bonds ("+serial+")");
@@ -700,6 +688,8 @@ public class ReactionTool extends AbstractSVGTool {
             }
         }
 //        List<ElectronPair> electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
+        @SuppressWarnings("unused")
+        List<ElectronPair> electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
 
 // there may be several unconnected fragments so go on until no change
         boolean change = true;
@@ -736,10 +726,11 @@ public class ReactionTool extends AbstractSVGTool {
                 System.out.println("Cycles atoms/bonds ("+serial+")");
                 AtomBondPair abp = (AtomBondPair) changedPairList.get(0);
                 if (abp instanceof MappedBondPair) {
-//                    MappedBondPair bondPair = (MappedBondPair) abp;
-//                    String atomId = (bondPair.bond1 != null) ?
-//                        bondPair.bond1.getAtomId(0) :
-//                        bondPair.bond2.getAtomId(0);
+                    MappedBondPair bondPair = (MappedBondPair) abp;
+                    @SuppressWarnings("unused")
+                    String atomId = (bondPair.bond1 != null) ?
+                        bondPair.bond1.getAtomId(0) :
+                        bondPair.bond2.getAtomId(0);
 // FIXME                    iterateChain(changedPairList, atomId);
                 }
             }
@@ -861,7 +852,7 @@ public class ReactionTool extends AbstractSVGTool {
     	try {
     		drawable.output(g);
     	} catch (IOException e) {
-    		throw new CMLRuntimeException(e);
+    		throw new RuntimeException(e);
     	}
     	return g;
     }

@@ -5,10 +5,10 @@ import java.util.List;
 import nu.xom.Element;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLSpectator;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLLabel;
+import org.xmlcml.cml.element.main.CMLElectron;
+import org.xmlcml.cml.element.main.CMLSpectator;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -74,7 +74,7 @@ public class MappedAtomPair extends AtomBondPair {
      * @deprecated
      */
     public MappedAtomPair(CMLAtom atom1, CMLAtom atom2, Element[] elements, int iii) {
-    	throw new CMLRuntimeException("NYI");
+    	throw new RuntimeException("NYI");
     }
     
     /** iterate through list till atomIds match.
@@ -156,10 +156,11 @@ public class MappedAtomPair extends AtomBondPair {
 //        snap.appendChild(parent, g);
         // get label string ("" if meaningless)
         // USE FIRST LABEL for annotation (use last for equivalence)
-//        CMLLabel label1 = (atom1 == null) ? atom2.getLabelElements().get(0): atom1.getLabelElements().get(0);
-//        CMLLabel label2 = (atom2 == null) ? atom1.getLabelElements().get(0): atom2.getLabelElements().get(0);
-//        String label1S = (label1 == null) ? "" : label1.getValue();
-//        String label2S = (label2 == null) ? "" : label2.getValue();
+        CMLLabel label1 = (atom1 == null) ? atom2.getLabelElements().get(0): atom1.getLabelElements().get(0);
+        CMLLabel label2 = (atom2 == null) ? atom1.getLabelElements().get(0): atom2.getLabelElements().get(0);
+        String label1S = (label1 == null) ? "" : label1.getValue();
+        @SuppressWarnings("unused")
+        String label2S = (label2 == null) ? "" : label2.getValue();
         
 //        labelS = (labelS == null) ? "" : labelS;
         // and element type
@@ -201,7 +202,8 @@ public class MappedAtomPair extends AtomBondPair {
 //        	elemColor = snap.spectatorColor;
         }
         // elementType
-//        String elemType1 = (!label1S.equals("")) ? label1S : elementType;
+        @SuppressWarnings("unused")
+        String elemType1 = (!label1S.equals("")) ? label1S : elementType;
 //        String elemType2 = (!label2S.equals("")) ? label2S : elementType;
         // FIXME animate this if two different labels
 //        Element text[] = snap.createTextElement(snap.svgDoc, "text", elemType1, snap.animate);

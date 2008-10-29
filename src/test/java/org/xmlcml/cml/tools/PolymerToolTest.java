@@ -1,7 +1,9 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CATALOG_XML;
 import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
-import static org.xmlcml.cml.element.AbstractTest.EXPERIMENTAL_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTestBase.EXPERIMENTAL_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
 import static org.xmlcml.euclid.EuclidConstants.S_COLON;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
@@ -20,10 +22,9 @@ import nu.xom.ValidityException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLMoleculeList;
 import org.xmlcml.euclid.Util;
 /**
  * test polymerTool.
@@ -32,6 +33,13 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class PolymerToolTest {
+
+	private static Catalog getMoleculeCatalog() throws IOException {
+        Catalog catalogTool = null;
+        catalogTool = new Catalog(Util
+                .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML));
+        return catalogTool;
+    }
 
 	/**
 	 * Test method for
@@ -116,7 +124,7 @@ public class PolymerToolTest {
         PolymerTool polymerTool = new PolymerTool();
 		CMLMolecule mol = (CMLMolecule) CMLUtil.readElementFromResource(fileroot + "_concise.xml");
 		polymerTool.setMolecule(mol);
-		polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
+		polymerTool.setMoleculeCatalog(getMoleculeCatalog());
 		polymerTool.processConvention();
 		// debug("basic", mol, fileroot);
 		polymerTool.processConvention();
@@ -153,10 +161,10 @@ public class PolymerToolTest {
 				+ "  />";
 		CMLMolecule molecule = (CMLMolecule) parseValidString(copolyS);
 		PolymerTool polymerTool = new PolymerTool(molecule);
-		polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog()); //added get catalog
+		polymerTool.setMoleculeCatalog(getMoleculeCatalog()); //added get catalog
 		try {
 			polymerTool.processConventionExhaustively();
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			System.err.println("ERROR " + e);
 		}
 		String convention = molecule.getConvention();
@@ -187,7 +195,7 @@ public class PolymerToolTest {
         
         polymerTool.setElement(root);
         polymerTool.setTargetLevel(PolymerTool.Convention.PML_COMPLETE);
-        polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
+        polymerTool.setMoleculeCatalog(getMoleculeCatalog());
         polymerTool.setDebug(true);
         polymerTool.processConventionExhaustively();
         polymerTool.write(fileroot + "final.xml");
@@ -211,7 +219,7 @@ public class PolymerToolTest {
 		CMLMoleculeList molList = polymerTool.readMoleculeList(EXPERIMENTAL_RESOURCE + U_S
                 + fileroot + "_concise.xml");
 		polymerTool.setMoleculeList(molList);
-		polymerTool.setMoleculeCatalog(MoleculeToolTest.getMoleculeCatalog());
+		polymerTool.setMoleculeCatalog(getMoleculeCatalog());
 		polymerTool.processConvention();
 		/*--
 
@@ -254,7 +262,7 @@ public class PolymerToolTest {
 //                    System.err.println("Molecules are different: "+e1);
 //                }
 //            }
-//        } catch (CMLRuntimeException e) {
+//        } catch (RuntimeException e) {
 //            System.out.println("Comparison files does not exist, skipped:  "+f);
 //        }
 //        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+XML_SUFF);
@@ -262,7 +270,7 @@ public class PolymerToolTest {
 //        try {
 //            CMLUtil.debug(molTest, new FileOutputStream(testFile));
 //        } catch (IOException e) {
-//            throw new CMLRuntimeException("IO Exception: "+e);
+//            throw new RuntimeException("IO Exception: "+e);
 //        }
 //        System.out.println("== end ==" + s + "==========");
 //    }

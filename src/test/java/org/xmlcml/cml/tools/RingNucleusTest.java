@@ -3,6 +3,8 @@
  */
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.test.CMLAssert.assertEquals;
+import static org.xmlcml.cml.test.CMLAssert.parseValidFile;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 import java.util.Iterator;
@@ -12,18 +14,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLAtomSetTest;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
 
 /**
  * @author pm286
- *
+ * 
  */
-public class RingNucleusTest  {
+public class RingNucleusTest {
 
-	static String MOLECULE = "org"+U_S+"xmlcml"+U_S+"cml"+U_S+"tools"+U_S+"examples"+U_S+"molecules";
+	static String MOLECULE = "org" + U_S + "xmlcml" + U_S + "cml" + U_S
+			+ "tools" + U_S + "examples" + U_S + "molecules";
 	CMLMolecule molecule;
 	RingNucleusSet ringNucleusSet;
 	RingNucleus nucleus0;
@@ -37,21 +38,23 @@ public class RingNucleusTest  {
 	public void setUp() throws Exception {
 		makeMol();
 	}
-	
+
 	void makeMol() {
-    	molecule = (CMLMolecule) TestUtils.parseValidFile(MOLECULE+U_S+"bg2066.xml");
-    	ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
-    	ringNucleusSet = connectionTableTool.getRingNucleusSet();
-    	Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
-    	nucleus0 = iterator.next();
-    	nucleus1 = iterator.next();
-    	nucleus2 = iterator.next();
+		molecule = (CMLMolecule) parseValidFile(MOLECULE + U_S + "bg2066.xml");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
+				molecule);
+		ringNucleusSet = connectionTableTool.getRingNucleusSet();
+		Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
+		nucleus0 = iterator.next();
+		nucleus1 = iterator.next();
+		nucleus2 = iterator.next();
 	}
 
 	void makeMol1() {
-    	molecule = (CMLMolecule) TestUtils.parseValidFile(MOLECULE+U_S+"bv2018.xml");
-    	ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
-    	ringNucleusSet = connectionTableTool.getRingNucleusSet();
+		molecule = (CMLMolecule) parseValidFile(MOLECULE + U_S + "bv2018.xml");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
+				molecule);
+		ringNucleusSet = connectionTableTool.getRingNucleusSet();
 	}
 
 	/**
@@ -59,9 +62,8 @@ public class RingNucleusTest  {
 	 */
 	@Test
 	public final void testGetAtomSet() {
-		CMLAtomSetTest.assertEquals("ringNucleus0", 
-			new String[]{"a47", "a43", "a40", "a41", "a49", "a45"},
-			nucleus0.getAtomSet());
+		assertEquals("ringNucleus0", new String[] { "a47", "a43", "a40", "a41",
+				"a49", "a45" }, nucleus0.getAtomSet());
 	}
 
 	/**
@@ -69,46 +71,50 @@ public class RingNucleusTest  {
 	 */
 	@Test
 	public final void testGetBondSet() {
-		Assert.assertEquals("ringNucleus0", 
-			new String[]{"a40_a41", "a40_a49", "a41_a43", "a43_a45", "a45_a47", "a47_a49"},
-			nucleus0.getBondSet().getXMLContent());
+		Assert.assertEquals("ringNucleus0", new String[] { "a40_a41",
+				"a40_a49", "a41_a43", "a43_a45", "a45_a47", "a47_a49" },
+				nucleus0.getBondSet().getXMLContent());
 	}
 
 	/**
 	 * Test method for {@link org.xmlcml.cml.tools.RingNucleus#getRings()}.
 	 */
 	@Test
-	@Ignore // depends on randome ordering
+	@Ignore
+	// depends on randome ordering
 	public final void testGetRings() {
 		List<Ring> ringList = nucleus0.getRings();
-		Assert.assertEquals("rings", 4, ringList.size()); 
+		Assert.assertEquals("rings", 4, ringList.size());
 		String[][] expected = new String[][] {
-			{"a34_a10", "a10_a9", "a2_a9", "a2_a8", "a34_a8"},
-			{"a20_a21", "a21_a23", "a23_a24", "a24_a26", "a26_a28", "a20_a28"},
-			{"a12_a14", "a14_a17", "a17_a20", "a20_a21", "a21_a23", "a23_a24", "a24_a26", "a26_a28", "a28_a29", "a12_a29"},
-			{"a12_a10", "a12_a14", "a14_a17", "a17_a20", "a20_a21", "a21_a23", "a23_a24", "a24_a26", "a26_a28", "a28_a29", "a29_a30", "a30_a31", "a34_a31", "a34_a10"},
-		};
+				{ "a34_a10", "a10_a9", "a2_a9", "a2_a8", "a34_a8" },
+				{ "a20_a21", "a21_a23", "a23_a24", "a24_a26", "a26_a28",
+						"a20_a28" },
+				{ "a12_a14", "a14_a17", "a17_a20", "a20_a21", "a21_a23",
+						"a23_a24", "a24_a26", "a26_a28", "a28_a29", "a12_a29" },
+				{ "a12_a10", "a12_a14", "a14_a17", "a17_a20", "a20_a21",
+						"a21_a23", "a23_a24", "a24_a26", "a26_a28", "a28_a29",
+						"a29_a30", "a30_a31", "a34_a31", "a34_a10" }, };
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
-		
+
 		ringList = nucleus1.getRings();
-		Assert.assertEquals("rings", 1, ringList.size()); 
-		expected = new String[][]{
-			new String[] {"a40_a41", "a41_a43", "a43_a45", "a45_a47", "a47_a49", "a40_a49"}
-		};
+		Assert.assertEquals("rings", 1, ringList.size());
+		expected = new String[][] { new String[] { "a40_a41", "a41_a43",
+				"a43_a45", "a45_a47", "a47_a49", "a40_a49" } };
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
-		
+
 		ringList = nucleus2.getRings();
-		Assert.assertEquals("rings", 2, ringList.size()); 
+		Assert.assertEquals("rings", 2, ringList.size());
 		expected = new String[][] {
-			new String[] {"a57_a59", "a57_a65", "a51_a65", "a51_a62", "a59_a62"},
-			new String[] {"a52_a51", "a52_a54", "a57_a54", "a57_a59", "a59_a62", "a51_a62"},
-		};
+				new String[] { "a57_a59", "a57_a65", "a51_a65", "a51_a62",
+						"a59_a62" },
+				new String[] { "a52_a51", "a52_a54", "a57_a54", "a57_a59",
+						"a59_a62", "a51_a62" }, };
 
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
@@ -117,45 +123,50 @@ public class RingNucleusTest  {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.RingNucleus#getSetOfSmallestRings(boolean)}.
+	 * Test method for
+	 * {@link org.xmlcml.cml.tools.RingNucleus#getSetOfSmallestRings(boolean)}.
 	 */
 	@Test
-	@Ignore // depends on randome ordering
+	@Ignore
+	// depends on randome ordering
 	public final void testGetSetOfSmallestRings() {
 		makeMol();
 		boolean update = true;
 		List<Ring> ringList = nucleus0.getSetOfSmallestRings(update);
-		Assert.assertEquals("rings", 4, ringList.size()); 
+		Assert.assertEquals("rings", 4, ringList.size());
 		ringList = nucleus0.getRings();
 		String[][] expected = new String[][] {
-			new String[]{"a34_a10", "a10_a9", "a2_a9", "a2_a8", "a34_a8"},
-			new String[]{"a12_a10", "a34_a10", "a34_a31", "a30_a31", "a29_a30", "a12_a29"},
-			new String[]{"a12_a14", "a14_a17", "a17_a20", "a20_a28", "a28_a29", "a12_a29"},
-			new String[]{"a20_a21", "a21_a23", "a23_a24", "a24_a26", "a26_a28", "a20_a28"},
-		};
+				new String[] { "a34_a10", "a10_a9", "a2_a9", "a2_a8", "a34_a8" },
+				new String[] { "a12_a10", "a34_a10", "a34_a31", "a30_a31",
+						"a29_a30", "a12_a29" },
+				new String[] { "a12_a14", "a14_a17", "a17_a20", "a20_a28",
+						"a28_a29", "a12_a29" },
+				new String[] { "a20_a21", "a21_a23", "a23_a24", "a24_a26",
+						"a26_a28", "a20_a28" }, };
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
 
 		ringList = nucleus1.getSetOfSmallestRings(update);
-		Assert.assertEquals("rings", 1, ringList.size()); 
+		Assert.assertEquals("rings", 1, ringList.size());
 		ringList = nucleus1.getRings();
-		expected = new String[][] {
-				new String[]{"a40_a41", "a41_a43", "a43_a45", "a45_a47", "a47_a49", "a40_a49"}
-		};
+		expected = new String[][] { new String[] { "a40_a41", "a41_a43",
+				"a43_a45", "a45_a47", "a47_a49", "a40_a49" } };
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
 			RingTest.assertEqualCyclicBondList("ring ", expected[i], ring);
 		}
-		
+
 		ringList = nucleus2.getSetOfSmallestRings(update);
-		Assert.assertEquals("rings", 2, ringList.size()); 
+		Assert.assertEquals("rings", 2, ringList.size());
 		ringList = nucleus2.getRings();
 		expected = new String[][] {
-			new String[]{"a52_a51", "a52_a54", "a57_a54", "a57_a65", "a51_a65"},
-			new String[]{"a57_a59", "a59_a62", "a51_a62", "a51_a65", "a57_a65"}
-				
+				new String[] { "a52_a51", "a52_a54", "a57_a54", "a57_a65",
+						"a51_a65" },
+				new String[] { "a57_a59", "a59_a62", "a51_a62", "a51_a65",
+						"a57_a65" }
+
 		};
 		for (int i = 0; i < ringList.size(); i++) {
 			Ring ring = ringList.get(i);
@@ -167,10 +178,9 @@ public class RingNucleusTest  {
 	 * Test method for {@link org.xmlcml.cml.tools.RingNucleus#getJunctions()}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetJunctions() {
 		makeMol();
-		/*List<Ring> ringList = */ nucleus0.getSetOfSmallestRings(true);
+		/* List<Ring> ringList = */nucleus0.getSetOfSmallestRings(true);
 		List<Junction> junctionList;
 		junctionList = nucleus2.getJunctions();
 		makeMol1();
@@ -182,30 +192,33 @@ public class RingNucleusTest  {
 		RingNucleus nucleus5 = ringNucleusSet.get(5);
 		junctionList = nucleus5.getJunctions();
 		Assert.assertEquals("junctions", 14, junctionList.size());
-//		@SuppressWarnings("unused")
+		// @SuppressWarnings("unused")
 	}
-	
-    /** Test method for {@link org.xmlcml.cml.tools.ConnectionTableTool#getRingNucleusSet()}.
-     */
-    @Test
-    public final void testGetRingNucleusSet() {
-    	CMLMolecule molecule = (CMLMolecule) TestUtils.parseValidFile(ConnectionTableToolTest.MOLECULES+U_S+"bg2066.xml");
-    	ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
-    	RingNucleusSet ringNucleusSet = connectionTableTool.getRingNucleusSet();
-    	Assert.assertEquals("ring tools", 3, ringNucleusSet.size()); 
-    	String[][] expectedAtomIDs = new String[][] {
-    		new String[]{"a47", "a45", "a41", "a40", "a49", "a43"},
-			new String[]{"a57", "a65", "a62", "a54", "a59", "a51", "a52"},
-			new String[]{"a2", "a8", "a23", "a21", "a34", "a17", "a20", "a10", "a26", "a24", "a30", "a12", "a31", "a29", "a28", "a14", "a9"},
-    	};
-    	Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
-    	for (int i = 0; i < 3; i++) {
+
+	/**
+	 * Test method for
+	 * {@link org.xmlcml.cml.tools.ConnectionTableTool#getRingNucleusSet()}.
+	 */
+	@Test
+	public final void testGetRingNucleusSet() {
+		CMLMolecule molecule = (CMLMolecule) parseValidFile(ConnectionTableToolTest.MOLECULES
+				+ U_S + "bg2066.xml");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
+				molecule);
+		RingNucleusSet ringNucleusSet = connectionTableTool.getRingNucleusSet();
+		Assert.assertEquals("ring tools", 3, ringNucleusSet.size());
+		String[][] expectedAtomIDs = new String[][] {
+				new String[] { "a47", "a45", "a41", "a40", "a49", "a43" },
+				new String[] { "a57", "a65", "a62", "a54", "a59", "a51", "a52" },
+				new String[] { "a2", "a8", "a23", "a21", "a34", "a17", "a20",
+						"a10", "a26", "a24", "a30", "a12", "a31", "a29", "a28",
+						"a14", "a9" }, };
+		Iterator<RingNucleus> iterator = ringNucleusSet.iterator();
+		for (int i = 0; i < 3; i++) {
 			CMLAtomSet atomSet = iterator.next().getAtomSet();
-    		CMLAtomSetTest.assertEquals("ringNucleus "+i, 
-			expectedAtomIDs[i], 
-			atomSet);
-    	}
+			assertEquals("ringNucleus " + i, expectedAtomIDs[i], atomSet);
+		}
 		ringNucleusSet.first().getRings();
-    }
-    
+	}
+
 }

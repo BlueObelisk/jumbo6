@@ -10,11 +10,10 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
@@ -42,8 +41,6 @@ public class Chain extends AbstractTool {
 	private SortedMap<CMLAtom, Real2> atomCoordinateMap;
 
 	private CMLAtom startAtom;
-
-//	private CMLAtom nextAtom;
 
 	private double bondLength;
 
@@ -235,7 +232,8 @@ public class Chain extends AbstractTool {
 		// longest paths first
 		Collections.reverse(pathList);
 		// longest path
-//		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
+        @SuppressWarnings("unused")
+		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
 		expandPaths(pathList);
 //		expandPathsOld(sprout, pathList, path);
 	}
@@ -256,7 +254,7 @@ public class Chain extends AbstractTool {
 //				System.out.println(">"+i+">"+pathList.get(i));
 //				try {
 //					calculate2DCoordinates(atomPath, i);
-//				} catch (CMLRuntimeException e) {
+//				} catch (RuntimeException e) {
 //					System.err.println("ERROR-CHAIN: "+e);
 //				}
 //			}
@@ -358,17 +356,17 @@ public class Chain extends AbstractTool {
 //	private void calculate2DCoordinates(AtomPath atomPath, int serial) {
 //		ensureAtomCoordinateMap();
 //		if (atomPath.size() < 2) {
-//			throw new CMLRuntimeException("Path must be at least 2 atoms");
+//			throw new RuntimeException("Path must be at least 2 atoms");
 //		}
 //		if (atomPath.get(0) != startAtom || atomPath.get(1) != nextAtom) {
-//			throw new CMLRuntimeException("atomPath does not start with start/nextAtom");
+//			throw new RuntimeException("atomPath does not start with start/nextAtom");
 //		}
 //		Real2 xy0 = atomCoordinateMap.get(startAtom);
 //		Real2 xy1 = atomCoordinateMap.get(nextAtom);
 ////		System.out.println(">>>start "+startAtom.getId()+"/"+xy0);
 ////		System.out.println(">>>next "+nextAtom.getId()+"/"+xy1);
 //		if (xy0 == null || xy1 == null) {
-//			throw new CMLRuntimeException("First 2 atoms must have coordinates");
+//			throw new RuntimeException("First 2 atoms must have coordinates");
 //		}
 //		Real2[] vv = new Real2[2];
 //		vv[1] = xy1.subtract(xy0);
@@ -384,7 +382,7 @@ public class Chain extends AbstractTool {
 //			Real2 newXY2 = atomCoordinateMap.get(atom);
 //			if (newXY2 != null) {
 //				if (start >= 0) {
-//					throw new CMLRuntimeException("wrong way down path?");
+//					throw new RuntimeException("wrong way down path?");
 //				}
 //				System.out.println(">SKIP> "+atom.getId());
 //				previousAtom = atom;
@@ -397,7 +395,7 @@ public class Chain extends AbstractTool {
 //			// are we branching?
 //			List<CMLAtom> ligandList = getLigandsInChain(previousAtom);
 //			if (ligandList.size() == 0) {
-//				throw new CMLRuntimeException("previous atom has no ligands");
+//				throw new RuntimeException("previous atom has no ligands");
 //			} else if (ligandList.size() == 1) {
 //				// no, flip vector with parity
 //				Real2 vvv = vv[(atomPathi) % 2];
@@ -417,7 +415,7 @@ public class Chain extends AbstractTool {
 //			previousAtom = atom;
 //		}
 //		if (start == -1 && atomPath.size() > 2) {
-//			throw new CMLRuntimeException("path full of coordinates");
+//			throw new RuntimeException("path full of coordinates");
 //		}
 //	}
 
@@ -564,7 +562,7 @@ public class Chain extends AbstractTool {
 	 */
 	public void addSprout(Sprout sprout) {
 		if (this.sproutList.contains(sprout)) {
-			throw new CMLRuntimeException("duplicate sprout in chain");
+			throw new RuntimeException("duplicate sprout in chain");
 		}
 		this.sproutList.add(sprout);
 		this.addTerminalBond(sprout.getRingAtom(), sprout.getBond());

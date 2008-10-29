@@ -7,12 +7,12 @@ import nu.xom.Element;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLReaction;
-import org.xmlcml.cml.element.CMLSpectator;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondStereo;
+import org.xmlcml.cml.element.main.CMLElectron;
+import org.xmlcml.cml.element.main.CMLReaction;
+import org.xmlcml.cml.element.main.CMLSpectator;
 
 /**
  * tool to support reactions. not fully developed
@@ -101,7 +101,8 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
         	atom21 = bond2.getAtom(1);
         	// if bond in wrong direction, flip it
         	if (reaction != null && bond1 != null) {
-//    	    	String id10 = bond1.getAtom(0).getId();
+                @SuppressWarnings("unused")
+    	    	String id10 = bond1.getAtom(0).getId();
 //    	    	String ref20 = snap.atomMap.getFromRef(id10);
 //	        	CMLAtom atom200 = (CMLAtom) snap.getAtom(reaction, ref20, snap.productAtomMapMap);
 	        	// bond might be pointing in wrong direction

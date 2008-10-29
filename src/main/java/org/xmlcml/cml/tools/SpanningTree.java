@@ -7,12 +7,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -48,7 +47,7 @@ public class SpanningTree extends AbstractTool {
 		init();
 		this.setIncludedAtomSet(includedAtomSet);
 		if (includedAtomSet.size() == 0) {
-			throw new CMLRuntimeException("Zero size atom set");
+			throw new RuntimeException("Zero size atom set");
 		}
 		CMLMolecule molecule = includedAtomSet.getAtom(0).getMolecule();
 		this.setIncludedBondSet(new CMLBondSet(molecule.getBonds()));
@@ -118,7 +117,7 @@ public class SpanningTree extends AbstractTool {
 	 */
 	private List<SpanningTreeElement> getAncestors(SpanningTreeElement element) {
 		if (element == null) {
-			throw new CMLRuntimeException("null spanningTreeElement");
+			throw new RuntimeException("null spanningTreeElement");
 		}
 		ensureElementAncestorMap();
 		List<SpanningTreeElement> ancestors = elementAncestorMap.get(element);
@@ -279,7 +278,7 @@ public class SpanningTree extends AbstractTool {
 	
 	private void generateIncludedLigands() {
 		if (includedAtomSet == null || includedBondSet == null) {
-			throw new CMLRuntimeException("Must define atom and bond sets");
+			throw new RuntimeException("Must define atom and bond sets");
 		}
 		ligandAtomMap = new HashMap<CMLAtom, List<CMLAtom>>();
 		ligandBondMap = new HashMap<CMLAtom, List<CMLBond>>();

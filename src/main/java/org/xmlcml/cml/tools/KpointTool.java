@@ -2,8 +2,7 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLKpoint;
+import org.xmlcml.cml.element.main.CMLKpoint;
 
 /**
  * tool to support atom set. not sure if useful
@@ -26,7 +25,7 @@ public class KpointTool extends AbstractTool {
 	 */
 	public KpointTool(CMLKpoint kpoint) {
 		if (kpoint == null) {
-			throw new CMLRuntimeException("Null kpoint");
+			throw new RuntimeException("Null kpoint");
 		}
 		this.kpoint = kpoint;
 		LOG.trace("constructor");

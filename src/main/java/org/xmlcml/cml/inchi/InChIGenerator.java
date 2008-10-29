@@ -18,12 +18,10 @@ import net.sf.jniinchi.JniInchiWrapper;
 import nu.xom.Text;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLIdentifier;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLIdentifier;
 import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -49,7 +47,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  * <h3>Example usage</h3>
  *
- * <code>// Generate factory - throws CMLException if native code does not load</code><br>
+ * <code>// Generate factory - if native code does not load</code><br>
  * <code>InChIGeneratorFactory factory = new InChIGeneratorFactory();</code><br>
  * <code>// Get InChIGenerator</code><br>
  * <code>InChIGenerator gen = factory.getInChIGenerator(molecule);</code><br>
@@ -62,7 +60,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * <code>  System.out.println("InChI warning: " + gen.getMessage());</code><br>
  * <code>} else if (ret != INCHI_RET.OKAY) {</code><br>
  * <code>  // InChI generation failed</code><br>
- * <code>  throw new CMLException("InChI failed: " + ret.toString()</code><br>
+ * <code>  throw new RuntimeException("InChI failed: " + ret.toString()</code><br>
  * <code>    + " [" + gen.getMessage() + S_RSQUARE);</code><br>
  * <code>}</code><br>
  * <code></code><br>
@@ -116,14 +114,14 @@ public class InChIGenerator implements EuclidConstants {
      *
      * @param molecule
      *            Molecule to generate InChI for.
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    protected InChIGenerator(CMLMolecule molecule) throws CMLException {
+    protected InChIGenerator(CMLMolecule molecule) {
         this.molecule = molecule;
         try {
             input = new JniInchiInput("");
         } catch (JniInchiException e) {
-            throw new CMLException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -141,15 +139,15 @@ public class InChIGenerator implements EuclidConstants {
      *            Space delimited string of options to pass to InChI library.
      *            Each option may optionally be preceded by a command line
      *            switch (/ or -).
-     * @throws CMLException
+     * @throws RuntimeException
      */
     protected InChIGenerator(CMLMolecule molecule, String options)
-            throws CMLException {
+            {
         try {
             this.molecule = molecule;
             input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
-            throw new CMLException(jie);
+            throw new RuntimeException(jie);
         }
     }
 
@@ -165,15 +163,15 @@ public class InChIGenerator implements EuclidConstants {
      *            Molecule to generate InChI for.
      * @param options
      *            List of INCHI_OPTION.
-     * @throws CMLException
+     * @throws RuntimeException
      */
     protected InChIGenerator(CMLMolecule molecule, List<?> options)
-            throws CMLException {
+            {
         try {
             this.molecule = molecule;
             input = new JniInchiInput(options);
         } catch (JniInchiException jie) {
-            throw new CMLException(jie);
+            throw new RuntimeException(jie);
         }
     }
 
@@ -181,12 +179,12 @@ public class InChIGenerator implements EuclidConstants {
      * Does the work of calling InChI. Can be called only once for each
      * generator.
      *
-     * @throws CMLException
+     * @throws RuntimeException
      * @throws IllegalStateException
      *             if generation has already been done.
      * @since 5.4
      */
-    public void generate() throws CMLException {
+    public void generate() {
         if (generated) {
             throw new IllegalStateException("Generator cannot be reused");
         }
@@ -201,11 +199,7 @@ public class InChIGenerator implements EuclidConstants {
      */
     private void lazyGenerate() {
         if (!generated) {
-            try {
-                generate();
-            } catch (CMLException e) {
-                throw new CMLRuntimeException(e);
-            }
+            generate();
         }
     }
 
@@ -215,10 +209,10 @@ public class InChIGenerator implements EuclidConstants {
      * requires, then makes call to library, generating InChI.
      *
      * @param molecule
-     * @throws CMLException
+     * @throws RuntimeException
      */
     protected void generateInchiFromCMLMolecule(CMLMolecule molecule)
-            throws CMLException {
+            {
 
         List<CMLAtom> atoms = molecule.getAtoms();
         List<CMLBond> bonds = molecule.getBonds();
@@ -290,18 +284,18 @@ public class InChIGenerator implements EuclidConstants {
                 } else if (spinMultiplicity == 3) {
                     iatom.setRadical(INCHI_RADICAL.TRIPLET);
                 } else {
-                    throw new CMLException(
+                    throw new RuntimeException(
                             "Failed to generate InChI: Unsupported spin multiplicity: "
                                     + spinMultiplicity);
                 }
-            } catch (CMLRuntimeException cre) {
+            } catch (RuntimeException cre) {
                 // Spin multiplicity not set
             }
 
             try {
                 int isotopeNumber = atom.getIsotopeNumber();
                 iatom.setIsotopicMass(isotopeNumber);
-            } catch (CMLRuntimeException cre) {
+            } catch (RuntimeException cre) {
                 // Isotope number not set
             }
 
@@ -323,7 +317,7 @@ public class InChIGenerator implements EuclidConstants {
                 }
 
                 if (hcount < 0) {
-                    throw new CMLRuntimeException(
+                    throw new RuntimeException(
                             "Negative implicit hydrogen count: " + atom);
                 }
             }
@@ -367,7 +361,7 @@ public class InChIGenerator implements EuclidConstants {
         try {
             output = JniInchiWrapper.getInchi(input);
         } catch (JniInchiException jie) {
-            throw new CMLException("Failed to generate InChI: "
+            throw new RuntimeException("Failed to generate InChI: "
                     + jie.getMessage());
         }
     }
@@ -379,9 +373,9 @@ public class InChIGenerator implements EuclidConstants {
     /**
      * Adds CMLIdentifier containing InChI to CMLMolecule.
      *
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public void appendToMolecule() throws CMLException {
+    public void appendToMolecule() {
         appendToElement(molecule);
     }
 
@@ -389,11 +383,11 @@ public class InChIGenerator implements EuclidConstants {
      * Adds CMLIdentifier containing InChI to specified element.
      *
      * @param element
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public void appendToElement(CMLElement element) throws CMLException {
+    public void appendToElement(CMLElement element) {
         if (output.getInchi() == null) {
-            throw new CMLException("Failed to generate InChI");
+            throw new RuntimeException("Failed to generate InChI");
         }
 
         CMLIdentifier identifier = new CMLIdentifier();

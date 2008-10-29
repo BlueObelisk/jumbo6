@@ -10,12 +10,11 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -308,7 +307,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		getSetOfSmallestRings(true);
 		this.getJunctions();
 		if (ringList.size() == 0) {
-			throw new CMLRuntimeException("ring nucleus has no rings");
+			throw new RuntimeException("ring nucleus has no rings");
 		}
 		// get largest ring
 		Collections.sort(ringList);
@@ -335,7 +334,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 			}
 		}
 		if (oldRingList.size() > 0) {
-			throw new CMLRuntimeException("Undrawn rings ");
+			throw new RuntimeException("Undrawn rings ");
 		}
 	}
 	/**
@@ -343,9 +342,9 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	 * @param growingRingList
 	 * @param change
 	 * @return junction or null
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
-	private Junction findNextJunctionUpdateListsAdd2DCoordinates(List<Ring> remainingRingList, List<Ring> growingRingList) throws CMLRuntimeException {
+	private Junction findNextJunctionUpdateListsAdd2DCoordinates(List<Ring> remainingRingList, List<Ring> growingRingList) throws RuntimeException {
 		int commonAtoms = 0;
 		Junction junction0 = null;
 		Ring ringToBeAdded0 = null;
@@ -356,7 +355,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 				if (junctionList == null) {
 					continue;
 				} else if (junctionList.size() > 1) {
-					throw new CMLRuntimeException("Cannot layout ring pair with multiple junctions");
+					throw new RuntimeException("Cannot layout ring pair with multiple junctions");
 				}
 				Junction junction = junctionList.get(0);
 				if (junction.getCommonAtomList().size() > 2) {
@@ -381,7 +380,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 				ringToBeAdded0.updateCoordinates();
 				growingRingList.add(ringToBeAdded0);
 				remainingRingList.remove(ringToBeAdded0);
-			} catch (CMLRuntimeException e) {
+			} catch (RuntimeException e) {
 				throw e;
 			}
 		}
@@ -390,7 +389,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	
 	private void calculate2DCoordinates(
 		Junction junction, Ring ringToBeAdded, Ring existingRing, MoleculeLayout moleculeDraw) 
-		throws CMLRuntimeException {
+		throws RuntimeException {
 		ringToBeAdded.calculate2DCoordinates(moleculeDraw);
 		List<CMLAtom> junctionCommonAtomList = junction.getCommonAtomList();
 		int commonAtomCount = junctionCommonAtomList.size();
@@ -541,7 +540,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	public List<Sprout> getRemoteSproutList() {
 		if (remoteSproutList == null) {
 			if (sproutList == null) {
-				throw new CMLRuntimeException("calculate sprouts first");
+				throw new RuntimeException("calculate sprouts first");
 			}
 			remoteSproutList = new ArrayList<Sprout>();
 			for (Sprout sprout : sproutList) {

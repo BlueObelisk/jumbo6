@@ -12,17 +12,17 @@ import nu.xom.Nodes;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLLabel;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLSymmetry;
+import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -32,6 +32,7 @@ import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.euclid.Angle.Range;
@@ -80,7 +81,7 @@ public class AtomTool extends AbstractSVGTool {
         this.atom.setTool(this);
         molecule = atom.getMolecule();
         if (molecule == null) {
-            throw new CMLRuntimeException("Atom must be in molecule: "+atom.getId());
+            throw new RuntimeException("Atom must be in molecule: "+atom.getId());
         }
     }
     
@@ -222,7 +223,7 @@ public class AtomTool extends AbstractSVGTool {
 		for (CMLAtom atom : atomList) {
 			Point3 p3 = (atom == null) ? null : atom.getXYZ3();
 			if (p3 == null) {
-//				throw new CMLRuntimeException("Missing 3D coordinates");
+//				throw new RuntimeException("Missing 3D coordinates");
 			}
 			p3v.add(p3);
 		}
@@ -356,7 +357,7 @@ public class AtomTool extends AbstractSVGTool {
     	if (CoordinateType.TWOD.equals(type)) {
     		calculateAndAddHydrogenCoordinates(bondLength);
     	} else {
-    		throw new CMLRuntimeException("THREED H coords nyi");
+    		throw new RuntimeException("THREED H coords nyi");
     	}
     }
     
@@ -372,7 +373,7 @@ public class AtomTool extends AbstractSVGTool {
     	int hydrogenCount = atom.getHydrogenCount();
     	if (hydrogenCount != ligandHydrogenList.size()) {
     		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
-    		throw new CMLRuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
+    		throw new RuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
     	}
     	List<Vector2> vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
     	Real2 xy2 = atom.getXY2();
@@ -554,9 +555,9 @@ public class AtomTool extends AbstractSVGTool {
 	 *
 	 * @param atom
 	 * @param control
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
-	public void expandImplicitHydrogens(HydrogenControl control) throws CMLRuntimeException {
+	public void expandImplicitHydrogens(HydrogenControl control) throws RuntimeException {
 		if (control.equals(HydrogenControl.USE_HYDROGEN_COUNT)) {
 			return;
 		}
@@ -597,12 +598,12 @@ public class AtomTool extends AbstractSVGTool {
 	 * @param molecule 
 	 *
 	 * @param atom
-	 * @exception CMLRuntimeException
+	 * @exception RuntimeException
 	 *                null atom in argument
 	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
 	 *         H ligands
 	 */
-	public int getSumNonHydrogenBondOrder() throws CMLRuntimeException {
+	public int getSumNonHydrogenBondOrder() throws RuntimeException {
 		float sumBo = 0.0f;
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		List<CMLBond> ligandBondList = atom.getLigandBonds();
@@ -640,7 +641,7 @@ public class AtomTool extends AbstractSVGTool {
      * only currently really works for first row (C, N, O, F)
      * calculated as  getHydrogenValencyGroup() -
      *   (getSumNonHydrogenBondOrder() + getHydrogenCount()) - atom.getFormalCharge()
-     *   @throws CMLException
+     *   @throws RuntimeException
      * @return number of lone electrons (< 0 means cannot calculate)
      */
      public int getLoneElectronCount() {
@@ -778,9 +779,9 @@ public class AtomTool extends AbstractSVGTool {
 	 * @return atomSet with atoms which were calculated. If request could not be
 	 *         fulfilled (e.g. too many atoms, or strange geometry) returns
 	 *         empty atomSet (not null)
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public CMLAtomSet calculate3DCoordinatesForLigands(int geometry, double length, double angle) throws CMLException {
+	public CMLAtomSet calculate3DCoordinatesForLigands(int geometry, double length, double angle) throws RuntimeException {
 		Point3 thisPoint;
 		// create sets of atoms with and without ligands
 		CMLAtomSet noCoordsLigandsAS = new CMLAtomSet();
@@ -1002,15 +1003,15 @@ public class AtomTool extends AbstractSVGTool {
     public void translateToCovalentRadius() {
          Point3 groupPoint = atom.getPoint3(CoordinateType.CARTESIAN);
          if (groupPoint == null) {
-        	 throw new CMLRuntimeException("atom has no coordinates: "+atom.getId());
+        	 throw new RuntimeException("atom has no coordinates: "+atom.getId());
          }
          CMLAtom rAtom = this.getSingleLigand();
          if (rAtom == null) {
-             throw new CMLRuntimeException("Expected 1 ligand for: "+atom.getId());
+             throw new RuntimeException("Expected 1 ligand for: "+atom.getId());
          }
          Point3 atomPoint = rAtom.getPoint3(CoordinateType.CARTESIAN);
          if (atomPoint == null) {
-        	 throw new CMLRuntimeException("atom has no coordinates: "+rAtom.getId());
+        	 throw new RuntimeException("atom has no coordinates: "+rAtom.getId());
          }
          Vector3 vector = groupPoint.subtract(atomPoint);
          vector = vector.normalize();
@@ -1446,7 +1447,7 @@ public class AtomTool extends AbstractSVGTool {
 	 * ligand
 	 *
 	 * @param atom
-	 * @exception CMLRuntimeException
+	 * @exception RuntimeException
 	 *                no hydrogen ligands on atom
 	 */
 	public void deleteHydrogen() {
@@ -1536,19 +1537,19 @@ public class AtomTool extends AbstractSVGTool {
 	 * @param atom TODO
 	 * @param fcd
 	 * @return the bond sum (0, 1, 2)
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 *             if cannot get formal charges
 	 */
 	public int getDoubleBondEquivalents(FormalChargeControl fcd) {
 		CMLMolecule molecule = atom.getMolecule();
 		if (molecule == null) {
-			throw new CMLRuntimeException("WARNING skipping DBE");
+			throw new RuntimeException("WARNING skipping DBE");
 		}
 		int valenceElectrons = atom.getValenceElectrons();
 		int formalCharge = 0;
 		try {
 			formalCharge = atom.getFormalCharge(fcd);
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		valenceElectrons -= formalCharge;
@@ -1571,9 +1572,9 @@ public class AtomTool extends AbstractSVGTool {
 	 * @param atom2 TODO
 	 * @param atom4 the original list of 4 atoms
 	 * @return ligands sorted into clockwise order
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
-	public CMLAtom[] getClockwiseLigands(CMLAtom[] atom4) throws CMLRuntimeException {
+	public CMLAtom[] getClockwiseLigands(CMLAtom[] atom4) throws RuntimeException {
 		Vector2 vx = new Vector2(1.0, 0.0);
 		Real2 thisxy = atom.getXY2();
 		double[] angle = new double[4];
@@ -1584,7 +1585,7 @@ public class AtomTool extends AbstractSVGTool {
 				// Angle class appears to be broken, hence the degrees
 				angle[i] = vx.getAngleMadeWith(v).getDegrees();
 			} catch (NullPointerException npe) {
-				throw new CMLRuntimeException(
+				throw new RuntimeException(
 						"Cannot compute clockwise ligands");
 			}
 			if (angle[i] < 0) {
@@ -1610,7 +1611,7 @@ public class AtomTool extends AbstractSVGTool {
 				cyclicAtom4[i] = atom4[low];
 				angle[low] = -100.;
 			} else {
-				throw new CMLRuntimeException(
+				throw new RuntimeException(
 						"Couldn't get AtomRefs4 sorted in cyclic order");
 			}
 		}
@@ -1630,7 +1631,7 @@ public class AtomTool extends AbstractSVGTool {
 				ang -= 360.;
 			}
 			if (ang > 180.) {
-				throw new CMLRuntimeException("All 4 ligands on same side "
+				throw new RuntimeException("All 4 ligands on same side "
 						+ atom.getId());
 			}
 		}
@@ -1663,7 +1664,7 @@ public class AtomTool extends AbstractSVGTool {
 //	 * @param atom
 //	 * @return the four atoms or null
 //	 */
-//	private CMLAtom[] getAtomRefs4() throws CMLRuntimeException {
+//	private CMLAtom[] getAtomRefs4() throws RuntimeException {
 //		CMLAtom[] atom4 = null;
 //		List<CMLAtom> ligandList = atom.getLigandAtoms();
 //		if (ligandList.size() < 3) {
@@ -1893,7 +1894,7 @@ public class AtomTool extends AbstractSVGTool {
 		int hydrogenCount = 0;
 		try {
 			hydrogenCount = atom.getHydrogenCount();
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 		}
 		multipleBondSum += hydrogenCount;
 	
@@ -1946,4 +1947,65 @@ public class AtomTool extends AbstractSVGTool {
 	        }
 	    }
 	    return cross;
-	}}
+	}
+	
+    /**
+     * transform 3D coordinates. does NOT alter fractional or 2D coordinates
+     *
+     * @param transform
+     *            the transformation
+     */
+    public void transformCartesians(CMLTransform3 transform) {
+        Point3 point = atom.getXYZ3();
+        point = point.transform(transform.getEuclidTransform3());
+        atom.setXYZ3(point);
+    }
+
+    /**
+     * transform fractional and 3D coordinates. does NOT alter 2D coordinates
+     * transforms fractionals then applies orthogonalisation to result
+     * @param transform
+     *            the fractional symmetry transformation
+     * @param orthTransform
+     *            orthogonalisation transform
+     */
+    public void transformFractionalsAndCartesians(CMLTransform3 transform, Transform3 orthTransform) {
+        Point3 point = atom.getXYZFract();
+        point = point.transform(transform.getEuclidTransform3());
+        atom.setXYZFract(point);
+        point = point.transform(orthTransform);
+        atom.setXYZ3(point);
+    }
+
+    /**
+     * transform 3D fractional coordinates. modifies this does not modify x3,
+     * y3, z3 (may need to re-generate cartesians)
+     *
+     * @param transform
+     *            the transformation
+     */
+    public void transformFractionals(CMLTransform3 transform) {
+        Point3 point = atom.getXYZFract();
+        point = point.transform(transform.getEuclidTransform3());
+        atom.setXYZFract(point);
+    }
+
+    /**
+     * calculate the spaceGroup multiplicity of the atom. this is defined by
+     * attribute spaceGroupMultiplicity and is the number of symmetry operators
+     * that transform the atom onto itself with normalization of cell
+     * translations.
+     *
+     * @param symmetry
+     *            spaceGroup operators
+     * @return the multiplicity (0 if no coordinates else 1 or more)
+     */
+    public int calculateSpaceGroupMultiplicity(CMLSymmetry symmetry) {
+        int multiplicity = 0;
+        if (symmetry != null && atom.hasCoordinates(CoordinateType.FRACTIONAL)) {
+            Point3 xyz = atom.getXYZFract();
+            multiplicity = symmetry.getSpaceGroupMultiplicity(xyz);
+        }
+        return multiplicity;
+    }
+}

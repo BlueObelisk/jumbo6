@@ -8,11 +8,10 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -61,14 +60,14 @@ public class ChainSet extends AbstractTool {
 			chain.setMoleculeDraw(moleculeDraw);
 			for (Sprout sprout : chain.getSproutList()) {
 				if (sproutMap.get(sprout) != null) {
-					throw new CMLRuntimeException("sprout in two chains: "+sprout);
+					throw new RuntimeException("sprout in two chains: "+sprout);
 				}
 				sproutMap.put(sprout, chain);
 			}
 			CMLAtomSet atomSet = chain.getAtomSet();
 			for (CMLAtom atom : atomSet.getAtoms()) {
 				if (atomMap.get(atom) != null) {
-					throw new CMLRuntimeException("atom in two chains: "+atom.getId());
+					throw new RuntimeException("atom in two chains: "+atom.getId());
 				}
 //				System.out.println("adding: "+atom.getId());
 				atomMap.put(atom, chain);
@@ -76,7 +75,7 @@ public class ChainSet extends AbstractTool {
 			CMLBondSet bondSet = chain.getBondSet();
 			for (CMLBond bond : bondSet.getBonds()) {
 				if (bondMap.get(bond) != null) {
-					throw new CMLRuntimeException("bond in two chains: "+bond.getId());
+					throw new RuntimeException("bond in two chains: "+bond.getId());
 				}
 //				System.out.println("adding: "+bond.getId());
 				bondMap.put(bond, chain);
@@ -153,7 +152,7 @@ public class ChainSet extends AbstractTool {
 				// found a sprout
 				Sprout otherSprout = ringNucleusSet.getBondSproutMap().get(ligandBond);
 				if (chain.getSproutList().contains(otherSprout)) {
-					throw new CMLRuntimeException("Sprout detected twice");
+					throw new RuntimeException("Sprout detected twice");
 				} else {
 					chain.addSprout(otherSprout);
 				}
