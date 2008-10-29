@@ -25,10 +25,12 @@ import org.xmlcml.cml.element.main.CMLMap;
 import org.xmlcml.cml.element.main.CMLTorsion;
 import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.Transform3;
+import org.xmlcml.euclid.Vector3;
 
 /**
  * tool to support atom set. not sure if useful
@@ -686,6 +688,57 @@ public class AtomSetTool extends AbstractTool {
 			AtomTool.getOrCreateTool(atom).transformCartesians(transform);
 		}
 	}
+
+    public void translateCentroidToOrigin3(CoordinateType type) {
+    	Point3 centroid = this.getCentroid3(type);
+    	if (centroid != null) {
+	    	Vector3 v3 = new Vector3(centroid).multiplyBy(-1.0);
+	    	this.translate3D(v3, type);
+    	}
+    }
+
+    /**
+     * translate molecule in 3D.
+     *
+     * @param delta3 add to all 3D coordinates
+     */
+    public void translate3D(Vector3 delta3, CoordinateType type) {
+        List<CMLAtom> atoms = atomSet.getAtoms();
+        for (int i = 0; i < atoms.size(); i++) {
+            CMLAtom atom = atoms.get(i);
+            if (type.equals(CoordinateType.CARTESIAN)) {
+	            if (atom.getX3Attribute() != null && atom.getY3Attribute() != null
+	                    && atom.getZ3Attribute() != null) {
+	                atom.setX3(atom.getX3() + delta3.getArray()[0]);
+	                atom.setY3(atom.getY3() + delta3.getArray()[1]);
+	                atom.setZ3(atom.getZ3() + delta3.getArray()[2]);
+	            }
+            } else if (type.equals(CoordinateType.FRACTIONAL)) {
+	            if (atom.getXFractAttribute() != null &&
+	            		atom.getYFractAttribute() != null &&
+	            		atom.getZFractAttribute() != null) {
+	                atom.setXFract(atom.getXFract() + delta3.getArray()[0]);
+	                atom.setYFract(atom.getYFract() + delta3.getArray()[1]);
+	                atom.setZFract(atom.getZFract() + delta3.getArray()[2]);
+	            }
+            }
+        }
+    }
+
+    /** get 3D centroid.
+    *
+    * @param type
+    *            CARTESIAN or FRACTIONAL
+    * @return centroid of 3D coords or null
+    */
+   public Point3 getCentroid3(CoordinateType type) {
+       Point3 centroid3 = null;
+       Point3Vector p3Vector = atomSet.getCoordinates3(type);
+       if (p3Vector != null) {
+           centroid3 = p3Vector.getCentroid();
+       }
+       return centroid3;
+   }
 
 	/**
 	 * transform 3D fractional coordinates. modifies this does not affect x3,
