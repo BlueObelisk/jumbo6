@@ -12,18 +12,16 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLCrystal;
-import org.xmlcml.cml.element.CMLFormula;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLSymmetry;
-import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLCml;
+import org.xmlcml.cml.element.lite.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLScalar;
+import org.xmlcml.cml.element.main.CMLCrystal;
+import org.xmlcml.cml.element.main.CMLSymmetry;
+import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real;
@@ -80,14 +78,14 @@ public class CrystalTool extends AbstractTool {
 	/** constructor.
 	 * requires molecule to contain <crystal> and optionally <symmetry>
 	 * @param molecule
-	 * @throws CMLRuntimeException must contain a crystal
+	 * @throws RuntimeException must contain a crystal
 	 */
-	public CrystalTool(CMLMolecule molecule) throws CMLRuntimeException {
+	public CrystalTool(CMLMolecule molecule) throws RuntimeException {
 		init();
 		setMolecule(molecule);
 		this.crystal = CMLCrystal.getContainedCrystal(molecule);
 		if (this.crystal == null) {
-			throw new CMLRuntimeException("molecule should contain a <crystal> child");
+			throw new RuntimeException("molecule should contain a <crystal> child");
 		}
 		this.symmetry = CMLSymmetry.getContainedSymmetry(molecule);
 	}
@@ -114,7 +112,7 @@ public class CrystalTool extends AbstractTool {
 		this.crystal = crystal;
 		try {
 			this.symmetry = CMLSymmetry.getContainedSymmetry(crystal);
-		} catch (CMLRuntimeException e) {
+		} catch (RuntimeException e) {
 			// ignore no symmetry
 		}
 	}
@@ -129,14 +127,14 @@ public class CrystalTool extends AbstractTool {
 	 *
 	 * @param molecule (should include a crystal child)
 	 * @param symmetry
-	 * @throws CMLRuntimeException molecule does not contain <crystal> child
+	 * @throws RuntimeException molecule does not contain <crystal> child
 	 */
-	public CrystalTool(CMLMolecule molecule, CMLSymmetry symmetry) throws CMLRuntimeException {
+	public CrystalTool(CMLMolecule molecule, CMLSymmetry symmetry) throws RuntimeException {
 		setMolecule(molecule);
 		this.symmetry = symmetry;
 		this.crystal = CMLCrystal.getContainedCrystal(molecule);
 		if (this.crystal == null) {
-			throw new CMLRuntimeException("molecule should contain a <crystal> child");
+			throw new RuntimeException("molecule should contain a <crystal> child");
 		}
 	}
 
@@ -234,7 +232,7 @@ public class CrystalTool extends AbstractTool {
 					p3List.add(newP3);
 				} else if (zeroCount == 2) {
 					// atom is on an edge of the unit cell
-					if (nonInteger == -1) throw new CMLRuntimeException("Should be one non-intger coordinate to reach this point.");
+					if (nonInteger == -1) throw new RuntimeException("Should be one non-intger coordinate to reach this point.");
 					double[] array = {0.0, 0.0,
 							1.0, 0.0,
 							1.0, 1.0,
@@ -270,7 +268,7 @@ public class CrystalTool extends AbstractTool {
 								getCoord(array[(2+(i*3))-1], coordArray[1]), getCoord(array[(3+(i*3))-1], coordArray[2])));
 					}
 				} else if (zeroCount > 3) {
-					throw new CMLRuntimeException("Should never throw");
+					throw new RuntimeException("Should never throw");
 				}
 				int serial = 1;
 				Transform3 t = crystal.getOrthogonalizationTransform();
@@ -343,6 +341,7 @@ public class CrystalTool extends AbstractTool {
 	 * @return molecule containing completed unit cell
 	 */
 	public CMLMolecule addAllAtomsToUnitCell(boolean includeAllCornerEdgeAndFaceAtoms, boolean addTransformsToAtoms) {
+		double EPS = 0.00000001;
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		ct.flattenMolecules();
 		MoleculeTool mt = MoleculeTool.getOrCreateTool(molecule);
@@ -370,7 +369,8 @@ public class CrystalTool extends AbstractTool {
 			// will not be exact, so we have to allow for this error in our calculations.
 			boolean isHexagonalTransform = false;
 			for (Double d : transform.getMatrixAsArray()) {
-				if (d.equals(EuclidConstants.ONE_THIRD) || d.equals(EuclidConstants.TWO_THIRDS)) {
+				if (Real.isEqual(d, EuclidConstants.ONE_THIRD, EPS) ||
+						Real.isEqual(d, EuclidConstants.TWO_THIRDS, EPS)) {
 					isHexagonalTransform = true;
 					break;
 				}
@@ -378,11 +378,12 @@ public class CrystalTool extends AbstractTool {
 
 			for (CMLAtom atom : symmetryMolecule.getAtoms()) {
 				Point3 originalP3 = atom.getXYZFract();
-				atom.transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
+				AtomTool.getOrCreateTool(atom).transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
 				Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
 				Vector3 v3 = p3.normaliseCrystallographically();
 				if (isHexagonalTransform && 
-						(originalP3.isOnNonExactHexagonalSymmetryElement() || originalP3.isOnUnitCellFaceEdgeOrCorner())) {
+						(CrystalTool.isOnNonExactHexagonalSymmetryElement(originalP3) ||
+								CrystalTool.isOnUnitCellFaceEdgeOrCorner(originalP3))) {
 					double[] array = p3.getArray();
 					int count = 0;
 					boolean changed = false;
@@ -498,7 +499,7 @@ public class CrystalTool extends AbstractTool {
 	 * do not apply symmetry
 	 */
 	public void calculateCartesiansAndBonds() {
-		molecule.createCartesiansFromFractionals(crystal);
+		MoleculeTool.getOrCreateTool(molecule).createCartesiansFromFractionals(crystal);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		moleculeTool.calculateBondedAtoms();
 		new ConnectionTableTool(molecule).partitionIntoMolecules();
@@ -532,17 +533,17 @@ public class CrystalTool extends AbstractTool {
 	 * @return contacts
 	 */
 	public List<Contact> getSymmetryContactsToMolecule(RealRange dist2Range) {
-		molecule.createCartesiansFromFractionals(crystal);
+		MoleculeTool.getOrCreateTool(molecule).createCartesiansFromFractionals(crystal);
 		List<Contact> contactList = new ArrayList<Contact>();
 		if (symmetry != null && molecule != null) {
-			Real3Range range3Fract = molecule.calculateRange3(CoordinateType.FRACTIONAL);
+			Real3Range range3Fract = MoleculeTool.getOrCreateTool(molecule).calculateRange3(CoordinateType.FRACTIONAL);
 			// create a wider border round the molecule
 			expandRange(range3Fract, crystal, dist2Range);
 			Transform3 orthMat = null;
 			try {
 				orthMat = new Transform3(crystal.getOrthogonalizationMatrix());
 			} catch (Exception e) {
-				throw new CMLRuntimeException("invalid orthogonalMatrix");
+				throw new RuntimeException("invalid orthogonalMatrix");
 			}
 			CMLSymmetry allSymmetry = symmetry;
 			// used to just use non-translations.  This works better if the molecule is not a
@@ -554,7 +555,7 @@ public class CrystalTool extends AbstractTool {
 			List<Type> typeIgnoreList = new ArrayList<Type>();
 			typeIgnoreList.add(Type.GROUP_A);
 			for (CMLMolecule subMolecule : subMolecules) {
-				subMolecule.createCartesiansFromFractionals(orthMat);
+				MoleculeTool.getOrCreateTool(subMolecule).createCartesiansFromFractionals(orthMat);
 				List<Contact> subContactList = findMoleculeMoleculeContacts(
 						subMolecule, range3Fract, allSymmetry, orthMat, dist2Range, typeIgnoreList);
 				for (Contact subContact : subContactList) {
@@ -569,11 +570,7 @@ public class CrystalTool extends AbstractTool {
 	private void expandRange(Real3Range range3Fract, CMLCrystal crystal, RealRange dist2Range) {
 		double dist = Math.sqrt(dist2Range.getMax());
 		double[] cellParam = null;
-		try {
-			cellParam = crystal.getCellParameterValues();
-		} catch (CMLException e) {
-			throw new CMLRuntimeException("BUG "+e);
-		}
+		cellParam = crystal.getCellParameterValues();
 		double deltax = dist / cellParam[0];
 		double deltay = dist / cellParam[1];
 		double deltaz = dist / cellParam[2];
@@ -600,7 +597,7 @@ public class CrystalTool extends AbstractTool {
 			// clone molecule
 			CMLMolecule symMolecule = new CMLMolecule(origMolecule);
 			// and transform it
-			symMolecule.transformFractionalsAndCartesians(
+			MoleculeTool.getOrCreateTool(symMolecule).transformFractionalsAndCartesians(
 					operator, orthMat);
 			//
 			RealRange xr = range3Fract.getXRange();
@@ -721,7 +718,7 @@ public class CrystalTool extends AbstractTool {
 		CMLMolecule fromMolecule = contact.fromAtom.getMolecule();
 		CMLMolecule targetMolecule = getTargetMolecule(mergedMolecule, fromMolecule.getId());
 		CMLMolecule symmetryMolecule = new CMLMolecule(fromMolecule);
-		symmetryMolecule.transformFractionalsAndCartesians(contact.transform3, orthMat);
+		MoleculeTool.getOrCreateTool(symmetryMolecule).transformFractionalsAndCartesians(contact.transform3, orthMat);
 
 		if (contact.isInSameMolecule) {
 			List<CMLAtom> newAtomList = new ArrayList<CMLAtom>();
@@ -847,9 +844,9 @@ public class CrystalTool extends AbstractTool {
 		calculateAndAddSpaceGroupMultiplicity(molecule, symmetryElements.get(0));
 
 		try {
-			molecule.calculateAndAddFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
-		} catch (CMLRuntimeException e) {
-			throw new CMLRuntimeException("Cannot generate chemical formula (?unknown element type): "+e);
+			MoleculeTool.getOrCreateTool(molecule).calculateAndAddFormula(CMLMolecule.HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		} catch (RuntimeException e) {
+			throw new RuntimeException("Cannot generate chemical formula (?unknown element type): "+e);
 		}
 
 		CMLElements<CMLMolecule> childMolecules = molecule.getMoleculeElements();
@@ -1018,7 +1015,7 @@ public class CrystalTool extends AbstractTool {
 	void calculateAndAddSpaceGroupMultiplicity(CMLMolecule molecule, CMLSymmetry symmetry) {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
-			int m = atom.calculateSpaceGroupMultiplicity(symmetry);
+			int m = AtomTool.getOrCreateTool(atom).calculateSpaceGroupMultiplicity(symmetry);
 			if (m > 1) {
 				atom.setSpaceGroupMultiplicity(m);
 			}
@@ -1110,7 +1107,7 @@ public class CrystalTool extends AbstractTool {
 			}
 			diff = childAggregateFormula.getDifference(parentAggregateFormula);
 		} catch (Throwable e) {
-			throw new CMLRuntimeException("exception "+e);
+			throw new RuntimeException("exception "+e);
 		}
 		return diff;
 	}
@@ -1220,7 +1217,49 @@ public class CrystalTool extends AbstractTool {
 			molecule.addAtom(atom);
 		}
 		// reset the cartesian coordinates now we have changed the fractionals
-		molecule.createCartesiansFromFractionals(crystal);
+		MoleculeTool.getOrCreateTool(molecule).createCartesiansFromFractionals(crystal);
 	}
 
+    /**
+     * @return true if on element
+     */
+    public static boolean isOnNonExactHexagonalSymmetryElement(Point3 p3) {
+    	for (Double d : p3.getArray()) {
+    		if (d < (EuclidConstants.ONE_THIRD+CrystalTool.HEXAGONAL_CELL_FRACT_EPS) &&
+    				d > (EuclidConstants.ONE_THIRD-CrystalTool.HEXAGONAL_CELL_FRACT_EPS)) {
+    			return true;
+    		} else if (d < (EuclidConstants.TWO_THIRDS+CrystalTool.HEXAGONAL_CELL_FRACT_EPS) &&
+    				d > (EuclidConstants.TWO_THIRDS-CrystalTool.HEXAGONAL_CELL_FRACT_EPS)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * 
+     * @return is on face or corner
+     * @deprecated use epsilon method
+     */
+    public static boolean isOnUnitCellFaceEdgeOrCorner(Point3 p3) {
+    	for (Double d : p3.getArray()) {
+    		if (d.equals(0.0) || d.equals(1.0)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * 
+     * @return is on face or corner
+     */
+    public static boolean isOnUnitCellFaceEdgeOrCorner(Point3 p3, double eps) {
+    	for (Double d : p3.getArray()) {
+    		if (Real.isEqual(d, 0.0, eps) || Real.isEqual(d, 1.0, eps)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 };

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtom;
 
 /**
  * tool to support a ring. not fully developed
@@ -18,15 +18,16 @@ public class AtomPath implements Comparable<AtomPath> {
 	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
 
 	private List<CMLAtom> atomList;
+
 	/**
 	 */
 	public AtomPath() {
 		init();
 		atomList = new ArrayList<CMLAtom>();
 	}
-	
+
 	protected void init() {
-		
+
 	}
 
 	/**
@@ -213,7 +214,8 @@ public class AtomPath implements Comparable<AtomPath> {
 	}
 
 	/**
-	 * @param atomList the atomList to set
+	 * @param atomList
+	 *            the atomList to set
 	 */
 	public void setAtomList(List<CMLAtom> atomList) {
 		this.atomList = atomList;
@@ -221,6 +223,7 @@ public class AtomPath implements Comparable<AtomPath> {
 
 	/**
 	 * returns AtomPath with atoms in reverse order
+	 * 
 	 * @return reversed path
 	 */
 	public AtomPath getReversePath() {
@@ -234,6 +237,7 @@ public class AtomPath implements Comparable<AtomPath> {
 
 	/**
 	 * compares on length of path
+	 * 
 	 * @param atomPath
 	 * @return -1 0 1
 	 */
@@ -246,17 +250,18 @@ public class AtomPath implements Comparable<AtomPath> {
 		}
 		return result;
 	}
+
 	/**
 	 * get list of atomIds
+	 * 
 	 * @return string
 	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (CMLAtom atom : atomList) {
-			sb.append(".."+atom.getId());
+			sb.append(".." + atom.getId());
 		}
 		return sb.toString();
 	}
-	
-}
 
+}

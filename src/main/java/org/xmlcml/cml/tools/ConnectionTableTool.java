@@ -15,15 +15,13 @@ import nu.xom.Elements;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtomArray;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondArray;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 /**
  * tool to support connection table. not fully developed
  * 
@@ -44,19 +42,18 @@ public class ConnectionTableTool extends AbstractTool {
 	 */
 	public ConnectionTableTool(CMLMolecule molecule) {
 		if (molecule == null) {
-			throw new CMLRuntimeException("null molecule");
+			throw new RuntimeException("null molecule");
 		}
 		this.molecule = molecule;
-//		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 	}
 
 	
 	/** splits given connection table into separate fragment molecules.
 	 * requires bonds to be assigned.
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
 
-	public void partitionIntoMolecules() throws CMLRuntimeException {
+	public void partitionIntoMolecules() throws RuntimeException {
 		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
 		if (molecules.size() > 0) {
 			for (CMLMolecule molecule : molecules) {
@@ -108,7 +105,7 @@ public class ConnectionTableTool extends AbstractTool {
 
 			int size = atomSetList.size();
 			if (size == 0) {
-				throw new CMLRuntimeException("No molecules found");
+				throw new RuntimeException("No molecules found");
 			} else if (size == 1) {
 				// System.out.println("no splitting required");
 			} else {
@@ -238,14 +235,14 @@ public class ConnectionTableTool extends AbstractTool {
 	/** merge molecules.
 	 * 
 	 * @param fromMolecule
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public void mergeMolecule(CMLMolecule fromMolecule) throws CMLException {
+	public void mergeMolecule(CMLMolecule fromMolecule) {
 		if (fromMolecule != null) {
 			for (CMLBond addBond : fromMolecule.getBonds()) {
 				fromMolecule.deleteBond(addBond);
 				if (molecule.getBond(addBond.getAtom(0), addBond.getAtom(1)) != null) {
-					throw new CMLException("Duplicate bond in addMolecule: "
+					throw new RuntimeException("Duplicate bond in addMolecule: "
 							+ addBond.getAtomRefs2());
 				}
 				this.transferToMolecule(addBond, molecule);
@@ -287,7 +284,7 @@ public class ConnectionTableTool extends AbstractTool {
 		for (String atomId : atomIds) {
 			CMLAtom oldAtom = molecule.getAtomById(atomId);
 			if (oldAtom == null) {
-				throw new CMLRuntimeException("Atom: " + atomId + " not in molecule: "
+				throw new RuntimeException("Atom: " + atomId + " not in molecule: "
 						+ molecule.getId());
 			}
 			CMLAtom newAtom = new CMLAtom(oldAtom);
@@ -354,23 +351,22 @@ public class ConnectionTableTool extends AbstractTool {
 	 * @param atom
 	 * @param mol
 	 *            to add
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 *             duplicate atom Ids
 	 */
-	private void transferToMolecule(CMLAtom atom, CMLMolecule mol)
-	throws CMLException {
+	private void transferToMolecule(CMLAtom atom, CMLMolecule mol) {
 		String id = atom.getId();
 		CMLMolecule thisMolecule = atom.getMolecule();
 		if (id == null) {
-			throw new CMLException("Missing atom id");
+			throw new RuntimeException("Missing atom id");
 		} else if (mol == null) {
-			throw new CMLException("Cannot add atom to null molecule");
+			throw new RuntimeException("Cannot add atom to null molecule");
 		} else if (mol == thisMolecule) {
 			// are molecules distinct?
-			throw new CMLException("Cannot add atom to same molecule");
+			throw new RuntimeException("Cannot add atom to same molecule");
 		} else if (mol.getAtomById(id) != null) {
 			// does atom Id clash with target molecule atomIds?
-			throw new CMLException("Duplicate atom ids: " + id);
+			throw new RuntimeException("Duplicate atom ids: " + id);
 		} else {
 			if (thisMolecule != null) {
 				thisMolecule.deleteAtom(atom);
@@ -431,11 +427,10 @@ public class ConnectionTableTool extends AbstractTool {
 	 * 
 	 * @param atomIds
 	 *            AtomIds of nuclei
-	 *            @throws CMLException
+	 *            @throws RuntimeException
 	 * @return atomSet containing nuclei and ligands
 	 */
-	public CMLAtomSet getNextCoordinationSphere(String[] atomIds)
-	throws CMLException {
+	public CMLAtomSet getNextCoordinationSphere(String[] atomIds) {
 		CMLAtomSet atomSet = new CMLAtomSet(molecule, atomIds);
 		// MoleculeTool moleculeTool = new MoleculeToolImpl(this, atomIds);
 		List<CMLAtom> atoms = atomSet.getAtoms();
@@ -506,7 +501,7 @@ public class ConnectionTableTool extends AbstractTool {
 			for (CMLBond bond : molecule.getBonds()) {
 				String[] atomRefs2 = bond.getAtomRefs2();
 				if (atomRefs2 == null) {
-					throw new CMLRuntimeException("Bond has no atomRefs2: " + bond);
+					throw new RuntimeException("Bond has no atomRefs2: " + bond);
 				}
 				CMLAtom at0 = molecule.getAtomById(atomRefs2[0]);
 				CMLAtom at1 = molecule.getAtomById(atomRefs2[1]);
@@ -530,7 +525,7 @@ public class ConnectionTableTool extends AbstractTool {
 		List<CMLMolecule> molecules = new ArrayList<CMLMolecule>();
 		for (CMLBondSet bondSet : bondSets) {
 			CMLAtomSet atomSet = bondSet.getAtomSet();
-			molecules.add(new CMLMolecule(atomSet, bondSet));
+			molecules.add(MoleculeTool.createMolecule(atomSet, bondSet));
 		}
 		return molecules;
 	}
@@ -650,12 +645,12 @@ public class ConnectionTableTool extends AbstractTool {
 	 */
 	// FIXME
 	/*--
-     public void joinAtomsAndRemoveHydrogens(CMLAtom a1, CMLAtom a2) throws CMLException {
+     public void joinAtomsAndRemoveHydrogens(CMLAtom a1, CMLAtom a2) {
      if (molecule != a1.getMolecule()) {
-     throw new CMLException("atom "+a1+" is not owned by molecule: "+this);
+     throw new RuntimeException("atom "+a1+" is not owned by molecule: "+this);
      }
      if (molecule != a2.getMolecule()) {
-     throw new CMLException("atom "+a2+" is not owned by molecule: "+this);
+     throw new RuntimeException("atom "+a2+" is not owned by molecule: "+this);
      }
      a1.deleteHydrogen();
      a2.deleteHydrogen();
@@ -713,13 +708,13 @@ public class ConnectionTableTool extends AbstractTool {
 	 * 0; -- k) { atoms.getAtom (k).setHydrogenCount (0); }
 	 *  // add from hMol for (int k = numH - 1; k >= 0; -- k) { try {
 	 * atoms.addAtom (hAtoms.getAtom (k)); //hAtoms.removeAtom (hAtoms.getAtom
-	 * (k)); } catch (CMLException cmle) { System.err.println("BUG "+cmle); } } }
+	 * (k)); } catch (RuntimeException cmle) { System.err.println("BUG "+cmle); } } }
 	 * 
 	 * if ((hBonds != null) && ((numH = hBonds.getBondCount ()) > 0)) { if
 	 * (bonds == null) { bonds = new CMLBondArray (); }
 	 *  // add from hMol for (int k = numH - 1; k >= 0; -- k) { try {
 	 * bonds.addBond (hBonds.getBond (k)); //hBonds.removeBond (hBonds.getBond
-	 * (k)); } catch (CMLException cmle) { System.err.println("BUG "+cmle); } } }
+	 * (k)); } catch (RuntimeException cmle) { System.err.println("BUG "+cmle); } } }
 	 * 
 	 * 
 	 * j = molecules.size(); // force exit from loop } } } } else {
@@ -734,13 +729,13 @@ public class ConnectionTableTool extends AbstractTool {
 	 * 0; -- k) { atoms.getAtom (k).setHydrogenCount (0); }
 	 *  // add from hMol for (int k = numH - 1; k >= 0; -- k) { try {
 	 * atoms.addAtom (hAtoms.getAtom (k)); //hAtoms.removeAtom (hAtoms.getAtom
-	 * (k)); } catch (CMLException cmle) { System.err.println("BUG "+cmle); } } }
+	 * (k)); } catch (RuntimeException cmle) { System.err.println("BUG "+cmle); } } }
 	 * 
 	 * if ((hBonds != null) && ((numH = hBonds.getBondCount ()) > 0)) { if
 	 * (bonds == null) { bonds = new CMLBondArray (); }
 	 *  // add from hMol for (int k = numH - 1; k >= 0; -- k) { try {
 	 * bonds.addBond (hBonds.getBond (k)); //hBonds.removeBond (hBonds.getBond
-	 * (k)); } catch (CMLException cmle) { System.err.println("BUG "+cmle); } } } } } } --
+	 * (k)); } catch (RuntimeException cmle) { System.err.println("BUG "+cmle); } } } } } } --
 	 */
 	/**
 	 * Recursively retrieves atom's parents, and returns the bond path.
@@ -831,7 +826,7 @@ public class ConnectionTableTool extends AbstractTool {
 			CMLAtom nextAtom, CMLAtom lastAtom, 
 			Set<CMLAtom> visitedAtoms, List<CMLAtom> path) {
 		if (ringNucleusAtoms.size() > 1000) {
-			throw new CMLRuntimeException("too many ringNucleusAtoms");
+			throw new RuntimeException("too many ringNucleusAtoms");
 		}
 		if (path.contains(nextAtom)) {
 
@@ -880,7 +875,7 @@ public class ConnectionTableTool extends AbstractTool {
 
 			// Terminate path, backtrace
 			if (path.remove(path.size() - 1) != nextAtom) {
-				throw new CMLRuntimeException("path sync error");
+				throw new RuntimeException("path sync error");
 			}
 		}
 	}

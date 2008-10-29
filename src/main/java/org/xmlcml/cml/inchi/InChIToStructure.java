@@ -14,10 +14,9 @@ import net.sf.jniinchi.JniInchiOutputStructure;
 import net.sf.jniinchi.JniInchiWrapper;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -30,7 +29,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  * <h3>Example usage</h3>
  * 
- * <code>// Generate factory - throws CMLException if native code does not load</code><br>
+ * <code>// Generate factory - if native code does not load</code><br>
  * <code>InChIGeneratorFactory factory = new InChIGeneratorFactory();</code><br>
  * <code>// Get InChIToStructure</code><br>
  * <code>InChIToStructure intostruct = factory.getInChIToStructure(inchi);</code><br>
@@ -60,13 +59,13 @@ public class InChIToStructure implements CMLConstants {
 	/**
 	 * Constructor. Generates CMLMolecule from InChI.
 	 * @param inchi
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public InChIToStructure(String inchi) throws CMLException {
+	public InChIToStructure(String inchi) {
 		try {
 			input = new JniInchiInputInchi(inchi, S_EMPTY);
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new RuntimeException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
         generateCMLMoleculeFromInchi();
 	}
@@ -75,13 +74,13 @@ public class InChIToStructure implements CMLConstants {
 	 * Constructor. Generates CMLMolecule from InChI.
 	 * @param inchi
 	 * @param options
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public InChIToStructure(String inchi, String options) throws CMLException {
+	public InChIToStructure(String inchi, String options) {
 		try {
 			input = new JniInchiInputInchi(inchi, options);
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new RuntimeException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
         generateCMLMoleculeFromInchi();
 	}
@@ -90,22 +89,22 @@ public class InChIToStructure implements CMLConstants {
 	 * Constructor. Generates CMLMolecule from InChI.
 	 * @param inchi
 	 * @param options
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public InChIToStructure(String inchi, List<String> options) throws CMLException {
+	public InChIToStructure(String inchi, List<String> options) {
 		try {
 			input = new JniInchiInputInchi(inchi, options);
 		} catch (JniInchiException jie) {
-			throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+			throw new RuntimeException("Failed to convert InChI to molecule: " + jie.getMessage());
 		}
         generateCMLMoleculeFromInchi();
 	}
 	
-	protected void generateCMLMoleculeFromInchi() throws CMLException {
+	protected void generateCMLMoleculeFromInchi() {
 		try {
 			output = JniInchiWrapper.getStructureFromInchi(input);
         } catch (JniInchiException jie) {
-        	throw new CMLException("Failed to convert InChI to molecule: " + jie.getMessage());
+        	throw new RuntimeException("Failed to convert InChI to molecule: " + jie.getMessage());
         }
 		
         molecule = new CMLMolecule();
@@ -153,7 +152,7 @@ public class InChIToStructure implements CMLConstants {
         	} else if (type == INCHI_BOND_TYPE.ALTERN) {
         		cBo.setOrder(CMLBond.AROMATIC);
         	} else {
-        		throw new CMLException("Unknown bond type: " + type);
+        		throw new RuntimeException("Unknown bond type: " + type);
         	}
         	
         	// TODO: bond sterochemistry

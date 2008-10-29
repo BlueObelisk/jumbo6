@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Util;
@@ -80,7 +79,7 @@ public final class TestUtils implements CMLConstants {
         }
         try {
         	assertEqualsIncludingFloat(message, refNode, testNode, eps);
-        } catch (CMLRuntimeException e) {
+        } catch (RuntimeException e) {
         	reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
         }
     }
@@ -124,7 +123,7 @@ public final class TestUtils implements CMLConstants {
 	    		Assert.fail(message + "cannot deal with XMLNode: "+refNode.getClass());
 	    	}
 		} catch (Throwable t) {
-			throw new CMLRuntimeException(""+t);
+			throw new RuntimeException(""+t);
 		}
 	}
 	private static void testStringDoubleEquality(String message, String refValue, String testValue,
@@ -144,7 +143,7 @@ public final class TestUtils implements CMLConstants {
 			ee = e;
 		}
 		if (ee != null) {
-			throw new CMLRuntimeException(""+ee);
+			throw new RuntimeException(""+ee);
 		}
 	}
     /**
@@ -211,7 +210,7 @@ public final class TestUtils implements CMLConstants {
 	        CMLUtil.debug((Element) testNode, System.err, 2); 
 	        System.err.println("=============="+message+"===================");
         } catch (Exception e) {
-        	throw new CMLRuntimeException(e);
+        	throw new RuntimeException(e);
         }
         Assert.fail(message+" ~ "+errorMessage);
     }
@@ -265,7 +264,7 @@ public final class TestUtils implements CMLConstants {
 	public static Element parseValidString(String s) {
 	    Element element = null;
 	    if (s == null) {
-	    	throw new CMLRuntimeException("NULL VALID JAVA_STRING");
+	    	throw new RuntimeException("NULL VALID JAVA_STRING");
 	    }
 	    try {
 	        element = new CMLBuilder().parseString(s);

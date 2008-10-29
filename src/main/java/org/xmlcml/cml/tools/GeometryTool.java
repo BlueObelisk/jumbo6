@@ -11,20 +11,18 @@ import nu.xom.Elements;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLLength;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTable;
-import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.lite.CMLArray;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.main.CMLAngle;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLLength;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLTable;
+import org.xmlcml.cml.element.main.CMLTorsion;
 import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.IntSquareMatrix;
@@ -96,7 +94,7 @@ public class GeometryTool extends AbstractTool {
      * (intended for hydrogens).
      * 
      * @param control
-     * @throws CMLException
+     * @throws RuntimeException
      */
     public void addCalculated3DCoordinatesForHydrogens(HydrogenControl control) {
         // TODO
@@ -106,7 +104,7 @@ public class GeometryTool extends AbstractTool {
              new GeometryTool(molecule).addCalculated3DCoordinatesForHydrogens(control);
          }
      } else {
-         throw new CMLRuntimeException("NYI");
+         throw new RuntimeException("NYI");
      }
     }
     /**
@@ -123,12 +121,12 @@ public class GeometryTool extends AbstractTool {
         } else if (type.equals(CoordinateType.TWOD)) {
             addCalculated2DCoordinatesForHydrogens(control);
         } else {
-            throw new CMLRuntimeException(
+            throw new RuntimeException(
                     "Add calculated coordinates for hydrogens: control not recognised: " + type); //$NON-NLS-1$
         }
     }
     boolean addNextTorsion(List<CMLTorsion> tVector,
-            Map<CMLAtom, String> usedAtomTable) throws CMLException {
+            Map<CMLAtom, String> usedAtomTable) {
         for (int i = 0; i < tVector.size(); i++) {
             CMLTorsion torsion = tVector.get(i);
             String[] atomRefs4 = torsion.getAtomRefs4();
@@ -160,15 +158,15 @@ public class GeometryTool extends AbstractTool {
         return false;
     }
     void calculateZMCoords(CMLAtom at0, CMLAtom at1, CMLAtom at2, CMLAtom at3,
-            CMLTorsion torsion) throws CMLException {
-        CMLAngle ang0 = molecule.getAngle(at1, at2, at3);
+            CMLTorsion torsion) {
+        CMLAngle ang0 = MoleculeTool.getOrCreateTool(molecule).getAngle(at1, at2, at3);
         if (ang0 == null) {
-            throw new CMLException("Cannot find angle: " + //$NON-NLS-1$
+            throw new RuntimeException("Cannot find angle: " + //$NON-NLS-1$
                     at1.getId() + " - " + at2.getId() + " - " + at3.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         CMLBond bond = molecule.getBond(at2, at3);
         if (bond == null) {
-            throw new CMLException(
+            throw new RuntimeException(
                     "Cannot find bond: " + at2.getId() + " - " + at3.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         double length = 0.0;
@@ -176,7 +174,7 @@ public class GeometryTool extends AbstractTool {
             length = bond
                     .calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
-            throw new CMLException(
+            throw new RuntimeException(
                     "Cannot find length for: " + at2.getId() + S_SLASH + at3.getId());} //$NON-NLS-1$ //$NON-NLS-2$
         Angle bondAngle = new Angle(ang0.getXMLContent(), Angle.Units.DEGREES);
         Angle torsionAngle = new Angle(torsion.getXMLContent(),
@@ -190,11 +188,11 @@ public class GeometryTool extends AbstractTool {
             at3.setXYZ3(p3);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CMLException(S_EMPTY + e);
+            throw new RuntimeException(S_EMPTY + e);
         } //$NON-NLS-1$
     }
     void calculateStartTriangle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
-	        throws CMLException {
+	        {
 	    if (calculateTriangle(at0, at1, at2)) {
 	        return;
 	    }
@@ -204,7 +202,7 @@ public class GeometryTool extends AbstractTool {
 	    if (calculateTriangle(at2, at0, at1)) {
 	        return;
 	    }
-	    throw new CMLException(
+	    throw new RuntimeException(
 	            "Cannot find triangle (2 bonds and 1 angle) for: " + //$NON-NLS-1$
 	                    at0.getId() + ", " + at1.getId() + ", " + at2.getId()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -214,9 +212,9 @@ public class GeometryTool extends AbstractTool {
      * assumes that molecule contains exactly the correct number and order of
      * these. Does not yet use CMLZMatrix
      * 
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public void calculateCoordsFromZMatrix() throws CMLException {
+    public void calculateCoordsFromZMatrix() {
         int atomCount = molecule.getAtomCount();
         if (atomCount == 0) {
             return;
@@ -254,12 +252,13 @@ public class GeometryTool extends AbstractTool {
             ;
         }
         if (tVector.size() > 0) {
-            throw new CMLException("Some torsions not resolved"); //$NON-NLS-1$
+            throw new RuntimeException("Some torsions not resolved"); //$NON-NLS-1$
         }
     }
     boolean calculateTriangle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
-            throws CMLException {
-        CMLAngle ang0 = molecule.getAngle(at0, at1, at2);
+            {
+    	MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+        CMLAngle ang0 = moleculeTool.getAngle(at0, at1, at2);
         if (ang0 == null) {
             return false;
         }
@@ -276,7 +275,7 @@ public class GeometryTool extends AbstractTool {
         try {
             length1 = bond1.calculateBondLength(CoordinateType.CARTESIAN);
         } catch (Exception e) {
-            throw new CMLException(
+            throw new RuntimeException(
                     "Cannot find length for: " + at0.getId() + S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         at1.setXYZ3(new Point3(length1, 0., 0.));
@@ -284,7 +283,7 @@ public class GeometryTool extends AbstractTool {
         try {
             length2 = bond2.calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
-            throw new CMLException(
+            throw new RuntimeException(
                     "Cannot find length for: " + at2.getId() + S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         double angle = ang0.getXMLContent() / Angle.DEGREES_IN_RADIAN;
@@ -295,9 +294,9 @@ public class GeometryTool extends AbstractTool {
     /**
      * uses bondStereo to adjust 2D coordinates.
      * 
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public void layoutDoubleBonds() throws CMLException {
+    public void layoutDoubleBonds() {
         // FIXME
         List<CMLBond> acyclicDoubleBonds = new ConnectionTableTool(molecule)
                 .getAcyclicDoubleBonds();
@@ -310,9 +309,9 @@ public class GeometryTool extends AbstractTool {
      * 
      * @param mol1
      * @param map
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public void compareGeometries(CMLMolecule mol1, CMLMap map) throws CMLException {
+    public void compareGeometries(CMLMolecule mol1, CMLMap map) {
          CMLTable table = null; 
          
          table = compareLengths(map, mol1); 
@@ -330,19 +329,19 @@ public class GeometryTool extends AbstractTool {
      * @param map of lengths between the two molecules
      * @param mol1 must already have <length> children
      * @return table
-     * @throws CMLException
+     * @throws RuntimeException
      */
-     public CMLTable compareLengths(CMLMap map, CMLMolecule mol1) throws CMLException { 
+     public CMLTable compareLengths(CMLMap map, CMLMolecule mol1) { 
         boolean calculate = true;
         boolean add = false;
         List<CMLLength> lengthList = null;
-        CMLElements<CMLLength> toLengths = null;
+        List<CMLLength> toLengths = null;
         Map<String, CMLLength> lengthTable = null;
         // from molecule
         lengthList = createValenceLengths(calculate, add);
         // to molecule
-        toLengths = mol1.getLengthElements();
-        lengthTable = CMLLength.getIndexedLengths(CMLLength.getList(toLengths));
+        toLengths = MoleculeTool.getOrCreateTool(mol1).getLengthElements();
+        lengthTable = CMLLength.getIndexedLengths(toLengths);
         CMLTable table = createTable("length", 2);
         CMLArray idArray1 = table.getArrayElements().get(0);
         CMLArray valueArray1 = table.getArrayElements().get(1);
@@ -417,19 +416,19 @@ public class GeometryTool extends AbstractTool {
       * @param map of angles between the two molecules
       * @param mol1 must already have <angle> children
       * @return table
-      * @throws CMLException
+      * @throws RuntimeException
       */
-      public CMLTable compareAngles(CMLMap map, CMLMolecule mol1) throws CMLException { 
+      public CMLTable compareAngles(CMLMap map, CMLMolecule mol1) { 
          boolean calculate = true;
          boolean add = false;
          List<CMLAngle> angleList = null;
-         CMLElements<CMLAngle> toAngles = null;
+         List<CMLAngle> toAngles = null;
          Map<String, CMLAngle> angleTable = null;
          // from molecule
          angleList = createValenceAngles(calculate, add);
          // to molecule
-         toAngles = mol1.getAngleElements();
-         angleTable = CMLAngle.getIndexedAngles(CMLAngle.getList(toAngles));
+         toAngles = MoleculeTool.getOrCreateTool(mol1).getAngleElements();
+         angleTable = CMLAngle.getIndexedAngles(toAngles);
          CMLTable table = createTable("angle", 3);
          CMLArray idArray1 = table.getArrayElements().get(0);
          CMLArray valueArray1 = table.getArrayElements().get(1);
@@ -474,19 +473,19 @@ public class GeometryTool extends AbstractTool {
        * @param map of torsions between the two molecules
        * @param mol1 must already have <torsion> children
        * @return table
-       * @throws CMLException
+       * @throws RuntimeException
        */
-       public CMLTable compareTorsions(CMLMap map, CMLMolecule mol1) throws CMLException { 
+       public CMLTable compareTorsions(CMLMap map, CMLMolecule mol1) { 
           boolean calculate = true;
           boolean add = false;
           List<CMLTorsion> torsionList = null;
-          CMLElements<CMLTorsion> toTorsions = null;
+          List<CMLTorsion> toTorsions = null;
           Map<String, CMLTorsion> torsionTable = null;
           // from molecule
           torsionList = createValenceTorsions(calculate, add);
           // to molecule
-          toTorsions = mol1.getTorsionElements();
-          torsionTable = CMLTorsion.getIndexedTorsions(CMLTorsion.getList(toTorsions));
+          toTorsions = MoleculeTool.getOrCreateTool(mol1).getTorsionElements();
+          torsionTable = CMLTorsion.getIndexedTorsions(toTorsions);
           CMLTable table = createTable("torsion", 4);
           CMLArray idArray1 = table.getArrayElements().get(0);
           CMLArray valueArray1 = table.getArrayElements().get(1);
@@ -576,7 +575,7 @@ public class GeometryTool extends AbstractTool {
      * @return array of lengths (zero length if none)
      */
     public List<CMLLength> createNonBondedLengths(CoordinateType type) {
-    	return createNonBondedLengths(molecule.getAtomSet(), type);
+    	return createNonBondedLengths(moleculeTool.getAtomSet(), type);
     }
     
     /**
@@ -730,7 +729,7 @@ public class GeometryTool extends AbstractTool {
                             torsionVal = torsion
                                 .getCalculatedTorsion(molecule);
                             torsion.setXMLContent(torsionVal);
-                        } catch (CMLRuntimeException e) {
+                        } catch (RuntimeException e) {
 //                            throw new CMLRuntime("Cannot calculate torsion for "+torsion.getString()+"; "+e);
                         }
                     }
@@ -753,7 +752,7 @@ public class GeometryTool extends AbstractTool {
      * @return nonBonded matrix (1 = 1,2 or 1,3 interaction, 0 = non-bonded);
      */
     public IntSquareMatrix getNonBondedMatrix() {
-        CMLAtomSet atomSet = molecule.getAtomSet();
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         IntSquareMatrix ism = null;
         List<CMLAtom> atoms = molecule.getAtoms();
         int[][] nbm = new int[atoms.size()][atoms.size()];
@@ -857,6 +856,44 @@ public class GeometryTool extends AbstractTool {
 	        atomSet.transform(mat);
         }
     }
+//    public void flip2D(CMLBond bond, CMLAtom atom) {
+//        try {
+//            CMLAtom otherAtom = bond.getOtherAtom(atom);
+//            CMLAtomSet atomSet = moleculeTool.getDownstreamAtoms(atom, otherAtom);
+//            Real2 this2 = atom.getXY2();
+//            Real2 other2 = otherAtom.getXY2();
+//            Vector2 this2v = new Vector2(this2);
+//            Vector2 bondVector = new Vector2(other2.subtract(this2));
+//            Vector2 yVector = new Vector2(0.0, 1.0);
+//            // translate to origin
+//            this2v.negative();
+//            Transform2 toOrigin = new Transform2(this2v);
+//            // translate from origin
+//            this2v.negative();
+//            Transform2 fromOrigin = new Transform2(this2v);
+//            // rotate to y axis
+//            Transform2 rotatePlus = new Transform2(bondVector, yVector);
+//            // rotate back from y axis
+//            Transform2 rotateMinus = new Transform2(yVector, bondVector);
+//            // flip about y
+//            RealSquareMatrix flipM = new RealSquareMatrix(2, new double[] {
+//                    -1.0, 0.0, 0.0, 1.0 });
+//            Transform2 flipY = new Transform2(flipM);
+//            // unit matrix
+//            Transform2 mat = new Transform2();
+//            RealSquareMatrix temp = mat;
+//            temp = toOrigin.multiply(temp);
+//            temp = rotatePlus.multiply(temp);
+//            temp = flipY.multiply(temp);
+//            temp = rotateMinus.multiply(temp);
+//            temp = fromOrigin.multiply(temp);
+//            mat = new Transform2(temp);
+//            atomSet.transform(mat);
+//        } catch (Exception e) {
+//            throw new RuntimeException(S_EMPTY + e);
+//>>>>>>> .merge-right.r915
+//        }
+//    }
     /**
      * create all valence angles for molecule.
      * 
@@ -868,7 +905,7 @@ public class GeometryTool extends AbstractTool {
      * @return array of angles (zero length if none)
      */
     public List<CMLAngle> createValenceAngles(boolean calculate, boolean add) {
-        CMLAtomSet atomSet = molecule.getAtomSet();
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         return this.createValenceAngles(atomSet, calculate, add);
     }
     /**
@@ -882,7 +919,7 @@ public class GeometryTool extends AbstractTool {
      * @return array of lengths (zero length if none)
      */
     public List<CMLLength> createValenceLengths(boolean calculate, boolean add) {
-        CMLAtomSet atomSet = molecule.getAtomSet();
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         return this.createValenceLengths(atomSet, calculate, add);
     }
     /**
@@ -896,7 +933,7 @@ public class GeometryTool extends AbstractTool {
      * @return array of torsions (zero length if none)
      */
     public List<CMLTorsion> createValenceTorsions(boolean calculate, boolean add) {
-        CMLAtomSet atomSet = molecule.getAtomSet();
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         return this.createValenceTorsions(atomSet, calculate, add);
     }
     /**
@@ -936,15 +973,15 @@ public class GeometryTool extends AbstractTool {
      * @param atomTool2B
      *            atom bonded to 2A
      * @return the rotational transformation
-     * @exception CMLException
+     * @exception RuntimeException
      *                wrong type of atoms, etc.
      */
     public static Transform3 overlapBonds(CMLAtom atomTool1A,
             CMLAtom atomTool1B, CMLAtom atomTool2A, CMLAtom atomTool2B)
-            throws CMLException {
+            {
         if (atomTool2B == null || atomTool2A == null || atomTool2B == null
                 || atomTool2A == null) {
-            throw new CMLException("null atomTools: ");
+            throw new RuntimeException("null atomTools: ");
         }
         Vector3 otherVector = atomTool1B.getVector3(atomTool1A);
         Vector3 thisVector = atomTool2B.getVector3(atomTool2A);
@@ -952,7 +989,7 @@ public class GeometryTool extends AbstractTool {
         try {
             transform = new Transform3(otherVector, thisVector);
         } catch (Exception e) {
-            throw new CMLException(S_EMPTY + e);
+            throw new RuntimeException(S_EMPTY + e);
         }
         return transform;
     }
@@ -1054,18 +1091,19 @@ public class GeometryTool extends AbstractTool {
 		if (size > 1) {
 			for (int i = 0; i < size; i++) {
 				CMLMolecule moleculei = identicalMoleculeList.get(i);
-				/*Point3Vector coordsi = */new Point3Vector(moleculei.getCoordinates3(CoordinateType.CARTESIAN));
+				Point3Vector coordsi = new Point3Vector(MoleculeTool.getOrCreateTool(moleculei).getCoordinates3(CoordinateType.CARTESIAN));
 				List<MoleculePair> moleculePairList = moleculePairMatrix.get(i);
 				for (int j = i+1; j < size; j++) {
 					CMLMolecule moleculej = identicalMoleculeList.get(j);
-					Point3Vector coordsj = new Point3Vector(moleculej.getCoordinates3(CoordinateType.CARTESIAN));
+					Point3Vector coordsj = new Point3Vector(MoleculeTool.getOrCreateTool(moleculej).getCoordinates3(CoordinateType.CARTESIAN));
 					MoleculePair moleculePair = moleculePairList.get(j - i - 1);
 					Transform3 transform3 = moleculePair.getTransform3();
 					// have to use map for this
 					//FIXME
 					System.err.println("COORDINATES NEED MAPPING");
 					coordsj.transform(transform3);
-//					double rms = coordsj.rms(coordsi);
+			        @SuppressWarnings("unused")
+					double rms = coordsj.rms(coordsi);
 //					System.out.print("| "+rms);
 				}
 				System.out.println();

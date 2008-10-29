@@ -16,10 +16,9 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 
 /** 
  * a textfield for direct entry of molecule structure
@@ -178,7 +177,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 						atomHighlighter.addHighlight(caretPosition, 
 							caretPosition+atomChunk.length(), new AtomHighlightPainter());
 					} catch (Exception ee) {
-						throw new CMLRuntimeException("HIGHLIGHT "+ee);
+						throw new RuntimeException("HIGHLIGHT "+ee);
 					}
 				}
 			}

@@ -5,11 +5,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 
 /**
  * tool to support a ring. not fully developed
@@ -18,7 +17,7 @@ import org.xmlcml.cml.element.CMLBondSet;
  * 
  */
 public class Junction extends AbstractTool {
-	final static Logger logger = Logger.getLogger(Junction.class.getName());
+	private final static Logger LOG = Logger.getLogger(Junction.class.getName());
 	private List<CMLAtomSet> ringAtomSetList;
 	private List<CMLBondSet> ringBondSetList;
 	private List<Ring> ringList;
@@ -40,10 +39,10 @@ public class Junction extends AbstractTool {
 	 */
 	Junction(Ring ring0, Ring ring1, CMLAtomSet commonAtomSet) {
 		if (ring0 == null || ring1 == null) {
-			throw new CMLRuntimeException("null ring in junction");
+			throw new RuntimeException("null ring in junction");
 		}
 		if (ring0.equals(ring1)) {
-			throw new CMLRuntimeException("cannot form junction with self");
+			throw new RuntimeException("cannot form junction with self");
 		}
 		this.ringAtomSetList = new ArrayList<CMLAtomSet>();
 		ringAtomSetList.add(ring0.getAtomSet());
@@ -81,13 +80,13 @@ public class Junction extends AbstractTool {
 	 */
 	private void makeJunction() {
 		if (commonAtomSet.size() != commonBondSet.size()+1) {
-			throw new CMLRuntimeException("commonAtomSet ("+commonAtomSet.size()+") should be 1 larger than commonBondSet ("+commonBondSet.size()+")");
+			throw new RuntimeException("commonAtomSet ("+commonAtomSet.size()+") should be 1 larger than commonBondSet ("+commonBondSet.size()+")");
 		}
 		// make sure ringList are distinct
 		if (ringList.get(0).size() == ringList.get(1).size()) {
 			CMLBondSet bs = ringBondSetList.get(0).complement(ringBondSetList.get(1));
 			if (bs.size() == 0) {
-				throw new CMLRuntimeException("identical ringList");
+				throw new RuntimeException("identical ringList");
 			}
 		}
 		commonBondList = new ArrayList<CMLBond>();
@@ -116,7 +115,7 @@ public class Junction extends AbstractTool {
 			if (bond.equals(startBond)) {
 				System.out.println(cyclicBondList0);
 				System.out.println(cyclicBondList1);
-				throw new CMLRuntimeException("all bonds are contained in one ring");
+				throw new RuntimeException("all bonds are contained in one ring");
 			}
 		}
 		startBond = bond;
@@ -126,7 +125,7 @@ public class Junction extends AbstractTool {
 			if (bond.equals(startBond)) {
 				System.out.println(cyclicBondList0);
 				System.out.println(cyclicBondList1);
-				throw new CMLRuntimeException("NO bonds are contained in one ring");
+				throw new RuntimeException("NO bonds are contained in one ring");
 			}
 		}
 		
@@ -143,7 +142,7 @@ public class Junction extends AbstractTool {
 			if (bond.equals(startBond)) {
 				System.out.println(cyclicBondList0);
 				System.out.println(cyclicBondList1);
-				throw new CMLRuntimeException("All/NO bonds are contained in one ring");
+				throw new RuntimeException("All/NO bonds are contained in one ring");
 			}
 		}
 		// get last atom
@@ -154,7 +153,7 @@ public class Junction extends AbstractTool {
 		CyclicList<CMLAtom> cyclicAtomList1 = this.ringList.get(1).getCyclicAtomList();
 		direction = getDirection(commonAtomList, cyclicAtomList1);
 		if (direction == 0) {
-			throw new CMLRuntimeException("bad direction");
+			throw new RuntimeException("bad direction");
 		}
 	}
 	
@@ -163,7 +162,7 @@ public class Junction extends AbstractTool {
 		CMLAtom startAtom = atomList.get(0);
 		int idx = cyclicAtomList.getIndexOfAndCache(startAtom);
 		if (idx == -1) {
-			throw new CMLRuntimeException("atom lists do not intersect");
+			throw new RuntimeException("atom lists do not intersect");
 		}
 		direction = 1;
 		if (!testDirection(direction, atomList, cyclicAtomList)) {
@@ -300,9 +299,9 @@ public class Junction extends AbstractTool {
 			for (CMLAtom atom : commonAtomList) {
 				System.out.print(" ... "+atom.getId());
 			}
-			System.out.println();
+//			System.out.println();
 		} else {
-			System.out.println("..atom "+commonAtomSet.getAtoms().get(0).getId());
+			LOG.info("..atom "+commonAtomSet.getAtoms().get(0).getId());
 		}
 		
 	}

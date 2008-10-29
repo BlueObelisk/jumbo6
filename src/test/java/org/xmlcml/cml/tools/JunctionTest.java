@@ -4,18 +4,17 @@
 package org.xmlcml.cml.tools;
 
 import static org.junit.Assert.fail;
+import static org.xmlcml.cml.test.CMLAssert.assertEquals;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.CMLAtomSetTest;
-import org.xmlcml.cml.element.CMLBondSetTest;
 
 /**
  * @author pm286
- *
+ * 
  */
 public class JunctionTest {
 
@@ -35,15 +34,16 @@ public class JunctionTest {
 		ringNucleusTest.makeMol();
 		ringList = ringNucleusTest.nucleus0.getRings();
 		ring = ringNucleusTest.nucleus1.getRings().get(0);
-		
+
 		// should be a norbornane
 		ring0 = ringNucleusTest.nucleus2.getRings().get(0);
 		ring1 = ringNucleusTest.nucleus2.getRings().get(1);
-		junction = Junction.createJunction(ring0,ring1);
+		junction = Junction.createJunction(ring0, ring1);
 	}
-	
+
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#getBridgeAtomList()}.
+	 * Test method for {@link org.xmlcml.cml.tools.Junction#getBridgeAtomList()}
+	 * .
 	 */
 	@Test
 	@Ignore
@@ -106,19 +106,19 @@ public class JunctionTest {
 	}
 
 	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#createJunction(org.xmlcml.cml.tools.Ring, org.xmlcml.cml.tools.Ring)}.
+	 * Test method for
+	 * {@link org.xmlcml.cml.tools.Junction#createJunction(org.xmlcml.cml.tools.Ring, org.xmlcml.cml.tools.Ring)}
+	 * .
 	 */
 	@Test
-	@Ignore // depends on history
+	@Ignore
+	// depends on history
 	public final void testCreateJunction() {
 		// should be a norbornane
-		CMLAtomSetTest.assertEquals("junction atoms", 
-			new String[]{"a51", "a62", "a59"}, 
-			junction.getCommonAtomSet());
-		CMLBondSetTest.assertEquals("junction bonds", 
-			new String[]{"a51_a62", "a59_a62"}, 
-			junction.getCommonBondSet());
+		assertEquals("junction atoms", new String[] { "a51", "a62", "a59" },
+				junction.getCommonAtomSet());
+		assertEquals("junction bonds", new String[] { "a51_a62", "a59_a62" },
+				junction.getCommonBondSet());
 	}
 
-	
 }

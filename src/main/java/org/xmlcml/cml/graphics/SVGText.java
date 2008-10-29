@@ -9,6 +9,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Real2;
 
 /** draws text.
@@ -17,7 +18,7 @@ import org.xmlcml.euclid.Real2;
  *
  */
 public class SVGText extends SVGElement {
-
+	private static Logger LOG = Logger.getLogger(SVGText.class);
 	final static String TAG ="text";
 	
 	/** constructor
@@ -139,7 +140,7 @@ public class SVGText extends SVGElement {
 			if (node instanceof Text) {
 				node.detach();
 			} else {
-				System.out.println(node.getClass());
+				LOG.debug(node.getClass());
 			}
 		}
 		this.appendChild(text);

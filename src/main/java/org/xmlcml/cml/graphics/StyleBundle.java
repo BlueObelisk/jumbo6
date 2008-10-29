@@ -1,7 +1,6 @@
 package org.xmlcml.cml.graphics;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
 
 public class StyleBundle implements CMLConstants {
 	
@@ -117,7 +116,7 @@ public class StyleBundle implements CMLConstants {
 	
 	public void setSubStyle(String subStyle, Object object) {
 		if (subStyle == null) {
-			throw new CMLRuntimeException("null style");
+			throw new RuntimeException("null style");
 		} else if (subStyle.equals("fill")) {
 			fill = (String) object;
 		} else if (subStyle.equals("stroke")) {
@@ -135,7 +134,7 @@ public class StyleBundle implements CMLConstants {
 		} else if (subStyle.equals("opacity")) {
 			opacity = (Double) object; 
 		} else {
-			throw new CMLRuntimeException("unsupported style: "+subStyle);
+			throw new RuntimeException("unsupported style: "+subStyle);
 		}
 
 	}
@@ -157,7 +156,7 @@ public class StyleBundle implements CMLConstants {
 		} else if (ss.equals("opacity")) {
 			subStyle = getOpacity();
 		} else {
-			throw new CMLRuntimeException("unknown subStyle: "+ss);
+			throw new RuntimeException("unknown subStyle: "+ss);
 		}
 		return subStyle;
 	}
@@ -167,7 +166,7 @@ public class StyleBundle implements CMLConstants {
 		try {
 			d = new Double(s).doubleValue();
 		} catch (NumberFormatException e) {
-			throw new CMLRuntimeException("bad double in style: "+s);
+			throw new RuntimeException("bad double in style: "+s);
 		}
 		return d;
 	}

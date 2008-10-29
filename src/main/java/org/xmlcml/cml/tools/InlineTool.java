@@ -1,10 +1,9 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 
 
 /**
@@ -42,9 +41,9 @@ public class InlineTool extends AbstractTool {
 				// no clear message
 			} else if (ch >= '1' && ch <= '2') {
 				if (i == len-1) {
-					throw new CMLRuntimeException("trailing digit");
+					throw new RuntimeException("trailing digit");
 				} else if (!Character.isDigit(ch)) {
-					throw new CMLRuntimeException("cannot make 1- or 2-membered ring");
+					throw new RuntimeException("cannot make 1- or 2-membered ring");
 				}
 //				ringSize = 10*(ch-'0') + (inline.charAt(++i)-'0');
 			} else if (ch > '2' && ch <= '9') {

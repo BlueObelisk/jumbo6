@@ -6,12 +6,12 @@ import nu.xom.Element;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-
-
-/** properties of a CML object.
- * currently motivated by graphics but could be extended
+/**
+ * properties of a CML object. currently motivated by graphics but could be
+ * extended
+ * 
  * @author pm286
- *
+ * 
  */
 public class AbstractDisplay {
 
@@ -24,16 +24,16 @@ public class AbstractDisplay {
 
 	protected final static String FONT_WEIGHT_NORMAL = "normal";
 	protected final static String FONT_WEIGHT_BOLD = "bold";
-	
+
 	protected final static String FONT_SANS_SERIF = "helvetica";
 	protected final static String FONT_SERIF = "timesRoman";
 	protected final static String FONT_MONOSPACE = "monospace";
-	
+
 	final static AbstractDisplay DEFAULT = new AbstractDisplay();
 	static {
 		DEFAULT.setDefaults();
 	};
-	
+
 	protected String color;
 	protected String fill = "red";
 	protected double fontSize = 15;
@@ -46,16 +46,17 @@ public class AbstractDisplay {
 	protected String backgroundColor;
 	protected Element userElement;
 
-	/** do not use.
+	/**
+	 * do not use.
 	 */
 	public AbstractDisplay() {
 		init();
 	}
-	
+
 	protected void init() {
 		setDefaults();
 	}
-	
+
 	protected void setDefaults() {
 		LOG.debug("SET DEFAULTS");
 		color = "black";
@@ -68,8 +69,9 @@ public class AbstractDisplay {
 		showChildLabels = false;
 		stroke = color;
 	}
-	
-	/** copy constructor.
+
+	/**
+	 * copy constructor.
 	 * 
 	 * @param a
 	 */
@@ -86,113 +88,138 @@ public class AbstractDisplay {
 		this.backgroundColor = a.backgroundColor;
 	}
 
-	
 	/**
 	 * @return the color
 	 */
 	public String getColor() {
 		return color;
 	}
+
 	/**
-	 * @param color the color to set
+	 * @param color
+	 *            the color to set
 	 */
 	public void setColor(String color) {
 		this.color = color;
 	}
+
 	/**
 	 * @return the fill
 	 */
 	public String getFill() {
 		return fill;
 	}
+
 	/**
-	 * @param fill the fill to set
+	 * @param fill
+	 *            the fill to set
 	 */
 	public void setFillColor(String fill) {
 		this.fill = fill;
 	}
+
 	/**
 	 * @return the opacity
 	 */
 	public double getOpacity() {
 		return opacity;
 	}
+
 	/**
-	 * @param opacity the opacity to set
+	 * @param opacity
+	 *            the opacity to set
 	 */
 	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 	}
+
 	/**
 	 * @return the stroke
 	 */
 	public String getStroke() {
 		return stroke;
 	}
+
 	/**
-	 * @param stroke the stroke to set
+	 * @param stroke
+	 *            the stroke to set
 	 */
 	public void setStroke(String stroke) {
 		this.stroke = stroke;
 	}
+
 	/**
 	 * @return the fontFamily
 	 */
 	public String getFontFamily() {
 		return fontFamily;
 	}
+
 	/**
-	 * @param fontFamily the fontFamilyto set
+	 * @param fontFamily
+	 *            the fontFamilyto set
 	 */
 	public void setFontFamily(String fontFamily) {
 		this.fontFamily = fontFamily;
 	}
+
 	/**
 	 * @return the fontSize
 	 */
 	public double getFontSize() {
 		return fontSize;
 	}
+
 	/**
-	 * @param fontSize the fontSize to set
+	 * @param fontSize
+	 *            the fontSize to set
 	 */
 	public void setFontSize(double fontSize) {
 		this.fontSize = fontSize;
 	}
+
 	/**
 	 * @return the fontStyle
 	 */
 	public String getFontStyle() {
 		return fontStyle;
 	}
+
 	/**
-	 * @param fontStyle the fontStyle to set
+	 * @param fontStyle
+	 *            the fontStyle to set
 	 */
 	public void setFontStyle(String fontStyle) {
 		this.fontStyle = fontStyle;
 	}
+
 	/**
 	 * @return the fontWeight
 	 */
 	public String getFontWeight() {
 		return fontWeight;
 	}
+
 	/**
-	 * @param fontWeight the fontWeight to set
+	 * @param fontWeight
+	 *            the fontWeight to set
 	 */
 	public void setFontWeight(String fontWeight) {
 		this.fontWeight = fontWeight;
 	}
-	
+
 	/**
-	 * @param fill the fill to set
+	 * @param fill
+	 *            the fill to set
 	 */
 	public void setFill(String fill) {
 		this.fill = fill;
 	}
+
 	public boolean isShowChildLabels() {
 		return showChildLabels;
 	}
+
 	public void setShowChildLabels(boolean showChildLabels) {
 		this.showChildLabels = showChildLabels;
 	}
@@ -204,29 +231,29 @@ public class AbstractDisplay {
 	public void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
-	
+
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("AbstractDisplay:");
-		sb.append("  color:           "+color);
+		sb.append("  color:           " + color);
 		sb.append(S_NEWLINE);
-		sb.append("  fill:            "+fill);
+		sb.append("  fill:            " + fill);
 		sb.append(S_NEWLINE);
-		sb.append("  fontSize:        "+fontSize);
+		sb.append("  fontSize:        " + fontSize);
 		sb.append(S_NEWLINE);
-		sb.append("  fontStyle:       "+fontStyle);
+		sb.append("  fontStyle:       " + fontStyle);
 		sb.append(S_NEWLINE);
-		sb.append("  fontWeight:      "+fontWeight);
+		sb.append("  fontWeight:      " + fontWeight);
 		sb.append(S_NEWLINE);
-		sb.append(  "fontFamily:      "+fontFamily);
+		sb.append("fontFamily:      " + fontFamily);
 		sb.append(S_NEWLINE);
-		sb.append(  "opacity:         "+opacity);
+		sb.append("opacity:         " + opacity);
 		sb.append(S_NEWLINE);
-		sb.append(  "showChildLabels: "+showChildLabels);
+		sb.append("showChildLabels: " + showChildLabels);
 		sb.append(S_NEWLINE);
-		sb.append(  "stroke:          "+stroke);
+		sb.append("stroke:          " + stroke);
 		sb.append(S_NEWLINE);
-		sb.append(  "backgroundColor: "+backgroundColor);
+		sb.append("backgroundColor: " + backgroundColor);
 		sb.append(S_NEWLINE);
 		sb.append(S_NEWLINE);
 

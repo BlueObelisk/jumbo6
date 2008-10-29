@@ -11,14 +11,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomParity;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtomArray;
+import org.xmlcml.cml.element.lite.CMLAtomParity;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondStereo;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -185,7 +184,7 @@ public class SMILESTool extends AbstractTool {
                 i++;
             } else if (c == C_RBRAK) {
                 if (stack.isEmpty()) {
-                    throw new CMLRuntimeException("Unexpected "+C_RBRAK);
+                    throw new RuntimeException("Unexpected "+C_RBRAK);
                 }
                 currentAtom = stack.pop();
                 bondChar = C_NONE;
@@ -193,7 +192,7 @@ public class SMILESTool extends AbstractTool {
             } else if (c == C_LSQUARE) {
                 final int idx = rawSmiles.indexOf(C_RSQUARE, i);
                 if (idx == -1) {
-                    throw new CMLRuntimeException("Unbalanced "+C_LSQUARE);
+                    throw new RuntimeException("Unbalanced "+C_LSQUARE);
                 }
                 int atomStartChar = i;
 //                String atomChunk = rawSmiles.substring(i, idx+1);
@@ -209,7 +208,7 @@ public class SMILESTool extends AbstractTool {
                 c == C_TRIPLE
                 ) {
                 if (bondChar != C_NONE || i==0 || i==l-1) {
-                    throw new CMLRuntimeException("Bond not expected here: "+rawSmiles.substring(i));
+                    throw new RuntimeException("Bond not expected here: "+rawSmiles.substring(i));
                 }
                 bondChar = c;
                 i++;
@@ -226,7 +225,7 @@ public class SMILESTool extends AbstractTool {
                 i++;
             } else if(Character.isDigit(c) || c == C_PERC ) {
             	if (currentAtom ==null){
-                    throw new CMLRuntimeException("Ring: "+ c + " does not have the starting or ending atom defined!");	
+                    throw new RuntimeException("Ring: "+ c + " does not have the starting or ending atom defined!");	
             	}
             	
             	int ring;
@@ -238,12 +237,12 @@ public class SMILESTool extends AbstractTool {
             				i++;
             			}
             			catch (NumberFormatException e){
-            				throw new CMLRuntimeException("Expected two digit number after % sign in string. Found: "
+            				throw new RuntimeException("Expected two digit number after % sign in string. Found: "
             						+rawSmiles.substring(i, i+2));
             			}
             		}
             		else{
-            			throw new CMLRuntimeException("Expected two digit number after % sign in SMILES. Found end of SMILES");	
+            			throw new RuntimeException("Expected two digit number after % sign in SMILES. Found end of SMILES");	
             		}
             	}
             	else{
@@ -316,14 +315,14 @@ public class SMILESTool extends AbstractTool {
             	i++;
             }
             else {
-                throw new CMLRuntimeException("Cannot interpret SMILES: "+rawSmiles.substring(i));
+                throw new RuntimeException("Cannot interpret SMILES: "+rawSmiles.substring(i));
             }
             
         }
         
         for (int r = 0; r < rings.length; r++) {
 			if (rings[r] != null){
-				throw new CMLRuntimeException("Ring: "+ r +" not closed!");
+				throw new RuntimeException("Ring: "+ r +" not closed!");
 			}
 		}
         
@@ -492,7 +491,7 @@ public class SMILESTool extends AbstractTool {
 		   String midS = ss.substring(1, jj);
 		   String endS = ss.substring(jj+1);
 		   if (!endS.startsWith(S_STAR+S_LBRAK)) {
-			   throw new CMLRuntimeException("expected * count after }");
+			   throw new RuntimeException("expected * count after }");
 		   }
 		   endS = endS.substring(2);
 		   int idx = endS.indexOf(S_RBRAK);
@@ -548,7 +547,7 @@ public class SMILESTool extends AbstractTool {
 	 */
     private String grabOrganicAtom(final String s) {
     	if (s.length() == 0) {
-    		throw new CMLRuntimeException("empty element symbol");
+    		throw new RuntimeException("empty element symbol");
     	}
         String atomString = s.substring(0, 1);
     	if (Character.isLowerCase(s.charAt(0))) {
@@ -561,7 +560,7 @@ public class SMILESTool extends AbstractTool {
     		{
     			;//
     		} else {
-    			throw new CMLRuntimeException("element may not start with lowercase: "+s);
+    			throw new RuntimeException("element may not start with lowercase: "+s);
     		}
     	}
         else if (s.startsWith(CL) || s.startsWith(BR)) {
@@ -578,7 +577,7 @@ public class SMILESTool extends AbstractTool {
     		atomString = s.substring(0, 1);
     	}
     	else {
-        	throw new CMLRuntimeException("Unknown element encountered: "+atomString +
+        	throw new RuntimeException("Unknown element encountered: "+atomString +
         			" Only organic elements may appear outside square brackets!");
         }
         return atomString;
@@ -592,7 +591,7 @@ public class SMILESTool extends AbstractTool {
 	 */
     private String grabAtom(final String s) {
     	if (s.length() == 0) {
-    		throw new CMLRuntimeException("empty element symbol");
+    		throw new RuntimeException("empty element symbol");
     	}
         String atomString = s.substring(0, 1);
         String elementSymbol = atomString;
@@ -612,7 +611,7 @@ public class SMILESTool extends AbstractTool {
     		{
     			elementSymbol =atomString.toUpperCase();
     		} else {
-    			throw new CMLRuntimeException("element may not start with lowercase: "+s);
+    			throw new RuntimeException("element may not start with lowercase: "+s);
     		}
     	}
     	else {
@@ -623,7 +622,7 @@ public class SMILESTool extends AbstractTool {
         }
         ChemicalElement chemicalElement = ChemicalElement.getChemicalElement(elementSymbol);
         if (chemicalElement == null) {
-        	throw new CMLRuntimeException("Unknown element: "+atomString);
+        	throw new RuntimeException("Unknown element: "+atomString);
         }
         return atomString;
     }
@@ -731,10 +730,10 @@ public class SMILESTool extends AbstractTool {
 	            }
             }
             else{
-            	throw new CMLRuntimeException("Invalid symbol found in atom description, found: "+s.charAt(i) );
+            	throw new RuntimeException("Invalid symbol found in atom description, found: "+s.charAt(i) );
             }
         }
-        //throw new CMLRuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
+        //throw new RuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
         
         atom.setFormalCharge(charge);
         atom.setHydrogenCount(hydrogenCount);
@@ -771,7 +770,7 @@ public class SMILESTool extends AbstractTool {
 
     private void setElementType(final CMLAtom atom, String elementType) {
     	if (elementType.length() < 1 || elementType.length() > 2) {
-            throw new CMLRuntimeException("Element of wrong length :"+elementType+":");
+            throw new RuntimeException("Element of wrong length :"+elementType+":");
         } else if (elementType.length() == 1) {
             if (Character.isLowerCase(elementType.charAt(0))) {
                 atom.setAttribute(AROMATIC, TRUE);
@@ -786,7 +785,7 @@ public class SMILESTool extends AbstractTool {
         else {
             if (!Character.isUpperCase(elementType.charAt(0)) &&
                 Character.isLowerCase(elementType.charAt(1))) {
-                throw new CMLRuntimeException("Bad element :"+elementType);
+                throw new RuntimeException("Bad element :"+elementType);
             }
         }
         atom.setElementType(elementType);
@@ -858,7 +857,7 @@ public class SMILESTool extends AbstractTool {
         } else if (bondChar == C_AROMATIC) {
             bond.setOrder(CMLBond.AROMATIC);
         } else {
-            throw new CMLRuntimeException("Unknown currentBond type :"+bondChar+":");
+            throw new RuntimeException("Unknown currentBond type :"+bondChar+":");
         }
         return bond;
     }

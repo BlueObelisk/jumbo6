@@ -6,8 +6,7 @@ import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.JniInchiWrapper;
 import net.sf.jniinchi.LoadNativeLibraryException;
 
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 
 /**
  * <p>Factory providing access to InChIGenerator and InChIToStructure. See those
@@ -36,15 +35,15 @@ public class InChIGeneratorFactory {
     /**
      * <p>Constructor for InChIGeneratorFactory. Ensures that native code
      * required for InChI/Structure interconversion is available, otherwise
-     * throws CMLException.
+     *.
      * 
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIGeneratorFactory() throws CMLException {
+    public InChIGeneratorFactory() {
         try {
             JniInchiWrapper.loadLibrary();
         } catch (LoadNativeLibraryException lnle) {
-            throw new CMLException("Unable to load native code; " + lnle.getMessage(), lnle);
+            throw new RuntimeException("Unable to load native code; " + lnle.getMessage(), lnle);
         }
     }
     
@@ -52,11 +51,11 @@ public class InChIGeneratorFactory {
      * <p>Gets InChI generator for CMLMolecule.
      * 
      * @param molecule     CMLMolecule to generate InChI for.
-     * @throws CMLException
+     * @throws RuntimeException
       * @return InChIGenrator
       * 
      */
-    public InChIGenerator getInChIGenerator(CMLMolecule molecule) throws CMLException {
+    public InChIGenerator getInChIGenerator(CMLMolecule molecule) {
         return(new InChIGenerator(molecule));
     }
     
@@ -66,9 +65,9 @@ public class InChIGeneratorFactory {
      * @param molecule     CMLMolecule to generate InChI for.
      * @param options       String of options for InChI generation.
      * @return inchi generator
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIGenerator getInChIGenerator(CMLMolecule molecule, String options) throws CMLException {
+    public InChIGenerator getInChIGenerator(CMLMolecule molecule, String options) {
         return(new InChIGenerator(molecule, options));
     }
     
@@ -78,9 +77,9 @@ public class InChIGeneratorFactory {
      * @param molecule     CMLMolecule to generate InChI for.
      * @param options      List of options (net.sf.jniinchi.INCHI_OPTION) for InChI generation.
      * @return Inchi generator
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIGenerator getInChIGenerator(CMLMolecule molecule, List<INCHI_OPTION> options) throws CMLException {
+    public InChIGenerator getInChIGenerator(CMLMolecule molecule, List<INCHI_OPTION> options) {
         return(new InChIGenerator(molecule, options));
     }
     
@@ -89,9 +88,9 @@ public class InChIGeneratorFactory {
      * 
      * @param inchi         InChI to generate structure from.
      * @return InChIToStructure
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIToStructure getInChIToStructure(String inchi) throws CMLException {
+    public InChIToStructure getInChIToStructure(String inchi) {
         return(new InChIToStructure(inchi));
     }
     
@@ -101,9 +100,9 @@ public class InChIGeneratorFactory {
      * @param inchi         InChI to generate structure from.
      * @param options       String of options for structure generation.
      * @return InChIToStructure
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIToStructure getInChIToStructure(String inchi, String options) throws CMLException {
+    public InChIToStructure getInChIToStructure(String inchi, String options) {
         return(new InChIToStructure(inchi, options));
     }
     
@@ -113,9 +112,9 @@ public class InChIGeneratorFactory {
      * @param inchi         InChI to generate structure from.
      * @param options       List of options (net.sf.jniinchi.INCHI_OPTION) for structure generation.
      * @return InChIToStructure
-     * @throws CMLException
+     * @throws RuntimeException
      */
-    public InChIToStructure getInChIToStructure(String inchi, List<String> options) throws CMLException {
+    public InChIToStructure getInChIToStructure(String inchi, List<String> options) {
         return(new InChIToStructure(inchi, options));
     }
 }

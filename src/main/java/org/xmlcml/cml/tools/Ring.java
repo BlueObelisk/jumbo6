@@ -9,11 +9,10 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Vector;
 import org.xmlcml.euclid.Transform2;
@@ -53,7 +52,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 		this.atomSet = atomSet;
 		this.bondSet = bondSet;
 		if (atomSet.size() != bondSet.size()) {
-			throw new CMLRuntimeException("atomSet and bondset different sizes");
+			throw new RuntimeException("atomSet and bondset different sizes");
 		}
 		makeCyclicLists();
 	}
@@ -80,7 +79,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 			}
 		}
 		if (nb != 2) {
-			throw new CMLRuntimeException("Bad list "+nb);
+			throw new RuntimeException("Bad list "+nb);
 		}
 		orderAtomsInCycle();
 		cyclicAtomList.canonicalize();
@@ -327,7 +326,7 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 			try {
 				// atom0 in next bond?
 				nextBond.getOtherAtom(atom0);
-			} catch (CMLRuntimeException e) {
+			} catch (RuntimeException e) {
 				// no, use atom0
 				canonicalAtom = atom0;
 			}

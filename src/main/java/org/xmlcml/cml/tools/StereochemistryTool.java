@@ -9,16 +9,14 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomParity;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLAtomParity;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondStereo;
+import org.xmlcml.cml.element.lite.CMLLabel;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
@@ -74,9 +72,9 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 * If ANY wedge/hatch are set, return without action (this may change)
 	 * 
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
-	public void addWedgeHatchBonds() throws CMLRuntimeException {
+	public void addWedgeHatchBonds() throws RuntimeException {
 		for (CMLAtom chiralAtom : new StereochemistryTool(molecule).getChiralAtoms()) {
 			this.addWedgeHatchBond(chiralAtom);
 		}
@@ -148,7 +146,7 @@ public class StereochemistryTool extends AbstractTool {
 				}
 			} else {
 				// no coordinates!
-				throw new CMLRuntimeException(
+				throw new RuntimeException(
 				"insufficient coordinates on ligands to determine parity");
 			}
 			atomRefs4[i] = ligandList.get(i).getId();
@@ -201,7 +199,7 @@ public class StereochemistryTool extends AbstractTool {
 					orderedLigandList.add(i, atom);
 					break;
 				} else {
-					throw new CMLRuntimeException("Error getting ligands in CIP order.");
+					throw new RuntimeException("Error getting ligands in CIP order.");
 				}
 			}
 		}
@@ -310,20 +308,12 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 * @param bond
 	 * @return bondstereo (null if cannot calculate as CIS/TRANS)
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 */
 	public CMLBondStereo get2DBondStereo(CMLBond bond) {
-		for (CMLAtom atom : bond.getAtoms()) {
-			System.out.print(atom.getId()+" ");
-		}
-		System.out.println();
 		CMLBondStereo bondStereo = null;
 		CMLAtom[] atom4 = BondTool.createAtomRefs4(bond);
 		if (atom4 != null) {
-			System.out.println(atom4[0].toXML());
-			System.out.println(atom4[1].toXML());
-			System.out.println(atom4[2].toXML());
-			System.out.println(atom4[3].toXML());
 			Vector3 v1 = AtomTool.getOrCreateTool(atom4[1]).get2DCrossProduct(atom4[2], atom4[0]);
 			Vector3 v2 = AtomTool.getOrCreateTool(atom4[2]).get2DCrossProduct(atom4[1], atom4[3]);
 			double d = v1.dot(v2);
@@ -340,9 +330,9 @@ public class StereochemistryTool extends AbstractTool {
 	 * uses bondStereo to adjust 2D coordinates.
 	 * 
 	 * @param bond
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public void layoutDoubleBond(CMLBond bond) throws CMLException {
+	public void layoutDoubleBond(CMLBond bond) {
 		CMLBondStereo bondStereo2 = null;
 		CMLBondStereo bondStereo3 = null;
 		// CMLMolecule molecule = this.getMolecule();
@@ -360,10 +350,10 @@ public class StereochemistryTool extends AbstractTool {
 	 * flip (about bond axis) the 2D coordinates attached to atom0.
 	 * 
 	 * @param bond
-	 * @exception CMLException
+	 * @exception RuntimeException
 	 *                many, including invalid geometry operations
 	 */
-	public void flip2D(CMLBond bond) throws CMLException {
+	public void flip2D(CMLBond bond) {
 		// FIXME
 		// flip2D(bond, this.getAtom(bond, 0));
 	}
@@ -374,8 +364,8 @@ public class StereochemistryTool extends AbstractTool {
 	 * requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
 	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1)
 	 * 
-	 * if connectivity is not as above throws CMLException if this.getAtom(0) or
-	 * this.getAtom(1) have > 3 ligands throws CMLException if either end of
+	 * if connectivity is not as above if this.getAtom(0) or
+	 * this.getAtom(1) have > 3 ligands if either end of
 	 * bond is effectively linear return BondTool.LINEAR
 	 * 
 	 * @param ligand0
@@ -391,8 +381,8 @@ public class StereochemistryTool extends AbstractTool {
 	 * requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
 	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1)
 	 * 
-	 * if connectivity is not as above throws CMLException if this.getAtom(0) or
-	 * this.getAtom(1) have > 3 ligands throws CMLException if either end of
+	 * if connectivity is not as above if this.getAtom(0) or
+	 * this.getAtom(1) have > 3 ligands if either end of
 	 * bond is effectively linear return BondTool.LINEAR
 	 * 
 	 * if torsion angle is in range pi/4 < t < 3*pi/4 return UNKNOWN
@@ -403,11 +393,11 @@ public class StereochemistryTool extends AbstractTool {
 	 * @param ligand1
 	 *            ligand(tool) for this.getAtom(1)
 	 * 
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 * @return CIS, TRANS, UNKNOWN,
 	 */
 	public CMLBondStereo create3DBondStereo(CMLBond bond, CMLAtom ligand0,
-			CMLAtom ligand1) throws CMLException {
+			CMLAtom ligand1) {
 		CMLBondStereo bondStereo = null;
 		String cisTrans = CMLBond.UNKNOWN_ORDER;
 		// wrong sort of bond
@@ -417,11 +407,11 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		CMLAtom atom0 = bond.getAtom(0);
 		if (molecule.getBond(atom0, ligand0) == null) {
-			throw new CMLException("ligand0 is not connected to bond");
+			throw new RuntimeException("ligand0 is not connected to bond");
 		}
 		CMLAtom atom1 = bond.getAtom(1);
 		if (molecule.getBond(atom1, ligand1) == null) {
-			throw new CMLException("ligand1 is not connected to bond");
+			throw new RuntimeException("ligand1 is not connected to bond");
 		}
 		// no meaningful ligands or too many
 		int ligandCount0 = atom0.getLigandAtoms().size();
@@ -644,10 +634,10 @@ public class StereochemistryTool extends AbstractTool {
 	 * uses atomParity to create wedge or hatch.
 	 *
 	 * @param atom
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 *             inconsistentencies in diagram, etc.
 	 */
-	public void addWedgeHatchBond(CMLAtom atom) throws CMLRuntimeException {
+	public void addWedgeHatchBond(CMLAtom atom) throws RuntimeException {
 		CMLBond bond = getFirstWedgeableBond(atom);
 		if (bond == null) {
 			LOG.info("Cannot find ANY free wedgeable bonds! "

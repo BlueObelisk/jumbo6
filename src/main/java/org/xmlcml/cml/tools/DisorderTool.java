@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -12,16 +13,13 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLScalar;
 import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
 import org.xmlcml.cml.tools.DisorderToolControls.RemoveControl;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.CombinationGenerator;
-import org.xmlcml.util.Partition;
 
 /**
  *
@@ -104,7 +102,7 @@ public class DisorderTool extends AbstractTool {
 	 * tagged with metadata stating that the molecule did contain disorder, but
 	 * has now been removed.
 	 *
-	 * @exception CMLRuntimeException
+	 * @exception RuntimeException
 	 */
 	public void resolveDisorder() {
 		if (molecule == null) {
@@ -175,7 +173,7 @@ public class DisorderTool extends AbstractTool {
 						failedAssemblyList.add(da);
 						continue;
 					} else if (ProcessControl.STRICT.equals(pControl)) {
-						throw new CMLRuntimeException(
+						throw new RuntimeException(
 								"Disorder assembly should contain at least 2 disorder groups: "
 								+ da.toString());
 					}
@@ -188,7 +186,7 @@ public class DisorderTool extends AbstractTool {
 							failedAssemblyList.add(da);
 							continue;
 						} else if (ProcessControl.STRICT.equals(pControl)) {
-							throw new CMLRuntimeException(
+							throw new RuntimeException(
 									"Common atoms require unit occupancy: "
 									+ commonAtom.getId()
 									+ ", in disorder assembly, "
@@ -205,7 +203,7 @@ public class DisorderTool extends AbstractTool {
 								failedAssemblyList.add(da);
 								continue;
 							} else if (ProcessControl.STRICT.equals(pControl)) {
-								throw new CMLRuntimeException("Atom, "
+								throw new RuntimeException("Atom, "
 										+ atom.getId() + ", in disorder group, "
 										+ dg.getGroupCode()
 										+ ", has unit occupancy");
@@ -217,7 +215,7 @@ public class DisorderTool extends AbstractTool {
 								failedAssemblyList.add(da);
 								continue;
 							} else if (ProcessControl.STRICT.equals(pControl)) {
-								throw new CMLRuntimeException(
+								throw new RuntimeException(
 										"Atom "
 										+ atom.getId()
 										+ ", in disorder group, "
@@ -413,7 +411,7 @@ public class DisorderTool extends AbstractTool {
 		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
 				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", CML_XPATH);
 		if (assemblyNodes.size() > 1) {
-			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
+			throw new RuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder assembly.");
 		} else {
 			// remove any old nodes
@@ -430,7 +428,7 @@ public class DisorderTool extends AbstractTool {
 		List<Node> groupNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
 				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", CML_XPATH);
 		if (groupNodes.size() > 1) {
-			throw new CMLRuntimeException("Atom "+atom.getId()+" contains more than one"
+			throw new RuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder group.");
 		} else {
 			// remove any old nodes
@@ -573,5 +571,174 @@ public class DisorderTool extends AbstractTool {
 		List<DisorderAssembly> disorderAssemblyList = DisorderAssembly
 		.getDisorderedAssemblyList(disorderedAtomList);
 		return disorderAssemblyList;
+	}
+}
+class CombinationGenerator {
+
+	private int[] a;
+	private int n;
+	private int r;
+	private BigInteger numLeft;
+	private BigInteger total;
+
+	//------------
+	// Constructor
+	//------------
+
+	/** constructor.
+	 * @param n
+	 * @param r
+	 */
+	public CombinationGenerator (int n, int r) {
+		if (r > n) {
+			throw new IllegalArgumentException ();
+		}
+		if (n < 1) {
+			throw new IllegalArgumentException ();
+		}
+		this.n = n;
+		this.r = r;
+		a = new int[r];
+		BigInteger nFact = getFactorial (n);
+		BigInteger rFact = getFactorial (r);
+		BigInteger nminusrFact = getFactorial (n - r);
+		total = nFact.divide (rFact.multiply (nminusrFact));
+		reset ();
+	}
+
+	//------
+	// Reset
+	//------
+
+	/** reset.
+	 * 
+	 */
+	public void reset () {
+		for (int i = 0; i < a.length; i++) {
+			a[i] = i;
+		}
+		numLeft = new BigInteger (total.toString ());
+	}
+
+	//------------------------------------------------
+	// Return number of combinations not yet generated
+	//------------------------------------------------
+
+	/** 
+	 * @return big int
+	 */
+	public BigInteger getNumLeft () {
+		return numLeft;
+	}
+
+	//-----------------------------
+	// Are there more combinations?
+	//-----------------------------
+
+	/**
+	 * @return has more
+	 */
+	public boolean hasMore () {
+		return numLeft.compareTo (BigInteger.ZERO) == 1;
+	}
+
+	/**
+	* Return total number of combinations
+	 * @return big int
+	 */
+	public BigInteger getTotal () {
+		return total;
+	}
+
+	//------------------
+	// Compute factorial
+	//------------------
+
+	private static BigInteger getFactorial (int n) {
+		BigInteger fact = BigInteger.ONE;
+		for (int i = n; i > 1; i--) {
+			fact = fact.multiply (new BigInteger (Integer.toString (i)));
+		}
+		return fact;
+	}
+
+	/** Generate next combination (algorithm from Rosen p. 286)
+	 * 
+	 * @return combinations
+	 */
+
+	public int[] getNext () {
+
+		if (numLeft.equals (total)) {
+			numLeft = numLeft.subtract (BigInteger.ONE);
+			return a;
+		}
+
+		int i = r - 1;
+		while (a[i] == n - r + i) {
+			i--;
+		}
+		a[i] = a[i] + 1;
+		for (int j = i + 1; j < r; j++) {
+			a[j] = a[i] + j - i;
+		}
+
+		numLeft = numLeft.subtract (BigInteger.ONE);
+		return a;
+
+	}
+}
+class Partition {
+	/**
+	 * returns all the ways the integer provided can be divided
+	 * into whole number parts.  This supplying 5 returns
+	 * 
+	 * 1 1 1 1 1
+	 * 2 1 1 1
+	 * 2 2 1
+	 * 3 1 1
+	 * 3 2
+	 * 4 1
+	 * 5
+	 * 
+	 * @param n
+	 * @return list
+	 */
+	public static List<List<Integer>> partition(int n) {
+		List<List<Integer>> partitionList = new ArrayList<List<Integer>>();
+		List<Integer> partition = new ArrayList<Integer>();
+		return partition(n, n, "", partitionList, partition);
+	}
+
+	private static List<List<Integer>> partition(int n, int max, String prefix,
+			List<List<Integer>> partitionList,
+			List<Integer> partition) {
+		if (n == 0) {
+			//System.out.println(prefix);
+			partitionList.add(new ArrayList<Integer>(partition));
+			partition.clear();
+			return partitionList;
+		}
+
+		for (int i = Math.min(max, n); i >= 1; i--) {
+			//System.out.println(prefix + " " + i);
+			partition.add(i);
+			partition(n-i, i, prefix + " " + i, partitionList, partition);
+		}
+		return partitionList;
+	}
+
+	/** main.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		List<List<Integer>> partitionList = partition(5);
+		for (List<Integer> partition : partitionList) {
+			for (Integer in : partition) {
+				System.out.print(in+" ");
+			}
+			System.out.println("");
+		}
 	}
 }

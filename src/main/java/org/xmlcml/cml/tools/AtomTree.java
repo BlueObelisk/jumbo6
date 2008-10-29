@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLLabel;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**

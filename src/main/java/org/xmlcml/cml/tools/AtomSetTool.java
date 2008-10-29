@@ -13,23 +13,22 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.CMLAngle;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLLink;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAngle;
+import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.main.CMLLink;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLTorsion;
+import org.xmlcml.cml.element.main.CMLTransform3;
 import org.xmlcml.euclid.Point3;
-import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real3Range;
+import org.xmlcml.euclid.Transform3;
 
 /**
  * tool to support atom set. not sure if useful
@@ -39,7 +38,7 @@ import org.xmlcml.euclid.Real3Range;
  */
 public class AtomSetTool extends AbstractTool {
 	private static Logger LOG = Logger.getLogger(AtomTool.class);
-	
+
 	Logger logger = Logger.getLogger(AtomSetTool.class.getName());
 
 	private CMLAtomSet atomSet;
@@ -51,6 +50,15 @@ public class AtomSetTool extends AbstractTool {
 
 	private AtomMatcher atomMatcher;
 
+	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
+		Nodes nodes = element.query("./cml:atomSet", CML_XPATH);
+		 List <CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
+		 for (int i = 0; i < nodes.size(); i++) {
+			 atomSetList.add((CMLAtomSet) nodes.get(i));
+		 }
+		return atomSetList;
+	}
+	    
 	/**
 	 * constructor.
 	 * 
@@ -59,7 +67,7 @@ public class AtomSetTool extends AbstractTool {
 	 */
 	public AtomSetTool(CMLAtomSet atomSet) {
 		if (atomSet == null) {
-			throw new CMLRuntimeException("Null atomSet");
+			throw new RuntimeException("Null atomSet");
 		}
 		this.atomSet = atomSet;
 		List<CMLAtom> atomList = atomSet.getAtoms();
@@ -68,8 +76,10 @@ public class AtomSetTool extends AbstractTool {
 		}
 	}
 
-	/** gets AtomSetTool associated with atomSet.
-	 * if null creates one and sets it in atomSet
+	/**
+	 * gets AtomSetTool associated with atomSet. if null creates one and sets it
+	 * in atomSet
+	 * 
 	 * @param atomSet
 	 * @return tool
 	 */
@@ -81,21 +91,35 @@ public class AtomSetTool extends AbstractTool {
 				atomSetTool = new AtomSetTool(atomSet);
 				atomSet.setTool(atomSetTool);
 				if (atomSet.getAtoms().size() > 0) {
-					atomSetTool.molecule = atomSet.getMoleculeOrAncestor();
+					atomSetTool.molecule = atomSetTool.getMoleculeOrAncestor();
 				}
 			}
 		}
 		return atomSetTool;
 	}
+	
+    public CMLMolecule getMoleculeOrAncestor() {
+        List<CMLAtom> atoms = atomSet.getAtoms();
+        if (atoms.size() > 0) {
+            molecule = CMLMolecule.getMoleculeAncestor(atoms.get(0));
+        } else {
+            throw new RuntimeException("NO atoms in set...");
+        }
+        return molecule;
+    }
 
-	/** gets AtomSetTool associated with molecule.
-	 * if null creates one and sets it in atomSet
-	 * (currently always creates it as molecule does not remember atomSet)
+
+	/**
+	 * gets AtomSetTool associated with molecule. if null creates one and sets
+	 * it in atomSet (currently always creates it as molecule does not remember
+	 * atomSet)
+	 * 
 	 * @param molecule
 	 * @return tool
 	 */
 	public static AtomSetTool getOrCreateTool(CMLMolecule molecule) {
-		return getOrCreateTool(molecule.getAtomSet());
+		return getOrCreateTool(MoleculeTool.getOrCreateTool(molecule)
+				.getAtomSet());
 	}
 
 	// =============== ATOMSET =========================
@@ -123,6 +147,39 @@ public class AtomSetTool extends AbstractTool {
 					!bondSet.contains(ligandBond)) {
 					bondSet.addBond(ligandBond);
 				}
+			}
+		}
+		return bondSet;
+	}
+
+	/**
+	 * gets bondset for all bonds in current atom set. slow. order of bond is
+	 * undetermined but probably in atom document order and iteration through
+	 * ligands
+	 * 
+	 * @return the bondSet
+	 * @throws RuntimeException
+	 *             one or more bonds does not have an id
+	 */
+	@SuppressWarnings("unused")
+	// FIXME don't think this works
+	public CMLBondSet getBondSet() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		molecule.getBonds();
+		CMLBondSet bondSet = new CMLBondSet();
+		for (CMLAtom atom : atoms) {
+			List<CMLAtom> ligandList = atom.getLigandAtoms();
+			List<CMLBond> ligandBondList = atom.getLigandBonds();
+			// Iterator<CMLAtom> ita = atom.getLigandList().iterator();
+			// Iterator<CMLBond> itb = atom.getBondList().iterator();
+			// loop through ligands and examine each for membership of this set;
+			// if so add bond
+			int i = 0;
+			for (CMLAtom ligand : ligandList) {
+				CMLBond ligandBond = ligandBondList.get(i++);
+				// if (atomSet.contains(ligand)) {
+				bondSet.addBond(ligandBond);
+				// }
 			}
 		}
 		return bondSet;
@@ -217,7 +274,7 @@ public class AtomSetTool extends AbstractTool {
 							at0.getId(), at1.getId(), ligand1.getId() });
 					if (calculate) {
 						double torsionVal = torsion
-						.getCalculatedTorsion(molecule);
+								.getCalculatedTorsion(molecule);
 						torsion.setXMLContent(torsionVal);
 					}
 					if (add) {
@@ -234,7 +291,8 @@ public class AtomSetTool extends AbstractTool {
 		return torsionVector;
 	}
 
-	/** Creates new AtomSet one ligand shell larger than this one.
+	/**
+	 * Creates new AtomSet one ligand shell larger than this one.
 	 * 
 	 * @return set
 	 */
@@ -271,8 +329,8 @@ public class AtomSetTool extends AbstractTool {
 				for (int j = i; j < atomSets.length; j++) {
 					// boolean diff = false;
 					if (atomSets[i] == null || atomSets[j] == null) {
-						throw new CMLRuntimeException("Null atom set component: " + i
-								+ S_SLASH + j);
+						throw new RuntimeException("Null atom set component: "
+								+ i + S_SLASH + j);
 					} else if (atomSets[i].compareTo(atomSets[j]) == 0) {
 						different = false;
 						break;
@@ -287,8 +345,8 @@ public class AtomSetTool extends AbstractTool {
 	}
 
 	/**
-	 * create from an array of molecules. we seem not to be able to use two List<>
-	 * constructors
+	 * create from an array of molecules. we seem not to be able to use two
+	 * List<> constructors
 	 * 
 	 * @param molecules
 	 *            the molecules
@@ -323,12 +381,12 @@ public class AtomSetTool extends AbstractTool {
 	 * @param atom
 	 *            atom whose parent should be set
 	 * @param parentAtom
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 *             child atom not in atom set
 	 */
-	public void setParent(CMLAtom atom, CMLAtom parentAtom) throws CMLException {
+	public void setParent(CMLAtom atom, CMLAtom parentAtom) {
 		if (!atomSet.contains(atom)) {
-			throw new CMLException("Child atom not in atom set");
+			throw new RuntimeException("Child atom not in atom set");
 		}
 		if (parentTable == null) {
 			parentTable = new HashMap<CMLAtom, CMLAtom>();
@@ -344,12 +402,12 @@ public class AtomSetTool extends AbstractTool {
 	 * @param atom
 	 *            atom whose parent should be found
 	 * @return parent atom, or null
-	 * @throws CMLRuntimeException
+	 * @throws RuntimeException
 	 *             child atom not in atom set
 	 */
-	public CMLAtom getParent(CMLAtom atom) throws CMLRuntimeException {
+	public CMLAtom getParent(CMLAtom atom) throws RuntimeException {
 		if (!atomSet.contains(atom)) {
-			throw new CMLRuntimeException("Child atom not in atom set");
+			throw new RuntimeException("Child atom not in atom set");
 		}
 		if (parentTable == null) {
 			return null;
@@ -358,9 +416,10 @@ public class AtomSetTool extends AbstractTool {
 		return parentAtom;
 	}
 
-	/** find atom closest to point.
-	 * uses 2D coordinates
-	 * skips atoms without 2D coords
+	/**
+	 * find atom closest to point. uses 2D coordinates skips atoms without 2D
+	 * coords
+	 * 
 	 * @param point
 	 * @return atom or null
 	 */
@@ -382,9 +441,10 @@ public class AtomSetTool extends AbstractTool {
 		return closestAtom;
 	}
 
-	/** find atom closest to point.
-	 * uses 3D coordinates
-	 * skips atoms without 3D coords
+	/**
+	 * find atom closest to point. uses 3D coordinates skips atoms without 3D
+	 * coords
+	 * 
 	 * @param point
 	 * @return atom or null
 	 */
@@ -514,15 +574,15 @@ public class AtomSetTool extends AbstractTool {
 		return newAtomSet;
 	}
 
-	/** get nearest atom in atomSet1 to this.
-	 * may get 1:n and 0:n mappings
+	/**
+	 * get nearest atom in atomSet1 to this. may get 1:n and 0:n mappings
+	 * 
 	 * @param atomSet1
 	 * @param delta
 	 * @return mapping
-	 * @throws CMLException
+	 * @throws RuntimeException
 	 */
-	public CMLMap matchNearestAtoms(
-			CMLAtomSet atomSet1, double delta) throws CMLException {
+	public CMLMap matchNearestAtoms(CMLAtomSet atomSet1, double delta) {
 		CMLMap map = new CMLMap();
 		boolean match = false;
 		Real2 centroid0 = atomSet.getCentroid2D();
@@ -547,63 +607,54 @@ public class AtomSetTool extends AbstractTool {
 			}
 		}
 		match = true;
-		/** not sure this is required...
-       for (int i = 0; i < atoms.size(); i++) {
-           if (!atomMatchTable.containsKey(atoms[i])) {
-               match = false;
-           }
-       }
-       for (int i = 0; i < atoms.size(); i++) {
-           if (!atomMatchTable.contains(atoms1[i])) {
-               match = false;
-           }
-       }
-       --*/
+		/**
+		 * not sure this is required... for (int i = 0; i < atoms.size(); i++) {
+		 * if (!atomMatchTable.containsKey(atoms[i])) { match = false; } } for
+		 * (int i = 0; i < atoms.size(); i++) { if
+		 * (!atomMatchTable.contains(atoms1[i])) { match = false; } } --
+		 */
 		if (match) {
 			// FIXME
-//			map = createMap(atomSet, atomSet1, atomMatchTable);
+			// map = createMap(atomSet, atomSet1, atomMatchTable);
 		} else {
-			//            System. out.println("FAILED to match unordered atoms");
+			// System. out.println("FAILED to match unordered atoms");
 		}
 
 		return map;
 	}
 
-	/** gets extent (bounding box).
-	 * skips atoms without coordinates
-	 * @return real2range
-	 */
-	public Real2Range getExtent2() {
-		Real2Range r2r = new Real2Range();
-
-		List<CMLAtom> atoms = molecule.getAtoms();
-		for (CMLAtom atom : atoms) {
-			Real2 xy = atom.getXY2();
-			if (xy != null) {
-				r2r.add(xy);
-			}
-		}
-		return r2r;
-	}
-
-	/** gets extend (bounding box).
-	 * 
-	 * @return {@link Real3Range}
-	 */
-	public Real3Range getExtent3() {
-		Real3Range r3r = new Real3Range();
-		if (molecule != null) {
-			List<CMLAtom> atoms = molecule.getAtoms();
-			for (CMLAtom atom : atoms) {
-				Point3 xyz = atom.getXYZ3();
-				if (xyz != null) {
-					r3r.add(xyz);
-				}
-			}
-		}
-		return r3r;
-	}
-
+	   /** gets extend (bounding box).
+	    * 
+	    * @return real2range
+	    */
+	   public Real2Range getExtent2() {
+		   Real2Range r2r = new Real2Range();
+		   
+		   List<CMLAtom> atoms = molecule.getAtoms();
+		   for (CMLAtom atom : atoms) {
+			   Real2 xy = atom.getXY2();
+			   if (xy != null) {
+				   r2r.add(xy);
+			   }
+		   }
+		   return r2r;
+	   }
+	    
+	   /** gets extend (bounding box).
+	    * 
+	    * @return {@link Real3Range}
+	    */
+	   public Real3Range getExtent3() {
+		   Real3Range r3r = new Real3Range();
+		   List<CMLAtom> atoms = molecule.getAtoms();
+		   for (CMLAtom atom : atoms) {
+			   Point3 xyz = atom.getXYZ3();
+			   if (xyz != null) {
+				   r3r.add(xyz);
+			   }
+		   }
+		   return r3r;
+	   }
 	public CMLAtomSet getAtomSet() {
 		return atomSet;
 	}
@@ -612,56 +663,92 @@ public class AtomSetTool extends AbstractTool {
 		return molecule;
 	}
 
-	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
-		Nodes nodes = element.query("./cml:atomSet", CML_XPATH);
-		 List <CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
-		 for (int i = 0; i < nodes.size(); i++) {
-			 atomSetList.add((CMLAtomSet) nodes.get(i));
-		 }
-		return atomSetList;
-	}
-	    
 	/**
-	 * Calculate RMS between two CMLAtomSets of equal length and atoms in the same order.
-	 * @param atomSet2
-	 * @return RMS
+	 * transform 3D cartesian coordinates. modifies this
+	 * 
+	 * @param transform
+	 *            the transformation
 	 */
-	public double calculateRMSForAlignedAtomSets(CMLAtomSet atomSet2) {
-		Point3Vector p3v1 = atomSet.getCoordinates3(CoordinateType.CARTESIAN);
-		Point3Vector p3v2 = atomSet2.getCoordinates3(CoordinateType.CARTESIAN);
-		if (p3v1 == null || p3v1.size() == 0 || p3v2 == null || p3v2.size() == 0) {
-			throw new CMLRuntimeException("No coordinates to compare");
-		} 
-		if (p3v1.size() != p3v2.size()) {
-			throw new CMLRuntimeException("AtomSets not of same size ("+p3v1.size()+":"+p3v2.size()+")");
+	public void transformCartesians(Transform3 transform) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			atom.transformCartesians(transform);
 		}
-		double sds = p3v1.getSigmaDeltaSquared(p3v2);
-		return Math.sqrt(sds/p3v1.size());
-	}
-	
-	public CMLMap match(CMLAtomSet search, AtomMatcher atomMatcher) {
-		CMLMap map = null;
-		this.searchAtomSet = search;
-		this.atomMatcher = atomMatcher;
-		findPossibleMatchesForEachAtomInSearch();
-		matchAtomSet();
-		return map;
-	}
-	
-	private void findPossibleMatchesForEachAtomInSearch() {
-		List<SearchAtom> searchAtomList = new ArrayList<SearchAtom>();
-		for (int i = 0; i < searchAtomSet.size(); i++) {
-			CMLAtom atom = searchAtomSet.getAtom(i);
-			SearchAtom searchAtom = new SearchAtom(atom);
-			searchAtom.addMatchableAtoms(atomSet, atomMatcher);
-			searchAtomList.add(searchAtom);
-		}
-	}
-	
-	private void matchAtomSet() {
-		
 	}
 
+	/**
+	 * transform 3D cartesian coordinates. modifies this
+	 * 
+	 * @param transform
+	 *            the transformation
+	 */
+	public void transformCartesians(CMLTransform3 transform) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			AtomTool.getOrCreateTool(atom).transformCartesians(transform);
+		}
+	}
+
+	/**
+	 * transform 3D fractional coordinates. modifies this does not affect x3,
+	 * y3, z3 (may need to re-generate cartesians)
+	 * 
+	 * @param transform
+	 *            the transformation
+	 */
+	public void transformFractionals(Transform3 transform) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			atom.transformFractionals(transform);
+		}
+	}
+
+	/**
+	 * transform 3D fractional coordinates. modifies this does not affect x3,
+	 * y3, z3 (may need to re-generate cartesians)
+	 * 
+	 * @param transform
+	 *            the transformation
+	 */
+	public void transformFractionals(CMLTransform3 transform) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			AtomTool.getOrCreateTool(atom).transformFractionals(transform);
+		}
+	}
+
+	/**
+	 * transform fractional and 3D coordinates. does NOT alter 2D coordinates
+	 * transforms fractionals then applies orthogonalisation to result
+	 * 
+	 * @param transform
+	 *            the fractional symmetry transformation
+	 * @param orthTransform
+	 *            orthogonalisation transform
+	 */
+	public void transformFractionalsAndCartesians(CMLTransform3 transform,
+			Transform3 orthTransform) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			AtomTool.getOrCreateTool(atom).transformFractionalsAndCartesians(
+					transform, orthTransform);
+		}
+	}
+
+	class SearchAtom {
+		CMLAtom atom;
+		List<CMLAtom> matchesInTarget = new ArrayList<CMLAtom>();
+
+		public SearchAtom(CMLAtom atom) {
+			this.atom = atom;
+		}
+
+		public void addMatchableAtoms(CMLAtomSet targetAtomSet,
+				AtomMatcher atomMatcher) {
+			for (CMLAtom targetAtom : targetAtomSet.getAtoms()) {
+				if (atomMatcher.matches(atom, targetAtom)) {
+					matchesInTarget.add(targetAtom);
+				}
+			}
+		}
+
+	}
+	
 	public void clean2D(double bondLength, int ncyc) {
 		int count = 0;
 		boolean converged = false;
@@ -670,7 +757,7 @@ public class AtomSetTool extends AbstractTool {
 	    	double modShift = 0.;
 	    	Map<CMLAtom, Real2> shiftMap = new HashMap<CMLAtom, Real2>();
 	    	for (CMLAtom atom : atomSet.getAtoms()) {
-	    		System.out.println(atom.getId());
+	    		LOG.trace(atom.getId());
 	    		buildShiftFromLigands(bondLength, atom, shiftMap);
 	    	}
 	    	for (CMLAtom atom : atomSet.getAtoms()) {
@@ -695,6 +782,7 @@ public class AtomSetTool extends AbstractTool {
 		}
 		
 	}
+	
 
 	private void buildShiftFromLigands(double bondLength, CMLAtom atom, Map<CMLAtom, Real2> shiftMap) {
 		List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -743,22 +831,5 @@ public class AtomSetTool extends AbstractTool {
 			map.put(atom, shift);
 		}
 		shift.plusEquals(delta);
-	}
-	
-}
-
-class SearchAtom {
-	CMLAtom atom;
-	List<CMLAtom> matchesInTarget = new ArrayList<CMLAtom>();
-	public SearchAtom(CMLAtom atom) {
-		this.atom = atom;
-	}
-	
-	public void addMatchableAtoms(CMLAtomSet targetAtomSet, AtomMatcher atomMatcher) {
-		for (CMLAtom targetAtom : targetAtomSet.getAtoms()) {
-			if (atomMatcher.matches(atom, targetAtom)) {
-				matchesInTarget.add(targetAtom);
-			}
-		}
 	}
 }

@@ -9,10 +9,9 @@ import net.sf.jniinchi.JniInchiNativeCodeLoader;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -133,7 +132,7 @@ public class InChIGeneratorTest {
     * @throws CMLException
 	 */
     @Test
-	public void testInChIGeneratorCMLAtomContainer() throws CMLException {
+	public void testInChIGeneratorCMLAtomContainer() {
         JniInchiNativeCodeLoader.setDebug(true);
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
 
@@ -155,7 +154,7 @@ public class InChIGeneratorTest {
     * @throws CMLException
 	 */
     @Test
-	public void testInChIGeneratorCMLMoleculeString() throws CMLException {
+	public void testInChIGeneratorCMLMoleculeString() {
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
 
 		CMLMolecule lAlanine = getLAlanineInput();
@@ -175,7 +174,7 @@ public class InChIGeneratorTest {
     * @throws CMLException
 	 */
     @Test
-	public void testInChIGeneratorCMLMoleculeList() throws CMLException {
+	public void testInChIGeneratorCMLMoleculeList() {
 		InChIGeneratorFactory factory = new InChIGeneratorFactory();
 
 		CMLMolecule lAlanine = getLAlanineInput();
@@ -200,7 +199,7 @@ public class InChIGeneratorTest {
      * @throws CMLException
      */
     @Test
-    public void testInChIWithImplicitHydrogen() throws CMLException {
+    public void testInChIWithImplicitHydrogen() {
         InChIGeneratorFactory factory = new InChIGeneratorFactory();
         CMLMolecule mol = new CMLMolecule();
         CMLAtom atom = new CMLAtom("a1");
@@ -218,7 +217,7 @@ public class InChIGeneratorTest {
      */
 
     @Test
-    public void testInChIWithExplicitHydrogens() throws CMLException {
+    public void testInChIWithExplicitHydrogens() {
         InChIGeneratorFactory factory = new InChIGeneratorFactory();
         CMLMolecule mol = new CMLMolecule();
         CMLAtom atom = new CMLAtom("a1");

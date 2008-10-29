@@ -5,8 +5,8 @@ import java.io.IOException;
 import nu.xom.Attribute;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLMoleculeList;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -60,6 +60,24 @@ public class MoleculeListTool extends AbstractSVGTool {
 		return moleculeListTool;
 	}
 
+	/** retrieve first molecule with given id.
+	 * O(n) linear search - crude
+	 * @param id
+	 * @return null if not found
+	 */
+	public CMLMolecule getMoleculeById(String id) {
+		CMLMolecule molecule = null;
+		if (id != null) {
+			for (CMLMolecule mol : moleculeList.getMoleculeElements()) {
+				if (id.equals(mol.getId())) {
+					molecule = mol;
+					break;
+				}
+			}
+		}
+		return molecule;
+	}
+
 	/**
 	 * 
 	 * @param moleculeList
@@ -87,13 +105,6 @@ public class MoleculeListTool extends AbstractSVGTool {
     	}
     	return g;
     }
-
-//    private void enableMoleculeDisplay() {
-//    	if (moleculeDisplay == null) {
-//    		moleculeDisplay = MoleculeDisplay.getDEFAULT();
-//    	}
-//    }
-
 
 	/**
 	 * @return the MoleculeDisplay

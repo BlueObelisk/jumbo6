@@ -4,7 +4,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.lite.CMLFormula;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;

@@ -6,19 +6,17 @@
 	<name>Jumbo</name>
 	<version>5.5-SNAPSHOT</version>
 	<description>A Java library for processing CML</description>
-	<url>http://sourceforge.net/projects/cml/</url>
+	<url>http://sourceforge.net/projects/cml/
+	</url>
 	<inceptionYear>1994</inceptionYear>
 	<mailingLists>
 		<mailingList>
 			<name>cml-discuss</name>
-			<subscribe>
-				http://lists.sourceforge.net/mailman/listinfo/cml-cvs
+			<subscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
 			</subscribe>
-			<unsubscribe>
-				http://lists.sourceforge.net/mailman/listinfo/cml-cvs
+			<unsubscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
 			</unsubscribe>
-			<archive>
-				http://sourceforge.net/mailarchive/forum.php?forum_id=44193
+			<archive> http://sourceforge.net/mailarchive/forum.php?forum_id=44193
 			</archive>
 		</mailingList>
 	</mailingLists>
@@ -139,48 +137,25 @@
 	<licenses>
 		<license>
 			<name>Artistic License</name>
-			<url>
-				http://www.opensource.org/licenses/artistic-license.php
-			</url>
+			<url> http://www.opensource.org/licenses/artistic-license.php</url>
 			<distribution>manual</distribution>
 		</license>
 	</licenses>
 	<scm>
-		<connection>
-			scm:cvs:pserver:anoncvs:@cml.cvs.sourceforge.net:/cvsroot/cml:jumbo53
+		<connection> scm:svn:https://cml.svn.sourceforge.net/svnroot/cml
 		</connection>
 		<developerConnection>
-			scm:cvs:extssh:[username]@cml.cvs.sourceforge.net:/cvsroot/cml:jumbo53
+			scm:svn:https://cml.svn.sourceforge.net/svnroot/cml
 		</developerConnection>
-		<url>http://cml.cvs.sourceforge.net/cml</url>
+		<url>http://cml.svn.sourceforge.net/viewvc/cml/
+		</url>
 	</scm>
 	<organization>
 		<name>Peter Murray-Rust</name>
-		<url>http://wwmm.ch.cam.ac.uk/blogs/murrayrust/</url>
+		<url>http://wwmm.ch.cam.ac.uk/blogs/murrayrust/
+		</url>
 	</organization>
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -190,42 +165,20 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<!--
-						<skip>true</skip>
-					-->
-					<version>2.3</version>
-					<excludes>
-						<exclude>
-							org/xmlcml/cml/tools/FragmentListToolTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/element/NumericTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/tools/MoleculeListToolTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/tools/AbstractToolTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/element/AbstractTest.java
-						</exclude>
-						<exclude>
-							org/xmlcml/cml/element/AbstractTest.java
-						</exclude>
-						<exclude>
-						org/xmlcml/cml/tools/AbstractToolTest.java
-						</exclude>
-						</excludes>
-				</configuration>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-2</version>
 			</plugin>
-		  <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-2</version>
-      </plugin>
-    </plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -238,15 +191,31 @@
 		<repository>
 			<id>wwmm</id>
 			<name>WWMM</name>
-			<url>http://wwmm.ch.cam.ac.uk/maven2/</url>
+			<url>http://wwmm.ch.cam.ac.uk/maven2/
+			</url>
 		</repository>
 	</repositories>
 	<dependencies>
+		<dependency>
+			<groupId>cml</groupId>
+			<artifactId>cmlxom</artifactId>
+			<version>2.5.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>cml</groupId>
+			<artifactId>cifxml</artifactId>
+			<version>1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
 			<version>0.4.1</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -265,13 +234,6 @@
 			<artifactId>xom</artifactId>
 			<version>1.1</version>
 		</dependency>
-		<!--
-			<dependency>
-			<groupId>commons-cli</groupId>
-			<artifactId>commons-cli</artifactId>
-			<version>1.0</version>
-			</dependency>
-		-->
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
@@ -282,7 +244,8 @@
 		<repository>
 			<id>wwmm-dav</id>
 			<name>WWMM</name>
-			<url>dav:http://wwmm.ch.cam.ac.uk/maven2</url>
+			<url>dav:http://wwmm.ch.cam.ac.uk/maven2
+			</url>
 		</repository>
 	</distributionManagement>
 </project>

@@ -14,6 +14,7 @@ import nu.xom.Node;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
@@ -27,7 +28,8 @@ import org.xmlcml.euclid.Transform2;
  *
  */
 public class SVGElement extends GraphicsElement {
-
+	private static Logger LOG = Logger.getLogger(GraphicsElement.class);
+	
 	private Element userElement;
 	private String strokeSave;
 	private String fillSave;

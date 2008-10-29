@@ -9,12 +9,11 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLRuntimeException;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLElectron;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLElectron;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -130,7 +129,7 @@ public class PiSystem implements CMLConstants {
      */
     public List<CMLAtom> getSortedAtomList() {
         if (piMap == null) {
-            throw new CMLRuntimeException("null piMap");
+            throw new RuntimeException("null piMap");
         }
         return getSortedAtomList(piMap);
     }
@@ -153,7 +152,7 @@ public class PiSystem implements CMLConstants {
         Collections.sort(atomList, new Comparator<CMLAtom>() {
             public int compare(CMLAtom a1, CMLAtom a2) {
                 if (!valid(a1) || !valid(a2)) {
-                    throw new CMLRuntimeException("null atoms or ids");
+                    throw new RuntimeException("null atoms or ids");
                 }
                 return (a1.getId().compareTo(a2.getId()));
             }
@@ -250,10 +249,10 @@ public class PiSystem implements CMLConstants {
     private PiSystem getPiSystem_createSubSystem(CMLAtom atom,
             Map<CMLAtom, Integer> parentMap) {
         if (atom == null) {
-            throw new CMLRuntimeException("ATOM MUST NOT BE NULL");
+            throw new RuntimeException("ATOM MUST NOT BE NULL");
         }
         if (parentMap == null) {
-            throw new CMLRuntimeException("Must calculate dbeMap");
+            throw new RuntimeException("Must calculate dbeMap");
         }
         PiSystem subSystem = new PiSystem(moleculeTool,
                 new ArrayList<CMLAtom>());
@@ -584,11 +583,11 @@ public class PiSystem implements CMLConstants {
         if (ii != null) {
             int iii = ii.intValue() + delta;
             if (iii < 0) {
-                throw new CMLRuntimeException("Negative Pi count");
+                throw new RuntimeException("Negative Pi count");
             }
             piMap.put(atom, new Integer(iii));
         } else {
-            throw new CMLRuntimeException("Null Pi count");
+            throw new RuntimeException("Null Pi count");
         }
         remainingPiCount += delta;
     }
@@ -602,7 +601,7 @@ public class PiSystem implements CMLConstants {
         List<CMLBond> bondList = this.createBondList();
         // System.out.println("BOND LIST "+bondList.size());
         if (bondList == null) {
-            throw new CMLRuntimeException("NULL BOND LIST");
+            throw new RuntimeException("NULL BOND LIST");
         } else {
             for (CMLBond bond : bondList) {
                 bond.incrementOrder(1);
@@ -627,12 +626,12 @@ public class PiSystem implements CMLConstants {
         CMLAtom atom1 = atomPair.getAtom1();
         CMLAtom atom2 = atomPair.getAtom2();
         if (atom1 == null || atom2 == null) {
-            throw new CMLRuntimeException("Null atom in atomPair " + atomPair);
+            throw new RuntimeException("Null atom in atomPair " + atomPair);
         }
         CMLMolecule molecule = atom1.getMolecule();
         CMLBond bond = molecule.getBond(atom1, atom2);
         if (bond == null) {
-            throw new CMLRuntimeException("Cannot find bond " + atomPair);
+            throw new RuntimeException("Cannot find bond " + atomPair);
         }
         return bond;
     }

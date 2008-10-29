@@ -1,7 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.main.CMLElectron;
 
 /** tool to support reactions. not fully developed
  * 

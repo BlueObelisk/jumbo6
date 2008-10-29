@@ -8,12 +8,11 @@ import nu.xom.Attribute;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLBondStereo;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLAtomSet;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -53,7 +52,7 @@ public class BondTool extends AbstractSVGTool {
         this.bond = bond;
         molecule = bond.getMolecule();
         if (molecule == null) {
-            throw new CMLRuntimeException("Bond must be in molecule");
+            throw new RuntimeException("Bond must be in molecule");
         }
     }
 
@@ -355,7 +354,7 @@ public class BondTool extends AbstractSVGTool {
 	 *
 	 * @param moleculeTool TODO
 	 * @param atom defining side of bond
-	 * @throws CMLRuntimeException atom is not in bond
+	 * @throws RuntimeException atom is not in bond
 	 * @return atomSet of downstream atoms
 	 */
 	public CMLAtomSet getDownstreamAtoms(CMLAtom atom, CMLAtomSet stopSet) {
@@ -374,7 +373,7 @@ public class BondTool extends AbstractSVGTool {
 	 * calls getDownstreamAtoms(atom, stopSet = null)
 	 * 
 	 * @param atom defining side of bond
-	 * @throws CMLRuntimeException atom is not in bond
+	 * @throws RuntimeException atom is not in bond
 	 * @return atomSet of downstream atoms
 	 */
 	public CMLAtomSet getDownstreamAtoms(CMLAtom atom) {
@@ -425,13 +424,13 @@ public class BondTool extends AbstractSVGTool {
 	 * than dumping the program
 	 *
 	 * @param bond
-	 * @exception CMLRuntimeException
+	 * @exception RuntimeException
 	 *                2 ligand atoms on same atom on same side too few or too
 	 *                many ligands at either end (any) ligand is linear with
 	 *                bond
 	 * @return the four atoms
 	 */
-	static CMLAtom[] createAtomRefs4(CMLBond bond) throws CMLRuntimeException {
+	static CMLAtom[] createAtomRefs4(CMLBond bond) throws RuntimeException {
 		CMLAtom[] atom4 = null;
 		List<CMLAtom> atomList = bond.getAtoms();
 		List<CMLAtom> ligands0 = AtomTool.getSubstituentLigandList(bond, atomList.get(0));
@@ -441,10 +440,10 @@ public class BondTool extends AbstractSVGTool {
 		} else if (ligands1.size() == 0) {
 			// no ligands on atom
 		} else if (ligands0.size() > 2) {
-			throw new CMLRuntimeException("Too many ligands on atom: "
+			throw new RuntimeException("Too many ligands on atom: "
 					+ atomList.get(0).getId());
 		} else if (ligands1.size() > 2) {
-			throw new CMLRuntimeException("Too many ligands on atom: "
+			throw new RuntimeException("Too many ligands on atom: "
 					+ atomList.get(1).getId());
 		} else {
 			CMLAtom ligand0 = ligands0.get(0);

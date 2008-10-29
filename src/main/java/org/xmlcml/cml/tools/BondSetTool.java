@@ -5,13 +5,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLRuntimeException;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondSet;
-import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.lite.CMLBond;
+import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.main.CMLMap.Direction;
 
 /**
  * tool to support bond set. not sure if useful
@@ -37,7 +36,7 @@ public class BondSetTool extends AbstractTool {
     private BondSetTool(CMLBondSet bondSet) {
         this.bondSet = bondSet;
         if (bondSet == null) {
-            throw new CMLRuntimeException("Null bondSet");
+            throw new RuntimeException("Null bondSet");
         }
         List<CMLBond> bondList = bondSet.getBonds();
         if (bondList.size() > 0) {

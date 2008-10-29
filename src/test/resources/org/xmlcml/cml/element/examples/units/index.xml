@@ -1,3 +1,9 @@
+<<<<<<< .working
 <files>
   <file name="action1.xml"/>
 </files>
+=======
+<files>
+  <file name="action1.xml"/>
+</files>
+>>>>>>> .merge-right.r915
