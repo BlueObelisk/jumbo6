@@ -2104,6 +2104,31 @@ public class MoleculeTool extends AbstractSVGTool {
 		addMoleculeTo(addedMolecule);
 	}
 	
+	
+	/** add atoms.
+	 * calls addAtom
+	 * @param atomSet
+	 * @throws CMLRuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	public void addAtoms(CMLAtomSet atomSet) {
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			molecule.addAtom(atom);
+		}
+	}
+	
+	/** add bonds.
+	 * calls addBond
+	 * @param bondSet
+	 * @throws RuntimeException
+	 *             null, non-uniqueID, etc.
+	 */
+	public void addBonds(CMLBondSet bondSet) {
+		for (CMLBond bond : bondSet.getBonds()) {
+			molecule.addBond(bond);
+		}
+	}
+	
 	/**
 	 * join one molecule to another. 
 	 * manages the XML but not yet the geometry
@@ -3624,6 +3649,25 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
+
+	/** set this.molecule for all descendant atomSets.
+	 * this is messy but a consequence of the serialization
+	 * of atomSets in CML since molecules are not explicit.
+	 */
+	public void setThisInDescendantAtomSets() {
+		Nodes nodes = molecule.query(".//cml:atomSet", CML_XPATH);
+		for (int i = 0; i < nodes.size(); i++) {
+			CMLAtomSet atomSet = (CMLAtomSet) nodes.get(i);
+			atomSet.setMolecule(molecule);
+		}
+	}
+
+	/** moves centroid to origin.
+	 * 
+	 */
+	public void translateCentroidToOrigin3(CoordinateType type) {
+		AtomSetTool.getOrCreateTool(this.getAtomSet()).translateCentroidToOrigin3(type);
+	}
 //	/** ensure integrity between list and children.
 //	 * @return CMLMoleculeList.class
 //	 */
