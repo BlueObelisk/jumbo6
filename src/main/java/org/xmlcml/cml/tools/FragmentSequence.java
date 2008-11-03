@@ -7,15 +7,15 @@ import nu.xom.Attribute;
 import nu.xom.Elements;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLLabel;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLLabel.Position;
-import org.xmlcml.cml.element.main.CMLArg;
-import org.xmlcml.cml.element.main.CMLJoin;
-import org.xmlcml.cml.element.main.CMLLength;
-import org.xmlcml.cml.element.main.CMLMoleculeList;
-import org.xmlcml.cml.element.main.CMLTorsion;
+import org.xmlcml.cml.element.CMLArg;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLJoin;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLLength;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLTorsion;
+import org.xmlcml.cml.element.CMLLabel.Position;
 import org.xmlcml.euclid.Util;
 
 

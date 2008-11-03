@@ -11,17 +11,17 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLArray;
-import org.xmlcml.cml.element.main.CMLArrayList;
-import org.xmlcml.cml.element.main.CMLList;
-import org.xmlcml.cml.element.main.CMLTable;
-import org.xmlcml.cml.element.main.CMLTableCell;
-import org.xmlcml.cml.element.main.CMLTableContent;
-import org.xmlcml.cml.element.main.CMLTableHeader;
-import org.xmlcml.cml.element.main.CMLTableHeaderCell;
-import org.xmlcml.cml.element.main.CMLTableRow;
-import org.xmlcml.cml.element.main.CMLTableRowList;
-import org.xmlcml.cml.element.main.CMLTable.TableType;
+import org.xmlcml.cml.element.CMLArray;
+import org.xmlcml.cml.element.CMLArrayList;
+import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLTable;
+import org.xmlcml.cml.element.CMLTableCell;
+import org.xmlcml.cml.element.CMLTableContent;
+import org.xmlcml.cml.element.CMLTableHeader;
+import org.xmlcml.cml.element.CMLTableHeaderCell;
+import org.xmlcml.cml.element.CMLTableRow;
+import org.xmlcml.cml.element.CMLTableRowList;
+import org.xmlcml.cml.element.CMLTable.TableType;
 import org.xmlcml.cml.interfacex.HasArraySize;
 
 /**

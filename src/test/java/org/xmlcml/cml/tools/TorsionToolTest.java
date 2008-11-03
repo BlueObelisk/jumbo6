@@ -14,12 +14,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLCml;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLTorsion;
-import org.xmlcml.cml.element.main.CMLTransform3;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLTorsion;
+import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.Angle;
 
 /**

@@ -13,10 +13,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondSet;
 
 /**
  * @author pm286

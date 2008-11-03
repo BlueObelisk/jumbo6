@@ -13,13 +13,13 @@ import nu.xom.ValidityException;
 import org.junit.Assert;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.main.CMLProduct;
-import org.xmlcml.cml.element.main.CMLProductList;
-import org.xmlcml.cml.element.main.CMLReactant;
-import org.xmlcml.cml.element.main.CMLReactantList;
-import org.xmlcml.cml.element.main.CMLReaction;
-import org.xmlcml.cml.element.main.CMLSpectator;
-import org.xmlcml.cml.element.main.CMLSpectatorList;
+import org.xmlcml.cml.element.CMLProduct;
+import org.xmlcml.cml.element.CMLProductList;
+import org.xmlcml.cml.element.CMLReactant;
+import org.xmlcml.cml.element.CMLReactantList;
+import org.xmlcml.cml.element.CMLReaction;
+import org.xmlcml.cml.element.CMLSpectator;
+import org.xmlcml.cml.element.CMLSpectatorList;
 
 public class ReactionFixture {
 	protected CMLReaction xomReact1;

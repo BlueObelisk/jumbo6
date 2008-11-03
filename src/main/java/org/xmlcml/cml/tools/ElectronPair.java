@@ -3,7 +3,7 @@ package org.xmlcml.cml.tools;
 import nu.xom.Element;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.main.CMLElectron;
+import org.xmlcml.cml.element.CMLElectron;
 
 /**
  * tool to support reactions. not fully developed

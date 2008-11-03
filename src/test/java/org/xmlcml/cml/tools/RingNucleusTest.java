@@ -14,8 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLAtomSet;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * @author pm286

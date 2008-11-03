@@ -1,8 +1,8 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.CMLMap;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Transform3;
 
 /**

@@ -15,18 +15,17 @@ import nu.xom.Nodes;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.CMLLog.Severity;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLAtomArray;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLBondArray;
-import org.xmlcml.cml.element.lite.CMLFormula;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLScalar;
-import org.xmlcml.cml.element.lite.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLBondSet;
-import org.xmlcml.cml.element.main.CMLElectron;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomArray;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondArray;
+import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 
@@ -60,7 +59,7 @@ public class ValencyTool extends AbstractTool {
 		if (formulaS != null) {
 			formulaS = CMLFormula.removeChargeFromConcise(formulaS);
 		}
-		molecule.addToLog(Severity.INFO, "Formula " + formulaS);
+//		molecule.addToLog(Severity.INFO, "Formula " + formulaS);
 	}
 	/**
 	 * adds charges and bond orders for common species.

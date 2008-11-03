@@ -15,13 +15,13 @@ import nu.xom.Elements;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLAtomArray;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLBondArray;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLBondSet;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomArray;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondArray;
+import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLMolecule;
 /**
  * tool to support connection table. not fully developed
  * 

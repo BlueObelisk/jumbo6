@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLScalar;
-import org.xmlcml.cml.element.main.CMLLink;
+import org.xmlcml.cml.element.CMLLink;
+import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.euclid.Util;
 
 /** utilities for managing catalogs.

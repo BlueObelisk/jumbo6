@@ -21,16 +21,16 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLAngle;
-import org.xmlcml.cml.element.main.CMLArg;
-import org.xmlcml.cml.element.main.CMLFragment;
-import org.xmlcml.cml.element.main.CMLFragmentList;
-import org.xmlcml.cml.element.main.CMLLength;
-import org.xmlcml.cml.element.main.CMLMoleculeList;
-import org.xmlcml.cml.element.main.CMLTorsion;
+import org.xmlcml.cml.element.CMLAngle;
+import org.xmlcml.cml.element.CMLArg;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLFragmentList;
+import org.xmlcml.cml.element.CMLLength;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.EuclidConstants;
 
 /** processes conventional molecule into fragment.

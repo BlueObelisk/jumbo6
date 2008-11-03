@@ -4,7 +4,7 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.lite.CMLProperty;
+import org.xmlcml.cml.element.CMLProperty;
 
 /**
  * tool for managing property

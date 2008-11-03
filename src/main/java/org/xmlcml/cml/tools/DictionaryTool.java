@@ -13,16 +13,16 @@ import org.xmlcml.cml.attribute.DictRefAttribute;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLArray;
-import org.xmlcml.cml.element.lite.CMLDictionary;
-import org.xmlcml.cml.element.lite.CMLEntry;
-import org.xmlcml.cml.element.lite.CMLFormula;
-import org.xmlcml.cml.element.lite.CMLProperty;
-import org.xmlcml.cml.element.lite.CMLScalar;
-import org.xmlcml.cml.element.main.CMLMatrix;
-import org.xmlcml.cml.element.main.CMLModule;
-import org.xmlcml.cml.element.main.CMLParameter;
-import org.xmlcml.cml.element.main.CMLVector3;
+import org.xmlcml.cml.element.CMLArray;
+import org.xmlcml.cml.element.CMLDictionary;
+import org.xmlcml.cml.element.CMLEntry;
+import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMatrix;
+import org.xmlcml.cml.element.CMLModule;
+import org.xmlcml.cml.element.CMLParameter;
+import org.xmlcml.cml.element.CMLProperty;
+import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLVector3;
 
 /** additional tools for dictionary. not fully developed
  * 

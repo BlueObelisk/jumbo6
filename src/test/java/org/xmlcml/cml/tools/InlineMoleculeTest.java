@@ -7,8 +7,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /** test InlineMolecule.

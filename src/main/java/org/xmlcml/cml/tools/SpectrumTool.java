@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLPeak;
-import org.xmlcml.cml.element.main.CMLSpectrum;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLPeak;
+import org.xmlcml.cml.element.CMLSpectrum;
 
 /**
  * tool for managing spectrum

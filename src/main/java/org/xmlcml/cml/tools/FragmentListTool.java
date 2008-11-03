@@ -2,8 +2,8 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.main.CMLFragment;
-import org.xmlcml.cml.element.main.CMLFragmentList;
+import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLFragmentList;
 
 /**
  * tool for managing fragmentLists

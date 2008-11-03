@@ -2,6 +2,7 @@ package org.xmlcml.cml.test;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
+import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.io.IOException;
@@ -13,18 +14,16 @@ import nu.xom.ParsingException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLBondArray;
-import org.xmlcml.cml.element.lite.CMLCml;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLCrystal;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondArray;
+import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.CMLCrystal;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import static org.xmlcml.cml.test.CMLAssert.*;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed

@@ -2,7 +2,7 @@ package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.CMLAtom;
 
 /**
  * represents a set of atoms.

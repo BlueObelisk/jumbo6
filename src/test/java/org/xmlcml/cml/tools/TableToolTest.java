@@ -7,9 +7,9 @@ import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLArray;
-import org.xmlcml.cml.element.main.CMLArrayList;
-import org.xmlcml.cml.element.main.CMLTableRowList;
+import org.xmlcml.cml.element.CMLArray;
+import org.xmlcml.cml.element.CMLArrayList;
+import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
 
 /**

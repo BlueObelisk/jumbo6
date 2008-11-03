@@ -15,7 +15,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
 import org.xmlcml.cml.map.IndexableByIdListManager;

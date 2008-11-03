@@ -13,12 +13,12 @@ import nu.xom.Element;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLCml;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLAngle;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLCrystal;
+import org.xmlcml.cml.element.CMLAngle;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.CMLCrystal;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
 
 /**
