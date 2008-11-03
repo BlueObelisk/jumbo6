@@ -6,7 +6,7 @@ import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.JniInchiWrapper;
 import net.sf.jniinchi.LoadNativeLibraryException;
 
-import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * <p>Factory providing access to InChIGenerator and InChIToStructure. See those

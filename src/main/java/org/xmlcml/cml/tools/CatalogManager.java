@@ -14,8 +14,8 @@ import nu.xom.Node;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.lite.CMLScalar;
-import org.xmlcml.cml.element.main.CMLList;
+import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLScalar;
 
 /**
  * list of catalogs for CML.

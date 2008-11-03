@@ -1,15 +1,16 @@
 package org.xmlcml.cml.tools;
 
+import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
+import static org.xmlcml.cml.test.CMLAssert.parseValidString;
+
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLScalar;
-import org.xmlcml.cml.element.main.CMLArrayList;
-import org.xmlcml.cml.element.main.CMLList;
-import org.xmlcml.cml.element.main.CMLTableContent;
-import org.xmlcml.cml.element.main.CMLTableRowList;
+import org.xmlcml.cml.element.CMLArrayList;
+import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLTableContent;
+import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.cml.tools.TableRowListTool;
-import static org.xmlcml.cml.base.CMLConstants.*;
-import static org.xmlcml.cml.test.CMLAssert.*;
 
 /**
  * test TableTool.

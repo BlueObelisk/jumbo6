@@ -1,7 +1,7 @@
 package org.xmlcml.cml.test;
 
 import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
-import static org.xmlcml.cml.test.CMLAssert.*;
+import static org.xmlcml.cml.test.CMLAssert.SIMPLE_RESOURCE;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 import java.io.IOException;
@@ -10,12 +10,12 @@ import java.net.URL;
 
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.lite.CMLCml;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLPeak;
-import org.xmlcml.cml.element.lite.CMLPeakList;
-import org.xmlcml.cml.element.lite.CMLPeakStructure;
-import org.xmlcml.cml.element.main.CMLSpectrum;
+import org.xmlcml.cml.element.CMLCml;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLPeak;
+import org.xmlcml.cml.element.CMLPeakList;
+import org.xmlcml.cml.element.CMLPeakStructure;
+import org.xmlcml.cml.element.CMLSpectrum;
 import org.xmlcml.euclid.Util;
 
 public class SpectrumFixture {

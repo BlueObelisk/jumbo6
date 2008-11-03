@@ -14,10 +14,10 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLBondSet;
-import org.xmlcml.cml.element.main.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
 
 /**
  * tool to support a ring. not fully developed

@@ -5,10 +5,10 @@ import java.util.List;
 import nu.xom.Element;
 
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLLabel;
-import org.xmlcml.cml.element.main.CMLElectron;
-import org.xmlcml.cml.element.main.CMLSpectator;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 

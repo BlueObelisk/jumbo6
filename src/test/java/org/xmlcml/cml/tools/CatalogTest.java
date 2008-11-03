@@ -16,12 +16,12 @@ import java.net.URL;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLLink;
-import org.xmlcml.cml.element.main.CMLList;
-import org.xmlcml.cml.element.main.CMLMap;
-import org.xmlcml.cml.element.main.CMLMap.Direction;
-import org.xmlcml.cml.element.main.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLLink;
+import org.xmlcml.cml.element.CMLList;
+import org.xmlcml.cml.element.CMLMap;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
 
 /**

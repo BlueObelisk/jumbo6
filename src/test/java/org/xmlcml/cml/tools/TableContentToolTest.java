@@ -7,7 +7,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlcml.cml.element.main.CMLTableRowList;
+import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
 
 /**

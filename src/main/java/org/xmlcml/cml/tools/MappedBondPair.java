@@ -7,12 +7,12 @@ import nu.xom.Element;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLBondStereo;
-import org.xmlcml.cml.element.main.CMLElectron;
-import org.xmlcml.cml.element.main.CMLReaction;
-import org.xmlcml.cml.element.main.CMLSpectator;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondStereo;
+import org.xmlcml.cml.element.CMLElectron;
+import org.xmlcml.cml.element.CMLReaction;
+import org.xmlcml.cml.element.CMLSpectator;
 
 /**
  * tool to support reactions. not fully developed

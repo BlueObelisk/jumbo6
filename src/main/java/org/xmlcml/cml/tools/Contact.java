@@ -1,8 +1,8 @@
 package org.xmlcml.cml.tools;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.main.CMLTransform3;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.RealRange;
 

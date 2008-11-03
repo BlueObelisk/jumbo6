@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLScalar;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLScalar;
 
 /** based on IUCr Core CIF dictionary 
  * 

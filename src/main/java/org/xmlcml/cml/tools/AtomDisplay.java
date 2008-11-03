@@ -4,7 +4,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.lite.CMLAtom;
+import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.tools.TextDisplay.Background;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement.AS;

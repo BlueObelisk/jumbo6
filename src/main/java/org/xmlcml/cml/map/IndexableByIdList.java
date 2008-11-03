@@ -3,8 +3,8 @@ package org.xmlcml.cml.map;
 import java.util.List;
 import java.util.Map;
 
-import org.xmlcml.cml.element.main.CMLFragmentList;
-import org.xmlcml.cml.element.main.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLFragmentList;
+import org.xmlcml.cml.element.CMLMoleculeList;
 
 
 /**

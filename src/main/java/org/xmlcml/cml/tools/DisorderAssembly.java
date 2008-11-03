@@ -14,9 +14,9 @@ import java.util.Set;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLScalar;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLScalar;
 
 /** based on IUCr Core CIF dictionary 
  * 

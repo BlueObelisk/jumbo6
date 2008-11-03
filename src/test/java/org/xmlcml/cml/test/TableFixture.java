@@ -1,7 +1,7 @@
 package org.xmlcml.cml.test;
 
-import static org.xmlcml.cml.test.CMLAssert.*;
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
+import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.io.File;
@@ -13,14 +13,13 @@ import nu.xom.ParsingException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.element.main.CMLArrayList;
-import org.xmlcml.cml.element.main.CMLTable;
-import org.xmlcml.cml.element.main.CMLTableContent;
-import org.xmlcml.cml.element.main.CMLTableHeader;
-import org.xmlcml.cml.element.main.CMLTableRow;
-import org.xmlcml.cml.element.main.CMLTableRowList;
+import org.xmlcml.cml.element.CMLArrayList;
+import org.xmlcml.cml.element.CMLTable;
+import org.xmlcml.cml.element.CMLTableContent;
+import org.xmlcml.cml.element.CMLTableHeader;
+import org.xmlcml.cml.element.CMLTableRow;
+import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.euclid.Util;
 
 public class TableFixture {

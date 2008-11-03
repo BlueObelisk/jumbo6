@@ -1,14 +1,15 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.*;
+import static org.xmlcml.cml.test.CMLAssert.assertEquals;
+import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.util.List;
 
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.lite.CMLBond;
-import org.xmlcml.cml.element.lite.CMLMolecule;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 
 public class MoleculeToolFixture {

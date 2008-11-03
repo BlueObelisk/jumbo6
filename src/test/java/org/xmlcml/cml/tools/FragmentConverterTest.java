@@ -8,8 +8,8 @@ import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 import static org.xmlcml.util.TestUtils.parseValidString;
 
 import org.junit.Test;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.main.CMLFragment;
+import org.xmlcml.cml.element.CMLFragment;
+import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * @author pm286

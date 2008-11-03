@@ -14,15 +14,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.lite.CMLAtom;
-import org.xmlcml.cml.element.lite.CMLMolecule;
-import org.xmlcml.cml.element.lite.CMLPeak;
-import org.xmlcml.cml.element.lite.CMLPeakGroup;
-import org.xmlcml.cml.element.lite.CMLPeakList;
-import org.xmlcml.cml.element.lite.CMLPeakList.Type;
-import org.xmlcml.cml.element.main.CMLAtomSet;
-import org.xmlcml.cml.element.main.CMLLink;
-import org.xmlcml.cml.element.main.CMLMap;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLLink;
+import org.xmlcml.cml.element.CMLMap;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLPeak;
+import org.xmlcml.cml.element.CMLPeakGroup;
+import org.xmlcml.cml.element.CMLPeakList;
+import org.xmlcml.cml.element.CMLPeakList.Type;
 import org.xmlcml.cml.interfacex.PeakOrGroup;
 
 /**

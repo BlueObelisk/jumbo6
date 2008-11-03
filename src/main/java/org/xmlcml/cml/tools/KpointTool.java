@@ -2,7 +2,7 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.element.main.CMLKpoint;
+import org.xmlcml.cml.element.CMLKpoint;
 
 /**
  * tool to support atom set. not sure if useful
