@@ -45,7 +45,8 @@ public final class TestUtils implements CMLConstants {
     
     /**
      * tests 2 XML objects for equality using canonical XML.
-     * 
+     * uses XOMTestCase.assertEquals. This treats different prefixes as different
+     * and compares floats literally. 
      * @param message
      * @param refNode
      *            first node
@@ -148,7 +149,8 @@ public final class TestUtils implements CMLConstants {
 	}
     /**
      * tests 2 XML objects for equality using canonical XML.
-     * 
+     * uses XOMTestCase.assertEquals. This treats different prefixes as different
+     * and compares floats literally. 
      * @param message
      * @param refNode first node
      * @param testNode second node
@@ -218,7 +220,8 @@ public final class TestUtils implements CMLConstants {
 
     /**
      * tests 2 XML objects for non-equality using canonical XML.
-     * 
+     * uses XOMTestCase.assertEquals. This treats different prefixes as different
+     * and compares floats literally. 
      * @param message
      * @param node1
      *            first node
