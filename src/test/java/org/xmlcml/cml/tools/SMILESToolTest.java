@@ -919,4 +919,16 @@ public class SMILESToolTest {
 		assertEqualsCanonically("chirality5", correctCML, smilesTool.getMolecule(), true);
 	}
 
+	@Test 
+	public void LHProblem() {
+		String smiles = 
+			"C1(C2)C(c4ccc(Oc6ccc(N)cc6)cc4)(c5ccc(Oc7ccc(N)cc7)cc5)C(C3)CC2CC3C1";		
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+//			smilesTool.getMolecule().debug("MOL");			
+		} catch (RuntimeException e) {
+			Assert.fail("should not fail: "+e);
+		}
+	}
 }
