@@ -851,7 +851,7 @@ class Branch implements CMLConstants {
         CMLLabel.setLabel(moleculeList, Position.PARENT, leftLabel);
         CMLJoin subJoin = this.getSubJoin();
         moleculeList.insertChild(subJoin, 0);
-        moleculeList.setConvention(PolymerTool.Convention.BRANCH.v);
+        moleculeList.setConvention(FragmentTool.Convention.BRANCH.v);
     }
     
     static String grabBranch(String s) {

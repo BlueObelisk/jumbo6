@@ -32,7 +32,6 @@ import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 
-
 /**
  * tool to support polymer building. not fully developed
  * 
@@ -43,37 +42,6 @@ public class PolymerTool extends AbstractTool {
 
     private static Logger LOG = Logger.getLogger(PolymerTool.class.getName());
     
-    /** polymer conventions.
-     * 
-     */
-    public enum Convention {
-    	/** signifies a branch */
-    	BRANCH("branch"),
-        /** concise formula string - obsolete.*/
-        PML_CONCISE(C_A+"PML-concise"),
-        /** basic XML formula.*/
-        PML_BASIC(C_A+"PML-basic"),
-        /** molecule references.*/
-        PML_INTERMEDIATE(C_A+"PML-intermediate"),
-        /** explicit un-joined molecules.*/
-        PML_EXPLICIT(C_A+"PML-explicit"),
-        /** complete molecules (includes cartesian coords).*/
-        PML_COMPLETE(C_A+"PML-complete"),
-        /** inline atom obsolete.*/
-        PML_INLINE_ATOM(C_A+"PML-inline-atom"),
-        /** default endpoint.*/
-        PML_DEFAULT_FINAL(PML_COMPLETE.v),
-        /** processed (nothing further to do) Normally Markush.*/
-        PML_PROCESSED(C_A+"PML-processed"),
-        ;
-        String v;
-        private Convention(String v) {
-            this.v = v;
-        }
-    }
-    
-//    Set<Convention> debugSet = new HashSet<Convention>();
-    
     File OUTPUT_DIR = Util.getTestOutputDirectory(PolymerTool.class);
 
     // root might be a molecule
@@ -83,7 +51,7 @@ public class PolymerTool extends AbstractTool {
     // in which case it generates child polymerTools
     private List<PolymerTool> polymerToolList = new ArrayList<PolymerTool>();
     // target
-    private Convention targetLevel = Convention.PML_COMPLETE;
+    private FragmentTool.Convention targetLevel = FragmentTool.Convention.PML_COMPLETE;
     // debug
     private boolean debug = false;
     // catalog
@@ -123,7 +91,7 @@ public class PolymerTool extends AbstractTool {
      * 
      * @param targetLevel
      */
-    public void setTargetLevel(Convention targetLevel) {
+    public void setTargetLevel(FragmentTool.Convention targetLevel) {
         this.targetLevel = targetLevel;
     }
 
@@ -214,17 +182,17 @@ public class PolymerTool extends AbstractTool {
             LOG.debug("=========="+convention+"=========");
             if (false) {
                 //
-            } else if (convention.equals(Convention.PML_INLINE_ATOM.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_INLINE_ATOM.v)) {
                 processInlineAtom();
-            } else if (convention.equals(Convention.PML_CONCISE.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_CONCISE.v)) {
                 processConcise();
-            } else if (convention.equals(Convention.PML_BASIC.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_BASIC.v)) {
                 processBasic();
-            } else if (convention.equals(Convention.PML_INTERMEDIATE.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_INTERMEDIATE.v)) {
                 processIntermediate();
-            } else if (convention.equals(Convention.PML_EXPLICIT.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_EXPLICIT.v)) {
                 processExplicit();
-            } else if (convention.equals(Convention.PML_COMPLETE.v)) {
+            } else if (convention.equals(FragmentTool.Convention.PML_COMPLETE.v)) {
                 LOG.debug("**********COMPLETE cannot be futher processed now ********");
 //                processZMatrix();
             }
@@ -288,7 +256,7 @@ public class PolymerTool extends AbstractTool {
             formula = formula.replace(S_SPACE, S_EMPTY);
             InlineMolecule inlineMolecule = new InlineMolecule(formula);
             CMLMolecule cmlMolecule = inlineMolecule.getCmlMolecule();
-            molecule.setConvention(Convention.PML_COMPLETE.v);
+            molecule.setConvention(FragmentTool.Convention.PML_COMPLETE.v);
             molecule.removeAttribute("formula");
         } else {
             throw new RuntimeException("must have molecule");
@@ -345,7 +313,7 @@ formula='
                 FragmentSequence fragmentSequence = new FragmentSequence(formula);
                 CMLMoleculeList topMoleculeList = fragmentSequence.getCMLMoleculeList();
                 molecule.appendChild(topMoleculeList);
-                molecule.setConvention(Convention.PML_BASIC.v);
+                molecule.setConvention(FragmentTool.Convention.PML_BASIC.v);
                 molecule.removeAttribute("formula");
             }
         } else {
@@ -447,7 +415,7 @@ formula='
         CMLElements<CMLMolecule> subMoleculeList = molecule.getMoleculeElements();
         for (int i = 0; i < subMoleculeList.size(); i++) {
         }
-        molecule.setConvention(Convention.PML_EXPLICIT.v);
+        molecule.setConvention(FragmentTool.Convention.PML_EXPLICIT.v);
     }
     
     /** convenience method to generate detailed molecules.
@@ -456,7 +424,7 @@ formula='
      * @throws RuntimeException
      */
     public void processConventionExhaustively() throws RuntimeException {
-        processConventionExhaustively((Convention) null);
+        processConventionExhaustively((FragmentTool.Convention) null);
     }
 
     /** convenience method to generate detailed molecules.
@@ -465,10 +433,10 @@ formula='
      * @param convention terminating convention
      * @throws RuntimeException
      */
-    private void processConventionExhaustively(Convention convention) throws RuntimeException {
+    private void processConventionExhaustively(FragmentTool.Convention convention) throws RuntimeException {
         int i = 0;
         if( convention == null ){
-        	convention = Convention.PML_DEFAULT_FINAL;
+        	convention = FragmentTool.Convention.PML_DEFAULT_FINAL;
         	LOG.debug("Assuming target level: "+convention);
         }
         if (moleculeList != null) {
@@ -481,7 +449,7 @@ formula='
                 if (moleculeConvention == null || 
                     moleculeConvention.equals(S_EMPTY) || 
                     moleculeConvention.equals(convention.v) ||
-                    moleculeConvention.equals(Convention.PML_COMPLETE.v)) {
+                    moleculeConvention.equals(FragmentTool.Convention.PML_COMPLETE.v)) {
                     break;
                 }
                 try {
@@ -531,7 +499,7 @@ formula='
      */
     public void processConventionExhaustively(
             String infile, String fragments, String outfileName, 
-            Convention targetLevel, boolean debug) throws Exception {
+            FragmentTool.Convention targetLevel, boolean debug) throws Exception {
     
         Document doc = new CMLBuilder().build(new File(infile));
         Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, CML_XPATH);
@@ -661,7 +629,7 @@ formula='
             String infile = S_EMPTY;
             String outfileName = S_EMPTY;
             String fragments = S_EMPTY;
-            Convention targetLevel = null;
+            FragmentTool.Convention targetLevel = null;
             String template = S_EMPTY;
             List<XSLParam> paramList = new ArrayList<XSLParam>();
             int i = 0;
@@ -674,13 +642,13 @@ formula='
                 } else if (args[i].equalsIgnoreCase("-OUTFILE")) {
                     outfileName = args[++i]; i++;
                 } else if (args[i].equalsIgnoreCase("-BASIC")) {
-                    targetLevel = Convention.PML_BASIC; i++;
+                    targetLevel = FragmentTool.Convention.PML_BASIC; i++;
                 } else if (args[i].equalsIgnoreCase("-INTERMEDIATE")) {
-                    targetLevel = Convention.PML_INTERMEDIATE; i++;
+                    targetLevel = FragmentTool.Convention.PML_INTERMEDIATE; i++;
                 } else if (args[i].equalsIgnoreCase("-EXPLICIT")) {
-                    targetLevel = Convention.PML_EXPLICIT; i++;
+                    targetLevel = FragmentTool.Convention.PML_EXPLICIT; i++;
                 } else if (args[i].equalsIgnoreCase("-COMPLETE")) {
-                    targetLevel = Convention.PML_COMPLETE; i++;
+                    targetLevel = FragmentTool.Convention.PML_COMPLETE; i++;
                 } else if("-FRAGMENTS".equalsIgnoreCase(args[i])) {
                     fragments = args[++i];
                     i++;
@@ -707,7 +675,7 @@ formula='
             	}
             } else {
 	            if (targetLevel == null){
-	            	targetLevel = Convention.PML_DEFAULT_FINAL;
+	            	targetLevel = FragmentTool.Convention.PML_DEFAULT_FINAL;
 	            	System.out.println("No level specified. Assuming level: "+targetLevel);
 	            }
 	            if(S_EMPTY.equals(fragments)) {
