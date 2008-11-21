@@ -194,7 +194,7 @@ public class PolymerToolTest {
         CMLElement root = (CMLElement) CMLUtil.readElementFromResource(file.toString());
         
         polymerTool.setElement(root);
-        polymerTool.setTargetLevel(PolymerTool.Convention.PML_COMPLETE);
+        polymerTool.setTargetLevel(FragmentTool.Convention.PML_COMPLETE);
         polymerTool.setMoleculeCatalog(getMoleculeCatalog());
         polymerTool.setDebug(true);
         polymerTool.processConventionExhaustively();

@@ -52,6 +52,34 @@ public class FragmentTool extends AbstractTool {
     Logger logger = Logger.getLogger(FragmentTool.class.getName());
 
 
+    /** polymer conventions.
+     * 
+     */
+    public enum Convention {
+    	/** signifies a branch */
+    	BRANCH("branch"),
+        /** concise formula string - obsolete.*/
+        PML_CONCISE(C_A+"PML-concise"),
+        /** basic XML formula.*/
+        PML_BASIC(C_A+"PML-basic"),
+        /** molecule references.*/
+        PML_INTERMEDIATE(C_A+"PML-intermediate"),
+        /** explicit un-joined molecules.*/
+        PML_EXPLICIT(C_A+"PML-explicit"),
+        /** complete molecules (includes cartesian coords).*/
+        PML_COMPLETE(C_A+"PML-complete"),
+        /** inline atom obsolete.*/
+        PML_INLINE_ATOM(C_A+"PML-inline-atom"),
+        /** default endpoint.*/
+        PML_DEFAULT_FINAL(PML_COMPLETE.v),
+        /** processed (nothing further to do) Normally Markush.*/
+        PML_PROCESSED(C_A+"PML-processed"),
+        ;
+        String v;
+        private Convention(String v) {
+            this.v = v;
+        }
+    }
 	final static String IDX = "idx";
 	final static String F_PREFIX = "f_";
     private CMLFragment rootFragment;
@@ -532,14 +560,14 @@ class BasicProcessor implements CMLConstants {
         	}
         	CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
         	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
-	        fragment.setConvention(PolymerTool.Convention.PML_PROCESSED.v);
+	        fragment.setConvention(FragmentTool.Convention.PML_PROCESSED.v);
         } else {
 	        fragmentTool.substituteFragmentRefsRecursively(100);
 	        new CountExpander(fragment).process();
 	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
 	        this.replaceFragmentsByChildMolecules();
 	        this.createAtomsRefs2OnJoins();
-	        fragment.setConvention(PolymerTool.Convention.PML_INTERMEDIATE.v);
+	        fragment.setConvention(FragmentTool.Convention.PML_INTERMEDIATE.v);
         }
         return generatedElement;
     }
@@ -878,7 +906,7 @@ class IntermediateProcessor implements CMLConstants {
 		dereferenceMolecules(catalog);
 		// this is not yet tested
 		dereferenceFragments(catalog);
-		fragment.setConvention(PolymerTool.Convention.PML_EXPLICIT.v);
+		fragment.setConvention(FragmentTool.Convention.PML_EXPLICIT.v);
 	}
 
 	private void dereferenceMolecules(Catalog catalog) {
@@ -1086,7 +1114,7 @@ class ExplicitProcessor implements CMLConstants {
         processMoleculeAndJoin(moleculeAndJoinList);
  //   	fragment.debug("COMPLETE");
         processProperties();
-        fragment.setConvention(PolymerTool.Convention.PML_COMPLETE.v);
+        fragment.setConvention(FragmentTool.Convention.PML_COMPLETE.v);
     }
     
     private void checkMoleculeAndJoinList(List<Node> moleculeAndJoinList) {
@@ -1283,3 +1311,5 @@ class ExplicitProcessor implements CMLConstants {
     	}
     }
 }
+
+
