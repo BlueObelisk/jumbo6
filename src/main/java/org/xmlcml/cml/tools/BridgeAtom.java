@@ -15,7 +15,7 @@ import org.xmlcml.cml.element.CMLAtom;
  * 
  */
 public class BridgeAtom extends AbstractTool {
-	final static Logger logger = Logger.getLogger(BridgeAtom.class.getName());
+	final static Logger LOG = Logger.getLogger(BridgeAtom.class);
 	private CMLAtom atom;
 	private List<Junction> junctionList;
 	private Set<Ring> ringSet;

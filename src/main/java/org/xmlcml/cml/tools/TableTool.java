@@ -66,10 +66,13 @@ public class TableTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static TableTool getOrCreateTool(CMLTable table) {
-		TableTool tableTool = (TableTool) table.getTool();
-		if (tableTool == null) {
-			tableTool = new TableTool(table);
-			table.setTool(tableTool);
+		TableTool tableTool = null;
+		if (table != null) {
+			tableTool = (TableTool) table.getTool();
+			if (tableTool == null) {
+				tableTool = new TableTool(table);
+				table.setTool(tableTool);
+			}
 		}
 		return tableTool;
 	}

@@ -56,6 +56,9 @@ public class ReactionTool extends AbstractSVGTool {
      * @deprecated use getOrCreateTool()
      */
     public ReactionTool(CMLReaction reaction) {
+    	if (reaction == null) {
+    		throw new RuntimeException("null reaction");
+    	}
         this.reaction = reaction;
 		this.reaction.setTool(this);
     }
@@ -66,10 +69,13 @@ public class ReactionTool extends AbstractSVGTool {
 	 * @return tool
 	 */
 	public static ReactionTool getOrCreateTool(CMLReaction reaction) {
-		ReactionTool reactionTool = (ReactionTool) reaction.getTool();
-		if (reactionTool == null) {
-			reactionTool = new ReactionTool(reaction);
-			reaction.setTool(reactionTool);
+		ReactionTool reactionTool = null;
+		if (reaction != null) {
+			reactionTool = (ReactionTool) reaction.getTool();
+			if (reactionTool == null) {
+				reactionTool = new ReactionTool(reaction);
+				reaction.setTool(reactionTool);
+			}
 		}
 		return reactionTool;
 	}

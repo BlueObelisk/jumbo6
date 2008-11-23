@@ -27,7 +27,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class Chain extends AbstractTool {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(RingNucleus.class);
 
 	private List<Sprout> sproutList;
 	private CMLAtomSet atomSet;

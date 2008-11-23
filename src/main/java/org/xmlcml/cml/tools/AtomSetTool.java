@@ -39,9 +39,7 @@ import org.xmlcml.euclid.Vector3;
  * 
  */
 public class AtomSetTool extends AbstractTool {
-	private static Logger LOG = Logger.getLogger(AtomTool.class);
-
-	Logger logger = Logger.getLogger(AtomSetTool.class.getName());
+	private static Logger LOG = Logger.getLogger(AtomSetTool.class);
 
 	private CMLAtomSet atomSet;
 	private CMLMolecule molecule = null;

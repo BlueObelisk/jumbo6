@@ -7,6 +7,7 @@ import java.util.Set;
 
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.DictRefAttribute;
@@ -31,14 +32,17 @@ import org.xmlcml.cml.element.CMLVector3;
  */
 public class DictionaryTool extends AbstractTool {
 
-    Logger logger = Logger.getLogger(DictionaryTool.class.getName());
+    private static Logger LOG = Logger.getLogger(DictionaryTool.class);
     private CMLDictionary dictionary;
     private String prefix;
     private boolean failOnError;
     private String delimiter;
     private boolean ignoreCaseOfEnumerations;
 
-    Map<CMLEntry, EntryTool> entryToolMap;
+    private Map<CMLEntry, EntryTool> entryToolMap;
+//    private Map<String, CMLEntry> entryMap = new HashMap<String, CMLEntry>();
+//    private Map<String, Map<String, CMLEntry>> entryMapMap = new HashMap<String, Map<String, CMLEntry>>();
+    
 	/**
 	 * @param dictionary the dictionary to set
 	 */
@@ -72,6 +76,9 @@ public class DictionaryTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static DictionaryTool getOrCreateTool(CMLDictionary dictionary) {
+		if (dictionary == null) {
+			throw new RuntimeException("null dictionary");
+		}
 		DictionaryTool dictionaryTool = (DictionaryTool) dictionary.getTool();
 		if (dictionaryTool == null) {
 			dictionaryTool = new DictionaryTool(dictionary);
@@ -325,14 +332,33 @@ public class DictionaryTool extends AbstractTool {
 //    	}
 //    }
 
-//    /** update index in dictionary entries.
-//     */
-//	public void updateEntryIndex() {
-//		for (CMLEntry entry : dictionary.getEntryElements()) {
-//			entry.updateIndex();
-//		}
-//	}
-
+    /** make index in dictionary entries.
+     */
+	public Map<String, CMLEntry> makeIndex(String xpath) {
+		Map<String, CMLEntry> entryMap = null;
+		for (CMLEntry entry : dictionary.getEntryElements()) {
+			try {
+				Nodes nodes = entry.query(xpath, CML_XPATH);
+				if (nodes.size() == 1) {
+					String key = nodes.get(0).getValue();
+					if (key != null) {
+						if (entryMap == null) {
+							entryMap = new HashMap<String, CMLEntry>();
+						}
+						if (entryMap.containsKey(key)) {
+							throw new RuntimeException("duplicate key: "+key+" ("+xpath+")");
+						}
+						entryMap.put(key, entry);
+					} else {
+						throw new RuntimeException("Cannot index: "+xpath);
+					}
+				}
+			} catch (Exception e) {
+				LOG.debug("could not find key for "+xpath+ "("+e+")");
+			}
+		}
+		return entryMap;
+	}
 
     /** update current dictionary with observed dictRefs.
      * uses observed names and values of dictRefs to add dictionary
@@ -370,14 +396,14 @@ public class DictionaryTool extends AbstractTool {
      * @param value
      * @return element
      */
-    public CMLElement createTypedNameValue(String name, String value) {
+    public CMLElement createTypedNameValue(String name, String value) throws RuntimeException {
     	name = name.toLowerCase();
     	if (dictionary == null) {
     		throw new RuntimeException("Null dictionary; cannot add value");
     	}
 		CMLEntry entry = dictionary.getCMLEntry(name);
 		if (entry == null) {
-			throw new RuntimeException("Cannot find entry for: "+name);
+			LOG.warn("Cannot find entry for: "+name);
 		}
 		EntryTool entryTool = this.createEntryTool(entry);
 		String dataType = entry.getDataType();
@@ -402,7 +428,8 @@ public class DictionaryTool extends AbstractTool {
 		} else if (CMLVector3.TAG.equals(CMLUtil.getLocalName(dataType))) {
 			element = entryTool.createVector3(name, value);
 		} else {
-			throw new RuntimeException("dataType not supported, assume string: "+dataType);
+			element = entryTool.createStringScalarOrStringArray(name, value);
+			LOG.warn("dataType not supported, assume string: "+dataType);
 		}
 		return element;
     }
@@ -414,14 +441,12 @@ public class DictionaryTool extends AbstractTool {
      */
     public EntryTool createEntryTool(CMLEntry entry) {
     	EntryTool entryTool = null;
-    	if (entry.getTool() == null) {
+    	if (entry != null) {
 	    	entryTool = EntryTool.getOrCreateTool(entry);
 	    	entryTool.setPrefix(this.getPrefix());
 	    	entryTool.setDelimiter(this.getDelimiter());
 	    	entryTool.setFailOnError(this.isFailOnError());
 	    	entryTool.setIgnoreCaseOfEnumerations(this.isIgnoreCaseOfEnumerations());
-    	} else {
-	    	entryTool = EntryTool.getOrCreateTool(entry);
     	}
     	return entryTool;
     }

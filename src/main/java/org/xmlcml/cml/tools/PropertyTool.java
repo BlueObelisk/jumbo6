@@ -48,10 +48,13 @@ public class PropertyTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static PropertyTool getOrCreateTool(CMLProperty property) {
-		PropertyTool propertyTool = (PropertyTool) property.getTool();
-		if (propertyTool == null) {
-			propertyTool = new PropertyTool(property);
-			property.setTool(propertyTool);
+		PropertyTool propertyTool = null;
+		if (property != null) {
+			propertyTool = (PropertyTool) property.getTool();
+			if (propertyTool == null) {
+				propertyTool = new PropertyTool(property);
+				property.setTool(propertyTool);
+			}
 		}
 		return propertyTool;
 	}

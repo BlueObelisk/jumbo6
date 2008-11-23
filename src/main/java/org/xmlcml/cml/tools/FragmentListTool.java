@@ -47,10 +47,13 @@ public class FragmentListTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static FragmentListTool getOrCreateTool(CMLFragmentList fragmentList) {
-		FragmentListTool fragmentListTool = (FragmentListTool) fragmentList.getTool();
-		if (fragmentListTool == null) {
-			fragmentListTool = new FragmentListTool(fragmentList);
-			fragmentList.setTool(fragmentListTool);
+		FragmentListTool fragmentListTool = null;
+		if (fragmentList != null) {
+			fragmentListTool = (FragmentListTool) fragmentList.getTool();
+			if (fragmentListTool == null) {
+				fragmentListTool = new FragmentListTool(fragmentList);
+				fragmentList.setTool(fragmentListTool);
+			}
 		}
 		return fragmentListTool;
 	}

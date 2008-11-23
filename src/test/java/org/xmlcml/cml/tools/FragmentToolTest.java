@@ -618,7 +618,7 @@ public class FragmentToolTest {
 	 * tests first ten examples
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	// FIXME needs getMoleculeList from catalog
 	public void test0_9() {
 		boolean debug = false;

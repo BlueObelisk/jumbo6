@@ -77,6 +77,9 @@ public class AtomTool extends AbstractSVGTool {
      * @deprecated use getOrCreateTool
      */
     public AtomTool(CMLAtom atom) {
+    	if (atom == null) {
+    		throw new RuntimeException("null atom");
+    	}
         this.atom = atom;
         this.atom.setTool(this);
         molecule = atom.getMolecule();

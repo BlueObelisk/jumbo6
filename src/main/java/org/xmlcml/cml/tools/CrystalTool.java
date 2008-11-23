@@ -40,7 +40,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  *
  */
 public class CrystalTool extends AbstractTool {
-	final static Logger logger = Logger.getLogger(CrystalTool.class.getName());
+	final static Logger LOG = Logger.getLogger(CrystalTool.class);
 
 	Map<String, Integer> formulaCountMap = new HashMap<String, Integer>();
 

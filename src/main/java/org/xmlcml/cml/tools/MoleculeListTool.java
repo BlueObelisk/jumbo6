@@ -32,6 +32,9 @@ public class MoleculeListTool extends AbstractSVGTool {
 	 * @deprecated use getOrCreateTool
 	 */
 	public MoleculeListTool(CMLMoleculeList moleculeList) {
+		if (moleculeList == null) {
+			throw new RuntimeException("null moleculeList");
+		}
 		this.moleculeList = moleculeList;
 		this.moleculeList.setTool(this);
 	}
@@ -52,10 +55,13 @@ public class MoleculeListTool extends AbstractSVGTool {
 	 */
 	@SuppressWarnings("all")
 	public static MoleculeListTool getOrCreateTool(CMLMoleculeList moleculeList) {
-		MoleculeListTool moleculeListTool = (MoleculeListTool) moleculeList.getTool();
-		if (moleculeListTool == null) {
-			moleculeListTool = new MoleculeListTool(moleculeList);
-			moleculeList.setTool(moleculeListTool);
+		MoleculeListTool moleculeListTool = null;
+		if (moleculeList != null) {
+			moleculeListTool = (MoleculeListTool) moleculeList.getTool();
+			if (moleculeListTool == null) {
+				moleculeListTool = new MoleculeListTool(moleculeList);
+				moleculeList.setTool(moleculeListTool);
+			}
 		}
 		return moleculeListTool;
 	}

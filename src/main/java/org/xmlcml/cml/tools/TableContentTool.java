@@ -57,10 +57,13 @@ public class TableContentTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static TableContentTool getOrCreateTool(CMLTableContent tableContent) {
-		TableContentTool tableContentTool = (TableContentTool) tableContent.getTool();
-		if (tableContentTool == null) {
-			tableContentTool = new TableContentTool(tableContent);
-			tableContent.setTool(tableContentTool);
+		TableContentTool tableContentTool = null;
+		if (tableContent != null) {
+			tableContentTool = (TableContentTool) tableContent.getTool();
+			if (tableContentTool == null) {
+				tableContentTool = new TableContentTool(tableContent);
+				tableContent.setTool(tableContentTool);
+			}
 		}
 		return tableContentTool;
 	}

@@ -23,7 +23,7 @@ import org.xmlcml.euclid.Vector3;
  *
  */
 public class AngleTool extends AbstractTool {
-	final static Logger logger = Logger.getLogger(AngleTool.class.getName());
+	final static Logger LOG = Logger.getLogger(AngleTool.class);
 
 	CMLAngle angle = null;
 
@@ -58,7 +58,7 @@ public class AngleTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static AngleTool getOrCreateTool(CMLAngle angle) {
-		AngleTool angleTool = (AngleTool) angle.getTool();
+		AngleTool angleTool = (angle == null) ? null : (AngleTool) angle.getTool();
 		if (angleTool == null) {
 			angleTool = new AngleTool(angle);
 			angle.setTool(angleTool);
