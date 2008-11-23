@@ -64,10 +64,13 @@ public class JoinTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static JoinTool getOrCreateTool(CMLJoin join) {
-		JoinTool joinTool = (JoinTool) join.getTool();
-		if (joinTool == null) {
-			joinTool = new JoinTool(join);
-			join.setTool(joinTool);
+		JoinTool joinTool = null;
+		if (join != null) {
+			joinTool = (JoinTool) join.getTool();
+			if (joinTool == null) {
+				joinTool = new JoinTool(join);
+				join.setTool(joinTool);
+			}
 		}
 		return joinTool;
 	}

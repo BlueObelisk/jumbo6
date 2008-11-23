@@ -25,7 +25,6 @@ public class CMLXTool extends AbstractSVGTool {
 	private static Logger LOG = Logger.getLogger(CMLXTool.class);
 
     private CMLCml cml;
-    Logger logger = Logger.getLogger(CMLXTool.class.getName());
 	/**
      * constructor
      * 

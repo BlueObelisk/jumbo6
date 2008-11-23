@@ -20,7 +20,7 @@ import org.xmlcml.cml.element.CMLMap.Direction;
  */
 public class BondSetTool extends AbstractTool {
 
-    Logger logger = Logger.getLogger(BondSetTool.class.getName());
+    Logger LOG = Logger.getLogger(BondSetTool.class);
 
     CMLBondSet bondSet;
     CMLMolecule molecule;

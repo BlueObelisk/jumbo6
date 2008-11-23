@@ -54,10 +54,13 @@ public class LengthTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static LengthTool getOrCreateTool(CMLLength length) {
-		LengthTool lengthTool = (LengthTool) length.getTool();
-		if (lengthTool == null) {
-			lengthTool = new LengthTool(length);
-			length.setTool(lengthTool);
+		LengthTool lengthTool = null;
+		if (length == null) {
+			lengthTool = (LengthTool) length.getTool();
+			if (lengthTool == null) {
+				lengthTool = new LengthTool(length);
+				length.setTool(lengthTool);
+			}
 		}
 		return lengthTool;
 	}

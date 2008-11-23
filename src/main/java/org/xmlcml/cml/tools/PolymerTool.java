@@ -37,6 +37,7 @@ import org.xmlcml.euclid.Util;
  * 
  * @author pmr
  * 
+ * @deprecated all functionality is in FragmentTool
  */
 public class PolymerTool extends AbstractTool {
 

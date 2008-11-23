@@ -34,10 +34,13 @@ public class MapTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static MapTool getOrCreateTool(CMLMap map) {
-		MapTool mapTool = (MapTool) map.getTool();
-		if (mapTool == null) {
-			mapTool = new MapTool(map);
-			map.setTool(mapTool);
+		MapTool mapTool = null;
+		if (map != null) {
+			mapTool = (MapTool) map.getTool();
+			if (mapTool == null) {
+				mapTool = new MapTool(map);
+				map.setTool(mapTool);
+			}
 		}
 		return mapTool;
 	}

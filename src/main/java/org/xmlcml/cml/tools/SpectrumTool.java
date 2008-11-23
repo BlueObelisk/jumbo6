@@ -52,10 +52,13 @@ public class SpectrumTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static SpectrumTool getOrCreateTool(CMLSpectrum spectrum) {
-		SpectrumTool spectrumTool = (SpectrumTool) spectrum.getTool();
-		if (spectrumTool == null) {
-			spectrumTool = new SpectrumTool(spectrum);
-			spectrum.setTool(spectrumTool);
+		SpectrumTool spectrumTool = null;
+		if (spectrum != null) {
+			spectrumTool = (SpectrumTool) spectrum.getTool();
+			if (spectrumTool == null) {
+				spectrumTool = new SpectrumTool(spectrum);
+				spectrum.setTool(spectrumTool);
+			}
 		}
 		return spectrumTool;
 	}

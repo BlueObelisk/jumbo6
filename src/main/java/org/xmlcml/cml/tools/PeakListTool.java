@@ -70,10 +70,13 @@ public class PeakListTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static PeakListTool getOrCreateTool(CMLPeakList peakList) {
-		PeakListTool peakListTool = (PeakListTool) peakList.getTool();
-		if (peakListTool == null) {
-			peakListTool = new PeakListTool(peakList);
-			peakList.setTool(peakListTool);
+		PeakListTool peakListTool = null;
+		if (peakList != null) {
+			peakListTool = (PeakListTool) peakList.getTool();
+			if (peakListTool == null) {
+				peakListTool = new PeakListTool(peakList);
+				peakList.setTool(peakListTool);
+			}
 		}
 		return peakListTool;
 	}

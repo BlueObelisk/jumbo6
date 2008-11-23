@@ -57,10 +57,13 @@ public class TorsionTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static TorsionTool getOrCreateTool(CMLTorsion torsion) {
-		TorsionTool torsionTool = (TorsionTool) torsion.getTool();
-		if (torsionTool == null) {
-			torsionTool = new TorsionTool(torsion);
-			torsion.setTool(torsionTool);
+		TorsionTool torsionTool = null;
+		if (torsion != null) {
+			torsionTool = (TorsionTool) torsion.getTool();
+			if (torsionTool == null) {
+				torsionTool = new TorsionTool(torsion);
+				torsion.setTool(torsionTool);
+			}
 		}
 		return torsionTool;
 	}

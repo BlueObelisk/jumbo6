@@ -33,6 +33,9 @@ public class FormulaTool extends AbstractSVGTool {
 	 * @deprecated use getOrCreateTool
 	 */
 	public FormulaTool(CMLFormula formula) {
+		if (formula == null) {
+			throw new RuntimeException("null formula");
+		}
 		this.formula = formula;
 		this.formula.setTool(this);
 	}

@@ -65,10 +65,13 @@ public class TableRowListTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static TableRowListTool getOrCreateTool(CMLTableRowList tableRowList) {
-		TableRowListTool tableRowListTool = (TableRowListTool) tableRowList.getTool();
-		if (tableRowListTool == null) {
-			tableRowListTool = new TableRowListTool(tableRowList);
-			tableRowList.setTool(tableRowListTool);
+		TableRowListTool tableRowListTool = null;
+		if (tableRowList != null) {
+			tableRowListTool = (TableRowListTool) tableRowList.getTool();
+			if (tableRowListTool == null) {
+				tableRowListTool = new TableRowListTool(tableRowList);
+				tableRowList.setTool(tableRowListTool);
+			}
 		}
 		return tableRowListTool;
 	}
@@ -93,6 +96,9 @@ public class TableRowListTool extends AbstractTool {
    }
 
    private CMLElements<CMLTableRow> getOrCreateTableRows(CMLElement listArray) {
+	   if (listArray == null) {
+		   throw new RuntimeException("null listArray");
+	   }
        CMLElements<CMLTableRow> tableRows = tableRowList.getTableRowElements();
        int size = -1;
        if (listArray instanceof CMLArray) {

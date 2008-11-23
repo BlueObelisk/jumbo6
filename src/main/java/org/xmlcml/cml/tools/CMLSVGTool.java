@@ -24,7 +24,7 @@ import org.xmlcml.euclid.Real2Range;
 public class CMLSVGTool extends AbstractSVGTool {
 
     private CMLElement cmlElement;
-    Logger logger = Logger.getLogger(CMLSVGTool.class.getName());
+    private Logger LOG = Logger.getLogger(CMLSVGTool.class);
 	/**
      * constructor
      * 

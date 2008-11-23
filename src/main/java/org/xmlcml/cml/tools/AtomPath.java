@@ -15,7 +15,7 @@ import org.xmlcml.cml.element.CMLAtom;
  * 
  */
 public class AtomPath implements Comparable<AtomPath> {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(RingNucleus.class);
 
 	private List<CMLAtom> atomList;
 

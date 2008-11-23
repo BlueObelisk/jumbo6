@@ -50,10 +50,13 @@ public class PeakTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static PeakTool getOrCreateTool(CMLPeak peak) {
-		PeakTool peakTool = (PeakTool) peak.getTool();
-		if (peakTool == null) {
-			peakTool = new PeakTool(peak);
-			peak.setTool(peakTool);
+		PeakTool peakTool = null;
+		if (peak != null) {
+			peakTool = (PeakTool) peak.getTool();
+			if (peakTool == null) {
+				peakTool = new PeakTool(peak);
+				peak.setTool(peakTool);
+			}
 		}
 		return peakTool;
 	}

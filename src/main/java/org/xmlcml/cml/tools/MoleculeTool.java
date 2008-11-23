@@ -109,6 +109,9 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @deprecated use getOrCreateTool
 	 */
 	public MoleculeTool(CMLMolecule molecule) {
+		if (molecule == null) {
+			throw new RuntimeException("null molecule");
+		}
 		this.molecule = molecule;
 		this.molecule.setTool(this);
 	}

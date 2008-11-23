@@ -48,10 +48,13 @@ public class MetadataTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static MetadataTool getOrCreateTool(CMLMetadata metadata) {
-		MetadataTool metadataTool = (MetadataTool) metadata.getTool();
-		if (metadataTool == null) {
-			metadataTool = new MetadataTool(metadata);
-			metadata.setTool(metadataTool);
+		MetadataTool metadataTool = null;
+		if (metadata != null) {
+			metadataTool = (MetadataTool) metadata.getTool();
+			if (metadataTool == null) {
+				metadataTool = new MetadataTool(metadata);
+				metadata.setTool(metadataTool);
+			}
 		}
 		return metadataTool;
 	}

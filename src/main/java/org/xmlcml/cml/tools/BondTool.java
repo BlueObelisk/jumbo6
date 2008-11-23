@@ -35,7 +35,7 @@ public class BondTool extends AbstractSVGTool {
 
     private CMLBond bond;
     private CMLMolecule molecule;
-    Logger logger = Logger.getLogger(BondTool.class.getName());
+    private static Logger LOG = Logger.getLogger(BondTool.class);
     private BondDisplay bondDisplay;
     private MoleculeTool moleculeTool;
     private MoleculeDisplay moleculeDisplay;
@@ -49,6 +49,9 @@ public class BondTool extends AbstractSVGTool {
      * @deprecated use getOrCreateTool
      */
     public BondTool(CMLBond bond) {
+    	if (bond == null) {
+    		throw new RuntimeException("null bond");
+    	}
         this.bond = bond;
         molecule = bond.getMolecule();
         if (molecule == null) {

@@ -1,19 +1,27 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArray;
 import org.xmlcml.cml.element.CMLEntry;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMatrix;
 import org.xmlcml.cml.element.CMLParameter;
+import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLVector3;
@@ -43,6 +51,10 @@ public class EntryTool extends AbstractTool {
     private boolean failOnError;
     
     private Set<String> valueSet;
+    private List<Element> enumerations;
+	private List<String> enumerationList;
+	private Set<String> enumerationSet;
+	private Set<String> ignoreCaseSet;
     
 	/**
 	 * @param entry the entry to set
@@ -66,10 +78,13 @@ public class EntryTool extends AbstractTool {
 	 * @return tool
 	 */
 	public static EntryTool getOrCreateTool(CMLEntry entry) {
-		EntryTool entryTool = (EntryTool) entry.getTool();
-		if (entryTool == null) {
-			entryTool = new EntryTool(entry);
-			entry.setTool(entryTool);
+		EntryTool entryTool = null;
+		if (entry != null) {
+			entryTool = (EntryTool) entry.getTool();
+			if (entryTool == null) {
+				entryTool = new EntryTool(entry);
+				entry.setTool(entryTool);
+			}
 		}
 		return entryTool;
 	}
@@ -222,8 +237,7 @@ public class EntryTool extends AbstractTool {
 //			this.checkValueAgainstEnumerations(value);
 			this.checkPattern(value);
     	}
-    	CMLScalar scalar = new CMLScalar();
-		scalar.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	CMLScalar scalar = createScalar(name);
 		scalar.setDataType(XSD_STRING);
 		scalar.setXMLContent(value);
 		return scalar;
@@ -240,11 +254,23 @@ public class EntryTool extends AbstractTool {
     	if (failOnError) {
 			this.checkNumericValue((double) value);
     	}
-    	CMLScalar scalar = new CMLScalar();
-		scalar.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	CMLScalar scalar = createScalar(name);
 		scalar.setValue(value);
 		return scalar;
     }
+
+	/**
+	 * @param name
+	 * @return
+	 * @throws RuntimeException
+	 */
+	private CMLScalar createScalar(String name) throws RuntimeException {
+		CMLScalar scalar = new CMLScalar();
+    	if (prefix != null) {
+    		scalar.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
+		return scalar;
+	}
 
     
 	/** add scalar int to a CMLElement.
@@ -259,8 +285,7 @@ public class EntryTool extends AbstractTool {
 //			this.checkValueAgainstEnumerations(value);
 			this.checkNumericValue((double) value);
 		}
-    	CMLScalar scalar = new CMLScalar();
-		scalar.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	CMLScalar scalar = createScalar(name);
 		scalar.setValue(value);
 		return scalar;
     }
@@ -277,7 +302,9 @@ public class EntryTool extends AbstractTool {
     	}
     	double[] values = realArray.getArray();
     	CMLArray array = new CMLArray(values);
-		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	if (prefix != null) {
+    		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
 		return array;
     }
     
@@ -290,7 +317,9 @@ public class EntryTool extends AbstractTool {
     	EntryTool.checkEmptyName(name);
     	int[] values = intArray.getArray();
     	CMLArray array = new CMLArray();
-		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	if (prefix != null) {
+    		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
 		array.setDataType(XSD_FLOAT);
 		array.setArray(values);
 		return array;
@@ -304,7 +333,9 @@ public class EntryTool extends AbstractTool {
     public CMLArray createStringArray(String name, String[] values) {
     	EntryTool.checkEmptyName(name);
     	CMLArray array = new CMLArray();
-		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	if (prefix != null) {
+    		array.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
 		array.setDataType(XSD_FLOAT);
 		array.setArray(values);
 		return array;
@@ -330,9 +361,9 @@ public class EntryTool extends AbstractTool {
 		// arrays
 		double minInclusive = Double.NaN;
 		double maxInclusive = Double.NaN;
-		if (lengthAttribute != null ||
+		if ((lengthAttribute != null ||
 				minLengthAttribute != null || 
-				maxLengthAttribute != null) {
+				maxLengthAttribute != null) && delimiter != null) {
 			String[] ss = value.split(delimiter);
 			this.checkArrayLength(ss, name);
 			// add arrays
@@ -366,7 +397,20 @@ public class EntryTool extends AbstractTool {
 		}
 		return element;
     }
-    
+
+    public CMLElement createElement(String name, String value) {
+    	CMLElement element = null;
+    	String dataType = entry.getDataType();
+    	if (dataType == null || dataType.equalsIgnoreCase(XSD_STRING)) {
+    		element = createStringScalarOrStringArray(name, value);
+    	} else if (dataType.equalsIgnoreCase(XSD_FLOAT) || dataType.equals(XSD_DOUBLE)) {
+    		element = createDoubleScalarOrDoubleArray(name, value);
+    	} else if (dataType.equalsIgnoreCase(XSD_INTEGER)) {
+    		element = createIntegerScalarOrIntegerArray(name, value);
+    	}
+    	return element;
+    		
+    }
     /** create integer data.
      * 
      * @param name
@@ -382,9 +426,9 @@ public class EntryTool extends AbstractTool {
 		
 		int minInclusive = Integer.MAX_VALUE;
 		int maxInclusive = -Integer.MAX_VALUE;
-		if (lengthAttribute != null || 
+		if ((lengthAttribute != null || 
 			minLengthAttribute != null || 
-			maxLengthAttribute != null) {
+			maxLengthAttribute != null) && delimiter != null) {
 			String[] ss = value.split(delimiter);
 			this.checkArrayLength(ss, name);
 			// fields in keywords should not be parsed
@@ -411,6 +455,19 @@ public class EntryTool extends AbstractTool {
 		}
 		return element;
 	}
+	
+
+	/** create string data.
+	 * 
+	 * @param name
+	 * @param value
+	 * @return string
+	 */
+	public static CMLElement createUnknownStringScalar(String name, String value) {
+		CMLScalar scalar = new CMLScalar();
+		scalar.setXMLContent(value);
+		return scalar;
+	}
 
 	/** create string data.
 	 * 
@@ -425,9 +482,9 @@ public class EntryTool extends AbstractTool {
 		Attribute maxLengthAttribute = entry.getMaxLengthAttribute();
 		Attribute lengthAttribute = entry.getLengthAttribute();
 		
-		if (lengthAttribute != null ||
+		if ((lengthAttribute != null ||
 				minLengthAttribute != null || 
-				maxLengthAttribute != null) {
+				maxLengthAttribute != null) && delimiter != null) {
 			String[] ss = value.split(delimiter);
 			this.checkArrayLength(ss, name);
 			// fields in keywords should not be parsed
@@ -465,6 +522,11 @@ public class EntryTool extends AbstractTool {
 			element = createDoubleScalarOrDoubleArray(name, value);
 		}
 		parameter.appendChild(element);
+		Attribute dictRef = element.getAttribute("dictRef");
+		if (dictRef != null) {
+			dictRef.detach();
+			parameter.addAttribute(dictRef);
+		}
 		return parameter;
 	}
 	
@@ -477,12 +539,11 @@ public class EntryTool extends AbstractTool {
 	 */
     public CMLScalar createDate(String name, String value) {
     	EntryTool.checkEmptyName(name);
-    	CMLScalar scalar = new CMLScalar();
     	String canonicalValue = Util.getCanonicalDate(value);
     	if (canonicalValue == null) {
     		throw new RuntimeException("Cannot parse as date: "+value);
     	}
-		scalar.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	CMLScalar scalar = createScalar(name);
 		scalar.setDataType(XSD_DATE);
 		scalar.setXMLContent(value);
 		return scalar;
@@ -501,7 +562,9 @@ public class EntryTool extends AbstractTool {
     	if (formula == null) {
     		throw new RuntimeException("Cannot parse as formula: "+value);
     	}
-		formula.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	if (prefix != null) {
+    		formula.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
 		return formula;
     }
 
@@ -514,7 +577,9 @@ public class EntryTool extends AbstractTool {
     	EntryTool.checkEmptyName(name);
     	RealArray array = new RealArray(value.split(this.getDelimiter()));
     	CMLVector3 vector3 = new CMLVector3(array.getArray());
-		vector3.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	if (prefix != null) {
+    		vector3.setDictRef(prefix+S_COLON+name.toLowerCase());
+    	}
 		return vector3;
     }
 
@@ -523,36 +588,36 @@ public class EntryTool extends AbstractTool {
 	 * @param value of vector
 	 * @return matrix 
  */
-//    public CMLMatrix createMatrix(String name, String value) {
-//    	// FIXME needs to return property
-//    	EntryTool.checkEmptyName(name);
-//    	CMLMatrix matrix = null;
-////    	List<Node> propertys = CMLUtil.getQueryNodes(entry, 
-////    			CMLAppinfo.NS+"/*/"+CMLProperty.NS+"["+CMLMatrix.NS+"]", CML_XPATH);
-////    	if (propertys.size() != 1) {
-////    		throw new RuntimeException(
-////    				"Cannot find property/matrix template in entry: "+entry.getId());
-////    	}
-////    	CMLProperty property = (CMLProperty) propertys.get(0);
-//    	CMLMatrix template = (CMLMatrix) property.getChildCMLElement(CMLMatrix.TAG, 0);
-//    	String matrixType = template.getMatrixType();
-//    	int rows = (template.getRowsAttribute() == null) ? 0 : template.getRows();
-//    	int columns = (template.getColumnsAttribute() == null) ? 0 : template.getColumns();
-//    	RealArray array = new RealArray(value.split(this.getDelimiter()));
-//    	if (rows != 0 && rows == columns && rows * columns == array.size()) {
-//    		matrix = new CMLMatrix(rows, columns, array.getArray());
-//    		matrix.copyAttributesFrom(template);
-//    	} else if (CMLMatrix.Type.SQUARE_SYMMETRIC_LT.value.equals(matrixType)) {
-//    		matrix = CMLMatrix.createSquareMatrix(
-//    				array, rows, CMLMatrix.Type.SQUARE_SYMMETRIC_LT);
-//    		matrix.copyAttributesFrom(template);
-//    	} else if (CMLMatrix.Type.SQUARE_SYMMETRIC_UT.value.equals(matrixType)) {
-//    		matrix = CMLMatrix.createSquareMatrix(
-//    				array, rows, CMLMatrix.Type.SQUARE_SYMMETRIC_UT);
-//    		matrix.copyAttributesFrom(template);
-//    	}
-//		return matrix;
-//    }
+    public CMLMatrix createMatrix(String name, String value) {
+    	// FIXME needs to return property
+    	EntryTool.checkEmptyName(name);
+    	CMLMatrix matrix = null;
+    	List<Node> propertys = CMLUtil.getQueryNodes(entry, 
+    			CMLProperty.NS+"["+CMLMatrix.NS+"]", CML_XPATH);
+    	if (propertys.size() != 1) {
+    		throw new RuntimeException(
+    				"Cannot find property/matrix template in entry: "+entry.getId());
+    	}
+    	CMLProperty property = (CMLProperty) propertys.get(0);
+    	CMLMatrix template = (CMLMatrix) property.getChildCMLElement(CMLMatrix.TAG, 0);
+    	String matrixType = template.getMatrixType();
+    	int rows = (template.getRowsAttribute() == null) ? 0 : template.getRows();
+    	int columns = (template.getColumnsAttribute() == null) ? 0 : template.getColumns();
+    	RealArray array = new RealArray(value.split(this.getDelimiter()));
+    	if (rows != 0 && rows == columns && rows * columns == array.size()) {
+    		matrix = new CMLMatrix(rows, columns, array.getArray());
+    		matrix.copyAttributesFrom(template);
+    	} else if (CMLMatrix.Type.SQUARE_SYMMETRIC_LT.value.equals(matrixType)) {
+    		matrix = CMLMatrix.createSquareMatrix(
+    				array, rows, CMLMatrix.Type.SQUARE_SYMMETRIC_LT);
+    		matrix.copyAttributesFrom(template);
+    	} else if (CMLMatrix.Type.SQUARE_SYMMETRIC_UT.value.equals(matrixType)) {
+    		matrix = CMLMatrix.createSquareMatrix(
+    				array, rows, CMLMatrix.Type.SQUARE_SYMMETRIC_UT);
+    		matrix.copyAttributesFrom(template);
+    	}
+		return matrix;
+    }
 
     /** check length.
      * 
@@ -650,34 +715,41 @@ public class EntryTool extends AbstractTool {
 		}
     }
         
-//    /** check against enumerations.
-//     * 
-//     * @param value
-//     */
-//    public void checkValueAgainstEnumerations(int value) {
-//    	checkValueAgainstEnumerations(""+value);
-//    }
-	
-    /** check value.
-     * 
+    
+    public List<String> ensureEnumerations() {
+	    if (enumerationList == null) {
+		    enumerationList = new ArrayList<String>();
+		    Nodes nodes = entry.query("*[local-name()='enumeration']");
+		    for (int i = 0; i < nodes.size(); i++) {
+			    enumerationList.add(nodes.get(i).getValue());
+		    }
+	   }
+	   if (ignoreCaseOfEnumerations && ignoreCaseSet == null) {
+		    ignoreCaseSet = new HashSet<String>();
+		    for (String s : enumerationList) {
+			    ignoreCaseSet.add(s.toLowerCase());
+		    }
+	   }
+	   if (enumerationSet == null) {
+		    enumerationSet = new HashSet<String>();
+		    for (String s : enumerationList) {
+			    enumerationSet.add(s);
+		    }
+	    }
+	    return enumerationList;
+    }
+
+    /** does the value correspond to an enuemrated value?
+     * if ignoreCaseOfEnumerations set ignores case
      * @param value
+     * @return
      */
-//    public void checkValueAgainstEnumerations(String value) {
-//    	CMLElements<CMLEnumeration> enumerations = entry.getEnumerationElements();
-//    	if (enumerations != null && enumerations.size() > 0) {
-//	    	for (CMLEnumeration enumeration : enumerations) {
-//	    		if (this.ignoreCaseOfEnumerations) {
-//	    			if (enumeration.getCMLValue().equalsIgnoreCase(value)) {
-//	    				return;
-//	    			}
-//	    		} else if (enumeration.getCMLValue().equals(value)) {
-//	    			return;
-//	    		}
-//	    	}
-//    		throw new RuntimeException("Value ("+value+") does not match" +
-//    				" enumeration for: "+entry.getId());
-//    	}
-//    }
+	public boolean containsEnumeratedValue(String value) {
+		ensureEnumerations();
+		return (this.ignoreCaseOfEnumerations &&
+			ignoreCaseSet.contains(value.toLowerCase()) ||
+			enumerationSet.contains(value));
+	}
     
     /** check pattern.
      * 

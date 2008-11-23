@@ -12,7 +12,7 @@ import org.xmlcml.cml.base.AbstractTool;
  *
  */
 public class AttributesTool extends AbstractTool {
-	final static Logger logger = Logger.getLogger(AttributesTool.class.getName());
+	final static Logger LOG = Logger.getLogger(AttributesTool.class.getName());
 
 
 
