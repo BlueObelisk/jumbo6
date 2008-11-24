@@ -42,7 +42,7 @@ import org.xmlcml.cml.map.IndexableByIdListManager;
  * 
  * @author Peter Murray-Rust
  * @version 5.0
- * 
+ * @deprecated use ResourceManager instead 
  */
 public class Catalog implements CatalogListChild, CMLConstants {
 

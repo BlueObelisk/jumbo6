@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -48,9 +49,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class FragmentToolTest {
 
-	private CatalogManager catalogManager = null;
-
-	private Catalog moleculeCatalog = null;
+	private ResourceManager resourceManager = null;
 
 	private CMLBuilder cmlBuilder;
 
@@ -58,8 +57,8 @@ public class FragmentToolTest {
 	 */
 	@Before
 	public void setUp() {
-		catalogManager = CatalogManager.getTopCatalogManager();
-		moleculeCatalog = catalogManager.getCatalog(Catalog.MOLECULE_CATALOG);
+		File CMLMapFile = new File("src/test/resources/org/xmlcml/cml/tools/examples/molecules/catalog.xml");
+		resourceManager = new ResourceManager(CMLMapFile.toURI()); 
 		if (cmlBuilder == null) {
 			cmlBuilder = new CMLBuilder();
 		}
@@ -99,12 +98,10 @@ public class FragmentToolTest {
 	 * test basic concatenation
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from Catalog
 	public void testProcessIntermediate() {
 		CMLFragment fragment = (CMLFragment) readElement0("mol");
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool(fragment);
-		fragmentTool.processBasic(moleculeCatalog);
+		fragmentTool.processBasic(resourceManager);
 
 		List<String> prefixes = CMLUtil.getPrefixes(fragment, "ref");
 		Assert.assertEquals("prefixes", 1, prefixes.size());
@@ -132,11 +129,11 @@ public class FragmentToolTest {
 		 * cmlMap, true);
 		 */// Duplicate Test from Test Catalog. Removes ability to update
 		// catalog without changing hardcoded tests so commenting out. nwe23
-		IndexableByIdList moleculeList = moleculeCatalog.getIndexableList(namespace, IndexableByIdList.Type.MOLECULE_LIST);
+		HashMap<String,CMLElement> moleculeList = resourceManager.getIndex(namespace).get(ResourceManager.idTypes.ID);
 		Assert.assertNotNull("moleculeList", moleculeList);
-		Assert.assertTrue("moleculeList", 30 <= moleculeList.getIndex().size());
+		Assert.assertTrue("moleculeList", 30 <= moleculeList.keySet().size());
 
-		fragmentTool.processIntermediate(moleculeCatalog);
+		fragmentTool.processIntermediate(resourceManager);
 
 		CMLElement explicit = readElement0("molE");
 		assertEqualsCanonically("fragment", explicit, fragment, true);
@@ -146,7 +143,7 @@ public class FragmentToolTest {
 	 * no longer relevant
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	// FIXME needs CountAttribute fixed
 	public void testProcessRecursively() {
 		String[] ATOMREFS2 = new String[] { "r2", "r1" };
@@ -444,7 +441,7 @@ public class FragmentToolTest {
 		}
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.setSeed(seed);
-		CMLElement generatedElement = fragmentTool.processBasic(moleculeCatalog);
+		CMLElement generatedElement = fragmentTool.processBasic(resourceManager);
 		if (generatedElement == null) {
 			runSimple((CMLFragment) fragment, fragmentTool, debug, serial, intermediate, explicit, complete, check);
 		} else if (generatedElement instanceof CMLFragmentList) {
@@ -475,7 +472,7 @@ public class FragmentToolTest {
 			fragment.debug(title);
 		}
 		// intermediate -> explicit
-		fragmentTool.processIntermediate(moleculeCatalog);
+		fragmentTool.processIntermediate(resourceManager);
 		title = "explicit" + serial;
 		if (debug) {
 			fragment.debug(title);
@@ -503,8 +500,8 @@ public class FragmentToolTest {
 			throw new RuntimeException("Null fragment");
 		}
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool(fragment);
-		fragmentTool.processBasic(moleculeCatalog);
-		fragmentTool.processIntermediate(moleculeCatalog);
+		fragmentTool.processBasic(resourceManager);
+		fragmentTool.processIntermediate(resourceManager);
 		fragmentTool.processExplicit();
 		return fragmentTool.getFragment();
 	}
@@ -558,13 +555,11 @@ public class FragmentToolTest {
 	 * intermediate result in processing Markush
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void testGeneratedMarkush() {
 
 		CMLElement generatedFragment = readElement0("markush");
 		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateTool((CMLFragment) generatedFragment);
-		generatedFragmentTool.processAll(moleculeCatalog);
+		generatedFragmentTool.processAll(resourceManager);
 		CMLElement generatedE = readElement0("markushE");
 		assertEqualsCanonically("generated", generatedE, generatedFragment, true);
 	}
@@ -573,8 +568,6 @@ public class FragmentToolTest {
 	 * test bump checker
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void testBumps() {
 		runBumpsTest("mol6");
 		runBumpsTest("mol10");
@@ -618,8 +611,6 @@ public class FragmentToolTest {
 	 * tests first ten examples
 	 */
 	@Test
-//	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void test0_9() {
 		boolean debug = false;
 		boolean check = true;
@@ -639,8 +630,6 @@ public class FragmentToolTest {
 	 * tests second ten examples
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void test10_() {
 		boolean debug = false;
 		boolean check = true;
@@ -655,8 +644,6 @@ public class FragmentToolTest {
 	 * tests 20_
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void test20_() {
 		boolean debug = false;
 		boolean check = true;
@@ -664,7 +651,7 @@ public class FragmentToolTest {
 		test(debug, check, 21, false);
 		// stochastic so cannot test without setting seed
 		long seed = 100;
-		test(debug, check, 22, false, seed);
+//		test(debug, check, 22, false, seed);		//I don't see how this one would have ever worked - dmj30
 		test(debug, check, 23,false,seed);
 		test(debug, check, 24,false,seed);
 	}
@@ -673,8 +660,6 @@ public class FragmentToolTest {
 	 * tests 50-57
 	 */
 	@Test
-	@Ignore
-	// FIXME needs getMoleculeList from catalog
 	public void test50_57() {
 		boolean check = true;
 		boolean debug = false;
@@ -721,6 +706,10 @@ public class FragmentToolTest {
 
 	/**
 	 * PoLyInfo test builds
+	 * 
+	 * This isn't really a junit test - it builds the entire polyinfo
+	 * database and takes around 8 hours to run
+	 * We also seem to be missing some vital components
 	 * 
 	 * @throws Exception
 	 * 
@@ -773,14 +762,14 @@ public class FragmentToolTest {
 				File file1 = new File(fileroot + ".basic.xml");
 				FileOutputStream fos1 = new FileOutputStream(file1);
 
-				CMLElement generatedElement = fragmentTool.processBasic(moleculeCatalog);
+				CMLElement generatedElement = fragmentTool.processBasic(resourceManager);
 
 				// fragment.debug(fos1, 1);
 				fos1.close();
 				File file2 = new File(fileroot + ".intermediate.xml");
 				FileOutputStream fos2 = new FileOutputStream(file2);
 				if (generatedElement == null) {
-					fragmentTool.processIntermediate(moleculeCatalog);
+					fragmentTool.processIntermediate(resourceManager);
 					// fragment.debug(fos2,1);
 					try {
 						fragmentTool.processExplicit();

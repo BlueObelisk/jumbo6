@@ -170,23 +170,23 @@ public class FragmentTool extends AbstractTool {
     }
     
     /** process basic convention.
-	 * @param catalog to find molecules
+	 * @param resourceManager to find molecules
 	 * @return fragmentList for Markush; null for simple fragment
      * @return element 
      */
-    public CMLElement processBasic(Catalog catalog) {
+    public CMLElement processBasic(ResourceManager resourceManager) {
     	BasicProcessor basicProcessor = new BasicProcessor(rootFragment,seed);
-    	CMLElement generatedElement = basicProcessor.process(catalog);
+    	CMLElement generatedElement = basicProcessor.process(resourceManager);
     	return generatedElement;
     }
     
 	/** process intermediate format.
 	 * @param catalog to find molecules
 	 */
-    public void processIntermediate(Catalog catalog) {
+    public void processIntermediate(ResourceManager resourceManager) {
     	IntermediateProcessor intermediateProcessor = 
     		new IntermediateProcessor(rootFragment);
-    	intermediateProcessor.process(catalog);
+    	intermediateProcessor.process(resourceManager);
     }
 
     /**  final processing.
@@ -198,13 +198,13 @@ public class FragmentTool extends AbstractTool {
 
     /** complete processing.
      * 
-     * @param moleculeCatalog
+     * @param resourceManager
      * @return fragmentList (Markush) or null
      */
-    public CMLElement processAll(Catalog moleculeCatalog) {
-		CMLElement generatedElement = this.processBasic(moleculeCatalog);
+    public CMLElement processAll(ResourceManager resourceManager) {
+		CMLElement generatedElement = this.processBasic(resourceManager);
 		if (generatedElement == null) {
-			this.processIntermediate(moleculeCatalog);
+			this.processIntermediate(resourceManager);
 			this.processExplicit();
 		}
 		return generatedElement;
@@ -490,6 +490,7 @@ class CountExpander implements CMLConstants {
 		List<Node> joins = CMLUtil.getQueryNodes(fragment, CMLJoin.NS, CML_XPATH);
 		List<Node> fragments = CMLUtil.getQueryNodes(fragment, CMLFragment.NS, CML_XPATH);
 		if (joins.size() != 1 || fragments.size() != 1) {
+			System.err.println(fragment.toXML());
 			throw new RuntimeException("wrong format; requires exactly 1 join and 1 fragment");
 		}
 		CMLJoin childJoin = (CMLJoin) joins.get(0);
@@ -546,10 +547,10 @@ class BasicProcessor implements CMLConstants {
 
 	/** manages single fragments and Markush
 	 * 
-	 * @param catalog
+	 * @param resourceManager
 	 * "return fragmentList if Markush; null if fragment
 	 */
-    CMLElement process(Catalog catalog) {
+    CMLElement process(ResourceManager resourceManager) {
     	CMLElement generatedElement = null;
         CMLUtil.removeWhitespaceNodes(fragment);
         List<Node> markushs = CMLUtil.getQueryNodes(
@@ -559,7 +560,7 @@ class BasicProcessor implements CMLConstants {
         		throw new RuntimeException("Can only process one Markush child");
         	}
         	CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
-        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, catalog);
+        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, resourceManager);
 	        fragment.setConvention(FragmentTool.Convention.PML_PROCESSED.v);
         } else {
 	        fragmentTool.substituteFragmentRefsRecursively(100);
@@ -576,11 +577,11 @@ class BasicProcessor implements CMLConstants {
      * creates M * N * P ... fragments in a fragmentList
      * 
      * @param expandableMarkush
-     * @param catalog
+     * @param resourceManager
      * @return generated fragmentList
      */
     private CMLFragmentList generateFragmentListFromMarkushGroupsAndTarget(
-		CMLFragmentList expandableMarkush, Catalog catalog) {
+		CMLFragmentList expandableMarkush, ResourceManager resourceManager) {
 //    	fragment
 //    		fragmentList (refs)
 //    		fragmentList role='markush'
@@ -616,7 +617,7 @@ class BasicProcessor implements CMLConstants {
     	}
     	CMLFragmentList generatedFragmentList = null;
     	if (role.equals("markushList")) {
-    		generatedFragmentList = multipleMarkush(markushListsOrMixtures, catalog);
+    		generatedFragmentList = multipleMarkush(markushListsOrMixtures, resourceManager);
     	} else if (role.equals("markushMixture")) {
     		CMLFragment markushTarget = (CMLFragment) markushTargets.get(0);
     		CountExpressionAttribute cea = new CountExpressionAttribute(markushTarget.getCountExpressionAttribute());
@@ -625,14 +626,14 @@ class BasicProcessor implements CMLConstants {
     		}
     		cea.detach();
     		int count = cea.calculateCountExpression();
-    		generatedFragmentList = markushMixture(markushListsOrMixtures, catalog, count);
+    		generatedFragmentList = markushMixture(markushListsOrMixtures, resourceManager, count);
     	} else {
     		throw new RuntimeException("Unknown role: "+role);
     	}
         return generatedFragmentList;
     }
     
-    private CMLFragmentList multipleMarkush(List<Node> markushLists, Catalog catalog) {
+    private CMLFragmentList multipleMarkush(List<Node> markushLists, ResourceManager resourceManager) {
     	
     	List<List<CMLFragment>> cartesianProductList = new ArrayList<List<CMLFragment>>();
     	// seed with new zero-length list
@@ -659,14 +660,14 @@ class BasicProcessor implements CMLConstants {
         	// clone the complete fragment
         	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
         	FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment);
-        	newFragmentTool.processAll(catalog);
+        	newFragmentTool.processAll(resourceManager);
         	generatedFragmentList.addFragment(newFragment);
         }
     	return generatedFragmentList;
     }
     
     private CMLFragmentList markushMixture(
-    		List<Node> markushLists, Catalog catalog, int count) {
+    		List<Node> markushLists, ResourceManager resourceManager, int count) {
     	
     	CMLFragmentList generatedFragmentList = new CMLFragmentList();
     	for (int i = 0; i < count; i++) {
@@ -679,7 +680,7 @@ class BasicProcessor implements CMLConstants {
         	CMLFragment newFragment = createSingleBasicFragment(markushGroupList);
         	if (newFragment != null) {
 	        	FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment);
-	        	newFragmentTool.processAll(catalog);
+	        	newFragmentTool.processAll(resourceManager);
 	        	generatedFragmentList.addFragment(newFragment);
         	} else {
         		System.out.println("NULL "+i);
@@ -896,25 +897,26 @@ class IntermediateProcessor implements CMLConstants {
 		this.fragment = fragment;
 	}
 	
-	void process(Catalog catalog) {
+	void process(ResourceManager resourceManager) {
 		List<Node> joins = CMLUtil.getQueryNodes(fragment, ".//"+CMLJoin.NS+"[not(@order)]", CML_XPATH);
 		for (Node node : joins) {
 		    ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
 		}
 		expandTorsionsWithMinMaxValues();
 		// lookup referenced molecules; replaces by fragments containing new molecules
-		dereferenceMolecules(catalog);
+		dereferenceMolecules(resourceManager);
 		// this is not yet tested
-		dereferenceFragments(catalog);
+		dereferenceFragments(resourceManager);
 		fragment.setConvention(FragmentTool.Convention.PML_EXPLICIT.v);
 	}
 
-	private void dereferenceMolecules(Catalog catalog) {
+	private void dereferenceMolecules(ResourceManager resourceManager) {
 		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLMolecule.NS+"[@ref]", CML_XPATH);
 		for (Node node : mols) {
 		    CMLMolecule subMolecule = (CMLMolecule) node;
 		    CMLMolecule dereferencedMol = (CMLMolecule) 
-		        dereference(catalog, subMolecule, IndexableByIdList.Type.MOLECULE_LIST);
+//		        dereference(resourceManager, subMolecule, IndexableByIdList.Type.MOLECULE_LIST);
+		    	resourceManager.deref(subMolecule, ResourceManager.idTypes.ID);
 		    if (dereferencedMol == null) {
 		    	throw new RuntimeException("Cannot dereference: "+subMolecule.getRef());
 		    }
@@ -942,14 +944,15 @@ class IntermediateProcessor implements CMLConstants {
 	
 	/** expand fragments.
 	* not yet tested
-	* @param catalog
+	* @param resourceManager
 	*/
-	private void dereferenceFragments(Catalog catalog) {
+	private void dereferenceFragments(ResourceManager resourceManager) {
 		List<Node> mols = CMLUtil.getQueryNodes(fragment, ".//"+CMLFragment.NS+"[@ref]", CML_XPATH);
 		for (Node node : mols) {
 		    CMLFragment subFragment = (CMLFragment) node;
 		    CMLFragment newFragment = (CMLFragment) 
-		        dereference(catalog, subFragment, IndexableByIdList.Type.FRAGMENT_LIST);
+//		        dereference(resourceManager, subFragment, IndexableByIdList.Type.FRAGMENT_LIST);
+		    	resourceManager.deref(subFragment, ResourceManager.idTypes.ID);
 		    subFragment.removeAttribute("ref");
 		    // copy
 		    FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment); 

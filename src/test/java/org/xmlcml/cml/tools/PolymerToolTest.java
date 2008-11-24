@@ -13,6 +13,7 @@ import static org.xmlcml.util.TestUtils.parseValidString;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import nu.xom.Document;
 import nu.xom.ParsingException;
@@ -34,10 +35,16 @@ import org.xmlcml.euclid.Util;
  */
 public class PolymerToolTest {
 
-	private static Catalog getMoleculeCatalog() throws IOException {
-        Catalog catalogTool = null;
-        catalogTool = new Catalog(Util
-                .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML));
+	private static ResourceManager getMoleculeCatalog() throws IOException {
+        ResourceManager catalogTool = null;
+        try {
+        	catalogTool = new ResourceManager(Util
+        		    .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML).toURI());
+        }
+        catch (URISyntaxException e) {
+        	e.printStackTrace();
+		}
+            
         return catalogTool;
     }
 
@@ -124,7 +131,7 @@ public class PolymerToolTest {
         PolymerTool polymerTool = new PolymerTool();
 		CMLMolecule mol = (CMLMolecule) CMLUtil.readElementFromResource(fileroot + "_concise.xml");
 		polymerTool.setMolecule(mol);
-		polymerTool.setMoleculeCatalog(getMoleculeCatalog());
+		polymerTool.setResourceManager(getMoleculeCatalog());
 		polymerTool.processConvention();
 		// debug("basic", mol, fileroot);
 		polymerTool.processConvention();
@@ -161,7 +168,7 @@ public class PolymerToolTest {
 				+ "  />";
 		CMLMolecule molecule = (CMLMolecule) parseValidString(copolyS);
 		PolymerTool polymerTool = new PolymerTool(molecule);
-		polymerTool.setMoleculeCatalog(getMoleculeCatalog()); //added get catalog
+		polymerTool.setResourceManager(getMoleculeCatalog()); //added get catalog
 		try {
 			polymerTool.processConventionExhaustively();
 		} catch (RuntimeException e) {
@@ -195,7 +202,7 @@ public class PolymerToolTest {
         
         polymerTool.setElement(root);
         polymerTool.setTargetLevel(FragmentTool.Convention.PML_COMPLETE);
-        polymerTool.setMoleculeCatalog(getMoleculeCatalog());
+        polymerTool.setResourceManager(getMoleculeCatalog());
         polymerTool.setDebug(true);
         polymerTool.processConventionExhaustively();
         polymerTool.write(fileroot + "final.xml");
@@ -219,7 +226,7 @@ public class PolymerToolTest {
 		CMLMoleculeList molList = polymerTool.readMoleculeList(EXPERIMENTAL_RESOURCE + U_S
                 + fileroot + "_concise.xml");
 		polymerTool.setMoleculeList(molList);
-		polymerTool.setMoleculeCatalog(getMoleculeCatalog());
+		polymerTool.setResourceManager(getMoleculeCatalog());
 		polymerTool.processConvention();
 		/*--
 
