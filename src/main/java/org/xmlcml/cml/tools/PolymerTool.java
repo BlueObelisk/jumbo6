@@ -56,7 +56,7 @@ public class PolymerTool extends AbstractTool {
     // debug
     private boolean debug = false;
     // catalog
-    private Catalog moleculeCatalog = null;
+    private ResourceManager resourceManager = null;
 
     
     /** constructor.
@@ -144,10 +144,10 @@ public class PolymerTool extends AbstractTool {
     }
 
     /** set molecule catalog
-     * @param catalog
+     * @param resourceManager
      */
-    public void setMoleculeCatalog(Catalog catalog) {
-        this.moleculeCatalog = catalog;
+    public void setResourceManager(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
     }
     /** process current molecule with its convention attribute.
      * the attribute can be re-adjusted by the process so this routine may be called 
@@ -169,7 +169,7 @@ public class PolymerTool extends AbstractTool {
             int i = 0;
             for (CMLMolecule molecule0 : molecules) {
                 PolymerTool polymerTool = new PolymerTool(molecule0);
-                polymerTool.setMoleculeCatalog(this.moleculeCatalog);
+                polymerTool.setResourceManager(this.resourceManager);
                 polymerToolList.add(polymerTool);
                 polymerTool.processConventionExhaustively();
 //                molecule0.debug("MOL "+i++);
@@ -329,7 +329,7 @@ formula='
             throw new RuntimeException("expected fragment child");
         }
         FragmentTool fragmentTool = FragmentTool.getOrCreateTool(fragment0);
-        fragmentTool.processBasic(moleculeCatalog);
+        fragmentTool.processBasic(resourceManager);
     }
     
 //    private static void recursiveProcessJoins(
@@ -409,7 +409,7 @@ formula='
             torsion.debug("MINMAX");
         }
         // lookup referenced molecules
-        if (moleculeCatalog == null) {
+        if (resourceManager == null) {
             new Exception().printStackTrace();
             throw new RuntimeException("Cannot processIntermediate without moleculeCatalog");
         }
@@ -513,7 +513,7 @@ formula='
             
         this.setElement(molecule);
         
-        this.setMoleculeCatalog(new Catalog(new File(fragments)));
+        this.setResourceManager(new ResourceManager(new File(fragments).toURI()));
         LOG.debug("Processing to level: "+targetLevel.v);
         this.processConventionExhaustively(targetLevel);
 
@@ -554,11 +554,11 @@ formula='
      * 
      * @param stylesheetFilename
      * @param parameters
-     * @param catalog
+     * @param resourceManager
      * @return fragment
      */
     public static CMLFragment createFromTemplate(
-		String stylesheetFilename, List<XSLParam> parameters, Catalog catalog) {
+		String stylesheetFilename, List<XSLParam> parameters, ResourceManager resourceManager) {
     	
     	LOG.debug("XSL "+stylesheetFilename);
     	for (XSLParam param : parameters) {
@@ -584,7 +584,7 @@ formula='
     	} catch (Exception e) {
     		throw new RuntimeException("should not throw: "+e.getMessage());
     	}
-    	FragmentTool.getOrCreateTool(fragment).processAll(catalog);
+    	FragmentTool.getOrCreateTool(fragment).processAll(resourceManager);
     	return fragment;
     }
     
