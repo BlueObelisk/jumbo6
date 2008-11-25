@@ -53,7 +53,7 @@ public class ResourceManagerTest {
 	public void testGetResourceByUid() {
 		File mapFile = new File("src/test/resources/org/xmlcml/cml/tools/examples/molecules/catalog.xml");
 		ResourceManager manager = new ResourceManager(mapFile.toURI());
-		CMLMolecule ethyl = (CMLMolecule) manager.getResourceByUID("http://www.xml-cml.org/mols/geom1", "ethyl");
+		CMLMolecule ethyl = (CMLMolecule) manager.getResourceByID("http://www.xml-cml.org/mols/geom1", "ethyl", ResourceManager.IdTypes.UID);
 		Assert.assertEquals(8, ethyl.getAtomArray().size());
 	}
 	
@@ -67,7 +67,7 @@ public class ResourceManagerTest {
 		molecule.addNamespaceDeclaration("g", "http://www.xml-cml.org/mols/geom1");
 		molecule.setRef("g:ethyl");
 		
-		CMLMolecule deref = (CMLMolecule) manager.deref(molecule, ResourceManager.idTypes.UID);
+		CMLMolecule deref = (CMLMolecule) manager.deref(molecule, ResourceManager.IdTypes.UID);
 		Assert.assertEquals(8, deref.getAtomArray().size());
 	}
 	
@@ -76,7 +76,7 @@ public class ResourceManagerTest {
 	public void testGetResourceById() {
 		File mapFile = new File("src/test/resources/org/xmlcml/cml/tools/examples/molecules/catalog.xml");
 		ResourceManager manager = new ResourceManager(mapFile.toURI());
-		CMLMolecule et = (CMLMolecule) manager.getResourceByID("http://www.xml-cml.org/mols/geom1", "et");
+		CMLMolecule et = (CMLMolecule) manager.getResourceByID("http://www.xml-cml.org/mols/geom1", "et", ResourceManager.IdTypes.ID);
 		Assert.assertEquals(8, et.getAtomArray().size());
 	}
 	
@@ -90,7 +90,7 @@ public class ResourceManagerTest {
 		molecule.addNamespaceDeclaration("g", "http://www.xml-cml.org/mols/geom1");
 		molecule.setRef("g:et");
 		
-		CMLMolecule deref = (CMLMolecule) manager.deref(molecule, ResourceManager.idTypes.ID);
+		CMLMolecule deref = (CMLMolecule) manager.deref(molecule, ResourceManager.IdTypes.ID);
 		Assert.assertEquals(8, deref.getAtomArray().size());
 	}
 	

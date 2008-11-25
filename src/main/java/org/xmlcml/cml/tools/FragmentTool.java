@@ -916,7 +916,7 @@ class IntermediateProcessor implements CMLConstants {
 		    CMLMolecule subMolecule = (CMLMolecule) node;
 		    CMLMolecule dereferencedMol = (CMLMolecule) 
 //		        dereference(resourceManager, subMolecule, IndexableByIdList.Type.MOLECULE_LIST);
-		    	resourceManager.deref(subMolecule, ResourceManager.idTypes.ID);
+		    	resourceManager.deref(subMolecule, ResourceManager.IdTypes.ID);
 		    if (dereferencedMol == null) {
 		    	throw new RuntimeException("Cannot dereference: "+subMolecule.getRef());
 		    }
@@ -952,7 +952,7 @@ class IntermediateProcessor implements CMLConstants {
 		    CMLFragment subFragment = (CMLFragment) node;
 		    CMLFragment newFragment = (CMLFragment) 
 //		        dereference(resourceManager, subFragment, IndexableByIdList.Type.FRAGMENT_LIST);
-		    	resourceManager.deref(subFragment, ResourceManager.idTypes.ID);
+		    	resourceManager.deref(subFragment, ResourceManager.IdTypes.ID);
 		    subFragment.removeAttribute("ref");
 		    // copy
 		    FragmentTool newFragmentTool = FragmentTool.getOrCreateTool(newFragment); 
