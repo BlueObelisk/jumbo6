@@ -129,7 +129,7 @@ public class FragmentToolTest {
 		 * cmlMap, true);
 		 */// Duplicate Test from Test Catalog. Removes ability to update
 		// catalog without changing hardcoded tests so commenting out. nwe23
-		HashMap<String,CMLElement> moleculeList = resourceManager.getIndex(namespace).get(ResourceManager.idTypes.ID);
+		HashMap<String,CMLElement> moleculeList = resourceManager.getIndex(namespace).get(ResourceManager.IdTypes.ID);
 		Assert.assertNotNull("moleculeList", moleculeList);
 		Assert.assertTrue("moleculeList", 30 <= moleculeList.keySet().size());
 

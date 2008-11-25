@@ -2,8 +2,6 @@ package org.xmlcml.cml.tools;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +18,6 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
 
 /**
  * First bash at a replacement class for Catalog
@@ -34,9 +31,9 @@ public class ResourceManager {
 
 	private CMLMap cmlMap;
 	// hashmap of namespace to hashmap of types of id to hashmap of ids to resources with said ids
-	private HashMap <String, HashMap<idTypes, HashMap<String, CMLElement>>> resourceIndex;
+	private HashMap <String, HashMap<IdTypes, HashMap<String, CMLElement>>> resourceIndex;
 	private URI rootURI;
-	public enum idTypes { UID, ID }
+	public enum IdTypes { UID, ID }
 	
 	
 	/**
@@ -54,7 +51,7 @@ public class ResourceManager {
 		Element map = doc.getRootElement();
 		if (map instanceof CMLMap) {
 			this.cmlMap = (CMLMap) map;
-			resourceIndex = new HashMap<String, HashMap<idTypes,HashMap<String,CMLElement>>>();
+			resourceIndex = new HashMap<String, HashMap<IdTypes,HashMap<String,CMLElement>>>();
 			rootURI = uri;
 		}
 		else throw new RuntimeException("bad map at " + uri.toString());
@@ -71,17 +68,17 @@ public class ResourceManager {
 	 * @param namespace
 	 * @return
 	 */
-	public HashMap <idTypes, HashMap<String, CMLElement>> getIndex(String namespace) {
+	public HashMap <IdTypes, HashMap<String, CMLElement>> getIndex(String namespace) {
 		
 		if (resourceIndex.containsKey(namespace)) {
-			return new HashMap<idTypes, HashMap<String,CMLElement>> (resourceIndex.get(namespace));
+			return new HashMap<IdTypes, HashMap<String,CMLElement>> (resourceIndex.get(namespace));
 		}
 		
 		else {
 			reindex(namespace);
 		}
 		
-		return new HashMap<idTypes, HashMap<String,CMLElement>> (resourceIndex.get(namespace));
+		return new HashMap<IdTypes, HashMap<String,CMLElement>> (resourceIndex.get(namespace));
 	}
 
 	
@@ -90,10 +87,11 @@ public class ResourceManager {
 	 * @param namespace
 	 */
 	public void reindex(String namespace) {
-		resourceIndex.put(namespace, new HashMap<idTypes, HashMap<String,CMLElement>>());
-		resourceIndex.get(namespace).put(idTypes.ID, new HashMap<String, CMLElement>());
-		resourceIndex.get(namespace).put(idTypes.UID, new HashMap<String, CMLElement>());
-		if (cmlMap.getToRef(namespace) == null) return;
+		if (cmlMap.getToRef(namespace) == null) throw new IllegalArgumentException("not a known namespace");
+		resourceIndex.put(namespace, new HashMap<IdTypes, HashMap<String,CMLElement>>());
+		for (IdTypes idType : IdTypes.values()) {
+			resourceIndex.get(namespace).put(idType, new HashMap<String, CMLElement>());	
+		}
 		File dir = null;
 		try {
 			dir = new File(new URL(rootURI.toURL(), cmlMap.getToRef(namespace)).toURI());
@@ -124,8 +122,8 @@ public class ResourceManager {
 		}
 		String uniqueID = getUniqueID(file.getName());
 		String id = document.getRootElement().getAttributeValue("id");
-		resourceIndex.get(namespace).get(idTypes.UID).put(uniqueID, (CMLElement) document.getRootElement());
-		if (id != null) resourceIndex.get(namespace).get(idTypes.ID).put(id, (CMLElement) document.getRootElement());
+		resourceIndex.get(namespace).get(IdTypes.UID).put(uniqueID, (CMLElement) document.getRootElement());
+		if (id != null) resourceIndex.get(namespace).get(IdTypes.ID).put(id, (CMLElement) document.getRootElement());
 	}
 
 	
@@ -137,35 +135,17 @@ public class ResourceManager {
 	}
 
 
-	/**
-	 * Returns (a copy of) the resource with the specified unique ID in the specified namespace
-	 * @param namespace
-	 * @param uid
-	 * @return
-	 */
-	public CMLElement getResourceByUID(String namespace, String uid) {
-
-		if (cmlMap.getToRef(namespace) == null) throw new RuntimeException("unknown namespace " + namespace);
-		if (resourceIndex.get(namespace) == null) reindex(namespace);
-		Map <String, CMLElement> foo = resourceIndex.get(namespace).get(idTypes.UID);
-		if (foo == null) throw new RuntimeException("unknown namespace " + namespace);
-		CMLElement resource = foo.get(uid);
-		if (resource == null) return null;
-		return (CMLElement) resource.copy();
-	}
-
-
-	public HashMap<idTypes, HashMap<String,CMLElement>> getIndex(CMLNamespace namespace) {
+	public HashMap<IdTypes, HashMap<String,CMLElement>> getIndex(CMLNamespace namespace) {
 		return getIndex(namespace.getNamespaceURI());
 	}
 
 
 	/**
-	 * Dereferences an element
+	 * Dereferences an element, returning a new object NOT modifying the argument
 	 * @param element
 	 * @return
 	 */
-	public CMLElement deref(CMLElement element, idTypes idType) {
+	public CMLElement deref(CMLElement element, IdTypes idType) {
 
 		String ref = element.getAttributeValue("ref");
 		if (ref == null) throw new RuntimeException("must have ref to deref!");
@@ -174,36 +154,18 @@ public class ResourceManager {
 		String id = split[1];
 		String namespace = element.getNamespaceURI(prefix);
 
-		Class clazz = this.getClass();
-		try {
-			Class [] params = new Class [2];
-			params [0] = params [1] = String.class;
-			Method method = clazz.getMethod("getResourceBy" + idType, params);
-			Object [] args = new String[2];
-			args[0] = namespace;
-			args[1] = id;
-			return (CMLElement) method.invoke(this, args);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+		return getResourceByID(namespace, id, idType);
 	}
 
 
-	public CMLElement getResourceByID(String namespace, String id) {
+	/**
+	 * Returns the resource with the specified id of the specified type in the specified namespace
+	 */
+	public CMLElement getResourceByID(String namespace, String id, ResourceManager.IdTypes idType) {
 
 		if (cmlMap.getToRef(namespace) == null) throw new RuntimeException("unknown namespace " + namespace);
 		if (resourceIndex.get(namespace) == null) reindex(namespace);
-		Map <String, CMLElement> foo = resourceIndex.get(namespace).get(idTypes.ID);
+		Map <String, CMLElement> foo = resourceIndex.get(namespace).get(idType);
 		if (foo == null) throw new RuntimeException("unknown namespace " + namespace);
 		CMLElement resource = foo.get(id);
 		if (resource == null) return null;
