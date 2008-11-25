@@ -5,6 +5,7 @@ import java.io.File;
 import junit.framework.Assert;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.tests.XOMTestCase;
 
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
@@ -28,7 +29,7 @@ public class ResourceManagerTest {
 		if (!(map instanceof CMLMap)) throw new RuntimeException("bad catalog.xml");
 
 		ResourceManager manager = new ResourceManager(mapFile.toURI());
-		TstBase.assertEqualsCanonically("", map, manager.getCmlMap());
+		XOMTestCase.assertEquals("", map, manager.getCmlMap());
 	}
 	
 	
