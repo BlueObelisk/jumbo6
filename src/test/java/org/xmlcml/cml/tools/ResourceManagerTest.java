@@ -9,7 +9,6 @@ import nu.xom.tests.XOMTestCase;
 
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
-import org.xmlcml.cml.base.TstBase;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 
