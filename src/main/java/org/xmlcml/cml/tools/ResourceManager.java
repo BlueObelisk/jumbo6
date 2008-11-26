@@ -57,6 +57,9 @@ public class ResourceManager {
 		else throw new RuntimeException("bad map at " + uri.toString());
 	}
 
+	public ResourceManager(File file) {
+		this(file.toURI());
+	}
 	
 	public CMLMap getCmlMap() {
 		return cmlMap;
