@@ -198,7 +198,7 @@
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
-			<version>0.5-SNAPSHOT</version>
+			<version>0.5</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
