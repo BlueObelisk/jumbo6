@@ -359,6 +359,8 @@ public class AtomTool extends AbstractSVGTool {
     public void addCalculatedCoordinatesForHydrogens(CoordinateType type, double bondLength) {
     	if (CoordinateType.TWOD.equals(type)) {
     		calculateAndAddHydrogenCoordinates(bondLength);
+    	} else if (CoordinateType.CARTESIAN.equals(type)) {
+    		throw new RuntimeException("CARTESIAN H coords nyi");
     	} else {
     		throw new RuntimeException("THREED H coords nyi");
     	}
