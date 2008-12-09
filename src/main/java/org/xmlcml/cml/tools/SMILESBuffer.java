@@ -1,16 +1,17 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.C_LBRAK;
+import static org.xmlcml.euclid.EuclidConstants.C_DOLLAR;
 import static org.xmlcml.euclid.EuclidConstants.C_RBRAK;
-import static org.xmlcml.euclid.EuclidConstants.C_STAR;
-import static org.xmlcml.euclid.EuclidConstants.S_DOLLAR;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLMolecule;
 
 public class SMILESBuffer {
+private static Logger LOG = Logger.getLogger(SMILESBuffer.class);
 
 	private static Map<String, String> groupMap = new HashMap<String, String>();
 	static {
@@ -19,6 +20,8 @@ public class SMILESBuffer {
 		groupMap.put("tosyl", "(OS(=O)(=O)c1cccc(C)cc1)");
 		groupMap.put("Ac", "(C(=O)C)");
 	}
+	
+	public static char GROUP_DELIM = C_DOLLAR;
 	
 	public static String lookup(String s) {
 		return (s == null) ? null : groupMap.get(s);
@@ -33,11 +36,50 @@ public class SMILESBuffer {
 	private SMILESTool smilesTool;
 	private CMLMolecule molecule;
 	private String saveBuffer;
+	private boolean validateSMILES;
+
+	private boolean saveValidate;
+	private StringBuffer dollarBuffer = null;
 	
 	public SMILESBuffer() {
 		buffer = new StringBuilder();
 		smilesTool = new SMILESTool();
 		caret = 0;
+		validateSMILES = true;
+		dollarBuffer = null;
+	}
+
+//	/** deletes end character.
+//	 * normally backspace
+//	 * if repeated leads to zero-length string and further operations are no-ops
+//	 * does not check SMILES validity
+//	 */
+//	public void deleteEndChar() {
+//		int len = buffer.length();
+//		if (len > 0) {
+//			buffer.deleteCharAt(len-1);
+//		}
+//		setCaret(caret);
+//	}
+	
+	/** deletes character at specified position.
+	 * does not check SMILES validity
+	 * leaves caret before deleted character
+	 */
+	public void deleteCharAt(int i) {
+		setCaret(i);
+		deleteCurrentCharacter();
+	}
+	
+	public void deleteCurrentCharacter() {
+		if (caret > 0) {
+			buffer.deleteCharAt(caret-1);
+			setCaret(caret - 1);
+		}
+	}
+	
+	public void shiftCaret(int i) {
+		setCaret(caret + i);
 	}
 	
 	public void addChar(char c) {
@@ -51,18 +93,56 @@ public class SMILESBuffer {
 	
 	public void insertChar(char c) {
 		saveBuffer();
-		if (c == C_LBRAK) {
-			insertCharAndAdjustCaret(C_LBRAK);
-			insertCharAndAdjustCaret(C_STAR);
-			insertCharAndAdjustCaret(C_RBRAK);
-		} else {
-			insertCharAndAdjustCaret(c);
+		try {
+			if (c == C_LBRAK) {
+				saveValidate = validateSMILES;
+				validateSMILES = false;
+				insertCharAndAdjustCaret(C_LBRAK);
+				insertCharAndAdjustCaret(C_RBRAK);
+				validateSMILES = saveValidate;
+				// position inside brackets
+				setCaret(caret - 1);
+			} else if (c == GROUP_DELIM) {
+				if (dollarBuffer == null) {
+					dollarBuffer = new StringBuffer();
+				} else {
+					String group = dollarBuffer.toString();
+					String content = lookup(group);
+					if (content != null) {
+						insertStringAndAdjustCaret(content);
+					}
+					dollarBuffer = null;
+				}
+			} else if (dollarBuffer != null) {
+				dollarBuffer.append(c);
+			} else if (Character.isDigit(c)) {
+				saveValidate = validateSMILES;
+				validateSMILES = false;
+				LOG.trace("?..."+caret);
+				insertCharAndAdjustCaret(c);
+				LOG.trace("a..."+caret);
+				insertCharAndAdjustCaret('C');
+				LOG.trace("b..."+caret);
+				insertCharAndAdjustCaret(c);
+				LOG.trace("c..."+caret);
+				validateSMILES = saveValidate;
+				setCaret(caret - 2);
+			} else {
+				insertCharAndAdjustCaret(c);
+			}
+		} catch (RuntimeException e) {
+			if (validateSMILES) {
+				throw e;
+			} else {
+				buffer = new StringBuilder(saveBuffer);
+			}
 		}
 	}
 
 	public void clearBuffer() {
 		buffer = new StringBuilder();
 	}
+	
 	private void saveBuffer() {
 		saveBuffer = buffer.toString();
 	}
@@ -78,40 +158,54 @@ public class SMILESBuffer {
 	
 	public void insertString(String s) {
 		saveBuffer();
-		if (s.startsWith(S_DOLLAR)) {
-			String ss = lookup(s.substring(1));
-			insertStringAndAdjustCaret(ss);
-		} else {
+		try {
 			insertStringAndAdjustCaret(s);
+		} catch (RuntimeException e) {
+			if (validateSMILES) {
+				throw e;
+			} else {
+				buffer = new StringBuilder(saveBuffer);
+			}
 		}
 	}
 	
 	private void insertCharAndAdjustCaret(char c) {
-		insertStringAndAdjustCaret(""+c);
+		if (c >= 32) { 
+			insertStringAndAdjustCaret(""+c);
+		}
 	}
 
-	private void insertStringAndAdjustCaret(String s) {
+	private void insertStringAndAdjustCaret(String s) throws RuntimeException {
+		LOG.debug(">>"+buffer.toString()+"..("+caret+").."+s);
 		buffer.insert(caret, s);
+		LOG.debug("<<"+buffer.toString()+"..("+caret+").."+s);
 		caret += s.length();
 		molecule = null;
 		// parse to SMILES. if invalid revert to last string
-		try {
+		if (validateSMILES) {
 			smilesTool.parseSMILES(buffer.toString());
 			molecule = smilesTool.getMolecule();
-		} catch (RuntimeException e) {
-			buffer = new StringBuilder(saveBuffer);
 		}
+//		LOG.debug(buffer.toString());
 	}
 	
 	public int getCaret() {
 		return caret;
 	}
 
+	/** sets caret.
+	 * if outside range of buffer(0 ... length)
+	 * sets to current limit
+	 * @param caret
+	 */
 	public void setCaret(int caret) {
-		if (caret > buffer.length() || caret < 0) {
-			throw new RuntimeException("Caret not in string: "+caret);
+		if (caret < 0) {
+			this.caret = 0;
+		} else if (caret > buffer.length()) {
+			this.caret = buffer.length();
+		} else {
+			this.caret = caret;
 		}
-		this.caret = caret;
 	}
 
 	public CMLMolecule getMolecule() {
@@ -120,5 +214,13 @@ public class SMILESBuffer {
 	
 	public String getSMILES() {
 		return buffer.toString();
+	}
+
+	public boolean isValidateSMILES() {
+		return validateSMILES;
+	}
+
+	public void setValidateSMILES(boolean validateSMILES) {
+		this.validateSMILES = validateSMILES;
 	}
 }

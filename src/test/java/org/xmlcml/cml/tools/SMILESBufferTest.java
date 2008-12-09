@@ -1,8 +1,10 @@
 package org.xmlcml.cml.tools;
 
+import nu.xom.Element;
+
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.base.TstBase;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.util.TestUtils;
 
@@ -12,18 +14,10 @@ public class SMILESBufferTest {
 	public void testSMILESBuffer() {
 		SMILESBuffer buffer = new SMILESBuffer();
 		Assert.assertEquals("caret", 0, buffer.getCaret());
-		try {
-			buffer.setCaret(1);
-			Assert.fail("should trap illegal caret");
-		} catch (RuntimeException e) {
-			
-		}
-		try {
-			buffer.setCaret(-1);
-			Assert.fail("should trap illegal caret");
-		} catch (RuntimeException e) {
-			
-		}
+		buffer.setCaret(1);
+		Assert.assertEquals("normalize caret", 0, buffer.getCaret());
+		buffer.setCaret(-1);
+		Assert.assertEquals("normalize caret", 0, buffer.getCaret());
 	}
 
 	@Test
@@ -31,7 +25,7 @@ public class SMILESBufferTest {
 		SMILESBuffer buffer = new SMILESBuffer();
 		buffer.addString("CO");
 		CMLMolecule molecule = buffer.getMolecule();
-		CMLMolecule expected = (CMLMolecule) TstBase.parseValidString(
+		CMLMolecule expected = (CMLMolecule) parseValidString(
 				"<molecule xmlns='http://www.xml-cml.org/schema'>"+
 				"<atomArray>"+
 				"<atom id='a1' elementType='C' hydrogenCount='3'/>"+
@@ -73,7 +67,7 @@ public class SMILESBufferTest {
 	}
 	
 	@Test
-	public void testSMILESBuffer3() {
+	public void testLookup() {
 		SMILESBuffer buffer = new SMILESBuffer();
 		buffer.addString("CO");
 		buffer.insertString(1, "N");
@@ -88,7 +82,7 @@ public class SMILESBufferTest {
 	}
 	
 	@Test
-	public void testSMILESBuffer4() {
+	public void testRGroups() {
 		SMILESBuffer buffer = new SMILESBuffer();
 		buffer.addString("CO");
 		try {
@@ -114,4 +108,45 @@ public class SMILESBufferTest {
 			// bad element
 		}
 	}
+	
+	@Test
+	public void testBrackets() {
+		SMILESBuffer buffer = new SMILESBuffer();
+		buffer.addChar('C');
+		Assert.assertEquals("add char", "C", buffer.getSMILES());
+		Assert.assertEquals("add char", 1, buffer.getCaret());
+		buffer.addChar('O');
+		Assert.assertEquals("add char", "CO", buffer.getSMILES());
+		Assert.assertEquals("add char", 2, buffer.getCaret());
+		buffer.shiftCaret(-1);
+		Assert.assertEquals("add char", 1, buffer.getCaret());
+		buffer.insertChar('N');
+		Assert.assertEquals("add char", "CNO", buffer.getSMILES());
+		Assert.assertEquals("add char", 2, buffer.getCaret());
+		buffer.insertChar('(');
+		Assert.assertEquals("add char", "CN()O", buffer.getSMILES());
+		// caret is positioned inside brackets
+		Assert.assertEquals("add char", 3, buffer.getCaret());
+	}
+	
+	@Test
+	public void testRings() {
+		SMILESBuffer buffer = new SMILESBuffer();
+		buffer.addChar('C');
+		Assert.assertEquals("add char", "C", buffer.getSMILES());
+		Assert.assertEquals("add char", 1, buffer.getCaret());
+		buffer.addChar('9');
+		Assert.assertEquals("add char", "C9C9", buffer.getSMILES());
+	}
+	
+	private Element parseValidString(String s) {
+		Element element = null;
+		try {
+			element = new CMLBuilder().parseString(s);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return element;
+	}
+
 }
