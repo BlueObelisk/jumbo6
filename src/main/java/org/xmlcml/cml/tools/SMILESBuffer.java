@@ -176,9 +176,9 @@ private static Logger LOG = Logger.getLogger(SMILESBuffer.class);
 	}
 
 	private void insertStringAndAdjustCaret(String s) throws RuntimeException {
-		LOG.debug(">>"+buffer.toString()+"..("+caret+").."+s);
+		LOG.trace(">>"+buffer.toString()+"..("+caret+").."+s);
 		buffer.insert(caret, s);
-		LOG.debug("<<"+buffer.toString()+"..("+caret+").."+s);
+		LOG.trace("<<"+buffer.toString()+"..("+caret+").."+s);
 		caret += s.length();
 		molecule = null;
 		// parse to SMILES. if invalid revert to last string

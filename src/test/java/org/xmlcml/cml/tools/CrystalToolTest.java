@@ -1,10 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.TOOLS_EXAMPLES;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.neverThrow;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
 import static org.xmlcml.euclid.EuclidConstants.U_S;
@@ -18,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import net.sf.jniinchi.INCHI_RET;
 import nu.xom.Element;
 
 import org.junit.Before;
@@ -27,7 +22,6 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLLog;
-import org.xmlcml.cml.base.CMLLog.Severity;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -37,11 +31,12 @@ import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.inchi.InChIGenerator;
-import org.xmlcml.cml.inchi.InChIGeneratorFactory;
+import org.xmlcml.cml.inchi.InChIGeneratorTool;
+import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test CrystalTool.
@@ -52,7 +47,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
 public class CrystalToolTest {
 
 	/** */
-	public final static String CIF_EXAMPLES = TOOLS_EXAMPLES + U_S + "cif";
+	public final static String CIF_EXAMPLES = CMLAssert.TOOLS_EXAMPLES + U_S + "cif";
 
 	CrystalTool tool1 = null;
 
@@ -82,8 +77,8 @@ public class CrystalToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		mol1 = (CMLMolecule) parseValidString(mol1S);
-		crystal1 = (CMLCrystal) parseValidString(crystal1S);
+		mol1 = (CMLMolecule) TestUtils.parseValidString(mol1S);
+		crystal1 = (CMLCrystal) TestUtils.parseValidString(crystal1S);
 		tool1 = new CrystalTool(mol1, crystal1);
 	}
 
@@ -99,9 +94,9 @@ public class CrystalToolTest {
 		tool1.calculateCartesiansAndBonds();
 		List<CMLBond> bonds = mol1.getBonds();
 		Assert.assertEquals("bond count", 2, bonds.size());
-		assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
+		CMLAssert.assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
 				.getAtomRefs2());
-		assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
+		CMLAssert.assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
 				.getAtomRefs2());
 		// adds the length elements
 		new GeometryTool(mol1).createValenceLengths(true, true);
@@ -109,12 +104,12 @@ public class CrystalToolTest {
 				.getLengthElements();
 		Assert.assertEquals("lengths", 2, lengths.size());
 		CMLLength length = lengths.get(0);
-		assertEquals("length 0 atoms", new String[] { "a1", "a2" }, length
+		CMLAssert.assertEquals("length 0 atoms", new String[] { "a1", "a2" }, length
 				.getAtomRefs2());
 		Assert.assertEquals("length 0 value", 0.956, length.getXMLContent(),
 				0.001);
 		length = lengths.get(1);
-		assertEquals("length 0 atoms", new String[] { "a1", "a3" }, length
+		CMLAssert.assertEquals("length 0 atoms", new String[] { "a1", "a3" }, length
 				.getAtomRefs2());
 		Assert.assertEquals("length 0 value", 0.955, length.getXMLContent(),
 				0.001);
@@ -125,7 +120,7 @@ public class CrystalToolTest {
 		// FIXME
 		Assert.assertEquals("angles", 1, angles.size());
 		CMLAngle angle = angles.get(0);
-		assertEquals("length 0 atoms", new String[] { "a2", "a1", "a3" }, angle
+		CMLAssert.assertEquals("length 0 atoms", new String[] { "a2", "a1", "a3" }, angle
 				.getAtomRefs3());
 		Assert.assertEquals("length 0 value", 116.875, angle.getXMLContent(),
 				0.001);
@@ -148,12 +143,7 @@ public class CrystalToolTest {
 				+ "    <atom id='a2' elementType='O' xFract='0.13' yFract='0.21' zFract='0.02'/>"
 				+ "    <atom id='a3' elementType='N' xFract='0.85' yFract='0.23' zFract='0.03'/>"
 				+ "  </atomArray>" + "</molecule>";
-		CMLMolecule mol = null;
-		try {
-			mol = (CMLMolecule) new CMLBuilder().parseString(molS);
-		} catch (Exception e) {
-			neverThrow(e);
-		}
+		CMLMolecule mol = (CMLMolecule) TestUtils.parseValidString(molS);
 		CMLSymmetry symmetry = new CMLSymmetry(new String[] { "x, y, z",
 				"-x, -y, -z" });
 		CMLCrystal crystal = new CMLCrystal(new double[] { 10., 20., 30., 90.,
@@ -535,25 +525,6 @@ public class CrystalToolTest {
 		}
 	}
 
-	private static void generateInChI(CMLMolecule molecule, CMLLog log) {
-		try {
-			// Generate factory - if native code does not load
-			InChIGeneratorFactory factory = new InChIGeneratorFactory();
-			// Get InChIGenerator
-			InChIGenerator igen = factory.getInChIGenerator(molecule);
-
-			INCHI_RET ret = igen.getReturnStatus();
-			if (!INCHI_RET.OKAY.equals(ret)) {
-				log.add(Severity.WARNING, igen.getMessage());
-			}
-
-			String inchi = igen.getInchi();
-			log.add("INCHI: " + inchi);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			// log.add(e, "BUG ");
-		}
-	}
 
 	@SuppressWarnings("all")
 	// generics
@@ -582,7 +553,7 @@ public class CrystalToolTest {
 				mergedMolecule).getMoleculeList();
 		int subMol = 0;
 		for (CMLMolecule subMolecule : subMoleculeList) {
-			generateInChI(subMolecule, log);
+			InChIGeneratorTool.generateInChI(subMolecule);
 
 			MoleculeTool subMoleculeTool = MoleculeTool
 					.getOrCreateTool(subMolecule);

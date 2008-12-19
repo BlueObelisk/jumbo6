@@ -85,6 +85,11 @@ public final class TestUtils implements CMLConstants {
         }
     }
 
+	public static void assertEqualsIncludingFloat(String message, String expectedS,
+			Node testNode, boolean stripWhite, double eps) {
+		assertEqualsIncludingFloat(message, parseValidString(expectedS), testNode, stripWhite, eps);
+	}
+
 	private static void assertEqualsIncludingFloat(String message, Node refNode,
 			Node testNode, double eps) {
 		try {

@@ -74,10 +74,11 @@ public class SVGText extends SVGElement {
 		fontSize = (fontSize < 8) ? 8 : fontSize;
 //		System.out.println("FONTSIZE "+fontSize);
 		
-		double x = this.getDouble("x");
-		double y = this.getDouble("y");
 		String text = this.getValue();
-		Real2 xy = new Real2(x, y);
+//		double x = this.getDouble("x");
+//		double y = this.getDouble("y");
+//		Real2 xy = new Real2(x, y);
+		Real2 xy = this.getXY();
 		xy = transform(xy, cumulativeTransform);
 		xy.plusEquals(new Real2(fontSize*0.65, -0.65*fontSize));
 		Color color = this.getColor("fill");
@@ -90,29 +91,28 @@ public class SVGText extends SVGElement {
 	
 	/** constructor.
 	 * 
-	 * @param x1
+	 * @param xy
 	 * @param text
 	 */
-	public SVGText(Real2 x1, String text) {
+	public SVGText(Real2 xy, String text) {
 		this();
-		setX1(x1);
+		setXY(xy);
 		setText(text);
 	}
 
 	/**
-	 * @return the x1
+	 * @return the coordinates
 	 */
-	public Real2 getX1() {
+	public Real2 getXY() {
 		return new Real2(
 			new Double(getAttributeValue("x")).doubleValue(),
 			new Double(getAttributeValue("y")).doubleValue()
 		);
 	}
 	/**
-9	 * @param x1 the x1 to set
-	 * @param x1 
+	 * @param xy the coordinates
 	 */
-	public void setX1(Real2 x1) {
+	public void setXY(Real2 x1) {
 		this.addAttribute(new Attribute("x", ""+x1.getX()));
 		this.addAttribute(new Attribute("y", ""+x1.getY()));
 	}
