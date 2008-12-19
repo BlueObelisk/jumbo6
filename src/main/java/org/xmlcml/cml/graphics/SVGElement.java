@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.ParentNode;
+import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 
 import org.apache.log4j.Logger;
@@ -73,10 +75,14 @@ public class SVGElement extends GraphicsElement {
 		} else if (tag.equals(SVGText.TAG)) {
 			newElement = new SVGText();
 		} else {
-			throw new RuntimeException("unknown element "+tag);
+			LOG.warn("unknown element "+tag);
+			newElement = new SVGG();
+			newElement.addAttribute(new Attribute("class", tag));
 		}
-        newElement.copyAttributesFrom(element);
-        createSubclassedChildren(element, newElement);
+		if (newElement != null) {
+	        newElement.copyAttributesFrom(element);
+	        createSubclassedChildren(element, newElement);
+		}
         return newElement;
 		
 	}
@@ -87,8 +93,14 @@ public class SVGElement extends GraphicsElement {
 			Node newNode = null;
 			if (node instanceof Text) {
 				newNode = new Text(node.getValue());
-			} else {
+			} else if (node instanceof Comment) {
+				newNode = new Comment(node.getValue());
+			} else if (node instanceof ProcessingInstruction) {
+				newNode = new ProcessingInstruction((ProcessingInstruction) node);
+			} else if (node instanceof Element) {
 				newNode = createSVG((Element) node);
+			} else {
+				throw new RuntimeException("Cannot create new node: "+node.getClass());
 			}
 			newElement.appendChild(newNode);
 		}

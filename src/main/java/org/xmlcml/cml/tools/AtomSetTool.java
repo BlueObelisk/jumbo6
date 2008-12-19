@@ -803,7 +803,7 @@ public class AtomSetTool extends AbstractTool {
 	public void clean2D(double bondLength, int ncyc) {
 		int count = 0;
 		boolean converged = false;
-		LOG.debug("clean "+atomSet.getSize());
+		LOG.trace("clean "+atomSet.getSize());
 		while (!converged && count < ncyc) {
 	    	double modShift = 0.;
 	    	Map<CMLAtom, Real2> shiftMap = new HashMap<CMLAtom, Real2>();
@@ -814,19 +814,19 @@ public class AtomSetTool extends AbstractTool {
 	    	for (CMLAtom atom : atomSet.getAtoms()) {
 				Real2 shift = shiftMap.get(atom);
 				modShift += shift.getLength();
-	    		LOG.debug("mod shift "+modShift);
+	    		LOG.trace("mod shift "+modShift);
 	    	}
     		if (modShift < 0.01 * bondLength) {
     			converged = true;
-    			LOG.debug("converged");
+    			LOG.trace("converged");
     			break;
     		}
 	    	int i = 0;
 	    	for (CMLAtom atom : shiftMap.keySet()) {
 	    		Real2 shift = shiftMap.get(atom);
-	    		LOG.debug("SHIFT "+shift);
+	    		LOG.trace("SHIFT "+shift);
 	    		atom.increaseXY2(shift.getX(), shift.getY());
-	    		LOG.debug("XY2 "+atom.getXY2());
+	    		LOG.trace("XY2 "+atom.getXY2());
 	    		i++;
 	    	}
 	    	count++;
@@ -860,7 +860,7 @@ public class AtomSetTool extends AbstractTool {
 			CMLAtom atom2, Map<CMLAtom, Real2> shiftMap) {
 		Real2 x0 = atom1.getXY2();
 		Real2 xi = atom2.getXY2();
-		LOG.debug(" "+atom1.getId()+" ... "+atom2.getId());
+		LOG.trace(" "+atom1.getId()+" ... "+atom2.getId());
 		if (atom1.equals(atom2)) {
 			throw new RuntimeException("identical ligands");
 		}
@@ -868,10 +868,10 @@ public class AtomSetTool extends AbstractTool {
 		Real2 x0i = xi.subtract(x0);
 		Real2 x0in = x0i.getUnitVector().multiplyBy(bondLength);
 		Real2 bondDelta = x0i.subtract(x0in).multiplyBy(0.5);
-		LOG.debug("D+ "+bondDelta);
+		LOG.trace("D+ "+bondDelta);
 		addShift(shiftMap, atom1, bondDelta);
 		bondDelta.multiplyEquals(-1.);
-		LOG.debug("D- "+bondDelta);
+		LOG.trace("D- "+bondDelta);
 		addShift(shiftMap, atom2, bondDelta);
 	}
 	
