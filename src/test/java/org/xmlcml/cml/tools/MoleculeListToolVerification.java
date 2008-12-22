@@ -21,6 +21,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.html.HtmlMenuSystem;
+import org.xmlcml.euclid.Util;
 
 
 /**
@@ -43,7 +44,7 @@ public class MoleculeListToolVerification {
      */
     public static void testSVG(String[] args) throws Exception {
     	if (args.length < 2 ) {
-    		System.out.println("-SVG infile/dir");
+    		LOG.debug("-SVG infile/dir");
     	} else {
     		makeMenu(args[1], ".svg");
     	}
@@ -109,9 +110,9 @@ public class MoleculeListToolVerification {
 	}
 
 	static void usage() {
-    	System.out.println("java org.xmlcml.cml.tools.MoleculeListToolTest <options>");
-    	System.out.println("... options ...");
-    	System.out.println("-SVG inputfile/dir  <options>");
+    	Util.println("java org.xmlcml.cml.tools.MoleculeListToolTest <options>");
+    	Util.println("... options ...");
+    	Util.println("-SVG inputfile/dir  <options>");
     }
     
     /** main
@@ -121,7 +122,7 @@ public class MoleculeListToolVerification {
      */
     public static void main(String[] args) throws Exception {
     	if (args.length == 0) {
-    		System.out.println("Args is 0");
+    		Util.println("Args is 0");
     		usage();
     	} else {
     		if (args[0].equalsIgnoreCase("-SVG")) {

@@ -298,7 +298,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
     void draw(String order) {
 //    	if (order == null) {
 //        } else if (order.equals("0")) {
-////			System.out.println("ORDER ZERO");
+////			LOG.debug("ORDER ZERO");
 ////            draw(bondWidth, "pink");
 //        } else if (order.equals(CMLBond.SINGLE) || order.equals(CMLBond.SINGLE_S)) {
 //            draw(bondWidth, drawBondColor);

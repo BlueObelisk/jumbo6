@@ -854,10 +854,10 @@ public class CrystalTool extends AbstractTool {
 		createFormulaCountMap(childFormulaList);
 
 		if (childMolecules.size() != formulaCountMap.size()) {
-			System.out.println("Identical childTypes "+formulaCountMap.size()+" != "+childMolecules.size());
+			LOG.debug("Identical childTypes "+formulaCountMap.size()+" != "+childMolecules.size());
 		}
 		for (String concise : formulaCountMap.keySet()) {
-			System.out.println("..mols.. "+concise+": "+formulaCountMap.get(concise).intValue());
+			LOG.debug("..mols.. "+concise+": "+formulaCountMap.get(concise).intValue());
 		}
 		CMLFormula sumFormula = getSumFormula(cml);
 		CMLFormula moietyFormula = getMoietyFormula(cml);
@@ -869,13 +869,13 @@ public class CrystalTool extends AbstractTool {
 		boolean moietyMatchesMolecules = true;
 		boolean publishedCompositionMatchesMolecules = true;
 		if (publishedFormula != null) {
-			System.out.println("PF "+publishedFormula.toFormulaString());
+			LOG.debug("PF "+publishedFormula.toFormulaString());
 			for (CMLFormula f : publishedFormulaList) {
-				System.out.println("..form.. "+f.getConcise()+S_LBRAK+f.getCount()+S_RBRAK);
+				LOG.debug("..form.. "+f.getConcise()+S_LBRAK+f.getCount()+S_RBRAK);
 			}
 			if (publishedFormulaList.size() != formulaCountMap.size()) {
 				moietyMatchesMolecules = false;
-				System.out.println("Cannot match moiety and molecules");
+				LOG.debug("Cannot match moiety and molecules");
 			}
 		}
 		// formula units in cell
@@ -892,7 +892,7 @@ public class CrystalTool extends AbstractTool {
 			z2op.setTitle("ratio of Z to symmetry operators");
 			molecule.appendChild(z2op);
 		}
-		System.out.println("Symmetry: FormUnits/Oper "+formulaUnitsPerOperator+" FormUnit/Cell "+formulaUnitsInCell+
+		LOG.debug("Symmetry: FormUnits/Oper "+formulaUnitsPerOperator+" FormUnit/Cell "+formulaUnitsInCell+
 				" NOper "+operatorCount+" ChildMols "+childMolecules.size());
 //		boolean matchedFormula = false;
 		// the logic of this is involved. best understood by reading through the
@@ -1002,7 +1002,7 @@ public class CrystalTool extends AbstractTool {
 			cml.appendChild(scalar);
 		}
 
-		System.out.println("============= "+((moietyMatchesMolecules) ? "MATCHED" : "UNMATCHED")+ formulaMoleculeMatch+" =================");
+		LOG.debug("============= "+((moietyMatchesMolecules) ? "MATCHED" : "UNMATCHED")+ formulaMoleculeMatch+" =================");
 	}
 
 	/**

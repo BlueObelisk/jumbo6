@@ -21,6 +21,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.euclid.Util;
 
 /**
  * A container for one or more indexables.
@@ -326,22 +327,22 @@ public class IndexableByIdListManager implements CMLConstants {
     /**
      */
     public void debug() {
-    	System.out.println("IndexableByIdListManager DEBUG");
+    	Util.println("IndexableByIdListManager DEBUG");
         for (Indexable indexable : indexableList.getIndexables()) {
         	((CMLElement) indexable).debug("INDEXABLE");
         }
-        System.out.println("MAP "+map.size());
+        Util.println("MAP "+map.size());
         for (String key : map.keySet()) {
-        	System.out.println(key);
+        	Util.println(key);
         	((CMLElement)map.get(key)).debug("MAP");
         }
         
-        System.out.println("LOWERCASE MAP "+map.size());
+        Util.println("LOWERCASE MAP "+map.size());
         for (String key : lowerCaseMap.keySet()) {
-        	System.out.println(key);
+        	Util.println(key);
         	((CMLElement)map.get(key)).debug("KEY");
         }
-        System.out.println("indexableLocalName: "+indexableLocalName);
+        Util.println("indexableLocalName: "+indexableLocalName);
 
     }
 

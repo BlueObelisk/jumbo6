@@ -107,7 +107,7 @@ public class ConnectionTableTool extends AbstractTool {
 			if (size == 0) {
 				throw new RuntimeException("No molecules found");
 			} else if (size == 1) {
-				// System.out.println("no splitting required");
+				// LOG.debug("no splitting required");
 			} else {
 				// More than one molecule found - delete current molecule, and
 				// and new molecules

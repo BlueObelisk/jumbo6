@@ -15,6 +15,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -26,6 +27,7 @@ import org.xmlcml.cml.element.CMLMolecule;
  *
  */
 public class MoleculeText extends JPanel implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(MoleculeText.class);
 
 	/**
 	 */
@@ -93,7 +95,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 			if (alt) {
 				moleculeFrame.getMoleculePanel().sendAltKey(-1, shift);
 			}
-//			System.out.println("REL "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
+//			LOG.debug("REL "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
 		}
 		
 		/**
@@ -101,7 +103,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 		 */
 		public void keyTyped(KeyEvent arg0) {
 //			int ch = arg0.getKeyCode();
-//			System.out.println("TY "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
+//			LOG.debug("TY "+(char)ch+"/"+(int)ch+"/"+alt+"/"+shift);
 		}
 	}
 
@@ -166,7 +168,7 @@ public class MoleculeText extends JPanel implements CMLConstants {
 						selectionTool.setSelected(currentAtom, true);
 						if (currentBond != null) {
 							selectionTool.setSelected(currentBond, true);
-							System.out.println("SELBOND "+currentBond.getId());
+							LOG.debug("SELBOND "+currentBond.getId());
 						}
 						moleculeFrame.repaint();
 					}

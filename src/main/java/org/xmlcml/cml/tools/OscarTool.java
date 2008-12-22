@@ -18,6 +18,7 @@ import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
@@ -51,6 +52,7 @@ import org.xmlcml.euclid.Util;
 @SuppressWarnings("unchecked")
 
 public class OscarTool implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(OscarTool.class);
 
     static String OSCAR_CONTAINER = "container";
     static String OSCAR_DATASECTION = "datasection";
@@ -228,7 +230,7 @@ public class OscarTool implements CMLConstants {
 //        Nodes nodes = cml.query(".//*[local-name()='module']");
 //        Nodes mods = cml.query(".//"+CMLModule.NS, CML_XPATH);
 //        if (nodes.size() != mods.size()) {
-//            System.out.println("MODULES....."+nodes.size()+S_SLASH+mods.size());
+//            LOG.debug("MODULES....."+nodes.size()+S_SLASH+mods.size());
 //        }
     }
 
@@ -328,7 +330,7 @@ public class OscarTool implements CMLConstants {
                             CMLAction action = new CMLAction();
                             action.setTitle(verb);
                             prop.getParent().replaceChild(prop, action);
-//                            System.out.println("replaced state by verb: "+verb);
+//                            LOG.debug("replaced state by verb: "+verb);
                             break;
                         }
                     }
@@ -398,7 +400,7 @@ public class OscarTool implements CMLConstants {
                 Nodes nn = lbrak.query("./preceding-sibling::*[1]");
                 if (nn.size() > 0) {
                 } else {
-                    System.out.println("no preceding siblling");
+                    LOG.debug("no preceding siblling");
                 }
                 nn = lbrak.query("./following-sibling::*[1]");
                 if (nn.size() > 0) {
@@ -432,7 +434,7 @@ public class OscarTool implements CMLConstants {
             if (container.getChildCMLElements().size() == 0 &&
                     container.getValue().trim().equals(S_EMPTY)) {
                 empty.detach();
-//                System.out.println("DETACH.............");
+//                LOG.debug("DETACH.............");
             }
         }
     }
@@ -454,9 +456,9 @@ public class OscarTool implements CMLConstants {
                 // all are modules
                 if (childs.size() == module.getChildCount()) {
 //                    for (int i = 0; i < module.getChildCount(); i++) {
-//                        System.out.print(((CMLModule)module.getChild(i)).getId()+S_SPACE);
+//                        Util.print((CMLModule)module.getChild(i)).getId()+S_SPACE);
 //                    }
-//                    System.out.println("\nREPLACEBYCHILDREN............"+module.getId());
+//                    LOG.debug("\nREPLACEBYCHILDREN............"+module.getId());
                     module.replaceByChildren();
                 } else {
                     // non-module child
@@ -554,7 +556,7 @@ public class OscarTool implements CMLConstants {
             CMLMolecule mol = (CMLMolecule) node;
             @SuppressWarnings("unused")
             String title = mol.getTitle();
-//            System.out.println("PPPPP "+title);
+//            LOG.debug("PPPPP "+title);
             List<Node> props = CMLUtil.getQueryNodes(mol, subquery, CML_XPATH);
             if (props.size() > 0) {
                 CMLProperty property = (CMLProperty) props.get(0);
@@ -733,7 +735,7 @@ public class OscarTool implements CMLConstants {
             Element sibling = (Element) parent.getChild(i);
             if (sibling instanceof CMLModule && 
                     "sentenceEnd".equals(sibling.getAttribute("role"))) {
-                System.out.println("SEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                LOG.debug("SEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                 continue;
             }
             siblingList.add(sibling);
@@ -742,7 +744,7 @@ public class OscarTool implements CMLConstants {
             sibling.detach();
             if (sibling instanceof CMLModule && 
                     "sentenceEnd".equals(sibling.getAttribute("role"))) {
-                System.out.println("SXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                LOG.debug("SXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                 continue;
             }
             sentenceEnd.appendChild(sibling);
@@ -899,7 +901,7 @@ public class OscarTool implements CMLConstants {
                     Element fs3 = (Element)module.query("./following-sibling::*[3]").get(0);
                     }
                 } else {
-                    System.out.println("OK PROPRTY");
+                    LOG.debug("OK PROPRTY");
                     CMLPropertyList propertyList = new CMLPropertyList();
                     CMLUtil.transferChildren(module, propertyList);
                     module.getParent().replaceChild(module, propertyList);
@@ -976,7 +978,7 @@ public class OscarTool implements CMLConstants {
         @SuppressWarnings("unused")
         List<CMLMolecule> molList = new ArrayList<CMLMolecule>();
         for (Node node : nodeList) {
-            System.out.println("NNNNNNN"+node);
+            LOG.debug("NNNNNNN"+node);
 //            CMLMolecule molecule = (CMLMolecule) node;
 //            tryMergeWithPreviousSibling(molecule);
         }
@@ -1019,10 +1021,10 @@ public class OscarTool implements CMLConstants {
                     if (idx == prevIdx + 1) {
                         preceding.setTitle(preceding.getTitle()+"++"+title);
 //                        String tValue = text.getValue();
-//                        System.out.println("XXXXXXXXXXXXXX "+tValue);
+//                        LOG.debug("XXXXXXXXXXXXXX "+tValue);
 //                        text.setValue(tValue+"++"+title);
 //                        molecule.setRole("detach");
-                        System.out.println("============== "+preceding.getTitle());
+                        LOG.debug("============== "+preceding.getTitle());
                         break;
                     }
                 }
@@ -1096,7 +1098,7 @@ public class OscarTool implements CMLConstants {
                     }
                     String title = textS.substring(start, end);
                     if (!(cmlClass.equals(CMLAction.class))) {
-//                        System.out.println("Made "+cmlClass+S_SLASH+title);
+//                        LOG.debug("Made "+cmlClass+S_SLASH+title);
                     }
                     cmlElement.addAttribute(new Attribute("title", title));
                     cmlElement.appendChild(new Text(title));
@@ -1185,7 +1187,7 @@ public class OscarTool implements CMLConstants {
                 try {
                     d = new Double(v);
                 } catch (NumberFormatException e) {
-    //                System.out.println("Isolated unit: Cannot parse as double: "+vector);
+    //                LOG.debug("Isolated unit: Cannot parse as double: "+vector);
                 }
             }
             if (d != null) {
@@ -1220,12 +1222,12 @@ public class OscarTool implements CMLConstants {
                 String standardUnit = unitsMap.get(u);
                 if (standardUnit == null) {
                     CMLUtil.debug(unit, "OSCAR1");
-                    System.out.println("\nCannot find unit for ["+u+S_RSQUARE);
+                    LOG.debug("\nCannot find unit for ["+u+S_RSQUARE);
                 } else {
                     text.setValue(standardUnit);
                     String uType = unitTypeMap.get(standardUnit);
                     if (uType == null) {
-                        System.out.println("Cannot find type for: "+standardUnit);
+                        LOG.debug("Cannot find type for: "+standardUnit);
                     } else {
                         Attribute type = quantity.getAttribute("type");
                         if (type == null) {
@@ -1234,11 +1236,11 @@ public class OscarTool implements CMLConstants {
                             String t = type.getValue();
                             String tt = rawUnitTypeMap.get(t);
                             if (tt == null) {
-                                System.out.println("Unknown raw unit type: "+t);
+                                LOG.debug("Unknown raw unit type: "+t);
                             } else {
                                 if (tt.equals(uType)) {
                                 } else {
-                                    System.out.println("original type ("+tt+") incomaptible with ("+uType+S_RBRAK);
+                                    LOG.debug("original type ("+tt+") incomaptible with ("+uType+S_RBRAK);
                                 }
                             }
                         }
@@ -1506,8 +1508,8 @@ public class OscarTool implements CMLConstants {
                         sb.replace(j, j+1, s);
                         change = true;
                     } else {
-                        System.out.println(">unknown>"+ii+">>"+c);
-                        System.out.println(">>>"+text.getParent().getValue());
+                        LOG.debug(">unknown>"+ii+">>"+c);
+                        LOG.debug(">>>"+text.getParent().getValue());
                     }
                 }
             }
@@ -1585,7 +1587,7 @@ public class OscarTool implements CMLConstants {
             int idx = parent.indexOf(formula);
             formula.detach();
             if (badFormulas.contains(value)) {
-    //            System.out.println("Bad: "+value);
+    //            LOG.debug("Bad: "+value);
                 parent.insertChild(new Text(value), idx);
     //            CMLUtil.debug((Element)parent);
             } else {
@@ -1650,7 +1652,7 @@ public class OscarTool implements CMLConstants {
             Elements elems = chemical.getChildElements();
             if (elems.size() > 0) {
     //            CMLUtil.debug((Element)chemical);
-    //            System.out.println(((CMLMolecule)elems.get(0)).getTitle());
+    //            LOG.debug(((CMLMolecule)elems.get(0)).getTitle());
     //            error("unexpected chemical child: "+elems.get(0).getLocalName());
                 error("unexpected chemical child: "+elems.get(0).getLocalName());
             }
@@ -1660,7 +1662,7 @@ public class OscarTool implements CMLConstants {
             mol.setRole("chemical");
             ParentNode parent = chemical.getParent();
             parent.replaceChild(chemical, mol);
-    //        System.out.println(">>>chemical>>>"+value);
+    //        LOG.debug(">>>chemical>>>"+value);
         }
     }
     
@@ -1785,7 +1787,7 @@ public class OscarTool implements CMLConstants {
             Nodes molecules = header.query(CMLMolecule.NS, CML_XPATH);
             int idx0 = header.indexOf(molecules.get(0));
             int idx1 = header.indexOf(molecules.get(1));
-//            System.out.println("==============");
+//            LOG.debug("==============");
             if (idx1 == idx0 + 1) {
                 error("Cannot interpret header "+header.getValue());
             } else if (idx1 == idx0 + 2) {
@@ -1796,13 +1798,13 @@ public class OscarTool implements CMLConstants {
                     addProduct(reactionScheme, (CMLMolecule) molecules.get(0));
                     addProduct(reactionScheme, (CMLMolecule) molecules.get(1));
                 } else {
-//                    System.out.println("NODE "+s);
+//                    LOG.debug("NODE "+s);
                 }
             } else {
                 for (int j = idx0 + 1; j < idx1; j++) {
                     @SuppressWarnings("unused")
                     Node node = header.getChild(j);
-//                    System.out.println("NODE.. "+node.getValue());
+//                    LOG.debug("NODE.. "+node.getValue());
                 }
             }
         }
@@ -1862,7 +1864,7 @@ public class OscarTool implements CMLConstants {
 //  </quantity>
 //  ) 
     private static void hrms(Element prop) {
-//        System.out.println(">>>hrms");
+//        LOG.debug(">>>hrms");
         Elements quantities = prop.getChildElements("quantity");
         CMLScalar found = null;
         CMLFormula formula = null;
@@ -1913,7 +1915,7 @@ public class OscarTool implements CMLConstants {
                 }
                 quantity.detach();
             } else {
-                System.out.println("????????"+type);
+                LOG.debug("????????"+type);
             }
         }
         unmark(prop, "SB");
@@ -1940,10 +1942,10 @@ public class OscarTool implements CMLConstants {
                         double d = new Double(value).doubleValue();
                         required = new CMLScalar(d);
                         required.setDictRef(OSCAR_NSP+S_COLON+"required");
-//                        System.out.println("req "+d);
+//                        LOG.debug("req "+d);
                     } catch (NumberFormatException e) {
 //                        CMLUtil.debug(prop);
-                        System.out.println("Couldn't interpret as hrms required value: "+value);
+                        LOG.debug("Couldn't interpret as hrms required value: "+value);
                     }
                 }
                 if (required == null) {
@@ -2140,7 +2142,7 @@ public class OscarTool implements CMLConstants {
                 error("Bad double "+nfe+" for "+ss);
             }
         } else if (elem.getParent() == null) {
-            System.out.println("null parent");
+            LOG.debug("null parent");
         } else {
             CMLUtil.debug((Element)elem.getParent(), "OSCARTOOL2");
             error("Bad value/point for "+ss+S_SLASH+elem.getParent().getValue());
@@ -2161,7 +2163,7 @@ public class OscarTool implements CMLConstants {
         }
         String s = null;
         if (!ss.equals(elem.getAttributeValue("type"))) {
-            System.out.println("no quantity of type found: "+ss);
+            LOG.debug("no quantity of type found: "+ss);
         } else {
             s = ((Element) units.get(0)).getValue();
             // trim bracket
@@ -2177,7 +2179,7 @@ public class OscarTool implements CMLConstants {
 //    <quantity type="nonsolidstate">oil</quantity> 
 //    </property>
     private static void nature(Element div) {
-//        System.out.println(">>>nature");
+//        LOG.debug(">>>nature");
         CMLProperty nature = new CMLProperty();
         nature.setDictRef(OSCAR_NSP+S_COLON+"nature");
         Elements quantities = div.getChildElements("quantity");
@@ -2227,10 +2229,10 @@ public class OscarTool implements CMLConstants {
                 }
             }
             if (property == null) {
-                System.out.println("Unknown property: "+prop.getValue());
+                LOG.debug("Unknown property: "+prop.getValue());
             }
         } else {
-//            System.out.println("TYPE "+type);
+//            LOG.debug("TYPE "+type);
 //                property.setDictRef(OSCAR_NSP+S_COLON+propertyS);
         }
         if (property != null) {
@@ -2239,7 +2241,7 @@ public class OscarTool implements CMLConstants {
             parent.insertChild(property, idx);
         } else {
 //            CMLUtil.debug(prop);
-//            System.out.println("Cannot add state: ");
+//            LOG.debug("Cannot add state: ");
         }
     }
 
@@ -2261,7 +2263,7 @@ public class OscarTool implements CMLConstants {
 
 
 	static void quantity(Element property) {
-//        System.out.println(">>>quantity>>>");
+//        LOG.debug(">>>quantity>>>");
         CMLProperty cmlProperty = new CMLProperty();
         cmlProperty.setDictRef(OSCAR_NSP+S_COLON+"quantity");
         Elements quantities = property.getChildElements("quantity");
@@ -2280,10 +2282,10 @@ public class OscarTool implements CMLConstants {
                 Node node = CMLUtil.getLastTextDescendant(oldQuantity);
                 unit = makeUnitFrom(node);
                 if (unit != null) {
-//                    System.out.println("Interpreted text as unit: "+unit.getValue());
+//                    LOG.debug("Interpreted text as unit: "+unit.getValue());
                     node.getParent().replaceChild(node, unit);
                 } else {
-                    System.out.println("No units given: "+property.getValue()+" :: ");
+                    LOG.debug("No units given: "+property.getValue()+" :: ");
                 }
             }
             if (unit != null) {
@@ -2334,7 +2336,7 @@ public class OscarTool implements CMLConstants {
         String type, Element unit, Element quant) {
         Node node = CMLUtil.getFirstTextDescendant(quant);
         if (node == null) {
-            System.out.println("no text in quantity:");
+            LOG.debug("no text in quantity:");
             CMLUtil.debug(quant, "OSCAR4");
         } else {
             String s = node.getValue();
@@ -2379,16 +2381,16 @@ public class OscarTool implements CMLConstants {
     private static Element makeUnitFrom(Node node) {
         Element unit = null;
         if (node == null) {
-            System.out.println("Null units text");
+            LOG.debug("Null units text");
         } else if (node instanceof Text) {
             String s = node.getValue().trim();
             if (s.equals(S_EMPTY)) {
 //                CMLUtil.debug((Element) node.getParent());
-                System.out.println("No trailing units given");
+                LOG.debug("No trailing units given");
             } else {
                 String type = unitsMap.get(s);
                 if (type == null) {
-                    System.out.println("Cannot interpret text as unit:"+s+S_COLON);
+                    LOG.debug("Cannot interpret text as unit:"+s+S_COLON);
                 } else {
                     unit = new Element("units");
                     unit.appendChild(new Text(s));
@@ -2402,6 +2404,6 @@ public class OscarTool implements CMLConstants {
     
     
     private static void error(String s) {
-        System.out.println("***ERROR**>>>"+s);
+        LOG.debug("***ERROR**>>>"+s);
     }
 }

@@ -69,7 +69,7 @@ public class ChainSet extends AbstractTool {
 				if (atomMap.get(atom) != null) {
 					throw new RuntimeException("atom in two chains: "+atom.getId());
 				}
-//				System.out.println("adding: "+atom.getId());
+//				LOG.debug("adding: "+atom.getId());
 				atomMap.put(atom, chain);
 			}
 			CMLBondSet bondSet = chain.getBondSet();
@@ -77,7 +77,7 @@ public class ChainSet extends AbstractTool {
 				if (bondMap.get(bond) != null) {
 					throw new RuntimeException("bond in two chains: "+bond.getId());
 				}
-//				System.out.println("adding: "+bond.getId());
+//				LOG.debug("adding: "+bond.getId());
 				bondMap.put(bond, chain);
 			}
 		}

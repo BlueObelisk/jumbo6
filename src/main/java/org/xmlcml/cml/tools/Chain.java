@@ -220,7 +220,7 @@ public class Chain extends AbstractTool {
 			Int2 ij = distanceMatrix.indexOfLargestElement();
 			startAtom = terminalAtomList.get(ij.getX());
 //			CMLAtom endAtom = terminalAtomList.get(ij.getY());
-//			System.out.println(startAtom.getId()+"<==>"+endAtom.getId()+"/"+spanningTree.getPath(startAtom, endAtom));
+//			LOG.debug(startAtom.getId()+"<==>"+endAtom.getId()+"/"+spanningTree.getPath(startAtom, endAtom));
 			atomCoordinateMap.put(startAtom, new Real2(0., 0.));
 		} else {
 			startAtom = sprout.getRingAtom();
@@ -248,10 +248,10 @@ public class Chain extends AbstractTool {
 //			} else {
 //				atomCoordinateMap.put(nextAtom, nextAtom.getXY2());
 //			}
-//			System.out.println("PATHS "+pathList.size());
+//			LOG.debug("PATHS "+pathList.size());
 //			for (int i = 0; i < pathList.size(); i++) {
 //				AtomPath atomPath = pathList.get(i);
-//				System.out.println(">"+i+">"+pathList.get(i));
+//				LOG.debug(">"+i+">"+pathList.get(i));
 //				try {
 //					calculate2DCoordinates(atomPath, i);
 //				} catch (RuntimeException e) {
@@ -363,8 +363,8 @@ public class Chain extends AbstractTool {
 //		}
 //		Real2 xy0 = atomCoordinateMap.get(startAtom);
 //		Real2 xy1 = atomCoordinateMap.get(nextAtom);
-////		System.out.println(">>>start "+startAtom.getId()+"/"+xy0);
-////		System.out.println(">>>next "+nextAtom.getId()+"/"+xy1);
+////		LOG.debug(">>>start "+startAtom.getId()+"/"+xy0);
+////		LOG.debug(">>>next "+nextAtom.getId()+"/"+xy1);
 //		if (xy0 == null || xy1 == null) {
 //			throw new RuntimeException("First 2 atoms must have coordinates");
 //		}
@@ -372,7 +372,7 @@ public class Chain extends AbstractTool {
 //		vv[1] = xy1.subtract(xy0);
 //		vv[0] = new Real2(vv[1]);
 //		vv[0].transformBy(ROT60);
-//		System.out.println(vv[0]+"/"+vv[1]);
+//		LOG.debug(vv[0]+"/"+vv[1]);
 //		int start = -1;
 //		CMLAtom previousAtom = nextAtom;
 //		Real2 currentXY2 = atomCoordinateMap.get(previousAtom);
@@ -384,7 +384,7 @@ public class Chain extends AbstractTool {
 //				if (start >= 0) {
 //					throw new RuntimeException("wrong way down path?");
 //				}
-//				System.out.println(">SKIP> "+atom.getId());
+//				LOG.debug(">SKIP> "+atom.getId());
 //				previousAtom = atom;
 //				continue;
 //			}
@@ -399,16 +399,16 @@ public class Chain extends AbstractTool {
 //			} else if (ligandList.size() == 1) {
 //				// no, flip vector with parity
 //				Real2 vvv = vv[(atomPathi) % 2];
-//				System.out.println("V1 "+vvv);
+//				LOG.debug("V1 "+vvv);
 //				currentXY2 = currentXY2.plus(vvv);
 //				atomCoordinateMap.put(atom, currentXY2);
-////				System.out.println(">>"+atom.getElementType()+">> "+atom.getId()+"/"+currentXY2);
+////				LOG.debug(">>"+atom.getElementType()+">> "+atom.getId()+"/"+currentXY2);
 //			} else if (ligandList.size() == 2) {
 //				currentXY2 = process2LigandList(vv, previousAtom, atomPathi, atom, ligandList);
 //			} else if (ligandList.size() == 3) {
-//				System.out.println("BUG 3LigandList not processed");
+//				LOG.debug("BUG 3LigandList not processed");
 //				for (CMLAtom ligand : ligandList) {
-//					System.out.println("LIG "+ligand.getId()+" / "+ligand.getXY2());
+//					LOG.debug("LIG "+ligand.getId()+" / "+ligand.getXY2());
 //				}
 //				currentXY2 = process3LigandList(vv, previousAtom, atomPathi, atom, ligandList);
 //			}
@@ -422,19 +422,19 @@ public class Chain extends AbstractTool {
 //	private Real2 process2LigandList(Real2[] vv, CMLAtom previousAtom, int i,
 //			CMLAtom atom, List<CMLAtom> ligandList) {
 //		Real2 currentXY2;
-//		System.out.println(">>BRANCH>> "+atom.getId());
-//		System.out.println("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
+//		LOG.debug(">>BRANCH>> "+atom.getId());
+//		LOG.debug("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
 //		currentXY2 = atomCoordinateMap.get(previousAtom);
 //		CMLAtom prevLig0 = ligandList.get(0);
 //		CMLAtom prevLig1 = ligandList.get(1);
-//		System.out.println(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
+//		LOG.debug(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
 //		Real2 prevLigXY0 = atomCoordinateMap.get(prevLig0);
 //		Real2 prevLigXY1 = atomCoordinateMap.get(prevLig1);
-//		System.out.println("MID "+prevLigXY0+"/"+prevLigXY1);
+//		LOG.debug("MID "+prevLigXY0+"/"+prevLigXY1);
 //		Real2 centroid = prevLigXY0.getMidPoint(prevLigXY1);
-//		System.out.println(centroid);
+//		LOG.debug(centroid);
 //		Real2 vect = currentXY2.subtract(centroid);
-//		System.out.println("V2 "+vect);
+//		LOG.debug("V2 "+vect);
 //		if (vect.getLength() < 0.00001) {
 //			vect = prevLigXY0.subtract(centroid);
 //			vect.transformBy(ROT90);
@@ -445,7 +445,7 @@ public class Chain extends AbstractTool {
 //		vv[i0] = vect;
 //		vv[i1] = new Real2(vv[i0]);
 //		vv[i1].transformBy(ROT60);
-////				System.out.println("V22 "+vect);
+////				LOG.debug("V22 "+vect);
 //		currentXY2 = currentXY2.plus(vv[i0]);
 //		atomCoordinateMap.put(atom, currentXY2);
 //		return currentXY2;
@@ -454,19 +454,19 @@ public class Chain extends AbstractTool {
 //	private Real2 process3LigandList(Real2[] vv, CMLAtom previousAtom, int i,
 //			CMLAtom atom, List<CMLAtom> ligandList) {
 //		Real2 currentXY2;
-//		System.out.println(">>BRANCH>> "+atom.getId());
-//		System.out.println("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
+//		LOG.debug(">>BRANCH>> "+atom.getId());
+//		LOG.debug("Midpoint for "+atom.getId()+" on "+previousAtom.getId());
 //		currentXY2 = atomCoordinateMap.get(previousAtom);
 //		CMLAtom prevLig0 = ligandList.get(0);
 //		CMLAtom prevLig1 = ligandList.get(1);
-//		System.out.println(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
+//		LOG.debug(prevLig0.getId()+"["+previousAtom.getId()+"]"+prevLig1.getId());
 //		Real2 prevLigXY0 = atomCoordinateMap.get(prevLig0);
 //		Real2 prevLigXY1 = atomCoordinateMap.get(prevLig1);
-//		System.out.println("MID "+prevLigXY0+"/"+prevLigXY1);
+//		LOG.debug("MID "+prevLigXY0+"/"+prevLigXY1);
 //		Real2 centroid = prevLigXY0.getMidPoint(prevLigXY1);
-//		System.out.println(centroid);
+//		LOG.debug(centroid);
 //		Real2 vect = currentXY2.subtract(centroid);
-//		System.out.println("V2 "+vect);
+//		LOG.debug("V2 "+vect);
 //		if (vect.getLength() < 0.00001) {
 //			vect = prevLigXY0.subtract(centroid);
 //			vect.transformBy(ROT90);
@@ -477,7 +477,7 @@ public class Chain extends AbstractTool {
 //		vv[i0] = vect;
 //		vv[i1] = new Real2(vv[i0]);
 //		vv[i1].transformBy(ROT30);
-////				System.out.println("V22 "+vect);
+////				LOG.debug("V22 "+vect);
 //		currentXY2 = currentXY2.plus(vv[i0]);
 //		atomCoordinateMap.put(atom, currentXY2);
 //		return currentXY2;

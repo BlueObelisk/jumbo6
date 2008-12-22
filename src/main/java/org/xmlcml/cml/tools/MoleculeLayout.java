@@ -18,6 +18,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.euclid.Util;
 
 /**
  * tool to support a ring. not fully developed
@@ -26,7 +27,7 @@ import org.xmlcml.cml.element.CMLMoleculeList;
  * 
  */
 public class MoleculeLayout extends AbstractTool {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(MoleculeLayout.class);
 	
 //	private CMLMolecule molecule;
 	private MoleculeTool moleculeTool;
@@ -112,14 +113,14 @@ public class MoleculeLayout extends AbstractTool {
 	private void tweakOverlappingAtoms() {
 		CMLMolecule molecule = this.moleculeTool.getMolecule();
 		double meanBond = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
-		System.out.println("mean bond length is WRONG: "+meanBond);
+		LOG.debug("mean bond length is WRONG: "+meanBond);
 		List<CMLAtom> atoms1 = molecule.getAtoms();
 		List<CMLAtom> atoms2 = molecule.getAtoms();
 		for (CMLAtom atom1 : atoms1) {
 			for (CMLAtom atom2 : atoms2) {
 				double dist = atom1.getDistance2(atom2);
 				if (!(atom1.equals(atom2)) && !Double.isNaN(dist) && dist < 0.15 * meanBond) {
-					System.out.println("dist "+atom1.getId()+" -> "+atom2.getId()+": "+dist);
+					LOG.debug("dist "+atom1.getId()+" -> "+atom2.getId()+": "+dist);
 					tweak(atom1, atom2);
 				}
 			}
@@ -214,11 +215,11 @@ public class MoleculeLayout extends AbstractTool {
 		this.moleculeTool = moleculeTool;
 	}
 	private static void usage() {
-		System.out.println("java "+new MoleculeLayout().getClass().getName()+" [options]" );
-		System.out.println("... -CML cml    // read cml");
-		System.out.println("... -SMILES smiles    // read smiles");
-		System.out.println("... -SVG    svgFile   // write to file");
-		System.out.println("... -JAVA             // display in Swing Panel");
+		Util.println("java "+new MoleculeLayout().getClass().getName()+" [options]" );
+		Util.println("... -CML cml    // read cml");
+		Util.println("... -SMILES smiles    // read smiles");
+		Util.println("... -SVG    svgFile   // write to file");
+		Util.println("... -JAVA             // display in Swing Panel");
 	}
 
 	/** main
@@ -286,7 +287,7 @@ public class MoleculeLayout extends AbstractTool {
 				moleculeTool = drawMoleculesToDisplayList(displayList, molecule);
 				writeDisplayList(displayList, moleculeTool);
 			}
-//			System.out.println("WARNING: only first molecule in list drawn");
+//			LOG.debug("WARNING: only first molecule in list drawn");
 //			moleculeTool = drawMoleculesToDisplayList(displayList, moleculeList.getMoleculeElements().get(0));
 //			writeDisplayList(displayList, moleculeTool);
 		} else if (mol != null) {
@@ -328,7 +329,7 @@ public class MoleculeLayout extends AbstractTool {
 //				displayList.debugSVG();
 				displayList.createOrDisplayGraphics();
 //				displayList.debugSVG();
-				System.out.println("=====================================");
+				LOG.debug("=====================================");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

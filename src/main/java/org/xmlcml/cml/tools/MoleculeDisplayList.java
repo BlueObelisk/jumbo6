@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
@@ -23,6 +24,7 @@ import org.xmlcml.cml.graphics.SVGSVG;
  *
  */
 public class MoleculeDisplayList implements CMLDrawable {
+	private static Logger LOG = Logger.getLogger(MoleculeDisplayList.class);
 	
 	private String outfile;
 	private AbstractSVGTool abstractSVGTool;
@@ -72,7 +74,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 			}
 			if (moleculeDisplay != null) {
 				g.detach();
-		    	System.out.println("REDRAW... MOL");
+		    	LOG.debug("REDRAW... MOL");
 				g = moleculeTool.createGraphicsElement(this);
 				g.detach();
 				svg.appendChild(g);
@@ -87,7 +89,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 		if (svg != null) {
 			CMLUtil.debug(svg, "SVG");
 		} else {
-			System.out.println("NULL SVG in debug");
+			LOG.debug("NULL SVG in debug");
 		}
 	}
 
@@ -152,7 +154,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 			} else {
 				CMLUtil.debug(svg, fos, indent);
 				fos.close();
-				System.out.println("wrote SVG "+outfile);
+				LOG.debug("wrote SVG "+outfile);
 			}
 		}
 	}

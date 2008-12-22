@@ -72,7 +72,7 @@ public class SVGText extends SVGElement {
 		double fontSize = this.getFontSize();
 		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
 		fontSize = (fontSize < 8) ? 8 : fontSize;
-//		System.out.println("FONTSIZE "+fontSize);
+//		LOG.debug("FONTSIZE "+fontSize);
 		
 		String text = this.getValue();
 //		double x = this.getDouble("x");

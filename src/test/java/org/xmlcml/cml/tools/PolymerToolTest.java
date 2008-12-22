@@ -20,6 +20,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLElement;
@@ -34,6 +35,7 @@ import org.xmlcml.euclid.Util;
  *
  */
 public class PolymerToolTest {
+	private static Logger LOG = Logger.getLogger(PolymerTool.class);
 
 	private static ResourceManager getMoleculeCatalog() throws IOException {
         ResourceManager catalogTool = null;
@@ -135,13 +137,13 @@ public class PolymerToolTest {
 		polymerTool.processConvention();
 		// debug("basic", mol, fileroot);
 		polymerTool.processConvention();
-		System.out.println("-----------intermed----------");
+		LOG.debug("-----------intermed----------");
 		// debug("intermed", mol, fileroot);
 		polymerTool.processConvention();
-		System.out.println("-----------explicit----------");
+		LOG.debug("-----------explicit----------");
 		// debug("explicit", mol, fileroot);
 		polymerTool.processConvention();
-		System.out.println("-----------complete----------");
+		LOG.debug("-----------complete----------");
 		// debug("complete", mol, fileroot);
 		polymerTool.processConvention();
 		// debug("cartesian", mol, fileroot);
@@ -190,7 +192,7 @@ public class PolymerToolTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Wrote: " + outfile.getAbsolutePath());
+		LOG.debug("Wrote: " + outfile.getAbsolutePath());
 	}
 
 	@SuppressWarnings("unused")
@@ -221,7 +223,7 @@ public class PolymerToolTest {
 	}
 
 	private void testMoleculeList(String fileroot) throws Exception {
-		System.out.println("Running example " + fileroot);
+		LOG.debug("Running example " + fileroot);
         PolymerTool polymerTool = new PolymerTool();
 		CMLMoleculeList molList = polymerTool.readMoleculeList(EXPERIMENTAL_RESOURCE + U_S
                 + fileroot + "_concise.xml");
@@ -243,7 +245,7 @@ public class PolymerToolTest {
 		 try {
 		 debug("cartesian", mol, fileroot);
 		 } catch (EuclidRuntime e) {
-		 System.out.println("ERROR "+e.getMessage());
+		 LOG.debug("ERROR "+e.getMessage());
 		 }
 		 --*/
 	}
@@ -255,7 +257,7 @@ public class PolymerToolTest {
 //     */
 //    public void debug(String s, CMLMolecule molTest) {
 //        String f = fileroot + S_UNDER + s + XML_SUFF;
-//        System.out.println("=== debug " + s + "== to == "+fileroot);
+//        LOG.debug("=== debug " + s + "== to == "+fileroot);
 //        
 //        try {
 //            CMLMolecule molRef = (CMLMolecule) CMLUtil.readElementFromResource(f);
@@ -270,16 +272,16 @@ public class PolymerToolTest {
 //                }
 //            }
 //        } catch (RuntimeException e) {
-//            System.out.println("Comparison files does not exist, skipped:  "+f);
+//            LOG.debug("Comparison files does not exist, skipped:  "+f);
 //        }
 //        File testFile = new File(OUTPUT_DIR, fileroot+S_UNDER+s+XML_SUFF);
-//        System.out.println("wrote..: "+testFile.getAbsolutePath());
+//        LOG.debug("wrote..: "+testFile.getAbsolutePath());
 //        try {
 //            CMLUtil.debug(molTest, new FileOutputStream(testFile));
 //        } catch (IOException e) {
 //            throw new RuntimeException("IO Exception: "+e);
 //        }
-//        System.out.println("== end ==" + s + "==========");
+//        LOG.debug("== end ==" + s + "==========");
 //    }
 //
 //    /** debug.
@@ -292,7 +294,7 @@ public class PolymerToolTest {
 //    public void debug(String s, CMLMoleculeList molListTest, String fileroot)
 //            throws Exception {
 //        Assert.assertNotNull("molListTest", molListTest);
-//        System.out.println("============" + s + "==========");
+//        LOG.debug("============" + s + "==========");
 //        String f = fileroot + S_UNDER + s + XML_SUFF;
 //        CMLMoleculeList molListRef = readMoleculeList(f);
 //        Assert.assertNotNull("molListRef", molListRef);
@@ -302,7 +304,7 @@ public class PolymerToolTest {
 //        } catch (AssertionError e) {
 //            Assert.fail(e + " for " + fileroot + S_SLASH + s);
 //        }
-//        System.out.println("============" + s + "==========");
+//        LOG.debug("============" + s + "==========");
 //    }
 
  }

@@ -32,6 +32,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.EuclidConstants;
+import org.xmlcml.euclid.Util;
 
 /** processes conventional molecule into fragment.
  * 
@@ -369,17 +370,17 @@ public class FragmentConverter extends AbstractTool {
 				} else if(args[i].equalsIgnoreCase("-outdir")) {
 					outdir = args[++i];
 				} else {
-					System.out.println("Unknown arg: "+args[i]);
+					Util.println("Unknown arg: "+args[i]);
 				}
 			}
 		}
 		
 		private void usage(){
-	    	System.out.println("Usage: java "+FragmentConverter.class.getName()+" <options>");
-	    	System.out.println("  -in (filename) //Input File");
-	    	System.out.println("  -out (filename) //Output File");
-	    	System.out.println("  -indir (dirname) //Whole directory to be input");
-	    	System.out.println("  -outdir (dirname) //Whole directory to be output");
+	    	Util.println("Usage: java "+FragmentConverter.class.getName()+" <options>");
+	    	Util.println("  -in (filename) //Input File");
+	    	Util.println("  -out (filename) //Output File");
+	    	Util.println("  -indir (dirname) //Whole directory to be input");
+	    	Util.println("  -outdir (dirname) //Whole directory to be output");
 	    }
 		
 		private void setOutputFile(String file){
@@ -399,7 +400,7 @@ public class FragmentConverter extends AbstractTool {
 			}
 			finally{
 				if (out != null) {
-					System.out.println("Writing fragment "+output.getAbsolutePath());
+					Util.println("Writing fragment "+output.getAbsolutePath());
 		    		try {
 						out.close();
 					} catch (IOException e) {

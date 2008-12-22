@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 
 /**
@@ -18,6 +19,7 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
  *
  */
 public class MoleculeFrame extends JPanel {
+	private static Logger LOG = Logger.getLogger(MoleculeFrame.class);
 
 	/**
 	 * 
@@ -56,21 +58,21 @@ public class MoleculeFrame extends JPanel {
 		 * @param arg0
 		 */
 		public void keyPressed(KeyEvent arg0) {
-//			System.out.println("KeyPress...x "+arg0);
+//			LOG.debug("KeyPress...x "+arg0);
 		}
 		
 		/**
 		 * @param arg0
 		 */
 		public void keyReleased(KeyEvent arg0) {
-//			System.out.println("KeyReleased...x "+arg0);
+//			LOG.debug("KeyReleased...x "+arg0);
 		}
 		
 		/**
 		 * @param arg0
 		 */
 		public void keyTyped(KeyEvent arg0) {
-//			System.out.println("KeyTyped..x "+arg0);
+//			LOG.debug("KeyTyped..x "+arg0);
 		}
 	}
 	
@@ -134,7 +136,7 @@ public class MoleculeFrame extends JPanel {
 			List<AtomPair> bumpList = moleculeTool.getBumps(CoordinateType.TWOD, 
 					moleculeDisplay.getBondLength() * 0.1);
 			for (AtomPair atomPair : bumpList) {
-				System.out.println("bump "+atomPair.getAtom1().getId()+" - "+atomPair.getAtom2().getId()+": .. "+atomPair.getDistance2());
+				LOG.debug("bump "+atomPair.getAtom1().getId()+" - "+atomPair.getAtom2().getId()+": .. "+atomPair.getDistance2());
 			}
 	
 			try {

@@ -8,6 +8,7 @@ import java.util.Map;
 import nu.xom.Attribute;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -22,6 +23,7 @@ import org.xmlcml.euclid.Real2;
  *
  */
 public class SelectionTool implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(SelectionTool.class);
 
 	Map<CMLAtom, Boolean> atomMap;
 	Map<CMLBond, Boolean> bondMap;
@@ -179,7 +181,7 @@ public class SelectionTool implements CMLConstants {
 		enableBondMap();
 		if (bond != null) {
 			bondMap.put(bond, new Boolean(selected));
-//			System.out.println("SET SEL BOND "+bond.getId());
+//			LOG.debug("SET SEL BOND "+bond.getId());
 			if (selected) {
 				highlightBond(bond);
 			} else {
@@ -203,7 +205,7 @@ public class SelectionTool implements CMLConstants {
    		 line.setOpacity(0.70);
    		 SVGElement g = bondTool.getG();
    		 if (g != null) {
-   			 System.out.println("HBO "+bond.getId());
+   			 LOG.debug("HBO "+bond.getId());
    			 g.appendChild(line);
    		 } else {
    			 System.err.println("HI: Bond has no SVGG child "+bond.getId());

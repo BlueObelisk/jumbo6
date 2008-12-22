@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.html.HtmlElement.Target;
 
@@ -14,6 +15,7 @@ import org.xmlcml.cml.html.HtmlElement.Target;
  *
  */
 public class HtmlMenuSystem {
+	private static Logger LOG = Logger.getLogger(HtmlMenuSystem.class);
 
 	private HtmlHtml menu;
 	private String menuName = null;
@@ -90,7 +92,7 @@ public class HtmlMenuSystem {
 		menuName = outdir+File.separator+"menu.html";		
 		indexFrameName = outdir+File.separator+"indexFrame.html";		
 		bottomName = outdir+File.separator+"bottom.html";		
-		System.out.println("HTML OUTPUT DIR "+outdir);
+		LOG.debug("HTML OUTPUT DIR "+outdir);
 		this.outdir = outdir;
 	}
 

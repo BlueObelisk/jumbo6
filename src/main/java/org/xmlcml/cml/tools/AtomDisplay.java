@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.tools.TextDisplay.Background;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -405,8 +406,8 @@ public class AtomDisplay extends AbstractDisplay {
 
 	public static void usage() {
 
-		System.out.println(" AtomDisplay options ");
-		System.out.println();
+		Util.println(" AtomDisplay options ");
+		Util.println();
 	}
 
 	public String getDebugString() {

@@ -11,6 +11,7 @@ import java.util.List;
 import junit.framework.Assert;
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLAngle;
@@ -28,6 +29,7 @@ import org.xmlcml.euclid.Angle;
  * 
  */
 public class AngleToolTest {
+	private static Logger LOG = Logger.getLogger(AngleToolTest.class);
 
 	AngleTool tool1 = null;
 	String s1 = S_EMPTY + "<cml " + CML_XMLNS + ">" + " <molecule id='m1'>"
@@ -58,7 +60,7 @@ public class AngleToolTest {
 			element = parseValidString(s1);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("EXC " + e);
+			LOG.debug("EXC " + e);
 			throw e;
 		}
 		CMLCml cml = (CMLCml) element;

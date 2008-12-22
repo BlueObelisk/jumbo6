@@ -1071,7 +1071,7 @@ public class AtomMatcher extends AbstractTool {
 		}
 		int nAtoms1 = atomSet.size();
 		int nAtoms2 = atomSet2.size();
-		System.out.println("==========" + nAtoms1 + "===" + nAtoms2
+		LOG.debug("==========" + nAtoms1 + "===" + nAtoms2
 				+ "=============");
 		double[][] distanceMatrix = new double[nAtoms1][nAtoms2];
 		String atom1Id[] = new String[nAtoms1];
@@ -1079,10 +1079,10 @@ public class AtomMatcher extends AbstractTool {
 		for (int j = 0; j < nAtoms2; j++) {
 			CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
 			atom2Id[j] = atom2.getId();
-			// System.out.print(" "+atom2Id[j]+S_LBRAK+atom2.getElementType()+
+			// Util.print(" "+atom2Id[j]+S_LBRAK+atom2.getElementType()+
 			// S_RBRAK);
 		}
-		// System.out.println();
+		// LOG.debug();
 		for (int i = 0; i < nAtoms1; i++) {
 			CMLAtom atom1 = (CMLAtom) atomSet.getAtoms().get(i);
 			atom1Id[i] = atom1.getId();

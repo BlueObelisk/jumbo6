@@ -6,6 +6,7 @@ import java.util.List;
 import nu.xom.Attribute;
 import nu.xom.Elements;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLBond;
@@ -52,6 +53,7 @@ import org.xmlcml.euclid.Util;
  *
  */
 class FragmentSequence implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(FragmentSequence.class);
     List<FragmentAndBond> fragmentAndBondList = null; 
     
 //    private String value;
@@ -105,7 +107,7 @@ class FragmentSequence implements CMLConstants {
             fragmentAndBond.setJoinBond(joinBond);
             formula = formula.substring(joinBondS.length());
         }
-//        System.out.println("FSEQ "+this.toString());
+//        LOG.debug("FSEQ "+this.toString());
     }
 
 
@@ -554,6 +556,7 @@ class Fragment implements CMLConstants {
 };
 
 class JoinBond implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(JoinBond.class);
 
     static char LBOND = C_LSQUARE;
     static char RBOND = C_RSQUARE;
@@ -646,7 +649,7 @@ class JoinBond implements CMLConstants {
             jBondS = jBondS.substring(1, jBondS.length()-1);
             if (jBondS.equals(S_EMPTY)) {
 //                throw new RuntimeException("bond qualifier should not be empty");
-                System.out.println("empty bond qualifier");
+                LOG.debug("empty bond qualifier");
             }
             lengthS = null;
             torsionS = null;

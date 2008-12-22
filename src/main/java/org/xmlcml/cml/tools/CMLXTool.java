@@ -104,7 +104,7 @@ public class CMLXTool extends AbstractSVGTool {
 				Real2Range childRange = svgTool.calculateBoundingBox2D();
 				range = range.plus(childRange);
 			} catch (RuntimeException e) {
-				System.out.println("NO atoms?");
+				LOG.debug("NO atoms?");
 			}
 		}
 		userBoundingBox = range;

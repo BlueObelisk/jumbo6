@@ -398,29 +398,29 @@ public class Ring extends AbstractTool implements Comparable<Ring> {
 	 */
 	public void debug() {
 		ensureAtomCoordMap();
-		System.out.print("atoms ");
+		Util.print("atoms ");
 		for (CMLAtom atom : cyclicAtomList) {
-			System.out.print(" .. "+atom.getId());
-			System.out.print("["+atom.getXY2()+"]");
-			System.out.print(" <xy2> ["+atomCoordMap.get(atom)+"]");
+			Util.print(" .. "+atom.getId());
+			Util.print("["+atom.getXY2()+"]");
+			Util.print(" <xy2> ["+atomCoordMap.get(atom)+"]");
 		}
-		System.out.println();
+		Util.println();
 		if (cyclicAtomList.get(0).getXY2() != null) {
 			for (int i = 0; i < cyclicAtomList.size(); i++) {
 				int j = (i+1) % cyclicAtomList.size();
 				try {
-				System.out.print(" .. "+cyclicAtomList.get(i).getXY2().getDistance(cyclicAtomList.get(j).getXY2()));
+				Util.print(" .. "+cyclicAtomList.get(i).getXY2().getDistance(cyclicAtomList.get(j).getXY2()));
 				} catch (Throwable t) {
 					System.err.println("DEBUG"+t);
 				}
 			}
 		}
-		System.out.println();
-		System.out.print("bonds ");
+		Util.println();
+		Util.print("bonds ");
 		for (CMLBond bond : cyclicBondList) {
-			System.out.print(" .. "+bond.getId());
+			Util.print(" .. "+bond.getId());
 		}
-		System.out.println();
+		Util.println();
 	}
 
 	/**
@@ -610,9 +610,9 @@ abstract class CyclicList<E> extends ArrayList<E> {
 	
 	protected void debug() {
 		for (E e : this) {
-			System.out.print(" .. "+stringId(e));
+			Util.print(" .. "+stringId(e));
 		}
-		System.out.println();
+		Util.println();
 	}
 };
 

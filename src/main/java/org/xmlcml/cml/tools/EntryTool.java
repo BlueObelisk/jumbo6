@@ -36,6 +36,7 @@ import org.xmlcml.euclid.Util;
  * 
  */
 public class EntryTool extends AbstractTool {
+	private static Logger LOG = Logger.getLogger(EntryTool.class);
 
     /** general whitespace regex */
 	public final static String ESCAPED_WHITESPACE = S_BACKSLASH+S_BACKSLASH+"s";
@@ -170,7 +171,7 @@ public class EntryTool extends AbstractTool {
     	} else if (element instanceof CMLTable) {
     		validate((CMLTable) element);
     	} else {
-    		System.out.println("Cannot validate: "+element.getClass());
+    		LOG.debug("Cannot validate: "+element.getClass());
     	}
     }
     
@@ -841,7 +842,7 @@ public class EntryTool extends AbstractTool {
 	  */
 	public void updateEnumerations() {
 		ensureValueSet();
-		System.out.println("===="+entry.getId()+"===");
+		LOG.debug("===="+entry.getId()+"===");
 		String dataType = entry.getDataType();
 		if (dataType == null || XSD_STRING.equals(dataType)) {
 			dataType = guessDataType();

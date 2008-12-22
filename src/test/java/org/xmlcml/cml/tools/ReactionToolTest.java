@@ -27,6 +27,7 @@ import nu.xom.Nodes;
 import nu.xom.Serializer;
 import nu.xom.xslt.XSLTransform;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -61,6 +62,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class ReactionToolTest {
+	private static Logger LOG = Logger.getLogger(ReactionToolTest.class);
 	ReactionFixture fixture = new ReactionFixture();
 	/** */
 	public final static String REACTION_EXAMPLES = CMLAssert.TOOLS_EXAMPLES
@@ -299,7 +301,7 @@ public class ReactionToolTest {
 				// if (fileS.indexOf(sss) == -1) continue;
 
 				File file = new File(dir, fileS);
-				System.out.println("=========" + file + "=========");
+				LOG.debug("=========" + file + "=========");
 				System.err.println("=========" + file + "=========");
 				Document doc = null;
 				try {
@@ -496,10 +498,10 @@ public class ReactionToolTest {
 				Assert.assertEquals("calc molar", mol[i], calcMolarAmount
 						.getXMLContent(), 0.001);
 				if (molarAmount != null) {
-					// System.out.print(molarAmount.getXMLContent());
+					// Util.printmolarAmount.getXMLContent());
 				}
 			}
-			// System.out.println("("+molecule.getTitle()+")");
+			// LOG.debug("("+molecule.getTitle()+")");
 		}
 	}
 
@@ -551,7 +553,7 @@ public class ReactionToolTest {
 			if (calcMolarAmount == null) {
 			} else {
 				if (molarAmount != null) {
-					System.out.println(molecule.getTitle() + ": "
+					LOG.debug(molecule.getTitle() + ": "
 							+ molarAmount.getXMLContent() + ": "
 							+ calcMolarAmount.getXMLContent());
 				}
@@ -564,7 +566,7 @@ public class ReactionToolTest {
 	 */
 	static void validate(String[] args) throws Exception {
 		if (args.length < 2) {
-			System.out.println("SVG infile");
+			LOG.debug("SVG infile");
 		} else {
 			String infile = args[1];
 			InputStream is = new FileInputStream(infile);
@@ -586,7 +588,7 @@ public class ReactionToolTest {
 				CMLProperty prop = MoleculeTool.getOrCreateTool(molecule)
 						.getMolarMass();
 
-				System.out.println("Mol(" + (i + 1) + "): "
+				LOG.debug("Mol(" + (i + 1) + "): "
 						+ molecule.getTitle() + " molarMass: "
 						+ ((prop == null) ? "?" : prop.getDouble()));
 			}
@@ -617,7 +619,7 @@ public class ReactionToolTest {
 	 */
 	public static void testSVG(String[] args) throws Exception {
 		if (args.length < 3) {
-			System.out.println("SVG infile outfile");
+			LOG.debug("SVG infile outfile");
 		} else {
 			String infile = args[1];
 			String outfile = args[2];
@@ -634,11 +636,10 @@ public class ReactionToolTest {
 	}
 
 	static void usage() {
-		System.out
-				.println("java org.xmlcml.cml.tools.ReactionToolTest <options>");
-		System.out.println("... options ...");
-		System.out.println("-SVG inputfile outputfile <options>");
-		System.out.println("-VALIDATE inputfile");
+		Util.println("java org.xmlcml.cml.tools.ReactionToolTest <options>");
+		Util.println("... options ...");
+		Util.println("-SVG inputfile outputfile <options>");
+		Util.println("-VALIDATE inputfile");
 	}
 
 	/**
@@ -649,7 +650,7 @@ public class ReactionToolTest {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
-			System.out.println("Args is 0");
+			Util.println("Args is 0");
 			usage();
 		} else {
 			if (args[0].equalsIgnoreCase("-SVG")) {

@@ -589,12 +589,12 @@ formula='
     }
     
     private static void usage() {
-        System.out.println("java org.xmlcml.cml.tools.PolymerTool1 [args]");
-        System.out.println("    -INFILE filename // XML input file; must include convention ");
-        System.out.println("    -OUTFILE filename // XML output file");
-        System.out.println("    -BASIC, -INTERMEDIATE, -EXPLICIT, -COMPLETE");
-        System.out.println("    -DEBUG");
-        System.out.println("  OR;  -TEMPLATE [-PARAM name value]* -CATALOG catalog");
+        Util.println("java org.xmlcml.cml.tools.PolymerTool1 [args]");
+        Util.println("    -INFILE filename // XML input file; must include convention ");
+        Util.println("    -OUTFILE filename // XML output file");
+        Util.println("    -BASIC, -INTERMEDIATE, -EXPLICIT, -COMPLETE");
+        Util.println("    -DEBUG");
+        Util.println("  OR;  -TEMPLATE [-PARAM name value]* -CATALOG catalog");
     }
     
     /** runs Polymer Tool including building polymers.
@@ -677,7 +677,7 @@ formula='
             } else {
 	            if (targetLevel == null){
 	            	targetLevel = FragmentTool.Convention.PML_DEFAULT_FINAL;
-	            	System.out.println("No level specified. Assuming level: "+targetLevel);
+	            	LOG.debug("No level specified. Assuming level: "+targetLevel);
 	            }
 	            if(S_EMPTY.equals(fragments)) {
 	                System.err.println("No fragments found; please give -FRAGMENTS");

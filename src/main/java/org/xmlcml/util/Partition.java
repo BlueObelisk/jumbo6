@@ -3,12 +3,16 @@ package org.xmlcml.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.xmlcml.euclid.Util;
+
 /**
  * 
  * @author pm286
  *
  */
 public class Partition {
+	private static Logger LOG = Logger.getLogger(Partition.class);
 	/**
 	 * returns all the ways the integer provided can be divided
 	 * into whole number parts.  This supplying 5 returns
@@ -34,14 +38,14 @@ public class Partition {
 			List<List<Integer>> partitionList,
 			List<Integer> partition) {
 		if (n == 0) {
-			//System.out.println(prefix);
+			//LOG.debug(prefix);
 			partitionList.add(new ArrayList<Integer>(partition));
 			partition.clear();
 			return partitionList;
 		}
 
 		for (int i = Math.min(max, n); i >= 1; i--) {
-			//System.out.println(prefix + " " + i);
+			//LOG.debug(prefix + " " + i);
 			partition.add(i);
 			partition(n-i, i, prefix + " " + i, partitionList, partition);
 		}
@@ -56,9 +60,9 @@ public class Partition {
 		List<List<Integer>> partitionList = partition(5);
 		for (List<Integer> partition : partitionList) {
 			for (Integer in : partition) {
-				System.out.print(in+" ");
+				Util.println(" ");
 			}
-			System.out.println("");
+			LOG.debug("");
 		}
 	}
 }

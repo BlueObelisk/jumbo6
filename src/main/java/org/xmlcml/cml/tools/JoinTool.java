@@ -213,7 +213,7 @@ public class JoinTool extends AbstractTool {
       if (join.getId() != null) {
           bond.setId(join.getId());
       } else {
-//          System.out.println("WARNING: join should have id: ");
+//          LOG.debug("WARNING: join should have id: ");
       }
       String order = join.getOrder();
       if (order != null && !order.trim().equals(S_EMPTY)) {

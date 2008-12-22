@@ -21,6 +21,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,6 +49,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class FragmentToolTest {
+	private static Logger LOG = Logger.getLogger(FragmentToolTest.class);
 
 	private ResourceManager resourceManager = null;
 
@@ -516,7 +518,7 @@ public class FragmentToolTest {
 			FileOutputStream fos = new FileOutputStream(outfile);
 			CMLUtil.debug(element, fos, 2);
 			fos.close();
-			System.out.println("WROTE: " + outfile);
+			LOG.debug("WROTE: " + outfile);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -574,7 +576,7 @@ public class FragmentToolTest {
 	}
 
 	private void runBumpsTest(String molname) {
-		System.out.println("Checking bumps: " + molname);
+		LOG.debug("Checking bumps: " + molname);
 		CMLElement fragment = readElement0(molname);
 		CMLFragment fragmentx = processFragment((CMLFragment) fragment);
 		CMLMolecule molecule = (CMLMolecule) fragmentx.getMoleculeElements().get(0);
@@ -600,7 +602,7 @@ public class FragmentToolTest {
 				boolean bump = atomi.isWithinRadiusSum(atomj, ChemicalElement.RadiusType.VDW);
 				if (bump) {
 //					double dist = atomi.getDistanceTo(atomj);
-//					System.out.println("BUMP " + atomi.getId() + "-" + atomj.getId() + ": " + dist);
+//					LOG.debug("BUMP " + atomi.getId() + "-" + atomj.getId() + ": " + dist);
 					// FIXME use CMLLength
 				}
 			}
@@ -698,11 +700,11 @@ public class FragmentToolTest {
 		t4 = System.currentTimeMillis();
 		test(check, debug, 1005, true);
 		t5 = System.currentTimeMillis();
-		System.out.println("Time for 25:" + (t1 - t0));
-		System.out.println("Time for 50:" + (t2 - t1));
-		System.out.println("Time for 100:" + (t3 - t2));
-		System.out.println("Time for 200:" + (t4 - t3));
-		System.out.println("Time for 1:" + (t5 - t4));
+		LOG.debug("Time for 25:" + (t1 - t0));
+		LOG.debug("Time for 50:" + (t2 - t1));
+		LOG.debug("Time for 100:" + (t3 - t2));
+		LOG.debug("Time for 200:" + (t4 - t3));
+		LOG.debug("Time for 1:" + (t5 - t4));
 	}
 
 	/**
