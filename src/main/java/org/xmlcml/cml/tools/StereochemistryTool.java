@@ -187,7 +187,7 @@ public class StereochemistryTool extends AbstractTool {
 				otherMarkedAtoms.addAtom(centralAtom);
 				int value = this.compareRecursivelyByAtomicNumber(orderedLigandList.get(i), 
 						atom, markedAtoms, otherMarkedAtoms);
-				//System.out.println(orderedLigandList.get(i).getId()+"/"+atom.getId()+" = "+value);
+				//LOG.debug(orderedLigandList.get(i).getId()+"/"+atom.getId()+" = "+value);
 				if (value == 1) {
 					if (i+1 == orderedLigandList.size()) {
 						orderedLigandList.add(i+1, atom);
@@ -341,7 +341,7 @@ public class StereochemistryTool extends AbstractTool {
 		if (bondStereo2 != null && bondStereo3 != null) {
 			int match = bondStereo3.matchParity(bondStereo2);
 			if (match == -1) {
-				// System.out.println("FLIP ");
+				// LOG.debug("FLIP ");
 				this.flip2D(bond);
 			}
 		}

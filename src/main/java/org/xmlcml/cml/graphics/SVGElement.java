@@ -401,7 +401,7 @@ public class SVGElement extends GraphicsElement {
 //		svg.appendChild(g);
 //		CMLUtil.debug(svg, fos, indent);
 //		fos.close();
-//		System.out.println("wrote SVG "+outfile);
+//		LOG.debug("wrote SVG "+outfile);
 	}
 
 	/**

@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.tools.DisorderTool;
 
 /**
  * superclass of all CMLTests. creates CMLBuilder for subclasses. little other
@@ -17,6 +19,7 @@ import org.xmlcml.cml.base.CMLElement;
  */
 
 public final class AbstractTestBase {
+	private static Logger LOG = Logger.getLogger(AbstractTestBase.class);
 
 	/** root of tests. */
 	public final static String TEST_RESOURCE = "org/xmlcml/cml/element";
@@ -76,7 +79,7 @@ public final class AbstractTestBase {
 	 * @param s
 	 */
 	public static void severeError(String s) {
-		System.out.println("***** SEVERE ERROR: " + s);
+		LOG.debug("***** SEVERE ERROR: " + s);
 	}
 
 	/**

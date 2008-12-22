@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.CMLAtom;
@@ -35,6 +36,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class PiSystem implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(PiSystem.class);
 
     MoleculeTool moleculeTool;
 
@@ -358,7 +360,7 @@ public class PiSystem implements CMLConstants {
                     tempCharge = adjustChargeOnCON(atom, tempCharge);
                 }
                 if (tempCharge != 0) {
-                    // System.out.println("Cannot distribute charge");
+                    // LOG.debug("Cannot distribute charge");
                 }
             }
         }
@@ -430,7 +432,7 @@ public class PiSystem implements CMLConstants {
                 }
             }
         }
-        // System.out.println("Terminal "+fullBondList.size());
+        // LOG.debug("Terminal "+fullBondList.size());
         return fullBondList;
     }
 
@@ -489,7 +491,7 @@ public class PiSystem implements CMLConstants {
      */
     private int exploreStart1(CMLAtom atom, int level) {
         int knownUnpaired = piSystemOptions.getKnownUnpaired();
-        // System.out.println(spaces(2*level)+">> "+atom.getId());
+        // LOG.debug(spaces(2*level)+">> "+atom.getId());
         // store any bonds formed here
         Stack<AtomPair> atomPairStack = new Stack<AtomPair>();
         List<CMLAtom> ligands = atom.getLigandAtoms();
@@ -501,7 +503,7 @@ public class PiSystem implements CMLConstants {
             for (CMLAtom ligand : ligands) {
                 // find next ligand with spare pi
                 if (lookupPiCount(ligand) > 0) {
-                    // System.out.println(spaces(2*level)+".. "+ligand.getId());
+                    // LOG.debug(spaces(2*level)+".. "+ligand.getId());
                     AtomPair atomPair = null;
                     // if atom still has pi, add new bond
                     if (lookupPiCount(atom) > 0) {
@@ -511,7 +513,7 @@ public class PiSystem implements CMLConstants {
                     // anything more to do?
                     int count1 = exploreStart1(ligand, level + 1);
                     if (remainingPiCount <= knownUnpaired) {
-                        // System.out.println("FINISHED EXPLORE
+                        // LOG.debug("FINISHED EXPLORE
                         // "+remainingPiCount);
                         break;
                     }
@@ -529,9 +531,9 @@ public class PiSystem implements CMLConstants {
             }
         }
         if (level == 0 && remainingPiCount > knownUnpaired) {
-            // System.out.println("FAILED, remaining: "+remainingPiCount);
+            // LOG.debug("FAILED, remaining: "+remainingPiCount);
         }
-        // System.out.println(spaces(2*level)+"<< "+atom.getId());
+        // LOG.debug(spaces(2*level)+"<< "+atom.getId());
         return count;
     }
 
@@ -544,7 +546,7 @@ public class PiSystem implements CMLConstants {
     }
 
     private void annotateUnmarkedPi() {
-        // System.out.println("Anotate unmarked pi");
+        // LOG.debug("Anotate unmarked pi");
         List<CMLAtom> atomList = getSortedAtomList();
         for (CMLAtom atom : atomList) {
             int pi = piMap.get(atom).intValue();
@@ -557,7 +559,7 @@ public class PiSystem implements CMLConstants {
     }
 
     private AtomPair markAtomPair(CMLAtom atom, CMLAtom ligand, int level) {
-        // System.out.println(spaces(2*level+2)+"++
+        // LOG.debug(spaces(2*level+2)+"++
         // "+atom.getId()+S_MINUS+ligand.getId());
         AtomPair bond = new AtomPair(atom, ligand);
         addToPi(atom, -1);
@@ -568,7 +570,7 @@ public class PiSystem implements CMLConstants {
 
     private void unmarkAtomPair(AtomPair atomPair, String s, int level) {
         if (atomPair != null) {
-            // System.out.println(spaces(2*level+2)+"--
+            // LOG.debug(spaces(2*level+2)+"--
             // "+atomPair.getAtom1().getId()+S_MINUS+atomPair.getAtom2().getId());
             CMLAtom atom = atomPair.getAtom1();
             CMLAtom ligand = atomPair.getAtom2();
@@ -597,9 +599,9 @@ public class PiSystem implements CMLConstants {
      * 
      */
     private void incrementBondOrders() {
-        // System.out.println("ATOM PAIR LIST "+finalAtomPairList.size());
+        // LOG.debug("ATOM PAIR LIST "+finalAtomPairList.size());
         List<CMLBond> bondList = this.createBondList();
-        // System.out.println("BOND LIST "+bondList.size());
+        // LOG.debug("BOND LIST "+bondList.size());
         if (bondList == null) {
             throw new RuntimeException("NULL BOND LIST");
         } else {
@@ -654,14 +656,14 @@ public class PiSystem implements CMLConstants {
 
     private void debugMap() {
         int count = 0;
-        System.out.println("===debug>>> " + piMap.size());
+        LOG.debug("===debug>>> " + piMap.size());
         List<CMLAtom> atomList = getSortedAtomList();
         for (CMLAtom atom : atomList) {
             int cc = piMap.get(atom).intValue();
-            System.out.println(".." + atom.getId() + ".." + cc);
+            LOG.debug(".." + atom.getId() + ".." + cc);
             count += cc;
         }
-        System.out.println("===debug<<< " + count);
+        LOG.debug("===debug<<< " + count);
     }
 
     // =================== utilities ====================

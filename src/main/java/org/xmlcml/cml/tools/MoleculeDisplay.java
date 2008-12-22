@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
@@ -12,6 +13,7 @@ import org.xmlcml.euclid.RealInterval;
  *
  */
 public class MoleculeDisplay extends AbstractDisplay {
+	private static Logger LOG = Logger.getLogger(MoleculeDisplay.class);
 
 	final static MoleculeDisplay DEFAULT = new MoleculeDisplay();
 	static {
@@ -174,7 +176,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	}
 
 	public void setDisplayFormula(boolean displayFormula) {
-		System.out.println("FORMULA "+this);
+		LOG.debug("FORMULA "+this);
 		this.displayFormula = displayFormula;
 	}
 

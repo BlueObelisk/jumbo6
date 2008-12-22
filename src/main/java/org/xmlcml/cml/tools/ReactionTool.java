@@ -449,7 +449,7 @@ public class ReactionTool extends AbstractSVGTool {
                 change = true;
                 MappedBondPair bondPair = getUniqueBondPairContaining(changedBondPairList, atomPair);
                 if (bondPair == null) {
-                	System.out.println("cannot find unique bond containing: "+atomPair);
+                	LOG.debug("cannot find unique bond containing: "+atomPair);
                     change = false;
                     break;
                 }
@@ -465,11 +465,10 @@ public class ReactionTool extends AbstractSVGTool {
 
 // cycles? take an arbitrary starting point and try. Only bonds should be left
         if (changedAtomPairList.size() > 0) {
-        	System.out.print(""+changedAtomPairList.size()+" unmatched atoms");
+        	LOG.debug(""+changedAtomPairList.size()+" unmatched atoms");
         	for (int i = 0; i < changedAtomPairList.size() && i < 3; i++) {
-        		System.out.print(": "+changedAtomPairList.get(i));
+        		LOG.debug(": "+changedAtomPairList.get(i));
         	}
-    		System.out.println();
         }
         
         while (changedBondPairList.size() > 0) {
@@ -483,11 +482,10 @@ public class ReactionTool extends AbstractSVGTool {
 // FIXME                iterateCycle(atomPairList, changedBondPairList, startingAtomPair, atomMap, electronPairList);
             }
             if (size == changedBondPairList.size()) {
-                System.out.print("Cannot match "+size+" bonds");
+                LOG.debug("Cannot match "+size+" bonds");
             	for (int i = 0; i < changedBondPairList.size() && i < 3; i++) {
-            		System.out.print(": "+changedBondPairList.get(i));
+            		LOG.debug(": "+changedBondPairList.get(i));
             	}
-        		System.out.println();
                 break;
             }
         }
@@ -569,7 +567,7 @@ public class ReactionTool extends AbstractSVGTool {
             MappedBondPair otherBondPair = getUniqueBondPairContaining(changedBondPairList, middleAtomPair);
             if (otherBondPair == null) {
                 if (!changedAtomPairList.contains(middleAtomPair)) {
-                	System.out.println("Cannot find terminal atom ("+middleAtomPair+") in electron chain");
+                	LOG.debug("Cannot find terminal atom ("+middleAtomPair+") in electron chain");
                 } else {
                     addElectrons(bondPair, middleAtomPair, electronPairList);
                     changedAtomPairList.remove(middleAtomPair);
@@ -688,9 +686,9 @@ public class ReactionTool extends AbstractSVGTool {
             compareBonds(bondPair, changedPairList);
         }
         if (changedPairList.size() > 0) {
-            System.out.println("Changed atoms/bonds ("+serial+")");
+            LOG.debug("Changed atoms/bonds ("+serial+")");
             for (int i = 0; i < changedPairList.size(); i++) {
-                System.out.println("BP "+changedPairList.get(i));
+                LOG.debug("BP "+changedPairList.get(i));
             }
         }
 //        List<ElectronPair> electronPairList = getElectronPairList(null, molecule1, molecule2, serial);
@@ -714,7 +712,7 @@ public class ReactionTool extends AbstractSVGTool {
                 }
                 if (true) throw new RuntimeException("FIX ME");
 //                removeFromChangedListAddElectrons(changedMappedAtomPairList, atomPair, bondPair);
-//                System.out.println("started: "+atomPair.id1+" ==> "+bondPair);
+//                LOG.debug("started: "+atomPair.id1+" ==> "+bondPair);
 //
 ////                String nextAtomId = getOtherAtomId(bondPair, atomPair);
 //                String nextAtomId = bondPair.bond1.getOtherAtomId(atomPair.id1);
@@ -729,7 +727,7 @@ public class ReactionTool extends AbstractSVGTool {
                 LOG.info("Finished all electrons");
                 break;
             } else {
-                System.out.println("Cycles atoms/bonds ("+serial+")");
+                LOG.debug("Cycles atoms/bonds ("+serial+")");
                 AtomBondPair abp = (AtomBondPair) changedPairList.get(0);
                 if (abp instanceof MappedBondPair) {
                     MappedBondPair bondPair = (MappedBondPair) abp;
@@ -792,14 +790,14 @@ public class ReactionTool extends AbstractSVGTool {
 // find atoms atomMap
     	List<String> fromRefs = atomMap.getFromRefs();
     	if (fromRefs.size() == 0) {
-    		System.out.println("NO FROM REFS+++++++++++++++++");
+    		LOG.debug("NO FROM REFS+++++++++++++++++");
     	}
         for (String fromRef : fromRefs) {
             CMLAtom atom1 = atomMap1.get(fromRef);
             String id2 = atomMap.getToRef(fromRef);
             CMLAtom atom2 = atomMap2.get(id2);
             if (atom2 == null) {
-            	System.out.println("NO MATCHED ATOM"+id2);
+            	LOG.debug("NO MATCHED ATOM"+id2);
             }
             atomPairList.add(new MappedAtomPair(atom1, atom2));
         }
@@ -846,7 +844,7 @@ public class ReactionTool extends AbstractSVGTool {
     	reaction.debug("REACT");
     	List<CMLMolecule> molecules = reaction.getMolecules(Component.REACTANT);
     	if (molecules.size() == 0) {
-    		System.out.println("No molecules to display");
+    		LOG.debug("No molecules to display");
     	} else if (applyScale) {
     		transform2 = scaleToBoundingBoxesAndScreenLimits(molecules);
     	}

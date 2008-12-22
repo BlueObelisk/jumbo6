@@ -28,7 +28,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class RingNucleus extends AbstractTool implements Comparable<RingNucleus> {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(RingNucleus.class);
 	private CMLAtomSet atomSet;
 	private CMLBondSet bondSet;
 	private List<Ring> ringList = null;
@@ -215,7 +215,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 			}
 			CMLBondSet newBondSet = target.getBondSet().symmetricDifference(ring.getBondSet());
 			if (newBondSet.size() < target.size()) {
-//				System.out.println(""+newBondSet.size()+" < "+target.size());
+//				LOG.debug(""+newBondSet.size()+" < "+target.size());
 				Ring newRing = new Ring(newBondSet);
 				newList.set(i, newRing);
 				change = true;
@@ -359,7 +359,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 				}
 				Junction junction = junctionList.get(0);
 				if (junction.getCommonAtomList().size() > 2) {
-					System.out.println("complex junction");
+					LOG.debug("complex junction");
 				}
 				// record largest junction
 				if (commonAtoms < atomSet.size()) {
@@ -373,7 +373,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		// did we find any junctions?
 		if (junction0 != null) {
 //			for (CMLAtom atom : existingRing0.getCyclicAtomList()) {
-//				System.out.println("JUNCT: "+atom.getElementType()+"/"+atom.getXY2());
+//				LOG.debug("JUNCT: "+atom.getElementType()+"/"+atom.getXY2());
 //			}
 			try {
 				calculate2DCoordinates(junction0, ringToBeAdded0, existingRing0, moleculeDraw);

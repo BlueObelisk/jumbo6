@@ -95,7 +95,7 @@ public class SpanningTree extends AbstractTool {
 		usedAtomSet = new CMLAtomSet();
 		rootElement = new SpanningTreeElement(null, rootAtom, null);
 		expand(rootAtom, rootElement);
-//		System.out.println("USED "+usedAtomSet.size());
+//		LOG.debug("USED "+usedAtomSet.size());
 	}
 
 	private void generateTerminals() {
@@ -202,7 +202,7 @@ public class SpanningTree extends AbstractTool {
 	 * @return path as list of atoms
 	 */
 	public AtomPath getPath(CMLAtom startAtom, CMLAtom endAtom) {
-//		System.out.println("XX "+startAtom.getId()+"/"+endAtom.getId());
+//		LOG.debug("XX "+startAtom.getId()+"/"+endAtom.getId());
 		ensurePathMap();
 		Map<CMLAtom, AtomPath> endAtomMap = pathMap.get(startAtom);
 		if (endAtomMap == null) {
@@ -257,7 +257,7 @@ public class SpanningTree extends AbstractTool {
 		ensureAtomSpanningTreeElementMap();
 		usedAtomSet.addAtom(atom);
 		atomSpanningTreeElementMap.put(atom, element);
-//		System.out.println("PUT "+atom.getId());
+//		LOG.debug("PUT "+atom.getId());
 		List<CMLAtom> ligands = ligandAtomMap.get(atom);
 		List<CMLBond> ligandBonds = ligandBondMap.get(atom);
 		int nbranches = 0;

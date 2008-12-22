@@ -324,10 +324,10 @@ public class DictionaryTool extends AbstractTool {
 //    	for (String key : tempDictRefMap.keySet()) {
 //    		Map<String, ValueCount> map = 
 //    			(Map<String, ValueCount>) tempDictRefMap.get(key);
-//    		System.out.println("\n"+key);
+//    		LOG.debug("\n"+key);
 //    		for (String s : map.keySet()) {
 //    			ValueCount termCount = map.get(s);
-//    			System.out.println(termCount.count+" ... "+s);
+//    			LOG.debug(termCount.count+" ... "+s);
 //    		}
 //    	}
 //    }

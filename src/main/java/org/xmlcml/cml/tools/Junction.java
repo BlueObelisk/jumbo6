@@ -9,6 +9,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.euclid.Util;
 
 /**
  * tool to support a ring. not fully developed
@@ -113,8 +114,8 @@ public class Junction extends AbstractTool {
 		while (ringBondSetList.get(1).contains(bond)) {
 			bond = cyclicBondList0.getNext();
 			if (bond.equals(startBond)) {
-				System.out.println(cyclicBondList0);
-				System.out.println(cyclicBondList1);
+				LOG.debug(cyclicBondList0);
+				LOG.debug(cyclicBondList1);
 				throw new RuntimeException("all bonds are contained in one ring");
 			}
 		}
@@ -123,8 +124,8 @@ public class Junction extends AbstractTool {
 		while (!ringBondSetList.get(1).contains(bond)) {
 			bond = cyclicBondList0.getNext();
 			if (bond.equals(startBond)) {
-				System.out.println(cyclicBondList0);
-				System.out.println(cyclicBondList1);
+				LOG.debug(cyclicBondList0);
+				LOG.debug(cyclicBondList1);
 				throw new RuntimeException("NO bonds are contained in one ring");
 			}
 		}
@@ -140,8 +141,8 @@ public class Junction extends AbstractTool {
 			bond = cyclicBondList0.getNext();
 			atom = cyclicAtomList0.getNext();
 			if (bond.equals(startBond)) {
-				System.out.println(cyclicBondList0);
-				System.out.println(cyclicBondList1);
+				LOG.debug(cyclicBondList0);
+				LOG.debug(cyclicBondList1);
 				throw new RuntimeException("All/NO bonds are contained in one ring");
 			}
 		}
@@ -290,16 +291,16 @@ public class Junction extends AbstractTool {
 	public void debug() {
 		ringList.get(0).debug();
 		if (commonBondList.size() > 0) {
-			System.out.print("..bond");
+			Util.print("..bond");
 			for (CMLBond bond : commonBondList) {
-				System.out.print(" ... "+bond.getId());
+				Util.print(" ... "+bond.getId());
 			}
-			System.out.println();
-			System.out.print("..atom");
+			Util.println();
+			Util.println("..atom");
 			for (CMLAtom atom : commonAtomList) {
-				System.out.print(" ... "+atom.getId());
+				Util.print(" ... "+atom.getId());
 			}
-//			System.out.println();
+//			LOG.debug();
 		} else {
 			LOG.info("..atom "+commonAtomSet.getAtoms().get(0).getId());
 		}

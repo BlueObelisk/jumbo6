@@ -191,11 +191,11 @@ public class AtomTreeTest {
 		atomTree0.expandTo(3);
 		AtomTree atomTree1 = new AtomTree(dmf.getAtom(1));
 		atomTree1.expandTo(3);
-		// System.out.println("1: "+atomTree1.toString());
+		// LOG.debug("1: "+atomTree1.toString());
 		Assert.assertTrue("compare 0 1 ", atomTree0.compareTo(atomTree1) > 0);
 		AtomTree atomTree2 = new AtomTree(dmf.getAtom(2));
 		atomTree2.expandTo(3);
-		// System.out.println("2 "+atomTree2.toString());
+		// LOG.debug("2 "+atomTree2.toString());
 		Assert.assertEquals("compare 0 1 ", -1, atomTree1.compareTo(atomTree2));
 	}
 

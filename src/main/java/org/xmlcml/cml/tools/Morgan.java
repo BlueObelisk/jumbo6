@@ -45,6 +45,7 @@ import org.xmlcml.molutil.ChemicalElement;
  * 
  */
 public class Morgan extends AbstractTool {
+	private static Logger LOG = Logger.getLogger(Morgan.class);
 	public static String EQUIVALENCE_ATTRIBUTE = "equivalenceString";
 	
     /** decides on type of algorithm.
@@ -363,21 +364,21 @@ public class Morgan extends AbstractTool {
      */
      public void debug(String message) {
          if (morganList == null) {
-             System.out.println("NO atoms in list");
+             LOG.warn("NO atoms in list");
          } else {
-             System.out.println("==========="+message+"==========");
+             Util.println("==========="+message+"==========");
              constantAtomSet.debug("MORGAN");
              for (int i = 0; i < morganList.size(); i++) {
                  if (i % 5 == 0) {
-                     System.out.println();
+                	 Util.println();
                  }
                  Long morganNumber = (Long) morganList.get(i);
                  @SuppressWarnings("unused")
                  CMLAtomSet atomSet = (CMLAtomSet) equivalenceMap.get(morganNumber);
-                 System.out.print(" I "+morganNumber);
+                 Util.println(" I "+morganNumber);
              }
          }
-         System.out.println();
+         Util.println();
      }
 
     /** calculate number for atom.

@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFormula;
@@ -32,6 +33,7 @@ import org.xmlcml.euclid.Transform2;
  *
  */
 public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConstants {
+	private static Logger LOG = Logger.getLogger(MoleculePanel.class);
 	
 	/**
 	 */
@@ -94,14 +96,14 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 		 * @param arg0
 		 */
 		public void mouseDragged(MouseEvent arg0) {
-			System.out.println("DRAGPanel "+arg0);
+			LOG.debug("DRAGPanel "+arg0);
 		}
 
 		/**
 		 * @param arg0
 		 */
 		public void mouseMoved(MouseEvent arg0) {
-//			System.out.println("MOVE "+arg0);
+//			LOG.debug("MOVE "+arg0);
 		}
 	}
 	
@@ -111,35 +113,35 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 		 * @param e
 		 */
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("CLICK "+e);
+			LOG.debug("CLICK "+e);
 		}
 
 		/**
 		 * @param e
 		 */
 		public void mouseEntered(MouseEvent e) {
-//			System.out.println("ENTER "+e);
+//			LOG.debug("ENTER "+e);
 		}
 
 		/**
 		 * @param e
 		 */
 		public void mouseExited(MouseEvent e) {
-//			System.out.println("EXIT "+e);
+//			LOG.debug("EXIT "+e);
 		}
 
 		/**
 		 * @param e
 		 */
 		public void mousePressed(MouseEvent e) {
-			System.out.println("PRESS "+e);
+			LOG.debug("PRESS "+e);
 		}
 
 		/**
 		 * @param e
 		 */
 		public void mouseReleased(MouseEvent e) {
-			System.out.println("RELEASE "+e);
+			LOG.debug("RELEASE "+e);
 		}
 	}
 	
@@ -216,7 +218,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			// atom labels
 			AtomDisplay atomDisplay = moleculeDisplay.getDefaultAtomDisplay();
 			atomDisplay.setDisplayLabels(!atomDisplay.isDisplayLabels());
-			System.out.println("LABEL: "+!atomDisplay.isDisplayLabels());
+			LOG.debug("LABEL: "+!atomDisplay.isDisplayLabels());
 			displayList.setAndProcess(moleculeFrame.getMoleculeTool());
 			this.repaint();
 		} else if (c == '2') {
@@ -241,7 +243,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			y += 1;
 			arrow = true;
 		} else {
-			System.out.println("CHHHH "+ch+"/"+KeyEvent.VK_ALT);
+			LOG.debug("CHHHH "+ch+"/"+KeyEvent.VK_ALT);
 			this.altCharacter(ch, shift);
 		}
 		if (arrow) {
@@ -275,7 +277,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			} else if (Character.isUpperCase(c)) {
 				s = groupMap.get(""+c);
 			} else {
-				System.out.println("ALT "+(int)c);
+				LOG.debug("ALT "+(int)c);
 			}
 			// substituent rings and groups
 			if (s != null && !"".equals(s)) {
@@ -288,7 +290,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			} else if (c == 'A') {
 				s = "=C=CC=C";
 			} else {
-				System.out.println("ALT SHIFT "+(int)c);
+				LOG.debug("ALT SHIFT "+(int)c);
 			}
 			// fused rings
 			if (!"".equals(s)) {

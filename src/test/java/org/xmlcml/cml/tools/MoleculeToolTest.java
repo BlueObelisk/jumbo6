@@ -659,7 +659,7 @@ public class MoleculeToolTest {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
-			System.out.println("Args is 0");
+			Util.println("Args is 0");
 			usage();
 		} else {
 			if (args[0].equalsIgnoreCase("-SVG")) {
@@ -676,7 +676,7 @@ public class MoleculeToolTest {
 	 */
 	public static void testSVG(String[] args) throws Exception {
 		if (args.length < 3) {
-			System.out.println("SVG infile/input_resource outfile");
+			Util.println("SVG infile/input_resource outfile");
 		} else {
 			String infile = args[1];
 			String outfile = args[2];
@@ -699,10 +699,9 @@ public class MoleculeToolTest {
 	}
 
 	static void usage() {
-		System.out
-				.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");
-		System.out.println("... options ...");
-		System.out.println("-SVG inputfile outputfile <options>");
+		Util.println("java org.xmlcml.cml.tools.MoleculeToolTest <options>");
+		Util.println("... options ...");
+		Util.println("-SVG inputfile outputfile <options>");
 	}
 
 	MoleculeAtomBondFixture fixture = new MoleculeAtomBondFixture();
@@ -1804,14 +1803,14 @@ public class MoleculeToolTest {
     }
 
 //    private void dmcn4(CMLMolecule mol) {
-//        System.out.println("====distributeCharge====== " + mol.getTitle()
+//        LOG.debug("====distributeCharge====== " + mol.getTitle()
 //                + " ======================");
 //        MoleculeTool.getOrCreateMoleculeTool(mol).distributeMolecularChargeToN4();
 //    }
 //
 
 //    private void tcfe(CMLMolecule mol, int knownUnpaired) {
-//        System.out.println("====transferUnpairedPi====== " + mol.getTitle()
+//        LOG.debug("====transferUnpairedPi====== " + mol.getTitle()
 //                + " ======================");
 //        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 //        mol.setBondOrders(CMLBond.SINGLE);
@@ -1837,7 +1836,7 @@ public class MoleculeToolTest {
 //    }
 
 //    private void mcm(CMLMolecule mol) {
-//        System.out.println("====MarkupCommonMolecules====== " + mol.getTitle()
+//        LOG.debug("====MarkupCommonMolecules====== " + mol.getTitle()
 //                + " ======================");
 //        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 //        moleculeTool.markupCommonMolecules();

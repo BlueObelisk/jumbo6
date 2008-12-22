@@ -151,14 +151,14 @@ public class BondDisplay extends AbstractDisplay {
 
 //	public static void usage() {
 //		
-//		System.out.println(" BondDisplay options ");
-//		System.out.println("    -BOND_MULTIPLECOLOR color");
-//		System.out.println("    -BOND_WIDTH width(D)");
-//		System.out.println("    -BOND_SCALE scale(D)");
-//		System.out.println("    -BOND_STROKE stroke");
-//		System.out.println("    -BOND_OPACITY opacity(D 0-BOND_1)");
-//		System.out.println("    -BOND_SHOWCHILDLABELS");
-//		System.out.println();
+//		Util.sysout(" BondDisplay options ");
+//		Util.sysout("    -BOND_MULTIPLECOLOR color");
+//		Util.sysout("    -BOND_WIDTH width(D)");
+//		Util.sysout("    -BOND_SCALE scale(D)");
+//		Util.sysout("    -BOND_STROKE stroke");
+//		Util.sysout("    -BOND_OPACITY opacity(D 0-BOND_1)");
+//		Util.sysout("    -BOND_SHOWCHILDLABELS");
+//		Util.sysout();
 //	}
 	
 	public String getDebugString() {

@@ -86,7 +86,7 @@ public class PropertyTool extends AbstractTool {
 //            for (CMLElement property : propertys) {
 //                DictRefAttribute dictRefAttribute = (DictRefAttribute) ((CMLProperty) property)
 //                        .getDictRefAttribute();
-//                // System.out.println("N"+dictRefAttribute);
+//                // LOG.debug("N"+dictRefAttribute);
 //                if (dictRefAttribute == null) {
 //                    errorList.add("NULL NAME: " + S_LSQUARE + property.toXML() + S_RSQUARE);
 //                } else {
@@ -97,7 +97,7 @@ public class PropertyTool extends AbstractTool {
 //                                + dictRefAttribute.getQualifiedName() + S_LSQUARE
 //                                + property.toXML() + S_RSQUARE);
 //                    } else {
-//                        // System.out.println("FOUND "+dictRefAttribute);
+//                        // LOG.debug("FOUND "+dictRefAttribute);
 //                    }
 //                }
 //            }

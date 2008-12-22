@@ -11,11 +11,13 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.euclid.Util;
 
 /**
  * list of catalogs for CML.
@@ -71,6 +73,7 @@ import org.xmlcml.cml.element.CMLScalar;
  * 
  */
 public class CatalogManager implements CatalogListChild, CMLConstants {
+	private static Logger LOG = Logger.getLogger(CatalogManager.class);
 
 	/**
 	 * folder located in user.dir. if this exists, then it should contain a
@@ -155,7 +158,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 			try {
 				catalogListUrl = new URL(dotJumbo.toURI().toURL(), CATALOGLIST_XML);
 				if (new File(catalogListUrl.getFile()).exists()) {
-					System.out.println("DJ EXISTS");
+					LOG.debug("DJ EXISTS");
 				} else {
 					catalogListUrl = null;
 				}
@@ -177,7 +180,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 		}
 		// try jar file
 		if (catalogListUrl == null) {
-			System.out.println("No DOT JUMBO");
+			LOG.debug("No DOT JUMBO");
 			catalogListUrl = CatalogUtil.getURLFromResource(CATALOGLIST_XML);
 		}
 		return catalogListUrl;
@@ -206,7 +209,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			System.out.println("Usage: java org.xmlcml.cml.base.CMLCatalog");
+			Util.println("Usage: java org.xmlcml.cml.base.CMLCatalog");
 			CatalogManager.getTopCatalogManager();
 		} else {
 

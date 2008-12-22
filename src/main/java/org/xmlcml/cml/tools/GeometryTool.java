@@ -1100,15 +1100,15 @@ public class GeometryTool extends AbstractTool {
 					Transform3 transform3 = moleculePair.getTransform3();
 					// have to use map for this
 					//FIXME
-					System.err.println("COORDINATES NEED MAPPING");
+					LOG.error("COORDINATES NEED MAPPING");
 					coordsj.transform(transform3);
 			        @SuppressWarnings("unused")
 					double rms = coordsj.rms(coordsi);
-//					System.out.print("| "+rms);
+//					Util.print("| "+rms);
 				}
-				System.out.println();
+				LOG.debug("");
 			}
-			System.out.println("-------------");
+			LOG.debug("-------------");
 		} else {
 			System.err.println("Cannot align only one molecule");
 		}

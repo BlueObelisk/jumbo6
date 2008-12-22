@@ -234,7 +234,7 @@ public class CrystalToolTest {
 		//
 		// for (int i = 0; i < cifnames.length; i++) {
 		// String cifname = cifnames[i];
-		// // System.out.println("CIF: "+cifname);
+		// // LOG.debug("CIF: "+cifname);
 		// try {
 		// InputStream in = Util.getInputStreamFromResource(
 		// CIF_EXAMPLES + U_S+ cifname + "sup1.cif");
@@ -354,7 +354,7 @@ public class CrystalToolTest {
 		// }
 		// String cifname = filename.substring(0, iCif);
 		// cifname = cifname.substring(cifname.lastIndexOf(File.separator)+1);
-		// System.out.println("======================="+cifname+
+		// LOG.debug("======================="+cifname+
 		// "=======================");
 		////log.add("======================="+cifname+"=======================")
 		// ;
@@ -393,7 +393,7 @@ public class CrystalToolTest {
 		// cifname = cifname.substring(0, cifname.length()-4);
 		// }
 		// List<CMLCml> cmlList = cifConverter.getCMLCmlList();
-		// System.out.println(cmlList.size());
+		// LOG.debug(cmlList.size());
 		// int mol = 0;
 		// for (CMLCml cml : cmlList) {
 		// mol++;
@@ -456,7 +456,7 @@ public class CrystalToolTest {
 		// ValencyTool subMolTool = new ValencyTool(subMol);
 		// subMolTool.adjustBondOrdersAndChargesToValency(moietyFormula);
 		// } else {
-		// System.out.println("molecule is disordered");
+		// LOG.debug("molecule is disordered");
 		// }
 		// }
 		// //addSpaceGroup(cml);
@@ -669,7 +669,7 @@ public class CrystalToolTest {
 		typeList.add(ChemicalElement.Type.TRANSITION_METAL);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		List<CMLMolecule> ligandList = moleculeTool.createLigands(typeList);
-		// System.out.println("LIGANDS"+ligandList.size());
+		// LOG.debug("LIGANDS"+ligandList.size());
 		log.add("LIGANDS" + ligandList.size());
 		int ligCount = 0;
 		for (CMLMolecule ligand : ligandList) {
@@ -718,7 +718,7 @@ public class CrystalToolTest {
 	}
 
 	// private List<String> getCifPathList(String user) {
-	// System.out.println(user);
+	// LOG.debug(user);
 	// String dir = getDir(user);
 	// if (dir == null) {
 	// throw new RuntimeException("Unknown user: "+user);
@@ -730,9 +730,9 @@ public class CrystalToolTest {
 	// }
 	//
 	// for (File file : fileList) {
-	// // System.out.println(file.getAbsolutePath());
+	// // LOG.debug(file.getAbsolutePath());
 	// if (file.toString().startsWith(S_PERIOD)) {
-	// System.out.println("File starts with .");
+	// LOG.debug("File starts with .");
 	// continue;
 	// }
 	// if (user.equals("NED")) {
@@ -752,7 +752,7 @@ public class CrystalToolTest {
 	// cifPathList.add(dir + File.separator + fileName);
 	// }
 	// }
-	// // System.out.println("Found "+cifPathList.size()+" files.");
+	// // LOG.debug("Found "+cifPathList.size()+" files.");
 	// return cifPathList;
 	// }
 

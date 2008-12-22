@@ -301,9 +301,9 @@ public class AtomMatcherTest {
 		}
 		for (Object obj : list) {
 			if (obj instanceof CMLAtom) {
-				// System.out.println("A "+((CMLAtom)obj).getId());
+				// LOG.debug("A "+((CMLAtom)obj).getId());
 			} else if (obj instanceof CMLAtomSet) {
-				// System.out.println("AS "+Util.concatenate(((CMLAtomSet)obj).
+				// LOG.debug("AS "+Util.concatenate(((CMLAtomSet)obj).
 				// getXMLContent(), S_SLASH));
 			}
 		}

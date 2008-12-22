@@ -144,7 +144,7 @@ public class InlineMolecule implements CMLConstants {
             CMLZMatrix zMatrix = new CMLZMatrix(cmlMolecule);
             zMatrix.addCartesiansTo(cmlMolecule);
         } catch (RuntimeException e) {
-            System.out.println("WARN of ZMAT "+e);
+            LOG.debug("WARN of ZMAT "+e);
         }
     }
     
@@ -259,7 +259,7 @@ class InlineAtom implements CMLConstants {
         if (inlineAtom.qual != null) {
             inlineAtom.process();
         }
-//        System.out.println("ATOM "+inlineAtom);
+//        LOG.debug("ATOM "+inlineAtom);
         return inlineAtom;
     }
 
@@ -293,7 +293,7 @@ class InlineAtom implements CMLConstants {
                 throw new RuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
-        System.out.println("AQ:"+this.fullString());
+        LOG.debug("AQ:"+this.fullString());
     }
 
     @SuppressWarnings("unused")
@@ -395,7 +395,7 @@ class InlineBond implements CMLConstants {
             bond.s = s.substring(0, 
                 ((bond.qual == null) ? 1 : 1 + bond.qual.getLength()));
         }
-//        System.out.println("BOND "+bond);
+//        LOG.debug("BOND "+bond);
         return bond;
     }
     
@@ -458,7 +458,7 @@ class InlineBond implements CMLConstants {
                 throw new RuntimeException("bad qual: "+qqq+S_SLASH+i);
             }
         }
-        System.out.println("BQ"+this.fullString());
+        LOG.debug("BQ"+this.fullString());
     }
     
     void createBond(String s) {
@@ -536,6 +536,7 @@ class Qualifier {
 }
 
 class InlineBranch {
+	private static Logger LOG = Logger.getLogger(InlineBranch.class);
     String b = null;
     InlineMolecule molecule;
     int serial;
@@ -584,7 +585,7 @@ class InlineBranch {
                     throw new RuntimeException("NULL atom");
                 }
                 if (branchBond != null) {
-                    System.out.println("III..."+inlineAtom);
+                    LOG.debug("III..."+inlineAtom);
                     inlineAtom.addBond(currentAtom, branchBond);
                     branchBond = null;
                 }

@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLAtom;
@@ -13,6 +14,7 @@ import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.html.HtmlMenuSystem;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 
@@ -24,6 +26,7 @@ import org.xmlcml.euclid.Transform2;
  * 
  */
 public abstract class AbstractSVGTool extends AbstractTool {
+	private static Logger LOG = Logger.getLogger(AbstractSVGTool.class);
 	
     protected SVGG g;
     protected boolean applyScale = false;
@@ -44,7 +47,7 @@ public abstract class AbstractSVGTool extends AbstractTool {
 		} else if (element instanceof CMLCml) {
 			abstractSVGTool = CMLXTool.getOrCreateTool((CMLCml)element); 
 		} else if (element instanceof CMLMolecule) {
-			System.out.println("MOLECULE...");
+			LOG.debug("MOLECULE...");
 			abstractSVGTool = MoleculeTool.getOrCreateTool((CMLMolecule)element); 
 		} else if (element instanceof CMLMoleculeList) {
 			abstractSVGTool = MoleculeListTool.getOrCreateTool((CMLMoleculeList)element); 

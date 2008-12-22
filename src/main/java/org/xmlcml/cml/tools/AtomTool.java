@@ -995,7 +995,7 @@ public class AtomTool extends AbstractSVGTool {
                 break;
             }
         }
-//         System.out.println("LOWEST ATOM "+lowestAtom.getId());
+//         LOG.debug("LOWEST ATOM "+lowestAtom.getId());
          return lowestAtom;
     }
 

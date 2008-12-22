@@ -14,12 +14,14 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.html.HtmlMenuSystem;
+import org.xmlcml.euclid.Util;
 
 /**
  * tests moleculeTool.
@@ -28,6 +30,7 @@ import org.xmlcml.cml.html.HtmlMenuSystem;
  * 
  */
 public class MoleculeListToolExercise {
+	private static Logger LOG = Logger.getLogger(MoleculeListTool.class);
 
 	/**
 	 * test display.
@@ -37,7 +40,7 @@ public class MoleculeListToolExercise {
 	 */
 	public static void testSVG(String[] args) throws Exception {
 		if (args.length < 2) {
-			System.out.println("-SVG infile/dir");
+			Util.println("-SVG infile/dir");
 		} else {
 			makeMenu(args[1], ".svg");
 		}
@@ -61,7 +64,7 @@ public class MoleculeListToolExercise {
 
 	private static void process1File(File infile, HtmlMenuSystem menu)
 			throws ParsingException, ValidityException, IOException {
-		System.out.println("INFILE " + infile);
+		LOG.debug("INFILE " + infile);
 		InputStream is = new FileInputStream(infile);
 		CMLMoleculeList moleculeList = getMoleculeList(is);
 		String outputFile = infile.toString();
@@ -105,10 +108,9 @@ public class MoleculeListToolExercise {
 	}
 
 	static void usage() {
-		System.out
-				.println("java org.xmlcml.cml.tools.MoleculeListToolTest <options>");
-		System.out.println("... options ...");
-		System.out.println("-SVG inputfile/dir  <options>");
+		Util.println("java org.xmlcml.cml.tools.MoleculeListToolTest <options>");
+		Util.println("... options ...");
+		Util.println("-SVG inputfile/dir  <options>");
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class MoleculeListToolExercise {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
-			System.out.println("Args is 0");
+			Util.println("Args is 0");
 			usage();
 		} else {
 			if (args[0].equalsIgnoreCase("-SVG")) {

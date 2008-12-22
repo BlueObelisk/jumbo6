@@ -9,6 +9,7 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class MorganTest {
+	private static Logger LOG = Logger.getLogger(MorganTest.class);
 	MoleculeAtomBondFixture fixture = new MoleculeAtomBondFixture();
 
 	/**
@@ -256,7 +258,7 @@ public class MorganTest {
 		markedAtoms = morgan.getMarkedAtomList();
 		Assert.assertEquals("marked atoms", 7, markedAtoms.size());
 		for (CMLAtom atom : markedAtoms) {
-			System.out.println("A " + atom.getId());
+			LOG.debug("A " + atom.getId());
 		}
 
 		// ==================================
@@ -280,7 +282,7 @@ public class MorganTest {
 		markedAtoms = morgan.getMarkedAtomList();
 		// // Assert.assertEquals("marked atoms", 7, markedAtoms.size());
 		// for (CMLAtom atom : markedAtoms) {
-		// System.out.println("A "+atom.getId());
+		// LOG.debug("A "+atom.getId());
 		// }
 
 		// ==================================
@@ -309,7 +311,7 @@ public class MorganTest {
 		markedAtoms = morgan.getMarkedAtomList();
 		// Assert.assertEquals("marked atoms", 7, markedAtoms.size());
 		// for (CMLAtom atom : markedAtoms) {
-		// System.out.println("A "+atom.getId());
+		// LOG.debug("A "+atom.getId());
 		// }
 
 		// ==========================
@@ -336,7 +338,7 @@ public class MorganTest {
 		markedAtoms = morgan.getMarkedAtomList();
 		// Assert.assertEquals("marked atoms", 7, markedAtoms.size());
 		// for (CMLAtom atom : markedAtoms) {
-		// System.out.println("A "+atom.getId());
+		// LOG.debug("A "+atom.getId());
 		// }
 	}
 

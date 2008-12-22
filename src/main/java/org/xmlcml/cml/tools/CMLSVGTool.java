@@ -85,7 +85,7 @@ public class CMLSVGTool extends AbstractSVGTool {
 	    			g.appendChild(gChild);
     			}
     		} else {
-    			System.out.println("NO GRAPHICS TOOL: "+cmlChild);
+    			LOG.debug("NO GRAPHICS TOOL: "+cmlChild);
     		}
     	}
 		return g;
@@ -104,7 +104,7 @@ public class CMLSVGTool extends AbstractSVGTool {
 				Real2Range childRange = svgTool.calculateBoundingBox2D();
 				range = range.plus(childRange);
 			} catch (RuntimeException e) {
-				System.out.println("NO atoms?");
+				LOG.debug("NO atoms?");
 			}
 		}
 		userBoundingBox = range;

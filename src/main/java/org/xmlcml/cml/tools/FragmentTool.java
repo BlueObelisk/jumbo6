@@ -48,6 +48,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class FragmentTool extends AbstractTool {
+	private static Logger LOG = Logger.getLogger(FragmentTool.class);
 
     Logger logger = Logger.getLogger(FragmentTool.class.getName());
 
@@ -511,6 +512,7 @@ class CountExpander implements CMLConstants {
 }
 
 class BasicProcessor implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(BasicProcessor.class);
 
 	private CMLFragment fragment;
 	private FragmentTool fragmentTool;
@@ -683,7 +685,7 @@ class BasicProcessor implements CMLConstants {
 	        	newFragmentTool.processAll(resourceManager);
 	        	generatedFragmentList.addFragment(newFragment);
         	} else {
-        		System.out.println("NULL "+i);
+        		LOG.debug("NULL "+i);
         	}
     	}
     	return generatedFragmentList;
@@ -1088,6 +1090,7 @@ class IntermediateProcessor implements CMLConstants {
 }
 
 class ExplicitProcessor implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(ExplicitProcessor.class);
 	
 	CMLFragment fragment;
 	CMLMolecule growingMolecule;
@@ -1220,7 +1223,7 @@ class ExplicitProcessor implements CMLConstants {
     		CMLPropertyList propertyList = (CMLPropertyList) node;
     		List<Node> psList = CMLUtil.getQueryNodes(propertyList, "preceding-sibling::"+CMLProperty.NS, CML_XPATH);
     		if (psList.size() == 0) {
-    			System.out.println("Expected preceding-sibling");
+    			LOG.debug("Expected preceding-sibling");
     		}
     		while (psList.size() > 0) {
     			Node node0 = psList.get(0);
@@ -1273,7 +1276,7 @@ class ExplicitProcessor implements CMLConstants {
 	        		title = prop.getTitle();
 	        		sum += scalar.getDouble();
         		} else {
-        			System.out.println("ROLE UNITS "+role+S_SLASH+units);
+        			LOG.debug("ROLE UNITS "+role+S_SLASH+units);
         			sum = Double.NaN;
         		}
         		count++;

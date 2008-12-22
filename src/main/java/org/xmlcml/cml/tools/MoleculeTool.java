@@ -243,7 +243,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			List<CMLAtom> atomList = subPiSystem.getAtomList();
 			int npi = atomList.size();
 			if (npi < 2) {
-//				System.out.println("Cannot find pi system for " + npi);
+//				LOG.debug("Cannot find pi system for " + npi);
 			} else {
 				subPiSystem.identifyDoubleBonds();
 			}
@@ -957,7 +957,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			if (atom == null) {
 				// maybe a fromSet
 //				for (String ss : idList) {
-//					System.out.println(ss);
+//					LOG.debug(ss);
 //				}
 //				map.debug();
 //				throw new RuntimeException("missing atom: "+id);
@@ -1821,7 +1821,7 @@ public class MoleculeTool extends AbstractSVGTool {
 					if (atomi.getDistanceTo(atomj) < 0.2) {
 						// remove overlapping atoms
 						atomj.detach();
-						//System.out.println("OVERLAP........................... "
+						//LOG.debug("OVERLAP........................... "
 						//		+ atomj.getId());
 					} else {
 						// transfer atom and add new bond
@@ -2508,7 +2508,7 @@ public class MoleculeTool extends AbstractSVGTool {
     
     	List<CMLAtom> atoms = molecule.getAtoms();
     	if (atoms.size() == 0) {
-    		System.out.println("No atoms to display");
+    		LOG.debug("No atoms to display");
     	} else if (atoms.size() == 1) {
     	} else if (applyScale) {
     		transform2 = scaleToBoundingBoxesAndScreenLimits(transform2);
@@ -3072,22 +3072,22 @@ public class MoleculeTool extends AbstractSVGTool {
 			t3 = p3vj.fitTo(p3vi);
 			Point3Vector pvtemp = new Point3Vector(p3vj);
 			pvtemp.transform(t3);
-			System.out.println("RMS "+pvtemp.rms(p3vi)+" / \n");
+			LOG.debug("RMS "+pvtemp.rms(p3vi)+" / \n");
 		}
 		
 		List<String[]> fromSets = map.getFromSetRefs();
 //		for (String[] from : fromSets) {
 //			for (String s : from) {
-//				System.out.print(s+" ");
+//				Util.prints+" ");
 //			}
-//			System.out.println("...");
+//			LOG.debug("...");
 //		}
 		List<String[]> toSets = map.getToSetRefs();
 //		for (String[] to : toSets) {
 //			for (String s : to) {
-//				System.out.print(s+" ");
+//				Util.prints+" ");
 //			}
-//			System.out.println("...");
+//			LOG.debug("...");
 //		}
 		AtomMatcher atomMatcher = new AtomMatcher();
 		for (int i = 0; i < fromSets.size(); i++) {

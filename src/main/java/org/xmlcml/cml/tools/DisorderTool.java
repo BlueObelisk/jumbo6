@@ -10,6 +10,7 @@ import java.util.Map;
 
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLAttribute;
 import org.xmlcml.cml.base.CMLElement;
@@ -19,6 +20,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.tools.DisorderToolControls.ProcessControl;
 import org.xmlcml.cml.tools.DisorderToolControls.RemoveControl;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -27,6 +29,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  */
 public class DisorderTool extends AbstractTool {
+	private static Logger LOG = Logger.getLogger(DisorderTool.class);
 
 	private CMLMolecule molecule;
 	private boolean disorderProcessed;
@@ -304,7 +307,7 @@ public class DisorderTool extends AbstractTool {
 			if (occupancy == Double.NaN) {
 				throw new RuntimeException("Atom "+disorderedAtom+" has no occupancy set.  Cannot resolve disorder.");
 			}
-			//System.out.println("occupancy is: "+occupancy);
+			//LOG.debug("occupancy is: "+occupancy);
 			// if atom has unit occupancy then we can ignore it for the rest of
 			// the method
 			if (Math.abs(1.0 - occupancy) < CrystalTool.OCCUPANCY_EPS) {
@@ -320,7 +323,7 @@ public class DisorderTool extends AbstractTool {
 					((List<CMLAtom>)entry.getValue()).add(disorderedAtom);
 					added = true;
 					addedCount++;
-					//System.out.println("adding to current list of occupancy: "+(Double)entry.getKey());
+					//LOG.debug("adding to current list of occupancy: "+(Double)entry.getKey());
 				}
 			}
 			// if atom added to more than one list then throw exception
@@ -689,6 +692,7 @@ class CombinationGenerator {
 	}
 }
 class Partition {
+	private static Logger LOG = Logger.getLogger(Partition.class);
 	/**
 	 * returns all the ways the integer provided can be divided
 	 * into whole number parts.  This supplying 5 returns
@@ -714,14 +718,14 @@ class Partition {
 			List<List<Integer>> partitionList,
 			List<Integer> partition) {
 		if (n == 0) {
-			//System.out.println(prefix);
+			//LOG.debug(prefix);
 			partitionList.add(new ArrayList<Integer>(partition));
 			partition.clear();
 			return partitionList;
 		}
 
 		for (int i = Math.min(max, n); i >= 1; i--) {
-			//System.out.println(prefix + " " + i);
+			//LOG.debug(prefix + " " + i);
 			partition.add(i);
 			partition(n-i, i, prefix + " " + i, partitionList, partition);
 		}
@@ -736,9 +740,9 @@ class Partition {
 		List<List<Integer>> partitionList = partition(5);
 		for (List<Integer> partition : partitionList) {
 			for (Integer in : partition) {
-				System.out.print(in+" ");
+				Util.println(" ");
 			}
-			System.out.println("");
+			LOG.debug("");
 		}
 	}
 }
