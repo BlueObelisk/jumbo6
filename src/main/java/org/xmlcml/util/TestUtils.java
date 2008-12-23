@@ -103,14 +103,13 @@ public final class TestUtils implements CMLConstants {
 	    	} else if (refNode instanceof Element){
 		    	int refNodeChildCount = refNode.getChildCount();
 		    	int testNodeChildCount = testNode.getChildCount();
-	//	    	CMLUtil.debug((Element)refNode, "XXXXXXXXXXX");
-	//	    	CMLUtil.debug((Element)testNode, "TEST");
 		    	Assert.assertEquals("number of children", testNodeChildCount, refNodeChildCount);
 		    	for (int i = 0; i < refNodeChildCount; i++) {
 		    		assertEqualsIncludingFloat(message, refNode.getChild(i), testNode.getChild(i), eps);
 		    	}
 		    	Element refElem = (Element) refNode;
 		    	Element testElem = (Element) testNode;
+		    	Assert.assertEquals(message+" name", refElem.getLocalName(), testElem.getLocalName());
 		    	Assert.assertEquals(message+" namespace", refElem.getNamespaceURI(), testElem.getNamespaceURI());
 		    	Assert.assertEquals(message+" attributes on "+refElem.getClass(), refElem.getAttributeCount(), testElem.getAttributeCount());
 		    	for (int i = 0; i < refElem.getAttributeCount(); i++) {
