@@ -1,6 +1,5 @@
 package org.xmlcml.cml.inchi;
 
-import net.sf.jniinchi.INCHI_RET;
 import nu.xom.Text;
 
 import org.xmlcml.cml.element.CMLIdentifier;
