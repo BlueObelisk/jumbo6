@@ -97,7 +97,7 @@ public final class TestUtils implements CMLConstants {
 	    	if (refNode instanceof Text) {
 	    		testStringDoubleEquality(message, refNode.getValue(), testNode.getValue(), eps);
 	    	} else if (refNode instanceof Comment) {
-	    		Assert.assertEquals(message+" pi", (Comment) refNode, (Comment) testNode);
+	    		Assert.assertEquals(message+" comment", refNode.getValue(), testNode.getValue());
 	    	} else if (refNode instanceof ProcessingInstruction) {
 	    		Assert.assertEquals(message+" pi", (ProcessingInstruction) refNode, (ProcessingInstruction) testNode);
 	    	} else if (refNode instanceof Element){
