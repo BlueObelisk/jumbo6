@@ -9,7 +9,10 @@ import nu.xom.Node;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+import org.xmlcml.euclid.Transform2;
 
 /** draws a straight line.
  * 
@@ -47,12 +50,12 @@ public class SVGPath extends SVGElement {
 	}
 	
 	public SVGPath(Real2Array xy) {
-		this(getD(xy));
+		this(createD(xy));
 	}
 	
 	public SVGPath(String d) {
 		this();
-		setD(d);
+		setDString(d);
 	}
 	
     /**
@@ -76,7 +79,7 @@ public class SVGPath extends SVGElement {
 		path.setFill("none");
 	}
 	
-	public static String getD(Real2Array xy) {
+	public static String createD(Real2Array xy) {
 		String s = S_EMPTY;
 		StringBuilder sb = new StringBuilder();
 		if (xy.size() > 0) {
@@ -96,14 +99,23 @@ public class SVGPath extends SVGElement {
 		return s;
 	}
 	
+	public void setD(Real2Array r2a) {
+		this.setDString(createD(r2a));
+	}
 	
-	public void setD(String d) {
+	public Real2Array getD() {
+		String d = getDString();
+		return createReal2ArrayFromDString(d);
+	}
+	
+	public void setDString(String d) {
 		this.addAttribute(new Attribute("d", d));
 	}
 	
-	public String getD() {
+	public String getDString() {
 		return this.getAttributeValue("d");
 	}
+	
 	
 //  <g style="stroke-width:0.2;">
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="black" style="stroke-width:0.36;"/>
@@ -115,36 +127,33 @@ public class SVGPath extends SVGElement {
 		g2d.draw(path);
 	}
 	
-	private class Real2String {
-		String s;
-		float x;
-		float y;
-		public Real2String(String s) {
-			this.s = s;
-			x = grabDouble();
-			y = grabDouble();
-		}
-		private float grabDouble() {
-			String ss = s;
-			float x;
-			int idx = s.indexOf(S_SPACE);
-			if (idx != -1) {
-				ss = s.substring(0, idx);
-				s = s.substring(idx+1);
+	public static Real2Array createReal2ArrayFromDString(String s) {
+		Real2Array r2a = new Real2Array();
+		while (s.length() > 0) {
+			// crude
+			if (s.startsWith("M") ||
+				s.startsWith("m") ||
+				s.startsWith("L") ||
+				s.startsWith("l")) {
+				Real2String r2s = new Real2String(s.substring(1));
+				Real2 xy = new Real2((double)r2s.x, (double)r2s.y);
+				r2a.add(xy);
+				s = r2s.s.trim();
+			} else if (s.startsWith("z") || s.startsWith("Z")) {
+				Real2String r2s = new Real2String(s.substring(1));
+				s = r2s.s.trim();
+//				path2.closePath();
+//				s = s.substring(1).trim();
 			} else {
-				s = S_EMPTY;
+				Real2String r2s = new Real2String(s.substring(0));
+				s = r2s.s.trim();
 			}
-			try {
-				x = (float)new Double(ss).floatValue();
-			} catch (Exception e) {
-				throw new RuntimeException("bad double:"+ss+" ... "+s);
-			}
-			return x;
 		}
+		return r2a;
 	}
 	
 	public GeneralPath createAndSetPath2D() {
-		String s = this.getD().trim()+S_SPACE;
+		String s = this.getDString().trim()+S_SPACE;
 		path2 = new GeneralPath();
 		while (s.length() > 0) {
 			if (s.startsWith("M")) {
@@ -177,4 +186,43 @@ public class SVGPath extends SVGElement {
 	public void setPath2(GeneralPath path2) {
 		this.path2 = path2;
 	}
+	
+	public void applyTransform(Transform2 t2) {
+		Real2Array xy = this.getD();
+		xy.transformBy(t2);
+		setD(xy);
+	}
+	
+	public void format(int places) {
+		setD(getD().format(places));
+	}
 }
+class Real2String {
+	String s;
+	float x;
+	float y;
+	public Real2String(String s) {
+		this.s = s;
+		x = grabDouble();
+		y = grabDouble();
+	}
+	
+	private float grabDouble() {
+		String ss = s;
+		float x;
+		int idx = s.indexOf(CMLConstants.S_SPACE);
+		if (idx != -1) {
+			ss = s.substring(0, idx);
+			s = s.substring(idx+1);
+		} else {
+			s = CMLConstants.S_EMPTY;
+		}
+		try {
+			x = (float)new Double(ss).floatValue();
+		} catch (Exception e) {
+			throw new RuntimeException("bad double:"+ss+" ... "+s);
+		}
+		return x;
+	}
+}
+

@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nu.xom.Attribute;
@@ -17,10 +19,13 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
+import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Transform2;
 
@@ -68,12 +73,18 @@ public class SVGElement extends GraphicsElement {
 			newElement = new SVGLine();
 		} else if (tag.equals(SVGPath.TAG)) {
 			newElement = new SVGPath();
+		} else if (tag.equals(SVGPolyline.TAG)) {
+			newElement = new SVGPolyline();
+		} else if (tag.equals(SVGPolygon.TAG)) {
+			newElement = new SVGPolygon();
 		} else if (tag.equals(SVGRect.TAG)) {
 			newElement = new SVGRect();
 		} else if (tag.equals(SVGSVG.TAG)) {
 			newElement = new SVGSVG();
 		} else if (tag.equals(SVGText.TAG)) {
 			newElement = new SVGText();
+		} else if (tag.equals(SVGTitle.TAG)) {
+			newElement = new SVGTitle();
 		} else {
 			LOG.warn("unknown element "+tag);
 			newElement = new SVGG();
@@ -157,7 +168,128 @@ public class SVGElement extends GraphicsElement {
 			matrix[2]+","+matrix[5]+
 			")"));
 	}
+
+	/** applies any transform attribute and removes it.
+	 * not yet hierarchical, so only use on lines, text, etc.
+	 */
+	public void applyTransformAttributeAndRemove() {
+		Attribute transformAttribute = this.getAttribute("transform");
+		if (transformAttribute != null) {
+			Transform2 transform2 = createTransform2FromTransformAttribute(transformAttribute.getValue());
+			this.applyTransform(transform2);
+			transformAttribute.detach();
+			double det = transform2.determinant();
+			// improper rotation ?
+			if (det < 0) {
+				Transform2 t = new Transform2(
+					new double[] {
+							1.0,  0.0,  0.0,
+							0.0, -1.0,  0.0,
+							0.0,  0.0,  1.0,
+					});
+				transform2 = transform2.concatenate(t);
+				this.addAttribute(new Attribute("improper", "true"));
+			}
+			// is object rotated?
+			Angle angle = transform2.getAngleOfRotation();
+			if (angle.getRadian() > Math.PI/4.) {
+				this.addAttribute(new Attribute("rotate", "Y"));
+			}
+			if (angle.getRadian() < -Math.PI/4.) {
+				this.addAttribute(new Attribute("rotate", "-Y"));
+			}
+		}
+	}
 	
+	/** currently a no-op.
+	 * subclassed by elements with coordinates
+	 * @param transform
+	 */
+	public void applyTransform(Transform2 transform) {
+		LOG.debug("No transform applied to: "+this.getClass());
+	}
+	
+	public static Transform2 createTransform2FromTransformAttribute(String transformAttributeValue) {
+/**
+    * matrix(<a> <b> <c> <d> <e> <f>)
+    * translate(<tx> [<ty>])
+    * scale(<sx> [<sy>]),
+    * rotate(<rotate-angle> [<cx> <cy>])
+    * skewX(<skew-angle>)
+    * skewY(<skew-angle>)
+ */
+//		String[] keywords = {"matrix", "scale", "translate", "rotate", "skewX", "skewY"};
+		Transform2 transform2 = null;
+		if (transformAttributeValue != null) {
+			transform2 = new Transform2();
+			List<Transform2> transformList = new ArrayList<Transform2>();
+			String s = transformAttributeValue.trim();
+			while (s.length() > 0) {
+				int lb = s.indexOf(CMLConstants.S_LBRAK);
+				int rb = s.indexOf(CMLConstants.S_RBRAK);
+				if (lb == -1 || rb == -1 || rb < lb) {
+					throw new RuntimeException("Unbalanced or missing brackets in transform");
+				}
+				String kw = s.substring(0, lb);
+				String values = s.substring(lb+1, rb);
+				s = s.substring(rb+1).trim();
+				Transform2 t2 = makeTransform(kw, values);
+				transformList.add(t2);
+			}
+			for (Transform2 t2 : transformList) {
+				transform2 = transform2.concatenate(t2);
+			}
+		}
+		return transform2;
+	}
+	
+	private static Transform2 makeTransform(String keyword, String valueString) {
+		LOG.trace("Transform "+valueString);
+		Transform2 t2 = new Transform2();
+		String[] vv = valueString.trim().split(S_COMMA+S_PIPE+S_SPACE);
+		RealArray ra = new RealArray(vv);
+		double[] raa = ra.getArray();
+		double[][] array = t2.getMatrix();
+		if (keyword.equals("scale") && ra.size() > 0) {
+			array[0][0] = raa[0];
+			if (ra.size() == 1) {
+				array[1][1] = raa[0];
+			} else if (ra.size() == 2) {
+				array[1][1] = raa[1];
+			} else if (ra.size() != 1){
+				throw new RuntimeException("Only 1 or 2 scales allowed");
+			}
+		} else if (keyword.equals("translate") && ra.size() > 0) {
+			array[0][2] = raa[0];
+			if (ra.size() == 1) {
+				array[1][2] = 0.0;
+			} else if (ra.size() == 2) {
+				array[1][2] = raa[1];
+			} else {
+				throw new RuntimeException("Only 1 or 2 translate allowed");
+			}
+		} else if (keyword.equals("rotate") && ra.size() == 1) {
+			double c = Math.cos(raa[0]*Math.PI/180.);
+			double s = Math.sin(raa[0]*Math.PI/180.);
+			array[0][0] = c;
+			array[0][1] = s;
+			array[1][0] = -s;
+			array[1][1] = c;
+		} else if (keyword.equals("rotate") && ra.size() == 3) {
+			throw new RuntimeException("rotate about point not yet supported");
+		} else if (keyword.equals("matrix") && ra.size() == 6) {
+			array[0][0] = raa[0];
+			array[0][1] = raa[1];
+			array[0][2] = raa[4];
+			array[1][0] = raa[2];
+			array[1][1] = raa[3];
+			array[1][2] = raa[5];
+		} else {
+			throw new RuntimeException("Unknown/unsuported transform keyword: "+keyword);
+		}
+
+		return t2;
+	}
 	/**
 	 * 
 	 * @param s
@@ -225,7 +357,7 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	/**
-	 * @param value if null clear the transform else concantenate
+	 * @param value if null clear the transform else concatenate
 	 * may be overridden by children such as Text
 	 */
 	protected void setCumulativeTransformRecursively(Object value) {
@@ -465,7 +597,7 @@ public class SVGElement extends GraphicsElement {
 		line.setStrokeWidth(3);
 		line.setStroke("blue");
 		g.appendChild(line);
-		SVGCircle circle = new SVGCircle(new Real2(300, 150), 20);
+		SVGElement circle = new SVGCircle(new Real2(300, 150), 20);
 		circle.setStroke("red");
 		circle.setFill("yellow");
 		circle.setStrokeWidth(3.);
@@ -523,5 +655,100 @@ public class SVGElement extends GraphicsElement {
 		if (color != null && g2d != null) {
 			g2d.setColor(color);
 		}
+	}
+
+	/**
+	 * get double value of attribute.
+	 * the full spec includes units but here we expect only numbers. Maybe later...
+	 * @param attName
+	 * @return
+	 */
+	public double getCoordinateValueDefaultZero(String attName) {
+		double d = Double.NaN;
+		String v = this.getAttributeValue(attName);
+		try {
+			d = new Double(v).doubleValue();
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cannot parse SVG coordinate "+v);
+		}
+		return d;
+	}
+	
+	/** subclassed by classes with extents.
+	 * 
+	 * @return null by default
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = null;
+		return boundingBox;
+	}
+	
+	/** subclassed to tidy format.
+	 * 
+	 * @param places decimal places
+	 */
+	public void format(int places) {
+		
+	}
+
+	public double getX() {
+		return this.getCoordinateValueDefaultZero("x");
+	}
+
+	public double getY() {
+		return this.getCoordinateValueDefaultZero("y");
+	}
+
+	public double getCX() {
+		return this.getCoordinateValueDefaultZero("cx");
+	}
+
+	public double getCY() {
+		return this.getCoordinateValueDefaultZero("cy");
+	}
+
+	/**
+	 * @param x1 the x1 to set
+	 */
+	public void setCXY(Real2 x1) {
+		this.setCX(x1.getX());
+		this.setCY(x1.getY());
+	}
+
+	public void setCX(double x) {
+		this.addAttribute(new Attribute("cx", ""+x));
+	}
+
+	public void setCY(double y) {
+		this.addAttribute(new Attribute("cy", ""+y));
+	}
+
+	public Real2 getCXY() {
+		return new Real2(this.getCX(), this.getCY());
+	}
+
+	public void setX(double x) {
+		this.addAttribute(new Attribute("x", ""+x));
+	}
+
+	public void setY(double y) {
+		this.addAttribute(new Attribute("y", ""+y));
+	}
+	
+	public Real2 getXY() {
+		return new Real2(this.getX(), this.getY());
+	}
+	
+	public void setXY(Real2 xy) {
+		setX(xy.getX());
+		setY(xy.getY());
+	}
+	
+	public void setClassName(String name) {
+		this.addAttribute(new Attribute("class", name));
+	}
+	
+	public String getClassName() {
+		return this.getAttributeValue("class");
 	}
 }

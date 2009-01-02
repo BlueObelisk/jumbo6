@@ -1,8 +1,10 @@
 package org.xmlcml.cml.graphics;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 
 public class StyleBundle implements CMLConstants {
+	private static Logger LOG = Logger.getLogger(StyleBundle.class);
 	
 	public final static StyleBundle DEFAULT_STYLE_BUNDLE = new StyleBundle(
 		"#000000",
@@ -104,8 +106,10 @@ public class StyleBundle implements CMLConstants {
 						fontWeight = aa[1]; 
 					} else if (aa[0].equals("opacity")) {
 						opacity = getDouble(aa[1]); 
+					} else if (aa[0].equals("stroke-linecap")) {
+						LOG.trace("Ignored style: "+aa[0]);
 					} else {
-						throw new RuntimeException("unsupported style: "+aa[0]);
+						LOG.warn("unsupported style: "+aa[0]);
 					}
 				}
 			}
@@ -133,8 +137,9 @@ public class StyleBundle implements CMLConstants {
 			fontWeight = (String) object; 
 		} else if (subStyle.equals("opacity")) {
 			opacity = (Double) object; 
+		} else if (subStyle.equals("stroke-linecap")) {
 		} else {
-			throw new RuntimeException("unsupported style: "+subStyle);
+			LOG.warn("unsupported style: "+subStyle);
 		}
 
 	}
@@ -155,8 +160,10 @@ public class StyleBundle implements CMLConstants {
 			subStyle = getFontWeight();
 		} else if (ss.equals("opacity")) {
 			subStyle = getOpacity();
+		} else if (ss.equals("stroke-linecap")) {
+			LOG.debug("ignored style: "+ss);
 		} else {
-			throw new RuntimeException("unknown subStyle: "+ss);
+			LOG.warn("unknown subStyle: "+ss);
 		}
 		return subStyle;
 	}

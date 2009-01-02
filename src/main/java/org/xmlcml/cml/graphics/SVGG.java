@@ -1,8 +1,12 @@
 package org.xmlcml.cml.graphics;
 
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Real2Range;
+
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 
 
@@ -78,4 +82,22 @@ public class SVGG extends SVGElement {
 		this.addAttribute(new Attribute("transform", "scale("+scale+","+scale+")"));
 	}
 
+	/** traverse all children recursively
+	 * 
+	 * @return null by default
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = null;
+		Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
+		if (childNodes.size() > 0) {
+			boundingBox = new Real2Range();
+		}
+		for (int i = 0; i < childNodes.size(); i++) {
+			Real2Range childBoundingBox = ((SVGElement)childNodes.get(i)).getBoundingBox();
+			if (boundingBox != null) {
+				boundingBox = boundingBox.plus(childBoundingBox);
+			}
+		}
+		return boundingBox;
+	}
 }

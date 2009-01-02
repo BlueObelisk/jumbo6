@@ -249,7 +249,7 @@ public class BondTool extends AbstractSVGTool {
 				sb.append(xyminus.getX()+" ");
 				sb.append(xyminus.getY()+" ");
 			}
-			path.setD(sb.toString());
+			path.setDString(sb.toString());
 		}
 		return path;
 	}
