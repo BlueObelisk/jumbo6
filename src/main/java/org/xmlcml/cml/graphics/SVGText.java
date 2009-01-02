@@ -11,6 +11,9 @@ import nu.xom.Text;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Util;
 
 /** draws text.
  * 
@@ -60,12 +63,12 @@ public class SVGText extends SVGElement {
 
     public double getX() {
     	String s = this.getAttributeValue("x");
-    	return (s != null) ? new Double(s).doubleValue()  : Double.NaN;
+    	return (s != null) ? new Double(s).doubleValue()  : 0.0;
     }
 
     public double getY() {
     	String s = this.getAttributeValue("y");
-    	return (s != null) ? new Double(s).doubleValue() : Double.NaN;
+    	return (s != null) ? new Double(s).doubleValue() : 0.0;
     }
     
 	protected void drawElement(Graphics2D g2d) {
@@ -100,22 +103,21 @@ public class SVGText extends SVGElement {
 		setText(text);
 	}
 
-	/**
-	 * @return the coordinates
-	 */
-	public Real2 getXY() {
-		return new Real2(
-			new Double(getAttributeValue("x")).doubleValue(),
-			new Double(getAttributeValue("y")).doubleValue()
-		);
+	public void applyTransform(Transform2 t2) {
+		//assume scale and translation only
+		Real2 xy = getXY();
+		xy.transformBy(t2);
+		this.setXY(xy);
 	}
-	/**
-	 * @param xy the coordinates
-	 */
-	public void setXY(Real2 x1) {
-		this.addAttribute(new Attribute("x", ""+x1.getX()));
-		this.addAttribute(new Attribute("y", ""+x1.getY()));
-	}
+
+    /** round to decimal places.
+     * 
+     * @param places
+     * @return this
+     */
+    public void format(int places) {
+    	setXY(getXY().format(places));
+    }
 
 	/**
 	 * @return tag
@@ -146,4 +148,14 @@ public class SVGText extends SVGElement {
 		this.appendChild(text);
 	}
 
+	/** extent of text
+	 * defined as the point origin (i.e. does not include font)
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = new Real2Range();
+		Real2 center = getXY();
+		boundingBox.add(center);
+		return boundingBox;
+	}
 }

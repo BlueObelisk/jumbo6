@@ -11,6 +11,9 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Util;
 
 /** draws a straight line.
  * 
@@ -30,7 +33,7 @@ public class SVGRect extends SVGElement {
 	
 	/** constructor
 	 */
-	public SVGRect(SVGRect element) {
+	public SVGRect(SVGElement element) {
         super((SVGElement) element);
 	}
 	
@@ -44,7 +47,7 @@ public class SVGRect extends SVGElement {
 		super.setDefaultStyle();
 		setDefaultStyle(this);
 	}
-	public static void setDefaultStyle(SVGRect rect) {
+	public static void setDefaultStyle(SVGElement rect) {
 		rect.setStroke("black");
 		rect.setStrokeWidth(1.0);
 		rect.setFill("none");
@@ -69,14 +72,6 @@ public class SVGRect extends SVGElement {
 		setY(y);
 		setWidth(w);
 		setHeight(h);
-	}
-	
-	public void setX(double x) {
-		this.addAttribute(new Attribute("x", ""+x));
-	}
-	
-	public void setY(double y) {
-		this.addAttribute(new Attribute("y", ""+y));
 	}
 	
 	public void setWidth(double w) {
@@ -129,6 +124,48 @@ public class SVGRect extends SVGElement {
 		g2d.setColor(color);
 		Line2D line = new Line2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
 		g2d.draw(line);
+	}
+	
+	public void applyTransform(Transform2 t2) {
+		//assume scale and translation only
+		Real2 xy = getXY();
+		xy.transformBy(t2);
+		this.setXY(xy);
+		Real2 xxyy = new Real2(xy.getX()+getWidth(), xy.getY()+getHeight());
+		xxyy.transformBy(t2);
+		setHeight(xxyy.getY() - xy.getY());
+		setWidth(xxyy.getX() - xy.getX());
+	}
+	
+    /** round to decimal places.
+     * 
+     * @param places
+     * @return this
+     */
+    public void format(int places) {
+    	setXY(getXY().format(places));
+    	setHeight(Util.format(getHeight(), places));
+    	setWidth(Util.format(getWidth(), places));
+    }
+	
+	public double getWidth() {
+		return new Double(this.getAttributeValue("width")).doubleValue();
+	}
+	
+	public double getHeight() {
+		return new Double(this.getAttributeValue("height")).doubleValue();
+	}
+
+	/** extent of rect
+	 * 
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = new Real2Range();
+		Real2 origin = getXY();
+		boundingBox.add(origin);
+		boundingBox.add(origin.plus(new Real2(getWidth(), getHeight())));
+		return boundingBox;
 	}
 	
 	/** get tag.

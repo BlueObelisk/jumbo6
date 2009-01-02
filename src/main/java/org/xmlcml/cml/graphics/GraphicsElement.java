@@ -283,7 +283,7 @@ public class GraphicsElement extends Element implements SVGConstants {
 		line.setStrokeWidth(3);
 		line.setStroke("blue");
 		g.appendChild(line);
-		SVGCircle circle = new SVGCircle(new Real2(300, 150), 20);
+		SVGElement circle = new SVGCircle(new Real2(300, 150), 20);
 		circle.setStroke("red");
 		circle.setFill("yellow");
 		circle.setStrokeWidth(3.);

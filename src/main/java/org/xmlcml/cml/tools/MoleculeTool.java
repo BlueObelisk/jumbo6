@@ -2570,7 +2570,7 @@ public class MoleculeTool extends AbstractSVGTool {
     			userBoundingBox.getYRange().getMax() + bondLength
     			);
     			
-    	SVGRect rect = new SVGRect(xy0, xy1);
+    	SVGElement rect = new SVGRect(xy0, xy1);
     	rect.setStroke("red");
     	rect.setStrokeWidth(2.0);
     	g.appendChild(rect);

@@ -10,7 +10,11 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.euclid.Line2;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.RealRange;
+import org.xmlcml.euclid.Transform2;
 
 /** draws a straight line.
  * 
@@ -194,4 +198,99 @@ public class SVGLine extends SVGElement {
 		this.euclidLine = euclidLine;
 	}
 
+	public void applyTransform(Transform2 transform) {
+		Real2 xy = this.getXY(0);
+		setXY(xy.getTransformed(transform), 0);
+		xy = this.getXY(1);
+		setXY(xy.getTransformed(transform), 1);
+	}
+
+	public void format(int places) {
+		setXY(getXY(0).format(places), 0);
+		setXY(getXY(1).format(places), 1);
+	}
+
+	public boolean connectsPoints(Real2 p0, Real2 p1, double eps) {
+		return (this.getXY(0).isEqualTo(p0, eps) && this.getXY(1).isEqualTo(p1, eps)) || 
+			(this.getXY(0).isEqualTo(p1, eps) && this.getXY(1).isEqualTo(p0, eps)); 
+	}
+	
+	public boolean isVertical(double eps) {
+		return Real.isEqual(this.getXY(0).getX(), this.getXY(1).getX(), eps);
+	}
+	
+	public boolean isHorizontal(double eps) {
+		return Real.isEqual(this.getXY(0).getY(), this.getXY(1).getY(), eps);
+	}
+
+	public Real2 getCommonPoint(SVGLine l, double eps) {
+		Real2 point = null;
+		if (l.getXY(0).isEqualTo(getXY(0), eps) ||  l.getXY(1).isEqualTo(getXY(0), eps)) {
+			point = getXY(0);
+		} else if (l.getXY(0).isEqualTo(getXY(1), eps) ||  l.getXY(1).isEqualTo(getXY(1), eps)) {
+			point = getXY(1);
+		}
+		return point;
+	}
+
+	/** if this butts onto line at right angles.
+	 * this and line should be hoizontal/vertical
+	 * final point of this should be on target line
+	 * @param l line to butt onto
+	 * @param eps
+	 * @return
+	 */
+	public boolean makesTJointWith(SVGLine l, double eps) {
+		boolean endsOn = false;
+		if (this.isHorizontal(eps) && l.isVertical(eps)) {
+			RealRange yrange = l.getReal2Range().getYRange();
+			double lx = l.getXY(0).getX();
+			double thisy = this.getXY(0).getY();
+			endsOn = yrange.contains(thisy) && 
+				(Real.isEqual(lx, this.getXY(0).getX(), eps) ||
+				Real.isEqual(lx, this.getXY(1).getX(), eps));
+		} else if (this.isVertical(eps) && l.isHorizontal(eps)) {
+			RealRange xrange = l.getReal2Range().getXRange();
+			double ly = l.getXY(0).getY();
+			double thisx = this.getXY(0).getX();
+			endsOn = xrange.contains(thisx) && 
+				(Real.isEqual(ly, this.getXY(0).getY(), eps) ||
+				Real.isEqual(ly, this.getXY(1).getY(), eps));
+		}
+		return endsOn;
+	}
+	
+	/** if point is close to one end of line get the other
+	 * 
+	 * @param point
+	 * @param eps
+	 * @return coordinates of other end null if point is not at a line end
+	 */
+	public Real2 getOtherPoint(Real2 point, double eps) {
+		Real2 other = null;
+		if (point.isEqualTo(getXY(0), eps)) {
+			other = getXY(1);
+		} else if (point.isEqualTo(getXY(1), eps)) {
+			other = getXY(0);
+		}
+		return other;
+	}
+	
+	public Real2Range getReal2Range() {
+		Real2Range real2Range = new Real2Range(getXY(0), getXY(1));
+		return real2Range;
+	}
+	
+	/** synonym for getReal2Range.
+	 * 
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		return getReal2Range();
+	}
+	
+	public String getXYString() {
+		return getXY(0)+ S_SPACE + getXY(1);
+	}
+	
 }

@@ -11,6 +11,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.graphics.SVGCircle;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Real2;
@@ -103,7 +104,7 @@ public class TextDisplay extends AbstractDisplay {
 	private void drawBackgroundCircle() {
 		double rad = backgroundRadiusFactor*fontSize;
 		LOG.debug("RAD "+rad);
-		SVGCircle circle = new SVGCircle(xyOffset.multiplyBy(fontSize), rad);
+		SVGElement circle = new SVGCircle(xyOffset.multiplyBy(fontSize), rad);
 		circle.setStroke("none");
 		if (userElement != null) {
 			circle.setUserElement(userElement);

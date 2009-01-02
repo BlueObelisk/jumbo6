@@ -9,6 +9,8 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
 
 /** draws a straight line.
  * NOT TESTED
@@ -28,7 +30,7 @@ public class SVGEllipse extends SVGElement {
 	
 	/** constructor
 	 */
-	public SVGEllipse(SVGEllipse element) {
+	public SVGEllipse(SVGElement element) {
         super((SVGElement) element);
 	}
 	
@@ -42,7 +44,7 @@ public class SVGEllipse extends SVGElement {
 		super.setDefaultStyle();
 		setDefaultStyle(this);
 	}
-	public static void setDefaultStyle(SVGEllipse ellipse) {
+	public static void setDefaultStyle(SVGElement ellipse) {
 		ellipse.setStroke("black");
 		ellipse.setStrokeWidth(0.5);
 		ellipse.setFill("#aaffff");
@@ -63,21 +65,16 @@ public class SVGEllipse extends SVGElement {
 	 */
 	public SVGEllipse(double cx, double cy, double rx, double ry) {
 		this();
-		this.addAttribute(new Attribute("cx", ""+cx));
-		this.addAttribute(new Attribute("cy", ""+cy));
-		this.addAttribute(new Attribute("rx", ""+rx));
-		this.addAttribute(new Attribute("ry", ""+ry));
+		this.setCXY(new Real2(cx, cy));
+		this.setRXY(new Real2(rx, ry));
 	}
 	
 	protected void drawElement(Graphics2D g2d) {
-		double cx = this.getDouble("cx");
-		double cy = this.getDouble("cy");
-		double rx = this.getDouble("rx");
-		double ry = this.getDouble("rx");
-		Real2 xy0 = new Real2(cx, cy);
+		Real2 xy0 = getCXY();
+		Real2 rxy = getRXY();
 		xy0 = transform(xy0, cumulativeTransform);
-		double rrx = rx * cumulativeTransform.getMatrixAsArray()[0] * 0.5;
-		double rry = ry * cumulativeTransform.getMatrixAsArray()[0] * 0.5;
+		double rrx = rxy.getX() * cumulativeTransform.getMatrixAsArray()[0] * 0.5;
+		double rry = rxy.getY() * cumulativeTransform.getMatrixAsArray()[0] * 0.5;
 		
 		Ellipse2D ellipse = new Ellipse2D.Double(xy0.x-rrx, xy0.y-rry, rrx+rrx, rry+rry);
 		Color color = this.getColor("fill");
@@ -85,12 +82,41 @@ public class SVGEllipse extends SVGElement {
 		g2d.fill(ellipse);
 	}
 	
-	/**
-	 * @param x1 the x1 to set
-	 */
-	public void setX1(Real2 x1) {
-		this.addAttribute(new Attribute("cx", ""+x1.getX()));
-		this.addAttribute(new Attribute("cy", ""+x1.getY()));
+	public Real2 getRXY() {
+		return new Real2(this.getRX(), this.getRY());
+	}
+	
+	public double getRX() {
+		return this.getCoordinateValueDefaultZero("rx");
+	}
+	
+	public double getRY() {
+		return this.getCoordinateValueDefaultZero("ry");
+	}
+	
+	public void applyTransform(Transform2 transform) {
+		Real2 xy = this.getCXY();
+		setCXY(xy.getTransformed(transform));
+		Real2 rxy = this.getRXY();
+		setRXY(rxy.getTransformed(transform));
+	}
+
+	public void format(int places) {
+		setCXY(getCXY().format(places));
+		setRXY(getRXY().format(places));
+	}
+	
+	public void setRXY(Real2 rxy) {
+		this.setRX(rxy.getX());
+		this.setRY(rxy.getY());
+	}
+
+	public void setRX(double x) {
+		this.addAttribute(new Attribute("rx", ""+x));
+	}
+
+	public void setRY(double y) {
+		this.addAttribute(new Attribute("ry", ""+y));
 	}
 
 	/**
@@ -107,5 +133,18 @@ public class SVGEllipse extends SVGElement {
 		this.addAttribute(new Attribute("r", ""+rad));
 	}
 
+	/** extent of ellipse
+	 * 
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = new Real2Range();
+		Real2 center = getCXY();
+		Real2 rad = getRXY();
+		boundingBox.add(center.subtract(rad));
+		boundingBox.add(center.plus(rad));
+		return boundingBox;
+	}
+	
 	
 }

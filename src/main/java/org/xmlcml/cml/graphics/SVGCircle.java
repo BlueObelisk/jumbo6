@@ -9,6 +9,9 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Util;
 
 /** draws a straight line.
  * 
@@ -42,7 +45,7 @@ public class SVGCircle extends SVGElement {
 	
 	/** constructor
 	 */
-	public SVGCircle(SVGCircle element) {
+	public SVGCircle(SVGElement element) {
         super((SVGElement) element);
 	}
 	
@@ -56,7 +59,7 @@ public class SVGCircle extends SVGElement {
 	 * 
 	 * @param circle
 	 */
-	public static void setDefaultStyle(SVGCircle circle) {
+	public static void setDefaultStyle(SVGElement circle) {
 		circle.setStroke("black");
 		circle.setStrokeWidth(0.5);
 		circle.setFill("#aaffff");
@@ -110,9 +113,21 @@ public class SVGCircle extends SVGElement {
 	 */
 	public Real2 getXY() {
 		return new Real2(
-			new Double(this.getAttributeValue("cx")).doubleValue(),
-			new Double(this.getAttributeValue("cy")).doubleValue()
+				getCX(),
+				getCY()
 			);
+	}
+	
+	public void applyTransform(Transform2 transform) {
+		Real2 xy = this.getXY();
+		setXY(xy.getTransformed(transform));
+		Real2 rxy = new Real2(this.getRad(), 0);
+		setRad(rxy.getX());
+	}
+
+	public void format(int places) {
+		setXY(getXY().format(places));
+		setRad(Util.format(getRad(), places));
 	}
 
 	/**
@@ -127,6 +142,16 @@ public class SVGCircle extends SVGElement {
 	 */
 	public void setRad(double rad) {
 		this.addAttribute(new Attribute("r", ""+rad));
+	}
+	
+	/** get radius
+	 * 
+	 * @return Double.NaN if not set
+	 */
+	public double getRad() {
+		String r = this.getAttributeValue("r");
+		Double d = new Double(r);
+		return (d == null) ? Double.NaN : d.doubleValue();
 	}
 
 	public Ellipse2D.Double createAndSetCircle2D() {
@@ -145,6 +170,19 @@ public class SVGCircle extends SVGElement {
 		}
 		circle2 = new Ellipse2D.Double(xy1.x - rad, xy1.y - rad, rad+rad, rad+rad);
 		return circle2;
+	}
+	
+	/** extent of circle
+	 * 
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = new Real2Range();
+		Real2 center = getCXY();
+		double rad = getRad();
+		boundingBox.add(new Real2(center.getX() - rad, center.getY() - rad));
+		boundingBox.add(new Real2(center.getX() + rad, center.getY() + rad));
+		return boundingBox;
 	}
 	
 }
