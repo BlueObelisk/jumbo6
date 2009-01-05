@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Real2;
 
@@ -33,7 +32,7 @@ public class TextDisplay extends AbstractDisplay {
 		RECTANGLE
 	};
 	
-	private SVGG g;
+	private SVGElement g;
 	private Background background;
 	private Real2 xyOffset = new Real2(0., 0.);
 	private double backgroundRadiusFactor = 0.55; // empirical
@@ -73,12 +72,12 @@ public class TextDisplay extends AbstractDisplay {
 		backgroundColor = "yellow";
 	}
 	
-	public void displayElement(SVGG g, String s) {
+	public void displayElement(SVGElement g, String s) {
 		background = Background.CIRCLE;
 		display(g, s);
 	}
 	
-	public void display(SVGG g, String s) {
+	public void display(SVGElement g, String s) {
 		this.g = g;
 		textS = s;
 		display();
@@ -121,7 +120,7 @@ public class TextDisplay extends AbstractDisplay {
 		
 	}
 
-	public void displaySignedInteger(SVGG g, int i) {
+	public void displaySignedInteger(SVGElement g, int i) {
 		textS = S_EMPTY;
 		if (i < 0) {
 			textS += S_MINUS;
@@ -137,13 +136,13 @@ public class TextDisplay extends AbstractDisplay {
 		display(g, textS);
 	}
 	
-	public void displayLabel(SVGG g, CMLLabel label) {
+	public void displayLabel(SVGElement g, CMLLabel label) {
 		textS = label.getCMLValue();
 		background = Background.RECTANGLE;
 		display(g, textS);
 	}
 	
-	public void displayId(SVGG g, String id) {
+	public void displayId(SVGElement g, String id) {
 		background = Background.RECTANGLE;
 		display(g, id);
 	}
@@ -151,7 +150,7 @@ public class TextDisplay extends AbstractDisplay {
 	/** 
 	 * @param label
 	 */
-	public void displayGroup(SVGG g, CMLLabel label) {
+	public void displayGroup(SVGElement g, CMLLabel label) {
 		textS = label.getCMLValue();
 		background = Background.RECTANGLE;
 		display(g, textS);

@@ -1,17 +1,8 @@
 package org.xmlcml.cml.graphics;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-
-import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
-import org.xmlcml.euclid.Line2;
-import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 
 /** draws a straight line.

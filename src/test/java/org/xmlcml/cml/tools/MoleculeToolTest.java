@@ -1221,7 +1221,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testContractExplicitHydrogensCMLAtomHydrogenControl() {
-		MoleculeTool moleculeTool = makeCompleteMol9();
+//		MoleculeTool moleculeTool = makeCompleteMol9();
 		CMLMolecule mol9 = fixture.mol9;
 		CMLAtom atom0 = mol9.getAtom(0);
 		Assert.assertEquals("before", 10, mol9.getAtomCount());
@@ -2247,7 +2247,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testGetNonHydrogenLigandList() {
-		MoleculeTool moleculeTool = makeCompleteMol9();
+//		MoleculeTool moleculeTool = makeCompleteMol9();
 		CMLAtom atom0 = fixture.mol9.getAtom(0);
 		CMLAtom atom1 = fixture.mol9.getAtom(1);
 		List<CMLAtom> atomList = AtomTool.getOrCreateTool(atom0).getNonHydrogenLigandList();

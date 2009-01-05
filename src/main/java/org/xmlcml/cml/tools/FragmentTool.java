@@ -48,6 +48,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class FragmentTool extends AbstractTool {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(FragmentTool.class);
 
     Logger logger = Logger.getLogger(FragmentTool.class.getName());

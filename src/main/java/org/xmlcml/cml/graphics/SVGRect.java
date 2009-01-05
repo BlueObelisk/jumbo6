@@ -73,6 +73,20 @@ public class SVGRect extends SVGElement {
 		setWidth(w);
 		setHeight(h);
 	}
+
+	/** create from bounding box
+	 * 
+	 * @param r2r
+	 * @return null if r2r is null
+	 */
+	public static SVGRect createFromReal2Range(Real2Range r2r) {
+		SVGRect rect = null;
+		if (r2r != null) {
+			Real2[] corners = r2r.getCorners();
+			rect = new SVGRect(corners[0], corners[1]);
+		}
+		return rect;
+	}
 	
 	public void setWidth(double w) {
 		this.addAttribute(new Attribute("width", ""+w));

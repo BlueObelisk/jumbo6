@@ -100,7 +100,7 @@ public class MoleculeListTool extends AbstractSVGTool {
      * @return null if problem
      */
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
-    	SVGG g = new SVGG();
+    	SVGElement g = new SVGG();
     	int i = 0;
     	for (CMLMolecule molecule : moleculeList.getMoleculeElements()) {
     		SVGElement molG = MoleculeTool.getOrCreateTool(molecule).createGraphicsElement(drawable);

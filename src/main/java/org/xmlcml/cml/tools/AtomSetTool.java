@@ -43,12 +43,7 @@ public class AtomSetTool extends AbstractTool {
 
 	private CMLAtomSet atomSet;
 	private CMLMolecule molecule = null;
-
 	private Map<CMLAtom, CMLAtom> parentTable = null;
-
-	private CMLAtomSet searchAtomSet;
-
-	private AtomMatcher atomMatcher;
 
 	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
 		Nodes nodes = element.query("./cml:atomSet", CML_XPATH);

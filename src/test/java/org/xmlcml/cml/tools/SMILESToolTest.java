@@ -377,7 +377,7 @@ public class SMILESToolTest {
 	@Ignore
 	public final void testUnileverSMILES(){
 		SMILESTool smilesTool = new SMILESTool();
-		CMLMolecule mol;
+//		CMLMolecule mol;
 		String ss = "_NC(CC(O)=O)C($)=O";
 		smilesTool.parseSMILES(ss);
 		mol = smilesTool.getMolecule();

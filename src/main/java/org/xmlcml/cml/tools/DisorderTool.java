@@ -29,6 +29,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  */
 public class DisorderTool extends AbstractTool {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(DisorderTool.class);
 
 	private CMLMolecule molecule;

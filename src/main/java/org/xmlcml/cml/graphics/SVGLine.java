@@ -4,11 +4,15 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.Line2;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
@@ -291,6 +295,18 @@ public class SVGLine extends SVGElement {
 	
 	public String getXYString() {
 		return getXY(0)+ S_SPACE + getXY(1);
+	}
+
+	public static List<SVGLine> findHorizontalOrVerticalLines(SVGElement svgElement, double eps) {
+		List<SVGLine> horizontalVerticalList = new ArrayList<SVGLine>();
+		Nodes lines = svgElement.query(".//svg:line", CMLConstants.SVG_XPATH);
+		for (int i = 0; i < lines.size(); i++) {
+			SVGLine line = (SVGLine) lines.get(i);
+			if (line.isHorizontal(eps) || line.isVertical(eps)) {
+				horizontalVerticalList.add(line);
+			}
+		}
+		return horizontalVerticalList;
 	}
 	
 }
