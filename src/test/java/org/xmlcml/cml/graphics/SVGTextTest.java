@@ -1,19 +1,14 @@
 package org.xmlcml.cml.graphics;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import nu.xom.Element;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.test.Real2Test;
 import org.xmlcml.util.TestUtils;
 
 public class SVGTextTest {
