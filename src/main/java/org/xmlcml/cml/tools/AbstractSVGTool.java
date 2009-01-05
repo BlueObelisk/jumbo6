@@ -14,7 +14,6 @@ import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.html.HtmlMenuSystem;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 

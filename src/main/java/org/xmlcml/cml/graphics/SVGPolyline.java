@@ -7,7 +7,6 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 
@@ -78,6 +77,22 @@ public class SVGPolyline extends SVGPoly {
 	 */
 	public String getTag() {
 		return TAG;
+	}
+
+	/** pass polyline or convert line.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public static SVGPolyline getOrCreatePolyline(SVGElement element) {
+		SVGPolyline polyline = null;
+		if (element instanceof SVGLine) {
+			polyline = new SVGPolyline((SVGLine) element);
+			
+		} else if (element instanceof SVGPolyline) {
+			polyline = (SVGPolyline) element;
+		}
+		return polyline;
 	}
 
 	public static List<SVGPolyline> binaryMergePolylines(List<SVGPolyline> polylineList, double eps) {

@@ -32,10 +32,11 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  * 
  */
 public class BondTool extends AbstractSVGTool {
+	@SuppressWarnings("unused")
+    private static Logger LOG = Logger.getLogger(BondTool.class);
 
     private CMLBond bond;
     private CMLMolecule molecule;
-    private static Logger LOG = Logger.getLogger(BondTool.class);
     private BondDisplay bondDisplay;
     private MoleculeTool moleculeTool;
     private MoleculeDisplay moleculeDisplay;

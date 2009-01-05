@@ -23,6 +23,7 @@ import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.euclid.Util;
 
 public class TableFixture {
+	@SuppressWarnings("unused")
 	private static final Logger LOG = Logger.getLogger(TableFixture.class);
 	String tableRowListS = S_EMPTY + "<tableRowList " + CML_XMLNS + ">"
 			+ "  <tableRow>" + "    <tableCell>1</tableCell>"

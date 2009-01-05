@@ -15,6 +15,7 @@ public class KpointTool extends AbstractTool {
 	
 	Logger logger = Logger.getLogger(KpointTool.class.getName());
 
+	@SuppressWarnings("unused")
 	private CMLKpoint kpoint;
 
 	/**

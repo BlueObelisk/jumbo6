@@ -25,6 +25,7 @@ import org.xmlcml.euclid.RealArray.Monotonicity;
  *
  */
 public abstract class SVGPoly extends SVGElement {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(SVGPoly.class);
 	
 	public final static String MONOTONIC = "monotonic";

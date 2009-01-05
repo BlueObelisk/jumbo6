@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.tools.DisorderTool;
 
 /**
  * superclass of all CMLTests. creates CMLBuilder for subclasses. little other

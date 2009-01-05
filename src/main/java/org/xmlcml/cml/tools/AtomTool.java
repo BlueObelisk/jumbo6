@@ -1490,7 +1490,7 @@ public class AtomTool extends AbstractSVGTool {
 	public CMLAtom addHydrogen() {
 		CMLAtom hAtom = null;
 		incrementHydrogenCountAttribute();
-		List<CMLAtom> hList = this.getHydrogenLigandList();
+//		List<CMLAtom> hList = this.getHydrogenLigandList();
 		// iterate through all hydrogens with similar name (not always ligands)
 		for (int i = 1; i <= 20; i++) {
 			String hId = atom.getId()+S_UNDER+"h"+i;

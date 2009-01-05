@@ -32,12 +32,13 @@ import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.euclid.Util;
-
 /**
  * @author pm286
  * 
  */
 public class StereochemistryToolTest {
+	@SuppressWarnings("unused")
+	private static Logger LOG = Logger.getLogger(StereochemistryToolTest.class);
 
 	private CMLMolecule makeMolecule1() {
 		URL url = Util.getResource(CRYSTAL_EXAMPLES + U_S + "ci6746_1.cml.xml");
@@ -343,7 +344,6 @@ public class StereochemistryToolTest {
 				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='1'/>"
 				+ "</bondArray>" + "</molecule>";
 		CMLMolecule molecule = (CMLMolecule) parseValidString(molS);
-		Logger LOG = Logger.getLogger(StereochemistryToolTest.class);
 		assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 

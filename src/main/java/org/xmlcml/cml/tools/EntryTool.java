@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import nu.xom.Attribute;
-import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
@@ -52,7 +51,6 @@ public class EntryTool extends AbstractTool {
     private boolean failOnError;
     
     private Set<String> valueSet;
-    private List<Element> enumerations;
 	private List<String> enumerationList;
 	private Set<String> enumerationSet;
 	private Set<String> ignoreCaseSet;

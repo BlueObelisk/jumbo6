@@ -14,6 +14,7 @@ import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -36,7 +37,22 @@ import org.xmlcml.euclid.Transform2;
  */
 public class SVGElement extends GraphicsElement {
 	private static Logger LOG = Logger.getLogger(GraphicsElement.class);
-	
+
+	public final static String CLASS = "class";
+	public final static String IMPROPER = "improper";
+	public final static String IMPROPER_TRUE = "true";
+	public final static String MATRIX = "matrix";
+	public final static String ROTATE = "rotate";
+	public final static String SCALE = "scale";
+	public final static String STYLE = "style";
+	public final static String TRANSFORM = "transform";
+	public final static String TRANSLATE = "translate";
+	public final static String X = "x";
+	public final static String Y = "y";
+	public final static String CX = "cx";
+	public final static String CY = "cy";
+	public final static String YMINUS = "-Y";
+	public final static String YPLUS = "Y";
 	private Element userElement;
 	private String strokeSave;
 	private String fillSave;
@@ -88,7 +104,8 @@ public class SVGElement extends GraphicsElement {
 		} else {
 			LOG.warn("unknown element "+tag);
 			newElement = new SVGG();
-			newElement.addAttribute(new Attribute("class", tag));
+			newElement.setClassName(tag);
+//			newElement.addAttribute(new Attribute("class", tag));
 		}
 		if (newElement != null) {
 	        newElement.copyAttributesFrom(element);
@@ -161,7 +178,7 @@ public class SVGElement extends GraphicsElement {
 	
 	protected void processTransform() {
 		double[] matrix = transform.getMatrixAsArray();
-		this.addAttribute(new Attribute("transform", "matrix(" +
+		this.addAttribute(new Attribute(TRANSFORM, MATRIX+"(" +
 			matrix[0] +"," +
 			"0., 0.," +
 			matrix[4] +"," +
@@ -173,7 +190,7 @@ public class SVGElement extends GraphicsElement {
 	 * not yet hierarchical, so only use on lines, text, etc.
 	 */
 	public void applyTransformAttributeAndRemove() {
-		Attribute transformAttribute = this.getAttribute("transform");
+		Attribute transformAttribute = this.getAttribute(TRANSFORM);
 		if (transformAttribute != null) {
 			Transform2 transform2 = createTransform2FromTransformAttribute(transformAttribute.getValue());
 			this.applyTransform(transform2);
@@ -188,15 +205,15 @@ public class SVGElement extends GraphicsElement {
 							0.0,  0.0,  1.0,
 					});
 				transform2 = transform2.concatenate(t);
-				this.addAttribute(new Attribute("improper", "true"));
+				this.addAttribute(new Attribute(IMPROPER, IMPROPER_TRUE));
 			}
 			// is object rotated?
 			Angle angle = transform2.getAngleOfRotation();
 			if (angle.getRadian() > Math.PI/4.) {
-				this.addAttribute(new Attribute("rotate", "Y"));
+				this.addAttribute(new Attribute(ROTATE, YPLUS));
 			}
 			if (angle.getRadian() < -Math.PI/4.) {
-				this.addAttribute(new Attribute("rotate", "-Y"));
+				this.addAttribute(new Attribute(ROTATE, YMINUS));
 			}
 		}
 	}
@@ -218,7 +235,6 @@ public class SVGElement extends GraphicsElement {
     * skewX(<skew-angle>)
     * skewY(<skew-angle>)
  */
-//		String[] keywords = {"matrix", "scale", "translate", "rotate", "skewX", "skewY"};
 		Transform2 transform2 = null;
 		if (transformAttributeValue != null) {
 			transform2 = new Transform2();
@@ -250,7 +266,7 @@ public class SVGElement extends GraphicsElement {
 		RealArray ra = new RealArray(vv);
 		double[] raa = ra.getArray();
 		double[][] array = t2.getMatrix();
-		if (keyword.equals("scale") && ra.size() > 0) {
+		if (keyword.equals(SCALE) && ra.size() > 0) {
 			array[0][0] = raa[0];
 			if (ra.size() == 1) {
 				array[1][1] = raa[0];
@@ -259,7 +275,7 @@ public class SVGElement extends GraphicsElement {
 			} else if (ra.size() != 1){
 				throw new RuntimeException("Only 1 or 2 scales allowed");
 			}
-		} else if (keyword.equals("translate") && ra.size() > 0) {
+		} else if (keyword.equals(TRANSLATE) && ra.size() > 0) {
 			array[0][2] = raa[0];
 			if (ra.size() == 1) {
 				array[1][2] = 0.0;
@@ -268,16 +284,16 @@ public class SVGElement extends GraphicsElement {
 			} else {
 				throw new RuntimeException("Only 1 or 2 translate allowed");
 			}
-		} else if (keyword.equals("rotate") && ra.size() == 1) {
+		} else if (keyword.equals(ROTATE) && ra.size() == 1) {
 			double c = Math.cos(raa[0]*Math.PI/180.);
 			double s = Math.sin(raa[0]*Math.PI/180.);
 			array[0][0] = c;
 			array[0][1] = s;
 			array[1][0] = -s;
 			array[1][1] = c;
-		} else if (keyword.equals("rotate") && ra.size() == 3) {
+		} else if (keyword.equals(ROTATE) && ra.size() == 3) {
 			throw new RuntimeException("rotate about point not yet supported");
-		} else if (keyword.equals("matrix") && ra.size() == 6) {
+		} else if (keyword.equals(MATRIX) && ra.size() == 6) {
 			array[0][0] = raa[0];
 			array[0][1] = raa[1];
 			array[0][2] = raa[4];
@@ -477,12 +493,12 @@ public class SVGElement extends GraphicsElement {
 	 */
 	public Transform2 getTransform2FromAttribute() {
 		Transform2 t = null;
-		String ts = this.getAttributeValue("transform");
+		String ts = this.getAttributeValue(TRANSFORM);
 		if (ts != null) {
-			if (!ts.startsWith("matrix(")) {
+			if (!ts.startsWith(MATRIX+"(")) {
 				throw new RuntimeException("Bad transform: "+ts);
 			}
-			ts = ts.substring("matrix(".length());
+			ts = ts.substring((MATRIX+"(").length());
 			ts = ts.substring(0, ts.length()-1);
 			ts = ts.replace(S_COMMA, S_SPACE);
 			RealArray realArray = new RealArray(ts);
@@ -553,9 +569,9 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	public void addDashedStyle(double bondWidth) {
-		String style = this.getAttributeValue("style");
+		String style = this.getAttributeValue(STYLE);
 		style += "stroke-dasharray : "+bondWidth*2+" "+bondWidth*2+";";
-		this.addAttribute(new Attribute("style", style));
+		this.addAttribute(new Attribute(STYLE, style));
 	}
 	
 	public void toggleFill(String fill) {
@@ -674,14 +690,14 @@ public class SVGElement extends GraphicsElement {
 		return d;
 	}
 	
-	/** subclassed by classes with extents.
-	 * 
-	 * @return null by default
-	 */
-	public Real2Range getBoundingBox() {
-		Real2Range boundingBox = null;
-		return boundingBox;
-	}
+//	/** subclassed by classes with extents.
+//	 * 
+//	 * @return null by default
+//	 */
+//	public Real2Range getBoundingBox() {
+//		Real2Range boundingBox = null;
+//		return boundingBox;
+//	}
 	
 	/** subclassed to tidy format.
 	 * 
@@ -692,19 +708,19 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	public double getX() {
-		return this.getCoordinateValueDefaultZero("x");
+		return this.getCoordinateValueDefaultZero(X);
 	}
 
 	public double getY() {
-		return this.getCoordinateValueDefaultZero("y");
+		return this.getCoordinateValueDefaultZero(Y);
 	}
 
 	public double getCX() {
-		return this.getCoordinateValueDefaultZero("cx");
+		return this.getCoordinateValueDefaultZero(CX);
 	}
 
 	public double getCY() {
-		return this.getCoordinateValueDefaultZero("cy");
+		return this.getCoordinateValueDefaultZero(CY);
 	}
 
 	/**
@@ -716,11 +732,11 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	public void setCX(double x) {
-		this.addAttribute(new Attribute("cx", ""+x));
+		this.addAttribute(new Attribute(CX, ""+x));
 	}
 
 	public void setCY(double y) {
-		this.addAttribute(new Attribute("cy", ""+y));
+		this.addAttribute(new Attribute(CY, ""+y));
 	}
 
 	public Real2 getCXY() {
@@ -728,11 +744,11 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	public void setX(double x) {
-		this.addAttribute(new Attribute("x", ""+x));
+		this.addAttribute(new Attribute(X, ""+x));
 	}
 
 	public void setY(double y) {
-		this.addAttribute(new Attribute("y", ""+y));
+		this.addAttribute(new Attribute(Y, ""+y));
 	}
 	
 	public Real2 getXY() {
@@ -745,10 +761,52 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	public void setClassName(String name) {
-		this.addAttribute(new Attribute("class", name));
+		this.addAttribute(new Attribute(CLASS, name));
 	}
 	
 	public String getClassName() {
-		return this.getAttributeValue("class");
+		return this.getAttributeValue(CLASS);
+	}
+
+	/** traverse all children recursively
+	 * 
+	 * @return null by default
+	 */
+	public Real2Range getBoundingBox() {
+		Real2Range boundingBox = null;
+		Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
+		if (childNodes.size() > 0) {
+			boundingBox = new Real2Range();
+		}
+		for (int i = 0; i < childNodes.size(); i++) {
+			SVGElement child = (SVGElement)childNodes.get(i);
+			Real2Range childBoundingBox = child.getBoundingBox();
+			if (childBoundingBox != null) {
+				boundingBox = boundingBox.plus(childBoundingBox);
+			}
+		}
+		return boundingBox;
+	}
+
+	public static void applyTransformsWithinElementsAndFormat(SVGElement svgElement) {
+		List<SVGElement> elementList = getElementList(svgElement, ".//svg:*[@transform]");
+		LOG.debug("NODES "+elementList.size());
+		for (SVGElement element : elementList) {
+			element.applyTransformAttributeAndRemove();
+			element.format(2);
+		}
+		LOG.debug("... applied transformations");
+	}
+
+	/**
+	 * @return
+	 */
+	public static List<SVGElement> getElementList(Element element, String xpath) {
+		Nodes childNodes = element.query(xpath, CMLConstants.SVG_XPATH);
+		List<SVGElement> elementList = new ArrayList<SVGElement>();
+		for (int i = 0; i < childNodes.size(); i++) {
+			elementList.add((SVGElement) childNodes.get(i));
+		}
+		return elementList;
 	}
 }

@@ -53,6 +53,7 @@ import org.xmlcml.euclid.Util;
  *
  */
 class FragmentSequence implements CMLConstants {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(FragmentSequence.class);
     List<FragmentAndBond> fragmentAndBondList = null; 
     
