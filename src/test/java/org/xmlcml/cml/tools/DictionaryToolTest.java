@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
-
 import java.util.Map;
 
 import org.junit.Assert;
@@ -17,7 +15,7 @@ public class DictionaryToolTest {
 	@Test
 	@Ignore
 	public void testExtractAndAnalyseDictRef() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
@@ -55,13 +53,13 @@ public class DictionaryToolTest {
 	@Test
 	@Ignore
 	public void testValidateDictRefsInCML() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateTypedNameValue() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }

@@ -12,6 +12,7 @@ import nu.xom.Elements;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
@@ -431,7 +432,7 @@ public class AtomMatcher extends AbstractTool {
 
 	/**
 	 * matches if elementType is in allowedTypes or allowedTypes is a single
-	 * S_STAR character
+	 * CMLConstants.S_STAR character
 	 * 
 	 * @param elementType
 	 * @param allowedTypes
@@ -441,7 +442,7 @@ public class AtomMatcher extends AbstractTool {
 		boolean matches = false;
 		if (elementType == null) {
 		} else if (allowedTypes.length == 0) {
-		} else if (allowedTypes.length == 1 && S_STAR.equals(allowedTypes[0])) {
+		} else if (allowedTypes.length == 1 && CMLConstants.S_STAR.equals(allowedTypes[0])) {
 			matches = true;
 		} else {
 			for (String ss : allowedTypes) {
@@ -467,8 +468,8 @@ public class AtomMatcher extends AbstractTool {
 	 */
 	public String toString() {
 		String s = CMLElement.S_EMPTY;
-		s += "useCharge: " + useCharge + S_SEMICOLON;
-		s += "useLabel: " + useLabel + S_SEMICOLON;
+		s += "useCharge: " + useCharge + CMLConstants.S_SEMICOLON;
+		s += "useLabel: " + useLabel + CMLConstants.S_SEMICOLON;
 		return s;
 	}
 
@@ -504,7 +505,7 @@ public class AtomMatcher extends AbstractTool {
 		if (atomSet0.size() != atomSet1.size()) {
 			// FIXME may manage this later
 			throw new RuntimeException("mapAtomSets wrong sizes:  "
-					+ atomSet0.size() + S_SLASH + atomSet1.size());
+					+ atomSet0.size() + CMLConstants.S_SLASH + atomSet1.size());
 		}
 		String title = this.getAtomMatchStrategy().toString();
 		int nMapped = 0;
@@ -535,7 +536,7 @@ public class AtomMatcher extends AbstractTool {
 					// atom sets are same size so we have an equivalence
 					if (atomSetx0.size() == atomSetx1.size()) {
 						cmlLink = new CMLLink();
-						cmlLink.setTitle(title + S_SPACE + atomSetx0.size());
+						cmlLink.setTitle(title + CMLConstants.S_SPACE + atomSetx0.size());
 						// if single atom we have exact match so add as link
 						// if annotation is required add it outside
 						if (atomSetx0.size() == 1) {
@@ -578,7 +579,7 @@ public class AtomMatcher extends AbstractTool {
 					} else if (object0 instanceof CMLAtom
 							&& object1 instanceof CMLAtom) {
 						cmlLink = new CMLLink();
-						cmlLink.setTitle(title + S_SPACE + atomSet0.size());
+						cmlLink.setTitle(title + CMLConstants.S_SPACE + atomSet0.size());
 						cmlLink.setFrom(((CMLAtom) object0).getId());
 						cmlLink.setTo(((CMLAtom) object1).getId());
 						nMapped++;
@@ -588,7 +589,7 @@ public class AtomMatcher extends AbstractTool {
 						CMLAtomSet atomSetx1 = (CMLAtomSet) object1;
 						if (atomSetx1.size() == atomSetx0.size()) {
 							cmlLink = new CMLLink();
-							cmlLink.setTitle(title + S_SPACE + atomSet0.size());
+							cmlLink.setTitle(title + CMLConstants.S_SPACE + atomSet0.size());
 							cmlLink.setFromSet(atomSetx0.getXMLContent());
 							cmlLink.setToSet(atomSetx1.getXMLContent());
 						} else {
@@ -676,7 +677,7 @@ public class AtomMatcher extends AbstractTool {
 					if (false) {
 						splitAndProcessAtomSets(mapij, mol0, mol1);
 					}
-					if (mapij.getChildElements(CMLLink.TAG, CML_NS).size() != mol0
+					if (mapij.getChildElements(CMLLink.TAG, CMLConstants.CML_NS).size() != mol0
 							.getCMLChildCount(CMLAtom.TAG)) {
 						// incomplete match; currently no action
 					}
@@ -1060,13 +1061,13 @@ public class AtomMatcher extends AbstractTool {
 			CMLAtomSet atomSet2) {
 		CMLMap cmlMap = new CMLMap();
 		if (atomSet.size() != atomSet2.size()) {
-			LOG.info(WARNING_S + S_NL + AtomMatcher.Strategy.DIFFERENT_SIZES
-					+ S_NL + WARNING_S);
+			LOG.info(WARNING_S + CMLConstants.S_NL + AtomMatcher.Strategy.DIFFERENT_SIZES
+					+ CMLConstants.S_NL + WARNING_S);
 			cmlMap.setDictRef(CMLReaction.MAP_REACTION_ATOM_MAP_INCOMPLETE);
 		} else {
 			cmlMap.setDictRef(CMLReaction.MAP_REACTION_ATOM_MAP_COMPLETE);
-			LOG.info(BANNER_S + S_NL
-					+ CMLReaction.MAP_REACTION_ATOM_MAP_COMPLETE + S_NL
+			LOG.info(BANNER_S + CMLConstants.S_NL
+					+ CMLReaction.MAP_REACTION_ATOM_MAP_COMPLETE + CMLConstants.S_NL
 					+ BANNER_S);
 		}
 		int nAtoms1 = atomSet.size();
@@ -1080,14 +1081,14 @@ public class AtomMatcher extends AbstractTool {
 			CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
 			atom2Id[j] = atom2.getId();
 			// Util.print(" "+atom2Id[j]+S_LBRAK+atom2.getElementType()+
-			// S_RBRAK);
+			// CMLConstants.S_RBRAK);
 		}
 		// LOG.debug();
 		for (int i = 0; i < nAtoms1; i++) {
 			CMLAtom atom1 = (CMLAtom) atomSet.getAtoms().get(i);
 			atom1Id[i] = atom1.getId();
-			// LOG.info(S_SPACE + atom1Id[i] + S_LBRAK + atom1.getElementType()
-			// + S_RBRAK);
+			// LOG.info(S_SPACE + atom1Id[i] + CMLConstants.S_LBRAK + atom1.getElementType()
+			// + CMLConstants.S_RBRAK);
 			Real2 atom1Coord = new Real2(atom1.getX2(), atom1.getY2());
 			for (int j = 0; j < nAtoms2; j++) {
 				CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
@@ -1200,8 +1201,8 @@ public class AtomMatcher extends AbstractTool {
 			// linkTool.splitAndProcessAtomSet(fromMolecule, toMolecule,
 			// atomMatchStrategy); // need to develop linkTool
 			String fromSet = Util
-					.concatenate(atomSetLink.getFromSet(), S_SPACE);
-			String toSet = Util.concatenate(atomSetLink.getToSet(), S_SPACE);
+					.concatenate(atomSetLink.getFromSet(), CMLConstants.S_SPACE);
+			String toSet = Util.concatenate(atomSetLink.getToSet(), CMLConstants.S_SPACE);
 			AtomMatcher.Strategy strategy = this.getAtomSetExpansionStrategy();
 			if (strategy.equals(AtomMatcher.Strategy.MATCH_GEOM)
 					|| strategy
@@ -1300,7 +1301,7 @@ public class AtomMatcher extends AbstractTool {
 			CMLAtom otherAtom = (CMLAtom) atomSet2.getAtoms().get(nearestIndex);
 			Real2 delta = thisCoords2.subtract(otherCoords2);
 			// index on most common vector (crude)
-			String iii = S_EMPTY + intDelta(delta);
+			String iii = CMLConstants.S_EMPTY + intDelta(delta);
 			// save count of frequency in table
 			Long count = deltaTable.get(iii);
 			count = (count == null) ? new Long(1) : new Long(
@@ -1536,7 +1537,7 @@ public class AtomMatcher extends AbstractTool {
 			CMLAtom otherAtom = (CMLAtom) (mol2.getAtoms()).get(nearestIndex);
 			Real2 delta = thisCoords2.subtract(otherCoords2);
 			// index on most common vector (crude)
-			String iii = S_EMPTY + intDelta(delta);
+			String iii = CMLConstants.S_EMPTY + intDelta(delta);
 			Long count = deltaTable.get(iii);
 			count = (count == null) ? new Long(1) : new Long(
 					count.intValue() + 1);
@@ -1675,7 +1676,7 @@ public class AtomMatcher extends AbstractTool {
 			for (int j = 0; j < molecule1.size(); j++) {
 				linkCount[i][j] = (mapMatrix[i][j] == null) ? 0
 						: mapMatrix[i][j].getCMLChildCount(CMLLink.TAG);
-				LOG.info(linkCount[i][j] + S_SPACE);
+				LOG.info(linkCount[i][j] + CMLConstants.S_SPACE);
 				if (linkCount[i][j] > 0) {
 					rowCount[i]++;
 					colCount[j]++;
@@ -1685,7 +1686,7 @@ public class AtomMatcher extends AbstractTool {
 		}
 		LOG.info(S_EMPTY);
 		for (int j = 0; j < molecule1.size(); j++) {
-			LOG.info(colCount[j] + S_SPACE);
+			LOG.info(colCount[j] + CMLConstants.S_SPACE);
 		}
 		LOG.info(S_EMPTY);
 
@@ -1733,13 +1734,13 @@ public class AtomMatcher extends AbstractTool {
 		for (int i = 0; i < molecule0.size(); i++) {
 			CMLMolecule mol0 = molecule0.get(i);
 			if (mol0 == null) {
-				LOG.error("Null molecule: molecule0[" + i + S_RSQUARE);
+				LOG.error("Null molecule: molecule0[" + i + CMLConstants.S_RSQUARE);
 				continue;
 			}
 			for (int j = 0; j < molecule1.size(); j++) {
 				CMLMolecule mol1 = molecule1.get(j);
 				if (mol1 == null) {
-					LOG.error("Null molecule: molecule1[" + j + S_RSQUARE);
+					LOG.error("Null molecule: molecule1[" + j + CMLConstants.S_RSQUARE);
 					continue;
 				}
 				// exact match with molecule?
@@ -1852,7 +1853,7 @@ public class AtomMatcher extends AbstractTool {
 			}
 			// LOG.info("Mapped " + atomPairVector.size()
 			// + " atoms from reactant (" + reactant.getAtomCount()
-			// + ") to product (" + reactant.getAtomCount() + S_RBRAK);
+			// + ") to product (" + reactant.getAtomCount() + CMLConstants.S_RBRAK);
 		} else {
 			ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 			// general translate to centroids
@@ -1962,10 +1963,10 @@ public class AtomMatcher extends AbstractTool {
 							reactantMolecule);
 				} catch (RuntimeException cmle) {
 					// molecules of different lengths, create a zero length map
-					LOG.error("Reactant (" + reactantMolecule.getId() + S_SLASH
+					LOG.error("Reactant (" + reactantMolecule.getId() + CMLConstants.S_SLASH
 							+ reactantMolecule.getAtomCount()
 							+ ") and product (" + productMolecule.getId()
-							+ S_SLASH + productMolecule.getAtomCount()
+							+ CMLConstants.S_SLASH + productMolecule.getAtomCount()
 							+ ") spectators " + cmle);
 					spectatorMap = new CMLMap();
 				}

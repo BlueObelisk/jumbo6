@@ -80,7 +80,7 @@ public class SVGPath extends SVGElement {
 	}
 	
 	public static String createD(Real2Array xy) {
-		String s = S_EMPTY;
+		String s = CMLConstants.S_EMPTY;
 		StringBuilder sb = new StringBuilder();
 		if (xy.size() > 0) {
 			sb.append("M");

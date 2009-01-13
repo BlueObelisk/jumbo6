@@ -20,6 +20,7 @@ import nu.xom.Text;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.UnitsAttribute;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLUtil;
@@ -188,7 +189,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public int getFormalCharge() {
 		int formalCharge = 0;
-		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", CML_XPATH);
+		Nodes chargedAtoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", CMLConstants.CML_XPATH);
 		for (int i = 0; i < chargedAtoms.size(); i++) {
 			formalCharge += Integer.parseInt(((Element)chargedAtoms.get(i)).getAttributeValue("formalCharge"));
 		}
@@ -201,7 +202,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public List<CMLAtom> getChargedAtoms() {
 		List<CMLAtom> chargedAtoms = new ArrayList<CMLAtom>();
-		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", CML_XPATH);
+		Nodes atoms = molecule.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge != 0]", CMLConstants.CML_XPATH);
 		for (int i = 0; i < atoms.size(); i++) {
 			chargedAtoms.add((CMLAtom)atoms.get(i));
 		}
@@ -249,7 +250,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 		}
 		// remove temporary pi electrons
-		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", CML_XPATH);
+		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", CMLConstants.CML_XPATH);
 		for (Node electron : electrons) {
 			electron.detach();
 		}
@@ -326,7 +327,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			} else if (order.equals(CMLBond.AROMATIC)) {
 				aromaticBondSum += 1;
 			} else {
-				LOG.info("Unknown bond order:" + order + S_COLON);
+				LOG.info("Unknown bond order:" + order + CMLConstants.S_COLON);
 				ok = false;
 			}
 		}
@@ -500,7 +501,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	public int getTotalHydrogenCount() {
 		String hydrogenCount = molecule.getAttributeValue(HYDROGEN_COUNT);
 		int sum = -1;
-		if (hydrogenCount == null || S_EMPTY.equals(hydrogenCount.trim())) {
+		if (hydrogenCount == null || CMLConstants.S_EMPTY.equals(hydrogenCount.trim())) {
 			this.adjustHydrogenCountsToValency(HydrogenControl.NO_EXPLICIT_HYDROGENS);
 			sum = sumHydrogenCountOnAtoms();
 			molecule.addAttribute(new Attribute(HYDROGEN_COUNT, ""+sum));
@@ -1601,7 +1602,7 @@ public class MoleculeTool extends AbstractSVGTool {
 					} else {
 						boolean contract = true;
 						for (CMLBond bond : atom.getLigandBonds()) {
-							List<Node> bondStereoNodes = CMLUtil.getQueryNodes(bond, ".//cml:"+CMLBondStereo.TAG, CML_XPATH);
+							List<Node> bondStereoNodes = CMLUtil.getQueryNodes(bond, ".//cml:"+CMLBondStereo.TAG, CMLConstants.CML_XPATH);
 							for (Node bondStereoNode : bondStereoNodes) {
 								String stereo = bondStereoNode.getValue();
 								if (CMLBond.WEDGE.equals(stereo) || CMLBond.HATCH.equals(stereo)) {
@@ -2156,7 +2157,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			molecule.addAtom(atom);
 		}
 		// copy any remaining nodes except atomArray and bondArray
-		Nodes nodes = addedMolecule.query(".//*", CML_XPATH);
+		Nodes nodes = addedMolecule.query(".//*", CMLConstants.CML_XPATH);
 		int nnodes = nodes.size();
 		for (int i = nnodes - 1; i >= 0; i--) {
 			Node node = nodes.get(i);
@@ -2253,7 +2254,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		if (molecule.hasCoordinates(CoordinateType.CARTESIAN)) {
 			// set torsions
 			CMLAtomSet moleculeAtomSet = this.getAtomSet();
-			Nodes torsions = molecule.query(".//"+CMLTorsion.NS, CML_XPATH);
+			Nodes torsions = molecule.query(".//"+CMLTorsion.NS, CMLConstants.CML_XPATH);
 			int nTors = torsions.size();
 			for (int i = 0; i < nTors; i++) {
 				CMLTorsion torsion = (CMLTorsion) torsions.get(i);
@@ -2970,7 +2971,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	CMLAtom atom = molecule.getAtomById(fromId);
     	if (atom != null) {
     		Nodes nodes = molecule.query(
-    				".//*[@atomRef or @atomRefs2 or @atomRefs3 or @atomRefs4 or @atomRefs]", CML_XPATH);
+    				".//*[@atomRef or @atomRefs2 or @atomRefs3 or @atomRefs4 or @atomRefs]", CMLConstants.CML_XPATH);
     		for (int i = 0; i < nodes.size(); i++) {
     			renumberAtomRefs((CMLElement)nodes.get(i), fromId, toId);
     		}
@@ -2988,7 +2989,7 @@ public class MoleculeTool extends AbstractSVGTool {
     					values[j] = toId;
     				}
     			}
-				attribute.setValue(Util.concatenate(values, S_SPACE));
+				attribute.setValue(Util.concatenate(values, CMLConstants.S_SPACE));
 				element.addAttribute(attribute);
     		}
     	}
@@ -2999,7 +3000,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @return electron
 	 */
     public CMLElectron getElectronById(String id) {
-        Nodes electronNodes = molecule.query(".//cml:electron[@id='"+id+"']", CML_XPATH);
+        Nodes electronNodes = molecule.query(".//cml:electron[@id='"+id+"']", CMLConstants.CML_XPATH);
         if (electronNodes.size() > 1) {
         	throw new RuntimeException("Electrons with duplicate id:"+id);
         }
@@ -3109,7 +3110,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * takes value of label ( labelS = cml:label/@value)
 	 * Looks for correspoding defintion of R as a descendant cml:molecule within
 	 * scopeElement,
-	 *   i.e. scopeElement.query(".//cml:atom[label/@value=$labelS", CML_XPATH)
+	 *   i.e. scopeElement.query(".//cml:atom[label/@value=$labelS", CMLConstants.CML_XPATH)
 	 *   @deprecated doen't work at all
 	 */
 	public void joinRGroupsExplicitly(Element scopeElement) {
@@ -3237,7 +3238,7 @@ public class MoleculeTool extends AbstractSVGTool {
 				&& !control.equals(HydrogenControl.USE_EXPLICIT_HYDROGENS)) {
 			throw new RuntimeException(
 					"No hydrogen count control on Formula - found(" + control
-					+ S_RBRAK);
+					+ CMLConstants.S_RBRAK);
 		}
 
 		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(molecule.getAtoms());
@@ -3451,8 +3452,8 @@ public class MoleculeTool extends AbstractSVGTool {
 			if (!(e1 == null && e2 == null ||
 					e1.equals(e2))) {
 				throw new RuntimeException(
-						"atoms have different excludeElementTypes: " + id + S_LBRAK
-						+ e1 + ") != " + id2 + S_LBRAK + e2 + S_RBRAK);
+						"atoms have different excludeElementTypes: " + id + CMLConstants.S_LBRAK
+						+ e1 + ") != " + id2 + CMLConstants.S_LBRAK + e2 + CMLConstants.S_RBRAK);
 			}
 			CMLLink link = new CMLLink();
 			link.setFrom(id);
@@ -3658,7 +3659,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * of atomSets in CML since molecules are not explicit.
 	 */
 	public void setThisInDescendantAtomSets() {
-		Nodes nodes = molecule.query(".//cml:atomSet", CML_XPATH);
+		Nodes nodes = molecule.query(".//cml:atomSet", CMLConstants.CML_XPATH);
 		for (int i = 0; i < nodes.size(); i++) {
 			CMLAtomSet atomSet = (CMLAtomSet) nodes.get(i);
 			atomSet.setMolecule(molecule);
@@ -3737,7 +3738,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return list (empty if none)
      */
     public List<CMLLength> getLengthElements() {
-    	Nodes nodes = molecule.query("./cml:length", CML_XPATH);
+    	Nodes nodes = molecule.query("./cml:length", CMLConstants.CML_XPATH);
     	List<CMLLength> list = new ArrayList<CMLLength>();
     	for (int i = 0; i < nodes.size(); i++) {
     		list.add((CMLLength)nodes.get(i));
@@ -3750,7 +3751,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return list (empty if none)
      */
     public List<CMLAngle> getAngleElements() {
-    	Nodes nodes = molecule.query("./cml:angle", CML_XPATH);
+    	Nodes nodes = molecule.query("./cml:angle", CMLConstants.CML_XPATH);
     	List<CMLAngle> list = new ArrayList<CMLAngle>();
     	for (int i = 0; i < nodes.size(); i++) {
     		list.add((CMLAngle)nodes.get(i));
@@ -3763,7 +3764,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return list (empty if none)
      */
     public List<CMLTorsion> getTorsionElements() {
-    	Nodes nodes = molecule.query("./cml:torsion", CML_XPATH);
+    	Nodes nodes = molecule.query("./cml:torsion", CMLConstants.CML_XPATH);
     	List<CMLTorsion> list = new ArrayList<CMLTorsion>();
     	for (int i = 0; i < nodes.size(); i++) {
     		list.add((CMLTorsion)nodes.get(i));
@@ -3776,7 +3777,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return list (empty if none)
      */
     public List<CMLFormula> getFormulaElements() {
-    	Nodes nodes = molecule.query("./cml:formula", CML_XPATH);
+    	Nodes nodes = molecule.query("./cml:formula", CMLConstants.CML_XPATH);
     	List<CMLFormula> list = new ArrayList<CMLFormula>();
     	for (int i = 0; i < nodes.size(); i++) {
     		list.add((CMLFormula)nodes.get(i));
@@ -3789,7 +3790,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return list (empty if none)
      */
     public List<CMLMolecule> getMoleculeElements() {
-    	Nodes nodes = molecule.query("./cml:molecule", CML_XPATH);
+    	Nodes nodes = molecule.query("./cml:molecule", CMLConstants.CML_XPATH);
     	List<CMLMolecule> list = new ArrayList<CMLMolecule>();
     	for (int i = 0; i < nodes.size(); i++) {
     		list.add((CMLMolecule)nodes.get(i));

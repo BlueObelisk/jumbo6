@@ -10,6 +10,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
@@ -424,7 +425,7 @@ public class CrystalTool extends AbstractTool {
 						atom.setXYZFract(p3);
 						if (addTransformsToAtoms) {
 							//remove any previous Transform3 elements
-							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", CML_XPATH);
+							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", CMLConstants.CML_XPATH);
 							for (int t = 0; t < t3s.size(); t++) {
 								t3s.get(t).detach();
 							}
@@ -913,8 +914,8 @@ public class CrystalTool extends AbstractTool {
 		}
 
 		boolean formulaMoleculeCount = (publishedFormulaList.size() == formulaCountMap.size());
-		String formulaCountMatch = S_EMPTY;
-		String formulaMoleculeMatch = S_EMPTY;
+		String formulaCountMatch = CMLConstants.S_EMPTY;
+		String formulaMoleculeMatch = CMLConstants.S_EMPTY;
 //		boolean matchedFormula = false;
 
 		try {
@@ -923,7 +924,7 @@ public class CrystalTool extends AbstractTool {
 				formulaMoleculeMatch = formulaCountMatch;
 			} else{
 				formulaCountMatch = "MATCHED FORMULA/MOLECULE COUNT "+publishedFormulaList.size()+"/"+formulaCountMap.size();
-				formulaMoleculeMatch = S_EMPTY;
+				formulaMoleculeMatch = CMLConstants.S_EMPTY;
 				// no symmetry, possibly multiple molecules
 				if (formulaUnitsInCell >= operatorCount) {
 					if (formulaUnitsInCell % operatorCount == 0){
@@ -1061,7 +1062,7 @@ public class CrystalTool extends AbstractTool {
 
 	private CMLFormula getFormula(String dictRef, CMLCml cml) {
 		CMLFormula formula = null;
-		Nodes formulaElements = cml.query(".//"+CMLFormula.NS, CML_XPATH);
+		Nodes formulaElements = cml.query(".//"+CMLFormula.NS, CMLConstants.CML_XPATH);
 		for (int i = 0; i < formulaElements.size(); i++) {
 			CMLFormula formula0 = (CMLFormula) formulaElements.get(i);
 			if (dictRef.equalsIgnoreCase(formula0.getDictRef())) {
@@ -1124,7 +1125,7 @@ public class CrystalTool extends AbstractTool {
     --*/
 
 	/** analyses cif value for indeterminacy.
-	 * if value id null, "." or S_QUERY assumes it is not
+	 * if value id null, "." or CMLConstants.S_QUERY assumes it is not
 	 * determinate
 	 * @param value
 	 * @return true if value as above
@@ -1149,7 +1150,7 @@ public class CrystalTool extends AbstractTool {
 	 * @return value of first node if isDeterminate else or null
 	 */
 	public static String getValue(CMLElement element, String xQuery) {
-		Nodes nodes = element.query(xQuery, CML_XPATH);
+		Nodes nodes = element.query(xQuery, CMLConstants.CML_XPATH);
 		String value = (nodes.size() == 0) ? null : nodes.get(0).getValue();
 		return (isIndeterminate(value)) ? null : value;
 	}

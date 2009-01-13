@@ -88,14 +88,14 @@ public class PropertyTool extends AbstractTool {
 //                        .getDictRefAttribute();
 //                // LOG.debug("N"+dictRefAttribute);
 //                if (dictRefAttribute == null) {
-//                    errorList.add("NULL NAME: " + S_LSQUARE + property.toXML() + S_RSQUARE);
+//                    errorList.add("NULL NAME: " + CMLConstants.S_LSQUARE + property.toXML() + CMLConstants.S_RSQUARE);
 //                } else {
 //                    CMLEntry entry = (CMLEntry) dictionaryMap
 //                            .getEntry(dictRefAttribute);
 //                    if (entry == null) {
 //                        errorList.add("NOTFOUND "
-//                                + dictRefAttribute.getQualifiedName() + S_LSQUARE
-//                                + property.toXML() + S_RSQUARE);
+//                                + dictRefAttribute.getQualifiedName() + CMLConstants.S_LSQUARE
+//                                + property.toXML() + CMLConstants.S_RSQUARE);
 //                    } else {
 //                        // LOG.debug("FOUND "+dictRefAttribute);
 //                    }

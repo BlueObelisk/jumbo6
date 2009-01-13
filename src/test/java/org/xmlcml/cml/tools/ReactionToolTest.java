@@ -1,16 +1,10 @@
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
-import static org.xmlcml.cml.test.CMLAssert.assertEqualsConcise;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +27,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLConstants.Units;
@@ -54,6 +49,7 @@ import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test reactionTool
@@ -66,11 +62,11 @@ public class ReactionToolTest {
 	ReactionFixture fixture = new ReactionFixture();
 	/** */
 	public final static String REACTION_EXAMPLES = CMLAssert.TOOLS_EXAMPLES
-			+ U_S + "reactions";
+			+CMLConstants.U_S + "reactions";
 
 	ReactionTool xmlReactTool1;
 
-	String balancedS = S_EMPTY + "<reaction id='br' " + CML_XMLNS + ">"
+	String balancedS = S_EMPTY + "<reaction id='br' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <reactantList id='brl1'>" + "    <reactant id='br1'>"
 			+ "     <molecule id='brm1'>" + "      <atomArray>"
 			+ "        <atom id='a1' elementType='O'/>"
@@ -91,7 +87,7 @@ public class ReactionToolTest {
 			+ "     </molecule>" + "    </product>" + "  </productList>"
 			+ "</reaction>" + S_EMPTY;
 
-	String unbalancedS = S_EMPTY + "<reaction " + CML_XMLNS + ">"
+	String unbalancedS = S_EMPTY + "<reaction " + CMLConstants.CML_XMLNS + ">"
 			+ "  <reactantList>" + "    <reactant>" + "     <molecule>"
 			+ "      <atomArray>" + "        <atom id='a1' elementType='O'/>"
 			+ "        <atom id='a2' elementType='Mg'/>" + "      </atomArray>"
@@ -122,8 +118,8 @@ public class ReactionToolTest {
 	public void setUp() throws Exception {
 		xmlReactTool1 = ReactionTool.getOrCreateTool(fixture.xmlReact1);
 
-		balancedR = (CMLReaction) parseValidString(balancedS);
-		unbalancedR = (CMLReaction) parseValidString(unbalancedS);
+		balancedR = (CMLReaction)TestUtils.parseValidString(balancedS);
+		unbalancedR = (CMLReaction)TestUtils.parseValidString(unbalancedS);
 
 		InputStream is = Util
 				.getInputStreamFromResource("org/xmlcml/cml/tools/reaction1.xml");
@@ -141,12 +137,12 @@ public class ReactionToolTest {
 		Document doc = null;
 		try {
 			InputStream in = Util.getInputStreamFromResource(REACTION_EXAMPLES
-					+ U_S + "oscar.xml");
+					+CMLConstants.U_S + "oscar.xml");
 			doc = new Builder().build(in);
 		} catch (Throwable e) {
 			System.err.println("SKIPPED" + e);
 		}
-		assertNotNull("oscar not null", doc);
+		Assert.assertNotNull("oscar not null", doc);
 		/* List<CMLReactionScheme> schemeList = */ReactionTool
 				.createFromOSCAR(doc);
 		FileOutputStream fos = null;
@@ -195,7 +191,7 @@ public class ReactionToolTest {
 	@Test
 	@Ignore
 	public void testCreateGraphicsElement() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	/** */
@@ -204,13 +200,13 @@ public class ReactionToolTest {
 		CMLFormula formula = ReactionTool.getOrCreateTool(balancedR)
 				.calculateDifferenceFormula();
 		CMLFormula expected = new CMLFormula();
-		assertEqualsConcise("empty", expected, formula, EPS);
+		CMLAssert.assertEqualsConcise("empty", expected, formula, EPS);
 		formula = ReactionTool.getOrCreateTool(unbalancedR)
 				.calculateDifferenceFormula();
 		expected = new CMLFormula();
 		expected.add(AS.O.value, 1.);
 		expected.add(AS.H.value, 2.);
-		assertEqualsConcise("non-empty", expected, formula, EPS);
+		CMLAssert.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
 
 	/** */
@@ -222,7 +218,7 @@ public class ReactionToolTest {
 		CMLFormula expected = new CMLFormula();
 		expected.add(AS.Cl.value, 2.);
 		expected.add("Mg", 1.);
-		assertEqualsConcise("non-empty", expected, formula, EPS);
+		CMLAssert.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
 
 	/** */
@@ -236,7 +232,7 @@ public class ReactionToolTest {
 		expected.add(AS.Cl.value, 2.);
 		expected.add("Mg", 1.);
 		expected.add(AS.O.value, 1.);
-		assertEqualsConcise("non-empty", expected, formula, EPS);
+		CMLAssert.assertEqualsConcise("non-empty", expected, formula, EPS);
 	}
 
 	/** */
@@ -248,7 +244,7 @@ public class ReactionToolTest {
 		CMLFormula expected = new CMLFormula();
 		expected.add("Mg", 1.0);
 		expected.add(AS.O.value, 1.0);
-		assertEqualsConcise("formula", expected, formula, EPS);
+		CMLAssert.assertEqualsConcise("formula", expected, formula, EPS);
 	}
 
 	/** */
@@ -312,7 +308,7 @@ public class ReactionToolTest {
 					System.err.println("SKIPPED" + e);
 					continue;
 				}
-				assertNotNull("oscar not null", doc);
+				Assert.assertNotNull("oscar not null", doc);
 				/* List<CMLReactionScheme> schemeList = */ReactionTool
 						.createFromOSCAR(doc);
 				FileOutputStream fos = null;
@@ -400,16 +396,16 @@ public class ReactionToolTest {
 		Document doc = null;
 		try {
 			InputStream in = Util.getInputStreamFromResource(REACTION_EXAMPLES
-					+ U_S + "reaction1.xml");
+					+CMLConstants.U_S + "reaction1.xml");
 			doc = new CMLBuilder().build(in);
 		} catch (Throwable e) {
 			System.err.println("SKIPPED" + e);
 		}
-		assertNotNull("reaction not null", doc);
+		Assert.assertNotNull("reaction not null", doc);
 		// molecules are listed in a moleculeList and accessed by molecule@ref
 		// first check the molecules are OK
 		CMLMoleculeList moleculeList = (CMLMoleculeList) doc.query(
-				".//cml:moleculeList", CML_XPATH).get(0);
+				".//cml:moleculeList", CMLConstants.CML_XPATH).get(0);
 		CMLReaction reaction1 = (CMLReaction) doc.query(".//cml:reaction",
 				CML_XPATH).get(0);
 		// get MWt for each molecule
@@ -443,7 +439,7 @@ public class ReactionToolTest {
 		CMLFormula difference = ReactionTool.getOrCreateTool(reaction1)
 				.calculateDifferenceFormula();
 		CMLFormula expected = new CMLFormula();
-		assertEqualsConcise("non-empty", expected, difference, EPS);
+		CMLAssert.assertEqualsConcise("non-empty", expected, difference, EPS);
 
 	}
 
@@ -468,17 +464,17 @@ public class ReactionToolTest {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			// get mass in grams
 			Nodes massAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.GRAM + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.GRAM + "']", CMLConstants.CML_XPATH);
 			CMLAmount massAmount = (massAmounts.size() == 0) ? null
 					: (CMLAmount) massAmounts.get(0);
 			// or volume in mL
 			Nodes volAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.ML + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.ML + "']", CMLConstants.CML_XPATH);
 			CMLAmount volAmount = (volAmounts.size() == 0) ? null
 					: (CMLAmount) volAmounts.get(0);
 			// and get the molar amount (mmol)
 			Nodes molarAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.MMOL + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.MMOL + "']", CMLConstants.CML_XPATH);
 			CMLAmount molarAmount = (molarAmounts.size() == 0) ? null
 					: (CMLAmount) molarAmounts.get(0);
 			// calculate molarAmount from either mass or volume and check it
@@ -492,7 +488,7 @@ public class ReactionToolTest {
 			}
 			if (calcMolarAmount == null) {
 				if (!Double.isNaN(mol[i])) {
-					fail("inconsistent null amount: " + mol[i]);
+					Assert.fail("inconsistent null amount: " + mol[i]);
 				}
 			} else {
 				Assert.assertEquals("calc molar", mol[i], calcMolarAmount
@@ -528,17 +524,17 @@ public class ReactionToolTest {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			// get mass in grams
 			Nodes massAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.GRAM + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.GRAM + "']", CMLConstants.CML_XPATH);
 			CMLAmount massAmount = (massAmounts.size() == 0) ? null
 					: (CMLAmount) massAmounts.get(0);
 			// or volume in mL
 			Nodes volAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.ML + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.ML + "']", CMLConstants.CML_XPATH);
 			CMLAmount volAmount = (volAmounts.size() == 0) ? null
 					: (CMLAmount) volAmounts.get(0);
 			// and get the molar amount (mmol)
 			Nodes molarAmounts = ((CMLElement) reactant).query(
-					".//cml:amount[@units='" + Units.MMOL + "']", CML_XPATH);
+					".//cml:amount[@units='" + Units.MMOL + "']", CMLConstants.CML_XPATH);
 			CMLAmount molarAmount = (molarAmounts.size() == 0) ? null
 					: (CMLAmount) molarAmounts.get(0);
 			// calculate molarAmount from either mass or volume and check it
@@ -576,7 +572,7 @@ public class ReactionToolTest {
 			// molecule@ref
 			// first check the molecules are OK
 			CMLMoleculeList moleculeList = (CMLMoleculeList) doc.query(
-					".//cml:moleculeList", CML_XPATH).get(0);
+					".//cml:moleculeList", CMLConstants.CML_XPATH).get(0);
 			CMLReaction reaction1 = (CMLReaction) doc.query(".//cml:reaction",
 					CML_XPATH).get(0);
 			// get MWt for each molecule

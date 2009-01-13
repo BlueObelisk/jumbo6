@@ -6,6 +6,7 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
@@ -140,7 +141,7 @@ public class JoinTool extends AbstractTool {
   }
 
   private void adjustLength(CMLAtom atom0, CMLAtom atom1, CMLAtomSet moveableAtomSet) {
-      List<Node> lengths = CMLUtil.getQueryNodes(join, CMLLength.NS, CML_XPATH);
+      List<Node> lengths = CMLUtil.getQueryNodes(join, CMLLength.NS, CMLConstants.CML_XPATH);
       if (lengths.size() == 1) {
           CMLLength length = (CMLLength) lengths.get(0);
           length.setAtomRefs2(atom0, atom1);
@@ -152,7 +153,7 @@ public class JoinTool extends AbstractTool {
   private void adjustTorsion(
           CMLAtom rGroup0, CMLAtom atom0, CMLAtom atom1, CMLAtom rGroup1,
           CMLAtomSet moleculeAtomSet, CMLAtomSet moveableAtomSet) {
-      List<Node> torsions = CMLUtil.getQueryNodes(join, CMLTorsion.NS, CML_XPATH);
+      List<Node> torsions = CMLUtil.getQueryNodes(join, CMLTorsion.NS, CMLConstants.CML_XPATH);
       if (torsions.size() == 1) {
           CMLTorsion torsion = (CMLTorsion) torsions.get(0);
           CMLAtom atom00 = this.getUniqueLigand(rGroup0, atom0, atom1);
@@ -188,7 +189,7 @@ public class JoinTool extends AbstractTool {
               return ligand;
           } else {
               List<Node> labels = CMLUtil.getQueryNodes(
-                      ligand, CMLJoin.TORSION_END_QUERY, CML_XPATH);
+                      ligand, CMLJoin.TORSION_END_QUERY, CMLConstants.CML_XPATH);
               // there may be multiple labels
               for (Node node : labels) {
                   CMLLabel label = (CMLLabel) node;

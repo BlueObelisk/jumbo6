@@ -93,7 +93,7 @@ public class DisorderAssembly implements CMLConstants {
             ".//"+CMLAtom.NS+"["+CMLScalar.NS+"[" +
             "(@dictRef='"+CrystalTool.DISORDER_ASSEMBLY+"' and .!='.') or " +
             "(@dictRef='"+CrystalTool.DISORDER_GROUP+"' and .!='.')" +
-            "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", CML_XPATH);
+            "]] | .//"+CMLAtom.NS+"[@occupancy[. < 1]]", CMLConstants.CML_XPATH);
         List<CMLAtom> atomList = new ArrayList<CMLAtom>();
         for (int i = 0; i < nodes.size(); i++) {
             atomList.add((CMLAtom) nodes.get(i));
@@ -128,7 +128,7 @@ public class DisorderAssembly implements CMLConstants {
     	for (CMLAtom atom : disorderedAtomList) {
     		String assemblyCode = DisorderAssembly.getAtomCode(atom);
     		if (assemblyCode == null) {
-    			assemblyCode = S_PERIOD;
+    			assemblyCode = CMLConstants.S_PERIOD;
     		}
     		
     		DisorderAssembly assembly = assemblyMap.get(assemblyCode);
@@ -169,10 +169,10 @@ public class DisorderAssembly implements CMLConstants {
     	String groupCode = DisorderGroup.getAtomCode(atom);
     	String assCode = DisorderAssembly.getAtomCode(atom);
     	if (groupCode == null) {
-    		groupCode = S_PERIOD;
+    		groupCode = CMLConstants.S_PERIOD;
     	}
     	if (assCode == null) {
-    		assCode = S_PERIOD;
+    		assCode = CMLConstants.S_PERIOD;
     		addCommonAtom(atom);
     	} else {
     		assemblyCode = assCode;
@@ -222,7 +222,7 @@ public class DisorderAssembly implements CMLConstants {
         String s = "disorderAssembly: "+assemblyCode+S_NEWLINE;
         s += "common atoms: "+S_NEWLINE;
         for (CMLAtom commonAtom : commonAtoms) {
-            s += S_SPACE+S_SPACE+CrystalTool.getFullLabel(commonAtom)+S_NEWLINE;
+            s += CMLConstants.S_SPACE+S_SPACE+CrystalTool.getFullLabel(commonAtom)+S_NEWLINE;
         }
         s += "disorderGroups: "+S_NEWLINE;
         for (String groupName : groupMap.keySet()) {

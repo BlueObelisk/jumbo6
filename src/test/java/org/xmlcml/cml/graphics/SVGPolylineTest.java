@@ -1,7 +1,6 @@
 package org.xmlcml.cml.graphics;
 
-import static org.junit.Assert.fail;
-
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.Real2Array;
@@ -22,13 +21,13 @@ public class SVGPolylineTest {
 	@Test
 	@Ignore
 	public void testGetReal2Array() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testGetPath2() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }

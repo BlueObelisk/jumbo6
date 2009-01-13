@@ -1,16 +1,14 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLArrayList;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test TableTool.
@@ -30,7 +28,7 @@ public class TableRowListToolTest {
 		CMLTableContent tableContent0 = TableRowListTool.getOrCreateTool(
 				fixture.tableRowList).createTableContent();
 		boolean stripWhite = true;
-		assertEqualsCanonically("table content", fixture.tableContent,
+		TestUtils.assertEqualsCanonically("table content", fixture.tableContent,
 				tableContent0, stripWhite);
 	}
 
@@ -50,7 +48,7 @@ public class TableRowListToolTest {
 		TableRowListTool.getOrCreateTool(tableRowList1).addColumn(cmlList);
 		String ss = ""
 				+ "<tableRowList "
-				+ CML_XMLNS
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "<tableRow>"
 				+ "<tableCell>1</tableCell>"
@@ -67,8 +65,8 @@ public class TableRowListToolTest {
 				+ "<tableCell>c</tableCell>"
 				+ "<tableCell><scalar dataType='xsd:double'>30.3</scalar></tableCell>"
 				+ "</tableRow>" + "</tableRowList>";
-		CMLTableRowList expected = (CMLTableRowList) parseValidString(ss);
-		assertEqualsCanonically("tablerow", expected, tableRowList1, true);
+		CMLTableRowList expected = (CMLTableRowList)TestUtils.parseValidString(ss);
+		TestUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
 	}
 
 	/**
@@ -81,7 +79,7 @@ public class TableRowListToolTest {
 		CMLArrayList arrayList1 = TableRowListTool.getOrCreateTool(
 				fixture.tableRowList)
 				.createArrayList(3, 2, fixture.tableHeader);
-		assertEqualsCanonically("tablerow", fixture.arrayList, arrayList1, true);
+		TestUtils.assertEqualsCanonically("tablerow", fixture.arrayList, arrayList1, true);
 	}
 
 }

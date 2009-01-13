@@ -188,7 +188,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 	
 	/**
 	 * gets the top catalog. first looks for <user.dir>/.jumbo/catalog.xml if
-	 * this is missing, looks for resource under S_PERIOD - this will be in the
+	 * this is missing, looks for resource under CMLConstants.S_PERIOD - this will be in the
 	 * directory immediately above org/cml... *.class usually "bin" or "classes"
 	 * 
 	 * @return null means not found, else a list of CMLMap which are the actual
@@ -226,7 +226,7 @@ public class CatalogManager implements CatalogListChild, CMLConstants {
 		if (this.catalogList == null) {
 			throw new RuntimeException("catalogManager must be of form list");
 		}
-		List<Node> mapNodes = CMLUtil.getQueryNodes(catalogList, CMLScalar.NS, CML_XPATH);
+		List<Node> mapNodes = CMLUtil.getQueryNodes(catalogList, CMLScalar.NS, CMLConstants.CML_XPATH);
 		CMLScalar theScalar = null;
 		for (Node node : mapNodes) {
 			CMLScalar scalar = (CMLScalar) node;

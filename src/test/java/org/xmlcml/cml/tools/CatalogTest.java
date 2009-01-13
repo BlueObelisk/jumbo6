@@ -3,11 +3,8 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
 import static org.xmlcml.euclid.EuclidConstants.F_S;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
 import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
-import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -16,6 +13,7 @@ import java.net.URL;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLMap;
@@ -23,6 +21,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -35,7 +34,7 @@ public class CatalogTest {
 	@Test
 	@Ignore
 	public void testCatalogToolURL() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	/**
@@ -43,7 +42,7 @@ public class CatalogTest {
 	@Test
 	@Ignore
 	public void testCatalogToolFile() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	/**
@@ -62,7 +61,7 @@ public class CatalogTest {
 		"  <scalar convention='cml:relativeUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>src/org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>"+
 		"</list>"+
 				"";
-		CMLList expected = (CMLList) parseValidString(expectedS);
+		CMLList expected = (CMLList)TestUtils.parseValidString(expectedS);
 		assertEqualsCanonically("list", expected, catalogList, true);
 	}
 
@@ -109,7 +108,7 @@ public class CatalogTest {
 //		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' role='cml:moleculeList' to='./geom1'/>"+
 //		"</map>"+
 //				"";
-//		CMLMap expected = (CMLMap) parseValidString(expectedS);
+//		CMLMap expected = (CMLMap)TestUtils.parseValidString(expectedS);
 		//AbstractTest.assertEqualsCanonically("list", expected, moleculeCatalogMap, true);
 		// find one specific namespace as string ...
 		String ref = moleculeCatalogMap.getToRef("http://www.xml-cml.org/mols/geom1");
@@ -120,7 +119,7 @@ public class CatalogTest {
 		Assert.assertEquals("link for geom1", "./geom1", link.getTo());
 		// make a valid url from it.
 		URL moleculeCatalogUrl = CatalogUtil.getURLFromLink(moleculeCatalog, link);
-        String expectedEnd = U_S+"org/xmlcml/cml/tools/examples/molecules/geom1";
+        String expectedEnd =CMLConstants.U_S+"org/xmlcml/cml/tools/examples/molecules/geom1";
 		Assert.assertTrue("Geom url", moleculeCatalogUrl.toString().endsWith(expectedEnd));
 		// this is where we would now get the moleculeList
 
@@ -143,7 +142,7 @@ public class CatalogTest {
 		"  </bondArray>"+
 		"</molecule>"+
 		"";
-		CMLMolecule expectedMolecule = (CMLMolecule) parseValidString(ohS);
+		CMLMolecule expectedMolecule = (CMLMolecule)TestUtils.parseValidString(ohS);
 		assertEqualsCanonically("list", expectedMolecule, molecule, true);
 	}
 

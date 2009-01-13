@@ -1,13 +1,4 @@
 package org.xmlcml.cml.test;
-import static org.junit.Assert.fail;
-import static org.xmlcml.cml.base.CMLConstants.XSD_DOUBLE;
-import static org.xmlcml.cml.base.CMLConstants.XSD_INTEGER;
-import static org.xmlcml.cml.base.CMLConstants.XSD_STRING;
-import static org.xmlcml.euclid.EuclidConstants.S_RBRAK;
-import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
-import static org.xmlcml.euclid.EuclidConstants.S_SPACE;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -45,6 +36,7 @@ import org.xmlcml.cml.element.CMLPlane3;
 import org.xmlcml.cml.element.CMLPoint3;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.element.CMLVector3;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
 import org.xmlcml.euclid.IntMatrix;
@@ -73,27 +65,27 @@ public class CMLAssert {
 	public final static String TEST_RESOURCE = "org/xmlcml/cml/element";
 
 	/** root of examples. */
-	public final static String EXAMPLES_RESOURCE = TEST_RESOURCE + S_SLASH
+	public final static String EXAMPLES_RESOURCE = TEST_RESOURCE + CMLConstants.S_SLASH
 			+ "examples";
 
 	/** root of complex examples. */
-	public final static String COMPLEX_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String COMPLEX_RESOURCE = EXAMPLES_RESOURCE + CMLConstants.S_SLASH
 			+ "complex";
 
 	/** root of experimental examples. */
 	public final static String EXPERIMENTAL_RESOURCE = EXAMPLES_RESOURCE
-			+ S_SLASH + "experimental";
+			+ CMLConstants.S_SLASH + "experimental";
 
 	/** root of xsd examples. */
-	public final static String SIMPLE_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String SIMPLE_RESOURCE = EXAMPLES_RESOURCE + CMLConstants.S_SLASH
 			+ "xsd";
 
 	/** root of dictionary examples. */
-	public final static String DICT_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String DICT_RESOURCE = EXAMPLES_RESOURCE + CMLConstants.S_SLASH
 			+ "dict";
 
 	/** root of unit examples. */
-	public final static String UNIT_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String UNIT_RESOURCE = EXAMPLES_RESOURCE + CMLConstants.S_SLASH
 			+ "units";
 
 	/** root of tool tests. */
@@ -101,16 +93,16 @@ public class CMLAssert {
 
 	/** root of tool test examples. */
 	public final static String TOOL_EXAMPLES_RESOURCE = TOOL_TEST_RESOURCE
-			+ S_SLASH + "examples";
+			+ CMLConstants.S_SLASH + "examples";
 
 	/** root of tool test molecules. */
 	public final static String TOOL_MOLECULES_RESOURCE = TOOL_EXAMPLES_RESOURCE
-			+ S_SLASH + "molecules";
+			+ CMLConstants.S_SLASH + "molecules";
 
 	/** index in each directory. */
 	public final static String INDEX = "index.xml";
 
-	static String TEST_INDEX = TEST_RESOURCE + S_SLASH + INDEX;
+	static String TEST_INDEX = TEST_RESOURCE + CMLConstants.S_SLASH + INDEX;
 
 	/** final string in dictionary namespaces */
 	public final static String CML_DICT = "cml";
@@ -160,15 +152,15 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test, Point3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
-	 * Assert.asserts equality of double arrays.
+	 * Asserts equality of double arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
@@ -196,7 +188,7 @@ public class CMLAssert {
 		} else if (b == null) {
 			s = "b is null";
 		} else if (a.length != b.length) {
-			s = "unequal arrays: " + a.length + S_SLASH + b.length;
+			s = "unequal arrays: " + a.length + CMLConstants.S_SLASH + b.length;
 		} else {
 			for (int i = 0; i < a.length; i++) {
 				if (!(((Double) a[i]).equals(b[i]) || !Real.isEqual(a[i], b[i],
@@ -213,7 +205,7 @@ public class CMLAssert {
 	}
 
 	/**
-	 * Assert.asserts non equality of double arrays.
+	 * Asserts non equality of double arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
@@ -251,7 +243,7 @@ public class CMLAssert {
 		} else if (b == null) {
 			s = "b is null";
 		} else if (a.length != b.length) {
-			s = "unequal arrays: " + a.length + S_SLASH + b.length;
+			s = "unequal arrays: " + a.length + CMLConstants.S_SLASH + b.length;
 		} else {
 			for (int i = 0; i < a.length; i++) {
 				if (!Real.isEqual(a[i], b[i], eps)) {
@@ -282,18 +274,18 @@ public class CMLAssert {
 		} else if (b == null) {
 			s = "b is null";
 		} else if (a.length != b.length) {
-			s = "unequal arrays: " + a.length + S_SLASH + b.length;
+			s = "unequal arrays: " + a.length + CMLConstants.S_SLASH + b.length;
 		} else {
 			for (int i = 0; i < a.length; i++) {
 				if (a[i].length != b[i].length) {
 					s = "row (" + i + ") has unequal lengths: " + a[i].length
-							+ S_SLASH + b[i].length;
+							+ CMLConstants.S_SLASH + b[i].length;
 					break;
 				}
 				for (int j = 0; j < a[i].length; j++) {
 					if (!Real.isEqual(a[i][j], b[i][j], eps)) {
 						s = "unequal element at (" + i + ", " + j + "), ("
-								+ a[i][j] + " != " + b[i][j] + S_RBRAK;
+								+ a[i][j] + " != " + b[i][j] + CMLConstants.S_RBRAK;
 						break;
 					}
 				}
@@ -324,7 +316,7 @@ public class CMLAssert {
 
 	/**
 	 * compares two XML nodes and checks float near-equivalence (can also be
-	 * used for documents without floats) uses assertEqualsCanonically and only
+	 * used for documents without floats) usesTstBase.assertEqualsCanonically and only
 	 * uses PMR code if fails
 	 * 
 	 * @param message
@@ -340,7 +332,7 @@ public class CMLAssert {
 
 	/**
 	 * compares two XML nodes and checks float near-equivalence (can also be
-	 * used for documents without floats) uses assertEqualsCanonically and only
+	 * used for documents without floats) usesTstBase.assertEqualsCanonically and only
 	 * uses PMR code if fails
 	 * 
 	 * @param message
@@ -605,22 +597,22 @@ public class CMLAssert {
 	/**
 	 * resource
 	 */
-	public final static String TOOLS_RESOURCE = "org" + U_S + "xmlcml" + U_S
-			+ "cml" + U_S + "tools";
+	public final static String TOOLS_RESOURCE = "org" + CMLConstants.U_S + "xmlcml" + CMLConstants.U_S
+			+ "cml" + CMLConstants.U_S + "tools";
 	/**
 	 * examples
 	 */
-	public final static String TOOLS_EXAMPLES = TOOLS_RESOURCE + U_S
+	public final static String TOOLS_EXAMPLES = TOOLS_RESOURCE + CMLConstants.U_S
 			+ "examples";
 
 	/**
 	 * crystal examples
 	 */
-	public final static String CRYSTAL_EXAMPLES = TOOLS_EXAMPLES + U_S
+	public final static String CRYSTAL_EXAMPLES = TOOLS_EXAMPLES + CMLConstants.U_S
 			+ "cryst";
 
 	/**
-	 * used by Assert.assert routines. copied from Assert
+	 * used by Assert routines. copied from Assert
 	 * 
 	 * @param message
 	 *            prepends if not null
@@ -651,7 +643,7 @@ public class CMLAssert {
 	}
 
 	/**
-	 * Assert.asserts equality of String arrays.
+	 * Asserts equality of String arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * equality if individual elements are equal or both elements are null
@@ -670,7 +662,7 @@ public class CMLAssert {
 	}
 
 	/**
-	 * Assert.asserts equality of String arrays.
+	 * Asserts equality of String arrays.
 	 * 
 	 * convenience method where test is a whitespace-separated set of tokens
 	 * 
@@ -681,7 +673,7 @@ public class CMLAssert {
 	 *            actual array may not include nulls
 	 */
 	public static void assertEquals(String message, String a, String[] b) {
-		String[] aa = a.split(S_SPACE);
+		String[] aa = a.split(EC.S_SPACE);
 		String s = testEquals(aa, b);
 		if (s != null) {
 			Assert.fail(message + "; " + s);
@@ -703,7 +695,7 @@ public class CMLAssert {
 		} else if (b == null) {
 			s = "b is null";
 		} else if (a.length != b.length) {
-			s = "unequal arrays: " + a.length + S_SLASH + b.length;
+			s = "unequal arrays: " + a.length + CMLConstants.S_SLASH + b.length;
 		} else {
 			for (int i = 0; i < a.length; i++) {
 				if (a[i] == null && b[i] == null) {
@@ -719,7 +711,7 @@ public class CMLAssert {
 	}
 
 	/**
-	 * Assert.asserts non equality of String arrays.
+	 * Asserts non equality of String arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
@@ -747,10 +739,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Real2 test, Real2 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
+		CMLAssert.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
 	}
 
 	/**
@@ -765,11 +757,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test, Real2 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 2", 2, test.length);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getXY(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXY(), epsilon);
 	}
 
 	/**
@@ -783,20 +775,20 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLArray test,
 			CMLArray expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		if ((test.getDataType() == null || test.getDataType()
-				.equals(XSD_STRING))
+				.equals(CMLConstants.XSD_STRING))
 				&& (expected.getDataType() == null || expected.getDataType()
-						.equals(XSD_STRING))) {
-			assertEquals(msg, test.getStrings(), expected.getStrings());
-		} else if (test.getDataType().equals(XSD_DOUBLE)
-				&& expected.getDataType().equals(XSD_DOUBLE)) {
-			assertEquals(msg, test.getDoubles(), expected.getDoubles(), EPS);
-		} else if (test.getDataType().equals(XSD_INTEGER)
-				&& expected.getDataType().equals(XSD_INTEGER)) {
-			assertEquals(msg, test.getInts(), expected.getInts());
+						.equals(CMLConstants.XSD_STRING))) {
+			Assert.assertEquals(msg, test.getStrings(), expected.getStrings());
+		} else if (test.getDataType().equals(CMLConstants.XSD_DOUBLE)
+				&& expected.getDataType().equals(CMLConstants.XSD_DOUBLE)) {
+			CMLAssert.assertEquals(msg, test.getDoubles(), expected.getDoubles(), EPS);
+		} else if (test.getDataType().equals(CMLConstants.XSD_INTEGER)
+				&& expected.getDataType().equals(CMLConstants.XSD_INTEGER)) {
+			Assert.assertEquals(msg, test.getInts(), expected.getInts());
 		} else {
 			Assert.fail("inconsistent dataTypes" + test.getDataType() + " / "
 					+ expected.getDataType());
@@ -814,13 +806,13 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLArray expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		if (!expected.getDataType().equals(XSD_DOUBLE)) {
+		if (!expected.getDataType().equals(CMLConstants.XSD_DOUBLE)) {
 			Assert.fail("expected should be double");
 		}
-		assertEquals(msg, test, expected.getDoubles(), EPS);
+		CMLAssert.assertEquals(msg, test, expected.getDoubles(), EPS);
 	}
 
 	/**
@@ -832,13 +824,13 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, int[] test, CMLArray expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		if (!expected.getDataType().equals(XSD_INTEGER)) {
+		if (!expected.getDataType().equals(CMLConstants.XSD_INTEGER)) {
 			Assert.fail("expected should be int");
 		}
-		assertEquals(msg, test, expected.getInts());
+		Assert.assertEquals(msg, test, expected.getInts());
 	}
 
 	/**
@@ -850,14 +842,14 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, String[] test, CMLArray expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		if (expected.getDataType() != null
-				&& !expected.getDataType().equals(XSD_STRING)) {
+				&& !expected.getDataType().equals(CMLConstants.XSD_STRING)) {
 			Assert.fail("expected should be String");
 		}
-		assertEquals(msg, test, expected.getStrings());
+		Assert.assertEquals(msg, test, expected.getStrings());
 	}
 
 	/**
@@ -876,10 +868,10 @@ public class CMLAssert {
 	public static void assertEqualsConcise(String message, CMLFormula formula1,
 			CMLFormula formula2, double eps) {
 		if (formula1 == null) {
-			fail(getAssertFormat(message, "formula", "null"));
+			Assert.fail(getAssertFormat(message, "formula", "null"));
 		}
 		if (formula2 == null) {
-			fail(getAssertFormat(message, "formula", "null"));
+			Assert.fail(getAssertFormat(message, "formula", "null"));
 		}
 		Assert.assertEquals("equal concise", true, formula1.equals(formula2,
 				eps));
@@ -959,10 +951,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLCellParameter test,
 			CMLCellParameter expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getType(), test.getXMLContent(), expected,
+		CMLAssert.assertEquals(msg, test.getType(), test.getXMLContent(), expected,
 				epsilon);
 	}
 
@@ -979,15 +971,15 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, String type, double[] test,
 			CMLCellParameter expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("type should not be null (" + msg + S_RBRAK, type);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("type should not be null (" + msg + CMLConstants.S_RBRAK, type);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertNotNull("expected should not have null type (" + msg
-				+ S_RBRAK, expected.getType());
+				+ CMLConstants.S_RBRAK, expected.getType());
 		Assert.assertEquals("types must be equal", 3, test.length);
-		assertEquals(msg, test, expected.getXMLContent(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXMLContent(), epsilon);
 	}
 
 	/**
@@ -1001,10 +993,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLLatticeVector test,
 			CMLLatticeVector expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getXMLContent(), expected.getXMLContent(),
+		CMLAssert.assertEquals(msg, test.getXMLContent(), expected.getXMLContent(),
 				epsilon);
 	}
 
@@ -1020,11 +1012,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLLatticeVector expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getXMLContent(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXMLContent(), epsilon);
 	}
 
 	/**
@@ -1038,10 +1030,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLLine3 test,
 			CMLLine3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getEuclidLine3(), expected.getEuclidLine3(),
+		CMLAssert.assertEquals(msg, test.getEuclidLine3(), expected.getEuclidLine3(),
 				epsilon);
 	}
 
@@ -1057,15 +1049,15 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLPoint3 testPoint,
 			CMLVector3 testVector, CMLLine3 expected, double epsilon) {
-		Assert.assertNotNull("testVector should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("testVector should not be null (" + msg + CMLConstants.S_RBRAK,
 				testVector);
-		Assert.assertNotNull("testPoint should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("testPoint should not be null (" + msg + CMLConstants.S_RBRAK,
 				testPoint);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, testVector.getEuclidVector3(), new Vector3(expected
+		CMLAssert.assertEquals(msg, testVector.getEuclidVector3(), new Vector3(expected
 				.getVector3()), epsilon);
-		assertEquals(msg, testPoint.getEuclidPoint3(), new Point3(expected
+		CMLAssert.assertEquals(msg, testPoint.getEuclidPoint3(), new Point3(expected
 				.getPoint3()), epsilon);
 	}
 
@@ -1080,14 +1072,14 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLMatrix test,
 			CMLMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		if (test.getEuclidRealMatrix() != null) {
-			assertEquals(msg, test.getEuclidRealMatrix(), expected
+			CMLAssert.assertEquals(msg, test.getEuclidRealMatrix(), expected
 					.getEuclidRealMatrix(), epsilon);
 		} else if (test.getEuclidIntMatrix() != null) {
-			assertEquals(msg, test.getEuclidIntMatrix(), expected
+			Assert.assertEquals(msg, test.getEuclidIntMatrix(), expected
 					.getEuclidIntMatrix());
 		} else {
 			Assert.fail("both matrices must be either real or int" + test);
@@ -1107,12 +1099,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, int rows, int cols,
 			double[] test, CMLMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("rows ", rows, expected.getRows());
 		Assert.assertEquals("columns ", cols, expected.getColumns());
-		assertEquals(msg, rows, cols, test, expected.getEuclidRealMatrix(),
+		CMLAssert.assertEquals(msg, rows, cols, test, expected.getEuclidRealMatrix(),
 				epsilon);
 	}
 
@@ -1128,12 +1120,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, int rows, int cols, int[] test,
 			CMLMatrix expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("rows ", rows, expected.getRows());
 		Assert.assertEquals("columns ", cols, expected.getColumns());
-		assertEquals(msg, rows, cols, test, expected.getEuclidIntMatrix());
+		CMLAssert.assertEquals(msg, rows, cols, test, expected.getEuclidIntMatrix());
 	}
 
 	/**
@@ -1147,10 +1139,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLPlane3 test,
 			CMLPlane3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1165,11 +1157,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLPlane3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 4", 4, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1183,10 +1175,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLPoint3 test,
 			CMLPoint3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getXYZ3(), expected.getXYZ3(), epsilon);
+		CMLAssert.assertEquals(msg, test.getXYZ3(), expected.getXYZ3(), epsilon);
 	}
 
 	/**
@@ -1201,11 +1193,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLPoint3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getXYZ3(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXYZ3(), epsilon);
 	}
 
 	/**
@@ -1219,10 +1211,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLTransform3 test,
 			CMLTransform3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getEuclidTransform3(), expected
+		CMLAssert.assertEquals(msg, test.getEuclidTransform3(), expected
 				.getEuclidTransform3(), epsilon);
 	}
 
@@ -1238,11 +1230,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLTransform3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 16", 16, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getEuclidTransform3(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getEuclidTransform3(), epsilon);
 	}
 
 	/**
@@ -1256,10 +1248,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, CMLVector3 test,
 			CMLVector3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getXYZ3(), expected.getXYZ3(), epsilon);
+		CMLAssert.assertEquals(msg, test.getXYZ3(), expected.getXYZ3(), epsilon);
 	}
 
 	/**
@@ -1274,11 +1266,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			CMLVector3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getXYZ3(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXYZ3(), epsilon);
 	}
 
 	/**
@@ -1290,10 +1282,10 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, IntArray test, IntArray expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray());
+		Assert.assertEquals(msg, test.getArray(), expected.getArray());
 	}
 
 	/**
@@ -1305,12 +1297,12 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, int[] test, IntArray expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("must be of equal length ", test.length, expected
 				.getArray().length);
-		assertEquals(msg, test, expected.getArray());
+		Assert.assertEquals(msg, test, expected.getArray());
 	}
 
 	/**
@@ -1324,22 +1316,22 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, IntMatrix test,
 			IntMatrix expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertNotNull("expected should have columns (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have columns (" + msg + CMLConstants.S_RBRAK,
 				expected.getCols());
-		Assert.assertNotNull("expected should have rows (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have rows (" + msg + CMLConstants.S_RBRAK,
 				expected.getRows());
-		Assert.assertNotNull("test should have columns (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have columns (" + msg + CMLConstants.S_RBRAK, test
 				.getCols());
-		Assert.assertNotNull("test should have rows (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have rows (" + msg + CMLConstants.S_RBRAK, test
 				.getRows());
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getRows(), expected.getRows());
-		Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("columns should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getCols(), expected.getCols());
-		assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray());
+		Assert.assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray());
 	}
 
 	/**
@@ -1354,14 +1346,14 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, int rows, int cols, int[] test,
 			IntMatrix expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, rows,
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, rows,
 				expected.getRows());
-		Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, cols,
+		Assert.assertEquals("columns should be equal (" + msg + CMLConstants.S_RBRAK, cols,
 				expected.getCols());
-		assertEquals(msg, test, expected.getMatrixAsArray());
+		Assert.assertEquals(msg, test, expected.getMatrixAsArray());
 	}
 
 	/**
@@ -1373,10 +1365,10 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, IntSet test, IntSet expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getElements(), expected.getElements());
+		Assert.assertEquals(msg, test.getElements(), expected.getElements());
 	}
 
 	/**
@@ -1388,16 +1380,16 @@ public class CMLAssert {
 	 * @param expected
 	 */
 	public static void assertEquals(String msg, int[] test, IntSet expected) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("must be of equal length ", test.length, expected
 				.getElements().length);
-		assertEquals(msg, test, expected.getElements());
+		Assert.assertEquals(msg, test, expected.getElements());
 	}
 
 	/**
-	 * Assert.asserts equality of int arrays.
+	 * Asserts equality of int arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
@@ -1415,7 +1407,7 @@ public class CMLAssert {
 	}
 
 	/**
-	 * Assert.asserts non equality of double arrays.
+	 * Asserts non equality of double arrays.
 	 * 
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
@@ -1446,7 +1438,7 @@ public class CMLAssert {
 		} else if (b == null) {
 			s = "b is null";
 		} else if (a.length != b.length) {
-			s = "unequal arrays: " + a.length + S_SLASH + b.length;
+			s = "unequal arrays: " + a.length + CMLConstants.S_SLASH + b.length;
 		} else {
 			for (int i = 0; i < a.length; i++) {
 				if (a[i] != b[i]) {
@@ -1469,11 +1461,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Line3 test, Line3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getPoint(), expected.getPoint(), epsilon);
-		assertEquals(msg, test.getVector(), expected.getVector(), epsilon);
+		CMLAssert.assertEquals(msg, test.getPoint(), expected.getPoint(), epsilon);
+		CMLAssert.assertEquals(msg, test.getVector(), expected.getVector(), epsilon);
 	}
 
 	/**
@@ -1488,14 +1480,14 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Point3 testPoint,
 			Vector3 testVector, Line3 expected, double epsilon) {
-		Assert.assertNotNull("testPoint should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("testPoint should not be null (" + msg + CMLConstants.S_RBRAK,
 				testPoint);
-		Assert.assertNotNull("testVector should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("testVector should not be null (" + msg + CMLConstants.S_RBRAK,
 				testVector);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, testPoint, expected.getPoint(), epsilon);
-		assertEquals(msg, testVector, expected.getVector(), epsilon);
+		CMLAssert.assertEquals(msg, testPoint, expected.getPoint(), epsilon);
+		CMLAssert.assertEquals(msg, testVector, expected.getVector(), epsilon);
 	}
 
 	/**
@@ -1509,10 +1501,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Plane3 test, Plane3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1527,11 +1519,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test, Plane3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 4", 4, test.length);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1545,10 +1537,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Point3Vector test,
 			Point3Vector expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1563,12 +1555,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			Point3Vector expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("must be of equal length ", test.length, expected
 				.getArray().length);
-		assertEquals(msg, test, expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1582,10 +1574,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Real2Vector expected,
 			Real2Vector test, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, expected.getXY().getArray(), test.getXY().getArray(),
+		CMLAssert.assertEquals(msg, expected.getXY().getArray(), test.getXY().getArray(),
 				epsilon);
 	}
 
@@ -1601,12 +1593,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			Real2Vector expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("must be of equal length ", test.length, expected
 				.getXY().getArray().length);
-		assertEquals(msg, test, expected.getXY().getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getXY().getArray(), epsilon);
 	}
 
 	/**
@@ -1619,9 +1611,9 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Real3Range r3ref,
 			Real3Range r3, double epsilon) {
-		assertEquals("xRange", r3.getXRange(), r3ref.getXRange(), epsilon);
-		assertEquals("yRange", r3.getYRange(), r3ref.getYRange(), epsilon);
-		assertEquals("zRange", r3.getZRange(), r3ref.getZRange(), epsilon);
+		CMLAssert.assertEquals("xRange", r3.getXRange(), r3ref.getXRange(), epsilon);
+		CMLAssert.assertEquals("yRange", r3.getYRange(), r3ref.getYRange(), epsilon);
+		CMLAssert.assertEquals("zRange", r3.getZRange(), r3ref.getZRange(), epsilon);
 	}
 
 	/**
@@ -1635,10 +1627,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, RealArray test,
 			RealArray expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1653,12 +1645,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			RealArray expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
 		Assert.assertEquals("must be of equal length ", test.length, expected
 				.getArray().length);
-		assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1673,22 +1664,22 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, RealMatrix test,
 			RealMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertNotNull("expected should have columns (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have columns (" + msg + CMLConstants.S_RBRAK,
 				expected.getCols());
-		Assert.assertNotNull("expected should have rows (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have rows (" + msg + CMLConstants.S_RBRAK,
 				expected.getRows());
-		Assert.assertNotNull("test should have columns (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have columns (" + msg + CMLConstants.S_RBRAK, test
 				.getCols());
-		Assert.assertNotNull("test should have rows (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have rows (" + msg + CMLConstants.S_RBRAK, test
 				.getRows());
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getRows(), expected.getRows());
-		Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("columns should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getCols(), expected.getCols());
-		assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
+		CMLAssert.assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
 				epsilon);
 	}
 
@@ -1705,14 +1696,14 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, int rows, int cols,
 			double[] test, RealMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, rows,
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, rows,
 				expected.getRows());
-		Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, cols,
+		Assert.assertEquals("columns should be equal (" + msg + CMLConstants.S_RBRAK, cols,
 				expected.getCols());
-		assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
 	}
 
 	/**
@@ -1742,22 +1733,22 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, RealSquareMatrix test,
 			RealSquareMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertNotNull("expected should have columns (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have columns (" + msg + CMLConstants.S_RBRAK,
 				expected.getCols());
-		Assert.assertNotNull("expected should have rows (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should have rows (" + msg + CMLConstants.S_RBRAK,
 				expected.getRows());
-		Assert.assertNotNull("test should have columns (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have columns (" + msg + CMLConstants.S_RBRAK, test
 				.getCols());
-		Assert.assertNotNull("test should have rows (" + msg + S_RBRAK, test
+		Assert.assertNotNull("test should have rows (" + msg + CMLConstants.S_RBRAK, test
 				.getRows());
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getRows(), expected.getRows());
-		Assert.assertEquals("columns should be equal (" + msg + S_RBRAK, test
+		Assert.assertEquals("columns should be equal (" + msg + CMLConstants.S_RBRAK, test
 				.getCols(), expected.getCols());
-		assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
+		CMLAssert.assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
 				epsilon);
 	}
 
@@ -1773,12 +1764,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, int rows, double[] test,
 			RealSquareMatrix expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		Assert.assertEquals("rows should be equal (" + msg + S_RBRAK, rows,
+		Assert.assertEquals("rows should be equal (" + msg + CMLConstants.S_RBRAK, rows,
 				expected.getRows());
-		assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
 	}
 
 	/**
@@ -1792,10 +1783,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Transform2 test,
 			Transform2 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
+		CMLAssert.assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
 				epsilon);
 	}
 
@@ -1811,12 +1802,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			Transform2 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertEquals("test should have 16 elements (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertEquals("test should have 16 elements (" + msg + CMLConstants.S_RBRAK,
 				9, test.length);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
 	}
 
 	/**
@@ -1830,10 +1821,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Transform3 test,
 			Transform3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
+		CMLAssert.assertEquals(msg, test.getMatrixAsArray(), expected.getMatrixAsArray(),
 				epsilon);
 	}
 
@@ -1849,12 +1840,12 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			Transform3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertEquals("test should have 16 elements (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertEquals("test should have 16 elements (" + msg + CMLConstants.S_RBRAK,
 				16, test.length);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getMatrixAsArray(), epsilon);
 	}
 
 	/**
@@ -1868,10 +1859,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Vector3 test, Vector3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1886,11 +1877,11 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, double[] test,
 			Vector3 expected, double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
 		Assert.assertEquals("must be of length 3", 3, test.length);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test, expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test, expected.getArray(), epsilon);
 	}
 
 	/**
@@ -1904,10 +1895,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Vector2 test, Vector2 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("expected should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("expected should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
+		CMLAssert.assertEquals(msg, test.getXY(), expected.getXY(), epsilon);
 	}
 
 	/**
@@ -1921,10 +1912,10 @@ public class CMLAssert {
 	 */
 	public static void assertEquals(String msg, Point3 test, Point3 expected,
 			double epsilon) {
-		Assert.assertNotNull("test should not be null (" + msg + S_RBRAK, test);
-		Assert.assertNotNull("ref should not be null (" + msg + S_RBRAK,
+		Assert.assertNotNull("test should not be null (" + msg + CMLConstants.S_RBRAK, test);
+		Assert.assertNotNull("ref should not be null (" + msg + CMLConstants.S_RBRAK,
 				expected);
-		assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
+		CMLAssert.assertEquals(msg, test.getArray(), expected.getArray(), epsilon);
 	}
 
 }

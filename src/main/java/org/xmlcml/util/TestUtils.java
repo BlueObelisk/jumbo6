@@ -66,7 +66,7 @@ public final class TestUtils implements CMLConstants {
 
     /** compares two XML nodes and checks float near-equivalence 
      * (can also be used for documents without floats)
-     * uses assertEqualsCanonically and only uses PMR code if fails
+     * usesTstBase.assertEqualsCanonically and only uses PMR code if fails
      * @param message
      * @param refNode
      * @param testNode
@@ -87,7 +87,7 @@ public final class TestUtils implements CMLConstants {
 
 	public static void assertEqualsIncludingFloat(String message, String expectedS,
 			Node testNode, boolean stripWhite, double eps) {
-		assertEqualsIncludingFloat(message, parseValidString(expectedS), testNode, stripWhite, eps);
+		assertEqualsIncludingFloat(message, TestUtils.parseValidString(expectedS), testNode, stripWhite, eps);
 	}
 
 	private static void assertEqualsIncludingFloat(String message, Node refNode,
@@ -302,7 +302,7 @@ public final class TestUtils implements CMLConstants {
 	}
 
 	/**
-	 * used by Assert.assert routines. copied from Assert
+	 * used by Assert routines. copied from Assert
 	 * 
 	 * @param message
 	 *            prepends if not null
@@ -314,7 +314,7 @@ public final class TestUtils implements CMLConstants {
 	        Object actual) {
 	    String formatted = "";
 	    if (message != null) {
-	        formatted = message + S_SPACE;
+	        formatted = message + CMLConstants.S_SPACE;
 	    }
 	    return formatted + "expected:<" + expected + "> but was:<" + actual
 	            + ">";

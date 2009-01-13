@@ -1,16 +1,14 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import java.util.List;
 
+import org.junit.Assert;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.util.TestUtils;
 
 public class MoleculeToolFixture {
 
@@ -29,7 +27,7 @@ public class MoleculeToolFixture {
 		for (CMLBond bond : bonds) {
 			found[i++] = bond.getOrder();
 		}
-		assertEquals("expected orders", found, expected);
+		Assert.assertEquals("expected orders", found, expected);
 	}
 
 	private MoleculeAtomBondFixture fixture = new MoleculeAtomBondFixture();
@@ -49,7 +47,7 @@ public class MoleculeToolFixture {
 	public AbstractTool moleculeToolBond0;
 	public AbstractTool moleculeToolXmlBonds;
 
-	String benzeneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='benzene'>"
+	String benzeneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='benzene'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -64,13 +62,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='A'/>"
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='A'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule benzene = null;
 
 	String[] benzeneOrder = new String[] { "2", "1", "2", "1", "2", "1" };
 
-	String nickS = S_EMPTY + "<molecule " + CML_XMLNS + ">" + " <atomArray> "
+	String nickS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + ">" + " <atomArray> "
 			+ "  <atom id='a1' elementType='O'/>"
 			+ "  <atom id='a2' elementType='O'/>"
 			+ "  <atom id='a3' elementType='O'/>"
@@ -155,7 +153,7 @@ public class MoleculeToolFixture {
 			+ "  <bond atomRefs2='a38 a41' /> " + " </bondArray>"
 			+ " <formula formalCharge='0' concise='C 19 H 9 N 5 O 8'> "
 			+ "  <atomArray elementType='C H N O' count='19.0 9.0 5.0 8.0' />"
-			+ " </formula> " + "</molecule> " + S_EMPTY;
+			+ " </formula> " + "</molecule> " + CMLConstants.S_EMPTY;
 
 	CMLMolecule nick = null;
 
@@ -164,7 +162,7 @@ public class MoleculeToolFixture {
 			"1", "2", "1", "1", "2", "1", "1", "2", "1", "1", "2", "1", "1",
 			"1", "1", "1", "1", "1", "1", "1", "1", "1" };
 
-	String styreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='styrene'>"
+	String styreneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='styrene'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -183,14 +181,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='A'/>"
 			+ "    <bond id='b7' atomRefs2='a6 a7' order='1'/>"
 			+ "    <bond id='b8' atomRefs2='a7 a8' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule styrene = null;
 
 	String[] styreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
 			"2", };
 
-	String pyreneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='pyrene'>"
+	String pyreneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='pyrene'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -228,14 +226,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
 			+ "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
 			+ "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule pyrene = null;
 
 	String[] pyreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
 			"1", "2", "1", "2", "1", "1", "1", "2", "1", "1", "2", "1" };
 
-	String tripheneS = S_EMPTY + "<molecule " + CML_XMLNS
+	String tripheneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='triphene'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -266,14 +264,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b61' atomRefs2='a6 a61' order='1'/>"
 			+ "    <bond id='b62' atomRefs2='a61 a62' order='1'/>"
 			+ "    <bond id='b63' atomRefs2='a62 a16' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule triphene = null;
 
 	String[] tripheneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
 			"2", "1", "1", "1", "2", "1", "2", "1" };
 
-	String methyleneCyclohexeneS = S_EMPTY + "<molecule " + CML_XMLNS
+	String methyleneCyclohexeneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methyleneCyclohexene'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -290,14 +288,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
 			+ "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule methyleneCyclohexene = null;
 
 	String[] methyleneCyclohexeneOrder = new String[] { "2", "1", "1", "1",
 			"1", "1", "2" };
 
-	String methyleneCyclohexadieneS = S_EMPTY + "<molecule " + CML_XMLNS
+	String methyleneCyclohexadieneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methyleneCyclohexadiene'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -314,14 +312,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
 			+ "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule methyleneCyclohexadiene = null;
 
 	String[] methyleneCyclohexadieneOrder = new String[] { "2", "1", "1", "2",
 			"1", "1", "2" };
 
-	String co2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='co2'>"
+	String co2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='co2'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -329,13 +327,13 @@ public class MoleculeToolFixture {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule co2 = null;
 
 	String[] co2Order = new String[] { "2", "2" };
 
-	String azuleneS = S_EMPTY + "<molecule " + CML_XMLNS + " title='azulene'>"
+	String azuleneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='azulene'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -359,14 +357,14 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b9' atomRefs2='a9 a10' order='1'/>"
 			+ "    <bond id='b10' atomRefs2='a1 a10' order='1'/>"
 			+ "    <bond id='b11' atomRefs2='a4 a10' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule azulene = null;
 
 	String[] azuleneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
 			"1", "2", "1", "1" };
 
-	String conjugatedS = S_EMPTY + "<molecule " + CML_XMLNS
+	String conjugatedS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='conjugated'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -386,13 +384,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b6' atomRefs2='a6 a7' order='1'/>"
 			+ "    <bond id='b7' atomRefs2='a7 a8' order='1'/>"
 			+ "    <bond id='b8' atomRefs2='a8 a9' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule conjugated = null;
 
-	String formate1S = S_EMPTY
+	String formate1S = CMLConstants.S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ " title='formate1'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
@@ -401,11 +399,11 @@ public class MoleculeToolFixture {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule formate1 = null;
 
-	String formate2S = S_EMPTY + "<molecule " + CML_XMLNS
+	String formate2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='formate2'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -413,11 +411,11 @@ public class MoleculeToolFixture {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule formate2 = null;
 
-	String formate3S = S_EMPTY + "<molecule " + CML_XMLNS
+	String formate3S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='formate3'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -425,11 +423,11 @@ public class MoleculeToolFixture {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule formate3 = null;
 
-	String pyridineS = S_EMPTY + "<molecule " + CML_XMLNS
+	String pyridineS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='pyridine'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -444,13 +442,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule pyridine = null;
 
-	String pyridiniumS = S_EMPTY
+	String pyridiniumS = CMLConstants.S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ " title='pyridinium'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
@@ -466,11 +464,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule pyridinium = null;
 
-	String pyridone4S = S_EMPTY + "<molecule " + CML_XMLNS
+	String pyridone4S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='pyridone4'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -487,13 +485,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
 			+ "    <bond id='b7' atomRefs2='a4 a7' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule pyridone4 = null;
 
 	String nitroMethaneS = ""
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ " title='MeN+(-O)O-'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' hydrogenCount='0' formalCharge='1'/>"
@@ -504,13 +502,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule nitroMethane = null;
 
-	String nitricS = S_EMPTY
+	String nitricS = CMLConstants.S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ " title='nitric'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' hydrogenCount='0'/>"
@@ -521,13 +519,13 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule nitric = null;
 
-	String oxalateS = S_EMPTY
+	String oxalateS = CMLConstants.S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ " title='oxalate'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
@@ -542,22 +540,22 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
 			+ "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule oxalate = null;
 
 	// =========== redistribute molecular charge ==============
-	String methylammoniumS = S_EMPTY + "<molecule " + CML_XMLNS
+	String methylammoniumS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methylammonium' formalCharge='1'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
 			+ "    <atom id='a2' elementType='N' hydrogenCount='3'/>"
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule methylammonium = null;
 
-	String pyridinium1S = S_EMPTY + "<molecule " + CML_XMLNS
+	String pyridinium1S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='pyridinium1' formalCharge='1'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -572,11 +570,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='2'/>"
 			+ "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a6 a1' order='2'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule pyridinium1 = null;
 
-	String oxalate2S = S_EMPTY + "<molecule " + CML_XMLNS
+	String oxalate2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='oxalate2' formalCharge='-2'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -590,11 +588,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
 			+ "    <bond id='b5' atomRefs2='a4 a6' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule oxalate2 = null;
 
-	String diMethylIminiumS = S_EMPTY + "<molecule " + CML_XMLNS
+	String diMethylIminiumS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='diMethylIminium Me2N-CH2(+)'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='2'/>"
 			+ "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -604,11 +602,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule diMethylIminium = null;
 
-	String munchnoneS = S_EMPTY + "<molecule " + CML_XMLNS
+	String munchnoneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='munchnone'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -623,12 +621,12 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
 			+ "    <bond id='b5' atomRefs2='a1 a5' order='1'/>"
 			+ "    <bond id='b6' atomRefs2='a1 a6' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule munchnone = null;
 
 	// nitrogen molecules
-	String nitric2S = S_EMPTY + "<molecule " + CML_XMLNS + " title='ON(O)O'>"
+	String nitric2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='ON(O)O'>"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -638,11 +636,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule nitric2 = null;
 
-	String nitroMethane2S = S_EMPTY + "<molecule " + CML_XMLNS
+	String nitroMethane2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='CH3N(O)O'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='3'/>"
 			+ "    <atom id='a2' elementType='N' hydrogenCount='0'/>"
@@ -652,12 +650,12 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule nitroMethane2 = null;
 
 	// oxy anion
-	String carbonate2S = S_EMPTY + "<molecule " + CML_XMLNS
+	String carbonate2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='OC(O)O'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='O' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='0'/>"
@@ -667,12 +665,12 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
 			+ "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule carbonate2 = null;
 
 	// oxy anion
-	String hydrogenSulfateS = S_EMPTY + "<molecule " + CML_XMLNS
+	String hydrogenSulfateS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='HSO4'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='O' hydrogenCount='0'/>"
@@ -684,12 +682,12 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
 			+ "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule hydrogenSulfate = null;
 
 	// methaneSulfonate
-	String methaneSulfonateS = S_EMPTY + "<molecule " + CML_XMLNS
+	String methaneSulfonateS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methaneSulfonate'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='S' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='3'/>"
@@ -701,11 +699,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
 			+ "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
 			+ "    <bond id='b4' atomRefs2='a1 a5' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule methaneSulfonate = null;
 
-	String benzophenoneS = S_EMPTY + "<molecule " + CML_XMLNS
+	String benzophenoneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='benzophenone'>" + "  <atomArray>"
 			+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -737,11 +735,11 @@ public class MoleculeToolFixture {
 			+ "    <bond id='b13' atomRefs2='a12 a13' order='1'/>"
 			+ "    <bond id='b14' atomRefs2='a13 a14' order='1'/>"
 			+ "    <bond id='b15' atomRefs2='a9 a14' order='1'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule benzophenone = null;
 
-	String sproutS = S_EMPTY + "<molecule " + CML_XMLNS + " title='sprout'>"
+	String sproutS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='sprout'>"
 			+ "  <atomArray>" + "    <atom id='a1' elementType='C'/>"
 			+ "    <atom id='a2' elementType='C'/>"
 			+ "    <atom id='a3' elementType='C'/>"
@@ -768,7 +766,7 @@ public class MoleculeToolFixture {
 			+ "     <bond id='a5 a11' atomRefs2='a5 a11'/>"
 			+ "     <bond id='a6 a12' atomRefs2='a6 a12'/>"
 			+ "     <bond id='a12 a13' atomRefs2='a12 a13'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule sprout = null;
 
@@ -819,7 +817,7 @@ public class MoleculeToolFixture {
 
 	private CMLMolecule makeMol(CMLMolecule mol, String s) {
 		if (mol == null) {
-			mol = (CMLMolecule) parseValidString(s);
+			mol = (CMLMolecule)TestUtils.parseValidString(s);
 		}
 		return mol;
 	}

@@ -1,14 +1,12 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.C_LBRAK;
-import static org.xmlcml.euclid.EuclidConstants.C_DOLLAR;
-import static org.xmlcml.euclid.EuclidConstants.C_RBRAK;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.euclid.EC;
 
 public class SMILESBuffer {
 private static Logger LOG = Logger.getLogger(SMILESBuffer.class);
@@ -21,7 +19,7 @@ private static Logger LOG = Logger.getLogger(SMILESBuffer.class);
 		groupMap.put("Ac", "(C(=O)C)");
 	}
 	
-	public static char GROUP_DELIM = C_DOLLAR;
+	public static char GROUP_DELIM = CMLConstants.C_DOLLAR;
 	
 	public static String lookup(String s) {
 		return (s == null) ? null : groupMap.get(s);
@@ -94,11 +92,11 @@ private static Logger LOG = Logger.getLogger(SMILESBuffer.class);
 	public void insertChar(char c) {
 		saveBuffer();
 		try {
-			if (c == C_LBRAK) {
+			if (c == EC.C_LBRAK) {
 				saveValidate = validateSMILES;
 				validateSMILES = false;
-				insertCharAndAdjustCaret(C_LBRAK);
-				insertCharAndAdjustCaret(C_RBRAK);
+				insertCharAndAdjustCaret(EC.C_LBRAK);
+				insertCharAndAdjustCaret(EC.C_RBRAK);
 				validateSMILES = saveValidate;
 				// position inside brackets
 				setCaret(caret - 1);

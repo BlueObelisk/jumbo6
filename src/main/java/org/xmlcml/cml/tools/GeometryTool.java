@@ -10,6 +10,7 @@ import nu.xom.Elements;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAngle;
@@ -139,7 +140,7 @@ public class GeometryTool extends AbstractTool {
                     && usedAtomTable.get(at2) != null) {
                 if (usedAtomTable.get(at3) == null) {
                     calculateZMCoords(at0, at1, at2, at3, torsion);
-                    usedAtomTable.put(at3, S_EMPTY); //$NON-NLS-1$
+                    usedAtomTable.put(at3, CMLConstants.S_EMPTY); //$NON-NLS-1$
                     tVector.remove(torsion);
                     return true;
                 }
@@ -149,7 +150,7 @@ public class GeometryTool extends AbstractTool {
                     && usedAtomTable.get(at1) != null) {
                 if (usedAtomTable.get(at0) == null) {
                     calculateZMCoords(at3, at2, at1, at0, torsion);
-                    usedAtomTable.put(at0, S_EMPTY); //$NON-NLS-1$
+                    usedAtomTable.put(at0, CMLConstants.S_EMPTY); //$NON-NLS-1$
                     tVector.remove(torsion);
                     return true;
                 }
@@ -175,7 +176,7 @@ public class GeometryTool extends AbstractTool {
                     .calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
             throw new RuntimeException(
-                    "Cannot find length for: " + at2.getId() + S_SLASH + at3.getId());} //$NON-NLS-1$ //$NON-NLS-2$
+                    "Cannot find length for: " + at2.getId() + CMLConstants.S_SLASH + at3.getId());} //$NON-NLS-1$ //$NON-NLS-2$
         Angle bondAngle = new Angle(ang0.getXMLContent(), Angle.Units.DEGREES);
         Angle torsionAngle = new Angle(torsion.getXMLContent(),
                 Angle.Units.DEGREES);
@@ -245,9 +246,9 @@ public class GeometryTool extends AbstractTool {
         CMLAtom at2 = molecule.getAtomById(atomRefs4[2]);
         this.calculateStartTriangle(at0, at1, at2);
         Map<CMLAtom, String> usedAtomTable = new HashMap<CMLAtom, String>();
-        usedAtomTable.put(at0, S_EMPTY); //$NON-NLS-1$
-        usedAtomTable.put(at1, S_EMPTY); //$NON-NLS-1$
-        usedAtomTable.put(at2, S_EMPTY); //$NON-NLS-1$
+        usedAtomTable.put(at0, CMLConstants.S_EMPTY); //$NON-NLS-1$
+        usedAtomTable.put(at1, CMLConstants.S_EMPTY); //$NON-NLS-1$
+        usedAtomTable.put(at2, CMLConstants.S_EMPTY); //$NON-NLS-1$
         while (addNextTorsion(tVector, usedAtomTable)) {
             ;
         }
@@ -276,7 +277,7 @@ public class GeometryTool extends AbstractTool {
             length1 = bond1.calculateBondLength(CoordinateType.CARTESIAN);
         } catch (Exception e) {
             throw new RuntimeException(
-                    "Cannot find length for: " + at0.getId() + S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
+                    "Cannot find length for: " + at0.getId() + CMLConstants.S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         at1.setXYZ3(new Point3(length1, 0., 0.));
         double length2 = 0.0;
@@ -284,7 +285,7 @@ public class GeometryTool extends AbstractTool {
             length2 = bond2.calculateBondLength(CoordinateType.TWOD);
         } catch (Exception e) {
             throw new RuntimeException(
-                    "Cannot find length for: " + at2.getId() + S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
+                    "Cannot find length for: " + at2.getId() + CMLConstants.S_SLASH + at1.getId()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         double angle = ang0.getXMLContent() / Angle.DEGREES_IN_RADIAN;
         at2.setXYZ3(new Point3(length1 - length2 * Math.cos(angle), length2
@@ -365,8 +366,8 @@ public class GeometryTool extends AbstractTool {
                 System.err.println("CMLDOM bug: " + nfe);
                 continue;
             }
-            idArray1.append(idList.get(0) + S_UNDER + idList.get(1));
-            idArray2.append(toIdList.get(0) + S_UNDER + toIdList.get(1));
+            idArray1.append(idList.get(0) + CMLConstants.S_UNDER + idList.get(1));
+            idArray2.append(toIdList.get(0) + CMLConstants.S_UNDER + toIdList.get(1));
             for (int j = 0; j < 4; j++) {
                 CMLArray column = table.getArrayElements().get(j+4);
                 column.append(molecule.getAtomById(idList.get(j)).getElementType());
@@ -454,8 +455,8 @@ public class GeometryTool extends AbstractTool {
                  System.err.println("CMLDOM bug: " + nfe);
                  continue;
              }
-             idArray1.append(id[0] + S_UNDER + id[1] + S_UNDER + id[2]);
-             idArray2.append(toIdList.get(0) + S_UNDER + toIdList.get(1) + S_UNDER + toIdList.get(2));
+             idArray1.append(id[0] + CMLConstants.S_UNDER + id[1] + CMLConstants.S_UNDER + id[2]);
+             idArray2.append(toIdList.get(0) + CMLConstants.S_UNDER + toIdList.get(1) + CMLConstants.S_UNDER + toIdList.get(2));
              for (int j = 0; j < 3; j++) {
                  CMLArray column = table.getArrayElements().get(j+4);
                  column.append(molecule.getAtomById(id[j]).getElementType());
@@ -512,9 +513,9 @@ public class GeometryTool extends AbstractTool {
                   System.err.println("CMLDOM bug: " + nfe);
                   continue;
               }
-              idArray1.append(id[0] + S_UNDER + id[1] + S_UNDER + id[2] + S_UNDER + id[3]);
-              idArray2.append(toIdList.get(0) + S_UNDER + toIdList.get(1) + S_UNDER + 
-                      toIdList.get(2) + S_UNDER + toIdList.get(3));
+              idArray1.append(id[0] + CMLConstants.S_UNDER + id[1] + CMLConstants.S_UNDER + id[2] + CMLConstants.S_UNDER + id[3]);
+              idArray2.append(toIdList.get(0) + CMLConstants.S_UNDER + toIdList.get(1) + CMLConstants.S_UNDER + 
+                      toIdList.get(2) + CMLConstants.S_UNDER + toIdList.get(3));
               for (int j = 0; j < 4; j++) {
                   CMLArray column = table.getArrayElements().get(j+4);
                   column.append(molecule.getAtomById(id[j]).getElementType());
@@ -801,7 +802,7 @@ public class GeometryTool extends AbstractTool {
         }
         for (int i = 0; i < atoms.size(); i++) {
             for (int j = 0; j < atoms.size(); j++) {
-                String s = S_EMPTY + nbm[i][j];
+                String s = CMLConstants.S_EMPTY + nbm[i][j];
                 LOG.info(S_SPACE + s);
             }
             LOG.info(S_NL);

@@ -1,10 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.cml.tools.MoleculeToolFixture.abov;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -16,6 +11,7 @@ import nu.xom.Document;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -28,6 +24,7 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 public class MoreMoleculeToolTest {
 
@@ -39,15 +36,15 @@ public class MoreMoleculeToolTest {
 	 */
 	@Test
 	public void testAdjustBondOrdersToValency() {
-		abov(tFix.benzene, 0, tFix.benzeneOrder); // OK
+		MoleculeToolFixture.abov(tFix.benzene, 0, tFix.benzeneOrder); // OK
 		// abov(nick, 0, nickOrder);
-		abov(tFix.styrene, 0, tFix.styreneOrder); // OK
-		abov(tFix.pyrene, 0, tFix.pyreneOrder); // OK
-		abov(tFix.triphene, 1, tFix.tripheneOrder); //
+		MoleculeToolFixture.abov(tFix.styrene, 0, tFix.styreneOrder); // OK
+		MoleculeToolFixture.abov(tFix.pyrene, 0, tFix.pyreneOrder); // OK
+		MoleculeToolFixture.abov(tFix.triphene, 1, tFix.tripheneOrder); //
 		// abov(methyleneCyclohexene, 0, methyleneCyclohexeneOrder); // OK
 		// abov(methyleneCyclohexadiene, 0, methyleneCyclohexadieneOrder); // OK
-		abov(tFix.co2, 0, tFix.co2Order); // OK
-		abov(tFix.azulene, 0, tFix.azuleneOrder);
+		MoleculeToolFixture.abov(tFix.co2, 0, tFix.co2Order); // OK
+		MoleculeToolFixture.abov(tFix.azulene, 0, tFix.azuleneOrder);
 		/*
 		 * -- abov(conjugated); abov(formate1); abov(formate2); abov(formate3);
 		 * abov(pyridine); abov(pyridinium); abov(pyridone4);
@@ -108,12 +105,12 @@ public class MoreMoleculeToolTest {
 	public final void testGetTotalHydrogenCount() {
 		Assert.assertEquals("benzene", 6, MoleculeTool.getOrCreateTool(
 				tFix.benzene).getTotalHydrogenCount());
-		String moleculeS = "" + "<molecule " + CML_XMLNS + ">"
+		String moleculeS = "" + "<molecule " + CMLConstants.CML_XMLNS + ">"
 				+ "  <atomArray>" + "    <atom id='a1' elementType='C'/>"
 				+ "    <atom id='a2' elementType='O'/>" + "  </atomArray>"
 				+ "  <bondArray>" + "    <bond atomRefs2='a1 a2' order='1'/>"
 				+ "  </bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(moleculeS);
 		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule)
 				.getTotalHydrogenCount();
 		Assert.assertEquals("h count", 4, hydrogenCount);
@@ -226,9 +223,9 @@ public class MoreMoleculeToolTest {
 		Builder builder = new CMLBuilder();
 		Document doc;
 		try {
-			String t01 = S_EMPTY
+			String t01 = CMLConstants.S_EMPTY
 					+ "<molecule id='t01' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "  <atomArray>"
 					+ "    <atom id='a1' elementType='C' x3='10' y3='10' z3='10'/>"
@@ -250,7 +247,7 @@ public class MoreMoleculeToolTest {
 		try {
 			// FIXME
 			String t02 = "<molecule id='t02' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t02));
@@ -266,7 +263,7 @@ public class MoreMoleculeToolTest {
 		// C(-H)(-H)-H
 		try {
 			String t03 = "<molecule id='t03' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t03));
@@ -282,7 +279,7 @@ public class MoreMoleculeToolTest {
 		// C(-H)(-H)(-H)-H
 		try {
 			String t04 = "<molecule id='t04' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/><atom id='h4' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/><bond atomRefs2='a1 h4' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t04));
@@ -299,7 +296,7 @@ public class MoreMoleculeToolTest {
 		// C#C-H
 		try {
 			String t11 = "<molecule id='t11' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='3'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t11));
@@ -315,7 +312,7 @@ public class MoreMoleculeToolTest {
 		// C-C-O-H
 		try {
 			String t11a = "<molecule id='t11a' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='O' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8' y3='9' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t11a));
@@ -331,7 +328,7 @@ public class MoreMoleculeToolTest {
 		// C-C=C(-H)-H
 		try {
 			String t12 = "<molecule id='t12' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t12));
@@ -347,7 +344,7 @@ public class MoreMoleculeToolTest {
 		// C-C-C(-H)(-H)-H
 		try {
 			String t13 = "<molecule id='t13' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t13));
@@ -366,7 +363,7 @@ public class MoreMoleculeToolTest {
 		// C
 		try {
 			String t21 = "<molecule id='t21' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t21));
@@ -384,7 +381,7 @@ public class MoreMoleculeToolTest {
 		// C
 		try {
 			String t21a = "<molecule id='t21a' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='N' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t21a));
@@ -402,7 +399,7 @@ public class MoreMoleculeToolTest {
 		// C
 		try {
 			String t22 = "<molecule id='t22' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t22));
@@ -423,7 +420,7 @@ public class MoreMoleculeToolTest {
 		// C
 		try {
 			String t31 = "<molecule id='t31' "
-					+ CML_XMLNS
+					+ CMLConstants.CML_XMLNS
 					+ ">"
 					+ "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='10.8' z3='10.8'/><atom id='a3' elementType='C' x3='10.8' y3='10.8' z3='9.2'/><atom id='a4' elementType='C' x3='10.8' y3='9.2' z3='10.8'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 a4' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
 			doc = builder.build(new StringReader(t31));
@@ -454,13 +451,13 @@ public class MoreMoleculeToolTest {
 		}
 		CMLMolecule mol5 = tFix.getFixture().mol5;
 		Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
-		assertEquals("calculated bonds", new String[] { "a1", "a2" }, mol5
+		Assert.assertEquals("calculated bonds", new String[] { "a1", "a2" }, mol5
 				.getBonds().get(0).getAtomRefs2());
-		assertEquals("calculated bonds", new String[] { "a1", "a4" }, mol5
+		Assert.assertEquals("calculated bonds", new String[] { "a1", "a4" }, mol5
 				.getBonds().get(1).getAtomRefs2());
-		assertEquals("calculated bonds", new String[] { "a1", "a5" }, mol5
+		Assert.assertEquals("calculated bonds", new String[] { "a1", "a5" }, mol5
 				.getBonds().get(2).getAtomRefs2());
-		assertEquals("calculated bonds", new String[] { "a2", "a3" }, mol5
+		Assert.assertEquals("calculated bonds", new String[] { "a2", "a3" }, mol5
 				.getBonds().get(3).getAtomRefs2());
 		List<CMLBond> bonds = mol5.getBonds();
 		moleculeTool5.calculateBondOrdersFromXYZ3();
@@ -756,7 +753,7 @@ public class MoreMoleculeToolTest {
 	@Test
 	public void testGetLoneElectronCount() {
 		// FIXME
-		CMLMolecule nitroMethane = (CMLMolecule) parseValidString(tFix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)TestUtils.parseValidString(tFix.nitroMethaneS);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(nitroMethane);
 		int n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(0));
 		Assert.assertEquals("lone pair", -6, n);

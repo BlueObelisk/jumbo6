@@ -1,17 +1,16 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.cml.test.CMLAssert.neverThrow;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * tests atomTree.
@@ -21,7 +20,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class AtomTreeTest {
 
-	String dmfS = S_EMPTY + "<molecule id='m1' " + CML_XMLNS + ">"
+	String dmfS = CMLConstants.S_EMPTY + "<molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' hydrogenCount='0'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='3'>"
@@ -34,11 +33,11 @@ public class AtomTreeTest {
 			+ "    <bond atomRefs2='a1 a2'/>" + "    <bond atomRefs2='a1 a3'/>"
 			+ "    <bond atomRefs2='a1 a4'/>"
 			+ "    <bond atomRefs2='a5 a3' order='2'/>" + "  </bondArray>"
-			+ "</molecule>" + S_EMPTY;
+			+ "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule dmf = null;
 
-	String cnoS = S_EMPTY + "<molecule id='m2' " + CML_XMLNS + ">"
+	String cnoS = CMLConstants.S_EMPTY + "<molecule id='m2' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' hydrogenCount='1'/>"
 			+ "    <atom id='a2' elementType='C' hydrogenCount='2'>"
@@ -47,7 +46,7 @@ public class AtomTreeTest {
 			+ "      <label>C2</label>" + "    </atom>" + "  </atomArray>"
 			+ "  <bondArray>" + "    <bond atomRefs2='a1 a2'/>"
 			+ "    <bond atomRefs2='a2 a3'/>" + "    <bond atomRefs2='a1 a3'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule cno = null;
 
@@ -58,8 +57,8 @@ public class AtomTreeTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		dmf = (CMLMolecule) parseValidString(dmfS);
-		cno = (CMLMolecule) parseValidString(cnoS);
+		dmf = (CMLMolecule)TestUtils.parseValidString(dmfS);
+		cno = (CMLMolecule)TestUtils.parseValidString(cnoS);
 	}
 
 	/**
@@ -205,7 +204,7 @@ public class AtomTreeTest {
 	 */
 	@Test
 	public void testPhenyl() {
-		String phenylS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
+		String phenylS = "<molecule " + CMLConstants.CML_XMLNS + ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
 				+ "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
@@ -244,7 +243,7 @@ public class AtomTreeTest {
 	 */
 	@Test
 	public void testAnisole() {
-		String anisoleS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
+		String anisoleS = "<molecule " + CMLConstants.CML_XMLNS + ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
 				+ "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
@@ -286,7 +285,7 @@ public class AtomTreeTest {
 	 */
 	@Test
 	public void testPhenylCyclohexane() {
-		String phcS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
+		String phcS = "<molecule " + CMLConstants.CML_XMLNS + ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
 				+ "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
@@ -352,7 +351,7 @@ public class AtomTreeTest {
 	 */
 	@Test
 	public void testAnisoleH() {
-		String anisoleS = "<molecule " + CML_XMLNS + ">" + "  <atomArray>"
+		String anisoleS = "<molecule " + CMLConstants.CML_XMLNS + ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' hydrogenCount='0'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
 				+ "    <atom id='a3' elementType='C' hydrogenCount='1'/>"
@@ -387,7 +386,7 @@ public class AtomTreeTest {
 		Assert.assertEquals("new AtomTree",
 				"O(C(C(C)(H))(C(C)(H)))(C(H)(H)(H))", atomTree.toString());
 
-		String methoxycyclohexeneS = "<molecule " + CML_XMLNS + ">"
+		String methoxycyclohexeneS = "<molecule " + CMLConstants.CML_XMLNS + ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' hydrogenCount='1'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='2'/>"

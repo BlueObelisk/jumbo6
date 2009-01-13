@@ -1,10 +1,10 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
 import nu.xom.Element;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.xmlcml.euclid.EC;
 
 /**
  * properties of a CML object. currently motivated by graphics but could be
@@ -236,26 +236,26 @@ public class AbstractDisplay {
 		StringBuilder sb = new StringBuilder();
 		sb.append("AbstractDisplay:");
 		sb.append("  color:           " + color);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  fill:            " + fill);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  fontSize:        " + fontSize);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  fontStyle:       " + fontStyle);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  fontWeight:      " + fontWeight);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("fontFamily:      " + fontFamily);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("opacity:         " + opacity);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("showChildLabels: " + showChildLabels);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("stroke:          " + stroke);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("backgroundColor: " + backgroundColor);
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 
 		return sb.toString();
 	}

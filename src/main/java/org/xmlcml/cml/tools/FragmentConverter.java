@@ -71,7 +71,7 @@ public class FragmentConverter extends AbstractTool {
 		molecule.appendChild(arg);
 		arg = new CMLArg();
 		arg.setParentAttribute("id");
-		arg.appendChild(molId + S_UNDER + S_LCURLY + S_DOLLAR + FragmentTool.IDX + S_RCURLY);
+		arg.appendChild(molId + CMLConstants.S_UNDER + CMLConstants.S_LCURLY + CMLConstants.S_DOLLAR + FragmentTool.IDX + CMLConstants.S_RCURLY);
 		molecule.appendChild(arg);
 	
 		createAtomArguments();
@@ -261,12 +261,12 @@ public class FragmentConverter extends AbstractTool {
 	// at present gly_{$idx}_
 	private String createMolIdArg() {
 		return molId +
-		S_UNDER + createIdArg(FragmentTool.IDX) + S_UNDER;
+		S_UNDER + createIdArg(FragmentTool.IDX) + CMLConstants.S_UNDER;
 	}
 
 	// at present {$id}
 	private static String createIdArg(String id) {
-		return S_LCURLY + S_DOLLAR + id + S_RCURLY;
+		return CMLConstants.S_LCURLY + CMLConstants.S_DOLLAR + id + CMLConstants.S_RCURLY;
 	}
 	
     /** convenience method.

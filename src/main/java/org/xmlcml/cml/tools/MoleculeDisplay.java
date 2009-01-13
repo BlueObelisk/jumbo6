@@ -1,9 +1,8 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
-
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
 
@@ -240,29 +239,29 @@ public class MoleculeDisplay extends AbstractDisplay {
 		StringBuilder sb = new StringBuilder();
 		sb.append("MoleculeDisplay:");
 		sb.append("..."+super.getDebugString());
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  bondLength:           "+bondLength);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  hydrogenLengthFactor: "+hydrogenLengthFactor);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  omitHydrogens:        "+omitHydrogens);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  contractGroups:       "+contractGroups);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayFormula:       "+displayFormula);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayLabels:        "+displayLabels);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append(  "displayNames:         "+displayNames);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append(  "screenExtent:         "+screenExtent);
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("..."+defaultAtomDisplay.getDebugString());
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("..."+defaultBondDisplay.getDebugString());
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 
 		return sb.toString();
 	}

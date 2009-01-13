@@ -361,13 +361,69 @@ public class SVGTextTest {
 		SVGText text2 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
 				"  <text style=\"font-family:'Helvetica',sans-serif;font-size:5.7793;stroke:none;fill:black;\" " +
 				"improper=\"true\" rotate=\"Y\" x=\"80.16\" y=\"297.54\">.</text> "));
-		Assert.assertEquals("text2", 297.30, text1.getCalculatedTextEndCoordinate(fontWidthFactor), 0.1);
 		SVGText text02 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 295.92, "178.", text01, text2);
 		
 		SVGText text3 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
 				"<text style=\"font-family:'Helvetica',sans-serif;font-size:5.7793;stroke:none;fill:black;\" " +
 				"improper=\"true\" rotate=\"Y\" x=\"80.16\" y=\"295.74\">616</text>"));
-		Assert.assertEquals("text2", 297.30, text1.getCalculatedTextEndCoordinate(fontWidthFactor), 0.1);
 		SVGText text03 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 286.03, "178.616", text01, text3);
+	}
+	
+	
+	@Test
+	public void testConcatenate3() {
+		double fontWidthFactor = 1.0;
+		double fontHeightFactor = 1.0;
+/**
+<g>
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"24.36\" y=\"303.36\">7</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"28.68\" y=\"303.36\">5</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"32.94\" y=\"303.36\"> M</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"41.47\" y=\"303.36\">H</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"46.99\" y=\"303.36\">z,</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"55.11\" y=\"303.36\">CD</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" improper=\"true\" x=\"66.08\" y=\"303.36\">Cl</text> 
+  <text style=\"font-family:'Helvetica',sans-serif;font-size:5.7091;stroke:none;fill:black;\" improper=\"true\" x=\"73.26\" y=\"301.68\">3</text> 
+  </g>
+  */
+		SVGText text0 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				" <text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"24.36\" y=\"303.36\">7</text> "));
+		Assert.assertEquals("text0", 28.69, text0.getCalculatedTextEndCoordinate(fontWidthFactor), 0.1);
+		
+		SVGText text1 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"28.68\" y=\"303.36\">5</text> "));
+		SVGText text01 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 33.01, "75", text0, text1);
+		
+		SVGText text2 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"32.94\" y=\"303.36\"> M</text> "));
+		SVGText text02 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 41.52, "75 M", text01, text2);
+		
+		SVGText text3 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"41.47\" y=\"303.36\">H</text>"));
+		SVGText text03 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 47.04, "75 MH", text01, text3);
+		
+		SVGText text4 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"46.99\" y=\"303.36\">z,</text>"));
+		SVGText text04 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 53.02, "75 MHz,", text01, text4);
+		
+		SVGText text5 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"55.11\" y=\"303.36\">CD</text>"));
+		SVGText text05 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 66.25, "75 MHz, CD", text01, text5);
+		
+		SVGText text6 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:7.7348;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"66.08\" y=\"303.36\">Cl</text>"));
+		SVGText text06 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 73.81, "75 MHz, CDCl", text01, text6);
+		
+		SVGText text7 = (SVGText) SVGElement.createSVG(TestUtils.parseValidString(
+				"<text style=\"font-family:'Helvetica',sans-serif;font-size:5.7091;stroke:none;fill:black;\" " +
+				"improper=\"true\" x=\"73.26\" y=\"301.68\">3</text>"));
+		SVGText text07 = testConcatenate(fontWidthFactor, fontHeightFactor, true, 76.45, "75 MHz, CDCl_{3", text01, text7);
 	}
 }

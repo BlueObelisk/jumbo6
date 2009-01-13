@@ -13,6 +13,7 @@ import nu.xom.ParentNode;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -229,9 +230,9 @@ public class PeakListTool extends AbstractTool {
   
   private void addLink(String atomRef, CMLPeak peak) {
   	Attribute peakAtt = peak.getAtomRefsAttribute();
-  	String atomRefs = (peakAtt == null || peakAtt.equals(S_EMPTY)) ? S_EMPTY : peakAtt.getValue();
+  	String atomRefs = (peakAtt == null || peakAtt.equals(S_EMPTY)) ? CMLConstants.S_EMPTY : peakAtt.getValue();
   	if (!atomRefs.equals(S_EMPTY)) {
-  		atomRefs += S_SPACE;
+  		atomRefs += CMLConstants.S_SPACE;
   	}
   	atomRefs += atomRef;
   	peak.setAtomRefs(atomRefs);
@@ -286,8 +287,8 @@ public class PeakListTool extends AbstractTool {
   		for (int i = 0; i < nodes.size(); i++) {
   			Element elem = (Element) nodes.get(i);
   			if (elem instanceof CMLPeakGroup || elem instanceof CMLPeak) {
-  				String atomRefs = S_SPACE+elem.getAttributeValue("atomRefs")+S_SPACE;
-  				String atomRefs1 = atomRefs.replace(S_SPACE+atomId+S_SPACE, S_SPACE);
+  				String atomRefs = CMLConstants.S_SPACE+elem.getAttributeValue("atomRefs")+S_SPACE;
+  				String atomRefs1 = atomRefs.replace(S_SPACE+atomId+S_SPACE, CMLConstants.S_SPACE);
   				if (!atomRefs1.equals(atomRefs)) {
   					atomRefs1 = atomRefs1.trim();
 						elem.removeAttribute(elem.getAttribute("atomRefs"));
@@ -357,7 +358,7 @@ public class PeakListTool extends AbstractTool {
     public CMLPeak getPeakChildById(String id) {
     	CMLPeak peak = null;
     	if (id != null) {
-	    	Nodes nodes = peakList.query("./cml:peak[@id='"+id+"']", CML_XPATH);
+	    	Nodes nodes = peakList.query("./cml:peak[@id='"+id+"']", CMLConstants.CML_XPATH);
 	    	if (nodes.size() > 1) {
 	    		throw new RuntimeException("Duplicate peak: "+id);
 	    	} else if (nodes.size() == 1) {
@@ -374,7 +375,7 @@ public class PeakListTool extends AbstractTool {
     public CMLPeak getPeakDescendantById(String id) {
     	CMLPeak peak = null;
     	if (id != null) {
-	    	Nodes nodes = peakList.query(".//cml:peak[@id='"+id+"']", CML_XPATH);
+	    	Nodes nodes = peakList.query(".//cml:peak[@id='"+id+"']", CMLConstants.CML_XPATH);
 	    	if (nodes.size() > 1) {
 	    		throw new RuntimeException("Dupicate peak: "+id);
 	    	} else if (nodes.size() == 1) {

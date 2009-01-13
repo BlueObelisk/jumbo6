@@ -11,6 +11,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
@@ -87,7 +88,7 @@ public abstract class SVGPoly extends SVGElement {
 	public Real2Array getReal2Array() {
 		if (real2Array == null) {
 			real2Array = Real2Array.createFromPairs(
-					this.getAttributeValue("points"), S_COMMA+S_PIPE+S_SPACE);
+					this.getAttributeValue("points"), CMLConstants.S_COMMA+S_PIPE+S_SPACE);
 		}
 		return real2Array;
 	}

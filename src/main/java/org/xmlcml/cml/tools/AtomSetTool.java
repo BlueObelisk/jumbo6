@@ -12,6 +12,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAngle;
@@ -46,7 +47,7 @@ public class AtomSetTool extends AbstractTool {
 	private Map<CMLAtom, CMLAtom> parentTable = null;
 
 	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
-		Nodes nodes = element.query("./cml:atomSet", CML_XPATH);
+		Nodes nodes = element.query("./cml:atomSet", CMLConstants.CML_XPATH);
 		 List <CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
 		 for (int i = 0; i < nodes.size(); i++) {
 			 atomSetList.add((CMLAtomSet) nodes.get(i));
@@ -518,7 +519,7 @@ public class AtomSetTool extends AbstractTool {
 	 */
 	public void removeUnmatchedAtoms(CMLMap map, CMLAtomSet toAtomSet,
 			String attribute) {
-		Elements links = map.getChildElements(CMLLink.TAG, CML_NS);
+		Elements links = map.getChildElements(CMLLink.TAG, CMLConstants.CML_NS);
 		for (int i = 0; i < links.size(); i++) {
 			String fromId = ((CMLLink) links.get(i)).getFrom();
 			String toId = ((CMLLink) links.get(i)).getTo();

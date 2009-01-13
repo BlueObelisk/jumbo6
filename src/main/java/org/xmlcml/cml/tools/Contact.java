@@ -136,7 +136,7 @@ public class Contact implements Comparable<Contact>, CMLConstants {
         s += fromAtom.getId()+S_LBRAK+fromAtom.getElementType()+") "+fromAtom.getXYZ3();
         s += " -> ";
         s += toAtom.getId()+S_LBRAK+toAtom.getElementType()+S_RBRAK+toAtom.getXYZ3();
-        s += S_LBRAK+getCMLTransform3().getEuclidTransform3().getCrystallographicString()+") = "+getDistance();
+        s += CMLConstants.S_LBRAK+getCMLTransform3().getEuclidTransform3().getCrystallographicString()+") = "+getDistance();
         return s;
     }
 };

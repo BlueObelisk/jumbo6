@@ -1,14 +1,13 @@
 package org.xmlcml.cml.test;
 
-import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
 import static org.xmlcml.cml.test.CMLAssert.SIMPLE_RESOURCE;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -20,15 +19,15 @@ import org.xmlcml.euclid.Util;
 
 public class SpectrumFixture {
 
-	protected String peakStructureFile1 = "peakStructure1" + XML_SUFF;
+	protected String peakStructureFile1 = "peakStructure1" + CMLConstants.XML_SUFF;
 
 	protected String peakStructureFile1NoSchema = "peakStructure1-noSchema"
-			+ XML_SUFF;
+			+ CMLConstants.XML_SUFF;
 
-	protected String peakStructureFile2 = "peakStructure2" + XML_SUFF;
+	protected String peakStructureFile2 = "peakStructure2" + CMLConstants.XML_SUFF;
 
 	protected String peakStructureFile2Schema = "peakStructure2Schema"
-			+ XML_SUFF;
+			+ CMLConstants.XML_SUFF;
 
 	protected String testfile = "spectrum";
 
@@ -45,8 +44,8 @@ public class SpectrumFixture {
 	protected String testCompoundFile1 = "spectrum_and_structure1.xml";
 
 	private URL makeSpectrumInputStreamContainer(int num) throws IOException {
-		return Util.getResource(SIMPLE_RESOURCE + U_S + "spectrum" + num
-				+ XML_SUFF);
+		return Util.getResource(SIMPLE_RESOURCE + CMLConstants.U_S + "spectrum" + num
+				+ CMLConstants.XML_SUFF);
 	}
 
 	protected CMLSpectrum readSpectrum(int num) throws Exception {
@@ -65,7 +64,7 @@ public class SpectrumFixture {
 	 */
 	public CMLSpectrum getSpectrum() throws Exception {
 		CMLSpectrum spectrum = null;
-		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE + U_S
+		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE + CMLConstants.U_S
 				+ peakStructureFile1);
 		CMLCml cml = (CMLCml) new CMLBuilder().build(in).getRootElement();
 		spectrum = (CMLSpectrum) cml.getChildCMLElements(CMLSpectrum.TAG)
@@ -108,7 +107,7 @@ public class SpectrumFixture {
 	 */
 	public CMLMolecule getMolecule() throws Exception {
 		CMLMolecule molecule = null;
-		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE + U_S
+		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE +CMLConstants.U_S
 				+ peakStructureFile1);
 		CMLCml cml = (CMLCml) new CMLBuilder().build(in).getRootElement();
 		in.close();

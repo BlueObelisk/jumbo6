@@ -1,12 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
-import static org.xmlcml.euclid.EuclidConstants.EPS;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -20,7 +13,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -31,6 +26,7 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -59,7 +55,7 @@ public class AtomToolTest {
 	//
 	// read into xom; not a stable molecule... (CH3)[N+](S-)(O)(F)
 	// 2 1 3 4 5
-	protected String xmlMolS = S_EMPTY + "  <molecule id='m1'  " + CML_XMLNS
+	protected String xmlMolS = EC.S_EMPTY + "  <molecule id='m1'  " + CMLConstants.CML_XMLNS
 			+ ">" + "    <atomArray>" + "      <atom id='a1' "
 			+ "        elementType='N'" + "        hydrogenCount='0'"
 			+ "        formalCharge='1'" + "        spinMultiplicity='1'"
@@ -157,34 +153,34 @@ public class AtomToolTest {
 		AtomTool atomTool1 = AtomTool.getOrCreateTool(atom1);
 		CMLAtomSet atomSet = atomTool1.getCoordinationSphereSet(0);
 		CMLAtomSet refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
-		assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(2);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='4' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4</atomSet>");
-		assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(3);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='5' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5</atomSet>");
-		assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(4);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='6' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6</atomSet>");
-		assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(5);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(6);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
 		// now a different atom
 		AtomTool atomTool5 = AtomTool.getOrCreateTool(fixture.mol11
 				.getAtomById("a5"));
 		atomSet = atomTool5.getCoordinationSphereSet(2);
 		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");
-		assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		TestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 
 	}
 
@@ -287,10 +283,10 @@ public class AtomToolTest {
 		fixture.xomAtom[0].setPoint3(new Point3(1.1, 1.2, 1.3),
 				CoordinateType.CARTESIAN);
 		Point3 p = fixture.xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
-		assertEquals("getPoint3", new double[] { 1.1, 1.2, 1.3 }, p, EPS);
+		CMLAssert.assertEquals("getPoint3", new double[] { 1.1, 1.2, 1.3 }, p, CC.EPS);
 		AtomTool.getOrCreateTool(fixture.xomAtom[0]).transformCartesians(t);
 		p = fixture.xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
-		assertEquals("getPoint3", new double[] { 1.2, -1.1, 2.5 }, p, EPS);
+		CMLAssert.assertEquals("getPoint3", new double[] { 1.2, -1.1, 2.5 }, p, CC.EPS);
 	}
 
 	/**
@@ -304,10 +300,10 @@ public class AtomToolTest {
 		fixture.xomAtom[0].setPoint3(new Point3(0.1, 0.2, 0.3),
 				CoordinateType.FRACTIONAL);
 		Point3 p = fixture.xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
-		assertEquals("getPoint3", new double[] { 0.1, 0.2, 0.3 }, p, EPS);
+		CMLAssert.assertEquals("getPoint3", new double[] { 0.1, 0.2, 0.3 }, p, CC.EPS);
 		AtomTool.getOrCreateTool(fixture.xomAtom[0]).transformFractionals(t);
 		p = fixture.xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
-		assertEquals("getPoint3", new double[] { 0.2, 0.4, 0.5 }, p, EPS);
+		CMLAssert.assertEquals("getPoint3", new double[] { 0.2, 0.4, 0.5 }, p, CC.EPS);
 	}
 
     /**
@@ -470,11 +466,11 @@ public class AtomToolTest {
         Element cml = TestUtils.parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
         Assert.assertNotNull("rgoup1 should exist", cml);
         String otbs = "OTBS";
-        CMLAtom atom = (CMLAtom) cml.query("./cml:molecule/cml:atomArray/cml:atom[@elementType='R' and cml:label[@value='"+otbs+"']]", CML_XPATH).get(0);
+        CMLAtom atom = (CMLAtom) cml.query("./cml:molecule/cml:atomArray/cml:atom[@elementType='R' and cml:label[@value='"+otbs+"']]", CMLConstants.CML_XPATH).get(0);
         AtomTool atomTool = AtomTool.getOrCreateTool(atom);
         // this uses the explicit pointer
         String molId =atom.getAttributeValue("moleculeRef");
-        Element refMol = (CMLMolecule) cml.query(".//cml:molecule[@id='"+molId+"']", CML_XPATH).get(0);
+        Element refMol = (CMLMolecule) cml.query(".//cml:molecule[@id='"+molId+"']", CMLConstants.CML_XPATH).get(0);
     	List<CMLAtom> atomList = atomTool.getReferencedAtoms(refMol, otbs);
     	Assert.assertEquals("atom count", 1, atomList.size());
     	Assert.assertEquals("atom id", "a1", atomList.get(0).getId());
@@ -494,7 +490,7 @@ public class AtomToolTest {
     public void testGet3DCrossProduct() {
         Vector3 cross3d = AtomTool.getOrCreateTool(xmlAtom[0]).get3DCrossProduct(xmlAtom[1], xmlAtom[2]);
         CMLAssert.assertEquals("cross3d", new double[] { 0., 2., -2. },
-                cross3d, EPS);
+                cross3d, CC.EPS);
     }
 
     /**
@@ -505,7 +501,7 @@ public class AtomToolTest {
     public void testGet2DCrossProduct() {
         Vector3 cross2d = AtomTool.getOrCreateTool(xmlAtom[0]).get2DCrossProduct(xmlAtom[1], xmlAtom[2]);
         CMLAssert.assertEquals("cross2d", new double[] { 0., 0., -2. },
-                cross2d, EPS);
+                cross2d, CC.EPS);
     }
     
     /**

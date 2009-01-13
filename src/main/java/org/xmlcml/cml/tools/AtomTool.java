@@ -11,6 +11,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
@@ -1113,7 +1114,7 @@ public class AtomTool extends AbstractSVGTool {
 	}
 
  	private CMLLabel getGroup() {
- 		Nodes nodes = atom.query(".//cml:label", CML_XPATH);
+ 		Nodes nodes = atom.query(".//cml:label", CMLConstants.CML_XPATH);
  		return (nodes.size() == 0) ? null : (CMLLabel) nodes.get(0);
  	}
  	
@@ -1402,7 +1403,7 @@ public class AtomTool extends AbstractSVGTool {
 	 * @return
 	 */
 	public List<CMLAtom> getReferencedAtoms(Element scopeElement, String label) {
-		Nodes refAtomNodes = scopeElement.query(".//cml:atom[@elementType='R' and cml:label[@value='"+label+"']]", CML_XPATH);
+		Nodes refAtomNodes = scopeElement.query(".//cml:atom[@elementType='R' and cml:label[@value='"+label+"']]", CMLConstants.CML_XPATH);
 		List<CMLAtom> refAtomList = new ArrayList<CMLAtom>();
 		for (int i = 0; i < refAtomNodes.size(); i++) {
 			CMLAtom refAtom = (CMLAtom) refAtomNodes.get(i);

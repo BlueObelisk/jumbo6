@@ -136,10 +136,10 @@ public class MoleculeText extends JPanel implements CMLConstants {
 			String text = jTextField.getText();
 			text = SMILESTool.normalizeRings(text);
 			text = text.substring(0, caretPosition-1)+
-			    S_LBRAK+
+			    CMLConstants.S_LBRAK+
 			    ringAtoms+
 				ring+
-			    S_RBRAK+
+			    CMLConstants.S_RBRAK+
 			    bond+
 			    text.substring(caretPosition, caretPosition+1)+
 			    ring+

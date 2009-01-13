@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -28,6 +27,8 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
+
+import java.util.Map.Entry;
 
 /**
  * @author pm286
@@ -1170,7 +1171,7 @@ public class ValencyTool extends AbstractTool {
 			mol.addBond(bond);
 		}
 		// remove scalars signifying atoms attached to metal
-		Nodes nodes = mol.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", CML_XPATH);
+		Nodes nodes = mol.query(".//"+CMLScalar.NS+"[@dictRef='"+metalLigandDictRef+"']", CMLConstants.CML_XPATH);
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).detach();
 		}
@@ -1372,7 +1373,7 @@ public class ValencyTool extends AbstractTool {
 
 		private boolean hasUnassignedElectrons(PiSystem system) {
 			for (CMLAtom a : system.getAtomList()) {
-				Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
+				Nodes nodes = a.query(".//"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CMLConstants.CML_XPATH);
 				if (nodes.size() > 0) {
 					return true;
 				}
@@ -1429,7 +1430,7 @@ public class ValencyTool extends AbstractTool {
 				bond.setOrder(CMLBond.SINGLE);
 			}
 			// reset all pi-electrons
-			Nodes piElectrons = mol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CML_XPATH);
+			Nodes piElectrons = mol.query(".//"+CMLAtom.NS+"/"+CMLElectron.NS+"[@dictRef='"+CMLElectron.PI+"']", CMLConstants.CML_XPATH);
 			for (int e = 0; e < piElectrons.size(); e++) {
 				((CMLElectron)piElectrons.get(e)).detach();
 			}
