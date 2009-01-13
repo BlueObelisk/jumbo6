@@ -37,8 +37,7 @@ import org.xmlcml.euclid.Util;
 public final class TestUtils implements CMLConstants {
 
     /** logger */
-    public final static Logger logger = Logger.getLogger(TestUtils.class
-            .getName());
+    public final static Logger logger = Logger.getLogger(TestUtils.class);
 
     /** root of tests.*/
     public final static String BASE_RESOURCE = "org/xmlcml/cml/base";
