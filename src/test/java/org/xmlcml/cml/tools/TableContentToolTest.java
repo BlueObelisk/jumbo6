@@ -1,14 +1,11 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test TableTool.
@@ -32,17 +29,17 @@ public class TableContentToolTest {
 	public void createTableRowList() {
 		CMLTableRowList rowList = TableContentTool.getOrCreateTool(
 				fixture.tableContent).createTableRowList(3, 2);
-		String rowS = S_EMPTY + "<tableRowList " + CML_XMLNS + ">"
+		String rowS = CMLConstants.S_EMPTY + "<tableRowList " + CMLConstants.CML_XMLNS + ">"
 				+ "  <tableRow>" + "    <tableCell>1</tableCell>"
 				+ "    <tableCell>a</tableCell>" + "  </tableRow>"
 				+ "  <tableRow>" + "    <tableCell>2</tableCell>"
 				+ "    <tableCell>b</tableCell>" + "  </tableRow>"
 				+ "  <tableRow>" + "    <tableCell>3</tableCell>"
 				+ "    <tableCell>c</tableCell>" + "  </tableRow>"
-				+ "</tableRowList>" + S_EMPTY;
-		CMLTableRowList expected = (CMLTableRowList) parseValidString(rowS);
+				+ "</tableRowList>" + CMLConstants.S_EMPTY;
+		CMLTableRowList expected = (CMLTableRowList)TestUtils.parseValidString(rowS);
 		boolean stripWhite = true;
-		assertEqualsCanonically("row list", expected, rowList, stripWhite);
+		TestUtils.assertEqualsCanonically("row list", expected, rowList, stripWhite);
 	}
 
 }

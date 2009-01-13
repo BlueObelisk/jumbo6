@@ -125,7 +125,7 @@ public class MappedBondPair extends AtomBondPair implements CMLConstants {
 //        bondWidth = snap.bondWidth;
         
         // if any atom is null, cannot be a spectator
-        spectator1 = (atom10 != null) ? (CMLSpectator) atom10.query("ancestor::cml:spectator", CML_XPATH).get(0) : null;
+        spectator1 = (atom10 != null) ? (CMLSpectator) atom10.query("ancestor::cml:spectator", CMLConstants.CML_XPATH).get(0) : null;
 //    	drawBondColor = (spectator1 != null) ? snap.spectatorColor : snap.bondColor;
 //    	drawAromBondColor = (spectator1 != null) ? snap.spectatorColor : snap.aromBondColor;
 //    	drawBondColor = snap.bondColor;

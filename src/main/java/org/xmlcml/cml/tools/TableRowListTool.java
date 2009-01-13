@@ -10,6 +10,7 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLUtil;
@@ -104,7 +105,7 @@ public class TableRowListTool extends AbstractTool {
        if (listArray instanceof CMLArray) {
            size = ((CMLArray)listArray).getSize();
        } else if (listArray instanceof CMLList) {
-           size = CMLUtil.getQueryNodes(listArray, S_STAR).size();
+           size = CMLUtil.getQueryNodes(listArray, CMLConstants.S_STAR).size();
        }
        if (tableRows.size() == 0) {
            for (int iRow = 0; iRow < size; iRow++) {
@@ -158,7 +159,7 @@ public class TableRowListTool extends AbstractTool {
                        arrayList.addArray(array);
                } else {
                    CMLTableCell tableCell = firstTableRow.getTableCellElements().get(jCol);
-                   List<Node> nodeList = CMLUtil.getQueryNodes(tableCell, S_STAR);
+                   List<Node> nodeList = CMLUtil.getQueryNodes(tableCell, CMLConstants.S_STAR);
                    Class<?> classx = (nodeList.size() == 0) ? null : nodeList.get(0).getClass();
                    classList.add(classx);
                    CMLList cmlList = new CMLList();
@@ -219,7 +220,7 @@ public class TableRowListTool extends AbstractTool {
 //      if (listArray instanceof CMLArray) {
 //          size = ((CMLArray)listArray).getSize();
 //      } else if (listArray instanceof CMLList) {
-//          size = CMLUtil.getQueryNodes(listArray, S_STAR).size();
+//          size = CMLUtil.getQueryNodes(listArray, CMLConstants.S_STAR).size();
 //      }
 //      if (tableRows.size() == 0) {
 //          for (int iRow = 0; iRow < size; iRow++) {

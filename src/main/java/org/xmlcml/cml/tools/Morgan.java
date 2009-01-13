@@ -10,6 +10,7 @@ import nu.xom.Attribute;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLLabel;
@@ -144,7 +145,7 @@ public class Morgan extends AbstractTool {
 
 	private String calculateEquivalenceString() {
 		List<Long> longList = getSortedLongList();
-		equivalenceString = S_EMPTY;
+		equivalenceString = CMLConstants.S_EMPTY;
     	for (Long longx : longList) {
     		CMLAtomSet atomSet = equivalenceMap.get(longx);
     		equivalenceString += longx+atomSet.getAtoms().get(0).getElementType()+atomSet.size()+"/";
@@ -408,7 +409,7 @@ public class Morgan extends AbstractTool {
 
         // uses labels as disambiguation
         CMLLabel label = (CMLLabel) atom.getFirstCMLChild(CMLLabel.TAG);
-        String labelS = (label == null) ? S_EMPTY : label.getValue();
+        String labelS = (label == null) ? CMLConstants.S_EMPTY : label.getValue();
         @SuppressWarnings("unused")
         int labelHash = labelS.hashCode() % 1000;
         // and properties

@@ -1,24 +1,18 @@
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
-
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test ConnectionTableTool.
@@ -28,9 +22,9 @@ import org.xmlcml.cml.element.CMLMolecule;
  */
 public class ConnectionTableToolTest {
 
-	static String MOLECULES = "org" + U_S + "xmlcml" + U_S + "cml" + U_S
-			+ "tools" + U_S + "examples" + U_S + "molecules";
-	String ringMolS = S_EMPTY + "  <molecule id='m1' " + CML_XMLNS + ">"
+	static String MOLECULES = "org" +CMLConstants.U_S + "xmlcml" +CMLConstants.U_S + "cml" +CMLConstants.U_S
+			+ "tools" +CMLConstants.U_S + "examples" +CMLConstants.U_S + "molecules";
+	String ringMolS = CMLConstants.S_EMPTY + "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 			+ "    <atomArray>" + "      <atom id='a1' elementType='C'/>"
 			+ "      <atom id='a2' elementType='C'/>"
 			+ "      <atom id='a3' elementType='C'/>"
@@ -55,12 +49,12 @@ public class ConnectionTableToolTest {
 			+ "      <bond id='b89' atomRefs2='a8 a9'/>"
 			+ "      <bond id='b910' atomRefs2='a9 a10' order='2'/>"
 			+ "      <bond id='b1011' atomRefs2='a10 a11'/>"
-			+ "    </bondArray>" + "  </molecule>" + S_EMPTY;
+			+ "    </bondArray>" + "  </molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule ringMol = null;
 	ConnectionTableTool ringMolTool = null;
 
-	String multiMolS = S_EMPTY + "  <molecule id='m2' " + CML_XMLNS + ">"
+	String multiMolS = CMLConstants.S_EMPTY + "  <molecule id='m2' " + CMLConstants.CML_XMLNS + ">"
 			+ "    <atomArray>" + "      <atom id='a1' elementType='C'/>"
 			+ "      <atom id='a2' elementType='C'/>"
 			+ "      <atom id='a3' elementType='C'/>"
@@ -83,18 +77,18 @@ public class ConnectionTableToolTest {
 			+ "      <bond id='b89' atomRefs2='a8 a9'/>"
 			+ "      <bond id='b910' atomRefs2='a9 a10' order='2'/>"
 			+ "      <bond id='b1011' atomRefs2='a10 a11'/>"
-			+ "    </bondArray>" + "  </molecule>" + S_EMPTY;
+			+ "    </bondArray>" + "  </molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule multiMol = null;
 	ConnectionTableTool multiMolTool = null;
 
-	String simpleMolS = "  <molecule id='m2' " + CML_XMLNS + ">"
+	String simpleMolS = "  <molecule id='m2' " + CMLConstants.CML_XMLNS + ">"
 			+ "    <atomArray>" + "      <atom id='a91' elementType='N'/>"
 			+ "      <atom id='a92' elementType='O'/>"
 			+ "      <atom id='a93' elementType='S'/>" + "    </atomArray>"
 			+ "    <bondArray>" + "      <bond id='b92' atomRefs2='a91 a92'/>"
 			+ "      <bond id='b93' atomRefs2='a92 a93'/>" + "    </bondArray>"
-			+ "  </molecule>" + S_EMPTY;
+			+ "  </molecule>" + CMLConstants.S_EMPTY;
 
 	// private CMLMolecule getMoleculeByFileRoot(String fileRoot) {
 	// CMLMolecule molecule = (CMLMolecule) parseValidResource(fileRoot+".xml");
@@ -122,7 +116,7 @@ public class ConnectionTableToolTest {
 	}
 
 	private CMLMolecule makeMol(String molS) {
-		CMLMolecule mol = (CMLMolecule) parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule)TestUtils.parseValidString(molS);
 		return mol;
 	}
 
@@ -232,7 +226,7 @@ public class ConnectionTableToolTest {
 		Assert.assertTrue("bond set bonds ", bondSet
 				.hasContentEqualTo(bondSet1));
 
-		String triangleMolS = "  <molecule id='m1' " + CML_XMLNS + ">"
+		String triangleMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 				+ "    <atomArray>" + "      <atom id='a1' elementType='C'/>"
 				+ "      <atom id='a2' elementType='N'/>"
 				+ "      <atom id='a3' elementType='O'/>"
@@ -244,14 +238,14 @@ public class ConnectionTableToolTest {
 				+ "      <bond id='b23' atomRefs2='a2 a3'/>"
 				+ "      <bond id='b24' atomRefs2='a2 a4'/>"
 				+ "      <bond id='b34' atomRefs2='a3 a4'/>"
-				+ "    </bondArray>" + "  </molecule>" + S_EMPTY;
+				+ "    </bondArray>" + "  </molecule>" + CMLConstants.S_EMPTY;
 		CMLMolecule triangleMol = makeMol(triangleMolS);
 		ConnectionTableTool triangleMolTool = new ConnectionTableTool(
 				triangleMol);
 		cyclicBondList = triangleMolTool.getCyclicBonds();
-		assertEquals("cyclic ", 6, cyclicBondList.size());
+		Assert.assertEquals("cyclic ", 6, cyclicBondList.size());
 
-		String triangle1MolS = "  <molecule id='m1' " + CML_XMLNS + ">"
+		String triangle1MolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 				+ "    <atomArray>" + "      <atom id='a1' elementType='C'/>"
 				+ "      <atom id='a2' elementType='N'/>"
 				+ "      <atom id='a3' elementType='O'/>"
@@ -263,12 +257,12 @@ public class ConnectionTableToolTest {
 				+ "      <bond id='b34' atomRefs2='a2 a3'/>"
 				+ "      <bond id='b15' atomRefs2='a2 a4'/>"
 				+ "      <bond id='b56' atomRefs2='a3 a4'/>"
-				+ "    </bondArray>" + "  </molecule>" + S_EMPTY;
+				+ "    </bondArray>" + "  </molecule>" + CMLConstants.S_EMPTY;
 		CMLMolecule triangle1Mol = makeMol(triangle1MolS);
 		ConnectionTableTool triangle1MolTool = new ConnectionTableTool(
 				triangle1Mol);
 		cyclicBondList = triangle1MolTool.getCyclicBonds();
-		assertEquals("cyclic ", 6, cyclicBondList.size());
+		Assert.assertEquals("cyclic ", 6, cyclicBondList.size());
 	}
 
 	/**
@@ -343,11 +337,11 @@ public class ConnectionTableToolTest {
 		multiMolTool = new ConnectionTableTool(multiMol);
 		multiMolTool.partitionIntoMolecules();
 		CMLMolecule molecule = multiMolTool.getMolecule();
-		assertNotNull("after partition", molecule);
+		Assert.assertNotNull("after partition", molecule);
 		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
-		assertEquals("after partition", 2, molecules.size());
-		assertEquals("after partition", 5, molecules.get(0).getAtoms().size());
-		assertEquals("after partition", 6, molecules.get(1).getAtoms().size());
+		Assert.assertEquals("after partition", 2, molecules.size());
+		Assert.assertEquals("after partition", 5, molecules.get(0).getAtoms().size());
+		Assert.assertEquals("after partition", 6, molecules.get(1).getAtoms().size());
 	}
 
 	/**
@@ -358,7 +352,7 @@ public class ConnectionTableToolTest {
 	@Test
 	public final void testGetUniqueId() {
 		String id = ringMolTool.getUniqueId(ringMol.getAtom(0));
-		assertEquals("unique id", "a1.1", id);
+		Assert.assertEquals("unique id", "a1.1", id);
 	}
 
 	/**
@@ -374,11 +368,11 @@ public class ConnectionTableToolTest {
 		CMLMolecule molecule = multiMolTool.getMolecule();
 		molecule.setTitle("before flatten");
 		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
-		assertEquals("after partition", 2, molecules.size());
+		Assert.assertEquals("after partition", 2, molecules.size());
 		multiMolTool.flattenMolecules();
 		molecule.setTitle("after flatten");
-		assertEquals("after flattening", 11, molecule.getAtoms().size());
-		assertEquals("after flattening", 11, molecule.getBonds().size());
+		Assert.assertEquals("after flattening", 11, molecule.getAtoms().size());
+		Assert.assertEquals("after flattening", 11, molecule.getBonds().size());
 	}
 
 	/**
@@ -388,14 +382,14 @@ public class ConnectionTableToolTest {
 	 */
 	@Test
 	public final void testMergeMolecule() {
-		assertEquals("ring mol", 11, ringMol.getAtoms().size());
-		assertEquals("ring mol", 13, ringMol.getBonds().size());
+		Assert.assertEquals("ring mol", 11, ringMol.getAtoms().size());
+		Assert.assertEquals("ring mol", 13, ringMol.getBonds().size());
 		CMLMolecule simpleMol = makeMol(simpleMolS);
-		assertEquals("simple mol", 3, simpleMol.getAtoms().size());
-		assertEquals("simple mol", 2, simpleMol.getBonds().size());
+		Assert.assertEquals("simple mol", 3, simpleMol.getAtoms().size());
+		Assert.assertEquals("simple mol", 2, simpleMol.getBonds().size());
 		ringMolTool.mergeMolecule(simpleMol);
-		assertEquals("ring mol", 14, ringMol.getAtoms().size());
-		assertEquals("ring mol", 15, ringMol.getBonds().size());
+		Assert.assertEquals("ring mol", 14, ringMol.getAtoms().size());
+		Assert.assertEquals("ring mol", 15, ringMol.getBonds().size());
 
 	}
 
@@ -405,8 +399,8 @@ public class ConnectionTableToolTest {
 	public final void testCreateSubMolecule() {
 		String[] atomIds = { "a1", "a2", "a3", "a4", "a5" };
 		CMLMolecule subMolecule = ringMolTool.createSubMolecule(atomIds);
-		assertEquals("submol", 5, subMolecule.getAtoms().size());
-		assertEquals("submol", 5, subMolecule.getBonds().size());
+		Assert.assertEquals("submol", 5, subMolecule.getAtoms().size());
+		Assert.assertEquals("submol", 5, subMolecule.getBonds().size());
 	}
 
 	/**
@@ -416,14 +410,14 @@ public class ConnectionTableToolTest {
 	@Test
 	public final void testCreateUniqueAtomId() {
 		String id = ringMolTool.createUniqueAtomId();
-		assertEquals("new id", "a12", id);
-		assertNull("id does not exist", ringMol.getAtomById(id));
+		Assert.assertEquals("new id", "a12", id);
+		Assert.assertNull("id does not exist", ringMol.getAtomById(id));
 		CMLAtom atom = new CMLAtom(id);
 		ringMol.addAtom(atom);
 		String id1 = ringMolTool.createUniqueAtomId();
-		assertEquals("new id", "a13", id1);
-		assertNotNull("id does exist", ringMol.getAtomById(id));
-		assertNull("id does not exist", ringMol.getAtomById(id1));
+		Assert.assertEquals("new id", "a13", id1);
+		Assert.assertNotNull("id does exist", ringMol.getAtomById(id));
+		Assert.assertNull("id does not exist", ringMol.getAtomById(id1));
 	}
 
 	/**
@@ -444,13 +438,13 @@ public class ConnectionTableToolTest {
 	public final void testAddSuffixToAtomIDs() {
 		ringMolTool.addSuffixToAtomIDs(".x");
 		CMLAtom a1 = ringMol.getAtom(0);
-		assertEquals("atom 1", "a1.x", a1.getId());
+		Assert.assertEquals("atom 1", "a1.x", a1.getId());
 		CMLAtom a2 = ringMol.getAtom(1);
-		assertEquals("atom 2", "a2.x", a2.getId());
+		Assert.assertEquals("atom 2", "a2.x", a2.getId());
 		CMLBond b1 = ringMol.getBonds().get(0);
 		String[] atrefs2 = { "a1.x", "a2.x" };
-		assertEquals("bond 1", atrefs2[0], b1.getAtomRefs2()[0]);
-		assertEquals("bond 1", atrefs2[1], b1.getAtomRefs2()[1]);
+		Assert.assertEquals("bond 1", atrefs2[0], b1.getAtomRefs2()[0]);
+		Assert.assertEquals("bond 1", atrefs2[1], b1.getAtomRefs2()[1]);
 	}
 
 	/**

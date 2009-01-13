@@ -25,7 +25,7 @@ public class SMILESBufferTest {
 		SMILESBuffer buffer = new SMILESBuffer();
 		buffer.addString("CO");
 		CMLMolecule molecule = buffer.getMolecule();
-		CMLMolecule expected = (CMLMolecule) parseValidString(
+		CMLMolecule expected = (CMLMolecule)TestUtils.parseValidString(
 				"<molecule xmlns='http://www.xml-cml.org/schema'>"+
 				"<atomArray>"+
 				"<atom id='a1' elementType='C' hydrogenCount='3'/>"+

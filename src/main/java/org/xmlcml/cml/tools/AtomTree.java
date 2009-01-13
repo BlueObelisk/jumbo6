@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -199,7 +200,7 @@ public class AtomTree extends AbstractTool implements Comparable<AtomTree> {
             s.append(elType);
             if (label) {
                 CMLLabel childLabel = (CMLLabel) atom.getFirstChildElement(
-                        "label", CML_NS);
+                        "label", CMLConstants.CML_NS);
                 if (childLabel != null) {
                     s.append(S_LCURLY);
                     s.append(childLabel.getValue());
@@ -210,7 +211,7 @@ public class AtomTree extends AbstractTool implements Comparable<AtomTree> {
                 int hCount = atom.getHydrogenCount();
                 if (implicitHydrogens && hCount > 0) {
                     s.append(AS.H.value);
-                    s.append(((hCount == 1) ? S_EMPTY : S_EMPTY + hCount));
+                    s.append(((hCount == 1) ? CMLConstants.S_EMPTY : CMLConstants.S_EMPTY + hCount));
                 }
             }
 
@@ -218,7 +219,7 @@ public class AtomTree extends AbstractTool implements Comparable<AtomTree> {
                 int ch = atom.getFormalCharge();
                 int nch = (ch > 0) ? ch : -ch;
                 if (ch != 0) {
-                    String chS = (ch > 0) ? S_PLUS : S_MINUS;
+                    String chS = (ch > 0) ? CMLConstants.S_PLUS : CMLConstants.S_MINUS;
                     for (int i = 0; i < nch; i++) {
                         s.append(chS);
                     }

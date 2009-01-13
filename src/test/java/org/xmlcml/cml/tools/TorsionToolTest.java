@@ -1,11 +1,6 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
 import static org.xmlcml.cml.test.CMLAssert.neverThrow;
-import static org.xmlcml.cml.test.CMLAssert.parseValidFile;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.EPS;
 
 import java.util.List;
 
@@ -13,6 +8,8 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CC;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
@@ -20,7 +17,9 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test AngleTool.
@@ -30,7 +29,7 @@ import org.xmlcml.euclid.Angle;
  */
 public class TorsionToolTest {
 
-	String s1 = "" + "<cml " + CML_XMLNS + ">" + " <molecule id='m1'>"
+	String s1 = "" + "<cml " + CMLConstants.CML_XMLNS + ">" + " <molecule id='m1'>"
 			+ "  <atomArray>" + "   <atom id='a1' x3='1.0' y3='0.0' z3='0.0'/>"
 			+ "   <atom id='a2' x3='0.0' y3='0.0' z3='0.0'/>"
 			+ "   <atom id='a3' x3='0.0' y3='0.0' z3='2.0'/>"
@@ -60,7 +59,7 @@ public class TorsionToolTest {
 	@Before
 	public void setUp() throws Exception {
 
-		CMLCml cml = (CMLCml) parseValidString(s1);
+		CMLCml cml = (CMLCml)TestUtils.parseValidString(s1);
 		molecule1 = (CMLMolecule) cml.getChildCMLElements("molecule").get(0);
 		torsion0 = (CMLTorsion) cml.getChildCMLElements("torsion").get(0);
 		torsion1 = (CMLTorsion) cml.getChildCMLElements("torsion").get(1);
@@ -75,7 +74,7 @@ public class TorsionToolTest {
 	@Test
 	public void testTetTransformationToNewTorsionAngleCMLMolecule() {
 		double t = torsion0.getCalculatedTorsion(molecule1);
-		Assert.assertEquals("calculated torsion", t, 90., EPS);
+		Assert.assertEquals("calculated torsion", t, 90.,  CC.EPS);
 		Angle angle = new Angle(Math.PI / 3);
 		TorsionTool torsionTool = TorsionTool.getOrCreateTool(torsion0);
 		CMLTransform3 transform = torsionTool.getTransformationToNewTorsion(
@@ -91,7 +90,7 @@ public class TorsionToolTest {
 			neverThrow(e);
 		}
 		double epsilon = 0.000001;
-		assertEquals("after transform", transform, expected, epsilon);
+		CMLAssert.assertEquals("after transform", transform, expected, epsilon);
 	}
 
 	/**
@@ -104,26 +103,26 @@ public class TorsionToolTest {
 		CMLAtomSet moveableSet = new CMLAtomSet(molecule1, new String[] { "a3",
 				"a4", "a5" });
 		double t0 = torsion0.getCalculatedTorsion(molecule1);
-		Assert.assertEquals("calculated torsion", 90., t0, EPS);
+		Assert.assertEquals("calculated torsion", 90., t0,  CC.EPS);
 		double t1 = torsion1.getCalculatedTorsion(molecule1);
-		Assert.assertEquals("calculated torsion", 90., t1, EPS);
+		Assert.assertEquals("calculated torsion", 90., t1,  CC.EPS);
 		double b45 = bonds.get(0).getBondLength(CoordinateType.CARTESIAN);
-		Assert.assertEquals("calculated b45", 1., b45, EPS);
+		Assert.assertEquals("calculated b45", 1., b45,  CC.EPS);
 		Angle angle = new Angle(Math.PI / 3);
 
 		CMLAtomSet atomSet = new CMLAtomSet(molecule1);
 		TorsionTool.getOrCreateTool(torsion0).adjustCoordinates(angle, atomSet,
 				moveableSet);
 		t0 = torsion0.getCalculatedTorsion(molecule1);
-		// Assert.assertEquals("new torsion", 60., t0, EPS);
+		// Assert.assertEquals("new torsion", 60., t0,  CC.EPS);
 		// this should be the same...
 		t1 = torsion1.getCalculatedTorsion(molecule1);
-		Assert.assertEquals("unaffected torsion", 90., t1, EPS);
+		Assert.assertEquals("unaffected torsion", 90., t1,  CC.EPS);
 		b45 = bonds.get(0).getBondLength(CoordinateType.CARTESIAN);
-		Assert.assertEquals("calculated b45", 1., b45, EPS);
+		Assert.assertEquals("calculated b45", 1., b45,  CC.EPS);
 
 		String filename = "org/xmlcml/cml/tools/examples/molecules/geom1/coxy.xml";
-		CMLMolecule molecule2 = (CMLMolecule) parseValidFile(filename);
+		CMLMolecule molecule2 = (CMLMolecule)TestUtils.parseValidFile(filename);
 		CMLTorsion torsion22 = new CMLTorsion();
 		torsion22.setAtomRefs4(new String[] { "a27", "a42", "a28", "a31" });
 		CMLAtomSet atomSet22 = new CMLAtomSet(molecule2);
@@ -132,7 +131,7 @@ public class TorsionToolTest {
 		double t22 = torsion22.getCalculatedTorsion(molecule2);
 		Assert
 				.assertEquals("calculated torsion", -177.96182350731638, t22,
-						EPS);
+						 CC.EPS);
 		angle = new Angle(Math.PI / 3);
 
 		TorsionTool.getOrCreateTool(torsion22).adjustCoordinates(angle,
@@ -150,7 +149,7 @@ public class TorsionToolTest {
 	@Test
 	public void testGetCalculatedTorsionCMLAtomSet() {
 		double t = torsion0.getCalculatedTorsion(molecule1);
-		Assert.assertEquals("calculated torsion", t, 90., EPS);
+		Assert.assertEquals("calculated torsion", t, 90.,  CC.EPS);
 
 	}
 

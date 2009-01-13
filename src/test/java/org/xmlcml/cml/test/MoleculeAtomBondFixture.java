@@ -1,10 +1,5 @@
 package org.xmlcml.cml.test;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -16,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -24,6 +20,7 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed
@@ -58,7 +55,7 @@ public final class MoleculeAtomBondFixture {
 	//
 	// read into xom; not a stable molecule... (CH3)[N+](S-)(O)(F)
 	// 2 1 3 4 5
-	protected String xmlMolS = S_EMPTY + "  <molecule id='m1'  " + CML_XMLNS
+	protected String xmlMolS = CMLConstants.S_EMPTY + "  <molecule id='m1'  " + CMLConstants.CML_XMLNS
 			+ ">" + "    <atomArray>" + "      <atom id='a1' "
 			+ "        elementType='N'" + "        hydrogenCount='0'"
 			+ "        formalCharge='1'" + "        spinMultiplicity='1'"
@@ -176,7 +173,7 @@ public final class MoleculeAtomBondFixture {
 	@Test
 	public void testParse() {
 
-		// Assert.assert that reference molecule read correctly
+		// Assert that reference molecule read correctly
 		CMLMolecule molecule = (CMLMolecule) xmlDocument.getRootElement();
 		Assert.assertNotNull("root should not be null", molecule);
 		Assert.assertEquals("molecule id", "m1", molecule.getId());
@@ -191,7 +188,7 @@ public final class MoleculeAtomBondFixture {
 
 		// test for incorrect XML
 		// duplicate id
-		xmlMolS = "  <molecule id='m1' " + CML_XMLNS + ">" + "    <atomArray>"
+		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a1' elementType='Fe'/>"
 				+ "      <atom id='a1'/>" + "    </atomArray>"
 				+ "    <bondArray>" + "      <bond atomRefs2='a1 a2'/>"
@@ -207,7 +204,7 @@ public final class MoleculeAtomBondFixture {
 		}
 
 		// missing id
-		xmlMolS = "  <molecule id='m1' " + CML_XMLNS + ">" + "    <atomArray>"
+		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom/>" + "    </atomArray>" + "    <bondArray>"
 				+ "      <bond atomRefs2='a1 a2'/>" + "    </bondArray>"
 				+ "  </molecule>" + "  ";
@@ -224,17 +221,17 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol1() {
-		String s = "  <molecule id='m1' " + CML_XMLNS + ">" + "    <atomArray>"
+		String s = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a1' x3='1.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a2' x3='3.0' y3='4.0' z3='0.0'/>"
 				+ "      <atom id='a3' x3='2.0' y3='3.0' z3='1.0'/>"
 				+ "    </atomArray>" + "  </molecule>";
-		mol1 = (CMLMolecule) parseValidString(s);
+		mol1 = (CMLMolecule)TestUtils.parseValidString(s);
 	}
 
 	public void makeMol2() {
-		mol2 = (CMLMolecule) parseValidString("  <molecule id='m2' "
-				+ CML_XMLNS + ">" + "    <atomArray>"
+		mol2 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m2' "
+				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a11' x3='1.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a12' x3='3.0' y3='4.0' z3='0.0'/>"
 				+ "      <atom id='a13' x3='2.0' y3='3.0' z3='-1.0'/>"
@@ -242,8 +239,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol3() {
-		mol3 = (CMLMolecule) parseValidString("  <molecule id='m3' "
-				+ CML_XMLNS + ">" + "    <atomArray>"
+		mol3 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m3' "
+				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a21' x3='21.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a22' x3='23.0' y3='4.0' z3='0.0'/>"
 				+ "      <atom id='a23' x3='22.0' y3='3.0' z3='1.0'/>"
@@ -251,8 +248,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol4() {
-		mol4 = (CMLMolecule) parseValidString("  <molecule id='m4' "
-				+ CML_XMLNS
+		mol4 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m4' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
 				+ "      <atom id='a1' xFract='0.1' yFract='0.2' zFract='0.0'/>"
@@ -262,8 +259,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeCrystal() {
-		crystal = (CMLCrystal) parseValidString("  <crystal id='c1' "
-				+ CML_XMLNS + ">"
+		crystal = (CMLCrystal)TestUtils.parseValidString("  <crystal id='c1' "
+				+ CMLConstants.CML_XMLNS + ">"
 				+ "    <scalar dictRef='iucr:_cell_length_a'>9.0</scalar>"
 				+ "    <scalar dictRef='iucr:_cell_length_b'>10.0</scalar>"
 				+ "    <scalar dictRef='iucr:_cell_length_c'>11.0</scalar>"
@@ -274,8 +271,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol5() {
-		mol5 = (CMLMolecule) parseValidString("  <molecule id='m5' "
-				+ CML_XMLNS
+		mol5 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m5' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'>"
@@ -292,8 +289,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol5a() {
-		mol5a = (CMLMolecule) parseValidString("  <molecule id='m5' "
-				+ CML_XMLNS
+		mol5a = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m5' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'/>"
@@ -310,8 +307,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMolCryst() {
-		cmlCryst = (CMLCml) parseValidString("<cml id='cml1' "
-				+ CML_XMLNS
+		cmlCryst = (CMLCml)TestUtils.parseValidString("<cml id='cml1' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <crystal id='c1' >"
 				+ "    <scalar dictRef='cml:a'>9.0</scalar>"
@@ -335,15 +332,15 @@ public final class MoleculeAtomBondFixture {
 				+ "      <bond id='a2_a3' atomRefs2='a2 a3'/>"
 				+ "    </bondArray>" + "  </molecule>" + "</cml>");
 		cmlCrystMol = (CMLMolecule) CMLUtil.getQueryNodes(cmlCryst,
-				".//" + CMLMolecule.NS, CML_XPATH).get(0);
+				".//" + CMLMolecule.NS, CMLConstants.CML_XPATH).get(0);
 		cmlCrystCryst = (CMLCrystal) CMLUtil.getQueryNodes(cmlCryst,
-				".//" + CMLCrystal.NS, CML_XPATH).get(0);
+				".//" + CMLCrystal.NS, CMLConstants.CML_XPATH).get(0);
 
 	}
 
 	public void makeMol6() {
-		mol6 = (CMLMolecule) parseValidString("  <molecule id='m6' "
-				+ CML_XMLNS
+		mol6 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m6' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'/>"
@@ -353,8 +350,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol7() {
-		mol7 = (CMLMolecule) parseValidString("  <molecule id='m7' "
-				+ CML_XMLNS + ">" + "    <atomArray>"
+		mol7 = (CMLMolecule)TestUtils.parseValidString("  <molecule id='m7' "
+				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "      <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
 				+ "      <atom id='a3' elementType='C' x2='1.2' y2='2.2'/>"
@@ -362,8 +359,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol8() {
-		mol8 = (CMLMolecule) parseValidString("<molecule id='m8' "
-				+ CML_XMLNS
+		mol8 = (CMLMolecule)TestUtils.parseValidString("<molecule id='m8' "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <molecule id='m8a'>"
 				+ "    <atomArray>"
@@ -381,7 +378,7 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol9() {
-		mol9 = (CMLMolecule) parseValidString("<molecule id='m9' " + CML_XMLNS
+		mol9 = (CMLMolecule)TestUtils.parseValidString("<molecule id='m9' " + CMLConstants.CML_XMLNS
 				+ ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "    <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
@@ -393,8 +390,8 @@ public final class MoleculeAtomBondFixture {
 	}
 
 	public void makeMol10() {
-		mol10 = (CMLMolecule) parseValidString("<molecule "
-				+ CML_XMLNS
+		mol10 = (CMLMolecule)TestUtils.parseValidString("<molecule "
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
@@ -407,11 +404,11 @@ public final class MoleculeAtomBondFixture {
 				+ "    <bond atomRefs2='a2 a3' order='S'/>"
 				+ "    <bond atomRefs2='a3 a4' order='D'/>"
 				+ "    <bond atomRefs2='a3 a5' order='S'/>" + "  </bondArray>"
-				+ "</molecule>" + S_EMPTY);
+				+ "</molecule>" + CMLConstants.S_EMPTY);
 	}
 
 	public void makeMol11() {
-		mol11 = (CMLMolecule) parseValidString("<molecule " + CML_XMLNS + ">"
+		mol11 = (CMLMolecule)TestUtils.parseValidString("<molecule " + CMLConstants.CML_XMLNS + ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -430,7 +427,7 @@ public final class MoleculeAtomBondFixture {
 				+ "    <bond atomRefs2='a5 a6' order='S'/>"
 				+ "    <bond atomRefs2='a6 a7' order='S'/>"
 				+ "    <bond atomRefs2='a6 a8' order='S'/>" + "  </bondArray>"
-				+ "</molecule>" + S_EMPTY);
+				+ "</molecule>" + CMLConstants.S_EMPTY);
 	}
 
 }

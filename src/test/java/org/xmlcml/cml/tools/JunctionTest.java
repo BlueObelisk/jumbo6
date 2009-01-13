@@ -3,11 +3,9 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,7 +46,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testGetBridgeAtomList() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testIsSpiro() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -66,7 +64,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testIsFusion() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -75,7 +73,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testIsBridge() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -84,7 +82,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testGetCommonAtomSet() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -93,7 +91,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testGetCommonBondSet() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -102,7 +100,7 @@ public class JunctionTest {
 	@Test
 	@Ignore
 	public final void testGetRingList() {
-		fail("Not yet implemented"); // TODO
+		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -115,9 +113,9 @@ public class JunctionTest {
 	// depends on history
 	public final void testCreateJunction() {
 		// should be a norbornane
-		assertEquals("junction atoms", new String[] { "a51", "a62", "a59" },
+		Assert.assertEquals("junction atoms", new String[] { "a51", "a62", "a59" },
 				junction.getCommonAtomSet());
-		assertEquals("junction bonds", new String[] { "a51_a62", "a59_a62" },
+		Assert.assertEquals("junction bonds", new String[] { "a51_a62", "a59_a62" },
 				junction.getCommonBondSet());
 	}
 

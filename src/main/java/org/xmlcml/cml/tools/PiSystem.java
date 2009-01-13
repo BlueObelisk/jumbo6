@@ -646,10 +646,10 @@ public class PiSystem implements CMLConstants {
     public String toString() {
         String s = "Atoms: ";
         for (CMLAtom atom : atomStack) {
-            s += S_SLASH + atom.getId();
+            s += CMLConstants.S_SLASH + atom.getId();
         }
         // for (AtomPair atomPair : fullBondList) {
-        // s += S_SLASH+atomPair;
+        // s += CMLConstants.S_SLASH+atomPair;
         // }
         return s;
     }

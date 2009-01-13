@@ -270,7 +270,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 			if (c == '0') {
 				// unused
 			} else if (c > '2' && c <= '9') {
-				s = S_LBRAK+rings[ringSize]+S_RBRAK;
+				s = CMLConstants.S_LBRAK+rings[ringSize]+S_RBRAK;
 				// groups
 			} else if (c == '\\') {
 				CMLBond currentBond = moleculeFrame.getMoleculeTool().incrementCurrentBond();

@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-
 import java.io.IOException;
 
 import nu.xom.Document;
@@ -15,6 +13,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.util.TestUtils;
 
 /**
  * 
@@ -31,7 +30,7 @@ public class ValencyToolTest {
 	 */
 	@Test
 	public void testMarkSpecial() {
-		CMLMolecule nitroMethane = (CMLMolecule) parseValidString(fix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)TestUtils.parseValidString(fix.nitroMethaneS);
 		// MoleculeTool moleculeTool =
 		// MoleculeTool.getOrCreateTool(nitroMethane);
 		CMLAtom nAtom = nitroMethane.getAtom(0);

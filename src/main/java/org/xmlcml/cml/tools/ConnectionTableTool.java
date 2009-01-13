@@ -14,6 +14,7 @@ import nu.xom.Elements;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomArray;
@@ -134,7 +135,7 @@ public class ConnectionTableTool extends AbstractTool {
 					oldId = "mol0";
 				}
 				if (oldId.length() > 0) {
-					oldId += S_UNDER;
+					oldId += CMLConstants.S_UNDER;
 				}
 
 				for (int i = 0; i < size; i++) {
@@ -183,7 +184,7 @@ public class ConnectionTableTool extends AbstractTool {
 			if (atom1 == null) {
 				break;
 			}
-			newId = atom.getId() + S_PERIOD + (++i);
+			newId = atom.getId() + CMLConstants.S_PERIOD + (++i);
 		}
 		return newId;
 	}
@@ -318,7 +319,7 @@ public class ConnectionTableTool extends AbstractTool {
 				id = id.substring(0, 1);
 				int i = 1;
 				while (true) {
-					String id0 = id + S_EMPTY + (i);
+					String id0 = id + CMLConstants.S_EMPTY + (i);
 					if (molecule.getAtomById(id0) == null) {
 						id = id0;
 						break;

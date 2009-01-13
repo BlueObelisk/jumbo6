@@ -3,13 +3,11 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
-import static org.xmlcml.util.TestUtils.parseValidString;
-
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.util.TestUtils;
 
 /**
  * @author pm286
@@ -24,7 +22,7 @@ public class FragmentConverterTest {
 	@Test
 	public void testConvertToFragment() {
 		String moleculeS = ""+
-		"<molecule "+CML_XMLNS+" id='m1'>" +
+		"<molecule "+CMLConstants.CML_XMLNS+" id='m1'>" +
 		"  <atomArray>" +
 		"    <atom id='a1'/>" +
 		"    <atom id='a2'/>" +
@@ -34,7 +32,7 @@ public class FragmentConverterTest {
 		"  </bondArray>" +
 		"</molecule>" +
 		"";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(moleculeS);
 		FragmentConverter fragmentConverter = new FragmentConverter(molecule);
 		CMLFragment fragment = fragmentConverter.convertToFragment();
 
@@ -59,8 +57,8 @@ public class FragmentConverterTest {
 		    "<arg parentAttribute='id'>m1_{$idx}</arg>"+
 		  "</molecule>"+
 		"</fragment>";
-		CMLFragment fragmentE = (CMLFragment) parseValidString(fragmentS);
-		assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		CMLFragment fragmentE = (CMLFragment)TestUtils.parseValidString(fragmentS);
+		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 		
 	}
 
@@ -70,7 +68,7 @@ public class FragmentConverterTest {
 	@Test
 	public void testConvertToFragment1() {
 		String moleculeS = ""+
-		"<molecule "+CML_XMLNS+" id='m1'>" +
+		"<molecule "+CMLConstants.CML_XMLNS+" id='m1'>" +
 		"  <atomArray>" +
 		"    <atom id='a1'>" +
 		"    </atom>" +
@@ -104,7 +102,7 @@ public class FragmentConverterTest {
 		"  <torsion id='tor2' atomRefs4='a2 a3 a4 a5'>-34</torsion>" +
 		"</molecule>" +
 		"";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(moleculeS);
 		FragmentConverter fragmentConverter = new FragmentConverter(molecule);
 		CMLFragment fragment = fragmentConverter.convertToFragment();
 		String fragmentS = 
@@ -185,8 +183,8 @@ public class FragmentConverterTest {
 		    "<arg parameterName='tor2'/>"+
 		  "</molecule>"+
 		"</fragment>";
-		CMLFragment fragmentE = (CMLFragment) parseValidString(fragmentS);
-		assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		CMLFragment fragmentE = (CMLFragment)TestUtils.parseValidString(fragmentS);
+		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 	
 //	/**
@@ -195,7 +193,7 @@ public class FragmentConverterTest {
 //	@Test
 //	@Ignore
 //	public void testConvertToFragmentOld() {
-//		CMLMolecule molecule1 = (CMLMolecule) parseValidString(molecule1S);
+//		CMLMolecule molecule1 = (CMLMolecule)TestUtils.parseValidString(molecule1S);
 //		FragmentConverter fragmentConverter = new FragmentConverter(molecule1);
 //		CMLFragment fragment =fragmentConverter.convertToFragment();
 //  	    String fragment1S = ""+
@@ -233,7 +231,7 @@ public class FragmentConverterTest {
 //		  "<arg parentAttribute='id'>id1_{$idx}</arg>"+
 //		"</molecule>" +
 //		"</fragment>";
-//		CMLFragment fragment1 = (CMLFragment) parseValidString(fragment1S);
+//		CMLFragment fragment1 = (CMLFragment)TestUtils.parseValidString(fragment1S);
 //		AbstractTest.assertEqualsCanonically("fragment", fragment1, fragment, true);
 //	}
 }

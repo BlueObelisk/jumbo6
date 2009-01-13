@@ -13,6 +13,7 @@ import nu.xom.Node;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLAttribute;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
@@ -145,7 +146,7 @@ public class DisorderTool extends AbstractTool {
 		List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLAtom.NS+"/@occupancy | "
 				+".//"+CMLAtom.NS+"/"+CMLScalar.NS+"[contains(@dictRef, '"+CrystalTool.DISORDER_ASSEMBLY+"') or " +
 				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')" +
-				"]", CML_XPATH);
+				"]", CMLConstants.CML_XPATH);
 		for (Node node : nodes) {
 			node.detach();
 		}
@@ -413,7 +414,7 @@ public class DisorderTool extends AbstractTool {
 
 	private void replaceAtomDisorderInformation(CMLAtom atom, String assemblyCode, String groupCode) {
 		List<Node> assemblyNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", CML_XPATH);
+				"contains(@dictRef,'"+CrystalTool.DISORDER_ASSEMBLY+"')]", CMLConstants.CML_XPATH);
 		if (assemblyNodes.size() > 1) {
 			throw new RuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder assembly.");
@@ -430,7 +431,7 @@ public class DisorderTool extends AbstractTool {
 			scalar.setStringContent(assemblyCode.toString());
 		}
 		List<Node> groupNodes = CMLUtil.getQueryNodes(atom, ".//"+CMLScalar.NS+"[" +
-				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", CML_XPATH);
+				"contains(@dictRef, '"+CrystalTool.DISORDER_GROUP+"')]", CMLConstants.CML_XPATH);
 		if (groupNodes.size() > 1) {
 			throw new RuntimeException("Atom "+atom.getId()+" contains more than one"
 					+" disorder group.");
@@ -497,7 +498,7 @@ public class DisorderTool extends AbstractTool {
 			List<Node> nodes = CMLUtil.getQueryNodes(atom, ".//" + CMLScalar.NS
 					+ "[@dictRef='" + CrystalTool.DISORDER_ASSEMBLY + "'] | "
 					+ ".//" + CMLScalar.NS + "[@dictRef='"
-					+ CrystalTool.DISORDER_GROUP + "']", CML_XPATH);
+					+ CrystalTool.DISORDER_GROUP + "']", CMLConstants.CML_XPATH);
 			if (nodes.size() > 0) {
 				return true;
 			}

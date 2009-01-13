@@ -13,6 +13,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArray;
@@ -38,7 +39,7 @@ public class EntryTool extends AbstractTool {
 	private static Logger LOG = Logger.getLogger(EntryTool.class);
 
     /** general whitespace regex */
-	public final static String ESCAPED_WHITESPACE = S_BACKSLASH+S_BACKSLASH+"s";
+	public final static String ESCAPED_WHITESPACE = CMLConstants.S_BACKSLASH+S_BACKSLASH+"s";
     /** whitespace comma slash */
 	public final static String DELIMITERS = 
 		ESCAPED_WHITESPACE+S_PIPE+S_COMMA+S_PIPE+S_SLASH;
@@ -107,7 +108,7 @@ public class EntryTool extends AbstractTool {
 	 * @return the delimiter
 	 */
 	public String getDelimiter() {
-		return (delimiter == null) ? S_SPACE : delimiter;
+		return (delimiter == null) ? CMLConstants.S_SPACE : delimiter;
 	}
 
 	/**
@@ -592,7 +593,7 @@ public class EntryTool extends AbstractTool {
     	EntryTool.checkEmptyName(name);
     	CMLMatrix matrix = null;
     	List<Node> propertys = CMLUtil.getQueryNodes(entry, 
-    			CMLProperty.NS+"["+CMLMatrix.NS+"]", CML_XPATH);
+    			CMLProperty.NS+"["+CMLMatrix.NS+"]", CMLConstants.CML_XPATH);
     	if (propertys.size() != 1) {
     		throw new RuntimeException(
     				"Cannot find property/matrix template in entry: "+entry.getId());

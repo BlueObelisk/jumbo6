@@ -1,9 +1,8 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
-
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.euclid.EC;
 
 
 
@@ -164,17 +163,17 @@ public class BondDisplay extends AbstractDisplay {
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("BondDisplay:");
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append(super.getDebugString());
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		
 		sb.append("  multipleColor: "+multipleColor);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  width:         "+width);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  scale:         "+scale);
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		return sb.toString();
 	}
 

@@ -1,11 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.EPS;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import java.io.StringReader;
 import java.util.List;
 
@@ -15,7 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -23,6 +19,7 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -41,7 +38,7 @@ public class AtomSetToolTest {
 		LOG.setLevel(Level.INFO);
 	}
 	MoleculeAtomBondFixture fixture = new MoleculeAtomBondFixture();
-	String sproutS = S_EMPTY + "<molecule " + CML_XMLNS + " title='sprout'>"
+	String sproutS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='sprout'>"
 			+ "  <atomArray>" + "    <atom id='a1' elementType='C'/>"
 			+ "    <atom id='a2' elementType='C'/>"
 			+ "    <atom id='a3' elementType='C'/>"
@@ -68,7 +65,7 @@ public class AtomSetToolTest {
 			+ "     <bond id='a5 a11' atomRefs2='a5 a11'/>"
 			+ "     <bond id='a6 a12' atomRefs2='a6 a12'/>"
 			+ "     <bond id='a12 a13' atomRefs2='a12 a13'/>"
-			+ "  </bondArray>" + "</molecule>" + S_EMPTY;
+			+ "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 	CMLMolecule sprout = null;
 
 	CMLAtomSet atomSet1 = null;
@@ -81,7 +78,7 @@ public class AtomSetToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		sprout = (CMLMolecule) parseValidString(sproutS);
+		sprout = (CMLMolecule)TestUtils.parseValidString(sproutS);
 		atomSet1 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a1",
 				"a2", "a3" });
 		atomSet2 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a2",
@@ -99,7 +96,7 @@ public class AtomSetToolTest {
 		CMLMolecule mol1 = null;
 		try {
 			mol1 = (CMLMolecule) new CMLBuilder().build(
-					new StringReader("<molecule " + CML_XMLNS + ">"
+					new StringReader("<molecule " + CMLConstants.CML_XMLNS + ">"
 							+ "  <atomArray>"
 							+ "    <atom id='a1' x3='1.0' y3='2.0' z3='0.0'/>"
 							+ "    <atom id='a2' x3='3.0' y3='4.0' z3='0.0'/>"
@@ -115,7 +112,7 @@ public class AtomSetToolTest {
 					.build(
 							new StringReader(
 									"<molecule "
-											+ CML_XMLNS
+											+ CMLConstants.CML_XMLNS
 											+ ">"
 											+ "  <atomArray>"
 											+ "    <atom id='a11' x3='1.0' y3='2.0' z3='0.0'/>"
@@ -312,12 +309,12 @@ public class AtomSetToolTest {
 		AtomSetTool.getOrCreateTool(atomSet1).transformCartesians(t);
 		Point3Vector p3v = atomSet1.getCoordinates3(CoordinateType.CARTESIAN);
 		Assert.assertEquals("point3vector", 3, p3v.size());
-		assertEquals("point3vector", new double[] { 0.0, 0.0, 0.0 },
-				p3v.get(0), EPS);
-		assertEquals("point3vector", new double[] { 1.0, -1.0, 2.0 }, p3v
-				.get(1), EPS);
-		assertEquals("point3vector", new double[] { -1.0, -1.0, -2.0 }, p3v
-				.get(2), EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { 0.0, 0.0, 0.0 },
+				p3v.get(0), CC.EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { 1.0, -1.0, 2.0 }, p3v
+				.get(1), CC.EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { -1.0, -1.0, -2.0 }, p3v
+				.get(2), CC.EPS);
 	}
 
 	/**
@@ -338,12 +335,12 @@ public class AtomSetToolTest {
 		atomSetTool1.transformFractionals(t);
 		Point3Vector p3v = atomSet1.getCoordinates3(CoordinateType.FRACTIONAL);
 		Assert.assertEquals("point3vector", 3, p3v.size());
-		assertEquals("point3vector", new double[] { 0.2, -0.1, 0.5 }, p3v
-				.get(0), EPS);
-		assertEquals("point3vector", new double[] { 0.5, -0.4, 1.1 }, p3v
-				.get(1), EPS);
-		assertEquals("point3vector", new double[] { 0.8, -0.7, 1.7 }, p3v
-				.get(2), EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { 0.2, -0.1, 0.5 }, p3v
+				.get(0), CC.EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { 0.5, -0.4, 1.1 }, p3v
+				.get(1), CC.EPS);
+		CMLAssert.assertEquals("point3vector", new double[] { 0.8, -0.7, 1.7 }, p3v
+				.get(2), CC.EPS);
 	}
 
     /**

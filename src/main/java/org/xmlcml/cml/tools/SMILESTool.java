@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomArray;
@@ -369,7 +370,7 @@ public class SMILESTool extends AbstractTool {
         	    	List<CMLBond> bondListWhichIncludesDoubleBond = atomRefs4sInDoubleBond.get(1).getLigandBonds();
         	    	for (CMLBond bond : bondListWhichIncludesDoubleBond) {
 	        			if (CMLBond.DOUBLE == bond.getOrder() && 
-	        					bond.query("cml:bondStereo", CML_XPATH).size() == 0) {
+	        					bond.query("cml:bondStereo", CMLConstants.CML_XPATH).size() == 0) {
 	        				CMLBondStereo bondstereo =new CMLBondStereo();
 	        				bondstereo.setAtomRefs4(
 	        						new String[]{

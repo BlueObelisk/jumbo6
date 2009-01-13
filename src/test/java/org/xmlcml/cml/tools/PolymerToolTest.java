@@ -5,10 +5,6 @@ import static org.xmlcml.cml.base.CMLConstants.XML_SUFF;
 import static org.xmlcml.cml.element.AbstractTestBase.EXPERIMENTAL_RESOURCE;
 import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
 import static org.xmlcml.euclid.EuclidConstants.S_COLON;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
-import static org.xmlcml.util.TestUtils.parseValidString;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,11 +19,14 @@ import nu.xom.ValidityException;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
+
 /**
  * test polymerTool.
  *
@@ -41,7 +40,7 @@ public class PolymerToolTest {
         ResourceManager catalogTool = null;
         try {
         	catalogTool = new ResourceManager(Util
-        		    .getResource(TOOL_MOLECULES_RESOURCE + U_S + CATALOG_XML).toURI());
+        		    .getResource(TOOL_MOLECULES_RESOURCE +CMLConstants.U_S + CATALOG_XML).toURI());
         }
         catch (URISyntaxException e) {
         	e.printStackTrace();
@@ -159,7 +158,7 @@ public class PolymerToolTest {
 	@Ignore
 	public void testProcessConventionExhaustively() throws Exception { //added throws Exception
 		String fileroot = "copoly1";
-		String copolyS = S_EMPTY
+		String copolyS = CMLConstants.S_EMPTY
 				+ "<molecule id='"
 				+ fileroot
 				+ "'"
@@ -168,7 +167,7 @@ public class PolymerToolTest {
 				+ "  convention='cml:PML-concise'"
 				+ "  formula='(f:oh}r1)-[l(1.39),t(180)](r1{f:po}r2-[l(1.41),t(60)])*(3)-[l(1.42),t(180)](r1{f:eo}r2-[l(1.43),t(-60)])*(4)-[l(1.44),t(165)](r1{f:me)'"
 				+ "  />";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(copolyS);
+		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(copolyS);
 		PolymerTool polymerTool = new PolymerTool(molecule);
 		polymerTool.setResourceManager(getMoleculeCatalog()); //added get catalog
 		try {
@@ -179,7 +178,7 @@ public class PolymerToolTest {
 		String convention = molecule.getConvention();
 		convention = convention.substring(convention.indexOf(S_COLON) + 1);
 
-        writeFile(molecule, fileroot + S_UNDER + convention + XML_SUFF);
+        writeFile(molecule, fileroot + CMLConstants.S_UNDER + convention + XML_SUFF);
     }
     
     private void writeFile(CMLMolecule molecule, String filename) {
@@ -225,7 +224,7 @@ public class PolymerToolTest {
 	private void testMoleculeList(String fileroot) throws Exception {
 		LOG.debug("Running example " + fileroot);
         PolymerTool polymerTool = new PolymerTool();
-		CMLMoleculeList molList = polymerTool.readMoleculeList(EXPERIMENTAL_RESOURCE + U_S
+		CMLMoleculeList molList = polymerTool.readMoleculeList(EXPERIMENTAL_RESOURCE +CMLConstants.U_S
                 + fileroot + "_concise.xml");
 		polymerTool.setMoleculeList(molList);
 		polymerTool.setResourceManager(getMoleculeCatalog());
@@ -256,7 +255,7 @@ public class PolymerToolTest {
 //     * @param molTest
 //     */
 //    public void debug(String s, CMLMolecule molTest) {
-//        String f = fileroot + S_UNDER + s + XML_SUFF;
+//        String f = fileroot + CMLConstants.S_UNDER + s + XML_SUFF;
 //        LOG.debug("=== debug " + s + "== to == "+fileroot);
 //        
 //        try {
@@ -266,7 +265,7 @@ public class PolymerToolTest {
 //                        molRef, molTest, true);
 //            } catch (AssertionError e) {
 //                try {
-//                    Assert.fail(e + " for " + fileroot + S_SLASH + s);
+//                    Assert.fail(e + " for " + fileroot + CMLConstants.S_SLASH + s);
 //                } catch (Throwable e1) {
 //                    System.err.println("Molecules are different: "+e1);
 //                }
@@ -295,14 +294,14 @@ public class PolymerToolTest {
 //            throws Exception {
 //        Assert.assertNotNull("molListTest", molListTest);
 //        LOG.debug("============" + s + "==========");
-//        String f = fileroot + S_UNDER + s + XML_SUFF;
+//        String f = fileroot + CMLConstants.S_UNDER + s + XML_SUFF;
 //        CMLMoleculeList molListRef = readMoleculeList(f);
 //        Assert.assertNotNull("molListRef", molListRef);
 //        try {
 //            TestUtils.assertEqualsCanonically("comparing with previous result",
 //                    molListRef, molListTest, true);
 //        } catch (AssertionError e) {
-//            Assert.fail(e + " for " + fileroot + S_SLASH + s);
+//            Assert.fail(e + " for " + fileroot + CMLConstants.S_SLASH + s);
 //        }
 //        LOG.debug("============" + s + "==========");
 //    }

@@ -1,9 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +8,17 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 /**
  * test AtomMatcher
@@ -29,7 +28,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class AtomMatcherTest {
 
-	String mol1S = S_EMPTY + "<molecule id='m1' " + CML_XMLNS + ">"
+	String mol1S = CMLConstants.S_EMPTY + "<molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' x2='0.0' y2='0.0'/>"
 			+ "    <atom id='a2' elementType='C' x2='0.0' y2='1.0'/>"
@@ -38,9 +37,9 @@ public class AtomMatcherTest {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond atomRefs2='a1 a2'/>" + "    <bond atomRefs2='a3 a2'/>"
 			+ "    <bond atomRefs2='a4 a2' order='2'/>" + "  </bondArray>"
-			+ "</molecule>" + S_EMPTY;
+			+ "</molecule>" + CMLConstants.S_EMPTY;
 
-	String mol2S = S_EMPTY + "<molecule id='m1' " + CML_XMLNS + ">"
+	String mol2S = CMLConstants.S_EMPTY + "<molecule id='m1' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <atomArray>"
 			+ "    <atom id='a1' elementType='N' x2='0.0', y2='0.0'/>"
 			+ "    <atom id='a2' elementType='C' x2='0.0', y2='1.0'/>"
@@ -49,7 +48,7 @@ public class AtomMatcherTest {
 			+ "  </atomArray>" + "  <bondArray>"
 			+ "    <bond atomRefs2='a1 a2'/>" + "    <bond atomRefs2='a3 a2'/>"
 			+ "    <bond atomRefs2='a4 a2' order='2'/>" + "  </bondArray>"
-			+ "</molecule>" + S_EMPTY;
+			+ "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule mol1;
 	CMLMolecule mol2;
@@ -68,11 +67,11 @@ public class AtomMatcherTest {
 	}
 
 	private void makeMol1() {
-		mol1 = (CMLMolecule) parseValidString(mol1S);
+		mol1 = (CMLMolecule)TestUtils.parseValidString(mol1S);
 	}
 
 	void makeMol2() {
-		mol2 = (CMLMolecule) parseValidString(mol2S);
+		mol2 = (CMLMolecule)TestUtils.parseValidString(mol2S);
 	}
 
 	/**
@@ -81,13 +80,13 @@ public class AtomMatcherTest {
 	@Test
 	public void testAtomMatcher() {
 		AtomMatcher atomMatcher = new AtomMatcher();
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
 				.getExcludeElementTypes());
-		assertEquals("INCLUDE_LIGAND_ELEMENT_TYPES", new String[] {},
+		Assert.assertEquals("INCLUDE_LIGAND_ELEMENT_TYPES", new String[] {},
 				atomMatcher.getIncludeLigandElementTypes());
-		assertEquals("EXCLUDE_LIGAND_ELEMENT_TYPES", new String[] {},
+		Assert.assertEquals("EXCLUDE_LIGAND_ELEMENT_TYPES", new String[] {},
 				atomMatcher.getExcludeLigandElementTypes());
 		Assert.assertEquals("USE_CHARGE", false, atomMatcher.isUseCharge());
 		Assert.assertEquals("USE_LABEL", false, atomMatcher.isUseLabel());
@@ -112,20 +111,20 @@ public class AtomMatcherTest {
 		AtomMatcher atomMatcher = new AtomMatcher();
 		atomMatcher.setIncludeElementTypes(new String[] { AS.C.value,
 				AS.N.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
 				AS.N.value }, atomMatcher.getIncludeElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
 				.getExcludeElementTypes());
 		atomMatcher.setExcludeElementTypes(new String[] { AS.N.value,
 				AS.O.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] { AS.N.value,
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] { AS.N.value,
 				AS.O.value }, atomMatcher.getExcludeElementTypes());
 		atomMatcher.setIncludeElementTypes(new String[] {});
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
 				.getExcludeElementTypes());
 	}
 
@@ -138,20 +137,20 @@ public class AtomMatcherTest {
 		AtomMatcher atomMatcher = new AtomMatcher();
 		atomMatcher.setIncludeLigandElementTypes(new String[] { AS.C.value,
 				AS.N.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
 				AS.N.value }, atomMatcher.getIncludeLigandElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
 				.getExcludeLigandElementTypes());
 		atomMatcher.setExcludeLigandElementTypes(new String[] { AS.N.value,
 				AS.O.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeLigandElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] { AS.N.value,
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] { AS.N.value,
 				AS.O.value }, atomMatcher.getExcludeLigandElementTypes());
 		atomMatcher.setIncludeLigandElementTypes(new String[] {});
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeLigandElementTypes());
-		assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
 				.getExcludeLigandElementTypes());
 	}
 
@@ -164,7 +163,7 @@ public class AtomMatcherTest {
 		AtomMatcher atomMatcher = new AtomMatcher();
 		atomMatcher.setIncludeElementTypes(new String[] { AS.C.value,
 				AS.N.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
 				AS.N.value }, atomMatcher.getIncludeElementTypes());
 		CMLAtom atomO = mol1.getAtom(3);
 		Assert.assertEquals(AS.O.value, AS.O.value, atomO.getElementType());
@@ -172,13 +171,13 @@ public class AtomMatcherTest {
 
 		atomMatcher.setIncludeElementTypes(new String[] { AS.C.value,
 				AS.O.value });
-		assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
+		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
 				AS.O.value }, atomMatcher.getIncludeElementTypes());
 		Assert.assertFalse("include O", atomMatcher.skipAtom(atomO));
 
 		atomMatcher.setExcludeElementTypes(new String[] { AS.C.value,
 				AS.O.value });
-		assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
+		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
 				AS.O.value }, atomMatcher.getExcludeElementTypes());
 		Assert.assertTrue("exclude O", atomMatcher.skipAtom(atomO));
 	}
@@ -191,7 +190,7 @@ public class AtomMatcherTest {
 	@Test
 	public void testCreateMapFrom2DOverlap() {
 		String s1 = "<molecule "
-				+ CML_XMLNS
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "<atomArray>"
 				+ "<atom id='a18' elementType='C' x2='23.182952807534104' y2='35.36516011351481'/>"
@@ -217,7 +216,7 @@ public class AtomMatcherTest {
 				+ "</bondArray>" + "</molecule>";
 
 		String s2 = "<molecule "
-				+ CML_XMLNS
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "<atomArray>"
 				+ "<atom id='a38' elementType='C' x2='52.882859304026375' y2='35.19970102439786'/>"
@@ -245,9 +244,9 @@ public class AtomMatcherTest {
 				+ "<bond atomRefs2='a43 a47' order='1' id='a43_a47'/>"
 				+ "</bondArray>" + "</molecule>";
 
-		CMLMolecule mol1 = (CMLMolecule) parseValidString(s1);
+		CMLMolecule mol1 = (CMLMolecule)TestUtils.parseValidString(s1);
 		CMLAtomSet atomSet1 = MoleculeTool.getOrCreateTool(mol1).getAtomSet();
-		CMLMolecule mol2 = (CMLMolecule) parseValidString(s2);
+		CMLMolecule mol2 = (CMLMolecule)TestUtils.parseValidString(s2);
 		CMLAtomSet atomSet2 = MoleculeTool.getOrCreateTool(mol2).getAtomSet();
 		AtomMatcher atomMatcher = new AtomMatcher();
 		atomMatcher.setAtomMatchStrategy(Strategy.MATCH_DISTANCE_MATRIX);
@@ -257,7 +256,7 @@ public class AtomMatcherTest {
 			Real2 xy1 = mol1.getAtomById(link.getFrom()).getXY2();
 			Real2 xy2 = mol2.getAtomById(link.getTo()).getXY2();
 			Real2 found = xy1.subtract(xy2);
-			assertEquals("delta", expected, found, 0.000001);
+			CMLAssert.assertEquals("delta", expected, found, 0.000001);
 		}
 	}
 
@@ -304,7 +303,7 @@ public class AtomMatcherTest {
 				// LOG.debug("A "+((CMLAtom)obj).getId());
 			} else if (obj instanceof CMLAtomSet) {
 				// LOG.debug("AS "+Util.concatenate(((CMLAtomSet)obj).
-				// getXMLContent(), S_SLASH));
+				// getXMLContent(), CMLConstants.S_SLASH));
 			}
 		}
 

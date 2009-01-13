@@ -3,14 +3,7 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
 import static org.xmlcml.cml.test.CMLAssert.CRYSTAL_EXAMPLES;
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.cml.test.CMLAssert.assertEqualsCanonically;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
 
 import java.net.URL;
 import java.util.List;
@@ -22,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomParity;
@@ -31,7 +25,9 @@ import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.util.TestUtils;
 /**
  * @author pm286
  * 
@@ -41,7 +37,7 @@ public class StereochemistryToolTest {
 	private static Logger LOG = Logger.getLogger(StereochemistryToolTest.class);
 
 	private CMLMolecule makeMolecule1() {
-		URL url = Util.getResource(CRYSTAL_EXAMPLES + U_S + "ci6746_1.cml.xml");
+		URL url = Util.getResource(CRYSTAL_EXAMPLES +CMLConstants.U_S + "ci6746_1.cml.xml");
 		Document document = null;
 		try {
 			document = new CMLBuilder().build(url.openStream());
@@ -50,9 +46,9 @@ public class StereochemistryToolTest {
 			throw new RuntimeException("should not throw " + e.getMessage());
 		}
 		CMLMolecule molecule = (CMLMolecule) CMLUtil.getQueryNodes(document,
-				"//" + CMLMolecule.NS, CML_XPATH).get(0);
+				"//" + CMLMolecule.NS, CMLConstants.CML_XPATH).get(0);
 		List<Node> scalars = CMLUtil.getQueryNodes(molecule, "//"
-				+ CMLScalar.NS, CML_XPATH);
+				+ CMLScalar.NS, CMLConstants.CML_XPATH);
 		for (Node node : scalars) {
 			node.detach();
 		}
@@ -66,7 +62,7 @@ public class StereochemistryToolTest {
 	 */
 	@Test
 	public final void testAdd2DStereo() {
-		String cisMolS = "" + "<molecule " + CML_XMLNS + " >" + "  <atomArray>"
+		String cisMolS = "" + "<molecule " + CMLConstants.CML_XMLNS + " >" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='Cl' x2='-5' y2='10'/>"
 				+ "    <atom id='a2' elementType='N' x2='0' y2='0'/>"
 				+ "    <atom id='a3' elementType='Cl' x2='10' y2='0'/>"
@@ -77,7 +73,7 @@ public class StereochemistryToolTest {
 				+ "    <bond id='b34' atomRefs2='a3 a4' order='S'/>" +
 				// "    <bond id='b13' atomRefs2='a1 a3' order='S'/>" +
 				"  </bondArray>" + "</molecule>";
-		CMLMolecule cisMol = (CMLMolecule) parseValidString(cisMolS);
+		CMLMolecule cisMol = (CMLMolecule)TestUtils.parseValidString(cisMolS);
 		ConnectionTableTool ctTool = new ConnectionTableTool(cisMol);
 		List<CMLBond> bonds = ctTool.getCyclicBonds();
 		Assert.assertEquals("cyclic", 0, bonds.size());
@@ -88,11 +84,11 @@ public class StereochemistryToolTest {
 		StereochemistryTool cisMolTool = new StereochemistryTool(cisMol);
 		cisMolTool.add2DStereo();
 		List<Node> bondStereos = CMLUtil.getQueryNodes(cisMol, CMLBondArray.NS
-				+ S_SLASH + CMLBond.NS + S_SLASH + CMLBondStereo.NS, CML_XPATH);
+				+ EC.S_SLASH + CMLBond.NS + EC.S_SLASH + CMLBondStereo.NS, CMLConstants.CML_XPATH);
 		Assert.assertEquals("bondStereo", 1, bondStereos.size());
 		CMLBondStereo bondStereo = (CMLBondStereo) bondStereos.get(0);
 		String[] atomRefs4 = bondStereo.getAtomRefs4();
-		assertEquals("atomRefs4", new String[] { "a1", "a2", "a3", "a4" },
+		Assert.assertEquals("atomRefs4", new String[] { "a1", "a2", "a3", "a4" },
 				atomRefs4);
 		String value = bondStereo.getXMLContent();
 		Assert.assertEquals("cid", CMLBond.CIS, value);
@@ -128,7 +124,7 @@ public class StereochemistryToolTest {
 		// chiral
 		atomParity1 = st.calculateAtomParity(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
-		assertEquals("atomRefs4", new String[] { "a28", "a6", "a10", "a49" },
+		Assert.assertEquals("atomRefs4", new String[] { "a28", "a6", "a10", "a49" },
 				atomRefs4);
 		Assert.assertEquals("atomRefs4", 11.158571879456787, atomParity1
 				.getXMLContent(), 0.000001);
@@ -343,8 +339,8 @@ public class StereochemistryToolTest {
 				+ "<bond id='a57_a58' atomRefs2='a57 a58' userCyclic='ACYCLIC' order='1'/>"
 				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='1'/>"
 				+ "</bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule) parseValidString(molS);
-		assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
+		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(molS);
+		TestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
 }

@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,109 +11,109 @@ public class EntryToolTest {
 	@Test
 	@Ignore
 	public void testCreateStringScalar() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateDoubleScalar() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateIntegerScalar() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateDoubleArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateIntegerArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateStringArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateDoubleScalarOrDoubleArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateIntegerScalarOrIntegerArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateStringScalarOrStringArray() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateParameter() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateDate() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateFormula() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateVector3() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCheckArrayLength() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCheckNumericValue() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCheckDoubleRange() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCheckIntegerRange() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testEnsureEnumerations() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
@@ -145,31 +143,31 @@ public class EntryToolTest {
 	@Test
 	@Ignore
 	public void testCheckPattern() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCheckEmptyName() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testAddValue() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testUpdateEnumerations() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	@Ignore
 	public void testCreateTerm() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }

@@ -1,13 +1,13 @@
 package org.xmlcml.cml.element;
 
-import static org.xmlcml.euclid.EuclidConstants.S_SLASH;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.euclid.EC;
 
 /**
  * superclass of all CMLTests. creates CMLBuilder for subclasses. little other
@@ -24,27 +24,27 @@ public final class AbstractTestBase {
 	public final static String TEST_RESOURCE = "org/xmlcml/cml/element";
 
 	/** root of examples. */
-	public final static String EXAMPLES_RESOURCE = TEST_RESOURCE + S_SLASH
+	public final static String EXAMPLES_RESOURCE = TEST_RESOURCE + EC.S_SLASH
 			+ "examples";
 
 	/** root of complex examples. */
-	public final static String COMPLEX_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String COMPLEX_RESOURCE = EXAMPLES_RESOURCE + EC.S_SLASH
 			+ "complex";
 
 	/** root of experimental examples. */
 	public final static String EXPERIMENTAL_RESOURCE = EXAMPLES_RESOURCE
-			+ S_SLASH + "experimental";
+			+ EC.S_SLASH + "experimental";
 
 	/** root of xsd examples. */
-	public final static String SIMPLE_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String SIMPLE_RESOURCE = EXAMPLES_RESOURCE + EC.S_SLASH
 			+ "xsd";
 
 	/** root of dictionary examples. */
-	public final static String DICT_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String DICT_RESOURCE = EXAMPLES_RESOURCE + EC.S_SLASH
 			+ "dict";
 
 	/** root of unit examples. */
-	public final static String UNIT_RESOURCE = EXAMPLES_RESOURCE + S_SLASH
+	public final static String UNIT_RESOURCE = EXAMPLES_RESOURCE + EC.S_SLASH
 			+ "units";
 
 	/** root of tool tests. */
@@ -52,16 +52,16 @@ public final class AbstractTestBase {
 
 	/** root of tool test examples. */
 	public final static String TOOL_EXAMPLES_RESOURCE = TOOL_TEST_RESOURCE
-			+ S_SLASH + "examples";
+			+ EC.S_SLASH + "examples";
 
 	/** root of tool test molecules. */
 	public final static String TOOL_MOLECULES_RESOURCE = TOOL_EXAMPLES_RESOURCE
-			+ S_SLASH + "molecules";
+			+ EC.S_SLASH + "molecules";
 
 	/** index in each directory. */
 	public final static String INDEX = "index.xml";
 
-	static String TEST_INDEX = TEST_RESOURCE + S_SLASH + INDEX;
+	static String TEST_INDEX = TEST_RESOURCE + CC.S_SLASH + INDEX;
 
 	/** final string in dictionary namespaces */
 	public final static String CML_DICT = "cml";

@@ -320,7 +320,7 @@ public class SVGText extends SVGElement {
 		// anticlockwise Y rotation changes order
 		double sign = (YPLUS.equals(rotate)) ? -1.0 : 1.0;
 		double[] fontWidths = FontWidths.getFontWidths(this.getFontFamily());
-		double spaceWidth = fontWidths[(int)C_SPACE];
+		double spaceWidth = fontWidths[(int)C_SPACE] * maxFontSize * fontWidthFactor;
 		
 		// same size of font?
 		LOG.debug(""+this.getValue()+"]["+text1.getValue()+ " ...fonts... " + fontSize0+"/"+fontSize1);
@@ -339,12 +339,12 @@ public class SVGText extends SVGElement {
 				double gapXX = (coordHoriz1 - coordHoriz0) * sign;
 				double calcEnd = this.getCalculatedTextEndCoordinate(fontWidthFactor);
 				double gapX = (coordHoriz1 - calcEnd) *sign;
-				int nspaces = (int) (gapX / spaceWidth);
+				double nspaces = (gapX / spaceWidth);
 				if (gapXX < 0) {
 					LOG.debug("text R to L ... "+gapXX);
 					// in front of preceding (axes sometime go backwards
 					linker = null;
-				} else if (nspaces < 1) {
+				} else if (nspaces < 0.5) {
 					nspaces = 0;
 				} else if (nspaces > 2) {
 					nspaces = 100;

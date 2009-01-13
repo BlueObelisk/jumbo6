@@ -3,9 +3,6 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.assertEquals;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
@@ -24,8 +22,8 @@ import org.xmlcml.cml.element.CMLBondSet;
  */
 public class RingTest {
 
-	static String MOLECULE = "org" + U_S + "xmlcml" + U_S + "cml" + U_S
-			+ "tools" + U_S + "examples" + U_S + "molecules";
+	static String MOLECULE = "org" +CMLConstants.U_S + "xmlcml" +CMLConstants.U_S + "cml" +CMLConstants.U_S
+			+ "tools" +CMLConstants.U_S + "examples" +CMLConstants.U_S + "molecules";
 
 	List<Ring> ringList = null;
 	Ring ring = null;
@@ -104,7 +102,7 @@ public class RingTest {
 	// order of sets is a problem
 	public final void testGetAtomSet() {
 		CMLAtomSet atomSet = new CMLAtomSet(ring.getAtomSet());
-		assertEquals("atom set", new String[] { "a52", "a54", "a51", "a65",
+		Assert.assertEquals("atom set", new String[] { "a52", "a54", "a51", "a65",
 				"a57" }, atomSet);
 	}
 
@@ -117,7 +115,7 @@ public class RingTest {
 	// order of bonds is a problem
 	public final void testGetBondSet() {
 		CMLBondSet bondSet = new CMLBondSet(ring.getBondSet());
-		assertEquals("bond set", new String[] { "a57_a65", "a57_a59",
+		Assert.assertEquals("bond set", new String[] { "a57_a65", "a57_a59",
 				"a59_a62", "a51_a62", "a51_a65" }, bondSet);
 	}
 
@@ -166,7 +164,7 @@ public class RingTest {
 	// depends on randome ordering
 	public final void testGetCyclicAtomIdList() {
 		String[] atomIds = ring.getCyclicAtomIdList().toArray(new String[0]);
-		assertEquals("atomids", new String[] { "a40", "a41", "a43", "a45",
+		Assert.assertEquals("atomids", new String[] { "a40", "a41", "a43", "a45",
 				"a47", "a49" }, atomIds);
 	}
 
@@ -213,7 +211,7 @@ public class RingTest {
 			String[] expectedAtomIds, Ring ring) {
 		String[] atomIds = (String[]) ring.getCyclicAtomIdList().toArray(
 				new String[0]);
-		assertEquals(message, expectedAtomIds, atomIds);
+		Assert.assertEquals(message, expectedAtomIds, atomIds);
 	}
 
 	/**
@@ -227,7 +225,7 @@ public class RingTest {
 			String[] expectedBondIds, Ring ring) {
 		String[] bondIds = (String[]) ring.getCyclicBondIdList().toArray(
 				new String[0]);
-		assertEquals(message, expectedBondIds, bondIds);
+		Assert.assertEquals(message, expectedBondIds, bondIds);
 	}
 
 }

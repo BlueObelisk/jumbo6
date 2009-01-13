@@ -1,9 +1,5 @@
 package org.xmlcml.cml.test;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -12,6 +8,7 @@ import nu.xom.ValidityException;
 
 import org.junit.Assert;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLProduct;
 import org.xmlcml.cml.element.CMLProductList;
@@ -20,11 +17,12 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.CMLSpectatorList;
+import org.xmlcml.util.TestUtils;
 
 public class ReactionFixture {
 	protected CMLReaction xomReact1;
 	protected CMLReaction xomReact2;
-	protected String xmlReact1S = "<reaction id='r1' " + CML_XMLNS + ">"
+	protected String xmlReact1S = "<reaction id='r1' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <reactantList id='rl1'>" + "    <reactant id='re1'>"
 			+ "      <molecule id='rm1'>" + "        <atomArray>"
 			+ "          <atom id='a1' elementType='C' hydrogenCount='3'>"
@@ -68,7 +66,7 @@ public class ReactionFixture {
 			+ "    </substance>" + "  </substanceList>" + "  <map>"
 			+ "    <link from='a1' to='a1'/>" + "    <link from='a2' to='a3'/>"
 			+ "    <link from='a3' to='a2'/>" + "  </map>" + "</reaction>"
-			+ S_EMPTY;
+			+ CMLConstants.S_EMPTY;
 	public CMLReaction xmlReact1;
 	protected CMLReaction multiReact1;
 	protected CMLElements<CMLReactantList> xmlReactantLists1;
@@ -81,7 +79,7 @@ public class ReactionFixture {
 	protected CMLElements<CMLReactant> xmlReactants1;
 	protected CMLElements<CMLProduct> xmlProducts1;
 	protected CMLElements<CMLSpectator> xmlSpectators1;
-	protected String xmlReact2S = "<reaction id='r1' " + CML_XMLNS + ">"
+	protected String xmlReact2S = "<reaction id='r1' " + CMLConstants.CML_XMLNS + ">"
 			+ "  <reactantList id='rl1'>" + "    <reactant id='re1'>"
 			+ "      <formula concise='H 1 Cl 1' id='r_f1'/>"
 			+ "    </reactant>" + "    <reactant id='re2'>"
@@ -94,11 +92,11 @@ public class ReactionFixture {
 			+ "    </product>" + "  </productList>"
 			+ "  <spectatorList id='sl1'>"
 			+ "    <spectator id='sp1' title='phenolphthalein'/>"
-			+ "  </spectatorList>" + "</reaction>" + S_EMPTY;
+			+ "  </spectatorList>" + "</reaction>" + CMLConstants.S_EMPTY;
 	protected CMLReaction xmlReact2;
 
 	public ReactionFixture() {
-		xmlReact1 = (CMLReaction) parseValidString(xmlReact1S);
+		xmlReact1 = (CMLReaction)TestUtils.parseValidString(xmlReact1S);
 		xmlReactantLists1 = xmlReact1.getReactantListElements();
 		xmlProductLists1 = xmlReact1.getProductListElements();
 		xmlSpectatorLists1 = xmlReact1.getSpectatorListElements();
@@ -117,7 +115,7 @@ public class ReactionFixture {
 	}
 
 	protected void makeMultiProductReactantLists() {
-		String multiReact1S = "<reaction id='r1' " + CML_XMLNS + ">"
+		String multiReact1S = "<reaction id='r1' " + CMLConstants.CML_XMLNS + ">"
 				+ "  <reactantList id='rl1'>" + "    <reactant id='re1'>"
 				+ "      <molecule id='m1'>" + "        <atomArray>"
 				+ "          <atom id='a1' elementType='C' hydrogenCount='3'>"
@@ -162,7 +160,7 @@ public class ReactionFixture {
 				+ "          <atom id='a3' elementType='Ar'>"
 				+ "          </atom>" + "        </atomArray>"
 				+ "      </molecule>" + "    </spectator>"
-				+ "  </spectatorList>" + "</reaction>" + S_EMPTY;
+				+ "  </spectatorList>" + "</reaction>" + CMLConstants.S_EMPTY;
 		try {
 			multiReact1 = (CMLReaction) new CMLBuilder().build(
 					new StringReader(multiReact1S)).getRootElement();

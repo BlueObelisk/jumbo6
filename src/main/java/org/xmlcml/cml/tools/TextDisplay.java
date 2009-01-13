@@ -1,18 +1,15 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.euclid.EuclidConstants.S_MINUS;
-import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
-import static org.xmlcml.euclid.EuclidConstants.S_PLUS;
-
 import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Real2;
 
 /** display properties for bond.
@@ -121,11 +118,11 @@ public class TextDisplay extends AbstractDisplay {
 	}
 
 	public void displaySignedInteger(SVGElement g, int i) {
-		textS = S_EMPTY;
+		textS = CC.S_EMPTY;
 		if (i < 0) {
-			textS += S_MINUS;
+			textS += CC.S_MINUS;
 		} else if (i > 1) {
-			textS += S_PLUS;
+			textS += CC.S_PLUS;
 		}
 		if (i < -1) {
 			textS += -i;
@@ -184,13 +181,13 @@ public class TextDisplay extends AbstractDisplay {
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("TextDisplay:");
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("..."+super.getDebugString());
 		sb.append("text:                      "+textS);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("xyOffset:                  "+xyOffset);
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		return sb.toString();
 	}
 

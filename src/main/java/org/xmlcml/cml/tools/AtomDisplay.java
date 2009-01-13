@@ -1,11 +1,10 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_NEWLINE;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.tools.TextDisplay.Background;
+import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -413,7 +412,7 @@ public class AtomDisplay extends AbstractDisplay {
 	public String getDebugString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("AtomDisplay:");
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 
 		sb.append((elementDisplay == null) ? "null elementDisplay"
 				: elementDisplay.getDebugString());
@@ -429,20 +428,20 @@ public class AtomDisplay extends AbstractDisplay {
 				.getDebugString());
 
 		sb.append("  background Radius Factor: " + backgroundRadiusFactor);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  display:                  " + display);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayCarbons:           " + displayCarbons);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayIds:               " + displayIds);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayGroups:            " + displayGroups);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  displayLabels:            " + displayLabels);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		sb.append("  scale:                    " + scale);
-		sb.append(S_NEWLINE);
-		sb.append(S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
+		sb.append(EC.S_NEWLINE);
 		return sb.toString();
 	}
 

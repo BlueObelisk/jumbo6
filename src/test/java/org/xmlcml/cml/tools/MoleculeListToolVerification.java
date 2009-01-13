@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +14,7 @@ import nu.xom.ValidityException;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
@@ -94,11 +93,11 @@ public class MoleculeListToolVerification {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		Nodes nodes = doc.query("//cml:moleculeList", CML_XPATH);
+		Nodes nodes = doc.query("//cml:moleculeList", CMLConstants.CML_XPATH);
 		if (nodes.size() > 0) {
 			moleculeList = (CMLMoleculeList) nodes.get(0);
 		} else {
-			nodes = doc.query("//cml:molecule", CML_XPATH);
+			nodes = doc.query("//cml:molecule", CMLConstants.CML_XPATH);
 			if (nodes.size() > 0) {
 				moleculeList = new CMLMoleculeList();
 				for (int i = 0; i < nodes.size(); i++) {

@@ -1,9 +1,6 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.euclid.EuclidConstants.S_UNDER;
-import static org.xmlcml.euclid.EuclidConstants.U_S;
 import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
 
 import java.io.File;
@@ -20,6 +17,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLLog;
 import org.xmlcml.cml.element.CMLAngle;
@@ -47,26 +45,26 @@ import org.xmlcml.util.TestUtils;
 public class CrystalToolTest {
 
 	/** */
-	public final static String CIF_EXAMPLES = CMLAssert.TOOLS_EXAMPLES + U_S + "cif";
+	public final static String CIF_EXAMPLES = CMLAssert.TOOLS_EXAMPLES +CMLConstants.U_S + "cif";
 
 	CrystalTool tool1 = null;
 
-	String mol1S = S_EMPTY
+	String mol1S = CMLConstants.S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ ">"
 			+ " <atomArray>"
 			+ "  <atom id='a1' xFract='0.1'  yFract='0.2'  zFract='0.3' elementType='O'/>"
 			+ "  <atom id='a2' xFract='0.15' yFract='0.25' zFract='0.35' elementType='H'/>"
 			+ "  <atom id='a3' xFract='0.15' yFract='0.15' zFract='0.25' elementType='H'/>"
-			+ " </atomArray>" + "</molecule>" + S_EMPTY;
+			+ " </atomArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
 	CMLMolecule mol1;
 
-	String crystal1S = S_EMPTY + "<crystal " + CML_XMLNS + ">"
+	String crystal1S = CMLConstants.S_EMPTY + "<crystal " + CMLConstants.CML_XMLNS + ">"
 			+ "  <cellParameter type='length'>10. 11. 12.</cellParameter>"
 			+ "  <cellParameter type='angle'>90. 90. 90.</cellParameter>"
-			+ "</crystal>" + S_EMPTY;
+			+ "</crystal>" + CMLConstants.S_EMPTY;
 
 	CMLCrystal crystal1;
 
@@ -134,9 +132,9 @@ public class CrystalToolTest {
 	@Test
 	@Ignore
 	public void testGetSymmetryContactsToMolecule() {
-		String molS = S_EMPTY
+		String molS = CMLConstants.S_EMPTY
 				+ "<molecule id='m1' "
-				+ CML_XMLNS
+				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' xFract='0.07' yFract='0.02' zFract='0.01'/>"
@@ -237,7 +235,7 @@ public class CrystalToolTest {
 		// // LOG.debug("CIF: "+cifname);
 		// try {
 		// InputStream in = Util.getInputStreamFromResource(
-		// CIF_EXAMPLES + U_S+ cifname + "sup1.cif");
+		// CIF_EXAMPLES +CMLConstants.U_S+ cifname + "sup1.cif");
 		// cifConverter.parseLegacy(in);
 		// in.close();
 		// } catch (Throwable e) {
@@ -261,15 +259,15 @@ public class CrystalToolTest {
 		// .size());
 		// if (contactCount[i] > 0) {
 		// Contact contact = contactList.get(0);
-		// Assert.assertEquals("contact atom 1 (" + i + S_RBRAK, ss[i][0],
+		// Assert.assertEquals("contact atom 1 (" + i + CMLConstants.S_RBRAK, ss[i][0],
 		// contact.getFromAtom().getId());
-		// Assert.assertEquals("contact atom 2 (" + i + S_RBRAK, ss[i][1],
+		// Assert.assertEquals("contact atom 2 (" + i + CMLConstants.S_RBRAK, ss[i][1],
 		// contact.getToAtom().getId());
 		// String cc = contact.getTransform3().getEuclidTransform3()
 		// .getCrystallographicString();
-		// Assert.assertEquals("contact operator (" + i + S_RBRAK, ss[i][2],
+		// Assert.assertEquals("contact operator (" + i + CMLConstants.S_RBRAK, ss[i][2],
 		// cc);
-		// Assert.assertEquals("contact distance (" + i + S_RBRAK,
+		// Assert.assertEquals("contact distance (" + i + CMLConstants.S_RBRAK,
 		// contactDist[i], contact.getDistance(), EPS);
 		// }
 		//
@@ -290,7 +288,7 @@ public class CrystalToolTest {
 	}
 
 	// private CMLMolecule getMolecule(CMLElement cml) {
-	// Nodes moleculeNodes = cml.query(CMLMolecule.NS, CML_XPATH);
+	// Nodes moleculeNodes = cml.query(CMLMolecule.NS, CMLConstants.CML_XPATH);
 	// if (moleculeNodes.size() != 1) {
 	// throw new RuntimeException("NO MOLECULE FOUND");
 	// }
@@ -404,8 +402,8 @@ public class CrystalToolTest {
 		// MoleculeTool.getOrCreateMoleculeTool(molecule);
 		//                    
 		// moleculeTool.createCartesiansFromFractionals();
-		// molecule.setId(cifname+((molecule.getId() == null) ? S_EMPTY :
-		// S_UNDER+molecule.getId()));
+		// molecule.setId(cifname+((molecule.getId() == null) ? CMLConstants.S_EMPTY :
+		// CMLConstants.S_UNDER+molecule.getId()));
 		// try {
 		// DisorderToolControls dm = new
 		// DisorderToolControls(ProcessControl.LOOSE);
@@ -419,7 +417,7 @@ public class CrystalToolTest {
 		// }
 		// // at this point no bonds have been calculated
 		// Nodes moiFormNodes = cml.query(".//"+CMLFormula.NS+
-		// "[@dictRef='iucr:_chemical_formula_moiety']", CML_XPATH);
+		// "[@dictRef='iucr:_chemical_formula_moiety']", CMLConstants.CML_XPATH);
 		// CMLFormula moietyFormula = null;
 		// if (moiFormNodes.size() > 0) {
 		// moietyFormula = (CMLFormula)moiFormNodes.get(0);
@@ -654,7 +652,7 @@ public class CrystalToolTest {
 									"nucleus");
 						} else {
 							System.err.println("No atoms in cluster!" + cifname
-									+ S_UNDER + (clust - 1));
+									+ CMLConstants.S_UNDER + (clust - 1));
 						}
 					}
 				}
@@ -782,12 +780,12 @@ public class CrystalToolTest {
 				|| user.startsWith("NED")) {
 			s = dir + File.separator + cifname;
 			if (mol > 0) {
-				s += S_UNDER + mol;
+				s += CMLConstants.S_UNDER + mol;
 			}
 			if (subMol > 0) {
-				s += S_UNDER + subMol;
+				s += CMLConstants.S_UNDER + subMol;
 			}
-			s += S_UNDER + serial + ".cml.xml";
+			s += CMLConstants.S_UNDER + serial + ".cml.xml";
 		}
 		return s;
 	}
@@ -798,7 +796,7 @@ public class CrystalToolTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String user = (args.length == 0) ? S_EMPTY : args[0];
+		String user = (args.length == 0) ? CMLConstants.S_EMPTY : args[0];
 		CrystalToolTest.analyzeCIFs(user);
 	}
 
@@ -829,7 +827,7 @@ public class CrystalToolTest {
 	// private void addSpaceGroup(CMLCml cml) {
 	// Nodes hmGroupNodes =
 	// cml.query(".//cml:scalar[@dictRef='iucr:_symmetry_space_group_name_H-M']"
-	// , CML_XPATH);
+	// , CMLConstants.CML_XPATH);
 	// if (hmGroupNodes.size() > 0) {
 	// String hmGroup = hmGroupNodes.get(0).getValue();
 	// Elements crystals = cml.getChildCMLElements(CMLCrystal.TAG);
@@ -849,7 +847,7 @@ public class CrystalToolTest {
     @Test
     public void testAnnotateSpaceGroupMultiplicities() {
     	String moleculeS = "" +
-    			"<molecule "+CML_XMLNS+">" +
+    			"<molecule "+CMLConstants.CML_XMLNS+">" +
     					"<atomArray>" +
     					"<atom id='a1' elementType='Cu' xFract='0' yFract='0' zFract='0'/>" +
     					"<atom id='a2' elementType='O' xFract='0' yFract='0' zFract='0.3'/>" +
@@ -860,7 +858,7 @@ public class CrystalToolTest {
 				"</molecule>";
     	CMLMolecule molecule = null;
     	String symmetryS = "" +
-		"<symmetry "+CML_XMLNS+">" +
+		"<symmetry "+CMLConstants.CML_XMLNS+">" +
 		"<transform3>1 0 0 0   0 1 0 0  0 0 1 0   0 0 0 1</transform3>" +
 		"<transform3>1 0 0 0   0 1 0 0  0 0 -1 0   0 0 0 1</transform3>" +
 		"<transform3>1 0 0 0   0 -1 0 0  0 0 1 0   0 0 0 1</transform3>" +

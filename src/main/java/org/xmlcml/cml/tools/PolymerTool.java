@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.main.CountExpressionAttribute;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLUtil;
@@ -158,7 +159,7 @@ public class PolymerTool extends AbstractTool {
         if (moleculeList != null) {
             LOG.debug("==========MOLLIST=========");
             List<Node> nodes = CMLUtil.getQueryNodes(
-                    moleculeList, CMLMolecule.NS+"[@countExpression]", CML_XPATH);
+                    moleculeList, CMLMolecule.NS+"[@countExpression]", CMLConstants.CML_XPATH);
             if (nodes.size() == 1) {
                 CMLMolecule molecule0 = (CMLMolecule) nodes.get(0);
                 CountExpressionAttribute.generateAndInsertClones(molecule0);
@@ -393,12 +394,12 @@ formula='
 // probably obsolete        
         //should consist of molecule (join, molecule)*
         // give join default bond orders
-        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLJoin.NS+"[not(@order)]", CML_XPATH);
+        List<Node> nodes = CMLUtil.getQueryNodes(molecule, ".//"+CMLJoin.NS+"[not(@order)]", CMLConstants.CML_XPATH);
         for (Node node : nodes) {
             ((CMLJoin) node).setOrder(CMLBond.SINGLE_S);
         }
         // expand random torsions
-        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//"+CMLTorsion.NS+"[@min and @max]", CML_XPATH);
+        List<Node> torsions = CMLUtil.getQueryNodes(molecule, ".//"+CMLTorsion.NS+"[@min and @max]", CMLConstants.CML_XPATH);
         for (Node node : torsions) {
             CMLTorsion torsion = (CMLTorsion) node;
             String countExpression = "range("+torsion.getMin()+S_COMMA+torsion.getMax()+S_RBRAK;
@@ -472,7 +473,7 @@ formula='
         CMLElements<CMLMolecule> molecules = moleculeList.getMoleculeElements();
         Transform3 fullTransform = new Transform3();
         for (CMLMolecule molecule : molecules) {
-            List<Node> transforms = CMLUtil.getQueryNodes(molecule, CMLTransform3.NS, CML_XPATH);
+            List<Node> transforms = CMLUtil.getQueryNodes(molecule, CMLTransform3.NS, CMLConstants.CML_XPATH);
             if (transforms.size() == 1) {   
             	MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
                 moleculeTool.transformCartesians(fullTransform);
@@ -503,7 +504,7 @@ formula='
             FragmentTool.Convention targetLevel, boolean debug) throws Exception {
     
         Document doc = new CMLBuilder().build(new File(infile));
-        Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, CML_XPATH);
+        Nodes nodes = doc.query(CMLMolecule.NS+X_OR+CMLMoleculeList.NS, CMLConstants.CML_XPATH);
         if (nodes.size() == 0) {
             throw new RuntimeException("No CML Molecule(List) in file: "+infile);
         }

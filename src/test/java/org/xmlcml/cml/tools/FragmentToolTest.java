@@ -1,8 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XPATH;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +23,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLUtil;
@@ -41,6 +39,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 
 
 /**
@@ -126,7 +125,7 @@ public class FragmentToolTest {
 		 * role='cml:fragmentList' to='./fragments'/>"+ " <link
 		 * convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' " + "
 		 * role='cml:moleculeList' to='./geom1'/>"+ "</map>"; CMLMap mapE =
-		 * (CMLMap) parseValidString(mapS); assertEqualsCanonically("map", mapE,
+		 * (CMLMap)TestUtils.parseValidString(mapS);TestUtils.TestUtils.assertEqualsCanonically("map", mapE,
 		 * cmlMap, true);
 		 */// Duplicate Test from Test Catalog. Removes ability to update
 		// catalog without changing hardcoded tests so commenting out. nwe23
@@ -137,7 +136,7 @@ public class FragmentToolTest {
 		fragmentTool.processIntermediate(resourceManager);
 
 		CMLElement explicit = readElement0("molE");
-		assertEqualsCanonically("fragment", explicit, fragment, true);
+		TestUtils.assertEqualsCanonically("fragment", explicit, fragment, true);
 	}
 
 	/**
@@ -269,7 +268,7 @@ public class FragmentToolTest {
 		fragment11.appendChild(fragmentList);
 
 		CMLElement fragmentE = readElement0("recurse");
-		assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 
 		// maybe defer this...
 		fragmentTool.basic_processRecursively();
@@ -278,7 +277,7 @@ public class FragmentToolTest {
 		// NOT REPEATABLE
 		// CMLFragment fragment1E = readFragment0("recurse1");
 		// FIXME - this fails although the files seem to be identical
-		// assertEqualsCanonically("fragment1", fragment1E, fragment, true);
+		//TestUtils.assertEqualsCanonically("fragment1", fragment1E, fragment, true);
 	}
 
 	/**
@@ -296,7 +295,7 @@ public class FragmentToolTest {
 		fragmentTool.substituteParameters();
 
 		CMLMolecule moleculeE = (CMLMolecule) readElement0("substitute0M");
-		assertEqualsCanonically("molecule", moleculeE, molecule, true);
+		TestUtils.assertEqualsCanonically("molecule", moleculeE, molecule, true);
 	}
 
 	/**
@@ -312,7 +311,7 @@ public class FragmentToolTest {
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.substituteParameters();
 		CMLElement fragmentE = readElement0("substitute1");
-		assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 
 	/**
@@ -333,7 +332,7 @@ public class FragmentToolTest {
 		// </property>
 		// </propertyList>
 		List<Node> scalars = CMLUtil.getQueryNodes(fragment, CMLPropertyList.NS + "/" + CMLProperty.NS + "/"
-				+ CMLScalar.NS, CML_XPATH);
+				+ CMLScalar.NS, CMLConstants.CML_XPATH);
 		Assert.assertEquals("scalars", 6, scalars.size());
 		CMLScalar scalar = (CMLScalar) scalars.get(0);
 		Assert.assertEquals("extensive", "intensive", ((CMLProperty) scalar.getParent()).getRole());
@@ -467,7 +466,7 @@ public class FragmentToolTest {
 		if (intermediate == null) {
 			dump(fragment, "mol" + serial + "I");
 		} else if (check) {
-			assertEqualsCanonically(title, intermediate, fragment, true);
+			TestUtils.assertEqualsCanonically(title, intermediate, fragment, true);
 		}
 		if (debug) {
 			fragment.debug(title);
@@ -481,7 +480,7 @@ public class FragmentToolTest {
 		if (explicit == null) {
 			dump(fragment, "mol" + serial + "E");
 		} else if (check) {
-			assertEqualsCanonically(title, explicit, fragment, true);
+			TestUtils.assertEqualsCanonically(title, explicit, fragment, true);
 		}
 		// explicit -> complete
 		fragmentTool.processExplicit();
@@ -492,7 +491,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragment, "mol" + serial + "C");
 		} else if (check) {
-			assertEqualsCanonically(title, complete, fragment, true);
+			TestUtils.assertEqualsCanonically(title, complete, fragment, true);
 		}
 	}
 
@@ -538,7 +537,7 @@ public class FragmentToolTest {
 			if (complete0 == null) {
 				dump(fragment, rootName);
 			} else if (check) {
-				assertEqualsCanonically(rootName, complete0, fragment, true);
+				TestUtils.assertEqualsCanonically(rootName, complete0, fragment, true);
 			}
 		}
 		String title = "complete" + serial;
@@ -548,7 +547,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragmentList, "mol" + serial + "C");
 		} else if (check) {
-			assertEqualsCanonically(title, complete, fragmentList, true);
+			TestUtils.assertEqualsCanonically(title, complete, fragmentList, true);
 		}
 	}
 
@@ -562,7 +561,7 @@ public class FragmentToolTest {
 		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateTool((CMLFragment) generatedFragment);
 		generatedFragmentTool.processAll(resourceManager);
 		CMLElement generatedE = readElement0("markushE");
-		assertEqualsCanonically("generated", generatedE, generatedFragment, true);
+		TestUtils.assertEqualsCanonically("generated", generatedE, generatedFragment, true);
 	}
 
 	/**

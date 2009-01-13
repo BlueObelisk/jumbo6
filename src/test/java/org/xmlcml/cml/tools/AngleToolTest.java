@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.base.CMLConstants.CML_XMLNS;
-import static org.xmlcml.cml.test.CMLAssert.parseValidString;
 import static org.xmlcml.euclid.EuclidConstants.EPS;
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
@@ -14,6 +12,7 @@ import nu.xom.Element;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -21,6 +20,8 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.util.TestUtils;
+
 
 /**
  * test AngleTool.
@@ -32,7 +33,7 @@ public class AngleToolTest {
 	private static Logger LOG = Logger.getLogger(AngleToolTest.class);
 
 	AngleTool tool1 = null;
-	String s1 = S_EMPTY + "<cml " + CML_XMLNS + ">" + " <molecule id='m1'>"
+	String s1 = S_EMPTY + "<cml " + CMLConstants.CML_XMLNS + ">" + " <molecule id='m1'>"
 			+ "  <atomArray>" + "   <atom id='a1' x3='1.0' y3='0.0' z3='0.0'/>"
 			+ "   <atom id='a2' x3='0.0' y3='0.0' z3='0.0'/>"
 			+ "   <atom id='a3' x3='0.0' y3='0.0' z3='2.0'/>"
@@ -57,7 +58,7 @@ public class AngleToolTest {
 	public void setUp() throws Exception {
 		Element element = null;
 		try {
-			element = parseValidString(s1);
+			element =TestUtils.parseValidString(s1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.debug("EXC " + e);
@@ -72,7 +73,7 @@ public class AngleToolTest {
 
 	String mol1S = S_EMPTY
 			+ "<molecule "
-			+ CML_XMLNS
+			+ CMLConstants.CML_XMLNS
 			+ ">"
 			+ " <atomArray>"
 			+ "  <atom id='a1' xFract='0.1'  yFract='0.2'  zFract='0.3' elementType='O'/>"
@@ -82,7 +83,7 @@ public class AngleToolTest {
 
 	CMLMolecule mol1;
 
-	String crystal1S = S_EMPTY + "<crystal " + CML_XMLNS + ">"
+	String crystal1S = S_EMPTY + "<crystal " + CMLConstants.CML_XMLNS + ">"
 			+ "  <cellParameter type='length'>10. 11. 12.</cellParameter>"
 			+ "  <cellParameter type='angle'>90. 90. 90.</cellParameter>"
 			+ "</crystal>" + S_EMPTY;

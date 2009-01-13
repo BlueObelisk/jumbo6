@@ -8,6 +8,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
@@ -885,12 +886,12 @@ public class StereochemistryTool extends AbstractTool {
 
 	private void addCIPLabel(CMLAtom atom) {
 		String rs = calculateCIPRS(atom);
-		Nodes labels = atom.query("cml:label[@role='"+CML_CIP+"']", CML_XPATH);
+		Nodes labels = atom.query("cml:label[@role='"+StereochemistryTool.CML_CIP+"']", CC.CML_XPATH);
 		CMLLabel label = null;
 		if (labels.size() == 0) {
 			label = new CMLLabel();
 			label.setCMLValue(rs);
-			label.addAttribute(new Attribute("role", CML_CIP));
+			label.addAttribute(new Attribute("role", StereochemistryTool.CML_CIP));
 			atom.addLabel(label);
 		} else {
 			label = (CMLLabel) labels.get(0);
@@ -908,7 +909,7 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public static CMLLabel getCIPRSLabel(CMLAtom atom) {
 		CMLLabel label = null;
-		Nodes labels = atom.query("cml:label[@role='"+CML_CIP+"']", CML_XPATH);
+		Nodes labels = atom.query("cml:label[@role='"+CML_CIP+"']", CMLConstants.CML_XPATH);
 		if (labels.size() != 0) {
 			label = (CMLLabel) labels.get(0);
 		}
