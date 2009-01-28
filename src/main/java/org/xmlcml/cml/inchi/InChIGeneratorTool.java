@@ -16,13 +16,14 @@ public class InChIGeneratorTool {
 	 */
 	public static String generateInChI(CMLMolecule molecule) {
 		String inchi = null;
+		InChIGeneratorInterface igen = null;
 		try {
 			// Generate factory - if native code does not load
 			InChIGeneratorFactoryInterface iff = (InChIGeneratorFactoryInterface)
 				Class.forName("org.xmlcml.cml.inchi.InChIGeneratorFactory").newInstance();
 //			InChIGeneratorFactory factory = new InChIGeneratorFactory();
 			// Get InChIGenerator
-			InChIGeneratorInterface igen = iff.getInChIGenerator(molecule);
+			igen = iff.getInChIGenerator(molecule);
 //			InChIGenerator igen = factory.getInChIGenerator(molecule);
 
 			if (!igen.isOK()) {
@@ -36,6 +37,7 @@ public class InChIGeneratorTool {
 			inchi = igen.getInchi();
 		} catch (Throwable e) {
 			e.printStackTrace();
+			throw new RuntimeException("Cannot convert Inchi: "+igen.getMessage());
 			// log.add(e, "BUG ");
 		}
 		return inchi;

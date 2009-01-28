@@ -65,7 +65,7 @@ public final class TestUtils implements CMLConstants {
 
     /** compares two XML nodes and checks float near-equivalence 
      * (can also be used for documents without floats)
-     * usesTstBase.assertEqualsCanonically and only uses PMR code if fails
+     * usesTestUtils.assertEqualsCanonically and only uses PMR code if fails
      * @param message
      * @param refNode
      * @param testNode
@@ -94,7 +94,7 @@ public final class TestUtils implements CMLConstants {
 		try {
 			Assert.assertEquals(message+": classes", testNode.getClass(), refNode.getClass());
 	    	if (refNode instanceof Text) {
-	    		testStringDoubleEquality(message, refNode.getValue(), testNode.getValue(), eps);
+	    		tstStringDoubleEquality(message, refNode.getValue(), testNode.getValue(), eps);
 	    	} else if (refNode instanceof Comment) {
 	    		Assert.assertEquals(message+" comment", refNode.getValue(), testNode.getValue());
 	    	} else if (refNode instanceof ProcessingInstruction) {
@@ -121,7 +121,7 @@ public final class TestUtils implements CMLConstants {
 //				    	CMLUtil.debug((Element)testNode, "TEST");
 		    			Assert.fail(message+" attribute on ref not on test: "+attName);
 		    		}
-		    		testStringDoubleEquality(message, refAtt.getValue(), testAtt.getValue(), eps);
+		    		tstStringDoubleEquality(message, refAtt.getValue(), testAtt.getValue(), eps);
 		    	}
 	    	} else {
 	    		Assert.fail(message + "cannot deal with XMLNode: "+refNode.getClass());
@@ -130,7 +130,7 @@ public final class TestUtils implements CMLConstants {
 			throw new RuntimeException(""+t);
 		}
 	}
-	private static void testStringDoubleEquality(String message, String refValue, String testValue,
+	private static void tstStringDoubleEquality(String message, String refValue, String testValue,
 			double eps) {
 		Error ee = null;
 		try {
@@ -317,18 +317,6 @@ public final class TestUtils implements CMLConstants {
 	    }
 	    return formatted + "expected:<" + expected + "> but was:<" + actual
 	            + ">";
-	}
-
-	public static void neverFail(Exception e) {
-	    Assert.fail("should never throw " + e);
-	}
-
-	public static void alwaysFail(String message) {
-	    Assert.fail("should always throw " + message);
-	}
-
-	public static void neverThrow(Exception e) {
-	    throw new EuclidRuntimeException("should never throw " + e);
 	}
     
 
