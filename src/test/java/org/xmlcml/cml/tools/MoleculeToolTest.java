@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
-import static org.xmlcml.util.TestUtils.neverThrow;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -2166,7 +2165,7 @@ public class MoleculeToolTest {
         try {
             mol = (CMLMolecule) new CMLBuilder().parseString(molS);
         } catch (Exception e) {
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
 //        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
         CMLNamespace namespace = CMLNamespace.createNamespace("p", mol);

@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.util.TestUtils.neverThrow;
-
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -47,7 +45,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
@@ -59,7 +57,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
@@ -71,7 +69,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
@@ -83,7 +81,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
@@ -95,7 +93,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
@@ -107,7 +105,7 @@ public class InlineMoleculeTest  {
             inlineMolecule = new InlineMolecule(formulaS);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            neverThrow(e);
+            throw new RuntimeException("should never throw " + e);
         }
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
