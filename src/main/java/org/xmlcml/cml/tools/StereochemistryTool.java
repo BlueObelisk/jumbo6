@@ -34,8 +34,12 @@ public class StereochemistryTool extends AbstractTool {
 	/** for @role
 	 */
 	public final static String CML_CIP = "cml:cip";
+	public final static String CIP_E = "E";
+	public final static String CIP_Z = "Z";
 	public final static String CIP_R = "R";
 	public final static String CIP_S = "S";
+	public final static String CIP_RSTAR = "R*";
+	public final static String CIP_SSTAR = "S*";
 	
 	AbstractTool moleculeTool;
 	CMLMolecule molecule;
@@ -66,6 +70,45 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
+	 * Calculates E or Z
+	 * uses calculateBondStereo(CMLBond bond)
+	 * 
+	 * @param bond
+	 * @return E or Z or null if this bond isnt a stereo centre or
+	 *         there isnt enough stereo information to calculate stereo
+	 */
+	public String calculateCIPEZ(CMLBond bond) {
+		CMLBondStereo bondStereo = this.calculateBondStereoForLigandsInCIPOrder(bond);
+		String ez = null;
+		if (bondStereo != null) {
+			ez = (bondStereo.getXMLContent() == CMLBond.CIS) ? CIP_Z : CIP_E;
+		}
+		return ez;
+	}
+
+	/**
+	 * Calculates the atom parity of this atom using the coords of either 4
+	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
+	 * specified then the parity is calculated using bond wedge/hatch
+	 * information.
+	 * 
+	 * @param atom
+	 * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
+	 *         there isnt enough stereo information to calculate parity. Note that 
+	 *         the atomParity is not necessarily created as a child of the atom
+	 */
+	public CMLBondStereo calculateBondStereoForLigandsInCIPOrder(CMLBond bond) {
+		if (!bond.getOrder().equals(CMLBond.DOUBLE_NORM)) {
+			// only double bonds count
+			return null;
+		}
+		if (true) {
+			throw new RuntimeException("NYI");
+		}
+		return null;
+	}
+	
+	/**
 	 * add wedge hatch bonds.
 	 * 
 	 * adds WEDGE/HATCH to appropriate bonds/atoms if not already present and we
@@ -90,12 +133,38 @@ public class StereochemistryTool extends AbstractTool {
 	 *         there isnt enough stereo information to calculate parity
 	 */
 	public String calculateCIPRS(CMLAtom atom) {
-		CMLAtomParity atomParity = this.calculateAtomParity(atom);
+		CMLAtomParity atomParity = this.calculateAtomParityForLigandsInCIPOrder(atom);
 		String rs = null;
 		if (atomParity != null) {
 			rs = (atomParity.getXMLContent() > 0) ? CIP_R : CIP_S;
 		}
 		return rs;
+	}
+
+	/**
+	 * Given R/S for atom, creates a new AtomParity element.
+	 * uses calculateAtomParity(CMLAtom atom)
+	 * 
+	 * @param atom
+	 * @return R or S or null if this atom isnt a chiral centre or
+	 *         there isnt enough stereo information to calculate parity
+	 */
+	public CMLAtomParity calculateAtomParityFromCIPRS(CMLAtom atom, String rs) {
+		if (!CIP_R.equals(rs) && !CIP_S.equals(rs)) {
+			throw new RuntimeException("rs should be "+CIP_R + " or "+CIP_S);
+		}
+		List<CMLAtom> ligands = this.getLigandsInCahnIngoldPrelogOrder(atom);
+		if (ligands == null) {
+			throw new RuntimeException("null ligands");
+		}
+		if (ligands.size() != 4) {
+			throw new RuntimeException("must have 4 discrete ligands for R/S: found "+ligands.size()+" for "+atom.getId());
+		}
+		CMLAtomParity atomParity = new CMLAtomParity();
+		atomParity.setAtomRefs4(ligands.toArray(new CMLAtom[0]));
+		// tune this by testing...
+		atomParity.setXMLContent((rs.equals(CIP_R)) ? 1.0 : -1.0);	
+		return atomParity;
 	}
 
 	
@@ -107,9 +176,10 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 * @param atom
 	 * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
-	 *         there isnt enough stereo information to calculate parity
+	 *         there isnt enough stereo information to calculate parity. Note that 
+	 *         the atomParity is not necessarily created as a child of the atom
 	 */
-	public CMLAtomParity calculateAtomParity(CMLAtom atom) {
+	public CMLAtomParity calculateAtomParityForLigandsInCIPOrder(CMLAtom atom) {
 		if (!isChiralCentre(atom)) {
 			return null;
 		}
@@ -501,7 +571,7 @@ public class StereochemistryTool extends AbstractTool {
 	private void addAtomParity(List<CMLAtom> chiralAtoms) {
 		for (CMLAtom chiralAtom : chiralAtoms) {
 			CMLAtomParity atomParity3 = null;
-			atomParity3 = calculateAtomParity(chiralAtom);
+			atomParity3 = calculateAtomParityForLigandsInCIPOrder(chiralAtom);
 			if (atomParity3 != null) {
 				chiralAtom.addAtomParity(atomParity3);
 			}
