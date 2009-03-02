@@ -23,6 +23,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondStereo;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.euclid.EC;
@@ -96,6 +97,26 @@ public class StereochemistryToolTest {
 	}
 
 	/**
+	 * 
+	 */
+	@Test
+	public void testGetBondStereoFromCIP() {
+		String mol = "BrC(I)=C(F)Cl";
+		SMILESTool st = new SMILESTool();
+		st.parseSMILES(mol);
+		CMLMolecule molM = st.getMolecule();
+		molM.debug("MOL");
+		CMLBond bond = molM.getBondByAtomIds("a2", "a4");
+		CMLLabel label = new CMLLabel();
+		label.setCMLValue("R");
+		label.setDictRef("cml:rs");
+		
+		StereochemistryTool stereoTool = new StereochemistryTool(molM);
+		CMLAtom atom = molM.getAtomById("a2");
+		throw new RuntimeException("NYI");
+	}
+
+	/**
 	 * Test method for
 	 * {@link org.xmlcml.cml.tools.StereochemistryTool#addWedgeHatchBonds()}.
 	 */
@@ -109,25 +130,59 @@ public class StereochemistryToolTest {
 
 	/**
 	 * Test method for
-	 * {@link org.xmlcml.cml.tools.StereochemistryTool#calculateAtomParity(org.xmlcml.cml.element.CMLAtom)}
+	 * {@link org.xmlcml.cml.tools.StereochemistryTool#calculateAtomParityForLigandsInCIPOrder(org.xmlcml.cml.element.CMLAtom)}
 	 * .
 	 */
 	@Test
-	public final void testCalculateAtomParity() {
+	public final void testCalculateAtomParityForCIP() {
 		CMLMolecule molecule1 = makeMolecule1();
 		CMLAtom atom = molecule1.getAtomById("a1");
 		StereochemistryTool st = new StereochemistryTool(molecule1);
 		// not chiral
-		CMLAtomParity atomParity1 = st.calculateAtomParity(atom);
+		CMLAtomParity atomParity1 = st.calculateAtomParityForLigandsInCIPOrder(atom);
 		Assert.assertNull("non-chiral", atomParity1);
 		atom = molecule1.getAtomById("a9");
 		// chiral
-		atomParity1 = st.calculateAtomParity(atom);
+		atomParity1 = st.calculateAtomParityForLigandsInCIPOrder(atom);
 		String[] atomRefs4 = atomParity1.getAtomRefs4();
 		Assert.assertEquals("atomRefs4", new String[] { "a28", "a6", "a10", "a49" },
 				atomRefs4);
 		Assert.assertEquals("atomRefs4", 11.158571879456787, atomParity1
 				.getXMLContent(), 0.000001);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testGetAtomParityFromCIP() {
+		String alanine = "N[CH]([CH3])C(=O)O";
+		// a2 id the c-alpha
+		SMILESTool st = new SMILESTool();
+		st.parseSMILES(alanine);
+		CMLMolecule alanineM = st.getMolecule();
+//		alanineM.debug("ALA");
+		StereochemistryTool stereoTool = new StereochemistryTool(alanineM);
+		CMLAtom atom = alanineM.getAtomById("a2");
+		// make chirality S
+		CMLAtomParity atomParity = stereoTool.calculateAtomParityFromCIPRS(atom, StereochemistryTool.CIP_S);
+		Assert.assertTrue("parity is negative", atomParity.getXMLContent() < -0.1);
+		atom.addAtomParity(atomParity);
+//		alanineM.debug("ALA");
+//		st.setMolecule(alanineM);
+//		System.out.println("SM "+st.write());
+	
+		// compare with SMILES
+		String alanineAtAt = "N[C@@H]([CH3])C(=O)O";
+		st = new SMILESTool();
+		st.parseSMILES(alanineAtAt);
+		CMLMolecule alanineMAtAt = st.getMolecule();
+//		alanineMAtAt.debug("ALA@@");
+		atom = alanineMAtAt.getAtomById("a2");
+		// make chirality S
+		atomParity = atom.getAtomParityElements().get(0);
+		// should also be negative
+		Assert.assertTrue("parity is negative", atomParity.getXMLContent() < -0.1);
 	}
 
 	/**
