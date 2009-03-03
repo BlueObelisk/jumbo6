@@ -10,6 +10,7 @@ import java.util.List;
 
 import nu.xom.Document;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -19,11 +20,13 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomArray;
 import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondStereo;
+import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
@@ -186,6 +189,251 @@ public class StereochemistryToolTest {
 		Assert.assertTrue("parity is negative", atomParity.getXMLContent() < -0.1);
 	}
 
+	@Test
+	public void testGetAtomParityCortisone() {
+		String s = ""+
+		"<cml xmlns='http://www.xml-cml.org/schema'>"+
+	    "<molecule id='m1'>"+
+	        "<atomArray>"+
+	            "<atom id='a1' elementType='C'>"+
+	                "<label value='1'/>"+
+	            "</atom>"+
+	            "<atom id='a2' elementType='C'>"+
+	                "<label value='2'/>"+
+	            "</atom>"+
+	            "<atom id='a3' elementType='C'>"+
+	                "<label value='3'/>"+
+	            "</atom>"+
+	            "<atom id='a4' elementType='C'>"+
+	                "<label value='4'/>"+
+	            "</atom>"+
+	            "<atom id='a5' elementType='C'>"+
+	                "<label value='5'/>"+
+	            "</atom>"+
+	            "<atom id='a6' elementType='C'>"+
+	                "<label value='6'/>"+
+	            "</atom>"+
+	            "<atom id='a7' elementType='C'>"+
+	                "<label value='7'/>"+
+	            "</atom>"+
+	            "<atom id='a8' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='8'/>"+
+	            "</atom>"+
+	            "<atom id='a9' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='9'/>"+
+	            "</atom>"+
+	            "<atom id='a10' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='R'/>"+
+	                "<label value='10'/>"+
+	            "</atom>"+
+	            "<atom id='a11' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='11'/>"+
+	            "</atom>"+
+	            "<atom id='a12' elementType='C'>"+
+	                "<label value='12'/>"+
+	            "</atom>"+
+	            "<atom id='a13' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='13'/>"+
+	            "</atom>"+
+	            "<atom id='a14' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='14'/>"+
+	            "</atom>"+
+	            "<atom id='a15' elementType='C'>"+
+	                "<label value='15'/>"+
+	            "</atom>"+
+	            "<atom id='a16' elementType='C'>"+
+	                "<label value='16'/>"+
+	            "</atom>"+
+	            "<atom id='a17' elementType='C'>"+
+	                "<label dictRef='cml:rs' value='S'/>"+
+	                "<label value='17'/>"+
+	            "</atom>"+
+	            "<atom id='a18' elementType='O'>"+
+	                "<label value='O'/>"+
+	            "</atom>"+
+	            "<atom id='a19' elementType='C'>"+
+	                "<label value='1'/>"+
+	            "</atom>"+
+	            "<atom id='a20' elementType='C'>"+
+	                "<label value='1'/>"+
+	            "</atom>"+
+	            "<atom id='a21' elementType='C'>"+
+	                "<label value='1'/>"+
+	            "</atom>"+
+	            "<atom id='a22' elementType='C'>"+
+	                "<label value='2'/>"+
+	            "</atom>"+
+	            "<atom id='a23' elementType='O'>"+
+	                "<label value='O'/>"+
+	            "</atom>"+
+	            "<atom id='a24' elementType='O'>"+
+	                "<label value='O'/>"+
+	            "</atom>"+
+	            "<atom id='a25' elementType='O'>"+
+	                "<label value='O'/>"+
+	            "</atom>"+
+	            "<atom id='a26' elementType='H'/>"+
+	            "<atom id='a27' elementType='H'/>"+
+	            "<atom id='a28' elementType='H'/>"+
+	            "<atom id='a29' elementType='H'/>"+
+	            "<atom id='a30' elementType='H'/>"+
+	            "<atom id='a31' elementType='H'/>"+
+	            "<atom id='a32' elementType='H'/>"+
+	            "<atom id='a33' elementType='H'/>"+
+	            "<atom id='a34' elementType='H'/>"+
+	            "<atom id='a35' elementType='H'/>"+
+	            "<atom id='a36' elementType='H'/>"+
+	            "<atom id='a37' elementType='H'/>"+
+	            "<atom id='a38' elementType='H'/>"+
+	            "<atom id='a39' elementType='H'/>"+
+	            "<atom id='a40' elementType='H'/>"+
+	            "<atom id='a41' elementType='H'/>"+
+	            "<atom id='a42' elementType='H'/>"+
+	            "<atom id='a43' elementType='H'/>"+
+	            "<atom id='a44' elementType='H'/>"+
+	            "<atom id='a45' elementType='H'/>"+
+	            "<atom id='a46' elementType='H'/>"+
+	            "<atom id='a47' elementType='H'/>"+
+	            "<atom id='a48' elementType='H'/>"+
+	            "<atom id='a49' elementType='H'/>"+
+	            "<atom id='a50' elementType='H'/>"+
+	            "<atom id='a51' elementType='H'/>"+
+	            "<atom id='a52' elementType='H'/>"+
+	            "<atom id='a53' elementType='H'/>"+
+	            "<atom id='a54' elementType='H'/>"+
+	            "<atom id='a55' elementType='H'/>"+
+	        "</atomArray>"+
+	        "<bondArray>"+
+	            "<bond atomRefs2='a1 a2' order='1'/>"+
+	            "<bond atomRefs2='a2 a3' order='1'/>"+
+	            "<bond atomRefs2='a3 a4' order='1'/>"+
+	            "<bond atomRefs2='a4 a5' order='2'/>"+
+	            "<bond atomRefs2='a5 a6' order='1'/>"+
+	            "<bond atomRefs2='a6 a7' order='1'/>"+
+	            "<bond atomRefs2='a7 a8' order='1'/>"+
+	            "<bond atomRefs2='a8 a9' order='1'/>"+
+	            "<bond atomRefs2='a9 a10' order='1'/>"+
+	            "<bond atomRefs2='a10 a5' order='1'/>"+
+	            "<bond atomRefs2='a10 a1' order='1'/>"+
+	            "<bond atomRefs2='a11 a9' order='1'/>"+
+	            "<bond atomRefs2='a11 a12' order='1'/>"+
+	            "<bond atomRefs2='a12 a13' order='1'/>"+
+	            "<bond atomRefs2='a13 a14' order='1'/>"+
+	            "<bond atomRefs2='a14 a8' order='1'/>"+
+	            "<bond atomRefs2='a14 a15' order='1'/>"+
+	            "<bond atomRefs2='a15 a16' order='1'/>"+
+	            "<bond atomRefs2='a16 a17' order='1'/>"+
+	            "<bond atomRefs2='a17 a13' order='1'/>"+
+	            "<bond atomRefs2='a18 a3' order='2'/>"+
+	            "<bond atomRefs2='a21 a22' order='1'/>"+
+	            "<bond atomRefs2='a23 a21' order='2'/>"+
+	            "<bond atomRefs2='a19 a13' order='1'/>"+
+	            "<bond atomRefs2='a20 a10' order='1'/>"+
+	            "<bond atomRefs2='a24 a22' order='1'/>"+
+	            "<bond atomRefs2='a21 a17' order='1'/>"+
+	            "<bond atomRefs2='a25 a11' order='1'/>"+
+	            "<bond atomRefs2='a1 a26' order='1'/>"+
+	            "<bond atomRefs2='a1 a27' order='1'/>"+
+	            "<bond atomRefs2='a2 a28' order='1'/>"+
+	            "<bond atomRefs2='a2 a29' order='1'/>"+
+	            "<bond atomRefs2='a4 a30' order='1'/>"+
+	            "<bond atomRefs2='a6 a31' order='1'/>"+
+	            "<bond atomRefs2='a6 a32' order='1'/>"+
+	            "<bond atomRefs2='a7 a33' order='1'/>"+
+	            "<bond atomRefs2='a7 a34' order='1'/>"+
+	            "<bond atomRefs2='a8 a35' order='1'/>"+
+	            "<bond atomRefs2='a9 a36' order='1'/>"+
+	            "<bond atomRefs2='a11 a37' order='1'/>"+
+	            "<bond atomRefs2='a12 a38' order='1'/>"+
+	            "<bond atomRefs2='a12 a39' order='1'/>"+
+	            "<bond atomRefs2='a14 a40' order='1'/>"+
+	            "<bond atomRefs2='a15 a41' order='1'/>"+
+	            "<bond atomRefs2='a15 a42' order='1'/>"+
+	            "<bond atomRefs2='a16 a43' order='1'/>"+
+	            "<bond atomRefs2='a16 a44' order='1'/>"+
+	            "<bond atomRefs2='a17 a45' order='1'/>"+
+	            "<bond atomRefs2='a19 a46' order='1'/>"+
+	            "<bond atomRefs2='a19 a47' order='1'/>"+
+	            "<bond atomRefs2='a19 a48' order='1'/>"+
+	            "<bond atomRefs2='a20 a49' order='1'/>"+
+	            "<bond atomRefs2='a20 a50' order='1'/>"+
+	            "<bond atomRefs2='a20 a51' order='1'/>"+
+	            "<bond atomRefs2='a22 a52' order='1'/>"+
+	            "<bond atomRefs2='a22 a53' order='1'/>"+
+	            "<bond atomRefs2='a24 a54' order='1'/>"+
+	            "<bond atomRefs2='a25 a55' order='1'/>"+
+	        "</bondArray>"+
+	    "</molecule>"+
+	"</cml>";
+
+		String expectedS = ""+
+		"<molecule xmlns='http://www.xml-cml.org/schema'>" +
+		"<atomArray>"+
+		"<atom id='a8' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='8'/>"+
+		  "<atomParity atomRefs4='a9 a14 a7 a35'>-1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a9' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='9'/>"+
+		  "<atomParity atomRefs4='a11 a10 a8 a36'>-1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a10' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='R'/>"+
+		  "<label value='10'/>"+
+		  "<atomParity atomRefs4='a9 a5 a1 a20'>1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a11' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='11'/>"+
+		  "<atomParity atomRefs4='a25 a9 a12 a37'>-1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a13' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='13'/>"+
+		  "<atomParity atomRefs4='a14 a17 a12 a19'>-1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a14' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='14'/>"+
+		  "<atomParity atomRefs4='a13 a8 a15 a40'>-1.0</atomParity>"+
+		"</atom>"+
+		"<atom id='a17' elementType='C'>"+
+		  "<label dictRef='cml:rs' value='S'/>"+
+		  "<label value='17'/>"+
+		  "<atomParity atomRefs4='a21 a13 a16 a45'>-1.0</atomParity>"+
+		"</atom>"+
+		"</atomArray>" +
+		"</molecule>";
+
+		
+		CMLCml cml = null;
+		CMLAtomArray expectedAA = null;
+		try {
+			cml = (CMLCml) new CMLBuilder().parseString(s);
+			expectedAA = (CMLAtomArray) new CMLBuilder().parseString(expectedS).getChild(0);
+		} catch (Exception e) {
+			throw new RuntimeException("bug "+e);
+		}
+		CMLMolecule molecule = (CMLMolecule) cml.getChild(0);
+		Nodes rsNodes = cml.query(".//cml:atom[cml:label[@dictRef='cml:rs']]", CMLConstants.CML_XPATH);
+		List<CMLAtom> expectedAtoms = expectedAA.getAtoms();
+		for (int i = 0; i < rsNodes.size(); i++) {
+			CMLAtom atom = (CMLAtom) rsNodes.get(i);
+			StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+			String rs = atom.query("./cml:label[@dictRef='cml:rs']/@value", CMLConstants.CML_XPATH).get(0).getValue();
+			CMLAtomParity atomParity = stereoTool.calculateAtomParityFromCIPRS(atom, rs);
+			atom.addAtomParity(atomParity);
+			TestUtils.assertEqualsIncludingFloat("atomParity", expectedAtoms.get(i), atom, true, 0.001);
+		}
+		
+	}
 	/**
 	 * Test method for
 	 * {@link org.xmlcml.cml.tools.StereochemistryTool#isChiralCentre(org.xmlcml.cml.element.CMLAtom)}
