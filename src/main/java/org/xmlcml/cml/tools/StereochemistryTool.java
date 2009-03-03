@@ -72,13 +72,13 @@ public class StereochemistryTool extends AbstractTool {
 	/**
 	 * Calculates E or Z
 	 * uses calculateBondStereo(CMLBond bond)
-	 * 
+	 * NOT TESTED
 	 * @param bond
 	 * @return E or Z or null if this bond isnt a stereo centre or
 	 *         there isnt enough stereo information to calculate stereo
 	 */
 	public String calculateCIPEZ(CMLBond bond) {
-		CMLBondStereo bondStereo = this.calculateBondStereoForLigandsInCIPOrder(bond);
+		CMLBondStereo bondStereo = this.calculateBondStereoForLigandsInCIPOrder(bond, (CoordinateType) null, null);
 		String ez = null;
 		if (bondStereo != null) {
 			ez = (bondStereo.getXMLContent() == CMLBond.CIS) ? CIP_Z : CIP_E;
@@ -87,25 +87,56 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * Calculates the atom parity of this atom using the coords of either 4
-	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
-	 * specified then the parity is calculated using bond wedge/hatch
-	 * information.
+	 * Calculates the bondStereo of this atom
+	 * (a) uses 2D coords OR
+	 * (b) uses 3D coords OR
+	 * (c) inputs EZ
 	 * 
-	 * @param atom
-	 * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
-	 *         there isnt enough stereo information to calculate parity. Note that 
-	 *         the atomParity is not necessarily created as a child of the atom
+	 * @param bond
+	 * @param type 2D or 3D or none
 	 */
-	public CMLBondStereo calculateBondStereoForLigandsInCIPOrder(CMLBond bond) {
+	public CMLBondStereo calculateBondStereoForLigandsInCIPOrder(
+			CMLBond bond, CoordinateType type, String ez) {
 		if (!bond.getOrder().equals(CMLBond.DOUBLE_NORM)) {
 			// only double bonds count
 			return null;
 		}
-		if (true) {
-			throw new RuntimeException("NYI");
+		CMLAtom ligand0 = getHighestCIPLigand(bond, 0);
+		CMLAtom ligand1 = getHighestCIPLigand(bond, 1);
+		CMLBondStereo bondStereo = new CMLBondStereo();
+		bondStereo.setAtomRefs4(
+				ligand0.getId()+" "+
+				bond.getAtomRefs2()[0]+" "+
+				bond.getAtomRefs2()[1]+" "+
+				ligand1.getId()
+				);
+		String ct = null;
+		if (type == null) {
+			if (CIP_Z.equals(ez)) {
+				ct = CMLBond.CIS;
+			}
+			if (CIP_E.equals(ez)) {
+				ct = CMLBond.TRANS;
+			}
+		} else if (type.equals(CoordinateType.TWOD)) {
+			bondStereo = get2DBondStereo(bond);
+		} else if (type.equals(CoordinateType.CARTESIAN)) {
+//			bondStereo = get3DBondStereo(bond);
 		}
-		return null;
+		return bondStereo;
+	}
+
+	/**
+	 * @param bond
+	 */
+	private CMLAtom getHighestCIPLigand(CMLBond bond, int atomSerial) {
+		CMLAtom atom = bond.getAtom(atomSerial);
+		List<CMLAtom> ligandList = this.getLigandsInCahnIngoldPrelogOrder(atom);
+		CMLAtom ligandCIP = null;
+		if (ligandList.size() == 1 || ligandList.size() == 2) {
+			ligandCIP = ligandList.get(0);
+		}
+		return ligandCIP;
 	}
 	
 	/**
@@ -244,9 +275,6 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public List<CMLAtom> getLigandsInCahnIngoldPrelogOrder(CMLAtom centralAtom) {
 		List<CMLAtom> ligandList = centralAtom.getLigandAtoms();
-		if (!AS.C.equals(centralAtom.getElementType()) || ligandList.size() != 4) {
-			return null;
-		}
 		List<CMLAtom> orderedLigandList = new ArrayList<CMLAtom>();
 		orderedLigandList.add(ligandList.get(0));
 		for (CMLAtom atom : ligandList) {

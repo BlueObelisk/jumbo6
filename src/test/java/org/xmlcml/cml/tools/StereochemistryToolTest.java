@@ -13,6 +13,7 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
@@ -100,6 +101,7 @@ public class StereochemistryToolTest {
 	 * 
 	 */
 	@Test
+	@Ignore
 	public void testGetBondStereoFromCIP() {
 		String mol = "BrC(I)=C(F)Cl";
 		SMILESTool st = new SMILESTool();
@@ -112,8 +114,7 @@ public class StereochemistryToolTest {
 		label.setDictRef("cml:rs");
 		
 		StereochemistryTool stereoTool = new StereochemistryTool(molM);
-		CMLAtom atom = molM.getAtomById("a2");
-		throw new RuntimeException("NYI");
+		String foo = stereoTool.calculateCIPEZ(bond);
 	}
 
 	/**
