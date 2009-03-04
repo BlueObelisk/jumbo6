@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<molecule xmlns="http://www.xml-cml.org/schema">
+<molecule xmlns="http://www.xml-cml.org/schema" cmlx:explicitHydrogens="true">
   <atomArray>
-    <atom id="a1" elementType="N" hydrogenCount="2"/>
-    <atom id="a2" elementType="C" chiral="@@" formalCharge="0" hydrogenCount="1"/>
-    <atom id="a3" elementType="C" hydrogenCount="3"/>
-    <atom id="a4" elementType="C" hydrogenCount="0"/>
-    <atom id="a5" elementType="O" hydrogenCount="0"/>
-    <atom id="a6" elementType="O" hydrogenCount="1"/>
+    <atom id="a1" elementType="N"/>
+    <atom id="a2" elementType="C" chiral="@@" formalCharge="0"/>
+    <atom id="a3" elementType="C"/>
+    <atom id="a4" elementType="C"/>
+    <atom id="a5" elementType="O"/>
+    <atom id="a6" elementType="O"/>
     <atom id="a1_h1" elementType="H"/>
     <atom id="a1_h2" elementType="H"/>
     <atom id="a2_h1" elementType="H"/>

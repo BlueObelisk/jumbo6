@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<molecule xmlns="http://www.xml-cml.org/schema">
+<molecule xmlns="http://www.xml-cml.org/schema"
+  xmlns:cmlx="http://www.xml-cml.org/schema/cmlx" cmlx:explicitHydrogens="true">
   <atomArray>
-    <atom id="a1" elementType="C" formalCharge="2" hydrogenCount="0"/>
+    <atom id="a1" elementType="C" formalCharge="2"/>
   </atomArray>
 </molecule>
