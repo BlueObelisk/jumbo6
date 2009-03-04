@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<molecule xmlns="http://www.xml-cml.org/schema">
+<molecule xmlns="http://www.xml-cml.org/schema" 
+   xmlns:cmlx="http://www.xml-cml.org/schema/cmlx" cmlx:explicitHydrogens="true">
   <atomArray>
-    <atom id="a1" elementType="P" hydrogenCount="0"/>
-    <atom id="a2" elementType="F" hydrogenCount="0"/>
-    <atom id="a3" elementType="F" hydrogenCount="0"/>
-    <atom id="a4" elementType="F" hydrogenCount="0"/>
-    <atom id="a5" elementType="F" hydrogenCount="0"/>
-    <atom id="a6" elementType="F" hydrogenCount="0"/>
+    <atom id="a1" elementType="P"/>
+    <atom id="a2" elementType="F"/>
+    <atom id="a3" elementType="F"/>
+    <atom id="a4" elementType="F"/>
+    <atom id="a5" elementType="F"/>
+    <atom id="a6" elementType="F"/>
   </atomArray>
   <bondArray>
     <bond atomRefs2="a1 a2" id="a1_a2" order="1"/>

@@ -57,13 +57,13 @@ public class SMILESToolTest {
 		String ss = "C1=CC=CO1";
 		smilesTool.parseSMILES(ss);
 		mol = smilesTool.getMolecule();
-		molS = "<molecule xmlns='http://www.xml-cml.org/schema'>"+
+		molS = "<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 				"  <atomArray>"+
-				"   <atom id='a1' elementType='C' hydrogenCount='1'/>" +
-				"   <atom id='a2' elementType='C' hydrogenCount='1'/>"+
-				"   <atom id='a3' elementType='C' hydrogenCount='1'/>"+
-				"    <atom id='a4' elementType='C' hydrogenCount='1'/>"+
-				"    <atom id='a5' elementType='O' hydrogenCount='0'/>"+
+				"   <atom id='a1' elementType='C'/>" +
+				"   <atom id='a2' elementType='C'/>"+
+				"   <atom id='a3' elementType='C'/>"+
+				"    <atom id='a4' elementType='C'/>"+
+				"    <atom id='a5' elementType='O'/>"+
 				"    <atom id='a1_h1' elementType='H'/>"+
 				"    <atom id='a2_h1' elementType='H'/>"+
 				"    <atom id='a3_h1' elementType='H'/>"+
@@ -96,12 +96,12 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES("[Si][O]1.[Ge][N]1");
 		mol = smilesTool.getMolecule();
 		molS = 
-			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+			"<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 		  "<atomArray>"+
-		    "<atom id='a1' elementType='Si' formalCharge='0' hydrogenCount='0'/>"+
-		    "<atom id='a2' elementType='O' formalCharge='0' hydrogenCount='0'/>"+
-		    "<atom id='a3' elementType='Ge' formalCharge='0' hydrogenCount='0' />"+
-		    "<atom id='a4' elementType='N' formalCharge='0' hydrogenCount='0'/>"+
+		    "<atom id='a1' elementType='Si' formalCharge='0'/>"+
+		    "<atom id='a2' elementType='O' formalCharge='0'/>"+
+		    "<atom id='a3' elementType='Ge' formalCharge='0' />"+
+		    "<atom id='a4' elementType='N' formalCharge='0'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
 		    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
@@ -123,17 +123,17 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES("[N+]1CCC[C@@]1(C(=O)[O-]).CCO");
 		mol = smilesTool.getMolecule();
 		molS =
-		"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+		"<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 		  "<molecule id='mol0_sub1'>"+
 		    "<atomArray>"+
-		      "<atom id='a12' elementType='C' hydrogenCount='2'/>"+
-		      "<atom id='a14' elementType='C' chiral='@@' hydrogenCount='1'/>"+
-		      "<atom id='a11' elementType='C' hydrogenCount='2'/>"+
-		      "<atom id='a13' elementType='C' hydrogenCount='2'/>"+
-		      "<atom id='a17' elementType='O' formalCharge='-1' hydrogenCount='0'/>"+
-		      "<atom id='a15' elementType='C' hydrogenCount='0'/>"+
-		      "<atom id='a16' elementType='O' hydrogenCount='0'/>"+
-		      "<atom id='a10' elementType='N' formalCharge='1' hydrogenCount='2'/>"+
+		      "<atom id='a12' elementType='C'/>"+
+		      "<atom id='a14' elementType='C' chiral='@@'/>"+
+		      "<atom id='a11' elementType='C'/>"+
+		      "<atom id='a13' elementType='C'/>"+
+		      "<atom id='a17' elementType='O' formalCharge='-1'/>"+
+		      "<atom id='a15' elementType='C'/>"+
+		      "<atom id='a16' elementType='O'/>"+
+		      "<atom id='a10' elementType='N' formalCharge='1'/>"+
 		      "<atom id='a12_h1' elementType='H'/>"+
 		      "<atom id='a12_h2' elementType='H'/>"+
 		      "<atom id='a14_h1' elementType='H'/>"+
@@ -166,9 +166,9 @@ public class SMILESToolTest {
 		  "</molecule>"+
 		  "<molecule id='mol0_sub2'>"+
 		    "<atomArray>"+
-		      "<atom id='a19' elementType='C' hydrogenCount='2'/>"+
-		      "<atom id='a18' elementType='C' hydrogenCount='3'/>"+
-		      "<atom id='a20' elementType='O' hydrogenCount='1'/>"+
+		      "<atom id='a19' elementType='C'/>"+
+		      "<atom id='a18' elementType='C'/>"+
+		      "<atom id='a20' elementType='O'/>"+
 		      "<atom id='a19_h1' elementType='H'/>"+
 		      "<atom id='a19_h2' elementType='H'/>"+
 		      "<atom id='a18_h1' elementType='H'/>"+
@@ -203,14 +203,14 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES("c1ncccc1");
 		mol = smilesTool.getMolecule();
 		molS =
-			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+			"<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 		  "<atomArray>"+
-		    "<atom id='a1' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a2' aromatic='true' elementType='N' hydrogenCount='0'/>"+
-		    "<atom id='a3' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a4' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a5' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a6' aromatic='true' elementType='C' hydrogenCount='1'/>"+
+		    "<atom id='a1' aromatic='true' elementType='C'/>"+
+		    "<atom id='a2' aromatic='true' elementType='N'/>"+
+		    "<atom id='a3' aromatic='true' elementType='C'/>"+
+		    "<atom id='a4' aromatic='true' elementType='C'/>"+
+		    "<atom id='a5' aromatic='true' elementType='C'/>"+
+		    "<atom id='a6' aromatic='true' elementType='C'/>"+
 		    "<atom id='a1_h2' elementType='H'/>"+
 		    "<atom id='a3_h2' elementType='H'/>"+
 		    "<atom id='a4_h2' elementType='H'/>"+
@@ -247,18 +247,18 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES("c1nccc2c1cccc2");
 		mol = smilesTool.getMolecule();
 		molS =
-			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+			"<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 		  "<atomArray>"+
-		    "<atom id='a1' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a2' aromatic='true' elementType='N' hydrogenCount='0'/>"+
-		    "<atom id='a3' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a4' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a5' aromatic='true' elementType='C' hydrogenCount='0'/>"+
-		    "<atom id='a6' aromatic='true' elementType='C' hydrogenCount='0'/>"+
-		    "<atom id='a7' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a8' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a9' aromatic='true' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a10' aromatic='true' elementType='C' hydrogenCount='1'/>"+
+		    "<atom id='a1' aromatic='true' elementType='C'/>"+
+		    "<atom id='a2' aromatic='true' elementType='N'/>"+
+		    "<atom id='a3' aromatic='true' elementType='C'/>"+
+		    "<atom id='a4' aromatic='true' elementType='C'/>"+
+		    "<atom id='a5' aromatic='true' elementType='C'/>"+
+		    "<atom id='a6' aromatic='true' elementType='C'/>"+
+		    "<atom id='a7' aromatic='true' elementType='C'/>"+
+		    "<atom id='a8' aromatic='true' elementType='C'/>"+
+		    "<atom id='a9' aromatic='true' elementType='C'/>"+
+		    "<atom id='a10' aromatic='true' elementType='C'/>"+
 		    "<atom id='a1_h2' elementType='H'/>"+
 		    "<atom id='a3_h2' elementType='H'/>"+
 		    "<atom id='a4_h2' elementType='H'/>"+
@@ -302,18 +302,18 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES("C1NCCC2C1CCCC2");
 		mol = smilesTool.getMolecule();
 		molS =
-			"<molecule xmlns='http://www.xml-cml.org/schema'>"+
+			"<molecule xmlns='http://www.xml-cml.org/schema' xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 		  "<atomArray>"+
-		    "<atom id='a1' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a2' elementType='N' hydrogenCount='1'/>"+
-		    "<atom id='a3' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a4' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a5' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a6' elementType='C' hydrogenCount='1'/>"+
-		    "<atom id='a7' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a8' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a9' elementType='C' hydrogenCount='2'/>"+
-		    "<atom id='a10' elementType='C' hydrogenCount='2'/>"+
+		    "<atom id='a1' elementType='C'/>"+
+		    "<atom id='a2' elementType='N'/>"+
+		    "<atom id='a3' elementType='C'/>"+
+		    "<atom id='a4' elementType='C'/>"+
+		    "<atom id='a5' elementType='C'/>"+
+		    "<atom id='a6' elementType='C'/>"+
+		    "<atom id='a7' elementType='C'/>"+
+		    "<atom id='a8' elementType='C'/>"+
+		    "<atom id='a9' elementType='C'/>"+
+		    "<atom id='a10' elementType='C'/>"+
 		    "<atom id='a1_h1' elementType='H'/>"+
 		    "<atom id='a1_h2' elementType='H'/>"+
 		    "<atom id='a2_h1' elementType='H'/>"+

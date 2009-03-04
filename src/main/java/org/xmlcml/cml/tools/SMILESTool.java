@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import nu.xom.Attribute;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
@@ -328,7 +330,7 @@ public class SMILESTool extends AbstractTool {
 		}
         
         markupDoubleBondCisTrans();
-    	//removeSmilesSpecificAttributes();
+    	removeSmilesSpecificAttributes();
         
         if (hasDot) {
         	new ConnectionTableTool(molecule).partitionIntoMolecules();
@@ -343,19 +345,19 @@ public class SMILESTool extends AbstractTool {
     }
 
     //removes Chiral and Slash attributes
-//    private void removeSmilesSpecificAttributes() {
-//        CMLAtomArray atomsInMoleculeArray = molecule.getAtomArray();
-//        List<CMLAtom> atomsInMolecule = atomsInMoleculeArray.getAtoms(); 
-//        for (CMLAtom atom : atomsInMolecule) {
-//        	if (atom.getAttributeValue(SLASH) != null){
-//        		atom.removeAttribute(SLASH);
-//        	}
-//        	if (atom.getAttributeValue(CHIRAL) != null){
-//        		atom.removeAttribute(CHIRAL);
-//        	}
-//        }
-//		
-//	}
+    private void removeSmilesSpecificAttributes() {
+        CMLAtomArray atomsInMoleculeArray = molecule.getAtomArray();
+        List<CMLAtom> atomsInMolecule = atomsInMoleculeArray.getAtoms(); 
+        for (CMLAtom atom : atomsInMolecule) {
+        	if (atom.getAttributeValue(SLASH) != null){
+        		atom.removeAttribute(SLASH);
+        	}
+        	if (atom.getAttributeValue(CHIRAL) != null){
+        		atom.removeAttribute(CHIRAL);
+        	}
+        }
+		
+	}
 
 	//  C\C=C\C=C\C
     private void markupDoubleBondCisTrans() {
@@ -523,7 +525,17 @@ public class SMILESTool extends AbstractTool {
     			atom.deleteAnyLigandHydrogenAtom();
     		}
     	}
+    	// make all H explicit
     	moleculeTool.expandImplicitHydrogens(hydrogenControl);
+    	molecule.addNamespaceDeclaration("cmlx", "http://www.xml-cml.org/schema/cmlx");
+    	molecule.addAttribute(new Attribute("cmlx:explicitHydrogens", "http://www.xml-cml.org/schema/cmlx", "true"));
+    	// remove all hydrogenCounts
+    	for (CMLAtom atom : molecule.getAtoms()) {
+    		Attribute hcount = atom.getAttribute("hydrogenCount");
+    		if (hcount != null) {
+    			hcount.detach();
+    		}
+    	}
     }
 
 	private void makeAromaticBonds() {
