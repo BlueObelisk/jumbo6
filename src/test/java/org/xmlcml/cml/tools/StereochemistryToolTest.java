@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.List;
 
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
@@ -30,6 +31,7 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.util.TestUtils;

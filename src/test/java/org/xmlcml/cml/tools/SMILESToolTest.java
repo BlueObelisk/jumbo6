@@ -912,7 +912,6 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality5.xml");
-		
 		TestUtils.assertEqualsCanonically("chirality5", correctCML, smilesTool.getMolecule(), true);
 	}
 
