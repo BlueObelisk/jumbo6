@@ -247,7 +247,7 @@ public class CIPToolTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void testWikipedia3() {
 		// -CH(OCH3)CH3 > CH(OH)CH2OH
 		assertDecreasing("[R]C([H])(O(C([H])([H])([H])))(C([H])([H])([H]))", 
