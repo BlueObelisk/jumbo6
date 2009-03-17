@@ -17,11 +17,12 @@ import org.xmlcml.molutil.ChemicalElement;
 
 public class CIPTool {
 
-	public final static String ATNUM = "atnum";
+	public final static String ATNUM = "atomicNumber";
 	public final static String GHOST = "ghost";
 	public final static String ID = "id";
 	public final static String NODE = "node";
 	public final static String PARENT = "parent";
+	public final static String TRUE = "true";
 	private CMLMolecule molecule;
 	private Queue<Element> nodeQueue;
 
@@ -70,32 +71,61 @@ public class CIPTool {
 	}
 	
 	public static int compare(Element nodei, Element nodej) {
-		int compare = 0;
-		// sort on atomic numbers
-		int atnumi = Integer.parseInt(nodei.getAttributeValue(ATNUM));
-		int atnumj = Integer.parseInt(nodej.getAttributeValue(ATNUM));
-		if (atnumi < atnumj) {
-			compare = -1;
-		} else if (atnumi > atnumj) {
-			compare = 1;
-		}
-		// compare on children recursively
-		// whenever unequal break
+		return compareChildrenRecursively(nodei, nodej);
+	}
+	
+	private static int compareChildrenRecursively(Element nodei, Element nodej) {
+		int compare = compareNodePairWithoutDescendants(nodei, nodej);
+		Nodes childNodesi = null;
+		Nodes childNodesj = null;
 		if (compare == 0) {
-			int minChildCount = Math.min(nodei.getChildCount(), nodej.getChildCount());
-			for (int i = 0; i < minChildCount; i++) {
-				compare = compare((Element) nodei.getChild(i), (Element) nodej.getChild(i));
-				if (compare != 0) {
-					break;
-				}
+			childNodesi = nodei.query("node");
+			childNodesj = nodej.query("node");
+			if (childNodesi.size() > 0 || childNodesj.size() > 0) {
+				compare = compareImmediateChildren(childNodesi, childNodesj);
 			}
-			// still equal?
-			if (compare == 0) {
-				compare = nodei.getChildCount() - nodej.getChildCount();
+		}
+		if (compare == 0) {
+			for (int ij = 0; ij < childNodesi.size(); ij++) {
+				compare = compareChildrenRecursively((Element) childNodesi.get(ij), (Element) childNodesj.get(ij));
 			}
 		}
 		return compare;
 	}
+		
+	private static int compareImmediateChildren(Nodes nodesi, Nodes nodesj) {
+		int nij = Math.min(nodesi.size(), nodesj.size());
+		int compare = 0;
+		// iterate through all children with common serial numbers
+		for (int ij = 0; ij < nij; ij++) {
+			// compare each child
+			compare = compareNodePairWithoutDescendants((Element)nodesi.get(ij), (Element)nodesj.get(ij));
+			if (compare != 0) {
+				// exit immediately on any difference
+				break;
+			}
+		}
+		// if common nodes are identical, check whether one list is longer
+		if (compare == 0) {
+			compare = nodesi.size() - nodesj.size();
+		}
+		return compare;
+	}
+
+	/**
+	 * @param nodei
+	 * @param nodej
+	 * @return
+	 * @throws NumberFormatException
+	 */
+	private static int compareNodePairWithoutDescendants(Element nodei,
+			Element nodej) {
+		// sort on atomic numbers
+		int atnumi = Integer.parseInt(nodei.getAttributeValue(ATNUM));
+		int atnumj = Integer.parseInt(nodej.getAttributeValue(ATNUM));
+		return atnumi - atnumj;
+	}
+	
 	
 	// j > i
 	private void swap(Element node, int i, int j) {
@@ -154,13 +184,13 @@ public class CIPTool {
 	}
 	
 	private boolean isAncestorOfLigandId(Element node, String ligandId) {
-		Nodes ancestors = node.query("./ancestor::node[@id='"+ligandId+"']");
+		Nodes ancestors = node.query("./ancestor::"+NODE+"[@"+ID+"='"+ligandId+"']");
 		return (ancestors.size() > 0);
 	}
 	
 	private void addGhost(Element node, String ligandId, int ligandAtomicNumber) {
 		Element ghost = makeNode(node.getAttributeValue(ID), ligandId+CMLConstants.S_UNDER+GHOST, ligandAtomicNumber);
-		ghost.addAttribute(new Attribute(GHOST, "true"));
+		ghost.addAttribute(new Attribute(GHOST, TRUE));
 		node.appendChild(ghost);
 	}
 	
