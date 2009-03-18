@@ -70,6 +70,9 @@ public class CIPTool {
 				for (int j = i+1 ; j < nNodes; j++) {
 					Element nodej = (Element) node.getChild(j);
 					int compare = compareWithGhosts(nodei, nodej);
+					if (compare == 0) {
+						compare = compareChildrenRecursively(nodei, nodej);
+					}
 					if (compare < 0) {
 						swap(node, i, j);
 						change = true;
