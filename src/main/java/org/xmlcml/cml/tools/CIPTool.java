@@ -1,5 +1,6 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -9,6 +10,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
@@ -16,6 +18,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.molutil.ChemicalElement;
 
 public class CIPTool {
+	private static Logger LOG = Logger.getLogger(CIPTool.class);
 
 	public final static String ATNUM = "atomicNumber";
 	public final static String GHOST = "ghost";
@@ -47,10 +50,16 @@ public class CIPTool {
 		sortNodesRecursively(elem1);
 		return elem1;
 	}
-	
+
+	/** sort nodes on each atom.
+	 * ordering is by atomic number, then ghosts
+	 * should put nodes with more children first, but I am not sure of this
+	 * @param node
+	 */
 	private void sortNodesRecursively(Element node) {
 		int nNodes = node.getChildCount();
 		boolean change = true;
+		// sort children first
 		for (int i = 0; i < nNodes; i++) {
 			sortNodesRecursively((Element) node.getChild(i));
 		}
@@ -60,7 +69,8 @@ public class CIPTool {
 				Element nodei = (Element) node.getChild(i);
 				for (int j = i+1 ; j < nNodes; j++) {
 					Element nodej = (Element) node.getChild(j);
-					if (compare(nodei, nodej) < 0) {
+					int compare = compareWithGhosts(nodei, nodej);
+					if (compare < 0) {
 						swap(node, i, j);
 						change = true;
 						break;
@@ -70,44 +80,71 @@ public class CIPTool {
 		}
 	}
 	
-	public static int compare(Element nodei, Element nodej) {
-		return compareChildrenRecursively(nodei, nodej);
-	}
-	
-	private static int compareChildrenRecursively(Element nodei, Element nodej) {
-		int compare = compareNodePairWithoutDescendants(nodei, nodej);
-		Nodes childNodesi = null;
-		Nodes childNodesj = null;
-		if (compare == 0) {
-			childNodesi = nodei.query("node");
-			childNodesj = nodej.query("node");
-			if (childNodesi.size() > 0 || childNodesj.size() > 0) {
-				compare = compareImmediateChildren(childNodesi, childNodesj);
+	public static int compareChildrenRecursively(Element nodei, Element nodej) {
+		int compare = 0;
+		// seed comparison
+		List<Element> nodesi = new ArrayList<Element>();
+		nodesi.add(nodei);
+		List<Element> nodesj = new ArrayList<Element>();
+		nodesj.add(nodej);
+		while (true) {
+			// compare at current level of tree
+			int nij = Math.min(nodesi.size(), nodesj.size());
+			// compare common children
+			for (int ij = 0; ij < nij; ij++) {
+				compare = compareWithoutGhosts(nodesi.get(ij), nodesj.get(ij));
+				if (compare != 0) {
+					break;
+				}
 			}
-		}
-		if (compare == 0) {
-			for (int ij = 0; ij < childNodesi.size(); ij++) {
-				compare = compareChildrenRecursively((Element) childNodesi.get(ij), (Element) childNodesj.get(ij));
+			// if common children match, are there any children unique to one tree?
+			compare = (compare == 0) ? nodesi.size() - nodesj.size() : compare;
+			// found inequality
+			if (compare != 0) {
+				break;
+			}
+			// recurse to next level of tree
+			nodesi = getChildNodes(nodesi);
+			nodesj = getChildNodes(nodesj);
+			// no more levels in either tree?
+			if (nodesi.size() == 0 && nodesj.size() == 0) {
+				break;
 			}
 		}
 		return compare;
 	}
-		
-	private static int compareImmediateChildren(Nodes nodesi, Nodes nodesj) {
-		int nij = Math.min(nodesi.size(), nodesj.size());
-		int compare = 0;
-		// iterate through all children with common serial numbers
-		for (int ij = 0; ij < nij; ij++) {
-			// compare each child
-			compare = compareNodePairWithoutDescendants((Element)nodesi.get(ij), (Element)nodesj.get(ij));
-			if (compare != 0) {
-				// exit immediately on any difference
-				break;
+	
+	private static List<Element> getChildNodes(List<Element> nodes) {
+		List<Element> childNodeList = new ArrayList<Element>();
+		for (Element node : nodes) {
+			Nodes childNodes = node.query("node");
+			for (int i = 0; i < childNodes.size(); i++) {
+				childNodeList.add((Element) childNodes.get(i));
 			}
 		}
-		// if common nodes are identical, check whether one list is longer
+		return childNodeList;
+	}
+		
+	/**
+	 * compares nodes on atomic numbers
+	 * if a tie then elements with ghosts have lower priority
+	 * @param nodei
+	 * @param nodej
+	 * @return atnumi - atnumj
+	 * @throws NumberFormatException
+	 */
+	private static int compareWithGhosts(Element nodei, Element nodej) {
+		int compare = compareWithoutGhosts(nodei, nodej);
 		if (compare == 0) {
-			compare = nodesi.size() - nodesj.size();
+			Attribute ghosti = nodei.getAttribute(GHOST);
+			Attribute ghostj = nodej.getAttribute(GHOST);
+			// ghosts have lower priority
+			if (ghosti == null && ghostj != null) {
+				compare = 1;
+			}
+			if (ghosti != null && ghostj == null) {
+				compare = -1;
+			}
 		}
 		return compare;
 	}
@@ -118,12 +155,13 @@ public class CIPTool {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	private static int compareNodePairWithoutDescendants(Element nodei,
-			Element nodej) {
+	private static int compareWithoutGhosts(Element nodei, Element nodej)
+			throws NumberFormatException {
 		// sort on atomic numbers
-		int atnumi = Integer.parseInt(nodei.getAttributeValue(ATNUM));
-		int atnumj = Integer.parseInt(nodej.getAttributeValue(ATNUM));
-		return atnumi - atnumj;
+		int compare = 
+			Integer.parseInt(nodei.getAttributeValue(ATNUM)) -
+			Integer.parseInt(nodej.getAttributeValue(ATNUM));
+		return compare;
 	}
 	
 	
