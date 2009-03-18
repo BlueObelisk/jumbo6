@@ -47,7 +47,7 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	public void testgetBreadthFirstCIPTree() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -69,11 +69,11 @@ public class CIPToolTest {
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = 
-			"<node parent='a1' id='a2' atnum='7'>" +
-			  "<node parent='a2' id='a3' atnum='6'>" +
-			    "<node parent='a3' id='a4' atnum='8'/>" +
+			"<node parent='a1' id='a2' atomicNumber='7'>" +
+			  "<node parent='a2' id='a3' atomicNumber='6'>" +
+			    "<node parent='a3' id='a4' atomicNumber='8'/>" +
 			  "</node>" +
-			  "<node parent='a2' id='a5' atnum='6'/>" +
+			  "<node parent='a2' id='a5' atomicNumber='6'/>" +
 			"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
 	}
@@ -82,7 +82,7 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	public void testgetBreadthFirstCIPTree2() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -112,30 +112,30 @@ public class CIPToolTest {
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
-		"<node parent='a1' id='a2' atnum='6'>" +
-		  "<node parent='a2' id='a3' atnum='6'>" +
-		    "<node parent='a3' id='a4' atnum='6'>" +
-		      "<node parent='a4' id='a5' atnum='6'>" +
-		        "<node parent='a5' id='a6' atnum='6'>" +
-		          "<node parent='a6' id='a7' atnum='6'>" +
-		            "<node parent='a7' id='a8' atnum='6'/>" +
-		            "<node parent='a7' id='a2_ghost' atnum='6' ghost='true'/>" +
+		"<node parent='a1' id='a2' atomicNumber='6'>" +
+		  "<node parent='a2' id='a3' atomicNumber='6'>" +
+		    "<node parent='a3' id='a4' atomicNumber='6'>" +
+		      "<node parent='a4' id='a5' atomicNumber='6'>" +
+		        "<node parent='a5' id='a6' atomicNumber='6'>" +
+		          "<node parent='a6' id='a7' atomicNumber='6'>" +
+		            "<node parent='a7' id='a8' atomicNumber='6'/>" +
+		            "<node parent='a7' id='a2_ghost' atomicNumber='6' ghost='true'/>" +
 		          "</node>" +
 		        "</node>" +
 		      "</node>" +
 		    "</node>" +
 		  "</node>" +
-		  "<node parent='a2' id='a7' atnum='6'>" +
-		    "<node parent='a7' id='a6' atnum='6'>" +
-		      "<node parent='a6' id='a5' atnum='6'>" +
-		        "<node parent='a5' id='a4' atnum='6'>" +
-		          "<node parent='a4' id='a3' atnum='6'>" +
-		            "<node parent='a3' id='a2_ghost' atnum='6' ghost='true'/>" +
+		  "<node parent='a2' id='a7' atomicNumber='6'>" +
+		    "<node parent='a7' id='a6' atomicNumber='6'>" +
+		      "<node parent='a6' id='a5' atomicNumber='6'>" +
+		        "<node parent='a5' id='a4' atomicNumber='6'>" +
+		          "<node parent='a4' id='a3' atomicNumber='6'>" +
+		            "<node parent='a3' id='a2_ghost' atomicNumber='6' ghost='true'/>" +
 		          "</node>" +
 		        "</node>" +
 		      "</node>" +
 		    "</node>" +
-		    "<node parent='a7' id='a8' atnum='6'/>" +
+		    "<node parent='a7' id='a8' atomicNumber='6'/>" +
 		  "</node>" +
 		"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
@@ -145,7 +145,7 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	public void testgetBreadthFirstCIPTree1() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -167,13 +167,13 @@ public class CIPToolTest {
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
-		"<node parent='a1' id='a2' atnum='6'>" +
-		  "<node parent='a2' id='a3' atnum='6'>" +
-		    "<node parent='a3' id='a2_ghost' atnum='6' ghost='true'/>" +
-		    "<node parent='a3' id='a4' atnum='6'/>" +
+		"<node parent='a1' id='a2' atomicNumber='6'>" +
+		  "<node parent='a2' id='a3' atomicNumber='6'>" +
+		    "<node parent='a3' id='a4' atomicNumber='6'/>" +
+		    "<node parent='a3' id='a2_ghost' atomicNumber='6' ghost='true'/>" +
 		  "</node>" +
-		  "<node parent='a2' id='a3_ghost' atnum='6' ghost='true'/>" +
-		  "<node parent='a2' id='a5' atnum='6'/>" +
+		  "<node parent='a2' id='a5' atomicNumber='6'/>" +
+		  "<node parent='a2' id='a3_ghost' atomicNumber='6' ghost='true'/>" +
 		"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
 	}
@@ -182,26 +182,26 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	public void testgetBreadthFirstCIPTree3() {
 		CMLMolecule mol = parseSMILES("[R][C]([N])([F])([O])");
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
-		"<node parent='a1' id='a2' atnum='6'>" +
-		  "<node parent='a2' id='a4' atnum='9'/>" +
-		  "<node parent='a2' id='a5' atnum='8'/>" +
-		  "<node parent='a2' id='a3' atnum='7'/>" +
+		"<node parent='a1' id='a2' atomicNumber='6'>" +
+		  "<node parent='a2' id='a4' atomicNumber='9'/>" +
+		  "<node parent='a2' id='a5' atomicNumber='8'/>" +
+		  "<node parent='a2' id='a3' atomicNumber='7'/>" +
 		"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
 		mol = parseSMILES("[R][C]([O])([N])([F])");
 		st = new CIPTool(mol);
 		elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		expectedS = ""+
-		"<node parent='a1' id='a2' atnum='6'>" +
-		  "<node parent='a2' id='a5' atnum='9'/>" +
-		  "<node parent='a2' id='a3' atnum='8'/>" +
-		  "<node parent='a2' id='a4' atnum='7'/>" +
+		"<node parent='a1' id='a2' atomicNumber='6'>" +
+		  "<node parent='a2' id='a5' atomicNumber='9'/>" +
+		  "<node parent='a2' id='a3' atomicNumber='8'/>" +
+		  "<node parent='a2' id='a4' atomicNumber='7'/>" +
 		"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
 	}
@@ -212,7 +212,7 @@ public class CIPToolTest {
 		return st.getMolecule();
 	}
 	@Test
-	@Ignore
+//	@Ignore
 	public void testWikipedia0() {
 		SMILESTool st = new SMILESTool();
 		st.parseSMILES("[R]O[H]");
@@ -233,14 +233,14 @@ public class CIPToolTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void testWikipedia1() {
 		// -OH > -CH3
 		assertDecreasing("[R]O[H]", "[R]C([H])([H])([H])");
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void testWikipedia2() {
 		// -CH(OH)CH3 > CH2OH
 		assertDecreasing("[R]C([H])(O([H]))C([H])([H])([H])", "[R]C([H])([H])(O([H]))");
@@ -255,11 +255,47 @@ public class CIPToolTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void testWikipedia4() {
 		// -CH(CH2F)OCH3 > CH(CH3)OCH2F
-		assertDecreasing("[R]C([H])(C([H])([H])([F]))[O](C([H])([H])([H]))", 
-				"[R]C([H])(C([H])([H])([H]))[O](C([H])([H])F)");
+		assertDecreasing(
+			"[R]C([H])(C([H])([H])([F]))[O](C([H])([H])([H]))", 
+			"[R]C([H])(C([H])([H])([H]))[O](C([H])([H])F)");
+	}
+	
+
+	@Test
+//	@Ignore
+	public void testWikipedia5() {
+//	    * -CH=O > -CH2OH. The distance-2 lists are (O, ghost O, H) and (O, H, H); 
+//		the ghost oxygen outranks the hydrogen.
+		assertDecreasing(
+			"[R]C([H])=[O]", 
+			"[R]C([H])([O]([H]))");
+	}
+	
+	@Test
+//	@Ignore
+	public void testWikipedia6() {
+//	    * -CH(OCH3)2 > -CH=O. The distance-2 lists are (O, O, H) and (O, ghost O, H). 
+//		This is a tie, but at distance 3, nothing else is attached to the ghost oxygen, 
+//		so it loses to the second oxygen of -CH(OCH3)2; the lists are ((C), (C), ( )) and 
+//		((ghost C), ( ), ( )).
+		assertDecreasing(
+		"[R]C([H])([O]([C]([H])([H])([H])))([O]([C]([H])([H])([H])))",
+		"[R]C([H])=[O]");
+	}
+	
+	@Test
+//	@Ignore
+	public void testWikipedia7() {
+//	    * -CH=CH2 > -CH(CH3)2. The distance-2 lists are (C, ghost C, H) and (C, C, H), a tie. 
+//		However, at distance 3, the lists are ((ghost C, H, H), ( ), ( )) and ((H, H, H), (H, H, H), ( )); 
+//		the ghost carbon representing the reverse direction of -CH=CH2's double bond outranks -CH(CH3)2's 
+//		hydrogens.
+		assertDecreasing(
+			"[R]C([H])=[C]([H])([H])", 
+			"[R]C([H])([C]([H])([H])([H]))([C]([H])([H])([H]))");
 	}
 	
 	private void assertDecreasing(String smiles1, String smiles2) {
@@ -267,9 +303,8 @@ public class CIPToolTest {
 //		CMLUtil.debug(root1, smiles1);
 		Element root2 = getOrderedBreadthFirstTree(smiles2);
 //		CMLUtil.debug(root2, smiles2);
-		int compare = CIPTool.compare(root1, root2);
-//		System.out.println("compare" + compare);
-		Assert.assertTrue("compare", compare > 0);
+		int compare = CIPTool.compareChildrenRecursively(root1, root2);
+		Assert.assertTrue("compare "+compare, compare > 0);
 	}
 
 	/**
@@ -282,7 +317,7 @@ public class CIPToolTest {
 //		mol.debug();
 		CIPTool cpt = new CIPTool(mol);
 		Element root = cpt.getBreadthFirstCIPTree("a1", "a2");
-		CMLUtil.debug(root, "root");
+//		CMLUtil.debug(root, "root");
 		return root;
 	}
 }

@@ -475,7 +475,6 @@ public class CMLAssert {
 			ee = e;
 		}
 		if (ee != null) {
-			LOG.info("Hi");
 			if (reportError) {
 				reportXMLDiffInFull(message, ee.getMessage(), refNode, testNode);
 			} else {
