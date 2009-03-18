@@ -113,18 +113,6 @@ public class CIPToolTest {
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
 		"<node parent='a1' id='a2' atomicNumber='6'>" +
-		  "<node parent='a2' id='a3' atomicNumber='6'>" +
-		    "<node parent='a3' id='a4' atomicNumber='6'>" +
-		      "<node parent='a4' id='a5' atomicNumber='6'>" +
-		        "<node parent='a5' id='a6' atomicNumber='6'>" +
-		          "<node parent='a6' id='a7' atomicNumber='6'>" +
-		            "<node parent='a7' id='a8' atomicNumber='6'/>" +
-		            "<node parent='a7' id='a2_ghost' atomicNumber='6' ghost='true'/>" +
-		          "</node>" +
-		        "</node>" +
-		      "</node>" +
-		    "</node>" +
-		  "</node>" +
 		  "<node parent='a2' id='a7' atomicNumber='6'>" +
 		    "<node parent='a7' id='a6' atomicNumber='6'>" +
 		      "<node parent='a6' id='a5' atomicNumber='6'>" +
@@ -136,6 +124,18 @@ public class CIPToolTest {
 		      "</node>" +
 		    "</node>" +
 		    "<node parent='a7' id='a8' atomicNumber='6'/>" +
+		  "</node>" +
+		  "<node parent='a2' id='a3' atomicNumber='6'>" +
+		    "<node parent='a3' id='a4' atomicNumber='6'>" +
+		      "<node parent='a4' id='a5' atomicNumber='6'>" +
+		        "<node parent='a5' id='a6' atomicNumber='6'>" +
+		          "<node parent='a6' id='a7' atomicNumber='6'>" +
+		            "<node parent='a7' id='a8' atomicNumber='6'/>" +
+		            "<node parent='a7' id='a2_ghost' atomicNumber='6' ghost='true'/>" +
+		          "</node>" +
+		        "</node>" +
+		      "</node>" +
+		    "</node>" +
 		  "</node>" +
 		"</node>";
 		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
@@ -271,7 +271,7 @@ public class CIPToolTest {
 //		the ghost oxygen outranks the hydrogen.
 		assertDecreasing(
 			"[R]C([H])=[O]", 
-			"[R]C([H])([O]([H]))");
+			"[R]C([H])([H])([O]([H]))");
 	}
 	
 	@Test
@@ -298,11 +298,38 @@ public class CIPToolTest {
 			"[R]C([H])([C]([H])([H])([H]))([C]([H])([H])([H]))");
 	}
 	
+	@Test
+//	@Ignore
+	public void testDaniel1() {
+//	R-[CH](C(F)(F)F))C([H])([H])[H] == R-[CH](C([H])([H])[H])C(F)(F)F
+		assertEquals(
+				"[R][CH](C(F)(F)F)C([H])([H])[H]", 
+				"[R][CH](C([H])([H])[H])C(F)(F)F");
+	}
+	
+	@Test
+//	@Ignore
+	public void testDaniel2() {
+//		R-[CH](S[H])S([H])([H])[H] vs R-[CH](S([H])[H])S([H])[H]
+		assertEquals(
+				"[R][CH](S[H])S([H])([H])[H]", 
+				"[R][CH](S([H])[H])S([H])[H]");
+	}
+	                                                      
+	private void assertEquals(String smiles1, String smiles2) {
+		Element root1 = getOrderedBreadthFirstTree(smiles1);
+		CMLUtil.debug(root1, smiles1);
+		Element root2 = getOrderedBreadthFirstTree(smiles2);
+		CMLUtil.debug(root2, smiles2);
+		int compare = CIPTool.compareChildrenRecursively(root1, root2);
+		Assert.assertTrue("compare "+compare, compare == 0);
+	}
+
 	private void assertDecreasing(String smiles1, String smiles2) {
 		Element root1 = getOrderedBreadthFirstTree(smiles1);
-//		CMLUtil.debug(root1, smiles1);
+		CMLUtil.debug(root1, smiles1);
 		Element root2 = getOrderedBreadthFirstTree(smiles2);
-//		CMLUtil.debug(root2, smiles2);
+		CMLUtil.debug(root2, smiles2);
 		int compare = CIPTool.compareChildrenRecursively(root1, root2);
 		Assert.assertTrue("compare "+compare, compare > 0);
 	}
