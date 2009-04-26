@@ -318,18 +318,18 @@ public class CIPToolTest {
 	                                                      
 	private void assertEquals(String smiles1, String smiles2) {
 		Element root1 = getOrderedBreadthFirstTree(smiles1);
-		CMLUtil.debug(root1, smiles1);
+//		CMLUtil.debug(root1, smiles1);
 		Element root2 = getOrderedBreadthFirstTree(smiles2);
-		CMLUtil.debug(root2, smiles2);
+//		CMLUtil.debug(root2, smiles2);
 		int compare = CIPTool.compareChildrenRecursively(root1, root2);
 		Assert.assertTrue("compare "+compare, compare == 0);
 	}
 
 	private void assertDecreasing(String smiles1, String smiles2) {
 		Element root1 = getOrderedBreadthFirstTree(smiles1);
-		CMLUtil.debug(root1, smiles1);
+//		CMLUtil.debug(root1, smiles1);
 		Element root2 = getOrderedBreadthFirstTree(smiles2);
-		CMLUtil.debug(root2, smiles2);
+//		CMLUtil.debug(root2, smiles2);
 		int compare = CIPTool.compareChildrenRecursively(root1, root2);
 		Assert.assertTrue("compare "+compare, compare > 0);
 	}
