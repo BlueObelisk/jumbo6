@@ -922,7 +922,6 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		try {
 			smilesTool.parseSMILES(smiles);
-//			smilesTool.getMolecule().debug("MOL");			
 		} catch (RuntimeException e) {
 			Assert.fail("should not fail: "+e);
 		}

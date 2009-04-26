@@ -191,6 +191,7 @@
 			<version>2.5.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>cml</groupId>
 			<artifactId>cifxml</artifactId>
@@ -198,6 +199,7 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
