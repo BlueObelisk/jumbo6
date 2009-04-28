@@ -4,7 +4,7 @@ package org.xmlcml.cml.graphics;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.Path2D;
+import java.awt.geom.Line2D;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -30,7 +30,7 @@ public abstract class SVGPoly extends SVGElement {
 	private static Logger LOG = Logger.getLogger(SVGPoly.class);
 	
 	public final static String MONOTONIC = "monotonic";
-	private Path2D.Double path2;
+	private Line2D.Double path2;
 	protected Real2Array real2Array;
 	
 	/** constructor
@@ -100,7 +100,7 @@ public abstract class SVGPoly extends SVGElement {
 //</g>
 	
 	protected void drawElement(Graphics2D g2d) {
-		Path2D path = createAndSetPath2D();
+		Line2D path = createAndSetLine2D();
 		applyAttributes(g2d);
 		g2d.draw(path);
 	}
@@ -114,7 +114,7 @@ public abstract class SVGPoly extends SVGElement {
 		}
 	}
 
-	public Path2D.Double createAndSetPath2D() {
+	public Line2D.Double createAndSetLine2D() {
 		double x1 = this.getDouble("x1");
 		double y1 = this.getDouble("y1");
 		Real2 xy1 = new Real2(x1, y1);
@@ -131,15 +131,15 @@ public abstract class SVGPoly extends SVGElement {
 			width = (float) new Double(style).doubleValue();
 			width *= 15.f;
 		}
-//		path2 = new Path2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
+		Line2D.Double path2 = new Line2D.Double(xy1.x, xy1.y, xy2.x, xy2.y);
 		return path2;
 	}
 	
-	public Path2D.Double getPath2() {
+	public Line2D.Double getPath2() {
 		return path2;
 	}
 
-	public void setPath2(Path2D.Double path2) {
+	public void setPath2(Line2D.Double path2) {
 		this.path2 = path2;
 	}
 	
