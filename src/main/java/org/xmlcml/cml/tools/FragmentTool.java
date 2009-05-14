@@ -182,6 +182,17 @@ public class FragmentTool extends AbstractTool {
     	return generatedElement;
     }
     
+    /** process basic convention.
+	 * @param resourceManager to find molecules
+	 * @return fragmentList for Markush; null for simple fragment
+     * @return element 
+     */
+    public CMLElement processBasic() {
+    	BasicProcessor basicProcessor = new BasicProcessor(rootFragment,seed);
+    	CMLElement generatedElement = basicProcessor.process();
+    	return generatedElement;
+    }
+    
 	/** process intermediate format.
 	 * @param catalog to find molecules
 	 */
@@ -559,22 +570,46 @@ class BasicProcessor implements CMLConstants {
         List<Node> markushs = CMLUtil.getQueryNodes(
         		fragment, CMLFragmentList.NS+"[@role='markush']", CMLConstants.CML_XPATH);
         if (markushs.size() != 0) {
-        	if (markushs.size() > 1) {
-        		throw new RuntimeException("Can only process one Markush child");
-        	}
-        	CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
-        	generatedElement = generateFragmentListFromMarkushGroupsAndTarget(expandableMarkush, resourceManager);
-	        fragment.setConvention(FragmentTool.Convention.PML_PROCESSED.v);
+        	generatedElement = processMarkush(resourceManager, markushs);
         } else {
-	        fragmentTool.substituteFragmentRefsRecursively(100);
-	        new CountExpander(fragment).process();
-	        CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
-	        this.replaceFragmentsByChildMolecules();
-	        this.createAtomsRefs2OnJoins();
-	        fragment.setConvention(FragmentTool.Convention.PML_INTERMEDIATE.v);
+	        processNonMarkush();
         }
         return generatedElement;
     }
+    
+	/** manages single fragments and Markush
+	 * 
+	 * @param resourceManager
+	 * "return fragmentList if Markush; null if fragment
+	 */
+    CMLElement process() {
+    	CMLElement generatedElement = null;
+        CMLUtil.removeWhitespaceNodes(fragment);
+	    processNonMarkush();
+        return generatedElement;
+    }
+    
+	private void processNonMarkush() {
+		fragmentTool.substituteFragmentRefsRecursively(100);
+		new CountExpander(fragment).process();
+		CMLArg.addIdxArgsWithSerialNumber(fragment, CMLMolecule.TAG);
+		this.replaceFragmentsByChildMolecules();
+		this.createAtomsRefs2OnJoins();
+		fragment.setConvention(FragmentTool.Convention.PML_INTERMEDIATE.v);
+	}
+	
+	private CMLElement processMarkush(ResourceManager resourceManager,
+			List<Node> markushs) {
+		CMLElement generatedElement;
+		if (markushs.size() > 1) {
+			throw new RuntimeException("Can only process one Markush child");
+		}
+		CMLFragmentList expandableMarkush = (CMLFragmentList)markushs.get(0);
+		generatedElement = generateFragmentListFromMarkushGroupsAndTarget(
+				expandableMarkush, resourceManager);
+		fragment.setConvention(FragmentTool.Convention.PML_PROCESSED.v);
+		return generatedElement;
+	}
     
     /** generate fragmentList from fragment.
      * creates M * N * P ... fragments in a fragmentList
