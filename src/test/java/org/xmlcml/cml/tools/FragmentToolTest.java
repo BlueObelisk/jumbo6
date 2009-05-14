@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -605,6 +606,163 @@ public class FragmentToolTest {
 				}
 			}
 		}
+	}
+
+	@Test
+	public void moleculeByValue() {
+		String s = ""+
+		"<fragment  convention='cml:PML-intermediate' "+
+		"	   xmlns='http://www.xml-cml.org/schema'"+
+		"	   xmlns:g='http://www.xml-cml.org/mols/geom1'>"+
+		"	  <fragment>"+
+		"<molecule id='2pyr'>"+
+		"	<atomArray>"+
+		"		<atom id='a1' elementType='C' x3='0.9130440201297267' y3='2.8881300000000003'"+
+		"			z3='24.75205498269886'>"+
+		"	        <label dictRef='cml:torsionEnd'>r6</label>"+
+		"		</atom>"+
+		"		<atom id='r1' elementType='R' x3='1.8668275372206224' y3='3.3649546'"+
+		"			z3='23.74540701932392'>"+
+		"		</atom>"+
+		"		<atom id='a2' elementType='C' x3='0.6710034793604291' y3='1.5629880000000003'"+
+		"			z3='24.99245916290205'>"+
+		"        <label dictRef='cml:torsionEnd'>r1</label>"+
+		"		</atom>"+
+		"		<atom id='r2' elementType='R' x3='1.1172207931351144' y3='0.9038148000000001'"+
+		"			z3='24.513083971081915'>"+
+		"		</atom>"+
+		"		<atom id='a3' elementType='N' x3='0.2765492911364054' y3='3.8757572000000002'"+
+		"			z3='25.381508959946053'>"+
+		"	        <label dictRef='cml:torsionEnd'>r2</label>"+
+		"		</atom>"+
+		"		<atom id='a4' elementType='C' x3='-0.2506677283610746' y3='1.2254732000000002'"+
+		"			z3='25.965836532665875'>"+
+		"	        <label dictRef='cml:torsionEnd'>r3</label>"+
+		"		</atom>"+
+		"		<atom id='r4' elementType='R' x3='-0.4083535460107754' y3='0.334117'"+
+		"			z3='26.17901490323389'>"+
+		"		</atom>"+
+		"		<atom id='a5' elementType='C' x3='-0.9274226661160216' y3='2.2244264'"+
+		"			z3='26.61004448473895'>"+
+		"	        <label dictRef='cml:torsionEnd'>r4</label>"+
+		"		</atom>"+
+		"		<atom id='r5' elementType='R' x3='-1.575899600097922' y3='2.0239562'"+
+		"			z3='27.245950763184325'>"+
+		"		</atom>"+
+		"		<atom id='a6' elementType='C' x3='-0.638411881791494' y3='3.5031318000000002'"+
+		"			z3='26.308615162238905'>"+
+		"	        <label dictRef='cml:torsionEnd'>r5</label>"+
+		"		</atom>"+
+		"		<atom id='r6' elementType='R' x3='-1.0946942477565857' y3='4.1724984'"+
+		"			z3='26.765175530265513'>"+
+		"		</atom>"+
+		"	</atomArray>"+
+		"	<bondArray>"+
+		"		<bond atomRefs2='r1 a1' id='r1-a1' order='1'/>"+
+		"		<bond atomRefs2='a1 a2' id='a1-a2' order='2'/>"+
+		"		<bond atomRefs2='a1 a3' id='a1-a3' order='1'/>"+
+		"		<bond atomRefs2='a2 r2' id='a2-r2' order='1'/>"+
+		"		<bond atomRefs2='a2 a4' id='a2-a4' order='1'/>"+
+		"		<bond atomRefs2='a6 a3' id='a6-a3' order='2'/>"+
+		"		<bond atomRefs2='a4 r4' id='a4-r4' order='1'/>"+
+		"		<bond atomRefs2='a4 a5' id='a4-a5' order='2'/>"+
+		"		<bond atomRefs2='a5 r5' id='a5-r5' order='1'/>"+
+		"		<bond atomRefs2='a5 a6' id='a5-a6' order='1'/>"+
+		"		<bond atomRefs2='a6 r6' id='a6-r6' order='1'/>"+
+		"	</bondArray>"+
+		"</molecule>"+
+		"	  </fragment>"+
+		"	  <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"	  <fragment countExpression='*(2)'>"+
+		"	    <join atomRefs2='r1 r2' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"	    <fragment>"+
+		"<molecule xmlns='http://www.xml-cml.org/schema' id='po'>"+
+		"	<atomArray>"+
+		"		<atom id='r1' elementType='R' x3='1.580000' y3='0.019000'"+
+		"			z3='-0.554000' />"+
+		"		<atom id='a2' elementType='C' x3='0.912000' y3='-0.145000'"+
+		"			z3='0.699000' />"+
+		"		<atom id='a3' elementType='C' x3='-0.599000' y3='-0.016000'"+
+		"			z3='0.493000'>"+
+		"			<label dictRef='cml:torsionEnd'>r1</label>"+
+		"			<label dictRef='cml:torsionEnd'>r2</label>"+
+		"		</atom>"+
+		"		<atom id='a4' elementType='C' x3='-0.908000' y3='1.315000'"+
+		"			z3='-0.194000' />"+
+		"		<atom id='a5' elementType='O' x3='-1.061000' y3='-1.093000'"+
+		"			z3='-0.326000' />"+
+		"		<atom id='a7' elementType='H' x3='1.140000' y3='-1.130000'"+
+		"			z3='1.106000' />"+
+		"		<atom id='a8' elementType='H' x3='1.250000' y3='0.623000'"+
+		"			z3='1.394000' />"+
+		"		<atom id='a9' elementType='H' x3='-1.102000' y3='-0.053000'"+
+		"			z3='1.459000' />"+
+		"		<atom id='a10' elementType='H' x3='-1.984000' y3='1.407000'"+
+		"			z3='-0.341000' />"+
+		"		<atom id='a11' elementType='H' x3='-0.556000' y3='2.137000'"+
+		"			z3='0.430000' />"+
+		"		<atom id='a12' elementType='H' x3='-0.405000' y3='1.352000'"+
+		"			z3='-1.160000' />"+
+		"		<atom id='r2' elementType='R' x3='-2.015000' y3='-0.974000'"+
+		"			z3='-0.431000' />"+
+		"	</atomArray>"+
+		"	<bondArray>"+
+		"		<bond atomRefs2='r1 a2' order='1' />"+
+		"		<bond atomRefs2='a2 a3' order='1' />"+
+		"		<bond atomRefs2='a2 a7' order='1' />"+
+		"		<bond atomRefs2='a2 a8' order='1' />"+
+		"		<bond atomRefs2='a3 a4' order='1' />"+
+		"		<bond atomRefs2='a3 a5' order='1' />"+
+		"		<bond atomRefs2='a3 a9' order='1' />"+
+		"		<bond atomRefs2='a4 a10' order='1' />"+
+		"		<bond atomRefs2='a4 a11' order='1' />"+
+		"		<bond atomRefs2='a4 a12' order='1' />"+
+		"		<bond atomRefs2='a5 r2' order='1' />"+
+		"	</bondArray>"+
+		"	<length atomRefs2='a2 a3' id='len23'></length>"+
+		"	<angle atomRefs3='a2 a3 a4' id='ang234'></angle>"+
+		"	<angle atomRefs3='r1 a2 a3' id='ang123'></angle>"+
+		"	<angle atomRefs3='a3 a5 r2' id='ang352'></angle>"+
+		"	<torsion atomRefs4='r1 a2 a3 a5' id='tor1'></torsion>"+
+		"	<torsion atomRefs4='a2 a3 a5 r2' id='tor2'></torsion>"+
+		"</molecule>"+
+		""+
+		"	    </fragment>"+
+		"	  </fragment>"+
+		"	  <join atomRefs2='r1 r1' moleculeRefs2='PREVIOUS NEXT'/>"+
+		"	  <fragment>"+
+		"<molecule id='acetyl'>"+
+		"  <atomArray>"+
+		"    <atom id='r1'  elementType='R' x3='6.393952073348176' y3='7.481432789999999'  z3='1.3355287286108608' xFract='0.853' yFract='0.40329' zFract='0.08749' formalCharge='0' hydrogenCount='0'/>"+
+		"    <atom id='a71' elementType='C' x3='7.470354790502688' y3='7.21912165'         z3='2.1153032017509776' xFract='0.9966' yFract='0.38915' zFract='0.12895' formalCharge='0' hydrogenCount='0'/>"+
+		"    <atom id='a72' elementType='O' x3='7.621770771606594' y3='6.2131009200000005' z3='2.7265105769419966' xFract='1.0168' yFract='0.33492' zFract='0.15894' formalCharge='0' hydrogenCount='0'>"+
+		"      <label dictRef='cml:torsionEnd'>r1</label>"+
+		"    </atom>"+
+		"    <atom id='a73' elementType='C' x3='8.407334871591223' y3='8.375034459999998'  z3='2.09259931555679' xFract='1.1216' yFract='0.45146' zFract='0.13125' formalCharge='0' hydrogenCount='0'/>"+
+		"    <atom id='a74' elementType='H' x3='9.290344900009062' y3='8.0103218'          z3='1.9961034580073869' xFract='1.2394' yFract='0.4318' zFract='0.1298' formalCharge='0' hydrogenCount='0'/>"+
+		"    <atom id='a75' elementType='H' x3='8.339122721687978' y3='8.830276'           z3='2.9353942128717265' xFract='1.1125' yFract='0.476' zFract='0.1716' formalCharge='0' hydrogenCount='0'/>"+
+		"    <atom id='a76' elementType='H' x3='8.236429704800676' y3='8.9953799'          z3='1.3798877395986096' xFract='1.0988' yFract='0.4849' zFract='0.0963' formalCharge='0' hydrogenCount='0'/>"+
+		"  </atomArray>"+
+		"  <bondArray>"+
+		"    <bond id='r1-a71'  atomRefs2='r1  a71' order='S'/>"+
+		"    <bond id='a71-a72' atomRefs2='a71 a72' order='D'/>"+
+		"    <bond id='a71-a73' atomRefs2='a71 a73' order='S'/>"+
+		"    <bond id='a73-a74' atomRefs2='a73 a74' order='S'/>"+
+		"    <bond id='a73-a75' atomRefs2='a73 a75' order='S'/>"+
+		"    <bond id='a73-a76' atomRefs2='a73 a76' order='S'/>"+
+		"  </bondArray>"+
+		"</molecule>"+
+		""+
+		"	  </fragment>"+
+		"	</fragment>"+
+		"";
+		CMLElement element = null;
+		try {
+			element = (CMLElement) new CMLBuilder().build(new StringReader(s)).getRootElement();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 
 	/**
