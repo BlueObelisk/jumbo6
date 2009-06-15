@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cml</groupId>
 	<artifactId>jumbo</artifactId>
@@ -11,14 +12,14 @@
 	<inceptionYear>1994</inceptionYear>
 	<mailingLists>
 		<mailingList>
-			<name>cml-discuss</name>
+			<name>cml-discuss</name> 
 			<subscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
 			</subscribe>
 			<unsubscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
 			</unsubscribe>
 			<archive> http://sourceforge.net/mailarchive/forum.php?forum_id=44193
 			</archive>
-		</mailingList>
+		</mailingList> 
 	</mailingLists>
 	<developers>
 		<developer>
@@ -174,6 +175,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>org/xmlcml/util/TestUtils.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>			
 		</plugins>
 	</build>
 	<repositories>

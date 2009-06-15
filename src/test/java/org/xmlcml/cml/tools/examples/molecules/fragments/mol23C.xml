@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fragment convention="cml:PML-complete" xmlns="http://www.xml-cml.org/schema" xmlns:g="http://www.xml-cml.org/mols/geom1">
+<fragment convention="cml:PML-complete" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
   <molecule role="fragment" id="acetyl_1">
     <atomArray> 
       <atom elementType="C" x3="7.470354790502688" y3="7.21912165" z3="2.1153032017509776" xFract="0.9966" yFract="0.38915" zFract="0.12895" formalCharge="0" hydrogenCount="0" id="acetyl_1_a71"/>
