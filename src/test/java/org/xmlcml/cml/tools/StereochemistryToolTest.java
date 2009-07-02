@@ -311,64 +311,64 @@ public class StereochemistryToolTest {
 	            "<atom id='a55' elementType='H'/>"+
 	        "</atomArray>"+
 	        "<bondArray>"+
-	            "<bond atomRefs2='a1 a2' order='1'/>"+
-	            "<bond atomRefs2='a2 a3' order='1'/>"+
-	            "<bond atomRefs2='a3 a4' order='1'/>"+
-	            "<bond atomRefs2='a4 a5' order='2'/>"+
-	            "<bond atomRefs2='a5 a6' order='1'/>"+
-	            "<bond atomRefs2='a6 a7' order='1'/>"+
-	            "<bond atomRefs2='a7 a8' order='1'/>"+
-	            "<bond atomRefs2='a8 a9' order='1'/>"+
-	            "<bond atomRefs2='a9 a10' order='1'/>"+
-	            "<bond atomRefs2='a10 a5' order='1'/>"+
-	            "<bond atomRefs2='a10 a1' order='1'/>"+
-	            "<bond atomRefs2='a11 a9' order='1'/>"+
-	            "<bond atomRefs2='a11 a12' order='1'/>"+
-	            "<bond atomRefs2='a12 a13' order='1'/>"+
-	            "<bond atomRefs2='a13 a14' order='1'/>"+
-	            "<bond atomRefs2='a14 a8' order='1'/>"+
-	            "<bond atomRefs2='a14 a15' order='1'/>"+
-	            "<bond atomRefs2='a15 a16' order='1'/>"+
-	            "<bond atomRefs2='a16 a17' order='1'/>"+
-	            "<bond atomRefs2='a17 a13' order='1'/>"+
-	            "<bond atomRefs2='a18 a3' order='2'/>"+
-	            "<bond atomRefs2='a21 a22' order='1'/>"+
-	            "<bond atomRefs2='a23 a21' order='2'/>"+
-	            "<bond atomRefs2='a19 a13' order='1'/>"+
-	            "<bond atomRefs2='a20 a10' order='1'/>"+
-	            "<bond atomRefs2='a24 a22' order='1'/>"+
-	            "<bond atomRefs2='a21 a17' order='1'/>"+
-	            "<bond atomRefs2='a25 a11' order='1'/>"+
-	            "<bond atomRefs2='a1 a26' order='1'/>"+
-	            "<bond atomRefs2='a1 a27' order='1'/>"+
-	            "<bond atomRefs2='a2 a28' order='1'/>"+
-	            "<bond atomRefs2='a2 a29' order='1'/>"+
-	            "<bond atomRefs2='a4 a30' order='1'/>"+
-	            "<bond atomRefs2='a6 a31' order='1'/>"+
-	            "<bond atomRefs2='a6 a32' order='1'/>"+
-	            "<bond atomRefs2='a7 a33' order='1'/>"+
-	            "<bond atomRefs2='a7 a34' order='1'/>"+
-	            "<bond atomRefs2='a8 a35' order='1'/>"+
-	            "<bond atomRefs2='a9 a36' order='1'/>"+
-	            "<bond atomRefs2='a11 a37' order='1'/>"+
-	            "<bond atomRefs2='a12 a38' order='1'/>"+
-	            "<bond atomRefs2='a12 a39' order='1'/>"+
-	            "<bond atomRefs2='a14 a40' order='1'/>"+
-	            "<bond atomRefs2='a15 a41' order='1'/>"+
-	            "<bond atomRefs2='a15 a42' order='1'/>"+
-	            "<bond atomRefs2='a16 a43' order='1'/>"+
-	            "<bond atomRefs2='a16 a44' order='1'/>"+
-	            "<bond atomRefs2='a17 a45' order='1'/>"+
-	            "<bond atomRefs2='a19 a46' order='1'/>"+
-	            "<bond atomRefs2='a19 a47' order='1'/>"+
-	            "<bond atomRefs2='a19 a48' order='1'/>"+
-	            "<bond atomRefs2='a20 a49' order='1'/>"+
-	            "<bond atomRefs2='a20 a50' order='1'/>"+
-	            "<bond atomRefs2='a20 a51' order='1'/>"+
-	            "<bond atomRefs2='a22 a52' order='1'/>"+
-	            "<bond atomRefs2='a22 a53' order='1'/>"+
-	            "<bond atomRefs2='a24 a54' order='1'/>"+
-	            "<bond atomRefs2='a25 a55' order='1'/>"+
+	            "<bond atomRefs2='a1 a2' order='S'/>"+
+	            "<bond atomRefs2='a2 a3' order='S'/>"+
+	            "<bond atomRefs2='a3 a4' order='S'/>"+
+	            "<bond atomRefs2='a4 a5' order='D'/>"+
+	            "<bond atomRefs2='a5 a6' order='S'/>"+
+	            "<bond atomRefs2='a6 a7' order='S'/>"+
+	            "<bond atomRefs2='a7 a8' order='S'/>"+
+	            "<bond atomRefs2='a8 a9' order='S'/>"+
+	            "<bond atomRefs2='a9 a10' order='S'/>"+
+	            "<bond atomRefs2='a10 a5' order='S'/>"+
+	            "<bond atomRefs2='a10 a1' order='S'/>"+
+	            "<bond atomRefs2='a11 a9' order='S'/>"+
+	            "<bond atomRefs2='a11 a12' order='S'/>"+
+	            "<bond atomRefs2='a12 a13' order='S'/>"+
+	            "<bond atomRefs2='a13 a14' order='S'/>"+
+	            "<bond atomRefs2='a14 a8' order='S'/>"+
+	            "<bond atomRefs2='a14 a15' order='S'/>"+
+	            "<bond atomRefs2='a15 a16' order='S'/>"+
+	            "<bond atomRefs2='a16 a17' order='S'/>"+
+	            "<bond atomRefs2='a17 a13' order='S'/>"+
+	            "<bond atomRefs2='a18 a3' order='D'/>"+
+	            "<bond atomRefs2='a21 a22' order='S'/>"+
+	            "<bond atomRefs2='a23 a21' order='D'/>"+
+	            "<bond atomRefs2='a19 a13' order='S'/>"+
+	            "<bond atomRefs2='a20 a10' order='S'/>"+
+	            "<bond atomRefs2='a24 a22' order='S'/>"+
+	            "<bond atomRefs2='a21 a17' order='S'/>"+
+	            "<bond atomRefs2='a25 a11' order='S'/>"+
+	            "<bond atomRefs2='a1 a26' order='S'/>"+
+	            "<bond atomRefs2='a1 a27' order='S'/>"+
+	            "<bond atomRefs2='a2 a28' order='S'/>"+
+	            "<bond atomRefs2='a2 a29' order='S'/>"+
+	            "<bond atomRefs2='a4 a30' order='S'/>"+
+	            "<bond atomRefs2='a6 a31' order='S'/>"+
+	            "<bond atomRefs2='a6 a32' order='S'/>"+
+	            "<bond atomRefs2='a7 a33' order='S'/>"+
+	            "<bond atomRefs2='a7 a34' order='S'/>"+
+	            "<bond atomRefs2='a8 a35' order='S'/>"+
+	            "<bond atomRefs2='a9 a36' order='S'/>"+
+	            "<bond atomRefs2='a11 a37' order='S'/>"+
+	            "<bond atomRefs2='a12 a38' order='S'/>"+
+	            "<bond atomRefs2='a12 a39' order='S'/>"+
+	            "<bond atomRefs2='a14 a40' order='S'/>"+
+	            "<bond atomRefs2='a15 a41' order='S'/>"+
+	            "<bond atomRefs2='a15 a42' order='S'/>"+
+	            "<bond atomRefs2='a16 a43' order='S'/>"+
+	            "<bond atomRefs2='a16 a44' order='S'/>"+
+	            "<bond atomRefs2='a17 a45' order='S'/>"+
+	            "<bond atomRefs2='a19 a46' order='S'/>"+
+	            "<bond atomRefs2='a19 a47' order='S'/>"+
+	            "<bond atomRefs2='a19 a48' order='S'/>"+
+	            "<bond atomRefs2='a20 a49' order='S'/>"+
+	            "<bond atomRefs2='a20 a50' order='S'/>"+
+	            "<bond atomRefs2='a20 a51' order='S'/>"+
+	            "<bond atomRefs2='a22 a52' order='S'/>"+
+	            "<bond atomRefs2='a22 a53' order='S'/>"+
+	            "<bond atomRefs2='a24 a54' order='S'/>"+
+	            "<bond atomRefs2='a25 a55' order='S'/>"+
 	        "</bondArray>"+
 	    "</molecule>"+
 	"</cml>";
@@ -578,72 +578,72 @@ public class StereochemistryToolTest {
 				+ "<metadata dictRef='cif:processedDisorder'/>"
 				+ "</metadataList>"
 				+ "<bondArray>"
-				+ "<bond id='a1_a5' atomRefs2='a1 a5' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a1_a28' atomRefs2='a1 a28' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a2_a5' atomRefs2='a2 a5' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a2_a6' atomRefs2='a2 a6' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a3_a37' atomRefs2='a3 a37' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a3_a40' atomRefs2='a3 a40' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a4_a40' atomRefs2='a4 a40' userCyclic='ACYCLIC' order='2'/>"
-				+ "<bond id='a5_a41' atomRefs2='a5 a41' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a5_a45' atomRefs2='a5 a45' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a6_a7' atomRefs2='a6 a7' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a6_a8' atomRefs2='a6 a8' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a6_a9' atomRefs2='a6 a9' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a9_a10' atomRefs2='a9 a10' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a9_a28' atomRefs2='a9 a28' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a9_a49' atomRefs2='a9 a49' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a10_a11' atomRefs2='a10 a11' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a10_a12' atomRefs2='a10 a12' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a10_a21' atomRefs2='a10 a21' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a12_a13' atomRefs2='a12 a13' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a12_a14' atomRefs2='a12 a14' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a12_a15' atomRefs2='a12 a15' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a15_a16' atomRefs2='a15 a16' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a15_a17' atomRefs2='a15 a17' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a15_a18' atomRefs2='a15 a18' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a18_a19' atomRefs2='a18 a19' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a18_a57' atomRefs2='a18 a57' userCyclic='ACYCLIC' order='2'>"
+				+ "<bond id='a1_a5' atomRefs2='a1 a5' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a1_a28' atomRefs2='a1 a28' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a2_a5' atomRefs2='a2 a5' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a2_a6' atomRefs2='a2 a6' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a3_a37' atomRefs2='a3 a37' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a3_a40' atomRefs2='a3 a40' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a4_a40' atomRefs2='a4 a40' userCyclic='ACYCLIC' order='D'/>"
+				+ "<bond id='a5_a41' atomRefs2='a5 a41' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a5_a45' atomRefs2='a5 a45' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a6_a7' atomRefs2='a6 a7' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a6_a8' atomRefs2='a6 a8' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a6_a9' atomRefs2='a6 a9' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a9_a10' atomRefs2='a9 a10' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a9_a28' atomRefs2='a9 a28' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a9_a49' atomRefs2='a9 a49' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a10_a11' atomRefs2='a10 a11' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a10_a12' atomRefs2='a10 a12' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a10_a21' atomRefs2='a10 a21' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a12_a13' atomRefs2='a12 a13' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a12_a14' atomRefs2='a12 a14' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a12_a15' atomRefs2='a12 a15' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a15_a16' atomRefs2='a15 a16' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a15_a17' atomRefs2='a15 a17' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a15_a18' atomRefs2='a15 a18' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a18_a19' atomRefs2='a18 a19' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a18_a57' atomRefs2='a18 a57' userCyclic='ACYCLIC' order='D'>"
 				+ "<bondStereo atomRefs4='a15 a18 a57 a59'>T</bondStereo>"
 				+ "</bond>"
-				+ "<bond id='a19_a20' atomRefs2='a19 a20' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a19_a21' atomRefs2='a19 a21' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a19_a30' atomRefs2='a19 a30' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a21_a22' atomRefs2='a21 a22' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a21_a53' atomRefs2='a21 a53' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a22_a23' atomRefs2='a22 a23' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a22_a24' atomRefs2='a22 a24' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a22_a25' atomRefs2='a22 a25' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a25_a26' atomRefs2='a25 a26' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a25_a27' atomRefs2='a25 a27' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a25_a28' atomRefs2='a25 a28' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a28_a29' atomRefs2='a28 a29' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a30_a31' atomRefs2='a30 a31' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a30_a32' atomRefs2='a30 a32' userCyclic='ACYCLIC' order='2'>"
+				+ "<bond id='a19_a20' atomRefs2='a19 a20' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a19_a21' atomRefs2='a19 a21' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a19_a30' atomRefs2='a19 a30' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a21_a22' atomRefs2='a21 a22' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a21_a53' atomRefs2='a21 a53' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a22_a23' atomRefs2='a22 a23' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a22_a24' atomRefs2='a22 a24' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a22_a25' atomRefs2='a22 a25' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a25_a26' atomRefs2='a25 a26' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a25_a27' atomRefs2='a25 a27' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a25_a28' atomRefs2='a25 a28' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a28_a29' atomRefs2='a28 a29' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a30_a31' atomRefs2='a30 a31' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a30_a32' atomRefs2='a30 a32' userCyclic='ACYCLIC' order='D'>"
 				+ "<bondStereo atomRefs4='a19 a30 a32 a34'>T</bondStereo>"
 				+ "</bond>"
-				+ "<bond id='a32_a33' atomRefs2='a32 a33' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a32_a34' atomRefs2='a32 a34' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a34_a35' atomRefs2='a34 a35' userCyclic='CYCLIC' order='2'/>"
-				+ "<bond id='a34_a40' atomRefs2='a34 a40' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a35_a36' atomRefs2='a35 a36' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a35_a37' atomRefs2='a35 a37' userCyclic='CYCLIC' order='1'/>"
-				+ "<bond id='a37_a38' atomRefs2='a37 a38' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a37_a39' atomRefs2='a37 a39' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a41_a42' atomRefs2='a41 a42' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a41_a43' atomRefs2='a41 a43' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a41_a44' atomRefs2='a41 a44' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a45_a46' atomRefs2='a45 a46' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a45_a47' atomRefs2='a45 a47' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a45_a48' atomRefs2='a45 a48' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a49_a50' atomRefs2='a49 a50' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a49_a51' atomRefs2='a49 a51' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a49_a52' atomRefs2='a49 a52' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a53_a54' atomRefs2='a53 a54' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a53_a55' atomRefs2='a53 a55' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a53_a56' atomRefs2='a53 a56' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a57_a58' atomRefs2='a57 a58' userCyclic='ACYCLIC' order='1'/>"
-				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='1'/>"
+				+ "<bond id='a32_a33' atomRefs2='a32 a33' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a32_a34' atomRefs2='a32 a34' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a34_a35' atomRefs2='a34 a35' userCyclic='CYCLIC' order='D'/>"
+				+ "<bond id='a34_a40' atomRefs2='a34 a40' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a35_a36' atomRefs2='a35 a36' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a35_a37' atomRefs2='a35 a37' userCyclic='CYCLIC' order='S'/>"
+				+ "<bond id='a37_a38' atomRefs2='a37 a38' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a37_a39' atomRefs2='a37 a39' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a41_a42' atomRefs2='a41 a42' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a41_a43' atomRefs2='a41 a43' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a41_a44' atomRefs2='a41 a44' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a45_a46' atomRefs2='a45 a46' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a45_a47' atomRefs2='a45 a47' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a45_a48' atomRefs2='a45 a48' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a49_a50' atomRefs2='a49 a50' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a49_a51' atomRefs2='a49 a51' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a49_a52' atomRefs2='a49 a52' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a53_a54' atomRefs2='a53 a54' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a53_a55' atomRefs2='a53 a55' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a53_a56' atomRefs2='a53 a56' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a57_a58' atomRefs2='a57 a58' userCyclic='ACYCLIC' order='S'/>"
+				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='S'/>"
 				+ "</bondArray>" + "</molecule>";
 		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(molS);
 		TestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);

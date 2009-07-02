@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fragment convention="cml:PML-intermediate" xmlns:g="http://www.xml-cml.org/mols/geom1" xmlns="http://www.xml-cml.org/schema">
+<fragment convention="cml:PML-intermediate" xmlns="http://www.xml-cml.org/schema" xmlns:g="http://www.xml-cml.org/mols/geom1">
   <molecule ref="g:acetyl" id="1">
     <arg name="idx">
       <scalar dataType="xsd:string">1</scalar>

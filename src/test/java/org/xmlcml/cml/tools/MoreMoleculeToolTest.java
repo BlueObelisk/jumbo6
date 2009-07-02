@@ -541,12 +541,12 @@ public class MoreMoleculeToolTest {
 		CMLMolecule mol5 = tFix.getFixture().mol5;
 		Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
 		Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-		mol5.setBondOrders(CMLBond.SINGLE_S);
+		mol5.setBondOrders(CMLBond.SINGLE);
 		// note that getOrder() will return the preferred order
-		Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
+		Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
 				.get(0).getOrderAttribute().getValue());
 		mol5.setNormalizedBondOrders();
-		Assert.assertEquals("perferred order", CMLBond.SINGLE, mol5.getBonds()
+		Assert.assertEquals("perferred order", CMLBond.SINGLE_S, mol5.getBonds()
 				.get(0).getOrderAttribute().getValue());
 	}
 
