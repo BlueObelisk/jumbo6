@@ -35,7 +35,12 @@ public class InChIGeneratorTool {
 //			}
 
 			inchi = igen.getInchi();
-		} catch (Throwable e) {
+		} 
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Inchi tools not loaded - ensure the seperate inchi project (https://cml.svn.sourceforge.net/svnroot/cml/inchi) is on the classpath at runtime");
+		}
+		catch (Throwable e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot convert Inchi: "+igen.getMessage());
 			// log.add(e, "BUG ");
