@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
@@ -120,7 +121,7 @@ public class CIPTool {
 	private static List<Element> getChildNodes(List<Element> nodes) {
 		List<Element> childNodeList = new ArrayList<Element>();
 		for (Element node : nodes) {
-			Nodes childNodes = node.query("node");
+			Elements childNodes = node.getChildElements("node");
 			for (int i = 0; i < childNodes.size(); i++) {
 				childNodeList.add((Element) childNodes.get(i));
 			}
@@ -225,8 +226,14 @@ public class CIPTool {
 	}
 	
 	private boolean isAncestorOfLigandId(Element node, String ligandId) {
-		Nodes ancestors = node.query("./ancestor::"+NODE+"[@"+ID+"='"+ligandId+"']");
-		return (ancestors.size() > 0);
+		Element currentNode = (Element) node.getParent();
+		while (currentNode !=null){
+			if (currentNode.getAttributeValue(ID).equals(ligandId)){
+				return true;
+			}
+			currentNode =(Element) currentNode.getParent();
+		}
+		return false;
 	}
 	
 	private void addGhost(Element node, String ligandId, int ligandAtomicNumber) {
