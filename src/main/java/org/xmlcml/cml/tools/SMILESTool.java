@@ -24,6 +24,7 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 
+
 /**
  * additional tools for currentBond. not fully developed
  * 
@@ -131,6 +132,28 @@ public class SMILESTool extends AbstractTool {
     private String rawSmiles;
 //	private String scopy;
     
+    
+	/**
+	 * Contains an atom and the order of the bond that it will form when a corresponding ring closure is found
+	 */
+	private class RingOpening {
+		/**The atom that will be bonded to when a corresponding ring closure is found*/
+		CMLAtom atom;
+		/**The order of the bond about to be formed can be either C_SINGLE, C_DOUBLE, C_TRIPLE, or C_AROMATIC.*/
+		char bondChar;
+
+
+		/**
+		 * An Atom and a bond order
+		 * @param a
+		 * @param bondOrderVal
+		 */
+		RingOpening(CMLAtom a, char bondOrderChar) {
+			atom = a;
+			bondChar = bondOrderChar;
+		}
+	}
+	
     /** constructor
      */
     public SMILESTool() {
@@ -174,7 +197,7 @@ public class SMILESTool extends AbstractTool {
         }
 
         final Stack<CMLAtom> stack = new Stack<CMLAtom>();
-        final CMLAtom[] rings = new CMLAtom[99];
+        final RingOpening[] rings = new RingOpening[99];
         int i = 0;
         char c = 0;
         char slashChar = C_NONE;
@@ -253,7 +276,8 @@ public class SMILESTool extends AbstractTool {
             	}
                 if (rings[ring] == null) {
                 	// start of ring
-                    rings[ring] = currentAtom;
+                	rings[ring] = new RingOpening(currentAtom, bondChar);
+                	bondChar = C_NONE;
                     
                     //Notes the order rings connect to a chiral atom
                     if (currentAtom.getAttributeValue(CHIRAL)!= null){
@@ -274,8 +298,8 @@ public class SMILESTool extends AbstractTool {
                 	// end of ring
                 	
                 	//Updates chiral atom with id of atom that has joined to it
-                    if (rings[ring].getAttributeValue(CHIRAL)!= null){
-                    	CMLElements<CMLAtomParity> atomParity = rings[ring].getAtomParityElements();
+                    if (rings[ring].atom.getAttributeValue(CHIRAL)!= null){
+                    	CMLElements<CMLAtomParity> atomParity = rings[ring].atom.getAtomParityElements();
 	                	for (CMLAtomParity atomParityTag : atomParity) {
 	                		String[] atomRefs4 =atomParityTag.getAtomRefs4();
 	                		
@@ -287,9 +311,17 @@ public class SMILESTool extends AbstractTool {
 	        				}
 	                		atomParityTag.setAtomRefs4(atomRefs4);
 	                	}
-                    } 
-                    currentBond = addBond(rings[ring], currentAtom,  bondChar, rawSmiles);
-                    currentBond.setOrder(CMLBond.SINGLE);
+                    }
+                    if (bondChar == C_NONE){
+                        currentBond = addBond(rings[ring].atom, currentAtom,  rings[ring].bondChar, rawSmiles);
+                    }
+                    else if (rings[ring].bondChar == C_NONE){
+                    	 currentBond = addBond(rings[ring].atom, currentAtom,  bondChar, rawSmiles);
+                    	 bondChar = C_NONE;
+                    }
+                    else{
+                    	throw new RuntimeException("Ring opening " + ring + " has two specifications as to what order bond it should form");
+                    }
                     rings[ring] = null;
                 }
                 i++;
