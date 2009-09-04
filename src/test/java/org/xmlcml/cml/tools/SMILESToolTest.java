@@ -725,6 +725,52 @@ public class SMILESToolTest {
 		
 		TestUtils.assertEqualsCanonically("ONO", correctCML, smilesTool.getMolecule(), true);
 	}
+	
+	/**
+	 * @author dl387
+	 * Ring closure with double bond at start of closure
+	 */
+	@Test
+	public void ringClosureHandling1() {
+		String smiles = "C=1CN1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
+		
+		TestUtils.assertEqualsCanonically("C1=CN1", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 * Ring closure with double bond at end of closure
+	 */
+	@Test
+	public void ringClosureHandling2() {
+		String smiles = "C1CN=1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
+		
+		TestUtils.assertEqualsCanonically("C1CN=1", correctCML, smilesTool.getMolecule(), true);
+	}
+	
+	/**
+	 * @author dl387
+	 *Ring closure with specification at both ends of closure, not allowed
+	 */
+	@Test
+	public void ringClosureHandling3() {
+		String smiles = "C#1CN=1";
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+			Assert.fail("Should throw exception for bad smiles: "+smiles);
+		} catch (Exception e) {
+			;
+		}
+	}
 
 	// MISSING FEATURES
 	
