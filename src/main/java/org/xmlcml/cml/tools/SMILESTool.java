@@ -802,10 +802,10 @@ public class SMILESTool extends AbstractTool {
         	
         	atomParity.setAtomRefs4(atomRefs4);
 	        if (chiral.equals(S_ATAT)){
-	        	atomParity.setXMLContent("-4");
+	        	atomParity.setXMLContent("1");
 	        }
 	        else if (chiral.equals(S_AT)) {
-	        	atomParity.setXMLContent("4");
+	        	atomParity.setXMLContent("-1");
 	        }
         	atom.appendChild(atomParity);
         }
