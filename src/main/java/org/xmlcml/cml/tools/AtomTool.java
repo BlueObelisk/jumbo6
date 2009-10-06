@@ -546,8 +546,8 @@ public class AtomTool extends AbstractSVGTool {
 				nh = 0;
 			}
 			atom.setHydrogenCount(nh);
-			this.expandImplicitHydrogens(control);
 		}
+		this.expandImplicitHydrogens(control);
 	}
 
 	/**
@@ -664,7 +664,7 @@ public class AtomTool extends AbstractSVGTool {
 
      static String[] elems  = {AS.H.value, AS.C.value, AS.N.value, AS.O.value, AS.F.value, AS.Si.value, AS.P.value, AS.S.value, AS.Cl.value, AS.Br.value, AS.I.value};
      static int[]    group  = { 1,   4,   5,   6,   7,   4,    5,   6,   7,    7,    7};
-     static int[]    eneg0  = { 0,   0,   1,   0,   1,   0,    0,   1,   1,    1,    1};
+     static int[]    eneg0  = { 0,   0,   0,   0,   1,   0,    0,   1,   1,    1,    1};
      static int[]    eneg1  = { 0,   0,   0,   1,   1,   0,    0,   0,   1,    1,    1};
      /** a simple lookup for common atoms.
      *

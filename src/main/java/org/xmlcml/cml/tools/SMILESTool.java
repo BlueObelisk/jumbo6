@@ -369,8 +369,8 @@ public class SMILESTool extends AbstractTool {
         	if (molecule.getMoleculeCount() > 0) {
         	}
         }
+        makeAromaticBonds();
         addHydrogens();
-    	makeAromaticBonds();
 //    	convertToKekule();
 
 
@@ -552,10 +552,10 @@ public class SMILESTool extends AbstractTool {
     	moleculeTool.adjustHydrogenCountsToValency(hydrogenControl);
     	// decrement aromatic atom H count
     	for (CMLAtom atom : molecule.getAtoms()) {
-    		if (TRUE.equals(atom.getAttributeValue(AROMATIC))) {
-    			atom.setHydrogenCount(atom.getHydrogenCount() - 1);
-    			atom.deleteAnyLigandHydrogenAtom();
-    		}
+//    		if (TRUE.equals(atom.getAttributeValue(AROMATIC))) {
+//    			atom.setHydrogenCount(atom.getHydrogenCount() - 1);
+//    			atom.deleteAnyLigandHydrogenAtom();
+//    		}
     	}
     	// make all H explicit
     	moleculeTool.expandImplicitHydrogens(hydrogenControl);

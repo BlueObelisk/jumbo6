@@ -188,7 +188,7 @@ public class StereochemistryToolTest {
 		// make chirality S
 		atomParity = atom.getAtomParityElements().get(0);
 		// should also be negative
-		Assert.assertTrue("parity is negative", atomParity.getXMLContent() < -0.1);
+		Assert.assertTrue("parity is positive", atomParity.getXMLContent() > 0.1);
 	}
 
 	@Test
