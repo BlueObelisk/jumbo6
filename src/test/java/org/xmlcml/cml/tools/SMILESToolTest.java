@@ -12,6 +12,7 @@ import junit.framework.Assert;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.util.TestUtils;
 
@@ -211,11 +212,11 @@ public class SMILESToolTest {
 		    "<atom id='a4' aromatic='true' elementType='C'/>"+
 		    "<atom id='a5' aromatic='true' elementType='C'/>"+
 		    "<atom id='a6' aromatic='true' elementType='C'/>"+
-		    "<atom id='a1_h2' elementType='H'/>"+
-		    "<atom id='a3_h2' elementType='H'/>"+
-		    "<atom id='a4_h2' elementType='H'/>"+
-		    "<atom id='a5_h2' elementType='H'/>"+
-		    "<atom id='a6_h2' elementType='H'/>"+
+		    "<atom id='a1_h1' elementType='H'/>"+
+		    "<atom id='a3_h1' elementType='H'/>"+
+		    "<atom id='a4_h1' elementType='H'/>"+
+		    "<atom id='a5_h1' elementType='H'/>"+
+		    "<atom id='a6_h1' elementType='H'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
 		    "<bond atomRefs2='a1 a2' id='a1_a2' order='A'/>"+
@@ -224,11 +225,11 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a4 a5' id='a4_a5' order='A'/>"+
 		    "<bond atomRefs2='a5 a6' id='a5_a6' order='A'/>"+
 		    "<bond atomRefs2='a1 a6' id='a1_a6' order='A'/>"+
-		    "<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
-		    "<bond atomRefs2='a3 a3_h2' id='a3_a3_h2' order='1'/>"+
-		    "<bond atomRefs2='a4 a4_h2' id='a4_a4_h2' order='1'/>"+
-		    "<bond atomRefs2='a5 a5_h2' id='a5_a5_h2' order='1'/>"+
-		    "<bond atomRefs2='a6 a6_h2' id='a6_a6_h2' order='1'/>"+
+		    "<bond atomRefs2='a1 a1_h1' id='a1_a1_h1' order='1'/>"+
+		    "<bond atomRefs2='a3 a3_h1' id='a3_a3_h1' order='1'/>"+
+		    "<bond atomRefs2='a4 a4_h1' id='a4_a4_h1' order='1'/>"+
+		    "<bond atomRefs2='a5 a5_h1' id='a5_a5_h1' order='1'/>"+
+		    "<bond atomRefs2='a6 a6_h1' id='a6_a6_h1' order='1'/>"+
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule)TestUtils.parseValidString(molS);
@@ -259,13 +260,13 @@ public class SMILESToolTest {
 		    "<atom id='a8' aromatic='true' elementType='C'/>"+
 		    "<atom id='a9' aromatic='true' elementType='C'/>"+
 		    "<atom id='a10' aromatic='true' elementType='C'/>"+
-		    "<atom id='a1_h2' elementType='H'/>"+
-		    "<atom id='a3_h2' elementType='H'/>"+
-		    "<atom id='a4_h2' elementType='H'/>"+
-		    "<atom id='a7_h2' elementType='H'/>"+
-		    "<atom id='a8_h2' elementType='H'/>"+
-		    "<atom id='a9_h2' elementType='H'/>"+
-		    "<atom id='a10_h2' elementType='H'/>"+
+		    "<atom id='a1_h1' elementType='H'/>"+
+		    "<atom id='a3_h1' elementType='H'/>"+
+		    "<atom id='a4_h1' elementType='H'/>"+
+		    "<atom id='a7_h1' elementType='H'/>"+
+		    "<atom id='a8_h1' elementType='H'/>"+
+		    "<atom id='a9_h1' elementType='H'/>"+
+		    "<atom id='a10_h1' elementType='H'/>"+
 		  "</atomArray>"+
 		  "<bondArray>"+
 		    "<bond atomRefs2='a1 a2' id='a1_a2' order='A'/>"+
@@ -279,13 +280,13 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a8 a9' id='a8_a9' order='A'/>"+
 		    "<bond atomRefs2='a9 a10' id='a9_a10' order='A'/>"+
 		    "<bond atomRefs2='a5 a10' id='a5_a10' order='A'/>"+
-		    "<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
-		    "<bond atomRefs2='a3 a3_h2' id='a3_a3_h2' order='1'/>"+
-		    "<bond atomRefs2='a4 a4_h2' id='a4_a4_h2' order='1'/>"+
-		    "<bond atomRefs2='a7 a7_h2' id='a7_a7_h2' order='1'/>"+
-		    "<bond atomRefs2='a8 a8_h2' id='a8_a8_h2' order='1'/>"+
-		    "<bond atomRefs2='a9 a9_h2' id='a9_a9_h2' order='1'/>"+
-		    "<bond atomRefs2='a10 a10_h2' id='a10_a10_h2' order='1'/>"+
+		    "<bond atomRefs2='a1 a1_h1' id='a1_a1_h1' order='1'/>"+
+		    "<bond atomRefs2='a3 a3_h1' id='a3_a3_h1' order='1'/>"+
+		    "<bond atomRefs2='a4 a4_h1' id='a4_a4_h1' order='1'/>"+
+		    "<bond atomRefs2='a7 a7_h1' id='a7_a7_h1' order='1'/>"+
+		    "<bond atomRefs2='a8 a8_h1' id='a8_a8_h1' order='1'/>"+
+		    "<bond atomRefs2='a9 a9_h1' id='a9_a9_h1' order='1'/>"+
+		    "<bond atomRefs2='a10 a10_h1' id='a10_a10_h1' order='1'/>"+
 		  "</bondArray>"+
 		"</molecule>";
 		molex = (CMLMolecule)TestUtils.parseValidString(molS);
@@ -715,7 +716,7 @@ public class SMILESToolTest {
 	 * JUMBO fails on this and we shan't alter it
 	 */
 	@Test
-	@Ignore
+	//@Ignore
 	public void hydrogenHandling3() {
 		String smiles = "ONO";
 		SMILESTool smilesTool = new SMILESTool();
@@ -725,7 +726,103 @@ public class SMILESToolTest {
 		
 		TestUtils.assertEqualsCanonically("ONO", correctCML, smilesTool.getMolecule(), true);
 	}
-	
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	public void hydrogenHandling4() {
+		String smiles = "c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling4.xml");
+		
+		TestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
+	}
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	public void hydrogenHandling5() {
+		String smiles = "N";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling5.xml");
+		
+		TestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
+	}
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	public void hydrogenHandling6() {
+		String smiles = "NO";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling6.xml");
+		
+		TestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
+	}
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	public void hydrogenHandling7() {
+		String smiles = "c1ccc[nH]1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling7.xml");
+		
+		TestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
+	}
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	@Ignore //Jumbo expects aromatic N
+	public void hydrogenHandling7a() {
+		String smiles = "c1ccc[NH]1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling7a.xml");
+		
+		TestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
+	}
+	/**
+	 * @author nwe23
+	 * Test for aromatic Ns
+	 */
+	@Test
+	public void hydrogenHandling8() {
+		String smiles = "C1=C-[NH]-C=C1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
+		System.out.println(form.getFormattedString());
+		CMLMolecule correctCML = (CMLMolecule) TestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/hydrogenHandling8.xml");
+		
+		TestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
+	}
 	/**
 	 * @author dl387
 	 * Ring closure with double bond at start of closure

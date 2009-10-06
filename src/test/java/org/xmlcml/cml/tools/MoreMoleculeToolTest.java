@@ -472,7 +472,7 @@ public class MoreMoleculeToolTest {
 		CMLAtom a3 = mol5.getAtomById("a3");
 		CMLAtom a4 = mol5.getAtomById("a4");
 		Assert.assertEquals("a1 ", 2, a1.getHydrogenCount());
-		Assert.assertNull("a2 ", a2.getHydrogenCountAttribute());
+		Assert.assertNotNull("a2 ", a2.getHydrogenCountAttribute());
 		Assert.assertEquals("a3 ", 0, a3.getHydrogenCount());
 		Assert.assertNull("a4 ", a4.getHydrogenCountAttribute()); // this is a
 		// hydrogen
