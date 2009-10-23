@@ -520,7 +520,6 @@ public class SMILESToolTest {
 	 *  of 0 instead of for example -2
 	 */
 	@Test
-	//@Ignore
 	public void phosphorusPentaFluoride() {
 		String smiles = "P(F)(F)(F)(F)F";
 		SMILESTool smilesTool = new SMILESTool();
@@ -536,7 +535,6 @@ public class SMILESToolTest {
 	 * @author dl387
 	 */
 	@Test
-	//@Ignore
 	public void realisticPositiveCharge1() {
 		String smiles = "[NH4+]";
 		SMILESTool smilesTool = new SMILESTool();
@@ -699,7 +697,6 @@ public class SMILESToolTest {
 	 * Should have one hydrogen and a negative charge
 	 */
 	@Test
-	//@Ignore
 	public void hydrogenHandling2() {
 		String smiles = "[OH-1]";
 		SMILESTool smilesTool = new SMILESTool();
@@ -713,10 +710,8 @@ public class SMILESToolTest {
 	/**
 	 * @author dl387
 	 * All three atoms should have one hydrogen each
-	 * JUMBO fails on this and we shan't alter it
 	 */
 	@Test
-	//@Ignore
 	public void hydrogenHandling3() {
 		String smiles = "ONO";
 		SMILESTool smilesTool = new SMILESTool();
@@ -984,7 +979,6 @@ public class SMILESToolTest {
 	 * Checks anticlockwise chirality
 	 */
 	@Test
-	//@Ignore
 	public void chiralityTest() {
 		String smiles = "N[C@@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
@@ -1000,7 +994,6 @@ public class SMILESToolTest {
 	 * Checks clockwise chirality
 	 */
 	@Test
-	//@Ignore
 	public void chiralityTest2() {
 		String smiles = "N[C@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
@@ -1016,7 +1009,6 @@ public class SMILESToolTest {
 	 * Checks rings defined before chiral centre
 	 */
 	@Test
-	//@Ignore
 	public void chiralityTest3() {
 		String smiles = "C2.N1.F3.[C@@H]231";
 		SMILESTool smilesTool = new SMILESTool();
@@ -1032,7 +1024,6 @@ public class SMILESToolTest {
 	 * Checks rings defined after chiral centre
 	 */
 	@Test
-	//@Ignore
 	public void chiralityTest4() {
 		String smiles = "[C@@H]231.C2.N1.F3";
 		SMILESTool smilesTool = new SMILESTool();
@@ -1048,7 +1039,6 @@ public class SMILESToolTest {
 	 * Checks connected chiral centres
 	 */
 	@Test
-	//@Ignore
 	public void chiralityTest5() {
 		String smiles = "[C@@H](Cl)1[C@H](C)(F).Br1";
 		SMILESTool smilesTool = new SMILESTool();

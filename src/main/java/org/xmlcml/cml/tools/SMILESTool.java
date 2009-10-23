@@ -448,7 +448,9 @@ public class SMILESTool extends AbstractTool {
 		List<CMLAtom> tempAtomRefs4sInDoubleBond=new ArrayList<CMLAtom>(atomRefs4sInDoubleBond);
 		for (CMLAtom atom2 : connectedAtoms ) {
 			if (atom2.getAttributeValue(SLASH)!=null && !atomsVisited.contains(atom2)){
-
+				if (i==1 && !CMLBond.DOUBLE.equals(molecule.getBond(atom, atom2).getOrder())){
+					continue;//bond between 2nd and 3rd atom should be a double bond
+				}
 				atomRefs4sInDoubleBond= recurseThroughAtoms(atomsVisited, atomRefs4sInDoubleBond, atom2, i+1);
 				if (atomRefs4sInDoubleBond.size()==4){
 					return atomRefs4sInDoubleBond;
