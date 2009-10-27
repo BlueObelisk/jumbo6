@@ -25,7 +25,7 @@ import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test polymerTool.
@@ -167,7 +167,7 @@ public class PolymerToolTest {
 				+ "  convention='cml:PML-concise'"
 				+ "  formula='(f:oh}r1)-[l(1.39),t(180)](r1{f:po}r2-[l(1.41),t(60)])*(3)-[l(1.42),t(180)](r1{f:eo}r2-[l(1.43),t(-60)])*(4)-[l(1.44),t(165)](r1{f:me)'"
 				+ "  />";
-		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(copolyS);
+		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(copolyS);
 		PolymerTool polymerTool = new PolymerTool(molecule);
 		polymerTool.setResourceManager(getMoleculeCatalog()); //added get catalog
 		try {

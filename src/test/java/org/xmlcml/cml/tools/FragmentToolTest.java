@@ -40,7 +40,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 
 /**
@@ -137,7 +137,7 @@ public class FragmentToolTest {
 		fragmentTool.processIntermediate(resourceManager);
 
 		CMLElement explicit = readElement0("molE");
-		TestUtils.assertEqualsCanonically("fragment", explicit, fragment, true);
+		TstUtils.assertEqualsCanonically("fragment", explicit, fragment, true);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class FragmentToolTest {
 		fragment11.appendChild(fragmentList);
 
 		CMLElement fragmentE = readElement0("recurse");
-		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 
 		// maybe defer this...
 		fragmentTool.basic_processRecursively();
@@ -296,7 +296,7 @@ public class FragmentToolTest {
 		fragmentTool.substituteParameters();
 
 		CMLMolecule moleculeE = (CMLMolecule) readElement0("substitute0M");
-		TestUtils.assertEqualsCanonically("molecule", moleculeE, molecule, true);
+		TstUtils.assertEqualsCanonically("molecule", moleculeE, molecule, true);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class FragmentToolTest {
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.substituteParameters();
 		CMLElement fragmentE = readElement0("substitute1");
-		TestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 
 	/**
@@ -467,7 +467,7 @@ public class FragmentToolTest {
 		if (intermediate == null) {
 			dump(fragment, "mol" + serial + "I");
 		} else if (check) {
-			TestUtils.assertEqualsCanonically(title, intermediate, fragment, true);
+			TstUtils.assertEqualsCanonically(title, intermediate, fragment, true);
 		}
 		if (debug) {
 			fragment.debug(title);
@@ -481,7 +481,7 @@ public class FragmentToolTest {
 		if (explicit == null) {
 			dump(fragment, "mol" + serial + "E");
 		} else if (check) {
-			TestUtils.assertEqualsCanonically(title, explicit, fragment, true);
+			TstUtils.assertEqualsCanonically(title, explicit, fragment, true);
 		}
 		// explicit -> complete
 		fragmentTool.processExplicit();
@@ -492,7 +492,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragment, "mol" + serial + "C");
 		} else if (check) {
-			TestUtils.assertEqualsCanonically(title, complete, fragment, true);
+			TstUtils.assertEqualsCanonically(title, complete, fragment, true);
 		}
 	}
 
@@ -538,7 +538,7 @@ public class FragmentToolTest {
 			if (complete0 == null) {
 				dump(fragment, rootName);
 			} else if (check) {
-				TestUtils.assertEqualsCanonically(rootName, complete0, fragment, true);
+				TstUtils.assertEqualsCanonically(rootName, complete0, fragment, true);
 			}
 		}
 		String title = "complete" + serial;
@@ -548,7 +548,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragmentList, "mol" + serial + "C");
 		} else if (check) {
-			TestUtils.assertEqualsCanonically(title, complete, fragmentList, true);
+			TstUtils.assertEqualsCanonically(title, complete, fragmentList, true);
 		}
 	}
 
@@ -562,7 +562,7 @@ public class FragmentToolTest {
 		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateTool((CMLFragment) generatedFragment);
 		generatedFragmentTool.processAll(resourceManager);
 		CMLElement generatedE = readElement0("markushE");
-		TestUtils.assertEqualsCanonically("generated", generatedE, generatedFragment, true);
+		TstUtils.assertEqualsCanonically("generated", generatedE, generatedFragment, true);
 	}
 
 	/**

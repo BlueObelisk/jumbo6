@@ -34,7 +34,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 /**
  * @author pm286
  * 
@@ -80,7 +80,7 @@ public class StereochemistryToolTest {
 				+ "    <bond id='b34' atomRefs2='a3 a4' order='S'/>" +
 				// "    <bond id='b13' atomRefs2='a1 a3' order='S'/>" +
 				"  </bondArray>" + "</molecule>";
-		CMLMolecule cisMol = (CMLMolecule)TestUtils.parseValidString(cisMolS);
+		CMLMolecule cisMol = (CMLMolecule)TstUtils.parseValidString(cisMolS);
 		ConnectionTableTool ctTool = new ConnectionTableTool(cisMol);
 		List<CMLBond> bonds = ctTool.getCyclicBonds();
 		Assert.assertEquals("cyclic", 0, bonds.size());
@@ -432,7 +432,7 @@ public class StereochemistryToolTest {
 			String rs = atom.query("./cml:label[@dictRef='cml:rs']/@value", CMLConstants.CML_XPATH).get(0).getValue();
 			CMLAtomParity atomParity = stereoTool.calculateAtomParityFromCIPRS(atom, rs);
 			atom.addAtomParity(atomParity);
-			TestUtils.assertEqualsIncludingFloat("atomParity", expectedAtoms.get(i), atom, true, 0.001);
+			TstUtils.assertEqualsIncludingFloat("atomParity", expectedAtoms.get(i), atom, true, 0.001);
 		}
 		
 	}
@@ -645,8 +645,8 @@ public class StereochemistryToolTest {
 				+ "<bond id='a57_a58' atomRefs2='a57 a58' userCyclic='ACYCLIC' order='S'/>"
 				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='S'/>"
 				+ "</bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(molS);
-		TestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
+		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(molS);
+		TstUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
 }

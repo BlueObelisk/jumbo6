@@ -20,7 +20,7 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 
 /**
@@ -58,7 +58,7 @@ public class AngleToolTest {
 	public void setUp() throws Exception {
 		Element element = null;
 		try {
-			element =TestUtils.parseValidString(s1);
+			element =TstUtils.parseValidString(s1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.debug("EXC " + e);

@@ -7,7 +7,7 @@ import org.xmlcml.cml.element.CMLArray;
 import org.xmlcml.cml.element.CMLArrayList;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test TableTool.
@@ -35,9 +35,9 @@ public class TableToolTest {
 				+ "  <array title='foo' id='th1' dictRef='c:foo' dataType='xsd:string' size='3'>1 2 3</array>"
 				+ "  <array title='bar' id='th2' dictRef='c:bar' dataType='xsd:string' size='3'>a b c</array>"
 				+ "</arrayList>" + CMLConstants.S_EMPTY;
-		CMLArrayList expected = (CMLArrayList) TestUtils.parseValidString(rowS);
+		CMLArrayList expected = (CMLArrayList) TstUtils.parseValidString(rowS);
 		boolean stripWhite = true;
-		TestUtils.assertEqualsCanonically("row list", expected, arrayList, stripWhite);
+		TstUtils.assertEqualsCanonically("row list", expected, arrayList, stripWhite);
 	}
 
 	/**
@@ -58,8 +58,8 @@ public class TableToolTest {
 				+ "<tableCell>3</tableCell>" + "<tableCell>c</tableCell>"
 				+ "<tableCell>13</tableCell>" + "</tableRow>"
 				+ "</tableRowList>";
-		CMLTableRowList expected = (CMLTableRowList)TestUtils.parseValidString(ss);
-		TestUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
+		CMLTableRowList expected = (CMLTableRowList)TstUtils.parseValidString(ss);
+		TstUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class TableToolTest {
 	public final void testCreateTableRowList() {
 		CMLTableRowList tableRowList1 = TableTool
 				.createTableRowList(fix.arrayList);
-		TestUtils.assertEqualsCanonically("tableRowList", fix.tableRowList,
+		TstUtils.assertEqualsCanonically("tableRowList", fix.tableRowList,
 				tableRowList1, true);
 	}
 }

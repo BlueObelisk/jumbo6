@@ -1,7 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TstUtils.assertEqualsCanonically;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,7 @@ import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test CrystalTool.
@@ -75,8 +75,8 @@ public class CrystalToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		mol1 = (CMLMolecule) TestUtils.parseValidString(mol1S);
-		crystal1 = (CMLCrystal) TestUtils.parseValidString(crystal1S);
+		mol1 = (CMLMolecule) TstUtils.parseValidString(mol1S);
+		crystal1 = (CMLCrystal) TstUtils.parseValidString(crystal1S);
 		tool1 = new CrystalTool(mol1, crystal1);
 	}
 
@@ -141,7 +141,7 @@ public class CrystalToolTest {
 				+ "    <atom id='a2' elementType='O' xFract='0.13' yFract='0.21' zFract='0.02'/>"
 				+ "    <atom id='a3' elementType='N' xFract='0.85' yFract='0.23' zFract='0.03'/>"
 				+ "  </atomArray>" + "</molecule>";
-		CMLMolecule mol = (CMLMolecule) TestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule) TstUtils.parseValidString(molS);
 		CMLSymmetry symmetry = new CMLSymmetry(new String[] { "x, y, z",
 				"-x, -y, -z" });
 		CMLCrystal crystal = new CMLCrystal(new double[] { 10., 20., 30., 90.,

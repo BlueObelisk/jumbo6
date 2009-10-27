@@ -13,7 +13,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class ValencyToolTest {
 	 */
 	@Test
 	public void testMarkSpecial() {
-		CMLMolecule nitroMethane = (CMLMolecule)TestUtils.parseValidString(fix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)TstUtils.parseValidString(fix.nitroMethaneS);
 		// MoleculeTool moleculeTool =
 		// MoleculeTool.getOrCreateTool(nitroMethane);
 		CMLAtom nAtom = nitroMethane.getAtom(0);

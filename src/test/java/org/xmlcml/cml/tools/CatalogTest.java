@@ -4,7 +4,7 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.F_S;
-import static org.xmlcml.util.TestUtils.assertEqualsCanonically;
+import static org.xmlcml.util.TstUtils.assertEqualsCanonically;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -21,7 +21,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * @author pm286
@@ -61,7 +61,7 @@ public class CatalogTest {
 		"  <scalar convention='cml:relativeUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>src/org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>"+
 		"</list>"+
 				"";
-		CMLList expected = (CMLList)TestUtils.parseValidString(expectedS);
+		CMLList expected = (CMLList)TstUtils.parseValidString(expectedS);
 		assertEqualsCanonically("list", expected, catalogList, true);
 	}
 
@@ -142,7 +142,7 @@ public class CatalogTest {
 		"  </bondArray>"+
 		"</molecule>"+
 		"";
-		CMLMolecule expectedMolecule = (CMLMolecule)TestUtils.parseValidString(ohS);
+		CMLMolecule expectedMolecule = (CMLMolecule)TstUtils.parseValidString(ohS);
 		assertEqualsCanonically("list", expectedMolecule, molecule, true);
 	}
 

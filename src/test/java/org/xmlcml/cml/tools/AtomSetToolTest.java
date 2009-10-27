@@ -24,7 +24,7 @@ import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test AtomSetTool.
@@ -78,7 +78,7 @@ public class AtomSetToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		sprout = (CMLMolecule)TestUtils.parseValidString(sproutS);
+		sprout = (CMLMolecule)TstUtils.parseValidString(sproutS);
 		atomSet1 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a1",
 				"a2", "a3" });
 		atomSet2 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a2",
@@ -488,7 +488,7 @@ public class AtomSetToolTest {
     			"a1 a2 a2 a3" +
     			"</bondSet>";
     	CMLBondSet bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     	
     	atomSet = new CMLAtomSet(
     			sprout, new String[]{"a1", "a2", "a3", "a7"});
@@ -498,7 +498,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
 
     	// isolated bond
     	atomSet = new CMLAtomSet(
@@ -509,7 +509,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3 a5 a11" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
 
     	// isolated atom, no bond
     	atomSet = new CMLAtomSet(
@@ -520,7 +520,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3 a5 a11" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     }
 
     

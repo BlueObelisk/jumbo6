@@ -24,7 +24,7 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 public class MoreMoleculeToolTest {
 
@@ -110,7 +110,7 @@ public class MoreMoleculeToolTest {
 				+ "    <atom id='a2' elementType='O'/>" + "  </atomArray>"
 				+ "  <bondArray>" + "    <bond atomRefs2='a1 a2' order='1'/>"
 				+ "  </bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule)TestUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(moleculeS);
 		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule)
 				.getTotalHydrogenCount();
 		Assert.assertEquals("h count", 4, hydrogenCount);
@@ -753,7 +753,7 @@ public class MoreMoleculeToolTest {
 	@Test
 	public void testGetLoneElectronCount() {
 		// FIXME
-		CMLMolecule nitroMethane = (CMLMolecule)TestUtils.parseValidString(tFix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)TstUtils.parseValidString(tFix.nitroMethaneS);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(nitroMethane);
 		int n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(0));
 		Assert.assertEquals("lone pair", -6, n);

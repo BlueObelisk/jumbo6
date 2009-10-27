@@ -30,7 +30,7 @@ import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * tests atomTool.
@@ -152,35 +152,35 @@ public class AtomToolTest {
 
 		AtomTool atomTool1 = AtomTool.getOrCreateTool(atom1);
 		CMLAtomSet atomSet = atomTool1.getCoordinationSphereSet(0);
-		CMLAtomSet refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
+		CMLAtomSet refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(2);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='4' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='4' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(3);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='5' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='5' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(4);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='6' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='6' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(5);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(6);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
 		// now a different atom
 		AtomTool atomTool5 = AtomTool.getOrCreateTool(fixture.mol11
 				.getAtomById("a5"));
 		atomSet = atomTool5.getCoordinationSphereSet(2);
-		refAtomSet = (CMLAtomSet) TestUtils.parseValidString("<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");
-		TestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");
+		TstUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 
 	}
 
@@ -463,7 +463,7 @@ public class AtomToolTest {
 	 */
 	@Test
     public final void testGetReferencedAtoms() {
-        Element cml = TestUtils.parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
+        Element cml = TstUtils.parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
         Assert.assertNotNull("rgoup1 should exist", cml);
         String otbs = "OTBS";
         CMLAtom atom = (CMLAtom) cml.query("./cml:molecule/cml:atomArray/cml:atom[@elementType='R' and cml:label[@value='"+otbs+"']]", CMLConstants.CML_XPATH).get(0);
