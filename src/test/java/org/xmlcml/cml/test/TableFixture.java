@@ -18,7 +18,7 @@ import org.xmlcml.cml.element.CMLTableHeader;
 import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 public class TableFixture {
 	@SuppressWarnings("unused")
@@ -94,11 +94,11 @@ public class TableFixture {
 			} catch (URISyntaxException e) {
 				throw new RuntimeException(e);
 			}
-			tableContent = (CMLTableContent)TestUtils.parseValidString(tableContentS);
-			tableHeader = (CMLTableHeader)TestUtils.parseValidString(tableHeaderS);
-			tableRowList = (CMLTableRowList)TestUtils.parseValidString(tableRowListS);
+			tableContent = (CMLTableContent)TstUtils.parseValidString(tableContentS);
+			tableHeader = (CMLTableHeader)TstUtils.parseValidString(tableHeaderS);
+			tableRowList = (CMLTableRowList)TstUtils.parseValidString(tableRowListS);
 			tableRow = tableRowList.getTableRowElements().get(1);
-			arrayList = (CMLArrayList)TestUtils.parseValidString(arrayListS);
+			arrayList = (CMLArrayList)TstUtils.parseValidString(arrayListS);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			throw e;

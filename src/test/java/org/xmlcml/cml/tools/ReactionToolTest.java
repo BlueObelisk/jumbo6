@@ -49,7 +49,7 @@ import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test reactionTool
@@ -118,8 +118,8 @@ public class ReactionToolTest {
 	public void setUp() throws Exception {
 		xmlReactTool1 = ReactionTool.getOrCreateTool(fixture.xmlReact1);
 
-		balancedR = (CMLReaction)TestUtils.parseValidString(balancedS);
-		unbalancedR = (CMLReaction)TestUtils.parseValidString(unbalancedS);
+		balancedR = (CMLReaction)TstUtils.parseValidString(balancedS);
+		unbalancedR = (CMLReaction)TstUtils.parseValidString(unbalancedS);
 
 		InputStream is = Util
 				.getInputStreamFromResource("org/xmlcml/cml/tools/reaction1.xml");

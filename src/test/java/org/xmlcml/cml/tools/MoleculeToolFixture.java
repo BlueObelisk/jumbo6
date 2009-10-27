@@ -8,7 +8,7 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 public class MoleculeToolFixture {
 
@@ -817,7 +817,7 @@ public class MoleculeToolFixture {
 
 	private CMLMolecule makeMol(CMLMolecule mol, String s) {
 		if (mol == null) {
-			mol = (CMLMolecule)TestUtils.parseValidString(s);
+			mol = (CMLMolecule)TstUtils.parseValidString(s);
 		}
 		return mol;
 	}

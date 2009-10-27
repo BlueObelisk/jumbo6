@@ -5,23 +5,21 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.ComparisonFailure;
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
-import nu.xom.tests.XOMTestCase;
+
+import org.junit.Assert;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.euclid.EuclidRuntimeException;
+import org.xmlcml.util.CMLUtilNew;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -34,35 +32,14 @@ import org.xmlcml.euclid.Util;
  * @version 5.0
  * 
  */
-public final class TestUtils implements CMLConstants {
+public final class TstUtils implements CMLConstants {
 
     /** logger */
-    public final static Logger logger = Logger.getLogger(TestUtils.class);
+    public final static Logger logger = Logger.getLogger(TstUtils.class);
 
     /** root of tests.*/
     public final static String BASE_RESOURCE = "org/xmlcml/cml/base";
     
-    /**
-     * tests 2 XML objects for equality using canonical XML.
-     * uses XOMTestCase.assertEquals. This treats different prefixes as different
-     * and compares floats literally. 
-     * @param message
-     * @param refNode
-     *            first node
-     * @param testNode
-     *            second node
-     */
-    public static void assertEqualsCanonically(
-            String message, Node refNode, Node testNode) {
-        try {
-            XOMTestCase.assertEquals(message, refNode, testNode);
-        } catch (ComparisonFailure e) {
-            reportXMLDiff(message, e.getMessage(), refNode, testNode);
-        } catch (AssertionFailedError e) {
-            reportXMLDiff(message, e.getMessage(), refNode, testNode);
-        }
-    }
-
     /** compares two XML nodes and checks float near-equivalence 
      * (can also be used for documents without floats)
      * usesTestUtils.assertEqualsCanonically and only uses PMR code if fails
@@ -78,16 +55,26 @@ public final class TestUtils implements CMLConstants {
             testNode = stripWhite((Element) testNode);
         }
         try {
-        	assertEqualsIncludingFloat(message, refNode, testNode, eps);
+            assertEqualsIncludingFloat(message, refNode, testNode, eps);
         } catch (RuntimeException e) {
-        	reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
+            reportXMLDiffInFull(message, e.getMessage(), refNode, testNode);
         }
     }
 
 	public static void assertEqualsIncludingFloat(String message, String expectedS,
 			Node testNode, boolean stripWhite, double eps) {
-		assertEqualsIncludingFloat(message, TestUtils.parseValidString(expectedS), testNode, stripWhite, eps);
+		assertEqualsIncludingFloat(message, TstUtils.parseValidString(expectedS), testNode, stripWhite, eps);
 	}
+
+    public static void assertEqualsCanonically(String message, Node refNode, Node testNode) {
+        String s1 = CMLUtil.getCanonicalString(refNode);
+        String s2 = CMLUtil.getCanonicalString(testNode);
+        if (!s1.equals(s2)) {
+            int i = Math.abs(s1.compareTo(s2));
+            reportXMLDiffInFull(message, "Error after: "+i+" after: "+CMLUtilNew.getCommonLeadingString(s1, s2), refNode, testNode);
+            Assert.fail(message + "nodes should be identical " + s1 + " == " + s2);
+        }
+    }
 
 	private static void assertEqualsIncludingFloat(String message, Node refNode,
 			Node testNode, double eps) {
@@ -132,7 +119,7 @@ public final class TestUtils implements CMLConstants {
 	}
 	private static void tstStringDoubleEquality(String message, String refValue, String testValue,
 			double eps) {
-		Error ee = null;
+		Throwable ee = null;
 		try {
 			try {
 				double testVal = new Double(testValue).doubleValue();
@@ -141,15 +128,14 @@ public final class TestUtils implements CMLConstants {
 			} catch (NumberFormatException e) {
 				Assert.assertEquals(message+" String ", refValue, testValue);
 			}
-		} catch (ComparisonFailure e) {
+		} catch (Throwable e) {
 			ee = e;
-		} catch (AssertionError e) {
-			ee = e;
-		}
+                }
 		if (ee != null) {
 			throw new RuntimeException(""+ee);
 		}
 	}
+
     /**
      * tests 2 XML objects for equality using canonical XML.
      * uses XOMTestCase.assertEquals. This treats different prefixes as different
@@ -161,9 +147,22 @@ public final class TestUtils implements CMLConstants {
      */
     public static void assertEqualsCanonically(
             String message, Element refNode, Element testNode, boolean stripWhite) {
-    	assertEqualsCanonically(message, refNode, testNode, stripWhite, true);
+    	assertEqualsCanonically(message, (Element) refNode, (Element) testNode, stripWhite, true);
     }
     
+    /**
+     * tests 2 XML objects for equality using canonical XML.
+     * uses XOMTestCase.assertEquals. This treats different prefixes as different
+     * and compares floats literally.
+     * @param message
+     * @param refNode first node
+     * @param testNode second node
+     * @param stripWhite if true remove w/s nodes
+     */
+//    public static void assertEqualsCanonically(
+//            String message, Element refNode, Element testNode) {
+//    	assertEqualsCanonically(message, (Element) refNode, (Element) testNode, true);
+//    }
     /**
      * tests 2 XML objects for equality using canonical XML.
      * 
@@ -178,28 +177,14 @@ public final class TestUtils implements CMLConstants {
             refNode = stripWhite(refNode);
             testNode = stripWhite(testNode);
         }
-        Error ee = null;
-        try {
-            XOMTestCase.assertEquals(message, refNode, testNode);
-        } catch (ComparisonFailure e) {
-        	ee = e;
-        } catch (AssertionFailedError e) {
-        	ee = e;
-        }
-        if (ee != null) {
-        	if (reportError) {
-                reportXMLDiffInFull(message, ee.getMessage(), refNode, testNode);
-        	} else {
-        		throw (ee);
-        	}
-        }
+        assertEqualsCanonically(message, refNode, testNode);
     }
 
-	private static Element stripWhite(Element refNode) {
-		refNode = new Element(refNode);
-		CMLUtil.removeWhitespaceNodes(refNode);
-		return refNode;
-	}
+    private static Element stripWhite(Element refNode) {
+            refNode = new Element(refNode);
+            CMLUtilNew.removeWhitespaceNodes(refNode);
+            return refNode;
+    }
     
     public static void reportXMLDiff(String message, String errorMessage,
             Node refNode, Node testNode) {
@@ -208,11 +193,12 @@ public final class TestUtils implements CMLConstants {
 
     public static void reportXMLDiffInFull(String message, String errorMessage,
             Node refNode, Node testNode) {
+        System.err.println(errorMessage);
         try {
 	        System.err.println("==========XMLDIFF reference=========");
-	        CMLUtil.debug((Element) refNode, System.err, 2); 
+	        CMLUtil.debug((Element) refNode, System.err, 2);
 	        System.err.println("------------test---------------------");
-	        CMLUtil.debug((Element) testNode, System.err, 2); 
+	        CMLUtil.debug((Element) testNode, System.err, 2);
 	        System.err.println("=============="+message+"===================");
         } catch (Exception e) {
         	throw new RuntimeException(e);
@@ -231,17 +217,10 @@ public final class TestUtils implements CMLConstants {
      * @param node2
      *            second node
      */
-    public static void assertNotEqualsCanonically(String message, Node node1,
-            Node node2) {
-        try {
-            XOMTestCase.assertEquals(message, node1, node2);
-            String s1 = CMLUtil.getCanonicalString(node1);
-            String s2 = CMLUtil.getCanonicalString(node2);
-            Assert.fail(message + "nodes should be different " + s1 + " != "
-                    + s2);
-        } catch (ComparisonFailure e) {
-        } catch (AssertionFailedError e) {
-        }
+    public static void assertNotEqualsCanonically(String message, Node node1, Node node2) {
+        String s1 = CMLUtil.getCanonicalString(node1);
+        String s2 = CMLUtil.getCanonicalString(node2);
+        Assert.fail(message + "nodes should be different " + s1 + " != " + s2);
     }
 
 

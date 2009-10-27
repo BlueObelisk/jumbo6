@@ -34,7 +34,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 /**
  * @author pm286
  * 
@@ -65,7 +65,7 @@ public class CIPToolTest {
 		"    <bond id='b25' atomRefs2='a2 a5' order='S'/>" +
 		"  </bondArray>" +
 		"</molecule>";
-		CMLMolecule mol = (CMLMolecule)TestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule)TstUtils.parseValidString(molS);
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = 
@@ -75,7 +75,7 @@ public class CIPToolTest {
 			  "</node>" +
 			  "<node parent='a2' id='a5' atomicNumber='6'/>" +
 			"</node>";
-		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
+		CMLAssert.assertEqualsCanonically("node tree", TstUtils.parseValidString(expectedS), elem1, true);
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class CIPToolTest {
 		"    <bond id='b28' atomRefs2='a2 a7' order='S'/>" +
 		"  </bondArray>" +
 		"</molecule>";
-		CMLMolecule mol = (CMLMolecule)TestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule)TstUtils.parseValidString(molS);
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
@@ -138,7 +138,7 @@ public class CIPToolTest {
 		    "</node>" +
 		  "</node>" +
 		"</node>";
-		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
+		CMLAssert.assertEqualsCanonically("node tree", TstUtils.parseValidString(expectedS), elem1, true);
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class CIPToolTest {
 		"    <bond id='b25' atomRefs2='a2 a5' order='S'/>" +
 		"  </bondArray>" +
 		"</molecule>";
-		CMLMolecule mol = (CMLMolecule)TestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule)TstUtils.parseValidString(molS);
 		CIPTool st = new CIPTool(mol);
 		Element elem1 = st.getBreadthFirstCIPTree("a1", "a2");
 		String expectedS = ""+
@@ -175,7 +175,7 @@ public class CIPToolTest {
 		  "<node parent='a2' id='a5' atomicNumber='6'/>" +
 		  "<node parent='a2' id='a3_ghost' atomicNumber='6' ghost='true'/>" +
 		"</node>";
-		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
+		CMLAssert.assertEqualsCanonically("node tree", TstUtils.parseValidString(expectedS), elem1, true);
 	}
 	
 	/**
@@ -193,7 +193,7 @@ public class CIPToolTest {
 		  "<node parent='a2' id='a5' atomicNumber='8'/>" +
 		  "<node parent='a2' id='a3' atomicNumber='7'/>" +
 		"</node>";
-		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
+		CMLAssert.assertEqualsCanonically("node tree", TstUtils.parseValidString(expectedS), elem1, true);
 		mol = parseSMILES("[R][C]([O])([N])([F])");
 		st = new CIPTool(mol);
 		elem1 = st.getBreadthFirstCIPTree("a1", "a2");
@@ -203,7 +203,7 @@ public class CIPToolTest {
 		  "<node parent='a2' id='a3' atomicNumber='8'/>" +
 		  "<node parent='a2' id='a4' atomicNumber='7'/>" +
 		"</node>";
-		CMLAssert.assertEqualsCanonically("node tree", TestUtils.parseValidString(expectedS), elem1, true);
+		CMLAssert.assertEqualsCanonically("node tree", TstUtils.parseValidString(expectedS), elem1, true);
 	}
 	
 	private CMLMolecule parseSMILES(String smiles) {
@@ -229,7 +229,7 @@ public class CIPToolTest {
 			    "<bond atomRefs2='a2 a3' id='a2_a3' order='1'/>" +
 			  "</bondArray>" +
 			"</molecule>";
-		CMLAssert.assertEqualsCanonically("mol", TestUtils.parseValidString(molS), mol1, true);
+		CMLAssert.assertEqualsCanonically("mol", TstUtils.parseValidString(molS), mol1, true);
 	}
 	
 	@Test

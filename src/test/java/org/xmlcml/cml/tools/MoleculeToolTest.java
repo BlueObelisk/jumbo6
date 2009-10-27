@@ -64,7 +64,7 @@ import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * tests moleculeTool.
@@ -259,11 +259,11 @@ public class MoleculeToolTest {
 				+ "      <atom id='a2' x3='3.0' y3='4.0' z3='0.0'/>"
 				+ "      <atom id='a3' x3='2.0' y3='3.0' z3='1.0'/>"
 				+ "    </atomArray>" + "  </molecule>";
-		mol1 = (CMLMolecule) TestUtils.parseValidString(s);
+		mol1 = (CMLMolecule) TstUtils.parseValidString(s);
 	}
 
 	protected void makeMol2() {
-		mol2 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m2' "
+		mol2 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m2' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a11' x3='1.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a12' x3='3.0' y3='4.0' z3='0.0'/>"
@@ -272,7 +272,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol3() {
-		mol3 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m3' "
+		mol3 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m3' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a21' x3='21.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a22' x3='23.0' y3='4.0' z3='0.0'/>"
@@ -281,7 +281,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol4() {
-		mol4 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m4' "
+		mol4 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m4' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -292,7 +292,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeCrystal() {
-		crystal = (CMLCrystal) TestUtils.parseValidString("  <crystal id='c1' "
+		crystal = (CMLCrystal) TstUtils.parseValidString("  <crystal id='c1' "
 				+ CMLConstants.CML_XMLNS + ">"
 				+ "    <scalar dictRef='iucr:_cell_length_a'>9.0</scalar>"
 				+ "    <scalar dictRef='iucr:_cell_length_b'>10.0</scalar>"
@@ -304,7 +304,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol5() {
-		mol5 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m5' "
+		mol5 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m5' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -322,7 +322,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol5a() {
-		mol5a = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m5' "
+		mol5a = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m5' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -340,7 +340,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMolCryst() {
-		cmlCryst = (CMLCml) TestUtils.parseValidString("<cml id='cml1' "
+		cmlCryst = (CMLCml) TstUtils.parseValidString("<cml id='cml1' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <crystal id='c1' >"
@@ -372,7 +372,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol6() {
-		mol6 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m6' "
+		mol6 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m6' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -383,7 +383,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol7() {
-		mol7 = (CMLMolecule) TestUtils.parseValidString("  <molecule id='m7' "
+		mol7 = (CMLMolecule) TstUtils.parseValidString("  <molecule id='m7' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "      <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
@@ -392,7 +392,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol8() {
-		mol8 = (CMLMolecule) TestUtils.parseValidString("<molecule id='m8' "
+		mol8 = (CMLMolecule) TstUtils.parseValidString("<molecule id='m8' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <molecule id='m8a'>"
@@ -411,7 +411,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol9() {
-		mol9 = (CMLMolecule) TestUtils.parseValidString("<molecule id='m9' " + CMLConstants.CML_XMLNS
+		mol9 = (CMLMolecule) TstUtils.parseValidString("<molecule id='m9' " + CMLConstants.CML_XMLNS
 				+ ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "    <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
@@ -423,7 +423,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol10() {
-		mol10 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+		mol10 = (CMLMolecule) TstUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
@@ -441,7 +441,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol11() {
-		mol11 = (CMLMolecule) TestUtils.parseValidString("<molecule " + CMLConstants.CML_XMLNS + ">"
+		mol11 = (CMLMolecule) TstUtils.parseValidString("<molecule " + CMLConstants.CML_XMLNS + ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -559,7 +559,7 @@ public class MoleculeToolTest {
 
     private CMLMolecule makeMol(CMLMolecule mol, String s) {
         if (mol == null) {
-            mol = (CMLMolecule) TestUtils.parseValidString(s);
+            mol = (CMLMolecule) TstUtils.parseValidString(s);
         }
         return mol;
     }
@@ -1170,8 +1170,8 @@ public class MoleculeToolTest {
 		Assert.assertEquals("atomSet", 2, atomSet.size());
 		CMLMolecule mol = MoleculeTool.createMolecule(atomSet);
 		Assert.assertEquals("atom count", 2, mol.getAtomCount());
-		TestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(0), mol.getAtom(0));
-		TestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(2), mol.getAtom(1));
+		TstUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(0), mol.getAtom(0));
+		TstUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(2), mol.getAtom(1));
 	}
 
 	/**
@@ -1189,9 +1189,9 @@ public class MoleculeToolTest {
 		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		// CMLMoleculeTest.TestUtils.assertEqualsCanonically("new mol", mol, mol5a);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
-		TestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		TstUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 4, mol.getBondCount());
-		TestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+		TstUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
 				.get(2));
 
 		CMLBond bond = bondSet.getBonds().get(0);
@@ -1199,9 +1199,9 @@ public class MoleculeToolTest {
 		mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		// CMLMoleculeTest.TestUtils.assertEqualsCanonically("new mol", mol, mol5a);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
-		TestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		TstUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 3, mol.getBondCount());
-		TestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+		TstUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
 				.get(1));
 	}
 
@@ -1314,7 +1314,7 @@ public class MoleculeToolTest {
 		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
 
 		to.setId("from"); // to allow comparison
-		TestUtils.assertEqualsCanonically("compare mols", from, to);
+		TstUtils.assertEqualsCanonically("compare mols", from, to);
 
 		permitOverwrite = false;
 		try {
@@ -1690,7 +1690,7 @@ public class MoleculeToolTest {
 				+ "  <angle atomRefs3='a1 a2 a3'>123</angle>"
 				+ "  <angle atomRefs3='a3 a4 a5'>99</angle>" + "</molecule>"
 				+ "";
-		CMLMolecule mol = (CMLMolecule) TestUtils.parseValidString(s);
+		CMLMolecule mol = (CMLMolecule) TstUtils.parseValidString(s);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 		CMLAtom a1 = mol.getAtom(0);
 		CMLAtom a2 = mol.getAtom(1);
@@ -2060,7 +2060,7 @@ public class MoleculeToolTest {
     @Test
     public void testGetLoneElectronCount() {
         // FIXME
-        CMLMolecule nitroMethane = (CMLMolecule) TestUtils.parseValidString(nitroMethaneS);
+        CMLMolecule nitroMethane = (CMLMolecule) TstUtils.parseValidString(nitroMethaneS);
         int n = AtomTool.getOrCreateTool(nitroMethane.getAtom(0)).getLoneElectronCount();
       //  Assert.assertEquals("lone pair", -6, n);
         n = AtomTool.getOrCreateTool(nitroMethane.getAtom(1)).getLoneElectronCount();
@@ -2338,7 +2338,7 @@ public class MoleculeToolTest {
 				"    <bond atomRefs2='a1 a2' order='1'/>" +
 				"  </bondArray>" +
 				"</molecule>";
-		CMLMolecule molecule = (CMLMolecule) TestUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule) TstUtils.parseValidString(moleculeS);
 		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule).getTotalHydrogenCount();
 		Assert.assertEquals("h count", 4, hydrogenCount);
 	}
@@ -2516,7 +2516,7 @@ public class MoleculeToolTest {
 		List<CMLMolecule> molList = MoleculeTool.getOrCreateTool(
 				fixture.cmlCrystMol).transformFractionalCoordinates(symmetry);
 		Assert.assertEquals("after t", 2, molList.size());
-		TestUtils.assertEqualsCanonically("mols equals", molList.get(0),
+		TstUtils.assertEqualsCanonically("mols equals", molList.get(0),
 				fixture.cmlCrystMol);
 		Point3 xf = molList.get(1).getAtom(2).getPoint3(
 				CoordinateType.FRACTIONAL);
@@ -2553,7 +2553,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testTransformFractionalCoordinatesTransform3() {
-		CMLMolecule mol0 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+		CMLMolecule mol0 = (CMLMolecule) TstUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
@@ -2606,7 +2606,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testTransformTransform3() {
-		CMLMolecule mol0 = (CMLMolecule) TestUtils.parseValidString("<molecule "
+		CMLMolecule mol0 = (CMLMolecule) TstUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"

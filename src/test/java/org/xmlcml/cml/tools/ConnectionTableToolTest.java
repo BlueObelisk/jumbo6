@@ -12,7 +12,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TestUtils;
+import org.xmlcml.util.TstUtils;
 
 /**
  * test ConnectionTableTool.
@@ -116,7 +116,7 @@ public class ConnectionTableToolTest {
 	}
 
 	private CMLMolecule makeMol(String molS) {
-		CMLMolecule mol = (CMLMolecule)TestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule)TstUtils.parseValidString(molS);
 		return mol;
 	}
 
