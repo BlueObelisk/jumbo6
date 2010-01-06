@@ -35,6 +35,7 @@ import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLProduct;
@@ -606,6 +607,91 @@ public class ReactionToolTest {
 			CMLFormula expected = new CMLFormula();
 		}
 
+	}
+	
+	@Test
+	public void testMapReactantsToProductsUsingAtomSets() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("CCC(=O)O");
+		reactionTool.addReactant("OCC");
+		reactionTool.addProduct("CCC(=O)OCC");
+		reactionTool.addProduct("O");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		cmlMap.debug("TESTTTTTTTTTTTTT");
+	}
+
+	@Test
+	public void testMapReactantsToProductsUsingAtomSets1() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("CCC(=O)O");
+		reactionTool.addReactant("NCC");
+		reactionTool.addProduct("CCC(=O)NCC");
+		reactionTool.addProduct("O");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+//		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
+	}
+
+	@Test
+	public void testMapReactantsToProductsUsingAtomSets2() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("C1=CC=CC1");
+		reactionTool.addReactant("C=C=O");
+		reactionTool.addProduct("C12C=CCC1CC(=O)2");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+//		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
+	}
+
+	@Test
+	public void testMapReactantsToProductsUsingAtomSets2a() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("C1=CC=C(Cl)C1");
+		reactionTool.addReactant("C=C=O");
+		reactionTool.addProduct("C12C=C(Cl)CC1CC(=O)2");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+//		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
+	}
+
+	@Test
+	public void testMapReactantsToProductsUsingAtomSets3() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("c1ccccc1C(=O)Cl");
+		reactionTool.addReactant("NCC");
+		reactionTool.addProduct("c1ccccc1C(=O)NCC");
+		reactionTool.addProduct("Cl");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
+	}
+
+	@Test
+	public void testPolyinfo1() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("CCCCOC=CC");
+		reactionTool.addProduct("CCCCO[CH][CH]C");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
+	}
+
+	@Test
+	public void testPolyinfo2() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("NCC(=O)O");
+		reactionTool.addProduct("[NH]C[C](=O)");
+		reactionTool.addProduct("O");
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		reactionTool.getReaction().debug("REACTION");
+		cmlMap.debug("REACTION MAP");
 	}
 
 	/**

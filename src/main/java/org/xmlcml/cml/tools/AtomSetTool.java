@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -25,6 +26,7 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -32,6 +34,8 @@ import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.ToolUtils;
 
 /**
  * tool to support atom set. not sure if useful
@@ -45,7 +49,8 @@ public class AtomSetTool extends AbstractTool {
 	private CMLAtomSet atomSet;
 	private CMLMolecule molecule = null;
 	private Map<CMLAtom, CMLAtom> parentTable = null;
-
+	private AtomMatchObject atomMatchObject = null;
+	
 	static List<CMLAtomSet> getChildAtomSetList(CMLElement element) {
 		Nodes nodes = element.query("./cml:atomSet", CMLConstants.CML_XPATH);
 		 List <CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
@@ -104,6 +109,22 @@ public class AtomSetTool extends AbstractTool {
         return molecule;
     }
 
+    /**
+     * @param atomSetOld
+     * @param atomIds if not found, skips without error
+     * @return
+     */
+	public static CMLAtomSet createAtomSet(CMLAtomSet atomSetOld,
+			String[] atomIds) {
+		CMLAtomSet atomSet = new CMLAtomSet();
+		for (String atomId : atomIds) {
+			CMLAtom atom = atomSetOld.getAtomById(atomId);
+			if (atom != null) {
+				atomSet.addAtom(atom);
+			}
+		}
+		return atomSet;
+	}
 
 	/**
 	 * gets AtomSetTool associated with molecule. if null creates one and sets
@@ -879,4 +900,267 @@ public class AtomSetTool extends AbstractTool {
 		}
 		shift.plusEquals(delta);
 	}
+	
+
+	/**
+	 * returns containing atomTree labelling (was in AtomSet) the atomTree is
+	 * calculated for each atom and expanded until that atom can be seen to be
+	 * unique in the atomSet or until maxAtomTreeLevel is reached For those
+	 * atoms which have unique atomTreeStrings and are keyed by these. If there
+	 * are sets of atoms which have the same string they are mapped to atomSets.
+	 * Example (maxAtomTreeLevel = 1: O1-C2-O3 has map = {"C", "a2"}, {"O(C)",
+	 * atomSet(a1, a3)}
+	 * 
+	 * terms:
+	 *  atomSetValue "a1 a3 a4"
+	 *  atomTreeString "C(N)(N(O))"
+	 * 
+	 * @param atomSet
+	 * @param atomMatcher
+	 *            to use
+	 * @return the maps
+	 */
+	@SuppressWarnings("all")
+	public Map<String, CMLAtomSet> createAtomSetByAtomTreeStringAtomTreeLabelling(AtomMatchObject atomMatchObject) {
+		this.atomMatchObject = atomMatchObject;
+		// iterate through levels
+		List<CMLAtom> atoms = atomSet.getAtoms();
+		int atomTreeLevel = atomMatchObject.getAtomTreeLevel(); // -1 by default
+		boolean variableLevel = (atomTreeLevel < 0);
+		int startLevel = (variableLevel) ? 0 : atomTreeLevel;
+		int endLevel = (variableLevel) ? atomMatchObject.getMaximumAtomTreeLevel() : atomTreeLevel + 1;
+		
+		Map<String, CMLAtomSet> atomSetByAtomTreeString = 
+			iterateThroughLevelsUntilPersistentNoChangeAndCreateAtomSetByAtomTreeString(
+			atoms, variableLevel, startLevel, endLevel);
+//		ToolUtils.debugMap("atomSetByAtomTreeString", atomSetByAtomTreeString);
+		Map<String, String> atomTreeStringByAtomSetValue = 
+			createAtomTreeStringsIndexedByAtomSetValue(atomSetByAtomTreeString);
+//		ToolUtils.debugMap("atomTreeStringByAtomSetValue", atomTreeStringByAtomSetValue);
+		Map<String, String> shortestAtomSetValueByAtomId = 
+			createShortestAtomSetValueByAtomId(atomSetByAtomTreeString);
+//		ToolUtils.debugMap("shortestAtomSetValueByAtomId", shortestAtomSetValueByAtomId);
+		atomTreeStringByAtomSetValue = removeSuperAtomSetsInAtomTreeStringByAtomSetValue(atomTreeStringByAtomSetValue, shortestAtomSetValueByAtomId);
+//		ToolUtils.debugMap("atomTreeStringByAtomSetValueShort", atomTreeStringByAtomSetValue);
+		atomSetByAtomTreeString = removeSuperSetsInAtomSetByAtomTreeString(atomSetByAtomTreeString, atomTreeStringByAtomSetValue);
+//		ToolUtils.debugMap("atomTreeStringByAtomSetValueShort", atomTreeStringByAtomSetValue);
+		Map<String, String> atomTreeStringByAtomId = createAtomTreeStringByAtomId(
+				shortestAtomSetValueByAtomId, atomTreeStringByAtomSetValue);
+//		ToolUtils.debugMap("atomTreeStringByAtomId", atomTreeStringByAtomId);
+		return atomSetByAtomTreeString;
+	}
+
+
+	private Map<String, CMLAtomSet> removeSuperSetsInAtomSetByAtomTreeString(
+			Map<String, CMLAtomSet> atomSetByAtomTreeString,
+			Map<String, String> atomTreeStringByAtomSetValue) {
+		Set<String> keysToDelete = new HashSet<String>();
+		for (String atomTreeString : atomSetByAtomTreeString.keySet()) {
+			if (!atomTreeStringByAtomSetValue.containsValue(atomTreeString)) {
+				keysToDelete.add(atomTreeString);
+			}
+		}
+		for (String atomTreeString : keysToDelete) {
+			atomSetByAtomTreeString.remove(atomTreeString);
+		}
+		return atomSetByAtomTreeString;
+	}
+
+	private static Map<String, String> removeSuperAtomSetsInAtomTreeStringByAtomSetValue(
+		Map<String, String> atomTreeByAtomSetValue, Map<String, String> shortestAtomSetValueByAtomId) {
+		Set<String> atomSetValueSet = new HashSet<String>();
+		for (String atomId : shortestAtomSetValueByAtomId.keySet()) {
+			atomSetValueSet.add(shortestAtomSetValueByAtomId.get(atomId));
+		}
+		Set<String> keysToRemove = new HashSet<String>();
+		for (String atomSetValue : atomTreeByAtomSetValue.keySet()) {
+			if (!atomSetValueSet.contains(atomSetValue)) {
+				keysToRemove.add(atomSetValue);
+			}
+		}
+		for (String key : keysToRemove) {
+			atomTreeByAtomSetValue.remove(key);
+		}
+		return atomTreeByAtomSetValue;
+	}
+
+	private Map<String, CMLAtomSet> iterateThroughLevelsUntilPersistentNoChangeAndCreateAtomSetByAtomTreeString(
+			List<CMLAtom> atoms, boolean variableLevel, int startLevel,
+			int endLevel) {
+		Map<String, CMLAtomSet> atomSetByAtomTreeString = new HashMap<String, CMLAtomSet>();
+		CMLAtomSet uniqueAtomSet = new CMLAtomSet();
+		int maxWithoutChange = 3;
+		int nunchanged = 0;
+		for (int level = startLevel; level < endLevel; level++) {
+			LOG.trace("START "+level);
+			int nuniq = uniqueAtomSet.size();
+			iterateThroughNonUniqueAtoms(atomSetByAtomTreeString, uniqueAtomSet, atoms, level);
+			markUniqueAtomsInMap(atomSetByAtomTreeString, uniqueAtomSet);
+			if (uniqueAtomSet.size() == nuniq) {
+				if (nunchanged++ >= maxWithoutChange-1) break;
+			} else {
+				nunchanged = 0;
+			}
+		}
+		return atomSetByAtomTreeString;
+	}
+
+	private void iterateThroughNonUniqueAtoms(Map<String, CMLAtomSet> atomSetByAtomTreeString, CMLAtomSet uniqueAtomSet,
+			List<CMLAtom> atoms, int level) {
+		for (int i = 0; i < atoms.size(); i++) {
+			CMLAtom atom = atoms.get(i);
+			boolean omit = false;
+			String elementType = atom.getElementType();
+			for (int j = 0; j < atomMatchObject.getExcludeElementTypes().length; j++) {
+				if (atomMatchObject.getExcludeElementTypes()[j].equals(elementType)) {
+					omit = true;
+					break;
+				}
+			}
+			if (!omit && !uniqueAtomSet.contains(atom)) {
+				createNewAtomTree(atomSetByAtomTreeString, level, atom, elementType);
+			}
+		}
+	}
+
+	private void createNewAtomTree(Map<String, CMLAtomSet> atomSetByAtomTreeString, int level, CMLAtom atom, String elementType) {
+		AtomTree atomTree = new AtomTree(atom);
+		atomTree.setUseCharge(atomMatchObject.isUseCharge());
+		atomTree.setUseLabel(atomMatchObject.isUseLabel());
+		atomTree.setUseExplicitHydrogens(AS.H.equals(elementType));
+		atomTree.expandTo(level);
+		String atomTreeString = atomTree.toString();
+		CMLAtomSet atomSet = atomSetByAtomTreeString.get(atomTreeString);
+		if (atomSet == null) {
+			atomSet = new CMLAtomSet();
+			atomSetByAtomTreeString.put(atomTreeString, atomSet);
+		}
+		atomSet.addAtom(atom);
+	}
+
+	private Map<String, String> createAtomTreeStringsIndexedByAtomSetValue(
+			Map<String, CMLAtomSet> atomSetByAtomTreeString) {
+		Map<String, String> atomTreeStringsIndexedByAtomSetValue = new HashMap<String, String>();
+		for (String atomTreeString : atomSetByAtomTreeString.keySet()) {
+			CMLAtomSet atomSet = atomSetByAtomTreeString.get(atomTreeString);
+			atomTreeStringsIndexedByAtomSetValue.put(atomSet.getValue(), atomTreeString);
+		}
+		return atomTreeStringsIndexedByAtomSetValue;
+	}
+
+	private Map<String, String> createAtomTreeStringByAtomId (
+			Map<String, String> atomSetValueIndexedByAtomId,
+			Map<String, String> atomTreeStringsIndexedByAtomSetValue) {
+		Map<String, String> atomTreeStringByAtomId = new HashMap<String, String>();
+		for (String atomId : atomSetValueIndexedByAtomId.keySet()) {
+			String atomSetValue = atomSetValueIndexedByAtomId.get(atomId);
+			String atomTreeValue = atomTreeStringsIndexedByAtomSetValue.get(atomSetValue);
+			atomTreeStringByAtomId.put(atomId, atomTreeValue);
+		}
+		return atomTreeStringByAtomId;
+	}
+
+	private Map<String, String> createShortestAtomSetValueByAtomId(
+			Map<String, CMLAtomSet> atomTreeStringsByAtomSet) {
+		Map<String, List<String>>  atomSetValuesIndexedByAtomId = new HashMap<String, List<String>>();
+		indexAtomSetValuesByAtomId(atomTreeStringsByAtomSet,
+				atomSetValuesIndexedByAtomId);
+		Map<String, String> atomSetValueIndexedByAtomId = 
+			indexShortestAtomSetByAtomId(atomSetValuesIndexedByAtomId);
+		return atomSetValueIndexedByAtomId;
+	}
+
+	private void indexAtomSetValuesByAtomId(
+			Map<String, CMLAtomSet> atomTreeStringsByAtomSet,
+			Map<String, List<String>> atomSetValueIndexedByAtomId) {
+		for (String atomTreeString : atomTreeStringsByAtomSet.keySet()) {
+			CMLAtomSet atomSet = atomTreeStringsByAtomSet.get(atomTreeString);
+			String atomSetValue = atomSet.getValue();
+			String[] atomIds = atomSetValue.split(" ");
+			for (String atomId : atomIds) {
+				List<String> atomSetValueList = atomSetValueIndexedByAtomId.get(atomId);
+				if (atomSetValueList == null) {
+					atomSetValueList = new ArrayList<String>();
+					atomSetValueIndexedByAtomId.put(atomId, atomSetValueList);
+				}
+				atomSetValueList.add(atomSetValue);
+			}
+		}
+	}
+
+	private Map<String, String> indexShortestAtomSetByAtomId(
+			Map<String, List<String>> atomSetValueIndexedByAtomId) {
+		for (String atomId : atomSetValueIndexedByAtomId.keySet()) {
+			String[] shortestAtomSetValues = null;
+			String shortestAtomSetValue = null;
+			List<String> atomSetValues = atomSetValueIndexedByAtomId.get(atomId);
+			for (String atomSetValue : atomSetValues) {
+				String[] newAtomSetValues = atomSetValue.split(CMLConstants.S_SPACE);
+				if (shortestAtomSetValues == null) {
+					shortestAtomSetValues = newAtomSetValues;
+					shortestAtomSetValue = atomSetValue;
+				} else if (shortestAtomSetValues.length > newAtomSetValues.length) {
+					shortestAtomSetValues = newAtomSetValues;
+					shortestAtomSetValue = atomSetValue;
+				}
+			}
+			atomSetValues = new ArrayList<String>();
+			atomSetValues.add(shortestAtomSetValue);
+			atomSetValueIndexedByAtomId.put(atomId, atomSetValues);
+		}
+		Map<String, String> indexShortestAtomSet = new HashMap<String, String>();
+		for (String atomId : atomSetValueIndexedByAtomId.keySet()) {
+			indexShortestAtomSet.put(atomId, atomSetValueIndexedByAtomId.get(atomId).get(0));
+		}
+		return indexShortestAtomSet;
+	}
+	
+
+	private void markUniqueAtomsInMap(Map<String, CMLAtomSet> atomSetByAtomTreeString, CMLAtomSet uniqueAtomSet) {
+		for (String atomTreeString : atomSetByAtomTreeString.keySet()) {
+			CMLAtomSet atomSet2 = atomSetByAtomTreeString.get(atomTreeString);
+			LOG.trace("A "+atomTreeString+"..."+atomSet2.getValue());
+			// if only one element, mark as unique
+			if (atomSet2.size() == 1) {
+				uniqueAtomSet.addAtom(atomSet2.getAtom(0));
+				LOG.trace("Unique: "+atomTreeString+"..."+atomSet2.getValue());
+			}
+		}
+	}
+
+	/** should move to AtomSetTool
+	 * 
+	 * @param direction
+	 * @param cmlMap
+	 * @param atomSet
+	 * @return
+	 */
+	public CMLAtomSet getAtomSetFromMap(Direction direction, CMLMap cmlMap) {
+		CMLAtomSet newAtomSet = new CMLAtomSet();
+		CMLElements<CMLLink> links = cmlMap.getLinkElements();
+		for (CMLLink link : links) {
+			String toFrom = null;
+			if (direction.equals(CMLMap.Direction.FROM)) {
+				toFrom = link.getAttributeValue("fromSet");
+			} else if (direction.equals(CMLMap.Direction.TO)) {
+				toFrom = link.getAttributeValue("toSet");
+			}
+			if (toFrom != null) {
+				String[] refs = toFrom.split(CMLConstants.S_WHITEREGEX);
+				for (String ref : refs) {
+					CMLAtom atom = atomSet.getAtomById(ref);
+					if (atom == null) {
+//						LOG.error("Cannot find atom: "+ref);
+//						return null;
+						throw new RuntimeException("Cannot find atom: "+ref);
+					}
+					newAtomSet.addAtom(atom);
+				}
+			}
+		}
+		return newAtomSet;
+	}
+
+
+
 }

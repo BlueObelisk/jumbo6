@@ -78,6 +78,8 @@ public class Morgan extends AbstractTool {
     }
 
     final static Logger logger = Logger.getLogger(Morgan.class.getName());
+    
+    private static int MAX_ITER = 10;
     private Algorithm algorithm = null;
     private CMLAtomSet constantAtomSet;
     private CMLMolecule molecule;
@@ -268,7 +270,7 @@ public class Morgan extends AbstractTool {
             if (atomSet == null) {
                 break;
             }
-            if (count++ > 10) {
+            if (count++ > MAX_ITER) {
                 break;
             }
             

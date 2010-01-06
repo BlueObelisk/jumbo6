@@ -14,16 +14,20 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProduct;
+import org.xmlcml.cml.element.CMLProductList;
 import org.xmlcml.cml.element.CMLReactant;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLFormula.Sort;
+import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
@@ -324,9 +328,14 @@ public class ReactionTool extends AbstractSVGTool {
      * @return the descendant molecules or empty list
      */
     public List<CMLMolecule> getMolecules(Component reactionComponent) {
-    	Element reactantProductList = (reactionComponent.equals(Component.REACTANTLIST)) ? 
-    			reaction.getReactantList() :
-				reaction.getProductList();
+    	Element reactantProductList = null; 
+    	if (Component.REACTANTLIST.equals(reactionComponent) || Component.REACTANT.equals(reactionComponent)) {
+    		reactantProductList = reaction.getReactantList();
+    	} else if (Component.PRODUCTLIST.equals(reactionComponent) || Component.PRODUCT.equals(reactionComponent)) {
+    		reactantProductList = reaction.getProductList();
+    	} else {
+    		throw new RuntimeException("Bad ReactionComponent type: "+reactionComponent);
+    	}
         List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
         if (reactantProductList != null) {
 	        Nodes moleculeNodes = reactantProductList.query(".//cml:molecule", CMLConstants.CML_XPATH);
@@ -932,4 +941,135 @@ public class ReactionTool extends AbstractSVGTool {
     public CMLProduct getProduct(int i) {
     	return reaction.getProductList().getProductElements().get(i);
     }
+
+	public void mapReactantsToProducts() {
+//		List<CMLMolecule> reactantMolecules = getMolecules(Component.REACTANT);
+//		List<CMLMolecule> productMolecules = getMolecules(Component.PRODUCT);
+//		List<List<Long>> reactantMorgans = extractMorgans(reactantMolecules);
+//		List<List<Long>> productMorgans = extractMorgans(productMolecules);
+		mapSingleReactantToSingleProductWithAtomMatcher();
+	}
+	
+	public CMLMap mapReactantsToProductsUsingAtomSets() {
+		List<CMLMolecule> reactantMolecules = getMolecules(Component.REACTANT);
+		CMLAtomSet reactantAtomSet = MoleculeTool.createAtomSet(reactantMolecules);
+		List<CMLMolecule> productMolecules = getMolecules(Component.PRODUCT);
+		CMLAtomSet productAtomSet = MoleculeTool.createAtomSet(productMolecules);
+		AtomMatcher atomMatcher = new AtomTreeMatcher();
+		CMLMap cmlMap = atomMatcher.mapAtomSets(reactantAtomSet, productAtomSet);
+		translateMapToUseOriginalIds(cmlMap, reactantAtomSet, productAtomSet);
+		reaction.addMap(cmlMap);
+		
+		return cmlMap;
+	}
+
+	private void translateMapToUseOriginalIds(CMLMap cmlMap,
+			CMLAtomSet reactantAtomSet, CMLAtomSet productAtomSet) {
+		translateMap(Direction.FROM, reactantAtomSet, cmlMap);
+		translateMap(Direction.TO, productAtomSet, cmlMap);
+	}
+
+	private void translateMap(Direction direction, CMLAtomSet atomSet, CMLMap cmlMap) {
+		Map<String, String> atomSet2Map = new HashMap<String, String>();
+		List<CMLAtom> atoms = atomSet.getAtoms();
+		for (CMLAtom atom : atoms) {
+			String id = atom.getId();
+			CMLLabel label = atom.getLabelElements().get(0);
+			String labelValue = (label == null) ? null : label.getCMLValue();
+			if (labelValue != null) {
+				atomSet2Map.put(id, labelValue);
+			}
+		}
+		MapTool cmlMapTool = MapTool.getOrCreateTool(cmlMap);
+		cmlMapTool.translateIds(direction, atomSet2Map);
+	}
+
+	public void addReactant(String smiles) {
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule reactantMol =  smilesTool.getMolecule();
+		CMLReactant reactant = new CMLReactant();
+		reactant.addMolecule(reactantMol);
+		this.reaction.addReactant(reactant);
+	}
+
+	public void addProduct(String smiles) {
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule productMol =  smilesTool.getMolecule();
+		CMLProduct product = new CMLProduct();
+		product.addMolecule(productMol);
+		this.addProduct(product);
+	}
+	
+	/** should be part of CMLReaction
+	 * 
+	 * @param product
+	 */
+	public void addProduct(CMLProduct product) {
+		CMLProductList productList = reaction.getProductList();
+		if (productList == null) {
+			productList = new CMLProductList();
+			reaction.addProductList(productList);
+		}
+		productList.addProduct(product);
+	}
+
+	private List<List<Long>> extractMorgans(List<CMLMolecule> molecules) {
+		List<List<Long>> morgans = new ArrayList<List<Long>>();
+		for (CMLMolecule molecule : molecules) {
+			Morgan morgan = new Morgan(MoleculeTool.getOrCreateTool(molecule).getAtomSet());
+			List<Long> morganLongs = morgan.getMorganList();
+			List<CMLAtomSet> atomSets = morgan.getAtomSetList();
+			for (int i = 0; i < morganLongs.size(); i++) {
+				System.out.println(" "+morganLongs.get(i)+" .. "+atomSets.get(i).getValue());
+			}
+			System.out.println();
+		}
+		return morgans;
+	}
+
+	/** 
+	 * if reaction has a single reactant and single product uses
+	 * AtomMatcher.mapMolecules to get atom2atom match
+	 * @return
+	 */
+	public CMLMap mapSingleReactantToSingleProductWithAtomMatcher() {
+		CMLMap map = null;
+		List<CMLMolecule> reactantMolecules = reaction.getMolecules(Component.REACTANT);
+		List<CMLMolecule> productMolecules = reaction.getMolecules(Component.PRODUCT);
+		if (reactantMolecules.size() == 1 && productMolecules.size() == 1) {
+			CMLMolecule reactantMolecule = reactantMolecules.get(0);
+			CMLMolecule productMolecule = productMolecules.get(0);
+			AtomMatcher atomMatcher = new AtomTreeMatcher();
+			map = atomMatcher.mapMolecules(reactantMolecule, productMolecule);
+			CMLAtomSet reactantAtomSet = new CMLAtomSet(reactantMolecule);
+			CMLAtomSet productAtomSet = new CMLAtomSet(productMolecule);			
+			reactantAtomSet.debug("react");
+			productAtomSet.debug("prod");
+//			map = atomMatcher.getUniqueMatchedAtoms(reactantAtomSet, productAtomSet);			
+			map.debug("FINAL MAP");
+		}
+		return map;
+	}
+	
+
+//	private List<CMLMolecule> getReactantMolecules() {
+//		return getMolecules(CMLReactant.TAG);
+//	}
+//
+//	private List<CMLMolecule> getProductMolecules() {
+//		return getMolecules(CMLProduct.TAG);
+//	}
+//
+//	private List<CMLMolecule> getMolecules(String reactantProduct) {
+//		List<CMLMolecule> molecules = new ArrayList<CMLMolecule>();
+//		Nodes nodes = reaction.query(".//*[local-name()='"+reactantProduct+"']/*" +
+//				"[local-name()='"+CMLMolecule.TAG+"']");
+//		for (int i = 0; i < nodes.size(); i++) {
+//			molecules.add((CMLMolecule) nodes.get(i));
+//		}
+//		return molecules;
+//	}
+
 }

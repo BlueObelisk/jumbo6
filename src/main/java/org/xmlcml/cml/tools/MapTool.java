@@ -1,8 +1,15 @@
 package org.xmlcml.cml.tools;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import nu.xom.Attribute;
+
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMap.Direction;
@@ -103,5 +110,61 @@ public class MapTool extends AbstractTool {
 //        }
         return targetBond;
     }
+
+    /**
+     * returns (FROM) fromSet values mappped to toSet
+     * @param direction FROM or TO
+     * @return
+     */
+	public Map<String, String> getFromSetToSetMap(Direction direction) {
+		Map<String, String> linkMap = new HashMap<String, String>();
+		CMLElements<CMLLink> links = map.getLinkElements();
+		for (CMLLink link : links) {
+			String fromSet = link.getFromSetAttribute().getValue();
+			String toSet = link.getToSetAttribute().getValue();
+			String key = (direction.equals(CMLMap.Direction.FROM)) ? fromSet : toSet;
+			String value = (direction.equals(CMLMap.Direction.FROM)) ? toSet : fromSet;
+			linkMap.put(key, value);
+		}
+		return linkMap;
+	}
+
+	public void translateIds(Direction direction, Map<String, String> idMap) {
+		CMLElements<CMLLink> links = map.getLinkElements();
+		for (CMLLink link : links) {
+			if (direction.equals(Direction.FROM)) {
+				String from = link.getFrom();
+				if (from != null) {
+					link.setFrom(translateIds(from, idMap));
+				}
+				String[] fromSet = link.getFromSet();
+				if (fromSet != null) {
+					link.setFromSet(translateIds(fromSet, idMap));
+				}
+			}
+			if (direction.equals(Direction.TO)) {
+				String to = link.getTo();
+				if (to != null) {
+					link.setTo(translateIds(to, idMap));
+				}
+				String[] toSet = link.getToSet();
+				if (toSet != null) {
+					link.setToSet(translateIds(toSet, idMap));
+				}
+			}
+		}
+	}
+
+	private String[] translateIds(String[] values, Map<String, String> idMap) {
+		String[] newValues = new String[values.length];
+		for (int i = 0; i < values.length; i++) {
+			newValues[i] = translateIds(values[i], idMap);
+		}
+		return newValues;
+	}
+
+	private String translateIds(String value, Map<String, String> idMap) {
+		return idMap.get(value);
+	}
     
 }
