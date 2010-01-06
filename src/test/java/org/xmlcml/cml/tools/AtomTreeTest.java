@@ -122,7 +122,7 @@ public class AtomTreeTest {
 		atomTree.setUseLabel(true);
 		atomTree.expandTo(3);
 		Assert.assertEquals("new AtomTree",
-				"N(C)(C)(C)(C(O))(C{C1})(C{C2}(O))", atomTree.toString());
+				"N(C)(C)(C{C1})(C{C1})(C{C2}(O))(C{C2}(O))", atomTree.toString());
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class AtomTreeTest {
 				.toString());
 		atomTree.setUseImplicitHydrogens(true);
 		atomTree.expandTo(3);
-		Assert.assertEquals("new AtomTree", "N(C)(C)(C(O))(CH)(CH3)(CH3(O))",
+		Assert.assertEquals("new AtomTree", "N(CH)(CH)(CH3)(CH3)(CH3(O))(CH3(O))",
 				atomTree.toString());
 	}
 
