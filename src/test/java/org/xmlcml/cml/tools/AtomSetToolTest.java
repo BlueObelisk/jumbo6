@@ -1,7 +1,9 @@
 package org.xmlcml.cml.tools;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -70,6 +72,7 @@ public class AtomSetToolTest {
 
 	CMLAtomSet atomSet1 = null;
 	CMLAtomSet atomSet2 = null;
+	CMLMolecule dmf;
 
 	/**
 	 * setup.
@@ -83,6 +86,9 @@ public class AtomSetToolTest {
 				"a2", "a3" });
 		atomSet2 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a2",
 				"a3", "a4", "a5" });
+		AtomTreeTest att = new AtomTreeTest();
+		att.setUp();
+		dmf = att.dmf;
 	}
 
 	/**
@@ -523,5 +529,34 @@ public class AtomSetToolTest {
     	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     }
 
+	@Test
+	public void testGetAtomTreeLabelling() {
+		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(dmf.getAtoms());
+		AtomMatchObject atomMatchObject = new AtomMatchObject();
+		Map<String, CMLAtomSet> map = 
+			AtomSetTool.getOrCreateTool(atomSet).createAtomSetByAtomTreeStringAtomTreeLabelling(atomMatchObject);
+		System.out.println(".........");
+		for (String s : map.keySet()) {
+			System.out.println(s+".."+map.get(s).getValue());
+		}
+		Assert.assertNotNull("atom tree map not null", map);
+		Assert.assertEquals("atom tree map size", 4, map.size());
+		String[] treeS = new String[] { "O", "C(N(C)(C(O)))", "C(N)(O)", "N", };
+
+		List list = new ArrayList();
+		for (String t : treeS) {
+			Object obj = map.get(t);
+			list.add(obj);
+		}
+		for (Object obj : list) {
+			if (obj instanceof CMLAtom) {
+				// LOG.debug("A "+((CMLAtom)obj).getId());
+			} else if (obj instanceof CMLAtomSet) {
+				// LOG.debug("AS "+Util.concatenate(((CMLAtomSet)obj).
+				// getXMLContent(), CMLConstants.S_SLASH));
+			}
+		}
+
+	}
     
 }

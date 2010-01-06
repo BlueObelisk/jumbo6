@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -2172,6 +2173,22 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		addedMolecule.detach();
 	}
+	
+	/**
+	 * join one molecule to another. 
+	 * manages the XML but not yet the geometry
+	 * empties the added molecule of elements and copies them
+	 * to this.molecule and then detaches the addedMolecule
+	 * @param addedMolecule to be joined
+	 */
+	public void addMoleculesTo(List<CMLMolecule> addedMolecules) {
+		if (addedMolecules != null) {
+			for (CMLMolecule addedMolecule : addedMolecules) {
+				this.addMoleculeTo(addedMolecule);
+			}
+		}
+	}
+
 
 	/**
 	 * @return list of atomIds in order
@@ -2192,7 +2209,9 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public void renumberToUniqueIds(List<String> avoidList) {
 		Set<String> stringSet = checkUnique(avoidList);
+//		molecule.debug("MMMMMMMMMMM");
 		int totalSize = molecule.getAtomCount() + avoidList.size();
+//		System.out.println("TTTTTT "+avoidList);
 		List<String> fromIdList = new ArrayList<String>();
 		List<String> toIdList = new ArrayList<String>();
 		// TODO hydrogens will not be pretty - 
@@ -2205,13 +2224,14 @@ public class MoleculeTool extends AbstractSVGTool {
 				while (ii < totalSize) {
 					newId = "a"+ii;
 					if (!stringSet.contains(newId) && molecule.getAtomById(newId) == null) {
+						stringSet.add(newId);
 						// new unique
 						break;
 					}
 					ii++;
 				}
 				toIdList.add(newId);
-				LOG.debug(id+" => "+newId);
+				LOG.trace(id+" => "+newId);
 			}
 		}
 		renumberAtomIds(fromIdList, toIdList);
@@ -2945,6 +2965,53 @@ public class MoleculeTool extends AbstractSVGTool {
     	for (int i = 0; i < fromIdList.size(); i++) {
     		renumberAtomId(fromIdList.get(i), toIdList.get(i));
     	}
+    	generateBondIds();
+    }
+
+	/** force renumbering to a1, a2... a(size)
+     * 
+     */
+    public void renumberAtomIdsSequentially() {
+        List<String> fromIdList = this.getAtomIds();
+        List<String> toIdList = MoleculeTool.createSequentialAtomIds("a", fromIdList.size());
+        renumberAtomIds(fromIdList, toIdList);
+    }
+
+    /** returns a list of ids idRoot+1, idRoot+2 ... idRoot+size
+     * 
+     * @param idRoot (e.g. "a"
+     * @param size
+     * @return list (e.g.) a1, a2 ... 
+     */
+    public static List<String> createSequentialAtomIds(String idRoot, int size) {
+    	List<String> atomIds = new ArrayList<String>(size);
+    	for (int i = 1; i <= size; i++) {
+    		atomIds.add(idRoot+i);
+    	}
+    	return atomIds;
+	}
+
+	/** return atom ids in order
+     * 
+     */
+    public List<String> getAtomIds() {
+    	List<CMLAtom> atoms = molecule.getAtoms();
+    	List<String> atomIds = new ArrayList<String>(atoms.size());
+    	for (int i = 0, max = atoms.size(); i < max; i++) {
+    		atomIds.add(atoms.get(i).getId());
+    	}
+    	return atomIds;
+    }
+        
+    /** 
+     * for each bond apply Bond.createId
+     */
+    public void createBondIdsFromAtomRefs2() {
+    	List<CMLBond> bonds = molecule.getBonds();
+    	for (CMLBond bond : bonds) {
+    		String id = bond.createId();
+    		bond.setId(id);
+    	}
     }
     
     private Set<String> checkUnique(List<String> stringList) {
@@ -3060,7 +3127,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @param molecule
      *      * @return
      */
-	public MoleculePair fitToMoleculeTool(CMLMap map, CMLMolecule moleculeRef) {
+	MoleculePair fitToMoleculeTool(CMLMap map, CMLMolecule moleculeRef) {
 		MoleculeTool moleculeRefTool = MoleculeTool.getOrCreateTool(moleculeRef);
 		List<CMLAtom> atomListi = this.getAtomList(map, Direction.FROM);
 		Point3Vector p3vi = AtomTool.getPoint3Vector(atomListi);
@@ -3090,11 +3157,11 @@ public class MoleculeTool extends AbstractSVGTool {
 //			}
 //			LOG.debug("...");
 //		}
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomMatcher3D();
 		for (int i = 0; i < fromSets.size(); i++) {
 			CMLAtomSet atomSet1 = new CMLAtomSet(molecule, fromSets.get(i));
 			CMLAtomSet atomSet2 = new CMLAtomSet(moleculeRef, toSets.get(i));
-			CMLMap geomMap = atomMatcher.matchAtomsByCoordinates(atomSet1, atomSet2, t3);
+			CMLMap geomMap = ((AtomMatcher3D)atomMatcher).match(atomSet1, atomSet2, t3);
 			geomMap.debug("GEOMMAP");
 		}
 		MoleculePair moleculePair = new MoleculePair(this.molecule, moleculeRef);
@@ -3797,5 +3864,35 @@ public class MoleculeTool extends AbstractSVGTool {
     	}
     	return list;
     }
+
+	public static CMLAtomSet createAtomSet(List<CMLMolecule> molecules) {
+		CMLAtomSet atomSet = null;
+		if (molecules.size() > 0) {
+			CMLMolecule newMolecule = new CMLMolecule(molecules.get(0));
+			MoleculeTool newMoleculeTool = MoleculeTool.getOrCreateTool(newMolecule);
+			newMoleculeTool.createLabelsOnMolFromLastIds("m1", molecules.get(0));
+			for (int i = 1, max = molecules.size(); i < max; i++) {
+				CMLMolecule mol = new CMLMolecule(molecules.get(i));
+				newMoleculeTool.addMoleculeTo(mol);
+				newMoleculeTool.createLabelsOnMolFromLastIds("m"+(i+1), molecules.get(i));
+			}
+			atomSet = new CMLAtomSet(newMolecule);
+		}
+		return atomSet;
+	}
+
+	private void createLabelsOnMolFromLastIds(String prefix, CMLMolecule mol) {
+		List<CMLAtom> atoms = mol.getAtoms();
+		int molCount = mol.getAtomCount();
+		List<CMLAtom> thisAtoms = molecule.getAtoms();
+		int start = thisAtoms.size() - molCount;
+		for (int i = 0, max = molCount; i < max; i++) {
+			String id = atoms.get(i).getId();
+			String labelValue = prefix+"_"+id;
+			CMLLabel label = new CMLLabel();
+			label.setCMLValue(labelValue);
+			thisAtoms.get(i+start).addLabel(label);
+		}
+	}
 }
 

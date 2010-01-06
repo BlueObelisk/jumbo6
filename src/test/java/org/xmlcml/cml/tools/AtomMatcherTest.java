@@ -1,10 +1,5 @@
 package org.xmlcml.cml.tools;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +48,6 @@ public class AtomMatcherTest {
 	CMLMolecule mol1;
 	CMLMolecule mol2;
 	AtomTreeTest att = new AtomTreeTest();
-	CMLMolecule dmf;
 
 	/**
 	 * setup.
@@ -63,7 +57,6 @@ public class AtomMatcherTest {
 	@Before
 	public void setUp() throws Exception {
 		att.setUp();
-		dmf = att.dmf;
 	}
 
 	private void makeMol1() {
@@ -79,7 +72,7 @@ public class AtomMatcherTest {
 	 */
 	@Test
 	public void testAtomMatcher() {
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomTreeMatcher();
 		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] {}, atomMatcher
 				.getIncludeElementTypes());
 		Assert.assertEquals("EXCLUDE_ELEMENT_TYPES", new String[] {}, atomMatcher
@@ -108,7 +101,7 @@ public class AtomMatcherTest {
 	 */
 	@Test
 	public void testGetSetIncludeExcludeElementTypes() {
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomTreeMatcher();
 		atomMatcher.setIncludeElementTypes(new String[] { AS.C.value,
 				AS.N.value });
 		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
@@ -134,7 +127,7 @@ public class AtomMatcherTest {
 	 */
 	@Test
 	public void testGetSetIncludeExcludeLigandElementTypes() {
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomTreeMatcher();
 		atomMatcher.setIncludeLigandElementTypes(new String[] { AS.C.value,
 				AS.N.value });
 		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
@@ -160,7 +153,7 @@ public class AtomMatcherTest {
 	@Test
 	public void testSkipAtom() {
 		makeMol1();
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomTreeMatcher();
 		atomMatcher.setIncludeElementTypes(new String[] { AS.C.value,
 				AS.N.value });
 		Assert.assertEquals("INCLUDE_ELEMENT_TYPES ", new String[] { AS.C.value,
@@ -248,9 +241,9 @@ public class AtomMatcherTest {
 		CMLAtomSet atomSet1 = MoleculeTool.getOrCreateTool(mol1).getAtomSet();
 		CMLMolecule mol2 = (CMLMolecule)TstUtils.parseValidString(s2);
 		CMLAtomSet atomSet2 = MoleculeTool.getOrCreateTool(mol2).getAtomSet();
-		AtomMatcher atomMatcher = new AtomMatcher();
+		AtomMatcher atomMatcher = new AtomMatcher2D();
 		atomMatcher.setAtomMatchStrategy(Strategy.MATCH_DISTANCE_MATRIX);
-		CMLMap map12 = atomMatcher.createMapFrom2DOverlap(atomSet1, atomSet2);
+		CMLMap map12 = atomMatcher.match(atomSet1, atomSet2, "distanceMatrix");
 		Real2 expected = new Real2(-29.69990649649227, 0.1654590891169505);
 		for (CMLLink link : map12.getLinkElements()) {
 			Real2 xy1 = mol1.getAtomById(link.getFrom()).getXY2();
@@ -265,7 +258,7 @@ public class AtomMatcherTest {
      */
     @Test
     public void testMatchesCMLAtomCMLAtom() {
-    	AtomMatcher atomMatcher = new AtomMatcher();
+    	AtomMatcher atomMatcher = new AtomTreeMatcher();
     	CMLAtom atom1 = null;
     	CMLAtom atom2 = null;
     	Assert.assertFalse("null does not match", atomMatcher.matches(atom1, atom2));
@@ -278,35 +271,5 @@ public class AtomMatcherTest {
     	Assert.assertTrue("match", atomMatcher.matches(atom1, atom2));
     }
 
-	/**
-	 * Test method for
-	 * 'org.xmlcml.cml.tools.AtomTree.getAtomTreeLabelling(CMLAtomSet,
-	 * AtomMatcher)'
-	 */
-	@SuppressWarnings("all")
-	@Test
-	public void testGetAtomTreeLabelling() {
-		CMLAtomSet atomSet = CMLAtomSet.createFromAtoms(dmf.getAtoms());
-		Map<String, Object> map = new AtomMatcher()
-				.getAtomTreeLabelling(atomSet);
-		Assert.assertNotNull("atom tree map not null", map);
-		Assert.assertEquals("atom tree map size", 4, map.size());
-		String[] treeS = new String[] { "O", "C(N(C)(C(O)))", "C(N)(O)", "N", };
-
-		List list = new ArrayList();
-		for (String t : treeS) {
-			Object obj = map.get(t);
-			list.add(obj);
-		}
-		for (Object obj : list) {
-			if (obj instanceof CMLAtom) {
-				// LOG.debug("A "+((CMLAtom)obj).getId());
-			} else if (obj instanceof CMLAtomSet) {
-				// LOG.debug("AS "+Util.concatenate(((CMLAtomSet)obj).
-				// getXMLContent(), CMLConstants.S_SLASH));
-			}
-		}
-
-	}
 
 }

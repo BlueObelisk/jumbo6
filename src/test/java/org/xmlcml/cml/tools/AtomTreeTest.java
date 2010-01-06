@@ -425,4 +425,26 @@ public class AtomTreeTest {
 								.toString());
 	}
 
+	@Test
+	public void getLevelOfAtomTreeString() {
+		String s = "O(C(C(C)(H))(C(C)(H)(H))(H))(C(H)(H)(H))";
+		int l = AtomTree.getLevelOfAtomTreeString(s);
+		Assert.assertEquals("l", 3, l);
+	}
+
+	@Test
+	public void trimToLevel() {
+		String s = "O(C(C(C)(H))(C(C)(H)(H))(H))(C(H)(H)(H))";
+		Assert.assertEquals("l3", 3, AtomTree.getLevelOfAtomTreeString(s));
+		String ss = AtomTree.trimToLevel(s, 4); // no effect
+		Assert.assertEquals("l3", s, ss);
+		ss = AtomTree.trimToLevel(s, 3); // no effect
+		Assert.assertEquals("l3", s, ss);
+		ss = AtomTree.trimToLevel(s, 2);
+		Assert.assertEquals("l2", 2, AtomTree.getLevelOfAtomTreeString(ss));
+		Assert.assertEquals("l2", "O(C(C)(C)(H))(C(H)(H)(H))", ss);
+		ss = AtomTree.trimToLevel(s, 1);
+		Assert.assertEquals("l1", 1, AtomTree.getLevelOfAtomTreeString(ss));
+		Assert.assertEquals("l1", "O(C)(C)", ss);
+	}
 }

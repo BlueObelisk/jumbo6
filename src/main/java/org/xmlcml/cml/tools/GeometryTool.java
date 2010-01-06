@@ -1057,34 +1057,6 @@ public class GeometryTool extends AbstractTool {
     	return torsion;
     }
     
-    /** pairwise atom-atom alignment of molecules.
-     * 
-     * @param identicalMoleculeList list of identical molecules (e.g. by morgan)
-     * @return upper triangle of transformations from mol(j) onto mol(i)
-     */
-	public static List<List<MoleculePair>> matchAndAlignMolecules(
-			List<CMLMolecule> identicalMoleculeList) {
-		AtomMatcher atomMatcher = new AtomMatcher();
-		atomMatcher.setAtomMatchStrategy(Strategy.MATCH_MORGAN);
-		CMLMap[][] mapMatrix = atomMatcher.getMoleculeMatch(identicalMoleculeList, identicalMoleculeList);
-		List<List<MoleculePair>> moleculePairListList = new ArrayList<List<MoleculePair>>();
-		int i = 0;
-		for (CMLMap[] mapx : mapMatrix) {
-			List<MoleculePair> moleculePairList = new ArrayList<MoleculePair>();
-			moleculePairListList.add(moleculePairList);
-			int j = 0;
-			for (CMLMap map : mapx) {
-				if (j > i) {
-					MoleculeTool moleculeTooli = MoleculeTool.getOrCreateTool(identicalMoleculeList.get(i));
-					MoleculePair moleculePair = moleculeTooli.fitToMoleculeTool(map, identicalMoleculeList.get(j));
-					moleculePairList.add(moleculePair);
-				}
-				j++;
-			}
-			i++;
-		}
-		return moleculePairListList;
-	}
 
 	public void displayAlignments(List<List<MoleculePair>> moleculePairMatrix, List<CMLMolecule> identicalMoleculeList) {
 		
