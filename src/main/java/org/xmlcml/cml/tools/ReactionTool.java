@@ -952,9 +952,21 @@ public class ReactionTool extends AbstractSVGTool {
 	
 	public CMLMap mapReactantsToProductsUsingAtomSets() {
 		List<CMLMolecule> reactantMolecules = getMolecules(Component.REACTANT);
+		if (reactantMolecules.size() == 0) {
+			throw new RuntimeException("No reactants");
+		}
 		CMLAtomSet reactantAtomSet = MoleculeTool.createAtomSet(reactantMolecules);
+		if (reactantAtomSet == null || reactantAtomSet.size() == 0) {
+			throw new RuntimeException("No atoms in reactants");
+		}
 		List<CMLMolecule> productMolecules = getMolecules(Component.PRODUCT);
+		if (reactantMolecules.size() == 0) {
+			throw new RuntimeException("No products");
+		}
 		CMLAtomSet productAtomSet = MoleculeTool.createAtomSet(productMolecules);
+		if (productAtomSet == null || productAtomSet.size() == 0) {
+			throw new RuntimeException("No atoms in products");
+		}
 		AtomMatcher atomMatcher = new AtomTreeMatcher();
 		CMLMap cmlMap = atomMatcher.mapAtomSets(reactantAtomSet, productAtomSet);
 		translateMapToUseOriginalIds(cmlMap, reactantAtomSet, productAtomSet);

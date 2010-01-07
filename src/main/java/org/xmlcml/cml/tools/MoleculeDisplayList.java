@@ -77,7 +77,9 @@ public class MoleculeDisplayList implements CMLDrawable {
 		    	LOG.debug("REDRAW... MOL");
 				g = moleculeTool.createGraphicsElement(this);
 				g.detach();
-				svg.appendChild(g);
+				if (!svg.equals(g)) {
+					svg.appendChild(g);
+				}
 //					CMLUtil.debug(svg);
 				svg.clearCumulativeTransformRecursively();
 				svg.setCumulativeTransformRecursively();

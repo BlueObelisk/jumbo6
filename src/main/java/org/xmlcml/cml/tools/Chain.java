@@ -19,6 +19,7 @@ import org.xmlcml.euclid.Int2;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -219,8 +220,6 @@ public class Chain extends AbstractTool {
 			// get longest path
 			Int2 ij = distanceMatrix.indexOfLargestElement();
 			startAtom = terminalAtomList.get(ij.getX());
-//			CMLAtom endAtom = terminalAtomList.get(ij.getY());
-//			LOG.debug(startAtom.getId()+"<==>"+endAtom.getId()+"/"+spanningTree.getPath(startAtom, endAtom));
 			atomCoordinateMap.put(startAtom, new Real2(0., 0.));
 		} else {
 			startAtom = sprout.getRingAtom();
@@ -235,39 +234,8 @@ public class Chain extends AbstractTool {
         @SuppressWarnings("unused")
 		AtomPath path = (pathList.size() == 0) ? null : pathList.get(0);
 		expandPaths(pathList);
-//		expandPathsOld(sprout, pathList, path);
 	}
 
-//	private void expandPathsOld(Sprout sprout, List<AtomPath> pathList, AtomPath path) {
-//		nextAtom = (path != null && path.size() > 1) ? path.get(1) : null;
-//		if (nextAtom == null) {
-////			atom.setXY2(new Real2(0.0, 0.0));
-//		} else {
-//			if (sprout == null) {
-//				atomCoordinateMap.put(nextAtom, new Real2(bondLength, 0.));
-//			} else {
-//				atomCoordinateMap.put(nextAtom, nextAtom.getXY2());
-//			}
-//			LOG.debug("PATHS "+pathList.size());
-//			for (int i = 0; i < pathList.size(); i++) {
-//				AtomPath atomPath = pathList.get(i);
-//				LOG.debug(">"+i+">"+pathList.get(i));
-//				try {
-//					calculate2DCoordinates(atomPath, i);
-//				} catch (RuntimeException e) {
-//					System.err.println("ERROR-CHAIN: "+e);
-//				}
-//			}
-//			for (CMLAtom atom : atomCoordinateMap.keySet()) {
-//				Real2 xy2 = atomCoordinateMap.get(atom);
-//				if (xy2 == null) {
-//					System.err.println("NULL coord: "+atom.getId());
-//				}
-//				atom.setXY2(xy2);
-//			}
-//		}
-//	}
-	
 	private void expandPaths(List<AtomPath> pathList) {
 		AtomPath atomPath0 = pathList.get(0);
 		CMLAtom atom0 = atomPath0.get(0);
@@ -311,7 +279,14 @@ public class Chain extends AbstractTool {
 		Real2 parentDirection = null;
 		if (grandParent != null) {
 			parentDirection = parent.getXY2().subtract(grandParent.getXY2());
+			LOG.debug("PARENTD"+parentDirection);
+			Vector2 v2 = new Vector2(parentDirection);
+			parentDirection = v2.getUnitVector();
+			parentDirection = parentDirection.multiplyBy(bondLength);
+//			double d = parentDirection.getLength();
+//			parentDirection.getUnitVector();
 		} else {
+			LOG.debug("BONDLENGTH"+bondLength);
 			parentDirection = new Real2(bondLength, 0.0);
 		}
 		direction = new Real2(parentDirection);

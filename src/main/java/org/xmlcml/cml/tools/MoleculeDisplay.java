@@ -107,6 +107,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	 * @return the bondLength
 	 */
 	public double getBondLength() {
+		LOG.debug("BONDLENGTH "+bondLength);
 		return bondLength;
 	}
 	/** apply scale to current molecule.

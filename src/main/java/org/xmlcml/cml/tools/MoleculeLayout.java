@@ -18,6 +18,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Util;
 
 /**
@@ -105,8 +106,13 @@ public class MoleculeLayout extends AbstractTool {
 				}
 				// now make decisions on what is central to diagram
 				nucleusWithMostRemoteSprouts.layout(null);
-				tweakOverlappingAtoms();
+//				if (1 == 2) {
+					tweakOverlappingAtoms();
+//				}
 			}
+			GeometryTool geometryTool = new GeometryTool(moleculeTool.getMolecule());
+			geometryTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, HydrogenControl.USE_EXPLICIT_HYDROGENS);
+			molecule.debug("AFTER H");
 		}
 	}
 	
@@ -323,6 +329,7 @@ public class MoleculeLayout extends AbstractTool {
 			if (!molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {
 				MoleculeLayout moleculeLayout = new MoleculeLayout(moleculeTool);
 				moleculeLayout.create2DCoordinates(molecule);
+				
 			}
 			try {
 				displayList.setAndProcess(moleculeTool);
