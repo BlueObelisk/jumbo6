@@ -53,8 +53,8 @@ public class ReactionTool extends AbstractSVGTool {
 	private CMLFormula aggregateProductFormula;
 	private CMLFormula differenceFormula;
     private List<String> electronIdList;
-
-    /**
+    
+	/**
      * constructor.
      * 
      * @param reaction
@@ -998,8 +998,10 @@ public class ReactionTool extends AbstractSVGTool {
 
 	public void addReactant(String smiles) {
 		SMILESTool smilesTool = new SMILESTool();
-		smilesTool.parseSMILES(smiles);
-		CMLMolecule reactantMol =  smilesTool.getMolecule();
+		addReactant(FormulaTool.calculateMolecule(smilesTool, smiles));
+	}
+
+	private void addReactant(CMLMolecule reactantMol) {
 		CMLReactant reactant = new CMLReactant();
 		reactant.addMolecule(reactantMol);
 		this.reaction.addReactant(reactant);
@@ -1007,10 +1009,9 @@ public class ReactionTool extends AbstractSVGTool {
 
 	public void addProduct(String smiles) {
 		SMILESTool smilesTool = new SMILESTool();
-		smilesTool.parseSMILES(smiles);
-		CMLMolecule productMol =  smilesTool.getMolecule();
+		CMLMolecule productMolecule = FormulaTool.calculateMolecule(smilesTool, smiles);
 		CMLProduct product = new CMLProduct();
-		product.addMolecule(productMol);
+		product.addMolecule(productMolecule);
 		this.addProduct(product);
 	}
 	
@@ -1064,8 +1065,35 @@ public class ReactionTool extends AbstractSVGTool {
 		}
 		return map;
 	}
-	
 
+	public void guessProducts() {
+		CMLFormula diffFormula = this.calculateDifferenceFormula();
+		String concise = diffFormula.getConcise();
+		if (concise == null || concise.trim().equals(CMLConstants.S_EMPTY)) {
+			// do nothing
+		} else {
+			CMLMolecule guessedProductMolecule = getProbableProduct(concise);
+			if (guessedProductMolecule != null) {
+				this.addProduct(guessedProductMolecule);
+			}
+		}
+	}
+
+	public static CMLMolecule getProbableProduct(String concise) {
+		CMLMolecule molecule = null;
+		if (concise != null) {
+			concise = concise.trim();
+			molecule = FormulaTool.ensureConcise2MoleculeMap().get(concise);
+		}
+		return molecule;
+	}
+
+	public void addProduct(CMLMolecule productMolecule) {
+		CMLProduct product = new CMLProduct();
+		product.addMolecule(productMolecule);
+		this.addProduct(product);
+	}
+	
 //	private List<CMLMolecule> getReactantMolecules() {
 //		return getMolecules(CMLReactant.TAG);
 //	}

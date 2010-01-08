@@ -1,10 +1,14 @@
 package org.xmlcml.cml.tools;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLFormula;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
@@ -25,6 +29,8 @@ public class FormulaTool extends AbstractSVGTool {
 	public static String HYDROGEN_COUNT = "hydrogenCount";
 	
 	private CMLFormula formula;
+
+	static Map<String, CMLMolecule> concise2MoleculeMap;
 
 	/**
 	 * constructor
@@ -89,6 +95,31 @@ public class FormulaTool extends AbstractSVGTool {
 		return g;
     }
 	
+	static CMLMolecule calculateMolecule(SMILESTool smilesTool, String smiles) {
+		smilesTool.parseSMILES(smiles);
+		return smilesTool.getMolecule();
+	}
+
+	public static Map<String, CMLMolecule> ensureConcise2MoleculeMap() {
+		if (FormulaTool.concise2MoleculeMap == null) {
+			FormulaTool.concise2MoleculeMap = new HashMap<String, CMLMolecule>();
+			SMILESTool smilesTool = new SMILESTool();
+			FormulaTool.concise2MoleculeMap.put("H 2", FormulaTool.calculateMolecule(smilesTool, "[H][H]"));
+			FormulaTool.concise2MoleculeMap.put("H 2 O 1", FormulaTool.calculateMolecule(smilesTool, "O"));
+			FormulaTool.concise2MoleculeMap.put("H 1 Br 1", FormulaTool.calculateMolecule(smilesTool, "Br"));
+			FormulaTool.concise2MoleculeMap.put("H 1 Cl 1", FormulaTool.calculateMolecule(smilesTool, "Cl"));
+			FormulaTool.concise2MoleculeMap.put("H 1 F 1", FormulaTool.calculateMolecule(smilesTool, "F"));
+			FormulaTool.concise2MoleculeMap.put("H 1 I 1", FormulaTool.calculateMolecule(smilesTool, "I"));
+			FormulaTool.concise2MoleculeMap.put("Br 2", FormulaTool.calculateMolecule(smilesTool, "BrBr"));
+			FormulaTool.concise2MoleculeMap.put("Cl 2", FormulaTool.calculateMolecule(smilesTool, "ClCl"));
+			// this creates a bug - java.lang.RuntimeException: duplicate id: a20
+			// at org.xmlcml.cml.tools.MoleculeTool.checkUnique(MoleculeTool.java:3021)
+//			FormulaTool.concise2MoleculeMap.put("O 2 S 1", FormulaTool.calculateMolecule(smilesTool, "O=S=O"));
+//			FormulaTool.concise2MoleculeMap.put("H 4 O 2", FormulaTool.calculateMolecule(smilesTool, "O.O"));
+		}
+		return FormulaTool.concise2MoleculeMap;
+	}
+
 	/**
 	 * normalize all formulas which are descendant of node
 	 * @param node
