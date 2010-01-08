@@ -58,7 +58,7 @@ public class MoleculeLayout extends AbstractTool {
 	}
 	/**
 	 */
-	private void create2DCoordinates(CMLMolecule molecule) {
+	void create2DCoordinates(CMLMolecule molecule) {
 		ensureMoleculeDisplay();
 		if (molecule.getMoleculeCount() > 0) {
 			for (CMLMolecule subMolecule : molecule.getMoleculeElements()) {
@@ -323,7 +323,8 @@ public class MoleculeLayout extends AbstractTool {
 			MoleculeDisplayList displayList, CMLMolecule molecule) {
 		MoleculeTool moleculeTool = null;
 //		displayList.debugSVG();
-		boolean omitHydrogen = true;
+//		boolean omitHydrogen = true;
+		boolean omitHydrogen = false;
 		if (molecule != null) {
 			moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			if (!molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {

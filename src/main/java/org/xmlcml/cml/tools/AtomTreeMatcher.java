@@ -25,13 +25,15 @@ public class AtomTreeMatcher extends AtomMatcher {
 
 	private static Logger LOG = Logger.getLogger(AtomTreeMatcher.class);
 
-	private static String BALANCED = "balanced";
-	private static String UNBALANCED = "unbalanced";
-	private static String ORPHAN = "orphan";
-	private static String COMMON_LIGANDS = "commonLigands";
-	private static String COMMON_ATOMTREE = "commonAtomTree";
+	public static String BALANCED = "balanced";
+	public static String UNBALANCED = "unbalanced";
+	public static String ORPHAN = "orphan";
+	public static String COMMON_LIGANDS = "commonLigands";
+	public static String COMMON_ATOMTREE = "commonAtomTree";
+	public static String UNIQUE_TREE = "unique treeString";
 	
 	private static int SAFETY = 3;
+	
 	private AtomTreeData atomTreeData0;
 	private AtomTreeData atomTreeData1;
 	private CMLMap cmlMap = null;
@@ -55,7 +57,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 	private void mapSingleMolecules(String title) {
 		cmlMap = makeMap();
 		/*Set<String> uniqueAtomTreeStringSet = */
-		mapUniqueAtomsByTreeString("unique treeString");
+		mapUniqueAtomsByTreeString(UNIQUE_TREE);
 		mapByUniqueLargestCommonAtomTreeStrings();
 		addUniqueLigandsToUniqueAtoms();
 		resolveAmbiguousLinks();

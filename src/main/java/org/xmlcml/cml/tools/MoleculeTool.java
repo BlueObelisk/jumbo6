@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,6 +58,7 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGRect;
+import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -3893,6 +3893,22 @@ public class MoleculeTool extends AbstractSVGTool {
 			label.setCMLValue(labelValue);
 			thisAtoms.get(i+start).addLabel(label);
 		}
+	}
+
+	public SVGSVG draw() {
+		boolean omitHydrogen = false;
+		if (!molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {
+			MoleculeLayout moleculeLayout = new MoleculeLayout(this);
+			moleculeLayout.create2DCoordinates(molecule);
+		}
+		MoleculeDisplayList displayList = new MoleculeDisplayList();
+		try {
+			displayList.setAndProcess(this);
+			displayList.createOrDisplayGraphics();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return displayList.getSvg();
 	}
 }
 
