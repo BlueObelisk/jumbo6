@@ -3910,5 +3910,14 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		return displayList.getSvg();
 	}
+
+	public void stripHydrogens() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (CMLAtom atom : atoms) {
+			if (ChemicalElement.AS.H.toString().equals(atom.getElementType())) {
+				molecule.deleteAtom(atom);
+			}
+		}
+	}
 }
 

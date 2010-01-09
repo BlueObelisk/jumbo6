@@ -851,7 +851,6 @@ public class ReactionTool extends AbstractSVGTool {
     				0.,  0., 1.}
     			);
     
-    	reaction.debug("REACT");
     	List<CMLMolecule> molecules = reaction.getMolecules(Component.REACTANT);
     	if (molecules.size() == 0) {
     		LOG.debug("No molecules to display");
@@ -1058,8 +1057,8 @@ public class ReactionTool extends AbstractSVGTool {
 			map = atomMatcher.mapMolecules(reactantMolecule, productMolecule);
 			CMLAtomSet reactantAtomSet = new CMLAtomSet(reactantMolecule);
 			CMLAtomSet productAtomSet = new CMLAtomSet(productMolecule);			
-			reactantAtomSet.debug("react");
-			productAtomSet.debug("prod");
+//			reactantAtomSet.debug("react");
+//			productAtomSet.debug("prod");
 //			map = atomMatcher.getUniqueMatchedAtoms(reactantAtomSet, productAtomSet);			
 			map.debug("FINAL MAP");
 		}

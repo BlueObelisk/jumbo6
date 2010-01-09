@@ -20,7 +20,7 @@ import org.xmlcml.euclid.Util;
  */
 public class SVGCircle extends SVGElement {
 
-	final static String TAG ="circle";
+	public final static String TAG ="circle";
 	private Ellipse2D.Double circle2;
 
 	public Ellipse2D.Double getCircle2() {

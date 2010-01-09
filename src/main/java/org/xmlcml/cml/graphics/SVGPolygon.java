@@ -12,7 +12,7 @@ import org.xmlcml.euclid.Real2Array;
  */
 public class SVGPolygon extends SVGPoly {
 
-	final static String TAG ="polygon";
+	public final static String TAG ="polygon";
 	
 	/** constructor
 	 */

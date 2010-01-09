@@ -15,7 +15,7 @@ import org.xmlcml.euclid.Real2Array;
  */
 public class SVGTitle extends SVGElement {
 
-	final static String TAG ="title";
+	public final static String TAG ="title";
 
 	protected Real2Array real2Array;
 	

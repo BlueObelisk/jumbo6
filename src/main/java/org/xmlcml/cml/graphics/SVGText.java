@@ -25,7 +25,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class SVGText extends SVGElement {
 	private static Logger LOG = Logger.getLogger(SVGText.class);
-	final static String TAG ="text";
+	public final static String TAG ="text";
 	
     public static String SUB0 = CMLConstants.S_UNDER+CMLConstants.S_LCURLY;
     public static String SUP0 = CMLConstants.S_CARET+CMLConstants.S_LCURLY;
