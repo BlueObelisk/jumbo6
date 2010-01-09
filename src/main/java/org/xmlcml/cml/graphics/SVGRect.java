@@ -22,7 +22,7 @@ import org.xmlcml.euclid.Util;
  */
 public class SVGRect extends SVGElement {
 
-	final static String TAG ="rect";
+	final public static String TAG ="rect";
 
 	/** constructor
 	 */

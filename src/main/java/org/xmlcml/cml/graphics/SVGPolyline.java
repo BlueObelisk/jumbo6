@@ -17,7 +17,7 @@ import org.xmlcml.euclid.Real2Array;
  */
 public class SVGPolyline extends SVGPoly {
 
-	final static String TAG ="polyline";
+	public final static String TAG ="polyline";
 
 	/** constructor
 	 */

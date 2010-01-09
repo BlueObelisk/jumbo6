@@ -29,8 +29,8 @@ import org.xmlcml.euclid.Util;
  */
 public class MoleculeLayout extends AbstractTool {
 	final static Logger LOG = Logger.getLogger(MoleculeLayout.class);
-	
-//	private CMLMolecule molecule;
+
+	private static int MAX_CYCLES = 300;
 	private MoleculeTool moleculeTool;
 	private MoleculeDisplay moleculeDisplay;
 	private RingNucleusSet ringNucleusSet;
@@ -73,6 +73,7 @@ public class MoleculeLayout extends AbstractTool {
 			chainSet = new ChainSet(this);
 			sproutMap = new HashMap<Sprout, Chain>();
 			sproutNucleusMap = new HashMap<Sprout, RingNucleus>();
+			int maxCycles = MAX_CYCLES;
 			if (ringNucleusSet.size() == 0) {
 				chainSet.findOrCreateAndAddChain(new CMLBondSet(moleculeTool.getMolecule()));
 				chainSet.layout(this);
@@ -105,14 +106,14 @@ public class MoleculeLayout extends AbstractTool {
 					}
 				}
 				// now make decisions on what is central to diagram
-				nucleusWithMostRemoteSprouts.layout(null);
+				nucleusWithMostRemoteSprouts.layout(null, maxCycles);
 //				if (1 == 2) {
 					tweakOverlappingAtoms();
 //				}
 			}
 			GeometryTool geometryTool = new GeometryTool(moleculeTool.getMolecule());
 			geometryTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, HydrogenControl.USE_EXPLICIT_HYDROGENS);
-			molecule.debug("AFTER H");
+//			molecule.debug("AFTER H");
 		}
 	}
 	

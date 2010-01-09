@@ -269,7 +269,10 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 	 * 
 	 * @param sprout
 	 */
-	public void layout(Sprout sprout) {
+	public void layout(Sprout sprout, int cycles) {
+		if (cycles-- <= 0) {
+			throw new RuntimeException("layout recurses too deeply");
+		}
 		Real2 oldSproutVector = null;
 		Real2 oldRingXY2 = null;
 		Real2 oldFirstXY2 = null;
@@ -296,7 +299,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		for (Sprout otherSprout : sproutList) {
 			if (otherSprout != sprout) {
 				Chain chain = moleculeDraw.getSproutMap().get(otherSprout);
-				chain.layout(otherSprout);
+				chain.layout(otherSprout, cycles);
 			}
 		}
 	}
@@ -420,6 +423,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		Sprout leadSprout = getSprout(ringToBeAdded, leadAtom);
 		if (tailSprout == null || leadSprout == null) {
 			System.err.println("Null sprout");
+			throw new RuntimeException("Null sprout - cannot draw");
 		} else {
 			//resultant sprout from old ring
 			Real2 oldRingMedianSprout = tailSprout.getSproutVector().plus(leadSprout.getSproutVector());

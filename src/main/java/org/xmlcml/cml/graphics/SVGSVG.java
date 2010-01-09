@@ -12,7 +12,7 @@ import nu.xom.Node;
  */
 public class SVGSVG extends SVGElement {
 
-	final static String TAG = "svg";
+	public final static String TAG = "svg";
 	
 	/** constructor.
 	 * 

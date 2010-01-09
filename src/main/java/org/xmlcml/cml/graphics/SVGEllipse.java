@@ -19,7 +19,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class SVGEllipse extends SVGElement {
 
-	final static String TAG ="ellipse";
+	public final static String TAG ="ellipse";
 
 	/** constructor
 	 */

@@ -27,7 +27,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class SVGLine extends SVGElement {
 
-	final static String TAG ="line";
+	public final static String TAG ="line";
 
 	private Line2D.Double line2;
 	private Line2 euclidLine;

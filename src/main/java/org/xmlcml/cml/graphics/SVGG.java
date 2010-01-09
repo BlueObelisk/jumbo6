@@ -14,7 +14,7 @@ import nu.xom.Node;
  */
 public class SVGG extends SVGElement {
 
-	final static String TAG ="g";
+	public final static String TAG ="g";
 
 	/** constructor
 	 */

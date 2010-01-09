@@ -18,6 +18,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	static {
 		DEFAULT.setDefaults();
 	};
+	public final static double DEFAULT_BONDLENGTH = 50.;
 	
 	// all atom displays are now defaults
 	private AtomDisplay defaultAtomDisplay = new AtomDisplay();
@@ -57,7 +58,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	protected void setDefaults() {
 		super.setDefaults();
 
-		bondLength = 50.0;
+		bondLength = DEFAULT_BONDLENGTH;
 		hydrogenLengthFactor = 0.7;
 		contractGroups = false;
 		
@@ -107,7 +108,6 @@ public class MoleculeDisplay extends AbstractDisplay {
 	 * @return the bondLength
 	 */
 	public double getBondLength() {
-		LOG.debug("BONDLENGTH "+bondLength);
 		return bondLength;
 	}
 	/** apply scale to current molecule.

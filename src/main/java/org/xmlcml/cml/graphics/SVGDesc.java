@@ -11,7 +11,7 @@ import nu.xom.Node;
  */
 public class SVGDesc extends SVGElement {
 
-	final static String TAG ="desc";
+	public final static String TAG ="desc";
 
 	/** constructor
 	 */

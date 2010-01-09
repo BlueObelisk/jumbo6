@@ -26,7 +26,7 @@ public class SVGPath extends SVGElement {
 		LOG.setLevel(Level.INFO);
 	}
 	
-	final static String TAG ="path";
+	public final static String TAG ="path";
 	private GeneralPath path2;
 
 	/** constructor

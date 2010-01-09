@@ -47,6 +47,7 @@ public class Chain extends AbstractTool {
 
 	private static Transform2 ROT60 = new Transform2(new Angle(Math.PI/3.));
 	private static Transform2 ROT300 = new Transform2(new Angle(-Math.PI/3.));
+	private static Transform2 ROT0 = new Transform2(new Angle(0.0));
 	private static Transform2 ROT30 = new Transform2(new Angle(Math.PI/6.));
 	private static Transform2 ROT330 = new Transform2(new Angle(Math.PI/6.));
 
@@ -252,6 +253,8 @@ public class Chain extends AbstractTool {
 			Real2 xy = node.getXY2();
 			if (xy == null) {
 				Real2 direction = getDirection(atomPath, i, node);
+				direction = direction.getUnitVector().multiplyBy(MoleculeDisplay.DEFAULT_BONDLENGTH);
+//				System.out.println("DIRECTION... "+direction.getLength());
 				xy = atomPath.get(i-1).getXY2().plus(direction);
 				node.setXY2(xy);
 			}
@@ -286,7 +289,7 @@ public class Chain extends AbstractTool {
 //			double d = parentDirection.getLength();
 //			parentDirection.getUnitVector();
 		} else {
-			LOG.debug("BONDLENGTH"+bondLength);
+//			LOG.debug("BONDLENGTH"+bondLength);
 			parentDirection = new Real2(bondLength, 0.0);
 		}
 		direction = new Real2(parentDirection);
@@ -298,13 +301,16 @@ public class Chain extends AbstractTool {
 			}
 			direction = parent.getXY2().subtract(grandParent.getXY2());
 			if (grandDirection == null) {
-				direction.transformBy(ROT330);
+//				direction.transformBy(ROT330);
+				direction.transformBy(ROT0);
 			} else {
 				Real2 direction1 = new Real2(direction);
-				direction1.transformBy(ROT30);
+//				direction1.transformBy(ROT30);
+				direction1.transformBy(ROT0);
 				double dot1 = Math.abs(direction1.dotProduct(grandDirection));
 				Real2 direction2 = new Real2(direction);
-				direction2.transformBy(ROT330);
+//				direction2.transformBy(ROT330);
+				direction2.transformBy(ROT0);
 				double dot2 = Math.abs(direction2.dotProduct(grandDirection));
 				direction = (dot1 > dot2) ? direction1 : direction2;
 			}
@@ -513,13 +519,13 @@ public class Chain extends AbstractTool {
 	 * recursively visit attachments
 	 * @param sprout
 	 */
-	public void layout(Sprout sprout) {
+	public void layout(Sprout sprout, int cycles) {
 		sprout.generateCoordinates();
 		applyCoordinates();
 		for (Sprout otherSprout : sproutList) {
 			if (sprout != otherSprout) {
 				RingNucleus nextNucleus = moleculeDraw.getSproutNucleusMap().get(otherSprout);
-				nextNucleus.layout(otherSprout);
+				nextNucleus.layout(otherSprout, cycles);
 			}
 		}
 	}

@@ -630,8 +630,7 @@ public class ReactionToolTest {
 		reactionTool.addProduct("CCC(=O)NCC");
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-//		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets1", cmlMap);
 	}
 
 	@Test
@@ -642,8 +641,7 @@ public class ReactionToolTest {
 		reactionTool.addReactant("C=C=O");
 		reactionTool.addProduct("C12C=CCC1CC(=O)2");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-//		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets2", cmlMap);
 	}
 
 	@Test
@@ -654,8 +652,7 @@ public class ReactionToolTest {
 		reactionTool.addReactant("C=C=O");
 		reactionTool.addProduct("C12C=C(Cl)CC1CC(=O)2");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-//		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets2a", cmlMap);
 	}
 
 	@Test
@@ -667,8 +664,7 @@ public class ReactionToolTest {
 		reactionTool.addProduct("c1ccccc1C(=O)NCC");
 		reactionTool.addProduct("Cl");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets3", cmlMap);
 	}
 
 	@Test
@@ -678,8 +674,7 @@ public class ReactionToolTest {
 		reactionTool.addReactant("CCCCOC=CC");
 		reactionTool.addProduct("CCCCO[CH][CH]C");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testPolyinfo1", cmlMap);
 	}
 
 	@Test
@@ -690,8 +685,7 @@ public class ReactionToolTest {
 		reactionTool.addProduct("[NH]C[C](=O)");
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		reactionTool.getReaction().debug("REACTION");
-		cmlMap.debug("REACTION MAP");
+		Assert.assertNotNull("testPolyinfo2", cmlMap);
 	}
 
 	/**
