@@ -16,9 +16,6 @@ import org.xmlcml.util.TestUtils;
 public class TestFit2D {
 
 	private static final Logger LOG = Logger.getLogger(TestFit2D.class);
-	
-	private static final double EPS = 0.001;
-	
 	public TestFit2D() {}
 	
 	@Test
@@ -36,10 +33,11 @@ public class TestFit2D {
 		CMLMolecule mol2 = readMolecule("org/xmlcml/cml/tools/matcher/acetylsalicylic.xml");
 		CMLMap cmlMap = new AtomTreeMatcher().mapMolecules(mol1, mol2);
 		Transform2 test = new Matcher2D().fit2D(mol1, mol2, cmlMap);
-		Transform2 expected = new Transform2(new double[]{-0.9999999999074332,-1.3606383073029906E-5,4.3414483446047776E-5,
-				1.3606383073029906E-5,-0.9999999999074332,-1.254011572237606E-4,
-				0.0,0.0,1.0,});
-		TestUtils.assertEquals("fit2d", expected, test, EPS);
+//		System.out.println(test);
+		Transform2 expected = new Transform2(new double[]{-0.9999999999729805,7.3511284464652065E-6,-8.136727333654608E-6,
+				-7.3511284464652065E-6,-0.9999999999729805,2.8559189798344974E-5,
+				0.0,0.0,1.0});
+		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
 		
  	}
 	
@@ -49,11 +47,11 @@ public class TestFit2D {
 		CMLMolecule mol2 = readMolecule("org/xmlcml/cml/tools/matcher/2carboxy.xml");
 		CMLMap cmlMap = new AtomTreeMatcher().mapMolecules(mol1, mol2);
 		Transform2 test = new Matcher2D().fit2D(mol1, mol2, cmlMap);
-		Transform2 expected = new Transform2(new double[]{0.9830239632543735,0.18347721293845792,-3.5699492578022154,
-				-0.18347721293845792,0.9830239632543735,3.0464093503943506,
+		Transform2 expected = new Transform2(new double[]{0.983077626540501,0.18318946529616598,-3.570670927524805,
+				-0.18318946529616598,0.983077626540501,3.0463031621387975,
 				0.0,0.0,1.0,});
-		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, EPS);
+//		System.out.println(test);
+		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
 	}
 	
 	@Test
@@ -62,11 +60,11 @@ public class TestFit2D {
 		CMLMolecule mol2 = readMolecule("org/xmlcml/cml/tools/matcher/2carboxy.xml");
 		CMLMap cmlMap = new AtomTreeMatcher().mapMolecules(mol1, mol2);
 		Transform2 test = new Matcher2D().fit2D(mol1, mol2, cmlMap);
-		Transform2 expected = new Transform2(new double[]{-0.9831192965130704,-0.182965703954718,3.5706041359369074,
-				0.182965703954718,-0.9831192965130704,-3.0459281597142356,
-				0.0,0.0,1.0});
-		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, EPS);
+		Transform2 expected = new Transform2(new double[]{-0.9830956282690666,-0.18309283349778954,3.5706653198667855,
+				0.18309283349778954,-0.9830956282690666,-3.0461985876806974,
+				0.0,0.0,1.0,});
+//		System.out.println(test);
+		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
 	}
 	
 	private CMLElement readCML(String filename) {
