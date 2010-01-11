@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cml xmlns="http://www.xml-cml.org/schema" xmlns:cmlDict="http://www.xml-cml.org/dictionary/cml/" xmlns:nameDict="http://www.xml-cml.org/dictionary/cml/name/" convention="cmlDict:cmllite">
+  <molecule>
+    <name dictRef="nameDict:unknown">acetylsalicylic acid</name>
+    <atomArray>
+      <atom id="a1" elementType="C" hydrogenCount="0" x2="-0.20040237458068466" y2="-1.0336261296068499">
+      </atom>
+      <atom id="a2" elementType="C" x2="-1.2396328591220103" y2="-0.43362612960684876">
+      </atom>
+      <atom id="a11" elementType="O" hydrogenCount="0" x2="-0.2004023745806851" y2="-2.23362612960685">
+      </atom>
+      <atom id="a16" elementType="H" x2="-0.6396328591220106" y2="0.6056043549344776" />
+      <atom id="a17" elementType="H" x2="-2.2788633436633363" y2="0.16637387039315232" />
+      <atom id="a18" elementType="H" x2="-1.8396328591220112" y2="-1.4728566141481751" />
+      <atom id="a3" elementType="C" hydrogenCount="0" x2="2.9172890790432957" y2="0.7663738703931489" />
+      <atom id="a4" elementType="C" hydrogenCount="0" x2="2.917289079043295" y2="-0.43362612960685115" >
+      </atom>
+      <atom id="a5" elementType="C" hydrogenCount="0" x2="1.8780585945019679" y2="-1.033626129606851" >
+      </atom>
+      <atom id="a6" elementType="O" hydrogenCount="0" x2="0.8388281099606418" y2="-0.4336261296068504" />
+      <atom id="a7" elementType="C" x2="1.878058594501966" y2="-2.2336261296068516" >
+      </atom>
+      <atom id="a8" elementType="C" x2="2.917289079043292" y2="-2.8336261296068517" >
+      </atom>
+      <atom id="a9" elementType="C" x2="3.9565195635846195" y2="-2.2336261296068534" >
+      </atom>
+      <atom id="a10" elementType="C" x2="3.9565195635846218" y2="-1.0336261296068523" >
+      </atom>
+      <atom id="a13" elementType="O" x2="3.956519563584622" y2="1.3663738703931478">
+      </atom>
+      <atom id="a15" elementType="O" hydrogenCount="0" x2="1.87805859450197" y2="1.3663738703931505">
+      </atom>
+      <atom id="a19" elementType="H" x2="0.8388281099606392" y2="-2.8336261296068512" />
+      <atom id="a20" elementType="H" x2="2.9172890790432895" y2="-4.033626129606851" />
+      <atom id="a21" elementType="H" x2="4.995750048125945" y2="-2.8336261296068534" />
+      <atom id="a22" elementType="H" x2="4.995750048125949" y2="-0.4336261296068531" />
+      <atom id="a23" elementType="H" x2="3.956519563584623" y2="2.5663738703931482" />
+    </atomArray>
+    <bondArray>
+      <bond id="a1_a2" atomRefs2="a1 a2" order="S" />
+      <bond id="a1_a11" atomRefs2="a1 a11" order="D" />
+      <bond id="a2_a16" atomRefs2="a2 a16" order="S" />
+      <bond id="a2_a17" atomRefs2="a2 a17" order="S" />
+      <bond id="a2_a18" atomRefs2="a2 a18" order="S" />
+      <bond id="a3_a4" atomRefs2="a3 a4" order="S" />
+      <bond id="a4_a5" atomRefs2="a4 a5" order="S" />
+      <bond id="a5_a6" atomRefs2="a5 a6" order="S" />
+      <bond id="a5_a7" atomRefs2="a5 a7" order="D" />
+      <bond id="a7_a8" atomRefs2="a7 a8" order="S" />
+      <bond id="a8_a9" atomRefs2="a8 a9" order="D" />
+      <bond id="a9_a10" atomRefs2="a9 a10" order="S" />
+      <bond id="a4_a10" atomRefs2="a4 a10" order="D" />
+      <bond id="a3_a13" atomRefs2="a3 a13" order="S" />
+      <bond id="a3_a15" atomRefs2="a3 a15" order="D" />
+      <bond id="a7_a19" atomRefs2="a7 a19" order="S" />
+      <bond id="a8_a20" atomRefs2="a8 a20" order="S" />
+      <bond id="a9_a21" atomRefs2="a9 a21" order="S" />
+      <bond id="a10_a22" atomRefs2="a10 a22" order="S" />
+      <bond id="a13_a23" atomRefs2="a13 a23" order="S" />
+      <bond id="a1_a6" atomRefs2="a1 a6" order="S" />
+    </bondArray>
+  </molecule>
+</cml>
