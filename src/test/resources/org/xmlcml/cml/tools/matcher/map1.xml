@@ -1,0 +1,20 @@
+<map toType="atom" fromType="atom" xmlns="http://www.xml-cml.org/schema">
+  <link title="unique treeString O" fromSet="a10" toSet="a11"/>
+  <link title="unique treeString C" fromSet="a3" toSet="a3"/>
+  <link title="unique treeString C" fromSet="a1" toSet="a1"/>
+  <link title="unique treeString H" fromSet="a21" toSet="a21"/>
+  <link title="unique treeString C" fromSet="a8" toSet="a9"/>
+  <link title="unique treeString C" fromSet="a5" toSet="a5"/>
+  <link title="unique treeString C" fromSet="a6" toSet="a7"/>
+  <link title="unique treeString H" fromSet="a22" toSet="a22"/>
+  <link title="unique treeString H" fromSet="a20" toSet="a20"/>
+  <link title="unique treeString O" fromSet="a12" toSet="a6"/>
+  <link title="unique treeString C" fromSet="a4" toSet="a4"/>
+  <link title="unique treeString H" fromSet="a23" toSet="a23"/>
+  <link title="unique treeString C" fromSet="a2" toSet="a2"/>
+  <link title="unique treeString O" fromSet="a13 a15" toSet="a13 a15"/>
+  <link title="unique treeString C" fromSet="a7" toSet="a8"/>
+  <link title="unique treeString H" fromSet="a19" toSet="a19"/>
+  <link title="unique treeString C" fromSet="a9" toSet="a10"/>
+  <link title="unique treeString H" fromSet="a16 a17 a18" toSet="a16 a17 a18"/>
+</map>
