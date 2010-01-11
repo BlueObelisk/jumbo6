@@ -530,12 +530,16 @@ public abstract class AtomMatcher extends AbstractTool {
 	public CMLMap mapMolecules(CMLMolecule molecule0, CMLMolecule molecule1)
 			throws RuntimeException {
 		CMLMap cmlMap = null;
-		if (molecule1 != null) {
+		if (molecule0 != null && molecule1 != null) {
 			CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule0)
 					.getAtomSet();
+//			atomSet.debug("AtomSet to match");
 			CMLAtomSet atomSet1 = MoleculeTool.getOrCreateTool(molecule1)
 					.getAtomSet();
+//			atomSet1.debug("AtomSet to match");
 			cmlMap = this.mapAtomSets(atomSet, atomSet1);
+		} else {
+			throw new RuntimeException("Cannot match null molecules");
 		}
 		return cmlMap;
 	}

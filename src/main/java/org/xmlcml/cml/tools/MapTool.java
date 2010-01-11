@@ -166,5 +166,4 @@ public class MapTool extends AbstractTool {
 	private String translateIds(String value, Map<String, String> idMap) {
 		return idMap.get(value);
 	}
-    
 }
