@@ -1170,11 +1170,15 @@ public class ReactionTool extends AbstractSVGTool {
 	private SVGSVG[] draw(String[] commands) {
 		SVGSVG[] svgsvg = new SVGSVG[2];
 		CMLMolecule product0 = this.getProduct(0).getMolecule();
+		boolean omitHydrogen = false;
 		if (getCommand(commands, STRIP_HYD)) {
 			MoleculeTool.getOrCreateTool(product0).stripHydrogens();
+			omitHydrogen = true;
 		}
-		svgsvg[1] = createSvg(product0);
-		svgsvg[0] = createSvg(this.getReactant(0).getMolecule());
+		// for testing
+		omitHydrogen = true;
+		svgsvg[1] = createSvg(product0, omitHydrogen);
+		svgsvg[0] = createSvg(this.getReactant(0).getMolecule(), omitHydrogen);
 		CMLReaction reaction = this.getReaction();
 		CMLMap map = reaction.getMapElements().get(0);
 		CMLElements<CMLLink> links = map.getLinkElements();
@@ -1324,11 +1328,11 @@ public class ReactionTool extends AbstractSVGTool {
 		}
 	}
 
-	private SVGSVG createSvg(CMLMolecule molecule) {
+	private SVGSVG createSvg(CMLMolecule molecule, boolean omitHydrogen) {
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	SVGSVG svg = null;
 		try {
-	    	svg = moleculeTool.draw();
+	    	svg = moleculeTool.draw(omitHydrogen);
 	    	addDefs(svg);
 		} catch (Exception e) {
 			System.err.println("ERROR "+e);
@@ -1471,7 +1475,6 @@ public class ReactionTool extends AbstractSVGTool {
 	public void drawToDirectory(Element ul, File pdir,
 			String[] commands) throws IOException {
 		SVGSVG[] svgs = this.draw(commands);
-//		SVGSVG[] svgs = this.draw();
 		Element li = this.createBoth(pdir, svgs);
 		if (li != null) {
 			ul.appendChild(li);

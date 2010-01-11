@@ -3895,12 +3895,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGSVG draw() {
-		boolean omitHydrogen = false;
-		if (!molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {
-			MoleculeLayout moleculeLayout = new MoleculeLayout(this);
-			moleculeLayout.create2DCoordinates(molecule);
-		}
+	public SVGSVG draw(boolean omitHydrogen) {
+		ensure2DCoordinates(omitHydrogen);
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		try {
 			displayList.setAndProcess(this);
@@ -3909,6 +3905,17 @@ public class MoleculeTool extends AbstractSVGTool {
 			e.printStackTrace();
 		}
 		return displayList.getSvg();
+	}
+
+	public void ensure2DCoordinates(boolean omitHydrogen) {
+		if (!molecule.hasCoordinates(CoordinateType.TWOD, omitHydrogen)) {
+			MoleculeLayout moleculeLayout = new MoleculeLayout(this);
+			try {
+				moleculeLayout.create2DCoordinates(molecule);
+			} catch (RuntimeException e) {
+				LOG.error("Cannot create coordinates: "+e);
+			}
+		}
 	}
 
 	public void stripHydrogens() {
