@@ -177,18 +177,16 @@
 		</plugins>
 	</build>
 	<repositories>
-	<!-- 
+		<repository>
+			<id>ucc-repository</id>
+			<name>Hudson-UCC</name>
+			<url>http://maven.ch.cam.ac.uk/m2repo</url>
+		</repository>
 		<repository>
 			<id>wwmm</id>
 			<name>WWMM</name>
 			<url>http://wwmm.ch.cam.ac.uk/maven2/
 			</url>
-		</repository>
-		-->
-		<repository>
-			<id>ucc-repository</id>
-			<name>Hudson-UCC</name>
-			<url>http://maven.ch.cam.ac.uk/m2repo</url>
 		</repository>
 	</repositories>
 	<dependencies>
