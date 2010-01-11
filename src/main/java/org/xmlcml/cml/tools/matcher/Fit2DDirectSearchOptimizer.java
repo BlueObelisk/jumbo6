@@ -33,14 +33,14 @@ public class Fit2DDirectSearchOptimizer  {
 	
 	private void setDefaults() {
 		setConvergenceLimit(0.5, 0.1);
-		steps[0] = 1.0;
-		steps[1] = 1.0;
-		steps[2] = 1.0;
+		steps[0] = 0.1;
+		steps[1] = 50.0;
+		steps[2] = 50.0;
 		directSearchOptimizer.setStartConfiguration(steps);
 		startPoint[0] = -1.0;
 		startPoint[1] = -1.0;
 		startPoint[2] = -1.0;
-		maxIterations = 25;
+		maxIterations = 100;
 		setMaxIterations(maxIterations);
 		this.goalType = GoalType.MINIMIZE;
 	}
