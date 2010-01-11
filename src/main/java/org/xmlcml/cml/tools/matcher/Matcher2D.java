@@ -5,6 +5,11 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Transform2;
 
+/**
+ * matches 2D structures
+ * @author pm286
+ *
+ */
 public class Matcher2D {
 
 	private static final Logger LOG = Logger.getLogger(Matcher2D.class);
