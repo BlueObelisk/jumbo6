@@ -106,4 +106,31 @@ public class LinkTool extends AbstractTool {
 		link.setFromSet(newFromAtomSet.getAtomIDs());
 	}
 
+	public String getSingleToAtomRef() {
+		return getSingleAtomRef(link.getTo(), link.getToSet());
+	}
+
+	public String getSingleFromAtomRef() {
+		return getSingleAtomRef(link.getFrom(), link.getFromSet());
+	}
+	
+	public CMLAtom getSingleToAtom(CMLMolecule mol) {
+		String ref = this.getSingleToAtomRef();
+		return (ref == null) ? null : mol.getAtomById(ref);
+	}
+
+	public CMLAtom getSingleFromAtom(CMLMolecule mol) {
+		String ref = this.getSingleFromAtomRef();
+		return (ref == null) ? null : mol.getAtomById(ref);
+	}
+
+	private String getSingleAtomRef(String toFrom, String[] toFromSet) {
+		String toFromRef = null;
+		if (toFrom != null) {
+			toFromRef = toFrom;
+		} else if (toFromSet != null && toFromSet.length == 1) {
+			toFromRef = toFromSet[0];
+		}
+		return toFromRef;
+	}
 };

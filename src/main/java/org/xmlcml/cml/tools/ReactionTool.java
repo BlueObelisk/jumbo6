@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -7,20 +9,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLName;
 import org.xmlcml.cml.element.CMLProduct;
 import org.xmlcml.cml.element.CMLProductList;
 import org.xmlcml.cml.element.CMLReactant;
@@ -31,10 +39,18 @@ import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
+import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGLine;
+import org.xmlcml.cml.graphics.SVGRect;
+import org.xmlcml.cml.graphics.SVGSVG;
+import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 
 /**
  * too to support reactions. not fully developed
@@ -46,8 +62,16 @@ public class ReactionTool extends AbstractSVGTool {
 
     Logger LOG = Logger.getLogger(ReactionTool.class);
 
+	public static String DRAW = "draw";
+	public static String MASS = "mass";
+	public static String STRIP_HYD = "strip_hydrogen";
+	
     private CMLReaction reaction = null;
 	private ReactionDisplay reactionDisplay;
+	private static int patternCount = 0;
+	private static Element defs = null;
+	private static String PATTERN = "pattern";
+	
 
 	private CMLFormula aggregateReactantFormula;
 	private CMLFormula aggregateProductFormula;
@@ -935,11 +959,31 @@ public class ReactionTool extends AbstractSVGTool {
     /** convenience method
      * 
      * @param i
+     * @return i'th reactant
+     */
+    public CMLMolecule getProductMolecule(int i) {
+    	CMLProduct product = getProduct(i);
+    	return (product == null) ? null : product.getMolecule();
+    }
+    
+    /** convenience method
+     * 
+     * @param i
      * @return i'th product
      */
     public CMLProduct getProduct(int i) {
     	return reaction.getProductList().getProductElements().get(i);
     }
+    /** convenience method
+     * 
+     * @param i
+     * @return i'th reactant
+     */
+    public CMLMolecule getReactantMolecule(int i) {
+    	CMLReactant reactant = getReactant(i);
+    	return (reactant == null) ? null : reactant.getMolecule();
+    }
+    
 
 	public void mapReactantsToProducts() {
 //		List<CMLMolecule> reactantMolecules = getMolecules(Component.REACTANT);
@@ -1092,23 +1136,387 @@ public class ReactionTool extends AbstractSVGTool {
 		product.addMolecule(productMolecule);
 		this.addProduct(product);
 	}
-	
-//	private List<CMLMolecule> getReactantMolecules() {
-//		return getMolecules(CMLReactant.TAG);
-//	}
-//
-//	private List<CMLMolecule> getProductMolecules() {
-//		return getMolecules(CMLProduct.TAG);
-//	}
-//
-//	private List<CMLMolecule> getMolecules(String reactantProduct) {
-//		List<CMLMolecule> molecules = new ArrayList<CMLMolecule>();
-//		Nodes nodes = reaction.query(".//*[local-name()='"+reactantProduct+"']/*" +
-//				"[local-name()='"+CMLMolecule.TAG+"']");
-//		for (int i = 0; i < nodes.size(); i++) {
-//			molecules.add((CMLMolecule) nodes.get(i));
-//		}
-//		return molecules;
-//	}
 
+	/*
+	public SVGSVG[] draw() {
+		SVGSVG[] svgsvg = new SVGSVG[2];
+		CMLMolecule product0 = this.getProduct(0).getMolecule();
+		svgsvg[1] = createSvg(product0);
+		svgsvg[0] = createSvg(this.getReactant(0).getMolecule());
+		CMLReaction reaction = this.getReaction();
+		CMLMap map = reaction.getMapElements().get(0);
+		CMLElements<CMLLink> links = map.getLinkElements();
+		List<CMLLink> uniqueLinks = new ArrayList<CMLLink>();
+		List<CMLLink> balancedCommonLinks = new ArrayList<CMLLink>();
+		List<CMLLink> otherLinks = new ArrayList<CMLLink>();
+		
+		for (CMLLink link : links) {
+			String title = link.getTitle();
+			if (title.startsWith(AtomTreeMatcher.UNIQUE_TREE)) {
+				uniqueLinks.add(link);
+			} else if (title.startsWith("balanced commonAtomTree")) {
+				balancedCommonLinks.add(link);
+			} else {
+				otherLinks.add(link);
+			}
+		}
+		addGradientsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
+		addGradientsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
+		addGradientsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
+		return svgsvg;
+	}
+	*/
+	
+	private SVGSVG[] draw(String[] commands) {
+		SVGSVG[] svgsvg = new SVGSVG[2];
+		CMLMolecule product0 = this.getProduct(0).getMolecule();
+		if (getCommand(commands, STRIP_HYD)) {
+			MoleculeTool.getOrCreateTool(product0).stripHydrogens();
+		}
+		svgsvg[1] = createSvg(product0);
+		svgsvg[0] = createSvg(this.getReactant(0).getMolecule());
+		CMLReaction reaction = this.getReaction();
+		CMLMap map = reaction.getMapElements().get(0);
+		CMLElements<CMLLink> links = map.getLinkElements();
+		List<CMLLink> uniqueLinks = new ArrayList<CMLLink>();
+		List<CMLLink> balancedCommonLinks = new ArrayList<CMLLink>();
+		List<CMLLink> otherLinks = new ArrayList<CMLLink>();
+		
+		for (CMLLink link : links) {
+			String title = link.getTitle();
+			if (title.startsWith(AtomTreeMatcher.UNIQUE_TREE)) {
+				uniqueLinks.add(link);
+			} else if (title.startsWith("balanced commonAtomTree")) {
+				balancedCommonLinks.add(link);
+			} else {
+				otherLinks.add(link);
+			}
+		}
+		addGradientsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
+		addGradientsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
+		addGradientsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
+		return svgsvg;
+	}
+	
+	private void addGradientsToLinkAtoms(SVGSVG[] svgsvg, List<CMLLink> links, double strokeWidth, String strokeColour) {
+		int gradient = 0;
+		int nlinks = links.size();
+		for (CMLLink link : links) {
+			gradient++;
+			addPattern(svgsvg[0], link.getFromSet(), gradient, strokeWidth, strokeColour);
+			addDefs(svgsvg[0]);
+			addPattern(svgsvg[1], link.getToSet(), gradient, strokeWidth, strokeColour);
+			addDefs(svgsvg[1]);
+		}
+	}
+
+	private void addDefs(SVGSVG svgsvg) {
+		ensurePatterns();
+		if (svgsvg != null && svgsvg.query("//*[local-name()='defs']").size() == 0) {
+			svgsvg.insertChild(defs.copy(), 0);
+		}
+	}
+	
+	private static Element ensurePatterns() {
+		if (patternCount == 0 && defs == null) {
+			defs = new Element("defs", CMLConstants.CML_NS);
+			double w01 = 4.0;
+			double h01 = 4.0;
+			double w11 = 4.0;
+			double h11 = 4.0;
+			
+			double w02 = 8.0;
+			double h02 = 4.0;
+			double w12 = 8.0;
+			double h12 = 4.0;
+			
+			double w03 = 4.0;
+			double h03 = 8.0;
+			double w13 = 4.0;
+			double h13 = 8.0;
+			
+			double w04 = 8.0;
+			double h04 = 8.0;
+			double w14 = 8.0;
+			double h14 = 8.0;
+			
+			double w05 = 4.0;
+			double h05 = 12.0;
+			double w15 = 4.0;
+			double h15 = 12.0;
+			
+			double w06 = 12.0;
+			double h06 = 4.0;
+			double w16 = 12.0;
+			double h16 = 4.0;
+			
+			double w07 = 8.0;
+			double h07 = 12.0;
+			double w17 = 8.0;
+			double h17 = 12.0;
+			
+			double w08 = 12.0;
+			double h08 = 8.0;
+			double w18 = 12.0;
+			double h18 = 8.0;
+			
+			String red = "#FF7777";
+			defs.appendChild(createPattern(w01, h01, w11, h11, ++patternCount, red));
+			defs.appendChild(createPattern(w02, h02, w12, h12, ++patternCount, red));
+			defs.appendChild(createPattern(w03, h03, w13, h13, ++patternCount, red));
+			defs.appendChild(createPattern(w04, h04, w14, h14, ++patternCount, red));
+			defs.appendChild(createPattern(w05, h05, w15, h15, ++patternCount, red));
+			defs.appendChild(createPattern(w06, h06, w16, h16, ++patternCount, red));
+			defs.appendChild(createPattern(w07, h07, w17, h17, ++patternCount, red));
+			defs.appendChild(createPattern(w08, h08, w18, h18, ++patternCount, red));
+			
+			String blue = "#7777FF";
+			defs.appendChild(createPattern(w01, h01, w11, h11, ++patternCount, blue));
+			defs.appendChild(createPattern(w02, h02, w12, h12, ++patternCount, blue));
+			defs.appendChild(createPattern(w03, h03, w13, h13, ++patternCount, blue));
+			defs.appendChild(createPattern(w04, h04, w14, h14, ++patternCount, blue));
+			defs.appendChild(createPattern(w05, h05, w15, h15, ++patternCount, blue));
+			defs.appendChild(createPattern(w06, h06, w16, h16, ++patternCount, blue));
+			defs.appendChild(createPattern(w07, h07, w17, h17, ++patternCount, blue));
+			defs.appendChild(createPattern(w08, h08, w18, h18, ++patternCount, blue));
+			
+			String green = "#77FF77";
+			defs.appendChild(createPattern(w01, h01, w11, h11, ++patternCount, green));
+			defs.appendChild(createPattern(w02, h02, w12, h12, ++patternCount, green));
+			defs.appendChild(createPattern(w03, h03, w13, h13, ++patternCount, green));
+			defs.appendChild(createPattern(w04, h04, w14, h14, ++patternCount, green));
+			defs.appendChild(createPattern(w05, h05, w15, h15, ++patternCount, green));
+			defs.appendChild(createPattern(w06, h06, w16, h16, ++patternCount, green));
+			defs.appendChild(createPattern(w07, h07, w17, h17, ++patternCount, green));
+			defs.appendChild(createPattern(w08, h08, w18, h18, ++patternCount, green));
+			
+			defs.appendChild(createPattern(w01, h01, w11, h11, ++patternCount, "black"));
+			defs.appendChild(createPattern(w02, h02, w12, h12, ++patternCount, "black"));
+			defs.appendChild(createPattern(w03, h03, w13, h13, ++patternCount, "black"));
+			defs.appendChild(createPattern(w04, h04, w14, h14, ++patternCount, "black"));
+			defs.appendChild(createPattern(w05, h05, w15, h15, ++patternCount, "black"));
+			defs.appendChild(createPattern(w06, h06, w16, h16, ++patternCount, "black"));
+			defs.appendChild(createPattern(w07, h07, w17, h17, ++patternCount, "black"));
+			defs.appendChild(createPattern(w08, h08, w18, h18, ++patternCount, "black"));
+		}
+		return defs;
+	}
+
+
+	private void addPattern(SVGSVG svgsvg, String[] ids, int gradient, 
+			double strokeWidth, String strokeColour) {
+		if (svgsvg != null && ids != null) {
+			for (String id : ids) {
+				String aid = id.substring("m1_".length());
+				String gid = "g_"+aid;
+				Nodes gNodes = svgsvg.query("//*[local-name()='g' and @id='g_"+aid+"']/*[local-name()='circle']");
+				if (gNodes.size() == 1) {
+					SVGCircle circle = (SVGCircle) gNodes.get(0);
+					circle.setFill("url(#"+PATTERN+gradient+")");
+					circle.setStrokeWidth(strokeWidth);
+					circle.setStroke(strokeColour);
+					Nodes textNodes = ((Element)gNodes.get(0)).getParent().query("*[local-name()='text']");
+					if (textNodes.size() == 1) {
+						((SVGText) textNodes.get(0)).setFill("black");
+					}
+				}
+			}
+		}
+	}
+
+	private SVGSVG createSvg(CMLMolecule molecule) {
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+    	SVGSVG svg = null;
+		try {
+	    	svg = moleculeTool.draw();
+	    	addDefs(svg);
+		} catch (Exception e) {
+			System.err.println("ERROR "+e);
+		}
+		return svg;
+	}
+	
+	private static Element createPattern(double width0, double height0, double width,
+			double height, int iid, String fill) {
+		String id = PATTERN+iid;
+		String patternUnits = "userSpaceOnUse";
+		Element pattern = new Element("pattern", CMLConstants.SVG_NS);
+		pattern.addAttribute(new Attribute("id", id));
+		pattern.addAttribute(new Attribute("patternUnits", patternUnits));
+		pattern.addAttribute(new Attribute("width", ""+width0));
+		pattern.addAttribute(new Attribute("height", ""+height0));
+		SVGRect rect = new SVGRect(0.,0., width, height);
+		rect.setFill(fill);
+		rect.setStroke("white");
+		rect.setStrokeWidth(2.0);
+		pattern.appendChild(rect);
+		return pattern;
+	}
+	
+	public Element createBoth(File pdir, SVGSVG[] svgs) throws IOException {
+		Element li = null;
+		if (svgs[0] != null && svgs[1] != null) {
+			double xshift0, yshift0, xshift1, yshift1;
+			SVGSVG svgTot = new SVGSVG();
+			addDefs(svgTot);
+			BoundingRect rect0 = new BoundingRect(svgs[0]);
+			xshift0 = -rect0.xorig;
+			yshift0 = rect0.height + rect0.yorig;
+			SVGG g0 = addTransformedG(svgs[0], xshift0, yshift0);
+			svgTot.appendChild(g0);
+			BoundingRect rect1 = new BoundingRect(svgs[1]);
+			xshift1 = rect0.width - rect1.xorig;
+			yshift1 = rect1.height + rect1.yorig;
+			SVGG g1 = addTransformedG(svgs[1], xshift1, yshift1);
+			svgTot.appendChild(g1);
+			addGraphicalLinks(svgTot, g0, g1);
+			writeSVG(pdir, svgTot, ".both.svg");
+			String bothName = new File(pdir.getName()+".both.svg").getName();
+			li = createMenuItem(bothName);
+		}
+		return li;
+	}
+
+	private void addGraphicalLinks(SVGSVG svgTot, SVGG g0, SVGG g1) {
+		Real2 offset0 = getOffset(g0);
+		Real2 offset1 = getOffset(g1);
+		Map<String, List<SVGCircle>> map0 = indexCirclesByFill(g0);
+		Map<String, List<SVGCircle>> map1 = indexCirclesByFill(g1);
+		for (String fill : map0.keySet()) {
+			List<SVGCircle> circles0 = map0.get(fill);
+			List<SVGCircle> circles1 = map1.get(fill);
+			if (circles0 != null && circles1 != null) {
+				for (SVGCircle circle0 : circles0) {
+					for (SVGCircle circle1 : circles1) {
+						SVGLine line = createLine(offset0, offset1, circle0, circle1);
+						svgTot.appendChild(line);
+					}
+				}
+			}
+		}
+	}
+
+	private Real2 getOffset(SVGG g) {
+		return g.getTransform2FromAttribute().getTranslation();
+	}
+
+	private SVGLine createLine(Real2 offset0, Real2 offset1, SVGCircle circle0, SVGCircle circle1) {
+		Real2 cxy0 = getCircleCentre(circle0);
+		cxy0 = cxy0.plus(offset0);
+		Real2 cxy1 = getCircleCentre(circle1);
+		cxy1 = cxy1.plus(offset1);
+		SVGLine line = new SVGLine(cxy0, cxy1);
+		line.setStroke("green");
+		line.setStrokeWidth(0.5);
+		return line;
+	}
+
+	private Real2 getCircleCentre(SVGCircle circle) {
+		SVGG g = (SVGG) circle.getParent();
+		Transform2 t = g.getTransform2FromAttribute();
+		Real2 cxy = t.getTranslation();
+		cxy.y = -cxy.y;
+		return cxy;
+	}
+
+	private Map<String, List<SVGCircle>> indexCirclesByFill(SVGG g) {
+		Map<String, List<SVGCircle>> circleListByFill = new HashMap<String, List<SVGCircle>>();
+		Nodes circles = g.query(".//*[local-name()='"+SVGCircle.TAG+"']");
+		for (int i = 0; i < circles.size(); i++) {
+			SVGCircle circle = (SVGCircle) circles.get(i);
+			String fill = circle.getFill();
+			List<SVGCircle> circleList = circleListByFill.get(fill);
+			if (circleList == null) {
+				circleList = new ArrayList<SVGCircle>();
+				circleListByFill.put(fill, circleList);
+			}
+			circleList.add(circle);
+		}
+		return circleListByFill;
+	}
+
+	private Element createMenuItem(String bothName) {
+		Element li;
+		li = new Element("li");
+		Element a = new Element("a");
+		a.addAttribute(new Attribute("href", bothName));
+		a.addAttribute(new Attribute("target", "right"));
+		a.appendChild(bothName.substring(0, bothName.indexOf(CMLConstants.S_PERIOD)));
+		li.appendChild(a);
+		return li;
+	}
+
+	private SVGG addTransformedG(SVGSVG svg, double xshift, double yshift) {
+		SVGG g = new SVGG();
+		Transform2 transform = new Transform2(new Vector2(xshift, yshift));
+		g.setAttributeFromTransform2(transform);
+		// skip the defs
+		g.appendChild(svg.getChild(1).copy());
+		return g;
+	}
+
+	public String writeSVG(File pdir, SVGSVG svg, String suffix)
+	throws IOException {
+		String path = null;
+		if (svg != null) {
+			File f = new File(pdir.getPath()+suffix);
+			path = f.getPath();
+			FileOutputStream fos = new FileOutputStream(f);
+			CMLUtil.debug(svg, fos, 1);
+			fos.close();
+		}
+	return path;
+	}
+
+	public void drawToDirectory(Element ul, File pdir,
+			String[] commands) throws IOException {
+		SVGSVG[] svgs = this.draw(commands);
+//		SVGSVG[] svgs = this.draw();
+		Element li = this.createBoth(pdir, svgs);
+		if (li != null) {
+			ul.appendChild(li);
+		}
+		this.writeSVG(pdir, svgs[0], ".r.svg");
+		this.writeSVG(pdir, svgs[1], ".p.svg");
+	}
+
+	public static boolean getCommand(String[] commands, String string) {
+		for (String s : commands) {
+			if (s.equals(string)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void alignFirstReactantProduct2D() {
+		CMLMolecule reactant0 = this.getReactantMolecule(0);
+		CMLMolecule product0 = this.getProductMolecule(0);
+	}
+
+}
+class BoundingRect {
+	
+	SVGRect rect;
+	double xorig;
+	double yorig;
+	double width;
+	double height;
+	double xshift;
+	double yshift;
+
+	public BoundingRect(SVGSVG svg) {
+		Nodes rects = svg.query(
+	//			"//*[local-name()='"+SVGG.TAG+"']/" +
+				"//*[local-name()='"+SVGG.TAG+"']/*[local-name()='"+SVGRect.TAG+"']");
+		Element rectx = (Element)rects.get(0);
+		rect = (SVGRect) SVGElement.createSVG(rectx);
+		xorig = rect.getX();
+		yorig = rect.getY();
+		width = rect.getWidth();
+		height = rect.getHeight();
+		xshift = -xorig;
+		yshift = yorig - height;
+		yshift = 0.0;
+	}
 }
