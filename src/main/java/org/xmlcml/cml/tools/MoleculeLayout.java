@@ -107,9 +107,7 @@ public class MoleculeLayout extends AbstractTool {
 				}
 				// now make decisions on what is central to diagram
 				nucleusWithMostRemoteSprouts.layout(null, maxCycles);
-//				if (1 == 2) {
-					tweakOverlappingAtoms();
-//				}
+				tweakOverlappingAtoms();
 			}
 			GeometryTool geometryTool = new GeometryTool(moleculeTool.getMolecule());
 			geometryTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, HydrogenControl.USE_EXPLICIT_HYDROGENS);
