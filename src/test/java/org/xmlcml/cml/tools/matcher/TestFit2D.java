@@ -16,6 +16,9 @@ import org.xmlcml.util.TestUtils;
 public class TestFit2D {
 
 	private static final Logger LOG = Logger.getLogger(TestFit2D.class);
+	
+	private static final double EPS = 0.001;
+	
 	public TestFit2D() {}
 	
 	@Test
@@ -36,7 +39,7 @@ public class TestFit2D {
 		Transform2 expected = new Transform2(new double[]{-0.9999999999074332,-1.3606383073029906E-5,4.3414483446047776E-5,
 				1.3606383073029906E-5,-0.9999999999074332,-1.254011572237606E-4,
 				0.0,0.0,1.0,});
-		TestUtils.assertEquals("fit2d", expected, test, Real.EPS);
+		TestUtils.assertEquals("fit2d", expected, test, EPS);
 		
  	}
 	
@@ -50,7 +53,7 @@ public class TestFit2D {
 				-0.18347721293845792,0.9830239632543735,3.0464093503943506,
 				0.0,0.0,1.0,});
 		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, Real.EPS);
+		TestUtils.assertEquals("fit2d", expected, test, EPS);
 	}
 	
 	@Test
@@ -63,7 +66,7 @@ public class TestFit2D {
 				0.182965703954718,-0.9831192965130704,-3.0459281597142356,
 				0.0,0.0,1.0});
 		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, Real.EPS);
+		TestUtils.assertEquals("fit2d", expected, test, EPS);
 	}
 	
 	private CMLElement readCML(String filename) {
