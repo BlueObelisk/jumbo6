@@ -282,7 +282,7 @@ public class Chain extends AbstractTool {
 		Real2 parentDirection = null;
 		if (grandParent != null) {
 			parentDirection = parent.getXY2().subtract(grandParent.getXY2());
-			LOG.debug("PARENTD"+parentDirection);
+			LOG.trace("PARENTD"+parentDirection);
 			Vector2 v2 = new Vector2(parentDirection);
 			parentDirection = v2.getUnitVector();
 			parentDirection = parentDirection.multiplyBy(bondLength);

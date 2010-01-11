@@ -131,6 +131,15 @@ public class LinkTool extends AbstractTool {
 		} else if (toFromSet != null && toFromSet.length == 1) {
 			toFromRef = toFromSet[0];
 		}
+		toFromRef = beheadMoleculeId(toFromRef);
+		return toFromRef;
+	}
+
+
+	private String beheadMoleculeId(String toFromRef) {
+		if (toFromRef != null && toFromRef.startsWith("m")) {
+			toFromRef = toFromRef.substring("m1_".length());
+		}
 		return toFromRef;
 	}
 };
