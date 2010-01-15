@@ -1,6 +1,7 @@
 package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
+import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Node;
@@ -13,6 +14,7 @@ import nu.xom.Node;
 public class SVGSVG extends SVGElement {
 
 	public final static String TAG = "svg";
+	private SVGLayout layout;
 	
 	/** constructor.
 	 * 
@@ -60,5 +62,17 @@ public class SVGSVG extends SVGElement {
 	
 	public String getId() {
 		return this.getAttributeValue("id");
+	}
+
+	public static void createHTMLDisplay(String dirname, List<SVGSVG> svgList) {
+		
+	}
+
+	public void setLayout(SVGLayout layout) {
+		this.layout = layout;
+	}
+
+	public void addSVG(SVGSVG reactantSVG) {
+		throw new RuntimeException("NYI");
 	}
 }

@@ -130,6 +130,16 @@ public class FormulaTool extends AbstractSVGTool {
     		((CMLFormula)formulas.get(i)).normalize();
     	}
 	}
-	
+
+//	public CMLFormula subtractFormula(CMLFormula form) {
+//		form.setAllowNegativeCounts(true);
+//		System.out.println(form.isAllowNegativeCounts());
+//		CMLFormula aggregatedFormula = form.getAggregateFormula();
+//		aggregatedFormula.setAllowNegativeCounts(true);
+//		aggregatedFormula.multiplyBy(-1.0f);
+//		aggregatedFormula.debug();
+//		CMLFormula newFormula = formula.createAggregatedFormula(aggregatedFormula);
+//		return newFormula;
+//	}
 }
 
