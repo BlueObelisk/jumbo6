@@ -3895,8 +3895,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGSVG draw(boolean omitHydrogen) {
-		ensure2DCoordinates(omitHydrogen);
+	public SVGSVG draw(MoleculeDisplay moleculeDisplay) {
+		ensure2DCoordinates(moleculeDisplay.isOmitHydrogens());
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		try {
 			displayList.setAndProcess(this);
