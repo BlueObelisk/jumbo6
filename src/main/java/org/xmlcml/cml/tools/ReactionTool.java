@@ -37,6 +37,8 @@ import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGGContainer;
+import org.xmlcml.cml.graphics.SVGGWithBox;
 import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.cml.graphics.SVGRect;
@@ -1123,65 +1125,6 @@ public class ReactionTool extends AbstractSVGTool {
 		this.addProduct(product);
 	}
 
-	/*
-	public SVGSVG[] draw() {
-		SVGSVG[] svgsvg = new SVGSVG[2];
-		CMLMolecule product0 = this.getProduct(0).getMolecule();
-		svgsvg[1] = createSvg(product0);
-		svgsvg[0] = createSvg(this.getReactant(0).getMolecule());
-		CMLReaction reaction = this.getReaction();
-		CMLMap map = reaction.getMapElements().get(0);
-		CMLElements<CMLLink> links = map.getLinkElements();
-		List<CMLLink> uniqueLinks = new ArrayList<CMLLink>();
-		List<CMLLink> balancedCommonLinks = new ArrayList<CMLLink>();
-		List<CMLLink> otherLinks = new ArrayList<CMLLink>();
-		
-		for (CMLLink link : links) {
-			String title = link.getTitle();
-			if (title.startsWith(AtomTreeMatcher.UNIQUE_TREE)) {
-				uniqueLinks.add(link);
-			} else if (title.startsWith("balanced commonAtomTree")) {
-				balancedCommonLinks.add(link);
-			} else {
-				otherLinks.add(link);
-			}
-		}
-		addGradientsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
-		addGradientsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
-		addGradientsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
-		return svgsvg;
-	}
-	*/
-
-	/*---
-	private List<List<SVGSVG>> drawComponents(String[] commands) {
-		List<List<SVGSVG>> svgsvgListList = new ArrayList<List<SVGSVG>>();
-		List<CMLMolecule> reactantMolecules = this.getMolecules(Component.REACTANT);
-		List<CMLMolecule> productMolecules = this.getMolecules(Component.PRODUCT);
-		boolean omitHydrogen = getCommand(commands, STRIP_HYD);
-//			MoleculeTool.getOrCreateTool(product0).stripHydrogens();
-//			omitHydrogen = true;
-//		}
-		
-		CMLMap map = reaction.getMapElements().get(0);
-		List<SVGSVG> reactantSvgList = new ArrayList<SVGSVG>();
-		for (CMLMolecule reactant : reactantMolecules) {
-			SVGSVG svgsvg = MoleculeTool.getOrCreateTool(reactant).draw(omitHydrogen);
-			reactantSvgList.add(svgsvg);
-		}
-		svgsvgListList.add(reactantSvgList);
-		List<SVGSVG> productSvgList = new ArrayList<SVGSVG>();
-		for (CMLMolecule product : productMolecules) {
-			SVGSVG svgsvg = MoleculeTool.getOrCreateTool(product).draw(omitHydrogen);
-			productSvgList.add(svgsvg);
-		}
-		svgsvgListList.add(productSvgList);
-		return svgsvgListList;
-	}
-	*/
-
-	
-
 	private void addPatternsToLinkedAtoms(SVGSVG[] svgsvg, CMLMap map) {
 		CMLElements<CMLLink> links = map.getLinkElements();
 		List<CMLLink> uniqueLinks = new ArrayList<CMLLink>();
@@ -1439,14 +1382,14 @@ public class ReactionTool extends AbstractSVGTool {
 	}
 
 	public SVGG drawSVG() {
-		SVGG svgTot = new SVGG();
+		SVGGContainer svgTot = new SVGGContainer();
 		if (reactionDisplay.getId() != null) {
 			svgTot.setId(reactionDisplay.getId());
 		}
-		SVGG reactantsSVGG = drawReactants();
+		SVGGContainer reactantsSVGG = drawReactants();
 		svgTot.addSVGG(reactantsSVGG);
 		double maxHeight = getMaxHeight(reactantsSVGG);
-		SVGG productsSVGG = drawProducts();
+		SVGGContainer productsSVGG = drawProducts();
 		Transform2 transform = productsSVGG.getTransform2FromAttribute();
 		if (transform == null) {
 			transform = new Transform2();
@@ -1503,11 +1446,11 @@ public class ReactionTool extends AbstractSVGTool {
 		return totalWidth;
 	}
 
-	public SVGG drawReactants() {
+	public SVGGContainer drawReactants() {
 		return createMoleculeSVGs(getLayout(reactionDisplay.reactantOrientation), this.getReactantMolecules());
 	}
 
-	public SVGG drawProducts() {
+	public SVGGContainer drawProducts() {
 		return createMoleculeSVGs(getLayout(reactionDisplay.productOrientation),  this.getProductMolecules());
 	}
 
@@ -1521,17 +1464,17 @@ public class ReactionTool extends AbstractSVGTool {
 		return layout;
 	}
 
-	private SVGG createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
-		SVGG gTot = new SVGG();
-		gTot.setLayout(layout);
+	private SVGGContainer createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
+		SVGGContainer svggContainer = new SVGGContainer();
+		svggContainer.setLayout(layout);
 		ensureReactionDisplay();
 		MoleculeDisplay moleculeDisplay = getReactionDisplay().getMoleculeDisplay();
 		for (CMLMolecule molecule : molecules) {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-			SVGG svgg = moleculeTool.drawAndTranslateToRectCorner(moleculeDisplay);
-			gTot.addSVGG(svgg);
+			SVGGWithBox svgg = moleculeTool.drawAndTranslateToRectCorner(moleculeDisplay);
+			svggContainer.addSVGG(svgg);
 		}
-		return gTot;
+		return svggContainer;
 	}
 
 	public void setReactionDisplay(ReactionDisplay reactionDisplay) {
