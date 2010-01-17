@@ -1,19 +1,15 @@
 package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Node;
-import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.euclid.Real2;
-import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Vector2;
 
 /** container for SVG
  * "svg"
@@ -24,6 +20,7 @@ public class SVGSVG extends SVGElement {
 
 	public final static Logger LOG = Logger.getLogger(SVGSVG.class);
 	public final static String TAG = "svg";
+	private static String svgSuffix = "svg";
 	
 	/** constructor.
 	 * 
@@ -73,14 +70,19 @@ public class SVGSVG extends SVGElement {
 		return this.getAttributeValue("id");
 	}
 
-	public static void wrapAndWriteAsSVG(SVGG svgg, String svgfile) {
+	public static void wrapAndWriteAsSVG(SVGG svgg, File file) {
 		SVGSVG svgsvg = new SVGSVG();
 		svgsvg.appendChild(svgg);
 		try {
-		CMLUtil.debug(svgsvg, new FileOutputStream(svgfile), 1);
+			LOG.trace("Writing SVG "+file.getAbsolutePath());
+			CMLUtil.debug(svgsvg, new FileOutputStream(file), 1);
 		} catch (Exception e) {
-			throw new RuntimeException("cannot write svg ", e);
+			throw new RuntimeException("cannot write svg to "+file, e);
 		}
+	}
+
+	public static String createFileName(String id) {
+		return id + CMLConstants.S_PERIOD+svgSuffix ;
 	}
 
 }

@@ -111,21 +111,18 @@ public class MoleculeLayout extends AbstractTool {
 			}
 			GeometryTool geometryTool = new GeometryTool(moleculeTool.getMolecule());
 			geometryTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, HydrogenControl.USE_EXPLICIT_HYDROGENS);
-//			molecule.debug("AFTER H");
 		}
 	}
 	
 	private void tweakOverlappingAtoms() {
 		CMLMolecule molecule = this.moleculeTool.getMolecule();
 		double meanBond = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
-		LOG.debug("mean bond length is WRONG: "+meanBond);
 		List<CMLAtom> atoms1 = molecule.getAtoms();
 		List<CMLAtom> atoms2 = molecule.getAtoms();
 		for (CMLAtom atom1 : atoms1) {
 			for (CMLAtom atom2 : atoms2) {
 				double dist = atom1.getDistance2(atom2);
 				if (!(atom1.equals(atom2)) && !Double.isNaN(dist) && dist < 0.15 * meanBond) {
-					LOG.debug("dist "+atom1.getId()+" -> "+atom2.getId()+": "+dist);
 					tweak(atom1, atom2);
 				}
 			}
@@ -257,7 +254,7 @@ public class MoleculeLayout extends AbstractTool {
 			} else if ("-JAVA".equals(args[i])) {
 				moleculeFrame = new MoleculeFrame(); i++;
 			} else {
-				System.err.println("unknown arg: "+args[i++]);
+				LOG.error("unknown arg: "+args[i++]);
 			}
 		}
 		if (cmlfile != null) {
@@ -292,9 +289,6 @@ public class MoleculeLayout extends AbstractTool {
 				moleculeTool = drawMoleculesToDisplayList(displayList, molecule);
 				writeDisplayList(displayList, moleculeTool);
 			}
-//			LOG.debug("WARNING: only first molecule in list drawn");
-//			moleculeTool = drawMoleculesToDisplayList(displayList, moleculeList.getMoleculeElements().get(0));
-//			writeDisplayList(displayList, moleculeTool);
 		} else if (mol != null) {
 			moleculeTool = drawMoleculesToDisplayList(displayList, mol);
 			writeDisplayList(displayList, moleculeTool);
@@ -333,10 +327,7 @@ public class MoleculeLayout extends AbstractTool {
 			}
 			try {
 				displayList.setAndProcess(moleculeTool);
-//				displayList.debugSVG();
 				displayList.createOrDisplayGraphics();
-//				displayList.debugSVG();
-				LOG.debug("=====================================");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

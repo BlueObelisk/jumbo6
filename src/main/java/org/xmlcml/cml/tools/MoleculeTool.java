@@ -58,7 +58,7 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGGWithBox;
+import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
@@ -2211,9 +2211,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public void renumberToUniqueIds(List<String> avoidList) {
 		Set<String> stringSet = checkUnique(avoidList);
-//		molecule.debug("MMMMMMMMMMM");
 		int totalSize = molecule.getAtomCount() + avoidList.size();
-//		System.out.println("TTTTTT "+avoidList);
 		List<String> fromIdList = new ArrayList<String>();
 		List<String> toIdList = new ArrayList<String>();
 		// TODO hydrogens will not be pretty - 
@@ -3906,7 +3904,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGGWithBox draw(MoleculeDisplay moleculeDisplay) {
+	public SVGGBox draw(MoleculeDisplay moleculeDisplay) {
 		ensure2DCoordinates(moleculeDisplay.isOmitHydrogens());
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		try {
@@ -3917,7 +3915,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		SVGG g = displayList.getSvg();
 		g = replaceThisBySingleGChild(g);
-		return SVGGWithBox.createSVGGWithBox(g);
+		return SVGGBox.createSVGGBox(g);
 	}
 
 	private SVGG replaceThisBySingleGChild(SVGG g) {
@@ -3948,9 +3946,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGGWithBox drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
-		SVGGWithBox svgg = this.draw(moleculeDisplay);
-		svgg.debug("BRECT");
+	public SVGGBox drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
+		SVGGBox svgg = this.draw(moleculeDisplay);
 		BoundingRect brect = new BoundingRect(svgg);
 		brect.translateGToRectCorner();
 		return svgg;

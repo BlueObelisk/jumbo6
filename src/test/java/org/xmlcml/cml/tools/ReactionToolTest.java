@@ -50,6 +50,7 @@ import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.CMLAssert;
@@ -57,6 +58,7 @@ import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.util.TestUtils;
 import org.xmlcml.util.TstUtils;
 
 /**
@@ -629,6 +631,7 @@ public class ReactionToolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testMapReactantsToProductsUsingAtomSets1() {
 		CMLReaction reaction = new CMLReaction();
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
@@ -638,6 +641,27 @@ public class ReactionToolTest {
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
 		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets1", cmlMap);
+		Element ref = TestUtils.parseValidString(
+"<map toType='atom' fromType='atom' xmlns='http://www.xml-cml.org/schema'>" +
+"<link title='unique treeString N' fromSet='m2_a1' toSet='m1_a5'/>" +
+"<link title='unique treeString C' fromSet='m2_a2' toSet='m1_a6'/>" +
+"<link title='unique treeString C' fromSet='m1_a1' toSet='m1_a1'/>" +
+"<link title='unique treeString C' fromSet='m1_a2' toSet='m1_a2'/>" +
+"<link title='unique treeString C' fromSet='m2_a3' toSet='m1_a7'/>" +
+"<link title='balanced commonAtomTree C' fromSet='m1_a3' toSet='m1_a3'/>" +
+"<link title='balanced commonAtomTree H' fromSet='m1_a1_h1 m1_a1_h2 m1_a1_h3' toSet='m1_a1_h1 m1_a1_h2 m1_a1_h3'/>" +
+"<link title='balanced commonAtomTree H' fromSet='m1_a2_h1 m1_a2_h2' toSet='m1_a2_h1 m1_a2_h2'/>" +
+"<link title='balanced commonAtomTree H' fromSet='m2_a2_h1 m2_a2_h2' toSet='m1_a6_h1 m1_a6_h2'/>" +
+"<link title='balanced commonAtomTree H' fromSet='m2_a3_h1 m2_a3_h2 m2_a3_h3' toSet='m1_a7_h1 m1_a7_h2 m1_a7_h3'/>" +
+"<link title='unbalanced commonAtomTree H' fromSet='m2_a1_h2' toSet='' />" +
+"<link title='unbalanced commonAtomTree H' fromSet='' toSet='m2_a1_h2'/>" +
+"<link title='balanced commonAtomTree O' fromSet='m1_a4 m1_a5' toSet='m1_a4 m2_a1'/>" +
+"<link title='unbalanced commonAtomTree O' fromSet='m1_a5' toSet=''/>" +
+"<link title='de-orphan' fromSet='m2_a1_h1' toSet='m1_a5_h1'/>" +
+"<link title='de-orphan' fromSet='m1_a5_h1' toSet='m2_a1_h1'/>" +
+"<link title='de-orphan' fromSet='m1_a4' toSet='m1_a4'/>" +
+"</map>");
+		TestUtils.assertEqualsCanonically("test", ref, cmlMap, true);
 	}
 
 	@Test
@@ -701,25 +725,42 @@ public class ReactionToolTest {
 		reactionTool.getReactionDisplay().setScale(0.5);
 		reactionTool.getReactionDisplay().setId("dummyId");
 		SVGG svgg = reactionTool.drawSVG();
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reaction.svg");
-		svgg.debug("SVGG.........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\reaction.svg"));
 	}
 
 	@Test
 	public void testDrawReactants0() {
 		ReactionTool reactionTool = makeReaction0();
 		SVGG svgg = reactionTool.drawReactants();
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reactants0.svg");
-		svgg.debug("SVGG........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\reactants0.svg"));
 	}
 
 	@Test
 	public void testDrawReactants() {
 		ReactionTool reactionTool = makeReaction();
-//		reactionTool.getReactionDisplay().setReactantOrientation(Orientation.VERTICAL);
 		SVGG svgg = reactionTool.drawReactants();
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reactants.svg");
-		svgg.debug("SVGG........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\reactants.svg"));
+	}
+
+	@Test
+	public void testDraw2Reactants() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("CC(=O)O");
+		reactionTool.addReactant("C(Cl)C(=O)O");
+		SVGG svgg = reactionTool.drawReactants();
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\manyReactants2.svg"));
+	}
+
+	@Test
+	public void testDraw3Reactants() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("CC(=O)O");
+		reactionTool.addReactant("C(Cl)C(=O)O");
+		reactionTool.addReactant("ClC(Cl)C(=O)O");
+		SVGGBox svgg = reactionTool.drawReactants();
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\manyReactants3.svg"));
 	}
 
 	private ReactionTool makeReaction0() {
@@ -745,8 +786,7 @@ public class ReactionToolTest {
 		ReactionTool reactionTool = makeReaction0();
 		reactionTool.getReactionDisplay().setScale(0.7);
 		SVGG svgg = reactionTool.drawProducts();
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\products0.svg");
-		svgg.debug("SVGG........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\products0.svg"));
 	}
 
 	@Test
@@ -755,8 +795,7 @@ public class ReactionToolTest {
 		reactionTool.getReactionDisplay().setScale(0.3);
 //		reactionTool.getReactionDisplay().setProductOrientation(Orientation.VERTICAL);
 		SVGG svgg = reactionTool.drawProducts();
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\products.svg");
-		svgg.debug("SVGG........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\products.svg"));
 	}
 
 	/**
@@ -781,6 +820,23 @@ public class ReactionToolTest {
 			graphicsManager.createOrDisplayGraphics();
 		}
 	}
+	
+	@Test
+	public void testUgi() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.getReactionDisplay().setScale(0.5);
+		reactionTool.addReactant("C1CCCCC1C(=O)O");
+		reactionTool.addReactant("CC(C)N");
+		reactionTool.addReactant("Cc1ccc(cc1)C(=O)C(F)(F)(F)");
+		reactionTool.addReactant("CCCC[N+]#[C-]");
+		reactionTool.addProduct("C1CCCCC1C(=O)N(CC(C)C)C(c1cccc(C)cc1(C(F)(F)(F))C(=O)N(CCCC)");
+		SVGG svgg = reactionTool.drawSVG();
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\ugi.svg"));
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		Assert.assertNotNull("testPolyinfo1", cmlMap);
+	}
+
 
 	static void usage() {
 		Util.println("java org.xmlcml.cml.tools.ReactionToolTest <options>");
