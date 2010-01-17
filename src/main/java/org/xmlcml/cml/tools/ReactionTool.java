@@ -37,8 +37,7 @@ import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGCircle;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGGContainer;
-import org.xmlcml.cml.graphics.SVGGWithBox;
+import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.cml.graphics.SVGRect;
@@ -1381,15 +1380,15 @@ public class ReactionTool extends AbstractSVGTool {
 		CMLMolecule product0 = this.getProductMolecule(0);
 	}
 
-	public SVGG drawSVG() {
-		SVGGContainer svgTot = new SVGGContainer();
+	public SVGGBox drawSVG() {
+		SVGGBox svgTot = new SVGGBox();
 		if (reactionDisplay.getId() != null) {
 			svgTot.setId(reactionDisplay.getId());
 		}
-		SVGGContainer reactantsSVGG = drawReactants();
+		SVGGBox reactantsSVGG = drawReactants();
 		svgTot.addSVGG(reactantsSVGG);
 		double maxHeight = getMaxHeight(reactantsSVGG);
-		SVGGContainer productsSVGG = drawProducts();
+		SVGGBox productsSVGG = drawProducts();
 		Transform2 transform = productsSVGG.getTransform2FromAttribute();
 		if (transform == null) {
 			transform = new Transform2();
@@ -1446,11 +1445,11 @@ public class ReactionTool extends AbstractSVGTool {
 		return totalWidth;
 	}
 
-	public SVGGContainer drawReactants() {
+	public SVGGBox drawReactants() {
 		return createMoleculeSVGs(getLayout(reactionDisplay.reactantOrientation), this.getReactantMolecules());
 	}
 
-	public SVGGContainer drawProducts() {
+	public SVGGBox drawProducts() {
 		return createMoleculeSVGs(getLayout(reactionDisplay.productOrientation),  this.getProductMolecules());
 	}
 
@@ -1464,17 +1463,17 @@ public class ReactionTool extends AbstractSVGTool {
 		return layout;
 	}
 
-	private SVGGContainer createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
-		SVGGContainer svggContainer = new SVGGContainer();
-		svggContainer.setLayout(layout);
+	private SVGGBox createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
+		SVGGBox svggBox = new SVGGBox();
+		svggBox.setLayout(layout);
 		ensureReactionDisplay();
 		MoleculeDisplay moleculeDisplay = getReactionDisplay().getMoleculeDisplay();
 		for (CMLMolecule molecule : molecules) {
 			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-			SVGGWithBox svgg = moleculeTool.drawAndTranslateToRectCorner(moleculeDisplay);
-			svggContainer.addSVGG(svgg);
+			SVGGBox svgg = moleculeTool.drawAndTranslateToRectCorner(moleculeDisplay);
+			svggBox.addSVGG(svgg);
 		}
-		return svggContainer;
+		return svggBox;
 	}
 
 	public void setReactionDisplay(ReactionDisplay reactionDisplay) {

@@ -1,12 +1,15 @@
 package org.xmlcml.cml.graphics;
 
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
+
+import org.xmlcml.cml.html.HtmlMenuSystem;
 
 
 
@@ -82,8 +85,18 @@ public class SVGG extends SVGElement {
 		this.addAttribute(new Attribute("transform", "scale("+scale+","+scale+")"));
 	}
 	
-	public static void createHTMLDisplay(String dirname, List<SVGG> svgList) {
-		throw new RuntimeException("NYI");
+	public static HtmlMenuSystem createHTMLMenuSystem(String dirname, List<SVGGBox> svgBoxList) 
+	throws IOException {
+		HtmlMenuSystem htmlMenuSystem = new HtmlMenuSystem();
+    	htmlMenuSystem.setOutdir(dirname);
+		for (SVGGBox box : svgBoxList) {
+			String id = box.getId();
+			File f = new File(dirname, SVGSVG.createFileName(id));
+			SVGSVG.wrapAndWriteAsSVG(box, f);
+			htmlMenuSystem.addHRef(f.getName());
+		}
+		htmlMenuSystem.outputMenuAndBottomAndIndexFrame();
+		return htmlMenuSystem;
 	}
 
 }

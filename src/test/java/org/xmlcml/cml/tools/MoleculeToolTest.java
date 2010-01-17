@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,6 @@ import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
@@ -1795,46 +1795,6 @@ public class MoleculeToolTest {
         Assert.assertEquals("bond order sum", 3, bes1);
     }
 
-//    private void dmcn4(CMLMolecule mol) {
-//        LOG.debug("====distributeCharge====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool.getOrCreateMoleculeTool(mol).distributeMolecularChargeToN4();
-//    }
-//
-
-//    private void tcfe(CMLMolecule mol, int knownUnpaired) {
-//        LOG.debug("====transferUnpairedPi====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
-//        mol.setBondOrders(CMLBond.SINGLE);
-//        PiSystemManager piSystemManager = new PiSystemManager();
-//        piSystemManager.setUpdateBonds(true);
-//        piSystemManager.setKnownUnpaired(knownUnpaired);
-//        moleculeTool.adjustBondOrdersToValency(piSystemManager);
-////        moleculeTool.transferChargeToFreePiElectrons();
-//    }
-
-//    /**
-//     * common molecules.
-//     */
-//    @Test
-//    public void testMarkupCommonMolecules() {
-//        /*--
-//         mcm(nitric2);
-//         mcm(carbonate2);
-//         mcm(hydrogenSulfate);
-//         mcm(nitroMethane2);
-//         mcm(methaneSulfonate);
-//         --*/
-//    }
-
-//    private void mcm(CMLMolecule mol) {
-//        LOG.debug("====MarkupCommonMolecules====== " + mol.getTitle()
-//                + " ======================");
-//        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
-//        moleculeTool.markupCommonMolecules();
-//    } x
-
     /**
 	 * Test method for
 	 * 'org.xmlcml.cml.tools.MoleculeTool.getBondSet(CMLAtomSet)'
@@ -2649,11 +2609,10 @@ public class MoleculeToolTest {
 	}
 	
 	@Test
-	public void testDraw() {
+	public void testDraw() throws Exception {
 		CMLMolecule molecule = SMILESTool.createMolecule("Clc1ccc(cc1)C(=O)N");
 		SVGG svgg = MoleculeTool.getOrCreateTool(molecule).drawAndTranslateToRectCorner(MoleculeDisplay.DEFAULT);
-		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\molecule.svg");
-		svgg.debug("SVGG........");
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\molecule.svg"));
 	}
 
 }

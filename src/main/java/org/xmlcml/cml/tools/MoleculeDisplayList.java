@@ -119,7 +119,6 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 */
 	public void createOrDisplayGraphics() throws IOException {
 	    g = abstractSVGTool.createGraphicsElement(this);
-//	    CMLUtil.debug(g, "CREATEORDISPLAYGRAPHICS");
 	}
 	
 	/**
