@@ -30,7 +30,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	private AbstractSVGTool abstractSVGTool;
 	private MoleculeDisplay moleculeDisplay;
 	private SVGElement g;
-	private SVGSVG svg;
+	private SVGG svg;
 	
 	/** constructor
 	 */
@@ -129,7 +129,7 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 */
 	public void output(GraphicsElement g) throws IOException {
 		if (svg == null) {
-			svg = new SVGSVG();
+			svg = new SVGG();
 			svg.appendChild(g);
 		} else {
 			// another object written - needs developing
@@ -199,14 +199,14 @@ public class MoleculeDisplayList implements CMLDrawable {
 	/**
 	 * @return the svg
 	 */
-	public SVGSVG getSvg() {
+	public SVGG getSvg() {
 		return svg;
 	}
 
 	/**
 	 * @param svg the svg to set
 	 */
-	public void setSvg(SVGSVG svg) {
+	public void setSvg(SVGG svg) {
 		this.svg = svg;
 	}
 }

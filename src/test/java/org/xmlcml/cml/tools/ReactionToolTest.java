@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -30,6 +32,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLConstants.Units;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
@@ -46,8 +49,12 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLReaction.Component;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGLayout;
+import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.ReactionFixture;
+import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.util.TstUtils;
@@ -686,6 +693,70 @@ public class ReactionToolTest {
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
 		Assert.assertNotNull("testPolyinfo2", cmlMap);
+	}
+	
+	@Test
+	public void testDrawReaction() {
+		ReactionTool reactionTool = makeReaction();
+		reactionTool.getReactionDisplay().setScale(0.5);
+		reactionTool.getReactionDisplay().setId("dummyId");
+		SVGG svgg = reactionTool.drawSVG();
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reaction.svg");
+		svgg.debug("SVGG.........");
+	}
+
+	@Test
+	public void testDrawReactants0() {
+		ReactionTool reactionTool = makeReaction0();
+		SVGG svgg = reactionTool.drawReactants();
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reactants0.svg");
+		svgg.debug("SVGG........");
+	}
+
+	@Test
+	public void testDrawReactants() {
+		ReactionTool reactionTool = makeReaction();
+//		reactionTool.getReactionDisplay().setReactantOrientation(Orientation.VERTICAL);
+		SVGG svgg = reactionTool.drawReactants();
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\reactants.svg");
+		svgg.debug("SVGG........");
+	}
+
+	private ReactionTool makeReaction0() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("c1ccccc1C(=O)OC(=O)C");
+		reactionTool.addProduct("c1ccccc1C(=O)NCCc1ccccc1");
+		return reactionTool;
+	}
+
+	private ReactionTool makeReaction() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.addReactant("c1ccccc1C(=O)OC(=O)C");
+		reactionTool.addReactant("c1ccccc1CCN");
+		reactionTool.addProduct("c1ccccc1C(=O)NCCc1ccccc1");
+		reactionTool.addProduct("CC(=O)O");
+		return reactionTool;
+	}
+
+	@Test
+	public void testDrawProducts0() {
+		ReactionTool reactionTool = makeReaction0();
+		reactionTool.getReactionDisplay().setScale(0.7);
+		SVGG svgg = reactionTool.drawProducts();
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\products0.svg");
+		svgg.debug("SVGG........");
+	}
+
+	@Test
+	public void testDrawProducts() {
+		ReactionTool reactionTool = makeReaction();
+		reactionTool.getReactionDisplay().setScale(0.3);
+//		reactionTool.getReactionDisplay().setProductOrientation(Orientation.VERTICAL);
+		SVGG svgg = reactionTool.drawProducts();
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\products.svg");
+		svgg.debug("SVGG........");
 	}
 
 	/**

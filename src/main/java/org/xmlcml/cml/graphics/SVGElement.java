@@ -489,7 +489,7 @@ public class SVGElement extends GraphicsElement {
 
 	/**
 	 * uses attribute value to calculate transform
-	 * @return current transform
+	 * @return current transform or null
 	 */
 	public Transform2 getTransform2FromAttribute() {
 		Transform2 t = null;
@@ -513,6 +513,15 @@ public class SVGElement extends GraphicsElement {
 			dd[7] = 0.0;
 			dd[8] = 1.0;
 			t = new Transform2(dd);
+		}
+		return t;
+	}
+	
+	public Transform2 ensureTransform2() {
+		Transform2 t = getTransform2FromAttribute();
+		if (t == null) {
+			t = new Transform2();
+			setTransform(t);
 		}
 		return t;
 	}

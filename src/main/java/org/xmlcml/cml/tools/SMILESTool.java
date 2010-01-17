@@ -1013,6 +1013,18 @@ public class SMILESTool extends AbstractTool {
 		this.hydrogenControl = hydrogenControl;
 	}
 
+	/** convenience
+	 * 
+	 * @param smilesString
+	 * @return
+	 */
+	public static CMLMolecule createMolecule(String smilesString) {
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smilesString);
+		CMLMolecule molecule = smilesTool.getMolecule();
+		return molecule;
+	}
+
 }	
 //class AtomCharacterMap {
 //	private TreeMap<Integer, String> treeMap;

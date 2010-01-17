@@ -48,6 +48,8 @@ import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
@@ -2644,6 +2646,14 @@ public class MoleculeToolTest {
 		p = mol1.getAtom(2).getXYZ3();
 		CMLAssert.assertEquals("moved point",
 				new double[] { 2.000111, 3.999999, 1.012345 }, p, CC.EPS);
+	}
+	
+	@Test
+	public void testDraw() {
+		CMLMolecule molecule = SMILESTool.createMolecule("Clc1ccc(cc1)C(=O)N");
+		SVGG svgg = MoleculeTool.getOrCreateTool(molecule).drawAndTranslateToRectCorner(MoleculeDisplay.DEFAULT);
+		SVGSVG.wrapAndWriteAsSVG(svgg, "C:\\temp\\molecule.svg");
+		svgg.debug("SVGG........");
 	}
 
 }

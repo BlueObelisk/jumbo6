@@ -42,6 +42,7 @@ import org.xmlcml.cml.graphics.SVGLine;
 import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
@@ -57,8 +58,7 @@ import org.xmlcml.euclid.Vector2;
 public class ReactionTool extends AbstractSVGTool {
 
     private static final String OMIT_REACTANTS = null;
-
-	private static final String REACTANT_VERTICAL = null;
+	public static final String REACTANT_VERTICAL = null;
 
 	Logger LOG = Logger.getLogger(ReactionTool.class);
 
@@ -67,7 +67,7 @@ public class ReactionTool extends AbstractSVGTool {
 	public static String STRIP_HYD = "strip_hydrogen";
 	
     private CMLReaction reaction = null;
-	private ReactionDisplay reactionDisplay;
+	private ReactionDisplay reactionDisplay = new ReactionDisplay();
 	private static int patternCount = 0;
 	private static Element defs = null;
 	private static String PATTERN = "pattern";
@@ -252,41 +252,6 @@ public class ReactionTool extends AbstractSVGTool {
 
     }
 
-
-//    /**
-//     * get all molecules on reactant or product side. includes cmlSpectator
-//     * 
-//     * @param reactantProduct ReactionComponent.Type.REACTANT or ReactionComponent.Type.PRODUCT
-//     * @return all molecules
-//     */
-//    public List<CMLMolecule> getMoleculesIncludingSpectators(
-//            ReactionComponent.Type reactantProduct) {
-//        List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
-//        if (reactantProduct.equals(Type.REACTANT)) {
-//            CMLReactantList reactantList = (CMLReactantList) reaction
-//                    .getFirstCMLChild(CMLReactantList.TAG);
-//            if (reactantList != null) {
-//                moleculeList = ReactionTool.getMolecules(reactantList);
-//            }
-//        } else if (reactantProduct.equals(Type.PRODUCT)) {
-//            CMLProductList productList = (CMLProductList) reaction
-//                    .getFirstCMLChild(CMLProductList.TAG);
-//            if (productList != null) {
-//                moleculeList = ReactionTool.getMolecules(productList);
-//            }
-//        }
-//        CMLSpectatorList spectatorList = (CMLSpectatorList) reaction
-//                .getFirstCMLChild(CMLSpectatorList.TAG);
-//        if (spectatorList != null) {
-//            List<CMLMolecule> moleculex = spectatorList
-//                    .getMolecules(reactantProduct);
-//            for (int i = 0; i < moleculex.size(); i++) {
-//                moleculeList.add(moleculex.get(i));
-//            }
-//        }
-//        return moleculeList;
-//    }
-
     /**
      * gets formula for product or reactant.
      * 
@@ -407,31 +372,6 @@ public class ReactionTool extends AbstractSVGTool {
         return bondList;
     }
 
-
-//    /**
-//     * translate reactants and products geometrically to overlap centroids.
-//     * 
-//     * experimental
-//     * 
-//     * @param spectatorList
-//     */
-//    public void translateSpectatorProductsToReactants(
-//            CMLSpectatorList spectatorList) {
-//        List<CMLMolecule> reactantSpectator = spectatorList
-//                .getSpectatorMolecules(CMLReactant.TAG);
-//        List<CMLMolecule> productSpectator = spectatorList
-//                .getSpectatorMolecules(CMLProduct.TAG);
-//        if (reactantSpectator.size() != 0 || productSpectator.size() != 0) {
-//            CMLAtomSet reactantAtomSet = AtomSetTool
-//                    .createAtomSet(reactantSpectator);
-//            CMLAtomSet productAtomSet = AtomSetTool
-//                    .createAtomSet(productSpectator);
-//            Real2 reactantCentroid = reactantAtomSet.getCentroid2D();
-//            Real2 productCentroid = productAtomSet.getCentroid2D();
-//            Real2 delta = reactantCentroid.subtract(productCentroid);
-//            productAtomSet.translate2D(delta);
-//        }
-//    }
 
     
     /** create from reaction scheme in literature.
@@ -867,7 +807,7 @@ public class ReactionTool extends AbstractSVGTool {
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
 //    	AbstractDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
 //    		reactionDisplay.getMoleculeDisplay();
-    	enableReactionDisplay();
+    	ensureReactionDisplay();
     	Transform2 transform2 = new Transform2(
     			new double[] {
     				1.,  0., 0.0,
@@ -883,8 +823,8 @@ public class ReactionTool extends AbstractSVGTool {
     	}
     	
     	SVGElement g = createSVGElement(drawable, transform2);
-    	g.setProperties(reactionDisplay);
-    	MoleculeDisplay moleculeDisplay = reactionDisplay.getMoleculeDisplay();
+    	g.setProperties(getReactionDisplay());
+    	MoleculeDisplay moleculeDisplay = getReactionDisplay().getMoleculeDisplay();
     	displayMolecules(drawable, g, moleculeDisplay, molecules);
     	try {
     		drawable.output(g);
@@ -898,7 +838,7 @@ public class ReactionTool extends AbstractSVGTool {
 		Transform2 transform2 = null;
 		try {
 			Real2Range boundingBox = getBoundingBox(molecules);
-			Real2Interval screenBoundingBox = reactionDisplay.getMoleculeDisplay().getScreenExtent();
+			Real2Interval screenBoundingBox = getReactionDisplay().getMoleculeDisplay().getScreenExtent();
 			Real2Interval moleculeInterval = new Real2Interval(boundingBox);
 			double scale = moleculeInterval.scaleTo(screenBoundingBox);
 			double[] offsets = moleculeInterval.offsetsTo(screenBoundingBox, scale);
@@ -941,9 +881,9 @@ public class ReactionTool extends AbstractSVGTool {
 	}
 
 
-    private void enableReactionDisplay() {
-    	if (reactionDisplay == null) {
-    		reactionDisplay = ReactionDisplay.getDEFAULT();
+    private void ensureReactionDisplay() {
+    	if (getReactionDisplay() == null) {
+    		setReactionDisplay(ReactionDisplay.getDEFAULT());
     	}
     }
 
@@ -1389,18 +1329,6 @@ public class ReactionTool extends AbstractSVGTool {
 		}
 	}
 
-//	private SVGSVG createSvg(CMLMolecule molecule, boolean omitHydrogen) {
-//		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-//    	SVGSVG svg = null;
-//		try {
-//	    	svg = moleculeTool.drawComponents(omitHydrogen);
-//	    	addDefs(svg);
-//		} catch (Exception e) {
-//			System.err.println("ERROR "+e);
-//		}
-//		return svg;
-//	}
-	
 	private static Element createPattern(double width0, double height0, double width,
 			double height, int iid, String fill) {
 		String id = PATTERN+iid;
@@ -1418,30 +1346,6 @@ public class ReactionTool extends AbstractSVGTool {
 		return pattern;
 	}
 	
-	public SVGSVG drawSVG(List<SVGSVG> svgsvgList, SVGLayout layout) throws IOException {
-		List<BoundingRect> rectList = new ArrayList<BoundingRect>();
-		for (int i = 0; i < svgsvgList.size(); i++) {
-			BoundingRect rect0 = new BoundingRect(svgsvgList.get(i));
-		}
-		SVGSVG svgTot = new SVGSVG();
-		svgTot.setLayout(layout);
-		for (int i = 0; i < svgsvgList.size(); i++) {
-			SVGSVG svgsvg = svgsvgList.get(i);
-//			BoundingRect rect0 = rectList.get(i);
-//			double xshift00 = (i == 0) ? 0 : ;
-//			double xshift0 = -rect0.xorig;
-//			double yshift0 = rect0.height + rect0.yorig;
-//			SVGG g0 = addTransformedG(svgs[0], xshift0, yshift0);
-//			svgTot.appendChild(g0);
-//			BoundingRect rect1 = new BoundingRect(svgs[1]);
-//			xshift1 = rect0.width - rect1.xorig;
-//			yshift1 = rect1.height + rect1.yorig;
-//			SVGG g1 = addTransformedG(svgs[1], xshift1, yshift1);
-			svgTot.appendChild(svgsvg);
-		}
-		return svgTot;
-	}
-
 	private void addGraphicalLinks(SVGSVG svgTot, SVGG g0, SVGG g1) {
 		Real2 offset0 = getOffset(g0);
 		Real2 offset1 = getOffset(g1);
@@ -1520,45 +1424,9 @@ public class ReactionTool extends AbstractSVGTool {
 		return g;
 	}
 
-//	public String writeSVG(File pdir, SVGSVG svg, String suffix)
-//	throws IOException {
-//		String path = null;
-//		if (svg != null) {
-//			File f = new File(pdir.getPath()+suffix);
-//			path = f.getPath();
-//			FileOutputStream fos = new FileOutputStream(f);
-//			CMLUtil.debug(svg, fos, 1);
-//			fos.close();
-//		}
-//	return path;
-//	}
-
-//	public void drawToDirectory(Element ul, File pdir,
-//			String[] commands) throws IOException {
-//		SVGSVG[] svgs = this.draw(commands);
-//		boolean addLinks = true;
-//		Element li = this.createAllReactionComponents(pdir, svgs, addLinks);
-//		if (li != null) {
-//			ul.appendChild(li);
-//		}
-//		this.writeSVG(pdir, svgs[0], ".r.svg");
-//		this.writeSVG(pdir, svgs[1], ".p.svg");
-//	}
-
-//	public void drawToFile(Element ul, File file,
-//			String[] commands, boolean addLinks) throws IOException {
-//		List<List<SVGSVG>> svgListList = this.drawComponents(commands);
-//		Element li = this.createAllReactionComponents(file, svgsvgList, addLinks);
-//		if (li != null) {
-//			ul.appendChild(li);
-//		}
-//		this.writeSVG(file, svgs[0], ".r.svg");
-//		this.writeSVG(file, svgs[1], ".p.svg");
-//	}
-
 	public static boolean getCommand(String[] commands, String string) {
-		for (String s : commands) {
-			if (s.equals(string)) {
+		for (String command : commands) {
+			if (command != null && command.equals(string)) {
 				return true;
 			}
 		}
@@ -1570,66 +1438,109 @@ public class ReactionTool extends AbstractSVGTool {
 		CMLMolecule product0 = this.getProductMolecule(0);
 	}
 
-	public SVGSVG drawSVG(String[] commands, String name) {
-		SVGSVG svgTot = new SVGSVG();
-		SVGLayout overallLayout = SVGLayout.LEFT2RIGHT;
-		SVGLayout reactantLayout = SVGLayout.LEFT2RIGHT;
-		SVGLayout productLayout = SVGLayout.LEFT2RIGHT;
-		if (getCommand(commands, REACTANT_VERTICAL)) {
-			reactantLayout = SVGLayout.TOP2BOTTOM;
+	public SVGG drawSVG() {
+		SVGG svgTot = new SVGG();
+		if (reactionDisplay.getId() != null) {
+			svgTot.setId(reactionDisplay.getId());
 		}
-		svgTot.setLayout(SVGLayout.LEFT2RIGHT);
-//		if (!getCommand(commands, OMIT_REACTANTS)) {
-		SVGSVG reactantSVG = drawReactants(commands, reactantLayout);
-		svgTot.addSVG(reactantSVG);
-		SVGSVG productSVG = drawProducts(commands, productLayout);
-		svgTot.addSVG(productSVG);
+		SVGG reactantsSVGG = drawReactants();
+		svgTot.addSVGG(reactantsSVGG);
+		double maxHeight = getMaxHeight(reactantsSVGG);
+		SVGG productsSVGG = drawProducts();
+		Transform2 transform = productsSVGG.getTransform2FromAttribute();
+		if (transform == null) {
+			transform = new Transform2();
+		}
+		transform = transform.concatenate(new Transform2(new Vector2(0.0, maxHeight)));
+		productsSVGG.setTransform(transform);
+		svgTot.addSVGG(productsSVGG);
+		Transform2 transformG = svgTot.ensureTransform2();
+		transformG = transformG.concatenate(
+				Transform2.applyScales(getReactionDisplay().scales.x, getReactionDisplay().scales.y));
+		svgTot.setTransform(transformG);
 		return svgTot;
 	}
 
-	public SVGSVG drawReactants(String[] commands, SVGLayout layout) {
-		return createMoleculeSVGs(layout, this.getReactantMolecules());
+	private double getMaxHeight(SVGG reactantsSVGG) {
+		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
+		double maxHeight = -1.0;
+		for (int i = 0; i < gs.size(); i++) {
+			SVGG g = (SVGG) gs.get(i);
+			double height = new BoundingRect(g).getHeight();
+			maxHeight = (maxHeight < height) ? height : maxHeight;
+		}
+		return maxHeight;
 	}
 
-	public SVGSVG drawProducts(String[] commands, SVGLayout layout) {
-		return createMoleculeSVGs(layout, this.getProductMolecules());
+	private double getTotalHeight(SVGG reactantsSVGG) {
+		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
+		double totalHeight = 0.0;
+		for (int i = 0; i < gs.size(); i++) {
+			SVGG g = (SVGG) gs.get(i);
+			totalHeight += new BoundingRect(g).getHeight();
+		}
+		return totalHeight;
 	}
 
-	private SVGSVG createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
-		SVGSVG svgTot = new SVGSVG();
-		svgTot.setLayout(layout);
-		MoleculeDisplay moleculeDisplay = reactionDisplay.getMoleculeDisplay();
+	private double getMaxWidth(SVGG reactantsSVGG) {
+		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
+		double maxWidth = -1.0;
+		for (int i = 0; i < gs.size(); i++) {
+			SVGG g = (SVGG) gs.get(i);
+			double width = new BoundingRect(g).getWidth();
+			maxWidth = (maxWidth < width) ? width : maxWidth;
+		}
+		return maxWidth;
+	}
+
+	private double getTotalWidth(SVGG reactantsSVGG) {
+		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
+		double totalWidth = 0.0;
+		for (int i = 0; i < gs.size(); i++) {
+			SVGG g = (SVGG) gs.get(i);
+			totalWidth += new BoundingRect(g).getWidth();
+		}
+		return totalWidth;
+	}
+
+	public SVGG drawReactants() {
+		return createMoleculeSVGs(getLayout(reactionDisplay.reactantOrientation), this.getReactantMolecules());
+	}
+
+	public SVGG drawProducts() {
+		return createMoleculeSVGs(getLayout(reactionDisplay.productOrientation),  this.getProductMolecules());
+	}
+
+	private SVGLayout getLayout(Orientation orientation) {
+		SVGLayout layout = null;
+		if (orientation.equals(Orientation.HORIZONTAL)) {
+			layout = SVGLayout.LEFT2RIGHT;
+		} else if (orientation.equals(Orientation.VERTICAL)) {
+			layout = SVGLayout.TOP2BOTTOM;
+		}
+		return layout;
+	}
+
+	private SVGG createMoleculeSVGs(SVGLayout layout, List<CMLMolecule> molecules) {
+		SVGG gTot = new SVGG();
+		gTot.setLayout(layout);
+		ensureReactionDisplay();
+		MoleculeDisplay moleculeDisplay = getReactionDisplay().getMoleculeDisplay();
 		for (CMLMolecule molecule : molecules) {
-			SVGSVG svg = MoleculeTool.getOrCreateTool(molecule).draw(moleculeDisplay);
-			svgTot.addSVG(svg);
+			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+			SVGG svgg = moleculeTool.drawAndTranslateToRectCorner(moleculeDisplay);
+			gTot.addSVGG(svgg);
 		}
-		return svgTot;
+		return gTot;
 	}
 
-}
-// messy get rid of this
-class BoundingRect {
-	
-	SVGRect rect;
-	double xorig;
-	double yorig;
-	double width;
-	double height;
-	double xshift;
-	double yshift;
-
-	public BoundingRect(SVGSVG svg) {
-		Nodes rects = svg.query(
-	//			"//*[local-name()='"+SVGG.TAG+"']/" +
-				"//*[local-name()='"+SVGG.TAG+"']/*[local-name()='"+SVGRect.TAG+"']");
-		Element rectx = (Element)rects.get(0);
-		rect = (SVGRect) SVGElement.createSVG(rectx);
-		xorig = rect.getX();
-		yorig = rect.getY();
-		width = rect.getWidth();
-		height = rect.getHeight();
-		xshift = -xorig;
-		yshift = yorig - height;
-		yshift = 0.0;
+	public void setReactionDisplay(ReactionDisplay reactionDisplay) {
+		this.reactionDisplay = reactionDisplay;
 	}
+
+	public ReactionDisplay getReactionDisplay() {
+		return reactionDisplay;
+	}
+
+
 }

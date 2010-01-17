@@ -8,6 +8,7 @@ import nu.xom.Attribute;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
@@ -505,6 +506,13 @@ public class BondTool extends AbstractSVGTool {
 
 	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
 		this.moleculeDisplay = moleculeDisplay;
+	}
+
+	public boolean hasCoordinates(CoordinateType type) {
+		List<CMLAtom> atoms = bond.getAtoms();
+		return (atoms != null && atoms.size() == 2 &&
+				atoms.get(0).hasCoordinates(type) && 
+				atoms.get(1).hasCoordinates(type)); 
 	}
 
 }
