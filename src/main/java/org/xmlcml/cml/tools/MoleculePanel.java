@@ -380,7 +380,7 @@ public class MoleculePanel extends JPanel implements /* CMLDrawable, */CMLConsta
 	 */
 	public void drawMolecule(Graphics2D g2d) {
 		if (displayList != null) {
-			SVGSVG svg = displayList.getSvg();
+			SVGG svg = displayList.getSvg();
 			if (svg != null) {
 				svg.clearCumulativeTransformRecursively();
 				svg.setAttributeFromTransform2(move);

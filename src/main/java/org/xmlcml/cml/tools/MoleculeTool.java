@@ -57,8 +57,8 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
+import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGRect;
-import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -74,6 +74,7 @@ import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.Molutils;
@@ -2581,20 +2582,22 @@ public class MoleculeTool extends AbstractSVGTool {
     
     private void drawBoundingBox(CMLDrawable drawable, SVGElement g) {
     	calculateBoundingBox2D();
-    	double bondLength = moleculeDisplay.getBondLength();
-    	Real2 xy0 = new Real2(
-    			userBoundingBox.getXRange().getMin() - bondLength, 
-    			userBoundingBox.getYRange().getMin() - bondLength
-    			);
-    	Real2 xy1 = new Real2(
-    			userBoundingBox.getXRange().getMax() + bondLength, 
-    			userBoundingBox.getYRange().getMax() + bondLength
-    			);
-    			
-    	SVGElement rect = new SVGRect(xy0, xy1);
-    	rect.setStroke("red");
-    	rect.setStrokeWidth(2.0);
-    	g.appendChild(rect);
+    	if (userBoundingBox != null && userBoundingBox.getXRange() != null && userBoundingBox.getYRange() != null) {
+	    	double bondLength = moleculeDisplay.getBondLength();
+	    	Real2 xy0 = new Real2(
+	    			userBoundingBox.getXRange().getMin() - bondLength, 
+	    			userBoundingBox.getYRange().getMin() - bondLength
+	    			);
+	    	Real2 xy1 = new Real2(
+	    			userBoundingBox.getXRange().getMax() + bondLength, 
+	    			userBoundingBox.getYRange().getMax() + bondLength
+	    			);
+	    			
+	    	SVGElement rect = new SVGRect(xy0, xy1);
+	    	rect.setStroke("red");
+	    	rect.setStrokeWidth(2.0);
+	    	g.appendChild(rect);
+    	}
     }
     
     private void setAtomBondAndGroupVisibility(
@@ -2721,30 +2724,37 @@ public class MoleculeTool extends AbstractSVGTool {
 	private void displayMoleculeLabels(CMLDrawable drawable, SVGElement g) {
 		calculateBoundingBox2D();
 		RealRange xRange = userBoundingBox.getXRange();
-		double xMid = xRange.getMidPoint();
-//		double minY = userBoundingBox.getYRange().getMin();
-		double maxY = userBoundingBox.getYRange().getMax();
-    	Transform2 transform2 = new Transform2(
-			new double[] {
-				1.,  0., 0.0,
-				0., -1., 0.0,
-				0.,  0., 1.}
-			);
-		if (molecule.getLabelElements().size() > 0) {
-			double labelFontSize = moleculeDisplay.getLabelFontSize();
-			double labelYSpacing = moleculeDisplay.getLabelYSpacing();
-//			double yLabel0 = maxY + labelYSpacing * labelFontSize;
-			double yLabel0 = maxY;
-			for (CMLLabel label : molecule.getLabelElements()) {
-				String labelS = label.getCMLValue();
-				double xLabel = xMid - labelFontSize * (labelS.length() / 2.); 
-				double yLabel = labelYSpacing * labelFontSize;
-				SVGText text = new SVGText(new Real2(xLabel, yLabel0 + yLabel), labelS);
-				text.setFontWeight("bold");
-				text.setFontSize(labelFontSize);
-		    	text.setTransform(transform2);
-				g.appendChild(text);
+		if (xRange != null) {
+			double xMid = xRange.getMidPoint();
+	//		double minY = userBoundingBox.getYRange().getMin();
+			double maxY = userBoundingBox.getYRange().getMax();
+	    	Transform2 transform2 = new Transform2(
+				new double[] {
+					1.,  0., 0.0,
+					0., -1., 0.0,
+					0.,  0., 1.}
+				);
+			if (molecule.getLabelElements().size() > 0) {
+				displayLabels(g, xMid, maxY, transform2);
 			}
+		}
+	}
+
+	private void displayLabels(SVGElement g, double xMid, double maxY,
+			Transform2 transform2) {
+		double labelFontSize = moleculeDisplay.getLabelFontSize();
+		double labelYSpacing = moleculeDisplay.getLabelYSpacing();
+//			double yLabel0 = maxY + labelYSpacing * labelFontSize;
+		double yLabel0 = maxY;
+		for (CMLLabel label : molecule.getLabelElements()) {
+			String labelS = label.getCMLValue();
+			double xLabel = xMid - labelFontSize * (labelS.length() / 2.); 
+			double yLabel = labelYSpacing * labelFontSize;
+			SVGText text = new SVGText(new Real2(xLabel, yLabel0 + yLabel), labelS);
+			text.setFontWeight("bold");
+			text.setFontSize(labelFontSize);
+			text.setTransform(transform2);
+			g.appendChild(text);
 		}
 	}
     
@@ -3895,7 +3905,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGSVG draw(MoleculeDisplay moleculeDisplay) {
+	public SVGG draw(MoleculeDisplay moleculeDisplay) {
 		ensure2DCoordinates(moleculeDisplay.isOmitHydrogens());
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		try {
@@ -3904,7 +3914,17 @@ public class MoleculeTool extends AbstractSVGTool {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return displayList.getSvg();
+		SVGG g = displayList.getSvg();
+		g = normalizeToSingleGContainer(g);
+		return g;
+	}
+
+	private SVGG normalizeToSingleGContainer(SVGG g) {
+		Nodes gNodes = g.query("./*[local-name()='"+SVGG.TAG+"']");
+		if (gNodes.size() == 1) {
+			g = new SVGG((SVGG)gNodes.get(0));
+		}
+		return g;
 	}
 
 	public void ensure2DCoordinates(boolean omitHydrogen) {
@@ -3926,5 +3946,56 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 		}
 	}
+
+	public SVGG drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
+		SVGG svgg = this.draw(moleculeDisplay);
+		BoundingRect brect = new BoundingRect(svgg);
+		brect.translateGToRectCorner();
+		return svgg;
+	}
 }
 
+class BoundingRect {
+
+	private SVGRect rect;
+	private double xorig;
+	private double yorig;
+	private double width;
+	private double height;
+	private SVGG svgg;
+
+	public BoundingRect(SVGG svgg) {
+		// child rect
+		this.svgg = svgg;
+		Nodes rects = svgg.query("./*[local-name()='"+SVGRect.TAG+"']");
+		if (rects.size() == 0) {
+			throw new RuntimeException("No bounding rectangle");
+		}
+		Element rectx = (Element)rects.get(0);
+		rect = (SVGRect) SVGElement.createSVG(rectx);
+		xorig = rect.getX();
+		yorig = rect.getY();
+		width = rect.getWidth();
+		height = rect.getHeight();
+	}
+
+	public void translateGToRectCorner() {
+		Transform2 transform = svgg.getTransform2FromAttribute();
+		if (transform == null) {
+			transform = new Transform2();
+		}
+		// subtract height since we are inverting box
+		Vector2 translateVector = new Vector2(-xorig, -yorig - height);
+		Transform2 translate = new Transform2(translateVector);
+		transform = transform.concatenate(translate);
+		svgg.setTransform(transform);
+	}
+	
+	public double getHeight() {
+		return height;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+}

@@ -10,6 +10,7 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.graphics.SVGCircle;
@@ -197,19 +198,22 @@ public class SelectionTool implements CMLConstants {
 	public void highlightBond(CMLBond bond) {
 	 // highlight
 		 BondTool bondTool = BondTool.getOrCreateTool(bond);
-		 List<CMLAtom> atoms = bond.getAtoms();
-   		 SVGElement line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
-   		 line.setStrokeWidth(bondTool.getWidth() * 10.0);
-   		 line.addAttribute(new Attribute("class", "highlight"));
-   		 line.setFill("yellow");
-   		 line.setOpacity(0.70);
-   		 SVGElement g = bondTool.getG();
-   		 if (g != null) {
-   			 LOG.debug("HBO "+bond.getId());
-   			 g.appendChild(line);
-   		 } else {
-   			 System.err.println("HI: Bond has no SVGG child "+bond.getId());
-   		 }
+		 if (bondTool.hasCoordinates(CoordinateType.TWOD)) {
+			 List<CMLAtom> atoms = bond.getAtoms();
+			 
+	   		 SVGElement line = new SVGLine(atoms.get(0).getXY2(), atoms.get(1).getXY2());
+	   		 line.setStrokeWidth(bondTool.getWidth() * 10.0);
+	   		 line.addAttribute(new Attribute("class", "highlight"));
+	   		 line.setFill("yellow");
+	   		 line.setOpacity(0.70);
+	   		 SVGElement g = bondTool.getG();
+	   		 if (g != null) {
+	   			 LOG.debug("HBO "+bond.getId());
+	   			 g.appendChild(line);
+	   		 } else {
+	   			 System.err.println("HI: Bond has no SVGG child "+bond.getId());
+	   		 }
+		 }
 	 }
 	
 	/**

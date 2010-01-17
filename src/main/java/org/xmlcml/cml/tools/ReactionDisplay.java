@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import org.xmlcml.euclid.Real2;
+
 
 /** display properties for bond.
  * 
@@ -13,8 +15,14 @@ public class ReactionDisplay extends AbstractDisplay {
 		DEFAULT.moleculeDisplay = MoleculeDisplay.DEFAULT;
 	};
 	
-	private MoleculeDisplay moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.DEFAULT);
-	protected boolean omitHydrogens;
+	public enum Orientation {
+		HORIZONTAL,
+		VERTICAL,
+	}
+	
+	protected Orientation reactant2ProductOrientation = Orientation.HORIZONTAL;
+	protected Orientation reactantOrientation = Orientation.HORIZONTAL;
+	protected Orientation productOrientation = Orientation.HORIZONTAL;
 
 	/** constructor.
 	 */
@@ -27,6 +35,42 @@ public class ReactionDisplay extends AbstractDisplay {
 	public ReactionDisplay(ReactionDisplay a) {
 		super(a);
 		this.moleculeDisplay = new MoleculeDisplay(a.moleculeDisplay);
+	}
+	private MoleculeDisplay moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.DEFAULT);
+	protected boolean omitHydrogens;
+	protected Real2 scales = new Real2(1.0, 1.0);
+	private String id;
+	
+	public Orientation getReactant2ProductOrientation() {
+		return reactant2ProductOrientation;
+	}
+	public void setReactant2ProductOrientation(
+			Orientation reactant2ProductOrientation) {
+		this.reactant2ProductOrientation = reactant2ProductOrientation;
+	}
+	public Orientation getReactantOrientation() {
+		return reactantOrientation;
+	}
+	public void setReactantOrientation(Orientation reactantOrientation) {
+		this.reactantOrientation = reactantOrientation;
+	}
+	public Orientation getProductOrientation() {
+		return productOrientation;
+	}
+	public void setProductOrientation(Orientation productOrientation) {
+		this.productOrientation = productOrientation;
+	}
+	public void setScales(Real2 scales) {
+		this.scales = scales;
+	}
+	public Real2 getScales() {
+		return scales;
+	}
+	public void setScale(double scale) {
+		this.scales = new Real2(scale, scale);
+	}
+	public void setScales(double scalex, double scaley) {
+		this.scales = new Real2(scalex, scaley);
 	}
 	/**
 	 * @return the moleculeDisplay
@@ -41,11 +85,16 @@ public class ReactionDisplay extends AbstractDisplay {
 		this.moleculeDisplay = moleculeDisplay;
 	}
 	/**
-	 * 
 	 * @return default
 	 */
 	public static ReactionDisplay getDEFAULT() {
 		return DEFAULT;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getId() {
+		return id;
 	}
 	
 }
