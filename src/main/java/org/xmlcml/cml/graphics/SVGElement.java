@@ -115,7 +115,7 @@ public class SVGElement extends GraphicsElement {
 		
 	}
 	
-	private static void createSubclassedChildren(Element oldElement, SVGElement newElement) {
+	protected static void createSubclassedChildren(Element oldElement, SVGElement newElement) {
 		for (int i = 0; i < oldElement.getChildCount(); i++) {
 			Node node = oldElement.getChild(i);
 			Node newNode = null;

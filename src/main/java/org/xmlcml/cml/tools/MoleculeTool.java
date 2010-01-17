@@ -58,6 +58,7 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGGWithBox;
 import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.euclid.Angle;
@@ -3905,7 +3906,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGG draw(MoleculeDisplay moleculeDisplay) {
+	public SVGGWithBox draw(MoleculeDisplay moleculeDisplay) {
 		ensure2DCoordinates(moleculeDisplay.isOmitHydrogens());
 		MoleculeDisplayList displayList = new MoleculeDisplayList();
 		try {
@@ -3915,11 +3916,11 @@ public class MoleculeTool extends AbstractSVGTool {
 			e.printStackTrace();
 		}
 		SVGG g = displayList.getSvg();
-		g = normalizeToSingleGContainer(g);
-		return g;
+		g = replaceThisBySingleGChild(g);
+		return SVGGWithBox.createSVGGWithBox(g);
 	}
 
-	private SVGG normalizeToSingleGContainer(SVGG g) {
+	private SVGG replaceThisBySingleGChild(SVGG g) {
 		Nodes gNodes = g.query("./*[local-name()='"+SVGG.TAG+"']");
 		if (gNodes.size() == 1) {
 			g = new SVGG((SVGG)gNodes.get(0));
@@ -3947,8 +3948,9 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
-	public SVGG drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
-		SVGG svgg = this.draw(moleculeDisplay);
+	public SVGGWithBox drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
+		SVGGWithBox svgg = this.draw(moleculeDisplay);
+		svgg.debug("BRECT");
 		BoundingRect brect = new BoundingRect(svgg);
 		brect.translateGToRectCorner();
 		return svgg;
