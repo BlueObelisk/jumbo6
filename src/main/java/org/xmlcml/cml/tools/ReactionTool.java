@@ -15,6 +15,7 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
@@ -1026,36 +1027,42 @@ public class ReactionTool extends AbstractSVGTool {
 		cmlMapTool.translateIds(direction, atomSet2Map);
 	}
 
-	public void addReactant(String smiles) {
+	public CMLReactant addReactant(String smiles) {
 		SMILESTool smilesTool = new SMILESTool();
-		addReactant(FormulaTool.calculateMolecule(smilesTool, smiles));
+		CMLReactant reactant = new CMLReactant();
+		reactant.addMolecule(FormulaTool.calculateMolecule(smilesTool, smiles));
+		reaction.addReactant(reactant);
+		return reactant;
 	}
 
-	private void addReactant(CMLMolecule reactantMol) {
+	private CMLReactant addReactant(CMLMolecule reactantMol) {
 		CMLReactant reactant = new CMLReactant();
 		reactant.addMolecule(reactantMol);
 		this.reaction.addReactant(reactant);
+		return reactant;
 	}
 
-	public void addProduct(String smiles) {
+	public CMLProduct addProduct(String smiles) {
 		SMILESTool smilesTool = new SMILESTool();
 		CMLMolecule productMolecule = FormulaTool.calculateMolecule(smilesTool, smiles);
 		CMLProduct product = new CMLProduct();
 		product.addMolecule(productMolecule);
 		this.addProduct(product);
+		return product;
 	}
 	
 	/** should be part of CMLReaction
 	 * 
 	 * @param product
 	 */
-	public void addProduct(CMLProduct product) {
+	public CMLProduct addProduct(CMLProduct product) {
 		CMLProductList productList = reaction.getProductList();
 		if (productList == null) {
 			productList = new CMLProductList();
 			reaction.addProductList(productList);
 		}
 		productList.addProduct(product);
+		return product;
 	}
 
 	private List<List<Long>> extractMorgans(List<CMLMolecule> molecules) {
@@ -1118,10 +1125,11 @@ public class ReactionTool extends AbstractSVGTool {
 		return molecule;
 	}
 
-	public void addProduct(CMLMolecule productMolecule) {
+	public CMLProduct addProduct(CMLMolecule productMolecule) {
 		CMLProduct product = new CMLProduct();
 		product.addMolecule(productMolecule);
 		this.addProduct(product);
+		return product;
 	}
 
 	private void addPatternsToLinkedAtoms(SVGSVG[] svgsvg, CMLMap map) {
@@ -1484,5 +1492,36 @@ public class ReactionTool extends AbstractSVGTool {
 		return reactionDisplay;
 	}
 
+	public void ensureIds() {
+		int i = 0;
+		for (CMLReactant reactant : this.getReactants()) {
+			ReactantTool.getOrCreateTool(reactant).ensureId(ReactantTool.ID_PREFIX+(i++));
+		}
+		i = 0;
+		for (CMLProduct product : this.getProducts()) {
+			ProductTool.getOrCreateTool(product).ensureId(ProductTool.ID_PREFIX+(i++));
+		}
+	}
+
+	/**
+	 * finds reactant with smallest value of molarAmount / count.
+	 * if count is absent, assume unity
+	 * skip reactants without amounts
+	 * @return
+	 */
+	public CMLReactant findLimitingReactant() {
+		List<CMLReactant> reactants = this.getReactants();
+		CMLReactant limitingReactant = null;
+		double maximumMolesPerCount = Double.MAX_VALUE;
+		for (CMLReactant reactant : reactants) {
+			ReactantTool reactantTool = ReactantTool.getOrCreateTool(reactant);
+			double molesPerCount = reactantTool.getMolesPerCount();
+			if (!Double.isNaN(molesPerCount) && molesPerCount < maximumMolesPerCount) {
+				maximumMolesPerCount = molesPerCount;
+				limitingReactant = reactant;
+			}
+		}
+		return limitingReactant;
+	}
 
 }

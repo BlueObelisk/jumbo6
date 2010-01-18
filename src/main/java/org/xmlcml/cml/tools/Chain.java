@@ -253,6 +253,10 @@ public class Chain extends AbstractTool {
 			Real2 xy = node.getXY2();
 			if (xy == null) {
 				Real2 direction = getDirection(atomPath, i, node);
+				// kludge
+				if (direction.getLength() < 0.0001) {
+					direction = new Real2(1.0, 0.0);
+				}
 				direction = direction.getUnitVector().multiplyBy(MoleculeDisplay.DEFAULT_BONDLENGTH);
 //				System.out.println("DIRECTION... "+direction.getLength());
 				xy = atomPath.get(i-1).getXY2().plus(direction);
@@ -299,7 +303,10 @@ public class Chain extends AbstractTool {
 			if (greatGrandParent != null) {
 				grandDirection = grandParent.getXY2().subtract(greatGrandParent.getXY2());
 			}
-			direction = parent.getXY2().subtract(grandParent.getXY2());
+			direction = parent.getXY2();
+			if (grandParent != null) {
+				direction = parent.getXY2().subtract(grandParent.getXY2());
+			}
 			if (grandDirection == null) {
 //				direction.transformBy(ROT330);
 				direction.transformBy(ROT0);
