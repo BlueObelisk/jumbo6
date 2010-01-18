@@ -47,7 +47,6 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-//	@Ignore
 	public void testgetBreadthFirstCIPTree() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -82,7 +81,6 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-//	@Ignore
 	public void testgetBreadthFirstCIPTree2() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -145,7 +143,6 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-//	@Ignore
 	public void testgetBreadthFirstCIPTree1() {
 		String molS = "" +
 		"<molecule " + CMLConstants.CML_XMLNS + " >" +
@@ -182,7 +179,6 @@ public class CIPToolTest {
 	 * 
 	 */
 	@Test
-//	@Ignore
 	public void testgetBreadthFirstCIPTree3() {
 		CMLMolecule mol = parseSMILES("[R][C]([N])([F])([O])");
 		CIPTool st = new CIPTool(mol);
@@ -212,7 +208,6 @@ public class CIPToolTest {
 		return st.getMolecule();
 	}
 	@Test
-//	@Ignore
 	public void testWikipedia0() {
 		SMILESTool st = new SMILESTool();
 		st.parseSMILES("[R]O[H]");
@@ -233,21 +228,18 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia1() {
 		// -OH > -CH3
 		assertDecreasing("[R]O[H]", "[R]C([H])([H])([H])");
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia2() {
 		// -CH(OH)CH3 > CH2OH
 		assertDecreasing("[R]C([H])(O([H]))C([H])([H])([H])", "[R]C([H])([H])(O([H]))");
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia3() {
 		// -CH(OCH3)CH3 > CH(OH)CH2OH
 		assertDecreasing("[R]C([H])(O(C([H])([H])([H])))(C([H])([H])([H]))", 
@@ -255,7 +247,6 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia4() {
 		// -CH(CH2F)OCH3 > CH(CH3)OCH2F
 		assertDecreasing(
@@ -265,7 +256,6 @@ public class CIPToolTest {
 	
 
 	@Test
-//	@Ignore
 	public void testWikipedia5() {
 //	    * -CH=O > -CH2OH. The distance-2 lists are (O, ghost O, H) and (O, H, H); 
 //		the ghost oxygen outranks the hydrogen.
@@ -275,7 +265,6 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia6() {
 //	    * -CH(OCH3)2 > -CH=O. The distance-2 lists are (O, O, H) and (O, ghost O, H). 
 //		This is a tie, but at distance 3, nothing else is attached to the ghost oxygen, 
@@ -287,7 +276,6 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testWikipedia7() {
 //	    * -CH=CH2 > -CH(CH3)2. The distance-2 lists are (C, ghost C, H) and (C, C, H), a tie. 
 //		However, at distance 3, the lists are ((ghost C, H, H), ( ), ( )) and ((H, H, H), (H, H, H), ( )); 
@@ -299,7 +287,6 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testDaniel1() {
 //	R-[CH](C(F)(F)F))C([H])([H])[H] == R-[CH](C([H])([H])[H])C(F)(F)F
 		assertEquals(
@@ -308,7 +295,6 @@ public class CIPToolTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void testDaniel2() {
 //		R-[CH](S[H])S([H])([H])[H] vs R-[CH](S([H])[H])S([H])[H]
 		assertEquals(

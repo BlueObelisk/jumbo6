@@ -422,25 +422,4 @@ public class GeometryToolTest{
 				+ "    <bond atomRefs2='a6 a8' order='S'/>" + "  </bondArray>"
 				+ "</molecule>" + CMLConstants.S_EMPTY);
 	}
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.element.CMLAtomSet.createValenceLengths(boolean,
-     * boolean)'
-     */
-    @Test
-    @Ignore
-    public void testCreateValenceLengthsAtomSet() {
-        /*--
-        CMLAtomSet atomSet = new CMLAtomSet(xomAtom);
-        MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(xomAtom[0].getMolecule());
-        boolean calculate = true;
-        boolean add = true;
-        List<CMLLength> lengths = moleculeTool.createValenceLengths(atomSet,
-                calculate, add);
-        Assert.assertNotNull("length", lengths);
-        Assert.assertEquals("length", 5, lengths.size());
-        Assert.assertEquals("length", Math.sqrt(3.), lengths.get(0)
-                .getCalculatedLength(atomSet.getMolecule()));
-                --*/
-    }
  }

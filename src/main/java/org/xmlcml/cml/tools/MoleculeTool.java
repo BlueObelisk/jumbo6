@@ -2593,8 +2593,9 @@ public class MoleculeTool extends AbstractSVGTool {
 	    			);
 	    			
 	    	SVGElement rect = new SVGRect(xy0, xy1);
-	    	rect.setStroke("red");
-	    	rect.setStrokeWidth(2.0);
+	    	rect.setStroke(moleculeDisplay.getBoundingBoxBundle().getStroke());
+	    	rect.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getStrokeWidth());
+	    	rect.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getOpacity());
 	    	g.appendChild(rect);
     	}
     }

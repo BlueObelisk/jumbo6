@@ -13,12 +13,6 @@ import org.xmlcml.util.TstUtils;
 public class DictionaryToolTest {
 
 	@Test
-	@Ignore
-	public void testExtractAndAnalyseDictRef() {
-		Assert.fail("Not yet implemented");
-	}
-
-	@Test
 	public void testMakeIndex() throws Exception {
 		String d = "" +
 				"<dictionary xmlns='http://www.xml-cml.org/schema'>" +
@@ -49,17 +43,5 @@ public class DictionaryToolTest {
 	}
 
 			
-
-	@Test
-	@Ignore
-	public void testValidateDictRefsInCML() {
-		Assert.fail("Not yet implemented");
-	}
-
-	@Test
-	@Ignore
-	public void testCreateTypedNameValue() {
-		Assert.fail("Not yet implemented");
-	}
 
 }

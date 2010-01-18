@@ -926,13 +926,6 @@ public class MoleculeToolTest {
         }
     }
 
-	/** */
-	@Test
-	@Ignore
-	public final void testAddMoleculeTo() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * Test method for
 	 * 'org.xmlcml.cml.tools.MoleculeTool.addSuffixToAtomIDs(String)'
@@ -944,30 +937,6 @@ public class MoleculeToolTest {
 		moleculeTool.addSuffixToAtomIDs("FOO");
 		Assert.assertEquals("new", 3, fixture.mol1.getAtomCount());
 		Assert.assertEquals("new", "a3FOO", fixture.mol1.getAtom(2).getId());
-	}
-
-	/**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.addWedgeHatchBond(CMLAtom)'
-     */
-    @Test
-    @Ignore
-    public void testAddWedgeHatchBond() {
-
-    }
-
-	/** */
-	@Test
-	@Ignore
-	public final void testAdjustAngles() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testAdjustBondOrdersToValencyPiSystemControls() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -1030,27 +999,6 @@ public class MoleculeToolTest {
 				.getBonds().get(8).getAtomRefs2());
 	}
 
-	/** */
-	@Test
-	@Ignore
-	public final void testAdjustLengths() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testAdjustTorsions() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testAdjustTorsionsCMLAtomCMLAtom() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * Test method for 'org.xmlcml.cml.tools.MoleculeTool.appendToId(CMLAtom,
 	 * String)'
@@ -1092,13 +1040,6 @@ public class MoleculeToolTest {
 				AS.N.value, AS.O.value }, atomArray.getElementType());
 		CMLAssert.assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
 				.getCount(), 0.000001);
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testCalculateBondsToAndJoin() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -1270,13 +1211,6 @@ public class MoleculeToolTest {
 
 	}
 
-	/** */
-	@Test
-	@Ignore
-	public final void testContractExplicitHydrogensHydrogenControlBoolean() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * copies attributes on bonds and atoms to another molecule. for each
 	 * atom/bond in this.molecule finds Id and hence corresponding atom/bond in
@@ -1339,27 +1273,6 @@ public class MoleculeToolTest {
 
 	}
 
-	/** */
-	@Test
-	@Ignore
-	public final void testCopyAtomAttributesById() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testCopyBondAttributesById() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testCreateAtomRefs4() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * Test method for
 	 * 'org.xmlcml.cml.element.CMLMolecule.createCartesiansFromFractionals(RealS
@@ -1403,20 +1316,6 @@ public class MoleculeToolTest {
 				0.0000000000001);
 	}
 
-	/** */
-	@Test
-	@Ignore
-	public final void testCreateClusters() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testCreateGraphicsElement() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	@Test
 	public void testCreateGraphicsElement1() throws Exception {
 		CMLMolecule molecule = new CMLMolecule();
@@ -1444,13 +1343,6 @@ public class MoleculeToolTest {
 		SVGElement g = moleculeTool.createGraphicsElement();
 		SVGSVG svg = new SVGSVG();
 		svg.appendChild(g);
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public final void testCreateLigands() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -1655,13 +1547,6 @@ public class MoleculeToolTest {
 
 	}
 
-	/** */
-	@Test
-	@Ignore
-	public final void testFlattenMoleculeDescendants() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * Test method for 'org.xmlcml.cml.tools.MoleculeTool.generateBondIds()'
 	 */
@@ -1705,13 +1590,6 @@ public class MoleculeToolTest {
 		Assert.assertNull("angle null", angle);
 	}
 	
-    /** */
-	@Test
-	@Ignore
-	public final void testGetAtomRefs4() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
     /**
 	 * Test method for
 	 * 'org.xmlcml.cml.tools.MoleculeTool.getAtomSet(CMLBondSet)'
@@ -1814,13 +1692,6 @@ public class MoleculeToolTest {
 				.getXMLContent());
 	}
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetCalculatedMolecularMass() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
     /**
 	 * Test method for 'org.xmlcml.cml.element.CMLMolecule.getCentroid3D()'
 	 */
@@ -1840,21 +1711,6 @@ public class MoleculeToolTest {
 	}
 
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetChainMolecules() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetChargedAtoms() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-    
     /**
 	 * Test method for
 	 * 'org.xmlcml.cml.element.CMLMolecule.getCoordinates3(CoordinateType)'
@@ -1921,13 +1777,6 @@ public class MoleculeToolTest {
     }
 
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetDownstreamAtomsCMLAtomCMLAtom() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
 
     /**
 	 * Test method for
@@ -1970,13 +1819,6 @@ public class MoleculeToolTest {
 		Assert.assertEquals("down", 6, downstreamAtoms.size());
 		Assert.assertEquals("down", new String[] { "a2", "a3", "a3_h1",
 				"a3_h2", "a3_h3", "a2_h1" }, downstreamAtoms.getXMLContent());
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetFormalCharge() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
     /**
@@ -2077,13 +1919,6 @@ public class MoleculeToolTest {
 		Assert.assertNull("mapped atom null", atom1a);
 	}
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMappedBondViaAtoms() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
     /**
 	 * Test method for
 	 * {@link org.xmlcml.cml.element.CMLAmount#getMolarAmount(org.xmlcml.cml.element.lite.CMLMolecule)}
@@ -2158,13 +1993,6 @@ public class MoleculeToolTest {
         Assert.assertEquals("link1", "./fragments/frags.xml", link1.getTo());
     }
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetMoleculeList() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
     /**
      * test get map of molecules under namespace.
      * @throws IOException
@@ -2209,28 +2037,6 @@ public class MoleculeToolTest {
 		Assert.assertEquals("nonH", 2, atomList.size());
 	}
 
-    /** */
-	@Test
-	@Ignore
-	public final void testGetOrCreateAtomTool() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetOrCreateBondTool() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-
-    /** */
-	@Test
-	public final void testGetOrCreateTool() {
-		// ignore
-	}
-
     /**
 	 * test molecule range3.
 	 */
@@ -2253,38 +2059,6 @@ public class MoleculeToolTest {
 		Assert.assertEquals("z range max", 0.5,
 				mol5Range3.getZRange().getMax(), CC.EPS);
 	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetRingNucleiMolecules() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetSumNonHydrogenBondOrderCMLAtom() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testGetSumNonHydrogenBondOrderCMLMoleculeCMLAtom() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-    /**
-     * Test method for
-     * 'org.xmlcml.cml.tools.MoleculeTool.getSymmetryContacts(RealRange,
-     * CrystalTool)'
-     */
-    @Test
-    @Ignore
-    public void testGetSymmetryContacts() {
-
-    }
 
     /** */
 	@Test
@@ -2322,20 +2096,6 @@ public class MoleculeToolTest {
 		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
 		vector = moleculeTool7.getCoordinates3(CoordinateType.CARTESIAN);
 		Assert.assertNull("get vector3d should be null", vector);
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testRemoveMetalAtomsAndBonds() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-    /** */
-	@Test
-	@Ignore
-	public final void testRemoveOverlapping3DAtoms() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
     /**
@@ -2422,13 +2182,6 @@ public class MoleculeToolTest {
                 .get(0).getOrderAttribute().getValue());
     }
 
-    /** */
-	@Test
-	@Ignore
-	public final void testSproutCMLAtomSet() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-    
     /**
 	 * Test method for
 	 * {@link org.xmlcml.cml.element.lite.CMLMolecule#transformCartesians(org.xmlcml.cml.element.CMLTransform3)}
