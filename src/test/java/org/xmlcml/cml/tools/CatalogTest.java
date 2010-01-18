@@ -29,20 +29,9 @@ import org.xmlcml.util.TstUtils;
  */
 public class CatalogTest {
 
-	/**
-	 */
 	@Test
-	@Ignore
-	public void testCatalogToolURL() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 */
-	@Test
-	@Ignore
-	public void testCatalogToolFile() {
-		Assert.fail("Not yet implemented");
+	public void testDummy() {
+		Assert.assertTrue(true);
 	}
 
 	/**

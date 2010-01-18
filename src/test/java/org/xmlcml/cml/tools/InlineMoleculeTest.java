@@ -110,27 +110,4 @@ public class InlineMoleculeTest  {
         molecule = inlineMolecule.getCmlMolecule();
         Assert.assertNotNull("molecule not null", molecule);
     }
-/**     @Test InlineBranch not visible
-     public void testGetLength(){
-    	 String s = "(jen)";
-    	 int i = InlineBranch.getLength(C_LBRAK, s) ;
-     }
-     */
-    /** Test method for 'org.xmlcml.cml.tools.InlineMolecule.createFromString(String)'
-     */
-     
-     @Test
-     @Ignore
-    public void testCreateFromString() {
-
-    }
-
-    /** Test method for 'org.xmlcml.cml.tools.InlineMolecule.getMolecule()'
-     */
-     @Test
-     @Ignore
-    public void testGetMolecule() {
-
-    }
-
 }

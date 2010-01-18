@@ -39,69 +39,6 @@ public class JunctionTest {
 		junction = Junction.createJunction(ring0, ring1);
 	}
 
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#getBridgeAtomList()}
-	 * .
-	 */
-	@Test
-	@Ignore
-	public final void testGetBridgeAtomList() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#isSpiro()}.
-	 */
-	@Test
-	@Ignore
-	public final void testIsSpiro() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#isFusion()}.
-	 */
-	@Test
-	@Ignore
-	public final void testIsFusion() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#isBridge()}.
-	 */
-	@Test
-	@Ignore
-	public final void testIsBridge() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#getCommonAtomSet()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetCommonAtomSet() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#getCommonBondSet()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetCommonBondSet() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link org.xmlcml.cml.tools.Junction#getRingList()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetRingList() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
 
 	/**
 	 * Test method for

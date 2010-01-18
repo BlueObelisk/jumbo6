@@ -144,7 +144,6 @@ public class FragmentToolTest {
 	 * no longer relevant
 	 */
 	@Test
-//	@Ignore
 	// FIXME needs CountAttribute fixed
 	public void testProcessRecursively() {
 		String[] ATOMREFS2 = new String[] { "r2", "r1" };

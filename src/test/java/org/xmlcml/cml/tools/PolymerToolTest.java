@@ -56,7 +56,6 @@ public class PolymerToolTest {
 	 * @throws Exception
 	 */
 	@Test
-//	@Ignore
 	public void testExamples() throws Exception {
 //// THESE WORK - some are commented out to save time
         /*--

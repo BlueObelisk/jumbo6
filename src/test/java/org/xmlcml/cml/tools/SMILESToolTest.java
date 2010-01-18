@@ -51,7 +51,6 @@ public class SMILESToolTest {
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
 	 */
 	@Test
-	//@Ignore
 	public final void testParseSMILES() {
 		smilesTool = new SMILESTool();
 		// furan - atoms, rings bonds
@@ -90,7 +89,6 @@ public class SMILESToolTest {
 	 * Test method for {@link org.xmlcml.cml.tools.SMILESTool#parseSMILES(java.lang.String)}.
 	 */
 	@Test
-	//@Ignore
 	public final void testParseSMILES1() {
 		// strange atom and silly ring and DOT
 		smilesTool = new SMILESTool();
@@ -790,7 +788,7 @@ public class SMILESToolTest {
 	 * Test for aromatic Ns
 	 */
 	@Test
-	@Ignore //Jumbo expects aromatic N
+	@Ignore ("Jumbo expects aromatic N")
 	public void hydrogenHandling7a() {
 		String smiles = "c1ccc[NH]1";
 		SMILESTool smilesTool = new SMILESTool();

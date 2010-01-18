@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
@@ -37,6 +38,8 @@ public class MoleculeDisplay extends AbstractDisplay {
 	
 	private Real2Interval screenExtent;
 	private MoleculeTool moleculeTool;
+
+	private BoundingBoxBundle boundingBoxBundle = new BoundingBoxBundle();
 	
 	/**
 	 */
@@ -289,6 +292,14 @@ public class MoleculeDisplay extends AbstractDisplay {
 
 	public void setDrawBoundingBox(boolean drawBoundingBox) {
 		this.drawBoundingBox = drawBoundingBox;
+	}
+
+	public BoundingBoxBundle getBoundingBoxBundle() {
+		return this.boundingBoxBundle;
+	}
+
+	public void setBoundingBoxBundle(BoundingBoxBundle boundingBoxBundle) {
+		this.boundingBoxBundle = boundingBoxBundle;
 	}
 	
 }

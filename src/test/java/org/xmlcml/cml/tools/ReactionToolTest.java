@@ -137,73 +137,6 @@ public class ReactionToolTest {
 
 	}
 
-	/**
-	 * test create from reaction scheme in literature.
-	 * 
-	 */
-	@Test
-	@Ignore
-	public void testCreateFromOSCAR() {
-		Document doc = null;
-		try {
-			InputStream in = Util.getInputStreamFromResource(REACTION_EXAMPLES
-					+CMLConstants.U_S + "oscar.xml");
-			doc = new Builder().build(in);
-		} catch (Throwable e) {
-			System.err.println("SKIPPED" + e);
-		}
-		Assert.assertNotNull("oscar not null", doc);
-		/* List<CMLReactionScheme> schemeList = */ReactionTool
-				.createFromOSCAR(doc);
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream("C:\\temp\\test.xml");
-			Serializer serializer = new Serializer(fos);
-			serializer.write(doc);
-			fos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * test create from reaction scheme in literature.
-	 * 
-	 */
-	@Test
-	@Ignore
-	public void testCreateFromOSCAR1() {
-		String dirS = "D:\\wwmm\\demos\\for_ram\\obc";
-		String fileS = "markedup.xml";
-		// String dirS = "C:\\oscar3\\reduced_corpus\\rsc";
-		// String fileS = null;
-		// String dirS =
-		// "C:\\pmr\\jumbo53\\src\\org\\xmlcml\\cml\\tools\\test\\examples\\reactions"
-		// ;
-		// String fileS = null;
-		int max = 999;
-		createFromOscar(dirS, fileS, max);
-	}
-
-	/**
-	 * test create from reaction scheme in literature.
-	 * 
-	 */
-	@Test
-	@Ignore
-	public void testCreateFromOSCAR2() {
-		String dirS = "D:\\wwmm\\demos\\markedup-scixml";
-		createFromOscar(dirS, null, 10);
-	}
-
-	/** */
-	@Test
-	@Ignore
-	public void testCreateGraphicsElement() {
-		Assert.fail("Not yet implemented");
-	}
-
 	/** */
 	@Test
 	public void testCalculateDifferenceFormula() {
@@ -831,9 +764,27 @@ public class ReactionToolTest {
 		reactionTool.addReactant("Cc1ccc(cc1)C(=O)C(F)(F)(F)");
 		reactionTool.addReactant("CCCC[N+]#[C-]");
 		reactionTool.addProduct("C1CCCCC1C(=O)N(CC(C)C)C(c1cccc(C)cc1(C(F)(F)(F))C(=O)N(CCCC)");
-		SVGG svgg = reactionTool.drawSVG();
+		SVGGBox svgg = reactionTool.drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\ugi.svg"));
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		cmlMap.debug("UGI");
+		Assert.assertNotNull("testPolyinfo1", cmlMap);
+	}
+
+	@Test
+	public void testAmide() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.getReactionDisplay().setScale(0.5);
+		reactionTool.addReactant("C1CCCCC1C(=O)OC(=O)C");
+		reactionTool.addReactant("CC(C)N");
+		reactionTool.addProduct("C1CCCCC1C(=O)NC(C)C");
+		reactionTool.addProduct("CC(=O)O");
+		reaction.debug("AMIDE");
+		SVGGBox svgg = reactionTool.drawSVG();
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\amide.svg"));
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		cmlMap.debug("AMIDE");
 		Assert.assertNotNull("testPolyinfo1", cmlMap);
 	}
 
