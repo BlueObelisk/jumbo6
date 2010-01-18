@@ -1,0 +1,31 @@
+<map toType="atom" fromType="atom" xmlns="http://www.xml-cml.org/schema">
+  <link title="unique treeString C" fromSet="m2_a3" toSet="m2_a3"/>
+  <link title="unique treeString H" fromSet="m2_a3_h1" toSet="m2_a3_h1"/>
+  <link title="unique treeString O" fromSet="m2_a8" toSet="m1_a1"/>
+  <link title="unique treeString P" fromSet="m1_a4" toSet="m1_a2"/>
+  <link title="unique treeString C" fromSet="m1_a1" toSet="m2_a10"/>
+  <link title="unique treeString H" fromSet="m2_a9_h1" toSet="m2_a11_h1"/>
+  <link title="unique treeString H" fromSet="m1_a8_h1 m1_a14_h1 m1_a20_h1" toSet="m1_a6_h1 m1_a12_h1 m1_a18_h1"/>
+  <link title="unique treeString H" fromSet="m1_a6_h1 m1_a10_h1 m1_a12_h1 m1_a16_h1 m1_a18_h1 m1_a22_h1" toSet="m1_a4_h1 m1_a8_h1 m1_a10_h1 m1_a14_h1 m1_a16_h1 m1_a20_h1"/>
+  <link title="balanced commonAtomTree C" fromSet="m1_a8 m1_a14 m1_a20" toSet="m1_a6 m1_a12 m1_a18"/>
+  <link title="balanced commonAtomTree C" fromSet="m1_a6 m1_a10 m1_a12 m1_a16 m1_a18 m1_a22" toSet="m1_a4 m1_a8 m1_a10 m1_a14 m1_a16 m1_a20"/>
+  <link title="balanced commonAtomTree C" fromSet="m1_a5 m1_a11 m1_a17" toSet="m1_a3 m1_a9 m1_a15"/>
+  <link title="balanced commonAtomTree C" fromSet="m1_a7 m1_a9 m1_a13 m1_a15 m1_a19 m1_a21" toSet="m1_a5 m1_a7 m1_a11 m1_a13 m1_a17 m1_a19"/>
+  <link title="balanced commonAtomTree C" fromSet="m2_a1 m2_a5" toSet="m2_a1 m2_a5"/>
+  <link title="balanced commonAtomTree C" fromSet="m2_a10 m2_a11" toSet="m2_a12 m2_a13"/>
+  <link title="balanced commonAtomTree H" fromSet="m1_a1_h1 m1_a1_h2 m1_a1_h3" toSet="m2_a10_h1 m2_a10_h2 m2_a10_h3"/>
+  <link title="balanced commonAtomTree H" fromSet="m2_a10_h1 m2_a10_h2 m2_a10_h3 m2_a11_h1 m2_a11_h2 m2_a11_h3" toSet="m2_a12_h1 m2_a12_h2 m2_a12_h3 m2_a13_h1 m2_a13_h2 m2_a13_h3"/>
+  <link title="balanced commonAtomTree H" fromSet="m2_a1_h1 m2_a5_h1" toSet="m2_a1_h1 m2_a5_h1"/>
+  <link title="balanced commonAtomTree H" fromSet="m1_a2_h1 m1_a2_h2" toSet="m2_a9_h1 m2_a9_h2"/>
+  <link title="balanced commonLigands C" fromSet="m2_a6" toSet="m2_a6"/>
+  <link title="balanced commonLigands C" fromSet="m1_a2" toSet="m2_a9"/>
+  <link title="balanced commonLigands C" fromSet="m2_a7" toSet="m2_a11"/>
+  <link title="orphan H" fromSet="m1_a3_h1 m2_a2_h1 m2_a4_h1" toSet="m2_a2_h1 m2_a4_h1 m2_a8_h1"/>
+  <link title="orphan C" fromSet="m1_a3 m2_a2 m2_a4 m2_a9" toSet="m2_a2 m2_a4 m2_a7 m2_a8"/>
+  <link title="de-orphan" fromSet="m1_a7_h1" toSet="m1_a5_h1"/>
+  <link title="de-orphan" fromSet="m1_a9_h1" toSet="m1_a7_h1"/>
+  <link title="de-orphan" fromSet="m1_a13_h1" toSet="m1_a11_h1"/>
+  <link title="de-orphan" fromSet="m1_a15_h1" toSet="m1_a13_h1"/>
+  <link title="de-orphan" fromSet="m1_a19_h1" toSet="m1_a17_h1"/>
+  <link title="de-orphan" fromSet="m1_a21_h1" toSet="m1_a19_h1"/>
+</map>
