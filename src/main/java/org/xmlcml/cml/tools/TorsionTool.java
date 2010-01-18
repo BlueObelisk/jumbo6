@@ -84,7 +84,7 @@ public class TorsionTool extends AbstractTool {
 
   /** applies transformation to reset torsion angle.
    *
-   * @param angle
+   * @param amount
    * @param atomSet to define torsion (could be the molecule)
    * @param moveableSet set of atoms which can be moved
    *   (normally those downstream of the rotatable bond)

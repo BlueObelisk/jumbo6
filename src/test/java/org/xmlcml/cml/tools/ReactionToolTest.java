@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -32,7 +30,6 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLConstants.Units;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
@@ -51,14 +48,12 @@ import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGGBox;
-import org.xmlcml.cml.graphics.SVGLayout;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.ReactionFixture;
-import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
+import org.xmlcml.util.TestUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TestUtils;
 import org.xmlcml.util.TstUtils;
 
 /**
@@ -214,89 +209,6 @@ public class ReactionToolTest {
 	}
 
 	// ===================================================
-	private void createFromOscar(String dirS, String xmlName, int max) {
-		File dir = new File(dirS);
-		String[] files = dir.list();
-		String oscar3tohtml = "C:\\pmr\\cmlsvg\\oscar3toHtml.xsl";
-		Document xslDoc = null;
-		XSLTransform transform = null;
-		try {
-			xslDoc = new Builder().build(new FileInputStream(oscar3tohtml));
-			transform = new XSLTransform(xslDoc);
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage() + "|" + e.getCause());
-		}
-		int count = 0;
-		for (String fileS : files) {
-			fileS = getFileNameIn(fileS, xmlName);
-			try {
-				if (!fileS.endsWith(XML_SUFF) || fileS.endsWith("out.xml")) {
-					continue;
-				}
-				if (count++ >= max)
-					continue;
-				@SuppressWarnings("unused")
-				String sss = "b512762a";
-				// if (fileS.indexOf(sss) == -1) continue;
-
-				File file = new File(dir, fileS);
-				LOG.debug("=========" + file + "=========");
-				System.err.println("=========" + file + "=========");
-				Document doc = null;
-				try {
-					doc = new Builder().build(new FileInputStream(file));
-				} catch (FileNotFoundException fnfe) {
-					continue;
-				} catch (Throwable e) {
-					System.err.println("SKIPPED" + e);
-					continue;
-				}
-				Assert.assertNotNull("oscar not null", doc);
-				/* List<CMLReactionScheme> schemeList = */ReactionTool
-						.createFromOSCAR(doc);
-				FileOutputStream fos = null;
-				File outFile = new File(dir, fileS.substring(0,
-						fileS.length() - 4)
-						+ ".out.xml");
-				try {
-					fos = new FileOutputStream(outFile);
-					Serializer serializer = new Serializer(fos);
-					serializer.write(doc);
-					fos.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				}
-				Nodes nodes = transform.transform(doc);
-				Document htmlDoc = null;
-				if (nodes.size() != 1) {
-					throw new RuntimeException("Must be one root node fro HTML");
-				}
-				htmlDoc = new Document((Element) nodes.get(0));
-				File htmlFile = new File(dir, fileS.substring(0,
-						fileS.length() - 4)
-						+ ".out.html");
-				Serializer serializer = new Serializer(new FileOutputStream(
-						htmlFile));
-				serializer.write(htmlDoc);
-
-			} catch (Throwable t) {
-				t.printStackTrace();
-				System.err.println("++++++++++" + t + S_SLASH + t.getCause()
-						+ S_SLASH + t.getMessage());
-			}
-		}
-	}
-
-	private String getFileNameIn(String fileS, String xmlName) {
-		String fname = fileS;
-		if (xmlName != null) {
-			fname = fileS + File.separator + xmlName;
-		}
-		return fname;
-	}
-
 	/** 
 	 */
 	@Test
@@ -560,7 +472,7 @@ public class ReactionToolTest {
 		reactionTool.addProduct("CCC(=O)OCC");
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		cmlMap.debug("TESTTTTTTTTTTTTT");
+		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets", cmlMap);
 	}
 
 	@Test
@@ -763,7 +675,7 @@ public class ReactionToolTest {
 		reactionTool.addReactant("CC(C)N");
 		reactionTool.addReactant("Cc1ccc(cc1)C(=O)C(F)(F)(F)");
 		reactionTool.addReactant("CCCC[N+]#[C-]");
-		reactionTool.addProduct("C1CCCCC1C(=O)N(CC(C)C)C(c1cccc(C)cc1(C(F)(F)(F))C(=O)N(CCCC)");
+		reactionTool.addProduct("C1CCCCC1C(=O)N(CC(C)C)C(c1ccc(C)cc1(C(F)(F)(F))C(=O)N(CCCC)");
 		SVGGBox svgg = reactionTool.drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\ugi.svg"));
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
@@ -772,20 +684,67 @@ public class ReactionToolTest {
 	}
 
 	@Test
-	public void testAmide() {
+	public void testWittigMap() {
 		CMLReaction reaction = new CMLReaction();
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		reactionTool.getReactionDisplay().setScale(0.5);
-		reactionTool.addReactant("C1CCCCC1C(=O)OC(=O)C");
-		reactionTool.addReactant("CC(C)N");
-		reactionTool.addProduct("C1CCCCC1C(=O)NC(C)C");
-		reactionTool.addProduct("CC(=O)O");
-		reaction.debug("AMIDE");
+		reactionTool.addReactant("CCC=P(c1ccccc1)(c1ccccc1)(c1ccccc1)");
+		reactionTool.addReactant("c1ccccc1C(=O)C(C)C");
+		reactionTool.addProduct("O=P(c1ccccc1)(c1ccccc1)(c1ccccc1)");
+		reactionTool.addProduct("c1ccccc1C(=CCC)C(C)C");
+		SVGGBox svgg = reactionTool.drawSVG();
+		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\wittig.svg"));
+		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
+		Element refMap = TestUtils.parseValidFile("org/xmlcml/cml/tools/wittigmap.xml");
+		TestUtils.assertEqualsIncludingFloat("amide and amount", refMap, cmlMap, true, EPS);
+	}
+
+	@Test
+	public void testAmide() {
+		ReactionTool reactionTool = createAmideReactionAndEnsureIds();
 		SVGGBox svgg = reactionTool.drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\amide.svg"));
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
 		cmlMap.debug("AMIDE");
 		Assert.assertNotNull("testPolyinfo1", cmlMap);
+	}
+
+	private ReactionTool createAmideReactionAndEnsureIds() {
+		CMLReaction reaction = new CMLReaction();
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		CMLReactant reactant0 = reactionTool.addReactant("C1CCCCC1C(=O)OC(=O)C");
+		reactant0.addAmount(AmountTool.createMilliMolarAmount(2.0));
+		CMLReactant reactant1 = reactionTool.addReactant("CC(C)N");
+		reactant1.addAmount(AmountTool.createMilliMolarAmount(1.5));
+		CMLProduct product = reactionTool.addProduct("C1CCCCC1C(=O)NC(C)C");
+		product.addAmount(AmountTool.createMilliMolarAmount(1.0));
+		product = reactionTool.addProduct("CC(=O)O");
+		reactionTool.ensureIds();
+		return reactionTool;
+	}
+
+	@Test
+	public void testEnsureIds() {
+		ReactionTool reactionTool = createAmideReactionAndEnsureIds();
+		Element ref = TestUtils.parseValidFile("org/xmlcml/cml/tools/reactionAmount.xml");
+		TestUtils.assertEqualsIncludingFloat("amide and amount", ref, reactionTool.getReaction(), true, EPS);
+	}
+
+	@Test
+	public void testFindLimitingReagent() {
+		ReactionTool reactionTool = createAmideReactionAndEnsureIds();
+		CMLReactant reactant = reactionTool.findLimitingReactant();
+		Assert.assertNotNull(reactant);
+		Assert.assertEquals("limiting reactant", "reactant1", reactant.getId());
+	}
+
+	@Test
+	public void testFindLimitingMolesPerCount() {
+		ReactionTool reactionTool = createAmideReactionAndEnsureIds();
+		CMLReactant reactant = reactionTool.findLimitingReactant();
+		ReactantTool reactantTool = ReactantTool.getOrCreateTool(reactant);
+		double molesPerCount = reactantTool.getMolesPerCount();
+		Assert.assertEquals("limiting molesPerCount", 0.0015, molesPerCount);
 	}
 
 
