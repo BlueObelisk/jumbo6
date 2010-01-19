@@ -3,6 +3,7 @@ package org.xmlcml.cml.tools.matcher;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
