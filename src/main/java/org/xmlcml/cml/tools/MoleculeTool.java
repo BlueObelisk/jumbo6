@@ -3933,7 +3933,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			try {
 				moleculeLayout.create2DCoordinates(molecule);
 			} catch (RuntimeException e) {
-				LOG.error("Cannot create coordinates: ", e);
+				LOG.error("Cannot create coordinates (maybe recurses too deeply)");
 			}
 		}
 	}
