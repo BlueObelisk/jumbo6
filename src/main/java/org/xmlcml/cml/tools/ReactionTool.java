@@ -45,6 +45,7 @@ import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
+import org.xmlcml.cml.tools.matcher.Matcher2D;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
@@ -1148,12 +1149,12 @@ public class ReactionTool extends AbstractSVGTool {
 				otherLinks.add(link);
 			}
 		}
-		addGradientsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
-		addGradientsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
-		addGradientsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
+		addPatternsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
+		addPatternsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
+		addPatternsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
 	}
 	
-	private void addGradientsToLinkAtoms(SVGSVG[] svgsvg, List<CMLLink> links, double strokeWidth, String strokeColour) {
+	private void addPatternsToLinkAtoms(SVGSVG[] svgsvg, List<CMLLink> links, double strokeWidth, String strokeColour) {
 		int gradient = 0;
 		int nlinks = links.size();
 		for (CMLLink link : links) {
@@ -1523,5 +1524,21 @@ public class ReactionTool extends AbstractSVGTool {
 		}
 		return limitingReactant;
 	}
+
+	public void createAndAlign2DCoordinates(CMLMap cmlMap) {
+		boolean omitHydrogen = true;
+		CMLMolecule reactantMolecule0 = this.getReactantMolecule(0);
+		MoleculeTool.getOrCreateTool(reactantMolecule0).ensure2DCoordinates(omitHydrogen);
+		CMLMolecule productMolecule0 = this.getProductMolecule(0);
+		MoleculeTool productMoleculeTool0 = MoleculeTool.getOrCreateTool(productMolecule0);
+//		if (ReactionTool.getCommand(commands, ReactionTool.STRIP_HYD)) {
+//			MoleculeTool.getOrCreateTool(productMolecule0).stripHydrogens();
+//			omitHydrogen = true;
+//		}
+		MoleculeTool.getOrCreateTool(productMolecule0).ensure2DCoordinates(omitHydrogen);
+		Transform2 t2 = new Matcher2D().fit2D(reactantMolecule0, productMolecule0, cmlMap);
+		productMoleculeTool0.transform(t2);
+	}
+
 
 }
