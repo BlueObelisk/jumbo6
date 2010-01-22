@@ -6,8 +6,7 @@
 	<name>Jumbo</name>
 	<version>5.5.1-SNAPSHOT</version>
 	<description>A Java library for processing CML</description>
-	<url>http://sourceforge.net/projects/cml/
-	</url>
+	<url>http://apidoc.ch.cam.ac.uk/jumbo5/</url>
 	<inceptionYear>1994</inceptionYear>
 	<mailingLists>
 		<mailingList>
