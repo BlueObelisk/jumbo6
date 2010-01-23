@@ -36,13 +36,14 @@ import org.xmlcml.euclid.Util;
  * @version 5.0
  * 
  */
-public final class TestUtils implements CMLConstants {
+public final class OldTestUtils implements CMLConstants {
 
     /** logger */
-    public final static Logger logger = Logger.getLogger(TestUtils.class);
+    public final static Logger logger = Logger.getLogger(OldTestUtils.class);
 
     /** root of tests.*/
     public final static String BASE_RESOURCE = "org/xmlcml/cml/base";
+	public static final String OUTPUT_DIR = "target/test-outputs";
     
     /**
      * tests 2 XML objects for equality using canonical XML.
@@ -88,7 +89,7 @@ public final class TestUtils implements CMLConstants {
 
 	public static void assertEqualsIncludingFloat(String message, String expectedS,
 			Node testNode, boolean stripWhite, double eps) {
-		assertEqualsIncludingFloat(message, TestUtils.parseValidString(expectedS), testNode, stripWhite, eps);
+		assertEqualsIncludingFloat(message, OldTestUtils.parseValidString(expectedS), testNode, stripWhite, eps);
 	}
 
 	private static void assertEqualsIncludingFloat(String message, Node refNode,
@@ -330,12 +331,9 @@ public final class TestUtils implements CMLConstants {
 	 * checks for non-null, then equality of length, then individual elements
 	 * 
 	 * @param message
-	 * @param a
-	 *            expected array
-	 * @param b
-	 *            actual array
-	 * @param eps
-	 *            tolerance for agreement
+	 * @param a expected array
+	 * @param b actual array
+	 * @param eps tolerance for agreement
 	 */
 	public static void assertEquals(String message, double[] a, double[] b,
 			double eps) {
@@ -474,7 +472,7 @@ public final class TestUtils implements CMLConstants {
 		Assert.assertNotNull("test should not be null (" + msg + EC.S_RBRAK, test);
 		Assert.assertNotNull("expected should not be null (" + msg + EC.S_RBRAK,
 				expected);
-		TestUtils.assertEquals(msg, expected
+		OldTestUtils.assertEquals(msg, expected
 				.getMatrixAsArray(), test.getMatrixAsArray(),  epsilon);
 	}
 
@@ -495,7 +493,7 @@ public final class TestUtils implements CMLConstants {
 				9, test.length);
 		Assert.assertNotNull("ref should not be null (" + msg + EC.S_RBRAK,
 				expected);
-		TestUtils.assertEquals(msg, test, expected.getMatrixAsArray(),
+		OldTestUtils.assertEquals(msg, test, expected.getMatrixAsArray(),
 				epsilon);
 	}
 

@@ -1,6 +1,5 @@
 package org.xmlcml.cml.graphics;
 
-
 import java.util.List;
 
 import nu.xom.Element;
@@ -8,6 +7,7 @@ import nu.xom.Element;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.cml.testutil.TestUtils;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.util.TstUtils;
@@ -154,7 +154,7 @@ public class SVGTextTest {
 		        5.2,
 		        3.5,
 	        };
-		String msg = org.xmlcml.euclid.TestUtils.testEquals("lengths", expectedLength, lengths, 0.1);
+		String msg = TestUtils.testEquals("lengths", expectedLength, lengths, 0.1);
 		if (msg != null) {
 			Assert.fail(msg);
 		}

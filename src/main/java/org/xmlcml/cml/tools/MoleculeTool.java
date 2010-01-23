@@ -3949,9 +3949,31 @@ public class MoleculeTool extends AbstractSVGTool {
 
 	public SVGGBox drawAndTranslateToRectCorner(MoleculeDisplay moleculeDisplay) {
 		SVGGBox svgg = this.draw(moleculeDisplay);
-		BoundingRect brect = new BoundingRect(svgg);
-		brect.translateGToRectCorner();
+		BoundingRect brect = BoundingRect.createBoundingRect(svgg);
+		if (brect != null) {
+			brect.translateGToRectCorner();
+		}
 		return svgg;
+	}
+
+	public void addExplicitHydrogensFromHydrogenCount() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (CMLAtom atom : atoms) {
+			if (!ChemicalElement.AS.H.toString().equals(atom.getElementType())) {
+				Attribute hcatt = atom.getHydrogenCountAttribute();
+				if (hcatt != null) {
+					int hc = atom.getHydrogenCount();
+					for (int i = 0; i < hc; i++) {
+						CMLAtom hatom = new CMLAtom(atom.getId()+"_h"+(i+1), ChemicalElement.AS.H);
+						molecule.addAtom(hatom);
+						CMLBond bond = new CMLBond(atom, hatom);
+						molecule.addBond(bond);
+						bond.setOrder(CMLBond.SINGLE_S);
+					}
+					hcatt.detach();
+				}
+			}
+		}
 	}
 }
 
@@ -3964,19 +3986,19 @@ class BoundingRect {
 	private double height;
 	private SVGG svgg;
 
-	public BoundingRect(SVGG svgg) {
-		// child rect
-		this.svgg = svgg;
-		Nodes rects = svgg.query("./*[local-name()='"+SVGRect.TAG+"']");
-		if (rects.size() == 0) {
-			throw new RuntimeException("No bounding rectangle");
-		}
+	private BoundingRect(Nodes rects, SVGG svgg) {
 		Element rectx = (Element)rects.get(0);
 		rect = (SVGRect) SVGElement.createSVG(rectx);
 		xorig = rect.getX();
 		yorig = rect.getY();
 		width = rect.getWidth();
 		height = rect.getHeight();
+		this.svgg = svgg;
+	}
+	
+	public static BoundingRect createBoundingRect(SVGG svgg) {
+		Nodes rects = svgg.query("./*[local-name()='"+SVGRect.TAG+"']");
+		return (rects.size() == 0) ? null : new BoundingRect(rects, svgg);
 	}
 
 	public void translateGToRectCorner() {

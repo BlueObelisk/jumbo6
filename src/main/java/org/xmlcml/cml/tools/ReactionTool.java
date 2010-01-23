@@ -15,7 +15,6 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
@@ -29,6 +28,7 @@ import org.xmlcml.cml.element.CMLProduct;
 import org.xmlcml.cml.element.CMLProductList;
 import org.xmlcml.cml.element.CMLReactant;
 import org.xmlcml.cml.element.CMLReaction;
+import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLFormula.Sort;
 import org.xmlcml.cml.element.CMLMap.Direction;
@@ -1036,11 +1036,26 @@ public class ReactionTool extends AbstractSVGTool {
 		return reactant;
 	}
 
-	private CMLReactant addReactant(CMLMolecule reactantMol) {
+	public CMLReactant addReactant(CMLMolecule reactantMol) {
 		CMLReactant reactant = new CMLReactant();
 		reactant.addMolecule(reactantMol);
 		this.reaction.addReactant(reactant);
 		return reactant;
+	}
+
+	public CMLSpectator addSpectator(String smiles) {
+		SMILESTool smilesTool = new SMILESTool();
+		CMLSpectator spectator = new CMLSpectator();
+		spectator.addMolecule(FormulaTool.calculateMolecule(smilesTool, smiles));
+		reaction.addSpectator(spectator);
+		return spectator;
+	}
+
+	public CMLSpectator addSpectator(CMLMolecule spectatorMol) {
+		CMLSpectator spectator = new CMLSpectator();
+		spectator.addMolecule(spectatorMol);
+		this.reaction.addSpectator(spectator);
+		return spectator;
 	}
 
 	public CMLProduct addProduct(String smiles) {
@@ -1133,7 +1148,7 @@ public class ReactionTool extends AbstractSVGTool {
 		return product;
 	}
 
-	private void addPatternsToLinkedAtoms(SVGSVG[] svgsvg, CMLMap map) {
+	public void addPatternsToLinkedAtoms(SVGGBox reactantsSVG, SVGGBox productsSVG, CMLMap map) {
 		CMLElements<CMLLink> links = map.getLinkElements();
 		List<CMLLink> uniqueLinks = new ArrayList<CMLLink>();
 		List<CMLLink> balancedCommonLinks = new ArrayList<CMLLink>();
@@ -1149,27 +1164,27 @@ public class ReactionTool extends AbstractSVGTool {
 				otherLinks.add(link);
 			}
 		}
-		addPatternsToLinkAtoms(svgsvg, uniqueLinks, 6.0, "black");
-		addPatternsToLinkAtoms(svgsvg, balancedCommonLinks, 6.0, "red");
-		addPatternsToLinkAtoms(svgsvg, otherLinks, 6.0, "blue");
+		addPatternsToLinkAtoms(reactantsSVG, productsSVG, uniqueLinks, 6.0, "black");
+		addPatternsToLinkAtoms(reactantsSVG, productsSVG,  balancedCommonLinks, 6.0, "red");
+		addPatternsToLinkAtoms(reactantsSVG, productsSVG,  otherLinks, 6.0, "blue");
 	}
 	
-	private void addPatternsToLinkAtoms(SVGSVG[] svgsvg, List<CMLLink> links, double strokeWidth, String strokeColour) {
+	private void addPatternsToLinkAtoms(SVGGBox reactantsSVG, SVGGBox productsSVG, List<CMLLink> links, double strokeWidth, String strokeColour) {
 		int gradient = 0;
 		int nlinks = links.size();
 		for (CMLLink link : links) {
 			gradient++;
-			addPattern(svgsvg[0], link.getFromSet(), gradient, strokeWidth, strokeColour);
-			addDefs(svgsvg[0]);
-			addPattern(svgsvg[1], link.getToSet(), gradient, strokeWidth, strokeColour);
-			addDefs(svgsvg[1]);
+			addPattern(reactantsSVG, link.getFromSet(), gradient, strokeWidth, strokeColour);
+			addDefs(reactantsSVG);
+			addPattern(productsSVG, link.getToSet(), gradient, strokeWidth, strokeColour);
+			addDefs(productsSVG);
 		}
 	}
 
-	private void addDefs(SVGSVG svgsvg) {
+	private void addDefs(SVGGBox svgg) {
 		ensurePatterns();
-		if (svgsvg != null && svgsvg.query("//*[local-name()='defs']").size() == 0) {
-			svgsvg.insertChild(defs.copy(), 0);
+		if (svgg != null && svgg.query("//*[local-name()='defs']").size() == 0) {
+			svgg.insertChild(defs.copy(), 0);
 		}
 	}
 	
@@ -1259,13 +1274,13 @@ public class ReactionTool extends AbstractSVGTool {
 	}
 
 
-	private void addPattern(SVGSVG svgsvg, String[] ids, int gradient, 
+	private void addPattern(SVGGBox svgg, String[] ids, int gradient, 
 			double strokeWidth, String strokeColour) {
-		if (svgsvg != null && ids != null) {
+		if (svgg != null && ids != null) {
 			for (String id : ids) {
 				String aid = id.substring("m1_".length());
 				String gid = "g_"+aid;
-				Nodes gNodes = svgsvg.query("//*[local-name()='g' and @id='g_"+aid+"']/*[local-name()='circle']");
+				Nodes gNodes = svgg.query("//*[local-name()='g' and @id='g_"+aid+"']/*[local-name()='circle']");
 				if (gNodes.size() == 1) {
 					SVGCircle circle = (SVGCircle) gNodes.get(0);
 					circle.setFill("url(#"+PATTERN+gradient+")");
@@ -1355,25 +1370,25 @@ public class ReactionTool extends AbstractSVGTool {
 		return circleListByFill;
 	}
 
-	private Element createMenuItem(String bothName) {
-		Element li;
-		li = new Element("li");
-		Element a = new Element("a");
-		a.addAttribute(new Attribute("href", bothName));
-		a.addAttribute(new Attribute("target", "right"));
-		a.appendChild(bothName.substring(0, bothName.indexOf(CMLConstants.S_PERIOD)));
-		li.appendChild(a);
-		return li;
-	}
+//	private Element createMenuItem(String bothName) {
+//		Element li;
+//		li = new Element("li");
+//		Element a = new Element("a");
+//		a.addAttribute(new Attribute("href", bothName));
+//		a.addAttribute(new Attribute("target", "right"));
+//		a.appendChild(bothName.substring(0, bothName.indexOf(CMLConstants.S_PERIOD)));
+//		li.appendChild(a);
+//		return li;
+//	}
 
-	private SVGG addTransformedG(SVGSVG svg, double xshift, double yshift) {
-		SVGG g = new SVGG();
-		Transform2 transform = new Transform2(new Vector2(xshift, yshift));
-		g.setAttributeFromTransform2(transform);
-		// skip the defs
-		g.appendChild(svg.getChild(1).copy());
-		return g;
-	}
+//	private SVGG addTransformedG(SVGSVG svg, double xshift, double yshift) {
+//		SVGG g = new SVGG();
+//		Transform2 transform = new Transform2(new Vector2(xshift, yshift));
+//		g.setAttributeFromTransform2(transform);
+//		// skip the defs
+//		g.appendChild(svg.getChild(1).copy());
+//		return g;
+//	}
 
 	public static boolean getCommand(String[] commands, String string) {
 		for (String command : commands) {
@@ -1417,8 +1432,11 @@ public class ReactionTool extends AbstractSVGTool {
 		double maxHeight = -1.0;
 		for (int i = 0; i < gs.size(); i++) {
 			SVGG g = (SVGG) gs.get(i);
-			double height = new BoundingRect(g).getHeight();
-			maxHeight = (maxHeight < height) ? height : maxHeight;
+			BoundingRect boundingRect = BoundingRect.createBoundingRect(g);
+			if (boundingRect != null) {
+				double height = boundingRect.getHeight();
+				maxHeight = (maxHeight < height) ? height : maxHeight;
+			}
 		}
 		return maxHeight;
 	}
@@ -1427,8 +1445,10 @@ public class ReactionTool extends AbstractSVGTool {
 		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
 		double totalHeight = 0.0;
 		for (int i = 0; i < gs.size(); i++) {
-			SVGG g = (SVGG) gs.get(i);
-			totalHeight += new BoundingRect(g).getHeight();
+			BoundingRect boundingRect = BoundingRect.createBoundingRect((SVGG) gs.get(i));
+			if (boundingRect != null) {
+				totalHeight += boundingRect.getHeight();
+			}
 		}
 		return totalHeight;
 	}
@@ -1436,9 +1456,9 @@ public class ReactionTool extends AbstractSVGTool {
 	private double getMaxWidth(SVGG reactantsSVGG) {
 		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
 		double maxWidth = -1.0;
-		for (int i = 0; i < gs.size(); i++) {
-			SVGG g = (SVGG) gs.get(i);
-			double width = new BoundingRect(g).getWidth();
+		BoundingRect boundingRect = BoundingRect.createBoundingRect(g);
+		if (boundingRect != null) {
+			double width = boundingRect.getWidth();
 			maxWidth = (maxWidth < width) ? width : maxWidth;
 		}
 		return maxWidth;
@@ -1448,8 +1468,10 @@ public class ReactionTool extends AbstractSVGTool {
 		Nodes gs = reactantsSVGG.query("./*[local-name()='"+SVGG.TAG+"']");
 		double totalWidth = 0.0;
 		for (int i = 0; i < gs.size(); i++) {
-			SVGG g = (SVGG) gs.get(i);
-			totalWidth += new BoundingRect(g).getWidth();
+			BoundingRect boundingRect = BoundingRect.createBoundingRect((SVGG) gs.get(i));
+			if (boundingRect != null) {
+				totalWidth += boundingRect.getWidth();
+			}
 		}
 		return totalWidth;
 	}
