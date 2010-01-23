@@ -419,7 +419,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 		
 		IntMatrix intMatrix = AtomTree.createSimilarityMatrix(sortedAtomTreeString0, sortedAtomTreeString1);
 		LOG.debug("IM "+intMatrix);
-		List<Integer> largestIndexList = ToolUtils.findLargestUniqueElementsInRowColumn(intMatrix);
+		List<Integer> largestIndexList = IntMatrix.findLargestUniqueElementsInRowColumn(intMatrix);
 		addMatrixElementsToMap(
 				largestIndexList, sortedAtomSetValues0, sortedAtomSetValues1);
 		atomTreeData0.removeUniqueElementsFromMap(0, largestIndexList);

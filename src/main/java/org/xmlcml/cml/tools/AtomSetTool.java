@@ -647,12 +647,13 @@ public class AtomSetTool extends AbstractTool {
 	    */
 	   public Real2Range getExtent2() {
 		   Real2Range r2r = new Real2Range();
-		   
-		   List<CMLAtom> atoms = molecule.getAtoms();
-		   for (CMLAtom atom : atoms) {
-			   Real2 xy = atom.getXY2();
-			   if (xy != null) {
-				   r2r.add(xy);
+		   if (molecule != null) {
+			   List<CMLAtom> atoms = molecule.getAtoms();
+			   for (CMLAtom atom : atoms) {
+				   Real2 xy = atom.getXY2();
+				   if (xy != null) {
+					   r2r.add(xy);
+				   }
 			   }
 		   }
 		   return r2r;

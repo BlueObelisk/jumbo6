@@ -3,16 +3,15 @@ package org.xmlcml.cml.tools.matcher;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.testutil.TestUtils;
 import org.xmlcml.cml.tools.AtomTreeMatcher;
-import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Transform2;
-import org.xmlcml.util.TestUtils;
+
 
 public class TestFit2D {
 
