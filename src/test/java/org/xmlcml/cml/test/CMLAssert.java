@@ -316,7 +316,7 @@ public class CMLAssert {
 
 	/**
 	 * compares two XML nodes and checks float near-equivalence (can also be
-	 * used for documents without floats) usesTestUtils.assertEqualsCanonically and only
+	 * used for documents without floats) uses JumboTestUtils.assertEqualsCanonically and only
 	 * uses PMR code if fails
 	 * 
 	 * @param message
@@ -332,7 +332,7 @@ public class CMLAssert {
 
 	/**
 	 * compares two XML nodes and checks float near-equivalence (can also be
-	 * used for documents without floats) usesTestUtils.assertEqualsCanonically and only
+	 * used for documents without floats) uses JumboTestUtils.assertEqualsCanonically and only
 	 * uses PMR code if fails
 	 * 
 	 * @param message

@@ -7,7 +7,7 @@ import nu.xom.Element;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlcml.cml.testutil.TestUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.util.TstUtils;
@@ -154,7 +154,7 @@ public class SVGTextTest {
 		        5.2,
 		        3.5,
 	        };
-		String msg = TestUtils.testEquals("lengths", expectedLength, lengths, 0.1);
+		String msg = JumboTestUtils.testEquals("lengths", expectedLength, lengths, 0.1);
 		if (msg != null) {
 			Assert.fail(msg);
 		}

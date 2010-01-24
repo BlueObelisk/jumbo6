@@ -251,74 +251,6 @@ public class PeakListToolTest {
 
 	}
 
-	// FIXME move to tools
-	// /**
-	// */
-	// @Test
-	// public void testMorganRoutines() {
-	// CMLMolecule molecule = new CMLMolecule();
-	// CMLAtom atom1 = new CMLAtom("a1",
-	// ChemicalElement.getChemicalElement(AS.O.value));
-	// molecule.addAtom(atom1);
-	// CMLAtom atom2 = new CMLAtom("a2",
-	// ChemicalElement.getChemicalElement(AS.C.value));
-	// molecule.addAtom(atom2);
-	// CMLAtom atom3 = new CMLAtom("a3",
-	// ChemicalElement.getChemicalElement(AS.Cl.value));
-	// molecule.addAtom(atom3);
-	// CMLAtom atom4 = new CMLAtom("a4",
-	// ChemicalElement.getChemicalElement(AS.Cl.value));
-	// molecule.addAtom(atom4);
-	// molecule.addBond(new CMLBond(atom1, atom2));
-	// molecule.addBond(new CMLBond(atom3, atom2));
-	// molecule.addBond(new CMLBond(atom4, atom2));
-	// CMLMap map = peakList.getPeakGroupsFromMorgan(molecule);
-	//		
-	// String expectedS = "" +
-	// "<map xmlns='http://www.xml-cml.org/schema'>"+
-	// "  <link to='p1' fromSet='p1'/>"+
-	// "  <link to='p3p4' fromSet='p3 p4'/>"+
-	// "  <link to='p2' fromSet='p2'/>"+
-	// "</map>";
-	// AbstractTest.TestUtils.assertEqualsCanonically("map",TestUtils.parseValidString(expectedS),
-	// map, true);
-	//
-	// CMLPeakList newPeakList =
-	// peakList.createPeakListGroupedByMorgan(molecule);
-	// CMLPeakGroup peakGroup = newPeakList.getPeakGroupElements().get(0);
-	// Assert.assertEquals("pg1", "p1", peakGroup.getId());
-	// CMLPeak peak = peakGroup.getPeakElements().get(0);
-	// Assert.assertEquals("peak", "p1", peak.getId());
-	//
-	// peakGroup = newPeakList.getPeakGroupElements().get(1);
-	// Assert.assertEquals("pg2", "p3p4", peakGroup.getId());
-	// peak = peakGroup.getPeakElements().get(0);
-	// Assert.assertEquals("peak", "p3", peak.getId());
-	// peak = peakGroup.getPeakElements().get(1);
-	// Assert.assertEquals("peak", "p4", peak.getId());
-	//
-	// peakGroup = newPeakList.getPeakGroupElements().get(2);
-	// Assert.assertEquals("pg3", "p2", peakGroup.getId());
-	// peak = peakGroup.getPeakElements().get(0);
-	// Assert.assertEquals("peak", "p2", peak.getId());
-	// expectedS = "" +
-	// "<peakList xmlns='http://www.xml-cml.org/schema'>"+
-	// "  <peakGroup id='p1'>"+
-	// "    <peak xValue='3.0' yValue='10.0' id='p1'/>"+
-	// "  </peakGroup>"+
-	// "  <peakGroup id='p3p4'>"+
-	// "    <peak xValue='2.0' yValue='5.0' id='p3'/>"+
-	// "    <peak xValue='2.0' yValue='3.0' id='p4'/>"+
-	// "  </peakGroup>"+
-	// "  <peakGroup id='p2'>"+
-	// "    <peak xValue='1.0' yValue='7.0' id='p2'/>"+
-	// "  </peakGroup>"+
-	// "</peakList>";
-	// Element expectedPeakList =TestUtils.parseValidString(expectedS);
-	// AbstractTest.TestUtils.assertEqualsCanonically("peakList", expectedPeakList,
-	// newPeakList, true);
-	// }
-
 	/** 
 	 */
 	@Test
@@ -344,46 +276,6 @@ public class PeakListToolTest {
 				peakList, true);
 		peakList = null;
 	}
-
-	// FIXME move to tools
-	// /**
-	// */
-	// @Test
-	// public final void testGetPeakGroupsFromMorgan() {
-	// CMLMap map = peakList.getPeakGroupsFromMorgan(molecule);
-	// String expectedS =
-	// "	<map xmlns='http://www.xml-cml.org/schema'>"+
-	// "		  <link to='p2' fromSet='p2'/>"+
-	// "		  <link to='p3p4' fromSet='p3 p4'/>"+
-	// "		  <link to='p1' fromSet='p1'/>"+
-	// "		</map>";
-	// AbstractTest.TestUtils.assertEqualsCanonically("atomRefs",
-	//TestUtils.parseValidString(expectedS), map, true);
-	// }
-
-	// FIXME move to tools
-	// /**
-	// */
-	// @Test
-	// public final void testCreatePeakListGroupedByMorgan() {
-	// CMLPeakList newPeakList =
-	// peakList.createPeakListGroupedByMorgan(molecule);
-	// String expectedS =
-	// "<peakList xmlns='http://www.xml-cml.org/schema'>"+
-	// "  <peakGroup id='p2'>"+
-	// "    <peak xValue='1.0' yValue='7.0' id='p2'/>"+
-	// "  </peakGroup>"+
-	// "  <peakGroup id='p3p4'>"+
-	// "    <peak xValue='2.0' yValue='5.0' id='p3'/>"+
-	// "    <peak xValue='2.0' yValue='3.0' id='p4'/>"+
-	// "  </peakGroup>"+
-	// "  <peakGroup id='p1'>"+
-	// "    <peak xValue='3.0' yValue='10.0' id='p1'/>"+
-	// "  </peakGroup>"+
-	// "</peakList>";
-	// AbstractTest.TestUtils.assertEqualsCanonically("atomRefs",
-	//TestUtils.parseValidString(expectedS), newPeakList, true);
-	// }
 
 	/** 
 	 */

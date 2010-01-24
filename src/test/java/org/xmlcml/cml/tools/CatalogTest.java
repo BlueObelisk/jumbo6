@@ -97,7 +97,6 @@ public class CatalogTest {
 //		"  <link convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' role='cml:moleculeList' to='./geom1'/>"+
 //		"</map>"+
 //				"";
-//		CMLMap expected = (CMLMap)TestUtils.parseValidString(expectedS);
 		//AbstractTest.assertEqualsCanonically("list", expected, moleculeCatalogMap, true);
 		// find one specific namespace as string ...
 		String ref = moleculeCatalogMap.getToRef("http://www.xml-cml.org/mols/geom1");
