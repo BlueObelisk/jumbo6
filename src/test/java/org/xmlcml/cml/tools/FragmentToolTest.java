@@ -113,22 +113,6 @@ public class FragmentToolTest {
 		Assert.assertEquals("prefixes", "http://www.xml-cml.org/mols/geom1", namespace.getNamespaceURI());
 		Assert.assertEquals("prefixes", "g", namespace.getPrefix());
 
-		// CMLMap cmlMap = moleculeCatalog.getCmlMap();
-		/*
-		 * String mapS = "" + "<map xmlns='http://www.xml-cml.org/schema'>"+ "<!--
-		 * DIRECTORY -->"+ " <link convention='cml:relativeUrl'
-		 * from='http://www.xml-cml.org/mols/geom' " + " role='cml:moleculeList'
-		 * to='./geom.xml'/>"+ " <link convention='cml:relativeUrl'
-		 * from='http://www.xml-cml.org/mols/frags' " + "
-		 * role='cml:fragmentList' to='./fragments/frags.xml'/>"+ " <link
-		 * convention='cml:relativeUrl'
-		 * from='http://www.xml-cml.org/mols/fragments' " + "
-		 * role='cml:fragmentList' to='./fragments'/>"+ " <link
-		 * convention='cml:relativeUrl' from='http://www.xml-cml.org/mols/geom1' " + "
-		 * role='cml:moleculeList' to='./geom1'/>"+ "</map>"; CMLMap mapE =
-		 * (CMLMap)TestUtils.parseValidString(mapS);TestUtils.TestUtils.assertEqualsCanonically("map", mapE,
-		 * cmlMap, true);
-		 */// Duplicate Test from Test Catalog. Removes ability to update
 		// catalog without changing hardcoded tests so commenting out. nwe23
 		HashMap<String,CMLElement> moleculeList = resourceManager.getIndex(namespace).get(ResourceManager.IdTypes.ID);
 		Assert.assertNotNull("moleculeList", moleculeList);
@@ -274,10 +258,6 @@ public class FragmentToolTest {
 		fragmentTool.basic_processRecursively();
 		fragment = fragmentTool.getFragment();
 
-		// NOT REPEATABLE
-		// CMLFragment fragment1E = readFragment0("recurse1");
-		// FIXME - this fails although the files seem to be identical
-		//TestUtils.assertEqualsCanonically("fragment1", fragment1E, fragment, true);
 	}
 
 	/**

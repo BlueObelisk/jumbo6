@@ -188,7 +188,6 @@ public class SMILESToolTest {
 		  "</molecule>"+
 		"</molecule>";
 		molex = (CMLMolecule)TstUtils.parseValidString(molS);
-//		AbstractTest.TestUtils.assertEqualsCanonically("zwitterion", molex, mol, true);
 	}
 
 

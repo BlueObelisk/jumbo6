@@ -8,7 +8,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.TestUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.tools.AtomTreeMatcher;
 import org.xmlcml.euclid.Transform2;
 
@@ -24,7 +24,7 @@ public class TestFit2D {
 		CMLMolecule mol2 = readMolecule("org/xmlcml/cml/tools/matcher/acetylsalicylic.xml");
 		CMLMap cmlMap = new AtomTreeMatcher().mapMolecules(mol1, mol2);
 		CMLMap refMap = (CMLMap) readCML("org/xmlcml/cml/tools/matcher/map1.xml");
-		TestUtils.assertEqualsCanonically("map", refMap, cmlMap, true);
+		JumboTestUtils.assertEqualsCanonically("map", refMap, cmlMap, true);
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class TestFit2D {
 		Transform2 expected = new Transform2(new double[]{-0.9999999999729805,7.3511284464652065E-6,-8.136727333654608E-6,
 				-7.3511284464652065E-6,-0.9999999999729805,2.8559189798344974E-5,
 				0.0,0.0,1.0});
-		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
+		JumboTestUtils.assertEquals("fit2d", expected, test, 0.0001);
 		
  	}
 	
@@ -51,7 +51,7 @@ public class TestFit2D {
 				-0.18318946529616598,0.983077626540501,3.0463031621387975,
 				0.0,0.0,1.0,});
 //		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
+		JumboTestUtils.assertEquals("fit2d", expected, test, 0.0001);
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class TestFit2D {
 				0.18309283349778954,-0.9830956282690666,-3.0461985876806974,
 				0.0,0.0,1.0,});
 //		System.out.println(test);
-		TestUtils.assertEquals("fit2d", expected, test, 0.0001);
+		JumboTestUtils.assertEquals("fit2d", expected, test, 0.0001);
 	}
 	
 	private CMLElement readCML(String filename) {

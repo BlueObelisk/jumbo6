@@ -1130,7 +1130,6 @@ public class MoleculeToolTest {
 		CMLBondSet bondSet = null;
 		bondSet = new CMLBondSet(mol5a.getBonds());
 		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
-		// CMLMoleculeTest.TestUtils.assertEqualsCanonically("new mol", mol, mol5a);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
 		TstUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 4, mol.getBondCount());
@@ -1140,7 +1139,6 @@ public class MoleculeToolTest {
 		CMLBond bond = bondSet.getBonds().get(0);
 		bondSet.removeBond(bond);
 		mol = MoleculeTool.createMolecule(atomSet, bondSet);
-		// CMLMoleculeTest.TestUtils.assertEqualsCanonically("new mol", mol, mol5a);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
 		TstUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 3, mol.getBondCount());
