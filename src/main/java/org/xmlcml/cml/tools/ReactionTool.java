@@ -1562,5 +1562,14 @@ public class ReactionTool extends AbstractSVGTool {
 		productMoleculeTool0.transform(t2);
 	}
 
+	public void scaleMolecules(double scale) {
+		List<CMLMolecule> molecules = this.getReactantMolecules();
+		molecules.addAll(this.getProductMolecules());
+		for (CMLMolecule molecule : molecules) {
+			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+			moleculeTool.getAtomSet().scale2D(scale);
+		}
+	}
+
 
 }
