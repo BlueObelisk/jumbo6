@@ -2556,7 +2556,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	displayAtoms(drawable, g, defaultAtomDisplay);
     	
     	if (moleculeDisplay.isDisplayFormula()) {
-    		LOG.debug("FORMULA");
+    		LOG.debug("FORMULA: "+molecule.getFirstConciseFormulaString());
     		displayFormula(drawable, g);
     	}
     	if (moleculeDisplay.isDisplayLabels()) {
@@ -3975,6 +3975,44 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 		}
 	}
+
+	public static void ensureAtoms(List<CMLMolecule> molecules) {
+		for (CMLMolecule molecule : molecules) {
+			if (molecule != null) {
+				MoleculeTool.getOrCreateTool(molecule).ensureAtomsUsingSMILES();
+				molecule.normalizeFormulas();
+				CMLFormula formula = molecule.getFirstConciseFormula();
+			}
+		}
+	}
+
+	private void ensureAtomsUsingSMILES() {
+		CMLAtomArray atomArray = molecule.getAtomArray();
+		if (atomArray == null) {
+			String smilesString = getSmilesFromkFormula();
+			CMLMolecule smilesMolecule = SMILESTool.createMolecule(smilesString);
+			if (smilesMolecule != null) {
+				CMLAtomArray smilesAtomArray = smilesMolecule.getAtomArray();
+				CMLBondArray smilesBondArray = smilesMolecule.getBondArray();
+				if (smilesAtomArray != null) {
+					smilesAtomArray.detach();
+					molecule.addAtomArray(smilesAtomArray);
+					if (smilesBondArray != null) {
+						smilesBondArray.detach();
+						molecule.addBondArray(smilesBondArray);
+					}
+				}
+			}
+		}
+	}
+
+	public String getSmilesFromkFormula() {
+		Nodes formulaNodes = molecule.query("./*[local-name()='"+CMLFormula.TAG+"' and" +
+				" @inline and @convention='SMILES']");
+		CMLFormula formula = (formulaNodes.size() == 1) ? (CMLFormula) formulaNodes.get(0) : null;
+		return (formula == null) ? null : formula.getInline();
+	}
+
 }
 
 class BoundingRect {

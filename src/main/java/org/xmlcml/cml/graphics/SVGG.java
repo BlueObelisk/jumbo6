@@ -89,9 +89,16 @@ public class SVGG extends SVGElement {
 	throws IOException {
 		HtmlMenuSystem htmlMenuSystem = new HtmlMenuSystem();
     	htmlMenuSystem.setOutdir(dirname);
+    	int i = 0;
 		for (SVGGBox box : svgBoxList) {
 			String id = box.getId();
+			if (id == null) {
+				id = "svg"+(++i);
+			}
 			File f = new File(dirname, SVGSVG.createFileName(id));
+			if (box.getParent() != null) {
+				box.detach();
+			}
 			SVGSVG.wrapAndWriteAsSVG(box, f);
 			htmlMenuSystem.addHRef(f.getName());
 		}

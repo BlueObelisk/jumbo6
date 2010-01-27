@@ -70,7 +70,7 @@ public class SVGSVG extends SVGElement {
 		return this.getAttributeValue("id");
 	}
 
-	public static void wrapAndWriteAsSVG(SVGG svgg, File file) {
+	public static SVGSVG wrapAndWriteAsSVG(SVGG svgg, File file) {
 		SVGSVG svgsvg = new SVGSVG();
 		svgsvg.appendChild(svgg);
 		try {
@@ -79,6 +79,7 @@ public class SVGSVG extends SVGElement {
 		} catch (Exception e) {
 			throw new RuntimeException("cannot write svg to "+file, e);
 		}
+		return svgsvg;
 	}
 
 	public static String createFileName(String id) {

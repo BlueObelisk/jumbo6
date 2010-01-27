@@ -7,6 +7,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -87,11 +88,50 @@ public class FormulaTool extends AbstractSVGTool {
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	String s = formula.getConcise();
     	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
-    	SVGText text = new SVGText(new Real2(10., 10.), s);
-    	text.setFontSize(6.);
-    	text.setOpacity(0.5);
-    	text.setFill("yellow");
-    	g.appendChild(text);
+    	SVGG svgg = new SVGG();
+    	if (s != null) {
+	    	String[] ss = s.split(CMLConstants.S_SPACE);
+	    	// charge at end?
+	    	int evenLength = (ss.length % 2 == 1) ? ss.length - 1 : ss.length;
+	    	Real2 offset = new Real2(0.0, 0.0);
+	    	double fontSizeAtom = 12.;
+	    	double widthFactor = 0.8;
+	    	double fontSizeCount = 8.;
+	    	double fontSizeCharge = 8.;
+	    	double subscriptShift = fontSizeCount / 2.0;
+	    	double superscriptShift = fontSizeCount / 2.0;
+	    	for (int i = 0; i < evenLength; i += 2) {
+	    		int isub = i+1;
+	    		SVGText atomSVG = new SVGText(offset, ss[i]);
+	    		atomSVG.setFontSize(fontSizeAtom);
+	    		svgg.appendChild(atomSVG);
+	    		double widthFactorGuessingLowerCase = Math.min( ss[i].length(), 1.6);
+	    		offset = offset.plus(new Real2(fontSizeAtom * widthFactor * widthFactorGuessingLowerCase, 0.0));
+	    		String countString = ss[isub];
+	    		int count = Integer.parseInt(countString);
+	    		if (count != 1) {
+	        		offset = offset.plus(new Real2(0.0, subscriptShift));
+	        		SVGText countSVG = new SVGText(offset, countString);
+	        		countSVG.setFontSize(fontSizeCount);
+	        		svgg.appendChild(countSVG);
+	        		offset = offset.plus(new Real2(fontSizeCount * countString.length() * widthFactor, -subscriptShift));
+	    		}
+	    	}
+	    	if (ss.length - evenLength == 1) {
+	    		String chargeString = ss[evenLength];
+	    		int charge = Integer.parseInt(chargeString);
+	    		if (charge == 1) {
+	    			chargeString = CMLConstants.S_PLUS;
+	    		} else if (charge == -1) {
+	    			chargeString = CMLConstants.S_MINUS;
+	    		} 
+	    		offset = offset.plus(new Real2(0.0, superscriptShift));
+	    		SVGText chargeSVG = new SVGText(offset, chargeString);
+	    		chargeSVG.setFontSize(fontSizeCharge);
+	    		svgg.appendChild(chargeSVG);
+	    	}
+	    	g.appendChild(svgg);
+    	}
 		return g;
     }
 	

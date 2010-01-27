@@ -1210,7 +1210,7 @@ public class AtomTool extends AbstractSVGTool {
     	 String s = atom.getElementType();
     	 // omit carbons?
     	 if (!atomDisplay.isDisplayCarbons() && AS.C.equals(s)) {
-    		 s = S_EMPTY;
+//    		 s = S_EMPTY;
     		 
     	 } else if (moleculeDisplay.isShowChildLabels() && AS.R.equals(s)) {
     		 // R-groups

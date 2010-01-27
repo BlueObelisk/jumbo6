@@ -125,7 +125,7 @@ public class SelectionTool implements CMLConstants {
    		 if (g != null) {
    			 g.appendChild(circle);
    		 } else {
-   			 System.err.println("Atom has no SVGG child "+atom.getId());
+   			 LOG.trace("Atom has no SVGG child "+atom.getId());
    		 }
 	 }
 	
@@ -211,7 +211,7 @@ public class SelectionTool implements CMLConstants {
 	   			 LOG.debug("HBO "+bond.getId());
 	   			 g.appendChild(line);
 	   		 } else {
-	   			 System.err.println("HI: Bond has no SVGG child "+bond.getId());
+	   			 LOG.trace("HI: Bond has no SVGG child "+bond.getId());
 	   		 }
 		 }
 	 }

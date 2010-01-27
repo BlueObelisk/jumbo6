@@ -65,7 +65,8 @@ public class MoleculeDisplay extends AbstractDisplay {
 		hydrogenLengthFactor = 0.7;
 		contractGroups = false;
 		
-		displayFormula = false;
+//		displayFormula = false;
+		displayFormula = true;
 		displayLabels = true;
 		displayNames = false;
 		labelYSpacing = 1.6;
@@ -104,6 +105,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 		this.omitHydrogens = a.omitHydrogens;
 		
 	    this.defaultAtomDisplay = new AtomDisplay(a.defaultAtomDisplay);
+//	    this.defaultAtomDisplay.displayCarbons = true;
 		this.defaultBondDisplay = new BondDisplay(a.defaultBondDisplay);
 	}
 	
