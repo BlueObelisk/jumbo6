@@ -130,6 +130,8 @@ public class SMILESTool extends AbstractTool {
 //    private List<String> ringIdList;
 //    private List<String> ringChunkList;
     private String rawSmiles;
+private String smilescopy;
+private int sLength;
 //	private String scopy;
     
     
@@ -171,30 +173,10 @@ public class SMILESTool extends AbstractTool {
      */
     public void parseSMILES(String sss) {
 
-//    	scopy = sss;
-		rawSmiles = expandString(sss);
-        rawSmiles = rawSmiles.trim();
-        molecule = new CMLMolecule();
-        currentAtom = null;
-        currentBond = null;
-        bondChar = 0;
-        final int l = rawSmiles.length();
-        atomIdList    = new ArrayList<String>();
-        atomChunkList = new ArrayList<String>();
-        
-//        bondIdList    = new ArrayList<String>();
-//        bondChunkList = new ArrayList<String>();
-//        ringIdList    = new ArrayList<String>();
-//        ringChunkList = new ArrayList<String>();
-        
-        for (int i = 0; i < l; i++) {
-        	atomIdList.add(null);
-        	atomChunkList.add(null);
-//        	bondIdList.add(null);
-//        	bondChunkList.add(null);
-//        	ringIdList.add(null);
-//        	ringChunkList.add(null);
-        }
+    	if (sss == null) {
+    		return;
+    	}
+    	initSmiles(sss);
 
         final Stack<CMLAtom> stack = new Stack<CMLAtom>();
         final RingOpening[] rings = new RingOpening[99];
@@ -202,7 +184,7 @@ public class SMILESTool extends AbstractTool {
         char c = 0;
         char slashChar = C_NONE;
         boolean hasDot = false;
-        while (i < l) {
+        while (i < sLength) {
         	lastAtom=currentAtom;
             c = rawSmiles.charAt(i);
             if (c == C_LBRAK) {
@@ -233,7 +215,7 @@ public class SMILESTool extends AbstractTool {
                 c == C_DOUBLE ||
                 c == C_TRIPLE
                 ) {
-                if (bondChar != C_NONE || i==0 || i==l-1) {
+                if (bondChar != C_NONE || i==0 || i==sLength-1) {
                     throw new RuntimeException("Bond not expected here: "+rawSmiles.substring(i));
                 }
                 bondChar = c;
@@ -257,7 +239,7 @@ public class SMILESTool extends AbstractTool {
             	int ring;
             	if (c == C_PERC){//support for using % syntax to define ring openings
             		i++;
-            		if(i +1 < l){
+            		if(i +1 < sLength){
             			try{
             				ring= Integer.parseInt(rawSmiles.substring(i, i+2));
             				i++;
@@ -357,7 +339,7 @@ public class SMILESTool extends AbstractTool {
         
         for (int r = 0; r < rings.length; r++) {
 			if (rings[r] != null){
-				throw new RuntimeException("Ring: "+ r +" not closed!");
+				throw new RuntimeException("Ring: "+ r +" not closed! "+smilescopy);
 			}
 		}
         
@@ -375,6 +357,24 @@ public class SMILESTool extends AbstractTool {
 
 
     }
+
+	private void initSmiles(String sss) {
+		smilescopy = sss;
+		rawSmiles = expandString(sss);
+        rawSmiles = rawSmiles.trim();
+        molecule = new CMLMolecule();
+        currentAtom = null;
+        currentBond = null;
+        bondChar = 0;
+        atomIdList    = new ArrayList<String>();
+        atomChunkList = new ArrayList<String>();
+        sLength = rawSmiles.length();
+        
+        for (int i = 0; i < sLength; i++) {
+        	atomIdList.add(null);
+        	atomChunkList.add(null);
+        }
+	}
 
     //removes Chiral and Slash attributes
     private void removeSmilesSpecificAttributes() {
@@ -777,7 +777,7 @@ public class SMILESTool extends AbstractTool {
 	            }
             }
             else{
-            	throw new RuntimeException("Invalid symbol found in atom description, found: "+s.charAt(i) );
+            	throw new RuntimeException("Invalid symbol found in atom description, found: "+s.charAt(i)+" in "+smilescopy );
             }
         }
         //throw new RuntimeException("Sign must be of form - or --.. or -n or + or ++... or +n (found "+sign+") in "+scopy );
