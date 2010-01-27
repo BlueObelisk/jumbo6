@@ -422,11 +422,9 @@ public class AtomToolTest {
     	CMLBond hBond2 = moleculeTool.getBond(atom.getId(), hAtom2.getId());
     	Assert.assertNotNull("h bond", hBond2);
     	Assert.assertEquals("h bond id", "a1_a1_h2", hBond2.getId());
-//    	molecule.debug("MOLZZZ ");
 
     	// delete bond but not atom (generally bad idea)
     	molecule.deleteBond(hBond1);
-//    	molecule.debug("MOL ");
     	moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	hBond1 = moleculeTool.getBond(atom.getId(), hAtom1.getId());
     	Assert.assertNull("h bond null", hBond1);
@@ -436,13 +434,11 @@ public class AtomToolTest {
     	atomTool.addHydrogen();
     	CMLAtom hAtom3 = molecule.getAtomById("a1_h3");
     	Assert.assertNotNull("h atom", hAtom3);
-//    	molecule.debug("MMMMM");
     	
     	Assert.assertEquals("h ligands", 2, atomTool.getHydrogenLigandList().size());
     	// deletes bond as well
     	molecule.deleteAtom(hAtom2);
     	hAtom2 = molecule.getAtomById("a1_h2");
     	Assert.assertNull("h atom", hAtom2);
-//    	molecule.debug("MOL ");
     }
 }

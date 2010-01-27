@@ -2556,7 +2556,6 @@ public class MoleculeTool extends AbstractSVGTool {
     	displayAtoms(drawable, g, defaultAtomDisplay);
     	
     	if (moleculeDisplay.isDisplayFormula()) {
-    		LOG.debug("FORMULA: "+molecule.getFirstConciseFormulaString());
     		displayFormula(drawable, g);
     	}
     	if (moleculeDisplay.isDisplayLabels()) {

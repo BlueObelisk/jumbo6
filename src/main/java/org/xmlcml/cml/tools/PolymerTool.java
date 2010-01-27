@@ -173,7 +173,6 @@ public class PolymerTool extends AbstractTool {
                 polymerTool.setResourceManager(this.resourceManager);
                 polymerToolList.add(polymerTool);
                 polymerTool.processConventionExhaustively();
-//                molecule0.debug("MOL "+i++);
                 LOG.debug("============ "+ i++ +" ================");
             }
         } else if (molecule != null){
