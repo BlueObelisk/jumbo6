@@ -1634,7 +1634,6 @@ public class ReactionTool extends AbstractSVGTool {
 		List<CMLMolecule> molecules = this.getProductMolecules();
 		molecules.addAll(this.getReactantMolecules());
 		molecules.addAll(this.getSpectatorMolecules());
-		LOG.debug("MOL "+molecules.size());
 		return molecules;
 	}
 
