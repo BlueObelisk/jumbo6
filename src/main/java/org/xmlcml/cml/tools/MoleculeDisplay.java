@@ -19,11 +19,22 @@ public class MoleculeDisplay extends AbstractDisplay {
 	static {
 		DEFAULT.setDefaults();
 	};
+	
+	public enum Position {
+		TOP,
+		RIGHT,
+		LEFT,
+		BOTTOM,
+		CENTRE
+	}
 	public final static double DEFAULT_BONDLENGTH = 50.;
 	
 	// all atom displays are now defaults
 	private AtomDisplay defaultAtomDisplay = new AtomDisplay();
 	private BondDisplay defaultBondDisplay = new BondDisplay(BondDisplay.DEFAULT);
+	private FormulaDisplay formulaDisplay = new FormulaDisplay();
+	private NameDisplay nameDisplay = new NameDisplay();
+
 	
 	private double bondLength;
 	private double hydrogenLengthFactor;
@@ -34,6 +45,13 @@ public class MoleculeDisplay extends AbstractDisplay {
 	private boolean omitHydrogens;
 	private double labelFontSize;
 	private double labelYSpacing;
+//	private Position formulaYPosition = Position.BOTTOM;
+	private Position formulaYPosition = Position.TOP;
+	private Position formulaXPosition = Position.LEFT;
+	private Position nameYPosition = Position.TOP;
+	private Position nameXPosition = Position.CENTRE;
+	private Position idYPosition = Position.TOP;
+	private Position idXPosition = Position.LEFT;
 	private boolean drawBoundingBox;
 	
 	private Real2Interval screenExtent;
@@ -129,6 +147,70 @@ public class MoleculeDisplay extends AbstractDisplay {
 			double avlength = moleculeTool.getAverageBondLength(CoordinateType.TWOD);
 			moleculeTool.getMolecule().multiply2DCoordsBy(bondLength / avlength);
 		}
+	}
+
+	public Position getFormulaYPosition() {
+		return formulaYPosition;
+	}
+
+	public void setFormulaYPosition(Position formulaYPosition) {
+		this.formulaYPosition = formulaYPosition;
+	}
+
+	public Position getFormulaXPosition() {
+		return formulaXPosition;
+	}
+
+	public void setFormulaXPosition(Position formulaXPosition) {
+		this.formulaXPosition = formulaXPosition;
+	}
+
+	public Position getNameYPosition() {
+		return nameYPosition;
+	}
+
+	public FormulaDisplay getFormulaDisplay() {
+		return formulaDisplay;
+	}
+
+	public void setFormulaDisplay(FormulaDisplay formulaDisplay) {
+		this.formulaDisplay = formulaDisplay;
+	}
+
+	public NameDisplay getNameDisplay() {
+		return nameDisplay;
+	}
+
+	public void setNameDisplay(NameDisplay nameDisplay) {
+		this.nameDisplay = nameDisplay;
+	}
+
+	public void setNameYPosition(Position nameYPosition) {
+		this.nameYPosition = nameYPosition;
+	}
+
+	public Position getNameXPosition() {
+		return nameXPosition;
+	}
+
+	public void setNameXPosition(Position nameXPosition) {
+		this.nameXPosition = nameXPosition;
+	}
+
+	public Position getIdYPosition() {
+		return idYPosition;
+	}
+
+	public void setIdYPosition(Position idYPosition) {
+		this.idYPosition = idYPosition;
+	}
+
+	public Position getIdXPosition() {
+		return idXPosition;
+	}
+
+	public void setIdXPosition(Position idXPosition) {
+		this.idXPosition = idXPosition;
 	}
 
 	/**

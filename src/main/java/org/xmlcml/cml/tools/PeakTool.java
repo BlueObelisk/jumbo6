@@ -1,7 +1,9 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
@@ -89,4 +91,47 @@ public class PeakTool extends AbstractTool {
         }
         return atomListList;
     }
+
+    private static Map<String, String> shapeMap;
+    static {
+    	shapeMap = new HashMap<String, String>();
+    	shapeMap.put("br", "cmlx:broad");
+    	shapeMap.put("bs", "cmlx:broad");
+    	shapeMap.put("bd", "cmlx:broad");
+    	shapeMap.put("broad", "cmlx:broad");
+    	shapeMap.put("sharp", "cmlx:sharp");
+    };
+
+	public static String guessShape(String peakType) {
+		String shape = null;
+		if (peakType != null) {
+			shape = shapeMap.get(peakType);
+		}
+		return shape;
+	}
+	
+    private static Map<String, String> multiplicityMap;
+    static {
+    	multiplicityMap = new HashMap<String, String>();
+    	multiplicityMap.put("s", "cmlx:singlet");
+    	multiplicityMap.put("bs", "cmlx:singlet");
+    	multiplicityMap.put("d", "cmlx:doublet");
+    	multiplicityMap.put("bd", "cmlx:doublet");
+    	multiplicityMap.put("t", "cmlx:triplet");
+    	multiplicityMap.put("q", "cmlx:quartet");
+    	multiplicityMap.put("quintet", "cmlx:quintet");
+    	multiplicityMap.put("m", "cmlx:multiplet");
+    	multiplicityMap.put("dd", "cmlx:doubletdoublet");
+    	multiplicityMap.put("dt", "cmlx:doublettriplet");
+    	multiplicityMap.put("td", "cmlx:tripletdoublet");
+    };
+
+	public static String guessMultiplicity(String peakType) {
+		String multiplicity = null;
+		if (peakType != null) {
+			multiplicity = multiplicityMap.get(peakType);
+		}
+		return multiplicity;
+	}
+	
 };
