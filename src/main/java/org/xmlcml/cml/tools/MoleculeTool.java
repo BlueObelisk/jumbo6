@@ -61,6 +61,7 @@ import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGRect;
 import org.xmlcml.cml.graphics.SVGText;
+import org.xmlcml.cml.tools.MoleculeDisplay.Position;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
@@ -104,6 +105,8 @@ public class MoleculeTool extends AbstractSVGTool {
 	private CMLBond currentBond;
 
 	private Morgan morgan;
+
+	private SVGRect boundingRectSVG;
 	
 
 	/**
@@ -2555,6 +2558,7 @@ public class MoleculeTool extends AbstractSVGTool {
     	displayBonds(drawable, g, defaultBondDisplay, defaultAtomDisplay);
     	displayAtoms(drawable, g, defaultAtomDisplay);
     	
+    	ensureBoundingRect();
     	if (moleculeDisplay.isDisplayFormula()) {
     		displayFormula(drawable, g);
     	}
@@ -2579,7 +2583,17 @@ public class MoleculeTool extends AbstractSVGTool {
     }
     
     private void drawBoundingBox(CMLDrawable drawable, SVGElement g) {
-    	calculateBoundingBox2D();
+    	ensureBoundingRect();
+    	if (boundingRectSVG != null) {
+	    	boundingRectSVG.setStroke(moleculeDisplay.getBoundingBoxBundle().getStroke());
+	    	boundingRectSVG.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getStrokeWidth());
+	    	boundingRectSVG.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getOpacity());
+	    	g.appendChild(boundingRectSVG);
+    	}
+    }
+
+	private void ensureBoundingRect() {
+		calculateBoundingBox2D();
     	if (userBoundingBox != null && userBoundingBox.getXRange() != null && userBoundingBox.getYRange() != null) {
 	    	double bondLength = moleculeDisplay.getBondLength();
 	    	Real2 xy0 = new Real2(
@@ -2591,13 +2605,9 @@ public class MoleculeTool extends AbstractSVGTool {
 	    			userBoundingBox.getYRange().getMax() + bondLength
 	    			);
 	    			
-	    	SVGElement rect = new SVGRect(xy0, xy1);
-	    	rect.setStroke(moleculeDisplay.getBoundingBoxBundle().getStroke());
-	    	rect.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getStrokeWidth());
-	    	rect.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getOpacity());
-	    	g.appendChild(rect);
+	    	boundingRectSVG = new SVGRect(xy0, xy1);
     	}
-    }
+	}
     
     private void setAtomBondAndGroupVisibility(
     		List<CMLAtom> atoms, List<CMLBond> bonds) {
@@ -2763,10 +2773,11 @@ public class MoleculeTool extends AbstractSVGTool {
     		FormulaTool formulaTool = FormulaTool.getOrCreateTool(formula);
     		SVGElement f = formulaTool.createGraphicsElement(drawable);
     		if (f != null) {
+    			Real2 formulaOffsets = calculateFormulaOffsets();
     	    	Transform2 transform2 = new Transform2(
 	    			new double[] {
-	    				1.,  0., 0.0,
-	    				0., -1., 0.0,
+	    				1.,  0., formulaOffsets.getX(),
+	    				0., -1., formulaOffsets.getY(),
 	    				0.,  0., 1.}
 	    			);
     	    	f.setTransform(transform2);
@@ -2774,8 +2785,49 @@ public class MoleculeTool extends AbstractSVGTool {
     		}
     	}
 	}
-    
-    public void enableMoleculeDisplay() {
+	
+    private Real2 calculateFormulaOffsets() {
+    	Real2 offsets = new Real2(getBoundingRectOffsets());
+    	if (moleculeDisplay.getFormulaXPosition().equals(Position.LEFT)) {
+    		offsets.x += moleculeDisplay.getFormulaDisplay().getFontSize() * 0.5;
+    	}
+    	if (moleculeDisplay.getFormulaYPosition().equals(Position.BOTTOM)) {
+    		offsets.y += moleculeDisplay.getFormulaDisplay().getFontSize() * 0.5;
+    	} else if (moleculeDisplay.getFormulaYPosition().equals(Position.TOP)) {
+    		if (boundingRectSVG != null) {
+    			offsets.y = boundingRectSVG.getY();
+	    		offsets.y += boundingRectSVG.getHeight();
+	    		offsets.y -= moleculeDisplay.getFormulaDisplay().getFontSize() * 1.5;
+    		}
+    	}
+    	return offsets;
+    }
+
+    private Real2 calculateNameOffsets() {
+    	Real2 offsets = new Real2(getBoundingRectOffsets());
+    	
+    	if (moleculeDisplay.getNameXPosition().equals(Position.LEFT)) {
+    		offsets.x += moleculeDisplay.getNameDisplay().getFontSize() * 0.2;
+    	}
+    	if (moleculeDisplay.getNameYPosition().equals(Position.BOTTOM)) {
+    		offsets.y += moleculeDisplay.getNameDisplay().getFontSize() * 0.5;
+    	} else if (moleculeDisplay.getNameYPosition().equals(Position.TOP)) {
+    		offsets.y = boundingRectSVG.getY();
+    		offsets.y += moleculeDisplay.getNameDisplay().getFontSize() * 0.5;
+    	}
+    	return offsets;
+    }
+
+	private Real2 getBoundingRectOffsets() {
+    	Real2 offsets = new Real2(0.0, 0.0);
+    	if (boundingRectSVG != null) {
+    		offsets.x = boundingRectSVG.getX();
+    		offsets.y = boundingRectSVG.getY();
+    	}
+    	return offsets;
+	}
+
+	public void enableMoleculeDisplay() {
     	if (moleculeDisplay == null) {
     		moleculeDisplay = MoleculeDisplay.getDEFAULT();
     	}

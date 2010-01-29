@@ -30,6 +30,7 @@ public class FormulaTool extends AbstractSVGTool {
 	public static String HYDROGEN_COUNT = "hydrogenCount";
 	
 	private CMLFormula formula;
+	private AbstractFormulaIdNameDisplay formulaDisplay = FormulaDisplay.DEFAULT;
 
 	static Map<String, CMLMolecule> concise2MoleculeMap;
 
@@ -71,21 +72,14 @@ public class FormulaTool extends AbstractSVGTool {
 		return formulaTool;
 	}
 
-//	/** get charge.
-//	 * 
-//	 * @return charge
-//	 */
-//	public int getFormalCharge() {
-//		int formalCharge = 0;
-//		Nodes chargedAtoms = formula.getAtomArray().query(".//"+CMLAtom.NS+"[@formalCharge]", CMLConstants.CML_XPATH);
-//		for (int i = 0; i < chargedAtoms.size(); i++) {
-//			formalCharge += Integer.parseInt(((Element)chargedAtoms.get(i)).getAttributeValue("formalCharge"));
-//		}
-//		return formalCharge;
-//	}
-//	
+	private void enableFormulaDisplay() {
+    	if (formulaDisplay == null) {
+    		formulaDisplay = FormulaDisplay.DEFAULT;
+    	}
+	}
 	
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
+		enableFormulaDisplay();
     	String s = formula.getConcise();
     	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
     	SVGG svgg = new SVGG();
@@ -94,27 +88,24 @@ public class FormulaTool extends AbstractSVGTool {
 	    	// charge at end?
 	    	int evenLength = (ss.length % 2 == 1) ? ss.length - 1 : ss.length;
 	    	Real2 offset = new Real2(0.0, 0.0);
-	    	double fontSizeAtom = 12.;
-	    	double widthFactor = 0.8;
-	    	double fontSizeCount = 8.;
-	    	double fontSizeCharge = 8.;
-	    	double subscriptShift = fontSizeCount / 2.0;
-	    	double superscriptShift = fontSizeCount / 2.0;
 	    	for (int i = 0; i < evenLength; i += 2) {
 	    		int isub = i+1;
 	    		SVGText atomSVG = new SVGText(offset, ss[i]);
-	    		atomSVG.setFontSize(fontSizeAtom);
+	    		atomSVG.setFontSize(formulaDisplay.getFontSizeAtom());
 	    		svgg.appendChild(atomSVG);
 	    		double widthFactorGuessingLowerCase = Math.min( ss[i].length(), 1.6);
-	    		offset = offset.plus(new Real2(fontSizeAtom * widthFactor * widthFactorGuessingLowerCase, 0.0));
+	    		offset = offset.plus(new Real2(
+	    				formulaDisplay.getFontSizeAtom() * formulaDisplay.getWidthFactor() * 
+	    				widthFactorGuessingLowerCase,
+	    				0.0));
 	    		String countString = ss[isub];
 	    		int count = Integer.parseInt(countString);
 	    		if (count != 1) {
-	        		offset = offset.plus(new Real2(0.0, subscriptShift));
+	        		offset = offset.plus(new Real2(0.0, formulaDisplay.getSubscriptShift()));
 	        		SVGText countSVG = new SVGText(offset, countString);
-	        		countSVG.setFontSize(fontSizeCount);
+	        		countSVG.setFontSize(formulaDisplay.getFontSizeCount());
 	        		svgg.appendChild(countSVG);
-	        		offset = offset.plus(new Real2(fontSizeCount * countString.length() * widthFactor, -subscriptShift));
+	        		offset = offset.plus(new Real2(formulaDisplay.getFontSizeCount() * countString.length() * formulaDisplay.getWidthFactor(), -formulaDisplay.getSubscriptShift()));
 	    		}
 	    	}
 	    	if (ss.length - evenLength == 1) {
@@ -125,9 +116,9 @@ public class FormulaTool extends AbstractSVGTool {
 	    		} else if (charge == -1) {
 	    			chargeString = CMLConstants.S_MINUS;
 	    		} 
-	    		offset = offset.plus(new Real2(0.0, superscriptShift));
+	    		offset = offset.plus(new Real2(0.0, formulaDisplay.getSuperscriptShift()));
 	    		SVGText chargeSVG = new SVGText(offset, chargeString);
-	    		chargeSVG.setFontSize(fontSizeCharge);
+	    		chargeSVG.setFontSize(formulaDisplay.getFontSizeCharge());
 	    		svgg.appendChild(chargeSVG);
 	    	}
 	    	g.appendChild(svgg);
