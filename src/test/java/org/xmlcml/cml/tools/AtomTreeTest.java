@@ -7,7 +7,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**
@@ -55,8 +55,8 @@ public class AtomTreeTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		dmf = (CMLMolecule)TstUtils.parseValidString(dmfS);
-		cno = (CMLMolecule)TstUtils.parseValidString(cnoS);
+		dmf = (CMLMolecule)JumboTestUtils.parseValidString(dmfS);
+		cno = (CMLMolecule)JumboTestUtils.parseValidString(cnoS);
 	}
 
 	/**

@@ -17,7 +17,7 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.CMLSpectatorList;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 public class ReactionFixture {
 	protected CMLReaction xomReact1;
@@ -96,7 +96,7 @@ public class ReactionFixture {
 	protected CMLReaction xmlReact2;
 
 	public ReactionFixture() {
-		xmlReact1 = (CMLReaction)TstUtils.parseValidString(xmlReact1S);
+		xmlReact1 = (CMLReaction)JumboTestUtils.parseValidString(xmlReact1S);
 		xmlReactantLists1 = xmlReact1.getReactantListElements();
 		xmlProductLists1 = xmlReact1.getProductListElements();
 		xmlSpectatorLists1 = xmlReact1.getSpectatorListElements();

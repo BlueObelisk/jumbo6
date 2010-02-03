@@ -10,7 +10,7 @@ import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -60,11 +60,11 @@ public class AtomMatcherTest {
 	}
 
 	private void makeMol1() {
-		mol1 = (CMLMolecule)TstUtils.parseValidString(mol1S);
+		mol1 = (CMLMolecule)JumboTestUtils.parseValidString(mol1S);
 	}
 
 	void makeMol2() {
-		mol2 = (CMLMolecule)TstUtils.parseValidString(mol2S);
+		mol2 = (CMLMolecule)JumboTestUtils.parseValidString(mol2S);
 	}
 
 	/**
@@ -237,9 +237,9 @@ public class AtomMatcherTest {
 				+ "<bond atomRefs2='a43 a47' order='1' id='a43_a47'/>"
 				+ "</bondArray>" + "</molecule>";
 
-		CMLMolecule mol1 = (CMLMolecule)TstUtils.parseValidString(s1);
+		CMLMolecule mol1 = (CMLMolecule)JumboTestUtils.parseValidString(s1);
 		CMLAtomSet atomSet1 = MoleculeTool.getOrCreateTool(mol1).getAtomSet();
-		CMLMolecule mol2 = (CMLMolecule)TstUtils.parseValidString(s2);
+		CMLMolecule mol2 = (CMLMolecule)JumboTestUtils.parseValidString(s2);
 		CMLAtomSet atomSet2 = MoleculeTool.getOrCreateTool(mol2).getAtomSet();
 		AtomMatcher atomMatcher = new AtomMatcher2D();
 		atomMatcher.setAtomMatchStrategy(Strategy.MATCH_DISTANCE_MATRIX);
@@ -249,7 +249,7 @@ public class AtomMatcherTest {
 			Real2 xy1 = mol1.getAtomById(link.getFrom()).getXY2();
 			Real2 xy2 = mol2.getAtomById(link.getTo()).getXY2();
 			Real2 found = xy1.subtract(xy2);
-			CMLAssert.assertEquals("delta", expected, found, 0.000001);
+			JumboTestUtils.assertEquals("delta", expected, found, 0.000001);
 		}
 	}
 

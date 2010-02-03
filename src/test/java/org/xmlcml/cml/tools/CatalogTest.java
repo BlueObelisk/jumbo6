@@ -21,7 +21,7 @@ import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * @author pm286
@@ -50,7 +50,7 @@ public class CatalogTest {
 		"  <scalar convention='cml:relativeUrl' dictRef='cml:moleculeCatalog' dataType='xsd:string'>src/org/xmlcml/cml/tools/examples/molecules/catalog.xml</scalar>"+
 		"</list>"+
 				"";
-		CMLList expected = (CMLList)TstUtils.parseValidString(expectedS);
+		CMLList expected = (CMLList)JumboTestUtils.parseValidString(expectedS);
 		JumboTestUtils.assertEqualsCanonically("list", expected, catalogList, true);
 	}
 
@@ -130,7 +130,7 @@ public class CatalogTest {
 		"  </bondArray>"+
 		"</molecule>"+
 		"";
-		CMLMolecule expectedMolecule = (CMLMolecule)TstUtils.parseValidString(ohS);
+		CMLMolecule expectedMolecule = (CMLMolecule)JumboTestUtils.parseValidString(ohS);
 		JumboTestUtils.assertEqualsCanonically("list", expectedMolecule, molecule, true);
 	}
 
