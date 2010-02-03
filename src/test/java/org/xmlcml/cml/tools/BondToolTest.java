@@ -10,7 +10,7 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement;
 
@@ -32,7 +32,7 @@ public class BondToolTest {
     	bondTool.getBondDisplay().setWidth(5.0);
     	SVGSVG svgsvg = createSvgSvg(bondTool);
         Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/bond1.svg");
-        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+        JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
     }
 
 	private SVGSVG createSvgSvg(BondTool bondTool) {

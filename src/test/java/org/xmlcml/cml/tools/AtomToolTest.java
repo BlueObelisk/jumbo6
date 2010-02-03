@@ -30,7 +30,7 @@ import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
@@ -158,35 +158,35 @@ public class AtomToolTest {
 
 		AtomTool atomTool1 = AtomTool.getOrCreateTool(atom1);
 		CMLAtomSet atomSet = atomTool1.getCoordinationSphereSet(0);
-		CMLAtomSet refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
+		CMLAtomSet refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='1' xmlns='http://www.xml-cml.org/schema'>a1</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 0", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(2);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='4' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='4' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(3);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='5' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='5' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 3", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(1);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='2' xmlns='http://www.xml-cml.org/schema'>a1 a2</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 1", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(4);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='6' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='6' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 4", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(5);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 5", refAtomSet, atomSet);
 		atomSet = atomTool1.getCoordinationSphereSet(6);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='8' xmlns='http://www.xml-cml.org/schema'>a1 a2 a3 a4 a5 a6 a7 a8</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 6", refAtomSet, atomSet);
 		// now a different atom
 		AtomTool atomTool5 = AtomTool.getOrCreateTool(fixture.mol11
 				.getAtomById("a5"));
 		atomSet = atomTool5.getCoordinationSphereSet(2);
-		refAtomSet = (CMLAtomSet) TstUtils.parseValidString("<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");
-		TstUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
+		refAtomSet = (CMLAtomSet) JumboTestUtils.parseValidString("<atomSet size='7' xmlns='http://www.xml-cml.org/schema'>a5 a3 a6 a2 a4 a7 a8</atomSet>");
+		JumboTestUtils.assertEqualsCanonically("atomSet 2", refAtomSet, atomSet);
 
 	}
 
@@ -289,10 +289,10 @@ public class AtomToolTest {
 		fixture.xomAtom[0].setPoint3(new Point3(1.1, 1.2, 1.3),
 				CoordinateType.CARTESIAN);
 		Point3 p = fixture.xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
-		CMLAssert.assertEquals("getPoint3", new double[] { 1.1, 1.2, 1.3 }, p, CC.EPS);
+		JumboTestUtils.assertEquals("getPoint3", new double[] { 1.1, 1.2, 1.3 }, p, CC.EPS);
 		AtomTool.getOrCreateTool(fixture.xomAtom[0]).transformCartesians(t);
 		p = fixture.xomAtom[0].getPoint3(CoordinateType.CARTESIAN);
-		CMLAssert.assertEquals("getPoint3", new double[] { 1.2, -1.1, 2.5 }, p, CC.EPS);
+		JumboTestUtils.assertEquals("getPoint3", new double[] { 1.2, -1.1, 2.5 }, p, CC.EPS);
 	}
 
 	/**
@@ -306,10 +306,10 @@ public class AtomToolTest {
 		fixture.xomAtom[0].setPoint3(new Point3(0.1, 0.2, 0.3),
 				CoordinateType.FRACTIONAL);
 		Point3 p = fixture.xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
-		CMLAssert.assertEquals("getPoint3", new double[] { 0.1, 0.2, 0.3 }, p, CC.EPS);
+		JumboTestUtils.assertEquals("getPoint3", new double[] { 0.1, 0.2, 0.3 }, p, CC.EPS);
 		AtomTool.getOrCreateTool(fixture.xomAtom[0]).transformFractionals(t);
 		p = fixture.xomAtom[0].getPoint3(CoordinateType.FRACTIONAL);
-		CMLAssert.assertEquals("getPoint3", new double[] { 0.2, 0.4, 0.5 }, p, CC.EPS);
+		JumboTestUtils.assertEquals("getPoint3", new double[] { 0.2, 0.4, 0.5 }, p, CC.EPS);
 	}
 
     /**
@@ -360,7 +360,7 @@ public class AtomToolTest {
 	 */
 	@Test
     public final void testGetReferencedAtoms() {
-        Element cml = TstUtils.parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
+        Element cml = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/rgroup1.xml");
         Assert.assertNotNull("rgoup1 should exist", cml);
         String otbs = "OTBS";
         CMLAtom atom = (CMLAtom) cml.query("./cml:molecule/cml:atomArray/cml:atom[@elementType='R' and cml:label[@value='"+otbs+"']]", CMLConstants.CML_XPATH).get(0);
@@ -386,7 +386,7 @@ public class AtomToolTest {
     @Test
     public void testGet3DCrossProduct() {
         Vector3 cross3d = AtomTool.getOrCreateTool(xmlAtom[0]).get3DCrossProduct(xmlAtom[1], xmlAtom[2]);
-        CMLAssert.assertEquals("cross3d", new double[] { 0., 2., -2. },
+        JumboTestUtils.assertEquals("cross3d", new double[] { 0., 2., -2. },
                 cross3d, CC.EPS);
     }
 
@@ -397,7 +397,7 @@ public class AtomToolTest {
     @Test
     public void testGet2DCrossProduct() {
         Vector3 cross2d = AtomTool.getOrCreateTool(xmlAtom[0]).get2DCrossProduct(xmlAtom[1], xmlAtom[2]);
-        CMLAssert.assertEquals("cross2d", new double[] { 0., 0., -2. },
+        JumboTestUtils.assertEquals("cross2d", new double[] { 0., 0., -2. },
                 cross2d, CC.EPS);
     }
     
@@ -457,7 +457,7 @@ public class AtomToolTest {
     	AtomTool atomTool = AtomTool.getOrCreateTool(atom);
     	SVGSVG svgsvg = createSvgSvg(atomTool);
         Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/atom1.svg");
-        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+        JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
     }
 
     @Test
@@ -470,7 +470,7 @@ public class AtomToolTest {
     	atomTool.getAtomDisplay().setDisplayCarbons(false);
     	SVGSVG svgsvg = createSvgSvg(atomTool);
         Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/atom2.svg");
-        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+        JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
     }
     
 	private SVGSVG createSvgSvg(AtomTool atomTool) {

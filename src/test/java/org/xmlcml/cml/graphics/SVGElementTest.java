@@ -5,7 +5,7 @@ import nu.xom.Element;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 public class SVGElementTest {
 
@@ -13,11 +13,11 @@ public class SVGElementTest {
 
 	@Test
 	public final void testcreateSVGElement() {
-		Element oldElement =TstUtils.parseValidFile(GRAPHICS_RESOURCE + CMLConstants.U_S
+		Element oldElement =JumboTestUtils.parseValidFile(GRAPHICS_RESOURCE + CMLConstants.U_S
 				+ "image12.svg");
 		SVGElement newSvg = SVGElement.createSVG(oldElement);
 		Assert.assertEquals("class", SVGSVG.class, newSvg.getClass());
-		TstUtils.assertEqualsCanonically("copy",TstUtils.parseValidFile(GRAPHICS_RESOURCE + CMLConstants.U_S
+		JumboTestUtils.assertEqualsCanonically("copy",JumboTestUtils.parseValidFile(GRAPHICS_RESOURCE + CMLConstants.U_S
 				+ "image12.svg"), newSvg, true);
 	}
 

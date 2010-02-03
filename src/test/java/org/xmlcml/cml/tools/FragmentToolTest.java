@@ -37,7 +37,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLPropertyList;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -121,7 +121,7 @@ public class FragmentToolTest {
 		fragmentTool.processIntermediate(resourceManager);
 
 		CMLElement explicit = readElement0("molE");
-		TstUtils.assertEqualsCanonically("fragment", explicit, fragment, true);
+		JumboTestUtils.assertEqualsCanonically("fragment", explicit, fragment, true);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class FragmentToolTest {
 		fragment11.appendChild(fragmentList);
 
 		CMLElement fragmentE = readElement0("recurse");
-		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		JumboTestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 
 		// maybe defer this...
 		fragmentTool.basic_processRecursively();
@@ -275,7 +275,7 @@ public class FragmentToolTest {
 		fragmentTool.substituteParameters();
 
 		CMLMolecule moleculeE = (CMLMolecule) readElement0("substitute0M");
-		TstUtils.assertEqualsCanonically("molecule", moleculeE, molecule, true);
+		JumboTestUtils.assertEqualsCanonically("molecule", moleculeE, molecule, true);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class FragmentToolTest {
 		FragmentTool fragmentTool = FragmentTool.getOrCreateTool((CMLFragment) fragment);
 		fragmentTool.substituteParameters();
 		CMLElement fragmentE = readElement0("substitute1");
-		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		JumboTestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 
 	/**
@@ -446,7 +446,7 @@ public class FragmentToolTest {
 		if (intermediate == null) {
 			dump(fragment, "mol" + serial + "I");
 		} else if (check) {
-			TstUtils.assertEqualsCanonically(title, intermediate, fragment, true);
+			JumboTestUtils.assertEqualsCanonically(title, intermediate, fragment, true);
 		}
 		if (debug) {
 			fragment.debug(title);
@@ -460,7 +460,7 @@ public class FragmentToolTest {
 		if (explicit == null) {
 			dump(fragment, "mol" + serial + "E");
 		} else if (check) {
-			TstUtils.assertEqualsCanonically(title, explicit, fragment, true);
+			JumboTestUtils.assertEqualsCanonically(title, explicit, fragment, true);
 		}
 		// explicit -> complete
 		fragmentTool.processExplicit();
@@ -471,7 +471,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragment, "mol" + serial + "C");
 		} else if (check) {
-			TstUtils.assertEqualsCanonically(title, complete, fragment, true);
+			JumboTestUtils.assertEqualsCanonically(title, complete, fragment, true);
 		}
 	}
 
@@ -517,7 +517,7 @@ public class FragmentToolTest {
 			if (complete0 == null) {
 				dump(fragment, rootName);
 			} else if (check) {
-				TstUtils.assertEqualsCanonically(rootName, complete0, fragment, true);
+				JumboTestUtils.assertEqualsCanonically(rootName, complete0, fragment, true);
 			}
 		}
 		String title = "complete" + serial;
@@ -527,7 +527,7 @@ public class FragmentToolTest {
 		if (complete == null) {
 			dump(fragmentList, "mol" + serial + "C");
 		} else if (check) {
-			TstUtils.assertEqualsCanonically(title, complete, fragmentList, true);
+			JumboTestUtils.assertEqualsCanonically(title, complete, fragmentList, true);
 		}
 	}
 
@@ -541,7 +541,7 @@ public class FragmentToolTest {
 		FragmentTool generatedFragmentTool = FragmentTool.getOrCreateTool((CMLFragment) generatedFragment);
 		generatedFragmentTool.processAll(resourceManager);
 		CMLElement generatedE = readElement0("markushE");
-		TstUtils.assertEqualsCanonically("generated", generatedE, generatedFragment, true);
+		JumboTestUtils.assertEqualsCanonically("generated", generatedE, generatedFragment, true);
 	}
 
 	/**

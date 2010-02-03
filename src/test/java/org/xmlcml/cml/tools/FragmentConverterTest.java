@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * @author pm286
@@ -32,7 +32,7 @@ public class FragmentConverterTest {
 		"  </bondArray>" +
 		"</molecule>" +
 		"";
-		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidString(moleculeS);
 		FragmentConverter fragmentConverter = new FragmentConverter(molecule);
 		CMLFragment fragment = fragmentConverter.convertToFragment();
 
@@ -57,8 +57,8 @@ public class FragmentConverterTest {
 		    "<arg parentAttribute='id'>m1_{$idx}</arg>"+
 		  "</molecule>"+
 		"</fragment>";
-		CMLFragment fragmentE = (CMLFragment)TstUtils.parseValidString(fragmentS);
-		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		CMLFragment fragmentE = (CMLFragment)JumboTestUtils.parseValidString(fragmentS);
+		JumboTestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 		
 	}
 
@@ -102,7 +102,7 @@ public class FragmentConverterTest {
 		"  <torsion id='tor2' atomRefs4='a2 a3 a4 a5'>-34</torsion>" +
 		"</molecule>" +
 		"";
-		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidString(moleculeS);
 		FragmentConverter fragmentConverter = new FragmentConverter(molecule);
 		CMLFragment fragment = fragmentConverter.convertToFragment();
 		String fragmentS = 
@@ -183,8 +183,8 @@ public class FragmentConverterTest {
 		    "<arg parameterName='tor2'/>"+
 		  "</molecule>"+
 		"</fragment>";
-		CMLFragment fragmentE = (CMLFragment)TstUtils.parseValidString(fragmentS);
-		TstUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
+		CMLFragment fragmentE = (CMLFragment)JumboTestUtils.parseValidString(fragmentS);
+		JumboTestUtils.assertEqualsCanonically("fragment", fragmentE, fragment, true);
 	}
 	
 }

@@ -23,7 +23,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -81,7 +81,7 @@ public class AtomSetToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		sprout = (CMLMolecule)TstUtils.parseValidString(sproutS);
+		sprout = (CMLMolecule)JumboTestUtils.parseValidString(sproutS);
 		atomSet1 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a1",
 				"a2", "a3" });
 		atomSet2 = new CMLAtomSet(fixture.xmlMolecule, new String[] { "a2",
@@ -169,11 +169,11 @@ public class AtomSetToolTest {
 		AtomSetTool.getOrCreateTool(atomSet1).transformCartesians(t);
 		Point3Vector p3v = atomSet1.getCoordinates3(CoordinateType.CARTESIAN);
 		Assert.assertEquals("point3vector", 3, p3v.size());
-		CMLAssert.assertEquals("point3vector", new double[] { 0.0, 0.0, 0.0 },
+		JumboTestUtils.assertEquals("point3vector", new double[] { 0.0, 0.0, 0.0 },
 				p3v.get(0), CC.EPS);
-		CMLAssert.assertEquals("point3vector", new double[] { 1.0, -1.0, 2.0 }, p3v
+		JumboTestUtils.assertEquals("point3vector", new double[] { 1.0, -1.0, 2.0 }, p3v
 				.get(1), CC.EPS);
-		CMLAssert.assertEquals("point3vector", new double[] { -1.0, -1.0, -2.0 }, p3v
+		JumboTestUtils.assertEquals("point3vector", new double[] { -1.0, -1.0, -2.0 }, p3v
 				.get(2), CC.EPS);
 	}
 
@@ -195,11 +195,11 @@ public class AtomSetToolTest {
 		atomSetTool1.transformFractionals(t);
 		Point3Vector p3v = atomSet1.getCoordinates3(CoordinateType.FRACTIONAL);
 		Assert.assertEquals("point3vector", 3, p3v.size());
-		CMLAssert.assertEquals("point3vector", new double[] { 0.2, -0.1, 0.5 }, p3v
+		JumboTestUtils.assertEquals("point3vector", new double[] { 0.2, -0.1, 0.5 }, p3v
 				.get(0), CC.EPS);
-		CMLAssert.assertEquals("point3vector", new double[] { 0.5, -0.4, 1.1 }, p3v
+		JumboTestUtils.assertEquals("point3vector", new double[] { 0.5, -0.4, 1.1 }, p3v
 				.get(1), CC.EPS);
-		CMLAssert.assertEquals("point3vector", new double[] { 0.8, -0.7, 1.7 }, p3v
+		JumboTestUtils.assertEquals("point3vector", new double[] { 0.8, -0.7, 1.7 }, p3v
 				.get(2), CC.EPS);
 	}
 
@@ -348,7 +348,7 @@ public class AtomSetToolTest {
     			"a1 a2 a2 a3" +
     			"</bondSet>";
     	CMLBondSet bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	JumboTestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     	
     	atomSet = new CMLAtomSet(
     			sprout, new String[]{"a1", "a2", "a3", "a7"});
@@ -358,7 +358,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	JumboTestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
 
     	// isolated bond
     	atomSet = new CMLAtomSet(
@@ -369,7 +369,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3 a5 a11" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	JumboTestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
 
     	// isolated atom, no bond
     	atomSet = new CMLAtomSet(
@@ -380,7 +380,7 @@ public class AtomSetToolTest {
     			"a1 a2 a1 a7 a2 a3 a5 a11" +
     			"</bondSet>";
     	bondSetRef = (CMLBondSet) new CMLBuilder().parseString(bondSetS);
-    	TstUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
+    	JumboTestUtils.assertEqualsCanonically("bondSet", bondSetRef, bondSet, true);
     }
 
 	@Test
