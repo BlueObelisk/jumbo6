@@ -2398,14 +2398,16 @@ public class MoleculeToolTest {
 	public void testDraw() throws Exception {
 		CMLMolecule molecule = SMILESTool.createMolecule("Clc1ccc(cc1)C(=O)N");
 		SVGG svgg = MoleculeTool.getOrCreateTool(molecule).drawAndTranslateToRectCorner(MoleculeDisplay.DEFAULT);
-		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\molecule.svg"));
+		File outputFile = File.createTempFile("molecule", ".svg");
+		SVGSVG.wrapAndWriteAsSVG(svgg, outputFile);
 	}
 
 	@Test
 	public void testDraw1() throws Exception {
 		CMLMolecule molecule = SMILESTool.createMolecule("OCCOCCO");
 		SVGG svgg = MoleculeTool.getOrCreateTool(molecule).drawAndTranslateToRectCorner(MoleculeDisplay.DEFAULT);
-		SVGSVG.wrapAndWriteAsSVG(svgg, new File("C:\\temp\\molecule1.svg"));
+		File outputFile = File.createTempFile("molecule", ".svg");
+		SVGSVG.wrapAndWriteAsSVG(svgg, outputFile);
 	}
 	
 }
