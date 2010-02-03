@@ -30,7 +30,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
 /**
@@ -78,7 +78,7 @@ public class StereochemistryToolTest {
 				+ "    <bond id='b34' atomRefs2='a3 a4' order='S'/>" +
 				// "    <bond id='b13' atomRefs2='a1 a3' order='S'/>" +
 				"  </bondArray>" + "</molecule>";
-		CMLMolecule cisMol = (CMLMolecule)TstUtils.parseValidString(cisMolS);
+		CMLMolecule cisMol = (CMLMolecule)JumboTestUtils.parseValidString(cisMolS);
 		ConnectionTableTool ctTool = new ConnectionTableTool(cisMol);
 		List<CMLBond> bonds = ctTool.getCyclicBonds();
 		Assert.assertEquals("cyclic", 0, bonds.size());
@@ -643,8 +643,8 @@ public class StereochemistryToolTest {
 				+ "<bond id='a57_a58' atomRefs2='a57 a58' userCyclic='ACYCLIC' order='S'/>"
 				+ "<bond id='a57_a59' atomRefs2='a57 a59' userCyclic='ACYCLIC' order='S'/>"
 				+ "</bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule)TstUtils.parseValidString(molS);
-		TstUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
+		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidString(molS);
+		JumboTestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
 }

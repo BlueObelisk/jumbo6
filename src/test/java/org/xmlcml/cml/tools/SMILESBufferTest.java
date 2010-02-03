@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 public class SMILESBufferTest {
 
@@ -25,7 +25,7 @@ public class SMILESBufferTest {
 		SMILESBuffer buffer = new SMILESBuffer();
 		buffer.addString("CO");
 		CMLMolecule molecule = buffer.getMolecule();
-		CMLMolecule expected = (CMLMolecule)TstUtils.parseValidString(
+		CMLMolecule expected = (CMLMolecule)JumboTestUtils.parseValidString(
 				"<molecule xmlns='http://www.xml-cml.org/schema' " +
 				"xmlns:cmlx='http://www.xml-cml.org/schema/cmlx' cmlx:explicitHydrogens='true'>"+
 				"<atomArray>"+
@@ -45,7 +45,7 @@ public class SMILESBufferTest {
 				"</bondArray>"+
 				"</molecule>"
 		);
-		TstUtils.assertEqualsIncludingFloat("CO", expected, molecule, true, 0.001);
+		JumboTestUtils.assertEqualsIncludingFloat("CO", expected, molecule, true, 0.001);
 	}
 
 	@Test

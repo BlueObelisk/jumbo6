@@ -16,7 +16,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -217,7 +217,7 @@ public class MorganTest {
 				+ "    <bond atomRefs2='a6 a1'/>"
 				+ "    <bond atomRefs2='a6 h6'/>" + "  </bondArray>"
 				+ "</molecule>";
-		CMLMolecule benzene = (CMLMolecule)TstUtils.parseValidString(benzeneS);
+		CMLMolecule benzene = (CMLMolecule)JumboTestUtils.parseValidString(benzeneS);
 		Morgan morgan = new Morgan(MoleculeTool.getOrCreateTool(benzene)
 				.getAtomSet());
 		List<Long> morganList = morgan.getMorganList();
@@ -231,7 +231,7 @@ public class MorganTest {
 
 		// ==================================
 
-		benzene = (CMLMolecule)TstUtils.parseValidString(benzeneS);
+		benzene = (CMLMolecule)JumboTestUtils.parseValidString(benzeneS);
 		morgan = new Morgan(MoleculeTool.getOrCreateTool(benzene).getAtomSet());
 		List<CMLAtom> markedAtoms = morgan.getMarkedAtomList();
 		Assert.assertNull("marked atoms null", markedAtoms);
@@ -261,7 +261,7 @@ public class MorganTest {
 
 		// ==================================
 
-		benzene = (CMLMolecule)TstUtils.parseValidString(benzeneS);
+		benzene = (CMLMolecule)JumboTestUtils.parseValidString(benzeneS);
 		morgan = new Morgan(MoleculeTool.getOrCreateTool(benzene).getAtomSet());
 		benzene.getAtom(1).setProperty(Morgan.Annotation.MARKED.toString(),
 				new Long(1));
@@ -285,7 +285,7 @@ public class MorganTest {
 
 		// ==================================
 
-		benzene = (CMLMolecule)TstUtils.parseValidString(benzeneS);
+		benzene = (CMLMolecule)JumboTestUtils.parseValidString(benzeneS);
 		morgan = new Morgan(MoleculeTool.getOrCreateTool(benzene).getAtomSet());
 		benzene.getAtom(1).setProperty(Morgan.Annotation.MARKED.toString(),
 				new Long(1));
@@ -314,7 +314,7 @@ public class MorganTest {
 
 		// ==========================
 
-		benzene = (CMLMolecule)TstUtils.parseValidString(benzeneS);
+		benzene = (CMLMolecule)JumboTestUtils.parseValidString(benzeneS);
 		morgan = new Morgan(MoleculeTool.getOrCreateTool(benzene).getAtomSet());
 		benzene.getAtom(1).setElementType(AS.Br.value);
 		benzene.getAtom(5).setElementType(AS.Cl.value);
@@ -357,7 +357,7 @@ public class MorganTest {
 				.assertEquals("equivalence classes", test.length, atomSets
 						.size());
 		for (int i = 0; i < test.length; i++) {
-			CMLAssert.assertEquals("class " + i, test[i], atomSets.get(i)
+			JumboTestUtils.assertEquals("class " + i, test[i], atomSets.get(i)
 					.getXMLContent());
 		}
 	}
