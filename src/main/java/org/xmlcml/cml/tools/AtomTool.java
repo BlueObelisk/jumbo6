@@ -2,6 +2,7 @@ package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -84,6 +85,7 @@ public class AtomTool extends AbstractSVGTool {
     	}
         this.atom = atom;
         this.atom.setTool(this);
+        setDefaults();
         molecule = atom.getMolecule();
         if (molecule == null) {
             throw new RuntimeException("Atom must be in molecule: "+atom.getId());
@@ -102,6 +104,11 @@ public class AtomTool extends AbstractSVGTool {
 			atom.setTool(atomTool);
 		}
 		return atomTool;
+	}
+	
+	private void setDefaults() {
+		this.ensureAtomDisplay();
+		this.ensureMoleculeDisplay();
 	}
 
 	/**
@@ -1049,72 +1056,92 @@ public class AtomTool extends AbstractSVGTool {
      public SVGElement createGraphicsElement(CMLDrawable drawable) {
     	g = null;
     	ensureMoleculeDisplay();
+    	ensureAtomDisplay();
     	atomDisplay.ensureMoleculeDisplay(moleculeDisplay);
 		if (false) {
-		} else if (atom.getX2Attribute() == null || atom.getY2Attribute() == null) {
-			// no 2D coords
-		} else if (atomDisplay != null &&
-				atomDisplay.isOmitHydrogens() &&
-				atom.hasElement("H")) {
-			// hidden hydrogens
-		} else if (atomDisplay != null &&
-				!atomDisplay.isDisplay() &&
-				!this.isGroupRoot()) {
-				LOG.debug(atom.getId()+"NOT PLOTTED");
-			// hidden by programmatic action
+		} else if (hasNo2DCoords()) {
+		} else if (hideHydrogens()) {
+		} else if (hideGroupRoot()) {
     	} else {
-	    	 double x = atom.getX2();
-	    	 double y = atom.getY2();
-	    	 g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
-	    	 g.setUserElement(atom);
-	    	 g.addAttribute(new Attribute("class", "atom"));
-	    	 g.addAttribute(new Attribute("id", "g"+S_UNDER+atom.getId()));
-	    	 g.setTransform(new Transform2(
-    			 new double[]{
-    			 1., 0., x,
-    			 0.,-1., y,
-    			 0., 0., 1.
-	    	 }));
-	    	 String fill = getAtomFill(atom.getElementType());
-	    	 TextDisplay elementDisplay = atomDisplay.getElementDisplay();
-	    	 TextDisplay chargeDisplay = atomDisplay.getChargeDisplay();
-	    	 TextDisplay groupDisplay = atomDisplay.getGroupDisplay();
-	    	 TextDisplay idDisplay = atomDisplay.getIdDisplay();
-	    	 TextDisplay isotopeDisplay = atomDisplay.getIsotopeDisplay();
-	    	 TextDisplay labelDisplay = atomDisplay.getLabelDisplay();
-
-	    	 String atomString = getAtomString();
-		 // always draw atom
-			 elementDisplay.setFill(fill);
-			 elementDisplay.setUserElement(atom);
-			 elementDisplay.displayElement(g, atomString);
-    		 if (atomString.equals(S_EMPTY)) {
-    			 elementDisplay.setOpacity(0.0);
-	    	 }
-	    	 if (atom.getFormalChargeAttribute() != null) {
-    			 chargeDisplay.displaySignedInteger(g, atom.getFormalCharge());
-	    	 }
-	    	 if (atom.getIsotopeNumberAttribute() != null) {
-    			 isotopeDisplay.display(g, ""+atom.getIsotopeNumber());
-	    	 }
-	    	 if (atomDisplay.isDisplayLabels()) {
-    			 labelDisplay.displayLabel(g, getLabel());
-	    	 }
-	    	 if (atomDisplay.isDisplayIds()) {
-    			 idDisplay.displayId(g, atom.getId());
-	    	 }
-	    	 if (atomDisplay.isDisplayGroups()) {
-    			 groupDisplay.displayGroup(g, getGroup());
-	    	 }
+	    	 drawAtom(drawable);
     	 }
     	 return (g == null || g.getChildElements().size() == 0) ? null : g;
      }
 
+	private void drawAtom(CMLDrawable drawable) {
+		double x = atom.getX2();
+		 double y = atom.getY2();
+		 g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
+		 g.setUserElement(atom);
+		 g.addAttribute(new Attribute("class", "atom"));
+		 g.addAttribute(new Attribute("id", "g"+S_UNDER+atom.getId()));
+		 g.setTransform(new Transform2(
+			 new double[]{
+			 1., 0., x,
+			 0.,-1., y,
+			 0., 0., 1.
+		 }));
+		 String fill = getAtomFill(atom.getElementType());
+		 TextDisplay elementDisplay = atomDisplay.getElementDisplay();
+		 TextDisplay chargeDisplay = atomDisplay.getChargeDisplay();
+		 TextDisplay groupDisplay = atomDisplay.getGroupDisplay();
+		 TextDisplay idDisplay = atomDisplay.getIdDisplay();
+		 TextDisplay isotopeDisplay = atomDisplay.getIsotopeDisplay();
+		 TextDisplay labelDisplay = atomDisplay.getLabelDisplay();
+
+		 String atomString = getAtomString();
+ // always draw atom
+		 elementDisplay.setFill(fill);
+		 elementDisplay.setUserElement(atom);
+		 elementDisplay.displayElement(g, atomString);
+		 if (atomString.equals(S_EMPTY)) {
+			 elementDisplay.setOpacity(0.0);
+		 }
+		 if (atom.getFormalChargeAttribute() != null) {
+			 chargeDisplay.displaySignedInteger(g, atom.getFormalCharge());
+		 }
+		 if (atom.getIsotopeNumberAttribute() != null) {
+			 isotopeDisplay.display(g, ""+atom.getIsotopeNumber());
+		 }
+		 if (atomDisplay.isDisplayLabels()) {
+			 labelDisplay.displayLabel(g, getLabel());
+		 }
+		 if (atomDisplay.isDisplayIds()) {
+			 idDisplay.displayId(g, atom.getId());
+		 }
+		 if (atomDisplay.isDisplayGroups()) {
+			 groupDisplay.displayGroup(g, getGroup());
+		 }
+	}
+
+	private boolean hasNo2DCoords() {
+		return atom.getX2Attribute() == null || atom.getY2Attribute() == null;
+	}
+
+	private boolean hideHydrogens() {
+		return atomDisplay != null &&
+				atomDisplay.isOmitHydrogens() &&
+				atom.hasElement("H");
+	}
+
+	private boolean hideGroupRoot() {
+		return atomDisplay != null &&
+				!atomDisplay.isDisplay() &&
+				!this.isGroupRoot();
+	}
+
   	private void ensureMoleculeDisplay() {
+  		ensureMoleculeTool();
 		moleculeDisplay = (moleculeTool == null) ? null : moleculeTool.getMoleculeDisplay();
 	}
 
- 	private CMLLabel getGroup() {
+ 	public void ensureMoleculeTool() {
+ 		if (moleculeTool == null) {
+ 			moleculeTool = MoleculeTool.getOrCreateTool(atom.getMolecule());
+ 		}
+	}
+
+	private CMLLabel getGroup() {
  		Nodes nodes = atom.query(".//cml:label", CMLConstants.CML_XPATH);
  		return (nodes.size() == 0) ? null : (CMLLabel) nodes.get(0);
  	}
@@ -1207,6 +1234,7 @@ public class AtomTool extends AbstractSVGTool {
 	}
      
      private String getAtomString() {
+    	 
     	 String s = atom.getElementType();
     	 // omit carbons?
     	 if (!atomDisplay.isDisplayCarbons() && AS.C.equals(s)) {

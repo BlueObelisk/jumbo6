@@ -4,12 +4,15 @@ import org.apache.commons.math.optimization.GoalType;
 import org.apache.commons.math.optimization.SimpleScalarValueChecker;
 import org.apache.commons.math.optimization.direct.DirectSearchOptimizer;
 import org.apache.commons.math.optimization.direct.NelderMead;
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Transform2;
 
 public class Fit2DDirectSearchOptimizer  {
 
+	private static Logger LOG = Logger.getLogger(Fit2DDirectSearchOptimizer.class);
+	
 	private double[] startPoint = new double[3];
 	private double[] steps = new double[3];
 	private CMLMolecule[] mols;
@@ -73,7 +76,7 @@ public class Fit2DDirectSearchOptimizer  {
 		this.goalType = goalType;
 	}
 	public void optimize() {
-		System.out.println(goalType);
+		LOG.trace(goalType);
 		try {
 			directSearchOptimizer.optimize(sqdevFunc, goalType, startPoint);
 		} catch (Exception e) {

@@ -24,11 +24,17 @@ import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
+import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.util.TstUtils;
 
@@ -441,4 +447,37 @@ public class AtomToolTest {
     	hAtom2 = molecule.getAtomById("a1_h2");
     	Assert.assertNull("h atom", hAtom2);
     }
+    
+    @Test
+    public void testCreateGraphicsElement1() {
+    	CMLAtom atom = new CMLAtom("a1", ChemicalElement.AS.Cl);
+    	atom.setXY2(new Real2(0.0, 0.0));
+    	CMLMolecule molecule = new CMLMolecule();
+    	molecule.addAtom(atom);
+    	AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+    	SVGSVG svgsvg = createSvgSvg(atomTool);
+        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/atom1.svg");
+        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+    }
+
+    @Test
+    public void testCreateGraphicsElement2() {
+    	CMLAtom atom = new CMLAtom("a1", ChemicalElement.AS.C);
+    	atom.setXY2(new Real2(0.0, 0.0));
+    	CMLMolecule molecule = new CMLMolecule();
+    	molecule.addAtom(atom);
+    	AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+    	atomTool.getAtomDisplay().setDisplayCarbons(false);
+    	SVGSVG svgsvg = createSvgSvg(atomTool);
+        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/atom2.svg");
+        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+    }
+    
+	private SVGSVG createSvgSvg(AtomTool atomTool) {
+		CMLDrawable drawable = new MoleculeDisplayList();
+    	SVGG svgg = (SVGG) atomTool.createGraphicsElement(drawable);
+    	svgg.translate(new Real2(100.,-100.));
+    	SVGSVG svgsvg = SVGSVG.wrapAsSVG(svgg);
+		return svgsvg;
+	}
 }

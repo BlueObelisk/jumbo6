@@ -128,7 +128,7 @@ public class AtomTreeData {
 				start = false;
 			} else {
 				if (ligands.size() != ligandSet.size()) {
-					LOG.error("............Unequal sets");
+					LOG.trace("............Unequal sets");
 					ligandSet = null;
 				} else {
 					for (CMLAtom ligand : ligands) {

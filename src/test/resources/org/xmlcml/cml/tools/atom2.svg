@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+  <g class="atom" id="g_a1" transform="matrix(1.0,0., 0.,-1.0,100.0,100.0)">
+    <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+    <text x="-8.75" y="9.25" style=" fill : black; stroke : none; font-size : 25.0;">C</text>
+  </g>
+</svg>

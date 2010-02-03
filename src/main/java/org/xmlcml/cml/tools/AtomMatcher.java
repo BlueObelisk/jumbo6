@@ -484,7 +484,7 @@ public abstract class AtomMatcher extends AbstractTool {
 					+ atomSet0.size() + CMLConstants.S_SLASH + atomSet1.size());
 		}
 		String title = this.getAtomMatchStrategy().toString();
-		LOG.debug("Strategy: "+title);
+		LOG.trace("Strategy: "+title);
 	    CMLMap cmlMap = match(atomSet0, atomSet1, title);
 		return cmlMap;
 	}

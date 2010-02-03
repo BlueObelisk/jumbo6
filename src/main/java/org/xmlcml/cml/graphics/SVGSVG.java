@@ -71,14 +71,22 @@ public class SVGSVG extends SVGElement {
 	}
 
 	public static SVGSVG wrapAndWriteAsSVG(SVGG svgg, File file) {
-		SVGSVG svgsvg = new SVGSVG();
-		svgsvg.appendChild(svgg);
+		SVGSVG svgsvg = wrapAsSVG(svgg);
 		try {
 			LOG.trace("Writing SVG "+file.getAbsolutePath());
 			CMLUtil.debug(svgsvg, new FileOutputStream(file), 1);
 		} catch (Exception e) {
 			throw new RuntimeException("cannot write svg to "+file, e);
 		}
+		return svgsvg;
+	}
+
+	public static SVGSVG wrapAsSVG(SVGG svgg) {
+		if (svgg.getParent() != null) {
+			svgg.detach();
+		}
+		SVGSVG svgsvg = new SVGSVG();
+		svgsvg.appendChild(svgg);
 		return svgsvg;
 	}
 
