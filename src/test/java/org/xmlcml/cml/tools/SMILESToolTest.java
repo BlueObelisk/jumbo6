@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 
 /**
@@ -761,7 +761,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+//		System.out.println(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) TstUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling6.xml");
 		

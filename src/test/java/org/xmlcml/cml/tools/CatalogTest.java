@@ -4,7 +4,6 @@
 package org.xmlcml.cml.tools;
 
 import static org.xmlcml.euclid.EuclidConstants.F_S;
-import static org.xmlcml.util.TstUtils.assertEqualsCanonically;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -21,7 +20,8 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 /**
  * @author pm286
@@ -51,7 +51,7 @@ public class CatalogTest {
 		"</list>"+
 				"";
 		CMLList expected = (CMLList)TstUtils.parseValidString(expectedS);
-		assertEqualsCanonically("list", expected, catalogList, true);
+		JumboTestUtils.assertEqualsCanonically("list", expected, catalogList, true);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class CatalogTest {
 		"</molecule>"+
 		"";
 		CMLMolecule expectedMolecule = (CMLMolecule)TstUtils.parseValidString(ohS);
-		assertEqualsCanonically("list", expectedMolecule, molecule, true);
+		JumboTestUtils.assertEqualsCanonically("list", expectedMolecule, molecule, true);
 	}
 
 	

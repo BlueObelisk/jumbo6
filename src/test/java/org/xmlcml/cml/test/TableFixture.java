@@ -17,8 +17,8 @@ import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableHeader;
 import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TstUtils;
 
 public class TableFixture {
 	@SuppressWarnings("unused")

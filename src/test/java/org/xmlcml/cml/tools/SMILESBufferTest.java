@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 public class SMILESBufferTest {
 

@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLFragment;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 /**
  * @author pm286

@@ -8,7 +8,7 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 public class MoleculeToolFixture {
 

@@ -3,12 +3,11 @@ package org.xmlcml.cml.tools;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLDictionary;
 import org.xmlcml.cml.element.CMLEntry;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 public class DictionaryToolTest {
 

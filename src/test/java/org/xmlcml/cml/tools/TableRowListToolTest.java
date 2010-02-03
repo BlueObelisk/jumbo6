@@ -8,7 +8,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 /**
  * test TableTool.

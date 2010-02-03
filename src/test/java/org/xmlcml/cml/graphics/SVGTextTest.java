@@ -8,9 +8,9 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.util.TstUtils;
 
 public class SVGTextTest {
 	private static Logger LOG = Logger.getLogger(SVGTextTest.class);

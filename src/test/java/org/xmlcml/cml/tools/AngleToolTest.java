@@ -19,8 +19,8 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.util.TstUtils;
 
 
 /**

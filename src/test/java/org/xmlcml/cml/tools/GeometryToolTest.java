@@ -9,7 +9,6 @@ import nu.xom.ParsingException;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
@@ -20,8 +19,8 @@ import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 /**
  * test geometry tool
  * Trim this down - most of the fixture is unneeded (brought in from CMLXOM).

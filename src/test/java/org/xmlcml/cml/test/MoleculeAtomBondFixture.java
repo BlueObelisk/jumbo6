@@ -19,8 +19,8 @@ import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * provides communal resources for testing. e.g. files and moelcules subclassed

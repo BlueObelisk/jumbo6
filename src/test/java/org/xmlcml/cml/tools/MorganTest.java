@@ -14,11 +14,11 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * @author pm286

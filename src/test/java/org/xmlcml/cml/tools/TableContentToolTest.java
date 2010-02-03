@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 /**
  * test TableTool.

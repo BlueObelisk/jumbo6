@@ -23,11 +23,11 @@ import org.xmlcml.cml.element.CMLPeakStructure;
 import org.xmlcml.cml.element.CMLSpectrum;
 import org.xmlcml.cml.element.CMLPeakList.Type;
 import org.xmlcml.cml.interfacex.PeakOrGroup;
-import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.SpectrumFixture;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * test AngleTool.

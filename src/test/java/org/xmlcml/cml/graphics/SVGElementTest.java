@@ -5,7 +5,7 @@ import nu.xom.Element;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 public class SVGElementTest {
 
