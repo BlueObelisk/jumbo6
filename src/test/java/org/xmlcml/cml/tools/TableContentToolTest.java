@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * test TableTool.
@@ -37,9 +37,9 @@ public class TableContentToolTest {
 				+ "  <tableRow>" + "    <tableCell>3</tableCell>"
 				+ "    <tableCell>c</tableCell>" + "  </tableRow>"
 				+ "</tableRowList>" + CMLConstants.S_EMPTY;
-		CMLTableRowList expected = (CMLTableRowList)TstUtils.parseValidString(rowS);
+		CMLTableRowList expected = (CMLTableRowList)JumboTestUtils.parseValidString(rowS);
 		boolean stripWhite = true;
-		TstUtils.assertEqualsCanonically("row list", expected, rowList, stripWhite);
+		JumboTestUtils.assertEqualsCanonically("row list", expected, rowList, stripWhite);
 	}
 
 }

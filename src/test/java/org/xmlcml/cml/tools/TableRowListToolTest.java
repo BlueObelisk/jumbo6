@@ -8,7 +8,7 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * test TableTool.
@@ -28,7 +28,7 @@ public class TableRowListToolTest {
 		CMLTableContent tableContent0 = TableRowListTool.getOrCreateTool(
 				fixture.tableRowList).createTableContent();
 		boolean stripWhite = true;
-		TstUtils.assertEqualsCanonically("table content", fixture.tableContent,
+		JumboTestUtils.assertEqualsCanonically("table content", fixture.tableContent,
 				tableContent0, stripWhite);
 	}
 
@@ -65,8 +65,8 @@ public class TableRowListToolTest {
 				+ "<tableCell>c</tableCell>"
 				+ "<tableCell><scalar dataType='xsd:double'>30.3</scalar></tableCell>"
 				+ "</tableRow>" + "</tableRowList>";
-		CMLTableRowList expected = (CMLTableRowList)TstUtils.parseValidString(ss);
-		TstUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
+		CMLTableRowList expected = (CMLTableRowList)JumboTestUtils.parseValidString(ss);
+		JumboTestUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class TableRowListToolTest {
 		CMLArrayList arrayList1 = TableRowListTool.getOrCreateTool(
 				fixture.tableRowList)
 				.createArrayList(3, 2, fixture.tableHeader);
-		TstUtils.assertEqualsCanonically("tablerow", fixture.arrayList, arrayList1, true);
+		JumboTestUtils.assertEqualsCanonically("tablerow", fixture.arrayList, arrayList1, true);
 	}
 
 }

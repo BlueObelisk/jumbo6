@@ -44,7 +44,7 @@ import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.TstUtils;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -118,8 +118,8 @@ public class ReactionToolTest {
 	public void setUp() throws Exception {
 		xmlReactTool1 = ReactionTool.getOrCreateTool(fixture.xmlReact1);
 
-		balancedR = (CMLReaction)TstUtils.parseValidString(balancedS);
-		unbalancedR = (CMLReaction)TstUtils.parseValidString(unbalancedS);
+		balancedR = (CMLReaction)JumboTestUtils.parseValidString(balancedS);
+		unbalancedR = (CMLReaction)JumboTestUtils.parseValidString(unbalancedS);
 
 		InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction1.xml");
 		reaction1 = (CMLReaction) new CMLBuilder().build(is).getRootElement();
