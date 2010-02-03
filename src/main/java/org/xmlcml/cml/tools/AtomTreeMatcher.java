@@ -71,9 +71,9 @@ public class AtomTreeMatcher extends AtomMatcher {
 		while (tries-- > 0 || change) {
 			CMLElements<CMLLink> links = cmlMap.getLinkElements();
 			List<CMLLink> unequalLinkList = makeUnequalToFromList(links);
-			debugLinks("UNEQUAL", unequalLinkList);
+//			debugLinks("UNEQUAL", unequalLinkList);
 			List<CMLLink> orphanList = makeOrphanList(links);
-			debugLinks("ORPHAN", orphanList);
+//			debugLinks("ORPHAN", orphanList);
 			change = false;
 			change |= deOrphanizeSingleToFrom(orphanList);
 			change |= tryToResolveConnectivity(orphanList);
@@ -147,12 +147,12 @@ public class AtomTreeMatcher extends AtomMatcher {
 		List<CMLAtom> fromAtoms = fromAtomSet.getAtoms();
 		CMLAtomSet toAtomSet = orphanLinkTool.getSet(Direction.TO, atomTreeData1.atomSet);
 		List<CMLAtom> toAtoms = toAtomSet.getAtoms();
-		System.out.println("checkingFromTo");
+		LOG.trace("checkingFromTo");
 		for (CMLAtom fromAtom : fromAtoms) {
 			for (CMLAtom toAtom : toAtoms) {
 				match = doLigandsMatch(fromAtom, toAtom);
 				if (match) {
-					System.out.println("MATCH!!!!!!!!!!!!!!"+fromAtom.getId()+" .. "+toAtom.getId());
+					LOG.trace("MATCH!!!!!!!!!!!!!!"+fromAtom.getId()+" .. "+toAtom.getId());
 					fromAtomSet.removeAtom(fromAtom);
 					toAtomSet.removeAtom(toAtom);
 					orphanLink.setFromSet(fromAtomSet.getAtomIDs());
@@ -208,7 +208,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 		for (CMLLink link : orphanList) {
 			if (LinkTool.getLinkSetLength(link, Direction.TO) == 1 &&
 				LinkTool.getLinkSetLength(link, Direction.FROM) == 1) {
-				LOG.debug("de-orphanising");
+				LOG.trace("de-orphanising");
 				change = true;
 				link.setTitle("de-"+link.getTitle());
 				deOrphanList.add(link);
@@ -246,9 +246,9 @@ public class AtomTreeMatcher extends AtomMatcher {
 		Map<ChemicalElement, List<String>> idListByElementMap1 = 
 			getIdListByChemicalElement(links,  Direction.TO,  atomTreeData1.atomSet);
 		Set<ChemicalElement> elementSet0 = idListByElementMap0.keySet();
-		System.out.println("set0 "+elementSet0.size());
+		LOG.trace("set0 "+elementSet0.size());
 		Set<ChemicalElement> elementSet1 = idListByElementMap1.keySet();
-		System.out.println("set1 "+elementSet1.size());
+		LOG.trace("set1 "+elementSet1.size());
 		addOrphanLinks(idListByElementMap0, idListByElementMap1, elementSet0, Direction.FROM);
 		elementSet1.removeAll(elementSet0);
 		addOrphanLinks(idListByElementMap1, idListByElementMap0, elementSet1, Direction.TO);
@@ -318,7 +318,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 		for (String id : uniqueIds) {
 			linkListMap.remove(id);
 		}
-		ToolUtils.debugMap("Ambig "+direction, linkListMap);
+//		ToolUtils.debugMap("Ambig "+direction, linkListMap);
 		return linkListMap;
 	}
 
@@ -369,10 +369,10 @@ public class AtomTreeMatcher extends AtomMatcher {
 				String elementType  = getElementTypeFrom(atomSetx0, atomSetx1);
 				cmlLink = LinkTool.makeLink(title+" "+elementType, atomSetx0, atomSetx1);
 			} else {
-				atomSetx0.debug("unequal set 0");
-				atomSetx1.debug("unequal set 1");
-				LOG.info(
-					"BUG: Unequal atomSets for link in AtomTreeMatching");
+//				atomSetx0.debug("unequal set 0");
+//				atomSetx1.debug("unequal set 1");
+//				LOG.info(
+//					"BUG: Unequal atomSets for link in AtomTreeMatching");
 			}
 			if (cmlLink != null) {
 				cmlMap.addUniqueLink(cmlLink, CMLMap.Direction.NEITHER);
@@ -418,7 +418,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 //		LOG.debug("sortedAtomSetValues1 "+sortedAtomSetValues1.size());
 		
 		IntMatrix intMatrix = AtomTree.createSimilarityMatrix(sortedAtomTreeString0, sortedAtomTreeString1);
-		LOG.debug("IM "+intMatrix);
+		LOG.trace("IM "+intMatrix);
 		List<Integer> largestIndexList = IntMatrix.findLargestUniqueElementsInRowColumn(intMatrix);
 		addMatrixElementsToMap(
 				largestIndexList, sortedAtomSetValues0, sortedAtomSetValues1);
@@ -473,7 +473,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 				}
 			}
 		}
-		LOG.debug("....... change "+change);
+		LOG.trace("....... change "+change);
 		return change;
 	}
 

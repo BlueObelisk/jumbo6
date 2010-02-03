@@ -55,11 +55,16 @@ public class BondTool extends AbstractSVGTool {
     		throw new RuntimeException("null bond");
     	}
         this.bond = bond;
+        setDefaults();
         molecule = bond.getMolecule();
         if (molecule == null) {
             throw new RuntimeException("Bond must be in molecule");
         }
     }
+
+	private void setDefaults() {
+		this.ensureBondDisplay();
+	}
 
 	/** gets BondTool associated with bond.
 	 * if null creates one and sets it in bond
@@ -272,20 +277,27 @@ public class BondTool extends AbstractSVGTool {
 	
 	public void ensureBondDisplay() {
 		if (bondDisplay == null) {
-			if (moleculeDisplay == null) {
-				CMLMolecule molecule = bond.getMolecule();
-				MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-				if (moleculeTool != null) {
-					moleculeDisplay = moleculeTool.getMoleculeDisplay();
+			ensureMoleculeDisplay();
+			if (moleculeDisplay != null) {
+				BondDisplay bondDisplayx = moleculeDisplay.getDefaultBondDisplay();
+				if (bondDisplayx != null) {
+					bondDisplay = new BondDisplay(bondDisplayx);
 				}
-				if (moleculeDisplay != null) {
-					BondDisplay bondDisplayx = moleculeDisplay.getDefaultBondDisplay();
-					if (bondDisplayx != null) {
-						bondDisplay = new BondDisplay(bondDisplayx);
-					}
-				}
-			} else {
 			}
+		}
+	}
+
+	public void ensureMoleculeDisplay() {
+		if (moleculeDisplay == null) {
+			ensureMoleculeTool();
+			moleculeDisplay = moleculeTool.getMoleculeDisplay();
+		}
+	}
+
+	private void ensureMoleculeTool() {
+		if (moleculeTool == null) {
+			CMLMolecule molecule = bond.getMolecule();
+			moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		}
 	}
 	

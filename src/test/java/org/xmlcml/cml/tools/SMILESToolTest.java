@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLFormula;
@@ -22,7 +23,7 @@ import org.xmlcml.util.TstUtils;
  *
  */
 public class SMILESToolTest {
-
+	private static Logger LOG = Logger.getLogger(SMILESToolTest.class);
 	private SMILESTool smilesTool;
 	private CMLMolecule mol;
 	private String molS;
@@ -728,7 +729,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) TstUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling4.xml");
 		
@@ -744,7 +745,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) TstUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling5.xml");
 		

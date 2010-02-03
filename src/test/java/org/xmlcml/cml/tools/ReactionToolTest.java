@@ -672,7 +672,7 @@ public class ReactionToolTest {
 		SVGGBox svgg = reactionTool.drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File(REACTION_OUTPUT_DIR, "ugi.svg"));
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		cmlMap.debug("UGI");
+//		cmlMap.debug("UGI");
 		Assert.assertNotNull("testPolyinfo1", cmlMap);
 	}
 
@@ -719,7 +719,7 @@ public class ReactionToolTest {
 		SVGGBox svgg = reactionTool.drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File(REACTION_OUTPUT_DIR, "amide.svg"));
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		cmlMap.debug("AMIDE");
+//		cmlMap.debug("AMIDE");
 		Assert.assertNotNull("testPolyinfo1", cmlMap);
 	}
 

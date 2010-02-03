@@ -12,6 +12,7 @@ import java.util.Map;
 
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.ParsingException;
 
 import org.apache.log4j.Logger;
@@ -48,6 +49,7 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
@@ -55,6 +57,7 @@ import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
 import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -1319,28 +1322,61 @@ public class MoleculeToolTest {
 		CMLMolecule molecule = new CMLMolecule();
 		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement
 				.getChemicalElement("C"));
-		atom1.setX2(10.0);
-		atom1.setY2(10.0);
+		atom1.setX2(50.0);
+		atom1.setY2(50.0);
 		molecule.addAtom(atom1);
 		CMLAtom atom2 = new CMLAtom("a2", ChemicalElement
 				.getChemicalElement("O"));
-		atom2.setX2(20.0);
-		atom2.setY2(20.0);
+		atom2.setX2(100.0);
+		atom2.setY2(100.0);
 		molecule.addAtom(atom2);
 		CMLBond bond = new CMLBond(atom1, atom2);
 		molecule.addBond(bond);
 		bond.setOrder(CMLBond.DOUBLE);
-		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement
-				.getChemicalElement("N"));
-		atom3.setX2(1.0);
-		atom3.setY2(10.0);
+		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.AS.N);
+		atom3.setX2(5.0);
+		atom3.setY2(50.0);
 		molecule.addAtom(atom3);
 		bond = new CMLBond(atom3, atom1);
 		molecule.addBond(bond);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-		SVGElement g = moleculeTool.createGraphicsElement();
-		SVGSVG svg = new SVGSVG();
-		svg.appendChild(g);
+    	SVGSVG svgsvg = createSvgSvg(moleculeTool);
+        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule1.svg");
+        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+	}
+	
+	@Test
+	public void testCreateGraphicsElement2() throws Exception {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom1 = addAtom(molecule, "a1", ChemicalElement.AS.N, new Real2(50.0, 50.0));
+		CMLAtom atom2 = addAtom(molecule, "a2", ChemicalElement.AS.C, new Real2(150.0, 50.0));
+		AtomTool.getOrCreateTool(atom2).getAtomDisplay().setDisplayCarbons(false);
+		CMLBond bond12 = new CMLBond(atom1, atom2);
+		molecule.addBond(bond12);
+		CMLAtom atom3 = addAtom(molecule, "a3", ChemicalElement.AS.O, new Real2(250.0, 150.0));
+		CMLBond bond23 = new CMLBond(atom2, atom3);
+		molecule.addBond(bond23);
+		bond23.setOrder(CMLBond.DOUBLE);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+    	SVGSVG svgsvg = createSvgSvg(moleculeTool);
+        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule2.svg");
+        TstUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+	}
+
+	private CMLAtom addAtom(CMLMolecule molecule, String id, ChemicalElement.AS as, Real2 xy2) {
+		CMLAtom atom1 = new CMLAtom(id, as);
+		atom1.setXY2(xy2);
+		molecule.addAtom(atom1);
+		return atom1;
+	}
+	
+
+	private SVGSVG createSvgSvg(MoleculeTool moleculeTool) {
+		CMLDrawable drawable = new MoleculeDisplayList();
+    	SVGG svgg = (SVGG) moleculeTool.createGraphicsElement(drawable);
+    	SVGSVG svgsvg = SVGSVG.wrapAsSVG(svgg);
+    	svgg.translate(new Real2(100., -200.));
+		return svgsvg;
 	}
 
 	/**

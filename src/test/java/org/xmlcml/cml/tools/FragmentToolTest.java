@@ -383,7 +383,7 @@ public class FragmentToolTest {
 
 	private void generateElement(String basicRootName, boolean debug, int serial, String intermediateRootName,
 			String explicitRootName, String completeRootName, boolean check, long seed) {
-		System.err.println("================TEST=============== " + basicRootName);
+		LOG.trace("================TEST=============== " + basicRootName);
 		CMLElement fragment = null;
 		CMLElement intermediate = null;
 		CMLElement explicit = null;
@@ -496,7 +496,7 @@ public class FragmentToolTest {
 			FileOutputStream fos = new FileOutputStream(outfile);
 			CMLUtil.debug(element, fos, 2);
 			fos.close();
-			LOG.debug("WROTE: " + outfile);
+			LOG.trace("WROTE: " + outfile);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -554,7 +554,7 @@ public class FragmentToolTest {
 	}
 
 	private void runBumpsTest(String molname) {
-		LOG.debug("Checking bumps: " + molname);
+		LOG.trace("Checking bumps: " + molname);
 		CMLElement fragment = readElement0(molname);
 		CMLFragment fragmentx = processFragment((CMLFragment) fragment);
 		CMLMolecule molecule = (CMLMolecule) fragmentx.getMoleculeElements().get(0);

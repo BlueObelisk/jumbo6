@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+  <g style=" fill : black; font-family : helvetica; font-size : 17.0; font-weight : normal;" transform="matrix(1.0,0., 0.,-1.0,100.0,200.0)">
+    <g>
+      <line x1="50.0" y1="50.0" x2="150.0" y2="50.0" style=" stroke : black; stroke-width : 9.656854249492381;" id="a1_a2"/>
+    </g>
+    <g>
+      <line x1="150.0" y1="50.0" x2="250.0" y2="150.0" style=" stroke : black; stroke-width : 24.624978336205572;" id="a2_a3"/>
+      <line x1="150.0" y1="50.0" x2="250.0" y2="150.0" style=" stroke : white; stroke-width : 7.387493500861672;" id="a2_a3"/>
+    </g>
+    <g class="atom" id="g_a1" transform="matrix(1.0,0., 0.,-1.0,50.0,50.0)">
+      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-8.75" y="9.25" style=" fill : blue; stroke : none; font-size : 25.0;">N</text>
+    </g>
+    <g class="atom" id="g_a2" transform="matrix(1.0,0., 0.,-1.0,150.0,50.0)">
+      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-8.75" y="9.25" style=" fill : black; stroke : none; font-size : 25.0;">C</text>
+    </g>
+    <g class="atom" id="g_a3" transform="matrix(1.0,0., 0.,-1.0,250.0,150.0)">
+      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-8.75" y="9.25" style=" fill : red; stroke : none; font-size : 25.0;">O</text>
+    </g>
+    <rect x="0.0" y="0.0" width="300.0" height="200.0" style=" fill : none; stroke : red; stroke-width : 1.0;"/>
+  </g>
+</svg>

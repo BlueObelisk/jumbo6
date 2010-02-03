@@ -37,16 +37,56 @@ public class AtomDisplay extends AbstractDisplay {
 	private static TextDisplay defaultLabelDisplay;
 
 	private static void ensureDefaults() {
-		if (defaultElementDisplay == null) {
-			defaultElementDisplay = new TextDisplay();
-			defaultElementDisplay.fill = "black";
-			defaultElementDisplay.backgroundColor = "#aaaaaa";
-			defaultElementDisplay.backgroundColor = "white";
-			// defaultElementDisplay.setXyOffset(new Real2(-0.4, 0.35));
-			defaultElementDisplay.setXyOffset(new Real2(0., 0.));
-			defaultElementDisplay.setFontSize(25.0);
-			defaultElementDisplay.setOpacity(1.0);
+		ensureElementDefaults();
+		ensureChargeDefaults();
+		ensureGroupsDefaults();
+		ensureIdDefaults();
+		ensureIsotopeDefaults();
+		ensureLabelDefaults();
+	}
+
+	private static void ensureLabelDefaults() {
+		if (defaultLabelDisplay == null) {
+			defaultLabelDisplay = new TextDisplay();
+			defaultLabelDisplay.fill = "pink";
+			defaultLabelDisplay.backgroundColor = "#dddddd";
+			defaultLabelDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultLabelDisplay.setFontSize(1.0);
 		}
+	}
+
+	private static void ensureIsotopeDefaults() {
+		if (defaultIsotopeDisplay == null) {
+			defaultIsotopeDisplay = new TextDisplay();
+			defaultIsotopeDisplay.fill = "black";
+			defaultIsotopeDisplay.backgroundColor = "#dddddd";
+			defaultIsotopeDisplay.setXyOffset(new Real2(-1.2, -0.55));
+			defaultIsotopeDisplay.setFontSize(25.0);
+			defaultIsotopeDisplay.setBackground(Background.CIRCLE);
+		}
+	}
+
+	private static void ensureIdDefaults() {
+		if (defaultIdDisplay == null) {
+			defaultIdDisplay = new TextDisplay();
+			defaultIdDisplay.fill = "cyan";
+			defaultIdDisplay.backgroundColor = "#dddddd";
+			defaultIdDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultIdDisplay.setFontSize(15.0);
+		}
+	}
+
+	private static void ensureGroupsDefaults() {
+		if (defaultGroupDisplay == null) {
+			defaultGroupDisplay = new TextDisplay();
+			defaultGroupDisplay.fill = "magenta";
+			defaultGroupDisplay.backgroundColor = "#dddddd";
+			defaultGroupDisplay.setXyOffset(new Real2(0.8, -0.35));
+			defaultGroupDisplay.setFontSize(10.0);
+		}
+	}
+
+	private static void ensureChargeDefaults() {
 		if (defaultChargeDisplay == null) {
 			defaultChargeDisplay = new TextDisplay();
 			defaultChargeDisplay.fill = "green";
@@ -56,34 +96,18 @@ public class AtomDisplay extends AbstractDisplay {
 			defaultChargeDisplay.setFontSize(30.0);
 			defaultChargeDisplay.setOpacity(1.0);
 		}
-		if (defaultGroupDisplay == null) {
-			defaultGroupDisplay = new TextDisplay();
-			defaultGroupDisplay.fill = "magenta";
-			defaultGroupDisplay.backgroundColor = "#dddddd";
-			defaultGroupDisplay.setXyOffset(new Real2(0.8, -0.35));
-			defaultGroupDisplay.setFontSize(10.0);
-		}
-		if (defaultIdDisplay == null) {
-			defaultIdDisplay = new TextDisplay();
-			defaultIdDisplay.fill = "cyan";
-			defaultIdDisplay.backgroundColor = "#dddddd";
-			defaultIdDisplay.setXyOffset(new Real2(0.8, -0.35));
-			defaultIdDisplay.setFontSize(15.0);
-		}
-		if (defaultIsotopeDisplay == null) {
-			defaultIsotopeDisplay = new TextDisplay();
-			defaultIsotopeDisplay.fill = "black";
-			defaultIsotopeDisplay.backgroundColor = "#dddddd";
-			defaultIsotopeDisplay.setXyOffset(new Real2(-1.2, -0.55));
-			defaultIsotopeDisplay.setFontSize(25.0);
-			defaultIsotopeDisplay.setBackground(Background.CIRCLE);
-		}
-		if (defaultLabelDisplay == null) {
-			defaultLabelDisplay = new TextDisplay();
-			defaultLabelDisplay.fill = "pink";
-			defaultLabelDisplay.backgroundColor = "#dddddd";
-			defaultLabelDisplay.setXyOffset(new Real2(0.8, -0.35));
-			defaultLabelDisplay.setFontSize(1.0);
+	}
+
+	private static void ensureElementDefaults() {
+		if (defaultElementDisplay == null) {
+			defaultElementDisplay = new TextDisplay();
+			defaultElementDisplay.fill = "black";
+			defaultElementDisplay.backgroundColor = "#aaaaaa";
+			defaultElementDisplay.backgroundColor = "white";
+			// defaultElementDisplay.setXyOffset(new Real2(-0.4, 0.35));
+			defaultElementDisplay.setXyOffset(new Real2(0., 0.));
+			defaultElementDisplay.setFontSize(25.0);
+			defaultElementDisplay.setOpacity(1.0);
 		}
 	};
 
