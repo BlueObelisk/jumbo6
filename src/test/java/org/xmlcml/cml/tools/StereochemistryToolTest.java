@@ -3,13 +3,10 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.CRYSTAL_EXAMPLES;
-
 import java.net.URL;
 import java.util.List;
 
 import nu.xom.Document;
-import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
@@ -31,10 +28,11 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.test.CMLAssert;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TstUtils;
 /**
  * @author pm286
  * 
@@ -44,7 +42,7 @@ public class StereochemistryToolTest {
 	private static Logger LOG = Logger.getLogger(StereochemistryToolTest.class);
 
 	private CMLMolecule makeMolecule1() {
-		URL url = Util.getResource(CRYSTAL_EXAMPLES +CMLConstants.U_S + "ci6746_1.cml.xml");
+		URL url = Util.getResource(CMLAssert.CRYSTAL_EXAMPLES +CMLConstants.U_S + "ci6746_1.cml.xml");
 		Document document = null;
 		try {
 			document = new CMLBuilder().build(url.openStream());
@@ -432,7 +430,7 @@ public class StereochemistryToolTest {
 			String rs = atom.query("./cml:label[@dictRef='cml:rs']/@value", CMLConstants.CML_XPATH).get(0).getValue();
 			CMLAtomParity atomParity = stereoTool.calculateAtomParityFromCIPRS(atom, rs);
 			atom.addAtomParity(atomParity);
-			TstUtils.assertEqualsIncludingFloat("atomParity", expectedAtoms.get(i), atom, true, 0.001);
+			JumboTestUtils.assertEqualsIncludingFloat("atomParity", (Node)expectedAtoms.get(i), (Node)atom, true, 0.001);
 		}
 		
 	}

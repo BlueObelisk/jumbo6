@@ -17,7 +17,7 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.CMLSpectatorList;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 
 public class ReactionFixture {
 	protected CMLReaction xomReact1;

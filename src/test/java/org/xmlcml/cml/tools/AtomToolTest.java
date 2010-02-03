@@ -27,16 +27,16 @@ import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
-import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * tests atomTool.

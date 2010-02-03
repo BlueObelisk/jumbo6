@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.neverThrow;
-
 import java.util.List;
 
 import junit.framework.Assert;
@@ -17,9 +15,9 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.test.CMLAssert;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.util.TstUtils;
 
 /**
  * test AngleTool.
@@ -87,7 +85,7 @@ public class TorsionToolTest {
 					-0.5, SQR32, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
 					1.0, });
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		double epsilon = 0.000001;
 		CMLAssert.assertEquals("after transform", transform, expected, epsilon);

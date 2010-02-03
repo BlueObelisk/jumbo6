@@ -1,7 +1,5 @@
 package org.xmlcml.cml.test;
 
-import static org.xmlcml.cml.test.CMLAssert.SIMPLE_RESOURCE;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -20,31 +18,21 @@ import org.xmlcml.euclid.Util;
 public class SpectrumFixture {
 
 	protected String peakStructureFile1 = "peakStructure1" + CMLConstants.XML_SUFF;
-
 	protected String peakStructureFile1NoSchema = "peakStructure1-noSchema"
 			+ CMLConstants.XML_SUFF;
-
 	protected String peakStructureFile2 = "peakStructure2" + CMLConstants.XML_SUFF;
-
 	protected String peakStructureFile2Schema = "peakStructure2Schema"
 			+ CMLConstants.XML_SUFF;
-
 	protected String testfile = "spectrum";
-
 	protected String testfile1 = "spectrum1.xml";
-
 	protected String testfile2 = "spectrum2.xml";
-
 	protected String testfile3 = "spectrum3.xml";
-
 	protected String testfile4 = "spectrum4.xml";
-
 	protected String testfile5 = "spectrum5.xml";
-
 	protected String testCompoundFile1 = "spectrum_and_structure1.xml";
 
 	private URL makeSpectrumInputStreamContainer(int num) throws IOException {
-		return Util.getResource(SIMPLE_RESOURCE + CMLConstants.U_S + "spectrum" + num
+		return Util.getResource(Fixture.SIMPLE_RESOURCE + CMLConstants.U_S + "spectrum" + num
 				+ CMLConstants.XML_SUFF);
 	}
 
@@ -64,7 +52,7 @@ public class SpectrumFixture {
 	 */
 	public CMLSpectrum getSpectrum() throws Exception {
 		CMLSpectrum spectrum = null;
-		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE + CMLConstants.U_S
+		InputStream in = Util.getInputStreamFromResource(Fixture.SIMPLE_RESOURCE + CMLConstants.U_S
 				+ peakStructureFile1);
 		CMLCml cml = (CMLCml) new CMLBuilder().build(in).getRootElement();
 		spectrum = (CMLSpectrum) cml.getChildCMLElements(CMLSpectrum.TAG)
@@ -107,7 +95,7 @@ public class SpectrumFixture {
 	 */
 	public CMLMolecule getMolecule() throws Exception {
 		CMLMolecule molecule = null;
-		InputStream in = Util.getInputStreamFromResource(SIMPLE_RESOURCE +CMLConstants.U_S
+		InputStream in = Util.getInputStreamFromResource(Fixture.SIMPLE_RESOURCE +CMLConstants.U_S
 				+ peakStructureFile1);
 		CMLCml cml = (CMLCml) new CMLBuilder().build(in).getRootElement();
 		in.close();

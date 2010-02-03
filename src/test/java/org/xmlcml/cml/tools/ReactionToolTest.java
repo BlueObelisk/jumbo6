@@ -41,12 +41,12 @@ import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGSVG;
-import org.xmlcml.cml.test.CMLAssert;
 import org.xmlcml.cml.test.ReactionFixture;
+import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * test reactionTool

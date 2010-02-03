@@ -3,38 +3,15 @@
  */
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.CRYSTAL_EXAMPLES;
-
-import java.net.URL;
-import java.util.List;
-
-import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLAtom;
-import org.xmlcml.cml.element.CMLAtomArray;
-import org.xmlcml.cml.element.CMLAtomParity;
-import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLBond;
-import org.xmlcml.cml.element.CMLBondArray;
-import org.xmlcml.cml.element.CMLBondStereo;
-import org.xmlcml.cml.element.CMLCml;
-import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.test.CMLAssert;
-import org.xmlcml.euclid.EC;
-import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TstUtils;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.TstUtils;
 /**
  * @author pm286
  * 

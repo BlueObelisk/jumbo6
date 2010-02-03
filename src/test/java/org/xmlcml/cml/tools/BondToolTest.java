@@ -10,9 +10,9 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.molutil.ChemicalElement;
-import org.xmlcml.util.TstUtils;
 
 public class BondToolTest {
 	

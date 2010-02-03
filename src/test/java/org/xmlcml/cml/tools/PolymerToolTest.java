@@ -24,8 +24,8 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.util.TstUtils;
 
 /**
  * test polymerTool.

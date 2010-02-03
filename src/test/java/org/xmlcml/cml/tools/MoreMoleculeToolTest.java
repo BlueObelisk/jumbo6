@@ -22,9 +22,9 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 public class MoreMoleculeToolTest {
 

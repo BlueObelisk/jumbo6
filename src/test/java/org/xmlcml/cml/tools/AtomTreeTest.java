@@ -1,7 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.test.CMLAssert.neverThrow;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +7,8 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.TstUtils;
 
 /**
  * tests atomTree.
@@ -224,7 +222,7 @@ public class AtomTreeTest {
 		try {
 			phenyl = (CMLMolecule) new CMLBuilder().parseString(phenylS);
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		AtomTree atomTree = new AtomTree(phenyl.getAtom(6));
 		atomTree.setUseExplicitHydrogens(false);
@@ -266,7 +264,7 @@ public class AtomTreeTest {
 		try {
 			anisole = (CMLMolecule) new CMLBuilder().parseString(anisoleS);
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		AtomTree atomTree = new AtomTree(anisole.getAtom(6));
 		atomTree.setUseExplicitHydrogens(false);
@@ -317,7 +315,7 @@ public class AtomTreeTest {
 		try {
 			phc = (CMLMolecule) new CMLBuilder().parseString(phcS);
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		AtomTree atomTree = new AtomTree(phc.getAtom(6));
 		atomTree.setUseExplicitHydrogens(false);
@@ -375,7 +373,7 @@ public class AtomTreeTest {
 		try {
 			anisole = (CMLMolecule) new CMLBuilder().parseString(anisoleS);
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(anisole);
 		moleculeTool
@@ -411,7 +409,7 @@ public class AtomTreeTest {
 			methoxycyclohexene = (CMLMolecule) new CMLBuilder()
 					.parseString(methoxycyclohexeneS);
 		} catch (Exception e) {
-			neverThrow(e);
+			Assert.fail(e.toString());
 		}
 		moleculeTool = MoleculeTool.getOrCreateTool(methoxycyclohexene);
 		moleculeTool

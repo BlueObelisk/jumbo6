@@ -1,8 +1,5 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
-import static org.xmlcml.util.TstUtils.assertEqualsCanonically;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -30,11 +27,12 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.inchi.InChIGeneratorTool;
-import org.xmlcml.cml.test.CMLAssert;
+import org.xmlcml.cml.testutil.CMLAssert;
+import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutil.TstUtils;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
-import org.xmlcml.util.TstUtils;
 
 /**
  * test CrystalTool.
@@ -527,7 +525,7 @@ public class CrystalToolTest {
 		}
 		CrystalTool crystalTool = new CrystalTool(molecule, symmetry);		
 		crystalTool.annotateSpaceGroupMultiplicities();
-		assertEqualsCanonically("symmetry", expected, molecule, true);
+		JumboTestUtils.assertEqualsCanonically("symmetry", expected, molecule, true);
 	}
 
 }
