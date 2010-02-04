@@ -122,6 +122,7 @@ public class PeakTool extends AbstractTool {
     	multiplicityMap.put("quintet", "cmlx:quintet");
     	multiplicityMap.put("m", "cmlx:multiplet");
     	multiplicityMap.put("dd", "cmlx:doubletdoublet");
+    	multiplicityMap.put("ddd", "cmlx:doubletdoubletdoublet");
     	multiplicityMap.put("dt", "cmlx:doublettriplet");
     	multiplicityMap.put("td", "cmlx:tripletdoublet");
     };
