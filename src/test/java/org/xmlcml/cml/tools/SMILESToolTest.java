@@ -847,7 +847,7 @@ public class SMILESToolTest {
 	}
 	
 	/**
-	 * @author dl387
+	 * @author dl387, dmj30
 	 *Ring closure with specification at both ends of closure, not allowed
 	 */
 	@Test
@@ -858,7 +858,7 @@ public class SMILESToolTest {
 			smilesTool.parseSMILES(smiles);
 			Assert.fail("Should throw exception for bad smiles: "+smiles);
 		} catch (Exception e) {
-			;
+			Assert.assertEquals("Ring opening 1 has two specifications as to what order bond it should form: C#1CN=1", e.getMessage());
 		}
 	}
 

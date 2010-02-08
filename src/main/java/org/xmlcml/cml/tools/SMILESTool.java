@@ -302,7 +302,7 @@ private int sLength;
                     	 bondChar = C_NONE;
                     }
                     else{
-                    	throw new RuntimeException("Ring opening " + ring + " has two specifications as to what order bond it should form");
+                    	throw new RuntimeException("Ring opening " + ring + " has two specifications as to what order bond it should form: " + sss);
                     }
                     rings[ring] = null;
                 }
