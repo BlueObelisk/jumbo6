@@ -861,6 +861,21 @@ public class SMILESToolTest {
 			Assert.assertEquals("Ring opening 1 has two specifications as to what order bond it should form: C#1CN=1", e.getMessage());
 		}
 	}
+	
+	/**
+	 * @author dmj30
+	 * Ring closure with identical specification at both ends
+	 */
+	@Test
+	public void ringClosureHandling4() {
+		String smiles = "C=1CN=1";
+		SMILESTool smilesTool = new SMILESTool();
+		smilesTool.parseSMILES(smiles);
+		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
+
+		JumboTestUtils.assertEqualsCanonically("C=1CN=1", correctCML, smilesTool.getMolecule(), true);
+	}
 
 	// MISSING FEATURES
 	
