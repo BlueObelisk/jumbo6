@@ -301,6 +301,9 @@ private int sLength;
                     	 currentBond = addBond(rings[ring].atom, currentAtom,  bondChar, rawSmiles);
                     	 bondChar = C_NONE;
                     }
+                    else if (rings[ring].bondChar == bondChar) {
+                    	currentBond = addBond(rings[ring].atom, currentAtom,  bondChar, rawSmiles);
+                    }
                     else{
                     	throw new RuntimeException("Ring opening " + ring + " has two specifications as to what order bond it should form: " + sss);
                     }
