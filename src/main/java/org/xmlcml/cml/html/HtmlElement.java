@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 
@@ -15,6 +16,7 @@ import org.xmlcml.cml.base.CMLUtil;
  *
  */
 public abstract class HtmlElement extends Element implements CMLConstants {
+	private final static Logger LOG = Logger.getLogger(HtmlElement.class);
 
 	public enum Target {
 		bottom,

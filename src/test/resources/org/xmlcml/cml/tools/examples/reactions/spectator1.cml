@@ -19,16 +19,16 @@
           <atom id="a4_h1" elementType="H"/>
         </atomArray>
         <bondArray>
-          <bond atomRefs2="a1 a2" id="a1_a2" order="1"/>
-          <bond atomRefs2="a2 a3" id="a2_a3" order="1"/>
-          <bond atomRefs2="a3 a4" id="a3_a4" order="1"/>
-          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="1"/>
-          <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="1"/>
-          <bond atomRefs2="a1 a1_h3" id="a1_a1_h3" order="1"/>
-          <bond atomRefs2="a2 a2_h1" id="a2_a2_h1" order="1"/>
-          <bond atomRefs2="a2 a2_h2" id="a2_a2_h2" order="1"/>
-          <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="1"/>
-          <bond atomRefs2="a4 a4_h1" id="a4_a4_h1" order="1"/>
+          <bond atomRefs2="a1 a2" id="a1_a2" order="S"/>
+          <bond atomRefs2="a2 a3" id="a2_a3" order="S"/>
+          <bond atomRefs2="a3 a4" id="a3_a4" order="S"/>
+          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="S"/>
+          <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="S"/>
+          <bond atomRefs2="a1 a1_h3" id="a1_a1_h3" order="S"/>
+          <bond atomRefs2="a2 a2_h1" id="a2_a2_h1" order="S"/>
+          <bond atomRefs2="a2 a2_h2" id="a2_a2_h2" order="S"/>
+          <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="S"/>
+          <bond atomRefs2="a4 a4_h1" id="a4_a4_h1" order="S"/>
         </bondArray>
       </molecule>
     </reactant>
@@ -42,8 +42,8 @@
           <atom id="a1_h2" elementType="H"/>
         </atomArray>
         <bondArray>
-          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="1"/>
-          <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="1"/>
+          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="S"/>
+          <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="S"/>
         </bondArray>
       </molecule>
     </spectator>
@@ -80,14 +80,14 @@
           <bond atomRefs2="a4 a5" id="a4_a5" order="A"/>
           <bond atomRefs2="a5 a6" id="a5_a6" order="A"/>
           <bond atomRefs2="a1 a6" id="a1_a6" order="A"/>
-          <bond atomRefs2="a6 a7" id="a6_a7" order="1"/>
-          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="1"/>
-          <bond atomRefs2="a2 a2_h1" id="a2_a2_h1" order="1"/>
-          <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="1"/>
-          <bond atomRefs2="a4 a4_h1" id="a4_a4_h1" order="1"/>
-          <bond atomRefs2="a5 a5_h1" id="a5_a5_h1" order="1"/>
-          <bond atomRefs2="a7 a7_h1" id="a7_a7_h1" order="1"/>
-          <bond atomRefs2="a7 a7_h2" id="a7_a7_h2" order="1"/>
+          <bond atomRefs2="a6 a7" id="a6_a7" order="S"/>
+          <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="S"/>
+          <bond atomRefs2="a2 a2_h1" id="a2_a2_h1" order="S"/>
+          <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="S"/>
+          <bond atomRefs2="a4 a4_h1" id="a4_a4_h1" order="S"/>
+          <bond atomRefs2="a5 a5_h1" id="a5_a5_h1" order="S"/>
+          <bond atomRefs2="a7 a7_h1" id="a7_a7_h1" order="S"/>
+          <bond atomRefs2="a7 a7_h2" id="a7_a7_h2" order="S"/>
         </bondArray>
       </molecule>
     </product>

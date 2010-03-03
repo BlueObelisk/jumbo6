@@ -43,11 +43,11 @@
     <bond atomRefs2="a14 a15" id="a14_a15" order="A"/>
     <bond atomRefs2="a15 a16" id="a15_a16" order="A"/>
     <bond atomRefs2="a12 a16" id="a12_a16" order="A"/>
-    <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="1"/>
-    <bond atomRefs2="a7 a7_h1" id="a7_a7_h1" order="1"/>
-    <bond atomRefs2="a8 a8_h1" id="a8_a8_h1" order="1"/>
-    <bond atomRefs2="a10 a10_h1" id="a10_a10_h1" order="1"/>
-    <bond atomRefs2="a11 a11_h1" id="a11_a11_h1" order="1"/>
-    <bond atomRefs2="a13 a13_h1" id="a13_a13_h1" order="1"/>
+    <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="S"/>
+    <bond atomRefs2="a7 a7_h1" id="a7_a7_h1" order="S"/>
+    <bond atomRefs2="a8 a8_h1" id="a8_a8_h1" order="S"/>
+    <bond atomRefs2="a10 a10_h1" id="a10_a10_h1" order="S"/>
+    <bond atomRefs2="a11 a11_h1" id="a11_a11_h1" order="S"/>
+    <bond atomRefs2="a13 a13_h1" id="a13_a13_h1" order="S"/>
   </bondArray>
 </molecule>

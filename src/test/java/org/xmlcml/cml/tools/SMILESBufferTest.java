@@ -37,11 +37,11 @@ public class SMILESBufferTest {
 				"<atom id='a2_h1' elementType='H'/>"+
 				"</atomArray>"+
 				"<bondArray>"+
-				"<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>"+
-				"<bond atomRefs2='a1 a1_h1' id='a1_a1_h1' order='1'/>"+
-				"<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='1'/>"+
-				"<bond atomRefs2='a1 a1_h3' id='a1_a1_h3' order='1'/>"+
-				"<bond atomRefs2='a2 a2_h1' id='a2_a2_h1' order='1'/>"+
+				"<bond atomRefs2='a1 a2' id='a1_a2' order='S'/>"+
+				"<bond atomRefs2='a1 a1_h1' id='a1_a1_h1' order='S'/>"+
+				"<bond atomRefs2='a1 a1_h2' id='a1_a1_h2' order='S'/>"+
+				"<bond atomRefs2='a1 a1_h3' id='a1_a1_h3' order='S'/>"+
+				"<bond atomRefs2='a2 a2_h1' id='a2_a2_h1' order='S'/>"+
 				"</bondArray>"+
 				"</molecule>"
 		);

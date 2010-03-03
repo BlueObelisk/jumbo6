@@ -1,5 +1,7 @@
 package org.xmlcml.cml.html;
 
+import org.apache.log4j.Logger;
+
 
 
 /** base class for lightweight generic SVG element.
@@ -8,12 +10,14 @@ package org.xmlcml.cml.html;
  *
  */
 public class HtmlA extends HtmlElement {
-
+	private final static Logger LOG = Logger.getLogger(HtmlA.class);
+	public final static String TAG = "a";
+	
 	/** constructor.
 	 * 
 	 */
 	public HtmlA() {
-		super("a");
+		super(TAG);
 	}
 	
 	public void setHref(String href) {

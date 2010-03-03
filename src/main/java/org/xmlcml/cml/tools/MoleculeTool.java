@@ -1636,6 +1636,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @see CMLAtom
 	 */
 	public void expandImplicitHydrogens(HydrogenControl control) {
+		molecule.debug("MOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 		for (CMLAtom atom : molecule.getAtoms()) {
 			if (!AS.H.equals(atom.getElementType())) {
 				AtomTool atomTool = AtomTool.getOrCreateTool(atom);
