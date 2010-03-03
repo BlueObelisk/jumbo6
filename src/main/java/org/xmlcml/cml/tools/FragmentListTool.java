@@ -58,11 +58,13 @@ public class FragmentListTool extends AbstractTool {
 		return fragmentListTool;
 	}
 
+	@Deprecated
 	public void updateIndex() {
 //		// no-op
 //		throw new RuntimeException("NYI");
 	}
 	
+	@Deprecated
 	public void addFragment(CMLFragment fragment) {
 		// FIXME
 		throw new RuntimeException("NYI");
