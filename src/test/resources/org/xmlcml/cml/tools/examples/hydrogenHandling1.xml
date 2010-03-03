@@ -7,7 +7,7 @@ xmlns:cmlx="http://www.xml-cml.org/schema/cmlx" cmlx:explicitHydrogens="true">
     <atom id="a1_h2" elementType="H"/>
   </atomArray>
   <bondArray>
-    <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="1"/>
-    <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="1"/>
+    <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="S"/>
+    <bond atomRefs2="a1 a1_h2" id="a1_a1_h2" order="S"/>
   </bondArray>
 </molecule>

@@ -8,14 +8,14 @@ import org.apache.log4j.Logger;
  * @author pm286
  *
  */
-public class HtmlBr extends HtmlElement {
+public class HtmlTd extends HtmlElement {
+	private final static Logger LOG = Logger.getLogger(HtmlTd.class);
+	public final static String TAG = "td";
 
-	private final static Logger LOG = Logger.getLogger(HtmlBr.class);
-	public final static String TAG = "br";
 	/** constructor.
 	 * 
 	 */
-	public HtmlBr() {
+	public HtmlTd() {
 		super(TAG);
 	}
 }

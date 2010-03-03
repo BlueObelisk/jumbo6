@@ -572,7 +572,7 @@ public class AtomTool extends AbstractSVGTool {
 	 * @throws RuntimeException
 	 */
 	public void expandImplicitHydrogens(HydrogenControl control) throws RuntimeException {
-		if (control.equals(HydrogenControl.USE_HYDROGEN_COUNT)) {
+		if (HydrogenControl.USE_HYDROGEN_COUNT.equals(control)) {
 			return;
 		}
 		if (atom.getHydrogenCountAttribute() == null
@@ -588,8 +588,7 @@ public class AtomTool extends AbstractSVGTool {
 			}
 		}
 		// FIXME. This needs rethinking
-		if (control.equals(HydrogenControl.NO_EXPLICIT_HYDROGENS)
-				&& currentHCount != 0) {
+		if (HydrogenControl.NO_EXPLICIT_HYDROGENS.equals(control) && currentHCount != 0) {
 			return;
 		}
 		String id = atom.getId();
@@ -599,7 +598,7 @@ public class AtomTool extends AbstractSVGTool {
 			hatom.setElementType(AS.H.value);
 			CMLBond bond = new CMLBond(atom, hatom);
 			molecule.addBond(bond);
-			bond.setOrder("1");
+			bond.setOrder(CMLBond.SINGLE_S);
 		}
 	}
 

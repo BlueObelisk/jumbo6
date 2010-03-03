@@ -197,8 +197,8 @@ public class CIPToolTest {
 			    "<atom id='a3' elementType='H' formalCharge='0'/>" +
 			  "</atomArray>" +
 			  "<bondArray>" +
-			    "<bond atomRefs2='a1 a2' id='a1_a2' order='1'/>" +
-			    "<bond atomRefs2='a2 a3' id='a2_a3' order='1'/>" +
+			    "<bond atomRefs2='a1 a2' id='a1_a2' order='S'/>" +
+			    "<bond atomRefs2='a2 a3' id='a2_a3' order='S'/>" +
 			  "</bondArray>" +
 			"</molecule>";
 		JumboTestUtils.assertEqualsCanonically("mol", JumboTestUtils.parseValidString(molS), mol1, true);

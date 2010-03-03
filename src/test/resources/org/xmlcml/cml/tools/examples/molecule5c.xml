@@ -13,15 +13,15 @@
     <atom id="a15" elementType="C" hydrogenCount="2"/>
   </atomArray>
   <bondArray>
-    <bond atomRefs2="a1 a2" order="1"/>
-    <bond atomRefs2="a2 a3" order="1"/>
-    <bond atomRefs2="a3 a4" order="2"/>
-    <bond atomRefs2="a3 a5" order="1"/>
-    <bond atomRefs2="a1 a5" order="1"/>
-    <bond atomRefs2="a11 a12" order="1"/>
-    <bond atomRefs2="a12 a13" order="1"/>
-    <bond atomRefs2="a13 a14" order="2"/>
-    <bond atomRefs2="a13 a15" order="1"/>
-    <bond atomRefs2="a11 a15" order="1"/>
+    <bond atomRefs2="a1 a2" order="S"/>
+    <bond atomRefs2="a2 a3" order="S"/>
+    <bond atomRefs2="a3 a4" order="D"/>
+    <bond atomRefs2="a3 a5" order="S"/>
+    <bond atomRefs2="a1 a5" order="S"/>
+    <bond atomRefs2="a11 a12" order="S"/>
+    <bond atomRefs2="a12 a13" order="S"/>
+    <bond atomRefs2="a13 a14" order="D"/>
+    <bond atomRefs2="a13 a15" order="S"/>
+    <bond atomRefs2="a11 a15" order="S"/>
   </bondArray>
 </molecule>

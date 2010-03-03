@@ -32,7 +32,7 @@ public class HtmlMenuSystem {
 	private int menuWidth = DEFAULT_MENU_WIDTH;
 	
 	private HtmlHead head;
-	private HtmlBody body;
+	private HtmlElement body;
 	private HtmlUl ul;
 	
 	private HtmlHtml indexFrame;
