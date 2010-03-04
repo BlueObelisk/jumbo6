@@ -993,7 +993,9 @@ private int sLength;
 	 * @return the molecule
 	 */
 	public CMLMolecule getMolecule() {
-		molecule.setNormalizedBondOrders();
+		if (molecule != null) {
+			molecule.setNormalizedBondOrders();
+		}
 		return molecule;
 	}
 	/**
