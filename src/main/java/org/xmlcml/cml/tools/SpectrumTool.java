@@ -94,5 +94,42 @@ public class SpectrumTool extends AbstractTool {
 //        return getCouplingsFrom(spectrum.getAuntMolecule(peak));
 //    }
 
+	/**
+	 * checks to see if a given proton NMR can correspond to a given molecule
+	 * by comparing spectrum integral to molecule hydrogen count 
+	 * @param spectrum
+	 * @param mol
+	 *  
+	 * @throws IllegalArgumentException for null spectrum/mol or mol with no atoms
+	 */
+	public static boolean checkProtonNmr(CMLSpectrum spectrum, CMLMolecule mol) {
+		return checkProtonNmr(spectrum, mol, 0.01d);
+	}
+
+	/**
+	 * checks to see if a given proton NMR can correspond to a given molecule
+	 * by comparing spectrum integral to molecule hydrogen count to within a given
+	 * epsilon
+	 * @param spectrum
+	 * @param mol
+	 * @param epsilon
+	 * 
+	 * @throws IllegalArgumentException for null spectrum/mol or mol with no atoms
+	 */
+	public static boolean checkProtonNmr(CMLSpectrum spectrum, CMLMolecule mol, double epsilon) {
+		if (spectrum == null) {
+			throw new IllegalArgumentException("spectrum must not be null");
+		}
+		if (mol == null) {
+			throw new IllegalArgumentException("mol must not be null");
+		}
+		if (mol.getAtomCount() == 0) {
+			throw new IllegalArgumentException("mol must have atoms");
+		}
+		double integralSum = spectrum.calculateIntegralSum();
+		double hydrogenCount = mol.calculateHydrogenCount();
+		return integralSum == hydrogenCount ? true : Math.abs(integralSum - hydrogenCount) < epsilon;
+	}
+
 
 };
