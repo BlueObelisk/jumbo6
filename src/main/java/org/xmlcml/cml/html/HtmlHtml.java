@@ -12,8 +12,9 @@ public class HtmlHtml extends HtmlElement {
 	private final static Logger LOG = Logger.getLogger(HtmlHtml.class);
 	public final static String TAG = "html";
 
-	private HtmlHead head;
 	private HtmlElement body;
+	private HtmlStyle htmlStyle;
+	private HtmlHead head;
 	
 	/** constructor.
 	 * 
@@ -25,7 +26,7 @@ public class HtmlHtml extends HtmlElement {
 	public HtmlHead ensureHead() {
 		if (head == null) {
 			head = new HtmlHead();
-			this.appendChild(head);
+			this.insertChild(head, 0);
 		}
 		return head;
 	}
@@ -38,4 +39,10 @@ public class HtmlHtml extends HtmlElement {
 		return body;
 	}
 	
+	public void addCSS(String cssStyle) {
+		ensureHead();
+		htmlStyle = head.getHtmlStyle(); 
+		htmlStyle.addCss(cssStyle);
+	}
+
 }

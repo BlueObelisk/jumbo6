@@ -56,4 +56,13 @@ public abstract class HtmlElement extends Element implements CMLConstants {
 		CMLUtil.debug(this, os, 1);
 	}
 
+	public void debug(String msg) {
+		CMLUtil.debug(this, msg);
+	}
+
+	public void setValue(String value) {
+		this.removeChildren();
+		this.appendChild(value);
+	}
+
 }
