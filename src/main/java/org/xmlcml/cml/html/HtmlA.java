@@ -1,5 +1,7 @@
 package org.xmlcml.cml.html;
 
+import nu.xom.Attribute;
+
 import org.apache.log4j.Logger;
 
 
@@ -27,5 +29,9 @@ public class HtmlA extends HtmlElement {
 	public void setTarget(Target target) {
 		this.setAttribute("target", target.toString());
 	}
-	
+
+	public String getId() {
+		return this.getAttributeValue("id");
+	}
+
 }
