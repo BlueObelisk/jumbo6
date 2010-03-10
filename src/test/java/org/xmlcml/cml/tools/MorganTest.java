@@ -182,7 +182,71 @@ public class MorganTest {
 				new String[] { "a1" }, }, atomSets);
 	}
 
-	/**
+	@Test
+	public void testHydrogens() throws Exception {
+		String smiles = "CNC=C(C#N)C#N";
+		CMLMolecule molecule = SMILESTool.createMolecule(smiles);
+		Morgan morgan = new Morgan(molecule);
+		List<Long> morganList = morgan.getMorganList();
+		MorganTest.assertEquals("Morgan list", new long[] { 20287711, 30077824, 31846287, 32170505, 42077324, 70065819, 74974185, 75425339, 76550307  }, morganList);
+
+		List<CMLAtomSet> atomSets = morgan.getAtomSetList();
+		for (CMLAtomSet atomSet : atomSets) {
+			System.out.println(atomSet.toXML()+", ");
+		}
+		MorganTest.assertEquals("equivalence classes", new String[][] {
+				new String[] { "a6", "a8" },
+				new String[] { "a3_h1" },
+				new String[] { "a1_h1", "a1_h2", "a1_h3" },
+				new String[] { "a2_h1" },
+				new String[] { "a5", "a7" }, 
+				new String[] { "a4" }, 
+				new String[] { "a2" }, 
+				new String[] { "a3" }, 
+				new String[] { "a1" }, 
+				}, atomSets);
+	}
+
+	@Test
+	public void testIncludeElementTypes() throws Exception {
+		String smiles = "CNC=C(C#N)C#N";
+		CMLMolecule molecule = SMILESTool.createMolecule(smiles);
+		Morgan morgan = new Morgan(molecule);
+		List<Long> morganList = morgan.getMorganListIncluding(new String[] {"H", "C"});
+		for (Long l : morganList) {
+			System.out.print(l+", ");
+		}
+		MorganTest.assertEquals("Morgan list", new long[] { 30077824, 31846287, 32170505, 42077324, 70065819, 75425339, 76550307  }, morganList);
+
+		List<CMLAtomSet> atomSets = morgan.getAtomSetList();
+		MorganTest.assertEquals("equivalence classes", new String[][] {
+				new String[] { "a3_h1" },
+				new String[] { "a1_h1", "a1_h2", "a1_h3" },
+				new String[] { "a2_h1" },
+				new String[] { "a5", "a7" },
+				new String[] { "a4" }, 
+				new String[] { "a3" }, 
+				new String[] { "a1" }, 
+				}, atomSets);
+	}
+
+	@Test
+	public void testExcludeElementTypes() throws Exception {
+		String smiles = "CNC=C(C#N)C#N";
+		CMLMolecule molecule = SMILESTool.createMolecule(smiles);
+		Morgan morgan = new Morgan(molecule);
+		List<Long> morganList = morgan.getMorganListExcluding(new String[] {"H", "C"});
+		MorganTest.assertEquals("Morgan list", new long[] {
+				20287711, 74974185,  }, morganList);
+
+		List<CMLAtomSet> atomSets = morgan.getAtomSetList();
+		MorganTest.assertEquals("equivalence classes", new String[][] {
+				new String[] { "a6", "a8" }, 
+				new String[] { "a2" }, 
+				}, atomSets);
+	}
+
+	/*
 	 * Test method for
 	 * {@link org.xmlcml.cml.tools.Morgan#Morgan(org.xmlcml.cml.element.CMLAtomSet)}
 	 * . test split various equivalences
@@ -353,12 +417,10 @@ public class MorganTest {
 	private static void assertEquals(String message, String[][] test,
 			List<CMLAtomSet> atomSets) {
 		Assert.assertNotNull("AtomSets list should be set", atomSets);
-		Assert
-				.assertEquals("equivalence classes", test.length, atomSets
-						.size());
+		Assert.assertEquals("equivalence classes", test.length, atomSets.size());
 		for (int i = 0; i < test.length; i++) {
-			JumboTestUtils.assertEquals("class " + i, test[i], atomSets.get(i)
-					.getXMLContent());
+			JumboTestUtils.assertEquals("class " + i, test[i], 
+					atomSets.get(i).getXMLContent());
 		}
 	}
 

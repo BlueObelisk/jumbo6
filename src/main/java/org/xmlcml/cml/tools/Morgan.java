@@ -88,6 +88,7 @@ public class Morgan extends AbstractTool {
     private int nClasses = -1;
     private List<CMLAtom> markedAtomsList = null;
 	private String equivalenceString;
+	private List<CMLAtomSet> atomSetList;
     /**
      * constructor
      * 
@@ -193,6 +194,7 @@ public class Morgan extends AbstractTool {
     public List<CMLAtom> getMarkedAtomList() {
         return markedAtomsList;
     }
+    
     /**
      * return ordered (by atoms in molecule or set) list of morganNumbers
      * 
@@ -203,7 +205,71 @@ public class Morgan extends AbstractTool {
         return morganList;
     }
     
-    private void ensureMorganList() {
+    /**
+\     * return ordered (by atoms in molecule or set) list of morganNumbers
+     * only returns atoms with element types in list. Will not return empty sets
+     *  
+     * @return list of integers
+     */
+    public List<Long> getMorganListIncluding(String[] elementTypes) {
+        morganListExcludeInclude(elementTypes, true);
+        return morganList;
+    }
+    
+    /**
+     * return ordered (by atoms in molecule or set) list of atomSets
+     * only returns atoms with element types in list. Will not return empty sets
+     *  
+     * @return list of integers
+     */
+    public List<CMLAtomSet> getAtomSetListIncluding(String[] elementTypes) {
+        morganListExcludeInclude(elementTypes, true);
+        return getAtomSetList();
+    }
+    
+    private void morganListExcludeInclude(String[] elementTypes, boolean include) {
+		ensureMorganList();
+		atomSetList = this.getAtomSetList();
+		morganList = this.getMorganList();
+		List<CMLAtomSet> newAtomSetList = new ArrayList<CMLAtomSet>();
+		List<Long> newMorganList = new ArrayList<Long>();
+		for (int i = 0; i < atomSetList.size(); i++) {
+			CMLAtomSet atomSet = atomSetList.get(i);
+			CMLAtomSet newAtomSet = (include == true) ? 
+					atomSet.includeElementTypes(elementTypes) : atomSet.excludeElementTypes(elementTypes);
+			if (newAtomSet.size() > 0) {
+				newAtomSetList.add(atomSet);
+				newMorganList.add(morganList.get(i));
+			}
+		}
+		morganList = newMorganList;
+		atomSetList = newAtomSetList;
+	}
+
+    /**
+     * return ordered (by atoms in molecule or set) list of morganNumbers
+     * only returns atoms with element types not in list. Will not return empty sets
+     *  
+     * @return list of integers
+     */
+    public List<Long> getMorganListExcluding(String[] elementTypes) {
+        morganListExcludeInclude(elementTypes, false);
+        return morganList;
+
+    }
+    
+    /**
+     * return ordered (by atoms in molecule or set) list of atomSets
+     * only returns atoms with element types not in list. Will not return empty sets
+     *  
+     * @return list of atomSets
+     */
+    public List<CMLAtomSet> getAtomSetListExcluding(String[] elementTypes) {
+        morganListExcludeInclude(elementTypes, false);
+        return getAtomSetList();
+    }
+    
+	private void ensureMorganList() {
         if (morganList == null) {
             // iterate until number of equivalence classes is constant
             iterateTillConstantEquivalenceClassCount();
@@ -287,7 +353,7 @@ public class Morgan extends AbstractTool {
      */
     public List<CMLAtomSet> getAtomSetList() {
         ensureMorganList();
-        List<CMLAtomSet> atomSetList = new ArrayList<CMLAtomSet>();
+        atomSetList = new ArrayList<CMLAtomSet>();
         for (int i = 0; i < morganList.size(); i++) {
             Long morganNumber = morganList.get(i);
             CMLAtomSet atomSet = equivalenceMap.get(morganNumber);
