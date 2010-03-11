@@ -17,11 +17,11 @@ public class SpectrumToolTest {
 		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
 		InputStream mol1Stream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/molecule1.xml");
 		CMLMolecule mol1 = (CMLMolecule) new CMLBuilder().build(mol1Stream).getRootElement();
-		assertFalse(SpectrumTool.checkProtonNmr(spectrum, mol1));
+		assertFalse(SpectrumTool.getOrCreateTool(spectrum).checkProtonNmr(mol1));
 		
 		InputStream mol2Stream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/spectrum1mol.xml");
 		CMLMolecule mol2 = (CMLMolecule) new CMLBuilder().build(mol2Stream).getRootElement().getFirstChildElement(CMLMolecule.TAG, CMLMolecule.CML_NS);
-		assertTrue(SpectrumTool.checkProtonNmr(spectrum, mol2));
+		assertTrue(SpectrumTool.getOrCreateTool(spectrum).checkProtonNmr(mol2));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -29,22 +29,7 @@ public class SpectrumToolTest {
 		InputStream spectrumStream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/spectrum1.xml");
 		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
 		CMLMolecule mol = null;
-		SpectrumTool.checkProtonNmr(spectrum, mol);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void checkProtonNmrNullSpectrum() throws Exception {
-		CMLSpectrum spectrum = null;
-		InputStream mol1Stream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/element/examples/xsd/molecule1.xml");
-		CMLMolecule mol = (CMLMolecule) new CMLBuilder().build(mol1Stream).getRootElement().getFirstChildElement(CMLMolecule.TAG, CMLMolecule.CML_NS);
-		SpectrumTool.checkProtonNmr(spectrum, mol);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void checkProtonNmrBothNull() throws Exception {
-		CMLSpectrum spectrum = null;
-		CMLMolecule mol = null;
-		SpectrumTool.checkProtonNmr(spectrum, mol);
+		SpectrumTool.getOrCreateTool(spectrum).checkProtonNmr(mol);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -52,6 +37,6 @@ public class SpectrumToolTest {
 		InputStream spectrumStream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/spectrum1.xml");
 		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
 		CMLMolecule mol = new CMLMolecule();
-		SpectrumTool.checkProtonNmr(spectrum, mol);
+		SpectrumTool.getOrCreateTool(spectrum).checkProtonNmr(mol);
 	}
 }

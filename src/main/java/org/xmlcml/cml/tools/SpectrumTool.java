@@ -26,6 +26,7 @@ public class SpectrumTool extends AbstractTool {
 	 * @param molecule
 	 * @throws RuntimeException must contain a crystal
 	 */
+	@Deprecated
 	public SpectrumTool(CMLSpectrum spectrum) throws RuntimeException {
 		init();
 		this.spectrum = spectrum;
@@ -102,8 +103,8 @@ public class SpectrumTool extends AbstractTool {
 	 *  
 	 * @throws IllegalArgumentException for null spectrum/mol or mol with no atoms
 	 */
-	public static boolean checkProtonNmr(CMLSpectrum spectrum, CMLMolecule mol) {
-		return checkProtonNmr(spectrum, mol, 0.01d);
+	public boolean checkProtonNmr(CMLMolecule mol) {
+		return checkIntegralAgainstProtonCount(mol, 0.01d);
 	}
 
 	/**
@@ -116,10 +117,7 @@ public class SpectrumTool extends AbstractTool {
 	 * 
 	 * @throws IllegalArgumentException for null spectrum/mol or mol with no atoms
 	 */
-	public static boolean checkProtonNmr(CMLSpectrum spectrum, CMLMolecule mol, double epsilon) {
-		if (spectrum == null) {
-			throw new IllegalArgumentException("spectrum must not be null");
-		}
+	public boolean checkIntegralAgainstProtonCount(CMLMolecule mol, double epsilon) {
 		if (mol == null) {
 			throw new IllegalArgumentException("mol must not be null");
 		}
