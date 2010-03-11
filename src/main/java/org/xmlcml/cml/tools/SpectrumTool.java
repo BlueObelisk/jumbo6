@@ -103,7 +103,7 @@ public class SpectrumTool extends AbstractTool {
 	 *  
 	 * @throws IllegalArgumentException for null spectrum/mol or mol with no atoms
 	 */
-	public boolean checkProtonNmr(CMLMolecule mol) {
+	public boolean checkIntegralAgainstProtonCount(CMLMolecule mol) {
 		return checkIntegralAgainstProtonCount(mol, 0.01d);
 	}
 
