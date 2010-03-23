@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.InputStream;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -38,5 +39,14 @@ public class SpectrumToolTest {
 		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
 		CMLMolecule mol = new CMLMolecule();
 		SpectrumTool.getOrCreateTool(spectrum).checkIntegralAgainstProtonCount(mol);
+	}
+	
+	
+	@Test
+	public void calculateIntegralSum() throws Exception {
+		InputStream spectrumStream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/spectrum1.xml");
+		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
+		SpectrumTool tool = SpectrumTool.getOrCreateTool(spectrum);
+		Assert.assertEquals(11d, tool.calculateIntegralSum());
 	}
 }
