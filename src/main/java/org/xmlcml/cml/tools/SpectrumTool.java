@@ -124,9 +124,24 @@ public class SpectrumTool extends AbstractTool {
 		if (mol.getAtomCount() == 0) {
 			throw new IllegalArgumentException("mol must have atoms");
 		}
-		double integralSum = spectrum.calculateIntegralSum();
+		double integralSum = calculateIntegralSum();
 		double hydrogenCount = mol.calculateHydrogenCount();
 		return integralSum == hydrogenCount ? true : Math.abs(integralSum - hydrogenCount) < epsilon;
+	}
+
+
+	/**
+	 * calculates the sum of the integrals of the spectrum peaks. No checking that
+	 * integrals are present is performed. 
+	 */
+	public double calculateIntegralSum() {
+		double sum = 0;
+		for (CMLPeak peak : CMLSpectrum.getDescendantPeaks(spectrum)) {
+			if (peak.getIntegral() != null) {
+				sum += Double.parseDouble(peak.getIntegral());
+			}
+		}
+		return sum;
 	}
 
 
