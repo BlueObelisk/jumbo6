@@ -3,6 +3,7 @@ package org.xmlcml.cml.tools;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -4062,6 +4063,69 @@ public class MoleculeTool extends AbstractSVGTool {
 				" @inline and @convention='SMILES']");
 		CMLFormula formula = (formulaNodes.size() == 1) ? (CMLFormula) formulaNodes.get(0) : null;
 		return (formula == null) ? null : formula.getInline();
+	}
+
+	
+	/**
+	 * Calculates the precise masses of the different isotopomers of the molecule
+	 * @return a list of double pairs (mass, abundance) sorted by abundance. The
+	 * abundance is expressed as a fraction NOT a percentage
+	 */
+	public List<double[]> getCalculatedIsotopomerMasses() {
+		List <double []> isotopomers = new ArrayList<double[]>();
+		isotopomers.add(new double[] {0, 1d});
+		for (CMLAtom atom : molecule.getAtoms()) {
+			isotopomers = addAtomToCurrentIsotopomers(atom, isotopomers);
+		}
+		
+		Collections.sort(isotopomers, new Comparator<double []>() {
+			public int compare(double[] arg0, double[] arg1) {
+				if (arg0[1] < arg1 [1]) {
+					return 1;
+				}
+				if (arg0[1] > arg1 [1]) {
+					return -1;
+				}
+				return 0;
+			}
+		});
+		isotopomers = mergeIdenticalMasses(isotopomers);		
+		return isotopomers;
+	}
+
+
+	private List<double[]> mergeIdenticalMasses(List<double[]> isotopomers) {
+		List <double []> newIsotopomers = new ArrayList<double[]>();
+		newIsotopomers.add(isotopomers.get(0));
+		for (int i = 1; i < isotopomers.size(); i++) {
+			double mass = isotopomers.get(i)[0];
+			if (Math.abs(mass - newIsotopomers.get(newIsotopomers.size()-1)[0]) < 1E-12 ) {
+				newIsotopomers.get(newIsotopomers.size()-1)[1] += isotopomers.get(i)[1];
+			}
+			else {
+				newIsotopomers.add(isotopomers.get(i));
+			}
+		}
+		return newIsotopomers;
+	}
+
+	private List<double[]> addAtomToCurrentIsotopomers(CMLAtom atom, List<double[]> isotopomers) {
+		List <double[]> newIsotopomers = new ArrayList<double[]>();
+		
+		for (double[] isotopomer : isotopomers) {
+			ChemicalElement element = ChemicalElement.getChemicalElement(atom.getElementType());
+			double [] abundancies = element.getIsotopeAbundances();
+			for (int i = 0; i < abundancies.length; i++) {
+				if (element.getIsotopePreciseMasses() == null) {
+					throw new RuntimeException("isotopes not known for " + element.getSymbol());
+				}
+				double newMass = isotopomer[0] + element.getIsotopePreciseMasses()[i];
+				double newAbundance = isotopomer[1] * abundancies[i]/100;
+				newIsotopomers.add(new double [] {newMass, newAbundance});
+			}
+		}
+		
+		return newIsotopomers;
 	}
 
 }
