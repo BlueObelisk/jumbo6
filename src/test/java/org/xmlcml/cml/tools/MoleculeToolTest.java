@@ -1,6 +1,6 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
+import static org.xmlcml.cml.element.AbstractTestBase.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,10 +55,7 @@ import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.euclid.EuclidTestUtils;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -2411,4 +2408,62 @@ public class MoleculeToolTest {
 		SVGSVG.wrapAndWriteAsSVG(svgg, outputFile);
 	}
 	
+	
+	@Test
+	public void getCalculatedIsotopomerMassesH2() {
+		CMLMolecule mol = new CMLMolecule();
+		mol.addAtom(new CMLAtom("h1", ChemicalElement.AS.H));
+		mol.addAtom(new CMLAtom("h2", ChemicalElement.AS.H));
+		List<double []> isotopomers = MoleculeTool.getOrCreateTool(mol).getCalculatedIsotopomerMasses();
+		Assert.assertEquals(3, isotopomers.size());
+		
+		Assert.assertEquals(2.015650064, isotopomers.get(0)[0], 1E-12);
+		Assert.assertEquals(0.999770013225, isotopomers.get(0)[1], 1E-12);
+
+		Assert.assertEquals(3.02192681, isotopomers.get(1)[0], 1E-12);
+		Assert.assertEquals(0.00022997355, isotopomers.get(1)[1], 1E-12);
+		
+		Assert.assertEquals(4.028203556, isotopomers.get(2)[0], 1E-12);
+		Assert.assertEquals(0.000000013225, isotopomers.get(2)[1], 1E-12);
+		
+		Assert.assertEquals(1d, isotopomers.get(0)[1] + isotopomers.get(1)[1] + isotopomers.get(2)[1], 1E-12);
+	}
+	
+	@Test
+	public void getCalculatedIsotopomerMassesHCl() {
+		CMLMolecule mol = new CMLMolecule();
+		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H));
+		mol.addAtom(new CMLAtom("a2", ChemicalElement.AS.Cl));
+		List<double []> isotopomers = MoleculeTool.getOrCreateTool(mol).getCalculatedIsotopomerMasses();
+		Assert.assertEquals(4, isotopomers.size());
+		
+		Assert.assertEquals(35.976677753, isotopomers.get(0)[0], 1E-12);
+		Assert.assertEquals(0.757712853, isotopomers.get(0)[1], 1E-12);
+		
+		Assert.assertEquals(37.973727652, isotopomers.get(1)[0], 1E-12);
+		Assert.assertEquals(0.242172147, isotopomers.get(1)[1], 1E-12);
+		
+		Assert.assertEquals(36.982954499, isotopomers.get(2)[0], 1E-12);
+		Assert.assertEquals(0.000087147, isotopomers.get(2)[1], 1E-12);
+		
+		Assert.assertEquals(38.980004398, isotopomers.get(3)[0], 1E-12);
+		Assert.assertEquals(0.000027853, isotopomers.get(3)[1], 1E-12);
+		
+		Assert.assertEquals(1d, isotopomers.get(0)[1] + isotopomers.get(1)[1]+ isotopomers.get(2)[1]+ isotopomers.get(3)[1], 1E-12);
+	}
+	
+	@Test
+	public void getCalculatedIsotopomerMassesUnknownPreciseMasses() {
+		//will need to be changed to a different element if the precise mass
+		//of U is ever specfied in elementdata.xml (in CMLXOM)
+		CMLMolecule mol = new CMLMolecule();
+		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H));
+		mol.addAtom(new CMLAtom("a2", ChemicalElement.getChemicalElement("U")));
+		List<double []> isotopomers = MoleculeTool.getOrCreateTool(mol).getCalculatedIsotopomerMasses();
+		Assert.assertEquals(6, isotopomers.size());
+		for (double[] ds : isotopomers) {
+			Assert.assertTrue(Double.isNaN(ds[0]));
+		}
+		Assert.assertEquals(0.992630834325, isotopomers.get(0)[1], 1E-12);
+	}
 }
