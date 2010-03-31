@@ -2466,4 +2466,44 @@ public class MoleculeToolTest {
 		}
 		Assert.assertEquals(0.992630834325, isotopomers.get(0)[1], 1E-12);
 	}
+	
+	@Test
+	public void getCalculatedIsotopomerMassesNoMaxCount() {
+		CMLMolecule mol = new CMLMolecule();
+		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H ));
+		mol.addAtom(new CMLAtom("a2", ChemicalElement.AS.C ));
+		mol.addAtom(new CMLAtom("a3", ChemicalElement.AS.O ));
+
+		List<double []> isotopomers = MoleculeTool.getOrCreateTool(mol).getCalculatedIsotopomerMasses(Integer.MAX_VALUE);
+		Assert.assertEquals(12, isotopomers.size());
+		for (int i = 1; i < 12; i++) {
+			Assert.assertTrue(isotopomers.get(i)[1] < isotopomers.get(i-1)[1]);
+		}
+		
+		double totalAbundance = 0;
+		for (double[] ds : isotopomers) {
+			totalAbundance+=ds[1];
+		}
+		Assert.assertTrue(Math.abs(1d - totalAbundance) < 1E-12);
+	}
+		
+	@Test
+	public void getCalculatedIsotopomerMassesWithMaxCount() {
+		CMLMolecule mol = new CMLMolecule();
+		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H ));
+		mol.addAtom(new CMLAtom("a2", ChemicalElement.AS.C ));
+		mol.addAtom(new CMLAtom("a3", ChemicalElement.AS.O ));
+		
+		List<double []> isotopomers = MoleculeTool.getOrCreateTool(mol).getCalculatedIsotopomerMasses(3);
+		Assert.assertEquals(3, isotopomers.size());
+		Assert.assertEquals(29.002739662, isotopomers.get(0)[0], 1E-12);
+		Assert.assertEquals(30.006093662, isotopomers.get(1)[0], 1E-12);
+		Assert.assertEquals(31.006985332, isotopomers.get(2)[0], 1E-12);
+		
+		double totalAbundance = 0;
+		for (double[] ds : isotopomers) {
+			totalAbundance+=ds[1];
+		}
+		Assert.assertFalse(Math.abs(1d - totalAbundance) < 1E-12);
+	}
 }
