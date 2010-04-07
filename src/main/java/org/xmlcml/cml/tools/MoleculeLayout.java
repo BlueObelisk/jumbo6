@@ -2,10 +2,13 @@ package org.xmlcml.cml.tools;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import nu.xom.Document;
 import nu.xom.Nodes;
@@ -15,11 +18,16 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomSet;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.euclid.Vector2;
 
 /**
  * tool to support a ring. not fully developed
@@ -30,12 +38,24 @@ import org.xmlcml.euclid.Util;
 public class MoleculeLayout extends AbstractTool {
 	final static Logger LOG = Logger.getLogger(MoleculeLayout.class);
 
-	private static int MAX_CYCLES = 300;
+//	private static final Angle MINANGLE = new Angle(1.5*Math.PI);
+	private static final Angle TARGET_ANGLE = new Angle(Math.PI);
+
+//	private static final Angle MINANGLE2 = new Angle(1.8*Math.PI/2.);
+	private static final Angle TARGET_ANGLE2 = new Angle(2*Math.PI/2.);
+
+//	private static final Angle MINANGLE3 = new Angle(2*Math.PI/3.);
+	private static final Angle TARGET_ANGLE3 = new Angle(2*Math.PI/3.);
+
+//	private static final Angle MINANGLE4 = new Angle(2*Math.PI/4.);
+	private static final Angle TARGET_ANGLE4 = new Angle(2*Math.PI/4.);
+
+	private static int MAX_CYCLES = 50;
 	private MoleculeTool moleculeTool;
 	private MoleculeDisplay moleculeDisplay;
 	private RingNucleusSet ringNucleusSet;
 	private ChainSet chainSet;
-	private ConnectionTableTool connectionTable;
+	private ConnectionTableTool connectionTableTool;
 	private Map<Sprout, Chain> sproutMap;
 	private Map<Sprout, RingNucleus> sproutNucleusMap;
 	
@@ -60,16 +80,31 @@ public class MoleculeLayout extends AbstractTool {
 	 */
 	void create2DCoordinates(CMLMolecule molecule) {
 		ensureMoleculeDisplay();
+		
 		if (molecule.getMoleculeCount() > 0) {
 			for (CMLMolecule subMolecule : molecule.getMoleculeElements()) {
 				this.create2DCoordinates(subMolecule);
 			}
 		} else {
+			// FIXME debug
+			moleculeDisplay.setDisplayGroups(true);
+			// make copy so as not to corrupt molecule
+			// skip this as the copy is messy
+//			if (false && moleculeDisplay.isDisplayGroups()) {
+//				molecule = new CMLMolecule(molecule);
+//			}
 			moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-			connectionTable = new ConnectionTableTool(molecule);
-			ringNucleusSet = connectionTable.getRingNucleusSet();
+			connectionTableTool = new ConnectionTableTool(molecule);
+			if (moleculeDisplay.isDisplayGroups()) {
+				connectionTableTool.contractNAlkylGroups();
+				List<List<BondTool>> bondToolListList = connectionTableTool.identifyGroupsOnAcyclicBonds();
+				ConnectionTableTool.outputGroups(bondToolListList);
+				ConnectionTableTool.pruneGroupsAndReLabel(bondToolListList);
+			}
+			ringNucleusSet = connectionTableTool.getRingNucleusSet();
 			ringNucleusSet.setMoleculeDraw(this);
 			ringNucleusSet.setMoleculeLayout(this);
+//			ringNucleusSet.debug();
 			chainSet = new ChainSet(this);
 			sproutMap = new HashMap<Sprout, Chain>();
 			sproutNucleusMap = new HashMap<Sprout, RingNucleus>();
@@ -78,39 +113,159 @@ public class MoleculeLayout extends AbstractTool {
 				chainSet.findOrCreateAndAddChain(new CMLBondSet(moleculeTool.getMolecule()));
 				chainSet.layout(this);
 			} else {
-				// get coordinates for ring nuclei
-				Iterator<RingNucleus> nucleusIterator = ringNucleusSet.iterator();
-				for (;nucleusIterator.hasNext();) {
-					RingNucleus nucleus = nucleusIterator.next();
-					nucleus.findSprouts(moleculeDisplay.isOmitHydrogens());
-				}
-				// find chains starting at sprouts
-				nucleusIterator = ringNucleusSet.iterator();
-				for (;nucleusIterator.hasNext();) {
-					RingNucleus nucleus = nucleusIterator.next();
-					for (Sprout sprout : nucleus.getSproutList(moleculeDisplay.isOmitHydrogens())) {
-						Chain chain = chainSet.findOrCreateAndAddChain(sprout, ringNucleusSet);
-						sproutMap.put(sprout, chain);
-						sproutNucleusMap.put(sprout, nucleus);
-						chain.addSprout(sprout);
-					}
-				}
-				nucleusIterator = ringNucleusSet.iterator();
-				RingNucleus nucleusWithMostRemoteSprouts = null;
-				for (;nucleusIterator.hasNext();) {
-					RingNucleus nucleus = nucleusIterator.next();
-					if (nucleusWithMostRemoteSprouts == null || 
-						nucleus.getRemoteSproutList().size() >
-					    nucleusWithMostRemoteSprouts.getRemoteSproutList().size()) {
-						nucleusWithMostRemoteSprouts = nucleus;
-					}
-				}
+				getCoordinatesForRingNuclei();
+				findChainsStartingAtSprouts();
+				RingNucleus nucleusWithMostRemoteSprouts = getNucleusWithMostRemoteSprouts();
 				// now make decisions on what is central to diagram
 				nucleusWithMostRemoteSprouts.layout(null, maxCycles);
 				tweakOverlappingAtoms();
 			}
+			// not yet active.
+			adjustUnusualAnglesInAcyclicNodes();
 			GeometryTool geometryTool = new GeometryTool(moleculeTool.getMolecule());
 			geometryTool.addCalculatedCoordinatesForHydrogens(CoordinateType.TWOD, HydrogenControl.USE_EXPLICIT_HYDROGENS);
+		}
+	}
+
+	private void adjustUnusualAnglesInAcyclicNodes() {
+		List<CMLAtom> acyclicAtoms = connectionTableTool.getFullyAcyclicAtoms();
+		for (CMLAtom acyclicAtom : acyclicAtoms) {
+			adjustValenceAnglesOnAcyclicAtom(acyclicAtom);
+		}
+		adjustAlternationInMethyleneLikeChains(acyclicAtoms);
+	}
+
+	private void adjustAlternationInMethyleneLikeChains(List<CMLAtom> acylicAtoms) {
+		Set<CMLAtom> acyclicAtomSet = new HashSet<CMLAtom>();
+		for (CMLAtom atom : acylicAtoms) {
+			acyclicAtomSet.add(atom);
+		}
+//		List<ChainAtom> chainAtoms = createAcyclicChains(acylicAtoms, acyclicAtomSet);
+	}
+
+	private List<ChainAtom> createAcyclicChains(List<CMLAtom> acylicAtoms, Set<CMLAtom> acyclicAtomSet) {
+		List<ChainAtom> chainAtomList = new ArrayList<ChainAtom>();
+		for (CMLAtom atom : acylicAtoms) {
+			ChainAtom chainAtom = ChainAtom.createAtom(atom, acyclicAtomSet);
+			if (chainAtom != null) {
+				chainAtomList.add(chainAtom);
+			}
+		}
+		return chainAtomList;
+	}
+
+	private void adjustValenceAnglesOnAcyclicAtom(CMLAtom atom) {
+		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+		List<CMLBond> ligandBonds = atomTool.getNonHydrogenLigandBondList();
+		if (ligandBonds.size() == 2) {
+			adjustValenceAnglesOnAcyclicAtom2(atom);
+		} else if (ligandBonds.size() == 3) {
+			adjustValenceAnglesOnAcyclicAtom3(atom);
+		} else if (ligandBonds.size() == 4) {
+			adjustValenceAnglesOnAcyclicAtom4(atom);
+		}
+	}
+
+	public static void adjustValenceAnglesOnAcyclicAtom4(CMLAtom atom) {
+		if (atom != null) {
+			List<CMLBond> bonds = getLigandBondsSortedBySizeOfDownstream4(atom);
+			adjustValenceAnglesOnAcyclicAtom(atom, bonds.get(0), bonds.get(1), TARGET_ANGLE4);
+			adjustValenceAnglesOnAcyclicAtom(atom, bonds.get(0), bonds.get(2), TARGET_ANGLE2);
+			adjustValenceAnglesOnAcyclicAtom(atom, bonds.get(0), bonds.get(3), TARGET_ANGLE4.multiplyBy(-1.0));
+		}
+	}
+
+	private static List<CMLBond> getLigandBondsSortedBySizeOfDownstream4(CMLAtom atom) {
+		List<CMLBond> ligands = AtomTool.getOrCreateTool(atom).getNonHydrogenLigandBondList();
+		List<CMLBond> bondsSortedByDownstream = new ArrayList<CMLBond>(4);
+		for (int i = 0; i < 4; i++) {
+			bondsSortedByDownstream.add(null);
+		}
+		int serialMaxDownstream = getSerialOfMaxDownstreamAtoms(atom, ligands);
+		bondsSortedByDownstream.set(0, ligands.get(serialMaxDownstream));
+		ligands.remove(serialMaxDownstream);
+		serialMaxDownstream = getSerialOfMaxDownstreamAtoms(atom, ligands);
+		bondsSortedByDownstream.set(2, ligands.get(serialMaxDownstream));
+		ligands.remove(serialMaxDownstream);
+		bondsSortedByDownstream.set(1, ligands.get(0));
+		bondsSortedByDownstream.set(3, ligands.get(1));
+		return bondsSortedByDownstream;
+	}
+
+	private static int getSerialOfMaxDownstreamAtoms(CMLAtom atom,
+			List<CMLBond> bonds) {
+		int serialMaxDownstream = -99;
+		int maxDownstream = -99;
+		for (int i = 0; i < bonds.size(); i++) {
+			CMLBond bond = bonds.get(i);
+			BondTool bondTool = BondTool.getOrCreateTool(bond);
+			CMLAtomSet downstreamAtoms = bondTool.getDownstreamAtoms(bond.getOtherAtom(atom));
+			if (serialMaxDownstream < 0 || maxDownstream < downstreamAtoms.size()) {
+				serialMaxDownstream = i;
+				maxDownstream = downstreamAtoms.size();
+			}
+		}
+		return serialMaxDownstream;
+	}
+
+	static void adjustValenceAnglesOnAcyclicAtom3(CMLAtom atom) {
+		if (atom != null) {
+			List<CMLBond> bonds = AtomTool.getOrCreateTool(atom).getNonHydrogenLigandBondList();
+			adjustValenceAnglesOnAcyclicAtom(atom, bonds.get(0), bonds.get(1), TARGET_ANGLE3);
+			adjustValenceAnglesOnAcyclicAtom(atom, bonds.get(0), bonds.get(2),  TARGET_ANGLE3.multiplyBy(-1.0));
+		}
+	}
+
+	public static void adjustValenceAnglesOnAcyclicAtom2(CMLAtom atom) {
+		List<CMLBond> ligandBonds = AtomTool.getOrCreateTool(atom).getNonHydrogenLigandBondList();
+		adjustValenceAnglesOnAcyclicAtom(atom, ligandBonds.get(0), ligandBonds.get(1), TARGET_ANGLE2);
+	}
+
+	private static void adjustValenceAnglesOnAcyclicAtom(CMLAtom atom, CMLBond staticBond, CMLBond movingBond,
+			Angle targetAngle) {
+		Angle angle = MoleculeTool.getCalculatedAngle2D(
+				staticBond.getOtherAtom(atom), atom, movingBond.getOtherAtom(atom));
+		Angle delta = angle.subtract(targetAngle);
+		BondTool movingBondTool = BondTool.getOrCreateTool(movingBond);
+		CMLAtomSet atomSet = movingBondTool.getDownstreamAtoms(atom);
+		Transform2 t2 = Transform2.getRotationAboutPoint(delta, atom.getXY2());
+		atomSet.transform(t2);
+	}
+
+
+	private RingNucleus getNucleusWithMostRemoteSprouts() {
+		Iterator<RingNucleus> nucleusIterator = ringNucleusSet.iterator();
+		RingNucleus nucleusWithMostRemoteSprouts = null;
+		for (;nucleusIterator.hasNext();) {
+			RingNucleus nucleus = nucleusIterator.next();
+			if (nucleusWithMostRemoteSprouts == null || 
+				nucleus.getRemoteSproutList().size() >
+			    nucleusWithMostRemoteSprouts.getRemoteSproutList().size()) {
+				nucleusWithMostRemoteSprouts = nucleus;
+			}
+		}
+		return nucleusWithMostRemoteSprouts;
+	}
+
+	private void getCoordinatesForRingNuclei() {
+		Iterator<RingNucleus> nucleusIterator = ringNucleusSet.iterator();
+		for (;nucleusIterator.hasNext();) {
+			RingNucleus nucleus = nucleusIterator.next();
+			nucleus.findSprouts(moleculeDisplay.isOmitHydrogens());
+		}
+	}
+
+	private void findChainsStartingAtSprouts() {
+		Iterator<RingNucleus> nucleusIterator;
+		nucleusIterator = ringNucleusSet.iterator();
+		for (;nucleusIterator.hasNext();) {
+			RingNucleus nucleus = nucleusIterator.next();
+			for (Sprout sprout : nucleus.getSproutList(moleculeDisplay.isOmitHydrogens())) {
+				Chain chain = chainSet.findOrCreateAndAddChain(sprout, ringNucleusSet);
+				sproutMap.put(sprout, chain);
+				sproutNucleusMap.put(sprout, nucleus);
+				chain.addSprout(sprout);
+			}
 		}
 	}
 	
@@ -165,7 +320,7 @@ public class MoleculeLayout extends AbstractTool {
 	 * @return the connectionTable
 	 */
 	public ConnectionTableTool getConnectionTable() {
-		return connectionTable;
+		return connectionTableTool;
 	}
 
 	/**
@@ -178,14 +333,14 @@ public class MoleculeLayout extends AbstractTool {
 	/**
 	 * @return the moleculeDisplay
 	 */
-	public AbstractDisplay getDrawParameters() {
-		ensureDrawParameters();
+	public AbstractDisplay getAbstractDisplay() {
+		ensureAbstractDisplay();
 		return moleculeDisplay;
 	}
 	
-	private void ensureDrawParameters() {
+	private void ensureAbstractDisplay() {
 		if (moleculeDisplay == null) {
-			moleculeDisplay = new MoleculeDisplay();
+			moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.getDEFAULT());
 		}
 	}
 	 
@@ -355,5 +510,6 @@ public class MoleculeLayout extends AbstractTool {
 	public void setMoleculeDisplay(MoleculeDisplay moleculeDisplay) {
 		this.moleculeDisplay = moleculeDisplay;
 	}
+	
 }
 

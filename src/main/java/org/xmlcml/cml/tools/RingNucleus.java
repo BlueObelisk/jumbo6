@@ -29,6 +29,7 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  */
 public class RingNucleus extends AbstractTool implements Comparable<RingNucleus> {
 	final static Logger LOG = Logger.getLogger(RingNucleus.class);
+	
 	private CMLAtomSet atomSet;
 	private CMLBondSet bondSet;
 	private List<Ring> ringList = null;
@@ -289,17 +290,27 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		this.add2DCoordinates();
 		if (sprout != null && oldSproutVector != null) {
 			Real2 sproutVector = sprout.getSproutVector();
-			Angle a = new Vector2(sproutVector).getAngleMadeWith(new Vector2(oldSproutVector));
-			Transform2 transform2 = new Transform2(a.plus(new Angle(Math.PI)));
-			atomSet.transform(transform2);
-			Real2 delta2 = oldRingXY2.subtract(sprout.getRingAtom().getXY2());
-			atomSet.translate2D(delta2);
+			if (sproutVector != null) {
+				Angle a = new Vector2(sproutVector).getAngleMadeWith(new Vector2(oldSproutVector));
+				Transform2 transform2 = new Transform2(a.plus(new Angle(Math.PI)));
+				atomSet.transform(transform2);
+				Real2 delta2 = oldRingXY2.subtract(sprout.getRingAtom().getXY2());
+				atomSet.translate2D(delta2);
+			}
 		}
-		getSproutList(((MoleculeDisplay)moleculeDraw.getDrawParameters()).isOmitHydrogens());
+		getSproutList(((MoleculeDisplay)moleculeDraw.getAbstractDisplay()).isOmitHydrogens());
 		for (Sprout otherSprout : sproutList) {
 			if (otherSprout != sprout) {
 				Chain chain = moleculeDraw.getSproutMap().get(otherSprout);
-				chain.layout(otherSprout, cycles);
+				try {
+					chain.layout(otherSprout, cycles);
+				} catch (RuntimeException e) {
+					// cut down on stack print
+					if (e.getMessage().equals("layout recurses too deeply")) {
+						e = new RuntimeException("layout recurses too deeply");
+					}
+					throw e;
+				}
 			}
 		}
 	}
@@ -310,34 +321,35 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		getSetOfSmallestRings(true);
 		this.getJunctions();
 		if (ringList.size() == 0) {
-			throw new RuntimeException("ring nucleus has no rings");
-		}
-		// get largest ring
-		Collections.sort(ringList);
-		Collections.reverse(ringList);
-		List<Ring> oldRingList = new ArrayList<Ring>();
-		for (Ring ring : ringList) {
-			oldRingList.add(ring);
-		}
-		List<Ring> newRingList = new ArrayList<Ring>();
-// add first ring
-		Ring currentRing = ringList.get(0);
-		currentRing.calculate2DCoordinates(moleculeDraw);
-		currentRing.updateCoordinates();
-		oldRingList.remove(currentRing);
-		newRingList.add(currentRing);
-		
-		Junction junction = null;
-//		findSprouts(true);
-		while (true) {
-			junction = findNextJunctionUpdateListsAdd2DCoordinates(
-				oldRingList, newRingList);
-			if (junction == null) {
-				break;
+			LOG.error("ring nucleus has no rings");
+		} else {
+			// get largest ring
+			Collections.sort(ringList);
+			Collections.reverse(ringList);
+			List<Ring> oldRingList = new ArrayList<Ring>();
+			for (Ring ring : ringList) {
+				oldRingList.add(ring);
 			}
-		}
-		if (oldRingList.size() > 0) {
-			throw new RuntimeException("Undrawn rings ");
+			List<Ring> newRingList = new ArrayList<Ring>();
+	// add first ring
+			Ring currentRing = ringList.get(0);
+			currentRing.calculate2DCoordinates(moleculeDraw);
+			currentRing.updateCoordinates();
+			oldRingList.remove(currentRing);
+			newRingList.add(currentRing);
+			
+			Junction junction = null;
+	//		findSprouts(true);
+			while (true) {
+				junction = findNextJunctionUpdateListsAdd2DCoordinates(
+					oldRingList, newRingList);
+				if (junction == null) {
+					break;
+				}
+			}
+			if (oldRingList.size() > 0) {
+				throw new RuntimeException("Undrawn rings ");
+			}
 		}
 	}
 	/**
@@ -422,8 +434,8 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		Sprout tailSprout = getSprout(ringToBeAdded, tailAtom);
 		Sprout leadSprout = getSprout(ringToBeAdded, leadAtom);
 		if (tailSprout == null || leadSprout == null) {
-			System.err.println("Null sprout");
-			throw new RuntimeException("Null sprout - cannot draw");
+			LOG.error("Null sprout");
+//			throw new RuntimeException("Null sprout - cannot draw");
 		} else {
 			//resultant sprout from old ring
 			Real2 oldRingMedianSprout = tailSprout.getSproutVector().plus(leadSprout.getSproutVector());

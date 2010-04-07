@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
@@ -478,4 +479,79 @@ public class ConnectionTableToolTest {
 				.hasContentEqualTo(atomSet));
 	}
 
+	@Test
+	public void getAcyclicBondsWithDownstreamAtomsMatchingRMolecule() {
+		CMLMolecule rMolecule = SMILESTool.createMolecule("[R]CNO");
+		GroupTool groupTool = new GroupTool("hydroxylamine", rMolecule);
+		CMLMolecule testMolecule = SMILESTool.createMolecule("FCCNO");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(testMolecule);
+		List<BondTool> bondTools = connectionTableTool.getAcyclicBondToolsWithDownstreamAtomsMatchingRMolecule(groupTool);
+		Assert.assertEquals("bonds0", 1, bondTools.size());
+	}
+	
+	@Test
+	public void getAcyclicBondsWithDownstreamAtomsMatchingRMoleculeMultiple() {
+		CMLMolecule rMolecule = SMILESTool.createMolecule("[R]CNO");
+		GroupTool groupTool = new GroupTool("hydroxylamine", rMolecule);
+		CMLMolecule testMolecule = SMILESTool.createMolecule("ONCSC(CNO)CCNO");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(testMolecule);
+		List<BondTool> bondTools = connectionTableTool.getAcyclicBondToolsWithDownstreamAtomsMatchingRMolecule(groupTool);
+		Assert.assertEquals("bonds0",3, bondTools.size());
+	}
+	
+	@Test
+	public void getAcyclicBondsWithDownstreamAtomsMatchingRMoleculeSymmetry() {
+		CMLMolecule rMolecule = SMILESTool.createMolecule("[R]C(C(F)(F)Cl)(C(F)(F)Cl)");
+		GroupTool groupTool = new GroupTool("di(diFluoroChloroMethyl)methyl", rMolecule);
+		CMLMolecule testMolecule = SMILESTool.createMolecule("ONSC(C(Cl)(F)F)(C(F)(Cl)F)");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(testMolecule);
+		List<BondTool> bondTools = connectionTableTool.getAcyclicBondToolsWithDownstreamAtomsMatchingRMolecule(groupTool);
+		Assert.assertEquals("bonds0", 1, bondTools.size());
+	}
+	
+	@Test
+	public void identifyGroupsOnAcyclicBonds() {
+		CMLMolecule testMolecule = SMILESTool.createMolecule("Fc1c(C(F)(F)F)c(C)c(CC)c(OC)c1OCC");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(testMolecule);
+		List<List<BondTool>> bondToolListList = connectionTableTool.identifyGroupsOnAcyclicBonds();
+		ConnectionTableTool.outputGroups(bondToolListList);
+	}
+
+	@Test
+	public void contractNAlkylGroups() {
+		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
+		connectionTableTool.contractNAlkylGroups();
+		molecule.debug();
+	}
+
+	@Test
+	public void contractNAlkylGroupsReverseBond() {
+		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
+		CMLBond bond = molecule.getBondByAtomIds("a3", "a4");
+		bond.setAtomRefs2(new String[]{"a4", "a3"});
+		molecule.debug("B4");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
+		connectionTableTool.contractNAlkylGroups();
+		molecule.debug();
+	}
+
+	@Test
+	public void contractNAlkylGroupsReverseBond1() {
+		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
+		CMLBond bond = molecule.getBondByAtomIds("a5", "a4");
+		bond.setAtomRefs2(new String[]{"a5", "a4"});
+		molecule.debug("B4");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
+		connectionTableTool.contractNAlkylGroups();
+		molecule.debug();
+	}
+
+	@Test
+	public void contractNAlkylGroups1() {
+		CMLMolecule molecule = SMILESTool.createMolecule("CCCCOCC");
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
+		connectionTableTool.contractNAlkylGroups();
+		molecule.debug();
+	}
 }

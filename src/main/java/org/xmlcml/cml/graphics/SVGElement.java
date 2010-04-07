@@ -53,6 +53,8 @@ public class SVGElement extends GraphicsElement {
 	public final static String CY = "cy";
 	public final static String YMINUS = "-Y";
 	public final static String YPLUS = "Y";
+	public final static String TITLE = "title";
+	public final static String ID = "id";
 	private Element userElement;
 	private String strokeSave;
 	private String fillSave;
@@ -116,21 +118,23 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	protected static void createSubclassedChildren(Element oldElement, SVGElement newElement) {
-		for (int i = 0; i < oldElement.getChildCount(); i++) {
-			Node node = oldElement.getChild(i);
-			Node newNode = null;
-			if (node instanceof Text) {
-				newNode = new Text(node.getValue());
-			} else if (node instanceof Comment) {
-				newNode = new Comment(node.getValue());
-			} else if (node instanceof ProcessingInstruction) {
-				newNode = new ProcessingInstruction((ProcessingInstruction) node);
-			} else if (node instanceof Element) {
-				newNode = createSVG((Element) node);
-			} else {
-				throw new RuntimeException("Cannot create new node: "+node.getClass());
+		if (oldElement != null) {
+			for (int i = 0; i < oldElement.getChildCount(); i++) {
+				Node node = oldElement.getChild(i);
+				Node newNode = null;
+				if (node instanceof Text) {
+					newNode = new Text(node.getValue());
+				} else if (node instanceof Comment) {
+					newNode = new Comment(node.getValue());
+				} else if (node instanceof ProcessingInstruction) {
+					newNode = new ProcessingInstruction((ProcessingInstruction) node);
+				} else if (node instanceof Element) {
+					newNode = createSVG((Element) node);
+				} else {
+					throw new RuntimeException("Cannot create new node: "+node.getClass());
+				}
+				newElement.appendChild(newNode);
 			}
-			newElement.appendChild(newNode);
 		}
 	}
 	
@@ -494,6 +498,7 @@ public class SVGElement extends GraphicsElement {
 	public Transform2 getTransform2FromAttribute() {
 		Transform2 t = null;
 		String ts = this.getAttributeValue(TRANSFORM);
+		System.out.println("TTT "+ts);
 		if (ts != null) {
 			if (!ts.startsWith(MATRIX+"(")) {
 				throw new RuntimeException("Bad transform: "+ts);
@@ -699,15 +704,6 @@ public class SVGElement extends GraphicsElement {
 		return d;
 	}
 	
-//	/** subclassed by classes with extents.
-//	 * 
-//	 * @return null by default
-//	 */
-//	public Real2Range getBoundingBox() {
-//		Real2Range boundingBox = null;
-//		return boundingBox;
-//	}
-	
 	/** subclassed to tidy format.
 	 * 
 	 * @param places decimal places
@@ -817,5 +813,21 @@ public class SVGElement extends GraphicsElement {
 			elementList.add((SVGElement) childNodes.get(i));
 		}
 		return elementList;
+	}
+	
+	public void setTitle(String title) {
+		this.addAttribute(new Attribute(TITLE, title));
+	}
+	
+	public String getTitle() {
+		return this.getAttributeValue(TITLE);
+	}
+	
+	public void setId(String id) {
+		this.addAttribute(new Attribute(ID, id));
+	}
+	
+	public String getId() {
+		return this.getAttributeValue(ID);
 	}
 }

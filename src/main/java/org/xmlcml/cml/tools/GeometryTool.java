@@ -24,7 +24,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
-import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.IntSquareMatrix;
 import org.xmlcml.euclid.Point3;
@@ -43,7 +42,7 @@ import org.xmlcml.molutil.ChemicalElement;
  * 
  */
 public class GeometryTool extends AbstractTool {
-    Logger LOG = Logger.getLogger(GeometryTool.class);
+    private static Logger LOG = Logger.getLogger(GeometryTool.class);
 
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
@@ -1087,4 +1086,40 @@ public class GeometryTool extends AbstractTool {
 		}
 	}
 
+	public static Point3Vector calculateAverageGeometry(List<CMLMolecule> moleculeList) {
+		Point3Vector p3vTotal = null;
+		for (CMLMolecule molecule : moleculeList) {
+			Point3Vector p3v = new CMLAtomSet(molecule).getCoordinates3(CoordinateType.CARTESIAN);
+			if (p3vTotal == null) {
+				p3vTotal = p3v;
+			} else {
+				p3vTotal = p3vTotal.plus(p3v); 
+			}
+		}
+		if (p3vTotal != null) {
+			p3vTotal = p3vTotal.multiplyBy(1./(double)moleculeList.size());
+		}
+		return p3vTotal;
+	}
+	
+	public static List<Point3Vector> calculateDeviationsFromMean(List<CMLMolecule> moleculeList) {
+		Point3Vector p3vTotal = calculateAverageGeometry(moleculeList);
+		List<Point3Vector> p3VectorList = new ArrayList<Point3Vector>();
+		for (CMLMolecule molecule : moleculeList) {
+			Point3Vector p3v = new CMLAtomSet(molecule).getCoordinates3(CoordinateType.CARTESIAN);
+			p3v = p3v.subtract(p3vTotal);
+			p3VectorList.add(p3v);
+		}
+		return p3VectorList;
+	}
+	
+	public static List<Double> calculateListOfSquaredDistancesBetweenMoleculesAndAverage(List<CMLMolecule> moleculeList) {
+		List<Point3Vector> p3VectorList = calculateDeviationsFromMean(moleculeList);
+		List<Double> squaredDistanceList = new ArrayList<Double>();
+		for (Point3Vector p3v : p3VectorList) {
+			squaredDistanceList.add(p3v.innerProduct());
+		}
+		return squaredDistanceList;
+	}
+	
 }

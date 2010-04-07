@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.cml.element.CMLAction;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLCml;
@@ -12,6 +13,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.graphics.CMLDrawable;
+import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Real2Range;
@@ -39,6 +41,8 @@ public abstract class AbstractSVGTool extends AbstractTool {
 	public static AbstractSVGTool getOrCreateSVGTool(CMLElement element) {
 		AbstractSVGTool abstractSVGTool = null;
 		if (false) {
+		} else if (element instanceof CMLAction) {
+			abstractSVGTool = ActionTool.getOrCreateTool((CMLAction)element); 
 		} else if (element instanceof CMLAtom) {
 			abstractSVGTool = AtomTool.getOrCreateTool((CMLAtom)element); 
 		} else if (element instanceof CMLBond) {
@@ -46,7 +50,6 @@ public abstract class AbstractSVGTool extends AbstractTool {
 		} else if (element instanceof CMLCml) {
 			abstractSVGTool = CMLXTool.getOrCreateTool((CMLCml)element); 
 		} else if (element instanceof CMLMolecule) {
-			LOG.debug("MOLECULE...");
 			abstractSVGTool = MoleculeTool.getOrCreateTool((CMLMolecule)element); 
 		} else if (element instanceof CMLMoleculeList) {
 			abstractSVGTool = MoleculeListTool.getOrCreateTool((CMLMoleculeList)element); 
@@ -54,6 +57,12 @@ public abstract class AbstractSVGTool extends AbstractTool {
 			abstractSVGTool = ReactionTool.getOrCreateTool((CMLReaction)element); 
 		}
 		return abstractSVGTool;
+	}
+
+	protected static void appendNonNullChild(SVGElement g, GraphicsElement childSvg) {
+		if (childSvg != null) {
+			g.appendChild(childSvg);
+		}
 	}
 
 	/** returns a "g" element

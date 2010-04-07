@@ -22,7 +22,7 @@ import org.xmlcml.cml.element.CMLBondSet;
  * 
  */
 public class RingNucleusSet extends AbstractTool {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(RingNucleus.class.getName());
 
 	private SortedSet<RingNucleus> nucleusSet;
 	private Map<Sprout, List<RingNucleus>> sproutMap;
@@ -249,6 +249,10 @@ public class RingNucleusSet extends AbstractTool {
 	 */
 	public void setMoleculeDraw(MoleculeLayout moleculeDraw) {
 		this.moleculeDraw = moleculeDraw;
+	}
+
+	public void debug() {
+		LOG.debug("NucleusSet size: "+nucleusSet.size());
 	}
 
 }

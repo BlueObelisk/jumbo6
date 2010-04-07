@@ -144,5 +144,4 @@ public class SpectrumTool extends AbstractTool {
 		return sum;
 	}
 
-
-};
+}

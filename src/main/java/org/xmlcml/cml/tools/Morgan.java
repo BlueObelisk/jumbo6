@@ -485,4 +485,42 @@ public class Morgan extends AbstractTool {
         return morgan;
     }
 
+    /**
+     * 
+     * @param groupSMILESString of form "[R]CNOSCC" with singly liganded R-group
+     * @return
+     */
+	public static String createMorganStringFromSMILES(String groupSMILESString) {
+		String morganString = null;
+		if (groupSMILESString != null) {
+			CMLMolecule smilesMolecule = SMILESTool.createMolecule(groupSMILESString);
+			morganString = createMorganStringFromRMolecule(smilesMolecule);
+		}
+		return morganString;
+	}
+
+	public static String createMorganStringFromRMolecule(CMLMolecule molecule) {
+		String morganString = null;
+		CMLAtomSet rAtomSet = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule))
+		    .getAtomSetIncludingElementTypes(new String[]{"R"});
+		if (rAtomSet != null && rAtomSet.size() == 1) {
+			CMLAtom rAtom = rAtomSet.getAtom(0);
+			if (rAtom.getLigandAtoms().size() == 1) {
+				BondTool rBondTool = BondTool.getOrCreateTool(rAtom.getLigandBonds().get(0));
+				morganString = rBondTool.getDownstreamMorganString(rAtom);
+			}
+		}
+		return morganString;
+	}
+
+	public CMLAtomSet getUniqueAtomSet() {
+		CMLAtomSet uniqueAtomSet = new CMLAtomSet();
+		List<CMLAtomSet> atomSetList = getAtomSetList();
+		for (CMLAtomSet atomSet : atomSetList) {
+			if (atomSet.size() == 1) {
+				uniqueAtomSet.addAtom(atomSet.getAtom(0));
+			}
+		}
+		return uniqueAtomSet;
+	}
 }

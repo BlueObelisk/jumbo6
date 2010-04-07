@@ -52,7 +52,7 @@ public class AtomTool extends AbstractSVGTool {
 
     final static Logger LOG = Logger.getLogger(AtomTool.class.getName());
     static {
-    	LOG.setLevel(Level.INFO);
+    	LOG.setLevel(Level.DEBUG);
     }
 	public final static String RIGHT = "RIGHT__";
 	public final double fontWidthFontSizeFactor = 0.8;
@@ -107,8 +107,8 @@ public class AtomTool extends AbstractSVGTool {
 	}
 	
 	private void setDefaults() {
-		this.ensureAtomDisplay();
-		this.ensureMoleculeDisplay();
+//		this.ensureAtomDisplay();
+//		this.ensureMoleculeDisplay();
 	}
 
 	/**
@@ -890,20 +890,20 @@ public class AtomTool extends AbstractSVGTool {
 	public void getDownstreamAtoms(CMLAtomSet atomSet,
 			CMLAtom otherAtom, boolean forceUpdate, CMLAtomSet stopSet) {
 		atomSet.addAtom(atom, forceUpdate);
-		LOG.debug("============="+atom.getId()+"===="+otherAtom.getId());
+		LOG.trace("============="+atom.getId()+"===="+otherAtom.getId());
 		List<CMLAtom> ligandList = atom.getLigandAtoms();
 		for (CMLAtom ligandAtom : ligandList) {
 			// do not revisit atoms
 			if (false) {
 			} else if (stopSet != null && stopSet.contains(ligandAtom)) {
-				LOG.debug("STOP "+ligandAtom.getId());
+				LOG.trace("STOP "+ligandAtom.getId());
 			} else if (ligandAtom.equals(otherAtom)) {
-				LOG.debug("PARENT "+ligandAtom.getId());
+				LOG.trace("PARENT "+ligandAtom.getId());
 			} else if (atomSet.contains(ligandAtom)) {
-				LOG.debug("ALREADY "+ligandAtom.getId());
+				LOG.trace("ALREADY "+ligandAtom.getId());
 				// do not backtrack
 			} else {
-				LOG.debug("RECURSE "+ligandAtom.getId());
+				LOG.trace("RECURSE "+ligandAtom.getId());
 				AtomTool ligandTool = AtomTool.getOrCreateTool(ligandAtom);
 				ligandTool.getDownstreamAtoms(atomSet, atom, forceUpdate, stopSet);
 			}
@@ -1003,7 +1003,6 @@ public class AtomTool extends AbstractSVGTool {
                 break;
             }
         }
-//         LOG.debug("LOWEST ATOM "+lowestAtom.getId());
          return lowestAtom;
     }
 
@@ -1167,8 +1166,8 @@ public class AtomTool extends AbstractSVGTool {
 	public void setDisplay(boolean display) {
 		ensureAtomDisplay();
 		if (atomDisplay != null) {
-			new Exception().printStackTrace();
-			LOG.debug("ATOM DISPLAY "+display+" "+atom.getId());
+//			new Exception().printStackTrace();
+//			LOG.debug("ATOM DISPLAY "+display+" "+atom.getId());
 			atomDisplay.setDisplay(display);
 		}
 	}
@@ -1360,14 +1359,14 @@ public class AtomTool extends AbstractSVGTool {
 	/**
 	 * @return the moleculeTool
 	 */
-	public MoleculeTool getMoleculeTool() {
+	public AbstractSVGTool getMoleculeTool() {
 		return moleculeTool;
 	}
 
 	/**
 	 * @param moleculeTool the moleculeTool to set
 	 */
-	public void setMoleculeTool(MoleculeTool moleculeTool) {
+	public void setMoleculeTool(AbstractSVGTool moleculeTool) {
 		this.moleculeTool = (MoleculeTool) moleculeTool;
 	}
 
@@ -1456,6 +1455,21 @@ public class AtomTool extends AbstractSVGTool {
 			}
 		}
 		return newLigandList;
+	}
+	
+	/**
+	 * @return 
+	 */
+	public List<CMLBond> getNonHydrogenLigandBondList() {
+		List<CMLBond> newLigandBondList = new ArrayList<CMLBond>();
+		List<CMLBond> ligandBondList = atom.getLigandBonds();
+		for (CMLBond ligandBond : ligandBondList) {
+			CMLAtom other = ligandBond.getOtherAtom(atom);
+			if (!AS.H.equals(other.getElementType())) {
+				newLigandBondList.add(ligandBond);
+			}
+		}
+		return newLigandBondList;
 	}
 	
 	/**

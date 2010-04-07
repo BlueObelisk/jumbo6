@@ -449,6 +449,7 @@ public class AtomToolTest {
     }
     
     @Test
+    @Ignore
     public void testCreateGraphicsElement1() {
     	CMLAtom atom = new CMLAtom("a1", ChemicalElement.AS.Cl);
     	atom.setXY2(new Real2(0.0, 0.0));
@@ -461,6 +462,7 @@ public class AtomToolTest {
     }
 
     @Test
+    @Ignore
     public void testCreateGraphicsElement2() {
     	CMLAtom atom = new CMLAtom("a1", ChemicalElement.AS.C);
     	atom.setXY2(new Real2(0.0, 0.0));

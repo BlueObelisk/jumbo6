@@ -32,6 +32,8 @@ public class SVGText extends SVGElement {
     public static String SUB1 = CMLConstants.S_RCURLY+CMLConstants.S_UNDER;
     public static String SUP1 = CMLConstants.S_RCURLY+CMLConstants.S_CARET;
     
+    public final static Double DEFAULT_FONT_WIDTH_FACTOR = 10.0;
+    
 	// these are all when text is used for concatenation, etc.
 	private double estimatedHorizontallength = Double.NaN; 
 	private double currentFontSize = Double.NaN;
@@ -96,12 +98,7 @@ public class SVGText extends SVGElement {
 		double fontSize = this.getFontSize();
 		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
 		fontSize = (fontSize < 8) ? 8 : fontSize;
-//		LOG.debug("FONTSIZE "+fontSize);
-		
 		String text = this.getValue();
-//		double x = this.getDouble("x");
-//		double y = this.getDouble("y");
-//		Real2 xy = new Real2(x, y);
 		Real2 xy = this.getXY();
 		xy = transform(xy, cumulativeTransform);
 		xy.plusEquals(new Real2(fontSize*0.65, -0.65*fontSize));
@@ -174,9 +171,15 @@ public class SVGText extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
+		
+//		double fontWidthFactor = DEFAULT_FONT_WIDTH_FACTOR;
+		double fontWidthFactor = 1.0;
+		double halfWidth = getEstimatedHorizontalLength(fontWidthFactor) / 2.0;
+		double height = this.getFontSize();
 		Real2Range boundingBox = new Real2Range();
 		Real2 center = getXY();
-		boundingBox.add(center);
+		boundingBox.add(center.plus(new Real2(halfWidth, 0.0)));
+		boundingBox.add(center.plus(new Real2(-halfWidth, height)));
 		return boundingBox;
 	}
 	
@@ -415,6 +418,13 @@ public class SVGText extends SVGElement {
 		}
 		LOG.debug("new...."+newText);
 		return (newText != null);
+	}
+	
+	public SVGRect getBoundingSVGRect() {
+		Real2Range r2r = getBoundingBox();
+		SVGRect rect = new SVGRect();
+		rect.setBounds(r2r);
+		return rect;
 	}
 	
 }

@@ -315,15 +315,12 @@ public class AtomMatcher2D extends AtomMatcher {
 		for (int j = 0; j < nAtoms2; j++) {
 			CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
 			atom2Id[j] = atom2.getId();
-			// Util.print(" "+atom2Id[j]+S_LBRAK+atom2.getElementType()+
-			// CMLConstants.S_RBRAK);
 		}
-		// LOG.debug();
 		for (int i = 0; i < nAtoms1; i++) {
 			CMLAtom atom1 = (CMLAtom) atomSet.getAtoms().get(i);
 			atom1Id[i] = atom1.getId();
-			// LOG.info(S_SPACE + atom1Id[i] + CMLConstants.S_LBRAK + atom1.getElementType()
-			// + CMLConstants.S_RBRAK);
+			LOG.trace(S_SPACE + atom1Id[i] + CMLConstants.S_LBRAK + atom1.getElementType()
+			 + CMLConstants.S_RBRAK);
 			Real2 atom1Coord = new Real2(atom1.getX2(), atom1.getY2());
 			for (int j = 0; j < nAtoms2; j++) {
 				CMLAtom atom2 = (CMLAtom) atomSet2.getAtoms().get(j);
@@ -331,7 +328,7 @@ public class AtomMatcher2D extends AtomMatcher {
 				distanceMatrix[i][j] = (!atom1.getElementType().equals(
 						atom2.getElementType())) ? CMLAtomSet.MAX_DIST
 						: atom1Coord.getDistance(atom2Coord);
-				// LOG.info(("      " + (int) (10 * distanceMatrix[i][j])));
+				 LOG.trace(("      " + (int) (10 * distanceMatrix[i][j])));
 			}
 			// LOG.info(S_EMPTY);
 		}

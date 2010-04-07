@@ -238,12 +238,14 @@ public class Chain extends AbstractTool {
 	}
 
 	private void expandPaths(List<AtomPath> pathList) {
-		AtomPath atomPath0 = pathList.get(0);
-		CMLAtom atom0 = atomPath0.get(0);
-		Real2 xy0 = new Real2(0., 0.);
-		atom0.setXY2(xy0);
-		for (AtomPath atomPath : pathList) {
-			expandPath(atomPath, 1);
+		if (pathList.size() > 0) {
+			AtomPath atomPath0 = pathList.get(0);
+			CMLAtom atom0 = atomPath0.get(0);
+			Real2 xy0 = new Real2(0., 0.);
+			atom0.setXY2(xy0);
+			for (AtomPath atomPath : pathList) {
+				expandPath(atomPath, 1);
+			}
 		}
 	}
 	
@@ -257,7 +259,7 @@ public class Chain extends AbstractTool {
 				if (direction.getLength() < 0.0001) {
 					direction = new Real2(1.0, 0.0);
 				}
-				direction = direction.getUnitVector().multiplyBy(MoleculeDisplay.DEFAULT_BONDLENGTH);
+				direction = direction.getUnitVector().multiplyBy(MoleculeDisplay.getDefaultBondLength());
 //				System.out.println("DIRECTION... "+direction.getLength());
 				xy = atomPath.get(i-1).getXY2().plus(direction);
 				node.setXY2(xy);
@@ -486,8 +488,10 @@ public class Chain extends AbstractTool {
 //	}
 	
 	private void applyCoordinates() {
-		for (CMLAtom atom : atomCoordinateMap.keySet()) {
-			atom.setXY2(atomCoordinateMap.get(atom));
+		if (atomCoordinateMap != null) {
+			for (CMLAtom atom : atomCoordinateMap.keySet()) {
+				atom.setXY2(atomCoordinateMap.get(atom));
+			}
 		}
 	}
 	
@@ -569,7 +573,7 @@ public class Chain extends AbstractTool {
 	 * @param bond  terminalBond
 	 */
 	public void addTerminalBond(CMLAtom atom, CMLBond bond) {
-		if (((MoleculeDisplay)moleculeDraw.getDrawParameters()).isOmitHydrogens() && AS.H.equals(atom.getElementType())) {
+		if (((MoleculeDisplay)moleculeDraw.getAbstractDisplay()).isOmitHydrogens() && AS.H.equals(atom.getElementType())) {
 			// omit hydrogens
 		} else {
 			if (terminalBondList == null) {

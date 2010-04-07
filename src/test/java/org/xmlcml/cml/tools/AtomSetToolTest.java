@@ -397,7 +397,7 @@ public class AtomSetToolTest {
 		Assert.assertEquals("atom tree map size", 4, map.size());
 		String[] treeS = new String[] { "O", "C(N(C)(C(O)))", "C(N)(O)", "N", };
 
-		List list = new ArrayList();
+		List<Object> list = new ArrayList<Object>();
 		for (String t : treeS) {
 			Object obj = map.get(t);
 			list.add(obj);
@@ -410,7 +410,64 @@ public class AtomSetToolTest {
 				// getXMLContent(), CMLConstants.S_SLASH));
 			}
 		}
-
 	}
     
+	@Test
+	public void includeAtoms0() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetIncludingElementTypes(new String[] {});
+		Assert.assertEquals("empty", 0, atomSet.size());
+		atomSet = atomSetTool.getAtomSetIncludingElementTypes(new String[] {"Pt", "Cl"});
+		Assert.assertEquals("unknown elements", 0, atomSet.size());
+	}
+
+	@Test
+	public void includeAtoms() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetIncludingElementTypes(new String[] {"H", "C"});
+		Assert.assertEquals("CH", 6, atomSet.size());
+		atomSet = atomSetTool.getAtomSetIncludingElementTypes(new String[] {"H", "N"});
+		Assert.assertEquals("NH", 6, atomSet.size());
+	}
+
+	@Test
+	public void includeAtomsAll() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetIncludingElementTypes(new String[] {"H", "C", "O", "N"});
+		Assert.assertEquals("all", 8, atomSet.size());
+	}
+
+	@Test
+	public void excludeAtoms0() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {});
+		Assert.assertEquals("empty", 8, atomSet.size());
+		atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {"Pt", "Cl"});
+		Assert.assertEquals("unknown elements", 8, atomSet.size());
+	}
+
+	@Test
+	public void excludeAtoms() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {"H"});
+		Assert.assertEquals("H", 3, atomSet.size());
+		atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {"H", "N"});
+		Assert.assertEquals("NH", 2, atomSet.size());
+		atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {"C", "O"});
+		Assert.assertEquals("CO", 6, atomSet.size());
+	}
+
+	@Test
+	public void excludeAtomsAll() {
+		AtomSetTool atomSetTool = AtomSetTool.getOrCreateTool(
+				new CMLAtomSet(SMILESTool.createMolecule("CNO")));
+		CMLAtomSet atomSet = atomSetTool.getAtomSetExcludingElementTypes(new String[] {"H", "C", "O", "N"});
+		Assert.assertEquals("all", 0, atomSet.size());
+	}
+
 }
