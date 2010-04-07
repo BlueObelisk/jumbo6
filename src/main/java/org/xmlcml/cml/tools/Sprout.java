@@ -1,6 +1,7 @@
 package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
+
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -15,7 +16,7 @@ import org.xmlcml.euclid.Vector2;
  * 
  */
 public class Sprout extends AbstractTool {
-	final static Logger logger = Logger.getLogger(RingNucleus.class.getName());
+	final static Logger LOG = Logger.getLogger(Sprout.class);
 
 	private CMLAtom ringAtom;
 	private CMLAtom firstAtom;
@@ -49,42 +50,47 @@ public class Sprout extends AbstractTool {
 			throw new RuntimeException("null chain");
 		}
 		Real2 sproutVector = getSproutVector();
-		firstAtom.setXY2(ringAtom.getXY2().plus(sproutVector));
-		chain.calculate2DCoordinates(this, moleculeDraw);
+		if (sproutVector != null) {
+			firstAtom.setXY2(ringAtom.getXY2().plus(sproutVector));
+			chain.calculate2DCoordinates(this, moleculeDraw);
+		}
 	}
 	/**
 	 * @return vector
 	 * @throws RuntimeException
 	 */
 	Real2 getSproutVector() throws RuntimeException {
-		double bondLength = ((MoleculeDisplay)ringNucleus.getMoleculeDraw().getDrawParameters()).getBondLength();
+		Real2 vv = null;
+		double bondLength = ((MoleculeDisplay)ringNucleus.getMoleculeDraw().getAbstractDisplay()).getBondLength();
 		if (ringAtom.getX2Attribute() == null) {
-			throw new RuntimeException("ringAtom has no coordinates; "+ringAtom.getId());
-		}
-		if (ringAtomSet == null) {
-			ringAtomSet = new CMLAtomSet();
-			for (CMLAtom atom : ringAtom.getLigandAtoms()) {
-				if (ringNucleus.getAtomSet().contains(atom)) {
-					if (atom.getX2Attribute() == null) {
-						// this happens when adding sprout to ring within
-						// ringSet
-//						System.err.println("ring has no coordinates: ");
-					} else {
-						ringAtomSet.addAtom(atom);
+			LOG.error("ringAtom has no coordinates; "+ringAtom.getId());
+		} else {
+			if (ringAtomSet == null) {
+				ringAtomSet = new CMLAtomSet();
+				for (CMLAtom atom : ringAtom.getLigandAtoms()) {
+					if (ringNucleus.getAtomSet().contains(atom)) {
+						if (atom.getX2Attribute() == null) {
+							// this happens when adding sprout to ring within
+							// ringSet
+	//						System.err.println("ring has no coordinates: ");
+						} else {
+							ringAtomSet.addAtom(atom);
+						}
 					}
 				}
 			}
+			if (ringAtomSet.size() < 2) {
+				LOG.error("Must have at list 2 ring atoms");
+			} else {
+				// calculate sprout coordinates and then recurse to chain
+				Real2 centroid = ringAtomSet.getCentroid2D();
+				Vector2 v = new Vector2(ringAtom.getXY2().subtract(centroid));
+				if (v.getLength() < 0.00001) {
+					v = new Vector2(1., 0.);
+				}
+				vv = v.getUnitVector().multiplyBy(bondLength);
+			}
 		}
-		if (ringAtomSet.size() < 2) {
-			throw new RuntimeException("Must have at list 2 ring atoms");
-		}
-		// calculate sprout coordinates and then recurse to chain
-		Real2 centroid = ringAtomSet.getCentroid2D();
-		Vector2 v = new Vector2(ringAtom.getXY2().subtract(centroid));
-		if (v.getLength() < 0.00001) {
-			v = new Vector2(1., 0.);
-		}
-		Real2 vv = v.getUnitVector().multiplyBy(bondLength);
 		return vv;
 	}
 

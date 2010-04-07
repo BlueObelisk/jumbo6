@@ -22,7 +22,9 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLBondSet;
+import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * tool to support connection table. not fully developed
  * 
@@ -486,7 +488,6 @@ public class ConnectionTableTool extends AbstractTool {
 			CMLAtomSet atomSet = new CMLAtomSet(set);
 			atomSetList.add(atomSet);
 		}
-
 		return atomSetList;
 	}
 
@@ -884,5 +885,202 @@ public class ConnectionTableTool extends AbstractTool {
 
 	public void setMolecule(CMLMolecule molecule) {
 		this.molecule = molecule;
+	}
+	
+	public List<BondTool> getAcyclicBondToolsWithDownstreamAtomsMatchingRMolecule(GroupTool groupToolTemplate) {
+		List<BondTool> matchedBondTools = new ArrayList<BondTool>();
+		CMLBondSet acyclicBondSet = new CMLBondSet(this.getAcyclicBonds());
+		CMLBondSet nonHAcyclicBondSet = BondSetTool.getOrCreateTool(acyclicBondSet)
+			.getBondSetExcludingElementTypes(new String[]{"H"});
+		List<CMLBond> nonHAcyclicBonds =  nonHAcyclicBondSet.getBonds();
+		for (CMLBond bond : nonHAcyclicBonds) {
+			BondTool bondTool = BondTool.getOrCreateTool(bond);
+			addMatchingBondTool(matchedBondTools, groupToolTemplate, bondTool, 0);
+			addMatchingBondTool(matchedBondTools, groupToolTemplate, bondTool, 1);
+		}
+		return matchedBondTools;
+	}
+
+	private void addMatchingBondTool(List<BondTool> matchedBondTools, GroupTool groupToolTemplate, BondTool bondTool, int serial) {
+		CMLBond rootBond = bondTool.getBond();
+		CMLAtom rootAtom = rootBond.getAtom(serial);
+		String downstreamMorganString = bondTool.getDownstreamMorganString(rootAtom);
+		if (downstreamMorganString.equals(groupToolTemplate.getMorganString())) {
+			matchedBondTools.add(bondTool);
+			GroupTool groupTool = new GroupTool(groupToolTemplate);
+			groupTool.setRootBond(rootBond);
+			groupTool.setRootAtom(rootAtom);
+			groupTool.setMorganString(downstreamMorganString);
+			bondTool.addGroupTool(groupTool);
+		}
+	}
+	
+	public List<List<BondTool>> identifyGroupsOnAcyclicBonds() {
+		Map<String, GroupTool> groupToolMap= GroupTool.getCommonGroupMap();
+		List<List<BondTool>> bondToolListList = new ArrayList<List<BondTool>>();
+		for (String name : groupToolMap.keySet()) {
+			GroupTool groupTool = groupToolMap.get(name);
+			List<BondTool> bondList = this.getAcyclicBondToolsWithDownstreamAtomsMatchingRMolecule(groupTool);
+			if (bondList.size() > 0) {
+				bondToolListList.add(bondList);
+			}
+		}
+		return bondToolListList;
+	}
+
+	public static void outputGroups(List<List<BondTool>> bondToolListList) {
+		for (List<BondTool> bondToolList : bondToolListList) {
+			for (BondTool bondTool : bondToolList) {
+				List<GroupTool> groupToolList = bondTool.getGroupToolList();
+				for (GroupTool groupTool : groupToolList) {
+					CMLBond bond = groupTool.getRootBond();
+					System.out.print("...."+groupTool.getName()+" "+
+						bond.getAtomRefs2Attribute().getValue()+" ~~ "+
+						groupTool.getRootAtom().getId());
+				}
+			}
+			System.out.println();
+		}
+	}
+	
+	public static void pruneGroupsAndReLabel(List<List<BondTool>> bondToolListList) {
+		for (List<BondTool> bondToolList : bondToolListList) {
+			for (BondTool bondTool : bondToolList) {
+				CMLBond bond = bondTool.getBond();
+				List<GroupTool> groupToolList = bondTool.getGroupToolList();
+				for (GroupTool groupTool : groupToolList) {
+					CMLAtom rootAtom = groupTool.getRootAtom();
+					CMLAtom otherAtom = bond.getOtherAtom(rootAtom);
+//					rootAtom.setElementType("R");
+					otherAtom.setElementType(groupTool.getName());
+					CMLLabel label = new CMLLabel();
+					label.setCMLValue(groupTool.getName());
+					otherAtom.addLabel(label);
+					bondTool.deleteDownstreamAtoms(rootAtom, otherAtom);
+				}
+			}
+		}
+	}
+
+
+	public List<CMLAtom> getMethylGroups() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		List<CMLAtom> methylGroupList = new ArrayList<CMLAtom>();
+		for (CMLAtom atom : atoms) {
+			if (AS.C.equals(atom.getElementType())) {
+				if (atom.getLigandHydrogenAtoms().size() == 3 && atom.getLigandAtoms().size() == 4) {
+					methylGroupList.add(atom);
+				}
+			}
+		}
+		return methylGroupList;
+	}
+
+	public void contractNAlkylGroups() {
+		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
+		List<CMLAtom> methylGroups = connectionTableTool.getMethylGroups();
+		for (CMLAtom atom : methylGroups) {
+			CMLAtom startAtom = atom;
+			CMLAtom currentAtom = atom;
+			CMLAtom lastAtom = null;
+			CMLAtom nextAtom;
+			int len = 1;
+			while (true) {
+				nextAtom = connectionTableTool.getNextPotentialMethylene(currentAtom, lastAtom);
+				if (nextAtom == null) {
+					// deal with methyl
+					if (lastAtom == null) {
+						lastAtom = startAtom;
+					}
+					break;
+				}
+				len++;
+				lastAtom = currentAtom;
+				currentAtom = nextAtom;
+			}
+			nextAtom = connectionTableTool.getNextAtom(currentAtom, lastAtom);
+			LOG.trace("len "+len+
+				" last/"+((lastAtom!=null) ? lastAtom.getId() : "null")+
+				" curr/"+((currentAtom!=null) ? currentAtom.getId() : "null")+
+				" next/"+((nextAtom!=null) ? nextAtom.getId() : "null")
+			);
+			String alkylName = GroupTool.getAlkylName(len);
+			if (len > 1) {
+				CMLBond deleteBond = molecule.getBond(currentAtom, nextAtom);
+				if (deleteBond != null) {
+					BondTool.getOrCreateTool(deleteBond).deleteDownstreamAtoms(nextAtom, currentAtom);
+				} else {
+					throw new RuntimeException("NO bond to delete");
+				}
+			}
+			currentAtom.setElementType(alkylName);
+		}
+	}
+
+	private CMLAtom getNextAtom(CMLAtom currentAtom, CMLAtom lastAtom) {
+		List<CMLAtom> ligands = currentAtom.getLigandAtoms();
+		CMLAtom nextAtom = null;
+		for (CMLAtom ligand : ligands) {
+			String elementType = ligand.getElementType();
+			if (AS.H.equals(elementType)) {
+				// ignore
+			} else if (ligand.equals(lastAtom)) {
+				// ignore
+			} else {
+				nextAtom = ligand;
+				break;
+			}
+		}
+		return nextAtom;
+	}
+	
+	private CMLAtom getNextPotentialMethylene(CMLAtom currentAtom, CMLAtom lastAtom) {
+		List<CMLAtom> ligands = currentAtom.getLigandAtoms();
+		CMLAtom nextAtom = null;
+		for (CMLAtom ligand : ligands) {
+			String elementType = ligand.getElementType();
+			if (AS.H.equals(elementType)) {
+				// ignore
+			} else if (ligand.equals(lastAtom)) {
+				// ignore
+			} else if (!AS.C.equals(elementType)) {
+				nextAtom = null;
+				break;
+			} else if (AS.C.equals(elementType)) {
+				if (nextAtom == null) {
+					nextAtom = ligand;
+				} else {
+					// too many ligands
+					nextAtom = null;
+					break;
+				}
+			}
+		}
+		return nextAtom;
+	}
+
+	public List<CMLAtom> getFullyAcyclicAtoms() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		
+		List<CMLAtom> acyclicAtoms = new ArrayList<CMLAtom>();
+		List<CMLBond> acyclicBonds = getAcyclicBonds();
+		Set<CMLBond> acyclicBondSet = new HashSet<CMLBond>();
+		for (CMLBond acyclicBond : acyclicBonds) {
+			acyclicBondSet.add(acyclicBond);
+		}
+		for (CMLAtom atom : atoms) {
+			List<CMLBond> ligandBonds = atom.getLigandBonds();
+			boolean acyclic = true;
+			for (CMLBond ligandBond : ligandBonds) {
+				if (!acyclicBondSet.contains(ligandBond)) {
+					acyclic = false;
+					break;
+				}
+			}
+			if (acyclic) {
+				acyclicAtoms.add(atom);
+			}
+		}
+		return acyclicAtoms;
 	}
 }

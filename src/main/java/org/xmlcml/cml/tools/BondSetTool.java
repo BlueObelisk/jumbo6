@@ -11,6 +11,7 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.euclid.Util;
 
 /**
  * tool to support bond set. not sure if useful
@@ -109,5 +110,37 @@ public class BondSetTool extends AbstractTool {
          return bond;
      }
 
-    
+     public CMLBondSet getBondSetIncludingElementTypes(String[] elementTypes) {
+     	return createIncludedSet(elementTypes, true);
+     }
+
+    public CMLBondSet getBondSetExcludingElementTypes(String[] elementTypes) {
+    	return createIncludedSet(elementTypes, false);
+    }
+
+	private CMLBondSet createIncludedSet(String[] elementTypes, boolean include) {
+		CMLBondSet includedBondSet = new CMLBondSet();
+		boolean ignoreCase = false;
+    	List<CMLBond> bonds = bondSet.getBonds();
+    	for (CMLBond bond : bonds) {
+    		String elementType0 = bond.getAtom(0).getElementType();
+    		String elementType1 = bond.getAtom(1).getElementType();
+    		if (include) {
+    			if (
+    			Util.indexOf(elementType0, elementTypes, ignoreCase) != -1 &&
+        		Util.indexOf(elementType1, elementTypes, ignoreCase) != -1
+        		) {
+    				includedBondSet.addBond(bond);
+    			}
+    		} else {
+    			if (
+    			Util.indexOf(elementType0, elementTypes, ignoreCase) == -1 &&
+        		Util.indexOf(elementType1, elementTypes, ignoreCase) == -1
+        		) {
+    				includedBondSet.addBond(bond);
+    			}
+    		} 
+    	}
+		return includedBondSet;
+	}
 }

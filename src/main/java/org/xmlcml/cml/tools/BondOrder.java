@@ -56,6 +56,15 @@ public class BondOrder
         return (value == null) ? UNKNOWN : GetBondOrderFromCMLOrder(value);
     }
 
+    public static String getCMLBondOrder(CMLBond bond) {
+    	return GetBondOrder(bond).getCmlBondOrder();
+    }
+    
+    public static void normalizeBondOrder(CMLBond bond) {
+    	bond.setOrder(GetBondOrder(bond).getCmlBondOrder());
+    }
+    
+    
     /// <summary>
     /// creates BondOrder
     /// if value is unknown, order = Order.UNKNOWN

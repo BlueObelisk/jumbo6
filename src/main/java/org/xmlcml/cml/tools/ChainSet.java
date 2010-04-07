@@ -140,7 +140,7 @@ public class ChainSet extends AbstractTool {
 		for (CMLBond ligandBond : bondList) {
 			CMLAtom otherAtom = ligandBond.getOtherAtom(nextAtom);
 			// skip hydrogens if required
-			if (((MoleculeDisplay)moleculeDraw.getDrawParameters()).isOmitHydrogens() && AS.H.equals(otherAtom.getElementType())) {
+			if (((MoleculeDisplay)moleculeDraw.getAbstractDisplay()).isOmitHydrogens() && AS.H.equals(otherAtom.getElementType())) {
 				continue;
 			}
 			// bond already used

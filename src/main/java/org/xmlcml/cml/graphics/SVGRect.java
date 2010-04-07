@@ -12,6 +12,7 @@ import nu.xom.Node;
 
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
 
@@ -187,6 +188,16 @@ public class SVGRect extends SVGElement {
 	 */
 	public String getTag() {
 		return TAG;
+	}
+
+	public void setBounds(Real2Range r2r) {
+		if (r2r != null) {
+			RealRange xr = r2r.getXRange();
+			RealRange yr = r2r.getYRange();
+			this.setXY(new Real2(xr.getMin(), yr.getMin()));
+			this.setWidth(xr.getRange());
+			this.setHeight(yr.getRange());
+		}
 	}
 	
 //	public String toString() {

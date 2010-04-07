@@ -106,7 +106,6 @@ public class MoleculeTool extends AbstractSVGTool {
 	private CMLBond currentBond;
 
 	private Morgan morgan;
-
 	private SVGRect boundingRectSVG;
 	
 
@@ -1928,6 +1927,24 @@ public class MoleculeTool extends AbstractSVGTool {
 		return (nBonds == 0 || Double.isNaN(bondSum) || Real.isZero(bondSum, Real.EPS)) 
 		    ? Double.NaN : bondSum / ((double) nBonds);
 	}
+	
+	/**
+	 * get the average atom-atom bond distance.
+	 *
+	 * This is primarily for scaling purposes and should not be taken too
+	 * seriously.
+	 *
+	 * @param type
+	 * @param omitHydrogens coordinates
+	 * @return average distance in origianl units. If no bonds returns negative.
+	 */
+	public void scaleAverage2DBondLength(double len) {
+		boolean omitHydrogens = true;
+		double averageBondLength = this.getAverageBondLength(CoordinateType.TWOD , omitHydrogens);
+		double scale = len/averageBondLength;
+		molecule.multiply2DCoordsBy(scale);
+	}
+
 
 	/**
 	 * get the average atom-atom bond distance.
@@ -2517,12 +2534,7 @@ public class MoleculeTool extends AbstractSVGTool {
      * @return null if problem
      */
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
-    	moleculeDisplay = (drawable instanceof MoleculeDisplayList) ? 
-    			((MoleculeDisplayList)drawable).getMoleculeDisplay() : moleculeDisplay;
-		enableMoleculeDisplay();
-    	BondDisplay defaultBondDisplay = moleculeDisplay.getDefaultBondDisplay();
-    	AtomDisplay defaultAtomDisplay = moleculeDisplay.getDefaultAtomDisplay();
-    	double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
+    	SVGElement g = null;
     	enableMoleculeDisplay();
     	Transform2 transform2 = new Transform2(
 			new double[] {
@@ -2532,56 +2544,198 @@ public class MoleculeTool extends AbstractSVGTool {
 			);
     
     	List<CMLAtom> atoms = molecule.getAtoms();
-    	if (atoms.size() == 0) {
-    		LOG.debug("No atoms to display");
-    	} else if (atoms.size() == 1) {
-    	} else if (applyScale) {
-    		transform2 = scaleToBoundingBoxesAndScreenLimits(transform2);
-    	}
-    	
-    	SVGElement g = null;
-    	if(drawable instanceof MoleculeDisplayList) {
-    		g = ((MoleculeDisplayList) drawable).getSvg();
-    	}
-		if (g == null) {
-	    	g = createSVGElement(drawable, transform2);
-	    	g.setProperties(moleculeDisplay);
-    	}
-    	defaultBondDisplay.setScale(avlength);
-    	
-    	defaultAtomDisplay.setScale(avlength);
-    	if (molecule.getAtomCount() == 1) {
-    		defaultAtomDisplay.setDisplayCarbons(true);
-    	} 
     	List<CMLBond> bonds = molecule.getBonds();
     	setAtomBondAndGroupVisibility(atoms, bonds);
-    	
-    	displayBonds(drawable, g, defaultBondDisplay, defaultAtomDisplay);
-    	displayAtoms(drawable, g, defaultAtomDisplay);
-    	
-    	ensureBoundingRect();
-    	if (moleculeDisplay.isDisplayFormula()) {
-    		displayFormula(drawable, g);
-    	}
-    	if (moleculeDisplay.isDisplayLabels()) {
-    		displayMoleculeLabels(drawable, g);
-    	}
-    	if (moleculeDisplay.isDisplayNames()) {
-    		displayMoleculeNames(drawable, g);
-    	}
-    	if (moleculeDisplay.isDrawBoundingBox()) {
-    		drawBoundingBox(drawable, g);
-    	}
-    	
-    	if (drawable != null) {
-    		try {
-    			drawable.output(g);
-    		} catch (IOException e) {
-    			throw new RuntimeException(e);
-    		}
+    	if (atoms.size() == 0) {
+    		g = this.getCascadingFormulaOrTextSVGElement();
+    	} else if (atoms.size() == 1) {
+    		g = this.getCascadingFormulaOrTextSVGElement();
+    	} else {
+			g = drawMultiAtomMolecule(drawable, g, transform2);
     	}
     	return g;
     }
+
+	private SVGElement getCascadingFormulaOrTextSVGElement() {
+		SVGElement gg = getCascadingFormulaSVGElement();
+		if (gg == null) {
+			gg = getCascadingTextSVGElement();
+		}
+		return gg;
+	}
+
+	private SVGG getCascadingTextSVGElement() {
+		String text = getCascadingTextElement();
+		if (text == null) {
+			text = "Cannot create meaningful text";
+		}
+		return createTextWithBoundingBox(text);
+	}
+
+	private SVGGBox createTextWithBoundingBox(String text) {
+		SVGText textSVGElement = new SVGText(new Real2(0.0, 0.0), text);
+		textSVGElement.setFontSize(10.0);
+		SVGRect rect = textSVGElement.getBoundingSVGRect();
+		SVGGBox box = new SVGGBox();
+		box.appendChild(textSVGElement);
+		box.appendChild(rect);
+		return box;
+	}
+
+	private String getCascadingTextElement() {
+		String text = null;
+		CMLName name = getCascadingName();
+		if (name != null) {
+			text = name.getValue();
+		}
+		if (text == null) {
+			CMLLabel label = getCascadingLabel();
+			if (label != null) {
+				text = label.getCMLValue();
+			}
+		}
+		if (text == null) {
+			text = molecule.getTitle();
+		}
+		if (text == null) {
+			text = molecule.getId();
+		}
+		return text;
+	}
+
+	private CMLLabel getCascadingLabel() {
+		// fixme - maybe use more complex strategy
+		CMLElements labels = molecule.getLabelElements();
+		return (labels.size() == 0) ? null : (CMLLabel) labels.get(0);
+	}
+
+	private CMLName getCascadingName() {
+		// fixme - maybe use more complex strategy
+		CMLElements names = molecule.getNameElements();
+		return (names.size() == 0) ? null : (CMLName) names.get(0);
+	}
+
+	private SVGElement getCascadingFormulaSVGElement() {
+		String formulaS = null;
+		CMLElements<CMLFormula> formulas = molecule.getFormulaElements();
+		if (formulas.size() > 0) {
+			for (CMLFormula formula : formulas) {
+				formulaS = formula.getConcise();
+				if (formulaS == null) {
+					formulaS = formula.getInline();
+				}
+				if (formulas != null) {
+					break;
+				}
+			}
+		} else {
+			CMLFormula formula = new CMLFormula(molecule);
+			formulaS = formula.getConcise();
+		}
+		SVGElement textSVGElement = null;
+		if (formulaS != null) {
+			textSVGElement = createTextWithBoundingBox(formulaS);
+		}
+		return textSVGElement;
+	}
+
+	private SVGElement drawMultiAtomMolecule(CMLDrawable drawable,
+			SVGElement g, Transform2 transform2) {
+		if (applyScale) {
+			transform2 = scaleToBoundingBoxesAndScreenLimits(transform2);
+		}
+		if(drawable instanceof MoleculeDisplayList) {
+			g = ((MoleculeDisplayList) drawable).getSvg();
+		}
+		if (g == null) {
+			g = createSVGElement(drawable, transform2);
+			g.setProperties(moleculeDisplay);
+		}
+		double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
+		
+		BondDisplay defaultBondDisplay = moleculeDisplay.getDefaultBondDisplay();
+		defaultBondDisplay.setScale(avlength);
+		displayBonds(drawable, g, defaultBondDisplay);
+		displayAtoms(drawable, g, avlength);
+		
+		ensureBoundingRect();
+		displayFormula(drawable, g);
+		displayMoleculeLabels(drawable, g);
+		displayMoleculeNames(drawable, g);
+		if (moleculeDisplay.isDrawBoundingBox()) {
+			drawBoundingBox(drawable, g);
+			scaleToScreen(g);
+		}
+		
+		if (drawable != null) {
+			try {
+				drawable.output(g);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return g;
+	}
+
+	private void scaleToScreen(SVGElement g) {
+		if (molecule.getMoleculeElements().size() == 0) {
+			if (moleculeDisplay.getMaxScreenSize() != null ||
+					moleculeDisplay.getMinScreenSize() != null) {
+				double scale = 1.0;
+				scale = scaleToMaximumScreen(scale);
+				scale = scaleToMinimumScreen(scale);
+				Transform2 t2 = g.getTransform2FromAttribute();
+				t2.multiplyBy(scale);
+				g.setTransform(t2);
+			}
+		}
+	}
+
+	private double scaleToMaximumScreen(double scale) {
+		Real2 maxScreenSize = moleculeDisplay.getMaxScreenSize();
+		if (maxScreenSize != null) {
+			Real2 scales = getScales(maxScreenSize);
+			if (scales != null) {
+				double scalex = Math.min(scale, scales.getX());
+				double scaley = Math.min(scale, scales.getY());
+				scale = Math.min(scale, Math.min(scalex, scaley));
+			}
+		}
+		return scale;
+	}
+
+	private double scaleToMinimumScreen(double scale) {
+		Real2 minScreenSize = moleculeDisplay.getMinScreenSize();
+		if (minScreenSize != null) {
+			Real2 scales = getScales(minScreenSize);
+			if (scales != null) {
+				double scalex = Math.max(scale, scales.getX());
+				double scaley = Math.max(scale, scales.getY());
+				scale = Math.max(scale, Math.max(scalex, scaley));
+			}
+		}
+		return scale;
+	}
+
+	private Real2 getScales(Real2 screenSize) {
+		Real2 scales = null;
+		if (boundingRectSVG != null) {
+			scales = new Real2();
+			scales.x = screenSize.x / boundingRectSVG.getWidth();
+			scales.y = screenSize.y / boundingRectSVG.getHeight();
+		}
+		return scales;
+	}
+
+	private void displayAtoms(CMLDrawable drawable, SVGElement g,
+			double avlength) {
+		AtomDisplay defaultAtomDisplay = moleculeDisplay.getDefaultAtomDisplay();
+		defaultAtomDisplay.setScale(avlength);
+		if (molecule.getAtomCount() == 1) {
+			defaultAtomDisplay.setDisplayCarbons(true);
+		} 
+		displayAtoms(drawable, g, defaultAtomDisplay);
+	}
     
     private void drawBoundingBox(CMLDrawable drawable, SVGElement g) {
     	ensureBoundingRect();
@@ -2589,7 +2743,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	    	boundingRectSVG.setStroke(moleculeDisplay.getBoundingBoxBundle().getStroke());
 	    	boundingRectSVG.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getStrokeWidth());
 	    	boundingRectSVG.setStrokeWidth(moleculeDisplay.getBoundingBoxBundle().getOpacity());
-	    	g.appendChild(boundingRectSVG);
+	    	appendNonNullChild(g, boundingRectSVG);
     	}
     }
 
@@ -2619,10 +2773,12 @@ public class MoleculeTool extends AbstractSVGTool {
     	// add atomDisplay to each atomTool
     	for (CMLAtom atom : atoms) {
     		AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+// FIXME PMR		
     		atomTool.ensureAtomDisplay();
     		atomTool.getAtomDisplay().setMoleculeDisplay(moleculeDisplay);
     		// group visibility (NYI)
     		if (atomTool.isGroupRoot()) {
+        		atomTool.ensureAtomDisplay();
     			atomTool.setDisplay(false);
     		}
     	}
@@ -2683,69 +2839,67 @@ public class MoleculeTool extends AbstractSVGTool {
     		if (atomTool.getAtomDisplay().omitAtom(atom)) {
     			continue;
     		}
-    		GraphicsElement a = atomTool.createGraphicsElement(drawable);
-    		if (a != null) {
-    			g.appendChild(a);
-    		}
+    		GraphicsElement atomSvg = atomTool.createGraphicsElement(drawable);
+			appendNonNullChild(g, atomSvg);
 		}
 	}
 
 	private void displayBonds(
 		CMLDrawable drawable, SVGElement g,
-		BondDisplay bondDisplay, AtomDisplay atomDisplay) {
+		BondDisplay bondDisplay) {
 		for (CMLBond bond : molecule.getBonds()) {
     		BondTool bondTool = getOrCreateBondTool(bond);
     		bondTool.setBondDisplay(bondDisplay);
     		bondTool.setMoleculeTool(this);
-    		if (bondTool.getBondDisplay().omitBond(bond)) {
-    			continue;
-    		}
-    		SVGElement b = null;
-    		try {
-    			b = bondTool.createGraphicsElement(drawable);
-        	} catch (RuntimeException e) {
-    			LOG.warn("Cannot draw bond; skipped: "+e.getMessage());
-        	}
-    		if (b != null) {
-    			g.appendChild(b);
+    		if (!bondTool.getBondDisplay().omitBond(bond)) {
+	    		SVGElement bondSvg = bondTool.createGraphicsElement(drawable);
+    			appendNonNullChild(g, bondSvg);
     		}
 		}
 	}
 	
 	private void displayMoleculeNames(CMLDrawable drawable, SVGElement g) {
-		double x = 50.;
-		double y = 50.;
-		double deltay = 20.0;
-		int i = 0;
-    	Transform2 transform2 = new Transform2(
-			new double[] {
-				1.,  0., 0.0,
-				0., -1., 0.0,
-				0.,  0., 1.}
-			);
-		for (CMLName name : molecule.getNameElements()) {
-			SVGText text = new SVGText(new Real2(x, y+(i*deltay)), name.getValue());
-	    	text.setTransform(transform2);
-			g.appendChild(text);
-			i++;
-		}
-	}
-    
-	private void displayMoleculeLabels(CMLDrawable drawable, SVGElement g) {
-		calculateBoundingBox2D();
-		RealRange xRange = userBoundingBox.getXRange();
-		if (xRange != null) {
-			double xMid = xRange.getMidPoint();
-	//		double minY = userBoundingBox.getYRange().getMin();
-			double maxY = userBoundingBox.getYRange().getMax();
+		if (moleculeDisplay.isDisplayNames()) {
+//			Real2 displayPoisition = moleculeDisplay.getNameXPosition()
+			double x = 50.;
+			double y = 0.;
+//			double y = 50.;
+			double deltay = 20.0;
+			int i = 0;
 	    	Transform2 transform2 = new Transform2(
 				new double[] {
 					1.,  0., 0.0,
 					0., -1., 0.0,
 					0.,  0., 1.}
 				);
-			if (molecule.getLabelElements().size() > 0) {
-				displayLabels(g, xMid, maxY, transform2);
+			for (CMLName name : molecule.getNameElements()) {
+				SVGText text = new SVGText(new Real2(x, y+(i*deltay)), name.getValue());
+				if (moleculeDisplay.getLabelFontSize() != null) {
+					text.setFontSize(moleculeDisplay.getLabelFontSize());
+				}
+		    	text.setTransform(transform2);
+				appendNonNullChild(g, text);
+				i++;
+			}
+		}
+	}
+    
+	private void displayMoleculeLabels(CMLDrawable drawable, SVGElement g) {
+		if (moleculeDisplay.isDisplayLabels()) {
+			calculateBoundingBox2D();
+			RealRange xRange = userBoundingBox.getXRange();
+			if (xRange != null) {
+				double xMid = xRange.getMidPoint();
+				double maxY = userBoundingBox.getYRange().getMax();
+		    	Transform2 transform2 = new Transform2(
+					new double[] {
+						1.,  0., 0.0,
+						0., -1., 0.0,
+						0.,  0., 1.}
+					);
+				if (molecule.getLabelElements().size() > 0) {
+					displayLabels(g, xMid, maxY, transform2);
+				}
 			}
 		}
 	}
@@ -2764,12 +2918,13 @@ public class MoleculeTool extends AbstractSVGTool {
 			text.setFontWeight("bold");
 			text.setFontSize(labelFontSize);
 			text.setTransform(transform2);
-			g.appendChild(text);
+			appendNonNullChild(g, text);
 		}
 	}
     
 	private void displayFormula(CMLDrawable drawable, SVGElement g) {
-    	if (molecule.getFormulaElements().size() > 0) {
+    	if (moleculeDisplay.isDisplayFormula() &&
+    			molecule.getFormulaElements().size() > 0) {
     		CMLFormula formula = molecule.getFormulaElements().get(0);
     		FormulaTool formulaTool = FormulaTool.getOrCreateTool(formula);
     		SVGElement f = formulaTool.createGraphicsElement(drawable);
@@ -2782,7 +2937,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	    				0.,  0., 1.}
 	    			);
     	    	f.setTransform(transform2);
-    			g.appendChild(f);
+    			appendNonNullChild(g, f);
     		}
     	}
 	}
@@ -3436,8 +3591,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @return CMLAngle in XOM
 	 * @throws RuntimeException
 	 */
-	public CMLAngle getAngle(CMLAtom at0, CMLAtom at1, CMLAtom at2)
-	throws RuntimeException {
+	public CMLAngle getAngle(CMLAtom at0, CMLAtom at1, CMLAtom at2)	throws RuntimeException {
 		if (at0 == null || at1 == null || at2 == null) {
 			throw new RuntimeException("FindAngle: null atom(s)");
 		}
@@ -3967,14 +4121,19 @@ public class MoleculeTool extends AbstractSVGTool {
 			e.printStackTrace();
 		}
 		SVGG g = displayList.getSvg();
+		if (g == null) {
+			throw new RuntimeException("NULL GGG");
+		}
 		g = replaceThisBySingleGChild(g);
 		return SVGGBox.createSVGGBox(g);
 	}
 
 	private SVGG replaceThisBySingleGChild(SVGG g) {
-		Nodes gNodes = g.query("./*[local-name()='"+SVGG.TAG+"']");
-		if (gNodes.size() == 1) {
-			g = new SVGG((SVGG)gNodes.get(0));
+		if (g != null) {
+			Nodes gNodes = g.query("./*[local-name()='"+SVGG.TAG+"']");
+			if (gNodes.size() == 1) {
+				g = new SVGG((SVGG)gNodes.get(0));
+			}
 		}
 		return g;
 	}
@@ -3985,7 +4144,8 @@ public class MoleculeTool extends AbstractSVGTool {
 			try {
 				moleculeLayout.create2DCoordinates(molecule);
 			} catch (RuntimeException e) {
-				LOG.error("Cannot create coordinates (maybe recurses too deeply)");
+				e.printStackTrace();
+				LOG.error("Cannot create coordinates: "+e);
 			}
 		}
 	}
@@ -4065,6 +4225,40 @@ public class MoleculeTool extends AbstractSVGTool {
 		return (formula == null) ? null : formula.getInline();
 	}
 
+	public static Angle getCalculatedAngle2D(CMLAtom atom0, CMLAtom atom1, CMLAtom atom2) {
+		Angle angle = null;
+		if (atom0 != null && atom1 != null && atom2 != null) {
+			Real2 xy0 = atom0.getXY2();
+			Real2 xy1 = atom1.getXY2();
+			Real2 xy2 = atom2.getXY2();
+			angle = Real2.getAngle(xy0, xy1, xy2);
+		}
+		return angle;
+	}
+
+	public void transformToInertialAxes() {
+		Point3Vector p3v = new CMLAtomSet(molecule).getCoordinates3(CoordinateType.CARTESIAN);
+		RealSquareMatrix eigvec = p3v.calculateRotationToInertialAxes();
+		if (eigvec != null) {
+			p3v.transform(new Transform3(eigvec));
+			this.setCoordinates(CoordinateType.CARTESIAN, p3v);
+		}
+	}
+	
+	public void setCoordinates(CoordinateType type, Point3Vector p3v) {
+		if (molecule.getAtomCount() != p3v.size()) {
+			throw new RuntimeException("inconsistent numbers of atoms");
+		}
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (int i = 0; i < p3v.size(); i++) {
+			if (CoordinateType.CARTESIAN.equals(type)) {
+				atoms.get(i).setXYZ3(p3v.get(i));
+			} else if (CoordinateType.FRACTIONAL.equals(type)) {
+				atoms.get(i).setXYZFract(p3v.get(i));
+			}
+		}
+	}
+	
 	/**
 	 * Calculates the precise masses of the different isotopomers of the molecule,
 	 * returning a maximum of ten isotopomers masses
@@ -4144,7 +4338,6 @@ public class MoleculeTool extends AbstractSVGTool {
 		
 		return newIsotopomers;
 	}
-
 
 }
 

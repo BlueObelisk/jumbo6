@@ -812,8 +812,6 @@ public class ReactionTool extends AbstractSVGTool {
      * @return null if problem
      */
     public SVGElement createGraphicsElement(CMLDrawable drawable) {
-//    	AbstractDisplay moleculeDisplayx = (reactionDisplay == null) ? null :
-//    		reactionDisplay.getMoleculeDisplay();
     	ensureReactionDisplay();
     	Transform2 transform2 = new Transform2(
     			new double[] {
@@ -865,7 +863,7 @@ public class ReactionTool extends AbstractSVGTool {
 	Real2Range getBoundingBox(List<CMLMolecule> molecules) {
 		Real2Range range = new Real2Range();
 		for (CMLMolecule molecule : molecules) {
-			MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+			AbstractSVGTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 			Real2Range molRange = moleculeTool.calculateBoundingBox2D();
 			range.plus(molRange);
 		}
@@ -878,7 +876,6 @@ public class ReactionTool extends AbstractSVGTool {
 		for (CMLMolecule molecule : molecules) {
     		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     		moleculeTool.setMoleculeDisplay(moleculeDisplay);
-// ??    		atomTool.setMoleculeTool(this);
     		GraphicsElement a = moleculeTool.createGraphicsElement(drawable);
     		if (a != null) {
     			a.detach();
@@ -1120,19 +1117,19 @@ public class ReactionTool extends AbstractSVGTool {
 		return product;
 	}
 
-	private List<List<Long>> extractMorgans(List<CMLMolecule> molecules) {
-		List<List<Long>> morgans = new ArrayList<List<Long>>();
-		for (CMLMolecule molecule : molecules) {
-			Morgan morgan = new Morgan(MoleculeTool.getOrCreateTool(molecule).getAtomSet());
-			List<Long> morganLongs = morgan.getMorganList();
-			List<CMLAtomSet> atomSets = morgan.getAtomSetList();
-			for (int i = 0; i < morganLongs.size(); i++) {
-				System.out.println(" "+morganLongs.get(i)+" .. "+atomSets.get(i).getValue());
-			}
-			System.out.println();
-		}
-		return morgans;
-	}
+//	private List<List<Long>> extractMorgans(List<CMLMolecule> molecules) {
+//		List<List<Long>> morgans = new ArrayList<List<Long>>();
+//		for (CMLMolecule molecule : molecules) {
+//			Morgan morgan = new Morgan(MoleculeTool.getOrCreateTool(molecule).getAtomSet());
+//			List<Long> morganLongs = morgan.getMorganList();
+//			List<CMLAtomSet> atomSets = morgan.getAtomSetList();
+//			for (int i = 0; i < morganLongs.size(); i++) {
+//				System.out.println(" "+morganLongs.get(i)+" .. "+atomSets.get(i).getValue());
+//			}
+//			System.out.println();
+//		}
+//		return morgans;
+//	}
 
 	/** 
 	 * if reaction has a single reactant and single product uses
@@ -1409,26 +1406,6 @@ public class ReactionTool extends AbstractSVGTool {
 		return circleListByFill;
 	}
 
-//	private Element createMenuItem(String bothName) {
-//		Element li;
-//		li = new Element("li");
-//		Element a = new Element("a");
-//		a.addAttribute(new Attribute("href", bothName));
-//		a.addAttribute(new Attribute("target", "right"));
-//		a.appendChild(bothName.substring(0, bothName.indexOf(CMLConstants.S_PERIOD)));
-//		li.appendChild(a);
-//		return li;
-//	}
-
-//	private SVGG addTransformedG(SVGSVG svg, double xshift, double yshift) {
-//		SVGG g = new SVGG();
-//		Transform2 transform = new Transform2(new Vector2(xshift, yshift));
-//		g.setAttributeFromTransform2(transform);
-//		// skip the defs
-//		g.appendChild(svg.getChild(1).copy());
-//		return g;
-//	}
-
 	public static boolean getCommand(String[] commands, String string) {
 		for (String command : commands) {
 			if (command != null && command.equals(string)) {
@@ -1462,7 +1439,7 @@ public class ReactionTool extends AbstractSVGTool {
 		
 		Transform2 transformG = svgTot.ensureTransform2();
 		transformG = transformG.concatenate(
-				Transform2.applyScales(getReactionDisplay().scales.x, getReactionDisplay().scales.y));
+				Transform2.applyScales(getReactionDisplay().getScales().x, getReactionDisplay().getScales().y));
 		svgTot.setTransform(transformG);
 		return svgTot;
 	}
@@ -1527,11 +1504,13 @@ public class ReactionTool extends AbstractSVGTool {
 	}
 
 	public SVGGBox drawReactants() {
-		return createMoleculeSVGs(getLayout(reactionDisplay.reactantOrientation), this.getReactantMolecules());
+		return createMoleculeSVGs(getLayout(reactionDisplay.reactantOrientation),
+				this.getReactantMolecules());
 	}
 
 	public SVGGBox drawProducts() {
-		return createMoleculeSVGs(getLayout(reactionDisplay.productOrientation),  this.getProductMolecules());
+		return createMoleculeSVGs(getLayout(reactionDisplay.productOrientation),
+				this.getProductMolecules());
 	}
 
 	public SVGGBox drawSpectators() {

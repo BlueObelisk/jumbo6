@@ -1,5 +1,7 @@
 package org.xmlcml.cml.tools;
 
+import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class BondTool extends AbstractSVGTool {
     private MoleculeDisplay moleculeDisplay;
 	private double width = 1.0;
 	private double widthFactor;
+	private List<GroupTool> groupToolList;
 
 	/**
      * constructor
@@ -63,7 +66,7 @@ public class BondTool extends AbstractSVGTool {
     }
 
 	private void setDefaults() {
-		this.ensureBondDisplay();
+//		this.ensureBondDisplay();
 	}
 
 	/** gets BondTool associated with bond.
@@ -78,6 +81,14 @@ public class BondTool extends AbstractSVGTool {
 			bond.setTool(bondTool);
 		}
 		return bondTool;
+	}
+
+	public CMLBond getBond() {
+		return bond;
+	}
+
+	public CMLMolecule getMolecule() {
+		return molecule;
 	}
 
 	/** get conventional bond order.
@@ -525,6 +536,56 @@ public class BondTool extends AbstractSVGTool {
 		return (atoms != null && atoms.size() == 2 &&
 				atoms.get(0).hasCoordinates(type) && 
 				atoms.get(1).hasCoordinates(type)); 
+	}
+
+	public String getDownstreamMorganString(CMLAtom atom) {
+		CMLAtomSet atomSet = this.getDownstreamAtoms(atom);
+		Morgan morgan = new Morgan(atomSet);
+		String s = morgan.getEquivalenceString();
+		return s;
+	}
+
+	public boolean matchesGroupAgainstSMILES(int zeroOrOne, String groupSMILESString) {
+		CMLAtom atom = bond.getAtom(zeroOrOne);
+		if (atom == null) {
+			throw new RuntimeException("Bad atom serial in bond: "+zeroOrOne);
+		}
+		String groupMorganString = Morgan.createMorganStringFromSMILES(groupSMILESString);
+		return this.getDownstreamMorganString(atom).equals(groupMorganString);
+	}
+
+	public void addGroupTool(GroupTool groupToolNew) {
+		ensureGroupToolList();
+		boolean duplicate = false;
+		for (GroupTool groupTool : groupToolList) {
+			if (groupTool.isDuplicate(groupToolNew)) {
+				duplicate = true;
+				break;
+			}
+		}
+		if (!duplicate) {
+			groupToolList.add(groupToolNew);
+		}
+	}
+
+	public List<GroupTool> getGroupToolList() {
+		return groupToolList;
+	}
+
+	private void ensureGroupToolList() {
+		if (this.groupToolList == null) {
+			this.groupToolList = new ArrayList<GroupTool>();
+		}
+	}
+	
+	public void deleteDownstreamAtoms(CMLAtom rootAtom, CMLAtom otherAtom) {
+		CMLAtomSet atomSet = this.getDownstreamAtoms(rootAtom);
+		atomSet.removeAtom(otherAtom);
+		atomSet.removeAtom(rootAtom);
+		for (CMLAtom atom : atomSet.getAtoms()) {
+			CMLMolecule molecule = atom.getMolecule();
+			molecule.deleteAtom(atom);
+		}
 	}
 
 }

@@ -9,6 +9,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.html.HtmlMenuSystem;
 
 
@@ -20,6 +21,7 @@ import org.xmlcml.cml.html.HtmlMenuSystem;
  *
  */
 public class SVGG extends SVGElement {
+	private static Logger LOG = Logger.getLogger(SVGG.class);
 
 	public final static String TAG ="g";
 	/** constructor

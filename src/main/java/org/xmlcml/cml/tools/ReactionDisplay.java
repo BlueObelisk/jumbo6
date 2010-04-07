@@ -38,7 +38,7 @@ public class ReactionDisplay extends AbstractDisplay {
 	}
 	private MoleculeDisplay moleculeDisplay = new MoleculeDisplay(MoleculeDisplay.DEFAULT);
 	protected boolean omitHydrogens;
-	protected Real2 scales = new Real2(1.0, 1.0);
+	private Real2 scales = new Real2(1.0, 1.0);
 	private String id;
 	
 	public Orientation getReactant2ProductOrientation() {

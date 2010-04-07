@@ -199,6 +199,9 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 * @return the svg
 	 */
 	public SVGG getSvg() {
+		if (svg == null && g != null) {
+			svg = (SVGG) g;
+		}
 		return svg;
 	}
 

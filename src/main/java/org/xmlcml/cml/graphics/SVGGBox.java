@@ -3,14 +3,18 @@ package org.xmlcml.cml.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Nodes;
+
+import org.apache.log4j.Logger;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector2;
 
-import nu.xom.Nodes;
-
 public class SVGGBox extends SVGG {
-
+	private static Logger LOG = Logger.getLogger(SVGGBox.class);
+	
 	protected SVGLayout layout;
 	private String id;
 	
@@ -24,12 +28,46 @@ public class SVGGBox extends SVGG {
 		return newBox;
 	}
 	
+	public static SVGGBox createSVGGBox(SVGSVG svgSvg) {
+		SVGGBox box = null;
+		Elements childSVGs = svgSvg.getChildElements();
+		if (childSVGs.size() == 1) {
+			box = createSVGGBox((SVGG)childSVGs.get(0));
+		} else {
+			box = new SVGGBox();
+			SVGGBox lastBox = null;
+			for (int i = 0; i < childSVGs.size(); i++) {
+				SVGGBox childBox = createSVGGBox((SVGG)childSVGs.get(i));
+				if (lastBox != null) {
+					lastBox.debug("RRXXX");
+					SVGRect rect = lastBox.getRect();
+					LOG.debug("RECT "+rect);
+					Transform2 t2 = lastBox.getTransform2FromAttribute();
+					System.out.println(">>>"+t2);
+					childBox.debug("SVGRRRRRRRRRR");
+				}
+				box.appendChild(childBox);
+				lastBox = childBox;
+			}
+		}
+		return box;
+	}
+	
 	public static SVGGBox createSVGGBox(SVGG svgg) {
 		SVGGBox newBox = new SVGGBox();
 	    newBox.copyAttributesFrom(svgg);
 	    createSubclassedChildren(svgg, newBox);
 		return newBox;
 	}
+	
+//	public static SVGGBox createSVGGBox(Elements svgElements) {
+//		SVGGBox newBox = new SVGGBox();
+//		for (int i = 0; i < svgElements.size(); i++) {
+//			Element svgChild = svgElements.get(i);
+//			SVGGBox box = createSVGGBox((SVGG)svgChild);
+//		}
+//		return newBox;
+//	}
 	public void setLayout(SVGLayout layout) {
 		this.layout = layout;
 	}

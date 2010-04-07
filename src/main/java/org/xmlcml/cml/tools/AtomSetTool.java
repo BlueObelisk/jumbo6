@@ -34,6 +34,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real3Range;
 import org.xmlcml.euclid.Transform3;
+import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.util.ToolUtils;
@@ -201,6 +202,33 @@ public class AtomSetTool extends AbstractTool {
 			}
 		}
 		return bondSet;
+	}
+	
+    public CMLAtomSet getAtomSetIncludingElementTypes(String[] elementTypes) {
+     	return createIncludedSet(elementTypes, true);
+     }
+
+    public CMLAtomSet getAtomSetExcludingElementTypes(String[] elementTypes) {
+    	return createIncludedSet(elementTypes, false);
+    }
+
+	private CMLAtomSet createIncludedSet(String[] elementTypes, boolean include) {
+		CMLAtomSet includedAtomSet = new CMLAtomSet();
+		boolean ignoreCase = false;
+    	List<CMLAtom> atoms = atomSet.getAtoms();
+    	for (CMLAtom atom : atoms) {
+    		String elementType = atom.getElementType();
+    		if (include) {
+    			if (Util.indexOf(elementType, elementTypes, ignoreCase) != -1) {
+    				includedAtomSet.addAtom(atom);
+    			}
+    		} else {
+    			if (Util.indexOf(elementType, elementTypes, ignoreCase) == -1) {
+    				includedAtomSet.addAtom(atom);
+    			}
+    		} 
+    	}
+		return includedAtomSet;
 	}
 
 	/**

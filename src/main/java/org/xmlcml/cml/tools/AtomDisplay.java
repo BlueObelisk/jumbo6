@@ -104,7 +104,6 @@ public class AtomDisplay extends AbstractDisplay {
 			defaultElementDisplay.fill = "black";
 			defaultElementDisplay.backgroundColor = "#aaaaaa";
 			defaultElementDisplay.backgroundColor = "white";
-			// defaultElementDisplay.setXyOffset(new Real2(-0.4, 0.35));
 			defaultElementDisplay.setXyOffset(new Real2(0., 0.));
 			defaultElementDisplay.setFontSize(25.0);
 			defaultElementDisplay.setOpacity(1.0);

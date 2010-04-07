@@ -2,8 +2,8 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.euclid.EC;
+import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.RealInterval;
 
@@ -27,7 +27,6 @@ public class MoleculeDisplay extends AbstractDisplay {
 		BOTTOM,
 		CENTRE
 	}
-	public final static double DEFAULT_BONDLENGTH = 50.;
 	
 	// all atom displays are now defaults
 	private AtomDisplay defaultAtomDisplay = new AtomDisplay();
@@ -35,16 +34,15 @@ public class MoleculeDisplay extends AbstractDisplay {
 	private FormulaDisplay formulaDisplay = new FormulaDisplay();
 	private NameDisplay nameDisplay = new NameDisplay();
 
-	
-	private double bondLength;
-	private double hydrogenLengthFactor;
+	private Double bondLength;
+	private Double hydrogenLengthFactor;
 	private Boolean contractGroups;
 	private boolean displayFormula;
 	private boolean displayLabels;
 	private boolean displayNames;
 	private boolean omitHydrogens;
-	private double labelFontSize;
-	private double labelYSpacing;
+	private Double labelFontSize;
+	private Double labelYSpacing;
 //	private Position formulaYPosition = Position.BOTTOM;
 	private Position formulaYPosition = Position.TOP;
 	private Position formulaXPosition = Position.LEFT;
@@ -55,19 +53,24 @@ public class MoleculeDisplay extends AbstractDisplay {
 	private boolean drawBoundingBox;
 	
 	private Real2Interval screenExtent;
-	private MoleculeTool moleculeTool;
+	private AbstractSVGTool moleculeTool;
 
 	private BoundingBoxBundle boundingBoxBundle = new BoundingBoxBundle();
+	private Real2 maxScreenSize;
+	private Real2 minScreenSize;
+	private Real2 namePosition;
+	private boolean displayGroups;
 	
 	/**
 	 */
 	public MoleculeDisplay() {
 		super();
+		init();
 	}
 	
 	/**
 	 */
-	public MoleculeDisplay(MoleculeTool moleculeTool) {
+	public MoleculeDisplay(AbstractSVGTool moleculeTool) {
 		this();
 		this.setMoleculeTool(moleculeTool);
 	}
@@ -79,7 +82,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	protected void setDefaults() {
 		super.setDefaults();
 
-		bondLength = DEFAULT_BONDLENGTH;
+		bondLength = getDefaultBondLength();
 		hydrogenLengthFactor = 0.7;
 		contractGroups = false;
 		
@@ -88,7 +91,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 		displayLabels = true;
 		displayNames = false;
 		labelYSpacing = 1.6;
-		labelFontSize = 50;
+		labelFontSize = 50.0;
 		drawBoundingBox = true;
 		
 		// molecule-specific
@@ -130,7 +133,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	/**
 	 * @return the bondLength
 	 */
-	public double getBondLength() {
+	public Double getBondLength() {
 		return bondLength;
 	}
 	/** apply scale to current molecule.
@@ -138,7 +141,7 @@ public class MoleculeDisplay extends AbstractDisplay {
 	 * @param bondLength the bondLength to set
 	 * 
 	 */
-	public void setBondLength(double bondLength) {
+	public void setBondLength(Double bondLength) {
 		this.bondLength = bondLength;
 	}
 	
@@ -196,6 +199,14 @@ public class MoleculeDisplay extends AbstractDisplay {
 	public void setNameXPosition(Position nameXPosition) {
 		this.nameXPosition = nameXPosition;
 	}
+
+//	public Position getNameXYPosition() {
+//		return nameXYPosition;
+//	}
+//
+//	public void setNameXYPosition(Real2 ) {
+//		return nameXYPosition;
+//	}
 
 	public Position getIdYPosition() {
 		return idYPosition;
@@ -263,7 +274,6 @@ public class MoleculeDisplay extends AbstractDisplay {
 	}
 
 	public void setDisplayFormula(boolean displayFormula) {
-		LOG.debug("FORMULA "+this);
 		this.displayFormula = displayFormula;
 	}
 
@@ -283,19 +293,19 @@ public class MoleculeDisplay extends AbstractDisplay {
 		this.displayNames = displayNames;
 	}
 
-	public MoleculeTool getMoleculeTool() {
+	public AbstractSVGTool getMoleculeTool() {
 		return moleculeTool;
 	}
 
-	public void setMoleculeTool(MoleculeTool moleculeTool) {
+	public void setMoleculeTool(AbstractSVGTool moleculeTool) {
 		this.moleculeTool = moleculeTool;
 	}
 
-	public double getHydrogenLengthFactor() {
+	public Double getHydrogenLengthFactor() {
 		return hydrogenLengthFactor;
 	}
 
-	public void setHydrogenLengthFactor(double hydrogenLengthFactor) {
+	public void setHydrogenLengthFactor(Double hydrogenLengthFactor) {
 		this.hydrogenLengthFactor = hydrogenLengthFactor;
 	}
 
@@ -321,6 +331,14 @@ public class MoleculeDisplay extends AbstractDisplay {
 
 	public void setDefaultBondDisplay(BondDisplay defaultBondDisplay) {
 		this.defaultBondDisplay = defaultBondDisplay;
+	}
+
+	public boolean isDisplayGroups() {
+		return displayGroups;
+	}
+
+	public void setDisplayGroups(boolean displayGroups) {
+		this.displayGroups = displayGroups;
 	}
 
 	public String getDebugString() {
@@ -354,19 +372,19 @@ public class MoleculeDisplay extends AbstractDisplay {
 		return sb.toString();
 	}
 
-	public double getLabelFontSize() {
+	public Double getLabelFontSize() {
 		return labelFontSize;
 	}
 
-	public void setLabelFontSize(double labelFontSize) {
+	public void setLabelFontSize(Double labelFontSize) {
 		this.labelFontSize = labelFontSize;
 	}
 
-	public double getLabelYSpacing() {
+	public Double getLabelYSpacing() {
 		return labelYSpacing;
 	}
 
-	public void setLabelYSpacing(double labelYSpacing) {
+	public void setLabelYSpacing(Double labelYSpacing) {
 		this.labelYSpacing = labelYSpacing;
 	}
 
@@ -385,5 +403,29 @@ public class MoleculeDisplay extends AbstractDisplay {
 	public void setBoundingBoxBundle(BoundingBoxBundle boundingBoxBundle) {
 		this.boundingBoxBundle = boundingBoxBundle;
 	}
+
+	public Real2 getMaxScreenSize() {
+		return maxScreenSize;
+	}
 	
+	public void setMaxScreenSize(Real2 maxScreenSize) {
+		this.maxScreenSize = maxScreenSize;
+	}
+	
+	public Real2 getMinScreenSize() {
+		return minScreenSize;
+	}
+	
+	public void setMinScreenSize(Real2 minScreenSize) {
+		this.minScreenSize = minScreenSize;
+	}
+
+	public static double getDefaultBondLength() {
+		return 50.0;
+	}
+
+	public void setNamePosition(Real2 real2) {
+		this.namePosition = real2;
+	}
+
 }

@@ -81,11 +81,13 @@ public class GraphicsElement extends Element implements SVGConstants {
      * @param element to copy from
      */
     public void copyAttributesFrom(Element element) {
-        for (int i = 0; i < element.getAttributeCount(); i++) {
-            Attribute att = element.getAttribute(i);
-            Attribute newAtt = (Attribute) att.copy();
-            this.addAttribute(newAtt);
-        }
+    	if (element != null) {
+	        for (int i = 0; i < element.getAttributeCount(); i++) {
+	            Attribute att = element.getAttribute(i);
+	            Attribute newAtt = (Attribute) att.copy();
+	            this.addAttribute(newAtt);
+	        }
+    	}
     }
 
     

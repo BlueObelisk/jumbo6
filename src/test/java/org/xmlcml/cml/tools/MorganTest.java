@@ -424,4 +424,31 @@ public class MorganTest {
 		}
 	}
 
+	@Test
+	public void createMorganStringFromSMILES() {
+		String groupSMILESString = "[R]CNO";
+		String s = Morgan.createMorganStringFromSMILES(groupSMILESString);
+		Assert.assertEquals("morgan", "19836383H1/25710873H2/28254882H1/39478662O1/53902287C1/58597330N1/", s);
+	}
+
+	@Test
+	public void createMorganStringFromRMolecule() {
+		CMLMolecule molecule = SMILESTool.createMolecule("[R]CNO");
+		String s = Morgan.createMorganStringFromRMolecule(molecule);
+		Assert.assertEquals("molecule", "19836383H1/25710873H2/28254882H1/39478662O1/53902287C1/58597330N1/", s);
+	}
+	
+	@Test
+	public void getUniqueAtomSet() {
+		assertMoleculeUniqueAtomSet("CO", "a2_h1 a2 a1");
+		assertMoleculeUniqueAtomSet("OC", "a1_h1 a1 a2");
+		assertMoleculeUniqueAtomSet("CC", "");
+	}
+
+	private void assertMoleculeUniqueAtomSet(String smiles, String expected) {
+		CMLMolecule molecule = SMILESTool.createMolecule(smiles);
+		Morgan morgan = new Morgan(molecule);
+		CMLAtomSet atomSet = morgan.getUniqueAtomSet();
+		Assert.assertEquals("morgan", expected, atomSet.getValue());
+	}
 }
