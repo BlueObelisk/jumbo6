@@ -2411,7 +2411,7 @@ public class MoleculeToolTest {
 	
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void getCalculatedIsotopomerMassesH2() {
 		CMLMolecule mol = new CMLMolecule();
 		mol.addAtom(new CMLAtom("h1", ChemicalElement.AS.H));
@@ -2432,7 +2432,7 @@ public class MoleculeToolTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void getCalculatedIsotopomerMassesHCl() {
 		CMLMolecule mol = new CMLMolecule();
 		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H));
@@ -2491,7 +2491,7 @@ public class MoleculeToolTest {
 	}
 		
 	@Test
-	@Ignore
+//	@Ignore
 	public void getCalculatedIsotopomerMassesWithMaxCount() {
 		CMLMolecule mol = new CMLMolecule();
 		mol.addAtom(new CMLAtom("a1", ChemicalElement.AS.H ));
