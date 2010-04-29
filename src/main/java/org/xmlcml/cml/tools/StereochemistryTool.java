@@ -590,8 +590,6 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 */
 	public void add3DStereo() {
-		// StereochemistryTool stereochemistryTool = new
-		// StereochemistryTool(molecule);
 		ConnectionTableTool ct = new ConnectionTableTool(molecule);
 		List<CMLBond> cyclicBonds = ct.getCyclicBonds();
 		List<CMLBond> doubleBonds = molecule.getDoubleBonds();
@@ -749,7 +747,7 @@ public class StereochemistryTool extends AbstractTool {
 			LOG.info("Cannot find ANY free wedgeable bonds! "
 					+ atom.getId());
 		} else {
-			String bondType = getWegeHatchForBondAndParity(atom, bond);
+			String bondType = getWedgeHatchForBondAndParity(atom, bond);
 			if (bondType != null) {
 				CMLBondStereo bondStereo = new CMLBondStereo();
 				bondStereo.setXMLContent(bondType);
@@ -758,7 +756,7 @@ public class StereochemistryTool extends AbstractTool {
 		}
 	}
 
-	public String getWegeHatchForBondAndParity(CMLAtom atom, CMLBond bond) {
+	public String getWedgeHatchForBondAndParity(CMLAtom atom, CMLBond bond) {
 		String bondType = null;
 		CMLAtomParity atomParity = (CMLAtomParity) atom
 		.getFirstChildElement(CMLAtomParity.TAG, CMLConstants.CML_NS);
@@ -829,8 +827,8 @@ public class StereochemistryTool extends AbstractTool {
 				}
 				totalParity = sense * atomParityValue * highestPriorityAtom;
 			}
-			bondType = (totalParity > 0) ? CMLBond.WEDGE
-					: CMLBond.HATCH;
+			bondType = (totalParity > 0) ? CMLBond.HATCH
+					: CMLBond.WEDGE;
 		}
 		return bondType;
 	}
