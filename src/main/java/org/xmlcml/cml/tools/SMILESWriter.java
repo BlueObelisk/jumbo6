@@ -12,6 +12,7 @@ import nu.xom.Elements;
 
 import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -24,12 +25,20 @@ public class SMILESWriter {
 	private Set<CMLBond> usedBonds;
 	private Map<CMLAtom, Element> atomMap;
 	private Set<CMLAtom> atomSet;
+	private int nring;
 
 	public SMILESWriter(CMLMolecule molecule) {
 		this.molecule = molecule;
+		convertToKekule(molecule);
+		nring = 0;
 	}
 	
-	 private String serialize(Element element) {
+	 private void convertToKekule(CMLMolecule molecule) {
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.adjustBondOrdersToValency();
+	}
+
+	private String serialize(Element element) {
     	 StringBuilder sb = new StringBuilder();
     	 expand(element, sb);
     	 return sb.toString();
@@ -40,10 +49,11 @@ public class SMILESWriter {
     	String el = element.getAttributeValue("elementType").trim();
     	String h = element.getAttributeValue("hydrogenCount");
     	if (h != null && !h.equals(CC.S_EMPTY)) {
-    		h = "H"+h.trim();
+ //   		h = "H"+h.trim();
     	} else {
     		h = null;
     	}
+    	h = null;
     	String ch = getCharge(element);
     	boolean addSquare = 
     		h != null ||
@@ -118,11 +128,10 @@ public class SMILESWriter {
     	usedAtoms = new TreeSet<CMLAtom>();
 		usedBonds = new TreeSet<CMLBond>();
 		atomMap = new HashMap<CMLAtom, Element>();
-		return addAndExpandAtom(atom, null, 0);
+		return addAndExpandAtom(atom, null);
     }
 
-	private Element addAndExpandAtom(CMLAtom atom, CMLAtom parent,  
-			int nring) {
+	private Element addAndExpandAtom(CMLAtom atom, CMLAtom parent) {
 		Element element = new Element("atom");
 		atomMap.put(atom, element);
 		int formalCharge = atom.getFormalCharge();
@@ -156,7 +165,7 @@ public class SMILESWriter {
 	    			usedBonds.add(ligandBond);
     			}
     		} else {
-    			Element elementx = addAndExpandAtom(ligand, atom, nring);
+    			Element elementx = addAndExpandAtom(ligand, atom);
     			elementx.addAttribute(new Attribute("order", order));
     			element.appendChild(elementx);
     		}
@@ -171,6 +180,7 @@ public class SMILESWriter {
 		}
 		attVal += " "+nring;
 		element.addAttribute(new Attribute("rings", attVal));
+
 	}
     
 	String getString() {

@@ -89,14 +89,21 @@ public class Morgan extends AbstractTool {
     private List<CMLAtom> markedAtomsList = null;
 	private String equivalenceString;
 	private List<CMLAtomSet> atomSetList;
+	private List<Morgan> childMorganList;
     /**
      * constructor
      * 
      * @param molecule
      */
     public Morgan(CMLMolecule molecule) {
-        if (molecule == null) {
+    	List<CMLMolecule> childMoleculeList = CMLMolecule.getChildMoleculeList(molecule);
+    	if (molecule == null) {
             throw new RuntimeException("Null molecule");
+        } else if (childMoleculeList.size() > 0) {
+        	childMorganList = new ArrayList<Morgan>();
+        	for (CMLMolecule childMolecule : childMoleculeList) {
+        		childMorganList.add(new Morgan(childMolecule));
+        	}
         }
         init();
         this.molecule = molecule;
@@ -147,12 +154,25 @@ public class Morgan extends AbstractTool {
     }
 
 	private String calculateEquivalenceString() {
-		List<Long> longList = getSortedLongList();
 		equivalenceString = CMLConstants.S_EMPTY;
-    	for (Long longx : longList) {
-    		CMLAtomSet atomSet = equivalenceMap.get(longx);
-    		equivalenceString += longx+atomSet.getAtoms().get(0).getElementType()+atomSet.size()+"/";
-    	}
+		if (childMorganList != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(CMLConstants.S_LCURLY);
+			for (int i = 0; i < childMorganList.size(); i++) {
+				if (i > 0) {
+					sb.append(CMLConstants.S_SEMICOLON);
+				}
+				sb.append(childMorganList.get(i));
+			}
+			sb.append(CMLConstants.S_RCURLY);	
+			equivalenceString = sb.toString();
+		} else {
+			List<Long> longList = getSortedLongList();
+	    	for (Long longx : longList) {
+	    		CMLAtomSet atomSet = equivalenceMap.get(longx);
+	    		equivalenceString += longx+atomSet.getAtoms().get(0).getElementType()+atomSet.size()+"/";
+	    	}
+		}
 		return equivalenceString;
 	}
 
@@ -271,6 +291,7 @@ public class Morgan extends AbstractTool {
     
 	private void ensureMorganList() {
         if (morganList == null) {
+        	morganList = new ArrayList<Long>();
             // iterate until number of equivalence classes is constant
             iterateTillConstantEquivalenceClassCount();
             //
@@ -376,7 +397,11 @@ public class Morgan extends AbstractTool {
             }
             atomSet.addAtom(atom);
         }
-        Collections.sort(morganList);
+        if (morganList == null) {
+ //       	LOG.error("null morganList");
+        } else {
+        	Collections.sort(morganList);
+        }
         return equivalenceMap.size();
     }
     
