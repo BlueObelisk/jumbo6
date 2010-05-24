@@ -1,0 +1,61 @@
+
+<molecule id="m1" xmlns="http://www.xml-cml.org/schema">
+  <atomArray>
+    <atom id="a1" elementType="O">
+      <label value="O"/>
+    </atom>
+    <atom id="a22" elementType="H"/>
+    <atom id="a13" elementType="N" hydrogenCount="0">
+      <label value="1"/>
+      <label value="N"/>
+    </atom>
+    <atom id="a14" elementType="N" hydrogenCount="0">
+      <label value="2"/>
+      <label value="N'"/>
+    </atom>
+    <atom id="a15" elementType="N" hydrogenCount="0">
+      <label value="3"/>
+      <label value="N''"/>
+    </atom>
+    <atom id="a16" elementType="C" hydrogenCount="0">
+      <label value="3a"/>
+    </atom>
+    <atom id="a17" elementType="C">
+      <label value="4"/>
+    </atom>
+    <atom id="a18" elementType="C">
+      <label value="5"/>
+    </atom>
+    <atom id="a19" elementType="C">
+      <label value="6"/>
+    </atom>
+    <atom id="a20" elementType="C">
+      <label value="7"/>
+    </atom>
+    <atom id="a21" elementType="C" hydrogenCount="0">
+      <label value="7a"/>
+    </atom>
+    <atom id="a23" elementType="H"/>
+    <atom id="a24" elementType="H"/>
+    <atom id="a25" elementType="H"/>
+    <atom id="a26" elementType="H"/>
+  </atomArray>
+  <bondArray>
+    <bond atomRefs2="a1 a22" order="1"/>
+    <bond atomRefs2="a15 a14" order="2"/>
+    <bond atomRefs2="a14 a13" order="1"/>
+    <bond atomRefs2="a13 a21" order="1"/>
+    <bond atomRefs2="a21 a16" order="2"/>
+    <bond atomRefs2="a15 a16" order="1"/>
+    <bond atomRefs2="a17 a18" order="2"/>
+    <bond atomRefs2="a18 a19" order="1"/>
+    <bond atomRefs2="a19 a20" order="2"/>
+    <bond atomRefs2="a20 a21" order="1"/>
+    <bond atomRefs2="a17 a16" order="1"/>
+    <bond atomRefs2="a17 a23" order="1"/>
+    <bond atomRefs2="a18 a24" order="1"/>
+    <bond atomRefs2="a19 a25" order="1"/>
+    <bond atomRefs2="a20 a26" order="1"/>
+    <bond atomRefs2="a1 a13" order="1"/>
+  </bondArray>
+</molecule>

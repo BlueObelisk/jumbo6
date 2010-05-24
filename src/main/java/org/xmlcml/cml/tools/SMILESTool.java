@@ -587,8 +587,6 @@ private int sLength;
 	}
 	
 //	private void convertToKekule() {
-//		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
-//		moleculeTool.adjustBondOrdersToValency();
 //	}
 
 	/*
@@ -628,7 +626,7 @@ private int sLength;
     	}
     	else {
         	throw new RuntimeException("Unknown element encountered: "+atomString +
-        			" Only organic elements may appear outside square brackets!");
+        			" Only organic elements may appear outside square brackets: "+s);
         }
         return atomString;
     }

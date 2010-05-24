@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.testutil.JumboTestUtils;
@@ -386,25 +387,25 @@ public class SMILESToolTest {
 		"org/xmlcml/cml/tools/examples/molecule5a.xml");
 		SMILESTool smilesTool = new SMILESTool(molecule);
 		String smiles = smilesTool.write();
-		Assert.assertEquals("smiles", "C([NH1][CH3])(=O)[CH3]", smiles);
+		Assert.assertEquals("smiles", "C(NC)(=O)C", smiles);
 
 		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
-		Assert.assertEquals("smiles", "C1([NH1][CH2][CH2]1)=O", smiles);
+		Assert.assertEquals("smiles", "C1(NCC1)=O", smiles);
 		
 		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5b.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
-		Assert.assertEquals("smiles", "C1([NH1][CH1]2[CH1]1S2)=O", smiles);
+		Assert.assertEquals("smiles", "C1(NC2C1S2)=O", smiles);
 		
 		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5c.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
-		Assert.assertEquals("smiles", "C1([NH1][CH2][CH2]1)=O.C1([NH1][CH2][CH2]1)=O", smiles);
+		Assert.assertEquals("smiles", "C1(NCC1)=O.C2(NCC2)=O", smiles);
 	}
 	
 	/**
@@ -1072,4 +1073,95 @@ public class SMILESToolTest {
 			Assert.fail("should not fail: "+e);
 		}
 	}
+	@Test 
+	public void SMILESWriter() {
+		String smiles = "NC1=CC=CC=C1F";		
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("should not fail: "+e);
+		}
+		CMLMolecule molecule = smilesTool.getMolecule();
+		SMILESTool smilesTool1 = new SMILESTool(molecule);
+		String expected = "C1(N([H])[H])=C(C(=C(C(=C1F)[H])[H])[H])[H]";
+		String found = smilesTool1.write();
+		System.err.println(found);
+		Assert.assertEquals("aminofluorobenzene", expected, found);
+	}
+	
+	@Test 
+	public void SMILESWriterAromatic() {
+		String smiles = "Nc1ccccc1F";		
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("should not fail: "+e);
+		}
+		CMLMolecule molecule = smilesTool.getMolecule();
+		SMILESTool smilesTool1 = new SMILESTool(molecule);
+		String expected = "C1(N([H])[H])=C(C(=C(C(=C1F)[H])[H])[H])[H]";
+		Assert.assertEquals("aromatic aminofluorobenzene", expected, smilesTool1.write());
+	}
+	
+	@Test 
+	public void roundTrip1() {
+		String smiles = "Nc1ccccc1F";
+		roundTrip(smiles);
+
+	}
+
+	@Test 
+	public void roundTrip2() {
+		String smiles = "C12N(C(=C(C1C(=C(C(=C2[H])";
+		roundTrip(smiles);
+
+	}
+
+	@Test 
+	public void roundTrip3() {
+		String smiles = "C12N(C(=C(C1C(=C(C(=C2[H])";
+		roundTrip(smiles);
+
+	}
+
+	private void roundTrip(String smiles) {
+		SMILESTool smilesTool = new SMILESTool();
+		try {
+			smilesTool.parseSMILES(smiles);
+		} catch (RuntimeException e) {
+			Assert.fail("should not fail: "+e);
+		}
+		CMLMolecule molecule = smilesTool.getMolecule();
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.adjustBondOrdersToValency();
+		molecule.debug("XXX");
+		Morgan morgan = new Morgan(molecule);
+		String morganString = morgan.getEquivalenceString();
+		SMILESTool smilesTool1 = new SMILESTool(molecule);
+		String smilesString1 = smilesTool1.write();
+		SMILESTool smilesTool2 = new SMILESTool();
+		smilesTool2.parseSMILES(smilesString1);
+		CMLMolecule molecule1 = smilesTool2.getMolecule();
+		Morgan morgan1 = new Morgan(molecule1);
+		String morganString1 = morgan1.getEquivalenceString();
+
+		if (!morganString.equals(morganString1)) {
+			Assert.fail("smiles "+smiles+" != "+smilesString1);
+		}
+		Assert.assertTrue(true);
+	}
+	
+	@Test
+	public void testWriter() throws Exception {
+		CMLMolecule testMolecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		"org/xmlcml/cml/tools/examples/smileswrite.xml");
+		SMILESTool smilesTool = new SMILESTool(testMolecule);
+		String test = smilesTool.write();
+		Assert.assertEquals("ring test", "C12=C(N(N=N1)O[H])C(=C(C(=C2[H])[H])[H])[H]", test);
+
+		
+	}
+	
 }
