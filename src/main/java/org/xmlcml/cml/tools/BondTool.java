@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import nu.xom.Attribute;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
+import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
@@ -284,6 +284,13 @@ public class BondTool extends AbstractSVGTool {
 	 */
 	public void setBondDisplay(BondDisplay bondDisplay) {
 		this.bondDisplay = bondDisplay;
+	}
+	
+	public void ensureId() {
+		String id = bond.getId();
+		if (id == null) {
+			bond.setId(bond.getAtomId(0)+CMLConstants.S_UNDER+bond.getAtomId(1));
+		}
 	}
 	
 	public void ensureBondDisplay() {

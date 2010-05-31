@@ -4231,7 +4231,11 @@ public class MoleculeTool extends AbstractSVGTool {
 			Real2 xy0 = atom0.getXY2();
 			Real2 xy1 = atom1.getXY2();
 			Real2 xy2 = atom2.getXY2();
-			angle = Real2.getAngle(xy0, xy1, xy2);
+			try {
+				angle = Real2.getAngle(xy0, xy1, xy2);
+			} catch (Exception e) {
+				// null coordinates
+			}
 		}
 		return angle;
 	}
