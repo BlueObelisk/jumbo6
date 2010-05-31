@@ -74,7 +74,11 @@ public class MoleculeLayout extends AbstractTool {
 	/** uses current molecule
 	 */
 	public void create2DCoordinates() {
-		this.create2DCoordinates(this.moleculeTool.getMolecule());
+		try {
+			this.create2DCoordinates(this.moleculeTool.getMolecule());
+		} catch (Exception e) {
+			LOG.error("Cannot create coordinates "+e);
+		}
 	}
 	/**
 	 */
@@ -225,11 +229,13 @@ public class MoleculeLayout extends AbstractTool {
 			Angle targetAngle) {
 		Angle angle = MoleculeTool.getCalculatedAngle2D(
 				staticBond.getOtherAtom(atom), atom, movingBond.getOtherAtom(atom));
-		Angle delta = angle.subtract(targetAngle);
-		BondTool movingBondTool = BondTool.getOrCreateTool(movingBond);
-		CMLAtomSet atomSet = movingBondTool.getDownstreamAtoms(atom);
-		Transform2 t2 = Transform2.getRotationAboutPoint(delta, atom.getXY2());
-		atomSet.transform(t2);
+		if (angle != null) {
+			Angle delta = angle.subtract(targetAngle);
+			BondTool movingBondTool = BondTool.getOrCreateTool(movingBond);
+			CMLAtomSet atomSet = movingBondTool.getDownstreamAtoms(atom);
+			Transform2 t2 = Transform2.getRotationAboutPoint(delta, atom.getXY2());
+			atomSet.transform(t2);
+		}
 	}
 
 

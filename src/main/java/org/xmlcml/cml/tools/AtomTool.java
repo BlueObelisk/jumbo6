@@ -389,10 +389,20 @@ public class AtomTool extends AbstractSVGTool {
     		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
     		throw new RuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
     	}
-    	List<Vector2> vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
-    	Real2 xy2 = atom.getXY2();
-    	for (int i = 0; i < ligandHydrogenList.size(); i++) {
-    		ligandHydrogenList.get(i).setXY2(xy2.plus(vectorList.get(i)));
+    	List<Vector2> vectorList = new ArrayList<Vector2>();
+    	try {
+    		vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
+    	} catch (Exception e) {
+    		LOG.error("Cannot add Hydrogen ", e);
+    	}
+    	if (vectorList.size() == 0) {
+    	} else if (vectorList.size() != ligandHydrogenList.size()) {
+    		LOG.error("vectorList ("+vectorList.size()+") != ligandHydrogenList ("+ligandHydrogenList.size()+")");
+    	} else {
+	    	Real2 xy2 = atom.getXY2();
+	    	for (int i = 0; i < ligandHydrogenList.size(); i++) {
+	    		ligandHydrogenList.get(i).setXY2(xy2.plus(vectorList.get(i)));
+	    	}
     	}
 	}
     

@@ -668,10 +668,14 @@ private int sLength;
         		elementSymbol = atomString;
         	}
         }
-        ChemicalElement chemicalElement = ChemicalElement.getChemicalElement(elementSymbol);
-        if (chemicalElement == null) {
-        	throw new RuntimeException("Unknown element: "+atomString);
-        }
+    	if (elementSymbol.equals(S_STAR)) {
+    		atomString = ChemicalElement.AS.R.value;
+    	} else {
+	        ChemicalElement chemicalElement = ChemicalElement.getChemicalElement(elementSymbol);
+	        if (chemicalElement == null) {
+	        	throw new RuntimeException("Unknown element: "+atomString);
+	        }
+    	}
         return atomString;
     }
 
