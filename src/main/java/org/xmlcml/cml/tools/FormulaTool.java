@@ -26,6 +26,58 @@ public class FormulaTool extends AbstractSVGTool {
 
 	Logger logger = Logger.getLogger(FormulaTool.class.getName());
 
+	public enum Type {
+		ORGANIC(new String[]{"H", "B", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"}),
+		GROUP1(new String[]{"Li", "Na", "K", "Rb", "Cs", "Fr"});
+		private String[] elems;
+
+		private Type(String[] elems) {
+			this.elems = elems;
+		}
+
+		public String[] getElems() {
+			return elems;
+		}
+
+		public boolean contains(String elementType) {
+			for (String elem : elems) {
+				if (elem.equals(elementType)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public boolean includesAnyOf(String[] elementTypes) {
+			for (String elementType : elementTypes) {
+				if (contains(elementType)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public boolean includesAllOf(String[] elementTypes) {
+			for (String elementType : elementTypes) {
+				if (!contains(elementType)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public boolean includesNoneOf(String[] elementTypes) {
+			for (String elementType : elementTypes) {
+				if (contains(elementType)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+
+	}
+
     /** dewisott */
 	public static String HYDROGEN_COUNT = "hydrogenCount";
 	
@@ -161,6 +213,32 @@ public class FormulaTool extends AbstractSVGTool {
     		((CMLFormula)formulas.get(i)).normalize();
     	}
 	}
+	
+	public boolean hasAllElementsBelongingTo(Type type) {
+		String[] elementTypes = formula.getElementTypes();
+		return type.includesAllOf(elementTypes);		
+	}
+	
+	public boolean hasAnyElementsBelongingTo(Type type) {
+		String[] elementTypes = formula.getElementTypes();
+		return type.includesAnyOf(elementTypes);		
+	}
+
+	public boolean hasNoElementsBelongingTo(Type type) {
+		String[] elementTypes = formula.getElementTypes();
+		return type.includesNoneOf(elementTypes);		
+	}
+
+	public boolean hasAnyElementsBelongingTo(Type[] types) {
+		String[] elementTypes = formula.getElementTypes();
+		for (Type type : types) {
+			if (type.includesAnyOf(elementTypes)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }
 
