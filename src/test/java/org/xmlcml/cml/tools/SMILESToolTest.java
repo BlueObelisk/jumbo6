@@ -1136,7 +1136,6 @@ public class SMILESToolTest {
 		CMLMolecule molecule = smilesTool.getMolecule();
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		moleculeTool.adjustBondOrdersToValency();
-		molecule.debug("XXX");
 		Morgan morgan = new Morgan(molecule);
 		String morganString = morgan.getEquivalenceString();
 		SMILESTool smilesTool1 = new SMILESTool(molecule);

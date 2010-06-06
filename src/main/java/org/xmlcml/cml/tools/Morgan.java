@@ -78,7 +78,7 @@ public class Morgan extends AbstractTool {
     }
 
     final static Logger logger = Logger.getLogger(Morgan.class.getName());
-    
+   
     private static int MAX_ITER = 10;
     private Algorithm algorithm = null;
     private CMLAtomSet constantAtomSet;
@@ -90,12 +90,29 @@ public class Morgan extends AbstractTool {
 	private String equivalenceString;
 	private List<CMLAtomSet> atomSetList;
 	private List<Morgan> childMorganList;
-    /**
+	
+	   /**
      * constructor
      * 
      * @param molecule
      */
+    public Morgan() {
+        init();
+
+    }
+    
+    /**
+     * constructor
+     * 
+     * @param molecule
+     * @deprecated ("Use setMolecule()")
+     */
     public Morgan(CMLMolecule molecule) {
+        this();
+        setMolecule(molecule);
+    }
+    
+    public void setMolecule(CMLMolecule molecule) {
     	List<CMLMolecule> childMoleculeList = CMLMolecule.getChildMoleculeList(molecule);
     	if (molecule == null) {
             throw new RuntimeException("Null molecule");
@@ -105,7 +122,7 @@ public class Morgan extends AbstractTool {
         		childMorganList.add(new Morgan(childMolecule));
         	}
         }
-        init();
+
         this.molecule = molecule;
         this.constantAtomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
     }
@@ -548,4 +565,8 @@ public class Morgan extends AbstractTool {
 		}
 		return uniqueAtomSet;
 	}
+	
+
+	
+
 }
