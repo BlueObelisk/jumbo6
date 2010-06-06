@@ -40,6 +40,9 @@ public class FormulaTool extends AbstractSVGTool {
 		}
 
 		public boolean contains(String elementType) {
+			if (elementType == null) {
+				return false;
+			}
 			for (String elem : elems) {
 				if (elem.equals(elementType)) {
 					return true;
@@ -49,6 +52,9 @@ public class FormulaTool extends AbstractSVGTool {
 		}
 		
 		public boolean includesAnyOf(String[] elementTypes) {
+			if (elementTypes == null) {
+				return false;
+			}
 			for (String elementType : elementTypes) {
 				if (contains(elementType)) {
 					return true;
@@ -58,6 +64,9 @@ public class FormulaTool extends AbstractSVGTool {
 		}
 
 		public boolean includesAllOf(String[] elementTypes) {
+			if (elementTypes == null) {
+				return false;
+			}
 			for (String elementType : elementTypes) {
 				if (!contains(elementType)) {
 					return false;
@@ -67,6 +76,9 @@ public class FormulaTool extends AbstractSVGTool {
 		}
 
 		public boolean includesNoneOf(String[] elementTypes) {
+			if (elementTypes == null) {
+				return true;
+			}
 			for (String elementType : elementTypes) {
 				if (contains(elementType)) {
 					return false;
