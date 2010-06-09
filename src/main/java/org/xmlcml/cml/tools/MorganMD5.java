@@ -30,7 +30,7 @@ public class MorganMD5 {
 	}
 	
 	public String getCountedString() {
-		return COUNT_START+count+COUNT_END+equivalenceString;
+		return prefixMultiplier(count)+equivalenceString;
 	}
 
 	public Integer getCount() {
@@ -44,6 +44,10 @@ public class MorganMD5 {
 
 	
 	public static List<MorganMD5> getCountedMorganList(CMLMolecule molecule) {
+		return getCountedMorganList(molecule, 1);
+	}
+	
+	public static List<MorganMD5> getCountedMorganList(CMLMolecule molecule, int  multiplier) {
 		List<CMLMolecule> childMolecules = CMLMolecule.getChildMoleculeList(molecule);
 		List<String> morganStringList = new ArrayList<String>();
 		for (CMLMolecule childMolecule : childMolecules) {
@@ -163,17 +167,29 @@ public class MorganMD5 {
 	}
 	
 	public static String createMorganMD5(CMLMolecule molecule) {
+		return createMorganMD5(molecule, 1);
+	}	
+	
+	public static String createMorganMD5(CMLMolecule molecule, int multiplier) {
 		String morganString = null;
 		if (molecule != null) {
 			if (molecule.getMoleculeCount() > 0) {
-				List<MorganMD5> morganList = MorganMD5.getCountedMorganList(molecule);
+				List<MorganMD5> morganList = MorganMD5.getCountedMorganList(molecule, multiplier);
 				morganString = MorganMD5.createMorganString(morganList);
 			} else {
 				Morgan morgan = new Morgan(molecule);
 				morganString = Util.calculateMD5(morgan.getEquivalenceString());
+				if (multiplier != 1) {
+					morganString = prefixMultiplier(multiplier)+morganString;
+				}
 			}
 		}
 		return morganString;
+	}
+
+
+	private static String prefixMultiplier(int multiplier) {
+		return COUNT_START+multiplier+COUNT_END;
 	}
 
 	private static String createMorganString(List<MorganMD5> morganList) {
