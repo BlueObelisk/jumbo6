@@ -24,7 +24,7 @@ public class TestFit2D {
 		CMLMolecule mol2 = readMolecule("org/xmlcml/cml/tools/matcher/acetylsalicylic.xml");
 		CMLMap cmlMap = new AtomTreeMatcher().mapMolecules(mol1, mol2);
 		CMLMap refMap = (CMLMap) readCML("org/xmlcml/cml/tools/matcher/map1.xml");
-		JumboTestUtils.assertEqualsCanonically("map", refMap, cmlMap, true);
+		JumboTestUtils.assertEqualsCanonically("map", refMap, cmlMap);
 	}
 
 	@Test

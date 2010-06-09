@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>wwmm</groupId>
+        <artifactId>wwmm-parent</artifactId>
+        <version>2-SNAPSHOT</version>
+    </parent>
+
 	<groupId>cml</groupId>
 	<artifactId>jumbo</artifactId>
 	<name>Jumbo</name>
@@ -161,13 +168,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<executions>
 					<execution>
@@ -220,8 +220,8 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>ucc-repository</id>
-			<name>Hudson-UCC</name>
+			<id>ucc-repo</id>
+            <name>UCC Maven Repository</name>
 			<url>https://maven.ch.cam.ac.uk/m2repo</url>
 		</repository>
 	</repositories>
@@ -269,14 +269,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<repository>
-			<id>ucc-repository</id>
-			<name>Mvn.ch.cam.ac.uk</name>
-			<url>https://maven.ch.cam.ac.uk/content/repositories/snapshots/
-			</url>
-		</repository>
-	</distributionManagement>
 	<reporting>
 		<plugins>
 			<plugin>
@@ -307,13 +299,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 				<configuration>
-					<targetJdk>1.5</targetJdk> 
-					<linkXref>true</linkXref>
+					<targetJdk>1.5</targetJdk>
+					<linkXRef>true</linkXRef>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -321,8 +313,8 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<configuration>
 					<configLocation>src/test/resources/checkstyle.xml</configLocation>
-				</configuration>				
-			</plugin>			
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -330,7 +322,7 @@
 			<plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>apt-maven-plugin</artifactId>
-        </plugin>						
+        </plugin>
 		</plugins>
 	</reporting>
 </project>
