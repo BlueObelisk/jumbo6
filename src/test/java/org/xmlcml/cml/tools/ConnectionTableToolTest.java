@@ -530,7 +530,7 @@ public class ConnectionTableToolTest {
 		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
 		CMLBond bond = molecule.getBondByAtomIds("a3", "a4");
 		bond.setAtomRefs2(new String[]{"a4", "a3"});
-		molecule.debug("B4");
+//		molecule.debug("B4");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
 		molecule.debug();
@@ -541,7 +541,7 @@ public class ConnectionTableToolTest {
 		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
 		CMLBond bond = molecule.getBondByAtomIds("a5", "a4");
 		bond.setAtomRefs2(new String[]{"a5", "a4"});
-		molecule.debug("B4");
+//		molecule.debug("B4");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
 		molecule.debug();
