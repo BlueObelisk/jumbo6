@@ -10,20 +10,18 @@
 
 	<groupId>cml</groupId>
 	<artifactId>jumbo</artifactId>
-	<name>Jumbo</name>
 	<version>5.5.1-SNAPSHOT</version>
+
+    <name>Jumbo</name>
 	<description>A Java library for processing CML</description>
 	<url>http://apidoc.ch.cam.ac.uk/jumbo5/</url>
 	<inceptionYear>1994</inceptionYear>
 	<mailingLists>
 		<mailingList>
 			<name>cml-discuss</name>
-			<subscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
-			</subscribe>
-			<unsubscribe> http://lists.sourceforge.net/mailman/listinfo/cml-cvs
-			</unsubscribe>
-			<archive> http://sourceforge.net/mailarchive/forum.php?forum_id=44193
-			</archive>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/cml-discuss</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/cml-discuss</unsubscribe>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=cml-discuss</archive>
 		</mailingList>
 	</mailingLists>
 	<ciManagement>
@@ -152,13 +150,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection> scm:svn:https://cml.svn.sourceforge.net/svnroot/cml
-		</connection>
-		<developerConnection>
-			scm:svn:https://cml.svn.sourceforge.net/svnroot/cml
-		</developerConnection>
-		<url>http://cml.svn.sourceforge.net/viewvc/cml/
-		</url>
+		<connection>scm:svn:https://cml.svn.sourceforge.net/svnroot/cml/jumbo5/trunk/</connection>
+		<developerConnection>scm:svn:https://cml.svn.sourceforge.net/svnroot/cml/jumbo5/trunk/</developerConnection>
+		<url>http://cml.svn.sourceforge.net/viewvc/cml/jumbo5/trunk/</url>
 	</scm>
 	<organization>
 		<name>Peter Murray-Rust</name>
@@ -230,37 +224,18 @@
 			<groupId>cml</groupId>
 			<artifactId>cmlxom</artifactId>
 			<version>2.5.1-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.sf</groupId>
 			<artifactId>jniinchi</artifactId>
 			<version>0.5</version>
-			<scope>compile</scope>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.13</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.0</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>xom</groupId>
-			<artifactId>xom</artifactId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-		  <groupId>org.apache.commons</groupId>
-		  <artifactId>commons-math</artifactId>
-		  <version>2.0</version>
 		</dependency>
 		<dependency>
             <version>1.0-SNAPSHOT</version>
