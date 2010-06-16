@@ -114,7 +114,8 @@ public class TableRowListTool extends AbstractTool {
            }
            tableRows = tableRowList.getTableRowElements();
        } else if(tableRows.size() != size) {
-           throw new RuntimeException("inconsistent column length for rectangulat table: "
+    	   tableRowList.debug("TRLIST");
+           throw new RuntimeException("inconsistent column length for rectangular table: "
                    +size+" instead of "+tableRows.size());
 
        }
@@ -214,26 +215,5 @@ public class TableRowListTool extends AbstractTool {
       TableTool.addColumnElementsTo(array, tableRows);
   }
 
-//  private CMLElements<CMLTableRow> getOrCreateTableRows(CMLElement listArray) {
-//      CMLElements<CMLTableRow> tableRows = tableRowList.getTableRowElements();
-//      int size = -1;
-//      if (listArray instanceof CMLArray) {
-//          size = ((CMLArray)listArray).getSize();
-//      } else if (listArray instanceof CMLList) {
-//          size = CMLUtil.getQueryNodes(listArray, CMLConstants.S_STAR).size();
-//      }
-//      if (tableRows.size() == 0) {
-//          for (int iRow = 0; iRow < size; iRow++) {
-//              CMLTableRow tableRow = new CMLTableRow();
-//              tableRowList.appendChild(tableRow);
-//          }
-//          tableRows = tableRowList.getTableRowElements();
-//      } else if(tableRows.size() != size) {
-//          throw new RuntimeException("inconsistent column length for rectangulat table: "
-//                  +size+" instead of "+tableRows.size());
-//
-//      }
-//      return tableRows;
-//  }
  
 };

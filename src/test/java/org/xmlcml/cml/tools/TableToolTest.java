@@ -1,10 +1,18 @@
 package org.xmlcml.cml.tools;
 
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLArray;
 import org.xmlcml.cml.element.CMLArrayList;
+import org.xmlcml.cml.element.CMLTable;
+import org.xmlcml.cml.element.CMLTableCell;
+import org.xmlcml.cml.element.CMLTableHeader;
+import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
 import org.xmlcml.cml.testutil.JumboTestUtils;
@@ -73,4 +81,140 @@ public class TableToolTest {
 		JumboTestUtils.assertEqualsCanonically("tableRowList", fix.tableRowList,
 				tableRowList1, true);
 	}
+	
+	@Test
+	public void addColumn() {
+		CMLTable table = new CMLTable();
+		TableTool tableTool = TableTool.getOrCreateTool(table);
+		CMLArray array = new CMLArray(new String[]{"a", "b", "c"});
+		tableTool.addArray(array);
+		String expected = "<table xmlns='http://www.xml-cml.org/schema'>" +
+				"<tableRowList>" +
+				" <tableRow>" +
+				"  <tableCell>a</tableCell>" +
+				" </tableRow>" +
+				" <tableRow>" +
+				"  <tableCell>b</tableCell></tableRow>" +
+				" <tableRow>" +
+				"  <tableCell>c</tableCell>" +
+				" </tableRow>" +
+				"</tableRowList>" +
+				"<tableHeader>" +
+			    " <tableHeaderCell/>" +
+			    " </tableHeader>" +
+				"</table>";
+		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
+		
+	}
+	
+	@Test
+	public void addColumns() {
+		CMLTable table = new CMLTable();
+		TableTool tableTool = TableTool.getOrCreateTool(table);
+		CMLArray array1 = new CMLArray(new String[]{"a", "b", "c"});
+		CMLArray array2 = new CMLArray(new int[]{1, 2, 3});
+		CMLArray array3 = new CMLArray(new double[]{1.1, 2.2, 3.3});
+		tableTool.addArray(array1);
+		tableTool.addArray(array2);
+		tableTool.addArray(array3);
+		String expected = "<table xmlns='http://www.xml-cml.org/schema'>" +
+				"<tableRowList>" +
+				" <tableRow>" +
+				"  <tableCell>a</tableCell><tableCell>1</tableCell><tableCell>1.1</tableCell>" +
+				" </tableRow>" +
+				" <tableRow>" +
+				"  <tableCell>b</tableCell><tableCell>2</tableCell><tableCell>2.2</tableCell>" +
+				" </tableRow>" +
+				" <tableRow>" +
+				"  <tableCell>c</tableCell><tableCell>3</tableCell><tableCell>3.3</tableCell>" +
+				" </tableRow>" +
+				"</tableRowList>" +
+				"<tableHeader>" +
+			    " <tableHeaderCell/>" +
+			    " <tableHeaderCell/>" +
+			    " <tableHeaderCell/>" +
+			    " </tableHeader>" +
+				"</table>";
+		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
+		
+	}
+	@Test
+	public void addColumnsReadRows() {
+		CMLTable table = new CMLTable();
+		TableTool tableTool = TableTool.getOrCreateTool(table);
+		CMLArray array1 = new CMLArray(new String[]{"a", "b", "c"});
+		CMLArray array2 = new CMLArray(new int[]{1, 2, 3});
+		CMLArray array3 = new CMLArray(new double[]{1.1, 2.2, 3.3});
+		CMLArray array4 = new CMLArray(new double[]{1.11, 2.22, 3.33});
+		tableTool.addArray(array1);
+		tableTool.addArray(array2);
+		tableTool.addArray(array3);
+		tableTool.addArray(array4);
+		CMLElements<CMLTableRow> rows = tableTool.getRowElements();
+		Assert.assertEquals("size", 3, rows.size());
+		CMLTableRow row = rows.get(0);
+		String expected = "<tableRow xmlns='http://www.xml-cml.org/schema'>		  " +
+				"<tableCell>a</tableCell>		  " +
+				"<tableCell>1</tableCell>		  " +
+				"<tableCell>1.1</tableCell>		" +
+				"<tableCell>1.11</tableCell>		" +
+				"</tableRow>	";
+		JumboTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), row, true, 0.00001);
+	}
+	
+	@Test
+	public void addColumnsDictRefs() {
+		TableTool tableTool = createTableTool1();
+		TableHeaderTool tableHeaderTool = tableTool.getTableHeaderTool();
+		CMLTableHeader tableHeader = tableHeaderTool.getTableHeader();
+				String expected = 
+				"<tableHeader xmlns='http://www.xml-cml.org/schema'>" +
+				"  <tableHeaderCell dictRef='foo:bar1'/>" +
+				"  <tableHeaderCell dictRef='foo:bar2'/>" +
+				"  <tableHeaderCell dictRef='foo:bar3'/>" +
+				"  <tableHeaderCell dictRef='foo:bar4'/>" +
+				"</tableHeader>";
+		JumboTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), tableHeader, true, 0.00001);
+	}
+
+	public static TableTool createTableTool1() {
+		CMLTable table = new CMLTable();
+		TableTool tableTool = TableTool.getOrCreateTool(table);
+		CMLArray array1 = new CMLArray(new String[]{"a", "b", "c"});
+		array1.setDictRef("foo:bar1");
+		CMLArray array2 = new CMLArray(new int[]{1, 2, 3});
+		array2.setDictRef("foo:bar2");
+		CMLArray array3 = new CMLArray(new double[]{1.1, 2.2, 3.3});
+		array3.setDictRef("foo:bar3");
+		CMLArray array4 = new CMLArray(new double[]{1.11, 2.22, 3.33});
+		array4.setDictRef("foo:bar4");
+		tableTool.addArray(array1);
+		tableTool.addArray(array2);
+		tableTool.addArray(array3);
+		tableTool.addArray(array4);
+		return tableTool;
+	}
+	
+	@Test
+	public void testGetRowCell() {
+		TableTool tableTool = TableToolTest.createTableTool1();
+		CMLTableCell cell = tableTool.getTableCell(2, "foo:bar1");
+		Assert.assertNotNull(cell);
+		String value = cell.getValue();
+		Assert.assertEquals("cell", "c", value);
+		cell = tableTool.getTableCell(0, "foo:bar3");
+		Assert.assertNotNull(cell);
+		value = cell.getValue();
+		Assert.assertEquals("cell", "1.1", value);
+	}
+	
+	@Test
+	public void testGetRowCell1() {
+		TableTool tableTool = TableToolTest.createTableTool1();
+		CMLTableCell cell = tableTool.getTableCell(2, "foo:bar1zz");
+		Assert.assertNull(cell);
+		cell = tableTool.getTableCell(5, "foo:bar1");
+		Assert.assertNull(cell);
+	}
+
 }

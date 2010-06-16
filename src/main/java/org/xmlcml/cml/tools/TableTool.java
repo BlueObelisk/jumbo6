@@ -35,6 +35,9 @@ public class TableTool extends AbstractTool {
 
 	CMLTable table = null;
 
+	private TableRowListTool tableRowListTool;
+	private TableHeaderTool tableHeaderTool;
+
 	/** constructor.
 	 * requires molecule to contain <crystal> and optionally <symmetry>
 	 * @param molecule
@@ -305,5 +308,92 @@ public class TableTool extends AbstractTool {
 	     return tableRowList;
 	 }
 
-   
+
+	 public void addArray(CMLArray array) {
+		 ensureTableRowListTool();
+		 ensureTableHeaderTool();
+		 tableRowListTool.addColumn(array);
+		 CMLTableHeaderCell tableHeaderCell = new CMLTableHeaderCell();
+		 String dictRef = array.getDictRef();
+		 tableHeaderCell.setDictRef(dictRef);
+		 tableHeaderTool.getTableHeader().addTableHeaderCell(tableHeaderCell);
+	 }
+
+
+	private void ensureTableHeaderTool() {
+		if (tableHeaderTool == null) {
+			CMLTableHeader tableHeader = new CMLTableHeader();
+			tableHeaderTool = TableHeaderTool.getOrCreateTool(tableHeader);
+			table.addTableHeader(tableHeader);
+		}
+	}
+
+
+	private void ensureTableRowListTool() {		
+		if (tableRowListTool == null) {
+			CMLTableRowList tableRowList = new CMLTableRowList();
+			tableRowListTool = TableRowListTool.getOrCreateTool(tableRowList);
+			table.addTableRowList(tableRowList);
+		}
+	}
+	
+	/**
+	 * may be null
+	 * @return
+	 */
+	public TableRowListTool getTableRowListTool() {
+		return tableRowListTool;
+	}
+
+	/**
+	 * 
+	 * @return if missing zero-length rather than null
+	 */
+	public CMLElements<CMLTableRow> getRowElements() {
+		ensureTableRowListTool();
+		return tableRowListTool.getTableRowList().getTableRowElements();
+
+	}
+
+	public TableHeaderTool getTableHeaderTool() {
+		return tableHeaderTool;
+	}
+
+	public int indexOfColumn(String dictRef) {
+		ensureTableHeaderTool();
+		return tableHeaderTool.indexOfColumn(dictRef);
+	}
+	public CMLTableCell getTableCell(int row, String dictRef) {
+		CMLTableCell cell = null;
+		CMLTableRow tableRow = this.getTableRow(row);
+		int columnIndex = this.getTableHeaderTool().indexOfColumn(dictRef);
+		if (columnIndex >= 0 && tableRow != null) {
+			TableRowTool tableRowTool = TableRowTool.getOrCreateTool(tableRow);
+			cell = tableRowTool.getTableCell(columnIndex);
+		}
+		return cell;
+	}
+
+
+	private CMLTableRow getTableRow(int row) {
+		CMLTableRow tableRow = null;
+		CMLElements<CMLTableRow> rows = this.getRowElements();
+		if (row >= 0 && row < rows.size()) {
+			tableRow = rows.get(row);
+		}
+		return tableRow;
+	}
+
+
+	public int getColumnCount() {
+		ensureTableHeaderTool();
+		return tableHeaderTool.size();
+	}
+
+
+	public String getColumnName(int icol) {
+		ensureTableHeaderTool();
+		return tableHeaderTool.getColumnName(icol);
+	}
+
 };
