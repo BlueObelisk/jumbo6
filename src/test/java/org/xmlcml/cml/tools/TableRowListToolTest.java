@@ -5,6 +5,7 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLArrayList;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLScalar;
+import org.xmlcml.cml.element.CMLTableCell;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
@@ -81,5 +82,6 @@ public class TableRowListToolTest {
 				.createArrayList(3, 2, fixture.tableHeader);
 		JumboTestUtils.assertEqualsCanonically("tablerow", fixture.arrayList, arrayList1, true);
 	}
+	
 
 }
