@@ -88,7 +88,7 @@ public class MoleculeLayoutTest {
     @Test
     public void adjustValenceAnglesOnAcyclicAtom4a() {
     	CMLMolecule molecule = SMILESTool.createMolecule("FC(Cl)(N(C)C)OCCC");
-    	molecule.debug();
+//    	molecule.debug();
     	CMLAtom centralAtom = molecule.getAtom(1);
     	molecule.getAtom(0).setXY2(new Real2(-1.0, 0.0));
     	centralAtom.setXY2(new Real2(0.0, 0.0));
@@ -99,7 +99,7 @@ public class MoleculeLayoutTest {
     	assertAngle(molecule, 0,1,3, -Math.PI/2.);
     	assertAngle(molecule, 0,1,6, -Math.PI);
     	MoleculeLayout.adjustValenceAnglesOnAcyclicAtom4(centralAtom);
-    	molecule.debug();
+//    	molecule.debug();
     	assertAngle(molecule, 0,1,2, -Math.PI);
     	assertAngle(molecule, 0,1,3, Math.PI/2.);
     	assertAngle(molecule, 0,1,6, -Math.PI/2.);

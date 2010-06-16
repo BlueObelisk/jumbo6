@@ -498,7 +498,6 @@ public class SVGElement extends GraphicsElement {
 	public Transform2 getTransform2FromAttribute() {
 		Transform2 t = null;
 		String ts = this.getAttributeValue(TRANSFORM);
-		System.out.println("TTT "+ts);
 		if (ts != null) {
 			if (!ts.startsWith(MATRIX+"(")) {
 				throw new RuntimeException("Bad transform: "+ts);

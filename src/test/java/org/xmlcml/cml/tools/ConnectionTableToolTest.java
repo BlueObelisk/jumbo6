@@ -522,7 +522,7 @@ public class ConnectionTableToolTest {
 		CMLMolecule molecule = SMILESTool.createMolecule("CCCCF");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
-		molecule.debug();
+//		molecule.debug();
 	}
 
 	@Test
@@ -533,7 +533,7 @@ public class ConnectionTableToolTest {
 //		molecule.debug("B4");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
-		molecule.debug();
+//		molecule.debug();
 	}
 
 	@Test
@@ -544,7 +544,7 @@ public class ConnectionTableToolTest {
 //		molecule.debug("B4");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
-		molecule.debug();
+//		molecule.debug();
 	}
 
 	@Test
@@ -552,6 +552,6 @@ public class ConnectionTableToolTest {
 		CMLMolecule molecule = SMILESTool.createMolecule("CCCCOCC");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(molecule);
 		connectionTableTool.contractNAlkylGroups();
-		molecule.debug();
+//		molecule.debug();
 	}
 }
