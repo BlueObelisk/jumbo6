@@ -3,8 +3,10 @@ package org.xmlcml.cml.tools;
 import java.io.IOException;
 
 import nu.xom.Attribute;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -129,6 +131,35 @@ public class MoleculeListTool extends AbstractSVGTool {
 		this.moleculeDisplay = MoleculeDisplay;
 	}
 	
-	
+	/** find single toplevel molecule or moleculeList as descendant-or-self of rootound
+	 * if a (single) molecule is found, wrap it in a moleculeList
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public static CMLMoleculeList ensureOrCreateRootMoleculeList(CMLElement root) {
+		CMLMoleculeList moleculeList = null;
+		Nodes moleculeNodes = root.query(
+				"//*[local-name()='molecule' " +
+				"and not(ancestor::*[local-name()='molecule'])" +
+				"and not(ancestor::*[local-name()='moleculeList'])" +
+				" ]");
+		Nodes moleculeListNodes = root.query(
+				"//*[local-name()='moleculeList' " +
+				"and not(ancestor::*[local-name()='moleculeList'])]");
+		if (moleculeNodes.size() == 1 && moleculeListNodes.size() == 0) {
+			CMLMolecule molecule = (CMLMolecule) moleculeNodes.get(0);
+			moleculeList = new CMLMoleculeList();
+			molecule.detach();
+			moleculeList.appendChild(molecule);
+		} else if (moleculeListNodes.size() == 1 && moleculeNodes.size() == 0) {
+			moleculeList = (CMLMoleculeList) moleculeListNodes.get(0);
+			moleculeList.detach();
+		} else {
+			throw new RuntimeException("Cannot find single molecule or moleculeList");
+		}
+		return moleculeList;
+	}
+
 }
 

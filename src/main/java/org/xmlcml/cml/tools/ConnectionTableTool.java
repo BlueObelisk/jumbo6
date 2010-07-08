@@ -199,8 +199,15 @@ public class ConnectionTableTool extends AbstractTool {
 	 */
 	public void flattenMolecules() {
 		CMLElements<CMLMolecule> subMolecules = molecule.getMoleculeElements();
+		List<CMLMolecule> moleculeList = new ArrayList<CMLMolecule>();
+		for (CMLMolecule subMolecule : subMolecules) {
+			moleculeList.add(subMolecule);
+		}
 //		CMLMolecule temp = CMLMolecule.createMoleculeWithId("temp");
-		CMLMolecule temp = molecule;
+		flattenMolecules(moleculeList, molecule);
+	}
+
+	public static void flattenMolecules(List<CMLMolecule> subMolecules, CMLMolecule temp) {
 		for (CMLMolecule subMolecule : subMolecules) {
 			transferAtomsBonds(subMolecule, temp);
 			subMolecule.removeAtomArray();
@@ -214,10 +221,9 @@ public class ConnectionTableTool extends AbstractTool {
 			}
 			subMolecule.detach();
 		}
-//		CMLUtil.transferChildren(temp, molecule);
 	}
 
-	private void transferAtomsBonds(CMLMolecule subMolecule, CMLMolecule temp) {
+	private static void transferAtomsBonds(CMLMolecule subMolecule, CMLMolecule temp) {
 		// have to do the bonds first, as detaching atoms deletes bonds
 		List<CMLBond> bonds = subMolecule.getBonds();
 		List<CMLAtom> atoms = subMolecule.getAtoms();

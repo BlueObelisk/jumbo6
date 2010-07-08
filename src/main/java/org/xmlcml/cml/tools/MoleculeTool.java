@@ -4343,6 +4343,23 @@ public class MoleculeTool extends AbstractSVGTool {
 		return newIsotopomers;
 	}
 
+	public void addLoneElectronCountToAtoms() {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (CMLAtom atom : atoms) {
+			int loneElectronCount = this.getLoneElectronCount(atom);
+			atom.setCMLXAttribute("loneElectrons", ""+loneElectronCount);
+		}
+	}
+
+	public void addElectronCountToBonds() {
+		List<CMLBond> bonds = molecule.getBonds();
+		for (CMLBond bond : bonds) {
+			BondTool bondTool = BondTool.getOrCreateTool(bond);
+			int electronCount = bondTool.getElectronCount();
+			bond.setCMLXAttribute("electrons", ""+electronCount);
+		}
+	}
+
 }
 
 class BoundingRect {

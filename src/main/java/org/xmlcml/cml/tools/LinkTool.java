@@ -4,15 +4,13 @@ package org.xmlcml.cml.tools;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.element.CMLLength;
+import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLLink;
+import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMap.Direction;
-import org.xmlcml.euclid.Point3;
-import org.xmlcml.euclid.Vector3;
 
 /**
  * tool for managing length
@@ -142,4 +140,26 @@ public class LinkTool extends AbstractTool {
 		}
 		return toFromRef;
 	}
+
+
+	public void addToAndFrom(CMLMap.Direction direction, CMLAtom atom, CMLAtom otherAtom) {
+		Direction otherDirection = direction.opposite();
+		this.set(direction, otherAtom.getId());
+		this.set(otherDirection, atom.getId());
+	}
+
+	public void addToAndFrom(CMLMap.Direction direction, CMLBond bond, CMLBond otherBond) {
+		Direction otherDirection = direction.opposite();
+		this.set(direction, otherBond.getId());
+		this.set(otherDirection, bond.getId());
+	}
+
+
+	public void set(Direction direction, String value) {
+		if (direction.equals(Direction.TO)) {
+			link.setTo(value);
+		} else if (direction.equals(Direction.FROM)) {
+			link.setFrom(value);
+		}
+	}	
 };
