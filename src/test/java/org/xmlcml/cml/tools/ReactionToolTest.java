@@ -22,6 +22,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLConstants.Units;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAtom;
@@ -842,6 +843,31 @@ public class ReactionToolTest {
 		SVGGBox svgg = ReactionTool.getOrCreateTool(reaction).drawSVG();
 		SVGSVG.wrapAndWriteAsSVG(svgg, new File(REACTION_OUTPUT_DIR, "spectatorReaction.svg"));
 	}
+	
+	@Test
+	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing0() throws Exception {
+		CMLReaction reaction = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/in/reaction0.cml"));
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing();
+		reaction.debug("RRR0");
+		CMLReaction reactionRef = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction0.cml"));
+	}
+	
+	@Test
+	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing1() throws Exception {
+		CMLReaction reaction = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/in/reaction1.cml"));
+		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
+		reactionTool.mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing();
+		reaction.debug("RRR1");
+		CMLReaction reactionRef = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction1.cml"));
+		reactionTool.displayAnimatedReactionUsingMap();
+	}
+	
+	
 
 	static void usage() {
 		Util.println("java org.xmlcml.cml.tools.ReactionToolTest <options>");

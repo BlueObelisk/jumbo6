@@ -110,6 +110,8 @@ public class BondTool extends AbstractSVGTool {
 			orderD = 1.5;
 		} else if (order.equals(CMLBond.UNKNOWN_ORDER)) {
 			orderD = 0.5;
+		} else if (order.equals(CMLBond.ZERO)) {
+			orderD = 0.0;
 		} else {
 			
 		}
@@ -593,6 +595,10 @@ public class BondTool extends AbstractSVGTool {
 			CMLMolecule molecule = atom.getMolecule();
 			molecule.deleteAtom(atom);
 		}
+	}
+
+	public int getElectronCount() {
+		return (int) (2 * this.getNumericOrder()+0.01);
 	}
 
 }

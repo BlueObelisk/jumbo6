@@ -14,10 +14,12 @@ import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLLabel;
@@ -1010,6 +1012,159 @@ public class ReactionTool extends AbstractSVGTool {
     }
 
 
+	public CMLMap mapReactantAtomsToProductsUsingIds() {
+		CMLMap map = new CMLMap();
+		CMLAtomSet reactantAtomSet = getReactantAtomSet();
+		CMLAtomSet productAtomSet = getProductAtomSet();
+		mapReactantAtomsToProductsIncludingMissing(map, reactantAtomSet, productAtomSet);
+		return map;
+	}
+
+	public void flattenReactantAndProductMolecules() {
+		ReactionComponent component = reaction.getReactantList();
+		CMLMolecule molecule = flatten(component);
+		molecule.setId("r_mol");
+		((CMLElement)component).detach();
+		reaction.addReactant(molecule);
+		
+		component = reaction.getProductList();
+		molecule = flatten(component);
+		molecule.setId("p_mol");
+		((CMLElement)component).detach();
+		reaction.addProduct(molecule);
+	}
+
+	private CMLMolecule flatten(ReactionComponent component) {
+		List<CMLMolecule> molecules = component.getMolecules();
+		CMLMolecule molecule = new CMLMolecule();
+		ConnectionTableTool.flattenMolecules(molecules, molecule);
+		return molecule;
+		
+	}
+
+
+	public CMLMap mapReactantAtomsToProductsUsingIdsAndIncludingMissing() {
+		CMLMap map = new CMLMap();
+		mapReactantAtomsToProductsIncludingMissing(
+				map, this.getReactantAtomSet(), this.getProductAtomSet());
+		return map;
+	}
+
+	private void mapReactantAtomsToProductsIncludingMissing(CMLMap map,
+			CMLAtomSet reactantAtomSet, CMLAtomSet productAtomSet) {
+		List<CMLAtom> reactantAtoms = reactantAtomSet.getAtoms();
+		List<CMLAtom> productAtoms = productAtomSet.getAtoms();
+		mapAtomsIncludingMissing(map, productAtomSet, reactantAtoms, Direction.FROM);
+		mapAtomsIncludingMissing(map, reactantAtomSet, productAtoms, Direction.TO);
+
+	}
+
+	private void mapAtomsIncludingMissing(
+			CMLMap map, CMLAtomSet atomSet, List<CMLAtom> otherAtoms, CMLMap.Direction direction) {
+		String toContext = otherAtoms.get(0).getMolecule().getId();
+		map.setToContext(toContext);
+		String fromContext = atomSet.getMolecule().getId();
+		map.setFromContext(fromContext);
+		for (CMLAtom otherAtom : otherAtoms) {
+			CMLAtom atom = getAtomOrCreateAndAddGhost(atomSet, otherAtom);
+			addUniqueLink(map, direction, otherAtom, atom);
+		}
+	}
+
+	private void addUniqueLink(CMLMap map, CMLMap.Direction direction,
+			CMLAtom otherAtom, CMLAtom atom) {
+		if (map.getLink(otherAtom.getId(), direction) == null) {
+			CMLLink link = new CMLLink();
+			LinkTool linkTool = LinkTool.getOrCreateTool(link);
+			linkTool.addToAndFrom(direction, otherAtom, atom);
+			map.addLink(link);
+		}
+	}
+
+	private CMLAtom getAtomOrCreateAndAddGhost(CMLAtomSet atomSet, CMLAtom otherAtom) {
+		CMLAtom atom = atomSet.getAtomById(otherAtom.getId());
+		if (atom == null) {
+			atom = new CMLAtom(otherAtom);
+			atom.setOccupancy(0.0);
+			atomSet.getMolecule().addAtom(atom);
+		}
+		return atom;
+	}
+
+	private CMLAtomSet getProductAtomSet() {
+		CMLProductList productList = reaction.getProductList();
+		List<CMLAtom> productAtoms = productList.getAtoms();
+		return new CMLAtomSet(productAtoms.toArray(new CMLAtom[0]));
+	}
+
+	private CMLAtomSet getReactantAtomSet() {
+		CMLReactantList reactantList = reaction.getReactantList();
+		List<CMLAtom> reactantAtoms = reactantList.getAtoms();
+		return new CMLAtomSet(reactantAtoms.toArray(new CMLAtom[0]));
+	}
+
+
+	public CMLMap mapReactantBondsToProductsUsingIdsAndIncludingMissing() {
+		CMLMap map = new CMLMap();
+		mapReactantBondsToProductsIncludingMissing(
+				map, this.getReactantBondSet(), this.getProductBondSet());
+		return map;
+	}
+
+	private void mapReactantBondsToProductsIncludingMissing(CMLMap map,
+			CMLBondSet reactantBondSet, CMLBondSet productBondSet) {
+		List<CMLBond> reactantBonds = reactantBondSet.getBonds();
+		List<CMLBond> productBonds = productBondSet.getBonds();
+		mapBondsIncludingMissing(map, productBondSet, reactantBonds, Direction.FROM);
+		mapBondsIncludingMissing(map, reactantBondSet, productBonds, Direction.TO);
+
+	}
+
+	private void mapBondsIncludingMissing(
+			CMLMap map, CMLBondSet bondSet, List<CMLBond> otherBonds, CMLMap.Direction direction) {
+		for (CMLBond otherBond : otherBonds) {
+			CMLBond bond = getBondOrCreateAndAddGhost(bondSet, otherBond);
+			addUniqueLink(map, direction, otherBond, bond);
+		}
+	}
+	
+	private void addUniqueLink(CMLMap map, CMLMap.Direction direction,
+			CMLBond otherBond, CMLBond bond) {
+		if (map.getLink(otherBond.getId(), direction) == null) {
+			CMLLink link = new CMLLink();
+			LinkTool linkTool = LinkTool.getOrCreateTool(link);
+			linkTool.addToAndFrom(direction, otherBond, bond);
+			map.addLink(link);
+		}
+	}
+
+
+	private CMLBond getBondOrCreateAndAddGhost(CMLBondSet bondSet,
+			CMLBond otherBond) {
+		CMLBond bond = bondSet.getBondById(otherBond.getId());
+		if (bond == null) {
+			bond = new CMLBond(otherBond);
+			bond.setOrder(CMLBond.ZERO);
+			bondSet.getMolecule().addBond(bond);
+			bond.setCMLXAttribute("electrons", "0");
+		}
+		return bond;
+	}
+
+	private CMLBondSet getProductBondSet() {
+		CMLProductList productList = reaction.getProductList();
+		List<CMLBond> productBonds = productList.getBonds();
+		return new CMLBondSet(productBonds.toArray(new CMLBond[0]));
+	}
+
+	private CMLBondSet getReactantBondSet() {
+		CMLReactantList reactantList = reaction.getReactantList();
+		List<CMLBond> reactantBonds = reactantList.getBonds();
+		return new CMLBondSet(reactantBonds.toArray(new CMLBond[0]));
+	}
+
+
+
 	public void mapReactantsToProducts() {
 //		List<CMLMolecule> reactantMolecules = getMolecules(Component.REACTANT);
 //		List<CMLMolecule> productMolecules = getMolecules(Component.PRODUCT);
@@ -1630,5 +1785,54 @@ public class ReactionTool extends AbstractSVGTool {
 		}
 	}
 
+	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing() {
+		this.flattenReactantAndProductMolecules();
+		CMLMap atomMap = this.mapReactantAtomsToProductsUsingIdsAndIncludingMissing();
+		reaction.appendChild(atomMap);
+		CMLMap bondMap = this.mapReactantBondsToProductsUsingIdsAndIncludingMissing();
+		reaction.appendChild(bondMap);
+	}
+	
+	public void displayAnimatedReactionUsingMap() {
+		displayAtoms();
+		displayBonds();
+	}
 
+	private void displayAtoms() {
+		CMLMap atomMap = reaction.getMapElements().get(0);
+		List<CMLAtom> reactantAtoms = reaction.getReactantList().getAtoms();
+		List<CMLAtom> productAtoms = reaction.getProductList().getAtoms();
+		CMLAtomSet productAtomSet = new CMLAtomSet(productAtoms.toArray(new CMLAtom[0]));
+		for (CMLAtom reactantAtom : reactantAtoms) {
+			String productId = atomMap.getToRef(reactantAtom.getId());
+			CMLAtom productAtom = productAtomSet.getAtomById(productId);
+			displayChange(reactantAtom, productAtom);
+		}
+	}
+
+	private void displayChange(CMLAtom reactantAtom, CMLAtom productAtom) {
+		System.out.println(reactantAtom.getId()+" "+reactantAtom.getXY2()+" => "+productAtom.getXY2());
+		double reactantOccupancy = Double.isNaN(reactantAtom.getOccupancy()) ? 1.0 : reactantAtom.getOccupancy();
+		double productOccupancy = Double.isNaN(productAtom.getOccupancy()) ? 1.0 : productAtom.getOccupancy();
+		if (reactantOccupancy < 0.1 || productOccupancy < 0.1 ) {
+			System.out.println(" ... "+reactantOccupancy +" ..> "+productOccupancy);
+		}
+	}
+	private void displayBonds() {
+		CMLMap bondMap = reaction.getMapElements().get(1);
+		List<CMLBond> reactantBonds = reaction.getReactantList().getBonds();
+		List<CMLBond> productBonds = reaction.getProductList().getBonds();
+		CMLBondSet productBondSet = new CMLBondSet(productBonds.toArray(new CMLBond[0]));
+		for (CMLBond reactantBond : reactantBonds) {
+			String productId = bondMap.getToRef(reactantBond.getId());
+			CMLBond productBond = productBondSet.getBondById(productId);
+			displayChange(reactantBond, productBond);
+		}
+	}
+
+	private void displayChange(CMLBond reactantBond, CMLBond productBond) {
+		String reactantOrder = reactantBond.getOrder();
+		String productOrder =  productBond.getOrder();
+		System.out.println(reactantBond.getId()+" "+reactantOrder+" => "+productOrder);
+	}
 }
