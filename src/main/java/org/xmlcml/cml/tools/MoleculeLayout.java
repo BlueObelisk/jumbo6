@@ -27,7 +27,6 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
-import org.xmlcml.euclid.Vector2;
 
 /**
  * tool to support a ring. not fully developed

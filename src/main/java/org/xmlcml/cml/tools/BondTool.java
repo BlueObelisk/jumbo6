@@ -175,13 +175,14 @@ public class BondTool extends AbstractSVGTool {
     	} else {
         	g = (drawable == null) ? new SVGG() : drawable.createGraphicsElement();
         	g.setUserElement(bond);
-	    	double bondWidth = bondDisplay.getScaledWidth();
+	    	double bondWidth = (bondDisplay == null) ? 1.0 : bondDisplay.getScaledWidth();
+	    	double middleFactor = (bondDisplay == null) ? 1.0 : bondDisplay.getDoubleMiddleFactor();
 			String order = bond.getOrder();
 			CMLBondStereo bondStereo = bond.getBondStereo();
 			String bondStereoS = (bondStereo == null) ? null : bondStereo.getXMLContent();
 	    	 // highlight
 			// FIXME obsolete?
-	    	 SelectionTool selectionTool = moleculeTool.getSelectionTool();
+	    	 SelectionTool selectionTool = (moleculeTool == null) ? null : moleculeTool.getSelectionTool();
 	    	 if (selectionTool != null) {
 	    		 if (selectionTool.isSelected(bond)) {
 		    		 double factor = 3.0;
@@ -211,11 +212,13 @@ public class BondTool extends AbstractSVGTool {
 			} else if (order.equals(CMLBond.DOUBLE)) {
 				g.appendChild(createBond("black", 2.55*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 
-						bondDisplay.getDoubleMiddleFactor()*0.85*bondWidth, xy0, xy1));
+						middleFactor*0.85*bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.TRIPLE)) {
 				g.appendChild(createBond("black", 3.75*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 2.25*bondWidth, xy0, xy1));
 				g.appendChild(createBond("black", 0.75*bondWidth, xy0, xy1));
+			} else {
+				g.appendChild(createBond("white", bondWidth, xy0, xy1));
 			}
     	}
 		return g;
