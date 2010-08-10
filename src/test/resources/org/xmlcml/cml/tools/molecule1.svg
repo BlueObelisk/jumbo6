@@ -9,16 +9,16 @@
       <line x1="5.0" y1="50.0" x2="50.0" y2="50.0" style=" stroke : black; stroke-width : 4.628427124746191;" id="a3_a1"/>
     </g>
     <g class="atom" id="g_a1" transform="matrix(1.0,0., 0.,-1.0,50.0,50.0)">
-      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
-      <text x="-8.75" y="9.25" style=" fill : black; stroke : none; font-size : 25.0;">C</text>
+      <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-3.8499999999999996" y="4.07" style=" fill : black; stroke : none; font-size : 11.0;">C</text>
     </g>
     <g class="atom" id="g_a2" transform="matrix(1.0,0., 0.,-1.0,100.0,100.0)">
-      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
-      <text x="-8.75" y="9.25" style=" fill : red; stroke : none; font-size : 25.0;">O</text>
+      <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-3.8499999999999996" y="4.07" style=" fill : red; stroke : none; font-size : 11.0;">O</text>
     </g>
     <g class="atom" id="g_a3" transform="matrix(1.0,0., 0.,-1.0,5.0,50.0)">
-      <circle cx="0.0" cy="0.0" r="13.750000000000002" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
-      <text x="-8.75" y="9.25" style=" fill : blue; stroke : none; font-size : 25.0;">N</text>
+      <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+      <text x="-3.8499999999999996" y="4.07" style=" fill : blue; stroke : none; font-size : 11.0;">N</text>
     </g>
     <rect x="-45.0" y="0.0" width="195.0" height="150.0" style=" fill : none; stroke : red; stroke-width : 1.0;"/>
   </g>

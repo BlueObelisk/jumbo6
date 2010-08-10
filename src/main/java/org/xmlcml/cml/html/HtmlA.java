@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
  *
  */
 public class HtmlA extends HtmlElement {
+	private static final String HREF = "href";
+	private static final String TARGET = "target";
 	private final static Logger LOG = Logger.getLogger(HtmlA.class);
 	public final static String TAG = "a";
 	
@@ -23,15 +25,15 @@ public class HtmlA extends HtmlElement {
 	}
 	
 	public void setHref(String href) {
-		this.setAttribute("href", href);
+		this.setAttribute(HREF, href);
 	}
 	
-	public void setTarget(Target target) {
-		this.setAttribute("target", target.toString());
+	public String getTarget() {
+		return this.getAttributeValue(TARGET);
 	}
 
-	public String getId() {
-		return this.getAttributeValue("id");
+	public void setTarget(Target target) {
+		this.setAttribute(TARGET, target.toString());
 	}
 
 }

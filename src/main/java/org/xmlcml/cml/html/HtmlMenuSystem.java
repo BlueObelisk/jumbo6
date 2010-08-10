@@ -3,6 +3,12 @@ package org.xmlcml.cml.html;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
@@ -18,12 +24,12 @@ import org.xmlcml.cml.html.HtmlElement.Target;
 public class HtmlMenuSystem {
 	private static Logger LOG = Logger.getLogger(HtmlMenuSystem.class);
 
-	private final static String DEFAULT_HTML_SUFFIX = "html";
-	private final static String DEFAULT_MENU_ROOT = "menu";
-	private final static int DEFAULT_MENU_WIDTH = 150;
-	private final static String DEFAULT_INDEXFRAME_ROOT = "indexFrame";
-	private final static String DEFAULT_BOTTOM_ROOT = "bottom";
-	private final static String DEFAULT_BOTTOM_WELCOME = "Images will appear here";
+	public final static String DEFAULT_HTML_SUFFIX = "html";
+	public final static String DEFAULT_MENU_ROOT = "menu";
+	public final static int DEFAULT_MENU_WIDTH = 150;
+	public final static String DEFAULT_INDEXFRAME_ROOT = "indexFrame";
+	public final static String DEFAULT_BOTTOM_ROOT = "bottom";
+	public final static String DEFAULT_BOTTOM_WELCOME = "Images will appear here";
 	
 	private HtmlHtml menu;
 	private String menuRootName = DEFAULT_MENU_ROOT;
@@ -57,6 +63,38 @@ public class HtmlMenuSystem {
 		makeBottom();
 		makeIndexFrame();
 		makeMenu();
+	}
+	
+	public static HtmlMenuSystem readDirectory(File dir) {
+		HtmlMenuSystem htmlMenuSystem = null;
+		if (dir != null && dir.isDirectory()) {
+			htmlMenuSystem = new HtmlMenuSystem();
+			htmlMenuSystem.readIndexFrameElement(dir);
+			htmlMenuSystem.readMenuElement(dir);
+			htmlMenuSystem.readBottomElement(dir);
+		}
+		return htmlMenuSystem;
+	}
+
+	private void readBottomElement(File dir) {
+		bottom = readElement(dir, createBottomFilename());
+	}
+
+	private void readMenuElement(File dir) {
+		menu = readElement(dir, createMenuFilename());
+	}
+
+	private void readIndexFrameElement(File dir) {
+		indexFrame = readElement(dir, createIndexFrameFilename());
+		
+	}
+
+	private HtmlHtml readElement(File dir, String filename) {
+		File file = new File(dir, filename);
+		Document document = CMLUtil.parseQuietlyToDocument(file);
+		return (document == null || !(document.getRootElement() instanceof HtmlHtml)) ? null 
+				: (HtmlHtml) document.getRootElement();
+
 	}
 
 	private String createBottomFilename() {
@@ -103,6 +141,20 @@ public class HtmlMenuSystem {
 	
 	public HtmlUl getUl() {
 		return ul;
+	}
+	
+	public List<HtmlA> getAList() {
+		Elements liElements = ul.getLiElements();
+		List<HtmlA> aList = new ArrayList<HtmlA>();
+		for (int i = 0; i < liElements.size(); i++) {
+			aList.add((HtmlA)liElements.get(i));
+		}
+		return aList;
+	}
+	
+	public String getFirstTarget() {
+		List<HtmlA> aList = getAList();
+		return (aList.size() == 0) ? null : aList.get(0).getTarget();
 	}
 
 	public HtmlElement addA(String href, Target target, String content) {

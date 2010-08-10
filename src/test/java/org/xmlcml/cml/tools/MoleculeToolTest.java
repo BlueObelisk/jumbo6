@@ -1339,6 +1339,7 @@ public class MoleculeToolTest {
 		AbstractSVGTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	SVGSVG svgsvg = createSvgSvg(moleculeTool);
         Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule1.svg");
+//        CMLUtil.debug(svgsvg, "SSVG");
         JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
 	}
 	

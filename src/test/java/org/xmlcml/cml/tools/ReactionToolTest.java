@@ -6,6 +6,8 @@ import static org.xmlcml.euclid.EuclidConstants.S_EMPTY;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -39,12 +41,12 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.element.CMLReaction.Component;
+import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGGBox;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.molutil.ChemicalElement.AS;
@@ -846,25 +848,42 @@ public class ReactionToolTest {
 	
 	@Test
 	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing0() throws Exception {
+		mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing(
+				"org/xmlcml/cml/tools/reaction/in/reaction0.cml",
+				"org/xmlcml/cml/tools/reaction/ref/reaction0.cml");
+	}
+
+	private void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing(
+			String inFilename, String refFilename)
+			throws IOException {
 		CMLReaction reaction = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
-				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/in/reaction0.cml"));
+				Util.getInputStreamFromResource(inFilename));
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		reactionTool.mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing();
-		reaction.debug("RRR0");
 		CMLReaction reactionRef = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
-				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction0.cml"));
+				Util.getInputStreamFromResource(refFilename));
+		SVGElement svg = reactionTool.displayAnimatedReactionUsingMap();
 	}
 	
 	@Test
 	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing1() throws Exception {
+		mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing(
+				"org/xmlcml/cml/tools/reaction/in/reaction1.cml",
+				"org/xmlcml/cml/tools/reaction/ref/reaction1.cml");
+	}
+	
+	@Test
+	public void mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing2() throws Exception {
 		CMLReaction reaction = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
-				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/in/reaction1.cml"));
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/in/reaction2.cml"));
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		reactionTool.mapReactantAtomsAndBondsToProductsUsingIdsAndIncludingMissing();
-		reaction.debug("RRR1");
 		CMLReaction reactionRef = (CMLReaction) CMLUtil.parseQuietlyIntoCML(
-				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction1.cml"));
-		reactionTool.displayAnimatedReactionUsingMap();
+				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction2.cml"));
+		SVGElement svg = reactionTool.displayAnimatedReactionUsingMap();
+		CMLUtil.debug(svg, new FileOutputStream("src/test/resources/org/xmlcml/cml/tools/reaction/ref/test2.svg"),1);
+		CMLUtil.debug(svg, new FileOutputStream("C:\\temp\\test2.svg"),1);
+
 	}
 	
 	
