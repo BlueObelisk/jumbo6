@@ -829,4 +829,5 @@ public class SVGElement extends GraphicsElement {
 	public String getId() {
 		return this.getAttributeValue(ID);
 	}
+
 }

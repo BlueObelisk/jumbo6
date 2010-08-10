@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.0,0., 0.,-1.0,0.0,0.0)">
+  <g id="p_a52_a4">
+   <line x1="125.9497" y1="-163.5535" x2="148.3357" y2="-216.75" style=" stroke : white; stroke-width : 1.0;" id="a52_a4">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x1" from="125.9497" to="117.0036"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y1" from="-163.5535" to="-182.804"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="1.0" to="0.0" fill="freeze"/>
+  </g>
+  <g id="p_a52_a4">
+   <line x1="117.0036" y1="-182.804" x2="148.3357" y2="-216.75" style=" stroke : black; stroke-width : 1.0;" id="a52_a4">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x1" from="125.9497" to="117.0036"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y1" from="-163.5535" to="-182.804"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="0.0" to="1.0" fill="freeze"/>
+  </g>
+  <g id="p_a52_a64">
+   <line x1="125.9497" y1="-163.5535" x2="154.7252" y2="-172.0369" style=" stroke : black; stroke-width : 1.0;" id="a52_a64">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x1" from="125.9497" to="117.0036"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y1" from="-163.5535" to="-182.804"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x2" from="154.7252" to="190.2252"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y2" from="-172.0369" to="-161.5369"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="1.0" to="0.0" fill="freeze"/>
+  </g>
+  <g id="p_a52_a64">
+   <line x1="117.0036" y1="-182.804" x2="190.2252" y2="-161.5369" style=" stroke : white; stroke-width : 1.0;" id="a52_a64">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x1" from="125.9497" to="117.0036"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y1" from="-163.5535" to="-182.804"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x2" from="154.7252" to="190.2252"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y2" from="-172.0369" to="-161.5369"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="0.0" to="1.0" fill="freeze"/>
+  </g>
+  <g id="p_a4_a8">
+   <line x1="148.3357" y1="-216.75" x2="148.3357" y2="-186.75" style=" stroke : black; stroke-width : 2.55;" id="a4_a8">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x2" from="148.3357" to="169.5489"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y2" from="-186.75" to="-195.5367"/>
+   </line>
+   <line x1="148.3357" y1="-216.75" x2="148.3357" y2="-186.75" style=" stroke : white; stroke-width : 0.85;" id="a4_a8">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x2" from="148.3357" to="169.5489"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y2" from="-186.75" to="-195.5367"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="1.0" to="0.0" fill="freeze"/>
+  </g>
+  <g id="p_a4_a8">
+   <line x1="148.3357" y1="-216.75" x2="169.5489" y2="-195.5367" style=" stroke : black; stroke-width : 1.0;" id="a4_a8">
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="x2" from="148.3357" to="169.5489"/>
+    <animate begin="0.0s" dur="5.0s" fill="freeze" attributeName="y2" from="-186.75" to="-195.5367"/>
+   </line>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="0.0" to="1.0" fill="freeze"/>
+  </g>
+  <g class="atom" transform="matrix(1.0,0., 0.,-1.0,154.7252,-172.0369)" id="p_a64">
+   <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+   <text x="-3.8499999999999996" y="4.07" style=" stroke : none; font-size : 11.0;">Mg</text>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="1.0" to="0.0" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="154.7252,-172.0369" to="190.2252,-161.5369" attributeType="XML" type="translate" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="1.0,-1.0" to="1.000001,-1.000001" attributeType="XML" type="scale" fill="freeze" additive="sum"/>
+  </g>
+  <g class="atom" transform="matrix(1.0,0., 0.,-1.0,190.2252,-161.5369)" id="p_a64">
+   <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+   <text x="-3.8499999999999996" y="4.07" style=" stroke : none; font-size : 11.0;">Mg+</text>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="0.0" to="1.0" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="154.7252,-172.0369" to="190.2252,-161.5369" attributeType="XML" type="translate" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="1.0,-1.0" to="1.000001,-1.000001" attributeType="XML" type="scale" fill="freeze" additive="sum"/>
+  </g>
+  <g class="atom" transform="matrix(1.0,0., 0.,-1.0,148.3357,-186.75)" id="p_a8">
+   <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+   <text x="-3.8499999999999996" y="4.07" style=" fill : red; stroke : none; font-size : 11.0;">O</text>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="1.0" to="0.0" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="148.3357,-186.75" to="169.5489,-195.5367" attributeType="XML" type="translate" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="1.0,-1.0" to="1.000001,-1.000001" attributeType="XML" type="scale" fill="freeze" additive="sum"/>
+  </g>
+  <g class="atom" transform="matrix(1.0,0., 0.,-1.0,169.5489,-195.5367)" id="p_a8">
+   <circle cx="0.0" cy="0.0" r="6.050000000000001" style=" fill : white; stroke : none; stroke-width : 0.5; opacity : 1.0;"/>
+   <text x="-3.8499999999999996" y="4.07" style=" fill : red; stroke : none; font-size : 11.0;">O-</text>
+   <animate begin="0.0s" dur="5.0s" attributeName="opacity" from="0.0" to="1.0" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="148.3357,-186.75" to="169.5489,-195.5367" attributeType="XML" type="translate" fill="freeze"/>
+   <animateTransform begin="0.0s" dur="5.0s" attributeName="transform" from="1.0,-1.0" to="1.000001,-1.000001" attributeType="XML" type="scale" fill="freeze" additive="sum"/>
+  </g>
+ </g>
+</svg>
