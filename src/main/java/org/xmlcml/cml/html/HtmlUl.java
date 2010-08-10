@@ -1,5 +1,7 @@
 package org.xmlcml.cml.html;
 
+import nu.xom.Elements;
+
 import org.apache.log4j.Logger;
 
 
@@ -17,5 +19,9 @@ public class HtmlUl extends HtmlElement {
 	 */
 	public HtmlUl() {
 		super(TAG);
+	}
+	
+	public Elements getLiElements() {
+		return this.getChildElements(HtmlLi.TAG);
 	}
 }

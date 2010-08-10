@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reaction cmlx:fileId="C:\Users\pm286\workspace\curly\orgreact2\carbonyl\addition\grignard\aldehydes\step0\reaction.cml" xmlns="http://www.xml-cml.org/schema" xmlns:cmlx="http://www.xml-cml.org/schema/cmlx">
+<reactantList>
+<reactant>
+<molecule id="r_mol">
+<atomArray>
+<atom id="a2" elementType="C" hydrogenCount="3" x2="122.3549" y2="-231.75" cmlx:loneElectrons="0"/>
+<atom id="a4" elementType="C" hydrogenCount="1" x2="148.3357" y2="-216.75" cmlx:loneElectrons="0"/>
+<atom id="a6" elementType="H" hydrogenCount="0" x2="167.82127868886533" y2="-228.00001230398823" cmlx:loneElectrons="0"/>
+<atom id="a8" elementType="O" hydrogenCount="0" x2="148.3357" y2="-186.75" cmlx:loneElectrons="4"/>
+<atom id="a10" elementType="H" hydrogenCount="0" x2="102.86931065557462" y2="-242.9999938480101" cmlx:loneElectrons="0"/>
+<atom id="a12" elementType="H" hydrogenCount="0" x2="133.60489384801008" y2="-251.23558934442536" cmlx:loneElectrons="0"/>
+<atom id="a18" elementType="H" hydrogenCount="0" x2="111.10490615198991" y2="-212.2644106555746" cmlx:loneElectrons="0"/>
+<atom id="a44" elementType="C" hydrogenCount="1" x2="90.1332" y2="-125.9081" cmlx:loneElectrons="0"/>
+<atom id="a46" elementType="C" hydrogenCount="1" x2="68.3986" y2="-146.5867" cmlx:loneElectrons="0"/>
+<atom id="a48" elementType="C" hydrogenCount="1" x2="75.4395" y2="-175.7488" cmlx:loneElectrons="0"/>
+<atom id="a50" elementType="C" hydrogenCount="1" x2="104.2151" y2="-184.2322" cmlx:loneElectrons="0"/>
+<atom id="a52" elementType="C" hydrogenCount="0" x2="125.9497" y2="-163.5535" cmlx:loneElectrons="0"/>
+<atom id="a54" elementType="C" hydrogenCount="1" x2="118.9088" y2="-134.3915" cmlx:loneElectrons="0"/>
+<atom id="a62" elementType="H" hydrogenCount="0" x2="109.49582223079112" y2="-206.10374116820765" cmlx:loneElectrons="0"/>
+<atom id="a64" elementType="Mg" hydrogenCount="0" x2="154.7252" y2="-172.0369" cmlx:loneElectrons="-1"/>
+<atom id="a66" elementType="H" hydrogenCount="0" x2="59.138528785726066" y2="-191.25778700182528" cmlx:loneElectrons="0"/>
+<atom id="a68" elementType="H" hydrogenCount="0" x2="135.20976514775626" y2="-118.88250662186586" cmlx:loneElectrons="0"/>
+<atom id="a70" elementType="H" hydrogenCount="0" x2="84.85250417863018" y2="-104.03655245544932" cmlx:loneElectrons="0"/>
+<atom id="a72" elementType="H" hydrogenCount="0" x2="46.816942474566076" y2="-140.2241219999866" cmlx:loneElectrons="0"/>
+<atom id="a74" elementType="Br" hydrogenCount="0" x2="183.5008" y2="-180.5203" cmlx:loneElectrons="-3"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a2 a4" id="a2_a4" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a4 a6" id="a4_a6" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a4 a8" id="a4_a8" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a2 a10" id="a2_a10" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a2 a12" id="a2_a12" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a2 a18" id="a2_a18" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a44 a46" id="a44_a46" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a46 a48" id="a46_a48" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a48 a50" id="a48_a50" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a50 a52" id="a50_a52" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a54" id="a52_a54" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a54 a44" id="a54_a44" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a50 a62" id="a50_a62" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a64" id="a52_a64" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a48 a66" id="a48_a66" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a54 a68" id="a54_a68" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a44 a70" id="a44_a70" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a46 a72" id="a46_a72" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a64 a74" id="a64_a74" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a4" id="a52_a4" order="." cmlx:electrons="0"/>
+</bondArray>
+</molecule>
+</reactant>
+</reactantList>
+<productList>
+<product>
+<molecule id="p_mol">
+<atomArray>
+<atom id="a2" elementType="C" hydrogenCount="3" x2="122.3549" y2="-231.75" cmlx:loneElectrons="0"/>
+<atom id="a4" elementType="C" hydrogenCount="1" x2="148.3357" y2="-216.75" cmlx:loneElectrons="0"/>
+<atom id="a6" elementType="H" hydrogenCount="0" x2="162.37458936199812" y2="-232.36763586831168" cmlx:loneElectrons="0"/>
+<atom id="a8" formalCharge="-1" elementType="O" hydrogenCount="0" x2="169.5489" y2="-195.5367" cmlx:loneElectrons="6">
+<label dictRef="cdx:label" id="x0" value="O-"/>
+</atom>
+<atom id="a10" elementType="H" hydrogenCount="0" x2="101.70049831329608" y2="-243.67480698440997" cmlx:loneElectrons="0"/>
+<atom id="a12" elementType="H" hydrogenCount="0" x2="134.27970698440998" y2="-252.40440168670392" cmlx:loneElectrons="0"/>
+<atom id="a18" elementType="H" hydrogenCount="0" x2="110.43009301559002" y2="-211.09559831329608" cmlx:loneElectrons="0"/>
+<atom id="a44" elementType="C" hydrogenCount="1" x2="102.0934" y2="-133.0276" cmlx:loneElectrons="0"/>
+<atom id="a46" elementType="C" hydrogenCount="1" x2="73.3551" y2="-141.636" cmlx:loneElectrons="0"/>
+<atom id="a48" elementType="C" hydrogenCount="1" x2="66.4409" y2="-170.8284" cmlx:loneElectrons="0"/>
+<atom id="a50" elementType="C" hydrogenCount="1" x2="88.2652" y2="-191.4124" cmlx:loneElectrons="0"/>
+<atom id="a52" elementType="C" hydrogenCount="0" x2="117.0036" y2="-182.804" cmlx:loneElectrons="0"/>
+<atom id="a54" elementType="C" hydrogenCount="1" x2="123.9177" y2="-153.6116" cmlx:loneElectrons="0"/>
+<atom id="a62" elementType="H" hydrogenCount="0" x2="82.76856598912133" y2="-214.6199924042457" cmlx:loneElectrons="0"/>
+<atom id="a66" elementType="H" hydrogenCount="0" x2="43.59420848873038" y2="-177.6719383859544" cmlx:loneElectrons="0"/>
+<atom id="a68" elementType="H" hydrogenCount="0" x2="146.76438041240982" y2="-146.7680245613598" cmlx:loneElectrons="0"/>
+<atom id="a70" elementType="H" hydrogenCount="0" x2="107.59002291194274" y2="-109.82000496701443" cmlx:loneElectrons="0"/>
+<atom id="a72" elementType="H" hydrogenCount="0" x2="56.00506653572509" y2="-125.27196414573434" cmlx:loneElectrons="0"/>
+<atom id="a64" formalCharge="1" elementType="Mg" hydrogenCount="0" x2="190.2252" y2="-161.5369" cmlx:loneElectrons="-1">
+<label dictRef="cdx:label" id="x0" value="Mg+"/>
+</atom>
+<atom id="a74" elementType="Br" hydrogenCount="0" x2="219.0008" y2="-170.0203" cmlx:loneElectrons="-3"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a2 a4" id="a2_a4" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a4 a6" id="a4_a6" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a4 a8" id="a4_a8" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a2 a10" id="a2_a10" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a2 a12" id="a2_a12" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a2 a18" id="a2_a18" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a44 a46" id="a44_a46" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a46 a48" id="a46_a48" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a48 a50" id="a48_a50" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a50 a52" id="a50_a52" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a54" id="a52_a54" order="2" cmlx:electrons="4"/>
+<bond atomRefs2="a54 a44" id="a54_a44" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a50 a62" id="a50_a62" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a48 a66" id="a48_a66" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a54 a68" id="a54_a68" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a44 a70" id="a44_a70" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a46 a72" id="a46_a72" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a4" id="a52_a4" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a64 a74" id="a64_a74" order="1" cmlx:electrons="2"/>
+<bond atomRefs2="a52 a64" id="a52_a64" order="." cmlx:electrons="0"/>
+</bondArray>
+</molecule>
+</product>
+</productList>
+<map toContext="p_mol" fromContext="r_mol">
+<link from="a2" to="a2"/>
+<link from="a4" to="a4"/>
+<link from="a6" to="a6"/>
+<link from="a8" to="a8"/>
+<link from="a10" to="a10"/>
+<link from="a12" to="a12"/>
+<link from="a18" to="a18"/>
+<link from="a44" to="a44"/>
+<link from="a46" to="a46"/>
+<link from="a48" to="a48"/>
+<link from="a50" to="a50"/>
+<link from="a52" to="a52"/>
+<link from="a54" to="a54"/>
+<link from="a62" to="a62"/>
+<link from="a64" to="a64"/>
+<link from="a66" to="a66"/>
+<link from="a68" to="a68"/>
+<link from="a70" to="a70"/>
+<link from="a72" to="a72"/>
+<link from="a74" to="a74"/>
+</map>
+<map>
+<link from="a2_a4" to="a2_a4"/>
+<link from="a4_a6" to="a4_a6"/>
+<link from="a4_a8" to="a4_a8"/>
+<link from="a2_a10" to="a2_a10"/>
+<link from="a2_a12" to="a2_a12"/>
+<link from="a2_a18" to="a2_a18"/>
+<link from="a44_a46" to="a44_a46"/>
+<link from="a46_a48" to="a46_a48"/>
+<link from="a48_a50" to="a48_a50"/>
+<link from="a50_a52" to="a50_a52"/>
+<link from="a52_a54" to="a52_a54"/>
+<link from="a54_a44" to="a54_a44"/>
+<link from="a50_a62" to="a50_a62"/>
+<link from="a52_a64" to="a52_a64"/>
+<link from="a48_a66" to="a48_a66"/>
+<link from="a54_a68" to="a54_a68"/>
+<link from="a44_a70" to="a44_a70"/>
+<link from="a46_a72" to="a46_a72"/>
+<link from="a64_a74" to="a64_a74"/>
+<link to="a52_a4" from="a52_a4"/>
+</map>
+</reaction>
