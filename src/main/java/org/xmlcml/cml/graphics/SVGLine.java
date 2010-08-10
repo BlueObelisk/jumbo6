@@ -308,5 +308,9 @@ public class SVGLine extends SVGElement {
 		}
 		return horizontalVerticalList;
 	}
+
+	public void setWidth(double width) {
+		this.addAttribute(new Attribute("stroke-width", ""+width));
+	}
 	
 }

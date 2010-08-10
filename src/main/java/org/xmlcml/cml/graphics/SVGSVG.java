@@ -21,6 +21,8 @@ public class SVGSVG extends SVGElement {
 	public final static Logger LOG = Logger.getLogger(SVGSVG.class);
 	public final static String TAG = "svg";
 	private static String svgSuffix = "svg";
+	private Double begin = null;
+	private Double dur = null;
 	
 	/** constructor.
 	 * 
@@ -92,6 +94,14 @@ public class SVGSVG extends SVGElement {
 
 	public static String createFileName(String id) {
 		return id + CMLConstants.S_PERIOD+svgSuffix ;
+	}
+
+	public void setDur(Double d) {
+		this.dur  = d;
+	}
+
+	public void setBegin(Double d) {
+		this.begin = d;
 	}
 
 }
