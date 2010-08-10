@@ -1099,6 +1099,9 @@ public class AtomTool extends AbstractSVGTool {
 
 		 String atomString = getAtomString();
  // always draw atom
+		 elementDisplay.setFontSize(11.0);
+
+//		 elementDisplay.setFontSize(atomDisplay.getFontSize());
 		 elementDisplay.setFill(fill);
 		 elementDisplay.setUserElement(atom);
 		 elementDisplay.displayElement(g, atomString);
@@ -1162,13 +1165,12 @@ public class AtomTool extends AbstractSVGTool {
 				if (moleculeTool != null) {
 					moleculeDisplay = moleculeTool.getMoleculeDisplay();
 				}
-				if (moleculeDisplay != null) {
-					AtomDisplay atomDisplayx = moleculeDisplay.getDefaultAtomDisplay();
-					if (atomDisplayx != null) {
-						atomDisplay = new AtomDisplay(atomDisplayx);
-					}
+			}
+			if (moleculeDisplay != null) {
+				AtomDisplay atomDisplayx = moleculeDisplay.getDefaultAtomDisplay();
+				if (atomDisplayx != null) {
+					atomDisplay = new AtomDisplay(atomDisplayx);
 				}
-			} else {
 			}
 		}
 	}

@@ -64,8 +64,12 @@ import org.xmlcml.euclid.Vector2;
  */
 public class ReactionTool extends AbstractSVGTool {
 
+	public static final String REACTANT = "reactant";
+	public static final String PRODUCT  = "product";
+
     private static final String OMIT_REACTANTS = null;
 	public static final String REACTANT_VERTICAL = null;
+	private static final double MINDIST = 1.0;
 
 	Logger LOG = Logger.getLogger(ReactionTool.class);
 
@@ -84,6 +88,9 @@ public class ReactionTool extends AbstractSVGTool {
 	private CMLFormula aggregateProductFormula;
 	private CMLFormula differenceFormula;
     private List<String> electronIdList;
+	private MoleculeDisplayList displayList;
+	private Map<String, ReactionAtomChange> atomChangeById;
+	private Map<String, ReactionBondChange> bondChangeById;
     
 	/**
      * constructor.
@@ -1793,46 +1800,119 @@ public class ReactionTool extends AbstractSVGTool {
 		reaction.appendChild(bondMap);
 	}
 	
-	public void displayAnimatedReactionUsingMap() {
-		displayAtoms();
-		displayBonds();
+	public SVGElement displayAnimatedReactionUsingMap() {
+		displayList = new MoleculeDisplayList();
+//		MoleculeDisplay moleculeDisplay = displayList.getMoleculeDisplay();
+//		moleculeDisplay.getDefaultAtomDisplay().setDisplayCarbons(false);
+//		moleculeDisplay.getDefaultAtomDisplay().setFontSize(11.0);
+//		System.out.println(moleculeDisplay.getDefaultAtomDisplay().getFontSize());
+		SVGSVG svg = new SVGSVG();
+		SVGG gg = createG(svg);
+		displayBonds1(gg);
+		displayAtoms1(gg);
+		displayElectrons(gg);
+		return svg;
+	}
+	
+	private SVGG createG(SVGSVG svg) {
+		SVGG gg = new SVGG();
+		Transform2 transform = new Transform2(new double[]{1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0});
+		gg.setTransform(transform);
+		svg.appendChild(gg);
+		svg.setBegin(0.0);
+		svg.setDur(5.0);
+		return gg;
 	}
 
-	private void displayAtoms() {
-		CMLMap atomMap = reaction.getMapElements().get(0);
+//	private void displayAtoms(SVGG g) {
+//		CMLMap atomMap = reaction.getMapElements().get(0);
+//		List<CMLAtom> reactantAtoms = reaction.getReactantList().getAtoms();
+//		List<CMLAtom> productAtoms = reaction.getProductList().getAtoms();
+//		CMLAtomSet productAtomSet = new CMLAtomSet(productAtoms.toArray(new CMLAtom[0]));
+//		for (CMLAtom reactantAtom : reactantAtoms) {
+//			SVGElement svgReactant = ReactionAtomChange.createSVGElement(
+//					ReactionChange.REACTANT_R, reactantAtom, displayList);
+//			if (svgReactant != null) {
+//				g.appendChild(svgReactant);
+//				SVGElement svgProduct = null;
+//				String productId = atomMap.getToRef(reactantAtom.getId());
+//				CMLAtom productAtom = productAtomSet.getAtomById(productId);
+//				ReactionAtomChange atomChange = ReactionAtomChange.getReactionAtomChange(reactantAtom, productAtom);
+//				if (atomChange != null) {
+//					svgProduct = atomChange.createAndAddProductDisplay(g, displayList);
+//					atomChange.applyAnimation(svgReactant, svgProduct);
+//					atomChange.processElectrons();
+//				}
+//				cleanPositiveAndNegative(svgReactant);
+//				cleanPositiveAndNegative(svgProduct);
+//			}
+//		}
+//	}
+//
+//	private void displayBonds(SVGG g) {
+//		CMLMap bondMap = reaction.getMapElements().get(1);
+//		List<CMLBond> reactantBonds = reaction.getReactantList().getBonds();
+//		List<CMLBond> productBonds = reaction.getProductList().getBonds();
+//		CMLBondSet productBondSet = new CMLBondSet(productBonds.toArray(new CMLBond[0]));
+//		for (CMLBond reactantBond : reactantBonds) {
+//			SVGElement svgReactant = ReactionBondChange.createSVGElement(ReactionChange.REACTANT_R, reactantBond, displayList);
+//			if (svgReactant != null) {
+//				g.appendChild(svgReactant);
+//				SVGElement svgProduct = null;
+//				String productId = bondMap.getToRef(reactantBond.getId());
+//				System.err.println("Bond id "+productId);
+//				CMLBond productBond = productBondSet.getBondById(productId);
+//				ReactionBondChange bondChange = ReactionBondChange.getReactionBondChange(reactantBond, productBond);
+//				if (bondChange != null) {
+//					svgProduct = bondChange.createAndAddProductDisplay(g, displayList);
+//					bondChange.applyAnimation(svgReactant, svgProduct);
+//					bondChange.processElectrons();
+//				}
+//			}
+//		}
+//	}
+
+	private void displayAtoms1(SVGG g) {
+//		CMLMap atomMap = reaction.getMapElements().get(1);
 		List<CMLAtom> reactantAtoms = reaction.getReactantList().getAtoms();
 		List<CMLAtom> productAtoms = reaction.getProductList().getAtoms();
+		CMLAtomSet reactantAtomSet = new CMLAtomSet(reactantAtoms.toArray(new CMLAtom[0]));
 		CMLAtomSet productAtomSet = new CMLAtomSet(productAtoms.toArray(new CMLAtom[0]));
-		for (CMLAtom reactantAtom : reactantAtoms) {
-			String productId = atomMap.getToRef(reactantAtom.getId());
-			CMLAtom productAtom = productAtomSet.getAtomById(productId);
-			displayChange(reactantAtom, productAtom);
+		atomChangeById = ReactionAtomChange.addAtomChangeById(productAtomSet, reactantAtomSet);
+		for (String id : atomChangeById.keySet()) {
+			ReactionAtomChange atomChange = atomChangeById.get(id);
+			if (atomChange != null) {
+				SVGElement svgReactant = atomChange.createAndAddReactantDisplay(g, displayList);
+				SVGElement svgProduct = atomChange.createAndAddProductDisplay(g, displayList);
+				ReactionAtomChange.cleanPositiveAndNegative(svgReactant);
+				ReactionAtomChange.cleanPositiveAndNegative(svgProduct);
+				atomChange.applyAnimation(svgReactant, svgProduct);
+				atomChange.processElectrons();
+			}
 		}
 	}
 
-	private void displayChange(CMLAtom reactantAtom, CMLAtom productAtom) {
-		System.out.println(reactantAtom.getId()+" "+reactantAtom.getXY2()+" => "+productAtom.getXY2());
-		double reactantOccupancy = Double.isNaN(reactantAtom.getOccupancy()) ? 1.0 : reactantAtom.getOccupancy();
-		double productOccupancy = Double.isNaN(productAtom.getOccupancy()) ? 1.0 : productAtom.getOccupancy();
-		if (reactantOccupancy < 0.1 || productOccupancy < 0.1 ) {
-			System.out.println(" ... "+reactantOccupancy +" ..> "+productOccupancy);
-		}
-	}
-	private void displayBonds() {
-		CMLMap bondMap = reaction.getMapElements().get(1);
+	private void displayBonds1(SVGG g) {
+//		CMLMap bondMap = reaction.getMapElements().get(1);
 		List<CMLBond> reactantBonds = reaction.getReactantList().getBonds();
 		List<CMLBond> productBonds = reaction.getProductList().getBonds();
+		CMLBondSet reactantBondSet = new CMLBondSet(reactantBonds.toArray(new CMLBond[0]));
 		CMLBondSet productBondSet = new CMLBondSet(productBonds.toArray(new CMLBond[0]));
-		for (CMLBond reactantBond : reactantBonds) {
-			String productId = bondMap.getToRef(reactantBond.getId());
-			CMLBond productBond = productBondSet.getBondById(productId);
-			displayChange(reactantBond, productBond);
+		bondChangeById = ReactionBondChange.addBondChangeById(productBondSet, reactantBondSet);
+		for (String id : bondChangeById.keySet()) {
+			ReactionBondChange bondChange = bondChangeById.get(id);
+			if (bondChange != null) {
+				SVGElement svgReactant = bondChange.createAndAddReactantDisplay(g, displayList);
+				SVGElement svgProduct = bondChange.createAndAddProductDisplay(g, displayList);
+				bondChange.applyAnimation(svgReactant, svgProduct);
+				bondChange.processElectrons();
+			}
 		}
 	}
 
-	private void displayChange(CMLBond reactantBond, CMLBond productBond) {
-		String reactantOrder = reactantBond.getOrder();
-		String productOrder =  productBond.getOrder();
-		System.out.println(reactantBond.getId()+" "+reactantOrder+" => "+productOrder);
+	private void displayElectrons(SVGG g) {
+		// currently no-op
 	}
+
+
 }

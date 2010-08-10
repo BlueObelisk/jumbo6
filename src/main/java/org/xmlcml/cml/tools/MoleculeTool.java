@@ -92,6 +92,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  */
 public class MoleculeTool extends AbstractSVGTool {
 
+
 	static final Logger LOG = Logger.getLogger(MoleculeTool.class.getName());
 
     /** dewisott */
@@ -4347,7 +4348,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		List<CMLAtom> atoms = molecule.getAtoms();
 		for (CMLAtom atom : atoms) {
 			int loneElectronCount = this.getLoneElectronCount(atom);
-			atom.setCMLXAttribute("loneElectrons", ""+loneElectronCount);
+			atom.setCMLXAttribute(ElectronTool.LONE_ELECTRONS, ""+loneElectronCount);
 		}
 	}
 
@@ -4356,7 +4357,7 @@ public class MoleculeTool extends AbstractSVGTool {
 		for (CMLBond bond : bonds) {
 			BondTool bondTool = BondTool.getOrCreateTool(bond);
 			int electronCount = bondTool.getElectronCount();
-			bond.setCMLXAttribute("electrons", ""+electronCount);
+			bond.setCMLXAttribute(ElectronTool.ELECTRONS, ""+electronCount);
 		}
 	}
 

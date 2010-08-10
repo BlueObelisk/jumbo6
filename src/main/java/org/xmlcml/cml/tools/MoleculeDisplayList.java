@@ -16,7 +16,6 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGSVG;
 
 
 /**
