@@ -5,9 +5,9 @@ import java.io.OutputStream;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.Node;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.html.HTMLElement;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 
@@ -93,6 +93,16 @@ public abstract class HtmlElement extends Element implements CMLConstants {
 			htmlElement = new HtmlUl();
 		} else {
 			throw new RuntimeException("Unknown html tag "+tag);
+		}
+		CMLUtil.copyAttributes(element, htmlElement);
+		for (int i = 0; i < element.getChildCount(); i++) {
+			Node child = element.getChild(i);
+			if (child instanceof Element) {
+				HtmlElement htmlChild = HtmlElement.create((Element)child);
+				htmlElement.appendChild(htmlChild);
+			} else {
+				htmlElement.appendChild(child.copy());
+			}
 		}
 		return htmlElement;
 		
