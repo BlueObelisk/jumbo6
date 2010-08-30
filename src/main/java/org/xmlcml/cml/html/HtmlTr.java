@@ -18,4 +18,5 @@ public class HtmlTr extends HtmlElement {
 	public HtmlTr() {
 		super(TAG);
 	}
+	
 }
