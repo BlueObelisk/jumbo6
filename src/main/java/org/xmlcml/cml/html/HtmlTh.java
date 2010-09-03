@@ -18,4 +18,16 @@ public class HtmlTh extends HtmlElement {
 	public HtmlTh() {
 		super(TAG);
 	}
+	/**
+	 * create a Td with the included text
+	 * @param content
+	 * @return
+	 */
+	public static HtmlTh createAndWrapText(String content) {
+		HtmlTh th = new HtmlTh();
+		th.appendChild(content);
+		return th;
+	}
+
+
 }
