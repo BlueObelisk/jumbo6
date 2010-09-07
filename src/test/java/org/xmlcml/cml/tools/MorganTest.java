@@ -427,14 +427,14 @@ public class MorganTest {
 	@Test
 	public void createMorganStringFromSMILES() {
 		String groupSMILESString = "[R]CNO";
-		String s = Morgan.createMorganStringFromSMILES(groupSMILESString);
+		String s = Morgan.createMorganStringFromSMILESRGroup(groupSMILESString);
 		Assert.assertEquals("morgan", "19836383H1/25710873H2/28254882H1/39478662O1/53902287C1/58597330N1/", s);
 	}
 
 	@Test
 	public void createMorganStringFromRMolecule() {
 		CMLMolecule molecule = SMILESTool.createMolecule("[R]CNO");
-		String s = Morgan.createMorganStringFromRMolecule(molecule);
+		String s = Morgan.createMorganStringFromRGroupMolecule(molecule);
 		Assert.assertEquals("molecule", "19836383H1/25710873H2/28254882H1/39478662O1/53902287C1/58597330N1/", s);
 	}
 	

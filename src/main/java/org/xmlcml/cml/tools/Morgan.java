@@ -532,16 +532,37 @@ public class Morgan extends AbstractTool {
      * @param groupSMILESString of form "[R]CNOSCC" with singly liganded R-group
      * @return
      */
-	public static String createMorganStringFromSMILES(String groupSMILESString) {
+	public static String createMorganStringFromSMILES(String smiles) {
 		String morganString = null;
-		if (groupSMILESString != null) {
-			CMLMolecule smilesMolecule = SMILESTool.createMolecule(groupSMILESString);
-			morganString = createMorganStringFromRMolecule(smilesMolecule);
+		if (smiles != null) {
+			CMLMolecule smilesMolecule = SMILESTool.createMolecule(smiles);
+			morganString = createMorganStringFromMolecule(smilesMolecule);
 		}
 		return morganString;
 	}
 
-	public static String createMorganStringFromRMolecule(CMLMolecule molecule) {
+	public static String createMorganStringFromMolecule(CMLMolecule molecule) {
+		Morgan morgan = new Morgan();
+		morgan.setMolecule(molecule);
+		return morgan.getEquivalenceString();
+	}
+
+
+	  /**
+     * 
+     * @param groupSMILESString of form "[R]CNOSCC" with singly liganded R-group
+     * @return
+     */
+	public static String createMorganStringFromSMILESRGroup(String groupSMILESString) {
+		String morganString = null;
+		if (groupSMILESString != null) {
+			CMLMolecule smilesMolecule = SMILESTool.createMolecule(groupSMILESString);
+			morganString = createMorganStringFromRGroupMolecule(smilesMolecule);
+		}
+		return morganString;
+	}
+
+	public static String createMorganStringFromRGroupMolecule(CMLMolecule molecule) {
 		String morganString = null;
 		CMLAtomSet rAtomSet = AtomSetTool.getOrCreateTool(new CMLAtomSet(molecule))
 		    .getAtomSetIncludingElementTypes(new String[]{"R"});

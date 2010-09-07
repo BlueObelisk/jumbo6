@@ -562,7 +562,7 @@ public class BondTool extends AbstractSVGTool {
 		if (atom == null) {
 			throw new RuntimeException("Bad atom serial in bond: "+zeroOrOne);
 		}
-		String groupMorganString = Morgan.createMorganStringFromSMILES(groupSMILESString);
+		String groupMorganString = Morgan.createMorganStringFromSMILESRGroup(groupSMILESString);
 		return this.getDownstreamMorganString(atom).equals(groupMorganString);
 	}
 
