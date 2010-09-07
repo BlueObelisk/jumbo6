@@ -99,13 +99,13 @@ public class GroupTool {
 
 	public GroupTool(String name, CMLMolecule rMolecule) {
 		this(name, null, null, null, null, null);
-		morganString = Morgan.createMorganStringFromRMolecule(rMolecule);
+		morganString = Morgan.createMorganStringFromRGroupMolecule(rMolecule);
 	}
 
 	public GroupTool(String name, String rSmiles) {
 		this(name, null, null, null, null, rSmiles);
 		CMLMolecule rMolecule = SMILESTool.createMolecule(rSmiles);
-		morganString = Morgan.createMorganStringFromRMolecule(rMolecule);
+		morganString = Morgan.createMorganStringFromRGroupMolecule(rMolecule);
 	}
 
 	public GroupTool(GroupTool groupToolTemplate) {

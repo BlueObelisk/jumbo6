@@ -1,5 +1,9 @@
 package org.xmlcml.cml.html;
 
+import java.util.List;
+
+import nu.xom.Nodes;
+
 import org.apache.log4j.Logger;
 
 
@@ -18,5 +22,23 @@ public class HtmlTr extends HtmlElement {
 	public HtmlTr() {
 		super(TAG);
 	}
+
+	public List<HtmlElement> getThChildren() {
+		return HtmlElement.getChildElements(this, HtmlTh.TAG);
+	}
 	
+	public List<HtmlElement> getTdChildren() {
+		return HtmlElement.getChildElements(this, HtmlTd.TAG);
+	}
+	
+	public HtmlTd getTd(int col) {
+		List<HtmlElement> cells = getTdChildren();
+		return (col < 0 || col >= cells.size()) ? null : (HtmlTd) cells.get(col);
+	}
+	
+	public HtmlTh getTh(int col) {
+		List<HtmlElement> cells = getThChildren();
+		return (col < 0 || col >= cells.size()) ? null : (HtmlTh) cells.get(col);
+	}
+
 }

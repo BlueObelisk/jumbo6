@@ -1,5 +1,7 @@
 package org.xmlcml.cml.html;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 
@@ -45,4 +47,11 @@ public class HtmlHtml extends HtmlElement {
 		htmlStyle.addCss(cssStyle);
 	}
 
+	public HtmlHead getHead() {
+		return (HtmlHead) getSingleChildElement(this, HtmlHead.TAG);
+	}
+
+	public HtmlBody getBody() {
+		return (HtmlBody) getSingleChildElement(this, HtmlBody.TAG);
+	}
 }
