@@ -29,7 +29,6 @@ import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.inchi.InChIGeneratorTool;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;

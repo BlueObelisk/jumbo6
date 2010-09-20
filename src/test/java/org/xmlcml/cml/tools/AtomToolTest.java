@@ -28,8 +28,6 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Point3;

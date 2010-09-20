@@ -4,17 +4,7 @@ package org.xmlcml.cml.tools;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLArrayList;
-import org.xmlcml.cml.element.CMLTable;
-import org.xmlcml.cml.element.CMLTableHeader;
-import org.xmlcml.cml.element.CMLTableRow;
-import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * test TableTool.

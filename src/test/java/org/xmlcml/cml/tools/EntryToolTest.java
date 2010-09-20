@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLEntry;

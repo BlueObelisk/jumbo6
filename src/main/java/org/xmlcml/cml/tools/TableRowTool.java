@@ -1,27 +1,9 @@
 package org.xmlcml.cml.tools;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
-
-import nu.xom.Element;
-import nu.xom.Node;
-
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.element.CMLArrayList;
-import org.xmlcml.cml.element.CMLList;
-import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTableCell;
-import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRow;
-import org.xmlcml.cml.element.CMLTableRow;
-import org.xmlcml.cml.element.CMLTableRowList;
-import org.xmlcml.cml.element.CMLTable.TableType;
-import org.xmlcml.cml.interfacex.HasArraySize;
 
 /**
  * tool for managing table

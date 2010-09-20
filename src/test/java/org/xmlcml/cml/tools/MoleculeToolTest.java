@@ -1,6 +1,6 @@
 package org.xmlcml.cml.tools;
 
-import static org.xmlcml.cml.element.AbstractTestBase.*;
+import static org.xmlcml.cml.element.AbstractTestBase.TOOL_MOLECULES_RESOURCE;
 
 import java.io.File;
 import java.io.FileInputStream;

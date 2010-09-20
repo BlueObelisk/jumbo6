@@ -15,7 +15,6 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.tools.Morgan.Algorithm;
 import org.xmlcml.molutil.ChemicalElement.AS;

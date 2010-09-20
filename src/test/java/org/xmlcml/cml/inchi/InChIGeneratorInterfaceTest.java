@@ -1,7 +1,6 @@
 package org.xmlcml.cml.inchi;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class InChIGeneratorInterfaceTest {

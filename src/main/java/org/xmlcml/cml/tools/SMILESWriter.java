@@ -12,7 +12,6 @@ import nu.xom.Elements;
 
 import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;

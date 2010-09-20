@@ -8,7 +8,6 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLLabel;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;

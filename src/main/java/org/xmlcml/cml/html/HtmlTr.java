@@ -1,8 +1,7 @@
 package org.xmlcml.cml.html;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import nu.xom.Nodes;
 
 import org.apache.log4j.Logger;
 
@@ -23,21 +22,31 @@ public class HtmlTr extends HtmlElement {
 		super(TAG);
 	}
 
-	public List<HtmlElement> getThChildren() {
-		return HtmlElement.getChildElements(this, HtmlTh.TAG);
+	public List<HtmlTh> getThChildren() {
+		List<HtmlElement> ths = HtmlElement.getChildElements(this, HtmlTh.TAG);
+		List<HtmlTh> thList = new ArrayList<HtmlTh>();
+		for (HtmlElement th : ths) {
+			thList.add((HtmlTh) th);
+		}
+		return thList;
 	}
 	
-	public List<HtmlElement> getTdChildren() {
-		return HtmlElement.getChildElements(this, HtmlTd.TAG);
+	public List<HtmlTd> getTdChildren() {
+		List<HtmlElement> tds = HtmlElement.getChildElements(this, HtmlTd.TAG);
+		List<HtmlTd> tdList = new ArrayList<HtmlTd>();
+		for (HtmlElement td : tds) {
+			tdList.add((HtmlTd) td);
+		}
+		return tdList;
 	}
 	
 	public HtmlTd getTd(int col) {
-		List<HtmlElement> cells = getTdChildren();
+		List<HtmlTd> cells = getTdChildren();
 		return (col < 0 || col >= cells.size()) ? null : (HtmlTd) cells.get(col);
 	}
 	
 	public HtmlTh getTh(int col) {
-		List<HtmlElement> cells = getThChildren();
+		List<HtmlTh> cells = getThChildren();
 		return (col < 0 || col >= cells.size()) ? null : (HtmlTh) cells.get(col);
 	}
 

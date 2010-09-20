@@ -25,7 +25,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 

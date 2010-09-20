@@ -1027,14 +1027,13 @@ private int sLength;
 	 * @return
 	 */
 	public static CMLMolecule createMolecule(String smilesString) {
-		SMILESTool smilesTool = new SMILESTool();
-		smilesTool.parseSMILES(smilesString);
-		CMLMolecule molecule = smilesTool.getMolecule();
+		CMLMolecule molecule = null;
+		if (smilesString != null && smilesString.trim().length() != 0) {
+			SMILESTool smilesTool = new SMILESTool();
+			smilesTool.parseSMILES(smilesString);
+			molecule = smilesTool.getMolecule();
+		}
 		return molecule;
 	}
 
 }	
-//class AtomCharacterMap {
-//	private TreeMap<Integer, String> treeMap;
-//}
-

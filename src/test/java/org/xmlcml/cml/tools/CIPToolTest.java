@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 /**
  * @author pm286

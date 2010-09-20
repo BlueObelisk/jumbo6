@@ -30,7 +30,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.EC;
 import org.xmlcml.euclid.Util;
 /**

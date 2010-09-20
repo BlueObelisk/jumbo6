@@ -9,7 +9,6 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.cml.tools.AtomMatcher.Strategy;
 import org.xmlcml.euclid.Real2;

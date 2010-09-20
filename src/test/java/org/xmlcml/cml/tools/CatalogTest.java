@@ -21,7 +21,6 @@ import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.map.IndexableByIdListManager;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.cml.testutil.JumboTestUtils;
 
 /**
  * @author pm286

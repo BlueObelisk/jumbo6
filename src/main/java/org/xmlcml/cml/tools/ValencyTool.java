@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -27,8 +28,6 @@ import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
-
-import java.util.Map.Entry;
 
 /**
  * @author pm286

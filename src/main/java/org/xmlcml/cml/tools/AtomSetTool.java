@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +36,6 @@ import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
-import org.xmlcml.util.ToolUtils;
 
 /**
  * tool to support atom set. not sure if useful
