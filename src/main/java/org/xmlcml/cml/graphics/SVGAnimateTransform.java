@@ -1,18 +1,10 @@
 package org.xmlcml.cml.graphics;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-
-import nu.xom.Attribute;
 import nu.xom.Element;
+
 import nu.xom.Node;
 
-import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.Real2;
-import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Util;
 
 /** draws a straight line.
  * 

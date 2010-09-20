@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElements;
@@ -19,7 +17,6 @@ import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.molutil.ChemicalElement;
-import org.xmlcml.util.ToolUtils;
 
 public class AtomTreeMatcher extends AtomMatcher {
 

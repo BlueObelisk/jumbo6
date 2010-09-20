@@ -1,20 +1,16 @@
 package org.xmlcml.cml.tools;
 import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import nu.xom.Attribute;
-import nu.xom.Element;
-import nu.xom.Node;
 import nu.xom.Nodes;
-import nu.xom.ParentNode;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomParity;
@@ -26,7 +22,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
-import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 /**
  * Tool to manage stereochemistry.

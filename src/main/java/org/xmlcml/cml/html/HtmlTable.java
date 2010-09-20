@@ -49,21 +49,22 @@ public class HtmlTable extends HtmlElement {
 		super(TAG);
 	}
 	
-	public List<HtmlElement> getRows() {
+	public List<HtmlTr> getRows() {
 		HtmlTbody tbody = this.getTbody();
-		if (tbody != null) {
-			return tbody.getRows();
-		} else {	
-			return getChildElements(this, HtmlTr.TAG);
+		List<HtmlTr> rowList = new ArrayList<HtmlTr>();
+		List<HtmlElement> rows = (tbody != null) ? tbody.getRows() : getChildElements(this, HtmlTr.TAG);
+		for (HtmlElement el : rows) {
+			rowList.add((HtmlTr) el);
 		}
+		return rowList;
 	}
 
 	public HtmlTbody getTbody() {
 		return (HtmlTbody) getSingleChildElement(this, HtmlTbody.TAG); 
 	}
 
-	public HtmlTbody getTfoot() {
-		return (HtmlTbody) getSingleChildElement(this, HtmlTfoot.TAG); 
+	public HtmlTfoot getTfoot() {
+		return (HtmlTfoot) getSingleChildElement(this, HtmlTfoot.TAG); 
 	}
 
 	public HtmlTbody getThead() {
@@ -71,7 +72,7 @@ public class HtmlTable extends HtmlElement {
 	}
 
 	public HtmlTr getSingleLeadingTrThChild() {
-		List<HtmlElement> rows = getRows();
+		List<HtmlTr> rows = getRows();
 		HtmlTr tr = null;
 		if (rows.size() > 0) {
 			Nodes trthNodes = this.query("./*[local-name()='tr' and *[local-name()='th']]");

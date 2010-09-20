@@ -6,16 +6,16 @@
 package org.xmlcml.util;
 
 import java.util.ArrayList;
-
 import java.util.List;
+
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
+
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.EuclidConstants;

@@ -3,7 +3,6 @@ package org.xmlcml.cml.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
 

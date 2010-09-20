@@ -121,10 +121,10 @@ public class Morgan extends AbstractTool {
         	for (CMLMolecule childMolecule : childMoleculeList) {
         		childMorganList.add(new Morgan(childMolecule));
         	}
+        } else {
+	        this.molecule = molecule;
+	        this.constantAtomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         }
-
-        this.molecule = molecule;
-        this.constantAtomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
     }
 
     void init() {
@@ -179,7 +179,7 @@ public class Morgan extends AbstractTool {
 				if (i > 0) {
 					sb.append(CMLConstants.S_SEMICOLON);
 				}
-				sb.append(childMorganList.get(i));
+				sb.append(childMorganList.get(i).getEquivalenceString());
 			}
 			sb.append(CMLConstants.S_RCURLY);	
 			equivalenceString = sb.toString();
@@ -319,11 +319,13 @@ public class Morgan extends AbstractTool {
     }
     
     private void calculateMorganNumbers() {
-        for (CMLAtom atom : constantAtomSet.getAtoms()) {
-            // start with ligand count for each atom
-            atom.setProperty(Annotation.NUMBER.toString(), new Long(Morgan
-                    .getNumber(atom, constantAtomSet)));
-        }
+    	if (constantAtomSet != null) {
+	        for (CMLAtom atom : constantAtomSet.getAtoms()) {
+	            // start with ligand count for each atom
+	            atom.setProperty(Annotation.NUMBER.toString(), new Long(Morgan
+	                    .getNumber(atom, constantAtomSet)));
+	        }
+    	} 
     }
 
     /** get largest atomSet.
@@ -405,20 +407,22 @@ public class Morgan extends AbstractTool {
      * @return number of classes
      */
     private int classifyMorganNumbers() {
-        for (CMLAtom atom : constantAtomSet.getAtoms()) {
-            Long morganNumber = (Long) atom.getProperty(Annotation.NUMBER.toString());
-            CMLAtomSet atomSet = equivalenceMap.get(morganNumber);
-            if (atomSet == null) {
-                atomSet = new CMLAtomSet();
-                addMorganNumber(morganNumber, atomSet);
-            }
-            atomSet.addAtom(atom);
-        }
-        if (morganList == null) {
- //       	LOG.error("null morganList");
-        } else {
-        	Collections.sort(morganList);
-        }
+    	if (constantAtomSet != null) {
+	        for (CMLAtom atom : constantAtomSet.getAtoms()) {
+	            Long morganNumber = (Long) atom.getProperty(Annotation.NUMBER.toString());
+	            CMLAtomSet atomSet = equivalenceMap.get(morganNumber);
+	            if (atomSet == null) {
+	                atomSet = new CMLAtomSet();
+	                addMorganNumber(morganNumber, atomSet);
+	            }
+	            atomSet.addAtom(atom);
+	        }
+	        if (morganList == null) {
+	 //       	LOG.error("null morganList");
+	        } else {
+	        	Collections.sort(morganList);
+	        }
+    	}
         return equivalenceMap.size();
     }
     
@@ -447,27 +451,29 @@ public class Morgan extends AbstractTool {
      *
      */
     private void expandMorganNumbers() {
-        for (CMLAtom atom : constantAtomSet.getAtoms()) {
-            // iterate through all ligands
-            long newMorgan = ((Long) atom.getProperty(Annotation.NUMBER.toString())).longValue();
-            List<CMLAtom> ligandList = Morgan.getLigandAtomsInAtomSetList(atom, constantAtomSet);
-            int ii = 0;
-            for (CMLAtom ligand : ligandList) {
-                Long llong = (Long) ligand.getProperty(Annotation.NUMBER.toString());
-                if (llong == null) {
-                	System.err.println(ligand.getId()+"/"+ii);
-                	throw new RuntimeException("null long in morgan");
-                }
-                ii++;
-                newMorgan += llong.longValue();
-            }
-            atom.setProperty(Annotation.NEXTNUMBER.toString(), new Long(newMorgan));
-        }
-        // transfer new morgan values to old
-        for (CMLAtom atom : constantAtomSet.getAtoms()) {
-            atom.setProperty(Annotation.NUMBER.toString(), 
-                    atom.getProperty(Annotation.NEXTNUMBER.toString()));
-        }
+    	if (constantAtomSet != null) {
+	        for (CMLAtom atom : constantAtomSet.getAtoms()) {
+	            // iterate through all ligands
+	            long newMorgan = ((Long) atom.getProperty(Annotation.NUMBER.toString())).longValue();
+	            List<CMLAtom> ligandList = Morgan.getLigandAtomsInAtomSetList(atom, constantAtomSet);
+	            int ii = 0;
+	            for (CMLAtom ligand : ligandList) {
+	                Long llong = (Long) ligand.getProperty(Annotation.NUMBER.toString());
+	                if (llong == null) {
+	                	System.err.println(ligand.getId()+"/"+ii);
+	                	throw new RuntimeException("null long in morgan");
+	                }
+	                ii++;
+	                newMorgan += llong.longValue();
+	            }
+	            atom.setProperty(Annotation.NEXTNUMBER.toString(), new Long(newMorgan));
+	        }
+	        // transfer new morgan values to old
+	        for (CMLAtom atom : constantAtomSet.getAtoms()) {
+	            atom.setProperty(Annotation.NUMBER.toString(), 
+	                    atom.getProperty(Annotation.NEXTNUMBER.toString()));
+	        }
+	    }
     }
 
     /** prints debug.
@@ -542,9 +548,17 @@ public class Morgan extends AbstractTool {
 	}
 
 	public static String createMorganStringFromMolecule(CMLMolecule molecule) {
-		Morgan morgan = new Morgan();
-		morgan.setMolecule(molecule);
-		return morgan.getEquivalenceString();
+		String s = null;
+		if (molecule != null) {
+			Morgan morgan = new Morgan();
+			morgan.setMolecule(molecule);
+			try {
+				s = morgan.getEquivalenceString();
+			} catch (Exception e) {
+				throw new RuntimeException("BUG? maybe multiple molecules: ", e);
+			}
+		}
+		return s;
 	}
 
 

@@ -1,7 +1,6 @@
 package org.xmlcml.cml.tools.matcher;
 
 import org.apache.commons.math.optimization.GoalType;
-
 import org.apache.commons.math.optimization.SimpleScalarValueChecker;
 import org.apache.commons.math.optimization.direct.DirectSearchOptimizer;
 import org.apache.commons.math.optimization.direct.NelderMead;

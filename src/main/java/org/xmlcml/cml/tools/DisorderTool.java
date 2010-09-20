@@ -30,6 +30,9 @@ import org.xmlcml.molutil.ChemicalElement.AS;
  *
  */
 public class DisorderTool extends AbstractTool {
+	private static final String UNRESOLVED_DISORDER = "unresolvedDisorder";
+	private static final String RESOLVED_DISORDER = "resolvedDisorder";
+
 	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(DisorderTool.class);
 
@@ -39,9 +42,9 @@ public class DisorderTool extends AbstractTool {
 
 	private DisorderToolControls disorderOptions;
     /** dewisott */
-	public static final String RESOLVED_DISORDER_DICTREF = "cif:resolvedDisorder";
+	public static final String RESOLVED_DISORDER_DICTREF = "cif:"+RESOLVED_DISORDER;
     /** dewisott */
-	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:unresolvedDisorder";
+	public static final String UNRESOLVED_DISORDER_DICTREF = "cif:"+UNRESOLVED_DISORDER;
 	private String disorderString;
 
 	/**
@@ -86,6 +89,16 @@ public class DisorderTool extends AbstractTool {
 	public CMLMolecule getMolecule() {
 		return molecule;
 	}
+	
+	/**
+	 * 
+	 * @return any dictRef with 'unresolvedDisorder'
+	 */
+	public boolean isDisordered() {
+		return molecule.query(
+				".//*[local-name()='scalar' and contains(@dictRef, '"+UNRESOLVED_DISORDER+"')]").size() > 0;
+	}
+
 
 	/**
 	 * Resolves crystallographic disorder.

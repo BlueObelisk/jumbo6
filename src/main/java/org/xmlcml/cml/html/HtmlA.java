@@ -1,7 +1,5 @@
 package org.xmlcml.cml.html;
 
-import nu.xom.Attribute;
-
 import org.apache.log4j.Logger;
 
 

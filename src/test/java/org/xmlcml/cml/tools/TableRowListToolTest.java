@@ -5,7 +5,6 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLArrayList;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLScalar;
-import org.xmlcml.cml.element.CMLTableCell;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;

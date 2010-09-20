@@ -3,8 +3,6 @@ package org.xmlcml.cml.tools;
 import java.util.HashMap;
 import java.util.Map;
 
-import nu.xom.Attribute;
-
 import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.element.CMLBond;

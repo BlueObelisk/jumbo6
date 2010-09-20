@@ -1,10 +1,8 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +27,6 @@ import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLVector3;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.IntArray;
-import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.Util;
 
