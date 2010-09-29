@@ -882,7 +882,7 @@ public class ReactionToolTest {
 				Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction/ref/reaction2.cml"));
 		SVGElement svg = reactionTool.displayAnimatedReactionUsingMap();
 		CMLUtil.debug(svg, new FileOutputStream("src/test/resources/org/xmlcml/cml/tools/reaction/ref/test2.svg"),1);
-		CMLUtil.debug(svg, new FileOutputStream("C:\\temp\\test2.svg"),1);
+//		CMLUtil.debug(svg, new FileOutputStream("C:\\temp\\test2.svg"),1);
 
 	}
 	
