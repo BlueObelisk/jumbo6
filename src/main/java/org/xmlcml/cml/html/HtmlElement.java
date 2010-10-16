@@ -3,7 +3,9 @@
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -119,6 +121,107 @@ public abstract class HtmlElement extends Element implements CMLConstants {
 	private static final String ID = "id";
 	private final static Logger LOG = Logger.getLogger(HtmlElement.class);
 
+	public static String[] tags = {
+		"A", 
+		"ABBR", 
+		"ACRONYM", 
+		"ADDRESS", 
+		"APPLET", 
+		"AREA", 
+		"B", 
+		"BASE", 
+		"BASEFONT", 
+		"BDO", 
+		"BIG", 
+		"BLOCKQUOTE", 
+		"BODY", 
+		"BR", 
+		"BUTTON", 
+		"CAPTION", 
+		"CENTER", 
+		"CITE", 
+		"CODE", 
+		"COL", 
+		"COLGROUP", 
+		"DD", 
+		"DEL", 
+		"DFN", 
+		"DIR", 
+		"DIV", 
+		"DL", 
+		"DT", 
+		"EM", 
+		"FIELDSET", 
+		"FONT", 
+		"FORM", 
+		"FRAME", 
+		"FRAMESET", 
+		"H1", 
+		"H2", 
+		"H3", 
+		"H4", 
+		"H5", 
+		"H6", 
+		"HEAD", 
+		"HR", 
+		"HTML", 
+		"I", 
+		"IFRAME", 
+		"IMG", 
+		"INPUT", 
+		"INS", 
+		"ISINDEX", 
+		"KBD", 
+		"LABEL", 
+		"LEGEND", 
+		"LI", 
+		"LINK", 
+		"MAP", 
+		"MENU", 
+		"META", 
+		"NOFRAMES", 
+		"NOSCRIPT", 
+		"OBJECT", 
+		"OL", 
+		"OPTGROUP", 
+		"OPTION", 
+		"P", 
+		"PARAM", 
+		"PRE", 
+		"Q", 
+		"S", 
+		"SAMP", 
+		"SCRIPT", 
+		"SELECT", 
+		"SMALL", 
+		"SPAN", 
+		"STRIKE", 
+		"STRONG", 
+		"STYLE", 
+		"SUB", 
+		"SUP", 
+		"TABLE", 
+		"TBODY", 
+		"TD", 
+		"TEXTAREA", 
+		"TFOOT", 
+		"TH", 
+		"THEAD", 
+		"TITLE", 
+		"TR", 
+		"TT", 
+		"U", 
+		"UL", 
+		"VAR", 
+	};
+	public static Set<String> TAGSET;
+	static {
+		TAGSET = new HashSet<String>();
+		for (String tag : tags) {
+			TAGSET.add(tag);
+		}
+	};
+	
 	public enum Target {
 		bottom,
 		menu,
@@ -162,6 +265,8 @@ public abstract class HtmlElement extends Element implements CMLConstants {
 			htmlElement = new HtmlH3();
 		} else if(HtmlHead.TAG.equalsIgnoreCase(tag)) {
 			htmlElement = new HtmlHead();
+		} else if(HtmlHr.TAG.equalsIgnoreCase(tag)) {
+			htmlElement = new HtmlHr();
 		} else if(HtmlHtml.TAG.equalsIgnoreCase(tag)) {
 			htmlElement = new HtmlHtml();
 		} else if(HtmlI.TAG.equalsIgnoreCase(tag)) {

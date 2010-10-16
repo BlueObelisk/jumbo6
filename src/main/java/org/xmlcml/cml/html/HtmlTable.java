@@ -76,7 +76,8 @@ public class HtmlTable extends HtmlElement {
 		HtmlTr tr = null;
 		if (rows.size() > 0) {
 			Nodes trthNodes = this.query("./*[local-name()='tr' and *[local-name()='th']]");
-			if (trthNodes.size() == 1) {
+			// some tables have more than one th row
+			if (trthNodes.size() >= 1) {
 				Element elem = (Element) this.getChildElements().get(0);
 				if (elem.equals(trthNodes.get(0))) {
 					tr = (HtmlTr) trthNodes.get(0);
