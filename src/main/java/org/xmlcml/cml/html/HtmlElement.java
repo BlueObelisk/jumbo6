@@ -315,6 +315,8 @@ public abstract class HtmlElement extends Element implements CMLConstants {
 			htmlElement = new HtmlTt();
 		} else if(HtmlUl.TAG.equalsIgnoreCase(tag)) {
 			htmlElement = new HtmlUl();
+		} else if (TAGSET.contains(tag.toUpperCase())) {
+			htmlElement = new HtmlGeneric(tag.toLowerCase());
 		} else {
 			throw new RuntimeException("Unknown html tag "+tag);
 		}
