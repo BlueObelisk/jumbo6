@@ -154,11 +154,23 @@ public class EntryTool extends AbstractTool {
             validate((CMLArray) element);
         } else if (element instanceof CMLFormula) {
             validate((CMLFormula) element);
+        } else if (element instanceof CMLParameter) {
+            validate((CMLParameter) element);
+        } else if (element instanceof CMLProperty) {
+            validate((CMLProperty) element);
         } else if (element instanceof CMLTable) {
             validate((CMLTable) element);
         } else {
             LOG.debug("Cannot validate: " + element.getClass());
         }
+    }
+
+    private void validate(CMLParameter parameter) {
+    	// validate scalar required
+    }
+
+    private void validate(CMLProperty property) {
+    	// validate scalar required
     }
 
     private void validate(CMLScalar scalar) {

@@ -25,6 +25,7 @@ import org.xmlcml.cml.element.CMLParameter;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLVector3;
+import org.xmlcml.cml.interfacex.HasDictRef;
 
 /** additional tools for dictionary. not fully developed
  * 
@@ -382,12 +383,7 @@ public class DictionaryTool extends AbstractTool {
     	List<Node> dictRefList = CMLUtil.getQueryNodes(cml, ".//*[@dictRef]");
     	for (Node node : dictRefList) {
     		CMLElement element = (CMLElement) node;
-//    		try {
-    			validateElementWithDictRef(element);
-//    		} catch (RuntimeException e) {
-//    			e.printStackTrace();
-//    			System.err.println("Cannot validate: "+element.getAttributeValue("dictRef")+" / "+e);
-//    		}
+			validateElementWithDictRef((HasDictRef)element);
     	}
     }
     
@@ -452,23 +448,19 @@ public class DictionaryTool extends AbstractTool {
     	return entryTool;
     }
     
-    private void validateElementWithDictRef(CMLElement element) {
-    	String dictRef = element.getAttributeValue("dictRef");
-    	if (dictRef == null) {
-    		element.debug("BAD NODE");
-    		throw new RuntimeException("null dictRef");
-    	}
-    	String localName = CMLUtil.getLocalName(dictRef);
-    	if (dictionary == null) {
-    		throw new RuntimeException("null dictionary, cannot validate");
-    	}
+    private void validateElementWithDictRef(HasDictRef element) {
+    	DictRefAttribute dictRef = (DictRefAttribute) element.getDictRefAttribute();
+    	String localName = dictRef.getLocalName();
     	CMLEntry entry = dictionary.getCMLEntry(localName.toLowerCase());
-    	
     	if (entry == null) {
     		throw new RuntimeException("Cannot find entry for: "+localName);
     	} else {
     		EntryTool entryTool = this.createEntryTool(entry);
-    		entryTool.validate(element);
+    		entryTool.validate((CMLElement)element);
     	}
+    }
+    
+    public boolean isIdInDictionary(String dictId) {
+    	return (dictId != null) && (this.dictionary.getCMLEntry(dictId.toLowerCase()) != null);
     }
 }
