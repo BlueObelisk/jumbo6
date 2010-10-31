@@ -100,7 +100,7 @@ public class TableToolTest {
 				" </tableRow>" +
 				"</tableRowList>" +
 				"<tableHeader>" +
-			    " <tableHeaderCell/>" +
+			    " <tableHeaderCell dataType='xsd:string'/>" +
 			    " </tableHeader>" +
 				"</table>";
 		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
@@ -130,9 +130,9 @@ public class TableToolTest {
 				" </tableRow>" +
 				"</tableRowList>" +
 				"<tableHeader>" +
-			    " <tableHeaderCell/>" +
-			    " <tableHeaderCell/>" +
-			    " <tableHeaderCell/>" +
+			    " <tableHeaderCell dataType='xsd:string'/>" +
+			    " <tableHeaderCell dataType='xsd:integer'/>" +
+			    " <tableHeaderCell dataType='xsd:double'/>" +
 			    " </tableHeader>" +
 				"</table>";
 		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
@@ -169,10 +169,10 @@ public class TableToolTest {
 		CMLTableHeader tableHeader = tableHeaderTool.getTableHeader();
 				String expected = 
 				"<tableHeader xmlns='http://www.xml-cml.org/schema'>" +
-				"  <tableHeaderCell dictRef='foo:bar1'/>" +
-				"  <tableHeaderCell dictRef='foo:bar2'/>" +
-				"  <tableHeaderCell dictRef='foo:bar3'/>" +
-				"  <tableHeaderCell dictRef='foo:bar4'/>" +
+				"  <tableHeaderCell dictRef='foo:bar1' dataType='xsd:string'/>" +
+				"  <tableHeaderCell dictRef='foo:bar2' dataType='xsd:integer'/>" +
+				"  <tableHeaderCell dictRef='foo:bar3' dataType='xsd:double'/>" +
+				"  <tableHeaderCell dictRef='foo:bar4' dataType='xsd:double'/>" +
 				"</tableHeader>";
 		JumboTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), tableHeader, true, 0.00001);
 	}
