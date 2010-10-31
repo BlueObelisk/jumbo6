@@ -316,8 +316,10 @@ public class TableTool extends AbstractTool {
 		 CMLTableHeaderCell tableHeaderCell = new CMLTableHeaderCell();
 		 String dictRef = array.getDictRef();
 		 tableHeaderCell.setDictRef(dictRef);
-		 String dataType = array.getDictRef();
-		 tableHeaderCell.setDataType(dataType);
+		 String dataType = array.getDataType();
+		 if (dataType != null) {
+			 tableHeaderCell.setDataType(dataType);
+		 }
 		 tableHeaderTool.getTableHeader().addTableHeaderCell(tableHeaderCell);
 	 }
 
