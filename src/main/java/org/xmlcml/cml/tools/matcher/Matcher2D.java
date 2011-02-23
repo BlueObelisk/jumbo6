@@ -12,6 +12,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class Matcher2D {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOG = Logger.getLogger(Matcher2D.class);
 
 	public Matcher2D() {

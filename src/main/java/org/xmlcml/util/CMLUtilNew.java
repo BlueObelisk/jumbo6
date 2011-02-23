@@ -917,8 +917,8 @@ public abstract class CMLUtilNew {
                 String xpathChild = xpath+"node()[position()="+(i+1)+"]";
                 Node refChildNode = refNode.getChild(i);
                 Node testChildNode = testNode.getChild(i);
-                Class refClass = refChildNode.getClass();
-                Class testClass = testChildNode.getClass();
+                Class<?> refClass = refChildNode.getClass();
+                Class<?> testClass = testChildNode.getClass();
                 if (!refClass.equals(testClass)) {
                     message = "child node classes differ at "+xpathChild+" "+refClass+"/"+testClass;
                     break;

@@ -2606,13 +2606,13 @@ public class MoleculeTool extends AbstractSVGTool {
 
 	private CMLLabel getCascadingLabel() {
 		// fixme - maybe use more complex strategy
-		CMLElements labels = molecule.getLabelElements();
+		CMLElements<CMLLabel> labels = molecule.getLabelElements();
 		return (labels.size() == 0) ? null : (CMLLabel) labels.get(0);
 	}
 
 	private CMLName getCascadingName() {
 		// fixme - maybe use more complex strategy
-		CMLElements names = molecule.getNameElements();
+		CMLElements<CMLName> names = molecule.getNameElements();
 		return (names.size() == 0) ? null : (CMLName) names.get(0);
 	}
 

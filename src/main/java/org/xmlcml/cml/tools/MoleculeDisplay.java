@@ -13,6 +13,7 @@ import org.xmlcml.euclid.RealInterval;
  *
  */
 public class MoleculeDisplay extends AbstractDisplay {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(MoleculeDisplay.class);
 
 	final static MoleculeDisplay DEFAULT = new MoleculeDisplay();

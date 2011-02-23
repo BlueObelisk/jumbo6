@@ -1067,7 +1067,7 @@ public class OscarTool implements CMLConstants {
      * @param text
      */
     
-    private void markup(Map<Pattern, String> map, Text text, Class cmlClass) {
+    private void markup(Map<Pattern, String> map, Text text, Class<?> cmlClass) {
         ParentNode parent = text.getParent();
         String textS = text.getValue();
         int pos = parent.indexOf(text);
