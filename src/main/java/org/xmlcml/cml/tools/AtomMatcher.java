@@ -452,6 +452,7 @@ public abstract class AtomMatcher extends AbstractTool {
 	 *             null atomSets, atom sets different sizes, bad Morgan
 	 * @return map or null if molecules of different length.
 	 */
+	@SuppressWarnings("unused")
 	public CMLMap mapAtomSets(CMLAtomSet atomSet0, CMLAtomSet atomSet1) {
 		if (atomSet0 == null) {
 			throw new RuntimeException("atomSet is null: " + atomSet0);
@@ -566,9 +567,9 @@ public abstract class AtomMatcher extends AbstractTool {
 					mapij
 							.setTitle(AtomMatcher.Strategy.FROM_UNIQUE_MATCHED_ATOMS
 									.toString());
-					if (false) {
-						splitAndProcessAtomSets(mapij, mol0, mol1);
-					}
+//					if (false) {
+//						splitAndProcessAtomSets(mapij, mol0, mol1);
+//					}
 					if (mapij.getChildElements(CMLLink.TAG, CMLConstants.CML_NS).size() != mol0
 							.getCMLChildCount(CMLAtom.TAG)) {
 						// incomplete match; currently no action
@@ -678,9 +679,11 @@ public abstract class AtomMatcher extends AbstractTool {
 	AtomPair getAtomsWithSameMappedNeighbours00(CMLAtomSet atomSet00,
 			CMLAtomSet atomSet, CMLMap currentMap) {
 		// FIXME
-		if (true)
+		if (true) {
 			throw new RuntimeException("NYI");
-		return new AtomPair(new CMLAtom(), new CMLAtom());
+		}
+		return null;
+//		return new AtomPair(new CMLAtom(), new CMLAtom());
 	}
 
 	/**

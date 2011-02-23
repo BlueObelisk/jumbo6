@@ -1216,7 +1216,7 @@ class IntermediateProcessor implements CMLConstants {
 		if (ref != null) {
 			String prefix = CMLUtil.getPrefix(ref);
 			if (S_EMPTY.equals(prefix)) {
-				((CMLElement) deref).debug("FT");
+//				((CMLElement) deref).debug("FT");
 				throw new RuntimeException("Cannot dereference empty prefix");
 			}
 			CMLNamespace namespace = CMLNamespace.createNamespace(prefix, fragment);

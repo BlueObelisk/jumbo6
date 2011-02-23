@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
  *  @author pm286
  */
 public class HtmlTt extends HtmlElement {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HtmlTt.class);
 	public final static String TAG = "tt";
 

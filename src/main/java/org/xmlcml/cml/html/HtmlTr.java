@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class HtmlTr extends HtmlElement {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HtmlTr.class);
 	public final static String TAG = "tr";
 

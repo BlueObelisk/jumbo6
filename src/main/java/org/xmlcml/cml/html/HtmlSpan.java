@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
  *  @author pm286
  */
 public class HtmlSpan extends HtmlElement {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HtmlSpan.class);
 	public final static String TAG = "span";
 

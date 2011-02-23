@@ -27,6 +27,7 @@ import org.xmlcml.euclid.Transform2;
  * 
  */
 public abstract class AbstractSVGTool extends AbstractTool {
+	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(AbstractSVGTool.class);
 	
     protected SVGG g;
@@ -40,8 +41,7 @@ public abstract class AbstractSVGTool extends AbstractTool {
      */
 	public static AbstractSVGTool getOrCreateSVGTool(CMLElement element) {
 		AbstractSVGTool abstractSVGTool = null;
-		if (false) {
-		} else if (element instanceof CMLAction) {
+		if (element instanceof CMLAction) {
 			abstractSVGTool = ActionTool.getOrCreateTool((CMLAction)element); 
 		} else if (element instanceof CMLAtom) {
 			abstractSVGTool = AtomTool.getOrCreateTool((CMLAtom)element); 

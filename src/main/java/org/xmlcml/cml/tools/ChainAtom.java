@@ -6,6 +6,7 @@ import java.util.Set;
 import org.xmlcml.cml.element.CMLAtom;
 
 public class ChainAtom {
+	@SuppressWarnings("unused")
 	private CMLAtom atom;
 	
 	private ChainAtom(CMLAtom atom) {

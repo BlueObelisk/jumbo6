@@ -421,8 +421,6 @@ public class AtomDisplay extends AbstractDisplay {
 	public int processArgs(String[] args, int i) {
 		// charge
 
-		if (false) {
-		}
 		return i;
 	}
 

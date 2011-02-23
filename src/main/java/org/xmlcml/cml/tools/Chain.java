@@ -48,8 +48,8 @@ public class Chain extends AbstractTool {
 	private static Transform2 ROT60 = new Transform2(new Angle(Math.PI/3.));
 	private static Transform2 ROT300 = new Transform2(new Angle(-Math.PI/3.));
 	private static Transform2 ROT0 = new Transform2(new Angle(0.0));
-	private static Transform2 ROT30 = new Transform2(new Angle(Math.PI/6.));
-	private static Transform2 ROT330 = new Transform2(new Angle(Math.PI/6.));
+//	private static Transform2 ROT30 = new Transform2(new Angle(Math.PI/6.));
+//	private static Transform2 ROT330 = new Transform2(new Angle(Math.PI/6.));
 
 	private static final Transform2 ROT90 = new Transform2(new Angle(Math.PI/2.));
 	private static final Transform2 ROT270 = new Transform2(new Angle(-Math.PI/2.));
