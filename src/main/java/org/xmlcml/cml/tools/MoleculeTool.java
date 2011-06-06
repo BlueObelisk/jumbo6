@@ -503,8 +503,11 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * if not uses adjustHydrogenCountsToValency()
 	 * then summs over all atoms
 	 * then adds hydrogenCountAttribute
+	 * 
+	 * THIS IS A MENACE - it calculates new hydrogens
 	 * @return total hydrogen count
 	 */
+	@Deprecated
 	public int getTotalHydrogenCount() {
 		String hydrogenCount = molecule.getAttributeValue(HYDROGEN_COUNT);
 		int sum = -1;
