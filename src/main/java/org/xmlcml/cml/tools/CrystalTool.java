@@ -474,7 +474,7 @@ public class CrystalTool extends AbstractTool {
 			}
 		}
 
-		mt.createCartesiansFromFractionals();
+		mt.createCartesiansFromFractionals(crystal);
 		mt.calculateBondedAtoms();	
 		// detach all bonds to group 1 or 2 atoms
 		for (CMLAtom atom : molecule.getAtoms()) {

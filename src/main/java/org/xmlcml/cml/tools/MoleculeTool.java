@@ -2048,17 +2048,6 @@ public class MoleculeTool extends AbstractSVGTool {
 		return moleculeList;
 	}
 
-	/**
-	 * convenience method to calculate and add Cartesian coordinates. requires
-	 * that molecule has descendant <crystal>
-	 *
-	 * @throws RuntimeException
-	 *             if no crystal
-	 */
-	public void createCartesiansFromFractionals() throws RuntimeException {
-		CMLCrystal crystal = CMLCrystal.getContainedCrystal(molecule);
-		this.createCartesiansFromFractionals(crystal);
-	}
 
 	/**
 	 *  get linkers
