@@ -132,12 +132,12 @@ public class MoreMoleculeToolTest {
 		bes = moleculeToolXml0.getBondOrderSum(xmlAtom[1]);
 		Assert.assertEquals("bond order sum", 4, bes);
 		CMLMolecule benzene = tFix.benzene;
-		benzene.setBondOrders(CMLBond.SINGLE);
+		benzene.setBondOrders(CMLBond.SINGLE_S);
 		int bes1 = MoleculeTool.getOrCreateTool(benzene).getBondOrderSum(
 				benzene.getAtom(0));
 		Assert.assertEquals("bond order sum", 3, bes1);
 		CMLMolecule methyleneCyclohexene = tFix.methyleneCyclohexene;
-		methyleneCyclohexene.setBondOrders(CMLBond.SINGLE);
+		methyleneCyclohexene.setBondOrders(CMLBond.SINGLE_S);
 		MoleculeTool methyleneCyclohexeneTool = MoleculeTool
 				.getOrCreateTool(methyleneCyclohexene);
 		bes1 = methyleneCyclohexeneTool.getBondOrderSum(methyleneCyclohexene
@@ -461,10 +461,10 @@ public class MoreMoleculeToolTest {
 				.getBonds().get(3).getAtomRefs2());
 		List<CMLBond> bonds = mol5.getBonds();
 		moleculeTool5.calculateBondOrdersFromXYZ3();
-		Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-		Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-		Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-		Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
+		Assert.assertEquals("bond 0", CMLBond.DOUBLE_D, bonds.get(0).getOrder());
+		Assert.assertEquals("bond 1", CMLBond.SINGLE_S, bonds.get(1).getOrder());
+		Assert.assertEquals("bond 2", CMLBond.SINGLE_S, bonds.get(2).getOrder());
+		Assert.assertEquals("bond 3", CMLBond.AROMATIC, bonds.get(3).getOrder());
 		moleculeTool5
 				.adjustHydrogenCountsToValency(HydrogenControl.ADD_TO_HYDROGEN_COUNT);
 		CMLAtom a1 = mol5.getAtomById("a1");
@@ -541,9 +541,9 @@ public class MoreMoleculeToolTest {
 		CMLMolecule mol5 = tFix.getFixture().mol5;
 		Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
 		Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-		mol5.setBondOrders(CMLBond.SINGLE);
+		mol5.setBondOrders(CMLBond.SINGLE_S);
 		// note that getOrder() will return the preferred order
-		Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
+		Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
 				.get(0).getOrderAttribute().getValue());
 		mol5.setNormalizedBondOrders();
 		Assert.assertEquals("perferred order", CMLBond.SINGLE_S, mol5.getBonds()
@@ -573,8 +573,8 @@ public class MoreMoleculeToolTest {
 		CMLMolecule mol5 = tFix.getFixture().mol5;
 		Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
 		Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-		mol5.setBondOrders(CMLBond.SINGLE);
-		Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
+		mol5.setBondOrders(CMLBond.SINGLE_S);
+		Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
 				.get(0).getOrder());
 	}
 
@@ -701,10 +701,10 @@ public class MoreMoleculeToolTest {
 				.getBondCount());
 		List<CMLBond> bonds = tFix.getFixture().mol5.getBonds();
 		moleculeTool5.calculateBondOrdersFromXYZ3();
-		Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-		Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-		Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-		Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
+		Assert.assertEquals("bond 0", CMLBond.DOUBLE_D, bonds.get(0).getOrder());
+		Assert.assertEquals("bond 1", CMLBond.SINGLE_S, bonds.get(1).getOrder());
+		Assert.assertEquals("bond 2", CMLBond.SINGLE_S, bonds.get(2).getOrder());
+		Assert.assertEquals("bond 3", CMLBond.AROMATIC, bonds.get(3).getOrder());
 	}
 
 	/**
@@ -723,10 +723,10 @@ public class MoreMoleculeToolTest {
 				.getBondCount());
 		List<CMLBond> bonds = tFix.getFixture().mol5.getBonds();
 		tFix.moleculeTool5.calculateBondOrdersFromXYZ3();
-		Assert.assertEquals("bond 0", "2", bonds.get(0).getOrder());
-		Assert.assertEquals("bond 1", "1", bonds.get(1).getOrder());
-		Assert.assertEquals("bond 2", "1", bonds.get(2).getOrder());
-		Assert.assertEquals("bond 3", "A", bonds.get(3).getOrder());
+		Assert.assertEquals("bond 0", CMLBond.DOUBLE_D, bonds.get(0).getOrder());
+		Assert.assertEquals("bond 1", CMLBond.SINGLE_S, bonds.get(1).getOrder());
+		Assert.assertEquals("bond 2", CMLBond.SINGLE_S, bonds.get(2).getOrder());
+		Assert.assertEquals("bond 3", CMLBond.AROMATIC, bonds.get(3).getOrder());
 	}
 
 	/**

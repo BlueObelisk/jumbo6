@@ -46,11 +46,11 @@ public class ValencyToolTest {
 		CMLAtom oAtom2 = nitroMethane.getAtom(3);
 		Assert.assertEquals("nitro", "a4", oAtom2.getId());
 		CMLBond bond = nitroMethane.getBonds().get(2);
-		Assert.assertEquals("nitro", CMLBond.SINGLE, bond.getOrder());
+		Assert.assertEquals("nitro", CMLBond.SINGLE_S, bond.getOrder());
 
 		// moleculeTool.markSpecial(); // hope this is right
 		new ValencyTool(nitroMethane).markupCommonGroups();
-		Assert.assertEquals("nitro", CMLBond.DOUBLE, bond.getOrder());
+		Assert.assertEquals("nitro", CMLBond.DOUBLE_D, bond.getOrder());
 
 	}
 

@@ -503,7 +503,7 @@ public class StereochemistryTool extends AbstractTool {
 		String cisTrans = CMLBond.UNKNOWN_ORDER;
 		// wrong sort of bond
 		// String order = getOrder();
-		if (!bond.getOrder().equals(CMLBond.DOUBLE)) {
+		if (!CMLBond.isDouble(bond.getOrder())) {
 			return null;
 		}
 		CMLAtom atom0 = bond.getAtom(0);

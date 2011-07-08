@@ -490,7 +490,7 @@ public class CrystalTool extends AbstractTool {
 			}
 		}
 		for (CMLBond bond : molecule.getBonds()) {
-			bond.setOrder(CMLBond.SINGLE);
+			bond.setOrder(CMLBond.SINGLE_S);
 		}
 		return molecule;
 	}

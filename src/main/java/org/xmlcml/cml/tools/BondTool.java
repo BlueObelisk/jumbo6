@@ -100,11 +100,11 @@ public class BondTool extends AbstractSVGTool {
 		double orderD = 0.0;
 		if (order == null) {
 			//
-		} else if (order.equals(CMLBond.DOUBLE) || order.equals(CMLBond.DOUBLE_D)) {
+		} else if (CMLBond.isDouble(order)) {
 			orderD = 2.0;
-		} else if (order.equals(CMLBond.TRIPLE) || order.equals(CMLBond.TRIPLE_T)) {
+		} else if (CMLBond.isTriple(order)) {
 			orderD = 3.0;
-		} else if (order.equals(CMLBond.SINGLE) || order.equals(CMLBond.SINGLE_S)) {
+		} else if (CMLBond.isSingle(order)) {
 			orderD = 1.0;
 		} else if (order.equals(CMLBond.AROMATIC)) {
 			orderD = 1.5;
@@ -186,9 +186,9 @@ public class BondTool extends AbstractSVGTool {
 	    	 if (selectionTool != null) {
 	    		 if (selectionTool.isSelected(bond)) {
 		    		 double factor = 3.0;
-		    	 	 if (order.equals(CMLBond.DOUBLE)) {
+		    	 	 if (order.equals(CMLBond.DOUBLE_D)) {
 		    	 		 factor = 5.0;
-		    	 	 } else if (order.equals(CMLBond.TRIPLE)) {
+		    	 	 } else if (order.equals(CMLBond.TRIPLE_T)) {
 		    	 		 factor = 7.0;
 		    	 	 }
 		    		 SVGElement line = createBond("yellow", bondWidth*factor, xy0, xy1);
@@ -203,17 +203,17 @@ public class BondTool extends AbstractSVGTool {
 				SVGPath path = createWedgeHatch("black", bondDisplay.getHatchCount(),
 						bondWidth, xy0, xy1, bondStereoS);
 				g.appendChild(path);
-			} else if (order == null || order.equals(CMLBond.SINGLE)) {
+			} else if (order == null || CMLBond.isSingle(order)) {
 				g.appendChild(createBond("black", bondWidth, xy0, xy1));
 			} else if (order.equals(CMLBond.AROMATIC)) {
 				SVGElement line = createBond("black", bondWidth, xy0, xy1);
 				line.addDashedStyle(bondWidth);
 				g.appendChild(line);
-			} else if (order.equals(CMLBond.DOUBLE)) {
+			} else if (CMLBond.isDouble(order)) {
 				g.appendChild(createBond("black", 2.55*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 
 						middleFactor*0.85*bondWidth, xy0, xy1));
-			} else if (order.equals(CMLBond.TRIPLE)) {
+			} else if (CMLBond.isTriple(order)) {
 				g.appendChild(createBond("black", 3.75*bondWidth, xy0, xy1));
 				g.appendChild(createBond("white", 2.25*bondWidth, xy0, xy1));
 				g.appendChild(createBond("black", 0.75*bondWidth, xy0, xy1));

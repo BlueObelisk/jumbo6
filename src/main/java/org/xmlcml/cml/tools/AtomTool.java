@@ -636,13 +636,13 @@ public class AtomTool extends AbstractSVGTool {
 			CMLBond bond = ligandBondList.get(i);
 			String bo = bond.getOrder();
 			if (bo != null) {
-				if (bo.equals(CMLBond.SINGLE) || bo.equals(CMLBond.SINGLE_S)) {
+				if (CMLBond.isSingle(bo)) {
 					sumBo += 1.0;
 				}
-				if (bo.equals(CMLBond.DOUBLE) || bo.equals(CMLBond.DOUBLE_D)) {
+				if (CMLBond.isDouble(bo)) {
 					sumBo += 2.0;
 				}
-				if (bo.equals(CMLBond.TRIPLE) || bo.equals(CMLBond.TRIPLE_T)) {
+				if (CMLBond.isTriple(bo)) {
 					sumBo += 3.0;
 				}
 				if (bo.equals(CMLBond.AROMATIC)) {

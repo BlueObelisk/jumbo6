@@ -631,7 +631,7 @@ public class ConnectionTableTool extends AbstractTool {
 		List<CMLBond> adbVector = new ArrayList<CMLBond>();
 		for (CMLBond bond : molecule.getBonds()) {
 			if (CMLBond.ACYCLIC.equals(bond.getCyclic())) {
-				if (CMLBond.DOUBLE.equals(bond.getOrder())) {
+				if (CMLBond.isDouble(bond.getOrder())) {
 					adbVector.add(bond);
 				}
 			}

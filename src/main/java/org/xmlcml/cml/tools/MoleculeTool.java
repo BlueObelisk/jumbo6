@@ -225,7 +225,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * uses default PISystemManager
 	 */
 	public void adjustBondOrdersToValency() {
-        molecule.setBondOrders(CMLBond.SINGLE);
+        molecule.setBondOrders(CMLBond.SINGLE_S);
         PiSystemControls piSystemManager = new PiSystemControls();
         piSystemManager.setUpdateBonds(true);
 //        piSystemManager.setKnownUnpaired(knownUnpaired);
@@ -260,6 +260,16 @@ public class MoleculeTool extends AbstractSVGTool {
 		List<Node> electrons = CMLUtil.getQueryNodes(molecule, ".//"+CMLElectron.NS+"[@dictRef='cml:piElectron']", CMLConstants.CML_XPATH);
 		for (Node electron : electrons) {
 			electron.detach();
+		}
+		normalizeBondOrders();
+	}
+
+	public void normalizeBondOrders() {
+		List<CMLBond> bonds = molecule.getBonds();
+		for (CMLBond bond : bonds) {
+//			bond.debug("XXXX");
+			BondOrder.normalizeBondOrder(bond);
+//			bond.debug("BBBBBBBBBBB");
 		}
 	}
 
@@ -325,11 +335,11 @@ public class MoleculeTool extends AbstractSVGTool {
 			String order = ligandBond.getOrder();
 			if (order == null) {
 				multipleBondSum += 0;
-			} else if (order.equals(CMLBond.DOUBLE)) {
+			} else if (CMLBond.isDouble(order)) {
 				multipleBondSum += 2;
-			} else if (order.equals(CMLBond.TRIPLE)) {
+			} else if (CMLBond.isTriple(order)) {
 				multipleBondSum += 3;
-			} else if (order.equals(CMLBond.SINGLE)) {
+			} else if (CMLBond.isSingle(order)) {
 				multipleBondSum += 1;
 			} else if (order.equals(CMLBond.AROMATIC)) {
 				aromaticBondSum += 1;
@@ -579,13 +589,13 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 			String bo = bond.getOrder();
 			if (bo != null) {
-				if (bo.equals(CMLBond.SINGLE) || bo.equals(CMLBond.SINGLE_S)) {
+				if (CMLBond.isSingle(bo)) {
 					sumBo += 1.0;
 				}
-				if (bo.equals(CMLBond.DOUBLE) || bo.equals(CMLBond.DOUBLE_D)) {
+				if (CMLBond.isDouble(bo)) {
 					sumBo += 2.0;
 				}
-				if (bo.equals(CMLBond.TRIPLE) || bo.equals(CMLBond.TRIPLE_T)) {
+				if (CMLBond.isTriple(bo)) {
 					sumBo += 3.0;
 				}
 				if (bo.equals(CMLBond.AROMATIC)) {
@@ -1143,11 +1153,11 @@ public class MoleculeTool extends AbstractSVGTool {
 					if (order.equals(CMLBond.UNKNOWN_ORDER)) {
 						missingBond[nMissing++] = bond;
 					} else {
-						if (order.equals(CMLBond.SINGLE)) {
+						if (CMLBond.isSingle(order)) {
 							bondSum++;
-						} else if (order.equals(CMLBond.DOUBLE)) {
+						} else if (CMLBond.isDouble(order)) {
 							bondSum += 2;
-						} else if (order.equals(CMLBond.TRIPLE)) {
+						} else if (CMLBond.isTriple(order)) {
 							bondSum += 3;
 						} else if (order.equals(CMLBond.AROMATIC)) {
 							aromSum++;
@@ -1169,7 +1179,7 @@ public class MoleculeTool extends AbstractSVGTool {
 				if (nMissing == delta) {
 					for (int j = 0; j < nMissing; j++) {
 						try {
-							missingBond[j].setOrder(CMLBond.SINGLE);
+							missingBond[j].setOrder(CMLBond.SINGLE_S);
 						} catch (Exception e) {
 							LOG.error("BUG " + e);
 						}
@@ -1178,11 +1188,11 @@ public class MoleculeTool extends AbstractSVGTool {
 				} else if (nMissing == 1) {
 					String newOrder = null;
 					if (delta == 1) {
-						newOrder = CMLBond.SINGLE;
+						newOrder = CMLBond.SINGLE_S;
 					} else if (delta == 2) {
-						newOrder = CMLBond.DOUBLE;
+						newOrder = CMLBond.DOUBLE_D;
 					} else if (delta == 3) {
-						newOrder = CMLBond.TRIPLE;
+						newOrder = CMLBond.TRIPLE_T;
 					} else if (newOrder != null) {
 						try {
 							missingBond[0].setOrder(newOrder);
@@ -1744,13 +1754,13 @@ public class MoleculeTool extends AbstractSVGTool {
 				double paulingBO = Math.exp(2.303 * (-dlen + r0 + r1) / 0.7);
 				try {
 					if (paulingBO < 1.3) {
-						bond.setOrder(CMLBond.SINGLE);
+						bond.setOrder(CMLBond.SINGLE_S);
 					} else if (paulingBO < 1.75) {
 						bond.setOrder(CMLBond.AROMATIC);
 					} else if (paulingBO < 2.5) {
-						bond.setOrder(CMLBond.DOUBLE);
+						bond.setOrder(CMLBond.DOUBLE_D);
 					} else if (paulingBO < 5) {
-						bond.setOrder(CMLBond.TRIPLE);
+						bond.setOrder(CMLBond.TRIPLE_T);
 					}
 				} catch (Exception e) {
 					Util.BUG(e);

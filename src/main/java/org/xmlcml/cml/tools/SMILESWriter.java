@@ -99,11 +99,11 @@ public class SMILESWriter {
     	String s = null;
     	if (order == null) {
     		s = CMLConstants.S_EMPTY;
-    	} else if (order.equals(CMLBond.SINGLE)) {
+    	} else if (CMLBond.isSingle(order)) {
     		s = CMLConstants.S_EMPTY;
-    	} else if (order.equals(CMLBond.DOUBLE)) {
+    	} else if (CMLBond.isDouble(order)) {
     		s = CMLConstants.S_EQUALS;
-    	} else if (order.equals(CMLBond.TRIPLE)) {
+    	} else if (CMLBond.isTriple(order)) {
     		s = CMLConstants.S_HASH;
     	}
     	return s;
