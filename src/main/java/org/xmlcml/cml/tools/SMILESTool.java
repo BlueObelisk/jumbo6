@@ -406,7 +406,7 @@ private int sLength;
         	    if (atomRefs4sInDoubleBond.size() ==4){
         	    	List<CMLBond> bondListWhichIncludesDoubleBond = atomRefs4sInDoubleBond.get(1).getLigandBonds();
         	    	for (CMLBond bond : bondListWhichIncludesDoubleBond) {
-	        			if (CMLBond.DOUBLE == bond.getOrder() && 
+	        			if (CMLBond.isDouble(bond.getOrder()) && 
 	        					bond.query("cml:bondStereo", CMLConstants.CML_XPATH).size() == 0) {
 	        				CMLBondStereo bondstereo =new CMLBondStereo();
 	        				bondstereo.setAtomRefs4(
@@ -451,7 +451,7 @@ private int sLength;
 		List<CMLAtom> tempAtomRefs4sInDoubleBond=new ArrayList<CMLAtom>(atomRefs4sInDoubleBond);
 		for (CMLAtom atom2 : connectedAtoms ) {
 			if (atom2.getAttributeValue(SLASH)!=null && !atomsVisited.contains(atom2)){
-				if (i==1 && !CMLBond.DOUBLE.equals(molecule.getBond(atom, atom2).getOrder())){
+				if (i==1 && !CMLBond.isDouble(molecule.getBond(atom, atom2).getOrder())){
 					continue;//bond between 2nd and 3rd atom should be a double bond
 				}
 				atomRefs4sInDoubleBond= recurseThroughAtoms(atomsVisited, atomRefs4sInDoubleBond, atom2, i+1);
@@ -901,11 +901,11 @@ private int sLength;
             bondChar = C_SINGLE;
         }
         if (bondChar == C_SINGLE) {
-            bond.setOrder(CMLBond.SINGLE);
+            bond.setOrder(CMLBond.SINGLE_S);
         } else if (bondChar == C_DOUBLE) {
-            bond.setOrder(CMLBond.DOUBLE);
+            bond.setOrder(CMLBond.DOUBLE_D);
         } else if (bondChar == C_TRIPLE) {
-            bond.setOrder(CMLBond.TRIPLE);
+            bond.setOrder(CMLBond.TRIPLE_T);
         } else if (bondChar == C_AROMATIC) {
             bond.setOrder(CMLBond.AROMATIC);
         } else {

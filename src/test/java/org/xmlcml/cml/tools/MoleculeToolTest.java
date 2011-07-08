@@ -25,11 +25,11 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLNamespace;
 import org.xmlcml.cml.base.CMLUtil;
-import org.xmlcml.cml.base.CMLElement.CoordinateType;
-import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -45,10 +45,10 @@ import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGSVG;
@@ -65,8 +65,8 @@ import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
-import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.molutil.Molutils;
 
 /**
  * tests moleculeTool.
@@ -110,10 +110,10 @@ public class MoleculeToolTest {
 			+ "      />" + "      <atom id='a5' " + "        elementType='F'"
 			+ "        x2='-1.' y2='1.'" + "        x3='-1.' y3='1.' z3='-1.'"
 			+ "      />" + "    </atomArray>" + "    <bondArray>"
-			+ "      <bond id='b1' atomRefs2='a1 a2' order='1'/>"
+			+ "      <bond id='b1' atomRefs2='a1 a2' order='S'/>"
 			+ "      <bond id='b2' atomRefs2='a1 a3' order='S'/>"
-			+ "      <bond id='b3' atomRefs2='a1 a4' order='1'/>"
-			+ "      <bond id='b4' atomRefs2='a1 a5' order='1'/>"
+			+ "      <bond id='b3' atomRefs2='a1 a4' order='S'/>"
+			+ "      <bond id='b4' atomRefs2='a1 a5' order='S'/>"
 			+ "    </bondArray>" + "  </molecule>" + "  ";
 
 	protected CMLMolecule xmlMolecule;
@@ -190,13 +190,13 @@ public class MoleculeToolTest {
             + "    <atom id='a6' elementType='C' hydrogenCount='2'/>"
             + "    <atom id='a7' elementType='C' hydrogenCount='2'/>"
             + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
+            + "    <bond id='b1' atomRefs2='a1 a2' order='S'/>"
+            + "    <bond id='b2' atomRefs2='a2 a3' order='S'/>"
+            + "    <bond id='b3' atomRefs2='a3 a4' order='S'/>"
+            + "    <bond id='b4' atomRefs2='a4 a5' order='S'/>"
+            + "    <bond id='b5' atomRefs2='a5 a6' order='S'/>"
+            + "    <bond id='b6' atomRefs2='a6 a1' order='S'/>"
+            + "    <bond id='b7' atomRefs2='a3 a7' order='S'/>"
             + "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
     CMLMolecule methyleneCyclohexene = null;
@@ -214,13 +214,13 @@ public class MoleculeToolTest {
             + "    <atom id='a6' elementType='C' hydrogenCount='2'/>"
             + "    <atom id='a7' elementType='C' hydrogenCount='2'/>"
             + "  </atomArray>" + "  <bondArray>"
-            + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-            + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-            + "    <bond id='b3' atomRefs2='a3 a4' order='1'/>"
-            + "    <bond id='b4' atomRefs2='a4 a5' order='1'/>"
-            + "    <bond id='b5' atomRefs2='a5 a6' order='1'/>"
-            + "    <bond id='b6' atomRefs2='a6 a1' order='1'/>"
-            + "    <bond id='b7' atomRefs2='a3 a7' order='1'/>"
+            + "    <bond id='b1' atomRefs2='a1 a2' order='S'/>"
+            + "    <bond id='b2' atomRefs2='a2 a3' order='S'/>"
+            + "    <bond id='b3' atomRefs2='a3 a4' order='S'/>"
+            + "    <bond id='b4' atomRefs2='a4 a5' order='S'/>"
+            + "    <bond id='b5' atomRefs2='a5 a6' order='S'/>"
+            + "    <bond id='b6' atomRefs2='a6 a1' order='S'/>"
+            + "    <bond id='b7' atomRefs2='a3 a7' order='S'/>"
             + "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
     static String nitroMethaneS = ""
@@ -233,9 +233,9 @@ public class MoleculeToolTest {
         + "    <atom id='a3' elementType='O' hydrogenCount='0' formalCharge='-1'/>"
         + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
         + "  </atomArray>" + "  <bondArray>"
-        + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-        + "    <bond id='b2' atomRefs2='a1 a3' order='1'/>"
-        + "    <bond id='b3' atomRefs2='a1 a4' order='1'/>"
+        + "    <bond id='b1' atomRefs2='a1 a2' order='S'/>"
+        + "    <bond id='b2' atomRefs2='a1 a3' order='S'/>"
+        + "    <bond id='b3' atomRefs2='a1 a4' order='S'/>"
         + "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
     CMLMolecule nitroMethane = null;
@@ -248,9 +248,9 @@ public class MoleculeToolTest {
     + "    <atom id='a3' elementType='O' hydrogenCount='0'/>"
     + "    <atom id='a4' elementType='O' hydrogenCount='0'/>"
     + "  </atomArray>" + "  <bondArray>"
-    + "    <bond id='b1' atomRefs2='a1 a2' order='1'/>"
-    + "    <bond id='b2' atomRefs2='a2 a3' order='1'/>"
-    + "    <bond id='b3' atomRefs2='a2 a4' order='1'/>"
+    + "    <bond id='b1' atomRefs2='a1 a2' order='S'/>"
+    + "    <bond id='b2' atomRefs2='a2 a3' order='S'/>"
+    + "    <bond id='b3' atomRefs2='a2 a4' order='S'/>"
     + "  </bondArray>" + "</molecule>" + CMLConstants.S_EMPTY;
 
     CMLMolecule nitroMethane2 = null;
@@ -734,7 +734,7 @@ public class MoleculeToolTest {
                     + "    <atom id='a1' elementType='C' x3='10' y3='10' z3='10'/>"
                     + "    <atom id='h1' elementType='H'/>"
                     + "  </atomArray>" + "  <bondArray>"
-                    + "    <bond atomRefs2='a1 h1' order='1'/>"
+                    + "    <bond atomRefs2='a1 h1' order='S'/>"
                     + "  </bondArray>" + "</molecule>";
             doc = builder.build(new StringReader(t01));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
@@ -751,7 +751,7 @@ public class MoleculeToolTest {
             String t02 = "<molecule id='t02' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t02));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -766,7 +766,7 @@ public class MoleculeToolTest {
             String t03 = "<molecule id='t03' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='S'/><bond atomRefs2='a1 h2' order='S'/><bond atomRefs2='a1 h3' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t03));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -781,7 +781,7 @@ public class MoleculeToolTest {
             String t04 = "<molecule id='t04' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/><atom id='h4' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/><bond atomRefs2='a1 h4' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/><atom id='h4' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 h1' order='S'/><bond atomRefs2='a1 h2' order='S'/><bond atomRefs2='a1 h3' order='S'/><bond atomRefs2='a1 h4' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t04));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -797,7 +797,7 @@ public class MoleculeToolTest {
             String t11 = "<molecule id='t11' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='3'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='3'/><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t11));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -812,7 +812,7 @@ public class MoleculeToolTest {
             String t11a = "<molecule id='t11a' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='O' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8' y3='9' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='O' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8' y3='9' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='S'/><bond atomRefs2='a2 a3' order='S'/><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t11a));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -827,7 +827,7 @@ public class MoleculeToolTest {
             String t12 = "<molecule id='t12' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='S'/><bond atomRefs2='a2 a3' order='D'/><bond atomRefs2='a1 h1' order='S'/><bond atomRefs2='a1 h2' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t12));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -842,7 +842,7 @@ public class MoleculeToolTest {
             String t13 = "<molecule id='t13' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a2 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/><bond atomRefs2='a1 h3' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='8.6' y3='10' z3='10'/><atom id='a3' elementType='C' x3='8.' y3='8.7' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/><atom id='h3' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='S'/><bond atomRefs2='a2 a3' order='S'/><bond atomRefs2='a1 h1' order='S'/><bond atomRefs2='a1 h2' order='S'/><bond atomRefs2='a1 h3' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t13));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -860,7 +860,7 @@ public class MoleculeToolTest {
             String t21 = "<molecule id='t21' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='D'/><bond atomRefs2='a1 a3' order='S'/><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t21));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -877,7 +877,7 @@ public class MoleculeToolTest {
             String t21a = "<molecule id='t21a' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='N' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='2'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='N' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='D'/><bond atomRefs2='a1 a3' order='S'/><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t21a));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -894,7 +894,7 @@ public class MoleculeToolTest {
             String t22 = "<molecule id='t22' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='2'/><bond atomRefs2='a1 h1' order='1'/><bond atomRefs2='a1 h2' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='9' z3='10'/><atom id='a3' elementType='C' x3='9.2' y3='11' z3='10'/><atom id='h1' elementType='H'/><atom id='h2' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='S'/><bond atomRefs2='a1 a3' order='D'/><bond atomRefs2='a1 h1' order='S'/><bond atomRefs2='a1 h2' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t22));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -914,7 +914,7 @@ public class MoleculeToolTest {
             String t31 = "<molecule id='t31' "
                     + CMLConstants.CML_XMLNS
                     + ">"
-                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='10.8' z3='10.8'/><atom id='a3' elementType='C' x3='10.8' y3='10.8' z3='9.2'/><atom id='a4' elementType='C' x3='10.8' y3='9.2' z3='10.8'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='1'/><bond atomRefs2='a1 a3' order='1'/><bond atomRefs2='a1 a4' order='1'/><bond atomRefs2='a1 h1' order='1'/></bondArray></molecule>";
+                    + "<atomArray><atom id='a1' elementType='C' x3='10' y3='10' z3='10'/><atom id='a2' elementType='C' x3='9.2' y3='10.8' z3='10.8'/><atom id='a3' elementType='C' x3='10.8' y3='10.8' z3='9.2'/><atom id='a4' elementType='C' x3='10.8' y3='9.2' z3='10.8'/><atom id='h1' elementType='H'/></atomArray><bondArray><bond atomRefs2='a1 a2' order='S'/><bond atomRefs2='a1 a3' order='S'/><bond atomRefs2='a1 a4' order='S'/><bond atomRefs2='a1 h1' order='S'/></bondArray></molecule>";
             doc = builder.build(new StringReader(t31));
             CMLMolecule mol = (CMLMolecule) doc.getRootElement();
             List<CMLAtom> atoms = mol.getAtoms();
@@ -1241,7 +1241,7 @@ public class MoleculeToolTest {
 
 		atom0.setXY2(new Real2(1., 2.));
 		atom1.setFormalCharge(1);
-		bond01.setOrder(CMLBond.DOUBLE);
+		bond01.setOrder(CMLBond.DOUBLE_D);
 
 		MoleculeTool fromTool = MoleculeTool.getOrCreateTool(from);
 		boolean permitOverwrite = true;
@@ -1329,7 +1329,7 @@ public class MoleculeToolTest {
 		molecule.addAtom(atom2);
 		CMLBond bond = new CMLBond(atom1, atom2);
 		molecule.addBond(bond);
-		bond.setOrder(CMLBond.DOUBLE);
+		bond.setOrder(CMLBond.DOUBLE_D);
 		CMLAtom atom3 = new CMLAtom("a3", ChemicalElement.AS.N);
 		atom3.setX2(5.0);
 		atom3.setY2(50.0);
@@ -1355,7 +1355,7 @@ public class MoleculeToolTest {
 		CMLAtom atom3 = addAtom(molecule, "a3", ChemicalElement.AS.O, new Real2(250.0, 150.0));
 		CMLBond bond23 = new CMLBond(atom2, atom3);
 		molecule.addBond(bond23);
-		bond23.setOrder(CMLBond.DOUBLE);
+		bond23.setOrder(CMLBond.DOUBLE_D);
 		AbstractSVGTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	SVGSVG svgsvg = createSvgSvg(moleculeTool);
         Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule2.svg");
@@ -1691,11 +1691,11 @@ public class MoleculeToolTest {
 		atomTool = AtomTool.getOrCreateTool(xmlAtom[1]);
         bes = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 4, bes);
-        benzene.setBondOrders(CMLBond.SINGLE);
+        benzene.setBondOrders(CMLBond.SINGLE_S);
         atomTool = AtomTool.getOrCreateTool(benzene.getAtom(0));
         int bes1 = atomTool.getBondOrderSum();
         Assert.assertEquals("bond order sum", 3, bes1);
-        methyleneCyclohexene.setBondOrders(CMLBond.SINGLE);
+        methyleneCyclohexene.setBondOrders(CMLBond.SINGLE_S);
         atomTool = AtomTool.getOrCreateTool(methyleneCyclohexene
                 .getAtom(0));
         bes1 = atomTool.getBondOrderSum();
@@ -2104,7 +2104,7 @@ public class MoleculeToolTest {
 				"    <atom id='a2' elementType='O'/>" +
 				"  </atomArray>" +
 				"  <bondArray>" +
-				"    <bond atomRefs2='a1 a2' order='1'/>" +
+				"    <bond atomRefs2='a1 a2' order='S'/>" +
 				"  </bondArray>" +
 				"</molecule>";
 		CMLMolecule molecule = (CMLMolecule) JumboTestUtils.parseValidString(moleculeS);
@@ -2182,8 +2182,8 @@ public class MoleculeToolTest {
         moleculeTool5.calculateBondedAtoms();
         Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
         Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-        mol5.setBondOrders(CMLBond.SINGLE);
-        Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
+        mol5.setBondOrders(CMLBond.SINGLE_S);
+        Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
                 .get(0).getOrder());
     }
 
@@ -2206,9 +2206,9 @@ public class MoleculeToolTest {
         moleculeTool5.calculateBondedAtoms();
         Assert.assertEquals("calculated bonds", 4, mol5.getBondCount());
         Assert.assertNull("initial order", mol5.getBonds().get(0).getOrder());
-        mol5.setBondOrders(CMLBond.SINGLE);
+        mol5.setBondOrders(CMLBond.SINGLE_S);
         // note that getOrder() will return the preferred order
-        Assert.assertEquals("updated order", CMLBond.SINGLE, mol5.getBonds()
+        Assert.assertEquals("updated order", CMLBond.SINGLE_S, mol5.getBonds()
                 .get(0).getOrderAttribute().getValue());
         mol5.setNormalizedBondOrders();
         Assert.assertEquals("perferred order", CMLBond.SINGLE_S, mol5.getBonds()
@@ -2510,5 +2510,22 @@ public class MoleculeToolTest {
 			totalAbundance+=ds[1];
 		}
 		Assert.assertFalse(Math.abs(1d - totalAbundance) < 1E-12);
+	}
+	
+	@Test // calculate bond orders
+	public void testSymbolicOrders() {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom atom1 = new CMLAtom("a1", AS.C);
+		molecule.addAtom(atom1);
+		CMLAtom atom2 = new CMLAtom("a2", AS.O);
+		molecule.addAtom(atom2);
+		CMLBond bond = new CMLBond(atom1, atom2);
+		bond.setOrder("2");
+		molecule.addBond(bond);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.normalizeBondOrders();
+		List<CMLBond> bonds = molecule.getBonds();
+		CMLBond bondx = bonds.get(0);
+		Assert.assertEquals("bond order ", CMLBond.DOUBLE_D, bondx.getOrder());
 	}
 }

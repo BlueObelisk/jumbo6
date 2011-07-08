@@ -194,9 +194,9 @@ public class CIPTool {
 			String ligandId = ligandAtom.getId();
 			String order = ligandBond.getOrder();
 			// multiple bonds (regardless of whether already in tree)
-			if (order.equals(CMLBond.DOUBLE)) {
+			if (CMLBond.isDouble(order)) {
 				addGhost(node, ligandId, ligandAtomicNumber);
-			} else if (order.equals(CMLBond.TRIPLE)) {
+			} else if (CMLBond.isTriple(order)) {
 				addGhost(node, ligandId, ligandAtomicNumber);
 				addGhost(node, ligandId, ligandAtomicNumber);
 			}

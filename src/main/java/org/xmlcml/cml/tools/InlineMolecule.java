@@ -402,11 +402,11 @@ class InlineBond implements CMLConstants {
     static String getOrder(char c) {
         String order = null;
         if (c == CMLUtil.C_MINUS) {
-            order = CMLBond.SINGLE;
+            order = CMLBond.SINGLE_S;
         } else if (c == CMLUtil.C_EQUALS) {
-            order = CMLBond.DOUBLE;
+            order = CMLBond.DOUBLE_D;
         } else if (c == CMLUtil.C_HASH) {
-            order = CMLBond.TRIPLE;
+            order = CMLBond.TRIPLE_T;
         }
         return order;
     }

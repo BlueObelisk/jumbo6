@@ -14,7 +14,7 @@ public class MoleculeToolFixture {
 
 	public static void abov(CMLMolecule mol, int knownUnpaired,
 			String[] expected) {
-		mol.setBondOrders(CMLBond.SINGLE);
+		mol.setBondOrders(CMLBond.SINGLE_S);
 		PiSystemControls piSystemManager = new PiSystemControls();
 		piSystemManager.setUpdateBonds(true);
 		piSystemManager.setKnownUnpaired(knownUnpaired);
@@ -66,7 +66,7 @@ public class MoleculeToolFixture {
 
 	CMLMolecule benzene = null;
 
-	String[] benzeneOrder = new String[] { "2", "1", "2", "1", "2", "1" };
+	String[] benzeneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S };
 
 	String nickS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + ">" + " <atomArray> "
 			+ "  <atom id='a1' elementType='O'/>"
@@ -157,10 +157,10 @@ public class MoleculeToolFixture {
 
 	CMLMolecule nick = null;
 
-	String[] nickOrder = new String[] { "1", "1", "1", "1", "2", "1", "1", "1",
-			"1", "1", "1", "1", "3", "3", "1", "1", "2", "2", "1", "1", "2",
-			"1", "2", "1", "1", "2", "1", "1", "2", "1", "1", "2", "1", "1",
-			"1", "1", "1", "1", "1", "1", "1", "1", "1" };
+	String[] nickOrder = new String[] { CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S,
+			CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.TRIPLE_T, CMLBond.TRIPLE_T, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D,
+			CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S,
+			CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S };
 
 	String styreneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='styrene'>"
 			+ "  <atomArray>"
@@ -185,8 +185,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule styrene = null;
 
-	String[] styreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
-			"2", };
+	String[] styreneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S,
+			CMLBond.DOUBLE_D, };
 
 	String pyreneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='pyrene'>"
 			+ "  <atomArray>"
@@ -230,8 +230,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule pyrene = null;
 
-	String[] pyreneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
-			"1", "2", "1", "2", "1", "1", "1", "2", "1", "1", "2", "1" };
+	String[] pyreneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D,
+			CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S };
 
 	String tripheneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='triphene'>" + "  <atomArray>"
@@ -268,8 +268,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule triphene = null;
 
-	String[] tripheneOrder = new String[] { "2", "1", "2", "1", "2", "1", "1",
-			"2", "1", "1", "1", "2", "1", "2", "1" };
+	String[] tripheneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S,
+			CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S };
 
 	String methyleneCyclohexeneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methyleneCyclohexene'>" + "  <atomArray>"
@@ -292,8 +292,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule methyleneCyclohexene = null;
 
-	String[] methyleneCyclohexeneOrder = new String[] { "2", "1", "1", "1",
-			"1", "1", "2" };
+	String[] methyleneCyclohexeneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.SINGLE_S,
+			CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D };
 
 	String methyleneCyclohexadieneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='methyleneCyclohexadiene'>" + "  <atomArray>"
@@ -316,8 +316,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule methyleneCyclohexadiene = null;
 
-	String[] methyleneCyclohexadieneOrder = new String[] { "2", "1", "1", "2",
-			"1", "1", "2" };
+	String[] methyleneCyclohexadieneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D,
+			CMLBond.SINGLE_S, CMLBond.SINGLE_S, CMLBond.DOUBLE_D };
 
 	String co2S = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='co2'>"
 			+ "  <atomArray>"
@@ -331,7 +331,7 @@ public class MoleculeToolFixture {
 
 	CMLMolecule co2 = null;
 
-	String[] co2Order = new String[] { "2", "2" };
+	String[] co2Order = new String[] { CMLBond.DOUBLE_D, CMLBond.DOUBLE_D };
 
 	String azuleneS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS + " title='azulene'>"
 			+ "  <atomArray>"
@@ -361,8 +361,8 @@ public class MoleculeToolFixture {
 
 	CMLMolecule azulene = null;
 
-	String[] azuleneOrder = new String[] { "2", "1", "2", "1", "2", "1", "2",
-			"1", "2", "1", "1" };
+	String[] azuleneOrder = new String[] { CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.DOUBLE_D,
+			CMLBond.SINGLE_S, CMLBond.DOUBLE_D, CMLBond.SINGLE_S, CMLBond.SINGLE_S };
 
 	String conjugatedS = CMLConstants.S_EMPTY + "<molecule " + CMLConstants.CML_XMLNS
 			+ " title='conjugated'>" + "  <atomArray>"

@@ -61,7 +61,9 @@ public class BondOrder
     }
     
     public static void normalizeBondOrder(CMLBond bond) {
-    	bond.setOrder(GetBondOrder(bond).getCmlBondOrder());
+    	BondOrder bondOrder = GetBondOrder(bond);
+    	String bondOrderString = bondOrder.getCmlBondOrder();
+    	bond.setOrder(bondOrderString);
     }
     
     

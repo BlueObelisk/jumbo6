@@ -576,7 +576,7 @@ class JoinBond implements CMLConstants {
     CMLTorsion torsion = null;
     String torsionS = null;     // original value (for parsing)
     String lengthS = null;
-    String order = CMLBond.SINGLE;
+    String order = CMLBond.SINGLE_S;
     String joinBondS = null;
 
     /** length keyword.
@@ -597,11 +597,11 @@ class JoinBond implements CMLConstants {
         this.joinBondS = jBondS;
         char c = jBondS.charAt(0);
         if (c == SINGLEBOND) {
-            order = CMLBond.SINGLE;
+            order = CMLBond.SINGLE_S;
         } else if (c == DOUBLEBOND) {
-            order = CMLBond.DOUBLE;
+            order = CMLBond.DOUBLE_D;
         } else if (c == TRIPLEBOND) {
-            order = CMLBond.TRIPLE;
+            order = CMLBond.TRIPLE_T;
         } else {
             throw new RuntimeException("Bad bond type: "+c);
         }
@@ -804,10 +804,10 @@ class JoinBond implements CMLConstants {
      */
     public static String getOrderSymbol(String orderS) {
         String orderSymbol = S_MINUS;
-        if (orderS == null || orderS.equals(CMLBond.SINGLE)) {
-        } else if (orderS.equals(CMLBond.DOUBLE)) {
+        if (orderS == null || CMLBond.isSingle(orderS)) {
+        } else if (CMLBond.isDouble(orderS)) {
             orderSymbol = S_EQUALS;
-        } else if (orderS.equals(CMLBond.TRIPLE)) {
+        } else if (CMLBond.isTriple(orderS)) {
             orderSymbol = S_HASH;
         }
         return orderSymbol;
