@@ -10,9 +10,9 @@
 		<version>4</version>
 	</parent>
 
-	<groupId>cml</groupId>
+	<groupId>org.xml-cml</groupId>
 	<artifactId>jumbo</artifactId>
-	<version>6.0.0-SNAPSHOT</version>
+	<version>6.0</version>
 	<packaging>jar</packaging>
 	<name>Jumbo</name>
 	<description>A Java library for processing CML</description>
@@ -212,6 +212,7 @@
 	</build>
 
 	<!-- remove <repositories> for release to maven central -->
+<!-- 
 	<repositories>
 		<repository>
 			<id>ucc-repo</id>
@@ -219,20 +220,20 @@
 			<url>https://maven.ch.cam.ac.uk/m2repo</url>
 		</repository>
 	</repositories>
-
+ -->
 	<dependencies>
 		<dependency>
 			<groupId>org.xml-cml</groupId>
 			<artifactId>euclid</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xml-cml</groupId>
 			<artifactId>cmlxom</artifactId>
-			<version>3.2-SNAPSHOT</version>
+			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 			<groupId>org.xml-cml</groupId>
 			<artifactId>jumbo-testutil</artifactId>
 			<scope>test</scope>
