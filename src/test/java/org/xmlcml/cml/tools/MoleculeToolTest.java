@@ -1969,7 +1969,7 @@ public class MoleculeToolTest {
 		double d = MoleculeTool.getOrCreateTool(molecule)
 				.getCalculatedMolecularMass(
 						HydrogenControl.NO_EXPLICIT_HYDROGENS);
-		Assert.assertEquals("MW ", 58.44277, d);
+		Assert.assertEquals("MW ", 58.44277, d, 0.0001);
 		CMLAmount massAmount = new CMLAmount();
 		massAmount.setUnits(CMLConstants.Units.GRAM.value);
 		massAmount.addAttribute(new NamespaceRefAttribute("unitType",

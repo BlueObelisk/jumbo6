@@ -4,9 +4,9 @@
 
 
     <parent>
-        <groupId>wwmm</groupId>
+        <groupId>uk.ac.cam.ch.wwmm</groupId>
         <artifactId>wwmm-parent</artifactId>
-        <version>2-SNAPSHOT</version>
+        <version>4</version>
     </parent>
 
 	<groupId>cml</groupId>
@@ -49,10 +49,6 @@
 		<developer>
 			<id>drzz</id>
 			<name>Daniel Zaharevitz</name>
-		</developer>
-		<developer>
-			<id>adw27</id>
-			<name>Andrew Walkingshaw</name>
 		</developer>
 		<developer>
 			<id>egonw</id>
@@ -213,6 +209,8 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+<!-- remove <repositories> for release to maven central -->	
 	<repositories>
 		<repository>
 			<id>ucc-repo</id>
@@ -220,29 +218,50 @@
 			<url>https://maven.ch.cam.ac.uk/m2repo</url>
 		</repository>
 	</repositories>
+	
 	<dependencies>
 		<dependency>
-			<groupId>cml</groupId>
-			<artifactId>cmlxom</artifactId>
-			<version>3.1-SNAPSHOT</version>
+			<groupId>org.xml-cml</groupId>
+			<artifactId>euclid</artifactId>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf</groupId>
-			<artifactId>jniinchi</artifactId>
-			<version>0.5</version>
-			<optional>true</optional>
+			<groupId>org.xml-cml</groupId>
+			<artifactId>cmlxom</artifactId>
+			<version>3.2-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+            <version>1.1-SNAPSHOT</version>
+			<groupId>org.xml-cml</groupId>
+			<artifactId>jumbo-testutil</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.0</version>
+			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <version>1.0-SNAPSHOT</version>
-			<groupId>cml</groupId>
-			<artifactId>jumbo-testutil</artifactId>
-			<scope>test</scope>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>xom</groupId>
+			<artifactId>xom</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math</artifactId>
+			<version>2.2</version>
 		</dependency>
 	</dependencies>
 	<reporting>

@@ -783,7 +783,7 @@ public class ReactionToolTest {
 		CMLReactant reactant = reactionTool.findLimitingReactant();
 		ReactantTool reactantTool = ReactantTool.getOrCreateTool(reactant);
 		double molesPerCount = reactantTool.getMolesPerCount();
-		Assert.assertEquals("limiting molesPerCount", 0.0015, molesPerCount);
+		Assert.assertEquals("limiting molesPerCount", 0.0015, molesPerCount, 0.0001);
 	}
 	
 	@Test
@@ -795,7 +795,7 @@ public class ReactionToolTest {
 		CMLReactant reactant = reactionTool.findLimitingReactant();
 		ReactantTool reactantTool = ReactantTool.getOrCreateTool(reactant);
 		double molesPerCount = reactantTool.getMolesPerCount();
-		Assert.assertEquals("limiting molesPerCount", 1.02, molesPerCount);
+		Assert.assertEquals("limiting molesPerCount", 1.02, molesPerCount, 0.0001);
 	}
 	@Test
 	public void testPatent1a() 
