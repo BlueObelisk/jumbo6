@@ -1,3 +1,21 @@
+<!--
+
+       Copyright 2011 Peter Murray-Rust et. al.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head profile="http://gmpg.org/xfn/11">
 
@@ -104,7 +122,7 @@
 	    </div>
 
 	    <p>
-              </p><p>Namespaces are fundamental to modern global information. They give complete “ownership” to the <em>names</em> in a document.</p>
+              </p><p>Namespaces are fundamental to modern global information. They give complete “ownership�? to the <em>names</em> in a document.</p>
 <p>Here’s a typical problem: If I write</p>
 <pre>&amp;lt;element&gt;oxygen&amp;lt;/element&gt;&lt;!--&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;lt;element--&gt;</pre>
 <p>you’ll all know what this means, right? But if I describe the molecule element in my my schema by:</p>
@@ -124,10 +142,10 @@ make sense to use someone else’s DN). <strong>NOTE: this is a NAME, NOT an ADD
 The namespaceURI is a very bad design - it would have been easy to use
 something other than http: but that is how things have turned out.</p>
 <p>I have to stress this. The namespaceURI does NOT link to anything,
-any more than “Peter Murray-Rust” addresses me. It identifies me, but
+any more than “Peter Murray-Rust�? addresses me. It identifies me, but
 does not locate me. Similarly “Chemistry Laboratory, Cambridge, CB2
-1EW, UK” is my address, not my name. It allows you to locate me, not to
-identify me. The use of “http:” for a name is absurd, but it is with us
+1EW, UK�? is my address, not my name. It allows you to locate me, not to
+identify me. The use of “http:�? for a name is absurd, but it is with us
 for ever.<br>
 Second, it would be nice to use the namespaceURI to create a fully
 qualified name. Java does this by having a name (e.g. CMLBond.class)
@@ -147,8 +165,8 @@ different semantics. Now we have the whole lot:</p>
 <pre>&amp;lt;cml:cml&gt;</pre>
 <p>The first  line states:</p>
 <ul>
-<li>the <tt>xmlns:cml=”http://www.xml-cml.org/schema”</tt>  string associated the prefix  <tt>cml</tt> with the namespaceURI <tt>http://www.xml-cml.org/schema</tt> (which is owned by CML)</li>
-<li>the <tt>cml:cml</tt> element belongs to the the namespaceURI <tt>http://www.xml-cml.org/schema</tt>. At this stage all you know is that we can uniquify the element - there is no central registry that says that “CML owns <tt>http://www.xml-cml.org/schema</tt>” - you have to find that out by social means. <tt>cml:cml</tt> is called a <tt>QName</tt>.</li>
+<li>the <tt>xmlns:cml=�?http://www.xml-cml.org/schema�?</tt>  string associated the prefix  <tt>cml</tt> with the namespaceURI <tt>http://www.xml-cml.org/schema</tt> (which is owned by CML)</li>
+<li>the <tt>cml:cml</tt> element belongs to the the namespaceURI <tt>http://www.xml-cml.org/schema</tt>. At this stage all you know is that we can uniquify the element - there is no central registry that says that “CML owns <tt>http://www.xml-cml.org/schema</tt>�? - you have to find that out by social means. <tt>cml:cml</tt> is called a <tt>QName</tt>.</li>
 <li>there is no need to repeat the namespaceURI on every element. The
 second line inherits the assignment from the first. But the prefix is
 always required.</li>
@@ -158,7 +176,7 @@ always required.</li>
 <pre>&amp;lt;foo:molecule title="benzene"/&gt;</pre>
 <pre>&amp;lt;foo:cml&gt;</pre>
 <p>are identical although the documents are lexically distinct. It’s
-useful to use “cml” as prefix as it makes the document easier for
+useful to use “cml�? as prefix as it makes the document easier for
 humans to read and we’ll try to use mnemonic QNames.</p>
 <ul>
 <li>Do not worry about attributes at this stage. Although it is
@@ -251,7 +269,7 @@ movement) such as OpenBabel or libraries such as CDK, JOELib and JUMBO.</li>
 </ul>
 <p>CML has been heaviliy informed by these exercises. We take the
 approach: “Here is an important program; how much of the output can CML
-capture? and what is the information loss?” So CML attempts to address
+capture? and what is the information loss?�? So CML attempts to address
 much of the information described on the File Formats page.</p>
 <p>In practice there is a lot not captured as many programs expose
 parts of their internal data structure but without clear semantics.
@@ -302,11 +320,11 @@ all CML documents should include the namespace:</p>
 useful to start it with &lt;cml&gt;. However it’s perfectly allowed to
 start it with &lt;molecule&gt;, &lt;spectrum&gt; or any other CML
 element. Thus the smallest CML document might look like:</p>
-<p>&lt;cml xmlns=”http://www.xml-cml.org/schema”/&gt;</p>
-<p>This is the “hello world” of CML. It says “I am a CML document”. Here’s a more chemical one:</p>
-<p>&lt;molecule title=”benzene” xmlns=”http://www.xml-cml.org/schema”/&gt;</p>
+<p>&lt;cml xmlns=�?http://www.xml-cml.org/schema�?/&gt;</p>
+<p>This is the “hello world�? of CML. It says “I am a CML document�?. Here’s a more chemical one:</p>
+<p>&lt;molecule title=�?benzene�? xmlns=�?http://www.xml-cml.org/schema�?/&gt;</p>
 <p>It says “I am a CML molecule element with a title whose value is
-‘benzene’”. It doesn’t tell us what benzene is, and we’ll look at ways
+‘benzene’�?. It doesn’t tell us what benzene is, and we’ll look at ways
 of doing that later. But it could be a useful piece of markup in some
 running scientific text.</p>
 <p>Next post will address namespaces…<br>
@@ -344,7 +362,7 @@ look prettier.)&nbsp;</em></p>
 In that schema is some human-readable and some machine-processible
 documentation describing the semantics. Formally that’s all <img src="blog1_files/icon_smile.gif" alt=":-)" class="wp-smiley"> . Not very exciting</p>
 <p>In practice, however, CML is a completely new way of formalising
-chemical information. It is NOT “just another file format”. It’s a
+chemical information. It is NOT “just another file format�?. It’s a
 formal way of describing a large number of chemical concepts and it’s
 probably correct to say it can support most of what is presented in
 undergraduate chemistry. This isn’t trivial, but it’s possible. So you
@@ -355,20 +373,20 @@ We’ll use the term <em>semantics</em> a lot. It means ( <a href="http://en.wik
 <li>Not everyone agrees on the meaning! This may seem strange but it’s very common. That’s why formal resources such as <a href="http://www.chemsoc.org/cgi-shell/empower.exe?DB=goldbook">IUPAC’s Gold Book</a>
 or Wikipedia are so important. So, for example, in our MaCIE database
 (see below) we have taken the definitions of things like “Claisen
-Condensation”, “Overall Reaction”, “Reactive Centre” directly from the
+Condensation�?, “Overall Reaction�?, “Reactive Centre�? directly from the
 GoldBook. That immediately ensures we share our concepts directly with
 a large number of other chemists and in some cases with everyone. The
 use of dictionaries (sometimes called ontologies) is fundamental to CML
 and you’ll see many examples.</li>
 <li>It is very difficult to formalize semantics. Even with a clear
 definition, not everyone will agree on whether a given system adheres
-to it. Thus even if we agree on the definition of “aldehyde” (as
+to it. Thus even if we agree on the definition of “aldehyde�? (as
 containing RC(=O)H), we might disagree whether formyl derivatives
 (H(C=O)X) are aldehydes. Humans will normally make reasonable
 judgements in most cases, but machines cannot. Therefore we need clear,
 unambiguous machine-enforceable rules. For example we require that a
 chemical element symbol in a CML document must be in the IUPAC list. A
-document with, say, elementType=”Phe” is <em>invalid</em>.</li>
+document with, say, elementType=�?Phe�? is <em>invalid</em>.</li>
 <li>Although a few rules can be expressed in XML syntax (we use
 something called XSD) most cannot. So we have to do this by the
 following approaches:</li>
@@ -394,7 +412,7 @@ libraries. Examples of these are CDK, JUMBO, and JOELib (all from the
 Blue Obelisk)</li>
 <li>applications. Although a prime use of CML is to represent chemical
 information, it’s often necessary to have applications that “do
-something” with the documents.</li>
+something�? with the documents.</li>
 <li>a set of neighbouring disciplines. CML deliberately interoperates with other languages such as MathML, XHTML and SVG.</li>
 <li>a community. This is perhaps the most exciting aspect of CML - a
 group of people who are trying to work out how to represent a
@@ -412,8 +430,8 @@ steps, and each of these can have many components and associated
 information. This type of approach is really only possible with markup
 languages.</p>
 <p>The data data on each reaction can be queried,e.g. “which reactions
-have more that 3 products”, “which involve the breaking of a C-O bond”,
-“which involve a histidine catalyst”. XML provodes many tools so that
+have more that 3 products�?, “which involve the breaking of a C-O bond�?,
+“which involve a histidine catalyst�?. XML provodes many tools so that
 these are easy to answer with standard tools.</p>
 <p>But there are exciting new possibilities. XML has an application,
 SVG, that supports animation. Reactions, being dynamic processes should
@@ -425,12 +443,12 @@ Java).</p>
 MACiE home page</a>
 at http://www-mitchell.ch.cam.ac.uk/macie/. It will display in any
 browser, but if you want to see the animation you’ll need IE as FireFox
-doesn’t yet do animations. Click “100 Entries” and then “M0001″ (or any
+doesn’t yet do animations. Click “100 Entries�? and then “M0001″ (or any
 other reaction). You’ll see something like</p>
 <p><img alt="MACiE reaction M0001" id="image5" src="blog1_files/macie.htm"></p>
 <p>This has been drawn automatically from the CML. A more complex example is shown in the second step:<img title="Step 2" alt="Step 2" src="blog1_files/macie1.htm" width="1"></p>
 <p><img id="image6" alt="Step 2" src="blog1_files/macie1_002.htm"></p>
-<p>If you are now in IE browser, follow the “Animated Reaction” and you
+<p>If you are now in IE browser, follow the “Animated Reaction�? and you
 start to see the whole reaction in dynamic form. All reactions have
 several steps, so there is a lot to see. A typical step might look like:<img title="Step 2" alt="Step 2" src="blog1_files/macie1.htm" width="600"></p></blockquote>
 <p><img id="image7" alt="Final step" src="blog1_files/macie2.htm"></p>
@@ -448,7 +466,7 @@ Cambridge, DSpace. This allows any object to be stored, especially if
 it’s in XML. We had a project 2 years ago in which we computed the
 properties of 250, 000 molecules. Normally this data would now be lost,
 but we transformed it into CML and deposited it. Because XML is
-“future-proofed” it is easy to get it out again. Have a look at:</p>
+“future-proofed�? it is easy to get it out again. Have a look at:</p>
 <p><a href="http://www.dspace.cam.ac.uk/handle/1810/183611"><br>
 http://www.dspace.cam.ac.uk/handle/1810/183611</a></p>
 <p>and note the metadata under full details:</p>
@@ -546,11 +564,11 @@ address some of the common hopes and concerns. Some of these are:</p>
 <h2>Mechanics of the blog</h2>
 <p>This blog was inspired by Andrew Walkingshaw and colleagues. It’s one of a series and I’ll include the others in my <em>blogroll</em>.
 This is the only blog devoted to a single topic; I have another
-personal blog (”petermr’s blog”) which will cover many aspects of the
+personal blog (�?petermr’s blog�?) which will cover many aspects of the
 current scientific web including technology, Openness and information
 design.</p>
 <p>We hope that this blog will act as one of the mechanisms for
-“documenting” CML - i.e. the discussion here may inform the use and
+“documenting�? CML - i.e. the discussion here may inform the use and
 design of CML.</p>
 <p>We welcome anyone as a poster but require them to register (to
 prevent spam). We honour copyright, but ask that posters make there

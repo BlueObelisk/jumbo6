@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2011 Peter Murray-Rust et. al.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+
 <cml xmlns="http://www.xml-cml.org/schema"><module role="metadata"><FILENO xmlns="">b201228f</FILENO><PAPERTYPE xmlns="">article</PAPERTYPE><JOURNAL xmlns=""><NAME>P1</NAME><YEAR>2002</YEAR><VOLUME/><ISSUE>13</ISSUE><PAGES>1581-1587</PAGES></JOURNAL></module><module role="title">Carotenoids and related <molecule title="polyenes" role="chemical"><link title="1" to="cit1"/></molecule>. Part 8. Total synthesis of optically active <molecule title="mytiloxanthin" role="chemical"/> applying the stereoselective rearrangement of tetrasubstituted <molecule title="epoxide" role="chemical"/><XREF ID="fn1" TYPE="FOOTNOTE_MARKER" xmlns=""/></module><module role="authorList"><AUTHOR ID="1" xmlns=""><NAME>Chisato<SURNAME>Tode</SURNAME></NAME></AUTHOR><AUTHOR ID="2" xmlns=""><NAME>Yumiko<SURNAME>Yamano</SURNAME></NAME></AUTHOR><AUTHOR ID="3" xmlns=""><NAME>Masayoshi<SURNAME>Ito</SURNAME></NAME></AUTHOR></module><module role="abstract">Biomimetic synthesis of  <molecule ref="chem1" title="1"><name>mytiloxanthin</name></molecule> was accomplished with stereoselective rearrangement of the tetrasubstituted <molecule title="epoxide" role="chemical"/> <molecule ref="chem5" title="5"/> as a key reaction. This is the first total synthesis of optically active all-<IT xmlns="">E</IT> <molecule title="mytiloxanthin" role="chemical"/> <molecule ref="chem1" title="1"/>.</module><module role="body">
 		<module role="introduction">
 			<module role="para"><module role="container"> </module><molecule ref="chem1" title="1"><name>Mytiloxanthin</name></molecule><module role="container">, with a unique </module><molecule title="cyclopentyl enolic [beta]-diketone" role="chemical"/><module role="container"> group conjugated to a </module><molecule title="polyene" role="chemical"/><module role="container"> chain, was first isolated from <IT xmlns="">Mytilus californianus</IT> by Scheer in 1940.<REF ID="cit2" TYPE="P" xmlns="">2</REF> Its structure and synthesis of the 9<IT xmlns="">Z</IT>-isomer were reported by Weedon's group,<REF ID="cit3" TYPE="P" xmlns="">3</REF> they developed the new synthetic route to </module><molecule title="polyene [beta]-diketones" role="chemical"/><module role="container"> using Claisen type condensation between </module><molecule title="polyene" role="chemical"/><module role="container"> esters and </module><molecule title="methyl ketones" role="chemical"><link title="4" to="cit4"/></molecule><module role="container">. The absolute configuration was determined by Maoka and Fujiwara in 1996. The </module><molecule title="cyclopentyl" role="chemical"/><module role="container"> end group of </module><molecule title="mytiloxanthin" role="chemical"/><module role="container"> </module><molecule ref="chem1" title="1"><link title="3" to="cit3"/></molecule><module role="container"> is believed to be formed in Nature from the </module><molecule title="epoxide" role="chemical"/><module role="container"> end group of </module><molecule title="5,6-epoxy" role="chemical"/><module role="container"> carotenoids such as </module><molecule title="halocynthiaxanthin" role="chemical"/><module role="container"> </module><molecule ref="chem2" title="2"/><module role="container"> by cleavage of the </module><molecule title="oxirane" role="chemical"/><module role="container"> ring at the C-5 position and successive ring contraction (a </module><molecule title="pinacolic" role="chemical"/><module role="container"> rearrangement)

@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2011 Peter Murray-Rust et. al.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+
 <example id="h0010" title="EXAMPLE 2"><heading id="h0011" title="N-(2,5-dichlorobenzyl)-8-hydroxy-1,6-naphthyridine-7-carboxamide"><p id="p0139" num="0139">
 <chemistry id="chem0078" num="0078"><img id="ib0078" file="imgb0078.tif" wi="77" he="33" img-content="chem" img-format="tif" orientation="portrait" inline="no"/></chemistry></p></heading><heading id="h0012" title="Step 1: Preparation of 8-hydroxy-1,6-naphthyridine-7-carboxylic acid"><p id="p0140" num="0140">To a slurry of methyl 8-hydroxy-1,6-naphthyridine-7-carboxylate from Example 1 step 2 (1.50g, 7.35 mmol) in methanol. (45ml) was added lithium hydroxide (22.0ml of a 1M aq. solution, 22.0 mmol) and the reaction was heated at 100°C for 7 hrs. Upon cooling to room temperature, hydrochloric acid (22.0ml of a 1M aq. solution, 22.0 mmol) was added and the reaction stirred for 16 hrs. The mixture was concentrated to a volume of 50 ml and neutralized with dilute NaHCO<sub>3</sub> (pH=7) The resulting precipitate was collected by filtration and washed with water and dried <i>in vacuo</i> to afford the title compound.<br/>
 FAB MS calcd for C<sub>9</sub>H<sub>6</sub>N<sub>2</sub>O<sub>3</sub> 191 (MH<sup>+</sup>), found 191.<br/>
