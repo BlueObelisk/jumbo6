@@ -48,6 +48,6 @@ public class SpectrumToolTest {
 		InputStream spectrumStream = ClassLoader.getSystemResourceAsStream("org/xmlcml/cml/tools/spectrum1.xml");
 		CMLSpectrum spectrum = (CMLSpectrum) new CMLBuilder().build(spectrumStream).getRootElement();
 		SpectrumTool tool = SpectrumTool.getOrCreateTool(spectrum);
-		Assert.assertEquals(11d, tool.calculateIntegralSum());
+		Assert.assertEquals(11d, tool.calculateIntegralSum(), 0.0001);
 	}
 }
