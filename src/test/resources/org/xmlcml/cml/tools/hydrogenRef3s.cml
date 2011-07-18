@@ -1,0 +1,33 @@
+<molecule xmlns="http://www.xml-cml.org/schema">
+  <atomArray>
+    <atom id="a1" elementType="C" x3="0.342896" y3="0.362128" z3="0.42294" hydrogenCount="1"/>
+    <atom id="a2" elementType="C" x3="1.375678" y3="0.853716" z3="-0.5893" hydrogenCount="3"/>
+    <atom id="a3" elementType="C" x3="-0.543911" y3="1.515651" z3="0.887329" hydrogenCount="3"/>
+    <atom id="a4" elementType="C" x3="1.033153" y3="-0.298073" z3="1.614803" hydrogenCount="3"/>
+    <atom id="a1_h1" elementType="H" x3="-0.2826986411269028" y3="-0.37469433876758806" z3="-0.05885267956908963"/>
+    <atom id="a2_h1" elementType="H" x3="2.029669616517262" y3="0.03838726980452112" z3="-0.8612081227969605"/>
+    <atom id="a2_h2" elementType="H" x3="1.9575509210513071" y3="1.6513027562845688" z3="-0.15148808839105465"/>
+    <atom id="a2_h3" elementType="H" x3="0.8700807027574655" y3="1.219053702861836" z3="-1.4709460377547678"/>
+    <atom id="a3_h1" elementType="H" x3="-0.23928473151215868" y3="2.4258352288561262" z3="0.39218507537933645"/>
+    <atom id="a3_h2" elementType="H" x3="-0.44623393869565897" y3="1.6371640989714609" z3="1.956016867655145"/>
+    <atom id="a3_h3" elementType="H" x3="-1.5732951333677105" y3="1.2996352463851266" z3="0.6421647690016624"/>
+    <atom id="a4_h1" elementType="H" x3="2.1033556621041565" y3="-0.2685557903619657" z3="1.4726938997975108"/>
+    <atom id="a4_h2" elementType="H" x3="0.7088421620550188" y3="-1.3250976197941897" z3="1.695070744007318"/>
+    <atom id="a4_h3" elementType="H" x3="0.7753405664200431" y3="0.23260755908504582" z3="2.5194083798760896"/>
+  </atomArray>
+  <bondArray>
+    <bond atomRefs2="a1 a2" order="1"/>
+    <bond atomRefs2="a1 a3" order="1"/>
+    <bond atomRefs2="a1 a4" order="1"/>
+    <bond atomRefs2="a1 a1_h1" id="a1_a1_h1" order="S"/>
+    <bond atomRefs2="a2 a2_h1" id="a2_a2_h1" order="S"/>
+    <bond atomRefs2="a2 a2_h2" id="a2_a2_h2" order="S"/>
+    <bond atomRefs2="a2 a2_h3" id="a2_a2_h3" order="S"/>
+    <bond atomRefs2="a3 a3_h1" id="a3_a3_h1" order="S"/>
+    <bond atomRefs2="a3 a3_h2" id="a3_a3_h2" order="S"/>
+    <bond atomRefs2="a3 a3_h3" id="a3_a3_h3" order="S"/>
+    <bond atomRefs2="a4 a4_h1" id="a4_a4_h1" order="S"/>
+    <bond atomRefs2="a4 a4_h2" id="a4_a4_h2" order="S"/>
+    <bond atomRefs2="a4 a4_h3" id="a4_a4_h3" order="S"/>
+  </bondArray>
+</molecule>

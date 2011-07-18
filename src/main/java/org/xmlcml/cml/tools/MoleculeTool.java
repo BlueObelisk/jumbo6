@@ -4379,6 +4379,16 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
+	/** calculates hydrogen coordinates for hydrogens already on atom
+	 * assumes they are the correct count
+	 */
+	public void addCalculated3DCoordinatesForExistingHydrogens() {
+		List<CMLAtom> atomList = molecule.getAtoms();
+		for (CMLAtom atom : atomList) {
+			AtomTool.getOrCreateTool(atom).addCalculated3DCoordinatesForExistingHydrogens();
+		}
+	}
+
 }
 
 class BoundingRect {

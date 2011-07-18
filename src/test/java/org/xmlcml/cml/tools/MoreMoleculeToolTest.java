@@ -23,11 +23,13 @@ import java.util.List;
 
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -779,6 +781,75 @@ public class MoreMoleculeToolTest {
 		Assert.assertEquals("lone pair", 6, n);
 		n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(3));
 		Assert.assertEquals("lone pair", 5, n);
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens0() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+				"org/xmlcml/cml/tools/hydrogen0.cml", "org/xmlcml/cml/tools/hydrogenRef0.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens1s() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen1s.cml", "org/xmlcml/cml/tools/hydrogenRef1s.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens1d() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen1d.cml", "org/xmlcml/cml/tools/hydrogenRef1d.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens1t() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen1t.cml", "org/xmlcml/cml/tools/hydrogenRef1t.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens2s() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen2s.cml", "org/xmlcml/cml/tools/hydrogenRef2s.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens2d() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen2d.cml", "org/xmlcml/cml/tools/hydrogenRef2d.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogens3s() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogen3s.cml", "org/xmlcml/cml/tools/hydrogenRef3s.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogensTest() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogenTest.cml", "org/xmlcml/cml/tools/hydrogenRefTest.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogensOH() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogenOH.cml", "org/xmlcml/cml/tools/hydrogenRefOH.cml");
+	}
+
+	@Test
+	public void testaddCalculated3DCoordinatesForExistingHydrogensNH() {
+		testAddCalculated3DCoordinatesForExistingHydrogens(
+			"org/xmlcml/cml/tools/hydrogenNH.cml", "org/xmlcml/cml/tools/hydrogenRefNH.cml");
+	}
+
+	private void testAddCalculated3DCoordinatesForExistingHydrogens(String filein, String fileout) {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.readElementFromResource(filein);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.adjustHydrogenCountsToValency(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
+		moleculeTool.addCalculated3DCoordinatesForExistingHydrogens();
+		Element moleculeRef = CMLUtil.readElementFromResource(fileout); 
+		JumboTestUtils.assertEqualsIncludingFloat("atom 1", moleculeRef, molecule, true, 0.00001);
 	}
 
 }

@@ -33,11 +33,13 @@ import org.xmlcml.cml.base.CC;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.graphics.CMLDrawable;
@@ -496,4 +498,5 @@ public class AtomToolTest {
     	SVGSVG svgsvg = SVGSVG.wrapAsSVG(svgg);
 		return svgsvg;
 	}
+	
 }

@@ -112,18 +112,26 @@ public class GeometryTool extends AbstractTool {
      * @param control
      * @throws RuntimeException
      */
-    public void addCalculated3DCoordinatesForHydrogens(HydrogenControl control) {
-        // TODO
-     CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
-     if (molecules.size() > 0) {
-         for (CMLMolecule molecule : molecules) {
-             new GeometryTool(molecule).addCalculated3DCoordinatesForHydrogens(control);
-         }
-     } else {
-         throw new RuntimeException("NYI");
-     }
-    }
-    /**
+	public void addCalculated3DCoordinatesForHydrogens(HydrogenControl control) {
+		// TODO
+		CMLElements<CMLMolecule> molecules = molecule.getMoleculeElements();
+		if (molecules.size() > 0) {
+			for (CMLMolecule molecule : molecules) {
+				new GeometryTool(molecule)
+						.addCalculated3DCoordinatesForHydrogens(control);
+			}
+		} else {
+			addCalculated3DCoordinatesForExistingHydrogens();
+		}
+	}
+     
+     /** assume all hydrogens are on atoms
+      * 
+      */
+    private void addCalculated3DCoordinatesForExistingHydrogens() {
+    	moleculeTool.addCalculated3DCoordinatesForExistingHydrogens();
+	}
+   	/**
      * Add calculated coordinates for hydrogen atoms.
      * 
      * We shall add a better selection soon.

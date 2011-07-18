@@ -818,7 +818,7 @@ public class AtomTool extends AbstractSVGTool {
 	 *         empty atomSet (not null)
 	 * @throws RuntimeException
 	 */
-	public CMLAtomSet calculate3DCoordinatesForLigands(int geometry, double length, double angle) throws RuntimeException {
+	public CMLAtomSet calculate3DCoordinatesForLigands(AtomGeometry geometry, double length, double angle) throws RuntimeException {
 		Point3 thisPoint;
 		// create sets of atoms with and without ligands
 		CMLAtomSet noCoordsLigandsAS = new CMLAtomSet();
@@ -840,8 +840,8 @@ public class AtomTool extends AbstractSVGTool {
 		}
 		int nWithoutCoords = noCoordsLigandsAS.size();
 		int nWithCoords = coordsLigandsAS.size();
-		if (geometry == Molutils.DEFAULT) {
-			geometry = atom.getLigandAtoms().size();
+		if (geometry.equals(AtomGeometry.DEFAULT)) {
+			geometry = AtomGeometry.getGeometry(atom.getLigandAtoms().size());
 		}
 	
 		// too many ligands at present
@@ -859,7 +859,7 @@ public class AtomTool extends AbstractSVGTool {
 		List<CMLAtom> noCoordAtoms = noCoordsLigandsAS.getAtoms();
 		if (nWithCoords == 0) {
 			newPoints = Molutils.calculate3DCoordinates0(thisPoint,
-				geometry, length);
+				geometry.getIntValue(), length);
 		} else if (nWithCoords == 1) {
 			// ligand on A
 			CMLAtom bAtom = (CMLAtom) coordAtoms.get(0);
@@ -874,12 +874,12 @@ public class AtomTool extends AbstractSVGTool {
 			}
 			newPoints = Molutils.calculate3DCoordinates1(thisPoint, bAtom
 					.getXYZ3(), (jAtom != null) ? jAtom.getXYZ3() : null,
-							geometry, length, angle);
+							geometry.getIntValue(), length, angle);
 		} else if (nWithCoords == 2) {
 			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
 			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
 			newPoints = Molutils.calculate3DCoordinates2(thisPoint, bPoint,
-					cPoint, geometry, length, angle);
+					cPoint, geometry.getIntValue(), length, angle);
 		} else if (nWithCoords == 3) {
 			Point3 bPoint = ((CMLAtom) coordAtoms.get(0)).getXYZ3();
 			Point3 cPoint = ((CMLAtom) coordAtoms.get(1)).getXYZ3();
@@ -895,6 +895,11 @@ public class AtomTool extends AbstractSVGTool {
 		return noCoordsLigandsAS;
 	}
 
+	@Deprecated //("use AtomGeometry")
+	public CMLAtomSet calculate3DCoordinatesForLigands(int geometryInt, double length, double angle) {
+		AtomGeometry atomGeometry = AtomGeometry.getGeometry(geometryInt);
+		return calculate3DCoordinatesForLigands(atomGeometry, length, angle);
+	}
 	/**
 	 * gets all atoms downstream of a bond.
 	 * recursively visits all atoms in branch until all leaves have been
@@ -2082,4 +2087,148 @@ public class AtomTool extends AbstractSVGTool {
         }
         return multiplicity;
     }
+
+
+    /** assume atom has correct count of hydrogens
+     * overwrite all existing coordinates
+     */
+	public void addCalculated3DCoordinatesForExistingHydrogens() {
+		Double length = 1.6; // default for unusual atoms
+		if (ChemicalElement.AS.C.equals(atom.getElementType())) {
+			length = 1.08;
+		} else if (ChemicalElement.AS.N.equals(atom.getElementType())) {
+			length = 1.03;
+		} else if (ChemicalElement.AS.O.equals(atom.getElementType())) {
+			length = 0.96;
+		}
+		if (length != null) {
+			this.addCalculated3DCoordinatesForExistingHydrogens(length);
+		}
+	}
+
+	private final static double TWOPI3  = Math.PI*2.0/3.0;
+	private final static double COS2PI3 = Math.cos(TWOPI3);
+	private final static double SIN2PI3 = Math.sin(TWOPI3);
+	private final static double ROOT3   = Math.sqrt(3.0);
+	private final static double TETANG  = 2*Math.atan(Math.sqrt(2.0));
+	private final static double TETANG0  = Math.PI - TETANG;
+	private final static double TWOPI30  = Math.PI-TWOPI3;
+
+    /** assume atom has correct count of hydrogens
+     * overwrite all existing coordinates
+     */
+	public void addCalculated3DCoordinatesForExistingHydrogens(double length) {
+		List<CMLAtom> nonHydrogenLigandList = this.getNonHydrogenLigandList();
+		List<CMLAtom> hydrogenLigandList = this.getHydrogenLigandList();
+		int nonhCount = nonHydrogenLigandList.size();
+		int hCount = hydrogenLigandList.size();
+		int coordNumber = nonhCount + hCount;
+		List<Vector3> vector3List = new ArrayList<Vector3>();
+		if (nonhCount == 0) {
+			vector3List = addCoords0(nonHydrogenLigandList, hydrogenLigandList, length);
+		} else if (nonhCount == 1) {
+			addCoords1(nonHydrogenLigandList, hydrogenLigandList, length);
+		} else if (nonhCount == 2) {
+			addCoords2(nonHydrogenLigandList, hydrogenLigandList, length);
+		} else if (nonhCount == 3) {
+			addCoords3(nonHydrogenLigandList, hydrogenLigandList, length);
+		} else {
+			// cannot add hydrogens
+		}
+		addCoords(vector3List, hydrogenLigandList);
+	}
+
+	private List<Vector3> addCoords0(List<CMLAtom> nonHydrogenLigandList,
+			List<CMLAtom> hydrogenLigandList, double length) {
+		List<Vector3> vector3List = new ArrayList<Vector3>();
+		Vector3 vector0 = new Vector3(0.0, 0.0, length);
+		if (hydrogenLigandList.size() == 0) {
+			// nothing to add
+		} else if (hydrogenLigandList.size() == 1) {
+			vector3List.add(vector0);
+		} else if (hydrogenLigandList.size() == 2) {
+			vector3List.add(vector0);
+			vector3List.add(new Vector3(0.0, 0.0, -length));
+		} else if (hydrogenLigandList.size() == 3) {
+			vector3List.add(vector0);
+			vector3List.add(new Vector3(0.0, length*COS2PI3, -length*SIN2PI3));
+			vector3List.add(new Vector3(0.0, length*COS2PI3, length*SIN2PI3));
+		} else if (hydrogenLigandList.size() == 4) {
+			vector3List.add(new Vector3(length/ROOT3, length/ROOT3, length/ROOT3));
+			vector3List.add(new Vector3(-length/ROOT3, length/ROOT3, -length/ROOT3));
+			vector3List.add(new Vector3(length/ROOT3, -length/ROOT3, -length/ROOT3));
+			vector3List.add(new Vector3(-length/ROOT3, -length/ROOT3, length/ROOT3));
+		}
+		return vector3List;
+	}
+	
+	private List<Vector3> addCoords1(List<CMLAtom> nonHydrogenLigandList,
+			List<CMLAtom> hydrogenLigandList, double length) {
+		List<Vector3> vector3List = new ArrayList<Vector3>();
+		CMLAtomSet atomSet = null;
+		if (hydrogenLigandList.size() == 0) {
+			// nothing to add
+		} else if (hydrogenLigandList.size() == 1) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.LINEAR, length,  TWOPI30);
+		} else if (hydrogenLigandList.size() == 2) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TRIGONAL, length, TWOPI30);
+		} else if (hydrogenLigandList.size() == 3) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TETRAHEDRAL, length, TETANG0);
+		}
+		if (atomSet != null) {
+			vector3List = getVectorList(atomSet);
+		}
+		return vector3List;
+	}
+	
+	private List<Vector3> addCoords2(List<CMLAtom> nonHydrogenLigandList,
+			List<CMLAtom> hydrogenLigandList, double length) {
+		CMLAtomSet atomSet = null;
+		List<Vector3> vector3List = new ArrayList<Vector3>();
+		if (hydrogenLigandList.size() == 0) {
+			// nothing to add
+		} else if (hydrogenLigandList.size() == 1) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TRIGONAL, length, TWOPI3);
+		} else if (hydrogenLigandList.size() == 2) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TETRAHEDRAL, length, 2*TETANG);
+		}
+		if (atomSet != null) {
+			vector3List = getVectorList(atomSet);
+		}
+		return vector3List;
+	}
+	
+	private List<Vector3> addCoords3(List<CMLAtom> nonHydrogenLigandList,
+			List<CMLAtom> hydrogenLigandList, double length) {
+		List<Vector3> vector3List = new ArrayList<Vector3>();
+		CMLAtomSet atomSet = null;
+		if (hydrogenLigandList.size() == 0) {
+			// nothing to add
+		} else if (hydrogenLigandList.size() == 1) {
+			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TETRAHEDRAL, length, TETANG0);
+		}
+		if (atomSet != null) {
+			vector3List = getVectorList(atomSet);
+		}
+		return vector3List;
+	}
+	
+	private List<Vector3> getVectorList(CMLAtomSet atomSet) {
+		List<Vector3> vectorList = new ArrayList<Vector3>();
+		for (CMLAtom atom1 : atomSet.getAtoms()) {
+			Point3 xyz31 = atom1.getXYZ3();
+			Vector3 vector3 = xyz31.subtract(this.atom.getXYZ3());
+			vectorList.add(vector3);
+		}
+		return vectorList;
+	}
+
+	private void addCoords(List<Vector3> vector3List, List<CMLAtom> hydrogenLigandList) {
+		Point3 atomxyz3 = atom.getXYZ3();
+		for (int i = 0; i < vector3List.size(); i++) {
+			Point3 xyz3 = atomxyz3.plus(vector3List.get(i));
+			hydrogenLigandList.get(i).setXYZ3(xyz3);
+		}
+	}
+
 }
