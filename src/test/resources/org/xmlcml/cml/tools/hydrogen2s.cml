@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<molecule xmlns='http://www.xml-cml.org/schema'>
+  <atomArray>
+    <atom id='a1' elementType='C' x3='0.0' y3='0.0' z3='0.0'/>
+    <atom id='a2' elementType='C' x3='1.0' y3='1.0' z3='0.0'/>
+    <atom id='a3' elementType='C' x3='1.0' y3='-1.0' z3='0.0'/>
+  </atomArray>
+  <bondArray>
+    <bond atomRefs2="a1 a2" order="S"/>
+    <bond atomRefs2="a1 a3" order="S"/>
+  </bondArray>
+</molecule>
+
+
+
