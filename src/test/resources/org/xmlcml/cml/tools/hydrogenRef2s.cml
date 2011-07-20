@@ -1,8 +1,8 @@
 <molecule xmlns="http://www.xml-cml.org/schema">
   <atomArray>
-    <atom id="a1" elementType="C" x3="0.0" y3="0.0" z3="0.0" hydrogenCount="2"/>
-    <atom id="a2" elementType="C" x3="1.0" y3="1.0" z3="0.0" hydrogenCount="3"/>
-    <atom id="a3" elementType="C" x3="1.0" y3="-1.0" z3="0.0" hydrogenCount="3"/>
+    <atom id="a1" elementType="C" x3="0.0" y3="0.0" z3="0.0"/>
+    <atom id="a2" elementType="C" x3="1.0" y3="1.0" z3="0.0"/>
+    <atom id="a3" elementType="C" x3="1.0" y3="-1.0" z3="0.0"/>
     <atom id="a1_h1" elementType="H" x3="-0.36000000000000004" y3="0.0" z3="-1.0182337649086286"/>
     <atom id="a1_h2" elementType="H" x3="-0.36000000000000004" y3="0.0" z3="1.0182337649086286"/>
     <atom id="a2_h1" elementType="H" x3="1.9745584412271575" y3="0.5345584412271571" z3="0.0"/>

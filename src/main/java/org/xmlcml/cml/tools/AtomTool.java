@@ -44,6 +44,7 @@ import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -72,6 +73,7 @@ public class AtomTool extends AbstractSVGTool {
 	public final double fontWidthFontSizeFactor = 0.8;
 	
 	private static final Transform2 ROT90 = new Transform2(new Angle(Math.PI/2.));
+	private static double DTORAD = Math.PI / 180.;
 	
     private CMLAtom atom;
     private CMLMolecule molecule;
@@ -82,9 +84,6 @@ public class AtomTool extends AbstractSVGTool {
     private CMLAtomSet coordinationSphereSet;
 
     private double fontSize;
-//	private String fontFamily;
-//	private String fontStyle;
-//	private String fontWeight;
 	private double radiusFactor = 1.0; 
 
 	/**
@@ -2106,6 +2105,14 @@ public class AtomTool extends AbstractSVGTool {
 		}
 		if (length != null) {
 			this.addCalculated3DCoordinatesForExistingHydrogens(length);
+			this.removeHydrogenCountAttribute();
+		}
+	}
+
+	public void removeHydrogenCountAttribute() {
+		Attribute att = atom.getAttribute("hydrogenCount");
+		if (att != null) {
+			att.detach();
 		}
 	}
 
@@ -2145,13 +2152,18 @@ public class AtomTool extends AbstractSVGTool {
 			List<CMLAtom> hydrogenLigandList, double length) {
 		List<Vector3> vector3List = new ArrayList<Vector3>();
 		Vector3 vector0 = new Vector3(0.0, 0.0, length);
+		String elementType = atom.getElementType();
 		if (hydrogenLigandList.size() == 0) {
 			// nothing to add
 		} else if (hydrogenLigandList.size() == 1) {
 			vector3List.add(vector0);
 		} else if (hydrogenLigandList.size() == 2) {
 			vector3List.add(vector0);
-			vector3List.add(new Vector3(0.0, 0.0, -length));
+			double angle = Math.PI;
+			if (ChemicalElement.AS.O.equals(elementType)) {
+				angle = 104 * DTORAD;
+			}
+			vector3List.add(new Vector3(0.0, length * Math.sin(angle), length * Math.cos(angle)));
 		} else if (hydrogenLigandList.size() == 3) {
 			vector3List.add(vector0);
 			vector3List.add(new Vector3(0.0, length*COS2PI3, -length*SIN2PI3));
@@ -2168,11 +2180,19 @@ public class AtomTool extends AbstractSVGTool {
 	private List<Vector3> addCoords1(List<CMLAtom> nonHydrogenLigandList,
 			List<CMLAtom> hydrogenLigandList, double length) {
 		List<Vector3> vector3List = new ArrayList<Vector3>();
+		String elementType = atom.getElementType();
 		CMLAtomSet atomSet = null;
 		if (hydrogenLigandList.size() == 0) {
 			// nothing to add
 		} else if (hydrogenLigandList.size() == 1) {
-			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.LINEAR, length,  TWOPI30);
+			AtomGeometry atomGeometry = AtomGeometry.LINEAR;
+			if (ChemicalElement.AS.O.equals(elementType)) {
+				atomGeometry = AtomGeometry.TETRAHEDRAL;
+			}
+			if (ChemicalElement.AS.N.equals(elementType)) {
+				atomGeometry = AtomGeometry.TETRAHEDRAL;
+			}
+			atomSet = this.calculate3DCoordinatesForLigands(atomGeometry, length,  TWOPI30);
 		} else if (hydrogenLigandList.size() == 2) {
 			atomSet = this.calculate3DCoordinatesForLigands(AtomGeometry.TRIGONAL, length, TWOPI30);
 		} else if (hydrogenLigandList.size() == 3) {
