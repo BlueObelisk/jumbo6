@@ -956,9 +956,9 @@ public class ConnectionTableTool extends AbstractTool {
 				List<GroupTool> groupToolList = bondTool.getGroupToolList();
 				for (GroupTool groupTool : groupToolList) {
 					CMLBond bond = groupTool.getRootBond();
-					System.out.print("...."+groupTool.getName()+" "+
-						bond.getAtomRefs2Attribute().getValue()+" ~~ "+
-						groupTool.getRootAtom().getId());
+//					System.out.print("...."+groupTool.getName()+" "+
+//						bond.getAtomRefs2Attribute().getValue()+" ~~ "+
+//						groupTool.getRootAtom().getId());
 				}
 			}
 			System.out.println();
