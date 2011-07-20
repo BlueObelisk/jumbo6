@@ -851,5 +851,21 @@ public class MoreMoleculeToolTest {
 		Element moleculeRef = CMLUtil.readElementFromResource(fileout); 
 		JumboTestUtils.assertEqualsIncludingFloat("atom 1", moleculeRef, molecule, true, 0.00001);
 	}
+	
+	@Test
+	public void testRemoveHydrogenCountAttributes() {
+		removeHydrogenCountAttributes(
+				"org/xmlcml/cml/tools/hAttribute1Test.cml", "org/xmlcml/cml/tools/hAttribute1RefTest.cml");
+		
+	}
+	
+	private void removeHydrogenCountAttributes(String filein, String fileout) {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.readElementFromResource(filein);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		moleculeTool.removeHydrogenCountAttributes();
+		Element moleculeRef = CMLUtil.readElementFromResource(fileout); 
+		JumboTestUtils.assertEqualsIncludingFloat("remove hcount att", moleculeRef, molecule, true, 0.00001);
+	}
+	
 
 }
