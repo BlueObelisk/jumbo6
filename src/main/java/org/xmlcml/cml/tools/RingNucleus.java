@@ -337,7 +337,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		getSetOfSmallestRings(true);
 		this.getJunctions();
 		if (ringList.size() == 0) {
-			LOG.error("ring nucleus has no rings");
+			LOG.trace("ring nucleus has no rings");
 		} else {
 			// get largest ring
 			Collections.sort(ringList);
@@ -450,7 +450,7 @@ public class RingNucleus extends AbstractTool implements Comparable<RingNucleus>
 		Sprout tailSprout = getSprout(ringToBeAdded, tailAtom);
 		Sprout leadSprout = getSprout(ringToBeAdded, leadAtom);
 		if (tailSprout == null || leadSprout == null) {
-			LOG.error("Null sprout");
+			LOG.trace("Null sprout");
 //			throw new RuntimeException("Null sprout - cannot draw");
 		} else {
 			//resultant sprout from old ring
