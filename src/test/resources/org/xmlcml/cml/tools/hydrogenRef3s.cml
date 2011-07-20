@@ -1,9 +1,9 @@
 <molecule xmlns="http://www.xml-cml.org/schema">
   <atomArray>
-    <atom id="a1" elementType="C" x3="0.342896" y3="0.362128" z3="0.42294" hydrogenCount="1"/>
-    <atom id="a2" elementType="C" x3="1.375678" y3="0.853716" z3="-0.5893" hydrogenCount="3"/>
-    <atom id="a3" elementType="C" x3="-0.543911" y3="1.515651" z3="0.887329" hydrogenCount="3"/>
-    <atom id="a4" elementType="C" x3="1.033153" y3="-0.298073" z3="1.614803" hydrogenCount="3"/>
+    <atom id="a1" elementType="C" x3="0.342896" y3="0.362128" z3="0.42294"/>
+    <atom id="a2" elementType="C" x3="1.375678" y3="0.853716" z3="-0.5893"/>
+    <atom id="a3" elementType="C" x3="-0.543911" y3="1.515651" z3="0.887329"/>
+    <atom id="a4" elementType="C" x3="1.033153" y3="-0.298073" z3="1.614803"/>
     <atom id="a1_h1" elementType="H" x3="-0.2826986411269028" y3="-0.37469433876758806" z3="-0.05885267956908963"/>
     <atom id="a2_h1" elementType="H" x3="2.029669616517262" y3="0.03838726980452112" z3="-0.8612081227969605"/>
     <atom id="a2_h2" elementType="H" x3="1.9575509210513071" y3="1.6513027562845688" z3="-0.15148808839105465"/>
