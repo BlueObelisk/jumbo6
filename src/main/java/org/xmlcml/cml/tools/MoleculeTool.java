@@ -4400,6 +4400,11 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
+	public void addCalculated2DCoordinatesForExistingHydrogens() {
+		GeometryTool geometryTool = new GeometryTool(molecule);
+		geometryTool.addCalculated2DCoordinatesForHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);		
+	}
+
 }
 
 class BoundingRect {
