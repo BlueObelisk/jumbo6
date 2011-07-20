@@ -120,10 +120,8 @@ public class SVGElement extends GraphicsElement {
 		} else if (tag.equals(SVGTitle.TAG)) {
 			newElement = new SVGTitle();
 		} else {
-//			LOG.warn("unknown element "+tag);
 			newElement = new SVGG();
 			newElement.setClassName(tag);
-//			newElement.addAttribute(new Attribute("class", tag));
 		}
 		if (newElement != null) {
 	        newElement.copyAttributesFrom(element);

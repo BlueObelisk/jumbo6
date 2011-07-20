@@ -95,7 +95,7 @@ public class SVGTextTest {
 		SVGText text = (SVGText) SVGElement.createSVG(element);
 		text.applyTransformAttributeAndRemove();
 		Real2Range bb = text.getBoundingBox();
-		System.out.println(bb);
+		LOG.trace(bb);
 		Real2Range bbexpect = new Real2Range(new Real2(3.0, 335.28), new Real2(3.0, 335.28));
 		Assert.assertNotNull(bb);
 //		Assert.assertTrue("bb", bbexpect.isEqualTo(bb, 0.01));
@@ -149,15 +149,15 @@ public class SVGTextTest {
 		for (int i = 0; i < elementList.size(); i++) {
 			SVGText text = (SVGText) elementList.get(i);
 			lengths[i] = text.getEstimatedHorizontalLength(fontWidthFactor);
-//			System.out.println("        "+Util.format(lengths[i], 1)+",");
+//			LOG.trace("        "+Util.format(lengths[i], 1)+",");
 		}
 //		for (int i = 1; i < elementList.size(); i++) {
 //			SVGText text0 = (SVGText) elementList.get(i-1);
 //			SVGText text = (SVGText) elementList.get(i);
-////			System.out.println("-----------------------");
+////			LOG.trace("-----------------------");
 //			length[i-1] = text0.getEstimatedHorizontalLength(fontWidthFactor);
 //			double dist = text.getX()-text0.getX();
-////			System.out.println(""+Util.format(text0.getY(), 2) +" "+Util.format(text.getY(), 2)+"["+text0.getValue()+"] "+Util.format(dist, 1)+" "+length[i-1]+" "+dist/length[i-1]);
+////			LOG.trace(""+Util.format(text0.getY(), 2) +" "+Util.format(text.getY(), 2)+"["+text0.getValue()+"] "+Util.format(dist, 1)+" "+length[i-1]+" "+dist/length[i-1]);
 //		}
 		
 		double[] expectedLength = new double[]{

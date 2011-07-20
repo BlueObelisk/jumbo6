@@ -39,12 +39,12 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.attribute.UnitsAttribute;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLElement;
-import org.xmlcml.cml.base.CMLElements;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
+import org.xmlcml.cml.base.CMLElements;
 import org.xmlcml.cml.base.CMLLog.Severity;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
@@ -61,16 +61,16 @@ import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
+import org.xmlcml.cml.element.CMLMap.Direction;
 import org.xmlcml.cml.element.CMLMatrix;
 import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLName;
 import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.element.CMLMap.Direction;
-import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.graphics.CMLDrawable;
 import org.xmlcml.cml.graphics.GraphicsElement;
 import org.xmlcml.cml.graphics.SVGElement;
@@ -88,6 +88,7 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Real3Range;
+import org.xmlcml.euclid.RealArray;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.RealSquareMatrix;
 import org.xmlcml.euclid.Transform2;
@@ -96,9 +97,9 @@ import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement;
-import org.xmlcml.molutil.Molutils;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.ChemicalElement.Type;
+import org.xmlcml.molutil.Molutils;
 
 /**
  * additional tools for molecule. not fully developed
@@ -4403,6 +4404,86 @@ public class MoleculeTool extends AbstractSVGTool {
 	public void addCalculated2DCoordinatesForExistingHydrogens() {
 		GeometryTool geometryTool = new GeometryTool(molecule);
 		geometryTool.addCalculated2DCoordinatesForHydrogens(HydrogenControl.USE_EXPLICIT_HYDROGENS);		
+	}
+
+	/** 
+	 * iterates over neighbours of each atom and adds the properties discovered through the
+	 * xpath on each atom.
+	 * for each atom 
+	 *  property = property + sumOverLigands(property) * damping
+	 *  
+	 *  if npasses is 0 the raw properties are returned
+	 *  if npasses is >0 the neighbours are summed for npasses 
+	 *  
+	 *  if an atom has no property this defaults to zero
+	 *  
+	 * @param npasses number of iterations of convolution
+	 * @param propertyXPath xpath to discover property
+	 * @param damping
+	 * @return array of doubles aligned with atoms (null if values not found or not doubles
+	 */
+	public RealArray convolutePropertyWithNeighbours(
+			int npasses, String propertyXPath, double damping) {
+		RealArray realArray = null;
+		if (npasses >= 0) {
+			realArray = collectProperties(propertyXPath);
+		}
+		if (realArray != null) {
+			for (int i = 0; i < npasses; i++) {
+				realArray = convoluteArray(realArray, damping);
+			}
+		}
+		return realArray;
+	}
+
+	private RealArray convoluteArray(RealArray realArray, double damping) {
+		RealArray newArray = new RealArray(molecule.getAtomCount());
+		List<CMLAtom> atoms = molecule.getAtoms();
+		for (int i = 0; i < atoms.size(); i++) {
+			double property = realArray.get(i);
+			CMLAtom atom = atoms.get(i);
+			List<CMLAtom> ligands = atom.getLigandAtoms();
+			for (CMLAtom ligand : ligands) {
+				int serial = getSerial(atoms, ligand);
+				double ligandProperty = realArray.get(serial);
+				property += ligandProperty * damping;
+			}
+			newArray.setElementAt(i, property);
+		}
+		return newArray;
+	}
+
+	private int getSerial(List<CMLAtom> atoms, CMLAtom ligand) {
+		for (int i = 0; i < atoms.size(); i++) {
+			if (ligand.equals(atoms.get(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private RealArray collectProperties(String propertyXPath) {
+		List<CMLAtom> atoms = molecule.getAtoms();
+		RealArray realArray = new RealArray(atoms.size());
+		for (int i = 0; i < atoms.size(); i++) {
+			CMLAtom atom = molecule.getAtom(i);
+			double property = getProperty(atom, propertyXPath);
+			realArray.setElementAt(i, property);
+		}
+		return realArray;
+	}
+
+	private double getProperty(CMLAtom atom, String xpath) {
+		Double d = 0.0;
+		Nodes nodes = atom.query(xpath, CML_XPATH);
+		if (nodes.size() == 1) {
+			try {
+				d = new Double(nodes.get(0).getValue());
+			} catch (Exception e) {
+				// not a double
+			}
+		}
+		return d;
 	}
 
 }

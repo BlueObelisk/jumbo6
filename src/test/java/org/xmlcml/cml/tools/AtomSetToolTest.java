@@ -405,9 +405,9 @@ public class AtomSetToolTest {
 		AtomMatchObject atomMatchObject = new AtomMatchObject();
 		Map<String, CMLAtomSet> map = 
 			AtomSetTool.getOrCreateTool(atomSet).createAtomSetByAtomTreeStringAtomTreeLabelling(atomMatchObject);
-		System.out.println(".........");
+		LOG.trace(".........");
 		for (String s : map.keySet()) {
-			System.out.println(s+".."+map.get(s).getValue());
+			LOG.trace(s+".."+map.get(s).getValue());
 		}
 		Assert.assertNotNull("atom tree map not null", map);
 		Assert.assertEquals("atom tree map size", 4, map.size());

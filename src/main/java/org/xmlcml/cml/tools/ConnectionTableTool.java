@@ -80,7 +80,7 @@ public class ConnectionTableTool extends AbstractTool {
 			}
 		} else {
 			if (molecule.getAtomCount() == 0) {
-				LOG.warn("no atoms to split");
+				LOG.trace("no atoms to split");
 				return;
 			}
 			List<Set<CMLAtom>> atomSetList = new ArrayList<Set<CMLAtom>>();
@@ -956,12 +956,8 @@ public class ConnectionTableTool extends AbstractTool {
 				List<GroupTool> groupToolList = bondTool.getGroupToolList();
 				for (GroupTool groupTool : groupToolList) {
 					CMLBond bond = groupTool.getRootBond();
-//					System.out.print("...."+groupTool.getName()+" "+
-//						bond.getAtomRefs2Attribute().getValue()+" ~~ "+
-//						groupTool.getRootAtom().getId());
 				}
 			}
-			System.out.println();
 		}
 	}
 	

@@ -240,7 +240,7 @@ public class MorganMD5Test {
 		String morganString1 = "*4*3e96d79b2176b4e17c29c7c6f54423f3*2*ee698e506161ae1bdec66931b1d23e84";
 		String morganString2 = "*2*3e96d79b2176b4e17c29c7c6f54423f3*1*ee698e506161ae1bdec66931b1d23e84";
 		Fraction commonFraction = MorganMD5.getCommonMultiplier(morganString1, morganString2);
-		System.err.println(commonFraction);
+		LOG.trace(commonFraction);
 		Assert.assertTrue("fraction ",new Fraction(2,1).equals(commonFraction));
 	}
 

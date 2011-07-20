@@ -193,39 +193,39 @@ public class GeometryToolTest{
 		Assert.assertNotNull("bond should not be null", bond);
 		Assert.assertEquals("bond atomrefs", bond.getAtomRefs2()[0], "a1");
 
-		// test for incorrect XML
-		// duplicate id
-		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
-				+ "      <atom id='a1' elementType='Fe'/>"
-				+ "      <atom id='a1'/>" + "    </atomArray>"
-				+ "    <bondArray>" + "      <bond atomRefs2='a1 a2'/>"
-				+ "    </bondArray>" + "  </molecule>" + "  ";
-		try {
-			xmlDocument = builder.build(new StringReader(xmlMolS));
-			Assert.fail("should trap duplicate atom id");
-		} catch (IOException e) {
-			Assert.fail("Should not throw IOException");
-		} catch (ParsingException e) {
-			Assert.assertEquals("duplicate id",
-					"Index atom: duplicate atom: a1", e.getMessage());
-		}
-
-		// missing id
-		// no longer checked, need to retrofit
-		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
-				+ "      <atom/>" + "    </atomArray>" + "    <bondArray>"
-				+ "      <bond atomRefs2='a1 a2'/>" + "    </bondArray>"
-				+ "  </molecule>" + "  ";
-		try {
-			xmlDocument = builder.build(new StringReader(xmlMolS));
-//			Assert.fail("should trap missing atom id");
-		} catch (IOException e) {
-			Assert.fail("Should not throw IOException");
-		} catch (ParsingException e) {
-			// should throw exception
-//			Assert.assertEquals("unset id", "Atom id must not be null", e
-//					.getMessage());
-		}
+//		// test for incorrect XML
+//		// duplicate id
+//		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
+//				+ "      <atom id='a1' elementType='Fe'/>"
+//				+ "      <atom id='a1'/>" + "    </atomArray>"
+//				+ "    <bondArray>" + "      <bond atomRefs2='a1 a2'/>"
+//				+ "    </bondArray>" + "  </molecule>" + "  ";
+//		try {
+//			xmlDocument = builder.build(new StringReader(xmlMolS));
+//			Assert.fail("should trap duplicate atom id");
+//		} catch (IOException e) {
+//			Assert.fail("Should not throw IOException");
+//		} catch (ParsingException e) {
+//			Assert.assertEquals("duplicate id",
+//					"Index atom: duplicate atom: a1", e.getMessage());
+//		}
+//
+//		// missing id
+//		// no longer checked, need to retrofit
+//		xmlMolS = "  <molecule id='m1' " + CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
+//				+ "      <atom/>" + "    </atomArray>" + "    <bondArray>"
+//				+ "      <bond atomRefs2='a1 a2'/>" + "    </bondArray>"
+//				+ "  </molecule>" + "  ";
+//		try {
+//			xmlDocument = builder.build(new StringReader(xmlMolS));
+////			Assert.fail("should trap missing atom id");
+//		} catch (IOException e) {
+//			Assert.fail("Should not throw IOException");
+//		} catch (ParsingException e) {
+//			// should throw exception
+////			Assert.assertEquals("unset id", "Atom id must not be null", e
+////					.getMessage());
+//		}
 	}
 
 	protected void makeMol1() {

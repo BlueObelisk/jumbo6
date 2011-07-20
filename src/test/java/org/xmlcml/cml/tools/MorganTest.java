@@ -207,7 +207,7 @@ public class MorganTest {
 
 		List<CMLAtomSet> atomSets = morgan.getAtomSetList();
 		for (CMLAtomSet atomSet : atomSets) {
-			System.out.println(atomSet.toXML()+", ");
+			LOG.trace(atomSet.toXML()+", ");
 		}
 		MorganTest.assertEquals("equivalence classes", new String[][] {
 				new String[] { "a6", "a8" },
@@ -229,7 +229,7 @@ public class MorganTest {
 		Morgan morgan = new Morgan(molecule);
 		List<Long> morganList = morgan.getMorganListIncluding(new String[] {"H", "C"});
 		for (Long l : morganList) {
-			System.out.print(l+", ");
+			LOG.trace(l+", ");
 		}
 		MorganTest.assertEquals("Morgan list", new long[] { 30077824, 31846287, 32170505, 42077324, 70065819, 75425339, 76550307  }, morganList);
 

@@ -733,7 +733,7 @@ private int sLength;
             } else if (s.substring(i).startsWith(S_AT)) {
             	if(Pattern.matches(S_AT +"[A-Z][A-Z]\\d\\S*", s.substring(i))){
             		i=i+4;
-            		LOG.warn("Currently unsupported chiral specification");
+            		LOG.trace("Currently unsupported chiral specification");
             	}
             	else{
 	                atom.setAttribute(CHIRAL, S_AT);

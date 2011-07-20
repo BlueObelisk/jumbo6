@@ -777,7 +777,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-//		System.out.println(form.getFormattedString());
+//		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling6.xml");
 		
@@ -793,7 +793,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling7.xml");
 		
@@ -810,7 +810,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling7a.xml");
 		
@@ -826,7 +826,7 @@ public class SMILESToolTest {
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
-		System.out.println(form.getFormattedString());
+		LOG.trace(form.getFormattedString());
 		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling8.xml");
 		
@@ -1101,7 +1101,6 @@ public class SMILESToolTest {
 		SMILESTool smilesTool1 = new SMILESTool(molecule);
 		String expected = "C1(N([H])[H])=C(C(=C(C(=C1F)[H])[H])[H])[H]";
 		String found = smilesTool1.write();
-		System.err.println(found);
 		Assert.assertEquals("aminofluorobenzene", expected, found);
 	}
 	

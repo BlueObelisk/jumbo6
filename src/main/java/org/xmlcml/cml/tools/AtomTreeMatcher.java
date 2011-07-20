@@ -411,7 +411,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 			if (elementType == null) {
 				elementType = newElementType;
 			} else if (!elementType.equals(newElementType)){
-				LOG.error("atomSets : "+elementType+" != "+newElementType);
+				LOG.trace("atomSets : "+elementType+" != "+newElementType);
 //				throw new RuntimeException("atomSets : "+elementType+" != "+newElementType);
 			}
 		}
@@ -509,7 +509,7 @@ public class AtomTreeMatcher extends AtomMatcher {
 						}
 					}
 					if (toSetValue == null) {
-						LOG.error("**********Cannot find match for "+ligand0.getId());
+						LOG.trace("**********Cannot find match for "+ligand0.getId());
 						targetAtomSetValueSet = null;
 						break;
 					} else {

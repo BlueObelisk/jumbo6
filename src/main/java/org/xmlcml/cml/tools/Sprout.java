@@ -78,7 +78,7 @@ public class Sprout extends AbstractTool {
 		Real2 vv = null;
 		double bondLength = ((MoleculeDisplay)ringNucleus.getMoleculeDraw().getAbstractDisplay()).getBondLength();
 		if (ringAtom.getX2Attribute() == null) {
-			LOG.error("ringAtom has no coordinates; "+ringAtom.getId());
+			LOG.trace("ringAtom has no coordinates; "+ringAtom.getId());
 		} else {
 			if (ringAtomSet == null) {
 				ringAtomSet = new CMLAtomSet();
@@ -95,7 +95,7 @@ public class Sprout extends AbstractTool {
 				}
 			}
 			if (ringAtomSet.size() < 2) {
-				LOG.error("Must have at list 2 ring atoms");
+				LOG.trace("Must have at list 2 ring atoms");
 			} else {
 				// calculate sprout coordinates and then recurse to chain
 				Real2 centroid = ringAtomSet.getCentroid2D();

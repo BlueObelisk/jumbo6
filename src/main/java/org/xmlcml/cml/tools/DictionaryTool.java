@@ -417,6 +417,7 @@ public class DictionaryTool extends AbstractTool {
 		CMLEntry entry = dictionary.getCMLEntry(name);
 		if (entry == null) {
 			LOG.warn("Cannot find entry for: "+name);
+			return null;
 		}
 		EntryTool entryTool = this.createEntryTool(entry);
 		String dataType = entry.getDataType();
@@ -442,7 +443,7 @@ public class DictionaryTool extends AbstractTool {
 			element = entryTool.createVector3(name, value);
 		} else {
 			element = entryTool.createStringScalarOrStringArray(name, value);
-			LOG.warn("dataType not supported, assume string: "+dataType);
+			LOG.trace("dataType not supported, assume string: "+dataType);
 		}
 		return element;
     }
