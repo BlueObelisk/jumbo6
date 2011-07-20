@@ -388,7 +388,10 @@ public class AtomTool extends AbstractSVGTool {
     		throw new RuntimeException("THREED H coords nyi");
     	}
     }
-    
+    /**
+     * 
+     * @param bondLength
+     */
     public void calculateAndAddHydrogenCoordinates(double bondLength) {
     	List<CMLAtom> ligandHydrogenList = atom.getLigandHydrogenAtoms();
     	List<CMLAtom> ligandList = atom.getLigandAtoms();
@@ -398,11 +401,11 @@ public class AtomTool extends AbstractSVGTool {
     			nonHydrogenLigandHydrogenList.add(ligand);
     		}
     	}
-    	int hydrogenCount = atom.getHydrogenCount();
-    	if (hydrogenCount != ligandHydrogenList.size()) {
-    		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
-    		throw new RuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
-    	}
+//    	int hydrogenCount = atom.getHydrogenCount();
+//    	if (hydrogenCount != ligandHydrogenList.size()) {
+//    		atom.debug("HC "+hydrogenCount+" "+ligandHydrogenList.size());
+//    		throw new RuntimeException("inconsistent hydrogen count in add coordinates for atom "+atom.getId());
+//    	}
     	List<Vector2> vectorList = new ArrayList<Vector2>();
     	try {
     		vectorList = addCoords(nonHydrogenLigandHydrogenList, ligandHydrogenList, bondLength);
