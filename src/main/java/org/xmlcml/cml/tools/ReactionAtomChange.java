@@ -22,6 +22,7 @@ import java.util.Map;
 import nu.xom.Element;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.graphics.SVGAnimate;
@@ -31,6 +32,7 @@ import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Real2;
 
 public class ReactionAtomChange extends ReactionChange {
+	private final static Logger LOG = Logger.getLogger(ReactionAtomChange.class);
 	public static final double MINDIST = 1.0;
 	
 	double minDist;
@@ -270,7 +272,7 @@ for PLUS the sign seems to have got lost, else the same
 
 	public void processElectrons() {
 		if (this.hasElectronChange()) {
-			System.err.println(this.reactantAtom.getId()+": atom e "+this.getElectronChange());
+			LOG.trace(this.reactantAtom.getId()+": atom e "+this.getElectronChange());
 		}
 	}
 

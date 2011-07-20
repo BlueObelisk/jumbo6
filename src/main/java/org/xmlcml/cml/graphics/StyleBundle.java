@@ -125,7 +125,7 @@ public class StyleBundle implements CMLConstants {
 					} else if (aa[0].equals("stroke-linecap")) {
 						LOG.trace("Ignored style: "+aa[0]);
 					} else {
-						LOG.warn("unsupported style: "+aa[0]);
+						LOG.trace("unsupported style: "+aa[0]);
 					}
 				}
 			}
@@ -155,7 +155,7 @@ public class StyleBundle implements CMLConstants {
 			opacity = (Double) object; 
 		} else if (subStyle.equals("stroke-linecap")) {
 		} else {
-			LOG.warn("unsupported style: "+subStyle);
+			LOG.trace("unsupported style: "+subStyle);
 		}
 
 	}
@@ -179,7 +179,7 @@ public class StyleBundle implements CMLConstants {
 		} else if (ss.equals("stroke-linecap")) {
 			LOG.debug("ignored style: "+ss);
 		} else {
-			LOG.warn("unknown subStyle: "+ss);
+			LOG.trace("unknown subStyle: "+ss);
 		}
 		return subStyle;
 	}

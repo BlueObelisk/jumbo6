@@ -266,7 +266,7 @@ public class ReactionToolTest {
 					+CMLConstants.U_S + "reaction1.xml");
 			doc = new CMLBuilder().build(in);
 		} catch (Throwable e) {
-			System.err.println("SKIPPED" + e);
+			LOG.trace("SKIPPED" + e);
 		}
 		Assert.assertNotNull("reaction not null", doc);
 		// molecules are listed in a moleculeList and accessed by molecule@ref

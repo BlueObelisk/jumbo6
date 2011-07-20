@@ -19,6 +19,7 @@ package org.xmlcml.cml.tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
@@ -28,6 +29,8 @@ import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.cml.graphics.SVGLine;
 
 public class ReactionBondChange extends ReactionChange {
+	
+	private final static Logger LOG = Logger.getLogger(ReactionBondChange.class);
 	
 	CMLBond reactantBond = null;
 	CMLBond productBond  = null;
@@ -222,7 +225,7 @@ public class ReactionBondChange extends ReactionChange {
 	public void processElectrons() {
 //		System.err.println("BB "+this.reactantBond.getId());
 		if (this.hasElectronChange()) {
-			System.err.println(this.reactantBond.getId()+": ...bond e "+this.getElectronChange());
+			LOG.trace(this.reactantBond.getId()+": ...bond e "+this.getElectronChange());
 		}
 	}
 

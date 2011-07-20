@@ -1295,20 +1295,6 @@ public class ReactionTool extends AbstractSVGTool {
 		return product;
 	}
 
-//	private List<List<Long>> extractMorgans(List<CMLMolecule> molecules) {
-//		List<List<Long>> morgans = new ArrayList<List<Long>>();
-//		for (CMLMolecule molecule : molecules) {
-//			Morgan morgan = new Morgan(MoleculeTool.getOrCreateTool(molecule).getAtomSet());
-//			List<Long> morganLongs = morgan.getMorganList();
-//			List<CMLAtomSet> atomSets = morgan.getAtomSetList();
-//			for (int i = 0; i < morganLongs.size(); i++) {
-//				System.out.println(" "+morganLongs.get(i)+" .. "+atomSets.get(i).getValue());
-//			}
-//			System.out.println();
-//		}
-//		return morgans;
-//	}
-
 	/** 
 	 * if reaction has a single reactant and single product uses
 	 * AtomMatcher.mapMolecules to get atom2atom match

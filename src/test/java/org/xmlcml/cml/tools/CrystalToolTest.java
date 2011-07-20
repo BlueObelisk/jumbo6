@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 import nu.xom.Element;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -56,6 +57,7 @@ import org.xmlcml.molutil.ChemicalElement.Type;
  * 
  */
 public class CrystalToolTest {
+	private final static Logger LOG = Logger.getLogger(CrystalToolTest.class);
 
 	/** */
 	public final static String CIF_EXAMPLES = CMLAssert.TOOLS_EXAMPLES +CMLConstants.U_S + "cif";
@@ -306,7 +308,7 @@ public class CrystalToolTest {
 									+ "_clust", 0, 0, ++clust), sproutCluster,
 									"nucleus");
 						} else {
-							System.err.println("No atoms in cluster!" + cifname
+							LOG.trace("No atoms in cluster!" + cifname
 									+ CMLConstants.S_UNDER + (clust - 1));
 						}
 					}
@@ -462,10 +464,10 @@ public class CrystalToolTest {
 	 * 
 	 * //client.setParams(hcp); int statusCode = client.executeMethod(filePost);
 	 * if (statusCode != HttpStatus.SC_OK) {
-	 * System.err.println("Could not connect to the IUCr Checkcif service."); }
+	 * LOG.trace("Could not connect to the IUCr Checkcif service."); }
 	 * InputStream in = filePost.getResponseBodyAsStream(); checkcif =
 	 * IOUtils.stream2String(in); } catch (IOException e) {
-	 * System.err.println("Error calculating checkcif."); } finally { if
+	 * LOG.trace("Error calculating checkcif."); } finally { if
 	 * (filePost != null) filePost.releaseConnection(); } return checkcif; }
 	 */
 

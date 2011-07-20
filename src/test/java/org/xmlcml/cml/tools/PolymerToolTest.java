@@ -82,7 +82,7 @@ public class PolymerToolTest {
       testExample("poly0");
       --*/
       //----
-        System.err.println("NOT YET WORKING - PMR");
+        LOG.trace("NOT YET WORKING - PMR");
 //        testExample("new1"); // fails
 //        testExample("new2");   // works
 //        testExample("new3a");

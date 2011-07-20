@@ -29,20 +29,21 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.base.CMLConstants;
-import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.base.CMLElement.CoordinateType;
+import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
 import org.xmlcml.cml.testutil.JumboTestUtils;
-import org.xmlcml.molutil.Molutils;
+import org.xmlcml.euclid.RealArray;
 import org.xmlcml.molutil.ChemicalElement.AS;
+import org.xmlcml.molutil.Molutils;
 
 public class MoreMoleculeToolTest {
 
@@ -867,5 +868,47 @@ public class MoreMoleculeToolTest {
 		JumboTestUtils.assertEqualsIncludingFloat("remove hcount att", moleculeRef, molecule, true, 0.00001);
 	}
 	
-
+	@Test
+	public void testConvolutePropertyWithNeighbours0() {
+		RealArray refArray = new RealArray(new double[]{1., 2., 3., 4., 5.});
+		convolutePropertyWithNeighbours(
+				"org/xmlcml/cml/tools/propertyMol.cml", 0, ".//cml:scalar", 1.0, refArray);
+	}
+	
+	@Test
+	public void testConvolutePropertyWithNeighbours1() {
+		RealArray refArray = new RealArray(new double[]{10.0,8.0,4.0,5.0,7.0});
+		convolutePropertyWithNeighbours(
+				"org/xmlcml/cml/tools/propertyMol.cml", 1, ".//cml:scalar", 1.0, refArray);
+	}
+	
+	@Test
+	public void testConvolutePropertyWithNeighbours1d() {
+		RealArray refArray = new RealArray(new double[]{1.9,2.6,3.1,4.1,5.2});
+		convolutePropertyWithNeighbours(
+				"org/xmlcml/cml/tools/propertyMol.cml", 1, ".//cml:scalar", 0.1, refArray);
+	}
+	
+	@Test
+	public void testConvolutePropertyWithNeighbours2() {
+		RealArray refArray = new RealArray(new double[]{27.0,25.0,14.0,15.0,15.0});
+		convolutePropertyWithNeighbours(
+				"org/xmlcml/cml/tools/propertyMol.cml", 2, ".//cml:scalar", 1.0, refArray);
+	}
+	
+	@Test
+	public void testConvolutePropertyWithNeighbours2d() {
+		RealArray refArray = new RealArray(new double[]{1.1808,2.1210999999999993,3.0208999999999997,4.0209,5.0405999999999995});
+		convolutePropertyWithNeighbours(
+				"org/xmlcml/cml/tools/propertyMol.cml", 2, ".//cml:scalar", 0.01, refArray);
+	}
+	
+	private void convolutePropertyWithNeighbours(
+			String filein, int npasses, String xpath, double damping, RealArray refArray ) {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.readElementFromResource(filein);
+		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
+		RealArray testArray = moleculeTool.convolutePropertyWithNeighbours(npasses, xpath, damping);
+		JumboTestUtils.assertEquals("convolute", refArray, testArray, 0.00001);
+	}
+	
 }

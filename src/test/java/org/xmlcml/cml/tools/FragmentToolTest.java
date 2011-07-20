@@ -371,10 +371,10 @@ public class FragmentToolTest {
 			try {
 				element = readElement(fileRoot);
 			} catch (FileNotFoundException e) {
-				System.err.println("FNF... " + e);
+				LOG.trace("FNF... " + e);
 			} catch (Exception e) {
 				// e.printStackTrace();
-				System.err.println("EXC " + e + " (fileRoot: " + fileRoot + ")");
+				LOG.trace("EXC " + e + " (fileRoot: " + fileRoot + ")");
 			}
 		}
 		return element;
@@ -407,7 +407,7 @@ public class FragmentToolTest {
 		try {
 			fragment = (CMLFragment) readElement(basicRootName);
 		} catch (Exception e) {
-			System.err.println("EXCEPTION " + e);
+			LOG.trace("EXCEPTION " + e);
 		}
 		try {
 			intermediate = readElement0(intermediateRootName);
