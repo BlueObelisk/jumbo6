@@ -4389,6 +4389,17 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 	}
 
+	/**
+	 * remove all hydrogenCount attributes on atoms
+	 * 
+	 */
+	public void removeHydrogenCountAttributes() {
+		Nodes hCountAttributes = molecule.query("//cml:atom/@hydrogenCount", CML_XPATH);
+		for (int i = 0; i < hCountAttributes.size(); i++) {
+			hCountAttributes.get(i).detach();
+		}
+	}
+
 }
 
 class BoundingRect {
