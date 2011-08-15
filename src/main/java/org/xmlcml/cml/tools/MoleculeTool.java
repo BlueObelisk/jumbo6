@@ -49,6 +49,7 @@ import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLAngle;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomArray;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondArray;
@@ -4484,6 +4485,23 @@ public class MoleculeTool extends AbstractSVGTool {
 			}
 		}
 		return d;
+	}
+
+	public void addBondStereo(CoordinateType coordinateType) {
+		List<CMLBond> bondList = molecule.getBonds();
+		for (CMLBond bond : bondList) {
+			BondTool bondTool = BondTool.getOrCreateTool(bond);
+			CMLBondStereo bondStereo = bondTool.calculateBondStereo(coordinateType);
+		}
+	}
+
+	public void addAtomParity(CoordinateType coordinateType) {
+		List<CMLAtom> atomList = molecule.getAtoms();
+		for (CMLAtom atom : atomList) {
+			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
+			CMLAtomParity atomParity = atomTool.calculateAtomParity(coordinateType);
+			atom.addAtomParity(atomParity);
+		}
 	}
 
 }

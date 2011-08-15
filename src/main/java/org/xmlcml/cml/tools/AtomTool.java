@@ -33,6 +33,7 @@ import org.xmlcml.cml.base.CMLElement.CoordinateType;
 import org.xmlcml.cml.base.CMLElement.FormalChargeControl;
 import org.xmlcml.cml.base.CMLElement.Hybridization;
 import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLLabel;
@@ -2252,6 +2253,10 @@ public class AtomTool extends AbstractSVGTool {
 			Point3 xyz3 = atomxyz3.plus(vector3List.get(i));
 			hydrogenLigandList.get(i).setXYZ3(xyz3);
 		}
+	}
+
+	public CMLAtomParity calculateAtomParity(CoordinateType coordinateType) {
+		throw new RuntimeException("atom parity NYI");
 	}
 
 }
