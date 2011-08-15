@@ -620,4 +620,10 @@ public class BondTool extends AbstractSVGTool {
 		return (int) (2 * this.getNumericOrder()+0.01);
 	}
 
+	@Deprecated // NYI
+	public CMLBondStereo calculateBondStereo(CoordinateType coordinateType) {
+		CMLBondStereo bondStereo = null;
+		return bondStereo;
+	}
+
 }
