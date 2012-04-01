@@ -339,6 +339,23 @@ public class BondTool extends AbstractSVGTool {
 			moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		}
 	}
+
+	/** expand @atomRefs2 attribute into explict <atom@ref/> elements as children
+	 * e.g. <bond atomRefs2="a1 a2"/>
+	 * expands to
+	 * <bond atomRefs2="a1 a2">
+	 *   <atom ref="a1"/> 
+	 *   <atom ref="a2"/>
+	 * </bond> 
+	 */
+	public void expandAtomRefs2() {
+		List<CMLAtom> atoms = bond.getAtoms();
+		for (CMLAtom atom : atoms) {
+			CMLAtom atomRef = new CMLAtom();
+			atomRef.setRef(atom.getId());
+			bond.appendChild(atomRef);
+		}
+	}
 	
 	/**
 	 * @param atomDisplay
