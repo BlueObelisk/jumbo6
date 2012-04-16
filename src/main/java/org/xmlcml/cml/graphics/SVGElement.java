@@ -411,6 +411,9 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	static Map<String, Color> colorMap;
+
+	protected Real2Range boundingBox = null;
+	
 	static {
 		colorMap = new HashMap<String, Color>();
 		colorMap.put("black", new Color(0, 0, 0));
@@ -791,16 +794,17 @@ public class SVGElement extends GraphicsElement {
 	 * @return null by default
 	 */
 	public Real2Range getBoundingBox() {
-		Real2Range boundingBox = null;
-		Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
-		if (childNodes.size() > 0) {
-			boundingBox = new Real2Range();
-		}
-		for (int i = 0; i < childNodes.size(); i++) {
-			SVGElement child = (SVGElement)childNodes.get(i);
-			Real2Range childBoundingBox = child.getBoundingBox();
-			if (childBoundingBox != null) {
-				boundingBox = boundingBox.plus(childBoundingBox);
+		if (boundingBox == null) {
+			Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
+			if (childNodes.size() > 0) {
+				boundingBox = new Real2Range();
+			}
+			for (int i = 0; i < childNodes.size(); i++) {
+				SVGElement child = (SVGElement)childNodes.get(i);
+				Real2Range childBoundingBox = child.getBoundingBox();
+				if (childBoundingBox != null) {
+					boundingBox = boundingBox.plus(childBoundingBox);
+				}
 			}
 		}
 		return boundingBox;

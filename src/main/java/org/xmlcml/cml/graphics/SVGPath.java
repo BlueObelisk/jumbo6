@@ -18,6 +18,7 @@ package org.xmlcml.cml.graphics;
 
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -28,7 +29,10 @@ import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 
 /** draws a straight line.
  * 
@@ -41,9 +45,12 @@ public class SVGPath extends SVGElement {
 	static {
 		LOG.setLevel(Level.INFO);
 	}
-	
+
+	public final static String D = "d";
 	public final static String TAG ="path";
 	private GeneralPath path2;
+	private boolean isClosed = false;
+	private Real2Array coords = null; // for diagnostics
 
 	/** constructor
 	 */
@@ -88,11 +95,23 @@ public class SVGPath extends SVGElement {
 		setDefaultStyle(this);
 	}
 	
-	
+	public Boolean isClosed() {
+		return isClosed;
+	}
 	public static void setDefaultStyle(SVGPath path) {
 		path.setStroke("black");
 		path.setStrokeWidth(0.5);
 		path.setFill("none");
+	}
+	
+	/** creates a list of primitives
+	 * at present Move, Line, Curve, Z
+	 * @param d
+	 * @return
+	 */
+	public List<SVGPathPrimitive> parseD() {
+		String d = getDString();
+		return d == null ? null : SVGPathPrimitive.parseD(d);
 	}
 	
 	public static String createD(Real2Array xy) {
@@ -125,11 +144,11 @@ public class SVGPath extends SVGElement {
 	}
 	
 	public void setDString(String d) {
-		this.addAttribute(new Attribute("d", d));
+		this.addAttribute(new Attribute(D, d));
 	}
 	
 	public String getDString() {
-		return this.getAttributeValue("d");
+		return this.getAttributeValue(D);
 	}
 	
 	
@@ -142,7 +161,12 @@ public class SVGPath extends SVGElement {
 		GeneralPath path = createAndSetPath2D();
 		g2d.draw(path);
 	}
-	
+
+	/** analyses MmLmZz 
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public static Real2Array createReal2ArrayFromDString(String s) {
 		Real2Array r2a = new Real2Array();
 		while (s.length() > 0) {
@@ -152,8 +176,7 @@ public class SVGPath extends SVGElement {
 				s.startsWith("L") ||
 				s.startsWith("l")) {
 				Real2String r2s = new Real2String(s.substring(1));
-				Real2 xy = new Real2((double)r2s.x, (double)r2s.y);
-				r2a.add(xy);
+				r2a.add(r2s.getReal2());
 				s = r2s.s.trim();
 			} else if (s.startsWith("z") || s.startsWith("Z")) {
 				Real2String r2s = new Real2String(s.substring(1));
@@ -166,6 +189,84 @@ public class SVGPath extends SVGElement {
 			}
 		}
 		return r2a;
+	}
+
+	/** extract polyline if path is M followed by L's
+	 * @return
+	 */
+	public SVGPolyline createPolyline() {
+		SVGPolyline polyline = null;
+		String s = this.getDString().trim()+S_SPACE;
+		Real2Array real2Array = new Real2Array();
+		boolean started = false;
+		int subgraphCount = 0;
+		isClosed = false;
+		while (s.length() > 0) {
+			if (s.startsWith("M")) {
+				// disjoint parts?
+				if (subgraphCount > 0) {
+					return null;
+				}
+				Real2String r2s = new Real2String(s.substring(1));
+				real2Array.add(r2s.getReal2());
+				s = r2s.s.trim();
+				subgraphCount++;
+			} else if (subgraphCount > 0 && s.startsWith("L")) {
+				Real2String r2s = new Real2String(s.substring(1));
+				real2Array.add(r2s.getReal2());
+				s = r2s.s.trim();
+			} else if (subgraphCount > 0 && (s.startsWith("z") || s.startsWith("Z"))) {
+				// close ??
+				String ss = s.substring(1).trim();
+				if (ss.trim().length() != 0) {
+					return null;
+				}
+				isClosed = true;
+				break;
+			} else if (s.charAt(0) == 'c' || s.charAt(0) == 'C') {
+				// not a polyline
+				return null;
+			}
+		}
+		if (real2Array.size() > 1) {
+			polyline = new SVGPolyline(real2Array);
+			polyline.setClosed(isClosed);
+		}
+		return polyline;
+	}
+	
+	public Real2Array getCoords() {
+		if (coords == null) {
+			coords = new Real2Array();
+			String ss = this.getDString().trim()+S_SPACE;
+			List<SVGPathPrimitive> primitives = this.createPathPrimitives();
+			for (SVGPathPrimitive primitive : primitives) {
+				Real2 coord = primitive.getCoords();
+				Real2Array coordArray = primitive.getCoordArray();
+				if (coord != null) {
+					coords.add(coord);
+				} else if (coordArray != null) {
+					coords.add(coordArray);
+				}
+			}
+		}
+		return coords;
+	}
+
+	private List<SVGPathPrimitive> createPathPrimitives() {
+		return SVGPathPrimitive.parseD(this.getDString());
+	}
+
+	/** get bounding box
+	 * use coordinates given and ignore effect of curves
+	 */
+	@Override
+	public Real2Range getBoundingBox() {
+//		if (boundingBox == null) {
+			getCoords();
+			boundingBox = coords.getRange2();
+//		}
+		return boundingBox;
 	}
 	
 	public GeneralPath createAndSetPath2D() {
@@ -183,6 +284,8 @@ public class SVGPath extends SVGElement {
 			} else if (s.startsWith("z") || s.startsWith("Z")) {
 				path2.closePath();
 				s = s.substring(1).trim();
+			} else {
+				throw new RuntimeException("Cannot create path: "+s.charAt(0));
 			}
 		}
 		return path2;
@@ -212,31 +315,82 @@ public class SVGPath extends SVGElement {
 	public void format(int places) {
 		setD(getD().format(places));
 	}
+
+	public String getSignature() {
+		String sig = null;
+		if (getDString() != null) {
+			List<SVGPathPrimitive> primitiveList = SVGPathPrimitive.parseD(getDString());
+			sig = SVGPathPrimitive.createSignature(primitiveList);
+		}
+		return sig;
+	}
+
+	public void normalizeOrigin() {
+		Real2Range boundingBox = this.getBoundingBox();
+		if (boundingBox == null) {
+			throw new RuntimeException("NULL BoundingBox");
+		}
+		RealRange xr = boundingBox.getXRange();
+		RealRange yr = boundingBox.getYRange();
+		Real2 xymin = new Real2(xr.getMin(), yr.getMin());
+		xymin = xymin.multiplyBy(-1.0);
+		Transform2 t2 = new Transform2(new Vector2(xymin));
+		List<SVGPathPrimitive> primitives = this.parseD();
+		for (SVGPathPrimitive primitive : primitives) {
+			primitive.transformBy(t2);
+		}
+		this.setD(primitives);
+	}
+
+	private void setD(List<SVGPathPrimitive> primitives) {
+		String d = constructDString(primitives);
+		this.addAttribute(new Attribute(D, d));
+	}
+
+	public static String constructDString(List<SVGPathPrimitive> primitives) {
+		StringBuilder dd = new StringBuilder();
+		for (SVGPathPrimitive primitive : primitives) {
+			dd.append(primitive.toString());
+		}
+		return dd.toString();
+	}
 }
 class Real2String {
 	String s;
+	String grabbed;
 	float x;
 	float y;
+	int idx = 0;
+	
 	public Real2String(String s) {
 		this.s = s;
 		x = grabDouble();
 		y = grabDouble();
 	}
 	
+	public Real2 getReal2() {
+		return new Real2(x, y);
+	}
+	
+	public int getCharactersGrabbed() {
+		return idx;
+	}
+	
 	private float grabDouble() {
-		String ss = s;
+		String ss = s.substring(idx)+" ";
+		String sss = null;
 		float x;
-		int idx = s.indexOf(CMLConstants.S_SPACE);
-		if (idx != -1) {
-			ss = s.substring(0, idx);
-			s = s.substring(idx+1);
+		int idx0 = ss.indexOf(CMLConstants.S_SPACE);
+		if (idx0 != -1) {
+			sss = ss.substring(0, idx0);
+			idx += idx0+1;
 		} else {
-			s = CMLConstants.S_EMPTY;
+			sss = CMLConstants.S_EMPTY;
 		}
 		try {
-			x = (float)new Double(ss).floatValue();
+			x = (float)new Double(sss.substring(0, idx0)).floatValue();
 		} catch (Exception e) {
-			throw new RuntimeException("bad double:"+ss+" ... "+s);
+			throw new RuntimeException("bad double ["+sss+"] ... "+s);
 		}
 		return x;
 	}

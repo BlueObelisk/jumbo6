@@ -23,6 +23,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 import org.xmlcml.cml.base.CMLElement;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 
@@ -34,6 +35,10 @@ import org.xmlcml.euclid.Real2Array;
 public class SVGPolyline extends SVGPoly {
 
 	public final static String TAG ="polyline";
+	private List<SVGLine> lineList;
+	private Boolean isClosed = false;
+	private Boolean isBox;
+	private Boolean isAligned = null;
 
 	/** constructor
 	 */
@@ -77,6 +82,7 @@ public class SVGPolyline extends SVGPoly {
 	public SVGPolyline(Real2Array real2Array) {
 		this();
 		setReal2Array(real2Array);
+		lineList = null;
 	}
 	
     /**
@@ -95,21 +101,41 @@ public class SVGPolyline extends SVGPoly {
 		return TAG;
 	}
 
+	public Boolean isClosed() {
+		return isClosed;
+	}
+	
+	public void setClosed(boolean isClosed) {
+		this.isClosed = isClosed;
+	}
+	
 	/** pass polyline or convert line.
 	 * 
 	 * @param element
 	 * @return
 	 */
-	public static SVGPolyline getOrCreatePolyline(SVGElement element) {
+	public static SVGPolyline createPolyline(SVGElement element) {
 		SVGPolyline polyline = null;
 		if (element instanceof SVGLine) {
 			polyline = new SVGPolyline((SVGLine) element);
-			
+		} else if (element instanceof SVGPath) {
+			polyline = ((SVGPath) element).createPolyline();
 		} else if (element instanceof SVGPolyline) {
 			polyline = (SVGPolyline) element;
 		}
 		return polyline;
 	}
+
+	/** creates a polyline IFF consists of a M(ove) followed by one or
+	 * more L(ines)
+	 * @param element
+	 * @return null if not transformable into a Polyline
+	 */
+	public static SVGPolyline createPolyline(SVGPath element) {
+		SVGPolyline polyline = null;
+		return polyline;
+	}
+		
 
 	public static List<SVGPolyline> binaryMergePolylines(List<SVGPolyline> polylineList, double eps) {
 		List<SVGPolyline> newList = new ArrayList<SVGPolyline>();
@@ -149,5 +175,64 @@ public class SVGPolyline extends SVGPoly {
 			newPoly.setReal2Array(r20);
 		}
 		return newPoly;
+	}
+
+	public List<SVGLine> createLineList() {
+		if (lineList == null) {
+			lineList = new ArrayList<SVGLine>();
+			for (int i = 1; i < real2Array.size(); i++) {
+				SVGLine line = new SVGLine(real2Array.elementAt(i-1), real2Array.elementAt(i));
+				lineList.add(line);
+			}
+		}
+		return lineList;
+	}
+	
+	/** is polyline aligned with axes?
+	 * 
+	 */
+	public Boolean isAlignedWithAxes(double epsilon) {
+		if (isAligned  == null) {
+			createLineList();
+			isAligned = true;
+			for (SVGLine line : lineList) {
+				if (!line.isHorizontal(epsilon) && !line.isVertical(epsilon)) {
+					isAligned = false;
+					break;
+				}
+			}
+		}
+		return isAligned;
+	}
+	
+	/** calculates whether 4 lines form a rectangle aligned with the axes
+	 * 
+	 * @param epsilon tolerance in coords
+	 * @return is rectangle
+	 */
+	public Boolean isBox(double epsilon) {
+		if (isBox == null) {
+			createLineList();
+			if (lineList.size() == 4) {
+				SVGLine line0 = lineList.get(0);
+				SVGLine line2 = lineList.get(2);
+				Real2 point0 = line0.getXY(0);
+				Real2 point1 = line0.getXY(1);
+				Real2 point2 = line2.getXY(0);
+				Real2 point3 = line2.getXY(1);
+				// vertical
+				isBox = Real.isEqual(point0.getX(), point1.getX(), epsilon) &&
+					Real.isEqual(point2.getX(), point3.getX(), epsilon) &&
+					Real.isEqual(point1.getY(), point2.getY(), epsilon) &&
+					Real.isEqual(point3.getY(), point0.getY(), epsilon);
+				if (!isBox) {
+					isBox = Real.isEqual(point0.getY(), point1.getY(), epsilon) &&
+							Real.isEqual(point2.getY(), point3.getY(), epsilon) &&
+							Real.isEqual(point1.getX(), point2.getX(), epsilon) &&
+							Real.isEqual(point3.getX(), point0.getX(), epsilon);
+				}
+			}
+		}
+		return isBox;
 	}
 }
