@@ -16,14 +16,21 @@
 
 package org.xmlcml.cml.graphics;
 
-import org.junit.Assert;
+import java.util.List;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 public class SVGPolylineTest {
 
 	@Test
-	public void testDummy() {
-		Assert.assertTrue(true);
+	public void testCreateLineLIst() {
+		String d = "M379.558 218.898 L380.967 212.146 L380.134 212.146 L378.725 218.898 L379.558 218.898";
+		SVGPath path = new SVGPath(d);
+		SVGPolyline polyline = path.createPolyline();
+		List<SVGLine> lineList = polyline.createLineList();
+		Assert.assertEquals("line count", 4, lineList.size());
 	}
 
 }

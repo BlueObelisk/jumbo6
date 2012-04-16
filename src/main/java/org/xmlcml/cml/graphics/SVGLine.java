@@ -29,6 +29,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Line2;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
@@ -328,5 +329,33 @@ public class SVGLine extends SVGElement {
 	public void setWidth(double width) {
 		this.addAttribute(new Attribute("stroke-width", ""+width));
 	}
-	
+
+	/**
+	 * 
+	 * @param svgLine
+	 * @param d max difference in radians from zero
+	 * @return
+	 */
+	public boolean isParallelTo(SVGLine svgLine, double d) {
+		Angle angle = this.getEuclidLine().getAngleMadeWith(svgLine.getEuclidLine());
+		double dd = Math.abs(angle.getAngle());
+		return dd < d;
+	}
+
+	/**
+	 * are two lines perpendicular 
+	 * @param svgLine
+	 * @param d max difference between cosine and 0
+	 * @return
+	 */
+	public boolean isPerpendicularTo(SVGLine svgLine, double d) {
+		Angle angle = this.getEuclidLine().getAngleMadeWith(svgLine.getEuclidLine());
+		Double dd = Math.abs(angle.cos());
+		return (dd < d && dd > -d);
+	}
+
+	//not allowed (?by Elliotte)
+//	public String toString() {
+//		return euclidLine.toString();
+//	}
 }

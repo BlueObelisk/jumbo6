@@ -142,7 +142,7 @@ public class BondToolTest {
   }
   
   @Test
-  @Ignore // not usre why
+  @Ignore // fails
   public void testExpandAtomRefs2() {
     String moleculeS = "" +
         "<molecule xmlns='http://www.xml-cml.org/schema'>" +
