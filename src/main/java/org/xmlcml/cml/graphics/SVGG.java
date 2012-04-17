@@ -27,6 +27,8 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.html.HtmlMenuSystem;
+import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Transform2;
 
 
 
@@ -124,5 +126,11 @@ public class SVGG extends SVGElement {
 		htmlMenuSystem.outputMenuAndBottomAndIndexFrame();
 		return htmlMenuSystem;
 	}
+	
+	public void applyTransform(Transform2 transform) {
+		this.setTransform(transform);
+	}
+	
+
 
 }

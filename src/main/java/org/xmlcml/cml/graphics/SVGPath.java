@@ -138,10 +138,11 @@ public class SVGPath extends SVGElement {
 		this.setDString(createD(r2a));
 	}
 	
-	public Real2Array getD() {
-		String d = getDString();
-		return createReal2ArrayFromDString(d);
-	}
+//	public Real2Array getD() {
+//		List<SVGPathPrimitive> pathPrimitives = this.createPathPrimitives();
+//		
+//		return createReal2ArrayFromDString(d);
+//	}
 	
 	public void setDString(String d) {
 		this.addAttribute(new Attribute(D, d));
@@ -162,95 +163,129 @@ public class SVGPath extends SVGElement {
 		g2d.draw(path);
 	}
 
-	/** analyses MmLmZz 
-	 * 
-	 * @param s
-	 * @return
-	 */
-	public static Real2Array createReal2ArrayFromDString(String s) {
-		Real2Array r2a = new Real2Array();
-		while (s.length() > 0) {
-			// crude
-			if (s.startsWith("M") ||
-				s.startsWith("m") ||
-				s.startsWith("L") ||
-				s.startsWith("l")) {
-				Real2String r2s = new Real2String(s.substring(1));
-				r2a.add(r2s.getReal2());
-				s = r2s.s.trim();
-			} else if (s.startsWith("z") || s.startsWith("Z")) {
-				Real2String r2s = new Real2String(s.substring(1));
-				s = r2s.s.trim();
-//				path2.closePath();
-//				s = s.substring(1).trim();
-			} else {
-				Real2String r2s = new Real2String(s.substring(0));
-				s = r2s.s.trim();
-			}
-		}
-		return r2a;
-	}
+//	/** analyses MmLmZz 
+//	 * 
+//	 * @param s
+//	 * @return
+//	 */
+//	public static Real2Array createReal2ArrayFromDString(String s) {
+//		Real2Array r2a = new Real2Array();
+//		while (s.length() > 0) {
+//			// crude
+//			if (s.startsWith("M") ||
+//				s.startsWith("m") ||
+//				s.startsWith("L") ||
+//				s.startsWith("l")) {
+//				Real2String r2s = new Real2String(s.substring(1));
+//				r2a.add(r2s.getReal2());
+//				s = r2s.s.trim();
+//			} else if (s.startsWith("z") || s.startsWith("Z")) {
+//				Real2String r2s = new Real2String(s.substring(1));
+//				s = r2s.s.trim();
+////				path2.closePath();
+////				s = s.substring(1).trim();
+//			} else {
+//				Real2String r2s = new Real2String(s.substring(0));
+//				s = r2s.s.trim();
+//			}
+//		}
+//		return r2a;
+//	}
 
 	/** extract polyline if path is M followed by L's
 	 * @return
 	 */
 	public SVGPolyline createPolyline() {
 		SVGPolyline polyline = null;
-		String s = this.getDString().trim()+S_SPACE;
 		Real2Array real2Array = new Real2Array();
-		boolean started = false;
-		int subgraphCount = 0;
-		isClosed = false;
-		while (s.length() > 0) {
-			if (s.startsWith("M")) {
-				// disjoint parts?
-				if (subgraphCount > 0) {
-					return null;
-				}
-				Real2String r2s = new Real2String(s.substring(1));
-				real2Array.add(r2s.getReal2());
-				s = r2s.s.trim();
-				subgraphCount++;
-			} else if (subgraphCount > 0 && s.startsWith("L")) {
-				Real2String r2s = new Real2String(s.substring(1));
-				real2Array.add(r2s.getReal2());
-				s = r2s.s.trim();
-			} else if (subgraphCount > 0 && (s.startsWith("z") || s.startsWith("Z"))) {
-				// close ??
-				String ss = s.substring(1).trim();
-				if (ss.trim().length() != 0) {
-					return null;
-				}
-				isClosed = true;
+		List<SVGPathPrimitive> primitiveList = this.createPathPrimitives();
+		for (SVGPathPrimitive primitive : primitiveList) {
+			if (primitive instanceof CurvePrimitive) {
+				real2Array = null;
 				break;
-			} else if (s.charAt(0) == 'c' || s.charAt(0) == 'C') {
-				// not a polyline
-				return null;
+			} else if (primitive instanceof ClosePrimitive) {
+				isClosed = true;
+			} else {
+				Real2 r2 = primitive.getCoords();
+				real2Array.add(r2);
 			}
 		}
-		if (real2Array.size() > 1) {
+		if (real2Array != null && real2Array.size() > 1) {
 			polyline = new SVGPolyline(real2Array);
 			polyline.setClosed(isClosed);
 		}
 		return polyline;
 	}
+
+	/**
+	 * do two paths have identical coordinates?
+	 * @param svgPath 
+	 * @param path2
+	 * @param epsilon tolerance allowed
+	 * @return
+	 */
+	public boolean hasEqualCoordinates(SVGPath path2, double epsilon) {
+		Real2Array r2a = this.getCoords();
+		Real2Array r2a2 = path2.getCoords();
+		return r2a.isEqualTo(r2a2, epsilon);
+	}
 	
 	public Real2Array getCoords() {
-		if (coords == null) {
-			coords = new Real2Array();
-			String ss = this.getDString().trim()+S_SPACE;
-			List<SVGPathPrimitive> primitives = this.createPathPrimitives();
-			for (SVGPathPrimitive primitive : primitives) {
-				Real2 coord = primitive.getCoords();
-				Real2Array coordArray = primitive.getCoordArray();
-				if (coord != null) {
-					coords.add(coord);
-				} else if (coordArray != null) {
-					coords.add(coordArray);
-				}
+		coords = new Real2Array();
+		String ss = this.getDString().trim()+S_SPACE;
+		List<SVGPathPrimitive> primitives = this.createPathPrimitives();
+		for (SVGPathPrimitive primitive : primitives) {
+			Real2 coord = primitive.getCoords();
+			Real2Array coordArray = primitive.getCoordArray();
+			if (coord != null) {
+				coords.add(coord);
+			} else if (coordArray != null) {
+				coords.add(coordArray);
 			}
 		}
 		return coords;
+	}
+	
+	/**
+	 * scale of bounding boxes
+	 * scale = Math.sqrt(xrange2/this.xrange * yrange2/this.yrange) 
+	 * (Can be used to scale vector fonts or other scalable objects)
+	 * @param path2
+	 * @return null if problem (e.g. zero ranges). result may be zero
+	 */
+	public Double getBoundingBoxScalefactor(SVGPath path2) {
+		Double s = null;
+		if (path2 != null) {
+			Real2Range bb = this.getBoundingBox();
+			Real2Range bb2 = path2.getBoundingBox();
+			double xr = bb.getXRange().getRange();
+			double yr = bb.getYRange().getRange();
+			if (xr > EPS && yr > EPS) {
+				s = Math.sqrt(bb2.getXRange().getRange()/xr * bb2.getYRange().getRange()/yr);
+			}
+		}
+		return s;
+	}
+	
+	/**
+	 * compares paths scaled by bounding boxes and then compares coordinates
+	 * @param path2
+	 * @return null if paths cannot be scaled else bounding box ratio
+	 */
+	public Double getScalefactor(SVGPath path2, double epsilon) {
+		Double s = this.getBoundingBoxScalefactor(path2);
+		if (s != null) {
+			SVGPath path = (SVGPath) this.copy();
+			path.normalizeOrigin();
+			Transform2 t2 = new Transform2(new double[]{s,0.,0.,0.,s,0.,0.,0.,1.});
+			path.applyTransform(t2);
+			SVGPath path22 = (SVGPath) path2.copy();
+			path22.normalizeOrigin();
+			if (!path.hasEqualCoordinates(path22, epsilon)) {
+				s = null;
+			}
+		}
+		return s;
 	}
 
 	private List<SVGPathPrimitive> createPathPrimitives() {
@@ -307,14 +342,16 @@ public class SVGPath extends SVGElement {
 	}
 	
 	public void applyTransform(Transform2 t2) {
-		Real2Array xy = this.getD();
-		xy.transformBy(t2);
-		setD(xy);
+		List<SVGPathPrimitive> pathPrimitives = this.createPathPrimitives();
+		for (SVGPathPrimitive primitive : pathPrimitives) {
+			primitive.transformBy(t2);
+		}
+		setD(pathPrimitives);
 	}
 	
-	public void format(int places) {
-		setD(getD().format(places));
-	}
+//	public void format(int places) {
+//		setD(getD().format(places));
+//	}
 
 	public String getSignature() {
 		String sig = null;

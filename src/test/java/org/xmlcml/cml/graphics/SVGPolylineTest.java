@@ -26,7 +26,6 @@ import org.junit.Test;
 public class SVGPolylineTest {
 
 	@Test
-	@Ignore // FIXME Real2String problem
 	public void testCreateLineList() {
 		String d = "M379.558 218.898 L380.967 212.146 L380.134 212.146 L378.725 218.898 L379.558 218.898";
 		SVGPath path = new SVGPath(d);

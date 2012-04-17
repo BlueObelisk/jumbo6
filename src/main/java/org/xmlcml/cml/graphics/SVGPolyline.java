@@ -22,6 +22,7 @@ import java.util.List;
 import nu.xom.Element;
 import nu.xom.Node;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
@@ -33,7 +34,7 @@ import org.xmlcml.euclid.Real2Array;
  *
  */
 public class SVGPolyline extends SVGPoly {
-
+	private static Logger LOG = Logger.getLogger(SVGPolyline.class);
 	public final static String TAG ="polyline";
 	private List<SVGLine> lineList;
 	private Boolean isClosed = false;
@@ -182,6 +183,9 @@ public class SVGPolyline extends SVGPoly {
 			lineList = new ArrayList<SVGLine>();
 			for (int i = 1; i < real2Array.size(); i++) {
 				SVGLine line = new SVGLine(real2Array.elementAt(i-1), real2Array.elementAt(i));
+				if (line.getEuclidLine().getLength() < 0.0000001) {
+					LOG.trace("ZERO LINE");
+				}
 				lineList.add(line);
 			}
 		}
@@ -231,6 +235,8 @@ public class SVGPolyline extends SVGPoly {
 							Real.isEqual(point1.getX(), point2.getX(), epsilon) &&
 							Real.isEqual(point3.getX(), point0.getX(), epsilon);
 				}
+			} else {
+				isBox = false;
 			}
 		}
 		return isBox;
