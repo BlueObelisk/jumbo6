@@ -443,4 +443,28 @@ public class SVGText extends SVGElement {
 		return rect;
 	}
 	
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default none
+	 */
+	protected String getBBFill() {
+		return "none";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default magenta
+	 */
+	protected String getBBStroke() {
+		return "magenta";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 0.5
+	 */
+	protected double getBBStrokeWidth() {
+		return 0.2;
+	}
+
 }

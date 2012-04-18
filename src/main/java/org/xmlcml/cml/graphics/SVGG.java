@@ -27,7 +27,6 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.html.HtmlMenuSystem;
-import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 
 

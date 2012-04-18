@@ -25,8 +25,8 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLLink;
 import org.xmlcml.cml.element.CMLMap;
-import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMap.Direction;
+import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.euclid.Util;
 
 

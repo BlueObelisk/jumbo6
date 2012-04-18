@@ -31,13 +31,13 @@ import org.xmlcml.cml.element.CMLArray;
 import org.xmlcml.cml.element.CMLArrayList;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLTable;
+import org.xmlcml.cml.element.CMLTable.TableType;
 import org.xmlcml.cml.element.CMLTableCell;
 import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableHeader;
 import org.xmlcml.cml.element.CMLTableHeaderCell;
 import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
-import org.xmlcml.cml.element.CMLTable.TableType;
 import org.xmlcml.cml.interfacex.HasArraySize;
 
 /**

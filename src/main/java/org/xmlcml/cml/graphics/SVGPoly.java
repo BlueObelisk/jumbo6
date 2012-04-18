@@ -28,13 +28,13 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Axis.Axis2;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealArray;
-import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Axis.Axis2;
 import org.xmlcml.euclid.RealArray.Monotonicity;
+import org.xmlcml.euclid.Transform2;
 
 /** draws a straight line.
  * 
@@ -229,4 +229,28 @@ public abstract class SVGPoly extends SVGElement {
 		}
 	}
 	
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default none
+	 */
+	protected String getBBFill() {
+		return "none";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default red
+	 */
+	protected String getBBStroke() {
+		return "red";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 0.5
+	 */
+	protected double getBBStrokeWidth() {
+		return 0.3;
+	}
+
 }

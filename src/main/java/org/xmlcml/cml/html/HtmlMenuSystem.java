@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.xom.Document;
-import nu.xom.Element;
 import nu.xom.Elements;
 
 import org.apache.log4j.Logger;

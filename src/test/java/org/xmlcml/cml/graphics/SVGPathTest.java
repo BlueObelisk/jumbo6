@@ -2,7 +2,6 @@ package org.xmlcml.cml.graphics;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.euclid.EuclidTestUtils;
 import org.xmlcml.euclid.Real2Array;

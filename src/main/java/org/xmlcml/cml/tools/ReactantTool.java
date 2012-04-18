@@ -23,7 +23,6 @@ import org.xmlcml.cml.base.AbstractTool;
 import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.element.CMLAmount;
 import org.xmlcml.cml.element.CMLProduct;
-import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLReactant;
 import org.xmlcml.cml.element.ReactionComponent;
 
