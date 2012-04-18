@@ -16,8 +16,6 @@
 
 package org.xmlcml.cml.html;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 

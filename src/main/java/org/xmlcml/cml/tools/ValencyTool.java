@@ -22,8 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -40,8 +40,8 @@ import org.xmlcml.cml.element.CMLBondSet;
 import org.xmlcml.cml.element.CMLElectron;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
+import org.xmlcml.cml.element.CMLScalar;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
 

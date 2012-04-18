@@ -120,4 +120,20 @@ public class SVGSVG extends SVGElement {
 		this.begin = d;
 	}
 
+	/**
+	 * adds a new svg:g between element and its children
+	 * this can be used to set scales, rendering, etc.
+	 * @param element to amend (is changed)
+	 */
+	public static SVGG interposeGBetweenChildren(SVGElement element) {
+		SVGG g = new SVGG();
+		element.appendChild(g);
+		while (element.getChildCount() > 1) {
+			Node child = element.getChild(0);
+			child.detach();
+			g.appendChild(child);
+		}
+		return g;
+	}
+
 }

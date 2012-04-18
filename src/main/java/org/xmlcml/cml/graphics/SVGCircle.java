@@ -201,4 +201,28 @@ public class SVGCircle extends SVGElement {
 		return boundingBox;
 	}
 	
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default none
+	 */
+	protected String getBBFill() {
+		return "none";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default green
+	 */
+	protected String getBBStroke() {
+		return "green";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 0.5
+	 */
+	protected double getBBStrokeWidth() {
+		return 0.5;
+	}
+
 }

@@ -297,13 +297,35 @@ public class SVGPath extends SVGElement {
 	 */
 	@Override
 	public Real2Range getBoundingBox() {
-//		if (boundingBox == null) {
-			getCoords();
-			boundingBox = coords.getRange2();
-//		}
+		getCoords();
+		boundingBox = coords.getRange2();
 		return boundingBox;
 	}
 	
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default none
+	 */
+	protected String getBBFill() {
+		return "none";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default blue
+	 */
+	protected String getBBStroke() {
+		return "blue";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 0.1
+	 */
+	protected double getBBStrokeWidth() {
+		return 0.1;
+	}
+
 	public GeneralPath createAndSetPath2D() {
 		String s = this.getDString().trim()+S_SPACE;
 		path2 = new GeneralPath();

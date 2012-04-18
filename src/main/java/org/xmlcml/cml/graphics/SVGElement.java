@@ -41,9 +41,11 @@ import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealArray;
+import org.xmlcml.euclid.RealRange;
 import org.xmlcml.euclid.Transform2;
 
 /** base class for lightweight generic SVG element.
@@ -71,9 +73,12 @@ public class SVGElement extends GraphicsElement {
 	public final static String YPLUS = "Y";
 	public final static String TITLE = "title";
 	public final static String ID = "id";
+	
 	private Element userElement;
 	private String strokeSave;
 	private String fillSave;
+//	Transform2 transform = new Transform2();
+
 	
 	/** constructor.
 	 * 
@@ -97,16 +102,24 @@ public class SVGElement extends GraphicsElement {
 			throw new RuntimeException("no tag");
 		} else if (tag.equals(SVGCircle.TAG)) {
 			newElement = new SVGCircle();
+		} else if (tag.equals(SVGClipPath.TAG)) {
+			newElement = new SVGClipPath();
+		} else if (tag.equals(SVGDefs.TAG)) {
+			newElement = new SVGDefs();
 		} else if (tag.equals(SVGDesc.TAG)) {
 			newElement = new SVGDesc();
 		} else if (tag.equals(SVGEllipse.TAG)) {
 			newElement = new SVGEllipse();
 		} else if (tag.equals(SVGG.TAG)) {
 			newElement = new SVGG();
+		} else if (tag.equals(SVGImage.TAG)) {
+			newElement = new SVGImage();
 		} else if (tag.equals(SVGLine.TAG)) {
 			newElement = new SVGLine();
 		} else if (tag.equals(SVGPath.TAG)) {
 			newElement = new SVGPath();
+		} else if (tag.equals(SVGPattern.TAG)) {
+			newElement = new SVGPattern();
 		} else if (tag.equals(SVGPolyline.TAG)) {
 			newElement = new SVGPolyline();
 		} else if (tag.equals(SVGPolygon.TAG)) {
@@ -122,6 +135,7 @@ public class SVGElement extends GraphicsElement {
 		} else {
 			newElement = new SVGG();
 			newElement.setClassName(tag);
+			System.err.println("unsupported svg element: "+tag);
 		}
 		if (newElement != null) {
 	        newElement.copyAttributesFrom(element);
@@ -178,23 +192,20 @@ public class SVGElement extends GraphicsElement {
 		}
 	}
 	
-	Transform2 transform = new Transform2();
-
 	/**
 	 * @return the transform
 	 */
 	public Transform2 getTransform() {
-		return transform;
+		return ensureTransform();
 	}
 	/**
 	 * @param transform the transform to set
 	 */
 	public void setTransform(Transform2 transform) {
-		this.transform = transform;
-		processTransform();
+		processTransform(transform);
 	}
 	
-	protected void processTransform() {
+	protected void processTransform(Transform2 transform) {
 		double[] matrix = transform.getMatrixAsArray();
 		this.addAttribute(new Attribute(TRANSFORM, MATRIX+"(" +
 			matrix[0] +"," +
@@ -266,6 +277,8 @@ public class SVGElement extends GraphicsElement {
 				}
 				String kw = s.substring(0, lb);
 				String values = s.substring(lb+1, rb);
+				// remove unwanted spaces
+				values = values.replaceAll("  *", " ");
 				s = s.substring(rb+1).trim();
 				Transform2 t2 = makeTransform(kw, values);
 				transformList.add(t2);
@@ -278,6 +291,10 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	private static Transform2 makeTransform(String keyword, String valueString) {
+		// remove unwanted space
+		valueString = valueString.replace(S_SPACE+S_PLUS, S_SPACE);
+		valueString = valueString.replace(S_COMMA+S_SPACE, S_COMMA);
+		valueString = valueString.replace(S_PIPE+S_SPACE, S_PIPE);
 		LOG.trace("Transform "+valueString);
 		Transform2 t2 = new Transform2();
 		String[] vv = valueString.trim().split(S_COMMA+S_PIPE+S_SPACE);
@@ -329,7 +346,7 @@ public class SVGElement extends GraphicsElement {
 	 * @param s
 	 */
 	public void setScale(double s) {
-		ensureTransform();
+		Transform2 transform = ensureTransform();
 		Transform2 t = new Transform2(
 				new double[]{
 				s, 0., 0.,
@@ -337,13 +354,16 @@ public class SVGElement extends GraphicsElement {
 				0., 0., 1.
 				});
 		transform = transform.concatenate(t);
-		processTransform();
+		processTransform(transform);
 	}
 
-	protected void ensureTransform() {
-		if (transform == null) {
-			transform = new Transform2();
+	protected Transform2 ensureTransform() {
+		Transform2 t2 = new Transform2();
+		String t2Value = this.getAttributeValue(TRANSFORM);
+		if (t2Value != null) {
+			t2 = createTransform2FromTransformAttribute(t2Value);		
 		}
+		return t2;
 	}
 
 	/** set moleculeDisplay properties.
@@ -587,7 +607,7 @@ public class SVGElement extends GraphicsElement {
 	 * @param xy
 	 */
 	public void translate(Real2 xy) {
-		ensureTransform();
+		Transform2 transform = ensureTransform();
 		Transform2 t = new Transform2(
 			new double[] {
 			1., 0., xy.getX(),
@@ -595,7 +615,7 @@ public class SVGElement extends GraphicsElement {
 			0., 0., 1.
 		});
 		transform = transform.concatenate(t);
-		processTransform();
+		processTransform(transform);
 	}
 
 	public void addDashedStyle(double bondWidth) {
@@ -808,6 +828,52 @@ public class SVGElement extends GraphicsElement {
 			}
 		}
 		return boundingBox;
+	}
+	
+	public SVGRect createGraphicalBoundingBox() {
+		Real2Range r2r = this.getBoundingBox();
+		RealRange xr = r2r.getXRange();
+		double dx = (xr.getRange() < Real.EPS) ? 1.0 : 0.0; 
+		RealRange yr = r2r.getYRange();
+		double dy = (yr.getRange() < Real.EPS) ? 1.0 : 0.0; 
+		SVGRect rect = new SVGRect(new Real2(xr.getMin()-dx, yr.getMin()-dy), new Real2(xr.getMax()+dx, yr.getMax()+dy));
+		rect.setStrokeWidth(getBBStrokeWidth());
+		rect.setStroke(getBBStroke());
+		rect.setFill(getBBFill());
+		if (this.getAttribute("transform") != null) {
+			Transform2 t2 = this.getTransform();
+			if (t2 != null) {
+				if (!t2.isUnit()) {
+					Real2 txy = t2.getTranslation();
+					rect.setTransform(t2);
+				}
+			}
+		}
+		return rect;
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default none
+	 */
+	protected String getBBFill() {
+		return "none";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default red
+	 */
+	protected String getBBStroke() {
+		return "red";
+	}
+
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 1.0
+	 */
+	protected double getBBStrokeWidth() {
+		return 0.4;
 	}
 
 	public static void applyTransformsWithinElementsAndFormat(SVGElement svgElement) {

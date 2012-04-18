@@ -28,11 +28,11 @@ import org.xmlcml.cml.element.CMLArg;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLJoin;
 import org.xmlcml.cml.element.CMLLabel;
+import org.xmlcml.cml.element.CMLLabel.Position;
 import org.xmlcml.cml.element.CMLLength;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
 import org.xmlcml.cml.element.CMLTorsion;
-import org.xmlcml.cml.element.CMLLabel.Position;
 import org.xmlcml.euclid.Util;
 
 

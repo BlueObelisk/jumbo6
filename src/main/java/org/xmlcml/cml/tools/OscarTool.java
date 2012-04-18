@@ -1915,7 +1915,7 @@ public class OscarTool implements CMLConstants {
                 quantity.detach();
             } else if (type.equals("ion")) {
 //                [Found: ( 
-// <quantity type="ion">M – Ac</quantity> 
+// <quantity type="ion">M ï¿½ Ac</quantity> 
 //                        ) <SP>+</SP> , 497.3463. <quantity type="formula">
                 //...
 // </quantity> requires <quantity type="ion"> <IT>M</IT> Ac</quantity>, 497.3485]
@@ -2136,10 +2136,10 @@ public class OscarTool implements CMLConstants {
         double d = Double.NaN;
         Nodes points = elem.query("value/point");
         Nodes texts = elem.query("value/text()");
-        // some constructs <value><point>3</point> × <point>100</point> ...
+        // some constructs <value><point>3</point> ï¿½ <point>100</point> ...
         if (points.size() == 2 && 
             texts.size() == 1 &&
-            texts.get(0).getValue().trim().equals("×")) {
+            texts.get(0).getValue().trim().equals("ï¿½")) {
             try {
                 d = new Double(points.get(1).getValue()).doubleValue();
             } catch (NumberFormatException nfe) {
