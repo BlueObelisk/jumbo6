@@ -244,6 +244,11 @@ public class SVGLine extends SVGElement {
 		return Real.isEqual(this.getXY(0).getY(), this.getXY(1).getY(), eps);
 	}
 
+	public boolean isZero(double eps) {
+		Real2Range bbox = this.getBoundingBox();
+		return bbox.getXRange().getRange() < eps && bbox.getYRange().getRange() < eps;
+	}
+
 	public Real2 getCommonPoint(SVGLine l, double eps) {
 		Real2 point = null;
 		if (l.getXY(0).isEqualTo(getXY(0), eps) ||  l.getXY(1).isEqualTo(getXY(0), eps)) {

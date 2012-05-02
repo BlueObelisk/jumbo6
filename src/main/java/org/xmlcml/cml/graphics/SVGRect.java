@@ -105,13 +105,6 @@ public class SVGRect extends SVGElement {
 		return rect;
 	}
 	
-	public void setWidth(double w) {
-		this.addAttribute(new Attribute("width", ""+w));
-	}
-	
-	public void setHeight(double h) {
-		this.addAttribute(new Attribute("height", ""+h));
-	}
 	/** constructor.
 	 * 
 	 * @param x1 "lower left"
@@ -125,6 +118,10 @@ public class SVGRect extends SVGElement {
 //  <line x1="-1.9021130325903073" y1="0.6180339887498945" x2="-1.175570504584946" y2="-1.618033988749895" stroke="white" style="stroke-width:0.12;"/>
 //</g>
 	
+	public SVGRect(Real2Range bbox) {
+		this(bbox.getXRange().getMin(), bbox.getYRange().getMin(), bbox.getXRange().getRange(), bbox.getYRange().getRange());
+	}
+
 	protected void drawElement(Graphics2D g2d) {
 		double x1 = this.getDouble("x");
 		double y1 = this.getDouble("y");
@@ -179,14 +176,6 @@ public class SVGRect extends SVGElement {
     	setWidth(Util.format(getWidth(), places));
     }
 	
-	public double getWidth() {
-		return new Double(this.getAttributeValue("width")).doubleValue();
-	}
-	
-	public double getHeight() {
-		return new Double(this.getAttributeValue("height")).doubleValue();
-	}
-
 	/** extent of rect
 	 * 
 	 * @return

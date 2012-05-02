@@ -27,6 +27,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+import org.xmlcml.euclid.RealArray;
 
 /** draws a straight line.
  * 
@@ -37,6 +38,7 @@ public class SVGPolyline extends SVGPoly {
 	private static Logger LOG = Logger.getLogger(SVGPolyline.class);
 	public final static String TAG ="polyline";
 	private List<SVGLine> lineList;
+	private List<SVGMarker> pointList;
 	private Boolean isClosed = false;
 	private Boolean isBox;
 	private Boolean isAligned = null;
@@ -181,15 +183,29 @@ public class SVGPolyline extends SVGPoly {
 	public List<SVGLine> createLineList() {
 		if (lineList == null) {
 			lineList = new ArrayList<SVGLine>();
+			pointList = new ArrayList<SVGMarker>();
+			SVGMarker lastPoint = new SVGMarker(real2Array.get(0));
+			pointList.add(lastPoint);
+			SVGLine line;
 			for (int i = 1; i < real2Array.size(); i++) {
-				SVGLine line = new SVGLine(real2Array.elementAt(i-1), real2Array.elementAt(i));
+				line = new SVGLine(real2Array.elementAt(i-1), real2Array.elementAt(i));
+				SVGMarker point = new SVGMarker(real2Array.get(i));
+				pointList.add(point);
+				lastPoint.addLine(line);
+				point.addLine(line);
 				if (line.getEuclidLine().getLength() < 0.0000001) {
 					LOG.trace("ZERO LINE");
 				}
 				lineList.add(line);
+				lastPoint = point;
 			}
 		}
 		return lineList;
+	}
+	
+	public List<SVGMarker> createPointList() {
+		createLineList();
+		return pointList;
 	}
 	
 	/** is polyline aligned with axes?

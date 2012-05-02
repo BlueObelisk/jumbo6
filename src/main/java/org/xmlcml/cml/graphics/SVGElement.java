@@ -801,6 +801,22 @@ public class SVGElement extends GraphicsElement {
 		setY(xy.getY());
 	}
 	
+	public double getWidth() {
+		return new Double(this.getAttributeValue("width")).doubleValue();
+	}
+	
+	public double getHeight() {
+		return new Double(this.getAttributeValue("height")).doubleValue();
+	}
+
+	public void setWidth(double w) {
+		this.addAttribute(new Attribute("width", ""+w));
+	}
+	
+	public void setHeight(double h) {
+		this.addAttribute(new Attribute("height", ""+h));
+	}
+	
 	public void setClassName(String name) {
 		this.addAttribute(new Attribute(CLASS, name));
 	}
@@ -912,6 +928,18 @@ public class SVGElement extends GraphicsElement {
 	
 	public String getId() {
 		return this.getAttributeValue(ID);
+	}
+
+	/** removes all transformation attributes
+	 * @transform
+	 * THIS IS NORMALLY ONLY DONE AFTER APPLYING CUMULATIVE TRANSFORMATIONS
+	 * also dangerous as the ancestor may govern other descendants
+	 */
+	public void removeAncestorTransformations() {
+		Nodes ancestorAttributes = this.query("ancestor::*/@transform");
+		for (int i = 0; i < ancestorAttributes.size(); i++) {
+			ancestorAttributes.get(i).detach();
+		}
 	}
 
 }
