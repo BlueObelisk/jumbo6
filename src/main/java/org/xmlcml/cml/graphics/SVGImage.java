@@ -16,6 +16,11 @@
 
 package org.xmlcml.cml.graphics;
 
+import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
+
 import nu.xom.Element;
 import nu.xom.Node;
 
@@ -67,6 +72,18 @@ public class SVGImage extends SVGElement {
 		return TAG;
 	}
 
+	/** extent of text
+	 * defined as the point origin (i.e. does not include font)
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		Real2 xy = this.getXY();
+		Double width = getWidth();
+		Double height = getHeight();
+		Real2Range boundingBox = new Real2Range(xy, xy.plus(new Real2(width, height)));
+		return boundingBox;
+	}
+
 	/** property of graphic bounding box
 	 * can be overridden
 	 * @return default none
@@ -91,5 +108,22 @@ public class SVGImage extends SVGElement {
 		return 0.5;
 	}
 
-	
+	/**
+   <image x="0" y="0" 
+     transform="matrix(0.3605,0,0,0.3592,505.824,65.944)" 
+     width="158" xlink:href="data:image/png;base64,iVBORw0KGgbGgjc... ...kJggg=="
+     style="clip-path:url(#clipPath18);" 
+     height="199" 
+     preserveAspectRatio="none" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+	 */
+	public void applyTransform(Transform2 t2) {
+		Real2 xy = getXY();
+		xy.transformBy(t2);
+		setXY(xy);
+		Real2 wh = new Real2(getWidth(), getHeight());
+		Transform2 rotScale = t2.removeTranslations();
+		wh.transformBy(rotScale);
+		this.setWidth(wh.getX());
+		this.setHeight(wh.getY());
+	}
 }

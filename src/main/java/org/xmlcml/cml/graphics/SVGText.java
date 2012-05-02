@@ -26,10 +26,12 @@ import nu.xom.Text;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Vector2;
 
 /** draws text.
  * 
@@ -142,7 +144,26 @@ public class SVGText extends SVGElement {
 		Real2 xy = getXY();
 		xy.transformBy(t2);
 		this.setXY(xy);
+		transformFontSize(t2);
+		//rotate text? // not tested
+		Angle angle = t2.getAngleOfRotation();
+		if (!angle.isEqualTo(0.0, EPS)) {
+			Transform2 t = Transform2.getRotationAboutPoint(angle, xy);
+			this.setTransform(t);
+		}
 	}
+
+	public void transformFontSize(Transform2 t2) {
+		Double fontSize = this.getFontSize();
+		// transform fontSize
+		if (fontSize != null) {
+			Real2 ff = new Real2(fontSize, 1.0);
+			ff.transformBy(t2);
+			this.setFontSize(ff.getX());
+		}
+	}
+
+
 
     /** round to decimal places.
      * 
@@ -186,11 +207,14 @@ public class SVGText extends SVGElement {
 	 * defined as the point origin (i.e. does not include font)
 	 * @return
 	 */
-	public Real2Range getBoundingBox() {
+	public Real2Range getBoundingBoxForCenterOrigin() {
 		
 //		double fontWidthFactor = DEFAULT_FONT_WIDTH_FACTOR;
-		double fontWidthFactor = 1.0;
+//		double fontWidthFactor = 1.0;
+		// seems to work??
+		double fontWidthFactor = 0.3;
 		double halfWidth = getEstimatedHorizontalLength(fontWidthFactor) / 2.0;
+		
 		double height = this.getFontSize();
 		Real2Range boundingBox = new Real2Range();
 		Real2 center = getXY();
@@ -198,7 +222,27 @@ public class SVGText extends SVGElement {
 		boundingBox.add(center.plus(new Real2(-halfWidth, height)));
 		return boundingBox;
 	}
-	
+
+	/** extent of text
+	 * defined as the point origin (i.e. does not include font)
+	 * @return
+	 */
+	public Real2Range getBoundingBox() {
+		
+		double fontWidthFactor = 1.0;
+		double width = getEstimatedHorizontalLength(fontWidthFactor);
+		double height = this.getFontSize() * fontWidthFactor;
+		Real2 xy = this.getXY();
+		Real2Range boundingBox = new Real2Range(xy, xy.plus(new Real2(width, -height)));
+		
+		return boundingBox;
+	}
+
+	/** this is a hack and depends on what information is available
+	 * include fontSize and factor
+	 * @param fontWidthFactor
+	 * @return
+	 */
 	public double getEstimatedHorizontalLength(double fontWidthFactor) {
 		String s = getValue();
 		String family = this.getFontFamily();
@@ -210,6 +254,9 @@ public class SVGText extends SVGElement {
 		estimatedHorizontallength = 0.0;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
+			if (c > 255) {
+				c = 's';  // as good as any
+			}
 			double length = fontSize * fontWidthFactor * lengths[(int)c];
 			estimatedHorizontallength += length;
 		}

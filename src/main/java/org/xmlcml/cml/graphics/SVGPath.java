@@ -138,12 +138,6 @@ public class SVGPath extends SVGElement {
 		this.setDString(createD(r2a));
 	}
 	
-//	public Real2Array getD() {
-//		List<SVGPathPrimitive> pathPrimitives = this.createPathPrimitives();
-//		
-//		return createReal2ArrayFromDString(d);
-//	}
-	
 	public void setDString(String d) {
 		this.addAttribute(new Attribute(D, d));
 	}
@@ -162,35 +156,6 @@ public class SVGPath extends SVGElement {
 		GeneralPath path = createAndSetPath2D();
 		g2d.draw(path);
 	}
-
-//	/** analyses MmLmZz 
-//	 * 
-//	 * @param s
-//	 * @return
-//	 */
-//	public static Real2Array createReal2ArrayFromDString(String s) {
-//		Real2Array r2a = new Real2Array();
-//		while (s.length() > 0) {
-//			// crude
-//			if (s.startsWith("M") ||
-//				s.startsWith("m") ||
-//				s.startsWith("L") ||
-//				s.startsWith("l")) {
-//				Real2String r2s = new Real2String(s.substring(1));
-//				r2a.add(r2s.getReal2());
-//				s = r2s.s.trim();
-//			} else if (s.startsWith("z") || s.startsWith("Z")) {
-//				Real2String r2s = new Real2String(s.substring(1));
-//				s = r2s.s.trim();
-////				path2.closePath();
-////				s = s.substring(1).trim();
-//			} else {
-//				Real2String r2s = new Real2String(s.substring(0));
-//				s = r2s.s.trim();
-//			}
-//		}
-//		return r2a;
-//	}
 
 	/** extract polyline if path is M followed by L's
 	 * @return
@@ -216,6 +181,19 @@ public class SVGPath extends SVGElement {
 		}
 		return polyline;
 	}
+	
+	public SVGRect createRectangle(double epsilon) {
+		SVGRect rect = null;
+		SVGPolyline polyline = createPolyline();
+		if (polyline != null && polyline.isBox(epsilon)) {
+			Real2Range r2r = this.getBoundingBox();
+			rect = new SVGRect(this.getOrigin(), this.getUpperRight());
+			rect.setFill("none");
+		}
+		return rect;
+	}
+
+
 
 	/**
 	 * do two paths have identical coordinates?
@@ -413,6 +391,21 @@ public class SVGPath extends SVGElement {
 		}
 		return dd.toString();
 	}
+
+	public Real2 getOrigin() {
+		Real2Range r2r = this.getBoundingBox();
+		return new Real2(r2r.getXRange().getMin(), r2r.getYRange().getMin());
+	}
+
+	/** opposite corner to origin
+	 * 
+	 * @return
+	 */
+	public Real2 getUpperRight() {
+		Real2Range r2r = this.getBoundingBox();
+		return new Real2(r2r.getXRange().getMax(), r2r.getYRange().getMax());
+	}
+
 }
 class Real2String {
 	String s;

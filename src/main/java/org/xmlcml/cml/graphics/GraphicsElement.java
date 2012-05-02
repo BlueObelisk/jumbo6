@@ -23,6 +23,7 @@ import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
@@ -35,6 +36,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class GraphicsElement extends Element implements SVGConstants {
 
+	private static final String FONT_SIZE = "font-size";
 	protected Transform2 cumulativeTransform = new Transform2();
 		
 	/** constructor.
@@ -165,6 +167,20 @@ public class GraphicsElement extends Element implements SVGConstants {
     }
     
 	/**
+	 * @return the clipPath
+	 */
+	public String getClipPath() {
+		return (String) getSubStyle("clip-path");
+	}
+
+	/**
+	 * @param clip-path
+	 */
+	public void setClipPath(String clipPath) {
+		setSubStyle("clip-path", clipPath);
+	}
+
+	/**
 	 * @return the fill
 	 */
 	public String getFill() {
@@ -269,8 +285,17 @@ public class GraphicsElement extends Element implements SVGConstants {
 	 * @return the font-size 
 	 */
 	public double getFontSize() {
-		Double fontSize = (Double) getSubStyle("font-size");
-		return (fontSize == null) ? Double.NaN : fontSize.doubleValue();
+		Double fontSize = Double.NaN;
+		if (this.getAttribute(FONT_SIZE) != null) {
+			fontSize = new Double(this.getAttributeValue(FONT_SIZE));
+		} else {
+			fontSize = (Double) getSubStyle("font-size");
+			if (fontSize != null) {
+				this.setFontSize(fontSize);
+//				this.addAttribute(new Attribute(FONT_SIZE, ""+fontSize));
+			}
+		}
+		return (this.getAttribute(FONT_SIZE) == null) ? Double.NaN : new Double(this.getAttributeValue(FONT_SIZE));
 	}
 
 	/**
@@ -278,7 +303,8 @@ public class GraphicsElement extends Element implements SVGConstants {
 	 * @param fontSize
 	 */
 	public void setFontSize(double fontSize) {
-		setSubStyle("font-size", new Double(fontSize));
+		this.addAttribute(new Attribute(FONT_SIZE, ""+fontSize));
+//		setSubStyle(FONT_SIZE, new Double(fontSize));
 	}
 
 	protected String getTag() {
@@ -331,14 +357,14 @@ public class GraphicsElement extends Element implements SVGConstants {
 	 * @return the cumulativeTransform
 	 */
 	public Transform2 getCumulativeTransform() {
+		Nodes transforms = this.query("ancestor-or-self::*/@transform");
+		cumulativeTransform = new Transform2();
+		for (int i = transforms.size()-1; i >= 0; i--) {
+			Transform2 t2 = ((SVGElement) transforms.get(i).getParent()).getTransform();
+//			cumulativeTransform = cumulativeTransform.concatenate(t2);
+			cumulativeTransform = t2.concatenate(cumulativeTransform);
+		}
 		return cumulativeTransform;
-	}
-
-	/**
-	 * @param cumulativeTransform the cumulativeTransform to set
-	 */
-	public void setCumulativeTransform(Transform2 cumulativeTransform) {
-		this.cumulativeTransform = cumulativeTransform;
 	}
 
 	private Object getSubStyle(String s) {

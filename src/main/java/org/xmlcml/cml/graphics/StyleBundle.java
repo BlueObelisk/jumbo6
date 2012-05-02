@@ -23,6 +23,7 @@ public class StyleBundle implements CMLConstants {
 	private static Logger LOG = Logger.getLogger(StyleBundle.class);
 	
 	public final static StyleBundle DEFAULT_STYLE_BUNDLE = new StyleBundle(
+		null,	
 		"#000000",
 		"#000000",
 		0.5,
@@ -31,6 +32,7 @@ public class StyleBundle implements CMLConstants {
 		"normal",
 		1.0
 	);
+	private String clipPath;
 	private String fill;
 	private String stroke;
 	private String fontFamily;
@@ -49,6 +51,7 @@ public class StyleBundle implements CMLConstants {
 	}
 	
 	public StyleBundle(
+		String clipPath,
 		String fill,
 		String Stroke,
 		double strokeWidth,
@@ -57,6 +60,9 @@ public class StyleBundle implements CMLConstants {
 		String fontWeight,
 		double opacity
 		) {
+		if (clipPath != null && !clipPath.trim().equals(S_EMPTY)) {
+			this.clipPath = clipPath.trim();
+		}
 		if (fill != null && !fill.trim().equals(S_EMPTY)) {
 			this.fill = fill.trim();
 		}
@@ -85,6 +91,7 @@ public class StyleBundle implements CMLConstants {
 	}
 	public void copy(StyleBundle style) {
 		if (style != null) {
+			this.clipPath = style.clipPath;
 			this.fill = style.fill;
 			this.stroke = style.stroke;
 			this.strokeWidth = style.strokeWidth;
@@ -137,6 +144,8 @@ public class StyleBundle implements CMLConstants {
 	public void setSubStyle(String subStyle, Object object) {
 		if (subStyle == null) {
 			throw new RuntimeException("null style");
+		} else if (subStyle.equals("clip-path")) {
+			clipPath = (String) object;
 		} else if (subStyle.equals("fill")) {
 			fill = (String) object;
 		} else if (subStyle.equals("stroke")) {
@@ -176,6 +185,8 @@ public class StyleBundle implements CMLConstants {
 			subStyle = getFontWeight();
 		} else if (ss.equals("opacity")) {
 			subStyle = getOpacity();
+		} else if (ss.equals("clip-path")) {
+			subStyle = getClipPath();
 		} else if (ss.equals("stroke-linecap")) {
 			LOG.debug("ignored style: "+ss);
 		} else {
@@ -194,6 +205,14 @@ public class StyleBundle implements CMLConstants {
 		return d;
 	}
 	
+	public String getClipPath() {
+		return clipPath;
+	}
+	
+	public void setClipPath(String clipPath) {
+		this.clipPath = clipPath;
+	}
+
 	public String getFill() {
 		return fill;
 	}
@@ -252,6 +271,7 @@ public class StyleBundle implements CMLConstants {
 	
 	public String toString() {
 		String s = "";
+		s = addString(s, clipPath, "clip-path");
 		s = addString(s, fill, "fill");
 		s = addString(s, stroke, "stroke");
 		s = addDouble(s, strokeWidth, "stroke-width");
