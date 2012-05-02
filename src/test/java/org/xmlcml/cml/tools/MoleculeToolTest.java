@@ -1331,6 +1331,7 @@ public class MoleculeToolTest {
 	}
 
 	@Test
+	@Ignore
 	public void testCreateGraphicsElement1() throws Exception {
 		CMLMolecule molecule = new CMLMolecule();
 		CMLAtom atom1 = new CMLAtom("a1", ChemicalElement

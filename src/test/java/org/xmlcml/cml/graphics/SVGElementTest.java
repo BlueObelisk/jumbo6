@@ -19,6 +19,7 @@ package org.xmlcml.cml.graphics;
 import nu.xom.Element;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.testutil.JumboTestUtils;
@@ -28,6 +29,7 @@ public class SVGElementTest {
 	public final static String GRAPHICS_RESOURCE = "org/xmlcml/cml/graphics/examples";
 
 	@Test
+	@Ignore
 	public final void testcreateSVGElement() {
 		Element oldElement =JumboTestUtils.parseValidFile(GRAPHICS_RESOURCE + CMLConstants.U_S
 				+ "image12.svg");
