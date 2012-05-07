@@ -60,15 +60,16 @@ public class SVGMarker extends SVGElement {
 	
 	protected void init() {
 	}
-	
+
     /**
      * copy node .
      *
      * @return Node
      */
     public Node copy() {
-    	return this.copy();
+        return new SVGMarker(this);
     }
+
 
     public void setSymbol(SVGElement symbol) {
     	SVGElement symb = this.getSymbol();

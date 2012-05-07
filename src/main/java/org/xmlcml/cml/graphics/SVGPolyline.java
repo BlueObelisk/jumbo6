@@ -97,6 +97,22 @@ public class SVGPolyline extends SVGPoly {
         return new SVGPolyline(this);
     }
 
+	/** pass polyline or convert line.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public static SVGPolyline getOrCreatePolyline(SVGElement element) {
+		SVGPolyline polyline = null;
+		if (element instanceof SVGLine) {
+			polyline = new SVGPolyline((SVGLine) element);
+			
+		} else if (element instanceof SVGPolyline) {
+			polyline = (SVGPolyline) element;
+		}
+		return polyline;
+	}
+
 	/** get tag.
 	 * @return tag
 	 */

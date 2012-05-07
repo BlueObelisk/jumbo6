@@ -26,6 +26,7 @@ public interface SVGConstants extends CMLConstants {
 	 * 
 	 */
 	public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+	public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
 
     /** XPathContext for CML.
      */
