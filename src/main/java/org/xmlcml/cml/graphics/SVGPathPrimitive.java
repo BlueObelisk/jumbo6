@@ -127,4 +127,22 @@ public abstract class SVGPathPrimitive {
 	protected String formatCoords(Real2 coords) {
 		return coords == null ? null : ((int)(1000*coords.getX()))/1000.+" "+(int)(1000*coords.getY())/1000.+" ";
 	}
+
+	public Real2 getFirstCoord() {
+		Real2 coord = getCoords();
+		if (coord != null) {
+			return coord;
+		}
+		Real2Array coordArray = getCoordArray();
+		return (coordArray) == null ? null : coordArray.get(0);
+	}
+	
+	public Real2 getLastCoord() {
+		Real2 coord = getCoords();
+		if (coord != null) {
+			return coord;
+		}
+		Real2Array coordArray = getCoordArray();
+		return (coordArray) == null ? null : coordArray.getLastElement();
+	}
 }

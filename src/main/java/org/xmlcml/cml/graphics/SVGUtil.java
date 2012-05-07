@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Element;
 import nu.xom.Node;
@@ -14,6 +15,8 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 
 public class SVGUtil {
+
+	private static final String TRANSFORMS_APPLIED = "transformsApplied";
 
 	/**
 	 * adds a new svg:g between element and its children
@@ -85,7 +88,7 @@ public class SVGUtil {
 	 * best not called directly
 	 * @param svgElements
 	 */
-	public static void applyAndRemoveCumulativeTransforms(List<SVGElement> svgElements) {
+	public static void applyCumulativeTransforms(List<SVGElement> svgElements) {
 		for (SVGElement svgElement : svgElements) {
 			Transform2 t2 = svgElement.getCumulativeTransform();
 			svgElement.applyTransform(t2);
@@ -99,11 +102,14 @@ public class SVGUtil {
 		List<SVGElement> roots = SVGUtil.getQuerySVGElements(element, "/svg:svg");
 		if (roots.size() == 1) {
 			SVGSVG root = (SVGSVG) roots.get(0);
-			List<SVGElement> leafElements = SVGUtil.getQuerySVGElements(root, "//svg:*[count(*)=0]");
-			applyAndRemoveCumulativeTransforms(leafElements);
-			Nodes transformAttributes = root.query("//@transform");
-			for (int i = 0; i < transformAttributes.size(); i++) {
-				transformAttributes.get(i).detach();
+			if (root.getAttribute(TRANSFORMS_APPLIED) == null) {
+				List<SVGElement> leafElements = SVGUtil.getQuerySVGElements(root, "//svg:*[count(*)=0]");
+				applyCumulativeTransforms(leafElements);
+				Nodes transformAttributes = root.query("//@transform");
+				for (int i = 0; i < transformAttributes.size(); i++) {
+					transformAttributes.get(i).detach();
+				}
+				root.addAttribute(new Attribute(TRANSFORMS_APPLIED, "yes"));
 			}
 		}
 	}
@@ -134,7 +140,42 @@ public class SVGUtil {
 		List<SVGElement> elems = SVGUtil.getQuerySVGElements(svg, "//svg:*");
 		int i = 0;
 		for (SVGElement elem : elems) {
-			elems.get(i).setId(elem.getTag()+(i++));
+			if (elem.getId() == null) {
+				elem.setId(elem.getTag()+(i++));
+			}
+		}
+	}
+
+	/**
+	 * find all text elements managed by a parent <g> and explicitly copy any font-size
+	 *?  //svg:g[@font-size]/svg:text[not(@font-size)] >> //svg:g[@font-size]/svg:text[@font-size]
+	 * @param svg
+	 */
+//	public static void denormalizeFontSizes(SVGSVG svg) {
+//		List<SVGElement> texts = SVGUtil.getQuerySVGElements(svg, "//svg:g[@font-size]/svg:text[not(@font-size)]");
+//		for (SVGElement text : texts) {
+//			((SVGText)text).setFontSize(((SVGG)text.getParent()).getFontSize());
+//		}
+//	}
+	
+	public static void denormalizeFontSizes(SVGSVG svg) {
+		List<SVGElement> gs = SVGUtil.getQuerySVGElements(svg, "//svg:g[@font-size and svg:text[not(@font-size)]]");
+		for (SVGElement g : gs) {
+			Double fontSize = g.getFontSize();
+			System.out.println("FS "+fontSize);
+			g.getAttribute("font-size").detach();
+			List<SVGElement> texts = SVGUtil.getQuerySVGElements(g, "./svg:text[not(@font-size)]");
+			for (SVGElement text : texts) {
+				((SVGText)text).setFontSize(fontSize);
+			}
+		}
+	}
+
+
+	public static void removeXmlSpace(SVGSVG svg) {
+		Nodes nodes = svg.query("//@*[local-name()='space' and .='preserve']");
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).detach();
 		}
 	}
 

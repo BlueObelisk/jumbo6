@@ -23,10 +23,12 @@ import java.util.List;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
@@ -48,9 +50,15 @@ public class SVGPath extends SVGElement {
 
 	public final static String D = "d";
 	public final static String TAG ="path";
+	private static final double EPS1 = 0.000001;
 	private GeneralPath path2;
 	private boolean isClosed = false;
 	private Real2Array coords = null; // for diagnostics
+	private SVGPolyline polyline;
+	private Real2Array allCoords;
+	private List<SVGPathPrimitive> primitiveList;
+	private Boolean isPolyline;
+	private Real2Array firstCoords;
 
 	/** constructor
 	 */
@@ -95,7 +103,7 @@ public class SVGPath extends SVGElement {
 		setDefaultStyle(this);
 	}
 	
-	public Boolean isClosed() {
+	public boolean isClosed() {
 		return isClosed;
 	}
 	public static void setDefaultStyle(SVGPath path) {
@@ -160,31 +168,41 @@ public class SVGPath extends SVGElement {
 	/** extract polyline if path is M followed by L's
 	 * @return
 	 */
-	public SVGPolyline createPolyline() {
-		SVGPolyline polyline = null;
-		Real2Array real2Array = new Real2Array();
-		List<SVGPathPrimitive> primitiveList = this.createPathPrimitives();
+	public void createCoordArray() {
+		polyline = null;
+		allCoords = new Real2Array();
+		firstCoords = new Real2Array();
+		ensurePrimitives();
+		isPolyline = true;
 		for (SVGPathPrimitive primitive : primitiveList) {
 			if (primitive instanceof CurvePrimitive) {
-				real2Array = null;
-				break;
+				isPolyline = false;
+				Real2Array curveCoords = primitive.getCoordArray();
+				allCoords.add(curveCoords);
+				firstCoords.add(primitive.getFirstCoord());
+//				break;
 			} else if (primitive instanceof ClosePrimitive) {
 				isClosed = true;
 			} else {
 				Real2 r2 = primitive.getCoords();
-				real2Array.add(r2);
+				allCoords.add(r2);
+				firstCoords.add(primitive.getFirstCoord());
 			}
 		}
-		if (real2Array != null && real2Array.size() > 1) {
-			polyline = new SVGPolyline(real2Array);
+	}
+	
+	public SVGPolyline createPolyline() {
+		createCoordArray();
+		if (isPolyline && allCoords.size() > 1) {
+			polyline = new SVGPolyline(allCoords);
 			polyline.setClosed(isClosed);
 		}
 		return polyline;
 	}
 	
 	public SVGRect createRectangle(double epsilon) {
+		createPolyline();
 		SVGRect rect = null;
-		SVGPolyline polyline = createPolyline();
 		if (polyline != null && polyline.isBox(epsilon)) {
 			Real2Range r2r = this.getBoundingBox();
 			rect = new SVGRect(this.getOrigin(), this.getUpperRight());
@@ -193,7 +211,82 @@ public class SVGPath extends SVGElement {
 		return rect;
 	}
 
+	public SVGSymbol createSymbol(double maxWidth) {
+		createCoordArray();
+		SVGSymbol symbol = null;
+		Real2Range r2r = this.getBoundingBox();
+		if (Math.abs(r2r.getXRange().getRange()) < maxWidth && Math.abs(r2r.getYRange().getRange()) < maxWidth) {
+			symbol = new SVGSymbol();
+			SVGPath path = (SVGPath)this.copy();
+			Real2 orig = path.getOrigin();
+			path.normalizeOrigin();
+			SVGLine line = path.createHorizontalOrVerticalLine(EPS);
+			symbol.appendChild(path);
+			symbol.setId(path.getId()+".s");
+			List<SVGElement> defsNodes = SVGUtil.getQuerySVGElements(this,"/svg:svg/svg:defs");
+			defsNodes.get(0).appendChild(symbol);
+		}
+		return symbol;
+	}
 
+	private SVGLine createHorizontalOrVerticalLine(double eps) {
+		SVGLine  line = null;
+		Real2Array coords = this.getCoords();
+		if (coords.size() == 2) {
+			line = new SVGLine(coords.get(0), coords.get(1));
+			if (!line.isHorizontal(eps) && !line.isVertical(eps)) {
+				line = null;
+			}
+		}
+		return  line;
+	}
+
+	/** sometimes polylines represent circles
+	 * crude algorithm - assume points are roughly equally spaced
+	 * @param maxSize
+	 * @param epsilon
+	 * @return
+	 */
+	public SVGCircle createCircle(double epsilon) {
+		createCoordArray();
+		SVGCircle circle = null;
+		if (isClosed && allCoords.size() >= 8) {
+			Real2Range r2r = this.getBoundingBox();
+			if (Real.isEqual(r2r.getXRange().getRange(),  r2r.getYRange().getRange(), 2*epsilon)) {
+				Real2 centre = r2r.getCentroid();
+				Double sum = 0.0;
+				double[] spokeLengths = new double[firstCoords.size()];
+				for (int i = 0; i < firstCoords.size(); i++) {
+					Double spokeLength = centre.getDistance(firstCoords.get(i));
+					spokeLengths[i] = spokeLength;
+					sum += spokeLength;
+				}
+				Double rad = sum / firstCoords.size();
+				for (int i = 0; i < spokeLengths.length; i++) {
+					if (Math.abs(spokeLengths[i] - rad) > epsilon) {
+						return null;
+					}
+				}
+				circle = new SVGCircle(centre, rad);
+			}
+		}
+		return circle;
+	}
+
+	public List<SVGPathPrimitive> ensurePrimitives() {
+		isClosed = false;
+		if (primitiveList == null) {
+			primitiveList = this.createPathPrimitives();
+		}
+		if (primitiveList != null && primitiveList.size() > 1) {
+			SVGPathPrimitive primitive0 = primitiveList.get(0);
+			SVGPathPrimitive primitiveEnd = primitiveList.get(primitiveList.size() - 1);
+			Real2 coord0 = primitive0.getFirstCoord();
+			Real2 coordEnd = primitiveEnd.getLastCoord();
+			isClosed = coord0.getDistance(coordEnd) < EPS1;
+		}
+		return primitiveList;
+	}
 
 	/**
 	 * do two paths have identical coordinates?
@@ -404,6 +497,41 @@ public class SVGPath extends SVGElement {
 	public Real2 getUpperRight() {
 		Real2Range r2r = this.getBoundingBox();
 		return new Real2(r2r.getXRange().getMax(), r2r.getYRange().getMax());
+	}
+
+	// there are some polylines which contain a small number of curves and may be transformable
+	public SVGPolyline createHeuristicPolyline(int minL, int maxC, int minPrimitives) {
+		SVGPolyline polyline = null;
+		String signature = this.getSignature();
+		if (signature.length() < 3) {
+			return null;
+		}
+		// must start with M
+		if (signature.charAt(0) != 'M') {
+			return null;
+		}
+		// can only have one M
+		if (signature.substring(1).indexOf("M") != -1) {
+			return null;
+		}
+		signature.replaceAll("[^C]", "").length();
+		StringBuilder sb = new StringBuilder();
+		if (signature.length() >= minPrimitives) {
+			int cCount = signature.replaceAll("[^C]", "").length();
+			int lCount = signature.replaceAll("[^L]", "").length();
+			if (lCount >= minL && maxC >= cCount) {
+				for (SVGPathPrimitive primitive : primitiveList) {
+					if (primitive instanceof CurvePrimitive) {
+						sb.append("L"+primitive.getLastCoord().toString());
+					} else {
+						sb.append(primitive.toString());
+					}
+				}
+			}
+			SVGPath path = new SVGPath(sb.toString());
+			polyline = new SVGPolyline(path);
+		}
+		return polyline;
 	}
 
 }

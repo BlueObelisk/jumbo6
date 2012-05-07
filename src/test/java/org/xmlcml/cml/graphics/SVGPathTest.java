@@ -45,4 +45,16 @@ public class SVGPathTest {
 		Assert.assertEquals("scale", 2.0, d, 0.00001);
 	}
 	
+	@Test
+	public void testCircle() {
+		SVGPath path1 = new SVGPath(
+				"M408.95 493.497 C408.95 492.438 407.805 491.779 406.889 492.308 C405.971 492.839 405.972 494.161 406.89 494.69 C407.807 495.217 408.95 494.557 408.95 493.497");
+		SVGCircle circle = path1.createCircle(0.5);
+		Assert. assertNotNull(circle);
+		Assert.assertEquals("rad", 1.675, circle.getRad(), 0.1);
+		Assert.assertEquals("cx", 407.4, circle.getCX(), 0.2);
+		Assert.assertEquals("cx", 493.5, circle.getCY(), 0.2);
+		
+	}
+
 }

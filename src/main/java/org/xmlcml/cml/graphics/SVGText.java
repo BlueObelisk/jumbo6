@@ -78,7 +78,7 @@ public class SVGText extends SVGElement {
 
 	public static void setDefaultStyle(SVGText text) {
 		text.setStroke("none");
-		text.setFontSize(7.654321);
+		text.setFontSize(1.0);
 	}
 	
 	/** constructor
