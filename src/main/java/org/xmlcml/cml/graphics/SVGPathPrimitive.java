@@ -64,7 +64,7 @@ public abstract class SVGPathPrimitive {
 				Real2Array r2a = new Real2Array();
 				while (ii < dd.length()) {
 					char c = dd.charAt(ii);
-					if (Character.isAlphabetic(c)) {
+					if (Character.isLetter(c)) {
 						break;
 					} else {
 						r2s = new Real2String(dd.substring(ii));
