@@ -149,7 +149,7 @@ public class SVGTextTest {
 				"improper=\"true\" x=\"266.4\" y=\"342.36\">0</text>" +
 				"</svg>";
 		SVGSVG svg = (SVGSVG) SVGElement.createSVG(JumboTestUtils.parseValidString(s));
-		List<SVGElement> elementList = SVGElement.getElementList(svg, "./svg:text");
+		List<SVGElement> elementList = SVGElement.generateElementList(svg, "./svg:text");
 		Assert.assertEquals("texts", 9, elementList.size());
 		double[] lengths = new double[elementList.size()];
 		for (int i = 0; i < elementList.size(); i++) {
@@ -328,7 +328,7 @@ public class SVGTextTest {
 	private SVGText testConcatenate(double fontWidthFactor,
 			double fontHeightFactor, String s, boolean mergedExpected, double endExpected, String textExpected) {
 		SVGSVG svg = (SVGSVG) SVGElement.createSVG(JumboTestUtils.parseValidString(s));
-		List<SVGElement> elementList = SVGElement.getElementList(svg, "./svg:text");
+		List<SVGElement> elementList = SVGElement.generateElementList(svg, "./svg:text");
 		Assert.assertEquals("texts", 2, elementList.size());
 		SVGText text0 = ((SVGText)elementList.get(0));
 		SVGText text1 = ((SVGText)elementList.get(1));

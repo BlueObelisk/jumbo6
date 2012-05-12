@@ -848,14 +848,7 @@ public class SVGElement extends GraphicsElement {
 	
 	public SVGRect createGraphicalBoundingBox() {
 		Real2Range r2r = this.getBoundingBox();
-		RealRange xr = r2r.getXRange();
-		double dx = (xr.getRange() < Real.EPS) ? 1.0 : 0.0; 
-		RealRange yr = r2r.getYRange();
-		double dy = (yr.getRange() < Real.EPS) ? 1.0 : 0.0; 
-		SVGRect rect = new SVGRect(new Real2(xr.getMin()-dx, yr.getMin()-dy), new Real2(xr.getMax()+dx, yr.getMax()+dy));
-		rect.setStrokeWidth(getBBStrokeWidth());
-		rect.setStroke(getBBStroke());
-		rect.setFill(getBBFill());
+		SVGRect rect = createGraphicalBox(r2r, getBBStroke(), getBBFill(), getBBStrokeWidth(), getBBOpacity());
 		if (this.getAttribute("transform") != null) {
 			Transform2 t2 = this.getTransform();
 			if (t2 != null) {
@@ -865,6 +858,23 @@ public class SVGElement extends GraphicsElement {
 				}
 			}
 		}
+		return rect;
+	}
+	
+	public static SVGRect createGraphicalBox(Real2Range r2r, String stroke, String fill, Double strokeWidth, Double opacity) {
+		RealRange xr = r2r.getXRange();
+		RealRange yr = r2r.getYRange();
+		if (xr == null || yr == null) {
+			LOG.error("null bbox");
+			return null;
+		}
+		double dx = (xr.getRange() < Real.EPS) ? 1.0 : 0.0; 
+		double dy = (yr.getRange() < Real.EPS) ? 1.0 : 0.0; 
+		SVGRect rect = new SVGRect(new Real2(xr.getMin()-dx, yr.getMin()-dy), new Real2(xr.getMax()+dx, yr.getMax()+dy));
+		rect.setStrokeWidth(strokeWidth);
+		rect.setStroke(stroke);
+		rect.setFill(fill);
+		rect.setOpacity(opacity);
 		return rect;
 	}
 
@@ -892,8 +902,33 @@ public class SVGElement extends GraphicsElement {
 		return 0.4;
 	}
 
+	/** property of graphic bounding box
+	 * can be overridden
+	 * @return default 1.0
+	 */
+	protected double getBBOpacity() {
+		return 1.0;
+	}
+
+	public static void drawBoundingBoxes(List<SVGElement> elements, SVGElement svgParent, String stroke, String fill, double strokeWidth, double opacity) {
+		for (SVGElement element : elements) {
+			SVGRect svgBox = SVGElement.drawBox(element.getBoundingBox(), svgParent, stroke, fill, strokeWidth, opacity);
+		}
+	}
+	public static void drawBoxes(List<Real2Range> boxes, SVGElement svgParent, String stroke, String fill, double strokeWidth, double opacity) {
+		for (Real2Range box : boxes) {
+			SVGRect svgBox = SVGElement.drawBox(box, svgParent, stroke, fill, strokeWidth, opacity);
+		}
+	}
+	public static SVGRect drawBox(Real2Range box, SVGElement svgParent,
+			String stroke, String fill, double strokeWidth, double opacity) {
+		SVGRect svgBox = createGraphicalBox(box, stroke, fill, strokeWidth, opacity);
+		svgParent.appendChild(svgBox);
+		return svgBox;
+	}
+
 	public static void applyTransformsWithinElementsAndFormat(SVGElement svgElement) {
-		List<SVGElement> elementList = getElementList(svgElement, ".//svg:*[@transform]");
+		List<SVGElement> elementList = generateElementList(svgElement, ".//svg:*[@transform]");
 		LOG.debug("NODES "+elementList.size());
 		for (SVGElement element : elementList) {
 			element.applyTransformAttributeAndRemove();
@@ -905,7 +940,7 @@ public class SVGElement extends GraphicsElement {
 	/**
 	 * @return
 	 */
-	public static List<SVGElement> getElementList(Element element, String xpath) {
+	public static List<SVGElement> generateElementList(Element element, String xpath) {
 		Nodes childNodes = element.query(xpath, CMLConstants.SVG_XPATH);
 		List<SVGElement> elementList = new ArrayList<SVGElement>();
 		for (int i = 0; i < childNodes.size(); i++) {
