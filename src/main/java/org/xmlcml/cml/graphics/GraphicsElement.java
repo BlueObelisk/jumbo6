@@ -36,6 +36,7 @@ import org.xmlcml.euclid.Transform2;
  */
 public class GraphicsElement extends Element implements SVGConstants {
 
+	private static final String CLIP_PATH = "clip-path";
 	private static final String FONT_SIZE = "font-size";
 	protected Transform2 cumulativeTransform = new Transform2();
 		
@@ -170,14 +171,15 @@ public class GraphicsElement extends Element implements SVGConstants {
 	 * @return the clipPath
 	 */
 	public String getClipPath() {
-		return (String) getSubStyle("clip-path");
+		String clipPath = this.getAttributeValue(CLIP_PATH);
+		return (clipPath != null) ? clipPath : (String) getSubStyle(CLIP_PATH);
 	}
 
 	/**
 	 * @param clip-path
 	 */
 	public void setClipPath(String clipPath) {
-		setSubStyle("clip-path", clipPath);
+		setSubStyle(CLIP_PATH, clipPath);
 	}
 
 	/**
