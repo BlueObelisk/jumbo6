@@ -10,6 +10,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
 
+import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
@@ -17,6 +18,7 @@ import org.xmlcml.euclid.Transform2;
 public class SVGUtil {
 
 	private static final String TRANSFORMS_APPLIED = "transformsApplied";
+	private static final Logger LOG = Logger.getLogger(SVGUtil.class);
 
 	/**
 	 * adds a new svg:g between element and its children
@@ -137,13 +139,16 @@ public class SVGUtil {
 	}
 
 	public static void addIdsToAllElements(SVGSVG svg) {
+		LOG.debug("adding ids");
 		List<SVGElement> elems = SVGUtil.getQuerySVGElements(svg, "//svg:*");
+		LOG.debug("found elements "+elems.size());
 		int i = 0;
 		for (SVGElement elem : elems) {
 			if (elem.getId() == null) {
 				elem.setId(elem.getTag()+(i++));
 			}
 		}
+		LOG.debug("added ids "+elems.size());
 	}
 
 	/**
