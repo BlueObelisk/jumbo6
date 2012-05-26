@@ -152,6 +152,7 @@ public class SVGPolyline extends SVGPoly {
 	 */
 	public static SVGPolyline createPolyline(SVGPath element) {
 		SVGPolyline polyline = null;
+		System.err.println("Beware NYI");
 		return polyline;
 	}
 		

@@ -26,6 +26,7 @@ import nu.xom.Node;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
+import org.xmlcml.euclid.Real2Range;
 
 /** container for SVG
  * "svg"
@@ -119,6 +120,17 @@ public class SVGSVG extends SVGElement {
 	public void setBegin(Double d) {
 		this.begin = d;
 	}
+	
+	/** traverse all children recursively
+	 * @return bbox
+	 */
+	public Real2Range getBoundingBox() {
+		if (boundingBoxNeedsUpdating()) {
+			aggregateBBfromSelfAndDescendants();
+		}
+		return boundingBox;
+	}
+
 
 	/**
 	 * adds a new svg:g between element and its children
