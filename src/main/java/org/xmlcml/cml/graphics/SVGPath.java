@@ -302,18 +302,20 @@ public class SVGPath extends SVGElement {
 	}
 	
 	public Real2Array getCoords() {
-		coords = new Real2Array();
-		String ss = this.getDString().trim()+S_SPACE;
-		List<SVGPathPrimitive> primitives = this.createPathPrimitives();
-		for (SVGPathPrimitive primitive : primitives) {
-			Real2 coord = primitive.getCoords();
-			Real2Array coordArray = primitive.getCoordArray();
-			if (coord != null) {
-				coords.add(coord);
-			} else if (coordArray != null) {
-				coords.add(coordArray);
+//		if (coords == null) {
+			coords = new Real2Array();
+			String ss = this.getDString().trim()+S_SPACE;
+			List<SVGPathPrimitive> primitives = this.createPathPrimitives();
+			for (SVGPathPrimitive primitive : primitives) {
+				Real2 coord = primitive.getCoords();
+				Real2Array coordArray = primitive.getCoordArray();
+				if (coord != null) {
+					coords.add(coord);
+				} else if (coordArray != null) {
+					coords.add(coordArray);
+				}
 			}
-		}
+//		}
 		return coords;
 	}
 	
@@ -368,8 +370,10 @@ public class SVGPath extends SVGElement {
 	 */
 	@Override
 	public Real2Range getBoundingBox() {
-		getCoords();
-		boundingBox = coords.getRange2();
+		if (boundingBox == null) {
+			getCoords();
+			boundingBox = coords.getRange2();
+		}
 		return boundingBox;
 	}
 	
@@ -456,6 +460,7 @@ public class SVGPath extends SVGElement {
 	}
 
 	public void normalizeOrigin() {
+		boundingBox = null; // fprce recalculate
 		Real2Range boundingBox = this.getBoundingBox();
 		if (boundingBox == null) {
 			throw new RuntimeException("NULL BoundingBox");

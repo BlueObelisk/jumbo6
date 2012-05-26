@@ -228,13 +228,13 @@ public class SVGText extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		
-		double fontWidthFactor = 1.0;
-		double width = getEstimatedHorizontalLength(fontWidthFactor);
-		double height = this.getFontSize() * fontWidthFactor;
-		Real2 xy = this.getXY();
-		Real2Range boundingBox = new Real2Range(xy, xy.plus(new Real2(width, -height)));
-		
+		if (boundingBoxNeedsUpdating()) {
+			double fontWidthFactor = 1.0;
+			double width = getEstimatedHorizontalLength(fontWidthFactor);
+			double height = this.getFontSize() * fontWidthFactor;
+			Real2 xy = this.getXY();
+			boundingBox = new Real2Range(xy, xy.plus(new Real2(width, -height)));
+		}
 		return boundingBox;
 	}
 

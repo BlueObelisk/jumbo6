@@ -154,8 +154,11 @@ public class SVGMarker extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		SVGElement element = getSymbol();
-		return (element == null) ? null : element.getBoundingBox();
+		if (boundingBoxNeedsUpdating()) {
+			SVGElement element = getSymbol();
+			boundingBox = (element == null) ? null : element.getBoundingBox();
+		}
+		return boundingBox;
 	}
 	
 	public SVGElement getSymbol() {

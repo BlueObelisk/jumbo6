@@ -194,11 +194,13 @@ public class SVGCircle extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		Real2Range boundingBox = new Real2Range();
-		Real2 center = getCXY();
-		double rad = getRad();
-		boundingBox.add(new Real2(center.getX() - rad, center.getY() - rad));
-		boundingBox.add(new Real2(center.getX() + rad, center.getY() + rad));
+		if (boundingBoxNeedsUpdating()) {
+			boundingBox = new Real2Range();
+			Real2 center = getCXY();
+			double rad = getRad();
+			boundingBox.add(new Real2(center.getX() - rad, center.getY() - rad));
+			boundingBox.add(new Real2(center.getX() + rad, center.getY() + rad));
+		}
 		return boundingBox;
 	}
 	

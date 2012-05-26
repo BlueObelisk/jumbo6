@@ -433,6 +433,8 @@ public class SVGElement extends GraphicsElement {
 	static Map<String, Color> colorMap;
 
 	protected Real2Range boundingBox = null;
+
+	protected boolean boundingBoxCached = false;
 	
 	static {
 		colorMap = new HashMap<String, Color>();
@@ -826,26 +828,38 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	/** traverse all children recursively
-	 * 
+	 * often  copied to subclasses to improve readability
 	 * @return null by default
 	 */
 	public Real2Range getBoundingBox() {
-		if (boundingBox == null) {
-			Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
-			if (childNodes.size() > 0) {
-				boundingBox = new Real2Range();
-			}
-			for (int i = 0; i < childNodes.size(); i++) {
-				SVGElement child = (SVGElement)childNodes.get(i);
-				Real2Range childBoundingBox = child.getBoundingBox();
-				if (childBoundingBox != null) {
-					boundingBox = boundingBox.plus(childBoundingBox);
-				}
-			}
+		if (boundingBoxNeedsUpdating()) {
+			aggregateBBfromSelfAndDescendants();
 		}
 		return boundingBox;
 	}
+
+	protected void aggregateBBfromSelfAndDescendants() {
+		Nodes childNodes = this.query("./svg:*", CMLConstants.SVG_XPATH);
+		if (childNodes.size() > 0) {
+			boundingBox = new Real2Range();
+		}
+		for (int i = 0; i < childNodes.size(); i++) {
+			SVGElement child = (SVGElement)childNodes.get(i);
+			Real2Range childBoundingBox = child.getBoundingBox();
+			if (childBoundingBox != null) {
+				boundingBox = boundingBox.plus(childBoundingBox);
+			}
+		}
+	}
+
+	protected boolean boundingBoxNeedsUpdating() {
+		return boundingBox == null || !boundingBoxCached ;
+	}
 	
+	public void setBoundingBoxCached(boolean boundingBoxCached) {
+		this.boundingBoxCached = boundingBoxCached;
+	}
+
 	public SVGRect createGraphicalBoundingBox() {
 		Real2Range r2r = this.getBoundingBox();
 		SVGRect rect = createGraphicalBox(r2r, getBBStroke(), getBBFill(), getBBStrokeWidth(), getBBOpacity());

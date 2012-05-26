@@ -186,12 +186,14 @@ public abstract class SVGPoly extends SVGElement {
     }
     
     public Real2Range getBoundingBox() {
-    	Real2Range real2Range = new Real2Range();
-    	getReal2Array();
-    	for (int i = 0; i < real2Array.size(); i++) {
-    		real2Range.add(real2Array.get(i));
+    	if (boundingBoxNeedsUpdating()) {
+	    	boundingBox = new Real2Range();
+	    	getReal2Array();
+	    	for (int i = 0; i < real2Array.size(); i++) {
+	    		boundingBox.add(real2Array.get(i));
+	    	}
     	}
-    	return real2Range;
+    	return boundingBox;
     }
  	
     /**

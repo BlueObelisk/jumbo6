@@ -77,10 +77,12 @@ public class SVGImage extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		Real2 xy = this.getXY();
-		Double width = getWidth();
-		Double height = getHeight();
-		Real2Range boundingBox = new Real2Range(xy, xy.plus(new Real2(width, height)));
+		if (boundingBoxNeedsUpdating()) {
+			Real2 xy = this.getXY();
+			Double width = getWidth();
+			Double height = getHeight();
+			boundingBox = new Real2Range(xy, xy.plus(new Real2(width, height)));
+		}
 		return boundingBox;
 	}
 

@@ -154,11 +154,13 @@ public class SVGEllipse extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		Real2Range boundingBox = new Real2Range();
-		Real2 center = getCXY();
-		Real2 rad = getRXY();
-		boundingBox.add(center.subtract(rad));
-		boundingBox.add(center.plus(rad));
+		if (boundingBoxNeedsUpdating()) {
+			boundingBox = new Real2Range();
+			Real2 center = getCXY();
+			Real2 rad = getRXY();
+			boundingBox.add(center.subtract(rad));
+			boundingBox.add(center.plus(rad));
+		}
 		return boundingBox;
 	}
 	

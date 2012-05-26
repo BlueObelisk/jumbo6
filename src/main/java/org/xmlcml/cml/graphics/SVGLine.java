@@ -312,7 +312,10 @@ public class SVGLine extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		return getReal2Range();
+		if (boundingBoxNeedsUpdating()) {
+			boundingBox = getReal2Range();
+		}
+		return boundingBox;
 	}
 	
 	public String getXYString() {

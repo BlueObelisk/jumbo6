@@ -181,10 +181,12 @@ public class SVGRect extends SVGElement {
 	 * @return
 	 */
 	public Real2Range getBoundingBox() {
-		Real2Range boundingBox = new Real2Range();
-		Real2 origin = getXY();
-		boundingBox.add(origin);
-		boundingBox.add(origin.plus(new Real2(getWidth(), getHeight())));
+		if (boundingBoxNeedsUpdating()) {
+			boundingBox = new Real2Range();
+			Real2 origin = getXY();
+			boundingBox.add(origin);
+			boundingBox.add(origin.plus(new Real2(getWidth(), getHeight())));
+		}
 		return boundingBox;
 	}
 	

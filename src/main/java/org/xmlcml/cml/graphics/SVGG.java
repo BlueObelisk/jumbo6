@@ -27,6 +27,7 @@ import nu.xom.Node;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.html.HtmlMenuSystem;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 
 
@@ -105,6 +106,17 @@ public class SVGG extends SVGElement {
 		this.addAttribute(new Attribute("transform", "scale("+scale+","+scale+")"));
 	}
 	
+	/** traverse all children recursively
+	 * 
+	 * @return null by default
+	 */
+	public Real2Range getBoundingBox() {
+		if (boundingBoxNeedsUpdating()) {
+			aggregateBBfromSelfAndDescendants();
+		}
+		return boundingBox;
+	}
+
 	public static HtmlMenuSystem createHTMLMenuSystem(String dirname, List<SVGGBox> svgBoxList) 
 	throws IOException {
 		HtmlMenuSystem htmlMenuSystem = new HtmlMenuSystem();
