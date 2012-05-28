@@ -735,7 +735,7 @@ public class SVGElement extends GraphicsElement {
 		double d = Double.NaN;
 		String v = this.getAttributeValue(attName);
 		try {
-			d = new Double(v).doubleValue();
+			d = (v == null) ? 0.0 : new Double(v).doubleValue();
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cannot parse SVG coordinate "+v);
 		}
