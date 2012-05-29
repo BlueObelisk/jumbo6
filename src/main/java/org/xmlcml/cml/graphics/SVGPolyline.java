@@ -220,6 +220,11 @@ public class SVGPolyline extends SVGPoly {
 		return lineList;
 	}
 	
+	public SVGLine createLine() {
+		createLineList();
+		return lineList.size() == 1 ? lineList.get(0) : null;
+	}
+	
 	public List<SVGMarker> createPointList() {
 		createLineList();
 		return pointList;

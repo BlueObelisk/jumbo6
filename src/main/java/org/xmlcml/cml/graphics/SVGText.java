@@ -31,7 +31,7 @@ import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
-import org.xmlcml.euclid.Vector2;
+import org.xmlcml.euclid.Util;
 
 /** draws text.
  * 
@@ -172,6 +172,11 @@ public class SVGText extends SVGElement {
      */
     public void format(int places) {
     	setXY(getXY().format(places));
+    	Double fontSize = this.getFontSize();
+    	if (fontSize != null) {
+    		fontSize = Util.format(fontSize, places);
+    		this.setFontSize(fontSize);
+    	}
     }
 
 	/**
