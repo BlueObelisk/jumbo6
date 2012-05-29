@@ -37,6 +37,7 @@ import nu.xom.Text;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.tools.AbstractDisplay;
 import org.xmlcml.cml.tools.MoleculeDisplay;
@@ -73,6 +74,8 @@ public class SVGElement extends GraphicsElement {
 	public final static String YPLUS = "Y";
 	public final static String TITLE = "title";
 	public final static String ID = "id";
+
+	private static final String BOUNDING_BOX = "boundingBox";
 	
 	private Element userElement;
 	private String strokeSave;
@@ -743,11 +746,14 @@ public class SVGElement extends GraphicsElement {
 	}
 	
 	/** subclassed to tidy format.
-	 * 
+	 * by default formats children
 	 * @param places decimal places
 	 */
 	public void format(int places) {
-		
+		List<SVGElement> childElements = SVGUtil.getQuerySVGElements(this,  "./svg:*");
+		for (SVGElement childElement : childElements) {
+			childElement.format(places);
+		}
 	}
 
 	public double getX() {
@@ -764,6 +770,16 @@ public class SVGElement extends GraphicsElement {
 
 	public double getCY() {
 		return this.getCoordinateValueDefaultZero(CY);
+	}
+	
+	public void setBoundingBoxAttribute(Integer decimalPlaces) {
+		Real2Range r2r = this.getBoundingBox();
+		if (r2r != null) {
+			if (decimalPlaces != null) {
+				r2r.format(decimalPlaces);
+			}
+			CMLElement.addCMLXAttribute(this, BOUNDING_BOX, r2r.toString());
+		}
 	}
 
 	/**
