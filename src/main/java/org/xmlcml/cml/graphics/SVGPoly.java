@@ -46,7 +46,7 @@ public abstract class SVGPoly extends SVGElement {
 	private static Logger LOG = Logger.getLogger(SVGPoly.class);
 	
 	public final static String MONOTONIC = "monotonic";
-	private Line2D.Double path2;
+//	private Line2D.Double path2;
 	protected Real2Array real2Array;
 	
 	/** constructor
@@ -151,13 +151,13 @@ public abstract class SVGPoly extends SVGElement {
 		return path2;
 	}
 	
-	public Line2D.Double getPath2() {
-		return path2;
-	}
-
-	public void setPath2(Line2D.Double path2) {
-		this.path2 = path2;
-	}
+//	public Line2D.Double getPath2() {
+//		return path2;
+//	}
+//
+//	public void setPath2(Line2D.Double path2) {
+//		this.path2 = path2;
+//	}
 	
 	public void applyTransform(Transform2 t2) {
 		Real2Array xy = this.getReal2Array();

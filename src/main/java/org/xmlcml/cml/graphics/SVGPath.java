@@ -202,13 +202,7 @@ public class SVGPath extends SVGElement {
 	
 	public SVGRect createRectangle(double epsilon) {
 		createPolyline();
-		SVGRect rect = null;
-		if (polyline != null && polyline.isBox(epsilon)) {
-			Real2Range r2r = this.getBoundingBox();
-			rect = new SVGRect(this.getOrigin(), this.getUpperRight());
-			rect.setFill("none");
-		}
-		return rect;
+		return polyline.createRect(epsilon);
 	}
 
 	public SVGSymbol createSymbol(double maxWidth) {

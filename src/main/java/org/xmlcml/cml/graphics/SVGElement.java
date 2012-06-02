@@ -133,6 +133,8 @@ public class SVGElement extends GraphicsElement {
 			newElement = new SVGSVG();
 		} else if (tag.equals(SVGText.TAG)) {
 			newElement = new SVGText();
+		} else if (tag.equals(SVGTSpan.TAG)) {
+			newElement = new SVGTSpan();
 		} else if (tag.equals(SVGTitle.TAG)) {
 			newElement = new SVGTitle();
 		} else {

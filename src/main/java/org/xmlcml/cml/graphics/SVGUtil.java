@@ -13,6 +13,7 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 
 public class SVGUtil {
@@ -178,7 +179,7 @@ public class SVGUtil {
 
 
 	public static void removeXmlSpace(SVGSVG svg) {
-		Nodes nodes = svg.query("//@*[local-name()='space' and .='preserve']");
+		Nodes nodes = svg.query(".//@*[local-name()='space' and .='preserve']");
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).detach();
 		}
@@ -201,5 +202,16 @@ public class SVGUtil {
 		for (SVGElement element : elementList) {
 			element.setBoundingBoxCached(cached);
 		}
+	}
+
+	public static Real2Range createBoundingBox(List<SVGElement> elementList) {
+		Real2Range r2r = null;
+		if (elementList != null && elementList.size() > 0) {
+			r2r = elementList.get(0).getBoundingBox();
+			for (int i = 1; i < elementList.size(); i++) {
+				r2r = r2r.plus(elementList.get(i).getBoundingBox());
+			}
+		}
+		return r2r;
 	}
 }

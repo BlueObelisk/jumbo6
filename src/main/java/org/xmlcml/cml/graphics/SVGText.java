@@ -22,11 +22,13 @@ import java.awt.Graphics2D;
 
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.Text;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.EuclidConstants;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Range;
@@ -74,6 +76,7 @@ public class SVGText extends SVGElement {
 		estimatedHorizontallength = Double.NaN; 
 		currentBaseY = Double.NaN;
 		calculatedTextEndCoordinate = Double.NaN;
+		this.setBoundingBoxCached(false);
 	}
 
 	public static void setDefaultStyle(SVGText text) {
@@ -93,6 +96,9 @@ public class SVGText extends SVGElement {
         super((SVGElement) element);
 	}
 	
+	protected SVGText(String tag) {
+		super(tag);
+	}
     /**
      * copy node .
      *
@@ -116,7 +122,7 @@ public class SVGText extends SVGElement {
 		double fontSize = this.getFontSize();
 		fontSize *= cumulativeTransform.getMatrixAsArray()[0] * 0.3;
 		fontSize = (fontSize < 8) ? 8 : fontSize;
-		String text = this.getValue();
+		String text = this.getText();
 		Real2 xy = this.getXY();
 		xy = transform(xy, cumulativeTransform);
 		xy.plusEquals(new Real2(fontSize*0.65, -0.65*fontSize));
@@ -190,10 +196,12 @@ public class SVGText extends SVGElement {
 	 * @return the text
 	 */
 	public String getText() {
-		return this.getValue();
+		Nodes nodes = this.query("./text()");
+		return nodes.size() == 1 ? nodes.get(0).getValue() : null;
 	}
 
 	/**
+	 * clears text and replaces if not null
 	 * @param text the text to set
 	 */
 	public void setText(String text) {
@@ -205,7 +213,12 @@ public class SVGText extends SVGElement {
 				LOG.debug(node.getClass());
 			}
 		}
-		this.appendChild(text);
+		if (text != null) {
+			this.appendChild(text);
+		}
+		boundingBox = null;
+		calculatedTextEndCoordinate = Double.NaN;
+		estimatedHorizontallength = Double.NaN; 
 	}
 
 	/** extent of text
@@ -248,22 +261,26 @@ public class SVGText extends SVGElement {
 	 * @param fontWidthFactor
 	 * @return
 	 */
-	public double getEstimatedHorizontalLength(double fontWidthFactor) {
-		String s = getValue();
-		String family = this.getFontFamily();
-		double[] lengths = FontWidths.getFontWidths(family);
-		if (lengths == null) {
-			lengths = FontWidths.SANS_SERIF;
-		}
-		double fontSize = this.getFontSize();
-		estimatedHorizontallength = 0.0;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c > 255) {
-				c = 's';  // as good as any
+	public Double getEstimatedHorizontalLength(double fontWidthFactor) {
+		String s = getText();
+		if (s == null) {
+			estimatedHorizontallength = Double.NaN;
+		} else {
+			String family = this.getFontFamily();
+			double[] lengths = FontWidths.getFontWidths(family);
+			if (lengths == null) {
+				lengths = FontWidths.SANS_SERIF;
 			}
-			double length = fontSize * fontWidthFactor * lengths[(int)c];
-			estimatedHorizontallength += length;
+			double fontSize = this.getFontSize();
+			estimatedHorizontallength = 0.0;
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (c > 255) {
+					c = 's';  // as good as any
+				}
+				double length = fontSize * fontWidthFactor * lengths[(int)c];
+				estimatedHorizontallength += length;
+			}
 		}
 		return estimatedHorizontallength;
 	}
@@ -394,7 +411,7 @@ public class SVGText extends SVGElement {
 		double spaceWidth = fontWidths[(int)C_SPACE] * maxFontSize * fontWidthFactor;
 		
 		// same size of font?
-		LOG.debug(""+this.getValue()+"]["+text1.getValue()+ " ...fonts... " + fontSize0+"/"+fontSize1);
+		LOG.debug(""+this.getText()+"]["+text1.getText()+ " ...fonts... " + fontSize0+"/"+fontSize1);
 		// has vertical changed by more than the larger font size?
 		if (!Real.isEqual(coordVert0, coordVert1, maxFontSize * fontHeightFactor)) {
 			LOG.debug("changed vertical height "+coordVert0+" => "+coordVert1+" ... "+maxFontSize);
@@ -469,7 +486,7 @@ public class SVGText extends SVGElement {
 			}
 			unscriptFontSize = text1.getFontSize();
 		} else {
-			LOG.debug("change of font size: "+fontSize0+"/"+fontSize1+" .... "+this.getValue()+" ... "+text1.getValue());
+			LOG.debug("change of font size: "+fontSize0+"/"+fontSize1+" .... "+this.getText()+" ... "+text1.getText());
 		}
 		if (linker != null) {
 			newText = string0 + linker + string1;
@@ -517,6 +534,46 @@ public class SVGText extends SVGElement {
 	 */
 	protected double getBBStrokeWidth() {
 		return 0.2;
+	}
+	
+	public void createWordWrappedTSpans(Double textWidthFactor, Real2Range boundingBox, Double fSize) {
+		String textS = getText().trim();
+		if (textS.length() == 0) {
+			return;
+		}
+		this.setText(null);
+		double fontSize = fSize == null ? this.getFontSize() : fSize;
+		String[] tokens = textS.split(EuclidConstants.S_WHITEREGEX);
+		Double x0 = boundingBox.getXRange().getMin();
+		Double x1 = boundingBox.getXRange().getMax();
+		Double x = x0;
+		Double y0 = boundingBox.getYRange().getMin();
+		Double y = y0;
+		Double deltay = fontSize*1.2;
+		y += deltay;
+		SVGTSpan span = this.createSpan(tokens[0], new Real2(x0, y), fontSize);
+		int ntok = 1;
+		while (ntok < tokens.length) { 
+			String s = span.getText();
+			span.setText(s+" "+tokens[ntok]);
+			double xx = span.getCalculatedTextEndCoordinate(textWidthFactor);
+			if (xx > x1) {
+				span.setText(s);
+				y += deltay;
+				span = this.createSpan(tokens[ntok], new Real2(x0, y), fontSize);
+			}
+			ntok++;
+		}
+		this.clearRotate();
+	}
+	
+	public SVGTSpan createSpan(String text, Real2 xy, Double fontSize) {
+		SVGTSpan span = new SVGTSpan();
+		span.setXY(xy);
+		span.setFontSize(fontSize);
+		span.setText(text);
+		appendChild(span);
+		return span;
 	}
 
 }

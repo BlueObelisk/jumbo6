@@ -16,47 +16,58 @@
 
 package org.xmlcml.cml.graphics;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Text;
 
-import org.xmlcml.euclid.Real2Array;
+import org.apache.log4j.Logger;
+import org.xmlcml.cml.base.CMLConstants;
+import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.Real;
+import org.xmlcml.euclid.Real2;
+import org.xmlcml.euclid.Real2Range;
+import org.xmlcml.euclid.Transform2;
+import org.xmlcml.euclid.Util;
 
-/** draws a straight line.
+/** draws text.
+ * 
+ * NOTE: Text can be rotated and the additonal fields manage some of the
+ * metrics for this. Still very experimental
  * 
  * @author pm286
  *
  */
-public class SVGPolygon extends SVGPoly {
-
-	public final static String TAG ="polygon";
+public class SVGTSpan extends SVGText {
+	private static Logger LOG = Logger.getLogger(SVGTSpan.class);
+	public final static String TAG ="tspan";
+	
 	
 	/** constructor
 	 */
-	public SVGPolygon() {
+	public SVGTSpan() {
 		super(TAG);
 		init();
 	}
+	protected void init() {
+		super.setDefaultStyle();
+		setDefaultStyle(this);
+	}
+	
 	
 	/** constructor
 	 */
-	public SVGPolygon(SVGElement element) {
+	public SVGTSpan(SVGTSpan element) {
         super((SVGElement) element);
 	}
 	
 	/** constructor
 	 */
-	public SVGPolygon(Element element) {
+	public SVGTSpan(Element element) {
         super((SVGElement) element);
-	}
-	
-	/** constructor.
-	 * 
-	 * @param x1
-	 * @param x2
-	 */
-	public SVGPolygon(Real2Array real2Array) {
-		this();
-		setReal2Array(real2Array);
 	}
 	
     /**
@@ -65,18 +76,16 @@ public class SVGPolygon extends SVGPoly {
      * @return Node
      */
     public Node copy() {
-        return new SVGPolygon(this);
+        return new SVGTSpan(this);
     }
-		
-	/** get tag.
+
+
+	/**
 	 * @return tag
 	 */
 	public String getTag() {
 		return TAG;
 	}
 
-	public int size() {
-		return real2Array.size();
-	}
 
 }
