@@ -27,6 +27,7 @@ import org.xmlcml.cml.base.CMLElement;
 import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.RealArray;
 
 /** draws a straight line.
@@ -278,5 +279,90 @@ public class SVGPolyline extends SVGPoly {
 			}
 		}
 		return isBox;
+	}
+
+	public void removeLastLine() {
+		createLineList();
+		if (lineList.size() > 0) {
+			lineList.remove(lineList.size()-1);
+			pointList.remove(pointList.size()-1);
+			if (pointList.size() == 1) {
+				pointList.remove(0);
+			}
+		}
+	}
+	
+	public void removeFirstLine() {
+		createLineList();
+		if (lineList.size() > 0) {
+			lineList.remove(0);
+			pointList.remove(0);
+			if (pointList.size() == 1) {
+				pointList.remove(0);
+			}
+		}
+	}
+	
+	public void add(SVGLine line) {
+		lineList.add(line);
+		SVGMarker marker = new SVGMarker();
+		marker.addLine(line);
+		pointList.add(marker);
+	}
+	
+	public List<SVGPolyline> createLinesSplitAtPoint(int split) {
+		createLineList();
+		List<SVGPolyline> polylines = null;
+		if (split > 0 && split <= lineList.size() ) {
+			polylines = new ArrayList<SVGPolyline>();
+			SVGPolyline polyline0 = new SVGPolyline();
+			polylines.add(polyline0);
+			for (int i = 0; i < split; i++) {
+				polyline0.add(new SVGLine(lineList.get(i)));
+			}
+			SVGPolyline polyline1 = new SVGPolyline();
+			polylines.add(polyline1);
+			for (int i = split; i < lineList.size(); i++) {
+				polyline1.add(new SVGLine(lineList.get(i)));
+			}
+		}
+		return polylines;
+	}
+	
+	public SVGPolyline createJoinedLines(List<SVGPolyline> polylineList) {
+		SVGPolyline newPolyline = new SVGPolyline();
+		for (SVGPolyline polyline : polylineList) {
+			List<SVGLine> lineList = polyline.createLineList();
+			for (SVGLine line : lineList) {
+				newPolyline.add(line);
+			}
+		}
+		return newPolyline;
+	}
+
+	public SVGPolygon createPolygon(double eps) {
+		createLineList();
+		SVGPolygon polygon = null;
+		if (lineList.size() > 2) {
+			SVGMarker point0 = pointList.get(0);
+			SVGMarker pointn = pointList.get(lineList.size());
+			if (point0.getXY().isEqualTo(pointn.getXY(), eps)) {
+				real2Array = new Real2Array();
+				for (int i = 0; i < lineList.size(); i++) {
+					real2Array.add(new Real2(pointList.get(i).getXY()));
+				}
+			}
+		}
+		return polygon;
+	}
+
+	public SVGRect createRect(double epsilon) {
+		SVGRect rect = null;
+		if (this != null && isBox(epsilon)) {
+			Real2Range r2r = this.getBoundingBox();
+			rect = new SVGRect(r2r.getCorners()[0], r2r.getCorners()[1]);
+			rect.setFill("none");
+		}
+		return rect;
 	}
 }

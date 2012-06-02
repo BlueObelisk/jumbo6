@@ -19,6 +19,7 @@ package org.xmlcml.cml.graphics;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Node;
@@ -131,6 +132,14 @@ public class SVGSVG extends SVGElement {
 		return boundingBox;
 	}
 
+
+	public void removeEmptySVGG() {
+		List<SVGElement> emptyGList = SVGUtil.getQuerySVGElements(this, ".//svg:g[count(*)=0]");
+		for (SVGElement g : emptyGList) {
+			g.detach();
+		}
+		LOG.trace("removed emptyG: "+emptyGList.size());
+	}
 
 	/**
 	 * adds a new svg:g between element and its children

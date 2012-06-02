@@ -307,6 +307,14 @@ public class SVGLine extends SVGElement {
 		return real2Range;
 	}
 	
+	public static boolean isEqual(SVGLine line0, SVGLine line1, double eps) {
+		Line2 eLine0 = line0.getEuclidLine();
+		Line2 eLine1 = line1.getEuclidLine();
+		return (eLine0.getXY(0).isEqualTo(eLine1.getXY(0), eps) &&
+				eLine0.getXY(1).isEqualTo(eLine1.getXY(1), eps)
+				);
+	}
+	
 	/** synonym for getReal2Range.
 	 * 
 	 * @return
