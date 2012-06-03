@@ -202,7 +202,7 @@ public class SVGPath extends SVGElement {
 	
 	public SVGRect createRectangle(double epsilon) {
 		createPolyline();
-		return polyline.createRect(epsilon);
+		return polyline == null ? null : polyline.createRect(epsilon);
 	}
 
 	public SVGSymbol createSymbol(double maxWidth) {

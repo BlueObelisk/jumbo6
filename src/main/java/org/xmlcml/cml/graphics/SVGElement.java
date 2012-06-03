@@ -1009,4 +1009,12 @@ public class SVGElement extends GraphicsElement {
 		}
 	}
 
+	public void removeEmptySVGG() {
+		List<SVGElement> emptyGList = SVGUtil.getQuerySVGElements(this, ".//svg:g[count(*)=0]");
+		for (SVGElement g : emptyGList) {
+			g.detach();
+		}
+		LOG.trace("removed emptyG: "+emptyGList.size());
+	}
+
 }

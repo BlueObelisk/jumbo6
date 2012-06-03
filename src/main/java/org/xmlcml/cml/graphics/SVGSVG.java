@@ -133,14 +133,6 @@ public class SVGSVG extends SVGElement {
 	}
 
 
-	public void removeEmptySVGG() {
-		List<SVGElement> emptyGList = SVGUtil.getQuerySVGElements(this, ".//svg:g[count(*)=0]");
-		for (SVGElement g : emptyGList) {
-			g.detach();
-		}
-		LOG.trace("removed emptyG: "+emptyGList.size());
-	}
-
 	/**
 	 * adds a new svg:g between element and its children
 	 * this can be used to set scales, rendering, etc.

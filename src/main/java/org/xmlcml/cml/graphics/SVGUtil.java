@@ -185,14 +185,14 @@ public class SVGUtil {
 		}
 	}
 
-	public static void drawBoxes(List<? extends SVGElement> elementList, SVGSVG svgParent,
+	public static void drawBoxes(List<? extends SVGElement> elementList, SVGElement svgParent,
 			String stroke, String fill, double strokeWidth, double opacity) {
 		for (SVGElement element : elementList) {
 			SVGElement.drawBox(element.getBoundingBox(), element, stroke, fill, strokeWidth, opacity);
 		}
 	}
 
-	public static void drawBoxes(List<? extends SVGElement> elementList, SVGSVG svgParent, double strokeWidth, double opacity) {
+	public static void drawBoxes(List<? extends SVGElement> elementList, SVGElement svgParent, double strokeWidth, double opacity) {
 		for (SVGElement element : elementList) {
 			SVGElement.drawBox(element.getBoundingBox(), element, element.getStroke(), element.getFill(), strokeWidth, opacity);
 		}
