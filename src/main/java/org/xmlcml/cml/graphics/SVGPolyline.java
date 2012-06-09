@@ -17,7 +17,9 @@
 package org.xmlcml.cml.graphics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nu.xom.Element;
 import nu.xom.Node;
@@ -28,7 +30,6 @@ import org.xmlcml.euclid.Real;
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
 import org.xmlcml.euclid.Real2Range;
-import org.xmlcml.euclid.RealArray;
 
 /** draws a straight line.
  * 
@@ -199,6 +200,13 @@ public class SVGPolyline extends SVGPoly {
 	}
 
 	public List<SVGLine> createLineList() {
+		return createLineList(false);
+	}
+	
+	public List<SVGLine> createLineList(boolean clear) {
+		if (clear) {
+			lineList = null;
+		}
 		if (lineList == null) {
 			lineList = new ArrayList<SVGLine>();
 			pointList = new ArrayList<SVGMarker>();
@@ -304,7 +312,16 @@ public class SVGPolyline extends SVGPoly {
 	}
 	
 	public void add(SVGLine line) {
+		ensureLineList();
+		ensurePointList();
+		if (pointList.size() == 0) {
+			addNewMarker(line);
+		}
 		lineList.add(line);
+		addNewMarker(line);
+	}
+
+	private void addNewMarker(SVGLine line) {
 		SVGMarker marker = new SVGMarker();
 		marker.addLine(line);
 		pointList.add(marker);
@@ -339,18 +356,32 @@ public class SVGPolyline extends SVGPoly {
 		}
 		return newPolyline;
 	}
+	
+	private List<SVGLine> ensureLineList() {
+		if (lineList == null) {
+			lineList = new ArrayList<SVGLine>();
+		}
+		return lineList;
+	}
+
+	private List<SVGMarker> ensurePointList() {
+		if (pointList == null) {
+			pointList = new ArrayList<SVGMarker>();
+		}
+		return pointList;
+	}
 
 	public SVGPolygon createPolygon(double eps) {
 		createLineList();
 		SVGPolygon polygon = null;
-		if (lineList.size() > 2) {
-			SVGMarker point0 = pointList.get(0);
-			SVGMarker pointn = pointList.get(lineList.size());
-			if (point0.getXY().isEqualTo(pointn.getXY(), eps)) {
-				real2Array = new Real2Array();
-				for (int i = 0; i < lineList.size(); i++) {
-					real2Array.add(new Real2(pointList.get(i).getXY()));
-				}
+		if (real2Array == null) {
+			throw new RuntimeException("null real2Array");
+		}
+		if (real2Array.size() > 2) {
+			if (real2Array.get(0).isEqualTo(real2Array.get(real2Array.size()-1), eps)) {
+				Real2Array real2Array1 = new Real2Array(real2Array);
+				real2Array1.deleteElement(real2Array.size()-1);
+				polygon = new SVGPolygon(real2Array1);
 			}
 		}
 		return polygon;
@@ -365,4 +396,35 @@ public class SVGPolyline extends SVGPoly {
 		}
 		return rect;
 	}
+
+	public boolean removeDuplicateLines() {
+		boolean duplicate = false;
+		List<SVGLine> lineList = createLineList();
+		List<SVGLine> lineList1 = new ArrayList<SVGLine>();
+		Set<String> xmlSet = new HashSet<String>();
+		int count = 0;
+		for (SVGLine line : lineList) {
+			String xmlS = line.toXML();
+			if (xmlSet.contains(xmlS)) {
+				LOG.debug("duplicate line in polyline "+xmlS);
+				count++;
+			} else {
+				xmlSet.add(xmlS);
+				lineList1.add(line);
+			}
+		}
+		if (count > 0) {
+			duplicate = true;
+			Real2Array r2a = new Real2Array();
+			r2a.add(lineList.get(0).getXY(0));
+			for (SVGLine line : lineList1) {
+				r2a.add(line.getXY(1));
+			}
+			this.setReal2Array(r2a);
+			this.createLineList(true);
+			LOG.trace("removed "+count+" duplicate lines ");
+		}
+		return duplicate;
+	}
+
 }

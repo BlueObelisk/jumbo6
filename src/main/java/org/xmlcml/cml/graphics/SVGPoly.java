@@ -46,7 +46,6 @@ public abstract class SVGPoly extends SVGElement {
 	private static Logger LOG = Logger.getLogger(SVGPoly.class);
 	
 	public final static String MONOTONIC = "monotonic";
-//	private Line2D.Double path2;
 	protected Real2Array real2Array;
 	
 	/** constructor
