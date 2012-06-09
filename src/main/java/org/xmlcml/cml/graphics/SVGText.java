@@ -209,8 +209,10 @@ public class SVGText extends SVGElement {
 			Node node = this.getChild(0);
 			if (node instanceof Text) {
 				node.detach();
+			} else if (node instanceof SVGTSpan) {
+				// expected child
 			} else {
-				LOG.debug(node.getClass());
+				LOG.debug("unexpected child of SVGText: "+node.getClass());
 			}
 		}
 		if (text != null) {

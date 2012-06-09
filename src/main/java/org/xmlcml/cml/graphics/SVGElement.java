@@ -257,7 +257,7 @@ public class SVGElement extends GraphicsElement {
 	 * @param transform
 	 */
 	public void applyTransform(Transform2 transform) {
-		LOG.debug("No transform applied to: "+this.getClass());
+		LOG.trace("No transform applied to: "+this.getClass());
 	}
 	
 	public static Transform2 createTransform2FromTransformAttribute(String transformAttributeValue) {
@@ -1010,11 +1010,11 @@ public class SVGElement extends GraphicsElement {
 	}
 
 	public void removeEmptySVGG() {
-		List<SVGElement> emptyGList = SVGUtil.getQuerySVGElements(this, ".//svg:g[count(*)=0]");
+		List<SVGElement> emptyGList = SVGUtil.getQuerySVGElements(this, ".//svg:g[(count(*)+count(svg:*))=0]");
 		for (SVGElement g : emptyGList) {
 			g.detach();
 		}
-		LOG.trace("removed emptyG: "+emptyGList.size());
+		LOG.debug("removed emptyG: "+emptyGList.size());
 	}
 
 }
