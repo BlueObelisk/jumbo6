@@ -41,6 +41,7 @@ import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.Angle;
+import org.xmlcml.euclid.IntMatrix;
 import org.xmlcml.euclid.IntSquareMatrix;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -58,8 +59,13 @@ import org.xmlcml.molutil.ChemicalElement;
  * 
  */
 public class GeometryTool extends AbstractTool {
-    private static Logger LOG = Logger.getLogger(GeometryTool.class);
 
+
+	private static Logger LOG = Logger.getLogger(GeometryTool.class);
+
+    private static final String DIFF = "diff";
+	private static final String LENGTH = "length";
+    
     CMLMolecule molecule;
     MoleculeTool moleculeTool;
     
@@ -248,11 +254,11 @@ public class GeometryTool extends AbstractTool {
         if (bondCount == 0 && atomCount < 2) {
             return;
         }
-        Elements angles = molecule.getChildCMLElements("angle"); //$NON-NLS-1$
+        Elements angles = molecule.getChildCMLElements(CMLAngle.TAG); //$NON-NLS-1$
         if (angles.size() == 0 && bondCount < 2) {
             return;
         }
-        Elements torsions = molecule.getChildCMLElements("torsion"); //$NON-NLS-1$
+        Elements torsions = molecule.getChildCMLElements(CMLTorsion.TAG); //$NON-NLS-1$
         if (torsions.size() == 0 && angles.size() < 2) {
             return;
         }
@@ -366,7 +372,7 @@ public class GeometryTool extends AbstractTool {
         // to molecule
         toLengths = MoleculeTool.getOrCreateTool(mol1).getLengthElements();
         lengthTable = CMLLength.getIndexedLengths(toLengths);
-        CMLTable table = createTable("length", 2);
+        CMLTable table = createTable(LENGTH, 2);
         CMLArray idArray1 = table.getArrayElements().get(0);
         CMLArray valueArray1 = table.getArrayElements().get(1);
         CMLArray idArray2 = table.getArrayElements().get(2);
@@ -398,7 +404,7 @@ public class GeometryTool extends AbstractTool {
         }
         
         CMLArray diffArray = valueArray1.subtract(valueArray2);
-        diffArray.setId("diff");
+        diffArray.setId(DIFF);
         diffArray.setTitle("mol1 - mol2");
         table.addArray(diffArray);
         return table; 
@@ -487,7 +493,7 @@ public class GeometryTool extends AbstractTool {
          }
          
          CMLArray diffArray = valueArray1.subtract(valueArray2);
-         diffArray.setId("diff");
+         diffArray.setId(DIFF);
          diffArray.setTitle("mol1 - mol2");
          table.addArray(diffArray);
          return table; 
@@ -546,7 +552,7 @@ public class GeometryTool extends AbstractTool {
           }
           
           CMLArray diffArray = valueArray1.subtract(valueArray2);
-          diffArray.setId("diff");
+          diffArray.setId(DIFF);
           diffArray.setTitle("mol1 - mol2");
           table.addArray(diffArray);
           return table; 
@@ -604,6 +610,7 @@ public class GeometryTool extends AbstractTool {
     
     /**
      * create all non-bonded lengths for molecule. only include each length once
+     * INCLUDES 1-3 and 1-4 interactions
      * 
      * @param atomSet
      * @param type of coordinate
@@ -688,6 +695,7 @@ public class GeometryTool extends AbstractTool {
                     CMLAngle angle = new CMLAngle();
                     angle.setAtomRefs3(new String[] { atomj.getId(),
                             atomi.getId(), atomk.getId() });
+                    angle.setId(atomj.getId()+"_"+atomi.getId()+"_"+atomk.getId());
                     if (calculate) {
                         double angleVal = angle.getCalculatedAngle(molecule);
                         angle.setXMLContent(angleVal);
@@ -747,6 +755,7 @@ public class GeometryTool extends AbstractTool {
                     CMLTorsion torsion = new CMLTorsion();
                     torsion.setAtomRefs4(new String[] { ligand0.getId(),
                             at0.getId(), at1.getId(), ligand1.getId() });
+                    torsion.setId(ligand0.getId()+"_"+at0.getId()+"_"+at1.getId()+"_"+ligand1.getId());
                     if (calculate) {
                         double torsionVal = Double.NaN;
                         try {
@@ -770,73 +779,31 @@ public class GeometryTool extends AbstractTool {
         }
         return torsionVector;
     }
+    
     /**
      * create nonBonded matrix
-     * NOT SURE THIS WORKS
      * @return nonBonded matrix (1 = 1,2 or 1,3 interaction, 0 = non-bonded);
      */
-    public IntSquareMatrix getNonBondedMatrix() {
+    public AdjacencyMatrix createAdjacencyMatrix() {
         CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
-        IntSquareMatrix ism = null;
-        List<CMLAtom> atoms = molecule.getAtoms();
-        int[][] nbm = new int[atoms.size()][atoms.size()];
-        for (int i = 0; i < atoms.size(); i++) {
-            for (int j = 0; j < atoms.size(); j++) {
-                nbm[i][j] = 0;
-            }
-            nbm[i][i] = 1;
-        }
-        // FIXME
-        List<CMLTorsion> torsionList = this.createValenceTorsions(atomSet,
-                false, false);
-        for (CMLTorsion torsion : torsionList) {
-            // CMLAtom at0 = torsions[i].getAtomRefs4()[0];
-            // int a0 = this.getAtom(at0);
-            // CMLAtom at3 = torsions[i].getAtomRefs4()[3];
-            // int a3 = this.getAtom(at3);
-            // nbm[a0][a3] = 1;
-            // nbm[a3][a0] = 1;
-            if (1 == 2)
-                torsion.debug("TOR"); // FIXME
-        }
-        List<CMLAngle> angleList = this.createValenceAngles(atomSet, false,
-                false);
-        for (CMLAngle angle : angleList) {
-            // FIXME
-            // CMLAtom at0 = angles[i].getAtomRefs3()[0];
-            // int a0 = this.getAtom(at0);
-            // CMLAtom at2 = angles[i].getAtomRefs3()[2];
-            // int a2 = this.getAtom(at2);
-            // nbm[a0][a2] = 1;
-            // nbm[a2][a0] = 1;
-            if (1 == 2)
-                angle.debug("GEOM");
-        }
-        for (CMLBond bond : molecule.getBonds()) {
-            // FIXME
-            // CMLAtom at0 = bonds[i].getAtom(0);
-            // int a0 = this.getAtom(at0);
-            // CMLAtom at1 = bonds[i].getAtom(1);
-            // int a1 = this.getAtom(at1);
-            // nbm[a0][a1] = 1;
-            // nbm[a1][a0] = 1;
-            if (1 == 2)
-                bond.debug("GEOMTOOL");
-        }
-        for (int i = 0; i < atoms.size(); i++) {
-            for (int j = 0; j < atoms.size(); j++) {
-                String s = CMLConstants.S_EMPTY + nbm[i][j];
-                LOG.info(S_SPACE + s);
-            }
-            LOG.info(S_NL);
-        }
-        try {
-            ism = new IntSquareMatrix(nbm);
-        } catch (Exception e) {
-            LOG.error("BUG " + e);
-        }
-        return ism;
+        return new AdjacencyMatrix(atomSet);
     }
+    
+    /**
+     * create nonBonded matrix
+     * @return nonBonded matrix (1 = 1,2 or 1,3 interaction, 0 = non-bonded);
+     */
+    public AdjacencyMatrix getNonBondedMatrix() {
+        AdjacencyMatrix adjacencyMatrix = createAdjacencyMatrix();
+        List<CMLBond> bondList = molecule.getBonds();
+        adjacencyMatrix.removeBondsFromAdjacencyMatrix(bondList);
+        List<CMLAngle> angleList = this.createValenceAngles(false, false);
+        adjacencyMatrix.removeAnglesFromAdjacencyMatrix(angleList);
+        List<CMLTorsion> torsionList = this.createValenceTorsions(false,  false);
+        adjacencyMatrix.removeTorsionsFromAdjacencyMatrix(torsionList);
+        return adjacencyMatrix;
+    }
+    
     /**
      * flip (about bond axis) the 2D coordinates attached to atom0.
      * 

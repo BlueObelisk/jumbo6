@@ -1,3 +1,5 @@
+package org.xmlcml.cml.tools;
+
 /**
  *    Copyright 2011 Peter Murray-Rust et. al.
  *
@@ -14,7 +16,6 @@
  *    limitations under the License.
  */
 
-package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
 import java.util.HashSet;
