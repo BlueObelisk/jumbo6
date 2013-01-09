@@ -35,14 +35,13 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLLength;
+import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLMap;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLTable;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.euclid.Angle;
-import org.xmlcml.euclid.IntMatrix;
-import org.xmlcml.euclid.IntSquareMatrix;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -781,6 +780,95 @@ public class GeometryTool extends AbstractTool {
     }
     
     /**
+     * get all 1-4 distances for molecule.
+     * 
+     * @param calculate
+     *            false=> empty content; true=>calculated values (angstrom) as
+     *            content
+     * @param add
+     *            array as childElements of molecule
+     * @return array of lengths (zero length if none)
+     */
+    public List<CMLLength> create14Lengths(boolean calculate, boolean add) {
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
+        return this.create14Lengths(atomSet, calculate, add);
+    }
+    /**
+     * get all valence torsions for molecule.
+     * 
+     * @param atomSet
+     * @param calculate
+     *            false=> empty content; true=>calculated values (degrees) as
+     *            content
+     * @param add
+     *            array as childElements of molecule
+     * @return array of torsions (zero length if none)
+     */
+    public List<CMLLength> create14Lengths(CMLAtomSet atomSet, boolean calculate, boolean add) {
+        List<CMLTorsion> torsionVector = createValenceTorsions(atomSet, calculate, add);
+        List<CMLLength> list = new ArrayList<CMLLength>();
+        for (CMLTorsion torsion: torsionVector) {
+        	CMLLength length = new CMLLength();
+        	CMLAtom atom0 = atomSet.getAtomById(torsion.getAtomRefs4()[0]);
+        	CMLAtom atom3 = atomSet.getAtomById(torsion.getAtomRefs4()[3]);
+        	length.setAtomRefs2(atom0, atom3);
+        	if (calculate) {
+        		LOG.debug("Cannot add calculated length");
+        	}
+        	list.add(length);
+        }
+        return list;
+    }
+    
+    /**
+     * get all improper torsions for molecule.
+     * 
+     * an improper torsion involvesa central atom A with three ligands B1, B2, B3
+     * There is no unique labelling of the atoms - and there are 12 permutations.
+     * This calculation returns all 12 angles (though they are not independent)
+     * 
+     * @param atomSet
+     * @param calculate
+     *            false=> empty content; true=>calculated values (degrees) as
+     *            content
+     * @param add
+     *            array as childElements of molecule
+     * @return array of array of torsions (zero length if none)
+     */
+    public List<List<CMLTorsion>> createImproperTorsions(CMLAtomSet atomSet,
+            boolean calculate, boolean add) {
+    	CMLTorsion t;
+        List<List<CMLTorsion>> torsionListList = new ArrayList<List<CMLTorsion>>();
+        for (CMLAtom atom : molecule.getAtoms()) {
+        	CMLAtom id = atom;
+        	List<CMLAtom> ligands = atom.getLigandAtoms();
+
+        	if (ligands.size() == 3) {
+            	CMLAtom id0 = ligands.get(0);
+            	CMLAtom id1 = ligands.get(1);
+            	CMLAtom id2 = ligands.get(2);
+        		List<CMLTorsion> torsionList = new ArrayList<CMLTorsion>();
+        		// atom in centre
+        		t = new CMLTorsion();t.setAtomRefs4(id0, id1, id, id2);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id1, id0, id, id2);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id0, id2, id, id1);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id2, id0, id, id1);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id1, id2, id, id0);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id2, id1, id, id0);torsionList.add(t);
+        		// atom at end
+        		t = new CMLTorsion();t.setAtomRefs4(id0, id1, id2, id);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id1, id0, id2, id);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id0, id2, id1, id);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id2, id0, id1, id);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id1, id2, id0, id);torsionList.add(t);
+        		t = new CMLTorsion();t.setAtomRefs4(id2, id1, id0, id);torsionList.add(t);
+        		torsionListList.add(torsionList);
+        	}
+        }
+        return torsionListList;
+    }
+    
+    /**
      * create nonBonded matrix
      * @return nonBonded matrix (1 = 1,2 or 1,3 interaction, 0 = non-bonded);
      */
@@ -927,6 +1015,21 @@ public class GeometryTool extends AbstractTool {
         CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
         return this.createValenceTorsions(atomSet, calculate, add);
     }
+    /**
+     * get all improper torsions for molecule.
+     * see createImproperTorsions
+     * @param calculate
+     *            false=> empty content; true=>calculated values (degrees) as
+     *            content
+     * @param add
+     *            array as childElements of molecule
+     * @return array of torsions (zero length if none)
+     */
+    public List<List<CMLTorsion>> createImproperTorsions(boolean calculate, boolean add) {
+        CMLAtomSet atomSet = MoleculeTool.getOrCreateTool(molecule).getAtomSet();
+        return this.createImproperTorsions(atomSet, calculate, add);
+    }
+    
     /**
      * get all internal coordinates (including redundant ones).
      * 
