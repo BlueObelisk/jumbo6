@@ -2263,7 +2263,7 @@ public class MoleculeTool extends AbstractSVGTool {
 			if (stringSet.contains(id)) {
 				fromIdList.add(id);
 				String newId = null;
-				while (ii < totalSize) {
+				while (ii <= totalSize) {
 					newId = "a"+ii;
 					if (!stringSet.contains(newId) && molecule.getAtomById(newId) == null) {
 						stringSet.add(newId);
