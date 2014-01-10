@@ -16,8 +16,10 @@
 
 package org.xmlcml.cml.tools;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -58,7 +60,7 @@ public class StereochemistryTool extends AbstractTool {
 	public final static String CIP_SSTAR = "S*";
 	
 	AbstractTool moleculeTool;
-	CMLMolecule molecule;
+	private CMLMolecule molecule;
 
 	/**
 	 * constructor with embedded molecule.
@@ -66,7 +68,7 @@ public class StereochemistryTool extends AbstractTool {
 	 * @param molecule
 	 */
 	public StereochemistryTool(CMLMolecule molecule) {
-		this.molecule = molecule;
+		this.setMolecule(molecule);
 		moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 	}
 
@@ -76,7 +78,7 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public void add2DStereo() {
 		// MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
-		List<CMLBond> acyclicDoubleBonds = new ConnectionTableTool(molecule)
+		List<CMLBond> acyclicDoubleBonds = new ConnectionTableTool(getMolecule())
 		.getAcyclicDoubleBonds();
 		for (CMLBond bond : acyclicDoubleBonds) {
 			CMLBondStereo bondStereo = this.get2DBondStereo(bond);
@@ -167,7 +169,7 @@ public class StereochemistryTool extends AbstractTool {
 	 * @throws RuntimeException
 	 */
 	public void addWedgeHatchBonds() throws RuntimeException {
-		for (CMLAtom chiralAtom : new StereochemistryTool(molecule).getChiralAtoms()) {
+		for (CMLAtom chiralAtom : new StereochemistryTool(getMolecule()).getChiralAtoms()) {
 			this.addWedgeHatchBond(chiralAtom);
 		}
 	}
@@ -405,7 +407,7 @@ public class StereochemistryTool extends AbstractTool {
 	 */
 	public List<CMLAtom> getChiralAtoms() {
 		List<CMLAtom> chiralAtoms = new ArrayList<CMLAtom>();
-		for (CMLAtom atom : molecule.getAtoms()) {
+		for (CMLAtom atom : getMolecule().getAtoms()) {
 			boolean isChiral = isChiralCentre(atom);
 			if (isChiral) {
 				chiralAtoms.add(atom);
@@ -522,11 +524,11 @@ public class StereochemistryTool extends AbstractTool {
 			return null;
 		}
 		CMLAtom atom0 = bond.getAtom(0);
-		if (molecule.getBond(atom0, ligand0) == null) {
+		if (getMolecule().getBond(atom0, ligand0) == null) {
 			throw new RuntimeException("ligand0 is not connected to bond");
 		}
 		CMLAtom atom1 = bond.getAtom(1);
-		if (molecule.getBond(atom1, ligand1) == null) {
+		if (getMolecule().getBond(atom1, ligand1) == null) {
 			throw new RuntimeException("ligand1 is not connected to bond");
 		}
 		// no meaningful ligands or too many
@@ -600,11 +602,11 @@ public class StereochemistryTool extends AbstractTool {
 	 * 
 	 */
 	public void add3DStereo() {
-		ConnectionTableTool ct = new ConnectionTableTool(molecule);
+		ConnectionTableTool ct = new ConnectionTableTool(getMolecule());
 		List<CMLBond> cyclicBonds = ct.getCyclicBonds();
-		List<CMLBond> doubleBonds = molecule.getDoubleBonds();
+		List<CMLBond> doubleBonds = getMolecule().getDoubleBonds();
 		addBondStereo(cyclicBonds, doubleBonds);
-		List<CMLAtom> chiralAtoms = new StereochemistryTool(molecule).getChiralAtoms();
+		List<CMLAtom> chiralAtoms = new StereochemistryTool(getMolecule()).getChiralAtoms();
 		addAtomParity(chiralAtoms);
 	}
 
@@ -774,7 +776,7 @@ public class StereochemistryTool extends AbstractTool {
 			AtomTool atomTool = AtomTool.getOrCreateTool(atom);
 			int totalParity = 0;
 			int sense = 0;
-			CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(molecule);
+			CMLAtom[] atomRefs4x = atomParity.getAtomRefs4(getMolecule());
 			int atomParityValue = atomParity.getIntegerValue();
 			int highestPriorityAtom = 1;
 			// 3 explicit ligands
@@ -1027,5 +1029,37 @@ public class StereochemistryTool extends AbstractTool {
 			label = (CMLLabel) labels.get(0);
 		}
 		return label;
+	}
+
+	public CMLMolecule getMolecule() {
+		return molecule;
+	}
+
+	public void setMolecule(CMLMolecule molecule) {
+		this.molecule = molecule;
+	}
+
+	public List<CMLAtom> getAtomsAtPointyBondEnds() {
+		CMLMolecule stereoMol = getMolecule();
+		List<CMLBond> bondList = stereoMol.getBonds();
+		Set<CMLAtom> pointyAtomSet = new HashSet<CMLAtom>();
+		for (CMLBond bond : bondList) {
+			CMLBondStereo bondStereo = bond.getBondStereo();
+			if (bondStereo != null) {
+				CMLAtom pointyAtom = bond.getAtom(0);
+				pointyAtomSet.add(pointyAtom);
+			}
+		}
+		return new ArrayList<CMLAtom>(pointyAtomSet);
+	}
+
+	public void addCalculatedAtomParityForPointyAtoms() {
+		List<CMLAtom> pointyAtoms = getAtomsAtPointyBondEnds();
+		for (CMLAtom pointyAtom : pointyAtoms) {
+			CMLAtomParity atomParity = calculateAtomParityForLigandsInCIPOrder(pointyAtom);
+			if (atomParity != null) {
+				pointyAtom.appendChild(atomParity);
+			}
+		}
 	}
 }
