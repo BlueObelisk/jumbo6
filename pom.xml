@@ -7,7 +7,8 @@
 	<parent>
 		<groupId>uk.ac.cam.ch.wwmm</groupId>
 		<artifactId>wwmm-parent</artifactId>
-		<version>5-SNAPSHOT</version>
+		<!--  note widespread BUG in Jumbo if parent 5-SNAPSHOT is used -->
+		<version>4</version>
 	</parent>
 
 	<groupId>org.xml-cml</groupId>
