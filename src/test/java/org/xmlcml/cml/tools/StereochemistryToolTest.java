@@ -662,4 +662,46 @@ public class StereochemistryToolTest {
 		JumboTestUtils.assertEqualsCanonically("bonds and atoms", molecule, molecule1, true);
 	}
 
+	@Test 
+	public void testGetPointyAtomsAndCalculateParity() {
+		String s = 
+				"<molecule id='ci6746' xmlns='http://www.xml-cml.org/schema'>" +
+				"<atomArray>" +
+	            "<atom id='a1' elementType='Cl' x2='1.0' y2='0.0'/>"+
+	            "<atom id='a2' elementType='F' x2='0.0' y2='1.0'/>"+
+	            "<atom id='a3' elementType='H' x2='1.0' y2='2.0'/>"+
+	            "<atom id='a4' elementType='C' x2='1.0' y2='1.0'/>"+
+	            "<atom id='a5' elementType='C' x2='2.0' y2='1.0'/>"+
+	            "<atom id='a6' elementType='I' x2='3.0' y2='1.0'/>"+
+	            "<atom id='a7' elementType='H' x2='2.0' y2='0.0'/>"+
+	            "<atom id='a8' elementType='Br' x2='2.0' y2='2.0'/>"+
+				"</atomArray>" +
+				"<bondArray>" +
+				"<bond id='a4_a1' atomRefs2='a4 a1' order='S'>"
+				+ " <bondStereo>W</bondStereo>"
+				+ "</bond>" +
+				"<bond id='a2_a4' atomRefs2='a2 a4' order='S'/>" +
+				"<bond id='a3_a4' atomRefs2='a3 a4' order='S'/>" +
+				"<bond id='a5_a4' atomRefs2='a5 a4' order='S'>" +
+				" <bondStereo>H</bondStereo>" +
+				"</bond>" +
+				"<bond id='a6_a5' atomRefs2='a6 a5' order='S'/>" +
+				"<bond id='a7_a5' atomRefs2='a7 a5' order='S'/>" +
+				"<bond id='a8_a5' atomRefs2='a8 a5' order='S'/>" +
+				"</bondArray>" +
+				"</molecule>" +
+	            "";
+	    		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidString(s);
+	    		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+	    		List<CMLAtom> pointyAtomList = stereoTool.getAtomsAtPointyBondEnds();
+	    		// pointy ends
+	    		Assert.assertEquals("pointy",  2, pointyAtomList.size());
+	    		Assert.assertTrue(pointyAtomList.contains(molecule.getAtomById("a4")));
+	    		Assert.assertTrue(pointyAtomList.contains(molecule.getAtomById("a5")));
+	    		// 
+	    		stereoTool.addCalculatedAtomParityForPointyAtoms();
+//	    		molecule.debug("stereo");
+
+		
+	}
 }
