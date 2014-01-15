@@ -3558,8 +3558,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 * @param crystal
 	 */
 	public void createCartesiansFromFractionals(CMLCrystal crystal) {
-		this.createCartesiansFromFractionals(crystal
-			.getOrthogonalizationMatrix());
+		this.createCartesiansFromFractionals(crystal.getOrthogonalizationMatrix());
 	}
 
 	/**
@@ -3570,6 +3569,7 @@ public class MoleculeTool extends AbstractSVGTool {
 	 */
 	public void createCartesiansFromFractionals(
 			Transform3 orthogonalMatrix) {
+		LOG.debug("orthogonalization matrix: "+orthogonalMatrix);
 		for (CMLAtom atom : molecule.getAtoms()) {
 			Point3 point = atom.getPoint3(CoordinateType.FRACTIONAL);
 			if (point != null) {
