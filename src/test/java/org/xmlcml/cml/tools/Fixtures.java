@@ -22,6 +22,6 @@ public class Fixtures {
 	@Test
 	public void testMolecule() {
 		CMLMolecule mol = getAceticAcid();
-		mol.debug();
+//		mol.debug();
 	}
 }
