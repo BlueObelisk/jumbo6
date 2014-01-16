@@ -48,7 +48,6 @@ public class ArrayToolTest {
 		CMLArray array = new CMLArray();
 		ArrayTool arrayTool = ArrayTool.getOrCreateTool(array);
 		CMLArray array1 = arrayTool.getArray();
-		array1.debug();
 		JumboTestUtils.assertEqualsCanonically("empty array", array, array1);
 	}
 
