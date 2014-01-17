@@ -198,11 +198,19 @@ public class CrystalTool extends AbstractTool {
 		Transform3 t3 = crystal.getOrthogonalizationTransform();
 		for (CMLAtom atom : molecule.getAtoms()) {
 			Point3 p3 = atom.getXYZFract();
+			if (p3 == null) {
+				LOG.trace("atom has no fractional coordinates: "+atom.getId());
+				continue;
+			}
 			p3.normaliseCrystallographically();
 			atom.setXYZFract(p3);
 			Point3 newP3 = p3.transform(t3);
 			atom.setXYZ3(newP3);
 			for (CMLAtom at : molecule.getAtoms()) {
+				if (at.getXYZFract() == null) {
+					LOG.trace("atom has no fractional coordinates: "+atom.getId());
+					continue;
+				}
 				if (p3.equalsCrystallographically(at.getXYZFract())
 						&& !at.getId().equals(atom.getId())) {
 					atom.detach();
@@ -217,6 +225,10 @@ public class CrystalTool extends AbstractTool {
 	public void addAtomsToAllCornersEdgesAndFaces() {		
 		for (CMLAtom atom : molecule.getAtoms()) {
 			Point3 p3 = atom.getXYZFract();
+			// atom without coordinates
+			if (p3 == null) {
+				continue;
+			}
 			double[] coordArray = p3.getArray();
 			int zeroCount = 0;
 			int count = 0;
@@ -233,70 +245,28 @@ public class CrystalTool extends AbstractTool {
 			if (zeroCount > 0) {
 				List<Point3> p3List = new ArrayList<Point3>();
 				if (zeroCount == 1) {
-					// atom is on a face of the unit cell
-					List<Double> dList = new ArrayList<Double>(3);
-					for (Double coord : coordArray) {
-						if (coord < FRACT_EPS) {
-							dList.add(1.0+coord);
-						} else if (1.0 - coord < FRACT_EPS) {
-							double d = 1.0 - coord;
-							dList.add(0.0-d);
-						} else {
-							dList.add(coord);
-						}
-					}
-					Point3 newP3 = new Point3(new Point3(dList.get(0), dList.get(1), dList.get(2)));
-					p3List.add(newP3);
+					processAtomOnFaceOfUnitCell(coordArray, p3List);
 				} else if (zeroCount == 2) {
 					// atom is on an edge of the unit cell
-					if (nonInteger == -1) throw new RuntimeException("Should be one non-intger coordinate to reach this point.");
-					double[] array = {0.0, 0.0,
-							1.0, 0.0,
-							1.0, 1.0,
-							0.0, 1.0
-					};
-					for (int i = 0; i < 4; i++) {
-						double firstCoord = array[(1+(i*2))-1];
-						double secondCoord = array[(2+(i*2))-1];
-						if (nonInteger == 0) {
-							Point3 newP3 = new Point3(coordArray[0], getCoord(firstCoord, coordArray[1]), getCoord(secondCoord, coordArray[2]));
-							p3List.add(newP3);
-						} else if (nonInteger == 1) {
-							Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), coordArray[1], getCoord(secondCoord, coordArray[2]));
-							p3List.add(newP3);
-						} else if (nonInteger == 2) {
-							Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), getCoord(secondCoord, coordArray[1]), coordArray[2]);
-							p3List.add(newP3);
-						}
-					}
+					processAtomOnEdgeOfUnitCell(coordArray, nonInteger, p3List);
 				} else if (zeroCount == 3) {
 					// atom is at a corner of the unit cell
-					double[] array = {0.0, 0.0, 0.0,
-							1.0, 0.0, 0.0,
-							1.0, 1.0, 0.0,
-							1.0, 0.0, 1.0,
-							1.0, 1.0, 1.0,
-							0.0, 1.0, 0.0,
-							0.0, 1.0, 1.0,
-							0.0, 0.0, 1.0
-					};
-					for (int i = 0; i < 8; i++) {
-						p3List.add(new Point3(getCoord(array[(1+(i*3))-1], coordArray[0]), 
-								getCoord(array[(2+(i*3))-1], coordArray[1]), getCoord(array[(3+(i*3))-1], coordArray[2])));
-					}
+					processAtomOnCornerOfUnitCell(coordArray, p3List);
 				} else if (zeroCount > 3) {
 					throw new RuntimeException("Should never throw");
 				}
 				int serial = 1;
 				Transform3 t = crystal.getOrthogonalizationTransform();
 				for (Point3 point3 : p3List) {
+					if (point3 == null) continue;
 					CMLAtom newAtom = new CMLAtom(atom);
 					newAtom.setXYZFract(point3);
 					Point3 cart = point3.transform(t);
 					newAtom.setXYZ3(cart);
 					boolean add = true;
 					for (CMLAtom at : molecule.getAtoms()) {
-						if (point3.isEqualTo(at.getXYZFract(), Real.EPS)) {
+						Point3 atFract = at.getXYZFract();
+						if (atFract != null && point3.isEqualTo(at.getXYZFract(), Real.EPS)) {
 							add = false;
 							break;
 						}
@@ -310,6 +280,63 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 		}
+	}
+
+	private void processAtomOnCornerOfUnitCell(double[] coordArray, List<Point3> p3List) {
+		double[] array = {0.0, 0.0, 0.0,
+				1.0, 0.0, 0.0,
+				1.0, 1.0, 0.0,
+				1.0, 0.0, 1.0,
+				1.0, 1.0, 1.0,
+				0.0, 1.0, 0.0,
+				0.0, 1.0, 1.0,
+				0.0, 0.0, 1.0
+		};
+		for (int i = 0; i < 8; i++) {
+			p3List.add(new Point3(getCoord(array[(1+(i*3))-1], coordArray[0]), 
+					getCoord(array[(2+(i*3))-1], coordArray[1]), getCoord(array[(3+(i*3))-1], coordArray[2])));
+		}
+	}
+
+	private void processAtomOnEdgeOfUnitCell(double[] coordArray, int nonInteger,
+			List<Point3> p3List) {
+		if (nonInteger == -1) throw new RuntimeException("Should be one non-intger coordinate to reach this point.");
+		double[] array = {0.0, 0.0,
+				1.0, 0.0,
+				1.0, 1.0,
+				0.0, 1.0
+		};
+		for (int i = 0; i < 4; i++) {
+			double firstCoord = array[(1+(i*2))-1];
+			double secondCoord = array[(2+(i*2))-1];
+			if (nonInteger == 0) {
+				Point3 newP3 = new Point3(coordArray[0], getCoord(firstCoord, coordArray[1]), getCoord(secondCoord, coordArray[2]));
+				p3List.add(newP3);
+			} else if (nonInteger == 1) {
+				Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), coordArray[1], getCoord(secondCoord, coordArray[2]));
+				p3List.add(newP3);
+			} else if (nonInteger == 2) {
+				Point3 newP3 = new Point3(getCoord(firstCoord, coordArray[0]), getCoord(secondCoord, coordArray[1]), coordArray[2]);
+				p3List.add(newP3);
+			}
+		}
+	}
+
+	private void processAtomOnFaceOfUnitCell(double[] coordArray, List<Point3> p3List) {
+		// atom is on a face of the unit cell
+		List<Double> dList = new ArrayList<Double>(3);
+		for (Double coord : coordArray) {
+			if (coord < FRACT_EPS) {
+				dList.add(1.0+coord);
+			} else if (1.0 - coord < FRACT_EPS) {
+				double d = 1.0 - coord;
+				dList.add(0.0-d);
+			} else {
+				dList.add(coord);
+			}
+		}
+		Point3 newP3 = new Point3(new Point3(dList.get(0), dList.get(1), dList.get(2)));
+		p3List.add(newP3);
 	}
 
 	private double getCoord(double first, double coord) {
@@ -393,70 +420,8 @@ public class CrystalTool extends AbstractTool {
 				}
 			}
 
-			for (CMLAtom atom : symmetryMolecule.getAtoms()) {
-				Point3 originalP3 = atom.getXYZFract();
-				AtomTool.getOrCreateTool(atom).transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
-				Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
-				Vector3 v3 = p3.normaliseCrystallographically();
-				if (isHexagonalTransform && 
-						(CrystalTool.isOnNonExactHexagonalSymmetryElement(originalP3) ||
-								CrystalTool.isOnUnitCellFaceEdgeOrCorner(originalP3))) {
-					double[] array = p3.getArray();
-					int count = 0;
-					boolean changed = false;
-					for (Double d : array) {
-						if (1-d < FRACT_EPS) {
-							array[count] = 1.0;
-							changed = true;
-						} else if (d < FRACT_EPS) {
-							array[count] = 0.0;
-							changed = true;
-						}
-						count++;
-					}
-					if (changed) {
-						p3 = new Point3(array);
-						p3.normaliseCrystallographically();
-					}
-				}
-
-				boolean inNMap = false;
-				boolean inOMap = false;
-				for (Iterator<Point3> it = newAtomMap.keySet().iterator(); it.hasNext(); ) {
-					Point3 key = it.next();
-					if (key.equalsCrystallographically(p3)) {
-						inNMap = true;
-						break;
-					}
-				}
-				if (!inNMap) {
-					for (CMLAtom at : molecule.getAtoms()) {
-						Point3 key = at.getXYZFract();
-						if (key.equalsCrystallographically(p3)) {
-							inOMap = true;
-							break;
-						}
-					}
-					if (!inOMap) {
-						atom.setXYZFract(p3);
-						if (addTransformsToAtoms) {
-							//remove any previous Transform3 elements
-							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", CMLConstants.CML_XPATH);
-							for (int t = 0; t < t3s.size(); t++) {
-								t3s.get(t).detach();
-							}
-							
-							Transform3 trans = new Transform3(transform.getMatrixAsArray());
-							trans.incrementTranslation(v3);
-							CMLScalar scalar = new CMLScalar();
-							scalar.setValue(new CMLTransform3(trans).getValue());
-							scalar.setDictRef("cml:transform3");
-							atom.addScalar(scalar);
-						}
-						newAtomMap.put(p3, atom);
-					}
-				}
-			}
+			applySymmetryTransforms(addTransformsToAtoms, newAtomMap, symmetryMolecule,
+					transform, isHexagonalTransform);
 		}
 		int count = 1;
 		for (CMLAtom atom : newAtomMap.values()) {
@@ -511,6 +476,77 @@ public class CrystalTool extends AbstractTool {
 		return molecule;
 	}
 
+	private void applySymmetryTransforms(boolean addTransformsToAtoms,
+			Map<Point3, CMLAtom> newAtomMap, CMLMolecule symmetryMolecule,
+			CMLTransform3 transform, boolean isHexagonalTransform) {
+		for (CMLAtom atom : symmetryMolecule.getAtoms()) {
+			Point3 originalP3 = atom.getXYZFract();
+			AtomTool.getOrCreateTool(atom).transformFractionalsAndCartesians(transform, crystal.getOrthogonalizationTransform());
+			Point3 p3 = atom.getPoint3(CoordinateType.FRACTIONAL);
+			if (p3 != null) {
+				Vector3 v3 = p3.normaliseCrystallographically();
+				if (isHexagonalTransform && 
+						(CrystalTool.isOnNonExactHexagonalSymmetryElement(originalP3) ||
+								CrystalTool.isOnUnitCellFaceEdgeOrCorner(originalP3))) {
+					double[] array = p3.getArray();
+					int count = 0;
+					boolean changed = false;
+					for (Double d : array) {
+						if (1-d < FRACT_EPS) {
+							array[count] = 1.0;
+							changed = true;
+						} else if (d < FRACT_EPS) {
+							array[count] = 0.0;
+							changed = true;
+						}
+						count++;
+					}
+					if (changed) {
+						p3 = new Point3(array);
+						p3.normaliseCrystallographically();
+					}
+				}
+	
+				boolean inNMap = false;
+				boolean inOMap = false;
+				for (Iterator<Point3> it = newAtomMap.keySet().iterator(); it.hasNext(); ) {
+					Point3 key = it.next();
+					if (key.equalsCrystallographically(p3)) {
+						inNMap = true;
+						break;
+					}
+				}
+				if (!inNMap) {
+					for (CMLAtom at : molecule.getAtoms()) {
+						Point3 key = at.getXYZFract();
+						if (key != null && key.equalsCrystallographically(p3)) {
+							inOMap = true;
+							break;
+						}
+					}
+					if (!inOMap) {
+						atom.setXYZFract(p3);
+						if (addTransformsToAtoms) {
+							//remove any previous Transform3 elements
+							Nodes t3s = atom.query(".//"+CMLScalar.NS+"[@dictRef='cml:transform3']", CMLConstants.CML_XPATH);
+							for (int t = 0; t < t3s.size(); t++) {
+								t3s.get(t).detach();
+							}
+							
+							Transform3 trans = new Transform3(transform.getMatrixAsArray());
+							trans.incrementTranslation(v3);
+							CMLScalar scalar = new CMLScalar();
+							scalar.setValue(new CMLTransform3(trans).getValue());
+							scalar.setDictRef("cml:transform3");
+							atom.addScalar(scalar);
+						}
+						newAtomMap.put(p3, atom);
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * calculate cartesians and bonds.
 	 * do not apply symmetry
@@ -554,29 +590,32 @@ public class CrystalTool extends AbstractTool {
 		List<Contact> contactList = new ArrayList<Contact>();
 		if (symmetry != null && molecule != null) {
 			Real3Range range3Fract = MoleculeTool.getOrCreateTool(molecule).calculateRange3(CoordinateType.FRACTIONAL);
-			// create a wider border round the molecule
-			expandRange(range3Fract, crystal, dist2Range);
-			Transform3 orthMat = null;
-			try {
-				orthMat = new Transform3(crystal.getOrthogonalizationMatrix());
-			} catch (Exception e) {
-				throw new RuntimeException("invalid orthogonalMatrix");
-			}
-			CMLSymmetry allSymmetry = symmetry;
-			// used to just use non-translations.  This works better if the molecule is not a
-			// inorganic or polymeric organometallic structure.  Use CrystalTool.addAllAtomsToUnitCell
-			// if you have a structure that fits either of these latter examples.
-			//CMLSymmetry nonTranslateSymmetry = symmetry;
-			//CMLSymmetry nonTranslateSymmetry = symmetry.getNonTranslations();
-			List<CMLMolecule> subMolecules = molecule.getDescendantsOrMolecule();
-			List<Type> typeIgnoreList = new ArrayList<Type>();
-			typeIgnoreList.add(Type.GROUP_A);
-			for (CMLMolecule subMolecule : subMolecules) {
-				MoleculeTool.getOrCreateTool(subMolecule).createCartesiansFromFractionals(orthMat);
-				List<Contact> subContactList = findMoleculeMoleculeContacts(
-						subMolecule, range3Fract, allSymmetry, orthMat, dist2Range, typeIgnoreList);
-				for (Contact subContact : subContactList) {
-					contactList.add(subContact);
+			// missing coordinates?
+			if (range3Fract != null) {
+				// create a wider border round the molecule
+				expandRange(range3Fract, crystal, dist2Range);
+				Transform3 orthMat = null;
+				try {
+					orthMat = new Transform3(crystal.getOrthogonalizationMatrix());
+				} catch (Exception e) {
+					throw new RuntimeException("invalid orthogonalMatrix");
+				}
+				CMLSymmetry allSymmetry = symmetry;
+				// used to just use non-translations.  This works better if the molecule is not a
+				// inorganic or polymeric organometallic structure.  Use CrystalTool.addAllAtomsToUnitCell
+				// if you have a structure that fits either of these latter examples.
+				//CMLSymmetry nonTranslateSymmetry = symmetry;
+				//CMLSymmetry nonTranslateSymmetry = symmetry.getNonTranslations();
+				List<CMLMolecule> subMolecules = molecule.getDescendantsOrMolecule();
+				List<Type> typeIgnoreList = new ArrayList<Type>();
+				typeIgnoreList.add(Type.GROUP_A);
+				for (CMLMolecule subMolecule : subMolecules) {
+					MoleculeTool.getOrCreateTool(subMolecule).createCartesiansFromFractionals(orthMat);
+					List<Contact> subContactList = findMoleculeMoleculeContacts(
+							subMolecule, range3Fract, allSymmetry, orthMat, dist2Range, typeIgnoreList);
+					for (Contact subContact : subContactList) {
+						contactList.add(subContact);
+					}
 				}
 			}
 		}
