@@ -2052,10 +2052,13 @@ public class AtomTool extends AbstractSVGTool {
      */
     public void transformFractionalsAndCartesians(CMLTransform3 transform, Transform3 orthTransform) {
         Point3 point = atom.getXYZFract();
-        point = point.transform(transform.getEuclidTransform3());
-        atom.setXYZFract(point);
-        point = point.transform(orthTransform);
-        atom.setXYZ3(point);
+        // some atome may have no coordinates
+        if (point != null) {
+	        point = point.transform(transform.getEuclidTransform3());
+	        atom.setXYZFract(point);
+	        point = point.transform(orthTransform);
+	        atom.setXYZ3(point);
+        }
     }
 
     /**
