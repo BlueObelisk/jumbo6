@@ -27,4 +27,5 @@ The architecture is described in docs/html/architecture
 
 Newcomers may get started with docs/html/gettingStarted/index.html
 
+JUMBO is now widelu used in JUMBO-converters
 PeterMR
