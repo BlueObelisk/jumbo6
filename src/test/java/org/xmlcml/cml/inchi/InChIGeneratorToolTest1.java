@@ -16,14 +16,45 @@
 
 package org.xmlcml.cml.inchi;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.xmlcml.cml.element.CMLAtom;
+import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLMolecule;
+import org.xmlcml.euclid.Point3;
+import org.xmlcml.molutil.ChemicalElement.AS;
 
 public class InChIGeneratorToolTest1 {
 
+	private final static Logger LOG = Logger.getLogger(InChIGeneratorToolTest1.class);
 	@Test
 	public void testDummy() {
 		Assert.assertTrue(true);
+	}
+
+	// requires svn cml inchi on classpath
+	@Test
+	public void inchiGeneratorTest() {
+		InChIGeneratorTool inChIGeneratorTool = new InChIGeneratorTool();
+		CMLMolecule co = createCO();
+		String inchi = InChIGeneratorTool.generateInChI(co);
+		LOG.debug(inchi);
+	}
+	
+	private CMLMolecule createCO() {
+		CMLMolecule molecule = new CMLMolecule();
+		CMLAtom a1 = new CMLAtom("a1", AS.C);
+		a1.setXYZ3(new Point3(0.0, 0.0, 0.0));
+		CMLAtom a2 = new CMLAtom("a2", AS.O);
+		a1.setXYZ3(new Point3(1.0, 0.0, 0.0));
+		molecule.addAtom(a1);
+		molecule.addAtom(a2);
+		CMLBond b12 = new CMLBond(a1, a2);
+		b12.setOrder(CMLBond.DOUBLE_D);
+		molecule.addBond(b12);
+		molecule.debug("mol");
+		return molecule;
 	}
 
 }
