@@ -26,6 +26,11 @@ import org.xmlcml.euclid.Real2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGAnimateTransform extends AbstractAnimate {
 
 	public final static String TAG ="animateTransform";

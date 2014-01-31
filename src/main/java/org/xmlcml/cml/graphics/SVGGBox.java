@@ -27,6 +27,11 @@ import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector2;
 
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGGBox extends SVGG {
 	private static Logger LOG = Logger.getLogger(SVGGBox.class);
 	

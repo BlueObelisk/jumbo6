@@ -37,6 +37,11 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGRect extends SVGElement {
 
 	final public static String TAG ="rect";

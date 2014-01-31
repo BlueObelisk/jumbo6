@@ -20,6 +20,10 @@ import nu.xom.XPathContext;
 
 import org.xmlcml.cml.base.CMLConstants;
 
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 public interface SVGConstants extends CMLConstants {
 
 	/** standard namespace for SVG

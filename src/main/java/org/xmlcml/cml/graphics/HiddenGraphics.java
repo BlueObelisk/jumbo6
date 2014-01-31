@@ -25,6 +25,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class HiddenGraphics {
 
 	private static final String PNG = "png";

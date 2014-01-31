@@ -18,6 +18,10 @@ package org.xmlcml.cml.graphics;
 
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.base.CMLConstants;
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 
 public class StyleBundle implements CMLConstants {
 	private static Logger LOG = Logger.getLogger(StyleBundle.class);

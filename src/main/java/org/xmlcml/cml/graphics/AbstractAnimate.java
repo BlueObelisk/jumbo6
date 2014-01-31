@@ -18,7 +18,16 @@ package org.xmlcml.cml.graphics;
 
 import nu.xom.Attribute;
 
+
+/**
+ * 
+ * @author pm286
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 public abstract class AbstractAnimate extends SVGElement {
+	
+	
 	protected static final String DUR = "dur";
 	protected static final String ATTRIBUTE_NAME = "attributeName";
 	protected static final String FROM = "from";

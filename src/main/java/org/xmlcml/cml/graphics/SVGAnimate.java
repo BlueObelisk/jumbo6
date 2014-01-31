@@ -24,6 +24,11 @@ import nu.xom.Node;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGAnimate extends AbstractAnimate {
 
 	public final static String TAG ="animate";

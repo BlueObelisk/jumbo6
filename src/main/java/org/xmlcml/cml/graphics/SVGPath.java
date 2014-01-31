@@ -41,6 +41,11 @@ import org.xmlcml.euclid.Vector2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGPath extends SVGElement {
 
 	private static Logger LOG = Logger.getLogger(SVGPath.class);

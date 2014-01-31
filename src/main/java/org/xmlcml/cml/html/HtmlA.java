@@ -25,6 +25,11 @@ import org.apache.log4j.Logger;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use HTML-DEV package"
+ */
+@Deprecated
+
 public class HtmlA extends HtmlElement {
 	private static final String HREF = "href";
 	private static final String TARGET = "target";

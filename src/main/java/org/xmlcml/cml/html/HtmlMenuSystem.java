@@ -36,6 +36,11 @@ import org.xmlcml.cml.html.HtmlElement.Target;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use HTML-DEV package"
+ */
+@Deprecated
+
 public class HtmlMenuSystem {
 	private static Logger LOG = Logger.getLogger(HtmlMenuSystem.class);
 

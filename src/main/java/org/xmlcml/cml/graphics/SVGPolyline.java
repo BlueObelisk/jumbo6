@@ -36,6 +36,11 @@ import org.xmlcml.euclid.Real2Range;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGPolyline extends SVGPoly {
 	private static Logger LOG = Logger.getLogger(SVGPolyline.class);
 	public final static String TAG ="polyline";

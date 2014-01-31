@@ -34,6 +34,10 @@ import org.xmlcml.euclid.Real2Range;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 public class SVGSVG extends SVGElement {
 
 	public final static Logger LOG = Logger.getLogger(SVGSVG.class);

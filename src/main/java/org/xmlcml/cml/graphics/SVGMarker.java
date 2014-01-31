@@ -32,6 +32,11 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGMarker extends SVGElement {
 
 	final public static String TAG ="marker";

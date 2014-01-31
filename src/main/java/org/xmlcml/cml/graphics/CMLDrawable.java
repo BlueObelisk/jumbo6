@@ -23,6 +23,13 @@ import java.io.IOException;
  * @author pm286
  *
  */
+/**
+ * 
+ * @author pm286
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public interface CMLDrawable {
 	
 	/**

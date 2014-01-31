@@ -1,5 +1,10 @@
 package org.xmlcml.cml.graphics;
 
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class UnknownPrimitive extends SVGPathPrimitive {
 
 	private String TAG = "?";
