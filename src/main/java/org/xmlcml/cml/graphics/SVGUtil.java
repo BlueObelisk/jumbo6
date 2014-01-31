@@ -27,6 +27,11 @@ public class SVGUtil {
 	 * also copies ant transform attribute
 	 * @param element to amend (is changed)
 	 */
+	/**
+	 * @deprecated "use SVG-DEV package"
+	 */
+	@Deprecated
+
 	public static SVGG interposeGBetweenChildren(SVGElement element) {
 		SVGG g = new SVGG();
 		element.appendChild(g);

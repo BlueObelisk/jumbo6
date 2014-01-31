@@ -12,6 +12,11 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public abstract class SVGPathPrimitive {
 
 	protected Real2 coords;

@@ -17,7 +17,6 @@
 package org.xmlcml.cml.graphics;
 
 import java.awt.Color;
-
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
@@ -30,11 +29,15 @@ import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Util;
 
-/** draws a straight line.
+/** draws a circle.
  * 
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 public class SVGCircle extends SVGElement {
 
 	public final static String TAG ="circle";

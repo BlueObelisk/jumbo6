@@ -41,6 +41,11 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGTSpan extends SVGText {
 	private static Logger LOG = Logger.getLogger(SVGTSpan.class);
 	public final static String TAG ="tspan";

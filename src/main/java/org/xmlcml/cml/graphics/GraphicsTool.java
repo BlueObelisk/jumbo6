@@ -24,6 +24,11 @@ import org.xmlcml.cml.base.CMLConstants;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class GraphicsTool implements CMLConstants {
 
 	SVGSVG svg;

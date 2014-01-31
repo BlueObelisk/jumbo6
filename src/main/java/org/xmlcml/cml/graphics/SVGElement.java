@@ -54,6 +54,11 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGElement extends GraphicsElement {
 	private static Logger LOG = Logger.getLogger(GraphicsElement.class);
 

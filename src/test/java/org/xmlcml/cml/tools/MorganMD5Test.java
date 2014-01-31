@@ -39,7 +39,7 @@ public class MorganMD5Test {
 	public void testMorganWater() {
 		CMLMolecule molecule = SMILESTool.createMolecule("O");
 		String s = MorganMD5.createMorganMD5(molecule);
-		Assert.assertEquals("formamide", "ee698e506161ae1bdec66931b1d23e84", s);
+		Assert.assertEquals("water", "ee698e506161ae1bdec66931b1d23e84", s);
 	}
 
 	@Test

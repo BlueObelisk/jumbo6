@@ -43,6 +43,11 @@ import org.xmlcml.euclid.Util;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGText extends SVGElement {
 	private static Logger LOG = Logger.getLogger(SVGText.class);
 	public final static String TAG ="text";

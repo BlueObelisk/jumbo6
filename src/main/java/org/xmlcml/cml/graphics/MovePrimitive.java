@@ -1,6 +1,10 @@
 package org.xmlcml.cml.graphics;
 
 import org.xmlcml.euclid.Real2;
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 
 public class MovePrimitive extends SVGPathPrimitive {
 

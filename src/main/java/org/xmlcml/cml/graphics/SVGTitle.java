@@ -29,6 +29,11 @@ import org.xmlcml.euclid.Real2Array;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGTitle extends SVGElement {
 
 	public final static String TAG ="title";

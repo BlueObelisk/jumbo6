@@ -2,6 +2,12 @@ package org.xmlcml.cml.graphics;
 
 import org.xmlcml.euclid.Real2;
 import org.xmlcml.euclid.Real2Array;
+/**
+ * 
+ * @author pm286
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
 
 public class CurvePrimitive extends SVGPathPrimitive {
 

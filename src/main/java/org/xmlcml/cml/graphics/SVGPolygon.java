@@ -26,6 +26,11 @@ import org.xmlcml.euclid.Real2Array;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGPolygon extends SVGPoly {
 
 	public final static String TAG ="polygon";

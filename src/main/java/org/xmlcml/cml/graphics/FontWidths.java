@@ -19,6 +19,13 @@ package org.xmlcml.cml.graphics;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * @author pm286
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class FontWidths {
 
 	public static Map<String, double[]> fontWidthMap;

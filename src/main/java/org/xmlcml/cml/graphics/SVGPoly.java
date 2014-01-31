@@ -41,6 +41,11 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public abstract class SVGPoly extends SVGElement {
 	@SuppressWarnings("unused")
 	private static Logger LOG = Logger.getLogger(SVGPoly.class);

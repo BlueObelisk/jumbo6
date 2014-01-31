@@ -34,6 +34,11 @@ import org.xmlcml.euclid.Transform2;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class GraphicsElement extends Element implements SVGConstants {
 
 	private static final String CLIP_PATH = "clip-path";

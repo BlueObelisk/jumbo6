@@ -15,6 +15,10 @@
  */
 
 package org.xmlcml.cml.html;
+/**
+ * @deprecated "use HTML-DEV package"
+ */
+@Deprecated
 
 public class HtmlGeneric extends HtmlElement {
 	public HtmlGeneric(String tag) {

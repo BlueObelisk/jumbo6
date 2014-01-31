@@ -24,6 +24,11 @@ import nu.xom.Node;
  * @author pm286
  *
  */
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGPattern extends SVGElement {
 
 	public final static String TAG ="pattern";

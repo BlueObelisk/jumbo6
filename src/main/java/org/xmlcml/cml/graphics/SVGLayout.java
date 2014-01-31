@@ -16,6 +16,11 @@
 
 package org.xmlcml.cml.graphics;
 
+/**
+ * @deprecated "use SVG-DEV package"
+ */
+@Deprecated
+
 public class SVGLayout {
 	public final static SVGLayout LEFT2RIGHT = new SVGLayout();
 	public final static SVGLayout TOP2BOTTOM = new SVGLayout();
