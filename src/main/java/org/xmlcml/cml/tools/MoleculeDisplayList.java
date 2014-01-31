@@ -28,10 +28,9 @@ import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLReaction.Component;
-import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.graphics.svg.GraphicsElement;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
 
 
 /**
@@ -225,5 +224,10 @@ public class MoleculeDisplayList implements CMLDrawable {
 	 */
 	public void setSvg(SVGG svg) {
 		this.svg = svg;
+	}
+
+	public void output(SVGElement g) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -16,9 +16,9 @@
 
 package org.xmlcml.cml.tools;
 
-import org.xmlcml.cml.graphics.SVGAnimate;
-import org.xmlcml.cml.graphics.SVGElement;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.graphics.svg.SVGAnimate;
+import org.xmlcml.graphics.svg.SVGElement;
 
 public class ReactionChange {
 
