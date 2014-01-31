@@ -22,9 +22,8 @@ import nu.xom.Elements;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAction;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
 
 /**
  * tool for managing actions

@@ -72,13 +72,6 @@ import org.xmlcml.cml.element.CMLProperty;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGGBox;
-import org.xmlcml.cml.graphics.SVGRect;
-import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.cml.tools.MoleculeDisplay.Position;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -97,6 +90,12 @@ import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.graphics.svg.GraphicsElement;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
+import org.xmlcml.graphics.svg.SVGGBox;
+import org.xmlcml.graphics.svg.SVGRect;
+import org.xmlcml.graphics.svg.SVGText;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.ChemicalElement.Type;
@@ -2670,7 +2669,8 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		if (g == null) {
 			g = createSVGElement(drawable, transform2);
-			g.setProperties(moleculeDisplay);
+//			throw new RuntimeException("FIXME");
+//			g.setProperties(moleculeDisplay); // uncomment
 		}
 		double avlength = MoleculeTool.getOrCreateTool(molecule).getAverageBondLength(CoordinateType.TWOD);
 		
@@ -2689,11 +2689,11 @@ public class MoleculeTool extends AbstractSVGTool {
 		}
 		
 		if (drawable != null) {
-			try {
+//			try {
 				drawable.output(g);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
 		}
 		return g;
 	}
@@ -4519,7 +4519,7 @@ class BoundingRect {
 
 	private BoundingRect(Nodes rects, SVGG svgg) {
 		Element rectx = (Element)rects.get(0);
-		rect = (SVGRect) SVGElement.createSVG(rectx);
+		rect = (SVGRect) SVGElement.readAndCreateSVG(rectx);
 		xorig = rect.getX();
 		yorig = rect.getY();
 		width = rect.getWidth();

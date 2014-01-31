@@ -21,6 +21,11 @@ import nu.xom.Text;
 import org.xmlcml.cml.element.CMLIdentifier;
 import org.xmlcml.cml.element.CMLMolecule;
 
+/**
+ * @deprecated "use HTML-DEV package"
+ */
+@Deprecated
+
 public class InChIGeneratorTool {
     public static final String CML_INCHI_CONVENTION = "iupac:inchi";
 

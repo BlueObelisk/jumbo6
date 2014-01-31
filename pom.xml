@@ -261,6 +261,17 @@
 			<version>1.2.5</version>
 		</dependency>
 		<dependency>
+			<groupId>org.xml-cml</groupId>
+			<artifactId>svg-dev</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+	<dependency>
+		<groupId>org.xml-cml</groupId>
+		<artifactId>html-dev</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</dependency>
+		
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math</artifactId>
 			<version>2.2</version>

@@ -25,11 +25,11 @@ import nu.xom.Nodes;
 import org.apache.log4j.Logger;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomSet;
-import org.xmlcml.cml.graphics.SVGAnimate;
-import org.xmlcml.cml.graphics.SVGAnimateTransform;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Real2;
+import org.xmlcml.graphics.svg.SVGAnimate;
+import org.xmlcml.graphics.svg.SVGAnimateTransform;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
 
 public class ReactionAtomChange extends ReactionChange {
 	private final static Logger LOG = Logger.getLogger(ReactionAtomChange.class);

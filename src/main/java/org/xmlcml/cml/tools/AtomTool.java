@@ -17,6 +17,7 @@
 package org.xmlcml.cml.tools;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -41,9 +42,6 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Angle.Range;
 import org.xmlcml.euclid.EuclidRuntimeException;
@@ -54,6 +52,8 @@ import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Transform3;
 import org.xmlcml.euclid.Vector2;
 import org.xmlcml.euclid.Vector3;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.Molutils;

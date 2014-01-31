@@ -57,14 +57,14 @@ import org.xmlcml.cml.element.CMLReactantList;
 import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.ReactionComponent;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGGBox;
-import org.xmlcml.cml.graphics.SVGSVG;
 import org.xmlcml.cml.test.ReactionFixture;
 import org.xmlcml.cml.testutil.CMLAssert;
 import org.xmlcml.cml.testutil.JumboTestUtils;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
+import org.xmlcml.graphics.svg.SVGGBox;
+import org.xmlcml.graphics.svg.SVGSVG;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
 /**

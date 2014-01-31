@@ -53,17 +53,6 @@ import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.CMLSpectator;
 import org.xmlcml.cml.element.CMLSpectatorList;
 import org.xmlcml.cml.element.ReactionComponent;
-import org.xmlcml.cml.graphics.CMLDrawable;
-import org.xmlcml.cml.graphics.GraphicsElement;
-import org.xmlcml.cml.graphics.SVGCircle;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.graphics.SVGG;
-import org.xmlcml.cml.graphics.SVGGBox;
-import org.xmlcml.cml.graphics.SVGLayout;
-import org.xmlcml.cml.graphics.SVGLine;
-import org.xmlcml.cml.graphics.SVGRect;
-import org.xmlcml.cml.graphics.SVGSVG;
-import org.xmlcml.cml.graphics.SVGText;
 import org.xmlcml.cml.tools.ReactionDisplay.Orientation;
 import org.xmlcml.cml.tools.matcher.Matcher2D;
 import org.xmlcml.euclid.Real2;
@@ -71,6 +60,16 @@ import org.xmlcml.euclid.Real2Interval;
 import org.xmlcml.euclid.Real2Range;
 import org.xmlcml.euclid.Transform2;
 import org.xmlcml.euclid.Vector2;
+import org.xmlcml.graphics.svg.GraphicsElement;
+import org.xmlcml.graphics.svg.SVGCircle;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.graphics.svg.SVGG;
+import org.xmlcml.graphics.svg.SVGGBox;
+import org.xmlcml.graphics.svg.SVGLayout;
+import org.xmlcml.graphics.svg.SVGLine;
+import org.xmlcml.graphics.svg.SVGRect;
+import org.xmlcml.graphics.svg.SVGSVG;
+import org.xmlcml.graphics.svg.SVGText;
 
 /**
  * too to support reactions. not fully developed
@@ -853,14 +852,15 @@ public class ReactionTool extends AbstractSVGTool {
     	}
     	
     	SVGElement g = createSVGElement(drawable, transform2);
-    	g.setProperties(getReactionDisplay());
+    	// FIXME
+//    	g.setProperties(getReactionDisplay());
     	MoleculeDisplay moleculeDisplay = getReactionDisplay().getMoleculeDisplay();
     	displayMolecules(drawable, g, moleculeDisplay, molecules);
-    	try {
+//    	try {
     		drawable.output(g);
-    	} catch (IOException e) {
-    		throw new RuntimeException(e);
-    	}
+//    	} catch (IOException e) {
+//    		throw new RuntimeException(e);
+//    	}
     	return g;
     }
 

@@ -34,9 +34,9 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.base.CMLUtil;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMoleculeList;
-import org.xmlcml.cml.graphics.SVGElement;
-import org.xmlcml.cml.html.HtmlMenuSystem;
 import org.xmlcml.euclid.Util;
+import org.xmlcml.graphics.svg.SVGElement;
+import org.xmlcml.html.HtmlMenuSystem;
 
 /**
  * tests moleculeTool.
