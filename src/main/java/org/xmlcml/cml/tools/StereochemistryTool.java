@@ -1056,10 +1056,78 @@ public class StereochemistryTool extends AbstractTool {
 	public void addCalculatedAtomParityForPointyAtoms() {
 		List<CMLAtom> pointyAtoms = getAtomsAtPointyBondEnds();
 		for (CMLAtom pointyAtom : pointyAtoms) {
-			CMLAtomParity atomParity = calculateAtomParityForLigandsInCIPOrder(pointyAtom);
+			CMLAtomParity atomParity = calculateAtomParityFromWedgesAndHatches(pointyAtom);
 			if (atomParity != null) {
 				pointyAtom.appendChild(atomParity);
 			}
 		}
 	}
+
+	/**
+	 * Calculates the atom parity of this atom using the coords of either 4
+	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
+	 * specified then the parity is calculated using bond wedge/hatch
+	 * information.
+	 * 
+	 * @param atom
+	 * @return the CMLAtomParity, or null if this atom isn't a chiral centre or
+	 *         there isn't enough stereo information to calculate parity; note that 
+	 *         the atomParity is not necessarily created as a child of the atom
+	 */
+	public CMLAtomParity calculateAtomParityFromWedgesAndHatches(CMLAtom atom) {
+		if (!isChiralCentre(atom)) {
+			return null;
+		}
+		List<CMLAtom> ligandList = atom.getLigandAtoms();
+
+		if (ligandList.size() == 3) {
+			ligandList.add(atom); // use this atom as 4th atom
+		}
+		double[][] parityMatrix = new double[4][4];
+		String[] atomRefs4 = new String[4];
+		for (int i = 0; i < 4; i++) { // build matrix
+			parityMatrix[0][i] = 1;
+			if (ligandList.get(i).hasCoordinates(CoordinateType.CARTESIAN)) {
+				parityMatrix[1][i] = ligandList.get(i).getX3();
+				parityMatrix[2][i] = ligandList.get(i).getY3();
+				parityMatrix[3][i] = ligandList.get(i).getZ3();
+			} else if (ligandList.get(i).hasCoordinates(CoordinateType.TWOD)) {
+				parityMatrix[1][i] = ligandList.get(i).getX2();
+				parityMatrix[2][i] = ligandList.get(i).getY2();
+				parityMatrix[3][i] = 0;
+				// get z-coord from wedge/hatch bond
+				CMLBond ligandBond = atom.getMolecule().getBond(atom,
+						ligandList.get(i));
+				if (ligandBond != null) {
+					CMLBondStereo ligandBondStereo = ligandBond.getBondStereo();
+					if (ligandBondStereo != null && ligandBond.getAtom(0).equals(atom)) {
+						if (ligandBondStereo.getXMLContent().equals(
+								CMLBond.WEDGE)) {
+							parityMatrix[3][i] = 1.0;
+						} else if (ligandBondStereo.getXMLContent().equals(
+								CMLBond.HATCH)) {
+							parityMatrix[3][i] = -1.0;
+						}
+					}
+				}
+			} else {
+				// no coordinates!
+				//throw new RuntimeException(
+				//"Insufficient coordinates on ligands to determine parity");
+				return null;
+			}
+			atomRefs4[i] = ligandList.get(i).getId();
+		}
+		double parityDeterminant = determinant(parityMatrix);
+		CMLAtomParity atomParity = new CMLAtomParity();
+		if (Math.abs(parityDeterminant) > atomParity.minChiralDeterminant) {
+			atomParity.setAtomRefs4(atomRefs4);
+			atomParity.setXMLContent(Math.signum(parityDeterminant));
+			return atomParity;
+		} else {
+			return null;
+		}
+	}
 }
+
+

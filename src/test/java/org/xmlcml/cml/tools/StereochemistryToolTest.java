@@ -704,4 +704,40 @@ public class StereochemistryToolTest {
 
 		
 	}
+	
+	@Test
+	public void testCalculateAtomParityFromWedgesAndHatches1() {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.parseQuietlyIntoCML(getClass().getResourceAsStream("examples/molecules/chclbrf1.cml"));
+		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+		CMLAtomParity parity = stereoTool.calculateAtomParityFromWedgesAndHatches(molecule.getAtomById("a0"));
+		Assert.assertEquals("atomRefs4",  "a1 a2 a3 a4", parity.getAtomRefs4Attribute().getValue());
+		Assert.assertEquals(-1.0, Math.signum(parity.getXMLContent()), 0.001);
+	}
+	
+	@Test
+	public void testCalculateAtomParityFromWedgesAndHatches2() {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.parseQuietlyIntoCML(getClass().getResourceAsStream("examples/molecules/chclbrf2.cml"));
+		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+		CMLAtomParity parity = stereoTool.calculateAtomParityFromWedgesAndHatches(molecule.getAtomById("a0"));
+		Assert.assertEquals("atomRefs4",  "a1 a2 a3 a4", parity.getAtomRefs4Attribute().getValue());
+		Assert.assertEquals(-1.0, Math.signum(parity.getXMLContent()), 0.001);
+	}
+	
+	@Test
+	public void testCalculateAtomParityFromWedgesAndHatches3() {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.parseQuietlyIntoCML(getClass().getResourceAsStream("examples/molecules/chclbrf3.cml"));
+		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+		CMLAtomParity parity = stereoTool.calculateAtomParityFromWedgesAndHatches(molecule.getAtomById("a0"));
+		Assert.assertNull(parity);
+	}
+	
+	@Test
+	public void testCalculateAtomParityFromWedgesAndHatches4() {
+		CMLMolecule molecule = (CMLMolecule) CMLUtil.parseQuietlyIntoCML(getClass().getResourceAsStream("examples/molecules/complicated.cml"));
+		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
+		CMLAtomParity parity = stereoTool.calculateAtomParityFromWedgesAndHatches(molecule.getAtomById("a10"));
+		molecule.debug("molecule");
+		Assert.assertEquals("atomRefs4",  "a1 a8 a19 a11", parity.getAtomRefs4Attribute().getValue());
+		Assert.assertEquals(1.0, Math.signum(parity.getXMLContent()), 0.001);
+	}
 }
