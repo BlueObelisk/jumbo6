@@ -736,7 +736,6 @@ public class StereochemistryToolTest {
 		CMLMolecule molecule = (CMLMolecule) CMLUtil.parseQuietlyIntoCML(getClass().getResourceAsStream("examples/molecules/complicated.cml"));
 		StereochemistryTool stereoTool = new StereochemistryTool(molecule);
 		CMLAtomParity parity = stereoTool.calculateAtomParityFromWedgesAndHatches(molecule.getAtomById("a10"));
-		molecule.debug("molecule");
 		Assert.assertEquals("atomRefs4",  "a1 a8 a19 a11", parity.getAtomRefs4Attribute().getValue());
 		Assert.assertEquals(1.0, Math.signum(parity.getXMLContent()), 0.001);
 	}
