@@ -262,6 +262,7 @@
 			<artifactId>xom</artifactId>
 			<version>1.2.5</version>
 		</dependency>
+<!-- where is this used? -->
 		<dependency>
 			<groupId>org.xml-cml</groupId>
 			<artifactId>svg-dev</artifactId>
