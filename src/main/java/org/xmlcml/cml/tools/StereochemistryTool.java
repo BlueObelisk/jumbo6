@@ -1,5 +1,5 @@
 /**
- *    Copyright 2011 Peter Murray-Rust et. al.
+ *    Copyright 2011 Peter Murray-Rust et al.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,16 +40,17 @@ import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Vector3;
 import org.xmlcml.molutil.ChemicalElement.AS;
+
 /**
  * Tool to manage stereochemistry.
  *  
  * @author pm286 & ned24
- * 
  */
 public class StereochemistryTool extends AbstractTool {
 	Logger LOG = Logger.getLogger(StereochemistryTool.class);
 
-	/** for @role
+	/** 
+	 * For @role
 	 */
 	public final static String CML_CIP = "cml:cip";
 	public final static String CIP_E = "E";
@@ -63,7 +64,7 @@ public class StereochemistryTool extends AbstractTool {
 	private CMLMolecule molecule;
 
 	/**
-	 * constructor with embedded molecule.
+	 * Constructor with embedded molecule.
 	 * 
 	 * @param molecule
 	 */
@@ -73,8 +74,7 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * uses 2D coordinates to add bondStereo.
-	 * 
+	 * Uses 2D coordinates to add bondStereo.
 	 */
 	public void add2DStereo() {
 		// MoleculeTool moleculeTool = MoleculeTool.getOrCreateMoleculeTool(molecule);
@@ -140,7 +140,7 @@ public class StereochemistryTool extends AbstractTool {
 		} else if (type.equals(CoordinateType.TWOD)) {
 			bondStereo = get2DBondStereo(bond);
 		} else if (type.equals(CoordinateType.CARTESIAN)) {
-//			bondStereo = get3DBondStereo(bond);
+			//bondStereo = get3DBondStereo(bond);
 		}
 		return bondStereo;
 	}
@@ -159,12 +159,12 @@ public class StereochemistryTool extends AbstractTool {
 	}
 	
 	/**
-	 * add wedge hatch bonds.
+	 * Adds wedge and hatch bonds.
 	 * 
-	 * adds WEDGE/HATCH to appropriate bonds/atoms if not already present and we
+	 * Adds wedge / hatch to appropriate bonds / atoms if not already present and we
 	 * have parities.
 	 * 
-	 * If ANY wedge/hatch are set, return without action (this may change)
+	 * If any wedge / hatch is set, return without action (this may change).
 	 * 
 	 * @throws RuntimeException
 	 */
@@ -176,11 +176,12 @@ public class StereochemistryTool extends AbstractTool {
 	
 	/**
 	 * Calculates R or S.
-	 * uses calculateAtomParity(CMLAtom atom)
+	 * <p>
+	 * Uses calculateAtomParity(CMLAtom atom).
 	 * 
 	 * @param atom
-	 * @return R or S or null if this atom isnt a chiral centre or
-	 *         there isnt enough stereo information to calculate parity
+	 * @return R or S or null if this atom isn't a chiral centre or
+	 *         there isn't enough stereo information to calculate parity
 	 */
 	public String calculateCIPRS(CMLAtom atom) {
 		CMLAtomParity atomParity = this.calculateAtomParityForLigandsInCIPOrder(atom);
@@ -193,11 +194,12 @@ public class StereochemistryTool extends AbstractTool {
 
 	/**
 	 * Given R/S for atom, creates a new AtomParity element.
-	 * uses calculateAtomParity(CMLAtom atom)
+	 * <p>
+	 * Uses calculateAtomParity(CMLAtom atom).
 	 * 
 	 * @param atom
-	 * @return R or S or null if this atom isnt a chiral centre or
-	 *         there isnt enough stereo information to calculate parity
+	 * @return R or S or null if this atom isn't a chiral centre or
+	 *         there isn't enough stereo information to calculate parity
 	 */
 	public CMLAtomParity calculateAtomParityFromCIPRS(CMLAtom atom, String rs) {
 		if (!CIP_R.equals(rs) && !CIP_S.equals(rs)) {
@@ -213,11 +215,10 @@ public class StereochemistryTool extends AbstractTool {
 		CMLAtomParity atomParity = new CMLAtomParity();
 		atomParity.setAtomRefs4(ligands.toArray(new CMLAtom[0]));
 		// tune this by testing...
-		atomParity.setXMLContent((rs.equals(CIP_R)) ? 1.0 : -1.0);	
+		atomParity.setXMLContent(rs.equals(CIP_R) ? 1.0 : -1.0);	
 		return atomParity;
 	}
 
-	
 	/**
 	 * Calculates the atom parity of this atom using the coords of either 4
 	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
@@ -225,15 +226,15 @@ public class StereochemistryTool extends AbstractTool {
 	 * information.
 	 * 
 	 * @param atom
-	 * @return the CMLAtomParity, or null if this atom isnt a chiral centre or
-	 *         there isnt enough stereo information to calculate parity. Note that 
+	 * @return the CMLAtomParity, or null if this atom isn't a chiral centre or
+	 *         there isn't enough stereo information to calculate parity; note that 
 	 *         the atomParity is not necessarily created as a child of the atom
 	 */
 	public CMLAtomParity calculateAtomParityForLigandsInCIPOrder(CMLAtom atom) {
 		if (!isChiralCentre(atom)) {
 			return null;
 		}
-		List<CMLAtom> ligandList = this.getLigandsInCahnIngoldPrelogOrder(atom);
+		List<CMLAtom> ligandList = getLigandsInCahnIngoldPrelogOrder(atom);
 
 		if (ligandList.size() == 3) {
 			ligandList.add(atom); // use this atom as 4th atom
@@ -267,8 +268,9 @@ public class StereochemistryTool extends AbstractTool {
 				}
 			} else {
 				// no coordinates!
-				throw new RuntimeException(
-				"insufficient coordinates on ligands to determine parity");
+				//throw new RuntimeException(
+				//"Insufficient coordinates on ligands to determine parity");
+				return null;
 			}
 			atomRefs4[i] = ligandList.get(i).getId();
 		}
@@ -276,6 +278,74 @@ public class StereochemistryTool extends AbstractTool {
 		CMLAtomParity atomParity = new CMLAtomParity();
 		if (Math.abs(parityDeterminant) > atomParity.minChiralDeterminant) {
 			atomParity.setAtomRefs4(atomRefs4);
+			//atomParity.setXMLContent(Math.signum(parityDeterminant));
+			atomParity.setXMLContent(parityDeterminant);
+			return atomParity;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Calculates the atom parity of this atom using the coords of either 4
+	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
+	 * specified then the parity is calculated using bond wedge/hatch
+	 * information.
+	 * 
+	 * @param atom
+	 * @return the CMLAtomParity, or null if this atom isn't a chiral centre or
+	 *         there isn't enough stereo information to calculate parity; note that 
+	 *         the atomParity is not necessarily created as a child of the atom
+	 */
+	public CMLAtomParity calculateAtomParityFromWedgesAndHatches(CMLAtom atom) {
+		if (!isChiralCentre(atom)) {
+			return null;
+		}
+		List<CMLAtom> ligandList = atom.getLigandAtoms();
+
+		if (ligandList.size() == 3) {
+			ligandList.add(atom); // use this atom as 4th atom
+		}
+		double[][] parityMatrix = new double[4][4];
+		String[] atomRefs4 = new String[4];
+		for (int i = 0; i < 4; i++) { // build matrix
+			parityMatrix[0][i] = 1;
+			if (ligandList.get(i).hasCoordinates(CoordinateType.CARTESIAN)) {
+				parityMatrix[1][i] = ligandList.get(i).getX3();
+				parityMatrix[2][i] = ligandList.get(i).getY3();
+				parityMatrix[3][i] = ligandList.get(i).getZ3();
+			} else if (ligandList.get(i).hasCoordinates(CoordinateType.TWOD)) {
+				parityMatrix[1][i] = ligandList.get(i).getX2();
+				parityMatrix[2][i] = ligandList.get(i).getY2();
+				parityMatrix[3][i] = 0;
+				// get z-coord from wedge/hatch bond
+				CMLBond ligandBond = atom.getMolecule().getBond(atom,
+						ligandList.get(i));
+				if (ligandBond != null) {
+					CMLBondStereo ligandBondStereo = ligandBond.getBondStereo();
+					if (ligandBondStereo != null && ligandBond.getAtom(0).equals(atom)) {
+						if (ligandBondStereo.getXMLContent().equals(
+								CMLBondStereo.WEDGE)) {
+							parityMatrix[3][i] = 1.0;
+						} else if (ligandBondStereo.getXMLContent().equals(
+								CMLBondStereo.HATCH)) {
+							parityMatrix[3][i] = -1.0;
+						}
+					}
+				}
+			} else {
+				// no coordinates!
+				//throw new RuntimeException(
+				//"Insufficient coordinates on ligands to determine parity");
+				return null;
+			}
+			atomRefs4[i] = ligandList.get(i).getId();
+		}
+		double parityDeterminant = determinant(parityMatrix);
+		CMLAtomParity atomParity = new CMLAtomParity();
+		if (Math.abs(parityDeterminant) > atomParity.minChiralDeterminant) {
+			atomParity.setAtomRefs4(atomRefs4);
+			//atomParity.setXMLContent(Math.signum(parityDeterminant));
 			atomParity.setXMLContent(parityDeterminant);
 			return atomParity;
 		} else {
@@ -284,9 +354,9 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * Does exactly what it says on the tin.  In the returned list the first atom
+	 * Does exactly what it says on the tin. In the returned list the first atom
 	 * has the highest priority, the last has the lowest priority.
-	 * 
+	 * <p>
 	 * Currently only works for C atoms with 4 ligands.
 	 * 
 	 * @param centralAtom
@@ -298,17 +368,19 @@ public class StereochemistryTool extends AbstractTool {
 		orderedLigandList.add(ligandList.get(0));
 		for (CMLAtom atom : ligandList) {
 			for (int i = 0; i < orderedLigandList.size(); i++) {
-				if (orderedLigandList.get(i) == atom) continue;
+				if (orderedLigandList.get(i) == atom) {
+					continue;
+				}
 				CMLAtomSet markedAtoms = new CMLAtomSet();
 				CMLAtomSet otherMarkedAtoms = new CMLAtomSet();
 				markedAtoms.addAtom(centralAtom);
 				otherMarkedAtoms.addAtom(centralAtom);
-				int value = this.compareRecursivelyByAtomicNumber(orderedLigandList.get(i), 
+				int value = compareRecursivelyByAtomicNumber(orderedLigandList.get(i), 
 						atom, markedAtoms, otherMarkedAtoms);
 				//LOG.debug(orderedLigandList.get(i).getId()+"/"+atom.getId()+" = "+value);
 				if (value == 1) {
-					if (i+1 == orderedLigandList.size()) {
-						orderedLigandList.add(i+1, atom);
+					if (i + 1 == orderedLigandList.size()) {
+						orderedLigandList.add(i + 1, atom);
 						break;
 					} else {
 						continue;
@@ -394,14 +466,14 @@ public class StereochemistryTool extends AbstractTool {
 		return mayBeChiral;
 	}
 	/**
-	 * gets list of atoms with enough different ligands to show chirality.
-	 * 
-	 * at present only processes Carbon. all four ligands must be different or
-	 * either explicitly or with an implicit hydrogen and 3 explict ligands
-	 * 
-	 * the atom may or may not have its chirality set by other means (e.g.
+	 * Gets list of atoms with enough different ligands to show chirality.
+	 * <p>
+	 * At present only processes Carbon. all four ligands must be different or
+	 * either explicitly or with an implicit hydrogen and 3 explict ligands.
+	 * <p>
+	 * The atom may or may not have its chirality set by other means (e.g.
 	 * atomParity) however an atom may not be tested for chirality if it is not
-	 * in this list
+	 * in this list.
 	 * 
 	 * @return the list of atoms
 	 */
@@ -416,13 +488,13 @@ public class StereochemistryTool extends AbstractTool {
 		return chiralAtoms;
 	}
 	/**
-	 * get the bondstereo from 2D coordinates.
+	 * Gets the bond stereo from 2D coordinates.
 	 * 
-	 * gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
-	 * X at1-lig2 and at1-at2 X at1-lig2
+	 * Gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
+	 * X at1-lig2 and at1-at2 X at1-lig2.
 	 * 
-	 * does NOT add bondStereo as child (in case further decisions need to be
-	 * made)
+	 * Does NOT add bondStereo as child (in case further decisions need to be
+	 * made).
 	 * 
 	 * @param bond
 	 * @return bondstereo (null if cannot calculate as CIS/TRANS)
@@ -444,8 +516,9 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		return bondStereo;
 	}
+	
 	/**
-	 * uses bondStereo to adjust 2D coordinates.
+	 * Uses bondStereo to adjust 2D coordinates.
 	 * 
 	 * @param bond
 	 * @throws RuntimeException
@@ -464,12 +537,12 @@ public class StereochemistryTool extends AbstractTool {
 			}
 		}
 	}
+	
 	/**
-	 * flip (about bond axis) the 2D coordinates attached to atom0.
+	 * Flips (about bond axis) the 2D coordinates attached to atom0.
 	 * 
 	 * @param bond
-	 * @exception RuntimeException
-	 *                many, including invalid geometry operations
+	 * @exception RuntimeException many, including invalid geometry operations
 	 */
 	public void flip2D(CMLBond bond) {
 		// FIXME
@@ -477,40 +550,36 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * calculates whether geometry of bond is cis or trans.
+	 * Calculates whether geometry of bond is cis or trans.
 	 * 
-	 * requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
-	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1)
+	 * Requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
+	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1).
 	 * 
-	 * if connectivity is not as above if this.getAtom(0) or
+	 * If connectivity is not as above if this.getAtom(0) or
 	 * this.getAtom(1) have > 3 ligands if either end of
-	 * bond is effectively linear return BondTool.LINEAR
+	 * bond is effectively linear return BondTool.LINEAR.
 	 * 
-	 * @param ligand0
-	 *            ligand(tool) for this.getAtom(0)
-	 * @param ligand1
-	 *            ligand(tool) for this.getAtom(1)
+	 * @param ligand0 ligand(tool) for this.getAtom(0)
+	 * @param ligand1 ligand(tool) for this.getAtom(1)
 	 * 
 	 * @return CIS, TRANS, UNKNOWN,
 	 */
+	
 	/**
-	 * calculates whether geometry of bond is cis or trans.
+	 * Calculates whether geometry of bond is cis or trans.
 	 * 
-	 * requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
-	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1)
+	 * Requires geometry of form: ligand0-atom(0)-atom(1)-ligand1 i.e. ligand0
+	 * is a ligand of this,getAtom(0) and ligand1 is a ligand of this,getAtom(1).
 	 * 
-	 * if connectivity is not as above if this.getAtom(0) or
+	 * If connectivity is not as above if this.getAtom(0) or
 	 * this.getAtom(1) have > 3 ligands if either end of
-	 * bond is effectively linear return BondTool.LINEAR
+	 * bond is effectively linear return BondTool.LINEAR.
 	 * 
-	 * if torsion angle is in range pi/4 < t < 3*pi/4 return UNKNOWN
+	 * If torsion angle is in range pi/4 < t < 3*pi/4 return UNKNOWN
 	 * 
 	 * @param bond
-	 * @param ligand0
-	 *            ligand(tool) for this.getAtom(0)
-	 * @param ligand1
-	 *            ligand(tool) for this.getAtom(1)
-	 * 
+	 * @param ligand0 ligand(tool) for this.getAtom(0)
+	 * @param ligand1 ligand(tool) for this.getAtom(1)
 	 * @throws RuntimeException
 	 * @return CIS, TRANS, UNKNOWN,
 	 */
@@ -567,16 +636,15 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * get the bondstereo from 3D coordinates.
+	 * Gets the bond stereo from 3D coordinates.
 	 * 
-	 * gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
-	 * X at1-lig2 and at1-at2 X at1-lig2
+	 * Gets atomRefs4 (at0, at1, at2, at3), then gets scalar product of at1-at0
+	 * X at1-lig2 and at1-at2 X at1-lig2.
 	 * 
-	 * does NOT add bondStereo as child (in case further decisions need to be
-	 * made)
+	 * Does NOT add bondStereo as child (in case further decisions need to be
+	 * made).
 	 * 
 	 * @param bond
-	 * 
 	 * @return bondstereo (null if cannot calculate as CIS/TRANS)
 	 */
 	public CMLBondStereo create3DBondStereo(CMLBond bond) {
@@ -598,8 +666,7 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * uses 3D coordinates to add bondStereo.
-	 * 
+	 * Uses 3D coordinates to add bondStereo.
 	 */
 	public void add3DStereo() {
 		ConnectionTableTool ct = new ConnectionTableTool(getMolecule());
@@ -639,14 +706,14 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * determines if 2D coordinates of atoms are suitable for bond
+	 * Determines if 2D coordinates of atoms are suitable for bond
 	 * stereochemistry.
 	 * 
-	 * normally used for 2 atoms or bond and two ligands of one atom
+	 * Normally used for 2 atoms or bond and two ligands of one atom
 	 * 
-	 * gets cross products of at0-at1 X at0-lig0 and at0-at1 X at0-lig1 and then
+	 * Gets cross products of at0-at1 X at0-lig0 and at0-at1 X at0-lig1 and then
 	 * gets their scalar product. If this is not negative, then the ligands are
-	 * unsatisfactory for determining stereo
+	 * unsatisfactory for determining stereo.
 	 * 
 	 * @param atom0
 	 * @param atom1
@@ -664,15 +731,16 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		return d;
 	}
+	
 	/**
-	 * determines if 3D coordinates of atoms are suitable for bond
+	 * Determines if 3D coordinates of atoms are suitable for bond
 	 * stereochemistry.
 	 * 
-	 * normally used for 2 atoms or bond and two ligands of one atom
+	 * Normally used for 2 atoms or bond and two ligands of one atom.
 	 * 
-	 * gets cross products of at0-at1 X at0-lig0 and at0-at1 X at0-lig1 and then
+	 * Gets cross products of at0-at1 X at0-lig0 and at0-at1 X at0-lig1 and then
 	 * gets their scalar product. If this is not negative, then the ligands are
-	 * unsatisfactory for determining stereo
+	 * unsatisfactory for determining stereo.
 	 * 
 	 * @param atom0
 	 * @param atom1
@@ -690,11 +758,12 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		return d;
 	}
+	
 	/**
-	 * gets first bond which is not already a wedge/hatch.
+	 * Gets first bond which is not already a wedge / hatch.
 	 *
-	 * try to get an X-H or other acyclic bond if possible bond must have first
-	 * atom equal to thisAtom so sharp end of bond can be managed
+	 * Tries to get an X-H or other acyclic bond if possible bond must have first
+	 * atom equal to thisAtom so sharp end of bond can be managed.
 	 *
 	 * @param tool TODO
 	 * @param atom TODO
@@ -746,12 +815,12 @@ public class StereochemistryTool extends AbstractTool {
 		}
 		return bond;
 	}
+	
 	/**
-	 * uses atomParity to create wedge or hatch.
+	 * Uses atomParity to create wedge or hatch.
 	 *
 	 * @param atom
-	 * @throws RuntimeException
-	 *             inconsistentencies in diagram, etc.
+	 * @throws RuntimeException inconsistentencies in diagram, etc.
 	 */
 	public void addWedgeHatchBond(CMLAtom atom) throws RuntimeException {
 		CMLBond bond = getFirstWedgeableBond(atom);
@@ -846,7 +915,7 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * not fully written.
+	 * Not fully written. TODO
 	 *
 	 * @param atom
 	 * @param array
@@ -857,16 +926,14 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * get ligands of this atom not in markedAtom set sorted in decreasing
+	 * Gets ligands of this atom not in markedAtom set sorted in decreasing
 	 * atomic number.
 	 *
-	 * sort the unvisisted atoms in decreasing atomic number. If atomic numbers
-	 * are tied, any order is permitted
+	 * Sorts the unvisisted atoms in decreasing atomic number. If atomic numbers
+	 * are tied, any order is permitted.
 	 *
 	 * @param atom
-	 * @param markedAtoms
-	 *            atoms already visited and not to be included
-	 *
+	 * @param markedAtoms atoms already visited and not to be included
 	 * @return the new ligands in decreasing order of atomic mass.
 	 */
 	private CMLAtom[] getNewLigandsSortedByAtomicNumber(CMLAtom atom,
@@ -890,28 +957,28 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * get priority relative to other atom.
+	 * Gets priority relative to other atom.
 	 *
-	 * uses simple CIP prioritization (does not include stereochemistry) if
+	 * Uses simple CIP prioritization (does not include stereochemistry) if
 	 * thisAtom has higher priority return 1 if thisAtom and otherAtom have
-	 * equal priority return 0 if otherAtom has higher priority return -1
+	 * equal priority return 0 if otherAtom has higher priority return -1.
 	 *
-	 * compare atomic numbers. if thisAtom has higher atomicNumber return 1 if
+	 * Compares atomic numbers. If thisAtom has higher atomicNumber return 1 if
 	 * otherAtom has higher atomicNumber return -1 if equal, visit new ligands
 	 * of each atom, sorted by priority until a mismatch is found or the whole
-	 * of the ligand trees are visited
+	 * of the ligand trees are visited.
 	 *
-	 * example: CMLAtomSet thisSetTool = new AtomSetToolImpl(); CMLAtomSet
-	 * otherSetTool = new AtomSetToolImpl(); int res =
-	 * atomTool.compareByAtomicNumber(otherAtom, thisSetTool, otherSetTool);
+	 * Example:
+	 * 
+	 * <code>CMLAtomSet thisSetTool = new AtomSetToolImpl();
+	 * CMLAtomSet otherSetTool = new AtomSetToolImpl();
+	 * int res = atomTool.compareByAtomicNumber(otherAtom, thisSetTool, otherSetTool);</code>
 	 *
 	 * @param atom
 	 * @param otherAtom
-	 * @param markedAtoms
-	 *            atomSet to keep track of visited atoms (avoiding infinite
+	 * @param markedAtoms atomSet to keep track of visited atoms (avoiding infinite
 	 *            recursion)
-	 * @param otherMarkedAtoms
-	 *            atomSet to keep track of visited atoms (avoiding infinite
+	 * @param otherMarkedAtoms atomSet to keep track of visited atoms (avoiding infinite
 	 *            recursion)
 	 *
 	 * @return int the comparison
@@ -934,7 +1001,7 @@ public class StereochemistryTool extends AbstractTool {
 			for (int i = 0; i < length; i++) {
 				CMLAtom thisLigand = thisSortedLigands[i];
 				CMLAtom otherLigand = otherSortedLigands[i];
-				comp = this.compareByAtomicNumber(thisLigand, otherLigand);
+				comp = compareByAtomicNumber(thisLigand, otherLigand);
 
 				if (comp != 0) {
 					break;
@@ -944,7 +1011,7 @@ public class StereochemistryTool extends AbstractTool {
 				for (int i = 0; i < length; i++) {
 					CMLAtom thisLigand = thisSortedLigands[i];
 					CMLAtom otherLigand = otherSortedLigands[i];		
-					comp = this.compareRecursivelyByAtomicNumber(thisLigand, otherLigand, markedAtoms, otherMarkedAtoms);
+					comp = compareRecursivelyByAtomicNumber(thisLigand, otherLigand, markedAtoms, otherMarkedAtoms);
 
 					if (comp != 0) {
 						break;
@@ -1015,10 +1082,11 @@ public class StereochemistryTool extends AbstractTool {
 	}
 
 	/**
-	 * return label of form:
-	 * <atom>
-	 *   <label role='cml:cip' value='R'/>
-	 * </atom>
+	 * Returns label of form:
+	 * &lt;atom&gt;
+	 *   &lt;label role='cml:cip' value='R'/&gt;
+	 * &lt;/atom&gt;
+	 * 
 	 * @param atom
 	 * @return label or null
 	 */
@@ -1062,72 +1130,5 @@ public class StereochemistryTool extends AbstractTool {
 			}
 		}
 	}
-
-	/**
-	 * Calculates the atom parity of this atom using the coords of either 4
-	 * explicit ligands or 3 ligands and this atom. If only 2D coords are
-	 * specified then the parity is calculated using bond wedge/hatch
-	 * information.
-	 * 
-	 * @param atom
-	 * @return the CMLAtomParity, or null if this atom isn't a chiral centre or
-	 *         there isn't enough stereo information to calculate parity; note that 
-	 *         the atomParity is not necessarily created as a child of the atom
-	 */
-	public CMLAtomParity calculateAtomParityFromWedgesAndHatches(CMLAtom atom) {
-		if (!isChiralCentre(atom)) {
-			return null;
-		}
-		List<CMLAtom> ligandList = atom.getLigandAtoms();
-
-		if (ligandList.size() == 3) {
-			ligandList.add(atom); // use this atom as 4th atom
-		}
-		double[][] parityMatrix = new double[4][4];
-		String[] atomRefs4 = new String[4];
-		for (int i = 0; i < 4; i++) { // build matrix
-			parityMatrix[0][i] = 1;
-			if (ligandList.get(i).hasCoordinates(CoordinateType.CARTESIAN)) {
-				parityMatrix[1][i] = ligandList.get(i).getX3();
-				parityMatrix[2][i] = ligandList.get(i).getY3();
-				parityMatrix[3][i] = ligandList.get(i).getZ3();
-			} else if (ligandList.get(i).hasCoordinates(CoordinateType.TWOD)) {
-				parityMatrix[1][i] = ligandList.get(i).getX2();
-				parityMatrix[2][i] = ligandList.get(i).getY2();
-				parityMatrix[3][i] = 0;
-				// get z-coord from wedge/hatch bond
-				CMLBond ligandBond = atom.getMolecule().getBond(atom,
-						ligandList.get(i));
-				if (ligandBond != null) {
-					CMLBondStereo ligandBondStereo = ligandBond.getBondStereo();
-					if (ligandBondStereo != null && ligandBond.getAtom(0).equals(atom)) {
-						if (ligandBondStereo.getXMLContent().equals(
-								CMLBond.WEDGE)) {
-							parityMatrix[3][i] = 1.0;
-						} else if (ligandBondStereo.getXMLContent().equals(
-								CMLBond.HATCH)) {
-							parityMatrix[3][i] = -1.0;
-						}
-					}
-				}
-			} else {
-				// no coordinates!
-				//throw new RuntimeException(
-				//"Insufficient coordinates on ligands to determine parity");
-				return null;
-			}
-			atomRefs4[i] = ligandList.get(i).getId();
-		}
-		double parityDeterminant = determinant(parityMatrix);
-		CMLAtomParity atomParity = new CMLAtomParity();
-		if (Math.abs(parityDeterminant) > atomParity.minChiralDeterminant) {
-			atomParity.setAtomRefs4(atomRefs4);
-			atomParity.setXMLContent(Math.signum(parityDeterminant));
-			return atomParity;
-		} else {
-			return null;
-		}
-	}
+	
 }
-
-
