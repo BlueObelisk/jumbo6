@@ -651,6 +651,7 @@ public class AtomTool extends AbstractSVGTool {
 				otherAngles.add(new Angle(Math.atan2(bond.getAtom(0).getY2() - atom.getY2(), bond.getAtom(0).getX2() - atom.getX2()), org.xmlcml.euclid.Angle.Units.RADIANS));
 			}
 		}
+		bondLength =  Math.sqrt(bondLength);
 		for (int i = 0; i < hydrogenCount - currentHCount; i++) {
 			CMLAtom hatom = new CMLAtom(id + "_h" + (i + 1));
 			molecule.addAtom(hatom);
