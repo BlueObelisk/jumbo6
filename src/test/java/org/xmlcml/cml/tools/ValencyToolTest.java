@@ -29,7 +29,7 @@ import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class ValencyToolTest {
 	 */
 	@Test
 	public void testMarkSpecial() {
-		CMLMolecule nitroMethane = (CMLMolecule)JumboTestUtils.parseValidString(fix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)CMLXOMTestUtils.parseValidString(fix.nitroMethaneS);
 		// MoleculeTool moleculeTool =
 		// MoleculeTool.getOrCreateTool(nitroMethane);
 		CMLAtom nAtom = nitroMethane.getAtom(0);

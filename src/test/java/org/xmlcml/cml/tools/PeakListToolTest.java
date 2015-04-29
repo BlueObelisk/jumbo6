@@ -41,7 +41,7 @@ import org.xmlcml.cml.element.CMLPeakStructure;
 import org.xmlcml.cml.element.CMLSpectrum;
 import org.xmlcml.cml.interfacex.PeakOrGroup;
 import org.xmlcml.cml.test.SpectrumFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 
@@ -107,12 +107,12 @@ public class PeakListToolTest {
 			peakList.addPeak(peak);
 		}
 		if (peakAndGroupList == null) {
-			peakAndGroupList = (CMLPeakList)JumboTestUtils.parseValidString(peakAndGroupListS);
+			peakAndGroupList = (CMLPeakList)CMLXOMTestUtils.parseValidString(peakAndGroupListS);
 			peakAndGroupListTool = PeakListTool
 					.getOrCreateTool(peakAndGroupList);
 		}
 		if (molecule == null) {
-			molecule = (CMLMolecule)JumboTestUtils.parseValidString(moleculeS);
+			molecule = (CMLMolecule)CMLXOMTestUtils.parseValidString(moleculeS);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class PeakListToolTest {
 				+ "  <link to='p1' fromSet='p1'/>"
 				+ "  <link to='p3p4' fromSet='p3 p4'/>"
 				+ "  <link to='p2' fromSet='p2'/>" + "</map>";
-		JumboTestUtils.assertEqualsCanonically("map",JumboTestUtils.parseValidString(expectedS), map, true);
+		CMLXOMTestUtils.assertEqualsCanonically("map",CMLXOMTestUtils.parseValidString(expectedS), map, true);
 		CMLPeakList newPeakList = peakListTool
 				.createPeakListGroupedByMorgan(molecule);
 		CMLPeakGroup peakGroup = newPeakList.getPeakGroupElements().get(0);
@@ -171,8 +171,8 @@ public class PeakListToolTest {
 				+ "  </peakGroup>" + "  <peakGroup id='p2'>"
 				+ "    <peak xValue='1.0' yValue='7.0' id='p2'/>"
 				+ "  </peakGroup>" + "</peakList>";
-		Element expectedPeakList =JumboTestUtils.parseValidString(expectedS);
-		JumboTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+		Element expectedPeakList =CMLXOMTestUtils.parseValidString(expectedS);
+		CMLXOMTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 	}
 
 	/** 
@@ -191,7 +191,7 @@ public class PeakListToolTest {
 				+ "  </peakGroup>" + "  <peakGroup id='p1'>"
 				+ "    <peak xValue='3.0' yValue='10.0' id='p1'/>"
 				+ "  </peakGroup>" + "</peakList>";
-		JumboTestUtils.assertEqualsCanonically("atomRefs",JumboTestUtils.parseValidString(expectedS),
+		CMLXOMTestUtils.assertEqualsCanonically("atomRefs",CMLXOMTestUtils.parseValidString(expectedS),
 				newPeakList, true);
 	}
 
@@ -205,7 +205,7 @@ public class PeakListToolTest {
 				+ "		  <link to='p2' fromSet='p2'/>"
 				+ "		  <link to='p3p4' fromSet='p3 p4'/>"
 				+ "		  <link to='p1' fromSet='p1'/>" + "		</map>";
-		JumboTestUtils.assertEqualsCanonically("atomRefs",JumboTestUtils.parseValidString(expectedS), map,
+		CMLXOMTestUtils.assertEqualsCanonically("atomRefs",CMLXOMTestUtils.parseValidString(expectedS), map,
 				true);
 	}
 
@@ -243,7 +243,7 @@ public class PeakListToolTest {
 
 		peakListTool.addAtomRefs(atoms2Peaks, overwrite);
 		CMLPeak peak = (CMLPeak) peakListTool.getPeakChildById("p1");
-		JumboTestUtils.assertEquals("addatomref", new String[] { "a17" }, peak.getAtomRefs());
+		CMLXOMTestUtils.assertEquals("addatomref", new String[] { "a17" }, peak.getAtomRefs());
 
 		link.setTo("p1");
 		link.setFrom("a2");
@@ -251,7 +251,7 @@ public class PeakListToolTest {
 
 		peakListTool.addAtomRefs(atoms2Peaks, overwrite);
 		peak = (CMLPeak) peakListTool.getPeakChildById("p1");
-		JumboTestUtils.assertEquals("addatomref", new String[] { "a17", "a2" }, peak
+		CMLXOMTestUtils.assertEquals("addatomref", new String[] { "a17", "a2" }, peak
 				.getAtomRefs());
 
 		link.setTo("p1");
@@ -261,7 +261,7 @@ public class PeakListToolTest {
 		overwrite = true;
 		peakListTool.addAtomRefs(atoms2Peaks, overwrite);
 		peak = (CMLPeak) peakListTool.getPeakChildById("p1");
-		JumboTestUtils.assertEquals("addatomref", new String[] { "a5" }, peak.getAtomRefs());
+		CMLXOMTestUtils.assertEquals("addatomref", new String[] { "a5" }, peak.getAtomRefs());
 
 		peakList = null;
 
@@ -280,7 +280,7 @@ public class PeakListToolTest {
 				+ "  <link to='p1' from='a1'/>" + "  <link to='p2' from='a2'/>"
 				+ "  <link to='p3' from='a3'/>" + "  <link to='p4' from='a4'/>"
 				+ "</map>";
-		JumboTestUtils.assertEqualsCanonically("atomRefs",JumboTestUtils.parseValidString(expectedS), map,
+		CMLXOMTestUtils.assertEqualsCanonically("atomRefs",CMLXOMTestUtils.parseValidString(expectedS), map,
 				true);
 		expectedS = "<peakList xmlns='http://www.xml-cml.org/schema'>"
 				+ "  <peak xValue='3.0' yValue='10.0' id='p1' atomRefs='a1'/>"
@@ -288,7 +288,7 @@ public class PeakListToolTest {
 				+ "  <peak xValue='2.0' yValue='5.0' id='p3' atomRefs='a3'/>"
 				+ "  <peak xValue='2.0' yValue='3.0' id='p4' atomRefs='a4'/>"
 				+ "</peakList>";
-		JumboTestUtils.assertEqualsCanonically("atomRefs",JumboTestUtils.parseValidString(expectedS),
+		CMLXOMTestUtils.assertEqualsCanonically("atomRefs",CMLXOMTestUtils.parseValidString(expectedS),
 				peakList, true);
 		peakList = null;
 	}
@@ -307,7 +307,7 @@ public class PeakListToolTest {
 				+ "  <link to='p1' from='a1'/>" + "  <link to='p2' from='a2'/>"
 				+ "  <link to='p3' from='a3'/>" + "  <link to='p4' from='a4'/>"
 				+ "</map>";
-		JumboTestUtils.assertEqualsCanonically("atommap",JumboTestUtils.parseValidString(expectedS), map,
+		CMLXOMTestUtils.assertEqualsCanonically("atommap",CMLXOMTestUtils.parseValidString(expectedS), map,
 				true);
 	}
 
@@ -336,8 +336,8 @@ public class PeakListToolTest {
 				+ "      <peak xValue='2.0' yValue='3.0' id='p4'/>"
 				+ "    </peakGroup>"
 				+ "  <peak xValue='2.0' yValue='5.0' id='p1'/>" + "</peakList>";
-		CMLPeakList expectedPeakList = (CMLPeakList)JumboTestUtils.parseValidString(expectedS);
-		JumboTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+		CMLPeakList expectedPeakList = (CMLPeakList)CMLXOMTestUtils.parseValidString(expectedS);
+		CMLXOMTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 	}
 
 	/** 
@@ -348,7 +348,7 @@ public class PeakListToolTest {
 				+ "  <link from='p1' to='p1'/>"
 				+ "  <link fromSet='p2 p3' to='p2p3'/>"
 				+ "  <link from='p4' to='p3'/>" + "</map>";
-		CMLMap peaks2Group = (CMLMap)JumboTestUtils.parseValidString(peaks2GroupS);
+		CMLMap peaks2Group = (CMLMap)CMLXOMTestUtils.parseValidString(peaks2GroupS);
 
 		CMLPeakList peakList1 = (CMLPeakList) peakListTool
 				.createPeakGroups(peaks2Group);
@@ -360,14 +360,14 @@ public class PeakListToolTest {
 				+ "		  </peakGroup>"
 				+ "		  <peak xValue='2.0' yValue='3.0' id='p3'/>"
 				+ "		</peakList>";
-		Element expected =JumboTestUtils.parseValidString(expectedS);
-		JumboTestUtils.assertEqualsCanonically("group", expected, peakList1, true);
+		Element expected =CMLXOMTestUtils.parseValidString(expectedS);
+		CMLXOMTestUtils.assertEqualsCanonically("group", expected, peakList1, true);
 
 		// omit peaks through map
 		peaks2GroupS = "<map xmlns='http://www.xml-cml.org/schema'>"
 				+ "  <link fromSet='p2 p3' to='p2p3'/>"
 				+ "  <link from='p4' to='p3'/>" + "</map>";
-		peaks2Group = (CMLMap)JumboTestUtils.parseValidString(peaks2GroupS);
+		peaks2Group = (CMLMap)CMLXOMTestUtils.parseValidString(peaks2GroupS);
 		peakList1 = (CMLPeakList) peakListTool.createPeakGroups(peaks2Group);
 		expectedS = "		<peakList xmlns='http://www.xml-cml.org/schema'>"
 				+ "		  <peakGroup id='p2p3'>"
@@ -376,8 +376,8 @@ public class PeakListToolTest {
 				+ "		  </peakGroup>"
 				+ "		  <peak xValue='2.0' yValue='3.0' id='p3'/>"
 				+ "		</peakList>";
-		expected =JumboTestUtils.parseValidString(expectedS);
-		JumboTestUtils.assertEqualsCanonically("group", expected, peakList1, true);
+		expected =CMLXOMTestUtils.parseValidString(expectedS);
+		CMLXOMTestUtils.assertEqualsCanonically("group", expected, peakList1, true);
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class PeakListToolTest {
 				+ "  <peak xValue='2.0' yValue='5.0' id='p3' atomRefs='a3'/>"
 				+ "  <peak xValue='2.0' yValue='3.0' id='p4' atomRefs='a4'/>"
 				+ "</peakList>";
-		CMLPeakList peakList1 = (CMLPeakList)JumboTestUtils.parseValidString(peakList1S);
+		CMLPeakList peakList1 = (CMLPeakList)CMLXOMTestUtils.parseValidString(peakList1S);
 		String[] atomId = new String[] { "a1", "a3" };
 		CMLPeakList newPeakList = PeakListTool.getOrCreateTool(peakList1)
 				.createPeakListFromPeakChildrenByAtomId(atomId);
@@ -397,7 +397,7 @@ public class PeakListToolTest {
 				+ "  <peak xValue='1.0' yValue='7.0' id='p2' atomRefs='a2'/>"
 				+ "  <peak xValue='2.0' yValue='3.0' id='p4' atomRefs='a4'/>"
 				+ "</peakList>";
-		JumboTestUtils.assertEqualsCanonically("select",JumboTestUtils.parseValidString(expectedS),
+		CMLXOMTestUtils.assertEqualsCanonically("select",CMLXOMTestUtils.parseValidString(expectedS),
 				newPeakList, true);
 	}
 
@@ -429,8 +429,8 @@ public class PeakListToolTest {
 				+ "		  <peak xValue='2.0' yValue='5.0' id='p3'/>"
 				+ "		  <peak xValue='3.0' yValue='10.0' id='p1'/>"
 				+ "		</peakList>";
-		Element expected =JumboTestUtils.parseValidString(expectedS);
-		JumboTestUtils.assertEqualsCanonically("group", expected, newPeakList, true);
+		Element expected =CMLXOMTestUtils.parseValidString(expectedS);
+		CMLXOMTestUtils.assertEqualsCanonically("group", expected, newPeakList, true);
 	}
 
 	/**
@@ -450,7 +450,7 @@ public class PeakListToolTest {
 				+ "      <peak id='p5' atomRefs='a5'/>"
 				+ "      <peak id='p3' atomRefs='a3'/>" + "    </peakGroup>"
 				+ "</peakList>";
-		CMLPeakList newPeakList = (CMLPeakList)JumboTestUtils.parseValidString(peakListS);
+		CMLPeakList newPeakList = (CMLPeakList)CMLXOMTestUtils.parseValidString(peakListS);
 		PeakListTool.getOrCreateTool(newPeakList)
 				.removeAtomRefsOnPeaksAndGroups(atomSet, false);
 		String expectedPeakListS = "        <peakList xmlns='http://www.xml-cml.org/schema'>"
@@ -464,18 +464,18 @@ public class PeakListToolTest {
 				+ "            <peak id='p3'/>"
 				+ "          </peakGroup>" + "        </peakList>";
 
-		CMLElement expectedPeakList = (CMLPeakList)JumboTestUtils.parseValidString(expectedPeakListS);
-		JumboTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+		CMLElement expectedPeakList = (CMLPeakList)CMLXOMTestUtils.parseValidString(expectedPeakListS);
+		CMLXOMTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 
-		newPeakList = (CMLPeakList)JumboTestUtils.parseValidString(peakListS);
+		newPeakList = (CMLPeakList)CMLXOMTestUtils.parseValidString(peakListS);
 		PeakListTool.getOrCreateTool(newPeakList)
 				.removeAtomRefsOnPeaksAndGroups(atomSet, true);
 		expectedPeakListS = "        <peakList xmlns='http://www.xml-cml.org/schema'> "
 				+ "          <peakGroup id='p2p3' atomRefs='a2'>"
 				+ "            <peak id='p2' atomRefs='a2'/> "
 				+ "          </peakGroup>" + "        </peakList>";
-		expectedPeakList = (CMLPeakList)JumboTestUtils.parseValidString(expectedPeakListS);
-		JumboTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
+		expectedPeakList = (CMLPeakList)CMLXOMTestUtils.parseValidString(expectedPeakListS);
+		CMLXOMTestUtils.assertEqualsCanonically("peakList", expectedPeakList, newPeakList, true);
 	}
 
 	// peak structure

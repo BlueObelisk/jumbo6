@@ -68,7 +68,7 @@ import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.cml.map.Indexable;
 import org.xmlcml.cml.map.IndexableByIdList;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
 import org.xmlcml.euclid.Real2;
@@ -276,11 +276,11 @@ public class MoleculeToolTest {
 				+ "      <atom id='a2' x3='3.0' y3='4.0' z3='0.0'/>"
 				+ "      <atom id='a3' x3='2.0' y3='3.0' z3='1.0'/>"
 				+ "    </atomArray>" + "  </molecule>";
-		mol1 = (CMLMolecule) JumboTestUtils.parseValidString(s);
+		mol1 = (CMLMolecule) CMLXOMTestUtils.parseValidString(s);
 	}
 
 	protected void makeMol2() {
-		mol2 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m2' "
+		mol2 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m2' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a11' x3='1.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a12' x3='3.0' y3='4.0' z3='0.0'/>"
@@ -289,7 +289,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol3() {
-		mol3 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m3' "
+		mol3 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m3' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a21' x3='21.0' y3='2.0' z3='0.0'/>"
 				+ "      <atom id='a22' x3='23.0' y3='4.0' z3='0.0'/>"
@@ -298,7 +298,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol4() {
-		mol4 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m4' "
+		mol4 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m4' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -309,7 +309,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeCrystal() {
-		crystal = (CMLCrystal) JumboTestUtils.parseValidString("  <crystal id='c1' "
+		crystal = (CMLCrystal) CMLXOMTestUtils.parseValidString("  <crystal id='c1' "
 				+ CMLConstants.CML_XMLNS + ">"
 				+ "    <scalar dictRef='iucr:_cell_length_a'>9.0</scalar>"
 				+ "    <scalar dictRef='iucr:_cell_length_b'>10.0</scalar>"
@@ -321,7 +321,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol5() {
-		mol5 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m5' "
+		mol5 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m5' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -339,7 +339,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol5a() {
-		mol5a = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m5' "
+		mol5a = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m5' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -357,7 +357,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMolCryst() {
-		cmlCryst = (CMLCml) JumboTestUtils.parseValidString("<cml id='cml1' "
+		cmlCryst = (CMLCml) CMLXOMTestUtils.parseValidString("<cml id='cml1' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <crystal id='c1' >"
@@ -389,7 +389,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol6() {
-		mol6 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m6' "
+		mol6 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m6' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "    <atomArray>"
@@ -400,7 +400,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol7() {
-		mol7 = (CMLMolecule) JumboTestUtils.parseValidString("  <molecule id='m7' "
+		mol7 = (CMLMolecule) CMLXOMTestUtils.parseValidString("  <molecule id='m7' "
 				+ CMLConstants.CML_XMLNS + ">" + "    <atomArray>"
 				+ "      <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "      <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
@@ -409,7 +409,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol8() {
-		mol8 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule id='m8' "
+		mol8 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule id='m8' "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <molecule id='m8a'>"
@@ -428,7 +428,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol9() {
-		mol9 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule id='m9' " + CMLConstants.CML_XMLNS
+		mol9 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule id='m9' " + CMLConstants.CML_XMLNS
 				+ ">" + "  <atomArray>"
 				+ "    <atom id='a1' elementType='C' x2='0.0' y2='0.0'/>"
 				+ "    <atom id='a2' elementType='N' x2='0.0' y2='1.3'/>"
@@ -440,7 +440,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol10() {
-		mol10 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule "
+		mol10 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
@@ -458,7 +458,7 @@ public class MoleculeToolTest {
 	}
 
 	protected void makeMol11() {
-		mol11 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule " + CMLConstants.CML_XMLNS + ">"
+		mol11 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule " + CMLConstants.CML_XMLNS + ">"
 				+ "  <atomArray>"
 				+ "    <atom id='a1' elementType='N' hydrogenCount='2'/>"
 				+ "    <atom id='a2' elementType='C' hydrogenCount='1'/>"
@@ -576,7 +576,7 @@ public class MoleculeToolTest {
 
     private CMLMolecule makeMol(CMLMolecule mol, String s) {
         if (mol == null) {
-            mol = (CMLMolecule) JumboTestUtils.parseValidString(s);
+            mol = (CMLMolecule) CMLXOMTestUtils.parseValidString(s);
         }
         return mol;
     }
@@ -1053,7 +1053,7 @@ public class MoleculeToolTest {
 				CMLAtomArray.TAG).get(0);
 		Assert.assertEquals("formula", new String[] { AS.C.value, AS.H.value,
 				AS.N.value, AS.O.value }, atomArray.getElementType());
-		JumboTestUtils.assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
+		CMLXOMTestUtils.assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
 				.getCount(), 0.000001);
 	}
 
@@ -1067,7 +1067,7 @@ public class MoleculeToolTest {
 		MoleculeTool moleculeTool5a = MoleculeTool
 				.getOrCreateTool(fixture.mol5a);
 		Point3 p = moleculeTool5a.calculateCentroid3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("p", new double[] { 0.24, 0.484, 0.0 }, p.getArray(),
+		CMLXOMTestUtils.assertEquals("p", new double[] { 0.24, 0.484, 0.0 }, p.getArray(),
 				0.00001);
 		fixture.makeMol7();
 		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
@@ -1094,7 +1094,7 @@ public class MoleculeToolTest {
 				CMLAtomArray.TAG).get(0);
 		Assert.assertEquals("formula", new String[] { AS.C.value, AS.H.value,
 				AS.N.value, AS.O.value }, atomArray.getElementType());
-		JumboTestUtils.assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
+		CMLXOMTestUtils.assertEquals("formula", new double[] { 1.0, 2.0, 1.0, 1.0 }, atomArray
 				.getCount(), 0.000001);
 
 	}
@@ -1110,7 +1110,7 @@ public class MoleculeToolTest {
 		Real3Range r3 = MoleculeTool.getOrCreateTool(fixture.mol5a)
 				.calculateRange3(CoordinateType.CARTESIAN);
 		Assert.assertNotNull("range", r3);
-		JumboTestUtils.assertEquals("r3", new Real3Range(new RealRange(-0.95, 1.2),
+		CMLXOMTestUtils.assertEquals("r3", new Real3Range(new RealRange(-0.95, 1.2),
 				new RealRange(-0.54, 2.2), new RealRange(0.0, 0.0)), r3,
 				0.000001);
 	}
@@ -1128,8 +1128,8 @@ public class MoleculeToolTest {
 		Assert.assertEquals("atomSet", 2, atomSet.size());
 		CMLMolecule mol = MoleculeTool.createMolecule(atomSet);
 		Assert.assertEquals("atom count", 2, mol.getAtomCount());
-		JumboTestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(0), mol.getAtom(0));
-		JumboTestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(2), mol.getAtom(1));
+		CMLXOMTestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(0), mol.getAtom(0));
+		CMLXOMTestUtils.assertEqualsCanonically("atom", fixture.mol1.getAtom(2), mol.getAtom(1));
 	}
 
 	/**
@@ -1146,18 +1146,18 @@ public class MoleculeToolTest {
 		bondSet = new CMLBondSet(mol5a.getBonds());
 		CMLMolecule mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
-		JumboTestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		CMLXOMTestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 4, mol.getBondCount());
-		JumboTestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+		CMLXOMTestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
 				.get(2));
 
 		CMLBond bond = bondSet.getBonds().get(0);
 		bondSet.removeBond(bond);
 		mol = MoleculeTool.createMolecule(atomSet, bondSet);
 		Assert.assertEquals("atoms", 5, mol.getAtomCount());
-		JumboTestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
+		CMLXOMTestUtils.assertEqualsCanonically("atom", mol5a.getAtom(2), mol.getAtom(2));
 		Assert.assertEquals("bonds", 3, mol.getBondCount());
-		JumboTestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
+		CMLXOMTestUtils.assertEqualsCanonically("bond", mol5a.getBonds().get(2), mol.getBonds()
 				.get(1));
 	}
 
@@ -1263,7 +1263,7 @@ public class MoleculeToolTest {
 		fromTool.copyAtomAndBondAttributesById(to, permitOverwrite);
 
 		to.setId("from"); // to allow comparison
-		JumboTestUtils.assertEqualsCanonically("compare mols", from, to);
+		CMLXOMTestUtils.assertEqualsCanonically("compare mols", from, to);
 
 		permitOverwrite = false;
 		try {
@@ -1298,9 +1298,9 @@ public class MoleculeToolTest {
 		MoleculeTool.getOrCreateTool(fixture.mol4)
 				.createCartesiansFromFractionals(fixture.crystal);
 		Assert.assertEquals("fractionals", 3, fixture.mol4.getAtomCount());
-		JumboTestUtils.assertEquals("fractionals", new double[] { 0.5, 0.6, 0.7 },
+		CMLXOMTestUtils.assertEquals("fractionals", new double[] { 0.5, 0.6, 0.7 },
 				fixture.mol4.getAtom(2).getXYZFract(), CC.EPS);
-		JumboTestUtils.assertEquals("cartesians", new double[] { 4.5, 6.0, 7.7 }, fixture.mol4
+		CMLXOMTestUtils.assertEquals("cartesians", new double[] { 4.5, 6.0, 7.7 }, fixture.mol4
 				.getAtom(2).getXYZ3(), CC.EPS);
 	}
 
@@ -1325,7 +1325,7 @@ public class MoleculeToolTest {
 		Assert.assertTrue("fractional coords", cmlCrystMol
 				.hasCoordinates(CoordinateType.FRACTIONAL));
 		Point3 xyz = cmlCrystMol.getAtom(2).getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("point", new double[] { 1.08, 2.2, 0.0 }, xyz,
+		CMLXOMTestUtils.assertEquals("point", new double[] { 1.08, 2.2, 0.0 }, xyz,
 				0.0000000000001);
 	}
 
@@ -1354,9 +1354,9 @@ public class MoleculeToolTest {
 		molecule.addBond(bond);
 		AbstractSVGTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	SVGSVG svgsvg = createSvgSvg(moleculeTool);
-        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule1.svg");
+        Element ref = CMLXOMTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule1.svg");
 //        CMLUtil.debug(svgsvg, "SSVG");
-        JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+        CMLXOMTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
 	}
 	
 	@Test
@@ -1374,8 +1374,8 @@ public class MoleculeToolTest {
 		bond23.setOrder(CMLBond.DOUBLE_D);
 		AbstractSVGTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
     	SVGSVG svgsvg = createSvgSvg(moleculeTool);
-        Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule2.svg");
-        JumboTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
+        Element ref = CMLXOMTestUtils.parseValidFile("org/xmlcml/cml/tools/molecule2.svg");
+        CMLXOMTestUtils.assertEqualsIncludingFloat("svg", ref, svgsvg, true, 0.0000000001);
 	}
 
 	private CMLAtom addAtom(CMLMolecule molecule, String id, ChemicalElement.AS as, Real2 xy2) {
@@ -1626,7 +1626,7 @@ public class MoleculeToolTest {
 				+ "  <angle atomRefs3='a1 a2 a3'>123</angle>"
 				+ "  <angle atomRefs3='a3 a4 a5'>99</angle>" + "</molecule>"
 				+ "";
-		CMLMolecule mol = (CMLMolecule) JumboTestUtils.parseValidString(s);
+		CMLMolecule mol = (CMLMolecule) CMLXOMTestUtils.parseValidString(s);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(mol);
 		CMLAtom a1 = mol.getAtom(0);
 		CMLAtom a2 = mol.getAtom(1);
@@ -1751,7 +1751,7 @@ public class MoleculeToolTest {
 		Point3 centroid = moleculeTool1
 				.calculateCentroid3(CoordinateType.CARTESIAN);
 		Assert.assertNotNull("centroid 1", centroid);
-		JumboTestUtils.assertEquals("centroid 1", new double[] { 2., 3., 0.33333 }, centroid,
+		CMLXOMTestUtils.assertEquals("centroid 1", new double[] { 2., 3., 0.33333 }, centroid,
 				.0001);
 		fixture.makeMol7();
 		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
@@ -1771,7 +1771,7 @@ public class MoleculeToolTest {
 				.getOrCreateTool(fixture.mol5a);
 		Point3Vector p3v = moleculeTool5a
 				.getCoordinates3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("p", new double[] { 0.0, 0.0, 0.0, 0.0, 1.3, 0.0, 1.2,
+		CMLXOMTestUtils.assertEquals("p", new double[] { 0.0, 0.0, 0.0, 0.0, 1.3, 0.0, 1.2,
 				2.2, 0.0, 0.95, -0.54, 0.0, -0.95, -0.54, 0.0, }, p3v
 				.getArray(), 0.00001);
 		fixture.makeMol7();
@@ -1913,7 +1913,7 @@ public class MoleculeToolTest {
     @Test
     public void testGetLoneElectronCount() {
         // FIXME
-        CMLMolecule nitroMethane = (CMLMolecule) JumboTestUtils.parseValidString(nitroMethaneS);
+        CMLMolecule nitroMethane = (CMLMolecule) CMLXOMTestUtils.parseValidString(nitroMethaneS);
         int n = AtomTool.getOrCreateTool(nitroMethane.getAtom(0)).getLoneElectronCount();
       //  Assert.assertEquals("lone pair", -6, n);
         n = AtomTool.getOrCreateTool(nitroMethane.getAtom(1)).getLoneElectronCount();
@@ -2123,7 +2123,7 @@ public class MoleculeToolTest {
 				"    <bond atomRefs2='a1 a2' order='S'/>" +
 				"  </bondArray>" +
 				"</molecule>";
-		CMLMolecule molecule = (CMLMolecule) JumboTestUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule) CMLXOMTestUtils.parseValidString(moleculeS);
 		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule).getTotalHydrogenCount();
 		Assert.assertEquals("h count", 4, hydrogenCount);
 	}
@@ -2140,7 +2140,7 @@ public class MoleculeToolTest {
 		Assert.assertNotNull("get vector3d", vector);
 		Assert.assertEquals("get vector3d", 3, vector.size());
 		Point3 p = vector.getPoint3(2);
-		JumboTestUtils.assertEquals("point", new double[] { 2., 3., 1. }, p, CC.EPS);
+		CMLXOMTestUtils.assertEquals("point", new double[] { 2., 3., 1. }, p, CC.EPS);
 		fixture.makeMol7();
 		MoleculeTool moleculeTool7 = MoleculeTool.getOrCreateTool(fixture.mol7);
 		vector = moleculeTool7.getCoordinates3(CoordinateType.CARTESIAN);
@@ -2176,15 +2176,15 @@ public class MoleculeToolTest {
 		fixture.makeMol1();
 		CMLMolecule mol1 = fixture.mol1;
 		Point3 p = mol1.getAtom(2).getXYZ3();
-		JumboTestUtils.assertEquals("original point", new double[] { 2., 3., 1. }, p, CC.EPS);
+		CMLXOMTestUtils.assertEquals("original point", new double[] { 2., 3., 1. }, p, CC.EPS);
 		MoleculeTool.getOrCreateTool(mol1).translate3D(
 				new Vector3(0.000111, 0.999999, 0.012345));
 		p = mol1.getAtom(2).getXYZ3();
-		JumboTestUtils.assertEquals("moved point",
+		CMLXOMTestUtils.assertEquals("moved point",
 				new double[] { 2.000111, 3.999999, 1.012345 }, p, CC.EPS);
 		mol1.roundCoords(.001, CoordinateType.CARTESIAN);
 		p = mol1.getAtom(2).getXYZ3();
-		JumboTestUtils.assertEquals("moved point", new double[] { 2.000, 3.999, 1.012 }, p,
+		CMLXOMTestUtils.assertEquals("moved point", new double[] { 2.000, 3.999, 1.012 }, p,
 				CC.EPS);
 	}
 
@@ -2243,10 +2243,10 @@ public class MoleculeToolTest {
 				0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, });
 		CMLAtom atom4 = fixture.mol5.getAtom(3);
 		Point3 p = atom4.getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
+		CMLXOMTestUtils.assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
 		MoleculeTool.getOrCreateTool(fixture.mol5).transformCartesians(t3);
 		p = atom4.getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
+		CMLXOMTestUtils.assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
 	}
 
     /**
@@ -2261,10 +2261,10 @@ public class MoleculeToolTest {
 				0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, });
 		CMLAtom atom4 = fixture.mol5.getAtom(3);
 		Point3 p = atom4.getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
+		CMLXOMTestUtils.assertEquals("orig", new Point3(0.85, -0.54, 0.5), p, 0.0000001);
 		MoleculeTool.getOrCreateTool(fixture.mol5).transformCartesians(t3);
 		p = atom4.getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
+		CMLXOMTestUtils.assertEquals("orig", new Point3(-0.54, 0.5, 0.85), p, 0.0000001);
 	}
 
     /**
@@ -2280,11 +2280,11 @@ public class MoleculeToolTest {
 		List<CMLMolecule> molList = MoleculeTool.getOrCreateTool(
 				fixture.cmlCrystMol).transformFractionalCoordinates(symmetry);
 		Assert.assertEquals("after t", 2, molList.size());
-		JumboTestUtils.assertEqualsCanonically("mols equals", molList.get(0),
+		CMLXOMTestUtils.assertEqualsCanonically("mols equals", molList.get(0),
 				fixture.cmlCrystMol);
 		Point3 xf = molList.get(1).getAtom(2).getPoint3(
 				CoordinateType.FRACTIONAL);
-		JumboTestUtils.assertEquals("mols equal", new double[] { 0.22, -0.12, 0.5 }, xf,
+		CMLXOMTestUtils.assertEquals("mols equal", new double[] { 0.22, -0.12, 0.5 }, xf,
 				0.0000001);
 	}
 
@@ -2302,12 +2302,12 @@ public class MoleculeToolTest {
 
 		Point3 pf = fixture.cmlCrystMol.getAtom(2).getPoint3(
 				CoordinateType.FRACTIONAL);
-		JumboTestUtils.assertEquals("before", new double[] { 0.12, 0.22, 0.0 }, pf, 0.000001);
+		CMLXOMTestUtils.assertEquals("before", new double[] { 0.12, 0.22, 0.0 }, pf, 0.000001);
 		MoleculeTool.getOrCreateTool(fixture.cmlCrystMol)
 				.transformFractionalCoordinates(transform);
 		pf = fixture.cmlCrystMol.getAtom(2)
 				.getPoint3(CoordinateType.FRACTIONAL);
-		JumboTestUtils.assertEquals("before", new double[] { 0.22, 0.0, 0.37 }, pf, 0.000001);
+		CMLXOMTestUtils.assertEquals("before", new double[] { 0.22, 0.0, 0.37 }, pf, 0.000001);
 	}
 
     /**
@@ -2317,7 +2317,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testTransformFractionalCoordinatesTransform3() {
-		CMLMolecule mol0 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule "
+		CMLMolecule mol0 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
@@ -2329,14 +2329,14 @@ public class MoleculeToolTest {
 				0, 0.5, 0, 0, -1, 0.25, 0, 0, 0, 1 });
 		MoleculeTool.getOrCreateTool(mol).transformFractionalCoordinates(tr);
 		CMLAtom atom0 = mol.getAtom(0);
-		JumboTestUtils.assertEquals("transform", new double[] { 1, 2, 3 }, atom0.getXYZ3(),
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 1, 2, 3 }, atom0.getXYZ3(),
 				CC.EPS);
-		JumboTestUtils.assertEquals("transform", new double[] { 0.1, 0.3, -0.05 }, atom0
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 0.1, 0.3, -0.05 }, atom0
 				.getXYZFract(), CC.EPS);
 		Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
 		Assert.assertEquals("transform", "a1", atom0.getId());
 		CMLAtom atom1 = mol.getAtom(1);
-		JumboTestUtils.assertEquals("transform", new double[] { 0.15, 0.25, -0.10 }, atom1
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 0.15, 0.25, -0.10 }, atom1
 				.getXYZFract(), CC.EPS);
 	}
 
@@ -2355,13 +2355,13 @@ public class MoleculeToolTest {
 		Point3 px = atom.getPoint3(CoordinateType.CARTESIAN);
 		Assert.assertNull("no 3dcart", px);
 		Point3 pf = atom.getPoint3(CoordinateType.FRACTIONAL);
-		JumboTestUtils.assertEquals("fract", new double[] { 0.12, 0.22, 0.0 }, pf, 0.0000001);
+		CMLXOMTestUtils.assertEquals("fract", new double[] { 0.12, 0.22, 0.0 }, pf, 0.0000001);
 		MoleculeTool.getOrCreateTool(fixture.cmlCrystMol)
 				.transformFractionalsAndCartesians(transform, orthMat);
 		px = atom.getPoint3(CoordinateType.CARTESIAN);
-		JumboTestUtils.assertEquals("3dcart", new double[] { -1.98, 1.2, 5.5 }, px, 0.0000001);
+		CMLXOMTestUtils.assertEquals("3dcart", new double[] { -1.98, 1.2, 5.5 }, px, 0.0000001);
 		pf = atom.getPoint3(CoordinateType.FRACTIONAL);
-		JumboTestUtils.assertEquals("fract", new double[] { -0.22, 0.12, 0.5 }, pf, 0.0000001);
+		CMLXOMTestUtils.assertEquals("fract", new double[] { -0.22, 0.12, 0.5 }, pf, 0.0000001);
 	}
 
     /**
@@ -2370,7 +2370,7 @@ public class MoleculeToolTest {
 	 */
 	@Test
 	public void testTransformTransform3() {
-		CMLMolecule mol0 = (CMLMolecule) JumboTestUtils.parseValidString("<molecule "
+		CMLMolecule mol0 = (CMLMolecule) CMLXOMTestUtils.parseValidString("<molecule "
 				+ CMLConstants.CML_XMLNS
 				+ ">"
 				+ "  <atomArray>"
@@ -2382,15 +2382,15 @@ public class MoleculeToolTest {
 				0, 0, 0, 0, -1, 0, 0, 0, 0, 1 });
 		MoleculeTool.getOrCreateTool(mol).transformCartesians(tr);
 		CMLAtom atom0 = mol.getAtom(0);
-		JumboTestUtils.assertEquals("transform", new double[] { 1, -2, -3 }, atom0.getXYZ3(),
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 1, -2, -3 }, atom0.getXYZ3(),
 				CC.EPS);
 		// not transformed
-		JumboTestUtils.assertEquals("transform", new double[] { 0.1, 0.2, 0.3 }, atom0
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 0.1, 0.2, 0.3 }, atom0
 				.getXYZFract(), CC.EPS);
 		Assert.assertEquals("transform", AS.N.value, atom0.getElementType());
 		Assert.assertEquals("transform", "a1", atom0.getId());
 		CMLAtom atom1 = mol.getAtom(1);
-		JumboTestUtils.assertEquals("transform", new double[] { 1.8, -2.8, -3.8 }, atom1
+		CMLXOMTestUtils.assertEquals("transform", new double[] { 1.8, -2.8, -3.8 }, atom1
 				.getXYZ3(), CC.EPS);
 	}
 
@@ -2402,11 +2402,11 @@ public class MoleculeToolTest {
 		fixture.makeMol1();
 		CMLMolecule mol1 = fixture.mol1;
 		Point3 p = mol1.getAtom(2).getXYZ3();
-		JumboTestUtils.assertEquals("original point", new double[] { 2., 3., 1. }, p, CC.EPS);
+		CMLXOMTestUtils.assertEquals("original point", new double[] { 2., 3., 1. }, p, CC.EPS);
 		MoleculeTool.getOrCreateTool(mol1).translate3D(
 				new Vector3(0.000111, 0.999999, 0.012345));
 		p = mol1.getAtom(2).getXYZ3();
-		JumboTestUtils.assertEquals("moved point",
+		CMLXOMTestUtils.assertEquals("moved point",
 				new double[] { 2.000111, 3.999999, 1.012345 }, p, CC.EPS);
 	}
 	

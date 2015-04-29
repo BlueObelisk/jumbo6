@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLBuilder;
 import org.xmlcml.cml.element.CMLDictionary;
 import org.xmlcml.cml.element.CMLEntry;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 public class DictionaryToolTest {
 
@@ -41,7 +41,7 @@ public class DictionaryToolTest {
 		Map<String, CMLEntry> idIndex = dictionaryTool.makeIndex("@id");
 		Assert.assertEquals("size", 2, idIndex.size());
 		CMLEntry entry = idIndex.get("e1");
-		JumboTestUtils.assertEqualsCanonically("entry1",
+		CMLXOMTestUtils.assertEqualsCanonically("entry1",
 				new CMLBuilder().parseString("<entry id='e1' term='t1' xmlns='http://www.xml-cml.org/schema'/>"),
 				entry, true);
 		entry = idIndex.get("e3");
@@ -50,7 +50,7 @@ public class DictionaryToolTest {
 		Map<String, CMLEntry> termIndex = dictionaryTool.makeIndex("@term");
 		Assert.assertEquals("size", 2, termIndex.size());
 		entry = termIndex.get("t1");
-		JumboTestUtils.assertEqualsCanonically("entry1",
+		CMLXOMTestUtils.assertEqualsCanonically("entry1",
 				new CMLBuilder().parseString("<entry id='e1' term='t1' xmlns='http://www.xml-cml.org/schema'/>"),
 				entry, true);
 		entry = termIndex.get("t3");

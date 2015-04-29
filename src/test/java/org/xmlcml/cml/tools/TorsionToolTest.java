@@ -31,8 +31,8 @@ import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.element.CMLTransform3;
-import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLAssert;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.Angle;
 
 /**
@@ -73,7 +73,7 @@ public class TorsionToolTest {
 	@Before
 	public void setUp() throws Exception {
 
-		CMLCml cml = (CMLCml)JumboTestUtils.parseValidString(s1);
+		CMLCml cml = (CMLCml)CMLXOMTestUtils.parseValidString(s1);
 		molecule1 = (CMLMolecule) cml.getChildCMLElements("molecule").get(0);
 		torsion0 = (CMLTorsion) cml.getChildCMLElements("torsion").get(0);
 		torsion1 = (CMLTorsion) cml.getChildCMLElements("torsion").get(1);
@@ -136,7 +136,7 @@ public class TorsionToolTest {
 		Assert.assertEquals("calculated b45", 1., b45,  CC.EPS);
 
 		String filename = "org/xmlcml/cml/tools/examples/molecules/geom1/coxy.xml";
-		CMLMolecule molecule2 = (CMLMolecule)JumboTestUtils.parseValidFile(filename);
+		CMLMolecule molecule2 = (CMLMolecule)CMLXOMTestUtils.parseValidFile(filename);
 		CMLTorsion torsion22 = new CMLTorsion();
 		torsion22.setAtomRefs4(new String[] { "a27", "a42", "a28", "a31" });
 		CMLAtomSet atomSet22 = new CMLAtomSet(molecule2);

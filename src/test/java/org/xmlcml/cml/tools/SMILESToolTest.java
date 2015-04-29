@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.xmlcml.cml.element.CMLFormula;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 
 /**
@@ -98,8 +98,8 @@ public class SMILESToolTest {
 				"    <bond atomRefs2='a4 a4_h1' id='a4_a4_h1' order='S'/>"+
 				"  </bondArray>"+
 				"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
-		JumboTestUtils.assertEqualsCanonically("furan", molex, mol, true);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
+		CMLXOMTestUtils.assertEqualsCanonically("furan", molex, mol, true);
 	}
 		
 	/**
@@ -125,8 +125,8 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a2 a4' id='a2_a4' order='S'/>"+
 		  "</bondArray>"+
 		"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
-		JumboTestUtils.assertEqualsCanonically("silly", molex, mol, true);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
+		CMLXOMTestUtils.assertEqualsCanonically("silly", molex, mol, true);
 	}
 		
 	/**
@@ -204,7 +204,7 @@ public class SMILESToolTest {
 		    "</bondArray>"+
 		  "</molecule>"+
 		"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
 	}
 
 
@@ -246,8 +246,8 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a6 a6_h1' id='a6_a6_h1' order='S'/>"+
 		  "</bondArray>"+
 		"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
-		JumboTestUtils.assertEqualsCanonically("pyridine", molex, mol, true);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
+		CMLXOMTestUtils.assertEqualsCanonically("pyridine", molex, mol, true);
 	}
 		
 	/**
@@ -303,8 +303,8 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a10 a10_h1' id='a10_a10_h1' order='S'/>"+
 		  "</bondArray>"+
 		"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
-		JumboTestUtils.assertEqualsCanonically("arom", molex, mol, true);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
+		CMLXOMTestUtils.assertEqualsCanonically("arom", molex, mol, true);
 	}
 	
 	/**
@@ -378,8 +378,8 @@ public class SMILESToolTest {
 		    "<bond atomRefs2='a10 a10_h2' id='a10_a10_h2' order='S'/>"+
 		  "</bondArray>"+
 		"</molecule>";
-		molex = (CMLMolecule)JumboTestUtils.parseValidString(molS);
-		JumboTestUtils.assertEqualsCanonically("zwitterion", molex, mol, true);
+		molex = (CMLMolecule)CMLXOMTestUtils.parseValidString(molS);
+		CMLXOMTestUtils.assertEqualsCanonically("zwitterion", molex, mol, true);
 	}
 	
 	/**
@@ -398,25 +398,25 @@ public class SMILESToolTest {
 	
 	@Test
 	public void testWriteSMILES() {
-		CMLMolecule molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule molecule = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5a.xml");
 		SMILESTool smilesTool = new SMILESTool(molecule);
 		String smiles = smilesTool.write();
 		Assert.assertEquals("smiles", "C(NC)(=O)C", smiles);
 
-		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		molecule = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
 		Assert.assertEquals("smiles", "C1(NCC1)=O", smiles);
 		
-		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		molecule = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5b.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
 		Assert.assertEquals("smiles", "C1(NC2C1S2)=O", smiles);
 		
-		molecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		molecule = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/molecule5c.xml");
 		smilesTool = new SMILESTool(molecule);
 		smiles = smilesTool.write();
@@ -538,10 +538,10 @@ public class SMILESToolTest {
 		String smiles = "P(F)(F)(F)(F)F";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/phosphorusPentaFluoride.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("PhosphorusPentaFluoride", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("PhosphorusPentaFluoride", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	
@@ -553,10 +553,10 @@ public class SMILESToolTest {
 		String smiles = "[NH4+]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/realisticPositiveCharge1.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Ammonium", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Ammonium", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -567,10 +567,10 @@ public class SMILESToolTest {
 		String smiles = "C[N+](C)(C)C";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/realisticPositiveCharge2.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Tetramethylammonium", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Tetramethylammonium", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -581,10 +581,10 @@ public class SMILESToolTest {
 		String smiles = "[O-]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/negativeCharge.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Negative Oxygen", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Negative Oxygen", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -595,10 +595,10 @@ public class SMILESToolTest {
 		String smiles = "[C++]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/doublePositiveCharge.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -609,10 +609,10 @@ public class SMILESToolTest {
 		String smiles = "[C+2]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/doublePositiveCharge.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Double positive carbon", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -623,10 +623,10 @@ public class SMILESToolTest {
 		String smiles = "[O--]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/doubleNegativeCharge.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Double negative carbon", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Double negative carbon", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -637,10 +637,10 @@ public class SMILESToolTest {
 		String smiles = "[O-2]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/doubleNegativeCharge.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Double negative oxygen", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Double negative oxygen", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -700,10 +700,10 @@ public class SMILESToolTest {
 		String smiles = "O[H]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling1.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Water", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Water", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -715,10 +715,10 @@ public class SMILESToolTest {
 		String smiles = "[OH-1]";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling2.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("Hydroxide", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Hydroxide", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -730,10 +730,10 @@ public class SMILESToolTest {
 		String smiles = "ONO";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling3.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("ONO", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("ONO", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -746,10 +746,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling4.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -762,10 +762,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling5.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -778,10 +778,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 //		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling6.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("N", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -794,10 +794,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling7.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -811,10 +811,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling7a.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("c1ccc[nH]1", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author nwe23
@@ -827,10 +827,10 @@ public class SMILESToolTest {
 		smilesTool.parseSMILES(smiles);
 		CMLFormula form=new CMLFormula(smilesTool.getMolecule());
 		LOG.trace(form.getFormattedString());
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/hydrogenHandling8.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("c1(c2[nH]nnn2)ccc(cc1)c1[nH]nnn1", correctCML, smilesTool.getMolecule(), true);
 	}
 	/**
 	 * @author dl387
@@ -841,10 +841,10 @@ public class SMILESToolTest {
 		String smiles = "C=1CN1";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("C1=CN1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("C1=CN1", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -856,10 +856,10 @@ public class SMILESToolTest {
 		String smiles = "C1CN=1";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("C1CN=1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("C1CN=1", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -887,10 +887,10 @@ public class SMILESToolTest {
 		String smiles = "C=1CN=1";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/ringClosureHandling.xml");
 
-		JumboTestUtils.assertEqualsCanonically("C=1CN=1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("C=1CN=1", correctCML, smilesTool.getMolecule(), true);
 	}
 
 	// MISSING FEATURES
@@ -908,10 +908,10 @@ public class SMILESToolTest {
 		} catch (RuntimeException e) {
 			Assert.fail("The following SMILES failed to parse but should have: "+smiles);
 		}
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/ringSupportGreaterThan10.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("CycloPropane", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("CycloPropane", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -929,10 +929,10 @@ public class SMILESToolTest {
 		} catch (RuntimeException e) {
 			Assert.fail("The following SMILES failed to parse but should have: "+smiles);
 		}
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/chiralityTetrahedral.xml");
 
-		JumboTestUtils.assertEqualsCanonically("Alanine", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("Alanine", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -962,10 +962,10 @@ public class SMILESToolTest {
 		String smiles = "F/C=C/F";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/transDiFluoroEthene.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("transDiFluoroEthene", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("transDiFluoroEthene", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -1012,10 +1012,10 @@ public class SMILESToolTest {
 		String smiles = "N[C@@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality1.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("chirality1", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("chirality1", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -1027,10 +1027,10 @@ public class SMILESToolTest {
 		String smiles = "N[C@H](F)C";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality2.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("chirality2", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("chirality2", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -1042,10 +1042,10 @@ public class SMILESToolTest {
 		String smiles = "C2.N1.F3.[C@@H]231";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality3.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("chirality3", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("chirality3", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -1057,10 +1057,10 @@ public class SMILESToolTest {
 		String smiles = "[C@@H]231.C2.N1.F3";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality4.xml");
 		
-		JumboTestUtils.assertEqualsCanonically("chirality4", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("chirality4", correctCML, smilesTool.getMolecule(), true);
 	}
 	
 	/**
@@ -1072,9 +1072,9 @@ public class SMILESToolTest {
 		String smiles = "[C@@H](Cl)1[C@H](C)(F).Br1";
 		SMILESTool smilesTool = new SMILESTool();
 		smilesTool.parseSMILES(smiles);
-		CMLMolecule correctCML = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule correctCML = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/chirality5.xml");
-		JumboTestUtils.assertEqualsCanonically("chirality5", correctCML, smilesTool.getMolecule(), true);
+		CMLXOMTestUtils.assertEqualsCanonically("chirality5", correctCML, smilesTool.getMolecule(), true);
 	}
 
 	@Test 
@@ -1168,7 +1168,7 @@ public class SMILESToolTest {
 	
 	@Test
 	public void testWriter() throws Exception {
-		CMLMolecule testMolecule = (CMLMolecule) JumboTestUtils.parseValidFile(
+		CMLMolecule testMolecule = (CMLMolecule) CMLXOMTestUtils.parseValidFile(
 		"org/xmlcml/cml/tools/examples/smileswrite.xml");
 		SMILESTool smilesTool = new SMILESTool(testMolecule);
 		String test = smilesTool.write();

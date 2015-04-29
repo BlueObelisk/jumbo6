@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLArray;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 
 /**
@@ -48,7 +48,7 @@ public class ArrayToolTest {
 		CMLArray array = new CMLArray();
 		ArrayTool arrayTool = ArrayTool.getOrCreateTool(array);
 		CMLArray array1 = arrayTool.getArray();
-		JumboTestUtils.assertEqualsCanonically("empty array", array, array1);
+		CMLXOMTestUtils.assertEqualsCanonically("empty array", array, array1);
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class ArrayToolTest {
 		CMLArray array1 = arrayTool.getArray();
 		CMLArray refArray = new CMLArray();
 		refArray.setDataType(CMLConstants.XSD_DOUBLE);
-		JumboTestUtils.assertEqualsCanonically("empty int array", refArray, array1);
+		CMLXOMTestUtils.assertEqualsCanonically("empty int array", refArray, array1);
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class ArrayToolTest {
 		CMLArray refArray = new CMLArray();
 		refArray.setDataType(CMLConstants.XSD_DOUBLE);
 		refArray.setArray(new double[] {1, 2, 3});
-		JumboTestUtils.assertEqualsIncludingFloat("int array", refArray, array1, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("int array", refArray, array1, true, 0.00001);
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class ArrayToolTest {
 		ArrayTool arrayTool = ArrayTool.getOrCreateTool(array);
 		arrayTool.createIntArray(4, 3, 2);
 		CMLArray refArray = new CMLArray(new double[]{3, 5, 7, 9});
-		JumboTestUtils.assertEqualsIncludingFloat("int array", refArray, arrayTool.getArray(), true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("int array", refArray, arrayTool.getArray(), true, 0.00001);
                                                                                                               	}
 
 
@@ -89,7 +89,7 @@ public class ArrayToolTest {
 		CMLArray array1 = arrayTool.getArray();
 		CMLArray refArray = new CMLArray();
 		refArray.setDataType(CMLConstants.XSD_DOUBLE);
-		JumboTestUtils.assertEqualsCanonically("empty double array", refArray, array1);
+		CMLXOMTestUtils.assertEqualsCanonically("empty double array", refArray, array1);
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class ArrayToolTest {
 		CMLArray refArray = new CMLArray();
 		refArray.setDataType(CMLConstants.XSD_DOUBLE);
 		refArray.setArray(new double[] {1., 2., 3.});
-		JumboTestUtils.assertEqualsIncludingFloat("double array", refArray, array1, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("double array", refArray, array1, true, 0.00001);
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class ArrayToolTest {
 		ArrayTool arrayTool = ArrayTool.getOrCreateTool(array);
 		arrayTool.createDoubleArray(4, 3., 0.1);
 		CMLArray refArray = new CMLArray(new double[]{3.0, 3.1, 3.2, 3.3});
-		JumboTestUtils.assertEqualsIncludingFloat("double array", refArray, arrayTool.getArray(), true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("double array", refArray, arrayTool.getArray(), true, 0.00001);
 	}
 
 }

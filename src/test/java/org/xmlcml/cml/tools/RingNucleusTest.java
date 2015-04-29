@@ -29,8 +29,8 @@ import org.junit.Test;
 import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLAssert;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 /**
  * @author pm286
@@ -55,7 +55,7 @@ public class RingNucleusTest {
 	}
 
 	void makeMol() {
-		molecule = (CMLMolecule)JumboTestUtils.parseValidFile(MOLECULE +CMLConstants.U_S + "bg2066.xml");
+		molecule = (CMLMolecule)CMLXOMTestUtils.parseValidFile(MOLECULE +CMLConstants.U_S + "bg2066.xml");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
 				molecule);
 		ringNucleusSet = connectionTableTool.getRingNucleusSet();
@@ -66,7 +66,7 @@ public class RingNucleusTest {
 	}
 
 	void makeMol1() {
-		molecule = (CMLMolecule)JumboTestUtils.parseValidFile(MOLECULE +CMLConstants.U_S + "bv2018.xml");
+		molecule = (CMLMolecule)CMLXOMTestUtils.parseValidFile(MOLECULE +CMLConstants.U_S + "bv2018.xml");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
 				molecule);
 		ringNucleusSet = connectionTableTool.getRingNucleusSet();
@@ -216,7 +216,7 @@ public class RingNucleusTest {
 	 */
 	@Test
 	public final void testGetRingNucleusSet() {
-		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidFile(ConnectionTableToolTest.MOLECULES
+		CMLMolecule molecule = (CMLMolecule)CMLXOMTestUtils.parseValidFile(ConnectionTableToolTest.MOLECULES
 				+CMLConstants.U_S + "bg2066.xml");
 		ConnectionTableTool connectionTableTool = new ConnectionTableTool(
 				molecule);
