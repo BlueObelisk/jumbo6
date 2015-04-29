@@ -19,6 +19,8 @@ package org.xmlcml.cml.tools;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +39,7 @@ import org.xmlcml.cml.element.CMLAtom;
 import org.xmlcml.cml.element.CMLAtomParity;
 import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLBond;
+import org.xmlcml.cml.element.CMLBondStereo;
 import org.xmlcml.cml.element.CMLLabel;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
@@ -44,6 +47,7 @@ import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTransform3;
 import org.xmlcml.euclid.Angle;
 import org.xmlcml.euclid.Angle.Range;
+import org.xmlcml.euclid.Angle.Units;
 import org.xmlcml.euclid.EuclidRuntimeException;
 import org.xmlcml.euclid.Point3;
 import org.xmlcml.euclid.Point3Vector;
@@ -57,11 +61,11 @@ import org.xmlcml.graphics.svg.SVGG;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.Molutils;
+
 /**
- * additional tools for atom. not fully developed
+ * Additional tools for atom. Not fully developed.
  * 
  * @author pmr
- * 
  */
 public class AtomTool extends AbstractSVGTool {
 
@@ -87,7 +91,7 @@ public class AtomTool extends AbstractSVGTool {
 	private double radiusFactor = 1.0; 
 
 	/**
-     * constructor
+     * Constructor
      * 
      * @param atom
      * @deprecated use getOrCreateTool
@@ -97,7 +101,7 @@ public class AtomTool extends AbstractSVGTool {
     		throw new RuntimeException("null atom");
     	}
         this.atom = atom;
-        this.atom.setTool(this);
+        atom.setTool(this);
         setDefaults();
         molecule = atom.getMolecule();
         if (molecule == null) {
@@ -105,8 +109,9 @@ public class AtomTool extends AbstractSVGTool {
         }
     }
     
-	/** gets AtomTool associated with atom.
-	 * if null creates one and sets it in atom
+	/** 
+	 * Gets AtomTool associated with atom. If null creates one and sets it in atom.
+	 * 
 	 * @param atom
 	 * @return tool
 	 */
@@ -545,8 +550,10 @@ public class AtomTool extends AbstractSVGTool {
     }
 
 	/**
-	 * Add or delete hydrogen atoms to satisy valence.
-	 * ignore if hydrogenCount attribute is set
+	 * Adds or delete hydrogen atoms to satisfy valence.
+	 * <p>
+	 * Ignore if hydrogenCount attribute is set.
+	 * <p>
 	 * Uses algorithm: nH = 8 - group - sumbondorder + formalCharge, where group
 	 * is 0-8 in first two rows
 	 *
@@ -568,8 +575,8 @@ public class AtomTool extends AbstractSVGTool {
 				return;
 			}
 			int sumBo = atomTool.getSumNonHydrogenBondOrder();
-			int fc = (atom.getFormalChargeAttribute() == null) ? 0 :
-				atom.getFormalCharge();
+			int fc = (atom.getFormalChargeAttribute() == null ? 0 :
+				atom.getFormalCharge());
 			int nh = 8 - group - sumBo + fc;
 			// non-octet species
 			if (group == 4 && fc == 1) {
@@ -581,15 +588,16 @@ public class AtomTool extends AbstractSVGTool {
 			}
 			atom.setHydrogenCount(nh);
 		}
-		this.expandImplicitHydrogens(control);
+		expandImplicitHydrogens(control);
 	}
 
 	/**
-	 * Expand implicit hydrogen atoms.
-	 *
-	 * This needs looking at
-	 *
+	 * Expands implicit hydrogen atoms.
+	 * <p>
+	 * TODO this needs looking at.
+	 * <p>
 	 * CMLMolecule.NO_EXPLICIT_HYDROGENS 
+	 * <p>
 	 * CMLMolecule.USE_HYDROGEN_COUNT // no
 	 * action
 	 *
@@ -613,33 +621,143 @@ public class AtomTool extends AbstractSVGTool {
 				currentHCount++;
 			}
 		}
-		// FIXME. This needs rethinking
+		//FIXME this might need rethinking; may not correctly handle sulfur stereochemistry or wiggly bonds
 		if (HydrogenControl.NO_EXPLICIT_HYDROGENS.equals(control) && currentHCount != 0) {
 			return;
 		}
 		String id = atom.getId();
+		List<CMLBond> bonds = atom.getLigandBonds();
+		/*boolean hasHatch = false;
+		boolean hasWedge = false;
+		boolean hasDouble = false;*/
+		Angle wedgeAngle = null;
+		Angle hatchAngle = null;
+		double bondLength = 0;
+		List<Angle> otherAngles = new ArrayList<Angle>();
+		for (CMLBond bond : bonds) {
+			if (bond.getBondStereo() != null && bond.getBondStereo().getValue().equals(CMLBondStereo.WEDGE) && bond.getAtom(0) == atom) {
+				//hasWedge = true;
+				wedgeAngle = new Angle(Math.atan2(bond.getAtom(1).getY2() - atom.getY2(), bond.getAtom(1).getX2() - atom.getX2()), org.xmlcml.euclid.Angle.Units.RADIANS);
+				bondLength = (bond.getAtom(1).getY2() - atom.getY2()) * (bond.getAtom(1).getY2() - atom.getY2()) + (bond.getAtom(1).getX2() - atom.getX2()) * (bond.getAtom(1).getX2() - atom.getX2());
+			} else if (bond.getBondStereo() != null && bond.getBondStereo().getValue().equals(CMLBondStereo.HATCH) && bond.getAtom(0) == atom) {
+				//hasHatch = true;
+				hatchAngle = new Angle(Math.atan2(bond.getAtom(1).getY2() - atom.getY2(), bond.getAtom(1).getX2() - atom.getX2()), org.xmlcml.euclid.Angle.Units.RADIANS);
+				bondLength = (bond.getAtom(1).getY2() - atom.getY2()) * (bond.getAtom(1).getY2() - atom.getY2()) + (bond.getAtom(1).getX2() - atom.getX2()) * (bond.getAtom(1).getX2() - atom.getX2());
+			}/* else if (bond.getOrder().equals(CMLBond.DOUBLE_D)) {
+				hasDouble = true;
+			}*/ else if (bond.getAtom(0) == atom) {
+				otherAngles.add(new Angle(Math.atan2(bond.getAtom(1).getY2() - atom.getY2(), bond.getAtom(1).getX2() - atom.getX2()), org.xmlcml.euclid.Angle.Units.RADIANS));
+			} else {
+				otherAngles.add(new Angle(Math.atan2(bond.getAtom(0).getY2() - atom.getY2(), bond.getAtom(0).getX2() - atom.getX2()), org.xmlcml.euclid.Angle.Units.RADIANS));
+			}
+		}
+		bondLength =  Math.sqrt(bondLength);
 		for (int i = 0; i < hydrogenCount - currentHCount; i++) {
 			CMLAtom hatom = new CMLAtom(id + "_h" + (i + 1));
 			molecule.addAtom(hatom);
 			hatom.setElementType(AS.H.value);
+			//hatom.setXY2(atom.getXY2().plus(new Real2(1, 1)));
 			CMLBond bond = new CMLBond(atom, hatom);
 			molecule.addBond(bond);
 			bond.setOrder(CMLBond.SINGLE_S);
+			if (hatchAngle == null ^ wedgeAngle == null) {
+				CMLBondStereo s = new CMLBondStereo();
+				s.setXMLContent(hatchAngle != null ? CMLBondStereo.WEDGE : CMLBondStereo.HATCH);
+				bond.setBondStereo(s);
+				Angle baseBondAngle = (hatchAngle != null ? hatchAngle : (wedgeAngle != null ? wedgeAngle : otherAngles.get(2)));
+				Angle diff1 = baseBondAngle.subtract(otherAngles.get(0));
+				Angle diff2 = baseBondAngle.subtract(otherAngles.get(1));
+				diff1.setRange(Range.UNLIMITED);
+				diff2.setRange(Range.UNLIMITED);
+				Angle newAngle = (Math.abs(diff1.getRadian()) < Math.abs(diff2.getRadian()) ? otherAngles.get(0).plus(baseBondAngle).multiplyBy(0.5) : otherAngles.get(1).plus(baseBondAngle).multiplyBy(0.5));
+				positionAtomRelatively(hatom, newAngle, bondLength);
+			} else if (hatchAngle == null && wedgeAngle == null) {
+				if (atom.getXY2() != null) {
+					hatom.setXY2(atom.getXY2().plus(new Real2(1, 1)));
+				}
+			} else if (hatchAngle != null && wedgeAngle != null) {
+				otherAngles.add(wedgeAngle);
+				otherAngles.add(hatchAngle);
+				Collections.sort(otherAngles, new Comparator<Angle>(){
+
+					public int compare(Angle o1, Angle o2) {
+						return (o1.lessThan(o2) ? -1 : 1);
+					}
+				
+				});
+				Angle largestAngle = new Angle(0);
+				Angle newAngle = null;
+				for (int angle = 0; angle < otherAngles.size() - 1; angle++) {
+					if ((otherAngles.get(angle) == wedgeAngle && otherAngles.get(angle + 1) == hatchAngle) || (otherAngles.get(angle) == hatchAngle && otherAngles.get(angle + 1) == wedgeAngle)) {
+						continue;
+					}
+					Angle diff = otherAngles.get(angle + 1).subtract(otherAngles.get(angle));
+					if (diff.greaterThan(largestAngle)) {
+						largestAngle = diff;
+						newAngle = otherAngles.get(angle).plus(otherAngles.get(angle + 1)).multiplyBy(0.5);
+					}
+				}
+				Angle diff = otherAngles.get(0).subtract(otherAngles.get(otherAngles.size() - 1)).plus(new Angle(360, org.xmlcml.euclid.Angle.Units.DEGREES));
+				if (diff.greaterThan(largestAngle)) {
+					largestAngle = diff;
+					newAngle = otherAngles.get(otherAngles.size() - 1).plus(otherAngles.get(0)).multiplyBy(0.5).plus(new Angle(180, org.xmlcml.euclid.Angle.Units.DEGREES));
+				}
+				positionAtomRelatively(hatom, newAngle, bondLength);
+			}
+			/*if (!(hasHatch && hasWedge) && !hasDouble && hydrogenCount - currentHCount < 2) {
+				CMLBondStereo s = new CMLBondStereo();
+				if (hasHatch) {
+					s.setXMLContent(CMLBondStereo.WEDGE);
+					bond.setBondStereo(s);
+				} else if (hasWedge) {
+					s.setXMLContent(CMLBondStereo.HATCH);
+					bond.setBondStereo(s);
+				} else {
+					s.setXMLContent(CMLBondStereo.NONE);
+					bond.setBondStereo(s);
+				}
+			}*/
 		}
+	}
+
+	private void positionAtomRelatively(CMLAtom hatom, Angle newAngle, double bondLength) {
+		double xDiff;
+		double yDiff;
+		if (newAngle.isEqualTo(Math.PI, 0.0000001)) {
+			xDiff = -bondLength;
+			yDiff = 0;
+		} else if (newAngle.isEqualTo(Math.PI / 2, 0.0000001)) {
+			xDiff = 0;
+			yDiff = bondLength;
+		} else if (newAngle.isEqualTo(0, 0.0000001)) {
+			xDiff = bondLength;
+			yDiff = 0;
+		} else if (newAngle.isEqualTo(-Math.PI / 2, 0.0000001)) {
+			xDiff = 0;
+			yDiff = -bondLength;
+		} else if (newAngle.isEqualTo(-Math.PI, 0.0000001)) {
+			xDiff = -bondLength;
+			yDiff = 0;
+		} else {
+			double ratio = Math.tan(newAngle.getRadian());
+			xDiff = Math.sqrt((bondLength * bondLength) / (1 + ratio * ratio));
+			if (newAngle.greaterThan(Math.PI / 2) && newAngle.lessThan((3 * Math.PI) / 2)) {
+				xDiff *= -1;
+			}
+			yDiff = xDiff * ratio;
+		}
+		hatom.setXY2(atom.getXY2().plus(new Real2(xDiff, yDiff)));
 	}
 
 	/**
 	 * Sums the formal orders of all bonds from atom to non-hydrogen ligands.
-	 *
-	 * Uses 1,2,3,A orders and creates the nearest integer. Thus 2 aromatic
+	 * <p>
+	 * Uses 1, 2, 3, A orders and creates the nearest integer. Thus 2 aromatic
 	 * bonds sum to 3 and 3 sum to 4. Bonds without order are assumed to be
-	 * single
-	 * @param molecule 
-	 *
-	 * @param atom
-	 * @exception RuntimeException
-	 *                null atom in argument
-	 * @return sum of bond orders. May be 0 for isolated atom or atom with only
+	 * single.
+	 * 
+	 * @exception RuntimeException null atom in argument
+	 * @return Sum of bond orders; may be 0 for isolated atom or atom with only
 	 *         H ligands
 	 */
 	public int getSumNonHydrogenBondOrder() throws RuntimeException {
