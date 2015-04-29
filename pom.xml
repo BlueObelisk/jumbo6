@@ -268,12 +268,14 @@
 		</dependency>
 -->
 <!-- where is this used? -->
+<!-- 
 		<dependency>
 			<groupId>org.xml-cml</groupId>
 			<artifactId>svg</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
-	<dependency>
+ -->
+ 	<dependency>
 		<groupId>org.xml-cml</groupId>
 		<artifactId>html</artifactId>
 		<version>0.2-SNAPSHOT</version>
