@@ -31,7 +31,7 @@ import org.xmlcml.cml.element.CMLTableHeader;
 import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
 import org.xmlcml.cml.test.TableFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 /**
  * test TableTool.
@@ -59,9 +59,9 @@ public class TableToolTest {
 				+ "  <array title='foo' id='th1' dictRef='c:foo' dataType='xsd:string' size='3'>1 2 3</array>"
 				+ "  <array title='bar' id='th2' dictRef='c:bar' dataType='xsd:string' size='3'>a b c</array>"
 				+ "</arrayList>" + CMLConstants.S_EMPTY;
-		CMLArrayList expected = (CMLArrayList) JumboTestUtils.parseValidString(rowS);
+		CMLArrayList expected = (CMLArrayList) CMLXOMTestUtils.parseValidString(rowS);
 		boolean stripWhite = true;
-		JumboTestUtils.assertEqualsCanonically("row list", expected, arrayList, stripWhite);
+		CMLXOMTestUtils.assertEqualsCanonically("row list", expected, arrayList, stripWhite);
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class TableToolTest {
 				+ "<tableCell>3</tableCell>" + "<tableCell>c</tableCell>"
 				+ "<tableCell>13</tableCell>" + "</tableRow>"
 				+ "</tableRowList>";
-		CMLTableRowList expected = (CMLTableRowList)JumboTestUtils.parseValidString(ss);
-		JumboTestUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
+		CMLTableRowList expected = (CMLTableRowList)CMLXOMTestUtils.parseValidString(ss);
+		CMLXOMTestUtils.assertEqualsCanonically("tablerow", expected, tableRowList1, true);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class TableToolTest {
 	public final void testCreateTableRowList() {
 		CMLTableRowList tableRowList1 = TableTool
 				.createTableRowList(fix.arrayList);
-		JumboTestUtils.assertEqualsCanonically("tableRowList", fix.tableRowList,
+		CMLXOMTestUtils.assertEqualsCanonically("tableRowList", fix.tableRowList,
 				tableRowList1, true);
 	}
 	
@@ -119,7 +119,7 @@ public class TableToolTest {
 			    " <tableHeaderCell dataType='xsd:string'/>" +
 			    " </tableHeader>" +
 				"</table>";
-		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
 		
 	}
 	
@@ -151,7 +151,7 @@ public class TableToolTest {
 			    " <tableHeaderCell dataType='xsd:double'/>" +
 			    " </tableHeader>" +
 				"</table>";
-		JumboTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("table", CMLUtil.parseXML(expected), table, true, 0.00001);
 		
 	}
 	@Test
@@ -175,7 +175,7 @@ public class TableToolTest {
 				"<tableCell>1.1</tableCell>		" +
 				"<tableCell>1.11</tableCell>		" +
 				"</tableRow>	";
-		JumboTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), row, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), row, true, 0.00001);
 	}
 	
 	@Test
@@ -190,7 +190,7 @@ public class TableToolTest {
 				"  <tableHeaderCell dictRef='foo:bar3' dataType='xsd:double'/>" +
 				"  <tableHeaderCell dictRef='foo:bar4' dataType='xsd:double'/>" +
 				"</tableHeader>";
-		JumboTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), tableHeader, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("row", CMLUtil.parseXML(expected), tableHeader, true, 0.00001);
 	}
 
 	public static TableTool createTableTool1() {

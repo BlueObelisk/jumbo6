@@ -40,7 +40,7 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLMolecule.HydrogenControl;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.RealArray;
 import org.xmlcml.molutil.ChemicalElement.AS;
 import org.xmlcml.molutil.Molutils;
@@ -129,7 +129,7 @@ public class MoreMoleculeToolTest {
 				+ "    <atom id='a2' elementType='O'/>" + "  </atomArray>"
 				+ "  <bondArray>" + "    <bond atomRefs2='a1 a2' order='1'/>"
 				+ "  </bondArray>" + "</molecule>";
-		CMLMolecule molecule = (CMLMolecule)JumboTestUtils.parseValidString(moleculeS);
+		CMLMolecule molecule = (CMLMolecule)CMLXOMTestUtils.parseValidString(moleculeS);
 		int hydrogenCount = MoleculeTool.getOrCreateTool(molecule)
 				.getTotalHydrogenCount();
 		Assert.assertEquals("h count", 4, hydrogenCount);
@@ -772,7 +772,7 @@ public class MoreMoleculeToolTest {
 	@Test
 	public void testGetLoneElectronCount() {
 		// FIXME
-		CMLMolecule nitroMethane = (CMLMolecule)JumboTestUtils.parseValidString(tFix.nitroMethaneS);
+		CMLMolecule nitroMethane = (CMLMolecule)CMLXOMTestUtils.parseValidString(tFix.nitroMethaneS);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(nitroMethane);
 		int n = moleculeTool.getLoneElectronCount(nitroMethane.getAtom(0));
 		Assert.assertEquals("lone pair", -6, n);
@@ -850,7 +850,7 @@ public class MoreMoleculeToolTest {
 		moleculeTool.adjustHydrogenCountsToValency(HydrogenControl.ADD_TO_EXPLICIT_HYDROGENS);
 		moleculeTool.addCalculated3DCoordinatesForExistingHydrogens();
 		Element moleculeRef = CMLUtil.readElementFromResource(fileout); 
-		JumboTestUtils.assertEqualsIncludingFloat("atom 1", moleculeRef, molecule, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("atom 1", moleculeRef, molecule, true, 0.00001);
 	}
 	
 	@Test
@@ -865,7 +865,7 @@ public class MoreMoleculeToolTest {
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		moleculeTool.removeHydrogenCountAttributes();
 		Element moleculeRef = CMLUtil.readElementFromResource(fileout); 
-		JumboTestUtils.assertEqualsIncludingFloat("remove hcount att", moleculeRef, molecule, true, 0.00001);
+		CMLXOMTestUtils.assertEqualsIncludingFloat("remove hcount att", moleculeRef, molecule, true, 0.00001);
 	}
 	
 	@Test
@@ -908,7 +908,7 @@ public class MoreMoleculeToolTest {
 		CMLMolecule molecule = (CMLMolecule) CMLUtil.readElementFromResource(filein);
 		MoleculeTool moleculeTool = MoleculeTool.getOrCreateTool(molecule);
 		RealArray testArray = moleculeTool.convolutePropertyWithNeighbours(npasses, xpath, damping);
-		JumboTestUtils.assertEquals("convolute", refArray, testArray, 0.00001);
+		CMLXOMTestUtils.assertEquals("convolute", refArray, testArray, 0.00001);
 	}
 	
 }

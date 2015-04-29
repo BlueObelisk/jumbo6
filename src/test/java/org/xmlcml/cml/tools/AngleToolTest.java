@@ -35,7 +35,7 @@ import org.xmlcml.cml.element.CMLAtomSet;
 import org.xmlcml.cml.element.CMLCml;
 import org.xmlcml.cml.element.CMLCrystal;
 import org.xmlcml.cml.element.CMLMolecule;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.Angle;
 
 
@@ -74,7 +74,7 @@ public class AngleToolTest {
 	public void setUp() throws Exception {
 		Element element = null;
 		try {
-			element =JumboTestUtils.parseValidString(s1);
+			element =CMLXOMTestUtils.parseValidString(s1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.debug("EXC " + e);

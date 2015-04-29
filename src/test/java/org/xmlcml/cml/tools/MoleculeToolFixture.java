@@ -24,7 +24,7 @@ import org.xmlcml.cml.base.CMLConstants;
 import org.xmlcml.cml.element.CMLBond;
 import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.test.MoleculeAtomBondFixture;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 
 public class MoleculeToolFixture {
 
@@ -833,7 +833,7 @@ public class MoleculeToolFixture {
 
 	private CMLMolecule makeMol(CMLMolecule mol, String s) {
 		if (mol == null) {
-			mol = (CMLMolecule)JumboTestUtils.parseValidString(s);
+			mol = (CMLMolecule)CMLXOMTestUtils.parseValidString(s);
 		}
 		return mol;
 	}

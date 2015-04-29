@@ -33,7 +33,7 @@ import org.xmlcml.cml.element.CMLTableContent;
 import org.xmlcml.cml.element.CMLTableHeader;
 import org.xmlcml.cml.element.CMLTableRow;
 import org.xmlcml.cml.element.CMLTableRowList;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.Util;
 
 public class TableFixture {
@@ -110,11 +110,11 @@ public class TableFixture {
 			} catch (URISyntaxException e) {
 				throw new RuntimeException(e);
 			}
-			tableContent = (CMLTableContent)JumboTestUtils.parseValidString(tableContentS);
-			tableHeader = (CMLTableHeader)JumboTestUtils.parseValidString(tableHeaderS);
-			tableRowList = (CMLTableRowList)JumboTestUtils.parseValidString(tableRowListS);
+			tableContent = (CMLTableContent)CMLXOMTestUtils.parseValidString(tableContentS);
+			tableHeader = (CMLTableHeader)CMLXOMTestUtils.parseValidString(tableHeaderS);
+			tableRowList = (CMLTableRowList)CMLXOMTestUtils.parseValidString(tableRowListS);
 			tableRow = tableRowList.getTableRowElements().get(1);
-			arrayList = (CMLArrayList)JumboTestUtils.parseValidString(arrayListS);
+			arrayList = (CMLArrayList)CMLXOMTestUtils.parseValidString(arrayListS);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			throw e;

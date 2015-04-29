@@ -1,4 +1,5 @@
 /**
+
  *    Copyright 2011 Peter Murray-Rust et. al.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,8 +45,8 @@ import org.xmlcml.cml.element.CMLMolecule;
 import org.xmlcml.cml.element.CMLSymmetry;
 import org.xmlcml.cml.element.CMLTorsion;
 import org.xmlcml.cml.inchi.InChIGeneratorTool;
-import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLAssert;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.RealRange;
 import org.xmlcml.molutil.ChemicalElement;
 import org.xmlcml.molutil.ChemicalElement.Type;
@@ -90,8 +91,8 @@ public class CrystalToolTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		mol1 = (CMLMolecule) JumboTestUtils.parseValidString(mol1S);
-		crystal1 = (CMLCrystal) JumboTestUtils.parseValidString(crystal1S);
+		mol1 = (CMLMolecule) CMLXOMTestUtils.parseValidString(mol1S);
+		crystal1 = (CMLCrystal) CMLXOMTestUtils.parseValidString(crystal1S);
 		tool1 = new CrystalTool(mol1, crystal1);
 	}
 
@@ -107,9 +108,9 @@ public class CrystalToolTest {
 		tool1.calculateCartesiansAndBonds();
 		List<CMLBond> bonds = mol1.getBonds();
 		Assert.assertEquals("bond count", 2, bonds.size());
-		JumboTestUtils.assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
+		CMLXOMTestUtils.assertEquals("bond 0", new String[] { "a1", "a2" }, bonds.get(0)
 				.getAtomRefs2());
-		JumboTestUtils.assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
+		CMLXOMTestUtils.assertEquals("bond 0", new String[] { "a1", "a3" }, bonds.get(1)
 				.getAtomRefs2());
 		// adds the length elements
 		new GeometryTool(mol1).createValenceLengths(true, true);
@@ -117,12 +118,12 @@ public class CrystalToolTest {
 				.getLengthElements();
 		Assert.assertEquals("lengths", 2, lengths.size());
 		CMLLength length = lengths.get(0);
-		JumboTestUtils.assertEquals("length 0 atoms", new String[] { "a1", "a2" }, length
+		CMLXOMTestUtils.assertEquals("length 0 atoms", new String[] { "a1", "a2" }, length
 				.getAtomRefs2());
 		Assert.assertEquals("length 0 value", 0.956, length.getXMLContent(),
 				0.001);
 		length = lengths.get(1);
-		JumboTestUtils.assertEquals("length 0 atoms", new String[] { "a1", "a3" }, length
+		CMLXOMTestUtils.assertEquals("length 0 atoms", new String[] { "a1", "a3" }, length
 				.getAtomRefs2());
 		Assert.assertEquals("length 0 value", 0.955, length.getXMLContent(),
 				0.001);
@@ -133,7 +134,7 @@ public class CrystalToolTest {
 		// FIXME
 		Assert.assertEquals("angles", 1, angles.size());
 		CMLAngle angle = angles.get(0);
-		JumboTestUtils.assertEquals("length 0 atoms", new String[] { "a2", "a1", "a3" }, angle
+		CMLXOMTestUtils.assertEquals("length 0 atoms", new String[] { "a2", "a1", "a3" }, angle
 				.getAtomRefs3());
 		Assert.assertEquals("length 0 value", 116.875, angle.getXMLContent(),
 				0.001);
@@ -156,7 +157,7 @@ public class CrystalToolTest {
 				+ "    <atom id='a2' elementType='O' xFract='0.13' yFract='0.21' zFract='0.02'/>"
 				+ "    <atom id='a3' elementType='N' xFract='0.85' yFract='0.23' zFract='0.03'/>"
 				+ "  </atomArray>" + "</molecule>";
-		CMLMolecule mol = (CMLMolecule) JumboTestUtils.parseValidString(molS);
+		CMLMolecule mol = (CMLMolecule) CMLXOMTestUtils.parseValidString(molS);
 		CMLSymmetry symmetry = new CMLSymmetry(new String[] { "x, y, z",
 				"-x, -y, -z" });
 		CMLCrystal crystal = new CMLCrystal(new double[] { 10., 20., 30., 90.,
@@ -542,7 +543,7 @@ public class CrystalToolTest {
 		}
 		CrystalTool crystalTool = new CrystalTool(molecule, symmetry);		
 		crystalTool.annotateSpaceGroupMultiplicities();
-		JumboTestUtils.assertEqualsCanonically("symmetry", expected, molecule, true);
+		CMLXOMTestUtils.assertEqualsCanonically("symmetry", expected, molecule, true);
 	}
 
 }

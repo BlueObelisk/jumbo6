@@ -58,8 +58,8 @@ import org.xmlcml.cml.element.CMLReaction;
 import org.xmlcml.cml.element.CMLReaction.Component;
 import org.xmlcml.cml.element.ReactionComponent;
 import org.xmlcml.cml.test.ReactionFixture;
-import org.xmlcml.cml.testutil.CMLAssert;
-import org.xmlcml.cml.testutil.JumboTestUtils;
+import org.xmlcml.cml.testutils.CMLAssert;
+import org.xmlcml.cml.testutils.CMLXOMTestUtils;
 import org.xmlcml.euclid.Util;
 import org.xmlcml.graphics.svg.SVGElement;
 import org.xmlcml.graphics.svg.SVGG;
@@ -81,7 +81,7 @@ public class ReactionToolTest {
 			+CMLConstants.U_S + "reactions";
 
 	public final static String REACTION_INPUT_PATH = JumboTestConstants.EXAMPLES_INPUT_PATH+"/reactions";
-	public final static File REACTION_OUTPUT_DIR = new File(JumboTestUtils.OUTPUT_DIR_NAME, "org/xmlcml/cml/tools/examples/reactions");
+	public final static File REACTION_OUTPUT_DIR = new File(CMLXOMTestUtils.OUTPUT_DIR_NAME, "org/xmlcml/cml/tools/examples/reactions");
 	
 	ReactionTool xmlReactTool1;
 
@@ -137,8 +137,8 @@ public class ReactionToolTest {
 	public void setUp() throws Exception {
 		xmlReactTool1 = ReactionTool.getOrCreateTool(fixture.xmlReact1);
 
-		balancedR = (CMLReaction)JumboTestUtils.parseValidString(balancedS);
-		unbalancedR = (CMLReaction)JumboTestUtils.parseValidString(unbalancedS);
+		balancedR = (CMLReaction)CMLXOMTestUtils.parseValidString(balancedS);
+		unbalancedR = (CMLReaction)CMLXOMTestUtils.parseValidString(unbalancedS);
 
 		InputStream is = Util.getInputStreamFromResource("org/xmlcml/cml/tools/reaction1.xml");
 		reaction1 = (CMLReaction) new CMLBuilder().build(is).getRootElement();
@@ -498,7 +498,7 @@ public class ReactionToolTest {
 		reactionTool.addProduct("O");
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
 		Assert.assertNotNull("testMapReactantsToProductsUsingAtomSets1", cmlMap);
-		Element ref = JumboTestUtils.parseValidString(
+		Element ref = CMLXOMTestUtils.parseValidString(
 "<map toType='atom' fromType='atom' xmlns='http://www.xml-cml.org/schema'>" +
 "<link title='unique treeString N' fromSet='m2_a1' toSet='m1_a5'/>" +
 "<link title='unique treeString C' fromSet='m2_a2' toSet='m1_a6'/>" +
@@ -518,7 +518,7 @@ public class ReactionToolTest {
 "<link title='de-orphan' fromSet='m1_a5_h1' toSet='m2_a1_h1'/>" +
 "<link title='de-orphan' fromSet='m1_a4' toSet='m1_a4'/>" +
 "</map>");
-		JumboTestUtils.assertEqualsCanonically("test", ref, cmlMap, true);
+		CMLXOMTestUtils.assertEqualsCanonically("test", ref, cmlMap, true);
 	}
 
 	@Test
@@ -706,9 +706,9 @@ public class ReactionToolTest {
 		Assert.assertNotNull(svgg);
 		/*
 		CMLMap cmlMap = reactionTool.mapReactantsToProductsUsingAtomSets();
-		Element refMap = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/wittigmap.xml");
+		Element refMap = CMLXOMTestUtils.parseValidFile("org/xmlcml/cml/tools/wittigmap.xml");
 		// too sensitive to environment
-//		JumboTestUtils.assertEqualsIncludingFloat("amide and amount", refMap, cmlMap, true, EPS);
+//		CMLXOMTestUtils.assertEqualsIncludingFloat("amide and amount", refMap, cmlMap, true, EPS);
 		Assert.assertNotNull(refMap);
 		*/
 	}
@@ -781,8 +781,8 @@ public class ReactionToolTest {
 	@Ignore ("spurious NoSuchMethod")
 	public void testEnsureIds() {
 		ReactionTool reactionTool = createAmideReactionAndEnsureIds();
-		Element ref = JumboTestUtils.parseValidFile("org/xmlcml/cml/tools/examples/reactions/reactionAmount.xml");
-		JumboTestUtils.assertEqualsIncludingFloat("amide and amount", ref, reactionTool.getReaction(), true, EPS);
+		Element ref = CMLXOMTestUtils.parseValidFile("org/xmlcml/cml/tools/examples/reactions/reactionAmount.xml");
+		CMLXOMTestUtils.assertEqualsIncludingFloat("amide and amount", ref, reactionTool.getReaction(), true, EPS);
 	}
 
 	@Test
@@ -805,7 +805,7 @@ public class ReactionToolTest {
 	@Test
 	public void testPatent1() 
 	{
-		CMLReaction reaction = (CMLReaction) JumboTestUtils.parseValidFile(
+		CMLReaction reaction = (CMLReaction) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/reactions/example1.cml").getChildElements().get(0);
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		CMLReactant reactant = reactionTool.findLimitingReactant();
@@ -816,7 +816,7 @@ public class ReactionToolTest {
 	@Test
 	public void testPatent1a() 
 	{
-		CMLReaction reaction = (CMLReaction) JumboTestUtils.parseValidFile(
+		CMLReaction reaction = (CMLReaction) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/reactions/example1.cml").getChildElements().get(0);
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		SVGGBox svgg = reactionTool.drawSVG();
@@ -826,7 +826,7 @@ public class ReactionToolTest {
 	@Test
 	public void testPatent1aa() 
 	{
-		CMLReaction reaction = (CMLReaction) JumboTestUtils.parseValidFile(
+		CMLReaction reaction = (CMLReaction) CMLXOMTestUtils.parseValidFile(
 				"org/xmlcml/cml/tools/examples/reactions/example1.cml").getChildElements().get(0);
 		ReactionTool reactionTool = ReactionTool.getOrCreateTool(reaction);
 		SVGGBox svgg = reactionTool.drawSVG();
@@ -837,9 +837,9 @@ public class ReactionToolTest {
 	public void testSpectator1() 
 	{
 		CMLReaction reaction = createSpectatorReaction();
-		CMLReaction reactionRef = (CMLReaction) JumboTestUtils.parseValidFile(
+		CMLReaction reactionRef = (CMLReaction) CMLXOMTestUtils.parseValidFile(
 			"org/xmlcml/cml/tools/examples/reactions/spectator1.cml");
-		JumboTestUtils.assertEqualsCanonically("spectator1", reactionRef, reaction, true);
+		CMLXOMTestUtils.assertEqualsCanonically("spectator1", reactionRef, reaction, true);
 	}
 
 	private CMLReaction createSpectatorReaction() {
